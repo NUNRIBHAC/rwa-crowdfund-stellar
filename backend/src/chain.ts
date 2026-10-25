@@ -77,8 +77,14 @@ export async function submitPayment(
     .setTimeout(60)
     .build();
   tx.sign(from);
-  const resp = await server.submitTransaction(tx);
-  return String(resp.hash ?? resp.id ?? resp);
+  try {
+    const resp = await server.submitTransaction(tx);
+    return String(resp.hash ?? resp.id ?? resp);
+  } catch (e: any) {
+    const rcs = e?.response?.data?.extras?.result_codes;
+    if (rcs) console.error('SUBMIT_FAIL result_codes=', JSON.stringify(rcs, null, 2));
+    throw e;
+  }
 }
 
 export async function getBalances(pub: string): Promise<Balance[]> {

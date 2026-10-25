@@ -90,7 +90,7 @@ export function listDemoInvestors(): string[] {
   return Object.keys(map);
 }
 
-export async function seedDemoInvestors(): Promise<{ investors: string[] }> {
+export async function seedDemoInvestors(amounts?: number[]): Promise<{ investors: string[] }> {
   if (!hasUsdcConfig) throw new Error('USDC_ISSUER non configurado');
   const map = fs.existsSync(demoInvestorsPath)
     ? JSON.parse(fs.readFileSync(demoInvestorsPath, 'utf8'))
@@ -100,9 +100,10 @@ export async function seedDemoInvestors(): Promise<{ investors: string[] }> {
   for (let n = Object.keys(map).length; n < 3; n++) {
     const kp = Keypair.random();
     const pub = kp.publicKey();
+    const amt = amounts && amounts.length > n ? amounts[n] : 100;
     await ensureAccount(pub);
     await ensureTrustline(kp, usdc);
-    await submitPayment(plat, pub, usdc, 30);
+    await submitPayment(plat, pub, usdc, amt);
     map[pub] = kp.secret();
   }
   fs.writeFileSync(demoInvestorsPath, JSON.stringify(map, null, 2), 'utf8');

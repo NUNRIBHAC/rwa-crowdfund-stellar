@@ -8,15 +8,16 @@ import {
   import { requirePlatform } from './stellar.js';
   
   async function main(): Promise<void> {
-    const { investors } = await seedDemoInvestors();
+    const amounts = [60, 30, 10];
+    const { investors } = await seedDemoInvestors(amounts);
     console.log('Investidores demo:', investors.join(', '));
   
-    const campaign = await createCampaign({ name: 'Solar Lisbon #1', goalUsdc: 150 });
+    const campaign = await createCampaign({ name: 'Solar Lisbon #1', goalUsdc: 100 });
     console.log(`Campaña ${campaign.id} (${campaign.code}) creador=${campaign.creatorPub} mint=${campaign.mintTx}`);
   
-    const amounts = [100, 30, 20];
-    for (let i = 0; i < amounts.length && i < investors.length; i++) {
-      const inv = await invest(campaign.id, { investorPub: investors[i], amountUsdc: amounts[i] });
+    const amounts2 = [60, 30, 10];
+    for (let i = 0; i < amounts2.length && i < investors.length; i++) {
+      const inv = await invest(campaign.id, { investorPub: investors[i], amountUsdc: amounts2[i] });
       const last = inv.investments[inv.investments.length - 1];
       console.log(
         `  ${investors[i].slice(0, 6)}… +${last.amountUsdc} USDC → +${last.tokens} tokens (usdc=${last.usdcTx} tokens=${last.tokenTx})`,
