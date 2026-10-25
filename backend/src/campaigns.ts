@@ -1,10 +1,10 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Asset, Keypair } from '@stellar/stellar-sdk';
+import { Asset, Keypair, Operation, TransactionBuilder } from '@stellar/stellar-sdk';
 import { USDC, hasUsdcConfig } from './config.js';
-import { requirePlatform } from './stellar.js';
-import { ensureAccount, ensureTrustline, submitPayment } from './chain.js';
+import { requirePlatform, server, networkPassphrase } from './stellar.js';
+import { ensureAccount, ensureTrustline, hasTrustline, submitPayment } from './chain.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const backendRoot = path.resolve(__dirname, '..');
@@ -268,6 +268,127 @@ export async function refund(id: string): Promise<Campaign> {
   }
   campaign.state = 'refunded';
   campaign.refundedAt = new Date().toISOString();
+  saveStore(store);
+  return campaign;
+}
+
+export async function buildInvestXdr(
+  id: string,
+  input: { investorPub: string; amountUsdc: number },
+): Promise<{ xdr: string; networkPassphrase: string; amountUsdc: number; tokens: number }> {
+  const store = loadStore();
+  const campaign = store.campaigns.find((c) => c.id === id);
+  if (!campaign) throw new Error(`campaña ${id} non existe`);
+  if (campaign.state !== 'funding') throw new Error(`campaña en estado ${campaign.state}`);
+  if (Date.now() > Date.parse(campaign.deadline)) throw new Error('prazo rematado');
+
+  const investorPub = (input.investorPub ?? '').trim();
+  const amount = Number(input.amountUsdc);
+  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
+  if (!Number.isFinite(amount) || amount <= 0) throw new Error('amountUsdc debe ser > 0');
+
+  const remaining = campaign.goalUsdc - investedUsdc(campaign);
+  if (remaining <= 0) throw new Error('obxectivo xa alcanzado');
+  const rounded = Math.round(Math.min(amount, remaining) * 100) / 100;
+
+  const tokens = Math.floor((rounded / campaign.goalUsdc) * campaign.supply);
+  if (tokens <= 0) throw new Error('cantidade moi pequena: non xenera tokens');
+
+  const plat = requirePlatform();
+  const usdc = usdcAsset();
+  const rwa = rwaAsset(campaign.code, plat.publicKey());
+
+  await ensureAccount(investorPub);
+
+  const account = await server.loadAccount(investorPub);
+  const ops: Operation[] = [];
+  if (!(await hasTrustline(investorPub, usdc))) {
+    ops.push(Operation.changeTrust({ asset: usdc }));
+  }
+  if (!(await hasTrustline(investorPub, rwa))) {
+    ops.push(Operation.changeTrust({ asset: rwa }));
+  }
+  ops.push(
+    Operation.payment({
+      destination: plat.publicKey(),
+      asset: usdc,
+      amount: rounded.toFixed(7),
+    }),
+  );
+
+  const builder = new TransactionBuilder(account, {
+    fee: '100',
+    networkPassphrase,
+  }).setTimeout(60);
+  for (const op of ops) builder.addOperation(op);
+  const tx = builder.build();
+
+  return { xdr: tx.toXDR(), networkPassphrase, amountUsdc: rounded, tokens };
+}
+
+export async function submitSignedInvest(
+  id: string,
+  input: { investorPub: string; xdr: string },
+): Promise<Campaign> {
+  const store = loadStore();
+  const campaign = store.campaigns.find((c) => c.id === id);
+  if (!campaign) throw new Error(`campaña ${id} non existe`);
+  if (campaign.state !== 'funding') throw new Error(`campaña en estado ${campaign.state}`);
+
+  const investorPub = (input.investorPub ?? '').trim();
+  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
+  if (typeof input.xdr !== 'string' || input.xdr.length === 0) throw new Error('xdr obrigatorio');
+
+  const plat = requirePlatform();
+  const tx = TransactionBuilder.fromXDR(input.xdr, networkPassphrase);
+  if (tx.source !== investorPub) {
+    throw new Error('XDR asinado por outra conta');
+  }
+
+  let paidUsdc: number | null = null;
+  for (const op of tx.operations) {
+    const obj = Operation.operationToObject(op) as any;
+    if (
+      obj.type === 'payment' &&
+      obj.destination === plat.publicKey() &&
+      obj.asset.code === USDC.code &&
+      obj.asset.issuer === USDC.issuer
+    ) {
+      paidUsdc = Number(obj.amount);
+      break;
+    }
+  }
+  if (paidUsdc === null || !Number.isFinite(paidUsdc) || paidUsdc <= 0) {
+    throw new Error('XDR sen pagamento USDC á plataforma');
+  }
+
+  const remaining = campaign.goalUsdc - investedUsdc(campaign);
+  if (paidUsdc > remaining) throw new Error('XDR paga máis do que queda por alcanzar');
+  const rounded = Math.round(paidUsdc * 100) / 100;
+  const tokens = Math.floor((rounded / campaign.goalUsdc) * campaign.supply);
+  if (tokens <= 0) throw new Error('cantidade moi pequena: non xenera tokens');
+
+  let usdcTx: string;
+  try {
+    const resp = await server.submitTransaction(tx);
+    usdcTx = String(resp.hash ?? resp.id ?? resp);
+  } catch (e: any) {
+    const rcs = e?.response?.data?.extras?.result_codes;
+    if (rcs) console.error('SUBMIT_SIGNED_FAIL result_codes=', JSON.stringify(rcs, null, 2));
+    throw e;
+  }
+
+  const rwa = rwaAsset(campaign.code, plat.publicKey());
+  const tokenTx = await submitPayment(plat, investorPub, rwa, tokens);
+
+  campaign.investments.push({
+    id: `i${campaign.investments.length + 1}`,
+    investorPub,
+    amountUsdc: rounded,
+    tokens,
+    usdcTx,
+    tokenTx,
+  });
   saveStore(store);
   return campaign;
 }
