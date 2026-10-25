@@ -15,11 +15,11 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// Próximo passo: rotas de campanhas e investimento
+// Próximo paso: rotas de campañas e investimento
 app.get('/api/campaigns', (_req, res) => {
   res.json({ campaigns: [] });
 });
 
 app.listen(PORT, () => {
-  console.log(`API em http://localhost:${PORT}`);
+  console.log(`API en http://localhost:${PORT}`);
 });
