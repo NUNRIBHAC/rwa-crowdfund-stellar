@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { isConnected, getPublicKey } from '@stellar/freighter-api';
+import { isConnected, getPublicKey, signTransaction } from '@stellar/freighter-api';
 
 type Investment = {
   id: string;
@@ -91,9 +91,6 @@ export default function App() {
       }
       const pk = await getPublicKey();
       setPubKey(pk);
-      if (!demoInvestors.includes(pk)) {
-        setError('A conta Freighter não é uma conta demo. Para o MVP, escolhe uma conta demo da lista.');
-      }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }
@@ -137,6 +134,43 @@ export default function App() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Falha no investimento.');
+      setAmounts((prev) => ({ ...prev, [c.id]: '' }));
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function investFreighter(c: Campaign) {
+    try {
+      setError(null);
+      if (!pubKey) throw new Error('Liga o Freighter primeiro.');
+      const inputAmt = Number(amounts[c.id]);
+      if (!Number.isFinite(inputAmt) || inputAmt <= 0) throw new Error('Montante inválido.');
+      setBusy(true);
+
+      const buildRes = await fetch(`/api/campaigns/${c.id}/invest/build`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ investorPub: pubKey, amountUsdc: inputAmt }),
+      });
+      const buildData = await buildRes.json();
+      if (!buildRes.ok) throw new Error(buildData.error ?? 'Falha ao preparar investimento.');
+
+      const signedXdr = await signTransaction(buildData.xdr, {
+        networkPassphrase: buildData.networkPassphrase,
+      });
+
+      const submitRes = await fetch(`/api/campaigns/${c.id}/invest/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ investorPub: pubKey, xdr: signedXdr }),
+      });
+      const submitData = await submitRes.json();
+      if (!submitRes.ok) throw new Error(submitData.error ?? 'Falha ao submeter investimento.');
+
       setAmounts((prev) => ({ ...prev, [c.id]: '' }));
       await refresh();
     } catch (err) {
@@ -262,9 +296,15 @@ export default function App() {
                   onChange={(e) => setAmounts((prev) => ({ ...prev, [c.id]: e.target.value }))}
                   style={{ width: 110, padding: 8 }}
                 />
-                <button onClick={() => invest(c)} disabled={busy}>
-                  Investir
-                </button>
+                {pubKey ? (
+                  <button onClick={() => investFreighter(c)} disabled={busy}>
+                    Investir (Freighter)
+                  </button>
+                ) : (
+                  <button onClick={() => invest(c)} disabled={busy}>
+                    Investir
+                  </button>
+                )}
                 {full && (
                   <button onClick={() => act(c, 'finalize')} disabled={busy}>
                     Finalizar (pagar criador)

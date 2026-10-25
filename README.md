@@ -32,3 +32,24 @@ npm run setup                          # contas + USDC testnet + asset RWA
 npm run dev:backend                    # API em http://localhost:4000
 npm run dev:frontend                   # app em http://localhost:5173
 ```
+
+## Demo limpa (reset + faucet)
+
+Para recomeçar do zero antes de uma demo (por exemplo, depois de um E2E completo em que os
+investidores demo gastaram os seus USDC na campanha anterior):
+
+1. `cd backend && npm run reset` — apaga `data/campaigns.json` e `.demo-investors.json`.
+2. `npm run setup` — garante a conta da plataforma, adiciona a trustline USDC e pede USDC ao
+   Sozu Faucet (plataforma + 1 investidor demo). Se o claim automático falhar porque a
+   plataforma já reclamou antes, pede USDC manualmente no Sozu Faucet com a publicKey da
+   plataforma.
+3. `npm run demo` — corre o E2E determinístico: seed 60+30+10 USDC (3 investidores), cria
+   campanha, investe, finaliza e paga o criador.
+
+Notas:
+
+- A conta da plataforma é persistente (`backend/.env` → `PLATFORM_SECRET`); o reset só apaga
+  campanhas e contas demo.
+- Após um E2E completo a plataforma fica com ~40 USDC, por isso o passo 2 é obrigatório antes
+  de nova demo.
+- Todas as transações do demo são verificáveis no stellar.expert (testnet).

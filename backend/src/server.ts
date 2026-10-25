@@ -3,6 +3,7 @@ import cors from 'cors';
 import { PORT, NETWORK } from './config.js';
 import { server } from './stellar.js';
 import {
+  buildInvestXdr,
   createCampaign,
   finalize,
   invest,
@@ -10,6 +11,7 @@ import {
   listDemoInvestors,
   refund,
   seedDemoInvestors,
+  submitSignedInvest,
 } from './campaigns.js';
 import { getBalances } from './chain.js';
 
@@ -44,6 +46,22 @@ app.post('/api/campaigns', async (req, res) => {
 app.post('/api/campaigns/:id/invest', async (req, res) => {
   try {
     res.json(await invest(req.params.id, req.body ?? {}));
+  } catch (err) {
+    res.status(400).json({ error: String(err) });
+  }
+});
+
+app.post('/api/campaigns/:id/invest/build', async (req, res) => {
+  try {
+    res.json(await buildInvestXdr(req.params.id, req.body ?? {}));
+  } catch (err) {
+    res.status(400).json({ error: String(err) });
+  }
+});
+
+app.post('/api/campaigns/:id/invest/submit', async (req, res) => {
+  try {
+    res.json(await submitSignedInvest(req.params.id, req.body ?? {}));
   } catch (err) {
     res.status(400).json({ error: String(err) });
   }
