@@ -347,18 +347,29 @@ export async function submitSignedInvest(
 
   let paidUsdc: number | null = null;
   for (const op of tx.operations) {
-    const obj = Operation.operationToObject(op) as any;
+    const o = op as any;
     if (
-      obj.type === 'payment' &&
-      obj.destination === plat.publicKey() &&
-      obj.asset.code === USDC.code &&
-      obj.asset.issuer === USDC.issuer
+      o?.type === 'payment' &&
+      o?.destination === plat.publicKey() &&
+      o?.asset?.code === USDC.code &&
+      o?.asset?.issuer === USDC.issuer
     ) {
-      paidUsdc = Number(obj.amount);
+      paidUsdc = Number(o.amount);
       break;
     }
   }
   if (paidUsdc === null || !Number.isFinite(paidUsdc) || paidUsdc <= 0) {
+    // Depuración: se o formato das operacións do SDK v17 for diferente,
+    // isto mostra a estrutura real para axustar a lectura.
+    for (const op of tx.operations as any[]) {
+      console.error(
+        'OP:',
+        JSON.stringify(
+          { keys: Object.keys(op), ctor: op?.constructor?.name, type: op?.type, op },
+          (k, v) => (typeof v === 'bigint' ? v.toString() : v),
+        ).slice(0, 1000),
+      );
+    }
     throw new Error('XDR sen pagamento USDC á plataforma');
   }
 
