@@ -8,5 +8,9 @@ build/
 .DS_Store
 coverage/
 
+# Secrets do creador demo + índice local de campañas
+backend/.creator.json
+backend/data/
+
 # Secrets de contas demo gerados por `npm run setup`
 backend/.demo-investors.json
