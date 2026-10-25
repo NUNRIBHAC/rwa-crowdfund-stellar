@@ -1,4 +1,3 @@
-gitignore
 node_modules/
 dist/
 build/
@@ -8,3 +7,6 @@ build/
 *.log
 .DS_Store
 coverage/
+
+# Secrets de contas demo gerados por `npm run setup`
+backend/.demo-investors.json
