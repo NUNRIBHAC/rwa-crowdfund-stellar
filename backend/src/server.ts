@@ -4,6 +4,7 @@ import { PORT, NETWORK } from './config.js';
 import { server } from './stellar.js';
 import {
   buildInvestXdr,
+  buildTrustlineXdr,
   createCampaign,
   finalize,
   invest,
@@ -12,6 +13,7 @@ import {
   refund,
   seedDemoInvestors,
   submitSignedInvest,
+  submitSignedTrustline,
 } from './campaigns.js';
 import { getBalances } from './chain.js';
 
@@ -100,6 +102,22 @@ app.get('/api/demo/wallet/:pub', async (req, res) => {
     res.json({ balances: await getBalances(req.params.pub) });
   } catch (err) {
     res.status(500).json({ error: String(err) });
+  }
+});
+
+app.post('/api/wallet/trustline/build', async (req, res) => {
+  try {
+    res.json(await buildTrustlineXdr(req.body ?? {}));
+  } catch (err) {
+    res.status(400).json({ error: String(err) });
+  }
+});
+
+app.post('/api/wallet/trustline/submit', async (req, res) => {
+  try {
+    res.json(await submitSignedTrustline(req.body ?? {}));
+  } catch (err) {
+    res.status(400).json({ error: String(err) });
   }
 });
 
