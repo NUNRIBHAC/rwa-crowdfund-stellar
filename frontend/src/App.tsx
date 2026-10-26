@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { isConnected, getPublicKey, signTransaction } from '@stellar/freighter-api';
+import { isConnected, requestAccess, signTransaction } from '@stellar/freighter-api';
 
 type Investment = {
   id: string;
@@ -58,6 +58,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [trustlineHash, setTrustlineHash] = useState<string | null>(null);
 
   const [newName, setNewName] = useState('');
   const [newGoal, setNewGoal] = useState('100');
@@ -86,13 +87,53 @@ export default function App() {
   async function connect() {
     try {
       setError(null);
-      if (!(await isConnected())) {
+      const conn = await isConnected();
+      if (conn.error) throw new Error(conn.error.message);
+      if (!conn.isConnected) {
         throw new Error('Freighter não está instalado ou ativo. Instala a extensão e recarrega.');
       }
-      const pk = await getPublicKey();
-      setPubKey(pk);
+      const acc = await requestAccess();
+      if (acc.error) throw new Error(acc.error.message);
+      if (!acc.address) throw new Error('Não foi possível obter o endereço da conta.');
+      setPubKey(acc.address);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
+    }
+  }
+
+  async function addUsdcTrustline() {
+    try {
+      setError(null);
+      if (!pubKey) throw new Error('Liga o Freighter primeiro.');
+      setBusy(true);
+
+      const buildRes = await fetch('/api/wallet/trustline/build', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ investorPub: pubKey }),
+      });
+      const buildData = await buildRes.json();
+      if (!buildRes.ok) throw new Error(buildData.error ?? 'Falha ao preparar trustline.');
+
+      const signed = await signTransaction(buildData.xdr, {
+        networkPassphrase: buildData.networkPassphrase,
+      });
+      if (signed.error) throw new Error(signed.error.message);
+      const signedXdr = signed.signedTxXdr;
+
+      const submitRes = await fetch('/api/wallet/trustline/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ investorPub: pubKey, xdr: signedXdr }),
+      });
+      const submitData = await submitRes.json();
+      if (!submitRes.ok) throw new Error(submitData.error ?? 'Falha ao adicionar trustline.');
+
+      setTrustlineHash(submitData.hash);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -159,9 +200,11 @@ export default function App() {
       const buildData = await buildRes.json();
       if (!buildRes.ok) throw new Error(buildData.error ?? 'Falha ao preparar investimento.');
 
-      const signedXdr = await signTransaction(buildData.xdr, {
+      const signed = await signTransaction(buildData.xdr, {
         networkPassphrase: buildData.networkPassphrase,
       });
+      if (signed.error) throw new Error(signed.error.message);
+      const signedXdr = signed.signedTxXdr;
 
       const submitRes = await fetch(`/api/campaigns/${c.id}/invest/submit`, {
         method: 'POST',
@@ -220,6 +263,22 @@ export default function App() {
           </button>
         )}
       </div>
+
+      {pubKey && (
+        <div style={{ marginBottom: 8 }}>
+          <button onClick={addUsdcTrustline} disabled={busy}>
+            Adicionar USDC (Freighter)
+          </button>
+          {trustlineHash && (
+            <span style={{ marginLeft: 8, fontSize: 13 }}>
+              Trustline:{' '}
+              <a href={txLink(trustlineHash)} target="_blank" rel="noreferrer">
+                {trustlineHash.slice(0, 16)}…
+              </a>
+            </span>
+          )}
+        </div>
+      )}
 
       {error && <p style={{ color: 'crimson' }}>{error}</p>}
 

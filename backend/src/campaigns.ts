@@ -348,11 +348,12 @@ export async function submitSignedInvest(
   let paidUsdc: number | null = null;
   for (const op of tx.operations) {
     const o = op as any;
+    const asset = o?.asset ?? o?.line;
     if (
       o?.type === 'payment' &&
-      o?.destination === plat.publicKey() &&
-      o?.asset?.code === USDC.code &&
-      o?.asset?.issuer === USDC.issuer
+      (o?.destination ?? o?.to) === plat.publicKey() &&
+      asset?.code === USDC.code &&
+      asset?.issuer === USDC.issuer
     ) {
       paidUsdc = Number(o.amount);
       break;
@@ -402,4 +403,69 @@ export async function submitSignedInvest(
   });
   saveStore(store);
   return campaign;
+}
+
+export async function buildTrustlineXdr(input: {
+  investorPub: string;
+  assetCode?: string;
+  assetIssuer?: string;
+}): Promise<{ xdr: string; networkPassphrase: string; assetCode: string }> {
+  const investorPub = (input.investorPub ?? '').trim();
+  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
+
+  const code = (input.assetCode ?? USDC.code).trim();
+  const issuer = (input.assetIssuer ?? USDC.issuer).trim();
+  if (!code || !issuer) throw new Error('assetCode/assetIssuer obrigatórios');
+
+  await ensureAccount(investorPub);
+
+  const account = await server.loadAccount(investorPub);
+  const asset = new Asset(code, issuer);
+  const builder = new TransactionBuilder(account, {
+    fee: '100',
+    networkPassphrase,
+  }).setTimeout(60);
+  builder.addOperation(Operation.changeTrust({ asset }));
+  const tx = builder.build();
+
+  return { xdr: tx.toXDR(), networkPassphrase, assetCode: code };
+}
+
+export async function submitSignedTrustline(input: {
+  investorPub: string;
+  xdr: string;
+}): Promise<{ hash: string; assetCode: string }> {
+  const investorPub = (input.investorPub ?? '').trim();
+  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
+  if (typeof input.xdr !== 'string' || input.xdr.length === 0) throw new Error('xdr obrigatorio');
+
+  const tx = TransactionBuilder.fromXDR(input.xdr, networkPassphrase);
+  if (tx.source !== investorPub) {
+    throw new Error('XDR asinado por outra conta');
+  }
+
+  let assetCode: string | null = null;
+  for (const op of tx.operations) {
+    const o = op as any;
+    if (o?.type === 'changeTrust') {
+      const asset = o?.asset ?? o?.line;
+      assetCode = typeof asset?.code === 'string' ? asset.code : null;
+      break;
+    }
+  }
+  if (!assetCode) {
+    throw new Error('XDR sen operación changeTrust');
+  }
+
+  let hash: string;
+  try {
+    const resp = await server.submitTransaction(tx);
+    hash = String(resp.hash ?? resp.id ?? resp);
+  } catch (e: any) {
+    const rcs = e?.response?.data?.extras?.result_codes;
+    if (rcs) console.error('SUBMIT_TRUSTLINE_FAIL result_codes=', JSON.stringify(rcs, null, 2));
+    throw e;
+  }
+
+  return { hash, assetCode };
 }
