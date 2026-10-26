@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Asset, Keypair, Operation, TransactionBuilder } from '@stellar/stellar-sdk';
+import { Asset, Keypair, Operation, Transaction, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { USDC, hasUsdcConfig } from './config.js';
 import { requirePlatform, server, networkPassphrase } from './stellar.js';
 import { ensureAccount, ensureTrustline, hasTrustline, submitPayment } from './chain.js';
@@ -301,7 +301,7 @@ export async function buildInvestXdr(
   await ensureAccount(investorPub);
 
   const account = await server.loadAccount(investorPub);
-  const ops: Operation[] = [];
+  const ops: xdr.Operation[] = [];
   if (!(await hasTrustline(investorPub, usdc))) {
     ops.push(Operation.changeTrust({ asset: usdc }));
   }
@@ -341,6 +341,9 @@ export async function submitSignedInvest(
 
   const plat = requirePlatform();
   const tx = TransactionBuilder.fromXDR(input.xdr, networkPassphrase);
+  if (!(tx instanceof Transaction)) {
+    throw new Error('FeeBump transactions non soportadas');
+  }
   if (tx.source !== investorPub) {
     throw new Error('XDR asinado por outra conta');
   }
@@ -383,7 +386,7 @@ export async function submitSignedInvest(
   let usdcTx: string;
   try {
     const resp = await server.submitTransaction(tx);
-    usdcTx = String(resp.hash ?? resp.id ?? resp);
+    usdcTx = String(resp.hash ?? resp);
   } catch (e: any) {
     const rcs = e?.response?.data?.extras?.result_codes;
     if (rcs) console.error('SUBMIT_SIGNED_FAIL result_codes=', JSON.stringify(rcs, null, 2));
@@ -440,6 +443,9 @@ export async function submitSignedTrustline(input: {
   if (typeof input.xdr !== 'string' || input.xdr.length === 0) throw new Error('xdr obrigatorio');
 
   const tx = TransactionBuilder.fromXDR(input.xdr, networkPassphrase);
+  if (!(tx instanceof Transaction)) {
+    throw new Error('FeeBump transactions non soportadas');
+  }
   if (tx.source !== investorPub) {
     throw new Error('XDR asinado por outra conta');
   }
@@ -460,7 +466,7 @@ export async function submitSignedTrustline(input: {
   let hash: string;
   try {
     const resp = await server.submitTransaction(tx);
-    hash = String(resp.hash ?? resp.id ?? resp);
+    hash = String(resp.hash ?? resp);
   } catch (e: any) {
     const rcs = e?.response?.data?.extras?.result_codes;
     if (rcs) console.error('SUBMIT_TRUSTLINE_FAIL result_codes=', JSON.stringify(rcs, null, 2));
