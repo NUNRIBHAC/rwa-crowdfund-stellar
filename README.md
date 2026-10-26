@@ -17,7 +17,7 @@ capabilities — without relying on Soroban contracts on the critical path.
 - Invest from your Freighter wallet (`@stellar/freighter-api`) or demo accounts
 - Funds are held in escrow (platform account) until the goal is met
 - Per-campaign transferable RWA tokens, issued through the protocol's native asset
-  issuance (classic asset issuance + trustlines): each campaign gets its own `RWA00X`
+  issuance (classic asset issuance + trustlines): each campaign gets its own `CRWD00X`
   asset, with the supply issued to the platform account and distributed to investors
 - `finalize` pays the creator when the goal is met; `refund` returns USDC to investors
   if the campaign does not move forward
@@ -26,7 +26,7 @@ capabilities — without relying on Soroban contracts on the critical path.
 
 What this build gets out of the Stellar protocol:
 
-- **Classic asset issuance**: each campaign creates a `RWA00X` asset with the platform
+- **Classic asset issuance**: each campaign creates a `CRWD00X` asset with the platform
   account as issuer and control authority. Investors create trustlines for the asset and
   receive transferable tokens.
 - **Stellar account escrow**: USDC sits in a platform account (not a complex contract)
