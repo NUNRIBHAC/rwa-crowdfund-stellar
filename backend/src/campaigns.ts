@@ -91,7 +91,7 @@ export function listDemoInvestors(): string[] {
 }
 
 export async function seedDemoInvestors(amounts?: number[]): Promise<{ investors: string[] }> {
-  if (!hasUsdcConfig) throw new Error('USDC_ISSUER non configurado');
+  if (!hasUsdcConfig) throw new Error('USDC_ISSUER not configured');
   const map = fs.existsSync(demoInvestorsPath)
     ? JSON.parse(fs.readFileSync(demoInvestorsPath, 'utf8'))
     : {};
@@ -123,10 +123,10 @@ export async function createCampaign(input: {
   const name = (input.name ?? '').trim();
   const goal = Number(input.goalUsdc);
   const supply = Math.floor(Number(input.supply ?? 1000));
-  if (!name) throw new Error('name obrigatorio');
-  if (!Number.isFinite(goal) || goal <= 0) throw new Error('goalUsdc debe ser > 0');
-  if (supply <= 0) throw new Error('supply debe ser > 0');
-  if (!hasUsdcConfig) throw new Error('USDC_ISSUER non configurado (backend/.env)');
+  if (!name) throw new Error('name is required');
+  if (!Number.isFinite(goal) || goal <= 0) throw new Error('goalUsdc must be > 0');
+  if (supply <= 0) throw new Error('supply must be > 0');
+  if (!hasUsdcConfig) throw new Error('USDC_ISSUER not configured (backend/.env)');
 
   const plat = requirePlatform();
   const store = loadStore();
@@ -155,7 +155,7 @@ export async function createCampaign(input: {
     investments: [],
   };
 
-  // Emitir o supply e mantelo en escrow na conta da plataforma (crea o asset onchain).
+  // Mint the supply and hold it in escrow on the platform account (creates the asset onchain).
   campaign.mintTx = await submitPayment(
     plat,
     plat.publicKey(),
@@ -174,27 +174,27 @@ export async function invest(
 ): Promise<Campaign> {
   const store = loadStore();
   const campaign = store.campaigns.find((c) => c.id === id);
-  if (!campaign) throw new Error(`campaña ${id} non existe`);
-  if (campaign.state !== 'funding') throw new Error(`campaña en estado ${campaign.state}`);
-  if (Date.now() > Date.parse(campaign.deadline)) throw new Error('prazo rematado');
+  if (!campaign) throw new Error(`campaign ${id} not found`);
+  if (campaign.state !== 'funding') throw new Error(`campaign is in state ${campaign.state}`);
+  if (Date.now() > Date.parse(campaign.deadline)) throw new Error('campaign deadline has passed');
 
   const investorPub = (input.investorPub ?? '').trim();
   const amount = Number(input.amountUsdc);
-  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
-  if (!Number.isFinite(amount) || amount <= 0) throw new Error('amountUsdc debe ser > 0');
+  if (!investorPub.startsWith('G')) throw new Error('invalid investorPub');
+  if (!Number.isFinite(amount) || amount <= 0) throw new Error('amountUsdc must be > 0');
 
   const remaining = campaign.goalUsdc - investedUsdc(campaign);
-  if (remaining <= 0) throw new Error('obxectivo xa alcanzado');
+  if (remaining <= 0) throw new Error('goal already reached');
   const rounded = Math.round(Math.min(amount, remaining) * 100) / 100;
 
   const tokens = Math.floor((rounded / campaign.goalUsdc) * campaign.supply);
-  if (tokens <= 0) throw new Error('cantidade moi pequena: non xenera tokens');
+  if (tokens <= 0) throw new Error('amount too small: does not generate tokens');
 
   const secret = demoSecretOf(investorPub);
   if (!secret) {
     throw new Error(
-      'Conta non demo: asinatura con Freighter no seguinte paso. ' +
-        `Usa unha conta de backend/.demo-investors.json para o E2E: ${listDemoInvestors().join(', ')}`,
+      'Non-demo account: sign with Freighter in the next step. ' +
+        `Use an account from backend/.demo-investors.json for the E2E: ${listDemoInvestors().join(', ')}`,
     );
   }
   const investor = Keypair.fromSecret(secret);
@@ -225,13 +225,13 @@ export async function invest(
 export async function finalize(id: string): Promise<Campaign> {
   const store = loadStore();
   const campaign = store.campaigns.find((c) => c.id === id);
-  if (!campaign) throw new Error(`campaña ${id} non existe`);
-  if (campaign.state !== 'funding') throw new Error(`campaña en estado ${campaign.state}`);
+  if (!campaign) throw new Error(`campaign ${id} not found`);
+  if (campaign.state !== 'funding') throw new Error(`campaign is in state ${campaign.state}`);
 
   const total = investedUsdc(campaign);
-  if (total <= 0) throw new Error('sen investimentos; non se pode finalizar');
+  if (total <= 0) throw new Error('no investments; cannot finalize');
   if (total < campaign.goalUsdc) {
-    throw new Error(`obxectivo non alcanzado (${total}/${campaign.goalUsdc})`);
+    throw new Error(`goal not reached (${total}/${campaign.goalUsdc})`);
   }
 
   const plat = requirePlatform();
@@ -248,8 +248,8 @@ export async function finalize(id: string): Promise<Campaign> {
 export async function refund(id: string): Promise<Campaign> {
   const store = loadStore();
   const campaign = store.campaigns.find((c) => c.id === id);
-  if (!campaign) throw new Error(`campaña ${id} non existe`);
-  if (campaign.state !== 'funding') throw new Error(`campaña en estado ${campaign.state}`);
+  if (!campaign) throw new Error(`campaign ${id} not found`);
+  if (campaign.state !== 'funding') throw new Error(`campaign is in state ${campaign.state}`);
 
   const plat = requirePlatform();
   for (const inv of campaign.investments) {
@@ -278,21 +278,21 @@ export async function buildInvestXdr(
 ): Promise<{ xdr: string; networkPassphrase: string; amountUsdc: number; tokens: number }> {
   const store = loadStore();
   const campaign = store.campaigns.find((c) => c.id === id);
-  if (!campaign) throw new Error(`campaña ${id} non existe`);
-  if (campaign.state !== 'funding') throw new Error(`campaña en estado ${campaign.state}`);
-  if (Date.now() > Date.parse(campaign.deadline)) throw new Error('prazo rematado');
+  if (!campaign) throw new Error(`campaign ${id} not found`);
+  if (campaign.state !== 'funding') throw new Error(`campaign is in state ${campaign.state}`);
+  if (Date.now() > Date.parse(campaign.deadline)) throw new Error('campaign deadline has passed');
 
   const investorPub = (input.investorPub ?? '').trim();
   const amount = Number(input.amountUsdc);
-  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
-  if (!Number.isFinite(amount) || amount <= 0) throw new Error('amountUsdc debe ser > 0');
+  if (!investorPub.startsWith('G')) throw new Error('invalid investorPub');
+  if (!Number.isFinite(amount) || amount <= 0) throw new Error('amountUsdc must be > 0');
 
   const remaining = campaign.goalUsdc - investedUsdc(campaign);
-  if (remaining <= 0) throw new Error('obxectivo xa alcanzado');
+  if (remaining <= 0) throw new Error('goal already reached');
   const rounded = Math.round(Math.min(amount, remaining) * 100) / 100;
 
   const tokens = Math.floor((rounded / campaign.goalUsdc) * campaign.supply);
-  if (tokens <= 0) throw new Error('cantidade moi pequena: non xenera tokens');
+  if (tokens <= 0) throw new Error('amount too small: does not generate tokens');
 
   const plat = requirePlatform();
   const usdc = usdcAsset();
@@ -332,20 +332,20 @@ export async function submitSignedInvest(
 ): Promise<Campaign> {
   const store = loadStore();
   const campaign = store.campaigns.find((c) => c.id === id);
-  if (!campaign) throw new Error(`campaña ${id} non existe`);
-  if (campaign.state !== 'funding') throw new Error(`campaña en estado ${campaign.state}`);
+  if (!campaign) throw new Error(`campaign ${id} not found`);
+  if (campaign.state !== 'funding') throw new Error(`campaign is in state ${campaign.state}`);
 
   const investorPub = (input.investorPub ?? '').trim();
-  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
-  if (typeof input.xdr !== 'string' || input.xdr.length === 0) throw new Error('xdr obrigatorio');
+  if (!investorPub.startsWith('G')) throw new Error('invalid investorPub');
+  if (typeof input.xdr !== 'string' || input.xdr.length === 0) throw new Error('xdr is required');
 
   const plat = requirePlatform();
   const tx = TransactionBuilder.fromXDR(input.xdr, networkPassphrase);
   if (!(tx instanceof Transaction)) {
-    throw new Error('FeeBump transactions non soportadas');
+    throw new Error('FeeBump transactions are not supported');
   }
   if (tx.source !== investorPub) {
-    throw new Error('XDR asinado por outra conta');
+    throw new Error('XDR signed by a different account');
   }
 
   let paidUsdc: number | null = null;
@@ -363,8 +363,8 @@ export async function submitSignedInvest(
     }
   }
   if (paidUsdc === null || !Number.isFinite(paidUsdc) || paidUsdc <= 0) {
-    // Depuración: se o formato das operacións do SDK v17 for diferente,
-    // isto mostra a estrutura real para axustar a lectura.
+    // Debug: if the operation format in SDK v17 is different,
+    // this shows the real structure to adjust the parsing.
     for (const op of tx.operations as any[]) {
       console.error(
         'OP:',
@@ -374,14 +374,14 @@ export async function submitSignedInvest(
         ).slice(0, 1000),
       );
     }
-    throw new Error('XDR sen pagamento USDC á plataforma');
+    throw new Error('XDR without a USDC payment to the platform');
   }
 
   const remaining = campaign.goalUsdc - investedUsdc(campaign);
-  if (paidUsdc > remaining) throw new Error('XDR paga máis do que queda por alcanzar');
+  if (paidUsdc > remaining) throw new Error('XDR pays more than the remaining goal');
   const rounded = Math.round(paidUsdc * 100) / 100;
   const tokens = Math.floor((rounded / campaign.goalUsdc) * campaign.supply);
-  if (tokens <= 0) throw new Error('cantidade moi pequena: non xenera tokens');
+  if (tokens <= 0) throw new Error('amount too small: does not generate tokens');
 
   let usdcTx: string;
   try {
@@ -414,11 +414,11 @@ export async function buildTrustlineXdr(input: {
   assetIssuer?: string;
 }): Promise<{ xdr: string; networkPassphrase: string; assetCode: string }> {
   const investorPub = (input.investorPub ?? '').trim();
-  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
+  if (!investorPub.startsWith('G')) throw new Error('invalid investorPub');
 
   const code = (input.assetCode ?? USDC.code).trim();
   const issuer = (input.assetIssuer ?? USDC.issuer).trim();
-  if (!code || !issuer) throw new Error('assetCode/assetIssuer obrigatórios');
+  if (!code || !issuer) throw new Error('assetCode/assetIssuer are required');
 
   await ensureAccount(investorPub);
 
@@ -439,15 +439,15 @@ export async function submitSignedTrustline(input: {
   xdr: string;
 }): Promise<{ hash: string; assetCode: string }> {
   const investorPub = (input.investorPub ?? '').trim();
-  if (!investorPub.startsWith('G')) throw new Error('investorPub inválido');
-  if (typeof input.xdr !== 'string' || input.xdr.length === 0) throw new Error('xdr obrigatorio');
+  if (!investorPub.startsWith('G')) throw new Error('invalid investorPub');
+  if (typeof input.xdr !== 'string' || input.xdr.length === 0) throw new Error('xdr is required');
 
   const tx = TransactionBuilder.fromXDR(input.xdr, networkPassphrase);
   if (!(tx instanceof Transaction)) {
-    throw new Error('FeeBump transactions non soportadas');
+    throw new Error('FeeBump transactions are not supported');
   }
   if (tx.source !== investorPub) {
-    throw new Error('XDR asinado por outra conta');
+    throw new Error('XDR signed by a different account');
   }
 
   let assetCode: string | null = null;
@@ -460,7 +460,7 @@ export async function submitSignedTrustline(input: {
     }
   }
   if (!assetCode) {
-    throw new Error('XDR sen operación changeTrust');
+    throw new Error('XDR without a changeTrust operation');
   }
 
   let hash: string;

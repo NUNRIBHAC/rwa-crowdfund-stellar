@@ -122,5 +122,5 @@ app.post('/api/wallet/trustline/submit', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`API en http://localhost:${PORT}`);
+  console.log(`API at http://localhost:${PORT}`);
 });

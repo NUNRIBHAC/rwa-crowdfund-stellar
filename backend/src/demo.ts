@@ -10,10 +10,10 @@ import {
   async function main(): Promise<void> {
     const amounts = [60, 30, 10];
     const { investors } = await seedDemoInvestors(amounts);
-    console.log('Investidores demo:', investors.join(', '));
+    console.log('Demo investors:', investors.join(', '));
   
     const campaign = await createCampaign({ name: 'Solar Lisbon #1', goalUsdc: 100 });
-    console.log(`Campaña ${campaign.id} (${campaign.code}) creador=${campaign.creatorPub} mint=${campaign.mintTx}`);
+    console.log(`Campaign ${campaign.id} (${campaign.code}) creator=${campaign.creatorPub} mint=${campaign.mintTx}`);
   
     const amounts2 = [60, 30, 10];
     for (let i = 0; i < amounts2.length && i < investors.length; i++) {
@@ -25,7 +25,7 @@ import {
     }
   
     const done = await finalize(campaign.id);
-    console.log(`Finalizada ${campaign.id}: payout=${done.payoutTx}`);
+    console.log(`Finalized ${campaign.id}: payout=${done.payoutTx}`);
   
     const platPub = requirePlatform().publicKey();
     for (const pub of [platPub, campaign.creatorPub, ...investors]) {
@@ -39,6 +39,6 @@ import {
   }
   
   main().catch((err) => {
-    console.error('Demo fallou:', err);
+    console.error('Demo failed:', err);
     process.exit(1);
-  });  
+  });

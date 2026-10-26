@@ -1,195 +1,200 @@
 # RWA Crowdfund — Stellar
 
-Plataforma de crowdfunding de RWA (real world assets) tokenizada na rede Stellar.
-Build para o HackMeridian 2026 — Genesis, track **Stellar Unlocked**.
+Tokenized RWA (real world assets) crowdfunding platform on the Stellar network.
+Built for HackMeridian 2026 — Genesis, **Stellar Unlocked** track.
 
-## Problema
+## Problem
 
-Projetos do mundo real (energia, infraestrutura, imobiliário) precisam de financiamento
-antecipado, mas o caminho tradicional é lento, opaco e sem liquidez para o pequeno investidor.
-A tokenização de RWA resolve isso: cada contribuição vira um ativo digital transferível e
-verificável. Este MVP prova o circuito completo em Testnet com as capacidades nativas do
-protocolo Stellar — sem depender de contratos Soroban no caminho crítico.
+Real-world projects (energy, infrastructure, real estate) need upfront funding, but the
+traditional path is slow, opaque and offers no liquidity to the small investor. RWA
+tokenization solves this: every contribution becomes a transferable, verifiable digital
+asset. This MVP proves the full loop on Testnet using Stellar's native protocol
+capabilities — without relying on Soroban contracts on the critical path.
 
-## O que faz (MVP)
+## What it does (MVP)
 
-- Criação de campanhas de financiamento com meta em USDC (testnet)
-- Investimento com a tua carteira Freighter (`@stellar/freighter-api`) ou contas demo
-- Custódia dos fundos em escrow (conta da plataforma) até a meta ser atingida
-- Emissão de tokens RWA transferíveis por campanha, usando a emissão nativa de ativos do
-  protocolo (asset issuance clássico + trustlines): cada campanha tem o seu ativo `RWA00X`,
-  com supply emitido para a conta da plataforma e distribuído aos investidores
-- `finalize` paga o criador quando a meta é atingida; `refund` devolve os USDC aos investidores
-  caso a campanha não prossiga
+- Create funding campaigns with a USDC goal (testnet)
+- Invest from your Freighter wallet (`@stellar/freighter-api`) or demo accounts
+- Funds are held in escrow (platform account) until the goal is met
+- Per-campaign transferable RWA tokens, issued through the protocol's native asset
+  issuance (classic asset issuance + trustlines): each campaign gets its own `RWA00X`
+  asset, with the supply issued to the platform account and distributed to investors
+- `finalize` pays the creator when the goal is met; `refund` returns USDC to investors
+  if the campaign does not move forward
 
 ## Track: Stellar Unlocked
 
-O que esta build extrai do protocolo Stellar:
+What this build gets out of the Stellar protocol:
 
-- **Asset issuance clássico**: cada campanha cria um ativo `RWA00X` com a conta da plataforma
-  como emissora e autoridade de controlo. Os investidores criam trustlines para o ativo e
-  recebem tokens transferíveis.
-- **Escrow em conta Stellar**: os USDC ficam numa conta da plataforma (não num contrato
-  complexo) até finalize/refund; o movimento é público e verificável em Horizon / stellar.expert.
-- **Integração criptográfica de carteiras**: assinatura de transações no browser com
-  `@stellar/freighter-api` sobre o fluxo build/submit do backend (o browser nunca expõe a
-  secret key).
+- **Classic asset issuance**: each campaign creates a `RWA00X` asset with the platform
+  account as issuer and control authority. Investors create trustlines for the asset and
+  receive transferable tokens.
+- **Stellar account escrow**: USDC sits in a platform account (not a complex contract)
+  until finalize/refund; the movement is public and verifiable on Horizon / stellar.expert.
+- **Cryptographic wallet integration**: transactions are signed in the browser with
+  `@stellar/freighter-api` over the backend's build/submit flow (the browser never exposes
+  the secret key).
 
 ## Stack
 
 - Backend: Node/TS, Express 5, `@stellar/stellar-sdk` v17, Horizon testnet, zod
 - Frontend: React + Vite, `@stellar/freighter-api`
-- Rede: Stellar Testnet (Horizon `https://horizon-testnet.stellar.org`), USDC testnet do
-  Circle (SAC), faucet Sozu
+- Network: Stellar Testnet (Horizon `https://horizon-testnet.stellar.org`), Circle USDC
+  testnet (SAC), Sozu faucet
 
-Sem contrato Soroban no caminho crítico: tudo é feito com operações clássicas do protocolo.
+No Soroban contract on the critical path: everything uses classic protocol operations.
 
-## Arquitetura
+## Architecture
 
 ```
 frontend (React + Freighter)               backend (Express + stellar-sdk)
         │                                          │
         │ 1. POST /api/campaigns/:id/invest/build  │
-        │    { investorPub, amountUsdc } ─────────►│ valida: campanha funding, montante > 0,
-        │                                          │   garante conta do investidor
-        │ 2. XDR não assinado ◄────────────────────│ build: changeTrust USDC (se falta),
+        │    { investorPub, amountUsdc } ─────────►│ validates: campaign funding, amount > 0,
+        │                                          │   ensures investor account exists
+        │ 2. unsigned XDR ◄────────────────────────│ build: changeTrust USDC (if missing),
         │    (changeTrust USDC + changeTrust RWA   │   changeTrust RWA,
-        │     + payment USDC → escrow plataforma)  │   payment USDC → plataforma (escrow)
+        │     + payment USDC → platform escrow)    │   payment USDC → platform (escrow)
         │ 3. signTransaction (Freighter)           │
         │ 4. POST /api/campaigns/:id/invest/submit │
-        │    { investorPub, xdr } ────────────────►│ verifica tx.source == investorPub,
-        │                                          │   extrai montante real do pagamento
-        │                                          │   (não confia no input), submete
-        │ 5. resposta com investimento ◄───────────│ entrega tokens RWA (payment do emissor),
-        │                                          │   regista em backend/data/campaigns.json
+        │    { investorPub, xdr } ────────────────►│ verifies tx.source == investorPub,
+        │                                          │   extracts the real payment amount
+        │                                          │   (does not trust the input), submits
+        │ 5. investment response ◄─────────────────│ delivers RWA tokens (issuer payment),
+        │                                          │   records in backend/data/campaigns.json
 ```
 
-Contas e ativos:
+Accounts and assets:
 
-- **Plataforma / escrow / emissor RWA**: `GDYY4VT5DI5QGBXBKJRCZGCEFJWEJNGTBLSFJF355Z53MI5QAHNJYUO7`
-  (secret em `backend/.env` → `PLATFORM_SECRET`)
+- **Platform / escrow / RWA issuer**: `GDYY4VT5DI5QGBXBKJRCZGCEFJWEJNGTBLSFJF355Z53MI5QAHNJYUO7`
+  (secret in `backend/.env` → `PLATFORM_SECRET`)
 - **USDC testnet (Circle SAC)**: issuer `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5`
-- **Investidores demo** (seed determinístico do demo):
+- **Demo investors** (deterministic demo seed):
   `GDPYRC7RTC2ZY3XUYIPHPO76QX34WJ4SNOTHK2ZGPVXECZ5FTNCBLE7L`,
   `GB5UJ2F5RBQEA5DIXNJCLADGAQNXD3D2H35GXD6EX2KHZ6FM7BODURNN`,
   `GBU5RMFCUEBOEQNAW547CA5SQZ4N5YROOMPLZVLNTWUU7EWGDLFRDI6U`
-- **Sem Soroban contract IDs, sem anchors, sem oracles** no MVP: são next steps (ver roadmap)
+- **No Soroban contract IDs, no anchors, no oracles** in the MVP: they are next steps
+  (see roadmap)
 
-## Evidência no Testnet (2026-10-26, campanha RWA005)
+## Testnet evidence (2026-10-26, campaign RWA005)
 
-Fluxo completo build/submit — o mesmo que o Freighter executa — com 3 investidores,
-goal 40 USDC, supply 1000 tokens, já finalizada:
+Full build/submit flow — the same one Freighter executes — with 3 investors,
+40 USDC goal, 1000 token supply, already finalized:
 
-| Passo | Tx hash | Explorer (testnet) |
+| Step | Tx hash | Explorer (testnet) |
 |---|---|---|
-| Mint do supply RWA005 (escrow na plataforma) | `78038fdbf068d0b636b1f8cf4e29816ca5e7124d422abb7e50ce5623867a3235` | https://stellar.expert/explorer/testnet/tx/78038fdbf068d0b636b1f8cf4e29816ca5e7124d422abb7e50ce5623867a3235 |
-| Investimento 1: 20 USDC → 500 tokens | USDC `0a6575bb97b547f993acbbcd76e24b9ce2efdd952a4b89aa458159438b4cd33c` / tokens `20ad1fe5d47a889c9cba3b6599974dc4cf786f687b799adf648cc6b9288c24bb` | https://stellar.expert/explorer/testnet/tx/0a6575bb97b547f993acbbcd76e24b9ce2efdd952a4b89aa458159438b4cd33c |
-| Investimento 2: 12 USDC → 300 tokens | USDC `42b678e6448f28d49e34ce0a8fb32ff5e5609a1339a1ab3371176c5ade751c58` / tokens `69b12b0f3c7c2269727216ee8978e89ec5da0dc833814811996fddf49a5fa9b6` | https://stellar.expert/explorer/testnet/tx/42b678e6448f28d49e34ce0a8fb32ff5e5609a1339a1ab3371176c5ade751c58 |
-| Investimento 3: 8 USDC → 200 tokens | USDC `bcc46b62da7761e55fdbba333748181149ec1d7a67ce99c5a9353ac1afa8bb96` / tokens `43fb367f63126f2deb591aae9132081cbfae93f44d77ecd3dc64ea327bd71b7c` | https://stellar.expert/explorer/testnet/tx/bcc46b62da7761e55fdbba333748181149ec1d7a67ce99c5a9353ac1afa8bb96 |
-| Finalize: payout 40 USDC ao criador | `803d20ceba1253d73f65d4db6d3ecba30e2fd15504d1607a32df4799d7f4a2fc` | https://stellar.expert/explorer/testnet/tx/803d20ceba1253d73f65d4db6d3ecba30e2fd15504d1607a32df4799d7f4a2fc |
+| Mint RWA005 supply (escrow on platform) | `78038fdbf068d0b636b1f8cf4e29816ca5e7124d422abb7e50ce5623867a3235` | https://stellar.expert/explorer/testnet/tx/78038fdbf068d0b636b1f8cf4e29816ca5e7124d422abb7e50ce5623867a3235 |
+| Investment 1: 20 USDC → 500 tokens | USDC `0a6575bb97b547f993acbbcd76e24b9ce2efdd952a4b89aa458159438b4cd33c` / tokens `20ad1fe5d47a889c9cba3b6599974dc4cf786f687b799adf648cc6b9288c24bb` | https://stellar.expert/explorer/testnet/tx/0a6575bb97b547f993acbbcd76e24b9ce2efdd952a4b89aa458159438b4cd33c |
+| Investment 2: 12 USDC → 300 tokens | USDC `42b678e6448f28d49e34ce0a8fb32ff5e5609a1339a1ab3371176c5ade751c58` / tokens `69b12b0f3c7c2269727216ee8978e89ec5da0dc833814811996fddf49a5fa9b6` | https://stellar.expert/explorer/testnet/tx/42b678e6448f28d49e34ce0a8fb32ff5e5609a1339a1ab3371176c5ade751c58 |
+| Investment 3: 8 USDC → 200 tokens | USDC `bcc46b62da7761e55fdbba333748181149ec1d7a67ce99c5a9353ac1afa8bb96` / tokens `43fb367f63126f2deb591aae9132081cbfae93f44d77ecd3dc64ea327bd71b7c` | https://stellar.expert/explorer/testnet/tx/bcc46b62da7761e55fdbba333748181149ec1d7a67ce99c5a9353ac1afa8bb96 |
+| Finalize: 40 USDC payout to creator | `803d20ceba1253d73f65d4db6d3ecba30e2fd15504d1607a32df4799d7f4a2fc` | https://stellar.expert/explorer/testnet/tx/803d20ceba1253d73f65d4db6d3ecba30e2fd15504d1607a32df4799d7f4a2fc |
 
-Saldos finais verificados: investidores com RWA005 500/300/200; plataforma 105 USDC e controlo
-do supply; criador com 390 USDC.
+Verified final balances: investors hold RWA005 500/300/200; platform has 105 USDC and
+control of the supply; creator has 390 USDC.
 
 ## Setup
 
-Requisitos: Node 20+, uma conta Stellar testnet e a extensão Freighter para o fluxo real.
+Requirements: Node 20+, a Stellar testnet account and the Freighter extension for the
+real wallet flow.
 
 ```bash
 npm install
-cp backend/.env.example backend/.env   # preencher (ver tabela abaixo)
-npm run setup                          # contas + USDC testnet + asset RWA
-npm run dev:backend                    # API em http://localhost:4000
-npm run dev:frontend                   # app em http://localhost:5173
+cp backend/.env.example backend/.env   # fill in (see table below)
+npm run setup                          # accounts + testnet USDC + RWA asset
+npm run dev:backend                    # API at http://localhost:4000
+npm run dev:frontend                   # app at http://localhost:5173
 ```
 
-### Variáveis de ambiente (`backend/.env`)
+### Environment variables (`backend/.env`)
 
-| Variável | Obrigatória | Descrição |
+| Variable | Required | Description |
 |---|---|---|
-| `STELLAR_NETWORK` | sim | `testnet` (único suportado neste MVP) |
-| `HORIZON_URL` | não | por omissão `https://horizon-testnet.stellar.org` |
-| `RPC_URL` | não | por omissão `https://soroban-testnet.stellar.org` |
-| `USDC_ISSUER` | sim | issuer do USDC testnet Circle SAC: `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5` |
-| `SOZU_FAUCET_URL` | não | por omissão `https://faucet.sozu.capital` |
-| `PLATFORM_SECRET` | sim | secret key da conta da plataforma/escrow (testnet only) |
-| `PORT` | não | porta da API, por omissão `4000` |
+| `STELLAR_NETWORK` | yes | `testnet` (only network supported in this MVP) |
+| `HORIZON_URL` | no | defaults to `https://horizon-testnet.stellar.org` |
+| `RPC_URL` | no | defaults to `https://soroban-testnet.stellar.org` |
+| `USDC_ISSUER` | yes | Circle USDC testnet SAC issuer: `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5` |
+| `SOZU_FAUCET_URL` | no | defaults to `https://faucet.sozu.capital` |
+| `PLATFORM_SECRET` | yes | secret key of the platform/escrow account (testnet only) |
+| `PORT` | no | API port, defaults to `4000` |
 
-Gerar `PLATFORM_SECRET` com:
+Generate `PLATFORM_SECRET` with:
 `node -e "console.log(require('@stellar/stellar-sdk').Keypair.random().secret())"`
 
-## Demo limpa (reset + faucet)
+## Clean demo (reset + faucet)
 
-Para recomeçar do zero antes de uma demo (por exemplo, depois de um E2E completo em que os
-investidores demo gastaram os seus USDC):
+To start from scratch before a demo (for example, after a full E2E in which the demo
+investors spent their USDC):
 
-1. `cd backend && npm run reset` — apaga `backend/data/campaigns.json` e `.demo-investors.json`.
-2. `npm run setup` — garante a conta da plataforma, adiciona a trustline USDC e pede USDC ao
-   Sozu Faucet (plataforma + 1 investidor demo). Se o claim automático falhar porque a
-   plataforma já reclamou antes, pede USDC manualmente no Sozu Faucet com a publicKey da
-   plataforma.
-3. `npm run demo` — corre o E2E determinístico: seed 60+30+10 USDC (3 investidores), cria
-   campanha, investe, finaliza e paga o criador.
+1. `cd backend && npm run reset` — deletes `backend/data/campaigns.json` and
+   `.demo-investors.json`.
+2. `npm run setup` — ensures the platform account, adds the USDC trustline and requests
+   USDC from the Sozu Faucet (platform + 1 demo investor). If the automatic claim fails
+   because the platform already claimed before, request USDC manually on the Sozu Faucet
+   using the platform's publicKey.
+3. `npm run demo` — runs the deterministic E2E: seeds 60+30+10 USDC (3 investors),
+   creates a campaign, invests, finalizes and pays the creator.
 
-Notas:
+Notes:
 
-- A conta da plataforma é persistente (`backend/.env` → `PLATFORM_SECRET`); o reset só apaga
-  campanhas e contas demo.
-- Após um E2E completo a plataforma fica com ~40 USDC, por isso o passo 2 é obrigatório antes
-  de nova demo.
-- Todas as transações são verificáveis no stellar.expert (testnet).
+- The platform account is persistent (`backend/.env` → `PLATFORM_SECRET`); reset only
+  deletes campaigns and demo accounts.
+- After a full E2E the platform is left with ~40 USDC, so step 2 is required before
+  another demo.
+- All demo transactions are verifiable on stellar.expert (testnet).
 
 ## API
 
-| Método | Rota | Descrição |
+| Method | Route | Description |
 |---|---|---|
-| GET | `/health` | estado da API e rede |
-| GET | `/api/campaigns` | lista campanhas |
-| POST | `/api/campaigns` | cria campanha |
-| POST | `/api/campaigns/:id/invest` | investimento demo (backend assina) |
-| POST | `/api/campaigns/:id/invest/build` | constrói XDR para assinatura Freighter |
-| POST | `/api/campaigns/:id/invest/submit` | submete XDR assinado e entrega tokens |
-| POST | `/api/campaigns/:id/finalize` | finaliza e paga o criador |
-| POST | `/api/campaigns/:id/refund` | reembolsa investidores |
-| GET | `/api/demo/investors` | lista investidores demo |
-| POST | `/api/demo/seed-investors` | seed dos investidores demo |
-| GET | `/api/demo/wallet/:pub` | saldos de uma conta |
-| POST | `/api/wallet/trustline/build` | XDR de trustline USDC (Freighter) |
-| POST | `/api/wallet/trustline/submit` | submete trustline assinada |
+| GET | `/health` | API and network status |
+| GET | `/api/campaigns` | list campaigns |
+| POST | `/api/campaigns` | create campaign |
+| POST | `/api/campaigns/:id/invest` | demo investment (backend signs) |
+| POST | `/api/campaigns/:id/invest/build` | build XDR for Freighter signing |
+| POST | `/api/campaigns/:id/invest/submit` | submit signed XDR and deliver tokens |
+| POST | `/api/campaigns/:id/finalize` | finalize and pay the creator |
+| POST | `/api/campaigns/:id/refund` | refund investors |
+| GET | `/api/demo/investors` | list demo investors |
+| POST | `/api/demo/seed-investors` | seed demo investors |
+| GET | `/api/demo/wallet/:pub` | account balances |
+| POST | `/api/wallet/trustline/build` | USDC trustline XDR (Freighter) |
+| POST | `/api/wallet/trustline/submit` | submit signed trustline |
 
-## Limitações reconhecidas (demo) e next steps
+## Known limitations (demo) and next steps
 
-Este MVP é deliberadamente simples; as decisões abaixo são simplificações de demo e os
-respetivos next steps:
+This MVP is deliberately simple; the decisions below are demo simplifications, with
+their respective next steps:
 
-1. **Autorização de finalize/refund**: hoje qualquer pessoa pode chamar `/finalize` e `/refund`
-   (e a UI expõe os botões). Na prática deve haver gate temporal (prazo da campanha,
-   all-or-nothing) e autorização (creator/admin/multisig). Next step: contrato Soroban com
-   `deadline`, `onlyOwner` e lógica de payout atómico.
-2. **Idempotência e corridas**: `invest()` lê o estado e grava depois; duas submissões
-   concorrentes podem ultrapassar o goal. Re-submeter o mesmo XDR falha no Horizon
-   (`tx_bad_seq`), por isso não duplica, mas a corrida entre investidores diferentes existe.
-   Aceitável ao nível de demo. Next step: estado e limite de captação atómicos no contrato.
-3. **Consistência pós-USDC**: se a entrega dos tokens falhar depois do pagamento USDC já
-   submetido, o registo fica pendente (não deve acontecer no demo). Next step: retry manual/
-   compensação, ou operações atómicas no contrato Soroban.
-4. **Chaves em plaintext**: `.creator.json`, `.demo-investors.json` e `PLATFORM_SECRET`
-   contêm secret keys e são **só para Testnet — nunca usar em mainnet**. Estão protegidos
-   pelo `.gitignore`; em produção usar gestor de segredos e multisig.
+1. **finalize/refund authorization**: today anyone can call `/finalize` and `/refund`
+   (and the UI exposes the buttons). In practice there should be a time gate (campaign
+   deadline, all-or-nothing) and authorization (creator/admin/multisig). Next step:
+   Soroban contract with `deadline`, `onlyOwner` and atomic payout logic.
+2. **Idempotency and races**: `invest()` reads state and writes afterwards; two
+   concurrent submissions can overshoot the goal. Re-submitting the same XDR fails on
+   Horizon (`tx_bad_seq`), so it does not duplicate, but the race between different
+   investors exists. Acceptable at demo level. Next step: atomic state and cap in the
+   contract.
+3. **Post-USDC consistency**: if token delivery fails after the USDC payment was
+   already submitted, the record stays pending (should not happen in the demo). Next
+   step: manual retry/compensation, or atomic operations in the Soroban contract.
+4. **Plaintext keys**: `.creator.json`, `.demo-investors.json` and `PLATFORM_SECRET`
+   contain secret keys and are **testnet only — never use on mainnet**. They are
+   protected by `.gitignore`; in production use a secrets manager and multisig.
 
-Roadmap além dos próximos passos acima: KYC/ECSPR e estruturação legal (MiCA/ECSPR),
-oracles de valuation dos RWA, mercado secundário dos tokens, governance da plataforma e
-integração com anchors para cash out (fiat) — o objetivo é chegar a um contrato Soroban único
-que substitua o backend como fonte de verdade para escrow, prazos e autorizações.
+Roadmap beyond the next steps above: KYC/ECSPR and legal structuring (MiCA/ECSPR),
+RWA valuation oracles, secondary market for the tokens, platform governance and anchor
+integration for fiat cash out — the goal is a single Soroban contract that replaces the
+backend as the source of truth for escrow, deadlines and authorization.
 
-## Segurança
+## Security
 
-- Rede: apenas Testnet; chaves demo em ficheiros protegidos pelo `.gitignore`
-- O backend valida o montante a partir das operações do XDR assinado (não confia no input)
-- Contas demo têm apenas USDC de faucet, sem valor real
+- Network: Testnet only; demo keys in files protected by `.gitignore`
+- The backend validates the amount from the signed XDR operations (does not trust the
+  input)
+- Demo accounts only hold faucet USDC, no real value
 
 ## Links
 
-- Repositório: https://github.com/NUNRIBHAC/rwa-crowdfund-stellar
+- Repository: https://github.com/NUNRIBHAC/rwa-crowdfund-stellar
 - Explorer (testnet): https://stellar.expert/explorer/testnet
 - Freighter: https://www.freighter.app/
