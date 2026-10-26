@@ -18,7 +18,7 @@ export async function accountExists(pub: string): Promise<boolean> {
 export async function fundFromFriendbot(pub: string): Promise<void> {
   const res = await fetch(`${FRIENDBOT}?addr=${pub}`);
   if (!res.ok) {
-    throw new Error(`Friendbot fallou (${res.status}): ${await res.text()}`);
+    throw new Error(`Friendbot failed (${res.status}): ${await res.text()}`);
   }
 }
 

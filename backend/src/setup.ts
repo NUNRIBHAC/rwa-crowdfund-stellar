@@ -40,7 +40,7 @@ let platformSecret = PLATFORM_SECRET;
 if (!platformSecret) {
   const kp = Keypair.random();
   platformSecret = kp.secret();
-  log('PLATFORM_SECRET não configurado; a xerar novo e gravar no backend/.env.');
+  log('PLATFORM_SECRET not configured; generating a new one and saving to backend/.env.');
   let env = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
   env = env
     .split('\n')
@@ -52,20 +52,20 @@ if (!platformSecret) {
 
 const platform = Keypair.fromSecret(platformSecret);
 const platformPub = platform.publicKey();
-log(`Plataforma: ${platformPub}`);
+log(`Platform: ${platformPub}`);
 
 async function ensureAccount(pub: string): Promise<void> {
   try {
     await server.loadAccount(pub);
-    log(`Conta ${pub.slice(0, 6)}… xa existe.`);
+    log(`Account ${pub.slice(0, 6)}… already exists.`);
     return;
   } catch (err: unknown) {
     if (!is404(err)) throw err;
   }
-  log(`Conta ${pub.slice(0, 6)}… non existe; a pedir XLM ao Friendbot.`);
+  log(`Account ${pub.slice(0, 6)}… does not exist; requesting XLM from Friendbot.`);
   const res = await fetch(`${friendbot}?addr=${pub}`);
-  if (!res.ok) throw new Error(`Friendbot falhou (${res.status}): ${await res.text()}`);
-  log('Funded con XLM.');
+  if (!res.ok) throw new Error(`Friendbot failed (${res.status}): ${await res.text()}`);
+  log('Funded with XLM.');
 }
 
 async function addUsdcTrustline(kp: Keypair): Promise<void> {
@@ -81,7 +81,7 @@ async function addUsdcTrustline(kp: Keypair): Promise<void> {
     .build();
   tx.sign(kp);
   await server.submitTransaction(tx);
-  log('Trustline USDC adicionada.');
+  log('USDC trustline added.');
 }
 
 async function claimUsdc(pub: string): Promise<void> {
@@ -93,23 +93,23 @@ async function claimUsdc(pub: string): Promise<void> {
     });
     log(`Sozu faucet OK: ${out.trim().slice(0, 400)}`);
   } catch (err) {
-    warn(`Claim Sozu fallou: ${err instanceof Error ? err.message : String(err)}`);
-    warn(`Corre manualmente: npx --yes @sozu/faucet@latest claim ${pub}`);
+    warn(`Sozu claim failed: ${err instanceof Error ? err.message : String(err)}`);
+    warn(`Run manually: npx --yes @sozu/faucet@latest claim ${pub}`);
   }
 }
 
 async function main(): Promise<void> {
-  log(`Rede: ${NETWORK}`);
-  if (!hasUsdcConfig) warn('USDC_ISSUER vazio; a saltar trustline/claim USDC.');
+  log(`Network: ${NETWORK}`);
+  if (!hasUsdcConfig) warn('USDC_ISSUER empty; skipping USDC trustline/claim.');
 
   await ensureAccount(platformPub);
   await addUsdcTrustline(platform);
   if (hasUsdcConfig) await claimUsdc(platformPub);
 
-  // Investidor demo (1 de 3 para o demo E2E)
+  // Demo investor (1 of 3 for the demo E2E)
   const demo = Keypair.random();
   const demoPub = demo.publicKey();
-  log(`Investidor demo: ${demoPub}`);
+  log(`Demo investor: ${demoPub}`);
   await ensureAccount(demoPub);
   await addUsdcTrustline(demo);
   if (hasUsdcConfig) await claimUsdc(demoPub);
@@ -119,12 +119,12 @@ async function main(): Promise<void> {
     : {};
   investors[demoPub] = demo.secret();
   fs.writeFileSync(demoFile, JSON.stringify(investors, null, 2), 'utf8');
-  log(`Investidores demo gardados en ${demoFile}`);
+  log(`Demo investors saved to ${demoFile}`);
 
-  log('Plataforma pronta. Asset RWA: código por campaña (ex: RWA001), issuer = plataforma; emisión no momento do investimento.');
+  log('Platform ready. RWA asset: per-campaign code (e.g. RWA001), issuer = platform; minted at investment time.');
 }
 
 main().catch((err) => {
-  console.error('[setup] Erro fatal:', err);
+  console.error('[setup] Fatal error:', err);
   process.exit(1);
 });
