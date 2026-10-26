@@ -135,7 +135,7 @@ export async function createCampaign(input: {
   await ensureAccount(creator.publicKey());
   await ensureTrustline(creator, usdcAsset());
 
-  const code = `RWA${String(store.nextCode).padStart(3, '0')}`;
+  const code = `CRWD${String(store.nextCode).padStart(3, '0')}`;
   const id = `c${store.nextCode}`;
   store.nextCode += 1;
 

@@ -12,7 +12,7 @@ export const platform = PLATFORM_SECRET
 
 export function requirePlatform(): Keypair {
   if (!platform) {
-    throw new Error('PLATFORM_SECRET não configurado (backend/.env)');
+    throw new Error('PLATFORM_SECRET not configured (backend/.env)');
   }
   return platform;
 }
