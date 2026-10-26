@@ -69,28 +69,32 @@ Accounts and assets:
 - **Platform / escrow / RWA issuer**: `GDYY4VT5DI5QGBXBKJRCZGCEFJWEJNGTBLSFJF355Z53MI5QAHNJYUO7`
   (secret in `backend/.env` → `PLATFORM_SECRET`)
 - **USDC testnet (Circle SAC)**: issuer `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5`
-- **Demo investors** (deterministic demo seed):
-  `GDPYRC7RTC2ZY3XUYIPHPO76QX34WJ4SNOTHK2ZGPVXECZ5FTNCBLE7L`,
-  `GB5UJ2F5RBQEA5DIXNJCLADGAQNXD3D2H35GXD6EX2KHZ6FM7BODURNN`,
-  `GBU5RMFCUEBOEQNAW547CA5SQZ4N5YROOMPLZVLNTWUU7EWGDLFRDI6U`
+- **Demo investors** (seed used on 2026-10-26):
+  `GAFMHEPPLG34JEMHZVVXL3PPMYWLUEBUGVC2CL6LNYXEKSHZU6DV7TW6`,
+  `GA2HE7NF6W5CK67X5BOSP2SSDFPDJ772ENOOYEDNYFBYLDBRZFQ7QUWY`,
+  `GDEN5H2LZVPFWWQTFZTOLCI2BCVXQG2QUMG5QQV2LVFOY6FSVUPBDWUM`
 - **No Soroban contract IDs, no anchors, no oracles** in the MVP: they are next steps
   (see roadmap)
 
-## Testnet evidence (2026-10-26, campaign RWA005)
+## Testnet evidence (2026-10-26, campaign CRWD001 — "Solar Lisbon #2")
 
-Full build/submit flow — the same one Freighter executes — with 3 investors,
+Full build/submit flow — the same one Freighter executes — with 3 investors
+(20 USDC from a real Freighter wallet, 12 and 8 USDC from demo accounts),
 40 USDC goal, 1000 token supply, already finalized:
 
 | Step | Tx hash | Explorer (testnet) |
 |---|---|---|
-| Mint RWA005 supply (escrow on platform) | `78038fdbf068d0b636b1f8cf4e29816ca5e7124d422abb7e50ce5623867a3235` | https://stellar.expert/explorer/testnet/tx/78038fdbf068d0b636b1f8cf4e29816ca5e7124d422abb7e50ce5623867a3235 |
-| Investment 1: 20 USDC → 500 tokens | USDC `0a6575bb97b547f993acbbcd76e24b9ce2efdd952a4b89aa458159438b4cd33c` / tokens `20ad1fe5d47a889c9cba3b6599974dc4cf786f687b799adf648cc6b9288c24bb` | https://stellar.expert/explorer/testnet/tx/0a6575bb97b547f993acbbcd76e24b9ce2efdd952a4b89aa458159438b4cd33c |
-| Investment 2: 12 USDC → 300 tokens | USDC `42b678e6448f28d49e34ce0a8fb32ff5e5609a1339a1ab3371176c5ade751c58` / tokens `69b12b0f3c7c2269727216ee8978e89ec5da0dc833814811996fddf49a5fa9b6` | https://stellar.expert/explorer/testnet/tx/42b678e6448f28d49e34ce0a8fb32ff5e5609a1339a1ab3371176c5ade751c58 |
-| Investment 3: 8 USDC → 200 tokens | USDC `bcc46b62da7761e55fdbba333748181149ec1d7a67ce99c5a9353ac1afa8bb96` / tokens `43fb367f63126f2deb591aae9132081cbfae93f44d77ecd3dc64ea327bd71b7c` | https://stellar.expert/explorer/testnet/tx/bcc46b62da7761e55fdbba333748181149ec1d7a67ce99c5a9353ac1afa8bb96 |
-| Finalize: 40 USDC payout to creator | `803d20ceba1253d73f65d4db6d3ecba30e2fd15504d1607a32df4799d7f4a2fc` | https://stellar.expert/explorer/testnet/tx/803d20ceba1253d73f65d4db6d3ecba30e2fd15504d1607a32df4799d7f4a2fc |
+| Mint CRWD001 supply (escrow on platform) | `879dc3a8c76a83e9865168cb31988851ce274f3b70663bd61a0f15ff73965288` | https://stellar.expert/explorer/testnet/tx/879dc3a8c76a83e9865168cb31988851ce274f3b70663bd61a0f15ff73965288 |
+| Investment 1: 20 USDC → 500 tokens (Freighter) | USDC `7c92d6c9305373d893e6516238fd46aaf57486755a65367c1e8b480a836e521c` / tokens `623b229d9eef3730034bd19de3a02168113c3270e367f221cf5bc1c1b9e4d66e` | https://stellar.expert/explorer/testnet/tx/7c92d6c9305373d893e6516238fd46aaf57486755a65367c1e8b480a836e521c |
+| Investment 2: 12 USDC → 300 tokens | USDC `26e6a938b0fe00241ff7ed1c4d2ae0f16f57c173d0ba79641e1f95857b2ef0a9` / tokens `16474e8ddb9a2342e84546f4c62b5362cacd4c969f9be640be88c1e5ccc15400` | https://stellar.expert/explorer/testnet/tx/26e6a938b0fe00241ff7ed1c4d2ae0f16f57c173d0ba79641e1f95857b2ef0a9 |
+| Investment 3: 8 USDC → 200 tokens | USDC `c265aaf2749d26616848c9217c300324aab81833c95067ec39b5b2bd6ee9e28d` / tokens `9ccd47948512254b8162602fabd430f9f33d56193d3288e2a0fb71bd69dfdb8e` | https://stellar.expert/explorer/testnet/tx/c265aaf2749d26616848c9217c300324aab81833c95067ec39b5b2bd6ee9e28d |
+| Finalize: 40 USDC payout to creator | `52b0556ea49eca1241a787321eea9ae6f30dc4fb740372ebe21ddc6aa0983bc7` | https://stellar.expert/explorer/testnet/tx/52b0556ea49eca1241a787321eea9ae6f30dc4fb740372ebe21ddc6aa0983bc7 |
 
-Verified final balances: investors hold RWA005 500/300/200; platform has 105 USDC and
-control of the supply; creator has 390 USDC.
+Verified final state: investors hold CRWD001 500/300/200 tokens (recorded in
+`backend/data/campaigns.json` and visible in the transactions above); the payout moved
+40 USDC from the platform escrow to the campaign creator
+(`GCYIL3FJ42V3VYGDJSPON3VWIAHEZXJZVU7HFL6DQ3FOVB4E35O6VUTI`); the platform keeps the
+issuer role and supply control.
 
 ## Setup
 
