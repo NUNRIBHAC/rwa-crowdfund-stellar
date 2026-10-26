@@ -32,7 +32,7 @@ export async function hasTrustline(pub: string, asset: Asset): Promise<boolean> 
   try {
     const res = await fetch(`${HORIZON_URL}/accounts/${pub}`);
     if (!res.ok) return false;
-    const data = await res.json();
+    const data: any = await res.json();
     return (data.balances ?? []).some(
       (b: { asset_code?: string; asset_issuer?: string }) =>
         b.asset_code === asset.code && b.asset_issuer === asset.issuer,
@@ -79,7 +79,7 @@ export async function submitPayment(
   tx.sign(from);
   try {
     const resp = await server.submitTransaction(tx);
-    return String(resp.hash ?? resp.id ?? resp);
+    return String(resp.hash ?? resp);
   } catch (e: any) {
     const rcs = e?.response?.data?.extras?.result_codes;
     if (rcs) console.error('SUBMIT_FAIL result_codes=', JSON.stringify(rcs, null, 2));
@@ -91,7 +91,7 @@ export async function getBalances(pub: string): Promise<Balance[]> {
   try {
     const res = await fetch(`${HORIZON_URL}/accounts/${pub}`);
     if (!res.ok) return [];
-    const data = await res.json();
+    const data: any = await res.json();
     return (data.balances ?? []).map((b: any) => ({
       code: String(b.asset_code ?? ''),
       issuer: String(b.asset_issuer ?? ''),
