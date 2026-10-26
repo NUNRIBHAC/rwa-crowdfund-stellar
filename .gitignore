@@ -1,14 +1,28 @@
+# Dependencies
 node_modules/
+
+# Builds
 dist/
 build/
+
+# Env
 .env
 .env.*
 !.env.example
+
+# Logs
 *.log
+
+# OS
 .DS_Store
+
+# Coverage
 coverage/
 
 # Secrets do creador demo + índice local de campañas
 backend/.creator.json
-backend/data/
 backend/.demo-investors.json
+backend/data/
+
+# Debug local
+backend/debug-ops.ts
