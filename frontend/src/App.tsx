@@ -345,6 +345,15 @@ export default function App() {
               </p>
             )}
 
+            {c.payoutTx && (
+              <p style={{ margin: '4px 0', fontSize: 13 }}>
+                Payout:{' '}
+                <a href={txLink(c.payoutTx)} target="_blank" rel="noreferrer">
+                  {c.payoutTx.slice(0, 16)}…
+                </a>
+              </p>
+            )}
+
             {c.state === 'funding' && (
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <input
