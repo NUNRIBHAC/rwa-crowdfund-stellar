@@ -29,3 +29,6 @@ backend/debug-ops.ts
 # Rust build/test output
 contracts/crowdfund/target/
 contracts/crowdfund/contracts/crowdfund/test_snapshots/
+
+# Private local copy of unverified skills (never commit)
+docs/skills-reference/private/
