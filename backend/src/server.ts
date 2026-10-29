@@ -1,126 +1,86 @@
 import express from 'express';
 import cors from 'cors';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
-import { server } from './stellar.js';
-import {
-  buildInvestXdr,
-  buildTrustlineXdr,
-  createCampaign,
-  finalize,
-  invest,
-  listCampaigns,
-  listDemoInvestors,
-  refund,
-  seedDemoInvestors,
-  submitSignedInvest,
-  submitSignedTrustline,
-} from './campaigns.js';
-import { getBalances } from './chain.js';
+import { listCampaigns } from './campaigns.js';
+import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban } from './soroban.js';
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.disable('x-powered-by');
+// Browser-origin requests are denied unless explicitly allowlisted. No-Origin
+// CLI/server requests still require the admin key on privileged endpoints.
+const allowedOrigins = () => (process.env.CORS_ALLOWED_ORIGINS ?? 'http://localhost:5173,http://127.0.0.1:5173')
+  .split(',').map(s => s.trim()).filter(Boolean);
+app.use((req, res, next) => {
+  const origin = req.header('origin');
+  if (origin && !allowedOrigins().includes(origin)) {
+    res.status(403).json({ error: 'origin not allowed' });
+    return;
+  }
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
+app.use(cors({ origin: (origin, done) => done(null, !origin || allowedOrigins().includes(origin)),
+  methods: ['GET', 'POST', 'OPTIONS'], allowedHeaders: ['Content-Type', 'x-admin-key'] }));
+app.use(express.json({ limit: '64kb' }));
+
+// Admin gate for operations that move money or spend platform/demo funds
+// (create, demo invest, finalize, refund, retry, seed). Demo-grade shared
+// secret (x-admin-key header); production needs creator/admin multisig,
+// eventually enforced by the Soroban contract. The Freighter build/submit
+// paths stay open: investors sign with their own funds.
+// Read at request time so tests can toggle it. Fail closed when unset.
+const requireAdmin: express.RequestHandler = (req, res, next) => {
+  const adminSecret = process.env.ADMIN_SECRET ?? '';
+  if (!adminSecret) {
+    res.status(503).json({
+      error: 'ADMIN_SECRET not configured (backend/.env); admin endpoints disabled',
+    });
+    return;
+  }
+  if (!timingSafeEqual(createHash('sha256').update(req.header('x-admin-key') ?? '').digest(),
+      createHash('sha256').update(adminSecret).digest())) {
+    res.status(401).json({ error: 'missing or invalid admin key (x-admin-key header)' });
+    return;
+  }
+  next();
+};
 
 app.get('/health', (_req, res) => {
-  res.json({
-    ok: true,
-    network: NETWORK,
-    horizon: server.serverURL.toString(),
-  });
+  res.json({ ok: true, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
 });
 
-app.get('/api/campaigns', async (_req, res) => {
-  try {
-    res.json({ campaigns: await listCampaigns() });
-  } catch (err) {
-    res.status(500).json({ error: String(err) });
-  }
+app.get('/api/campaigns', async (req, res) => {
+  try { res.json({ campaigns: await sorobanCampaigns(typeof req.query.actor === 'string' ? req.query.actor : undefined), mode: 'soroban' }); }
+  catch (err) { res.status(503).json({ error: err instanceof Error ? err.message : String(err) }); }
+});
+app.get('/api/legacy/campaigns', requireAdmin, async (_req, res) => {
+  // Migration evidence only. Never return signed XDRs or private keys.
+  const campaigns = await listCampaigns();
+  res.json({ readOnly: true, migrationRequired: true, campaigns: campaigns.map(c => ({ id: c.id, name: c.name, state: c.state,
+    goalUsdc: c.goalUsdc, investments: c.investments.map(i => ({ id: i.id, investorPub: i.investorPub, amountUsdc: i.amountUsdc,
+      status: i.status, usdcTx: i.usdcTx, tokenTx: i.tokenTx, refundTx: i.refundTx, error: i.error })) })) });
+});
+app.post('/api/campaigns/:id/soroban/build', async (req, res) => {
+  try { res.json(await buildSoroban(String(req.params.id), req.body ?? {})); }
+  catch (err) { res.status(400).json({ error: err instanceof Error ? err.message : String(err) }); }
+});
+app.post('/api/campaigns/:id/soroban/submit', async (req, res) => {
+  try { res.json(await submitSoroban(String(req.params.id), req.body ?? {})); }
+  catch (err) { res.status(400).json({ error: err instanceof Error ? err.message : String(err) }); }
+});
+app.get('/api/soroban/transactions/:hash', async (req, res) => {
+  try { res.json(await statusSoroban(String(req.params.hash))); }
+  catch (err) { res.status(400).json({ error: err instanceof Error ? err.message : String(err) }); }
+});
+// All old money-moving and wallet submission routes are disabled. Existing
+// classic state is never converted, cleared or resubmitted by the new server.
+app.post('/api/{*path}', (_req, res) => {
+  res.status(410).json({ error: 'Classic campaign writes disabled. Soroban is the active flow. Legacy state requires a separately reviewed migration/reconciliation.' });
 });
 
-app.post('/api/campaigns', async (req, res) => {
-  try {
-    res.status(201).json(await createCampaign(req.body ?? {}));
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.post('/api/campaigns/:id/invest', async (req, res) => {
-  try {
-    res.json(await invest(req.params.id, req.body ?? {}));
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.post('/api/campaigns/:id/invest/build', async (req, res) => {
-  try {
-    res.json(await buildInvestXdr(req.params.id, req.body ?? {}));
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.post('/api/campaigns/:id/invest/submit', async (req, res) => {
-  try {
-    res.json(await submitSignedInvest(req.params.id, req.body ?? {}));
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.post('/api/campaigns/:id/finalize', async (req, res) => {
-  try {
-    res.json(await finalize(req.params.id));
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.post('/api/campaigns/:id/refund', async (req, res) => {
-  try {
-    res.json(await refund(req.params.id));
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.get('/api/demo/investors', (_req, res) => {
-  res.json({ investors: listDemoInvestors() });
-});
-
-app.post('/api/demo/seed-investors', async (_req, res) => {
-  try {
-    res.json(await seedDemoInvestors());
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.get('/api/demo/wallet/:pub', async (req, res) => {
-  try {
-    res.json({ balances: await getBalances(req.params.pub) });
-  } catch (err) {
-    res.status(500).json({ error: String(err) });
-  }
-});
-
-app.post('/api/wallet/trustline/build', async (req, res) => {
-  try {
-    res.json(await buildTrustlineXdr(req.body ?? {}));
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.post('/api/wallet/trustline/submit', async (req, res) => {
-  try {
-    res.json(await submitSignedTrustline(req.body ?? {}));
-  } catch (err) {
-    res.status(400).json({ error: String(err) });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`API at http://localhost:${PORT}`);
-});
+export { app };
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, process.env.HOST ?? '127.0.0.1', () => console.log(`Soroban test-only API at http://127.0.0.1:${PORT}`));
+}

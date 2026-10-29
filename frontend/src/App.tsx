@@ -1,409 +1,215 @@
 import { useEffect, useState } from 'react';
 import { isConnected, requestAccess, signTransaction } from '@stellar/freighter-api';
+import type { Campaign, Intent } from './types';
+import { isTerminal } from './types';
+import { api } from './api';
+import { FIXTURE_CAMPAIGNS } from './fixtures';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import CampaignCard, { campaignStatus, type CampaignStatus } from './components/CampaignCard';
+import IntentPanel from './components/IntentPanel';
+import EmptyState from './components/EmptyState';
+import Footer from './components/Footer';
 
-type Investment = {
-  id: string;
-  investorPub: string;
-  amountUsdc: number;
-  tokens: number;
-  usdcTx: string;
-  tokenTx: string;
-  clawbackTx?: string;
-  refundTx?: string;
-};
-
-type Campaign = {
-  id: string;
-  code: string;
-  name: string;
-  goalUsdc: number;
-  deadline: string;
-  creatorPub: string;
-  supply: number;
-  state: 'funding' | 'finalized' | 'refunded';
-  createdAt: string;
-  mintTx: string;
-  payoutTx?: string;
-  finalizedAt?: string;
-  refundedAt?: string;
-  investments: Investment[];
-};
-
-function investedUsdc(c: Campaign): number {
-  return c.investments.reduce((sum, i) => sum + i.amountUsdc, 0);
-}
-
-function fmt(n: number): string {
-  return n.toLocaleString('en-US', { maximumFractionDigits: 2 });
-}
-
-const TESTNET_EXPLORER = 'https://stellar.expert/explorer/testnet';
-
-const stateLabel: Record<Campaign['state'], string> = {
-  funding: 'Funding',
-  finalized: 'Finalized',
-  refunded: 'Refunded',
-};
-
-const stateColor: Record<Campaign['state'], string> = {
-  funding: '#1a7f37',
-  finalized: '#0969da',
-  refunded: '#bc4c00',
-};
+const INTENT_KEY = 'rwa-soroban-intent';
 
 export default function App() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [demoInvestors, setDemoInvestors] = useState<string[]>([]);
-  const [pubKey, setPubKey] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [actor, setActor] = useState('');
+  const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [trustlineHash, setTrustlineHash] = useState<string | null>(null);
-
-  const [newName, setNewName] = useState('');
-  const [newGoal, setNewGoal] = useState('100');
-  const [selected, setSelected] = useState('');
   const [amounts, setAmounts] = useState<Record<string, string>>({});
+  const [loaded, setLoaded] = useState(false);
+  const [fixtureMode, setFixtureMode] = useState(false);
+  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | CampaignStatus>('all');
+  const [sortBy, setSortBy] = useState<'deadline' | 'progress' | 'name'>('deadline');
+  const [intent, setIntent] = useState<Intent | null>(() => {
+    try { return JSON.parse(localStorage.getItem(INTENT_KEY) ?? 'null'); } catch { return null; }
+  });
 
-  async function refresh() {
-    const [c, inv] = await Promise.all([
-      fetch('/api/campaigns').then((r) => r.json()),
-      fetch('/api/demo/investors').then((r) => r.json()),
-    ]);
-    setCampaigns(c.campaigns ?? []);
-    setDemoInvestors(inv.investors ?? []);
+  async function refresh(address = actor) {
+    const data = await api(`/api/campaigns${address ? `?actor=${encodeURIComponent(address)}` : ''}`);
+    setCampaigns(data.campaigns);
+    setLoaded(true);
   }
 
   useEffect(() => {
-    refresh()
-      .catch((err) => setError(String(err)))
-      .finally(() => setLoading(false));
+    localStorage.removeItem('rwa-admin-key');
+    // ?fixtures=1 shows the clearly labeled sample-data preview on load.
+    if (new URLSearchParams(window.location.search).get('fixtures') === '1') {
+      setFixtureMode(true);
+      setLoaded(true);
+    }
+    refresh().catch(e => setError(e.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (!selected && demoInvestors.length > 0) setSelected(demoInvestors[0]);
-  }, [demoInvestors, selected]);
+  function retain(i: Intent) {
+    setIntent(i);
+    localStorage.setItem(INTENT_KEY, JSON.stringify(i));
+  }
+
+  async function run(fn: () => Promise<void>) {
+    setBusy(true);
+    setError('');
+    try { await fn(); }
+    catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+    finally { setBusy(false); }
+  }
 
   async function connect() {
-    try {
-      setError(null);
-      const conn = await isConnected();
-      if (conn.error) throw new Error(conn.error.message);
-      if (!conn.isConnected) {
-        throw new Error('Freighter is not installed or active. Install the extension and reload.');
+    // Without the extension, requestAccess waits indefinitely (only the
+    // connection-status probe has a timeout), so fail with a clear error first.
+    const conn = await isConnected();
+    if (!conn.isConnected) throw new Error('Freighter wallet extension not detected. Install Freighter, then retry Connect.');
+    const r = await requestAccess();
+    if (r.error || !r.address) throw new Error(r.error?.message ?? 'Wallet access failed');
+    setActor(r.address);
+    setFixtureMode(false);
+    await refresh(r.address);
+  }
+
+  async function prepare(c: Campaign, action: 'contribute' | 'refund' | 'withdraw') {
+    if (!actor) throw new Error('Connect Freighter first.');
+    if (intent && !isTerminal(intent.status)) {
+      throw new Error('Resolve the saved transaction before preparing another.');
+    }
+    const result = await api(`/api/campaigns/${c.id}/soroban/build`, { actor, action, amount: amounts[c.id] });
+    retain({ ...result, campaign: c.id, actor, status: 'BUILT' });
+    setFixtureMode(false);
+  }
+
+  async function submit() {
+    if (!intent) return;
+    if (actor !== intent.actor) throw new Error('Connect the wallet that prepared this transaction.');
+    let current = intent;
+    if (!current.signedXdr) {
+      const result = await signTransaction(current.xdr, { networkPassphrase: 'Test SDF Network ; September 2015' });
+      if (result.error || !result.signedTxXdr) throw new Error(result.error?.message ?? 'Wallet did not sign');
+      current = { ...current, signedXdr: result.signedTxXdr, status: 'SIGNED' };
+      retain(current);
+    }
+    // Persist exact signed XDR before the first send. Network errors retain it.
+    const result = await api(`/api/campaigns/${current.campaign}/soroban/submit`, { actor: current.actor, xdr: current.signedXdr });
+    retain({ ...current, status: result.status });
+  }
+
+  async function check() {
+    if (!intent) return;
+    const r = await api(`/api/soroban/transactions/${intent.hash}`);
+    retain({ ...intent, status: r.status });
+    await refresh();
+  }
+
+  function toggleFixtures() {
+    if (fixtureMode) {
+      setFixtureMode(false);
+      run(() => refresh());
+    } else {
+      setFixtureMode(true);
+      setLoaded(true);
+    }
+  }
+
+  const base = fixtureMode ? FIXTURE_CAMPAIGNS : campaigns;
+  const q = query.trim().toLowerCase();
+  const shown = base
+    .filter(c => !q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q))
+    .filter(c => statusFilter === 'all' || campaignStatus(c) === statusFilter)
+    .sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      if (sortBy === 'progress') {
+        const pa = Number((BigInt(a.raised) * 10000n) / BigInt(a.config.goal));
+        const pb = Number((BigInt(b.raised) * 10000n) / BigInt(b.config.goal));
+        return pb - pa;
       }
-      const acc = await requestAccess();
-      if (acc.error) throw new Error(acc.error.message);
-      if (!acc.address) throw new Error('Could not get the account address.');
-      setPubKey(acc.address);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    }
-  }
-
-  async function addUsdcTrustline() {
-    try {
-      setError(null);
-      if (!pubKey) throw new Error('Connect Freighter first.');
-      setBusy(true);
-
-      const buildRes = await fetch('/api/wallet/trustline/build', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: pubKey }),
-      });
-      const buildData = await buildRes.json();
-      if (!buildRes.ok) throw new Error(buildData.error ?? 'Failed to prepare trustline.');
-
-      const signed = await signTransaction(buildData.xdr, {
-        networkPassphrase: buildData.networkPassphrase,
-      });
-      if (signed.error) throw new Error(signed.error.message);
-      const signedXdr = signed.signedTxXdr;
-
-      const submitRes = await fetch('/api/wallet/trustline/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: pubKey, xdr: signedXdr }),
-      });
-      const submitData = await submitRes.json();
-      if (!submitRes.ok) throw new Error(submitData.error ?? 'Failed to add trustline.');
-
-      setTrustlineHash(submitData.hash);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function createCampaign() {
-    try {
-      setError(null);
-      const name = newName.trim();
-      const goal = Number(newGoal);
-      if (!name) throw new Error('Enter a name for the campaign.');
-      if (!Number.isFinite(goal) || goal <= 0) throw new Error('Invalid goal.');
-      setBusy(true);
-      const res = await fetch('/api/campaigns', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, goalUsdc: goal }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Failed to create campaign.');
-      setNewName('');
-      await refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function invest(c: Campaign) {
-    try {
-      setError(null);
-      if (!selected) throw new Error('Pick a demo investor or connect Freighter.');
-      const inputAmt = Number(amounts[c.id]);
-      if (!Number.isFinite(inputAmt) || inputAmt <= 0) throw new Error('Invalid amount.');
-      setBusy(true);
-      const res = await fetch(`/api/campaigns/${c.id}/invest`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: selected, amountUsdc: inputAmt }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Investment failed.');
-      setAmounts((prev) => ({ ...prev, [c.id]: '' }));
-      await refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function investFreighter(c: Campaign) {
-    try {
-      setError(null);
-      if (!pubKey) throw new Error('Connect Freighter first.');
-      const inputAmt = Number(amounts[c.id]);
-      if (!Number.isFinite(inputAmt) || inputAmt <= 0) throw new Error('Invalid amount.');
-      setBusy(true);
-
-      const buildRes = await fetch(`/api/campaigns/${c.id}/invest/build`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: pubKey, amountUsdc: inputAmt }),
-      });
-      const buildData = await buildRes.json();
-      if (!buildRes.ok) throw new Error(buildData.error ?? 'Failed to prepare investment.');
-
-      const signed = await signTransaction(buildData.xdr, {
-        networkPassphrase: buildData.networkPassphrase,
-      });
-      if (signed.error) throw new Error(signed.error.message);
-      const signedXdr = signed.signedTxXdr;
-
-      const submitRes = await fetch(`/api/campaigns/${c.id}/invest/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: pubKey, xdr: signedXdr }),
-      });
-      const submitData = await submitRes.json();
-      if (!submitRes.ok) throw new Error(submitData.error ?? 'Failed to submit investment.');
-
-      setAmounts((prev) => ({ ...prev, [c.id]: '' }));
-      await refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function act(c: Campaign, action: 'finalize' | 'refund') {
-    try {
-      setError(null);
-      setBusy(true);
-      const res = await fetch(`/api/campaigns/${c.id}/${action}`, { method: 'POST' });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? `Failed to ${action}.`);
-      await refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  function txLink(hash: string): string {
-    return `${TESTNET_EXPLORER}/tx/${hash}`;
-  }
+      return Number(a.config.deadline) - Number(b.config.deadline);
+    });
+  const showEmpty = loaded && !fixtureMode && campaigns.length === 0;
 
   return (
-    <main style={{ fontFamily: 'system-ui', maxWidth: 760, margin: '0 auto', padding: 32 }}>
-      <h1>RWA Crowdfund — Stellar Testnet</h1>
+    <>
+      <Header actor={actor} busy={busy} onConnect={() => run(connect)} />
+      <main className="page">
+        <Hero />
 
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 8 }}>
-        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
-          {demoInvestors.length === 0 && <option value="">No demo accounts</option>}
-          {demoInvestors.map((pk) => (
-            <option key={pk} value={pk}>
-              {pk.slice(0, 6)}…{pk.slice(-4)}
-            </option>
-          ))}
-        </select>
-        {pubKey ? (
-          <code>{pubKey.slice(0, 6)}…{pubKey.slice(-4)} (Freighter)</code>
-        ) : (
-          <button onClick={connect} disabled={busy}>
-            Connect Freighter
-          </button>
+        {error && <p role="alert" className="error-banner">{error}</p>}
+
+        {intent && (
+          <IntentPanel
+            intent={intent}
+            busy={busy}
+            onSubmit={() => run(submit)}
+            onCheck={() => run(check)}
+            onCancel={() => retain({ ...intent, status: 'CANCELLED_UNSIGNED' })}
+          />
         )}
-      </div>
 
-      {pubKey && (
-        <div style={{ marginBottom: 8 }}>
-          <button onClick={addUsdcTrustline} disabled={busy}>
-            Add USDC (Freighter)
-          </button>
-          {trustlineHash && (
-            <span style={{ marginLeft: 8, fontSize: 13 }}>
-              Trustline:{' '}
-              <a href={txLink(trustlineHash)} target="_blank" rel="noreferrer">
-                {trustlineHash.slice(0, 16)}…
-              </a>
-            </span>
-          )}
-        </div>
-      )}
-
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
-
-      <section style={{ border: '1px solid #d0d7de', borderRadius: 8, padding: 16, margin: '16px 0' }}>
-        <h2 style={{ marginTop: 0 }}>New campaign</h2>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <input
-            placeholder="Name (e.g. Solar Lisbon #2)"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            style={{ flex: 1, padding: 8 }}
-          />
-          <input
-            placeholder="Goal USDC"
-            value={newGoal}
-            onChange={(e) => setNewGoal(e.target.value)}
-            style={{ width: 120, padding: 8 }}
-          />
-          <button onClick={createCampaign} disabled={busy}>
-            Create
+        <div className="registry-bar">
+          <h2 className="section-title">Campaigns</h2>
+          <button className="btn btn-ghost" disabled={busy || fixtureMode} onClick={() => run(() => refresh())}>
+            Refresh contract state
           </button>
         </div>
-      </section>
 
-      <h2>Campaigns ({campaigns.length})</h2>
-      {loading && <p>Loading…</p>}
-
-      {campaigns.map((c) => {
-        const raised = investedUsdc(c);
-        const pct = Math.min(100, (raised / c.goalUsdc) * 100);
-        const full = raised >= c.goalUsdc;
-        return (
-          <article
-            key={c.id}
-            style={{ border: '1px solid #d0d7de', borderRadius: 8, padding: 16, marginBottom: 16 }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: 0 }}>{c.name}</h3>
-              <span style={{ color: stateColor[c.state], fontWeight: 600 }}>{stateLabel[c.state]}</span>
-            </div>
-            <p style={{ margin: '6px 0' }}>
-              <code>{c.code}</code> · Goal {fmt(c.goalUsdc)} USDC · Supply {fmt(c.supply)}{' '}
-              tokens · {c.investments.length} investors
-            </p>
-            <div style={{ background: '#eaeef2', borderRadius: 4, height: 10, overflow: 'hidden' }}>
-              <div
-                style={{
-                  width: `${pct}%`,
-                  height: '100%',
-                  background: full ? '#1a7f37' : '#0969da',
-                }}
-              />
-            </div>
-            <p style={{ margin: '6px 0' }}>
-              {fmt(raised)} / {fmt(c.goalUsdc)} USDC ({fmt(pct)}%) · Minted {fmt(raised === 0 ? 0 : (raised / c.goalUsdc) * c.supply)} tokens
-            </p>
-
-            {c.mintTx && (
-              <p style={{ margin: '4px 0', fontSize: 13 }}>
-                Mint:{' '}
-                <a href={txLink(c.mintTx)} target="_blank" rel="noreferrer">
-                  {c.mintTx.slice(0, 16)}…
-                </a>
-              </p>
-            )}
-
-            {c.payoutTx && (
-              <p style={{ margin: '4px 0', fontSize: 13 }}>
-                Payout:{' '}
-                <a href={txLink(c.payoutTx)} target="_blank" rel="noreferrer">
-                  {c.payoutTx.slice(0, 16)}…
-                </a>
-              </p>
-            )}
-
-            {c.state === 'funding' && (
-              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <input
-                  type="number"
-                  min="1"
-                  placeholder="USDC"
-                  value={amounts[c.id] ?? ''}
-                  onChange={(e) => setAmounts((prev) => ({ ...prev, [c.id]: e.target.value }))}
-                  style={{ width: 110, padding: 8 }}
-                />
-                {pubKey ? (
-                  <button onClick={() => investFreighter(c)} disabled={busy}>
-                    Invest (Freighter)
-                  </button>
-                ) : (
-                  <button onClick={() => invest(c)} disabled={busy}>
-                    Invest
-                  </button>
-                )}
-                {full && (
-                  <button onClick={() => act(c, 'finalize')} disabled={busy}>
-                    Finalize (pay creator)
-                  </button>
-                )}
-                <button onClick={() => act(c, 'refund')} disabled={busy}>
-                  Refund
+        {base.length > 0 && (
+          <div className="discovery-bar">
+            <input
+              className="discovery-search"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="Search campaigns by name or contract"
+              aria-label="Search campaigns"
+            />
+            <div className="filter-chips" role="group" aria-label="Filter by status">
+              {(['all', 'open', 'funded', 'ended'] as const).map(f => (
+                <button
+                  key={f}
+                  className={`chip ${statusFilter === f ? 'chip-active' : ''}`}
+                  onClick={() => setStatusFilter(f)}
+                >
+                  {f === 'all' ? 'All' : f === 'open' ? 'Open' : f === 'funded' ? 'Funded' : 'Underfunded'}
                 </button>
-              </div>
-            )}
+              ))}
+            </div>
+            <select
+              className="discovery-sort"
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
+              aria-label="Sort campaigns"
+            >
+              <option value="deadline">Deadline soonest</option>
+              <option value="progress">Most funded</option>
+              <option value="name">Name A-Z</option>
+            </select>
+          </div>
+        )}
 
-            {c.investments.length > 0 && (
-              <ul style={{ fontSize: 13, margin: '8px 0 0', paddingLeft: 20 }}>
-                {c.investments.map((inv) => (
-                  <li key={inv.id}>
-                    {inv.investorPub.slice(0, 6)}… +{fmt(inv.amountUsdc)} USDC → +{fmt(inv.tokens)}{' '}
-                    tokens ·{' '}
-                    <a href={txLink(inv.usdcTx)} target="_blank" rel="noreferrer">
-                      USDC
-                    </a>{' '}
-                    ·{' '}
-                    <a href={txLink(inv.tokenTx)} target="_blank" rel="noreferrer">
-                      tokens
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
-        );
-      })}
-    </main>
+        {base.length > 0 && shown.length === 0 && (
+          <p className="no-matches">No campaigns match the current search and filters.</p>
+        )}
+
+        {showEmpty && <EmptyState fixtureMode={false} onToggleFixtures={toggleFixtures} />}
+        {fixtureMode && <EmptyState fixtureMode onToggleFixtures={toggleFixtures} />}
+
+        <div className="card-grid">
+          {shown.map(c => (
+            <CampaignCard
+              key={c.id}
+              campaign={c}
+              actor={actor}
+              busy={busy}
+              readOnly={fixtureMode}
+              amount={amounts[c.id] ?? ''}
+              onAmount={v => setAmounts({ ...amounts, [c.id]: v })}
+              onPrepare={action => run(() => prepare(c, action))}
+            />
+          ))}
+        </div>
+
+        <Footer />
+      </main>
+    </>
   );
 }
