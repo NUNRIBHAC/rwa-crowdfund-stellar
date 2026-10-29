@@ -1,3 +1,5 @@
+> **Local implementation extension (29 October 2026):** Read [IMPLEMENTATION.md](IMPLEMENTATION.md) first. The new identity/valuation/governance/cash-out API is test-only and separate from the campaign API. It does not approve real investors or send fiat. The existing classic tokens and Soroban balance records do not by themselves establish economic rights, legal ownership, liquidity, regulatory permission or KYC enforcement. No live network tests, provider integrations, push or deployment are included.
+
 # RWA Crowdfund — Stellar
 
 Tokenized RWA (real world assets) crowdfunding platform on the Stellar network.
@@ -119,6 +121,7 @@ npm run dev:frontend                   # app at http://localhost:5173
 | `USDC_ISSUER` | yes | Circle USDC testnet SAC issuer: `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5` |
 | `SOZU_FAUCET_URL` | no | defaults to `https://faucet.sozu.capital` |
 | `PLATFORM_SECRET` | yes | secret key of the platform/escrow account (testnet only) |
+| `ADMIN_SECRET` | yes | shared admin key for the money-moving endpoints (`/finalize`, `/refund`, `/retry-pending`, `/demo/seed-investors`); sent as the `x-admin-key` header. `npm run setup` generates one if empty |
 | `PORT` | no | API port, defaults to `4000` |
 
 Generate `PLATFORM_SECRET` with:
@@ -156,8 +159,9 @@ Notes:
 | POST | `/api/campaigns/:id/invest` | demo investment (backend signs) |
 | POST | `/api/campaigns/:id/invest/build` | build XDR for Freighter signing |
 | POST | `/api/campaigns/:id/invest/submit` | submit signed XDR and deliver tokens |
-| POST | `/api/campaigns/:id/finalize` | finalize and pay the creator |
-| POST | `/api/campaigns/:id/refund` | refund investors |
+| POST | `/api/campaigns/:id/finalize` | finalize and pay the creator (admin key, after deadline, goal met) |
+| POST | `/api/campaigns/:id/refund` | refund investors (admin key, after deadline, goal missed) |
+| POST | `/api/campaigns/:id/retry-pending` | retry token delivery for pending investments (admin key) |
 | GET | `/api/demo/investors` | list demo investors |
 | POST | `/api/demo/seed-investors` | seed demo investors |
 | GET | `/api/demo/wallet/:pub` | account balances |
@@ -166,35 +170,100 @@ Notes:
 
 ## Known limitations (demo) and next steps
 
-This MVP is deliberately simple; the decisions below are demo simplifications, with
-their respective next steps:
+### Addressed in the backend (previously mis-described or open)
 
-1. **finalize/refund authorization**: today anyone can call `/finalize` and `/refund`
-   (and the UI exposes the buttons). In practice there should be a time gate (campaign
-   deadline, all-or-nothing) and authorization (creator/admin/multisig). Next step:
-   Soroban contract with `deadline`, `onlyOwner` and atomic payout logic.
-2. **Idempotency and races**: `invest()` reads state and writes afterwards; two
-   concurrent submissions can overshoot the goal. Re-submitting the same XDR fails on
-   Horizon (`tx_bad_seq`), so it does not duplicate, but the race between different
-   investors exists. Acceptable at demo level. Next step: atomic state and cap in the
+1. **finalize/refund authorization and time gate**: previously anyone could call
+   `/finalize` and `/refund` at any time. Now both are all-or-nothing and gated:
+   `finalize` only after the deadline and only if the goal was met; `refund` only
+   after the deadline and only if the goal was missed. Every money-moving route
+   (`/campaigns` create, `/invest` demo path, `/finalize`, `/refund`,
+   `/retry-pending`, `/demo/seed-investors`) requires the admin key
+   (`x-admin-key` header; demo-grade shared secret, not yet creator/multisig
+   authorization). Next step: Soroban contract with `deadline`, `onlyOwner` and
+   atomic payout logic.
+2. **Idempotency, intent-first**: an earlier version of this section claimed
+   that re-submitting the same XDR always fails on Horizon (`tx_bad_seq`);
+   Horizon can instead replay the original successful result, which double-paid
+   tokens. Now every payment (USDC contribution, token delivery, payout,
+   clawback, refund, mint) is executed intent-first: the exact signed XDR and
+   its hash are persisted (fsynced JSON store) before the first broadcast, and
+   uncertain outcomes (crash after broadcast, lost response, `tx_bad_seq`,
+   `tx_too_late`) resubmit the identical transaction, which Horizon replays
+   instead of applying twice. A previously broadcast intent is never discarded
+   or rebuilt automatically: its hash is reconciled against Horizon, and
+   anything short of an authoritative applied result (successful === true)
+   holds the intent for manual reconciliation — that includes a bare 404
+   (absence in queried history, not proof the tx can never execute) and a
+   transaction found but recorded as failed. Remaining honesty note: this
+   protects one backend process with its JSON store; it is not multi-process
+   safe and not a substitute for on-chain enforcement.
+3. **Races and cap**: an in-process lock serializes all state changes and the
+   goal is a strict cap: a contribution above the remaining target is rejected,
+   never trimmed, and concurrent investments cannot overshoot the goal within
+   one backend process.
+4. **Post-USDC consistency**: an earlier version claimed a failed token delivery
+   "leaves the record pending"; the old code saved nothing. Now the investment
+   is recorded (`pending_usdc` before broadcast, then `pending_token_delivery`)
+   and `POST /api/campaigns/:id/retry-pending` (admin) settles it by
+   resubmitting the persisted intents.
+5. **Refund correctness**: refunds are intent-first and recorded per
+   investment, so a retry after a partial failure does not pay an investor
+   twice. A pending token delivery is reconciled against Horizon before any
+   refund without token recovery; unless the delivery is found applied
+   (successful === true) the refund is held for manual reconciliation — a 404
+   is absence in queried history, not proof the tx did not execute, a
+   found-but-failed record is not proof the funds are safe either, and even
+   an expired timebound only proves it cannot execute in the future, not that
+   it did not already execute. Delivered tokens must come back before the
+   USDC refund: for demo accounts the platform signs the clawback; for
+   non-demo (Freighter) accounts the backend verifies the return on-chain via
+   the Horizon payment history. The verification is conservative: the return
+   must be a single successful payment of the exact token amount owed,
+   ordered after the token delivery in ledger total order (SEP-0035 paging
+   tokens compared numerically, not local wall clock), and each return
+   operation id can fund only one refund for the campaign. Partial, oversized
+   or failed-transaction returns are not credited (manual reconciliation
+   needed), and if the delivery's ledger position cannot be established the
+   refund is held (`awaiting_token_return` until verified).
+6. **Amounts and deadline**: money is integer cents (no float accumulation); a
+   signed XDR whose payment has more than 2 decimals is rejected, never rounded
+   into extra credit; the campaign deadline is enforced on the signed submit
+   path as well (it was only checked at XDR build time).
+
+### Still demo-only
+
+1. **Single process**: the state lock and the JSON file store protect one
+   backend process only. Multiple instances need a shared store with real
+   transactions (e.g. a database) or, longer term, the on-chain Soroban
    contract.
-3. **Post-USDC consistency**: if token delivery fails after the USDC payment was
-   already submitted, the record stays pending (should not happen in the demo). Next
-   step: manual retry/compensation, or atomic operations in the Soroban contract.
-4. **Plaintext keys**: `.creator.json`, `.demo-investors.json` and `PLATFORM_SECRET`
-   contain secret keys and are **testnet only — never use on mainnet**. They are
-   protected by `.gitignore`; in production use a secrets manager and multisig.
-
-Roadmap beyond the next steps above: KYC/ECSPR and legal structuring (MiCA/ECSPR),
-RWA valuation oracles, secondary market for the tokens, platform governance and anchor
-integration for fiat cash out — the goal is a single Soroban contract that replaces the
-backend as the source of truth for escrow, deadlines and authorization.
+2. **Authorization is a shared demo secret**, not creator/multisig control.
+   Production needs real authorization (multisig, then the contract).
+3. **No automatic on-chain reconciliation worker**: uncertain submissions are
+   resolved by calling `/retry-pending` (admin); there is no background job
+   polling Horizon yet. A bare Horizon 404 is treated as inconclusive, never
+   as proof a transaction did not execute, so previously broadcast intents are
+   never discarded or rebuilt automatically — clearing one requires explicit
+   manual reconciliation by an operator against an authoritative source.
+4. **Plaintext keys**: `.creator.json`, `.demo-investors.json`, `PLATFORM_SECRET`
+   and `ADMIN_SECRET` contain secret keys and are **testnet only — never use on
+   mainnet**. They are protected by `.gitignore`; in production use a secrets
+   manager and multisig.
 
 ## Security
 
 - Network: Testnet only; demo keys in files protected by `.gitignore`
-- The backend validates the amount from the signed XDR operations (does not trust the
-  input)
+- The backend validates the amount from the signed XDR operations (does not trust
+  the input), persists every signed payment intent (fsynced) before broadcast
+  and retries the identical transaction; a broadcast intent is never rebuilt
+  automatically, so replays and crash/timeout retries do not duplicate payments
+- The goal is a strict cap under an in-process lock; the deadline gates
+  investing, finalizing and refunding
+- Refunds fail closed: an unverifiable or oversized token return, a pending
+  token intent that could still execute, or an inconclusive Horizon lookup
+  holds the refund instead of guessing
+- Money-moving endpoints (create, demo invest, finalize, refund, retry-pending,
+  seed) require `x-admin-key` and fail closed when `ADMIN_SECRET` is not
+  configured
 - Demo accounts only hold faucet USDC, no real value
 
 ## Links
