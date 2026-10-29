@@ -15,8 +15,8 @@ export default function Hero() {
         <span className="badge">Nontransferable records</span>
       </div>
       <p className="hero-note">
-        Testnet integration preview. No contracts are deployed or configured by this app,
-        and it is not audited or production-ready.
+        Testnet demo. Every campaign shown is a live Soroban contract on Stellar
+        testnet. Not audited, not production-ready, no real funds.
       </p>
       <p className="hero-unavailable">
         Not available in this prototype: identity/KYC onboarding, secondary-market trading,

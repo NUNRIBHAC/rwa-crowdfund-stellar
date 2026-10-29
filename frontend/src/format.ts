@@ -23,9 +23,14 @@ export function deadlineInfo(seconds: string): { date: string; label: string; st
   const ms = Number(seconds) * 1000;
   const now = Date.now();
   const date = new Date(ms).toISOString().slice(0, 10);
-  const days = Math.ceil((ms - now) / 86400000);
-  if (days < 0) return { date, label: 'Ended', state: 'ended' };
-  if (days === 0) return { date, label: 'Ends today', state: 'closing' };
+  const rem = ms - now;
+  if (rem <= 0) return { date, label: 'Ended', state: 'ended' };
+  const mins = Math.floor(rem / 60000);
+  if (mins < 1) return { date, label: 'Under a minute left', state: 'closing' };
+  if (mins < 60) return { date, label: `${mins} minute${mins === 1 ? '' : 's'} left`, state: 'closing' };
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return { date, label: `${hours} hour${hours === 1 ? '' : 's'} left`, state: 'closing' };
+  const days = Math.ceil(rem / 86400000);
   if (days <= 3) return { date, label: `${days} day${days === 1 ? '' : 's'} left`, state: 'closing' };
   return { date, label: `${days} days left`, state: 'open' };
 }
