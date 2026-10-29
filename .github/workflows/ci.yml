@@ -1,0 +1,32 @@
+name: Tests and builds
+on:
+  pull_request:
+  push:
+    branches: [main, hardening-and-infrastructure-prototype]
+permissions:
+  contents: read
+jobs:
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+  soroban:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts/crowdfund
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Rust toolchain and target
+        run: rustup toolchain install 1.99.1 --profile minimal --target wasm32v1-none
+      - run: cargo test --locked
+      - name: Install pinned Stellar CLI
+        run: cargo install --locked stellar-cli --version 28.1.0
+      - run: stellar contract build

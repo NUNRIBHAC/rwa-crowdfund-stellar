@@ -43,7 +43,7 @@ const {
 const appliedTxHashes = new Set<string>();
 const appliedTxRecords = new Map<
   string,
-  { hash: string; paging_token: string; created_at: string; successful: boolean }
+  { hash: string; paging_token: string; created_at: string; successful: boolean; ledger?: number }
 >();
 let pagingCounter = 0;
 const paymentLog: Array<{ from: string; to: string; code: string; amount: string }> = [];
@@ -65,6 +65,7 @@ function applyTx(tx: Transaction, hash: string): void {
     paging_token: toid.toString(),
     created_at: new Date().toISOString(),
     successful: true,
+    ledger: 1000,
   });
   sequences.set(tx.source, (sequences.get(tx.source) ?? 1) + 1);
   for (const op of tx.operations) {
@@ -84,7 +85,12 @@ __setDepsForTests({
   ensureAccount: async () => {},
   ensureTrustline: async () => {},
   hasTrustline: async () => true,
-  loadAccount: async (pub: string) => new Account(pub, String(sequences.get(pub) ?? 1)),
+  loadAccount: async (pub: string) => Object.assign(new Account(pub, String(sequences.get(pub) ?? 1)), {
+    signers: [{ key: pub, type: 'ed25519_public_key', weight: 1 }],
+    thresholds: { low_threshold: 1, med_threshold: 1 },
+    balances: [{ asset_type: 'native', balance: '100' }, { asset_code: 'USDC', asset_issuer: process.env.USDC_ISSUER, balance: '1000', selling_liabilities: '0', is_authorized: true }],
+  }),
+  latestLedger: async () => ({ base_fee_in_stroops: 100, base_reserve_in_stroops: 5000000 }),
   accountPayments: async () => {
     let i = 0;
     const page = (): any => ({
@@ -778,7 +784,7 @@ test('refund holds while an undelivered token intent could still execute', async
   assert.ok(afterStore.investments[0].tokenXdr, 'intent retained for manual reconciliation');
 });
 
-test('a found-but-failed intent is held, never confirmed or rebuilt', async () => {
+test('a conclusively failed USDC intent releases reservation without rebuilding', async () => {
   resetState();
   const investor = addDemoInvestor();
   const c = await createCampaign({ name: 'failedtx', goalUsdc: GOAL });
@@ -786,20 +792,20 @@ test('a found-but-failed intent is held, never confirmed or rebuilt', async () =
   injectedFailure = { type: 'bad_seq', applyFirst: false };
   await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 }), /not proof/);
 
-  // Horizon now HAS the transaction, recorded as failed: still a hold.
+  // Horizon now has positive, hash-bound failed ledger evidence: release the USDC reservation.
   const stored = readStore().campaigns.find((x: any) => x.id === c.id);
   const intentHash = stored.investments[0].usdcTx;
   appliedTxRecords.set(intentHash, {
     hash: intentHash,
     paging_token: (1001n << 32n).toString(),
     created_at: new Date().toISOString(),
-    successful: false,
+    successful: false, ledger: 1000,
   });
   injectedFailure = { type: 'bad_seq', applyFirst: false }; // force the reconcile path
   const heldResult = await retryPending(c.id); // per-investment errors are recorded, not thrown
   const held = readStore().campaigns.find((x: any) => x.id === c.id);
-  assert.equal(held.investments[0].status, 'pending_usdc', 'failed intent held, not confirmed');
-  assert.match(held.investments[0].error ?? '', /recorded on the ledger as failed/);
+  assert.equal(held.investments[0].status, 'failed_usdc', 'failed intent releases reservation');
+  assert.match(held.investments[0].error ?? '', /conclusively failed on ledger/);
   const usdcPayments = paymentLog.filter((p) => p.code === 'USDC');
   assert.equal(usdcPayments.length, 0, 'a failed tx applied nothing');
 });
@@ -821,7 +827,7 @@ test('refund holds when the token delivery is recorded as failed', async () => {
     hash: mid.investments[0].tokenTx,
     paging_token: (1002n << 32n).toString(),
     created_at: new Date().toISOString(),
-    successful: false,
+    successful: false, ledger: 1000,
   });
   await sleep(1600);
   const r = await refund(c.id);
@@ -869,4 +875,203 @@ test('refund holds when the delivery ledger position cannot be established', asy
   assert.match(r.investments[0].error ?? '', /cannot verify/);
   const refunds = paymentLog.filter((p) => p.to === investor.publicKey() && p.code === 'USDC');
   assert.equal(refunds.length, 0, 'no refund while verification is inconclusive');
+});
+
+// Regression tests: public envelope validation happens before a reservation.
+async function signedInvestment(c: any, investor: Keypair, amount = 100): Promise<string> {
+  const built = await buildInvestXdr(c.id, { investorPub: investor.publicKey(), amountUsdc: amount });
+  const tx = TransactionBuilder.fromXDR(built.xdr, built.networkPassphrase);
+  tx.sign(investor);
+  return tx.toXDR();
+}
+
+test('lockup: unsigned and wrong-signature full-goal envelopes create no reservation', async () => {
+  resetState();
+  const c = await createCampaign({ name: 'unsigned', goalUsdc: GOAL });
+  const a = Keypair.random();
+  const built = await buildInvestXdr(c.id, { investorPub: a.publicKey(), amountUsdc: 100 });
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: built.xdr }), /invalid investor signature/);
+  const wrong = TransactionBuilder.fromXDR(built.xdr, built.networkPassphrase);
+  wrong.sign(Keypair.random());
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: wrong.toXDR() }), /invalid investor signature/);
+  assert.equal(readStore().campaigns[0].investments.length, 0);
+  const done = await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a) });
+  assert.equal(done.investments[0].status, 'confirmed');
+});
+
+test('lockup: unfunded, insufficient-USDC and fee-reserve failures never reserve cap', async () => {
+  resetState();
+  const c = await createCampaign({ name: 'unpayable', goalUsdc: GOAL });
+  const a = Keypair.random();
+  const xdr = await signedInvestment(c, a);
+  const original = campaigns.deps.loadAccount;
+  try {
+    for (const mode of ['unfunded', 'usdc', 'native', 'sequence', 'threshold']) {
+      __setDepsForTests({ loadAccount: async pub => {
+        if (mode === 'unfunded') throw new Error('source account not found');
+        const account = await original(pub);
+        if (mode === 'usdc') account.balances[1].balance = '1';
+        if (mode === 'native') account.balances[0].balance = '0';
+        if (mode === 'threshold') account.thresholds.med_threshold = 2;
+        if (mode === 'sequence') account.incrementSequenceNumber();
+        return account;
+      } });
+      await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr }), /not found|insufficient|sequence|signing/);
+      assert.equal(readStore().campaigns[0].investments.length, 0, mode);
+    }
+  } finally { __setDepsForTests({ loadAccount: original }); }
+  assert.equal((await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr })).investments[0].status, 'confirmed');
+});
+
+test('signed envelope rejects two payments and unrelated/source-override operations without broadcasting', async () => {
+  resetState();
+  const c = await createCampaign({ name: 'multi', goalUsdc: GOAL });
+  const a = Keypair.random();
+  const { Asset, Operation, Memo } = await import('@stellar/stellar-sdk');
+  for (const ops of [
+    [Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' }), Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' })],
+    [Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10', source: Keypair.random().publicKey() })],
+    [Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' }), Operation.manageData({ name: 'bad', value: 'x' })],
+  ]) {
+    const builder = new TransactionBuilder(new Account(a.publicKey(), '1'), { fee: '100', networkPassphrase: 'Test SDF Network ; September 2015' }).addMemo(Memo.text(c.id)).setTimeout(900);
+    ops.forEach(op => builder.addOperation(op));
+    const tx = builder.build(); tx.sign(a);
+    const broadcasts = submitLog.length;
+    await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: tx.toXDR() }), /exactly one|operation source|unsupported/);
+    assert.equal(submitLog.length, broadcasts);
+    assert.equal(readStore().campaigns[0].investments.length, 0);
+  }
+});
+
+test('wallet build gives 15 minutes; expired signed envelopes reserve nothing', async () => {
+  resetState(); const a = Keypair.random();
+  const c = await createCampaign({ name: 'window', goalUsdc: GOAL });
+  const built = await buildInvestXdr(c.id, { investorPub: a.publicKey(), amountUsdc: 10 });
+  const tx = TransactionBuilder.fromXDR(built.xdr, built.networkPassphrase) as Transaction;
+  assert.ok(Number(tx.timeBounds!.maxTime) - Date.now()/1000 > 895);
+  const { Asset, Operation, Memo } = await import('@stellar/stellar-sdk');
+  const expired = new TransactionBuilder(new Account(a.publicKey(), '1'), { fee: '100', networkPassphrase: built.networkPassphrase, timebounds: { minTime: '0', maxTime: '1' } }).addMemo(Memo.text(c.id)).addOperation(Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' })).build();
+  expired.sign(a);
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: expired.toXDR() }), /time bounds/);
+  assert.equal(readStore().campaigns[0].investments.length, 0);
+});
+
+test('signed pending reservations stay atomic; a post-preflight race remains held on 404', async () => {
+  resetState(); const a = Keypair.random(), b = Keypair.random();
+  const c = await createCampaign({ name: 'signedrace', goalUsdc: GOAL });
+  const x = await signedInvestment(c, a, 60), y = await signedInvestment(c, b, 60);
+  injectedFailure = { type: 'bad_seq', applyFirst: false, times: 5 };
+  const result = await Promise.allSettled([
+    submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: x }),
+    submitSignedInvest(c.id, { investorPub: b.publicKey(), xdr: y }),
+  ]);
+  assert.ok(result.every(r => r.status === 'rejected'));
+  assert.equal(readStore().campaigns[0].investments.length, 1);
+  assert.equal(readStore().campaigns[0].investments[0].status, 'pending_usdc');
+  assert.match(readStore().campaigns[0].investments[0].error, /not proof/);
+});
+
+test('partial token returns combine across pages; retries and duplicate IDs cannot double refund', async () => {
+  resetState(); const a = Keypair.random();
+  const c = await createCampaign({ name: 'partials', goalUsdc: GOAL });
+  await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a, 20) });
+  const store = readStore(); store.campaigns[0].deadline = new Date(0).toISOString(); fs.writeFileSync(storePath, JSON.stringify(store));
+  returnedPaymentPages = [[mkReturn('part-a', a.publicKey(), c.code, '75.0000000')]];
+  const r1 = await refund(c.id);
+  assert.equal(r1.investments[0].status, 'awaiting_token_return');
+  assert.equal(r1.investments[0].returnedTokens, '75.0000000');
+  returnedPaymentPages = [[mkReturn('part-b', a.publicKey(), c.code, '125')], [mkReturn('part-a', a.publicKey(), c.code, '75'), mkReturn('part-a', a.publicKey(), c.code, '75')]];
+  const r2 = await refund(c.id);
+  assert.equal(r2.state, 'refunded');
+  assert.deepEqual(new Set(r2.consumedReturnOps), new Set(['part-a','part-b']));
+  assert.equal(paymentLog.filter(p => p.to === a.publicKey() && p.code === 'USDC').length, 1);
+});
+
+test('CORS allowlist rejects untrusted POSTs and preflights, permits configured origins', async () => {
+  const { app } = await import('../src/server.js'); const srv = app.listen(0);
+  await new Promise(r => srv.once('listening', r));
+  const url = `http://127.0.0.1:${(srv.address() as any).port}/api/campaigns`;
+  try {
+    for (const method of ['POST', 'OPTIONS']) {
+      const bad = await fetch(url, { method, headers: { origin: 'https://evil.invalid', 'x-admin-key': 'test-admin-key' } });
+      assert.equal(bad.status, 403); assert.equal(bad.headers.get('access-control-allow-origin'), null);
+    }
+    const allowed = await fetch(url, { headers: { origin: 'http://localhost:5173' } });
+    assert.equal(allowed.headers.get('access-control-allow-origin'), 'http://localhost:5173');
+    assert.equal(allowed.headers.get('cache-control'), 'no-store');
+  } finally { srv.close(); }
+});
+
+test('conclusive failed USDC payment releases full goal for another investor; no rebroadcast', async () => {
+  resetState(); const a = Keypair.random(), b = Keypair.random();
+  const c = await createCampaign({ name: 'failedrelease', goalUsdc: GOAL });
+  injectedFailure = { type: 'network', applyFirst: false };
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a) }), /uncertain/);
+  const hash = readStore().campaigns[0].investments[0].usdcTx;
+  appliedTxRecords.set(hash, { hash, ledger: 1001, successful: false, paging_token: RETURN_PT, created_at: new Date().toISOString() });
+  const before = submitLog.length;
+  const cleared = await retryPending(c.id);
+  assert.equal(cleared.investments[0].status, 'failed_usdc');
+  assert.equal(submitLog.length, before, 'known failed transaction never resubmitted');
+  const done = await submitSignedInvest(c.id, { investorPub: b.publicKey(), xdr: await signedInvestment(c, b) });
+  assert.equal(done.investments[1].status, 'confirmed');
+  const store = readStore(); store.campaigns[0].deadline = new Date(0).toISOString(); fs.writeFileSync(storePath, JSON.stringify(store));
+  assert.equal((await finalize(c.id)).state, 'finalized');
+  assert.equal(paymentLog.filter(p => p.from === a.publicKey() && p.code === 'USDC').length, 0);
+});
+
+test('missing/mismatched ledger evidence cannot release a reservation', async () => {
+  resetState(); const a = Keypair.random();
+  const c = await createCampaign({ name: 'unproven', goalUsdc: GOAL });
+  injectedFailure = { type: 'bad_seq', applyFirst: false, times: 20 };
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a) }), /not proof/);
+  const hash = readStore().campaigns[0].investments[0].usdcTx;
+  for (const evidence of [
+    { hash, successful: false },
+    { hash: 'wrong', ledger: 1000, successful: false },
+    { hash, ledger: 1000 },
+  ]) {
+    appliedTxRecords.set(hash, evidence as any);
+    assert.equal((await retryPending(c.id)).investments[0].status, 'pending_usdc');
+  }
+});
+
+test('campaign binding prevents crediting one signed payment twice across campaigns', async () => {
+  resetState(); const a = Keypair.random();
+  const c = await createCampaign({ name: 'one', goalUsdc: GOAL });
+  const other = await createCampaign({ name: 'two', goalUsdc: GOAL });
+  const xdr = await signedInvestment(c, a, 20);
+  await assert.rejects(submitSignedInvest(other.id, { investorPub: a.publicKey(), xdr }), /memo must bind/);
+  await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr });
+  await assert.rejects(submitSignedInvest(other.id, { investorPub: a.publicKey(), xdr }), /already assigned/);
+  assert.equal(readStore().campaigns[1].investments.length, 0);
+});
+
+test('legacy no-memo pending intents resume unchanged; new no-memo submissions fail', async () => {
+  resetState(); const a = Keypair.random();
+  const c = await createCampaign({ name: 'legacy', goalUsdc: GOAL });
+  const { Asset, Operation } = await import('@stellar/stellar-sdk');
+  const tx = new TransactionBuilder(new Account(a.publicKey(), '1'), { fee: '100', networkPassphrase: 'Test SDF Network ; September 2015' }).addOperation(Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '20' })).setTimeout(900).build();
+  tx.sign(a);
+  const input = { investorPub: a.publicKey(), xdr: tx.toXDR() };
+  await assert.rejects(submitSignedInvest(c.id, input), /memo must bind/);
+  // Simulate a durable intent persisted by the previous branch version.
+  const store = readStore();
+  store.campaigns[0].investments.push({ id: 'i1', investorPub: a.publicKey(), amountUsdc: 20, tokens: 200, usdcXdr: input.xdr, usdcTx: Buffer.from(tx.hash()).toString('hex'), tokenTx: '', status: 'pending_usdc' });
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  const done = await submitSignedInvest(c.id, input);
+  assert.equal(done.investments.length, 1);
+  assert.equal(done.investments[0].status, 'confirmed');
+  assert.equal(submitLog[1], input.xdr, 'exact legacy XDR resubmitted, not rebuilt');
+});
+
+test('wallet build with missing trustlines produces an accepted narrow envelope', async () => {
+  resetState(); const a = Keypair.random();
+  const c = await createCampaign({ name: 'trustlines', goalUsdc: GOAL });
+  const original = campaigns.deps.hasTrustline;
+  __setDepsForTests({ hasTrustline: async () => false });
+  try {
+    const done = await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a, 20) });
+    assert.equal(done.investments[0].status, 'confirmed');
+  } finally { __setDepsForTests({ hasTrustline: original }); }
 });
