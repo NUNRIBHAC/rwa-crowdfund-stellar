@@ -132,7 +132,7 @@ export default function App() {
     <>
       <Header actor={actor} busy={busy} onConnect={() => run(connect)} />
       <main className="page">
-        <Hero />
+        <Hero mode={fixtureMode ? 'sample' : loaded && campaigns.length > 0 ? 'live' : 'unknown'} />
 
         {error && <p role="alert" className="error-banner">{error}</p>}
 
