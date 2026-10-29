@@ -22,5 +22,5 @@ Use this skill when an agent needs to structure, execute, or audit crowdfunding 
 ## Constraints
 - DO NOT issue tokens to non-EU investors without verifying specific cross-border marketing rules.
 - DO NOT bypass the 4-day "reflection period" (cooling-off) for non-sophisticated investors if required by ECSPR.
-- NEVER operate without the `AUTH_REVOCABLE` flag; EU regulators require the ability to freeze assets in cases of fraud or court orders.
+- Set the `AUTH_REVOCABLE` flag where the legal structure requires issuer-side freezing (fraud, court orders); it is a design choice supporting compliance, not a universal EU mandate.
 - DO NOT exceed the €5,000,000 annual limit per issuer under the standard EU Crowdfunding Regulation without a full Prospectus.

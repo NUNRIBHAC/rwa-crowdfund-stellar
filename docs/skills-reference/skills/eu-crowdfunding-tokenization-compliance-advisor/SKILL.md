@@ -19,7 +19,7 @@ Use this skill when a user is designing a crowdfunding platform in the EU that u
 ## Examples
 **Scenario:** A startup wants to raise €2M by issuing "SolarTokens" on Stellar representing debt in a green energy project.
 **Advisor Response:** 
-"Since this is under the €5M threshold, you must apply for an ECSP license. On Stellar, you must use the `SEP-8` standard for regulated assets to ensure every trade is authorized by your compliance server. You are required to provide a 3-page KIIS to all investors and implement a 4-day cooling-off period where their USDC/XLM remains in an escrow balance before the 'SolarTokens' are finalized."
+"Since this is under the €5M threshold, you must apply for an ECSP license. On Stellar, you must use the `SEP-8` standard for regulated assets to ensure every trade is authorized by your compliance server. You are required to provide a Key Investment Information Sheet (KIIS) to all investors, with the content set by ECSPR Article 23 and its technical standards (there is no fixed page count) and implement a 4-day cooling-off period where their USDC/XLM remains in an escrow balance before the 'SolarTokens' are finalized."
 
 ## Constraints
 *   Do NOT provide specific legal advice that replaces a qualified EU lawyer's review.

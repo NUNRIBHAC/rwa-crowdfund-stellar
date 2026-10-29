@@ -7,7 +7,7 @@ When to use
 Use this skill when designing governance structures for Stellar-based crowdfunding platforms operating in the EU. This applies when deciding on token voting mechanisms, treasury management, or legal compliance (MiCA/DLT Pilot Regime) for decentralized organizations.
 
 ## Instructions
-1.  **Identify the Legal Entity**: Advise the user to establish a legal wrapper (e.g., a German GmbH, French Association, or Swiss Foundation) to interface with EU regulations.
+1.  **Identify the Legal Entity**: Advise the user to establish a legal wrapper (e.g., a German GmbH or a French Association) to interface with EU regulations; note that Swiss foundations sit outside the EU/EEA regulatory perimeter.
 2.  **Map Governance to MiCA**: Ensure the governance token utility is defined. If tokens grant profit-sharing, treat them as Security Tokens (MiFID II). If they grant pure governance, evaluate them under MiCA's "Utility Token" or "Asset-Referenced Token" definitions.
 3.  **Structure On-Chain Voting**: Recommend Stellar-specific governance tools (like Stellar Turrets or smart contracts on Soroban) for transparent voting.
 4.  **Implement EU Compliance Hooks**:

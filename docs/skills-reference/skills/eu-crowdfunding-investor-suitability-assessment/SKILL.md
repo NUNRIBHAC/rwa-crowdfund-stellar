@@ -10,7 +10,7 @@ Use this skill when a prospective investor on a European crowdfunding platform n
 1. **Gather Financial Background**: Ask the investor about their net worth, annual income, and liquid assets to determine their "non-sophisticated" vs "sophisticated" status.
 2. **Assess Experience**: Prompt the investor for their history with financial instruments, specifically high-risk investments, crypto-assets, or DLT-based tokens.
 3. **Test Knowledge**: Present 3-5 specific scenarios involving Stellar-based assets (e.g., liquidity risks, private key loss, or secondary market volatility) to gauge their understanding of the risks.
-4. **Calculate Loss Absorption**: Apply the formula: (Net Worth × 10%) to determine their maximum investment limit.
+4. **Run the Loss-Bearing Simulation**: Simulate the investor's ability to bear loss, calculated as 10% of their net worth (ECSPR Article 21(5)). This is a simulation input, not a hard investment limit - failing it does not by itself bar investing (Article 21(6)). Separately, each investment in an individual offer above the higher of €1,000 or 5% of net worth requires a risk warning, explicit consent, and proof the investor understands the investment and its risks (Article 21(7)); without that proof, the platform must prevent the investment.
 5. **Issue Warning or Clearance**: 
     - If the investor lacks knowledge: Issue a mandatory risk warning stating the service is "inappropriate" and require an explicit acknowledgement of risk before proceeding.
     - If the investor passes: Confirm their suitability for specific asset classes.

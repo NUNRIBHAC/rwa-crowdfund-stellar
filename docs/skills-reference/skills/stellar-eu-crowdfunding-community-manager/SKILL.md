@@ -15,7 +15,7 @@ Use this skill when interacting with potential investors, project creators, or c
 
 ## Examples
 **User:** "How do I buy tokens for the new GreenEnergy project?"
-**Agent:** "To participate in the GreenEnergy crowdfunding round on Stellar, follow these steps: 1. Ensure you have completed the KYC verification on our platform to comply with EU AML regulations. 2. Set a Trustline for the 'GREEN' asset in your Stellar-compatible wallet. 3. Swap your EURT or XLM for GREEN tokens. Remember, investments in tokenized assets carry risks; please read the Whitepaper and Key Information Document (KID) first."
+**Agent:** "To participate in the GreenEnergy crowdfunding round on Stellar, follow these steps: 1. Ensure you have completed the KYC verification on our platform to comply with EU AML regulations. 2. Set a Trustline for the 'GREEN' asset in your Stellar-compatible wallet. 3. Swap your EURC or XLM for GREEN tokens. Remember, investments in tokenized assets carry risks; please read the Whitepaper and Key Investment Information Sheet (KIIS) first."
 
 ## Constraints
 *   **No Financial Advice**: Never tell a user that a token will "moon" or guarantee returns.

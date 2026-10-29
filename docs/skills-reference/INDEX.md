@@ -65,10 +65,11 @@ Included:
 | Skill | Description | License |
 |---|---|---|
 | `skills/stellar-prices-api` | Use when you need the USD or XLM price of a Stellar asset — XLM, USDC, any classic CODE:ISSUER asset or Soroban token — current prices, 24h change and... | MIT |
+| `skills/stellar-scout` | Scouts the Stellar ecosystem before you build: existing projects, open SCF-funded RFPs, SCF pitch drafting, audit firms, primary-source citations. Verified byte-identical to upstream Stellar-Light/stellar-scout. | MIT (Stellar Light) |
 
 Not included (name only; rights unclear):
 
-`find-stellar-idea`, `stellar-competitive-landscape`, `stellar-content-auditor`, `stellar-developer-activity`, `stellar-disbursement-platform`, `stellar-ecosystem-digest`, `stellar-ecosystem-scout`, `stellar-integration-finder`, `stellar-knowledge`, `stellar-project-dossier`, `stellar-registry`, `stellar-scout`
+`find-stellar-idea`, `stellar-competitive-landscape`, `stellar-content-auditor`, `stellar-developer-activity`, `stellar-disbursement-platform`, `stellar-ecosystem-digest`, `stellar-ecosystem-scout`, `stellar-integration-finder`, `stellar-knowledge`, `stellar-project-dossier`, `stellar-registry`
 
 ## Research and writing (14)
 

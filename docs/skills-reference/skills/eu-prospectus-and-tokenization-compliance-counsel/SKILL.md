@@ -8,7 +8,7 @@ Use this skill when a user is launching a crowdfunding campaign in the European 
 
 ## Instructions
 1.  **Identify the Offering Type**: Determine if the offering falls under the European Crowdfunding Service Providers Regulation (ECSPR) for raises up to €5M or the full Prospectus Regulation.
-2.  **Verify Asset Representation**: Ensure the tokenized asset on Stellar (e.g., via SEP-20 or SEP-40) accurately reflects the underlying legal security defined in the disclosure.
+2.  **Verify Asset Representation**: Ensure the tokenized asset on Stellar (a native Stellar asset, or the SEP-41 token interface for Soroban) accurately reflects the underlying legal security defined in the disclosure.
 3.  **Draft the KIIS**: For ECSPR raises, focus on the Key Investment Information Sheet (KIIS), ensuring it includes the specific risks of distributed ledger technology (DLT).
 4.  **Disclose Blockchain Risks**: Explicitly detail Stellar-specific factors including private key management, network fees (lumens), and the finality of transactions.
 5.  **Address Custody and Transferability**: Describe how the issuer handles "Clawback" and "Authorization" (via Stellar flags) to remain compliant with AML/KYC requirements.

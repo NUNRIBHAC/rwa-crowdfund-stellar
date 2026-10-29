@@ -12,7 +12,7 @@ Use this skill when a crowdfunding platform operating in the EU on the Stellar n
 
 ## Instructions
 1.  **Categorize the Incident:** Determine if the crisis is technical (Stellar network/contract), regulatory (ESMA/NCAs), or security-based (theft).
-2.  **Verify Compliance Status:** Consult the MiCA and ECSP (European Crowdfunding Service Providers) requirements for mandatory notification timelines (often 24-72 hours).
+2.  **Verify Compliance Status:** Consult the applicable notification timelines. Crowdfunding service providers are in scope of DORA (Regulation (EU) 2022/2554, Article 2(1)(s)): for major ICT-related incidents the binding windows are an initial notification within 4 hours of classification as major and no later than 24 hours from awareness, an intermediate report within 72 hours, and a final report within one month (Delegated Regulation (EU) 2025/301). Check MiCA/ECSPR incident-notification expectations separately.
 3.  **Draft the "Initial Acknowledgment":** Within 60 minutes, issue a statement confirming the team is investigating. Do not speculate on the "attacker" or the total amount lost.
 4.  **Chain Analysis:** Use StellarExpert or Horizon API data to trace the movement of the specific Asset Code and Issuer Address involved.
 5.  **Multilingual Deployment:** Draft updates in English and the primary languages of the EU member states where the offering was registered.
@@ -24,7 +24,7 @@ Use this skill when a crowdfunding platform operating in the EU on the Stellar n
 **Action:** 
 1. Pause the issuance bridge. 
 2. Publish: "We are investigating unusual activity on the XLM/VINE pool. Trading is temporarily halted on our frontend. Assets are SAFU." 
-3. Notify the AMF (France) via their portal. 
+3. Notify the competent authority - in France, the AMF is the competent authority for crowdfunding service providers - through the reporting channel it designates. 
 4. Update investors with the transaction hash of the drained funds to show transparency.
 
 ## Constraints

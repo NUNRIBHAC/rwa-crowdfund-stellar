@@ -7,8 +7,8 @@ When to use
 Use this skill when developing or auditing a crowdfunding platform in the European Union that utilizes the Stellar blockchain for asset tokenization. It is specifically for ensuring compliance with the European Crowdfunding Service Providers (ECSP) Regulation regarding Professional Indemnity Insurance (PII) and prudential safeguards.
 
 ## Instructions
-1.  **Verify ECSP Compliance Status**: Confirm if the platform falls under Regulation (EU) 2020/1503. If so, PII is a mandatory prudential safeguard.
-2.  **Determine Minimum Coverage**: Calculate the required coverage based on the platform's volume. Under EU law, the minimum PII or own funds requirement is typically at least €25,000 or a percentage of the annual fixed overheads.
+1.  **Verify ECSP Compliance Status**: Confirm if the platform falls under Regulation (EU) 2020/1503. If so, prudential safeguards are mandatory (ECSPR Article 11).
+2.  **Determine Minimum Coverage**: Calculate the required coverage based on the platform's volume. Under ECSPR Article 11, the prudential safeguard must equal at least the higher of EUR 25,000 or one quarter of the preceding year's fixed overheads, and must take the form of own funds, an insurance policy covering the territories where offers are actively marketed (or a comparable guarantee), or a combination of the two.
 3.  **Scope Stellar-Specific Risks**: Ensure the insurance policy explicitly covers "Digital Asset Risks," including:
     *   Loss of private keys/custodial failure on the Stellar network.
     *   Smart contract (Soroban) vulnerabilities.

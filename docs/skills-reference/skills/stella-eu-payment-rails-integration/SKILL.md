@@ -8,7 +8,7 @@ Use this skill when designing or implementing the financial layer of a European 
 
 ## Instructions
 1.  **Select MiCA-Compliant Assets**: Default to using **EURC** (issued by Circle) as the primary Euro stablecoin, as it is designed for MiCA compliance.
-2.  **Define On-Ramp Flow**: Identify a regulated VASP (Virtual Asset Service Provider) or SEP-24/SEP-6 provider (like Tempo or Bitbond) to bridge SEPA transfers to Stellar assets.
+2.  **Define On-Ramp Flow**: Identify a MiCA-authorized CASP or SEP-24/SEP-6 anchor to bridge SEPA transfers to Stellar assets, and verify the provider's current authorization in the relevant national register before relying on it - provider availability changes fast, and any provider named in older material may no longer be active or authorized.
 3.  **Implement Stellar Ecosystem Proposals (SEPs)**:
     *   Use **SEP-24** for hosted deposit and withdrawal flows.
     *   Use **SEP-31** for cross-border business payments if the platform acts as a facilitator.

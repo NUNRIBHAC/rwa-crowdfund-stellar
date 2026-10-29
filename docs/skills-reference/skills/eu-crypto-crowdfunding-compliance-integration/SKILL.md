@@ -25,6 +25,6 @@ Use this skill when designing or implementing the onboarding flow for a European
 
 ## Constraints
 *   Do NOT store clear-text PII (names, addresses, ID photos) on the Stellar ledger or in public metadata.
-*   Do NOT bypass the "manual review" flag for high-risk jurisdictions or transactions exceeding €1,000 (standard EU AML trigger).
+*   Apply enhanced due diligence and manual review for high-risk jurisdictions. Do not treat €1,000 as a general AML trigger: under the Transfer of Funds Regulation, CASP transfers carry originator/beneficiary information at any amount, and €1,000 is only the threshold for verifying self-hosted wallets.
 *   Do NOT use vendors that do not offer GDPR-compliant Data Processing Agreements (DPA).
 *   Do NOT issue tokens to a Stellar address until the `SEP-12` status is officially marked as `APPROVED`.

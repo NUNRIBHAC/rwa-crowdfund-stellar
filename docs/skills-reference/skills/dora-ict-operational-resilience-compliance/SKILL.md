@@ -13,8 +13,8 @@ Use this skill when designing, auditing, or documenting the technical infrastruc
 4. **Design for Resilience:** 
     - Implement multi-signature setups for asset issuance to prevent single points of failure.
     - Establish "Continuous Monitoring" for smart contract execution errors.
-5. **Draft Incident Response:** Create a step-by-step workflow for reporting major ICT-related incidents to the relevant European Supervisory Authority (ESA) within DORA's strict timelines.
-6. **Plan Testing:** Schedule annual "Basic TLPT" (Threat-Led Penetration Testing) or vulnerability scans focused on the API gateway and the bridge between off-chain ledgers and the Stellar ledger.
+5. **Draft Incident Response:** Create a step-by-step workflow for reporting major ICT-related incidents to the national competent authority within DORA's binding timelines: initial notification within 4 hours of classifying the incident as major and no later than 24 hours from awareness, intermediate report within 72 hours, final report within one month (Delegated Regulation (EU) 2025/301).
+6. **Plan Testing:** Schedule annual basic resilience testing (vulnerability scans) focused on the API gateway and the bridge between off-chain ledgers and the Stellar ledger. Full TLPT (Threat-Led Penetration Testing) is required at least every three years, and only for entities designated by the competent authority (DORA Articles 26-27).
 
 ## Examples
 **Scenario:** A platform issuing "Real Estate Tokens" on Stellar needs to comply with DORA Article 6 (ICT Risk Management).

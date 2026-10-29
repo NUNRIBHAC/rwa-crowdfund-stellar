@@ -39,3 +39,10 @@ inside `skills/soroban-common-mistakes/`.
 
 MIT License, copyright (c) 2026 Rumble Fish Poland Sp. z o.o. The LICENSE file
 is preserved inside `skills/stellar-prices-api/`.
+
+## stellar-scout
+
+MIT License, copyright (c) 2026 Stellar Light
+(<https://github.com/Stellar-Light/stellar-scout>). The upstream LICENSE file
+is preserved inside `skills/stellar-scout/`; the copy was verified
+byte-identical to upstream on 2026-10-29.

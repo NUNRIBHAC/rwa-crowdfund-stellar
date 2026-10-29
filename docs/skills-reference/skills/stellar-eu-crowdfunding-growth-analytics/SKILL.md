@@ -1,6 +1,6 @@
 ---
 name: stellar-eu-crowdfunding-growth-analytics
-description: Analyze user acquisition, liquidity, and regulatory compliance metrics for Stellar-based tokenization platforms in the EU. ---Analyze user acquisition, liquidity, and regulatory compliance metrics for Stellar-based tokenization platforms in the EU.
+description: Analyze user acquisition, liquidity, and regulatory compliance metrics for Stellar-based tokenization platforms in the EU.
 ---
 
 When to use
@@ -11,7 +11,7 @@ Use this skill when you need to optimize growth strategies, track investor conve
 2.  **Monitor Stellar On-Chain Activity**: Use Horizon API or Stellar Expert to track "Asset Issued" vs. "Asset Distributed" ratios for specific project tokens. 
 3.  **Analyze Investor Funnel**:
     *   Measure the conversion rate from "KYC Approved" (required in EU) to "First Trustline Created."
-    *   Track the velocity of EURT or USDC (Stellar) deposits into project escrow accounts.
+    *   Track the velocity of EURC or USDC (Stellar) deposits into project escrow accounts.
 4.  **Evaluate Liquidity Pools**: Analyze AMM (Automated Market Maker) performance for project tokens to ensure secondary market health, which is a key selling point for EU retail investors.
 5.  **Calculate CAC/LTV**: Determine the Cost Per Acquisition for EU-based investors across different member states, accounting for localized marketing costs.
 

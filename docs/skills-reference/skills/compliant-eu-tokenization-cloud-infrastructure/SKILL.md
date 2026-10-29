@@ -29,4 +29,4 @@ Use this skill when designing, auditing, or deploying infrastructure for a Europ
 *   **NEVER** store unencrypted private keys in environment variables or version control.
 *   **NEVER** use non-EU cloud regions for storing PII (Personally Identifiable Information) or transaction ledgers.
 *   **DO NOT** allow public SSH access; use Bastion hosts or Session Manager.
-*   **DO NOT** bypass the Stellar Compliance Protocol (SEP-3) when handling EU investor onboarding.
+*   **DO NOT** bypass KYC data exchange (SEP-12) when handling EU investor onboarding. Note: the old SEP-3 Compliance Protocol is abandoned and must not be relied on.

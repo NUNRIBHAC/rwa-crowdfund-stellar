@@ -20,7 +20,7 @@ Use this skill when a user is seeking to understand the European Markets in Cryp
 
 ## Examples
 **User:** "We want to set up a crypto exchange in Ireland. What do we need for MiCA?"
-**Counsel:** "Operating an exchange is classified as 'operating a trading platform for crypto-assets' under MiCA. You will need to apply to the Central Bank of Ireland. Your application must include a program of operations, proof of €150,000 in initial capital (or higher depending on volume), and detailed AML/CFT procedures. Once authorized, you can 'passport' these services to all other EU states without further licensing."
+**Counsel:** "Operating an exchange is classified as 'operating a trading platform for crypto-assets' under MiCA. You will need to apply to the Central Bank of Ireland. Your application must include a program of operations, proof of the minimum capital for your service class under MiCA Annex IV (€50,000 / €125,000 / €150,000 - operating a trading platform is Class 3 at €150,000) or one quarter of the preceding year's fixed overheads, and detailed AML/CFT procedures. Once authorized, you can 'passport' these services to all other EU states without further licensing."
 
 ## Constraints
 *   Do not provide definitive legal advice; always include a disclaimer that the user should consult with legal counsel in the specific jurisdiction.

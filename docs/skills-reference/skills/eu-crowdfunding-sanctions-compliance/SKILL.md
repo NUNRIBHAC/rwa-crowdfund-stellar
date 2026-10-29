@@ -8,7 +8,7 @@ Use this skill when a platform user attempts to:
 1. Register an account for an EU-based crowdfunding project.
 2. Purchase or trade tokenized assets on the Stellar network within the EU jurisdiction.
 3. Withdraw funds from a crowdfunding campaign to an external wallet or bank account.
-4. Conduct Due Diligence (CDD/EDD) as required by the European Securities and Markets Authority (ESMA) and AMLD6.
+4. Conduct Due Diligence (CDD/EDD) as required by the EU anti-money-laundering framework (AMLD5/6, transitioning to the AML Regulation (EU) 2024/1624 package).
 
 ## Instructions
 1. **Identify the Subject:** Extract the full legal name, date of birth (for individuals), or registration number (for entities), and country of residence/incorporation.
@@ -31,7 +31,7 @@ Use this skill when a platform user attempts to:
 5. **Outcome:** Transaction Authorized.
 
 ## Constraints
-- **Do NOT** allow any transaction involving jurisdictions on the EU "Blacklist" (High-risk third countries).
+- **Do NOT** treat the EU list of high-risk third countries as an automatic ban: it requires enhanced due diligence (EDD). Direct matches on EU sanctions lists remain prohibited.
 - **Do NOT** process transactions for anonymous wallets; all Stellar keys must be mapped to a verified KYC profile.
-- **Do NOT** bypass the €5 million limit without verifying the existence of an ESMA-approved prospectus.
+- **Do NOT** bypass the €5 million limit without verifying the existence of a prospectus approved by the issuer's home Member State competent authority (prospectuses are not approved by ESMA).
 - **Do NOT** share specific internal screening logic or "tipping off" information with the user if they are flagged.

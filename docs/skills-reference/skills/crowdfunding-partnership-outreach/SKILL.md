@@ -7,9 +7,9 @@ When to use
 Use this skill when identifying, vetting, or initiating outreach to potential asset issuers (real estate developers, SMEs, or startups) in the European Union who wish to raise capital via tokenized instruments on the Stellar blockchain.
 
 ## Instructions
-1.  **Identify Target Issuers**: Focus on EU-based entities in sectors like Renewable Energy, Real Estate, or Tech SMEs seeking €500k–€8M in funding.
+1.  **Identify Target Issuers**: Focus on EU-based entities in sectors like Renewable Energy, Real Estate, or Tech SMEs seeking up to €5M per project owner over 12 months (the ECSPR ceiling; larger raises follow the Prospectus Regulation).
 2.  **Verify EU Compliance Prerequisites**: Confirm the issuer understands MiCA (Markets in Crypto-Assets) or local crowdfunding regulations (ECSPR).
-3.  **Explain the Stellar Advantage**: Highlight low transaction costs, built-in Compliance Protocol (SEP-20), and native Asset Issuance features.
+3.  **Explain the Stellar Advantage**: Highlight low transaction costs, regulated-asset controls (SEP-8) with native authorization/clawback flags, and native Asset Issuance features.
 4.  **Structure the Value Proposition**:
     *   *Liquidity*: Explain how tokenization enables fractional ownership.
     *   *Efficiency*: Automated dividends and cap table management via Stellar Smart Contracts (Soroban).
@@ -19,7 +19,7 @@ Use this skill when identifying, vetting, or initiating outreach to potential as
 ## Examples
 **User Request**: "Draft a first-contact email for a Berlin-based real estate firm interested in tokenizing a new apartment complex."
 **Agent Response**: "Subject: Modernizing Real Estate Financing for [Firm Name] via Stellar
-Dear [Name], I noticed your upcoming project in Berlin. We specialize in helping EU firms leverage the Stellar network to tokenize debt/equity under ECSPR standards. By using Stellar, you can reduce administrative overhead by 40% and offer fractional shares to investors using EURC. Are you available for a brief call to discuss your regulatory roadmap?"
+Dear [Name], I noticed your upcoming project in Berlin. We specialize in helping EU firms leverage the Stellar network to tokenize debt/equity under ECSPR standards. By using Stellar, you can reduce administrative overhead (insert your own evidenced figure here) and offer fractional shares to investors using EURC. Are you available for a brief call to discuss your regulatory roadmap?"
 
 ## Constraints
 *   **No Legal Advice**: Never provide definitive legal or regulatory rulings; always recommend consulting with qualified EU counsel.

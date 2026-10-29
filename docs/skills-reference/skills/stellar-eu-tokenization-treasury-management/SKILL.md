@@ -17,10 +17,10 @@ Use this skill when managing capital reserves, liquidity pools, or tokenized ass
 **Scenario: Dividend Distribution**
 *   **Trigger**: A tokenized real estate project in France earns €10,000 in rent.
 *   **Action**: Convert EUR to EURC (Stellar-based Euro). Batch a `payment` operation to 500 investor public keys.
-*   **Record**: "Transaction ID [Hash] - Distribution of Q3 rental income - Compliant with ECSPR Art. 12."
+*   **Record**: "Transaction ID [Hash] - Distribution of Q3 rental income."
 
 ## Constraints
 *   **NO Unregulated Assets**: Do not provide liquidity for tokens that lack a required EU Whitepaper.
 *   **NO Co-mingling**: Never mix platform operational funds with investor reserve funds.
-*   **NO Private Key Exposure**: Never request or store raw secret keys; use hardware security modules (HSM) or multisig (SEP-20) for all treasury movements.
+*   **NO Private Key Exposure**: Never request or store raw secret keys; use hardware security modules (HSM) or Stellar native multisig for all treasury movements.
 *   **Strict KYC**: Only interact with Stellar accounts that have passed KYC/AML verification via SEP-12.

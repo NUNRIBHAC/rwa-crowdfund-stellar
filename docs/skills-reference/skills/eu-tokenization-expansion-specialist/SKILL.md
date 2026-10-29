@@ -11,7 +11,7 @@ Use this skill when a crowdfunding platform utilizing Stellar blockchain technol
 2.  **Verify ECSP Standards**: Ensure the platform aligns with the European Crowdfunding Service Providers (ECSP) Regulation, specifically regarding the "Key Investment Information Sheet" (KIIS).
 3.  **Map Payment Rails**: Identify SEPA-compliant gateways to bridge Euro (EUR) liquidity with Stellar anchors (e.g., EURC by Circle).
 4.  **Localize Disclosures**: Draft risk warnings tailored to specific EU member states (e.g., BaFin requirements for Germany, AMF for France) ensuring they are in the local language.
-5.  **Audit On-Chain Identity**: Implement SEP-12 (Identity API) and SEP-10 (Stellar Web Authentication) protocols to satisfy EU Anti-Money Laundering (AML) and KYC directives.
+5.  **Audit On-Chain Identity**: Implement SEP-12 (KYC API) and SEP-10 (Stellar Web Authentication) protocols to satisfy EU Anti-Money Laundering (AML) and KYC directives.
 
 ## Examples
 **Scenario**: A Spanish real estate developer wants to tokenize a building on Stellar for EU investors.

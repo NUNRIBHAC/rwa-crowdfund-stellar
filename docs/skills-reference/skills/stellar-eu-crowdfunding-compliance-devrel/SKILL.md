@@ -9,12 +9,12 @@ Use this skill when designing a tokenized crowdfunding platform on Stellar that 
 ## Instructions
 1.  **Identify Regulatory Framework**: Determine if the project falls under the European Crowdfunding Service Providers Regulation (ECSPR) for raises up to €5M, or the Markets in Crypto-Assets (MiCA) regulation for asset-referenced tokens.
 2.  **Map Stellar Features to EU Rules**: 
-    *   Use **Stellar Asset Sandboxing (SEP-8)** to enforce compliance rules (KYC/AML) directly on the ledger.
+    *   Use **Stellar Regulated Assets (SEP-8)** to enforce compliance rules (KYC/AML) directly on the ledger.
     *   Implement **Clawback capabilities** to meet legal requirements for asset recovery or court-ordered reversals.
 3.  **Localize Developer Outreach**: 
     *   Focus on "Green Finance" and "SME Funding" narratives, as these align with EU Horizon Europe goals.
     *   Target European tech hubs (Berlin, Paris, Tallinn, Lisbon) for hackathons and grant distribution.
-4.  **Verification Architecture**: Utilize **SEP-1 KYC data standards** to ensure interoperability with European Identity Providers (eIDAS).
+4.  **Verification Architecture**: Utilize **SEP-12 KYC data standards** to ensure interoperability with European Identity Providers (eIDAS).
 
 ## Examples
 **User:** "We want to launch a real estate crowdfunding portal in France using Stellar."

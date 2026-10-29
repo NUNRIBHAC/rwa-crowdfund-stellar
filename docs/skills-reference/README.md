@@ -11,7 +11,7 @@ the backend or the contracts.
 
 ## What is included
 
-Skills are copied into `skills/` (65 of the 222 supplied) when the right to
+Skills are copied into `skills/` (66 of the 222 supplied) when the right to
 publish them is established. See `NOTICE.md` for attribution and `INDEX.md`
 for the full catalog of all 222 entries with the provenance and inclusion
 status of each.
@@ -23,12 +23,14 @@ status of each.
   granted yet - all rights reserved by the owner.
 - 17 skills from [nrxschool/blockchain-skills](https://github.com/nrxschool/blockchain-skills)
   (CC-BY-4.0 content / MIT code), verified identical to upstream.
-- `soroban-common-mistakes` (MIT, Aayush Gupta) and `stellar-prices-api`
-  (MIT, Rumble Fish Poland), LICENSE files preserved.
+- `soroban-common-mistakes` (MIT, Aayush Gupta), `stellar-prices-api`
+  (MIT, Rumble Fish Poland) and `stellar-scout` (MIT, Stellar Light),
+  LICENSE files preserved; all three verified byte-identical to their
+  upstream repositories.
 
 ## What is not included, and why
 
-The remaining 157 supplied skills have no license file or an unverified
+The remaining 156 supplied skills have no license file or an unverified
 origin (third-party authors, community collections without a clear license, or
 no stated author at all). Because this repository is public, they are not
 copied here. `INDEX.md` lists each one with its status.

@@ -22,6 +22,6 @@ Use this skill when designing the technical and regulatory architecture for a cr
 
 ## Constraints
 - **Do NOT** issue tokens without setting the `AUTH_REQUIRED` flag; EU crowdfunding requires strict identity control.
-- **Do NOT** ignore MiCA limits regarding the €5M threshold for prospectus exemptions.
+- **Do NOT** ignore the €5M per-project-owner 12-month threshold under ECSPR and the Prospectus Regulation (it is not a MiCA limit).
 - **Do NOT** store PII (Personally Identifiable Information) directly on the Stellar ledger; use hashes or external data rooms.
 - **Do NOT** use automated market makers (AMMs) for these tokens unless the liquidity provider is a regulated entity.
