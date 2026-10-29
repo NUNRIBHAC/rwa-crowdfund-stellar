@@ -13,6 +13,19 @@ import type { Intent, IntentStore } from './journal.js';
 type Entry = { id: string; name: string; contractId: string };
 let queue: Promise<unknown> = Promise.resolve();
 const lock = <T>(fn: () => Promise<T>): Promise<T> => { const next = queue.then(fn, fn); queue = next.catch(() => {}); return next; };
+// Critical sections that read the journal, check for unresolved signed
+// intents and save must be mutually exclusive across every process sharing
+// the journal (rolling deploys briefly overlap two processes). The in-process
+// queue covers one process; a Postgres journal adds a session advisory lock
+// so a second process waits instead of racing the check. File backend
+// (single developer) has no cross-process guard: single instance only.
+const JOURNAL_OPS_LOCK_KEY = 'soroban-journal-ops';
+async function guarded<T>(fn: () => Promise<T>): Promise<T> {
+  return lock(async () => {
+    const j = await journalBackend();
+    return j.runExclusive ? j.runExclusive(JOURNAL_OPS_LOCK_KEY, fn) : fn();
+  });
+}
 async function readStore(): Promise<IntentStore> { return (await journalBackend()).read(); }
 async function save(store: IntentStore): Promise<void> { return (await journalBackend()).save(store); }
 function guard(): void {
@@ -70,7 +83,7 @@ export async function sorobanCampaigns(actor?: string): Promise<any[]> {
   }));
 }
 export async function buildSoroban(id: string, input: { actor: string; action: string; amount?: string }): Promise<any> {
-  return lock(async () => {
+  return guarded(async () => {
     const e = entry(id), actor = actorAddress(input.actor);
     if (process.env.SOROBAN_RECOVERY_MODE === 'true') throw new Error('recovery mode: journal was restored from backup and is not yet reconciled; new transactions are disabled until an operator completes reconciliation and disables SOROBAN_RECOVERY_MODE');
     if (!['contribute', 'refund', 'withdraw'].includes(input.action)) throw new Error('unsupported action');
@@ -109,7 +122,7 @@ async function submitIntent(client: rpc.Server, store: IntentStore, intent: Inte
   } catch (err) { intent.status = 'UNKNOWN'; await save(store); throw err; }
 }
 export async function submitSoroban(id: string, input: { actor: string; xdr: string }): Promise<any> {
-  return lock(async () => {
+  return guarded(async () => {
     entry(id); actorAddress(input.actor);
     const tx = TransactionBuilder.fromXDR(input.xdr, passphrase);
     if (!(tx instanceof Transaction) || tx.source !== input.actor || tx.signatures.length !== 1 || !Keypair.fromPublicKey(input.actor).verify(tx.hash(), tx.signatures[0].signature)) throw new Error('invalid signed transaction');
@@ -128,7 +141,7 @@ export async function submitSoroban(id: string, input: { actor: string; xdr: str
 // or submits anything. A recovered unconfirmed intent blocks new builds for
 // that wallet (fail-closed) until its exact hash resolves on-chain.
 export async function recoverSoroban(input: { actor: string; xdr: string }): Promise<any> {
-  return lock(async () => {
+  return guarded(async () => {
     guard(); actorAddress(input.actor);
     const tx = TransactionBuilder.fromXDR(input.xdr, passphrase);
     if (!(tx instanceof Transaction) || tx.source !== input.actor || tx.signatures.length !== 1 || !Keypair.fromPublicKey(input.actor).verify(tx.hash(), tx.signatures[0].signature)) throw new Error('invalid signed transaction');
@@ -154,7 +167,7 @@ export async function recoverSoroban(input: { actor: string; xdr: string }): Pro
 }
 
 export async function statusSoroban(hash: string): Promise<any> {
-  return lock(async () => {
+  return guarded(async () => {
     guard(); if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error('invalid hash');
     const store = await readStore(), intent = store.intents.find(i => i.hash === hash);
     if (!intent || !intent.signedXdr) throw new Error('signed intent not found');

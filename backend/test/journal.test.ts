@@ -96,3 +96,29 @@ test('postgres journal rolls back when an upsert fails', async () => {
   assert.ok(pool.calls.includes('ROLLBACK'), 'rollback attempted');
   assert.deepEqual(await j.read(), { intents: [] }, 'nothing committed');
 });
+
+test('file journal has no cross-process guard; postgres runExclusive holds and releases an advisory lock', async () => {
+  // The file backend intentionally omits runExclusive: single instance only.
+  const queries: string[] = [];
+  const client = { query: async (text: string) => { queries.push(text.replace(/\s+/g, ' ').trim()); return { rows: [] }; }, release: () => { queries.push('RELEASE'); } };
+  const pool = { query: async () => ({ rows: [] }), end: async () => {}, connect: async () => client };
+  const j = new PostgresJournal(pool as any);
+  const order: string[] = [];
+  await j.runExclusive!('soroban-journal-ops', async () => { order.push('critical'); });
+  assert.ok(queries.some(q => q.includes('pg_advisory_lock')), 'advisory lock taken');
+  assert.ok(queries.some(q => q.includes('pg_advisory_unlock')), 'advisory lock released');
+  assert.ok(queries.includes('RELEASE'), 'client released');
+  assert.deepEqual(order, ['critical']);
+});
+
+test('postgres save never regresses a signed envelope or terminal status in its upsert', async () => {
+  const pool = fakePool();
+  const raw: string[] = [];
+  const original = pool.query.bind(pool);
+  pool.query = async (text: string, params?: unknown[]) => { raw.push(text.replace(/\s+/g, ' ')); return original(text, params); };
+  const j = new PostgresJournal(pool);
+  await j.save({ intents: [signed] });
+  const upsert = raw.find(c => c.includes('ON CONFLICT'))!;
+  assert.match(upsert, /signed_xdr = COALESCE\(soroban_intents\.signed_xdr, EXCLUDED\.signed_xdr\)/, 'signed envelope never erased');
+  assert.match(upsert, /CASE WHEN soroban_intents\.status IN \('SUCCESS','FAILED'\)/, 'terminal status never overwritten');
+});
