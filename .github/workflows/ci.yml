@@ -1,0 +1,44 @@
+name: Tests and builds
+on:
+  pull_request:
+  push:
+    branches: [main, hardening-and-infrastructure-prototype]
+permissions:
+  contents: read
+jobs:
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+  soroban:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts/crowdfund
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Rust toolchain and target
+        run: rustup toolchain install 1.99.1 --profile minimal --target wasm32v1-none
+      - run: cargo test --locked
+      - name: Install pinned Stellar CLI release binary
+        run: |
+          curl --fail --location --retry 3 --proto '=https' --tlsv1.2 \
+            https://github.com/stellar/stellar-cli/releases/download/v28.1.0/stellar-cli-28.1.0-x86_64-unknown-linux-gnu.tar.gz \
+            --output /tmp/stellar-cli.tar.gz
+          echo 'c1680deee94301d33ada7a17f98411e642a4248c727afbd2e43050d345746462  /tmp/stellar-cli.tar.gz' | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/stellar-cli"
+          tar -xzf /tmp/stellar-cli.tar.gz -C "$RUNNER_TEMP/stellar-cli"
+          "$RUNNER_TEMP/stellar-cli/stellar" --version
+          echo "$RUNNER_TEMP/stellar-cli" >> "$GITHUB_PATH"
+      - run: stellar contract build
+      - name: Verify API-pinned Wasm fixture
+        run: |
+          echo '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564  target/wasm32v1-none/release/crowdfund.wasm' | sha256sum -c -
+          cmp target/wasm32v1-none/release/crowdfund.wasm ../../backend/test/fixtures/reviewed-crowdfund.wasm

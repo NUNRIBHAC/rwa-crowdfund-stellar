@@ -60,7 +60,7 @@ export async function submitPayment(
   from: Keypair,
   toPub: string,
   asset: Asset,
-  amount: number,
+  amount: number | string,
 ): Promise<string> {
   const account = await server.loadAccount(from.publicKey());
   const tx = new TransactionBuilder(account, {
@@ -71,7 +71,7 @@ export async function submitPayment(
       Operation.payment({
         destination: toPub,
         asset,
-        amount: amount.toFixed(7),
+        amount: typeof amount === 'number' ? amount.toFixed(7) : amount,
       }),
     )
     .setTimeout(60)

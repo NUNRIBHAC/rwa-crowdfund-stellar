@@ -1,3 +1,4 @@
+if (process.env.LEGACY_MAINTENANCE !== 'explicitly_authorized') throw new Error('Legacy reset disabled: preserve unresolved balances and intents.');
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
