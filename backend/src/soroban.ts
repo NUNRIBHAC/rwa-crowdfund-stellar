@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { Account, Address, Asset, Contract, Keypair, Networks, Transaction, TransactionBuilder, nativeToScVal, scValToNative, rpc } from '@stellar/stellar-sdk';
+import { Account, Address, Asset, Contract, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, scValToNative, rpc } from '@stellar/stellar-sdk';
 
 // No deployment path, platform signer, local capacity counter or receipt token.
 export const sorobanDeps = {
@@ -133,6 +133,36 @@ export async function submitSoroban(id: string, input: { actor: string; xdr: str
     return submitIntent(sorobanDeps.client(), store, intent);
   });
 }
+// Journal-loss recovery: re-register one exact signed envelope whose journal
+// entry was lost (e.g. restored from a stale backup). Never builds, replaces
+// or submits anything. A recovered unconfirmed intent blocks new builds for
+// that wallet (fail-closed) until its exact hash resolves on-chain.
+export async function recoverSoroban(input: { actor: string; xdr: string }): Promise<any> {
+  return lock(async () => {
+    guard(); actorAddress(input.actor);
+    const tx = TransactionBuilder.fromXDR(input.xdr, passphrase);
+    if (!(tx instanceof Transaction) || tx.source !== input.actor || tx.signatures.length !== 1 || !Keypair.fromPublicKey(input.actor).verify(tx.hash(), tx.signatures[0].signature)) throw new Error('invalid signed transaction');
+    const hash = Buffer.from(tx.hash()).toString('hex');
+    const store = readStore();
+    const existing = store.intents.find(i => i.hash === hash);
+    if (existing) return { hash, status: existing.status, recovered: false };
+    let contractId = '';
+    try {
+      const ca = (tx.operations[0] as any).func.invokeContract?.contractAddress;
+      if (ca?.type === 'scAddressTypeContract' && ca.contractId?.value) contractId = StrKey.encodeContract(Buffer.from(ca.contractId.value));
+    } catch { contractId = ''; }
+    const campaign = entries().find(e => e.contractId === contractId)?.id ?? null;
+    const result = await sorobanDeps.client().getTransaction(hash);
+    if (result.txHash !== hash) throw new Error('RPC returned mismatched hash');
+    const terminal = result.status === 'SUCCESS' || result.status === 'FAILED';
+    if (terminal && (!Number.isSafeInteger(result.ledger) || result.ledger <= 0)) throw new Error('RPC result missing conclusive ledger');
+    const status = terminal ? result.status : 'NOT_FOUND';
+    store.intents.push({ hash, campaign: campaign ?? 'recovered', actor: input.actor, action: 'recovered', xdr: tx.toXDR(), signedXdr: tx.toXDR(), status });
+    save(store);
+    return { hash, status, recovered: true, campaign, held: status === 'NOT_FOUND' };
+  });
+}
+
 export async function statusSoroban(hash: string): Promise<any> {
   return lock(async () => {
     guard(); if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error('invalid hash');

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { Account, Asset, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, SorobanDataBuilder, xdr } from '@stellar/stellar-sdk';
-import { sorobanDeps, amountUnits, sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban } from '../src/soroban.js';
+import { sorobanDeps, amountUnits, sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban } from '../src/soroban.js';
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'soroban-api-'));
 const actor = Keypair.random();
 const contractId = StrKey.encodeContract(Buffer.alloc(32, 2));
@@ -144,4 +144,25 @@ test('HTTP build/submit/status roundtrip invokes only registered Soroban flow', 
     const checked: any = await (await fetch(root + '/api/soroban/transactions/' + b.hash)).json();
     assert.equal(checked.confirmed, true); assert.equal(sendCount, 1);
   } finally { srv.close(); }
+});
+
+test('journal-loss recovery re-registers exact signed intent, blocks replacement until resolved', async () => {
+  reset();
+  const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  const signedXdr = signed(b);
+  fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true }); // journal lost
+  const r = await recoverSoroban({ actor: actor.publicKey(), xdr: signedXdr });
+  assert.equal(r.recovered, true); assert.equal(r.status, 'NOT_FOUND'); assert.equal(r.campaign, 's1');
+  await assert.rejects(buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' }), /unresolved/);
+  txStatus = 'SUCCESS';
+  assert.equal((await statusSoroban(b.hash)).status, 'SUCCESS');
+  await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' }); // allowed once terminal
+});
+
+test('recovery never submits and rejects a mismatched RPC hash', async () => {
+  reset(); wrongHash = true;
+  const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true });
+  await assert.rejects(recoverSoroban({ actor: actor.publicKey(), xdr: signed(b) }), /mismatched/);
+  assert.equal(sendCount, 0);
 });

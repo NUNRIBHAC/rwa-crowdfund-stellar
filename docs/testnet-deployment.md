@@ -78,5 +78,6 @@ For the user-facing demo, register demo-solar only; the E2E contracts are ended 
 
 - Freighter browser UX test (extension signing) - attempted only with a test-only key, or the owner tries it from their own browser.
 - Postgres journal adapter for durable hosted state (plus export/shutdown procedure for the 30-day free Postgres expiry).
+- Journal restore caveat: a stale backup can omit newer signed/broadcast intents, and exact-hash reconciliation cannot recover hashes it never knew. This branch adds `POST /api/soroban/recover` (read-only against the network): it re-registers one exact signed envelope (e.g. the one the frontend retains in localStorage), records its on-chain status, and fail-closes new builds for that wallet until the hash resolves. After any restore from backup, every wallet with a possibly outstanding signed intent must re-register it before building anything new. Snapshot freshness remains an operational requirement; recovery is per-envelope, never a rebuild.
 - TTL maintenance: campaigns longer than ~30 days need `bump` calls; demo-solar (7 days) is within the initial TTL set on contribution.
 - Hosting account creation and any payment await owner approval; no external accounts were created.

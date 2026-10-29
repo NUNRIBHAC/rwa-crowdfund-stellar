@@ -3,7 +3,7 @@ import cors from 'cors';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
-import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban } from './soroban.js';
+import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban } from './soroban.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -68,6 +68,12 @@ app.post('/api/campaigns/:id/soroban/build', async (req, res) => {
 });
 app.post('/api/campaigns/:id/soroban/submit', async (req, res) => {
   try { res.json(await submitSoroban(String(req.params.id), req.body ?? {})); }
+  catch (err) { res.status(400).json({ error: err instanceof Error ? err.message : String(err) }); }
+});
+app.post('/api/soroban/recover', async (req, res) => {
+  // Re-register an exact signed envelope lost with the journal. Read-only
+  // against the network: looks up the hash, never submits.
+  try { res.json(await recoverSoroban(req.body ?? {})); }
   catch (err) { res.status(400).json({ error: err instanceof Error ? err.message : String(err) }); }
 });
 app.get('/api/soroban/transactions/:hash', async (req, res) => {
