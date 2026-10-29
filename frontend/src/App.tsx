@@ -1,487 +1,75 @@
 import { useEffect, useState } from 'react';
-import { isConnected, requestAccess, signTransaction } from '@stellar/freighter-api';
-
-type Investment = {
-  id: string;
-  investorPub: string;
-  amountUsdc: number;
-  tokens: number;
-  usdcTx: string;
-  tokenTx: string;
-  status?:
-    | 'pending_usdc'
-    | 'pending_token_delivery'
-    | 'confirmed'
-    | 'awaiting_token_return'
-    | 'refund_pending'
-    | 'refunded'
-    | 'failed_usdc';
-  returnedTokens?: string;
-  error?: string;
-  clawbackTx?: string;
-  refundTx?: string;
-};
-
-type Campaign = {
-  id: string;
-  code: string;
-  name: string;
-  goalUsdc: number;
-  deadline: string;
-  creatorPub: string;
-  supply: number;
-  state: 'funding' | 'finalized' | 'refunded';
-  createdAt: string;
-  mintTx: string;
-  payoutTx?: string;
-  finalizedAt?: string;
-  refundedAt?: string;
-  investments: Investment[];
-};
-
-function investedUsdc(c: Campaign): number {
-  return c.investments.filter(i => i.status !== 'failed_usdc' && i.status !== 'refunded').reduce((sum, i) => sum + i.amountUsdc, 0);
+import { requestAccess, signTransaction } from '@stellar/freighter-api';
+type Campaign = { id: string; name: string; contractId: string; raised: string; balance: string | null; withdrawn: boolean;
+  config: { creator: string; token: string; goal: string; deadline: string } };
+type Intent = { hash: string; xdr: string; campaign: string; actor: string; action: string; status: string; signedXdr?: string; amount?: string; feeStroops?: string; contractId?: string };
+const units = (v: string) => { const n = BigInt(v); return `${n/10000000n}.${String(n%10000000n).padStart(7,'0')}`; };
+async function api(url: string, body?: unknown) {
+  const r = await fetch(url, body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : undefined);
+  const v = await r.json(); if (!r.ok) throw new Error(v.error ?? 'API request failed'); return v;
 }
-
-function fmt(n: number): string {
-  return n.toLocaleString('en-US', { maximumFractionDigits: 2 });
-}
-
-const TESTNET_EXPLORER = 'https://stellar.expert/explorer/testnet';
-
-const stateLabel: Record<Campaign['state'], string> = {
-  funding: 'Funding',
-  finalized: 'Finalized',
-  refunded: 'Refunded',
-};
-
-const stateColor: Record<Campaign['state'], string> = {
-  funding: '#1a7f37',
-  finalized: '#0969da',
-  refunded: '#bc4c00',
-};
-
-const investmentStatusLabel: Record<NonNullable<Investment['status']>, string> = {
-  pending_usdc: 'USDC payment not confirmed yet — use "Retry token delivery"',
-  pending_token_delivery: 'USDC received — token delivery pending',
-  confirmed: 'confirmed',
-  awaiting_token_return: 'refund blocked — return the tokens to the platform first',
-  refund_pending: 'refund in progress',
-  refunded: 'refunded',
-  failed_usdc: 'USDC failed on ledger - no contribution; capacity released',
-};
-
 export default function App() {
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [demoInvestors, setDemoInvestors] = useState<string[]>([]);
-  const [pubKey, setPubKey] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState(false);
-  const [trustlineHash, setTrustlineHash] = useState<string | null>(null);
-
-  const [newName, setNewName] = useState('');
-  const [newGoal, setNewGoal] = useState('100');
-  const [newDeadlineMin, setNewDeadlineMin] = useState('1440');
-  const [adminKey, setAdminKey] = useState('');
-  const [selected, setSelected] = useState('');
-  const [amounts, setAmounts] = useState<Record<string, string>>({});
-
-  async function refresh() {
-    const [c, inv] = await Promise.all([
-      fetch('/api/campaigns').then((r) => r.json()),
-      fetch('/api/demo/investors').then((r) => r.json()),
-    ]);
-    setCampaigns(c.campaigns ?? []);
-    setDemoInvestors(inv.investors ?? []);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]), [actor, setActor] = useState('');
+  const [error, setError] = useState(''), [busy, setBusy] = useState(false), [amounts, setAmounts] = useState<Record<string,string>>({});
+  const [intent, setIntent] = useState<Intent | null>(() => { try { return JSON.parse(localStorage.getItem('rwa-soroban-intent') ?? 'null'); } catch { return null; } });
+  const [loaded, setLoaded] = useState(false);
+  async function refresh(address = actor) {
+    const data = await api(`/api/campaigns${address ? `?actor=${encodeURIComponent(address)}` : ''}`);
+    setCampaigns(data.campaigns); setLoaded(true);
   }
-
-  useEffect(() => {
-    // Remove credentials persisted by earlier demo versions. New keys live only in memory.
-    localStorage.removeItem('rwa-admin-key');
-    refresh()
-      .catch((err) => setError(String(err)))
-      .finally(() => setLoading(false));
-  }, []);
-
-  useEffect(() => {
-    if (!selected && demoInvestors.length > 0) setSelected(demoInvestors[0]);
-  }, [demoInvestors, selected]);
-
-  async function connect() {
-    try {
-      setError(null);
-      const conn = await isConnected();
-      if (conn.error) throw new Error(conn.error.message);
-      if (!conn.isConnected) {
-        throw new Error('Freighter is not installed or active. Install the extension and reload.');
-      }
-      const acc = await requestAccess();
-      if (acc.error) throw new Error(acc.error.message);
-      if (!acc.address) throw new Error('Could not get the account address.');
-      setPubKey(acc.address);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+  useEffect(() => { localStorage.removeItem('rwa-admin-key'); refresh().catch(e => setError(e.message)); }, []);
+  function retain(i: Intent) { setIntent(i); localStorage.setItem('rwa-soroban-intent', JSON.stringify(i)); }
+  async function run(fn: () => Promise<void>) { setBusy(true); setError(''); try { await fn(); } catch(e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); } }
+  async function connect() { const r = await requestAccess(); if (r.error || !r.address) throw new Error(r.error?.message ?? 'Wallet access failed'); setActor(r.address); await refresh(r.address); }
+  async function prepare(c: Campaign, action: string) {
+    if (!actor) throw new Error('Connect Freighter first.');
+    if (intent && !['SUCCESS','FAILED','CANCELLED_UNSIGNED'].includes(intent.status)) throw new Error('Resolve the saved transaction before preparing another.');
+    const result = await api(`/api/campaigns/${c.id}/soroban/build`, { actor, action, amount: amounts[c.id] });
+    retain({ ...result, campaign: c.id, actor, status: 'BUILT' });
+  }
+  async function submit() {
+    if (!intent) return;
+    if (actor !== intent.actor) throw new Error('Connect the wallet that prepared this transaction.');
+    let current = intent;
+    if (!current.signedXdr) {
+      const result = await signTransaction(current.xdr, { networkPassphrase: 'Test SDF Network ; September 2015' });
+      if (result.error || !result.signedTxXdr) throw new Error(result.error?.message ?? 'Wallet did not sign');
+      current = { ...current, signedXdr: result.signedTxXdr, status: 'SIGNED' }; retain(current);
     }
+    // Persist exact signed XDR before the first send. Network errors retain it.
+    const result = await api(`/api/campaigns/${current.campaign}/soroban/submit`, { actor: current.actor, xdr: current.signedXdr });
+    retain({ ...current, status: result.status });
   }
-
-  async function addUsdcTrustline() {
-    try {
-      setError(null);
-      if (!pubKey) throw new Error('Connect Freighter first.');
-      setBusy(true);
-
-      const buildRes = await fetch('/api/wallet/trustline/build', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: pubKey }),
-      });
-      const buildData = await buildRes.json();
-      if (!buildRes.ok) throw new Error(buildData.error ?? 'Failed to prepare trustline.');
-
-      const signed = await signTransaction(buildData.xdr, {
-        networkPassphrase: buildData.networkPassphrase,
-      });
-      if (signed.error) throw new Error(signed.error.message);
-      const signedXdr = signed.signedTxXdr;
-
-      const submitRes = await fetch('/api/wallet/trustline/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: pubKey, xdr: signedXdr }),
-      });
-      const submitData = await submitRes.json();
-      if (!submitRes.ok) throw new Error(submitData.error ?? 'Failed to add trustline.');
-
-      setTrustlineHash(submitData.hash);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function createCampaign() {
-    try {
-      setError(null);
-      if (!adminKey.trim()) throw new Error('Enter the admin key first (backend .env ADMIN_SECRET).');
-      const name = newName.trim();
-      const goal = Number(newGoal);
-      const mins = Number(newDeadlineMin);
-      if (!name) throw new Error('Enter a name for the campaign.');
-      if (!Number.isFinite(goal) || goal <= 0) throw new Error('Invalid goal.');
-      if (!Number.isFinite(mins) || mins <= 0) throw new Error('Invalid deadline (minutes).');
-      setBusy(true);
-      const res = await fetch('/api/campaigns', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey.trim() },
-        body: JSON.stringify({
-          name,
-          goalUsdc: goal,
-          deadline: new Date(Date.now() + mins * 60000).toISOString(),
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Failed to create campaign.');
-      setNewName('');
-      await refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function invest(c: Campaign) {
-    try {
-      setError(null);
-      if (!adminKey.trim()) throw new Error('Enter the admin key first (backend .env ADMIN_SECRET).');
-      if (!selected) throw new Error('Pick a demo investor or connect Freighter.');
-      const inputAmt = Number(amounts[c.id]);
-      if (!Number.isFinite(inputAmt) || inputAmt <= 0) throw new Error('Invalid amount.');
-      setBusy(true);
-      const res = await fetch(`/api/campaigns/${c.id}/invest`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey.trim() },
-        body: JSON.stringify({ investorPub: selected, amountUsdc: inputAmt }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Investment failed.');
-      setAmounts((prev) => ({ ...prev, [c.id]: '' }));
-      await refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function investFreighter(c: Campaign) {
-    try {
-      setError(null);
-      if (!pubKey) throw new Error('Connect Freighter first.');
-      const inputAmt = Number(amounts[c.id]);
-      if (!Number.isFinite(inputAmt) || inputAmt <= 0) throw new Error('Invalid amount.');
-      setBusy(true);
-
-      const buildRes = await fetch(`/api/campaigns/${c.id}/invest/build`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: pubKey, amountUsdc: inputAmt }),
-      });
-      const buildData = await buildRes.json();
-      if (!buildRes.ok) throw new Error(buildData.error ?? 'Failed to prepare investment.');
-
-      const signed = await signTransaction(buildData.xdr, {
-        networkPassphrase: buildData.networkPassphrase,
-      });
-      if (signed.error) throw new Error(signed.error.message);
-      const signedXdr = signed.signedTxXdr;
-
-      const submitRes = await fetch(`/api/campaigns/${c.id}/invest/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ investorPub: pubKey, xdr: signedXdr }),
-      });
-      const submitData = await submitRes.json();
-      if (!submitRes.ok) throw new Error(submitData.error ?? 'Failed to submit investment.');
-
-      setAmounts((prev) => ({ ...prev, [c.id]: '' }));
-      await refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function act(c: Campaign, action: 'finalize' | 'refund' | 'retry-pending') {
-    try {
-      setError(null);
-      if (!adminKey.trim()) throw new Error('Enter the admin key first (backend .env ADMIN_SECRET).');
-      setBusy(true);
-      const res = await fetch(`/api/campaigns/${c.id}/${action}`, {
-        method: 'POST',
-        headers: { 'x-admin-key': adminKey.trim() },
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? `Failed to ${action}.`);
-      await refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  function txLink(hash: string): string {
-    return `${TESTNET_EXPLORER}/tx/${hash}`;
-  }
-
-  return (
-    <main style={{ fontFamily: 'system-ui', maxWidth: 760, margin: '0 auto', padding: 32 }}>
-      <h1>RWA Crowdfund — Stellar Testnet</h1>
-
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 8 }}>
-        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
-          {demoInvestors.length === 0 && <option value="">No demo accounts</option>}
-          {demoInvestors.map((pk) => (
-            <option key={pk} value={pk}>
-              {pk.slice(0, 6)}…{pk.slice(-4)}
-            </option>
-          ))}
-        </select>
-        {pubKey ? (
-          <code>{pubKey.slice(0, 6)}…{pubKey.slice(-4)} (Freighter)</code>
-        ) : (
-          <button onClick={connect} disabled={busy}>
-            Connect Freighter
-          </button>
-        )}
-      </div>
-
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-        <input
-          type="password"
-          placeholder="Admin key (finalize / refund)"
-          value={adminKey}
-          onChange={(e) => setAdminKey(e.target.value)}
-          style={{ padding: 6, width: 260 }}
-        />
-        <span style={{ fontSize: 12, color: '#57606a' }}>
-          Admin key stays in memory only. Reload to clear it. Use HTTPS when hosted.
-        </span>
-      </div>
-
-      {pubKey && (
-        <div style={{ marginBottom: 8 }}>
-          <button onClick={addUsdcTrustline} disabled={busy}>
-            Add USDC (Freighter)
-          </button>
-          {trustlineHash && (
-            <span style={{ marginLeft: 8, fontSize: 13 }}>
-              Trustline:{' '}
-              <a href={txLink(trustlineHash)} target="_blank" rel="noreferrer">
-                {trustlineHash.slice(0, 16)}…
-              </a>
-            </span>
-          )}
-        </div>
-      )}
-
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
-
-      <section style={{ border: '1px solid #d0d7de', borderRadius: 8, padding: 16, margin: '16px 0' }}>
-        <h2 style={{ marginTop: 0 }}>New campaign</h2>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <input
-            placeholder="Name (e.g. Solar Lisbon #2)"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            style={{ flex: 1, padding: 8 }}
-          />
-          <input
-            placeholder="Goal USDC"
-            value={newGoal}
-            onChange={(e) => setNewGoal(e.target.value)}
-            style={{ width: 120, padding: 8 }}
-          />
-          <input
-            placeholder="Deadline (min)"
-            value={newDeadlineMin}
-            onChange={(e) => setNewDeadlineMin(e.target.value)}
-            style={{ width: 120, padding: 8 }}
-          />
-          <button onClick={createCampaign} disabled={busy}>
-            Create
-          </button>
-        </div>
-      </section>
-
-      <h2>Campaigns ({campaigns.length})</h2>
-      {loading && <p>Loading…</p>}
-
-      {campaigns.map((c) => {
-        const raised = investedUsdc(c);
-        const pct = Math.min(100, (raised / c.goalUsdc) * 100);
-        const full = raised >= c.goalUsdc;
-        return (
-          <article
-            key={c.id}
-            style={{ border: '1px solid #d0d7de', borderRadius: 8, padding: 16, marginBottom: 16 }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: 0 }}>{c.name}</h3>
-              <span style={{ color: stateColor[c.state], fontWeight: 600 }}>{stateLabel[c.state]}</span>
-            </div>
-            <p style={{ margin: '6px 0' }}>
-              <code>{c.code}</code> · Goal {fmt(c.goalUsdc)} USDC · Supply {fmt(c.supply)}{' '}
-              tokens · {c.investments.length} investors · Deadline{' '}
-              {new Date(c.deadline).toLocaleString()}
-            </p>
-            <div style={{ background: '#eaeef2', borderRadius: 4, height: 10, overflow: 'hidden' }}>
-              <div
-                style={{
-                  width: `${pct}%`,
-                  height: '100%',
-                  background: full ? '#1a7f37' : '#0969da',
-                }}
-              />
-            </div>
-            <p style={{ margin: '6px 0' }}>
-              {fmt(raised)} / {fmt(c.goalUsdc)} USDC ({fmt(pct)}%) · Minted {fmt(raised === 0 ? 0 : (raised / c.goalUsdc) * c.supply)} tokens
-            </p>
-
-            {c.mintTx && (
-              <p style={{ margin: '4px 0', fontSize: 13 }}>
-                Mint:{' '}
-                <a href={txLink(c.mintTx)} target="_blank" rel="noreferrer">
-                  {c.mintTx.slice(0, 16)}…
-                </a>
-              </p>
-            )}
-
-            {c.payoutTx && (
-              <p style={{ margin: '4px 0', fontSize: 13 }}>
-                Payout:{' '}
-                <a href={txLink(c.payoutTx)} target="_blank" rel="noreferrer">
-                  {c.payoutTx.slice(0, 16)}…
-                </a>
-              </p>
-            )}
-
-            {c.state === 'funding' && (
-              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <input
-                  type="number"
-                  min="1"
-                  placeholder="USDC"
-                  value={amounts[c.id] ?? ''}
-                  onChange={(e) => setAmounts((prev) => ({ ...prev, [c.id]: e.target.value }))}
-                  style={{ width: 110, padding: 8 }}
-                />
-                {pubKey ? (
-                  <button onClick={() => investFreighter(c)} disabled={busy}>
-                    Invest (Freighter)
-                  </button>
-                ) : (
-                  <button onClick={() => invest(c)} disabled={busy}>
-                    Invest
-                  </button>
-                )}
-                {full && (
-                  <button onClick={() => act(c, 'finalize')} disabled={busy}>
-                    Finalize (pay creator)
-                  </button>
-                )}
-                <button onClick={() => act(c, 'refund')} disabled={busy}>
-                  Refund
-                </button>
-                {c.investments.some((i) =>
-                  ['pending_usdc', 'pending_token_delivery'].includes(i.status ?? 'confirmed'),
-                ) && (
-                  <button onClick={() => act(c, 'retry-pending')} disabled={busy}>
-                    Retry token delivery
-                  </button>
-                )}
-              </div>
-            )}
-
-            {c.investments.length > 0 && (
-              <ul style={{ fontSize: 13, margin: '8px 0 0', paddingLeft: 20 }}>
-                {c.investments.map((inv) => {
-                  const status = inv.status ?? 'confirmed';
-                  return (
-                    <li key={inv.id}>
-                      {inv.investorPub.slice(0, 6)}… +{fmt(inv.amountUsdc)} USDC → +{fmt(inv.tokens)}{' '}
-                      tokens ·{' '}
-                      <a href={txLink(inv.usdcTx)} target="_blank" rel="noreferrer">
-                        USDC
-                      </a>
-                      {inv.tokenTx && (
-                        <>
-                          {' '}
-                          ·{' '}
-                          <a href={txLink(inv.tokenTx)} target="_blank" rel="noreferrer">
-                            tokens
-                          </a>
-                        </>
-                      )}
-                      {status !== 'confirmed' && (
-                        <span style={{ color: '#bc4c00' }}>
-                          {' '}
-                          · {investmentStatusLabel[status]}
-                          {inv.error ? ` (${inv.error})` : ''}
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </article>
-        );
-      })}
-    </main>
-  );
+  async function check() { if (!intent) return; const r = await api(`/api/soroban/transactions/${intent.hash}`); retain({ ...intent, status: r.status }); await refresh(); }
+  return <main style={{ fontFamily: 'system-ui', maxWidth: 850, margin: 'auto', padding: 24, lineHeight: 1.5, overflowWrap: 'anywhere' }}>
+    <h1>Soroban crowdfunding</h1>
+    <p>Testnet integration preview. Not deployed by this app. Not audited or production-ready.</p>
+    <p>All campaigns use contract escrow and nontransferable contribution records. Payments and cap checks execute atomically. No CRWD receipt tokens or platform-signed refunds.</p>
+    <button disabled={busy} onClick={() => run(connect)}>Connect Freighter (testnet)</button>
+    {actor && <p>Wallet: {actor}</p>}
+    <button disabled={busy} onClick={() => run(() => refresh())}>Refresh contract state</button>
+    {error && <p role="alert" style={{ background: '#fff0ef', padding: 12, color: '#8c1c13' }}>{error}</p>}
+    {intent && <section style={{ border: '2px solid #9a6700', padding: 16, marginTop: 20 }}>
+      <h2>Saved transaction</h2><p>{intent.action}{intent.amount ? ` ${intent.amount}` : ''} - {intent.campaign}</p>
+      <p>Contract: {intent.contractId}</p><p>Maximum transaction fee: {intent.feeStroops ? units(intent.feeStroops) : "check wallet"} testnet XLM</p><p>Hash: {intent.hash}</p><p>Status: {intent.status}</p>
+      <p>Submission is not confirmation. A missing result does not mean failure. Check status or retry this exact signed transaction, never create a replacement while uncertain.</p>
+      {!['SUCCESS','FAILED','CANCELLED_UNSIGNED'].includes(intent.status) && <button disabled={busy} onClick={() => run(submit)}>{intent.signedXdr ? 'Retry identical transaction' : 'Sign and submit'}</button>}
+      {intent.signedXdr && <button disabled={busy} onClick={() => run(check)}>Check ledger result</button>}
+      {!intent.signedXdr && intent.status === 'BUILT' && <button disabled={busy} onClick={() => retain({ ...intent, status: 'CANCELLED_UNSIGNED' })}>Cancel unsigned transaction</button>}
+      {intent.status === 'NOT_FOUND' && <p>Uncertain outcome retained. The RPC may have limited history. Do not clear or replace it based on expiry.</p>}
+    </section>}
+    {loaded && !campaigns.length && <section><h2>No deployed campaign configured</h2><p>An operator must deploy and verify the reviewed contract separately, then set SOROBAN_CAMPAIGNS_JSON. Deployment and migration are not performed here. Legacy campaigns are read-only and require reconciliation.</p></section>}
+    {campaigns.map(c => <section key={c.id} style={{ border: '1px solid #ccc', borderRadius: 8, padding: 16, marginTop: 20 }}>
+      <h2>{c.name}</h2><p>Contract: {c.contractId}</p><p>Asset contract: {c.config.token}</p>
+      <p>Raised: {units(c.raised)} / {units(c.config.goal)} asset units</p><p>Deadline: {new Date(Number(c.config.deadline)*1000).toISOString()}</p>
+      <p>Creator: {c.config.creator}. {c.withdrawn ? 'Withdrawn.' : 'Not withdrawn.'}</p>
+      {c.balance !== null && <p>Your contribution record: {units(c.balance)}</p>}
+      <label>Contribution amount <input value={amounts[c.id] ?? ''} onChange={e => setAmounts({ ...amounts, [c.id]: e.target.value })} placeholder="10.00" inputMode="decimal" /></label>
+      <p><button disabled={busy || !actor} onClick={() => run(() => prepare(c,'contribute'))}>Prepare contribution</button>{' '}
+      <button disabled={busy || !actor} onClick={() => run(() => prepare(c,'refund'))}>Prepare my refund</button>{' '}
+      <button disabled={busy || actor !== c.config.creator} onClick={() => run(() => prepare(c,'withdraw'))}>Prepare creator withdrawal</button></p>
+      <p>Contribute before the deadline, up to the remaining goal. After the deadline: creator withdraws if fully funded; otherwise each contributor signs their own refund. The contract enforces these rules.</p>
+    </section>)}
+    <footer style={{ marginTop: 32 }}><p>No automatic deployment or legacy balance conversion. Existing classic intents and balances are preserved, not cleared. The separate identity/valuation infrastructure remains mock-only.</p></footer>
+  </main>;
 }

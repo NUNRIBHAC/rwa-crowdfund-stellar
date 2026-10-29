@@ -475,34 +475,22 @@ test('integer cents: 0.1 + 0.2 fills a 0.3 goal exactly', async () => {
   );
 });
 
-test('admin gate: create, demo invest, finalize, refund, retry-pending require the admin key', async () => {
-  resetState();
-  const { app } = await import('../src/server.js');
-  const srv = app.listen(0);
-  await new Promise((r) => srv.once('listening', r));
-  const port = (srv.address() as any).port;
-  const post = (path: string, key?: string) =>
-    fetch(`http://127.0.0.1:${port}${path}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...(key ? { 'x-admin-key': key } : {}) },
-      body: '{}',
-    });
+test('active server disables every classic write and protects read-only migration evidence', async () => {
+  const { app } = await import('../src/server.js'); const srv = app.listen(0);
+  await new Promise(r => srv.once('listening', r));
+  const base = `http://127.0.0.1:${(srv.address() as any).port}`;
   try {
-    assert.equal((await post('/api/campaigns')).status, 401);
-    assert.equal((await post('/api/campaigns', 'wrong')).status, 401);
-    assert.equal((await post('/api/campaigns/c1/invest')).status, 401);
-    assert.equal((await post('/api/campaigns/c1/finalize')).status, 401);
-    assert.equal((await post('/api/campaigns/c1/refund')).status, 401);
-    assert.equal((await post('/api/campaigns/c1/retry-pending')).status, 401);
-    assert.equal((await post('/api/campaigns/c1/finalize', 'test-admin-key')).status, 400);
-
-    // Fail closed when ADMIN_SECRET is not configured.
+    for (const route of ['/api/campaigns', '/api/campaigns/c1/invest', '/api/campaigns/c1/invest/submit', '/api/campaigns/c1/finalize', '/api/campaigns/c1/refund', '/api/campaigns/c1/retry-pending', '/api/demo/seed-investors', '/api/wallet/trustline/submit']) {
+      assert.equal((await fetch(base + route, { method: 'POST', headers: { 'x-admin-key': 'test-admin-key' } })).status, 410);
+    }
+    const legacy = base + '/api/legacy/campaigns';
+    assert.equal((await fetch(legacy)).status, 401);
+    assert.equal((await fetch(legacy, { headers: { 'x-admin-key': 'wrong' } })).status, 401);
+    assert.equal((await fetch(legacy, { headers: { 'x-admin-key': 'test-admin-key' } })).status, 200);
     delete process.env.ADMIN_SECRET;
-    assert.equal((await post('/api/campaigns/c1/refund')).status, 503);
+    assert.equal((await fetch(legacy)).status, 503);
     process.env.ADMIN_SECRET = 'test-admin-key';
-  } finally {
-    srv.close();
-  }
+  } finally { srv.close(); }
 });
 
 test('reconcile: bad_seq with an actually-applied hash confirms without rebuilding', async () => {

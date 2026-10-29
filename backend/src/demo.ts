@@ -1,3 +1,4 @@
+if (process.env.LEGACY_MAINTENANCE !== 'explicitly_authorized') throw new Error('Legacy classic script disabled. Do not run without a separately reviewed migration/reconciliation plan.');
 import {
   createCampaign,
   finalize,

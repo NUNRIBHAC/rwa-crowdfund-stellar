@@ -288,3 +288,22 @@ fn exact_fill_allowed_then_campaign_is_full() {
     end(&t);
     assert_eq!(t.client.withdraw(), GOAL);
 }
+
+#[test]
+fn failed_full_goal_contribution_does_not_reserve_capacity_for_others() {
+    let t = setup();
+    // Alice was funded at setup. Drain her just before the contribution,
+    // modelling the balance race that jams the classic pending-intent flow.
+    t.token.transfer(&t.alice, &t.bob, &5_000);
+    let failed = catch_unwind(AssertUnwindSafe(|| t.client.contribute(&t.alice, &GOAL)));
+    assert!(failed.is_err());
+    assert_eq!(t.client.total_raised(), 0);
+    assert_eq!(t.client.balance_of(&t.alice), 0);
+    assert_eq!(t.token.balance(&t.contract), 0);
+    // Another contributor can still fill the entire goal and settle it.
+    t.client.contribute(&t.bob, &GOAL);
+    assert_eq!(t.client.total_raised(), GOAL);
+    end(&t);
+    assert_eq!(t.client.withdraw(), GOAL);
+    assert_eq!(t.token.balance(&t.creator), GOAL);
+}
