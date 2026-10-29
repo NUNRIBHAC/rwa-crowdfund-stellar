@@ -83,6 +83,7 @@ export async function sorobanCampaigns(actor?: string): Promise<any[]> {
 export async function buildSoroban(id: string, input: { actor: string; action: string; amount?: string }): Promise<any> {
   return lock(async () => {
     const e = entry(id), actor = actorAddress(input.actor);
+    if (process.env.SOROBAN_RECOVERY_MODE === 'true') throw new Error('recovery mode: journal was restored from backup and is not yet reconciled; new transactions are disabled until an operator completes reconciliation and disables SOROBAN_RECOVERY_MODE');
     if (!['contribute', 'refund', 'withdraw'].includes(input.action)) throw new Error('unsupported action');
     const store = readStore();
     const unresolved = store.intents.find(i => i.actor === input.actor && i.signedXdr && !['SUCCESS', 'FAILED'].includes(i.status));

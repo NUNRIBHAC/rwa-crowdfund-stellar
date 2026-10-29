@@ -166,3 +166,26 @@ test('recovery never submits and rejects a mismatched RPC hash', async () => {
   await assert.rejects(recoverSoroban({ actor: actor.publicKey(), xdr: signed(b) }), /mismatched/);
   assert.equal(sendCount, 0);
 });
+
+test('recovery mode blocks all builds after a stale restore until operator reconciliation', async () => {
+  reset();
+  // Signed intent exists only in a journal portion a stale backup would lose.
+  const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  const signedXdr = signed(b);
+  // Operator restores an older journal without that intent and starts in recovery mode.
+  fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true });
+  process.env.SOROBAN_RECOVERY_MODE = 'true';
+  // Without the gate this build would create a duplicate while the signed
+  // envelope is outstanding. The gate rejects it for every actor.
+  await assert.rejects(buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' }), /recovery mode/);
+  await assert.rejects(buildSoroban('s1', { actor: Keypair.random().publicKey(), action: 'contribute', amount: '1' }), /recovery mode/);
+  // Reconciliation: the retained envelope is re-registered and resolves.
+  const r = await recoverSoroban({ actor: actor.publicKey(), xdr: signedXdr });
+  assert.equal(r.campaign, 's1');
+  txStatus = 'SUCCESS';
+  assert.equal((await statusSoroban(b.hash)).status, 'SUCCESS');
+  // Operator completes reconciliation and lifts the gate.
+  delete process.env.SOROBAN_RECOVERY_MODE;
+  await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  delete process.env.SOROBAN_RECOVERY_MODE;
+});
