@@ -54,6 +54,11 @@ function fakePool() {
       if (sql === 'BEGIN') { assert.equal(inTx, false, 'nested transaction'); inTx = true; return { rows: [] }; }
       if (sql === 'COMMIT') { inTx = false; return { rows: [] }; }
       if (sql === 'ROLLBACK') { inTx = false; return { rows: [] }; }
+      if (/^SELECT signed_xdr FROM soroban_intents/.test(sql)) {
+        assert.ok(inTx, 'conflict check outside transaction');
+        const row = rows.get((params as any[])[0]);
+        return { rows: row ? [{ signed_xdr: row.signed_xdr ?? null }] : [] };
+      }
       if (/^INSERT INTO soroban_intents/.test(sql)) {
         assert.ok(inTx, 'upsert outside transaction');
         const [hash, campaign, actor, action, amount, xdr, signed_xdr, status] = params as any[];
@@ -121,4 +126,16 @@ test('postgres save never regresses a signed envelope or terminal status in its 
   const upsert = raw.find(c => c.includes('ON CONFLICT'))!;
   assert.match(upsert, /signed_xdr = COALESCE\(soroban_intents\.signed_xdr, EXCLUDED\.signed_xdr\)/, 'signed envelope never erased');
   assert.match(upsert, /CASE WHEN soroban_intents\.status IN \('SUCCESS','FAILED'\)/, 'terminal status never overwritten');
+});
+
+test('conflicting signed envelope for the same hash is rejected and the original is preserved', async () => {
+  const pool = fakePool();
+  const j = new PostgresJournal(pool);
+  await j.save({ intents: [signed] });
+  await assert.rejects(
+    j.save({ intents: [{ ...signed, signedXdr: 'AAAAdifferent' }] }),
+    /conflicting signed envelope/);
+  assert.equal((await j.read()).intents[0].signedXdr, signed.signedXdr, 'original envelope intact');
+  await j.save({ intents: [signed] }); // identical re-save is idempotent, not a conflict
+  assert.equal((await j.read()).intents.length, 1);
 });
