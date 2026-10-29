@@ -11,11 +11,16 @@ the backend or the contracts.
 
 ## What is included
 
-Only skills whose license was verified to permit public redistribution are
-copied into `skills/` (19 of the 222 supplied). See `NOTICE.md` for
-attribution and `INDEX.md` for the full catalog of all 222 entries with the
-provenance and inclusion status of each.
+Skills are copied into `skills/` (65 of the 222 supplied) when the right to
+publish them is established. See `NOTICE.md` for attribution and `INDEX.md`
+for the full catalog of all 222 entries with the provenance and inclusion
+status of each.
 
+- 46 owner-authored EU compliance and legal guides. The project owner
+  confirmed his authorship on 2026-10-29, and they were reviewed against
+  current official EU sources the same day; see `ASSESSMENT.md` for the
+  review notes. They are published as written by the owner, with no license
+  granted yet - all rights reserved by the owner.
 - 17 skills from [nrxschool/blockchain-skills](https://github.com/nrxschool/blockchain-skills)
   (CC-BY-4.0 content / MIT code), verified identical to upstream.
 - `soroban-common-mistakes` (MIT, Aayush Gupta) and `stellar-prices-api`
@@ -23,14 +28,10 @@ provenance and inclusion status of each.
 
 ## What is not included, and why
 
-The remaining 203 supplied skills have no license file or an unverified origin
-(third-party authors, community collections without a clear license, or no
-stated author at all). Because this repository is public, they are not copied
-here. `INDEX.md` lists each one with its status.
-
-If you are the author of some of those skills (for example the EU-compliance
-or SCF guides written for this project), confirm it and they can be moved into
-`skills/` with a note recording your authorship.
+The remaining 157 supplied skills have no license file or an unverified
+origin (third-party authors, community collections without a clear license, or
+no stated author at all). Because this repository is public, they are not
+copied here. `INDEX.md` lists each one with its status.
 
 To keep the full collection available locally without publishing it, copy the
 original archive into `docs/skills-reference/private/` — that path is in

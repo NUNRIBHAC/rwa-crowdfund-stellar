@@ -1,5 +1,17 @@
 # Third-party notices
 
+## Owner-authored skills
+
+The 46 EU compliance and legal guides under `skills/` (the `eu-*`,
+`*-eu-*`, `dora-*`, `ecspr-*`, `crowdfunding-*`, `fintech-*`,
+`select-eu-*`, `stella-eu-*`, `stellar-eu-*` and
+`compliant-eu-tokenization-cloud-infrastructure` entries listed in
+`INDEX.md`) were written by the project owner, who confirmed his authorship
+on 2026-10-29. They are his copyright, published here as he wrote them; no
+license is granted for them at this time.
+
+## Third-party skills
+
 This directory includes copies of third-party "skill" reference files that are
 published under permissive licenses. Attribution:
 
