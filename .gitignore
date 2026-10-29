@@ -26,3 +26,6 @@ backend/data/
 
 # Debug local
 backend/debug-ops.ts
+# Rust build/test output
+contracts/crowdfund/target/
+contracts/crowdfund/contracts/crowdfund/test_snapshots/

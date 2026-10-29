@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
 import { server } from './stellar.js';
 import {
@@ -19,8 +20,24 @@ import {
 import { getBalances } from './chain.js';
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.disable('x-powered-by');
+// Browser-origin requests are denied unless explicitly allowlisted. No-Origin
+// CLI/server requests still require the admin key on privileged endpoints.
+const allowedOrigins = () => (process.env.CORS_ALLOWED_ORIGINS ?? 'http://localhost:5173,http://127.0.0.1:5173')
+  .split(',').map(s => s.trim()).filter(Boolean);
+app.use((req, res, next) => {
+  const origin = req.header('origin');
+  if (origin && !allowedOrigins().includes(origin)) {
+    res.status(403).json({ error: 'origin not allowed' });
+    return;
+  }
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
+app.use(cors({ origin: (origin, done) => done(null, !origin || allowedOrigins().includes(origin)),
+  methods: ['GET', 'POST', 'OPTIONS'], allowedHeaders: ['Content-Type', 'x-admin-key'] }));
+app.use(express.json({ limit: '64kb' }));
 
 // Admin gate for operations that move money or spend platform/demo funds
 // (create, demo invest, finalize, refund, retry, seed). Demo-grade shared
@@ -36,7 +53,8 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
     });
     return;
   }
-  if ((req.header('x-admin-key') ?? '') !== adminSecret) {
+  if (!timingSafeEqual(createHash('sha256').update(req.header('x-admin-key') ?? '').digest(),
+      createHash('sha256').update(adminSecret).digest())) {
     res.status(401).json({ error: 'missing or invalid admin key (x-admin-key header)' });
     return;
   }
@@ -154,7 +172,7 @@ app.post('/api/wallet/trustline/submit', async (req, res) => {
 export { app };
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
+  app.listen(PORT, process.env.HOST ?? '127.0.0.1', () => {
     console.log(`API at http://localhost:${PORT}`);
   });
 }

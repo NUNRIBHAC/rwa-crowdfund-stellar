@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Asset, Keypair, Operation, Transaction, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
+import { Asset, Keypair, Memo, Operation, Transaction, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { USDC, hasUsdcConfig } from './config.js';
 import { requirePlatform, server, networkPassphrase } from './stellar.js';
 import { ensureAccount, ensureTrustline, hasTrustline } from './chain.js';
@@ -23,7 +23,8 @@ export type InvestmentStatus =
   | 'confirmed' // USDC received and tokens delivered
   | 'awaiting_token_return' // refund blocked: investor still holds tokens the platform cannot claw back
   | 'refund_pending' // refund (or clawback) intent persisted, not yet confirmed
-  | 'refunded';
+  | 'refunded'
+  | 'failed_usdc'; // conclusive ledger failure, no contribution and no retry
 
 export type Investment = {
   id: string;
@@ -40,6 +41,7 @@ export type Investment = {
   tokenTx: string;
   clawbackXdr?: string;
   clawbackTx?: string;
+  returnedTokens?: string; // verified total observed; informational until full return
   tokenDeliveredAt?: string; // set when token delivery is confirmed (binds on-chain return verification)
   refundXdr?: string;
   refundTx?: string;
@@ -129,6 +131,7 @@ export const deps = {
   ensureTrustline,
   hasTrustline,
   loadAccount: (pub: string): Promise<any> => server.loadAccount(pub),
+  latestLedger: (): Promise<any> => server.ledgers().order('desc').limit(1).call().then(p => p.records[0]),
   submitTransaction: (tx: Transaction) => server.submitTransaction(tx),
   accountPayments: (pub: string): Promise<any> =>
     (server as any).payments().forAccount(pub).order('desc').limit(200).call(),
@@ -162,7 +165,7 @@ const rwaAsset = (code: string, issuer: string) => new Asset(code, issuer);
 // over-reject contributions, never to overshoot the cap.
 function investedCents(c: Campaign): number {
   return c.investments
-    .filter((i) => i.status !== 'refunded')
+    .filter((i) => i.status !== 'refunded' && i.status !== 'failed_usdc')
     .reduce((sum, i) => sum + toCents(i.amountUsdc), 0);
 }
 
@@ -241,18 +244,19 @@ const txResultCode = (e: any): string | null =>
 // Reconcile a persisted intent hash against the ledger before trusting or
 // discarding it:
 //  - 'applied': found AND successful === true;
-//  - 'failed': found but recorded as failed - its operations did not execute,
-//    but mere presence must never release anything: hold for manual
-//    reconciliation like every other non-applied outcome;
+//  - 'failed': a matching hash + ledger + explicit successful=false proves
+//    atomic operations did not execute. USDC reservations can be released;
+//    other payment intents retain their conservative manual recovery policy;
 //  - 'not_found': absent in queried history (a 404 is NOT proof the tx can
 //    never execute: the node may lag or have pruned);
 //  - 'unknown': lookup failed.
-// Only 'applied' is trusted; every other outcome holds the intent.
+// Missing fields, absence, and inconclusive errors never prove an outcome.
 async function reconcileTx(hash: string): Promise<'applied' | 'failed' | 'not_found' | 'unknown'> {
   try {
     const tx = await deps.lookupTransaction(hash);
+    if (tx?.hash !== hash || !Number.isSafeInteger(tx?.ledger) || tx.ledger <= 0) return 'unknown';
     if (tx?.successful === false) return 'failed';
-    return 'applied';
+    return tx?.successful === true ? 'applied' : 'unknown';
   } catch (e: any) {
     const status = e?.response?.status ?? e?.status;
     if (status === 404) return 'not_found';
@@ -377,9 +381,8 @@ async function fetchPayments(pub: string, maxPages = 10): Promise<any[]> {
 
 // Verifies on-chain that `inv` got its tokens back before the USDC refund.
 // Conservative allocation rules (fail closed):
-//  - a return counts only as a single payment of EXACTLY this investment's
-//    token amount from the investor to the platform (partial or oversized
-//    returns are not credited; they need manual reconciliation);
+//  - partial payments may combine to EXACTLY the investment token amount;
+//    oversized operations are held for manual reconciliation;
 //  - each return operation id can fund at most one refund per campaign;
 //  - the return must come AFTER the token delivery in ledger order (paging
 //    tokens), never by local wall clock.
@@ -406,21 +409,38 @@ async function verifyTokenReturn(
     return 'unknown';
   }
   const consumed = new Set(campaign.consumedReturnOps ?? []);
+  const candidates = new Map<string, { id: string; amount: bigint }>();
   for (const r of records) {
     if (r?.type !== 'payment' || r?.from !== inv.investorPub || r?.to !== platformPub) continue;
     if (r?.asset_code !== rwa.code || r?.asset_issuer !== rwa.issuer) continue;
-    if (!r?.id || consumed.has(r.id)) continue;
-    if (r?.transaction_successful === false) continue; // failed tx ops never qualify
-    if (Number(r?.amount) !== inv.tokens) continue; // exact amount only
-    // Ledger-order binding via SEP-0035 total-order ids: a payment op id is
-    // numerically greater than its containing tx id and than any earlier tx,
-    // so a BigInt comparison against the delivery tx paging token is sound.
-    if (!r?.paging_token || BigInt(r.paging_token) <= BigInt(deliveryOrder)) continue;
-    campaign.consumedReturnOps = [...consumed, r.id];
-    inv.clawbackTx = `verified-onchain:${r.id}`;
+    if (!r?.id || consumed.has(r.id) || candidates.has(r.id)) continue;
+    if (r?.transaction_successful !== true) continue;
+    if (!/^\d+$/.test(String(r?.paging_token)) || !/^\d+$/.test(deliveryOrder)) continue;
+    if (BigInt(r.paging_token) <= BigInt(deliveryOrder)) continue;
+    let amount: bigint;
+    try { amount = assetUnits(r.amount); } catch { continue; }
+    if (amount <= 0n || amount > BigInt(inv.tokens) * 10000000n) continue;
+    candidates.set(r.id, { id: r.id, amount });
+  }
+  const required = BigInt(inv.tokens) * 10000000n;
+  let total = 0n;
+  const ids: string[] = [];
+  // Deterministic oldest-first allocation; never split an operation between
+  // investments. Oversized/overflow returns require manual reconciliation.
+  for (const r of [...candidates.values()].reverse()) {
+    if (total + r.amount > required) continue;
+    total += r.amount;
+    ids.push(r.id);
+    if (total === required) break;
+  }
+  inv.returnedTokens = `${total / 10000000n}.${String(total % 10000000n).padStart(7, '0')}`;
+  if (total === required) {
+    campaign.consumedReturnOps = [...consumed, ...ids];
+    inv.clawbackTx = `verified-onchain:${ids.join(',')}`;
     saveStore(store);
     return 'verified';
   }
+  saveStore(store);
   return 'not_returned';
 }
 
@@ -542,7 +562,16 @@ async function settleInvestment(
   const rwa = rwaAsset(campaign.code, plat.publicKey());
 
   if (inv.status === 'pending_usdc') {
+    // A positive, hash-bound failed ledger record is conclusive: atomic
+    // transaction operations did not execute. Absence/expiry never suffices.
+    if (await reconcileTx(inv.usdcTx) === 'failed') {
+      inv.status = 'failed_usdc';
+      inv.error = 'USDC transaction conclusively failed on ledger; reservation released, no funds received';
+      saveStore(store);
+      return;
+    }
     const slot = { xdr: inv.usdcXdr, hash: inv.usdcTx || undefined };
+    try {
     inv.usdcTx = await executePayment(
       slot,
       async () => {
@@ -572,6 +601,17 @@ async function settleInvestment(
         saveStore(store);
       },
     );
+    } catch (e) {
+      if (await reconcileTx(inv.usdcTx) === 'failed') {
+        inv.status = 'failed_usdc';
+        inv.error = 'USDC transaction conclusively failed on ledger; reservation released, no funds received';
+        saveStore(store);
+        return;
+      }
+      inv.error = errMsg(e);
+      saveStore(store);
+      throw e;
+    }
     inv.usdcXdr = undefined;
     inv.status = 'pending_token_delivery';
     inv.error = undefined;
@@ -690,7 +730,7 @@ export async function finalize(id: string): Promise<Campaign> {
         `goal not reached (${centsToUsdc(totalCents)}/${campaign.goalUsdc}); refund instead`,
       );
     }
-    const unsettled = campaign.investments.filter((i) => i.status !== 'confirmed' && i.status !== 'refunded');
+    const unsettled = campaign.investments.filter((i) => i.status !== 'confirmed' && i.status !== 'refunded' && i.status !== 'failed_usdc');
     if (unsettled.length > 0) {
       throw new Error(
         `investments not fully settled (${unsettled.map((i) => i.id).join(', ')}); run retry-pending first`,
@@ -750,7 +790,7 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
     const blocked: string[] = [];
 
     for (const inv of campaign.investments) {
-      if (inv.status === 'refunded') continue;
+      if (inv.status === 'refunded' || inv.status === 'failed_usdc') continue;
 
       if (inv.status === 'pending_usdc') {
         inv.error = 'USDC payment not confirmed; run retry-pending before refunding';
@@ -836,7 +876,8 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
             inv.error =
               'refund blocked: investor still holds tokens the platform cannot claw back ' +
               '(non-demo account); the refund is released after an on-chain verified return ' +
-              'of the exact token amount to the platform';
+              `totalling ${inv.tokens} tokens to the platform; verified so far: ${inv.returnedTokens ?? '0'}. ` +
+              'Partial returns are combined; oversized returns need manual reconciliation';
             blocked.push(inv.id);
             saveStore(store);
             continue;
@@ -877,7 +918,7 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
       saveStore(store);
     }
 
-    if (campaign.investments.every((i) => i.status === 'refunded')) {
+    if (campaign.investments.every((i) => i.status === 'refunded' || i.status === 'failed_usdc')) {
       campaign.state = 'refunded';
       campaign.refundedAt = new Date().toISOString();
     }
@@ -954,8 +995,6 @@ export async function buildInvestXdr(
     const usdc = usdcAsset();
     const rwa = rwaAsset(campaign.code, plat.publicKey());
 
-    await deps.ensureAccount(investorPub);
-
     const account = await deps.loadAccount(investorPub);
     const ops: xdr.Operation[] = [];
     if (!(await deps.hasTrustline(investorPub, usdc))) {
@@ -975,12 +1014,57 @@ export async function buildInvestXdr(
     const builder = new TransactionBuilder(account, {
       fee: '100',
       networkPassphrase,
-    }).setTimeout(60);
+    }).addMemo(Memo.text(campaign.id)).setTimeout(900);
     for (const op of ops) builder.addOperation(op);
     const tx = builder.build();
 
     return { xdr: tx.toXDR(), networkPassphrase, amountUsdc: centsToUsdc(amountCents), tokens };
   });
+}
+
+// Parse Stellar's fixed seven-decimal amounts without floating-point loss.
+function assetUnits(value: string): bigint {
+  if (!/^\d+(\.\d{1,7})?$/.test(String(value))) throw new Error('invalid asset amount');
+  const [whole, fraction = ''] = value.split('.');
+  return BigInt(whole) * 10000000n + BigInt(fraction.padEnd(7, '0'));
+}
+
+async function validateInvestmentEnvelope(tx: Transaction, pub: string, cents: number): Promise<void> {
+  // Deliberately supports ordinary master-key accounts only, not multisig,
+  // pre-authorized/hash signers or custom preconditions. Fail closed.
+  if (tx.signatures.length !== 1 || !Keypair.fromPublicKey(pub).verify(tx.hash(), tx.signatures[0].signature)) {
+    throw new Error('invalid investor signature');
+  }
+  const now = Math.floor(Date.now() / 1000);
+  const bounds = tx.timeBounds;
+  if (!bounds || Number(bounds.minTime) > now || Number(bounds.maxTime) <= now ||
+      Number(bounds.maxTime) > now + 900) throw new Error('investment requires active time bounds of at most 15 minutes');
+  if (tx.ledgerBounds || tx.minAccountSequence || tx.minAccountSequenceAge ||
+      tx.minAccountSequenceLedgerGap || tx.extraSigners?.length) throw new Error('custom preconditions not supported');
+  const account = await deps.loadAccount(pub);
+  const master = account.signers?.find((s: any) => s.key === pub && s.type === 'ed25519_public_key');
+  if (!master || master.weight <= 0 || master.weight < Math.max(1, account.thresholds?.low_threshold ?? 1, account.thresholds?.med_threshold ?? 1)) {
+    throw new Error('unsupported account signing configuration');
+  }
+  if (BigInt(tx.sequence) !== BigInt(account.sequenceNumber()) + 1n) throw new Error('stale investment sequence');
+  const balance = account.balances?.find((b: any) => b.asset_code === USDC.code && b.asset_issuer === USDC.issuer);
+  const required = BigInt(cents) * 100000n;
+  if (!balance || balance.is_authorized === false || assetUnits(balance.balance) - assetUnits(balance.selling_liabilities ?? '0') < required) {
+    throw new Error('insufficient spendable USDC balance');
+  }
+  const ledger = await deps.latestLedger();
+  const baseFee = BigInt(ledger.base_fee_in_stroops);
+  const reserve = BigInt(ledger.base_reserve_in_stroops);
+  if (BigInt(tx.fee) < BigInt(tx.operations.length) * baseFee) throw new Error('insufficient transaction fee');
+  const native = account.balances?.find((b: any) => b.asset_type === 'native');
+  const newLines = tx.operations.filter((op: any) => op.type === 'changeTrust' &&
+    !account.balances.some((b: any) => b.asset_code === op.line?.code && b.asset_issuer === op.line?.issuer)).length;
+  const entries = 2 + (account.subentry_count ?? 0) + (account.num_sponsoring ?? 0) - (account.num_sponsored ?? 0) + newLines;
+  if (!native || reserve <= 0n || entries < 0 || assetUnits(native.balance) - assetUnits(native.selling_liabilities ?? '0') <
+      reserve * BigInt(entries) + BigInt(tx.fee)) throw new Error('insufficient native balance for fee and reserves');
+  // This is a preflight, not a ledger guarantee. Balance/sequence can race.
+  // Every ambiguous broadcast remains held; only a conclusive failed ledger
+  // record can release its reservation automatically.
 }
 
 export async function submitSignedInvest(
@@ -1012,6 +1096,9 @@ export async function submitSignedInvest(
     // already-recorded tx never pays tokens or records twice; a still-pending
     // record is resumed instead.
     const txHash = Buffer.from(tx.hash()).toString('hex');
+    if (store.campaigns.some(c => c.id !== campaign.id && c.investments.some(i => i.usdcTx === txHash))) {
+      throw new Error('transaction already assigned to another campaign');
+    }
     const existing = campaign.investments.find((i) => i.usdcTx === txHash);
     if (existing) {
       if (existing.status === 'pending_usdc' || existing.status === 'pending_token_delivery') {
@@ -1021,23 +1108,27 @@ export async function submitSignedInvest(
       return { ...campaign, duplicate: true };
     }
 
-    let paidCents: number | null = null;
-    for (const op of tx.operations) {
-      const o = op as any;
-      const asset = o?.asset ?? o?.line;
-      if (
-        o?.type === 'payment' &&
-        (o?.destination ?? o?.to) === plat.publicKey() &&
-        asset?.code === USDC.code &&
-        asset?.issuer === USDC.issuer
-      ) {
-        paidCents = toCents(Number(o.amount));
-        break;
+    // Only the narrow envelope built by this API is accepted. Never broadcast
+    // unrelated operations or credit the first of multiple payments.
+    const payments = tx.operations.filter((o) => o.type === 'payment');
+    if (payments.length !== 1) throw new Error('XDR must contain exactly one USDC payment');
+    const payment = payments[0] as any;
+    if (payment.destination !== plat.publicKey() || payment.asset?.code !== USDC.code ||
+        payment.asset?.issuer !== USDC.issuer) throw new Error('XDR without a USDC payment to the platform');
+    for (const op of tx.operations as any[]) {
+      if (op.source && op.source !== investorPub) throw new Error('operation source must be the investor');
+      if (op.type === 'payment') continue;
+      if (op.type !== 'changeTrust' || op.limit !== '922337203685.4775807' ||
+          !((op.line?.code === USDC.code && op.line?.issuer === USDC.issuer) ||
+            (op.line?.code === campaign.code && op.line?.issuer === plat.publicKey()))) {
+        throw new Error('unsupported investment operation');
       }
     }
-    if (paidCents === null || !Number.isFinite(paidCents) || paidCents <= 0) {
-      throw new Error('XDR without a USDC payment to the platform');
-    }
+    if (tx.operations.length > 3) throw new Error('too many investment operations');
+    const paidCents = toCents(Number(payment.amount));
+    if (paidCents <= 0) throw new Error('USDC payment must be positive');
+    if (tx.memo.type !== 'text' || Buffer.from(tx.memo.value as Uint8Array).toString('utf8') !== campaign.id) throw new Error('investment memo must bind campaign id');
+    await validateInvestmentEnvelope(tx, investorPub, paidCents);
 
     // Re-validate the signed amount against the current cap inside the lock:
     // another investor may have filled the remaining goal after the XDR was built.
@@ -1090,7 +1181,7 @@ export async function buildTrustlineXdr(input: {
     networkPassphrase,
   })
     .addOperation(Operation.changeTrust({ asset: new Asset(code, issuer) }))
-    .setTimeout(60)
+    .setTimeout(900)
     .build();
 
   return { xdr: tx.toXDR(), networkPassphrase, assetCode: code };

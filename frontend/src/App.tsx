@@ -14,7 +14,9 @@ type Investment = {
     | 'confirmed'
     | 'awaiting_token_return'
     | 'refund_pending'
-    | 'refunded';
+    | 'refunded'
+    | 'failed_usdc';
+  returnedTokens?: string;
   error?: string;
   clawbackTx?: string;
   refundTx?: string;
@@ -38,7 +40,7 @@ type Campaign = {
 };
 
 function investedUsdc(c: Campaign): number {
-  return c.investments.reduce((sum, i) => sum + i.amountUsdc, 0);
+  return c.investments.filter(i => i.status !== 'failed_usdc' && i.status !== 'refunded').reduce((sum, i) => sum + i.amountUsdc, 0);
 }
 
 function fmt(n: number): string {
@@ -66,6 +68,7 @@ const investmentStatusLabel: Record<NonNullable<Investment['status']>, string> =
   awaiting_token_return: 'refund blocked — return the tokens to the platform first',
   refund_pending: 'refund in progress',
   refunded: 'refunded',
+  failed_usdc: 'USDC failed on ledger - no contribution; capacity released',
 };
 
 export default function App() {
@@ -80,7 +83,7 @@ export default function App() {
   const [newName, setNewName] = useState('');
   const [newGoal, setNewGoal] = useState('100');
   const [newDeadlineMin, setNewDeadlineMin] = useState('1440');
-  const [adminKey, setAdminKey] = useState(() => localStorage.getItem('rwa-admin-key') ?? '');
+  const [adminKey, setAdminKey] = useState('');
   const [selected, setSelected] = useState('');
   const [amounts, setAmounts] = useState<Record<string, string>>({});
 
@@ -94,6 +97,8 @@ export default function App() {
   }
 
   useEffect(() => {
+    // Remove credentials persisted by earlier demo versions. New keys live only in memory.
+    localStorage.removeItem('rwa-admin-key');
     refresh()
       .catch((err) => setError(String(err)))
       .finally(() => setLoading(false));
@@ -167,7 +172,6 @@ export default function App() {
       if (!Number.isFinite(goal) || goal <= 0) throw new Error('Invalid goal.');
       if (!Number.isFinite(mins) || mins <= 0) throw new Error('Invalid deadline (minutes).');
       setBusy(true);
-      localStorage.setItem('rwa-admin-key', adminKey.trim());
       const res = await fetch('/api/campaigns', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey.trim() },
@@ -196,7 +200,6 @@ export default function App() {
       const inputAmt = Number(amounts[c.id]);
       if (!Number.isFinite(inputAmt) || inputAmt <= 0) throw new Error('Invalid amount.');
       setBusy(true);
-      localStorage.setItem('rwa-admin-key', adminKey.trim());
       const res = await fetch(`/api/campaigns/${c.id}/invest`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey.trim() },
@@ -256,7 +259,6 @@ export default function App() {
     try {
       setError(null);
       if (!adminKey.trim()) throw new Error('Enter the admin key first (backend .env ADMIN_SECRET).');
-      localStorage.setItem('rwa-admin-key', adminKey.trim());
       setBusy(true);
       const res = await fetch(`/api/campaigns/${c.id}/${action}`, {
         method: 'POST',
@@ -307,7 +309,7 @@ export default function App() {
           style={{ padding: 6, width: 260 }}
         />
         <span style={{ fontSize: 12, color: '#57606a' }}>
-          required for create, demo invest, finalize, refund and retry (x-admin-key)
+          Admin key stays in memory only. Reload to clear it. Use HTTPS when hosted.
         </span>
       </div>
 
