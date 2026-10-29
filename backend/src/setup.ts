@@ -1,3 +1,4 @@
+if (process.env.LEGACY_MAINTENANCE !== 'explicitly_authorized') throw new Error('Legacy classic script disabled. Do not run without a separately reviewed migration/reconciliation plan.');
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
