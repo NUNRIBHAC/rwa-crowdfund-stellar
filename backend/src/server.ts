@@ -87,6 +87,6 @@ app.post('/api/{*path}', (_req, res) => {
 });
 
 export { app };
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && !process.env.EMBEDDED_HOST) {
   app.listen(PORT, process.env.HOST ?? '127.0.0.1', () => console.log(`Soroban test-only API at http://127.0.0.1:${PORT}`));
 }

@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { Account, Address, Asset, Contract, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, scValToNative, rpc } from '@stellar/stellar-sdk';
 
@@ -10,22 +8,13 @@ export const sorobanDeps = {
 const passphrase = Networks.TESTNET;
 const expectedToken = () => new Asset('USDC', process.env.USDC_ISSUER ?? '').contractId(passphrase);
 const WASM_HASH = '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564';
+import { journalBackend } from './journal.js';
+import type { Intent, IntentStore } from './journal.js';
 type Entry = { id: string; name: string; contractId: string };
-type Intent = { hash: string; campaign: string; actor: string; action: string; xdr: string; signedXdr?: string; status: string; amount?: string };
-type IntentStore = { intents: Intent[] };
-const storePath = () => process.env.SOROBAN_INTENTS_PATH ?? path.resolve('data/soroban-intents.json');
 let queue: Promise<unknown> = Promise.resolve();
 const lock = <T>(fn: () => Promise<T>): Promise<T> => { const next = queue.then(fn, fn); queue = next.catch(() => {}); return next; };
-function readStore(): IntentStore {
-  return fs.existsSync(storePath()) ? JSON.parse(fs.readFileSync(storePath(), 'utf8')) : { intents: [] };
-}
-function save(store: IntentStore): void {
-  const target = storePath(); fs.mkdirSync(path.dirname(target), { recursive: true });
-  const tmp = `${target}.tmp`; const fd = fs.openSync(tmp, 'w', 0o600);
-  try { fs.writeFileSync(fd, JSON.stringify(store)); fs.fsyncSync(fd); } finally { fs.closeSync(fd); }
-  fs.renameSync(tmp, target);
-  const dir = fs.openSync(path.dirname(target), 'r'); try { fs.fsyncSync(dir); } finally { fs.closeSync(dir); }
-}
+async function readStore(): Promise<IntentStore> { return (await journalBackend()).read(); }
+async function save(store: IntentStore): Promise<void> { return (await journalBackend()).save(store); }
 function guard(): void {
   if ((process.env.STELLAR_NETWORK ?? 'testnet') !== 'testnet') throw new Error('Soroban integration is testnet-only; public network disabled');
 }
@@ -85,7 +74,7 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     const e = entry(id), actor = actorAddress(input.actor);
     if (process.env.SOROBAN_RECOVERY_MODE === 'true') throw new Error('recovery mode: journal was restored from backup and is not yet reconciled; new transactions are disabled until an operator completes reconciliation and disables SOROBAN_RECOVERY_MODE');
     if (!['contribute', 'refund', 'withdraw'].includes(input.action)) throw new Error('unsupported action');
-    const store = readStore();
+    const store = await readStore();
     const unresolved = store.intents.find(i => i.actor === input.actor && i.signedXdr && !['SUCCESS', 'FAILED'].includes(i.status));
     if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
     const client = sorobanDeps.client(); await verifyCode(client, e);
@@ -105,7 +94,7 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     const op = prepared.operations[0] as any;
     if (op.auth?.some((a: any) => a.credentials.type !== 'sorobanCredentialsSourceAccount')) throw new Error('separate address authorization is unsupported');
     const hash = Buffer.from(prepared.hash()).toString('hex');
-    store.intents.push({ hash, campaign: id, actor: input.actor, action: input.action, amount: input.amount, xdr: prepared.toXDR(), status: 'BUILT' }); save(store);
+    store.intents.push({ hash, campaign: id, actor: input.actor, action: input.action, amount: input.amount, xdr: prepared.toXDR(), status: 'BUILT' }); await save(store);
     return { hash, xdr: prepared.toXDR(), networkPassphrase: passphrase, action: input.action, amount: input.amount, feeStroops: prepared.fee, contractId: e.contractId, testOnly: true };
   });
 }
@@ -115,22 +104,22 @@ async function submitIntent(client: rpc.Server, store: IntentStore, intent: Inte
     const result = await client.sendTransaction(tx);
     if (result.hash !== intent.hash) throw new Error('RPC returned mismatched transaction hash');
     intent.status = result.status === 'ERROR' ? 'UNKNOWN' : result.status;
-    save(store);
+    await save(store);
     return { hash: intent.hash, status: intent.status, confirmed: false, message: 'Submission is not confirmation. Check the hash before another action.' };
-  } catch (err) { intent.status = 'UNKNOWN'; save(store); throw err; }
+  } catch (err) { intent.status = 'UNKNOWN'; await save(store); throw err; }
 }
 export async function submitSoroban(id: string, input: { actor: string; xdr: string }): Promise<any> {
   return lock(async () => {
     entry(id); actorAddress(input.actor);
     const tx = TransactionBuilder.fromXDR(input.xdr, passphrase);
     if (!(tx instanceof Transaction) || tx.source !== input.actor || tx.signatures.length !== 1 || !Keypair.fromPublicKey(input.actor).verify(tx.hash(), tx.signatures[0].signature)) throw new Error('invalid signed transaction');
-    const hash = Buffer.from(tx.hash()).toString('hex'); const store = readStore();
+    const hash = Buffer.from(tx.hash()).toString('hex'); const store = await readStore();
     const intent = store.intents.find(i => i.hash === hash && i.campaign === id && i.actor === input.actor);
     if (!intent) throw new Error('transaction was not prepared by this API');
     if (['SUCCESS', 'FAILED'].includes(intent.status)) return { hash, status: intent.status, confirmed: intent.status === 'SUCCESS' };
     const other = store.intents.find(i => i.hash !== hash && i.actor === input.actor && i.signedXdr && !['SUCCESS','FAILED'].includes(i.status));
     if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
-    if (!intent.signedXdr) { intent.signedXdr = input.xdr; intent.status = 'SIGNED'; save(store); }
+    if (!intent.signedXdr) { intent.signedXdr = input.xdr; intent.status = 'SIGNED'; await save(store); }
     return submitIntent(sorobanDeps.client(), store, intent);
   });
 }
@@ -144,7 +133,7 @@ export async function recoverSoroban(input: { actor: string; xdr: string }): Pro
     const tx = TransactionBuilder.fromXDR(input.xdr, passphrase);
     if (!(tx instanceof Transaction) || tx.source !== input.actor || tx.signatures.length !== 1 || !Keypair.fromPublicKey(input.actor).verify(tx.hash(), tx.signatures[0].signature)) throw new Error('invalid signed transaction');
     const hash = Buffer.from(tx.hash()).toString('hex');
-    const store = readStore();
+    const store = await readStore();
     const existing = store.intents.find(i => i.hash === hash);
     if (existing) return { hash, status: existing.status, recovered: false };
     let contractId = '';
@@ -159,7 +148,7 @@ export async function recoverSoroban(input: { actor: string; xdr: string }): Pro
     if (terminal && (!Number.isSafeInteger(result.ledger) || result.ledger <= 0)) throw new Error('RPC result missing conclusive ledger');
     const status = terminal ? result.status : 'NOT_FOUND';
     store.intents.push({ hash, campaign: campaign ?? 'recovered', actor: input.actor, action: 'recovered', xdr: tx.toXDR(), signedXdr: tx.toXDR(), status });
-    save(store);
+    await save(store);
     return { hash, status, recovered: true, campaign, held: status === 'NOT_FOUND' };
   });
 }
@@ -167,7 +156,7 @@ export async function recoverSoroban(input: { actor: string; xdr: string }): Pro
 export async function statusSoroban(hash: string): Promise<any> {
   return lock(async () => {
     guard(); if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error('invalid hash');
-    const store = readStore(), intent = store.intents.find(i => i.hash === hash);
+    const store = await readStore(), intent = store.intents.find(i => i.hash === hash);
     if (!intent || !intent.signedXdr) throw new Error('signed intent not found');
     if (['SUCCESS', 'FAILED'].includes(intent.status)) return { hash, status: intent.status, confirmed: intent.status === 'SUCCESS' };
     const result = await sorobanDeps.client().getTransaction(hash);
@@ -175,7 +164,7 @@ export async function statusSoroban(hash: string): Promise<any> {
     // NOT_FOUND is not failure. RPC has bounded history. No new intent,
     // reservation release, expiry inference, or automatic replacement.
     if ((result.status === 'SUCCESS' || result.status === 'FAILED') && (!Number.isSafeInteger(result.ledger) || result.ledger <= 0)) throw new Error('RPC result missing conclusive ledger');
-    if (result.status === 'SUCCESS' || result.status === 'FAILED') { intent.status = result.status; save(store); }
+    if (result.status === 'SUCCESS' || result.status === 'FAILED') { intent.status = result.status; await save(store); }
     return { hash, status: result.status, confirmed: result.status === 'SUCCESS', held: result.status === 'NOT_FOUND' };
   });
 }

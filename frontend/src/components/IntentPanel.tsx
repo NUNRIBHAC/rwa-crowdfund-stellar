@@ -12,6 +12,7 @@ type Props = {
 
 function stepClass(intent: Intent, step: number): string {
   const status = intent.status;
+  if (status === 'SUCCESS') return 'step step-done';
   const order = ['BUILT', 'SIGNED', 'PENDING', 'SUCCESS'];
   let idx = order.indexOf(status);
   if (status === 'FAILED') idx = 3;
@@ -46,11 +47,18 @@ export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel 
         <div className="intent-hash"><dt>Hash</dt><dd><code title={intent.hash}>{shorten(intent.hash, 12, 8)}</code></dd></div>
       </dl>
 
-      <p className="intent-warning">
-        Submission is not confirmation. A missing result does not mean failure. Check the
-        status or retry this exact signed transaction; never create a replacement while
-        uncertain.
-      </p>
+      {!terminal && (
+        <p className="intent-warning">
+          Submission is not confirmation. A missing result does not mean failure. Check the
+          status or retry this exact signed transaction; never create a replacement while
+          uncertain.
+        </p>
+      )}
+      {intent.status === 'SUCCESS' && (
+        <p className="intent-warning intent-confirmed">
+          Confirmed on Stellar testnet. This exact transaction is final; the hash above is its permanent proof.
+        </p>
+      )}
       {intent.status === 'NOT_FOUND' && (
         <p className="intent-warning intent-notfound">
           Uncertain outcome retained. The RPC may have limited history. Do not clear or
