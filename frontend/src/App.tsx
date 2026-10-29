@@ -8,6 +8,14 @@ type Investment = {
   tokens: number;
   usdcTx: string;
   tokenTx: string;
+  status?:
+    | 'pending_usdc'
+    | 'pending_token_delivery'
+    | 'confirmed'
+    | 'awaiting_token_return'
+    | 'refund_pending'
+    | 'refunded';
+  error?: string;
   clawbackTx?: string;
   refundTx?: string;
 };
@@ -51,6 +59,15 @@ const stateColor: Record<Campaign['state'], string> = {
   refunded: '#bc4c00',
 };
 
+const investmentStatusLabel: Record<NonNullable<Investment['status']>, string> = {
+  pending_usdc: 'USDC payment not confirmed yet — use "Retry token delivery"',
+  pending_token_delivery: 'USDC received — token delivery pending',
+  confirmed: 'confirmed',
+  awaiting_token_return: 'refund blocked — return the tokens to the platform first',
+  refund_pending: 'refund in progress',
+  refunded: 'refunded',
+};
+
 export default function App() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [demoInvestors, setDemoInvestors] = useState<string[]>([]);
@@ -62,6 +79,8 @@ export default function App() {
 
   const [newName, setNewName] = useState('');
   const [newGoal, setNewGoal] = useState('100');
+  const [newDeadlineMin, setNewDeadlineMin] = useState('1440');
+  const [adminKey, setAdminKey] = useState(() => localStorage.getItem('rwa-admin-key') ?? '');
   const [selected, setSelected] = useState('');
   const [amounts, setAmounts] = useState<Record<string, string>>({});
 
@@ -140,15 +159,23 @@ export default function App() {
   async function createCampaign() {
     try {
       setError(null);
+      if (!adminKey.trim()) throw new Error('Enter the admin key first (backend .env ADMIN_SECRET).');
       const name = newName.trim();
       const goal = Number(newGoal);
+      const mins = Number(newDeadlineMin);
       if (!name) throw new Error('Enter a name for the campaign.');
       if (!Number.isFinite(goal) || goal <= 0) throw new Error('Invalid goal.');
+      if (!Number.isFinite(mins) || mins <= 0) throw new Error('Invalid deadline (minutes).');
       setBusy(true);
+      localStorage.setItem('rwa-admin-key', adminKey.trim());
       const res = await fetch('/api/campaigns', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, goalUsdc: goal }),
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey.trim() },
+        body: JSON.stringify({
+          name,
+          goalUsdc: goal,
+          deadline: new Date(Date.now() + mins * 60000).toISOString(),
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Failed to create campaign.');
@@ -164,13 +191,15 @@ export default function App() {
   async function invest(c: Campaign) {
     try {
       setError(null);
+      if (!adminKey.trim()) throw new Error('Enter the admin key first (backend .env ADMIN_SECRET).');
       if (!selected) throw new Error('Pick a demo investor or connect Freighter.');
       const inputAmt = Number(amounts[c.id]);
       if (!Number.isFinite(inputAmt) || inputAmt <= 0) throw new Error('Invalid amount.');
       setBusy(true);
+      localStorage.setItem('rwa-admin-key', adminKey.trim());
       const res = await fetch(`/api/campaigns/${c.id}/invest`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey.trim() },
         body: JSON.stringify({ investorPub: selected, amountUsdc: inputAmt }),
       });
       const data = await res.json();
@@ -223,11 +252,16 @@ export default function App() {
     }
   }
 
-  async function act(c: Campaign, action: 'finalize' | 'refund') {
+  async function act(c: Campaign, action: 'finalize' | 'refund' | 'retry-pending') {
     try {
       setError(null);
+      if (!adminKey.trim()) throw new Error('Enter the admin key first (backend .env ADMIN_SECRET).');
+      localStorage.setItem('rwa-admin-key', adminKey.trim());
       setBusy(true);
-      const res = await fetch(`/api/campaigns/${c.id}/${action}`, { method: 'POST' });
+      const res = await fetch(`/api/campaigns/${c.id}/${action}`, {
+        method: 'POST',
+        headers: { 'x-admin-key': adminKey.trim() },
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? `Failed to ${action}.`);
       await refresh();
@@ -264,6 +298,19 @@ export default function App() {
         )}
       </div>
 
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
+        <input
+          type="password"
+          placeholder="Admin key (finalize / refund)"
+          value={adminKey}
+          onChange={(e) => setAdminKey(e.target.value)}
+          style={{ padding: 6, width: 260 }}
+        />
+        <span style={{ fontSize: 12, color: '#57606a' }}>
+          required for create, demo invest, finalize, refund and retry (x-admin-key)
+        </span>
+      </div>
+
       {pubKey && (
         <div style={{ marginBottom: 8 }}>
           <button onClick={addUsdcTrustline} disabled={busy}>
@@ -297,6 +344,12 @@ export default function App() {
             onChange={(e) => setNewGoal(e.target.value)}
             style={{ width: 120, padding: 8 }}
           />
+          <input
+            placeholder="Deadline (min)"
+            value={newDeadlineMin}
+            onChange={(e) => setNewDeadlineMin(e.target.value)}
+            style={{ width: 120, padding: 8 }}
+          />
           <button onClick={createCampaign} disabled={busy}>
             Create
           </button>
@@ -321,7 +374,8 @@ export default function App() {
             </div>
             <p style={{ margin: '6px 0' }}>
               <code>{c.code}</code> · Goal {fmt(c.goalUsdc)} USDC · Supply {fmt(c.supply)}{' '}
-              tokens · {c.investments.length} investors
+              tokens · {c.investments.length} investors · Deadline{' '}
+              {new Date(c.deadline).toLocaleString()}
             </p>
             <div style={{ background: '#eaeef2', borderRadius: 4, height: 10, overflow: 'hidden' }}>
               <div
@@ -381,24 +435,46 @@ export default function App() {
                 <button onClick={() => act(c, 'refund')} disabled={busy}>
                   Refund
                 </button>
+                {c.investments.some((i) =>
+                  ['pending_usdc', 'pending_token_delivery'].includes(i.status ?? 'confirmed'),
+                ) && (
+                  <button onClick={() => act(c, 'retry-pending')} disabled={busy}>
+                    Retry token delivery
+                  </button>
+                )}
               </div>
             )}
 
             {c.investments.length > 0 && (
               <ul style={{ fontSize: 13, margin: '8px 0 0', paddingLeft: 20 }}>
-                {c.investments.map((inv) => (
-                  <li key={inv.id}>
-                    {inv.investorPub.slice(0, 6)}… +{fmt(inv.amountUsdc)} USDC → +{fmt(inv.tokens)}{' '}
-                    tokens ·{' '}
-                    <a href={txLink(inv.usdcTx)} target="_blank" rel="noreferrer">
-                      USDC
-                    </a>{' '}
-                    ·{' '}
-                    <a href={txLink(inv.tokenTx)} target="_blank" rel="noreferrer">
-                      tokens
-                    </a>
-                  </li>
-                ))}
+                {c.investments.map((inv) => {
+                  const status = inv.status ?? 'confirmed';
+                  return (
+                    <li key={inv.id}>
+                      {inv.investorPub.slice(0, 6)}… +{fmt(inv.amountUsdc)} USDC → +{fmt(inv.tokens)}{' '}
+                      tokens ·{' '}
+                      <a href={txLink(inv.usdcTx)} target="_blank" rel="noreferrer">
+                        USDC
+                      </a>
+                      {inv.tokenTx && (
+                        <>
+                          {' '}
+                          ·{' '}
+                          <a href={txLink(inv.tokenTx)} target="_blank" rel="noreferrer">
+                            tokens
+                          </a>
+                        </>
+                      )}
+                      {status !== 'confirmed' && (
+                        <span style={{ color: '#bc4c00' }}>
+                          {' '}
+                          · {investmentStatusLabel[status]}
+                          {inv.error ? ` (${inv.error})` : ''}
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </article>

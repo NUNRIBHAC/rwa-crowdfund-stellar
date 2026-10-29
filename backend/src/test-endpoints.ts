@@ -37,7 +37,9 @@ async function main() {
     console.log(`Refunded ${AMOUNTS[n]} USDC -> ${pubs[n].slice(0, 8)}...`);
   }
 
-  const c = await createCampaign({ name: 'Endpoint Flow Test', goalUsdc: GOAL, supply: 1000 });
+  // Short deadline so the all-or-nothing time gate can pass before finalize.
+  const deadline = new Date(Date.now() + 65 * 1000).toISOString();
+  const c = await createCampaign({ name: 'Endpoint Flow Test', goalUsdc: GOAL, supply: 1000, deadline });
   console.log('\nCampaign created:', c.id, c.code, 'state', c.state);
   console.log('mintTx (supply issuance held in escrow):', c.mintTx);
   console.log('Explorer mint:', `https://stellar.expert/explorer/testnet/tx/${c.mintTx}`);
@@ -60,6 +62,10 @@ async function main() {
   const total = campaign.investments.reduce((s, i) => s + i.amountUsdc, 0);
   console.log('\nTotal invested in campaign:', total);
   console.log('Investments:', JSON.stringify(campaign.investments, null, 2));
+
+  const waitMs = Date.parse(c.deadline) - Date.now() + 2000;
+  console.log(`\nWaiting ${Math.ceil(waitMs / 1000)}s for the deadline (finalize is time-gated)…`);
+  await new Promise((r) => setTimeout(r, Math.max(0, waitMs)));
 
   const finalized = await finalize(c.id);
   console.log('\nFinalized:', finalized.state, 'payoutTx', finalized.payoutTx);

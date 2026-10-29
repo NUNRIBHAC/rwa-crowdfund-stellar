@@ -36,19 +36,23 @@ const is404 = (err: unknown): boolean => {
   return e?.status === 404 || e?.response?.status === 404;
 };
 
-let platformSecret = PLATFORM_SECRET;
-if (!platformSecret) {
+function ensureEnvSecret(name: string, current: string): string {
+  if (current) return current;
   const kp = Keypair.random();
-  platformSecret = kp.secret();
-  log('PLATFORM_SECRET not configured; generating a new one and saving to backend/.env.');
+  const secret = kp.secret();
+  log(`${name} not configured; generating a new one and saving to backend/.env.`);
   let env = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
   env = env
     .split('\n')
-    .filter((l) => !l.startsWith('PLATFORM_SECRET='))
+    .filter((l) => !l.startsWith(`${name}=`))
     .join('\n')
     .trim();
-  fs.writeFileSync(envPath, `${env}\nPLATFORM_SECRET=${platformSecret}\n`, 'utf8');
+  fs.writeFileSync(envPath, `${env}\n${name}=${secret}\n`, 'utf8');
+  return secret;
 }
+
+let platformSecret = ensureEnvSecret('PLATFORM_SECRET', PLATFORM_SECRET);
+ensureEnvSecret('ADMIN_SECRET', process.env.ADMIN_SECRET ?? '');
 
 const platform = Keypair.fromSecret(platformSecret);
 const platformPub = platform.publicKey();

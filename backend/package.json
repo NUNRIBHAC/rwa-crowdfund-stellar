@@ -9,7 +9,11 @@
     "start": "node dist/server.js",
     "setup": "tsx src/setup.ts",
     "demo": "tsx src/demo.ts",
-    "reset": "node scripts/reset.mjs"
+    "reset": "node scripts/reset.mjs",
+    "test": "NODE_ENV=test tsx --test test/*.test.ts",
+    "infra:dev": "tsx src/infrastructure/server.ts",
+    "infra:demo": "tsx scripts/demo-infrastructure.ts",
+    "infra:test": "NODE_ENV=test tsx --test test/infrastructure.test.ts"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^17.4.0",

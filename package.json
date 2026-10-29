@@ -7,7 +7,8 @@
     "dev:backend": "npm --workspace backend run dev",
     "dev:frontend": "npm --workspace frontend run dev",
     "build": "npm --workspace backend run build && npm --workspace frontend run build",
-    "setup": "npm --workspace backend run setup"
+    "setup": "npm --workspace backend run setup",
+    "test": "npm --workspace backend run test"
   },
   "engines": {
     "node": ">=20.19"
