@@ -69,15 +69,19 @@ export class PostgresJournal implements Journal {
   static async connect(url: string | undefined): Promise<PostgresJournal> {
     if (!url) throw new Error('SOROBAN_JOURNAL_BACKEND=postgres requires SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file journal');
     const { Pool } = (await import('pg')).default;
-    return new PostgresJournal(new Pool({ connectionString: url }));
+    // Small pool: Neon direct connections are limited (104 on the free 0.25 CU) and the demo is single-instance.
+    return new PostgresJournal(new Pool({ connectionString: url, max: 5 }));
   }
   // Session advisory lock with a backend-stability check. Session locks only
   // work when every query lands on the same Postgres backend; a transaction
   // pooler (e.g. PgBouncer transaction mode, Neon pooled endpoint) silently
   // rebinds queries to different backends and breaks lock semantics. The
   // backend pid is verified stable across the critical section and any drift
-  // fails closed instead of pretending the lock held. Deployments must use a
-  // DIRECT (non-pooled) database connection.
+  // fails closed instead of pretending the lock held. This is defense in
+  // depth, NOT proof of a safe URL: a pooler can reuse one backend and pass
+  // the check. The primary control is the DIRECT (non-pooled) endpoint:
+  // Neon documents PgBouncer transaction mode breaking session-level
+  // advisory locks (neon.com/docs/connect/connection-pooling).
   private async withSessionLock<T>(client: any, key: string, fn: () => Promise<T>): Promise<T> {
     await client.query('SELECT pg_advisory_lock(hashtext($1))', [key]);
     try {
