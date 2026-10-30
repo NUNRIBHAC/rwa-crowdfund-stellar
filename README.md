@@ -21,6 +21,7 @@ Copy `backend/.env.example` to `backend/.env` and configure only reviewed deploy
 - [Contract rules, pinned builds and deployment/TTL caveats](contracts/crowdfund/README.md)
 - [Separate mock-only identity, valuation, governance and cashout API](IMPLEMENTATION.md)
 - [Historical classic README, not current behavior](docs/classic-readme-historical.md)
+- [Skills reference collection](docs/skills-reference/README.md) - the skill catalog with per-skill rights status and include now / include for later / not include decisions ([INDEX](docs/skills-reference/INDEX.md), [assessment](docs/skills-reference/ASSESSMENT.md), [attribution](docs/skills-reference/NOTICE.md)). Reference documentation only; nothing there is installed or executed by this repository.
 
 ## Checks
 

@@ -11,29 +11,39 @@ the backend or the contracts.
 
 ## What is included
 
-Skills are copied into `skills/` (66 of the 222 supplied) when the right to
-publish them is established. See `NOTICE.md` for attribution and `INDEX.md`
-for the full catalog of all 222 entries with the provenance and inclusion
-status of each.
+Skills are copied into `skills/` when the right to publish them is
+established. See `NOTICE.md` for attribution and `INDEX.md` for the full
+catalog - the 222 supplied entries plus the skills discovered on GitHub on
+2026-10-30 - with the provenance, rights and include now / include for later
+/ not include status of each.
 
-- 46 owner-authored EU compliance and legal guides. The project owner
-  confirmed his authorship on 2026-10-29, and they were reviewed against
-  current official EU sources the same day; see `ASSESSMENT.md` for the
-  review notes. They are published as written by the owner, with no license
-  granted yet - all rights reserved by the owner.
+- 44 owner-authored EU compliance and legal guides (originally 46; the two
+  duplicate pairs were merged on 2026-10-30 with the owner's approval - the
+  merge map is in `INDEX.md`). The project owner confirmed his authorship on
+  2026-10-29, and the guides were reviewed against current official EU
+  sources; see `ASSESSMENT.md` for the review notes. They are published as
+  written by the owner, with no license granted yet - all rights reserved by
+  the owner.
 - 17 skills from [nrxschool/blockchain-skills](https://github.com/nrxschool/blockchain-skills)
   (CC-BY-4.0 content / MIT code), verified identical to upstream.
 - `soroban-common-mistakes` (MIT, Aayush Gupta), `stellar-prices-api`
   (MIT, Rumble Fish Poland) and `stellar-scout` (MIT, Stellar Light),
   LICENSE files preserved; all three verified byte-identical to their
   upstream repositories.
+- 29 skills discovered on GitHub on 2026-10-30 (testing, database and
+  operations, security and accessibility, payments, documentation and
+  design, Stellar tooling), each content-read and license-verified at its
+  upstream source, plus 2 supplied entries (`stellar-anchor-skill`,
+  `scaffold-stellar`) whose upstream licenses were verified the same day.
+  Sources and licenses are listed in `NOTICE.md`.
 
 ## What is not included, and why
 
-The remaining 156 supplied skills have no license file or an unverified
-origin (third-party authors, community collections without a clear license, or
-no stated author at all). Because this repository is public, they are not
-copied here. `INDEX.md` lists each one with its status.
+The remaining supplied skills have no license file or an unverified origin
+(third-party authors, community collections without a clear license, or no
+stated author at all). The same applies to discovered candidates whose rights
+could not be verified. Because this repository is public, they are not copied
+here. `INDEX.md` lists each one with its status.
 
 To keep the full collection available locally without publishing it, copy the
 original archive into `docs/skills-reference/private/` — that path is in

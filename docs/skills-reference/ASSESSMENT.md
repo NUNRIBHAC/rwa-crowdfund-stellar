@@ -596,3 +596,123 @@ the stellar-build / stellar-raven-codemode skill-collection tooling itself),
 `discover`, `onboard` (MPP/agent-wallet payment tooling), `reprompt`,
 `routing-agent-work`, `skill router stellar new` (orchestration meta-tooling),
 `stellarskills-zk-proofs`, `sub-rosa` (ZK/sealed-bid tooling).
+
+## 2026-10-30 GitHub discovery and consolidation
+
+### What was searched
+
+35+ GitHub code-search query families across all public repositories, covering
+soroban, stellar, freighter/wallet-kit, SEP anchors, escrow/trustless-work,
+Stellar DeFi, accessibility/WCAG, incident response/postmortem,
+postgres/backup/migration, e2e testing, OWASP security testing, disaster
+recovery, KYC/identity, observability, GDPR/privacy, financial modeling and
+marketing/SEO; plus org-scoped sweeps (stellar, stripe, neondatabase,
+supabase, microsoft, callstackincubator, LambdaTest) and a dedicated
+Stellar-ecosystem sweep (stellar-core, CheesecakeLabs, SentinelFi, Soneso,
+StellarCN, stellar-scaffold, Micopay, Trustless-Work, and others).
+
+Limits: public GitHub only, sampled not exhaustive - this cannot certify every
+repository. Every skill recommended below was individually opened: its full
+skill file read and its license verified at the linked upstream file. Items
+not fully verified are listed under "not included" in INDEX.md with their
+reasons.
+
+### Included now (15 new skills, each content-read and license-verified)
+
+| Skill | Why it helps the demo now | Source |
+|---|---|---|
+| `webapp-testing` | Playwright testing of the demo frontend (incl. Freighter flows) | anthropics/skills, Apache-2.0 |
+| `playwright-skill` | Production-grade E2E test generation | LambdaTest/agent-skills, MIT |
+| `vitest-skill` | Vitest unit tests for the JS stack | LambdaTest/agent-skills, MIT |
+| `jest-skill` | Jest unit tests for the JS stack | LambdaTest/agent-skills, MIT |
+| `cicd-pipeline-skill` | GitHub Actions test pipelines | LambdaTest/agent-skills, MIT |
+| `api-health-monitoring` | Health endpoints, SLA/SLO, alerting for the backend | LambdaTest/agent-skills, MIT |
+| `neon` | Official Neon skill - the demo runs on Neon Postgres | neondatabase/agent-skills, Apache-2.0 |
+| `logging-best-practices` | Wide-event logging; supports the incident-recovery gap | neondatabase/mcp-server-neon, MIT |
+| `atlas` | Official schema migrations for the journal database | ariga/atlas, Apache-2.0 |
+| `postgres-readonly` | Safe read-only DB inspection (writes blocked) | sanjay3290/ai-skills, Apache-2.0 |
+| `wcag` | Practical WCAG 2.2/EAA audit; complements the owner-authored accessibility guide | CalebHendren/wcag, MIT |
+| `web-security-testing` | OWASP Top 10 testing workflow | davila7/claude-code-templates, MIT |
+| `test-driven-development` | TDD workflow | obra/superpowers, MIT |
+| `systematic-debugging` | Structured debugging method | obra/superpowers, MIT |
+| `oz-stellar` | OpenZeppelin Stellar contracts v0.6.0 reference; fills the rights-blocked `openzeppelin` need | SentinelFi/sentinel_soroban_v3, Apache-2.0 |
+
+### Included for later (14 new skills, each content-read and license-verified)
+
+| Skill | Why later | Source |
+|---|---|---|
+| `stripe-pay`, `connect-recommend`, `upgrade-stripe`, `stripe-docs` | Fiat payment rails, Connect marketplace patterns, upgrades, docs lookup | stripe/ai, MIT |
+| `incident-response` | Live-incident method (Kubernetes-flavored; adapt to the project's hosting); supports DORA duties | giantswarm/agent-skills, Apache-2.0 |
+| `incident-postmortem` | Blameless postmortems and runbooks | camilooscargbaptista/cto-toolkit, MIT |
+| `writing-user-docs` | House style for user-facing documentation | callstackincubator/agent-skills, MIT |
+| `stellar-core-code-review` | Stellar protocol review skill (`high-level-code-review` upstream); this single skill reviewed, the repo's subsystem-reference family was not | stellar/stellar-core, Apache-2.0 |
+| `theme-factory`, `frontend-design`, `web-artifacts-builder`, `canvas-design`, `internal-comms`, `mcp-builder` | Marketing/pitch artifacts, UI design, prototyping, comms; `mcp-builder` only if the project builds MCP integrations | anthropics/skills, Apache-2.0 |
+
+### Promotions (2 supplied entries, previously "rights unclear")
+
+| Catalog entry | Upstream verified | License |
+|---|---|---|
+| `stellar-anchor-skill` | CheesecakeLabs/stellar-anchor-skill | Apache-2.0 |
+| `scaffold-stellar` | stellar-scaffold/cli | Apache-2.0 |
+
+### Consolidation of the owner-authored guides (approved 2026-10-30)
+
+The 46 owner-authored guides were checked for genuine content overlap. Two
+merges were made; nothing unique was dropped:
+
+- `stellar-eu-tokenization-treasurymanagement` was a near-duplicate of
+  `stellar-eu-tokenization-treasury-management`. Its two unique operational
+  points - SEPA-to-mint coordination (memo-mapped minting, with the
+  new-investment example) and the XLM operations reserve constraint - were
+  folded into the canonical guide, which stays at
+  `skills/stellar-eu-tokenization-treasury-management/`.
+- `stellar-eu-compliance-monitor` was byte-identical to
+  `stellar-eu-crowdfunding-community-manager`; the duplicate was removed and
+  the canonical guide kept. A rewritten monitor guide covering ongoing
+  compliance monitoring was prepared in review and remains a parked proposal
+  - not approved, not published.
+
+Reviewed and kept separate as distinct-scope documents (title overlap only):
+`dora-ict-operational-resilience-compliance` vs
+`dora-ict-operational-resilience-specialist`, and the
+`eu-crowdfunding-tokenization-compliance` family (base, advisor, writer).
+
+The guide count is therefore 44, and the corrections published on 2026-10-30
+(commit `66e1226`) are preserved unchanged - this update only merges the two
+duplicate pairs and records the map in INDEX.md.
+
+### Reviewed and not included (watchlist)
+
+- `kyc-aml-patterns` (HermeticOrmus/LibreFinTech-Claude-Code, MIT verified) -
+  makes regulatory claims; needs the same content review protocol as the 46
+  EU guides before inclusion.
+- `regdata-kyc-aml` (ThomasMoreAI/legal-skills-open) - license conflict:
+  repository says Apache-2.0, skill header says MIT, upstream author is
+  Nolpak14/getregdata.
+- `neon-postgres`, `neon-auth` (neondatabase/website) - content read, but no
+  LICENSE file exists in that repository.
+- `doc-coauthoring` (anthropics/skills) - its folder has no LICENSE file.
+- hashicorp terraform skills - not reviewed; likely MPL-2.0.
+- obra `root-cause-tracing` - does not exist under that name; the real skill
+  is `systematic-debugging` (included).
+- obra `brainstorming` - MIT verified, but duplicates the catalogued BMAD
+  `brainstorming`; not counted.
+- anthropics `brand-guidelines` - Apache-2.0 verified, but applies
+  Anthropic's own brand; low direct value.
+- anthropics `docx`, `pdf`, `pptx`, `xlsx` - source-available, NOT open
+  source per the repository README; reference only.
+- sickn33/agentic-awesome-skills soroban set - read in full; template-grade
+  filler despite MIT license.
+- jthack/ffuf_claude_skill - no LICENSE file.
+- Ormus-Solutions/LibreFinTech-Claude-Code - fork without LICENSE; the
+  canonical HermeticOrmus repository was used for `kyc-aml-patterns`.
+- NeoLabHQ/context-engineering-kit - GPL copyleft (same deliberate-decision
+  category as the catalog's AGPL entry).
+- ScaleDockHQ/scaledock-skills - mirror collection; the CalebHendren/davila7
+  entries cover the same ground with clearer provenance.
+- barolivera/avalon stellar-anchors-ramps - Spanish-language project doc.
+- Soneso/StellarCN SDK skills (Kotlin/PHP/Python) - stack mismatch for the
+  current demo.
+- supabase and microsoft/vscode skills - internal tooling for those products.
+- Marketing/GTM mega-collections from curated lists - names surveyed; quality
+  and licenses unverified.
