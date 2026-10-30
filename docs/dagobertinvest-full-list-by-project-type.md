@@ -21,18 +21,54 @@ Every URL and date in the supplied list equals the corresponding row of the earl
 
 ## 2. Instrument forms and related tranches
 
-Instrument class from the site's own "Vertragsform" term per campaign page (all 342 readable campaign pages have a term; the 4 unresolved rows and the non-campaign row have none):
+Instrument class from the site's own "Vertragsform" term per campaign page (all 342 readable campaign pages have a term; the 4 unresolved rows and the non-campaign row have none). The site terms are filed into the unified instrument categories the user supplied on WhatsApp on 2026-10-30:
 
-| Instrument class (site term)                                      | Campaigns |
-| ----------------------------------------------------------------- | --------- |
-| Subordinated loan (qualified) / Qualifiziertes Nachrangdarlehen   | 261       |
-| Bridge financing / Bridgefinanzierung                             | 27        |
-| Junior loan                                                       | 21        |
-| Subordinated bond (Mini Bond) / Mini Bond (nachrangige Anleihe)   | 17        |
-| Zero-coupon bond / Zero Bond                                      | 12        |
-| Subordinated bond (qualified) / Qualifizierte nachrangige Anleihe | 2         |
-| Senior loan                                                       | 1         |
-| Bond (qualified) / Qualifizierte Anleihe                          | 1         |
+**Participation**
+
+1. Participation right / certificate
+   - Substance profit participation right (Substanzgenussrecht) - subtype of 1
+2. Share - the instrument; a capital increase is the action that creates new shares, not a separate instrument
+3. Indirect participation - an ownership structure, not a distinct instrument
+4. Limited partnership interest
+
+**Debt** - two generic parents, three states each:
+
+5. Loan - state: senior / subordinated / unspecified
+6. Bond - state: senior (non-subordinated) / subordinated / unspecified
+
+**Structure overlays** (combine with 5 or 6, never standalone):
+
+- Zero-coupon (Zero Bond): a coupon structure, not a seniority
+- Convertible: a conversion feature on a bond
+
+**Rank and label qualifiers** (site wording, preserved as-is):
+
+- "junior": a lower-rank label; indicates subordinated ranking but does not by itself establish contractual qualified subordination
+- "qualified / qualifiziert": the site's own wording on loans and bonds; on bonds it is not read as qualified subordination unless the term says subordinated
+- "Mini Bond": small-denomination bond label
+
+**Role overlay**:
+
+- Bridge financing: a financing role (short-term interim funding), not an instrument class and not a seniority. Each bridge campaign keeps whatever instrument and seniority its own page states.
+
+Mapping of the 8 site Vertragsform terms (342 campaigns):
+
+| Site term (Vertragsform)                                          | Campaigns | Category     | State / structure                                                          |
+| ----------------------------------------------------------------- | --------- | ------------ | -------------------------------------------------------------------------- |
+| Subordinated loan (qualified) / Qualifiziertes Nachrangdarlehen   | 261       | 5 Loan       | Subordinated; "qualified" kept as the site's label                         |
+| Bridge financing / Bridgefinanzierung                             | 27        | Role overlay | Instrument and seniority unverified per campaign                           |
+| Junior loan                                                       | 21        | 5 Loan       | Subordinated rank by label; contractual qualified subordination not proven |
+| Subordinated bond (Mini Bond) / Mini Bond (nachrangige Anleihe)   | 17        | 6 Bond       | Subordinated (term says "nachrangige Anleihe"); "Mini Bond" kept as label  |
+| Zero-coupon bond / Zero Bond                                      | 12        | 6 Bond       | Seniority unspecified; zero-coupon structure                               |
+| Subordinated bond (qualified) / Qualifizierte nachrangige Anleihe | 2         | 6 Bond       | Subordinated (explicit in term); "qualified" kept as the site's label      |
+| Senior loan                                                       | 1         | 5 Loan       | Senior                                                                     |
+| Bond (qualified) / Qualifizierte Anleihe                          | 1         | 6 Bond       | Seniority unspecified; "qualified" not read as subordination               |
+| **Total**                                                         | **342**   |              |                                                                            |
+
+- No dagobertinvest campaign maps to categories 1-4 (participation side), to a senior bond, or to the convertible structure.
+- Bridge financing: the 27 campaigns stay a financing role until each campaign's own terms are checked. One checked page (row 314, Kronenhaus) is documented on its own page as a "qualifiziertes Nachrangdarlehen"; that single page does not establish the instrument of the other 26.
+- The 12 Zero Bond rows and the 1 unlabelled qualified bond are not filed as senior bonds: their checked pages state no seniority (the Vierseithof Zero Bonds state mortgage security but no subordination).
+- The mapping rests on the site's Vertragsform labels, not on a re-verification of each instrument's legal terms.
 
 12 rows are child tranches of another campaign in the list and are kept as separate campaigns: 43 of 42 (aventa-anzengrubergasse-leoben), 50 of 49 (aventa-hartberg), 119 of 118 (fzw-bau-salzburg-parsch), 130 of 129 (gupympka-leobersdorf), 136 of 135 (herakles-hietzing2), 142 of 141 (home-management-mannersdorf), 148 of 147 (hyperia-drischuetzgasse-1110), 174 of 173 (k3-eisenstadt), 205 of 204 (mgroup-fulpmes), 212 of 211 (ml-bau-tulbing), 311 of 310 (umfeld-stjohanniT-Farcherweg), 321 of 320 (wertsecure-voecklabruck). Rows 312, 345 and 346 are three separate financings of the same hotel project (Haberent Hotel Vierseithof).
 
