@@ -179,9 +179,9 @@ These exist on the CONDA site; which of them are legally mandatory for _your_ pl
 
 ### 11. Your instrument categories - observed implementations
 
-Your list is eight instrument classes, with Substanzgenussrecht as a subtype of participation rights (not a ninth mutually exclusive class); the numbering below follows that hierarchy.
+Your unified hierarchy (as supplied on 2026-10-30): four participation-side parents (1-4), then **Debt** - two generic parents, 5 Loan and 6 Bond, with three seniority states each (senior / subordinated / unspecified) - plus two **structure overlays** that combine with 5 or 6 and never stand alone (zero-coupon, convertible), and **rank and label qualifiers** kept as site wording (junior, qualified/qualifiziert, Mini Bond). Substanzgenussrecht is a subtype of participation rights (1a); a capital increase is the action that creates new shares, not a separate instrument; indirect participation is an ownership structure, not a distinct instrument. The numbering below follows that hierarchy. Observed CONDA evidence covers only part of this model; categories without archive evidence are marked as such, not presented as platform-supported. The full supplied campaign list (270 numbered rows) is classified under the same hierarchy in [conda-full-list-by-project-type.md](conda-full-list-by-project-type.md) (which also treats "Bridge financing" as a financing-role overlay, not an instrument).
 
-CONDA's site taxonomy (S-080): Bonds; Share, GmbH share via SPV, Participation Certificate; Participation Certificate, Subordinated bond, Convertible Bond; homepage additionally lists Indirect Participation and Hybrid Investment Products (S-001). Which of these, and which of your categories, may be offered under a single ECSP licence is a legal question for your own structure - do not assume CONDA's set transfers. [PROPOSED: verify per instrument and jurisdiction before scoping.]
+CONDA's site taxonomy (S-080): Bonds; Share, GmbH share via SPV, Participation Certificate; Participation Certificate, Subordinated bond, Convertible Bond; homepage additionally lists Indirect Participation and Hybrid Investment Products (S-001). Which of these, and which of your categories, may be offered under a single ECSP licence is a legal question for your own structure - do not assume CONDA's set transfers. [PROPOSED: verify per instrument and jurisdiction before scoping.] Mapped to your hierarchy: the site's "Bonds" and "Subordinated bond" are 6 (Bond) in different seniority states, "Convertible Bond" is 6 with the convertible overlay, "Share" is 2, "GmbH share via SPV" is 2 held through the indirect-participation structure (3), "Participation Certificate" is 1, "Indirect Participation" is the structure 3 itself, and "Hybrid Investment Products" has no home in the hierarchy - the archive does not show which instruments that label covers.
 
 #### 1. Participation right / certificate (Genussschein) [OBSERVED]
 
@@ -195,39 +195,52 @@ CONDA's site taxonomy (S-080): Bonds; Share, GmbH share via SPV, Participation C
 - Structure in that contract: CONDA Unternehmensberatungs GmbH acts as **trustee (Treuhander)** - it subscribes and holds the Substanzgenussrechte (the contract cites sec. 174(3) AktG for the instrument) **in its own name but on account of the crowd investors**; investors participate in EUR 100 units (nominal plus agio), then-min/max EUR 100 / EUR 3,000; funding threshold EUR 50,000 (preamble, §1).
 - Note: the archive does not show whether this trustee model is still used; current campaigns use direct securities with ISINs instead. Do not derive the legal nature or issuer-eligibility of Substanzgenussrechte from this contract alone - issuer forms vary by jurisdiction and statute.
 
-#### 2. Share / capital increase [OBSERVED]
+#### 2. Share [OBSERVED]
 
+- A capital increase is the corporate action that creates new shares, not a separate instrument; the oekostrom campaign below is titled "capital increase 2026" because it is one [S-047].
 - oekostrom AG (S-047): price EUR 32/share, minimum 8 shares, up to EUR 14M total of which max EUR 4,999,936 (156,248 registered no-par shares) via CONDA, subscription period 1 Oct - 6 Nov 2026, ISIN with note "share not tradable on any exchange". Backed by an approved prospectus dated 31 Aug 2026 (D-oekostrom-Prospekt: offer of 450,198 registered no-par shares from authorised capital, full dividend entitlement; stated dividend policy: currently no distributions to strengthen the capital base).
 - innolytics AG (S-039): issue price EUR 322, pre-money valuation EUR 18,203,304, funding threshold EUR 300,000, pre-subscriptions by existing investors (ordinary + preference shares) counted into displayed progress.
 
-#### 3. Indirect participation [OBSERVED]
+#### 3. Indirect participation - an ownership structure [OBSERVED]
 
 - ewia 3.0 (S-029): placement volume EUR 2.0M, funding threshold EUR 200,000, unlimited term with waiver of termination until 31 Dec 2035, annual profit distribution, participation in company value = yes, targeted average return 37.93% p.a., company value disclosed, three named lead investors with amounts.
 - Site definition: "Access to SME investments with simplified processing and typical participation risks" (S-001).
+- Classification note: CONDA presents "Indirect Participation" as an asset-class label (S-001); in your hierarchy it is an ownership structure, not a distinct instrument. Which underlying participation the ewia 3.0 structure wraps is not resolvable from the archive captures, so the page's own label is preserved here. The Learn hub's "GmbH share via SPV" (S-080) is the same structural idea wrapped around a Share.
 
 #### 4. Limited partnership interest (KG-Anteil) [NOT SEEN IN THIS ARCHIVE]
 
 - No campaign in this archive shows the instrument terms of a limited-partnership offering. A previous page review in our earlier work noted a Venture Space offering labelled in that direction; this archive's Venture Space captures (S-125..128) show only the closed page shell (status "Nicht erfolgreich", min EUR 100) without its Additional Info panel. Treat instrument mechanics as unverified until a live page or term sheet is captured.
 
-#### 5. Subordinated loan [OBSERVED, legacy 2017]
+#### 5. Loan
 
-- aiyp / "ants in your pants GmbH" (D-aiyp_darlehensvertrag): bilingual profit-participating subordinated loan agreement ("partiarisches Nachrangdarlehen"), base rate 5.5% or 4.5% p.a. (act/360) depending on offer date, maturity 30.04.2024, annual interest 30.06. This comes from CONDA's earlier platform generation; the archive does not show how CONDA structures subordinated loans today, and you should not assume the current "subordinated bond" label is legally the same instrument.
+Generic debt parent with three seniority states; the state is a property of the loan, not a separate instrument.
 
-#### 6. Subordinated bond [OBSERVED]
+- **senior** - no example in this archive. [NOT SEEN IN THIS ARCHIVE]
+- **subordinated** [OBSERVED, legacy 2017] - aiyp / "ants in your pants GmbH" (D-aiyp_darlehensvertrag): bilingual profit-participating subordinated loan agreement ("partiarisches Nachrangdarlehen"), base rate 5.5% or 4.5% p.a. (act/360) depending on offer date, maturity 30.04.2024, annual interest 30.06. This comes from CONDA's earlier platform generation; the archive does not show how CONDA structures subordinated loans today, and you should not assume the current "subordinated bond" label is legally the same instrument.
+- **unspecified (seniority unspecified)** - no example in this archive; the full supplied campaign list holds 64 "Darlehen" rows whose fetched fields state no seniority (see [conda-full-list-by-project-type.md](conda-full-list-by-project-type.md)). [NOT SEEN IN THIS ARCHIVE]
 
-- Eternal Power (S-022): 9.00% p.a. + 1.00% bonus p.a., term to 31.12.2028, EUR 250 units, no funding threshold, annual repayment, act/act, ISIN DE000A4DFN13.
+#### 6. Bond
+
+Generic debt parent with three seniority states; the subordinated state includes explicitly subordinated qualified bonds and subordinated Mini Bonds.
+
+- **senior (non-subordinated)** [OBSERVED] - devolo solutions GmbH (S-091, German page): headline 10% = 7% cash / 10% in-kind vouchers, EUR 250 units, funding threshold EUR 400,000, volume EUR 2.0M, term to 30.11.2029, annual interest 30.11. from 2027, bullet repayment, two ISINs.
+- Emission conditions (D-devolo-Emissionsbedingungen §2.2): the securities are **direct, non-subordinated, unsecured** obligations ranking pari passu. The site explainer (S-080/091): bondholders rank ahead of subordinated capital and equity in insolvency; no participation in growth.
+- **subordinated** [OBSERVED] - Eternal Power (S-022): 9.00% p.a. + 1.00% bonus p.a., term to 31.12.2028, EUR 250 units, no funding threshold, annual repayment, act/act, ISIN DE000A4DFN13.
 - COOEE alpin / You Will Like It Hotels (S-012): cash interest 7% p.a. vs interest in kind 9% p.a. (vouchers), two ISINs, half-yearly payments 31 May / 30 Nov from 2027, 30E/360, funding threshold EUR 250,000, volume EUR 2.5M, repayment at maturity, 4% early discount until 30.09.2026.
 - Explainer banner on the campaign page (S-012): mezzanine character, paid after non-subordinated creditors in insolvency, no participation in company growth.
+- **unspecified** - no example in this archive; the full supplied list holds 19 "Bond" rows with no seniority stated in the fetched fields, plus 125 rows with a "nachrangig" hint that the fetched fields cannot resolve between Loan (5) and Bond (6) (see [conda-full-list-by-project-type.md](conda-full-list-by-project-type.md)). [NOT SEEN IN THIS ARCHIVE]
 
-#### 7. Senior bond (non-subordinated) [OBSERVED]
+#### Structure overlays (combine with 5 or 6, never standalone)
 
-- devolo solutions GmbH (S-091, German page): headline 10% = 7% cash / 10% in-kind vouchers, EUR 250 units, funding threshold EUR 400,000, volume EUR 2.0M, term to 30.11.2029, annual interest 30.11. from 2027, bullet repayment, two ISINs.
-- Emission conditions (D-devolo-Emissionsbedingungen §2.2): the securities are **direct, non-subordinated, unsecured** obligations ranking pari passu. The site explainer (S-080/091): bondholders rank ahead of subordinated capital and equity in insolvency; no participation in growth.
-
-#### 8. Convertible bond [OBSERVED]
-
-- ProFem "Going Public Wandelanleihe" (S-114, German page; successfully financed): 8% p.a., EUR 500 units, funding threshold EUR 100,000, max EUR 2.5M, term to 30.12.2028, interest annually 30.12. (first 2026), repayment at maturity if not converted, ISIN AT0000A3QA28.
+- **Convertible** [OBSERVED] - a conversion feature on a bond, not a standalone instrument: ProFem "Going Public Wandelanleihe" (S-114, German page; successfully financed): 8% p.a., EUR 500 units, funding threshold EUR 100,000, max EUR 2.5M, term to 30.12.2028, interest annually 30.12. (first 2026), repayment at maturity if not converted, ISIN AT0000A3QA28. The bond's seniority state is not established by the cited evidence.
 - Conversion mechanics (D-20260109-Emissionsbedingungen-Profem §7): the conversion right arises when the issuer announces its planned IPO; exercisable on any business day within a one-month window after the announcement; whole bonds only; conversion price determined within the fixed price range; interest stops on the conversion day (§7.1, §7.2 and interest provisions).
+- **Zero-coupon (Zero Bond)** [NOT SEEN IN THIS ARCHIVE] - a coupon structure, not a seniority. No campaign in this archive carries it.
+
+#### Rank and label qualifiers (site wording, preserved as-is)
+
+- **"junior"** - a lower-rank label; indicates subordinated ranking but does not by itself establish contractual qualified subordination. Not recorded on any campaign in this archive's captured evidence.
+- **"qualified / qualifiziert"** - the site's own wording on loans and bonds; on bonds it is not read as qualified subordination unless the term says subordinated. Not recorded on any campaign in this archive's captured evidence.
+- **"Mini Bond"** - a small-denomination bond label. Not recorded on any campaign in this archive's captured evidence.
 
 #### Cross-instrument mechanics worth copying structurally [OBSERVED]
 
@@ -276,7 +289,7 @@ Everything in sections 14 and 15 is a proposed design derived from the observed 
 - **CompanyAccount** (id, legal_name, register_id, country, owners[]>25%, status) linked N:1 to a primary User; **AccountMembership** lets one user act in personal or company context
 - **Issuer** (company data, onboarding status, eligibility checklist, assigned campaign manager)
 - **Campaign** (issuer_id, slug, title, category, country, status, funding_threshold, issue_volume, goal, subscription_window, offered_in_countries[], risk texts, marketing content blocks, video, rewards tiers[])
-- **Instrument** (campaign_id, class: one of the eight base classes, plus subtype (e.g. Substanzgenussrecht under participation rights), isin_per_variant[], unit_nominal, min_subscription_units, currency, term_start/end, interest variants[] {cash_rate, in_kind_rate, calc_method, payment_schedule[], repayment_mode}, bonus_rules[], discount_windows[], conversion_terms{trigger, window, pricing}, valuation fields for equity)
+- **Instrument** (campaign_id, parent: participation_right | share | limited_partnership_interest | loan | bond, subtype (e.g. substanzgenussrecht under participation_right), seniority: senior | subordinated | unspecified (loan/bond only), overlays[] (zero_coupon | convertible; only on loan/bond, never standalone), structure (e.g. indirect_participation - an ownership-structure attribute, not a parent), site_labels[] (verbatim rank/label qualifiers such as "junior", "qualified/qualifiziert", "Mini Bond"), isin_per_variant[], unit_nominal, min_subscription_units, currency, term_start/end, interest variants[] {cash_rate, in_kind_rate, calc_method, payment_schedule[], repayment_mode}, bonus_rules[], discount_windows[], conversion_terms{trigger, window, pricing}, valuation fields for equity)
 - **Document** (campaign_id, type: KIIS/AIB/emission-conditions/prospectus/pitch/financials, file, version, visibility: public/registered)
 - **InvestmentOrder** (investor account_id, campaign_id, variant, units, amount, status, reflection_period_ends_at, offer_timestamp, cancel_timestamp)
 - **Payment** (order_id, method, reference, amount, status: expected/received/unallocated/allocated/refunded, psp_ids)
@@ -336,8 +349,8 @@ Everything in sections 14 and 15 is a proposed design derived from the observed 
 
 #### 14.7 MVP vs follow-ons [PROPOSED]
 
-- **MVP:** public site + campaign pages (one instrument class first - senior or subordinated bond, simplest data model), registration + KYC, knowledge test, invest flow with reflection period, PSP payments with manual-allocation queue, dashboard, documents, FAQ/support KB, compliance pages, admin: KYC review + campaign builder + payment reconciliation.
-- **Follow-ons:** further instrument classes (shares with prospectus flow, convertible with conversion events, indirect participation, certificates, KG model if needed), company accounts, rewards, comments/news, events, marketplace bulletin board, white-label, tokenised register/custody integration per jurisdiction.
+- **MVP:** public site + campaign pages (one debt parent first - Bond in a senior or subordinated state, simplest data model), registration + KYC, knowledge test, invest flow with reflection period, PSP payments with manual-allocation queue, dashboard, documents, FAQ/support KB, compliance pages, admin: KYC review + campaign builder + payment reconciliation.
+- **Follow-ons:** further parents, subtypes and overlays (Share with the prospectus flow, convertible overlay with conversion events, indirect-participation structures, participation certificates incl. the Substanzgenussrecht subtype, limited partnership interest if needed), company accounts, rewards, comments/news, events, marketplace bulletin board, white-label, tokenised register/custody integration per jurisdiction.
 
 ---
 
@@ -454,7 +467,7 @@ Everything in sections 14 and 15 is a proposed design derived from the observed 
 - S-045 = `screencapture-conda-capital-en-campaigns-innolytics-ag-share-2026-10-30-15_44_17.pdf`
 - S-046 = `screencapture-conda-capital-en-campaigns-innolytics-ag-share-2026-10-30-15_44_29.pdf`
 
-#### oekostrom AG (share / capital increase)
+#### oekostrom AG (share - capital increase campaign)
 
 - S-047 = `screencapture-conda-capital-en-campaigns-oekostrom-ag-energy-group-capital-increase-2026-stock-2026-10-30-15_35_55.pdf`
 - S-048 = `screencapture-conda-capital-en-campaigns-oekostrom-ag-energy-group-capital-increase-2026-stock-2026-10-30-15_36_14.pdf`
