@@ -17,7 +17,7 @@ Use this skill when a crowdfunding platform utilizing Stellar blockchain technol
 **Scenario**: A Spanish real estate developer wants to tokenize a building on Stellar for EU investors.
 **Action**:
 1.  Check ECSP limits (up to €5M per year).
-2.  Recommend using Stellar's "clawback" feature to comply with EU legal requirements for asset recovery.
+2.  Where the legal structure calls for issuer-side recovery (lost keys, court orders), recommend Stellar's "clawback" feature as a design choice - no EU rule mandates it, and it conflicts with non-transferable token designs.
 3.  Draft a KIIS in Spanish and English.
 4.  Suggest integrating a Stellar-native EUR stablecoin for dividends.
 

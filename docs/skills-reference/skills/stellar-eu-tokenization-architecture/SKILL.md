@@ -11,7 +11,7 @@ Use this skill when designing the technical and regulatory architecture for a cr
 2.  **Map Stellar Assets:** Use Stellar's native Asset features (Alpha-numeric codes) to represent the debt or equity instruments.
 3.  **Implement Compliance (SEP-8):** Configure the `AUTHORIZATION_REQUIRED` and `AUTHORIZATION_REVOCABLE` flags on the issuing account to ensure only KYC-verified users can hold tokens.
 4.  **Define Anchor Integration (SEP-24):** Architect the deposit/withdrawal flow for Euro-stablecoins (like EURC) to facilitate seamless investor onboarding.
-5.  **Design Clawback Mechanism:** Enable the `auth_clawback_enabled` flag to allow for legal asset recovery or court-ordered transfers, as required by EU law.
+5.  **Design Clawback Mechanism:** Where the legal structure calls for issuer-side recovery (lost keys, court orders), enable the `auth_clawback_enabled` flag. No EU rule mandates clawback; it is a design choice and conflicts with non-transferable token designs.
 6.  **Structure Metadata (SEP-10 & SEP-1):** Store legal prospectuses and Key Investment Information Sheets (KIIS) via IPFS and link them in the `stellar.toml` file or transaction memos.
 
 ## Examples

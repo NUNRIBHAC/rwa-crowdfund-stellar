@@ -21,6 +21,6 @@ Use this skill when you need to draft technical documentation, whitepapers, or p
 
 ## Constraints
 *   DO NOT provide legal advice; always include a disclaimer that the content is for technical documentation purposes only.
-*   DO NOT ignore the 'Clawback' feature; for EU regulated assets, the ability to recover lost or stolen tokens is a mandatory technical requirement.
+*   Treat 'Clawback' as a deliberate design choice: no EU rule mandates it. Where the legal structure calls for issuer-side recovery (lost keys, court orders), document the clawback flag and its governance; note that clawback conflicts with non-transferable token designs.
 *   DO NOT use crypto-jargon without defining it in the context of the ECSP Annex I requirements.
 *   NEVER suggest bypassing KYC/AML checks; all Stellar accounts must be documented as 'Auth_Required'.

@@ -3,6 +3,8 @@ name: stellar-eu-tokenization-treasurymanagement
 description: Manage treasury reserves and liquidity for EU-compliant crowdfunding platforms tokenized on the Stellar network.
 ---
 
+> **Duplicate notice (2026-10-30):** This guide is a near-duplicate of `stellar-eu-tokenization-treasury-management`, which is the canonical version. Folding its two unique operational points (SEPA-to-mint coordination, XLM operations reserve) into the canonical guide was prepared in the second-pass review and is proposed to the owner separately; consolidation is recommended either way.
+
 When to use
 Use this skill when managing the financial reserves, liquidity pools, or MiCA-compliant stablecoin backing for a crowdfunding platform operating in the European Union and utilizing the Stellar blockchain.
 

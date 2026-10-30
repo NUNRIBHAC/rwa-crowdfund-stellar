@@ -1,7 +1,9 @@
 ---
-name: stellar-eu-crowdfunding-community-manager
+name: stellar-eu-compliance-monitor
 description: Guidelines for managing a tokenized crowdfunding community within the EU regulatory framework on the Stellar network.
 ---
+
+> **Duplicate notice (2026-10-30):** This guide is currently byte-identical to `stellar-eu-crowdfunding-community-manager`. A rewritten version covering ongoing compliance monitoring (this guide's stated name and purpose) was prepared in the second-pass review and is proposed to the owner separately; consolidation is recommended either way.
 
 When to use
 Use this skill when interacting with potential investors, project creators, or community members regarding tokenized crowdfunding campaigns hosted on Stellar that operate within the European Union (EU). This includes answering questions about MiCA compliance, Stellar asset mechanics, and community engagement.

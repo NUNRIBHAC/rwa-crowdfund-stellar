@@ -8,7 +8,7 @@ Use this skill when an agent needs to structure, execute, or audit crowdfunding 
 
 ## Instructions
 1.  **Verify Regulatory Perimeter**: Determine if the project falls under the EU Crowdfunding Regulation (up to €5M) or MiCA. Ensure the issuer is a legal entity registered in an EU Member State.
-2.  **Asset Configuration**: Define the Stellar Asset (Trustline) parameters. Set the `AUTH_REQUIRED` and `AUTH_REVOCABLE` flags on the issuing account to ensure compliance with KYC/AML clawback requirements.
+2.  **Asset Configuration**: Define the Stellar Asset (Trustline) parameters. Set `AUTH_REQUIRED` on the issuing account so only KYC-verified holders can hold the token. Set `AUTH_REVOCABLE`/clawback only where the legal structure calls for issuer-side freezing (fraud, court orders); it is a design choice, not a KYC/AML mandate.
 3.  **Investor Onboarding**: Validate that investors have undergone mandatory Knowledge Tests and Simulation of Loss as required by EU law before allowing them to hold the token.
 4.  **Transaction Logic**: Execute primary issuance by sending tokens to validated investor wallets in exchange for SEPA/stablecoin payments. Record the hash of the Key Investment Information Sheet (KIIS) in the transaction memo or a dedicated data entry.
 5.  **Compliance Reporting**: Generate a ledger-based report of all token holders for the National Competent Authority (NCA) of the relevant EU state.

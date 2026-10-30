@@ -11,7 +11,7 @@ Use this skill when developing, auditing, or launching a crowdfunding platform i
 2.  **Verify ECSP Authorization:** Ensure the platform entity is authorized as an ECSP by the National Competent Authority (NCA) of its home Member State.
 3.  **Implement KIIS:** Draft or review the Key Investment Information Sheet (KIIS). Ensure it includes the specific risks of using the Stellar ledger (e.g., private key management, network fees).
 4.  **Enforce Thresholds:** Apply the €5,000,000 12-month limit for crowdfunding offers as per EU 2020/1503.
-5.  **Smart Contract Compliance:** Verify that Stellar "Clawback" and "Auth Revocable" flags are enabled on the asset to allow for court-ordered freezes or regulatory compliance, matching EU investor protection laws.
+5.  **Smart Contract Compliance:** Decide explicitly whether the asset enables Stellar's "Clawback" and "Auth Revocable" flags. They support court-ordered freezes and recovery, but no EU rule mandates them; treat them as a documented design choice, noting they conflict with non-transferable token designs.
 6.  **Investor Categorization:** Implement a mandatory entry knowledge test and a simulation of the ability to bear loss for "non-sophisticated" investors.
 
 ## Examples

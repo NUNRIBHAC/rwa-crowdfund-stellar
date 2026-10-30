@@ -8,10 +8,10 @@ Use this skill when designing or auditing a crowdfunding platform based on the S
 
 ## Instructions
 1.  **Classify Infrastructure:** Identify the platform's role under MiCA (e.g., CASP - Crypto-Asset Service Provider) and determine if it falls under DORA’s scope for financial entities.
-2.  **Stellar Asset Security:** Audit the "clawback" and "authorization" flags on Stellar assets. Ensure the issuer maintains the ability to freeze tokens in case of a court order or confirmed theft, as required by EU anti-money laundering (AML) standards.
+2.  **Stellar Asset Security:** Audit the "clawback" and "authorization" flags on Stellar assets. Where the legal structure calls for issuer-side recovery (court order, confirmed theft), verify the freeze/clawback capability exists and is governed; no EU AML rule mandates it, so treat it as a documented design choice.
 3.  **ICT Risk Management:** Establish a framework for Digital Operational Resilience. This includes mapping all third-party dependencies (nodes, validators, API providers) and documenting redundancy plans.
 4.  **Smart Contract/Soroban Audit:** If using Soroban smart contracts for crowdfunding logic, mandate a formal verification or a third-party security audit specifically checking for re-entrancy and integer overflows.
-5.  **Incident Reporting:** Define a process for reporting major ICT-related incidents to EU competent authorities within the 24-hour window required by DORA.
+5.  **Incident Reporting:** Define a process for reporting major ICT-related incidents to the national competent authority within DORA's binding windows: initial notification within 4 hours of classifying the incident as major and no later than 24 hours from awareness, intermediate report within 72 hours, final report within one month (Delegated Regulation (EU) 2025/301).
 6.  **Custody Architecture:** If the platform holds private keys, ensure the use of Multi-Sig or Threshold Signature Schemes (TSS) that meet the high-level security requirements of MiCA Art. 75.
 
 ## Examples

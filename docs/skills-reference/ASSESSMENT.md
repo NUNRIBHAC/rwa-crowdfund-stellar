@@ -27,17 +27,29 @@ Assessment date: 2026-10-29.
    stellarskills family (declared-only), so not published here.
 5. `state-archival` - TTL and state restoration rules. stellarskills family,
    so not published here.
+6. The Soroban security set - access control, cap and refund checks are
+   current work on the live testnet contract. `soroban-security`,
+   `smart-contract-security` and `soroban-common-mistakes` are published
+   here (licenses verified); `security` and `develop-secure-contracts` are
+   not. `develop-secure-contracts` declares AGPL-3.0-only (author:
+   OpenZeppelin), verified against the upstream repository - a real license,
+   but strong copyleft; publishing a copy needs a deliberate decision and a
+   separate license boundary. Reclassified from "useful later" on 2026-10-30.
+7. Five of the 46 owner-authored guides whose core content applies to the
+   current demo: `eu-compliant-stellar-crowdfunding-engineering` (escrow,
+   refund and atomic-settlement mechanics), `stellar-eu-crowdfunding-smart-contract-auditor`
+   (the audit method applies to the demo contract),
+   `stellar-eu-tokenization-api-design` (endpoint and XDR-envelope patterns
+   for the demo backend), `fintech-ux-design-for-eu-crowdfunding` and
+   `eu-web-accessibility-compliance-wcag-eaa` (both apply to the current
+   demo UI). Reclassified on 2026-10-30; the remaining 41 stay useful later.
 
 ## Useful later, for the real product
 
-- The 46 owner-authored EU compliance guides - published in `skills/`;
-  reviewed below.
+- 41 of the 46 owner-authored EU compliance guides - published in
+  `skills/`; reviewed below. The other 5 are useful now (above).
 - The SCF set (13 guides) - direct fit for a Stellar Community Fund
   application. Rights unclear; names only in `INDEX.md`.
-- The Soroban security set - `soroban-security`, `smart-contract-security`
-  and `soroban-common-mistakes` are published with verified licenses;
-  `stellar-eu-crowdfunding-smart-contract-auditor` is owner-authored and
-  published.
 - `passkeys` + `smart-accounts` - the wallet-upgrade path. `passkeys`
   references kalepail/passkey-kit (MIT verified upstream), but the file
   itself declares no license; `smart-accounts` is stellarskills family.
@@ -46,10 +58,6 @@ Assessment date: 2026-10-29.
 - The ecosystem scouting set - `stellar-scout` is published here (MIT,
   Stellar Light; verified byte-identical to the upstream repository); the
   rest declare nothing and stay out.
-- `develop-secure-contracts` declares AGPL-3.0-only (author: OpenZeppelin),
-  verified against the upstream repository. A real license, but strong
-  copyleft; publishing a copy needs a deliberate decision and a separate
-  license boundary.
 
 ## Legal review of the 46 owner-authored guides
 
@@ -73,12 +81,10 @@ claims, with these qualifications:
   amf-france.org PSFP page.
 - DORA scope: crowdfunding service providers are listed in Article
   2(1)(s) of Regulation (EU) 2022/2554. The owning source is EUR-Lex
-  (https://eur-lex.europa.eu/eli/reg/2022/2554/oj/eng); direct inline
-  retrieval of the Article 2 text was bounded (EUR-Lex fetch truncates
-  before Article 2; EUR-Lex browser access blocked in this environment;
-  EBA/ESMA interactive rulebooks carry no inline article text), so the
-  item was confirmed against a verbatim mirror of the Official Journal
-  text plus EUR-Lex recital-level context.
+  (https://eur-lex.europa.eu/eli/reg/2022/2554/oj/eng). The Article 2
+  text was confirmed against a verbatim mirror of the Official Journal
+  text plus EUR-Lex recital-level context; the official full text was
+  not independently confirmed line by line.
 - EU VAT framing in the tax guide: single-purpose vouchers taxed at
   issuance and multi-purpose vouchers at redemption match the EU voucher
   rules (Directive 2006/112/EC as amended; see Council Directive
@@ -302,3 +308,291 @@ The design direction is a decision for the owner with qualified EU counsel.
   `freighter-best-practices`, `dapp`, `agent-browser-webauthn`, the
   ecosystem scouting set, and the remaining entries. `INDEX.md` records
   their names only.
+
+## Second-pass review of the 46 owner guides (2026-10-30)
+
+At the owner's request, all 46 guides were re-read in full on 2026-10-30 -
+not only the 28 corrected in the first pass. For every guide this pass
+checked: the full text end to end; its concrete legal claims (thresholds,
+deadlines, article references, investor-protection mechanics, flag and SEP
+references) against the sources listed below; internal consistency with the
+corrected set; and fit with the current app (a testnet Soroban escrow demo
+with non-transferable contribution balances, all-or-nothing funding and
+atomic cap enforcement; identity, KYC, valuation, cashout and legal rights
+are not implemented). This remains a documentation review, not legal advice
+or certification.
+
+Sources (the 2026-10-29 verified baseline, plus one fresh check marked
+"fresh"):
+
+- S1: ECSPR, Regulation (EU) 2020/1503, EUR-Lex - thresholds, Art. 11
+  prudential safeguards, Art. 21 investor protections, Art. 23 KIIS,
+  Art. 25 bulletin board.
+- S2: MiCA, Regulation (EU) 2023/1114 - Art. 13 retail withdrawal, Art. 67
+  and Annex IV capital, white paper rules. Art. 75 custody segregation was
+  re-verified fresh on 2026-10-30 against the ESMA interactive rulebook
+  (Art. 75(7): client crypto-assets segregated from the CASP's own holdings).
+- S3: DORA, Regulation (EU) 2022/2554, plus Delegated Regulation (EU)
+  2025/301 (reporting windows) and Delegated Regulation (EU) 2024/1772
+  (classification).
+- S4: Transfer of Funds Regulation (EU) 2023/1113 - travel rule.
+- S5: ESMA interactive rulebook - MiCA service classes and capital.
+- S6: ACPR REGAFI register (EURC issuer authorization) and Circle's MiCA
+  EURC white paper.
+- S7: BaFin Unternehmensdatenbank and BaFin/AMF sites.
+- S8: impots.gouv.fr - French 30% flat tax framing.
+- S9: Stellar ecosystem references - SEP-8/10/12/24/30/31/41 and CAP-0035.
+- S10: European Accessibility Act, Directive (EU) 2019/882; WCAG 2.1/2.2 AA.
+- S11: GDPR, Regulation (EU) 2016/679 - directional guidance.
+- S12: Prospectus Regulation (EU) 2017/1129 - perimeter.
+
+### Corrections made in the second pass
+
+16. Clawback framing, remaining instances: the first pass corrected four
+    guides (item 3 above); this pass found the same "clawback or freeze is
+    required by EU law" framing in six more and corrected all of them to the
+    design-choice wording, noting the conflict with non-transferable token
+    designs: `eu-crowdfunding-tokenization-compliance`,
+    `eu-crowdfunding-tokenization-compliance-writer`,
+    `eu-crypto-asset-crowdfunding-cybersecurity-compliance`,
+    `eu-tokenization-expansion-specialist`,
+    `stellar-eu-tokenization-architecture`,
+    `stellar-eu-crowdfunding-compliance-devrel`. The hard constraint in
+    `stellar-eu-crowdfunding-compliance-risk` ("do not approve any asset that
+    lacks clawback") and the conflated "KYC/AML clawback requirements"
+    wording in `stellar-eu-tokenized-crowdfunding-compliance` were corrected
+    the same way. No EU rule mandates clawback; this restates the position
+    verified against EUR-Lex in the first pass.
+17. `select-eu-compliant-stellar-funding-portals`: removed the "SEP-20"
+    reference (SEP-20 is self-verification of validator nodes, not a portal
+    standard; the relevant standards are SEP-24/SEP-6 for anchored flows and
+    SEP-8 for regulated assets). The Bitbond example no longer presents
+    Bitbond as currently BaFin-regulated: the BaFin Unternehmensdatenbank
+    name search on 2026-10-28 returned no match, so the guide keeps Bitbond
+    only as the historical 2019 STO example and tells the reader to verify
+    any provider's current authorization in the relevant national register,
+    consistent with `stella-eu-payment-rails-integration`. US terminology
+    ("Broker-Dealer / Funding Portal") was replaced with the EU categories
+    (ECSP, CASP, MiFID II investment firm).
+18. `eu-crypto-asset-crowdfunding-cybersecurity-compliance`: incident
+    reporting updated from a flat "24-hour window" to the binding Delegated
+    Regulation (EU) 2025/301 windows (initial 4 hours from classification as
+    major and no later than 24 hours from awareness; intermediate 72 hours;
+    final one month), consistent with the two DORA guides.
+19. Duplicates, handled conservatively: `stellar-eu-compliance-monitor` is
+    byte-identical to `stellar-eu-crowdfunding-community-manager` and
+    `stellar-eu-tokenization-treasurymanagement` is a near-duplicate of
+    `stellar-eu-tokenization-treasury-management`. Both copies now carry a
+    duplicate notice, and the monitor copy's frontmatter `name:` field -
+    which literally carried the community-manager name - was corrected. A
+    rewritten, monitoring-specific version of `stellar-eu-compliance-monitor`
+    and a fold of the treasury copy's two unique operational points
+    (SEPA-to-mint coordination, XLM operations reserve) into the canonical
+    guide were prepared but NOT applied: rewriting a guide's purpose and
+    moving content between guides are substantive authored changes, proposed
+    to the owner separately rather than made unilaterally.
+
+### Review record, all 46 guides
+
+For every guide: full text re-read end to end; concrete claims compared
+against the sources in the "Checked against" column (codes above);
+consistency with the corrected set and with the current app checked.
+"Corrections" names the pass that changed the guide. "Unresolved" lists what
+this review did not establish. Guides not listed under any correction item
+needed no change - the reasons are visible in the per-guide rows.
+
+| Guide | Checked against | Corrections | Unresolved | App fit |
+|---|---|---|---|---|
+| `compliant-eu-tokenization-cloud-infrastructure` | S3, S9, S11 | Pass 1 (SEP-3/SEP-12 note) | Member-state hosting/administrative practice not re-verified | Real product only (production infrastructure) |
+| `crowdfunding-partnership-outreach` | S1, S6, S9 | Pass 1 (SEP numbering, EUR 500k-8M range, unevidenced figure) | None identified | Real product only (issuer outreach) |
+| `crowdfunding-secondary-market-advisor-eu-stellar` | S1 (Art. 25), S2, S9 | None | Market-making/proprietary-trading boundary is directional guidance | Real product only; the demo token is deliberately non-transferable |
+| `dora-ict-operational-resilience-compliance` | S3 | Pass 1 (reporting windows, TLPT cadence, NCA routing) | None identified | Real product only |
+| `dora-ict-operational-resilience-specialist` | S3 | Pass 1 (reporting windows) | None identified | Real product only |
+| `ecspr-crowdfunding-compliance-specialist` | S1, S9 | None | None identified | Closest match to the demo's product shape, but none of the compliance flow is implemented |
+| `eu-compliant-stellar-crowdfunding-engineering` | S1 (Art. 21(7)), S9 | Pass 1 (SEP-41, Art. 21(7) mechanics, clawback) | None identified | Usable now: escrow, refund and atomic-settlement mechanics map to the demo contract; the compliance hooks are for the real product |
+| `eu-crowdfunding-governance-risk-advisor` | S1, S2 | None | Board 'fit and proper' detail is member-state specific | Real product only |
+| `eu-crowdfunding-investor-suitability-assessment` | S1 (Art. 21(5)-(7)) | Pass 1 (simulation vs. limit framing) | None identified | Real product only (no investor checks in the demo) |
+| `eu-crowdfunding-sanctions-compliance` | S1, S4, S12 | Pass 1 (prospectus approver, high-risk third countries) | None identified | Real product only |
+| `eu-crowdfunding-tokenization-compliance` | S1, S9 | Pass 2 (clawback framing, item 16) | None identified | Real product only |
+| `eu-crowdfunding-tokenization-compliance-advisor` | S1, S9 | Pass 1 ('3-page KIIS') | None identified | Real product only |
+| `eu-crowdfunding-tokenization-compliance-writer` | S1, S9 | Pass 1 (SEP numbering, investor limits); pass 2 (clawback 'mandatory' constraint, item 16) | None identified | Real product only |
+| `eu-crowdfunding-tokenization-insurance-advisor` | S1 (Art. 11) | Pass 1 (prudential safeguard precision) | Insurance-market specifics not re-verified | Real product only |
+| `eu-crowdfunding-tokenization-tax-compliance` | S8, S2 | None | Member-state tax detail beyond the verified French example | Real product only |
+| `eu-crypto-aml-ctf-compliance-officer` | S4, S7 | None | None identified | Real product only |
+| `eu-crypto-asset-crowdfunding-cybersecurity-compliance` | S2 (Art. 75, fresh check 2026-10-30), S3, S9 | Pass 2 (freeze capability framing, DORA windows; items 16, 18) | None identified | Real product only |
+| `eu-crypto-asset-investor-education` | S1 | None | None identified | Real product only |
+| `eu-crypto-crowdfunding-compliance-integration` | S4, S9 | Pass 1 (EUR 1,000 TFR scope) | None identified | Real product only |
+| `eu-crypto-crowdfunding-incident-response` | S3, S7 | Pass 1 (DORA windows, AMF channel) | None identified | Real product only |
+| `eu-data-privacy-for-tokenized-crowdfunding` | S11, S9 | None | GDPR application to on-chain data is directional guidance | Real product only; overlaps current good practice (the demo keeps PII off-chain) |
+| `eu-mica-casp-licensing-counsel` | S2, S5 | Pass 1 (capital-by-class) | None identified | Real product only |
+| `eu-prospectus-and-tokenization-compliance-counsel` | S1, S9, S12 | Pass 1 (SEP-41) | None identified | Real product only |
+| `eu-securities-legal-counsel-crowdfunding-tokenization` | S1, S2, S12 | None | None identified | Real product only |
+| `eu-tokenization-expansion-specialist` | S1, S6, S9 | Pass 1 (SEP-12 title); pass 2 (clawback example, item 16) | None identified | Real product only |
+| `eu-web-accessibility-compliance-wcag-eaa` | S10 | None | None identified | Usable now: accessibility applies to the current demo UI |
+| `eu-web3-governance-advisor` | S2 | Pass 1 (Swiss foundation) | Legal-wrapper detail is member-state specific | Real product only |
+| `fintech-ux-design-for-eu-crowdfunding` | S1 | None | None identified | Usable now: jargon translation, disclosure layout, dual-currency display and wallet UX apply to the demo UI |
+| `select-eu-compliant-stellar-funding-portals` | S7, S9 | Pass 2 (SEP-20 removed, Bitbond currency, EU terminology; item 17) | No provider's current authorization is verified; the guide now instructs register checks | Real product only |
+| `stella-eu-payment-rails-integration` | S6, S9 | Pass 1 (provider verification wording) | Provider availability changes fast; verify at integration time | Real product only (the demo uses testnet USDC) |
+| `stellar-eu-compliance-monitor` | S1, S6 (current content is the community-manager text) | Pass 2 (duplicate notice; frontmatter name corrected - it carried the community-manager name; item 19) | The rewritten monitoring version is proposed to the owner separately | Real product only |
+| `stellar-eu-crowdfunding-community-manager` | S1, S6 | Pass 1 (KIIS terminology, EURC) | None identified | Real product only |
+| `stellar-eu-crowdfunding-compliance-devrel` | S1, S9 | Pass 1 (SEP numbering); pass 2 (clawback framing, item 16) | None identified | Real product only |
+| `stellar-eu-crowdfunding-compliance-risk` | S2 (Art. 13), S4, S9 | Pass 1 (clawback, withdrawal periods, TFR scope); pass 2 (clawback constraint, item 16) | None identified | Real product only |
+| `stellar-eu-crowdfunding-compliance-support` | S1, S9 | Pass 1 (SEP-41, knowledge-test terminology, Rabet) | None identified | Real product only |
+| `stellar-eu-crowdfunding-growth-analytics` | S1, S6 | Pass 1 (EURC) | None identified | Real product only |
+| `stellar-eu-crowdfunding-gtm-strategy` | S1, S9 | Pass 1 (SEP-20 custody mis-cite, BaFin/clawback claim) | None identified | Real product only |
+| `stellar-eu-crowdfunding-regulatory-compliance` | S1, S9 | None | None identified | Real product only |
+| `stellar-eu-crowdfunding-smart-contract-auditor` | S9 (plus consistency with the Soroban security set) | None | None identified | Usable now: the audit method (reentrancy, overflow, access control, cap/refund invariants) applies to the demo contract |
+| `stellar-eu-tokenization-api-design` | S2, S9, S11 | None | None identified | Usable now: endpoint and XDR-envelope patterns fit the demo backend; the MiCA/KYC metadata layer is for the real product |
+| `stellar-eu-tokenization-architecture` | S1, S9 | Pass 1 (EUR 5M scope); pass 2 (clawback 'as required by EU law', item 16) | None identified | Real product only |
+| `stellar-eu-tokenization-custodian` | S2 (Art. 75, fresh check 2026-10-30), S9 | Pass 1 (SEP-30, CAP-0035, clawback) | None identified | Real product only |
+| `stellar-eu-tokenization-transfer-agent` | S1, S9 | None | None identified | Real product only |
+| `stellar-eu-tokenization-treasury-management` | S1, S9 | Pass 1 (SEP numbering, Art. 12 mis-cite) | The 1:1 reserve framing is backing practice for fiat-backed tokens, not a platform legal mandate (noted in text) | Real product only |
+| `stellar-eu-tokenization-treasurymanagement` | S1, S9 | Pass 2 (near-duplicate notice, item 19) | Folding its two unique points into the canonical guide is proposed to the owner separately | Real product only |
+| `stellar-eu-tokenized-crowdfunding-compliance` | S1, S9 | Pass 1 (clawback); pass 2 (KYC/AML clawback conflation, item 16) | None identified | Real product only |
+
+Count reconciliation: the first pass corrected 28 guides; the second pass
+changed 11 more guides (items 16-19), of which 4
+(`eu-crowdfunding-tokenization-compliance`,
+`eu-crypto-asset-crowdfunding-cybersecurity-compliance`,
+`select-eu-compliant-stellar-funding-portals`,
+`stellar-eu-tokenization-treasurymanagement`) had no first-pass correction.
+So 32 of the 46 guides carry at least one correction across both passes, and
+14 needed no change in either pass. 7 of the 11 second-pass changes are
+further corrections to guides already corrected in the first pass.
+
+Remaining limits, unchanged from the first pass: member-state administrative
+practice (BaFin/AMF processes) and national tax, insurance and custody detail
+beyond the concrete claims listed above were not re-verified; those sections
+point to local professionals and should be read that way. This review found
+and fixed documentation errors; it is not legal advice or certification.
+
+## Usefulness classification of the full collection (2026-10-30)
+
+Every catalog entry was classified against the current project: the live
+testnet demo (Soroban escrow contract, Freighter wallet, backend;
+non-transferable contribution balances, all-or-nothing funding, atomic cap)
+and the intended real product (an EU-compliant tokenized crowdfunding
+platform). **Useful** = useful now, for the demo and its ongoing development.
+**Useful but not for now** = useful later, for the real product. **Not a fit
+for this project** = no relevant use in either. Classification is independent
+of inclusion; rights status is unchanged.
+
+### Stellar development
+
+Useful now (included): `soroban-contracts`, `stellar-cli`, `stellar-rpc`,
+`stellar-sdks`, `soroban-testing` - the contract, tooling and test stack the
+demo is built on. `accounts`, `assets`, `operations`, `fees` - account,
+asset, transaction and fee mechanics every demo flow touches.
+`frontend-integration` - wallet connection and signing in the demo UI.
+`mcp-servers` - AI-assisted development tooling for Stellar.
+`soroban-security`, `smart-contract-security`, `soroban-common-mistakes` -
+access control, cap and refund checks on the live testnet contract are
+current work, not a future concern. `horizon-legacy` - bounded auxiliary
+use: the guide itself says prefer RPC for new work, but it helps with the
+existing classic trustline/funding queries the testnet flow still uses.
+
+Useful now (not included): `smart-contracts`, `soroban`, `storage`, `tools`,
+`standards`, `data` - same development areas as the included set (contract
+work, storage/TTL, local tooling, standards reference, chain-data queries).
+`assets`, `stellar-assets`, `stellar-cli`, `stellarskills-accounts`,
+`stellarskills-assets`, `stellarskills-fees`, `stellarskills-operations`,
+`stellarskills-rpc` - content overlaps the included nrxschool versions.
+`openzeppelin` - audited contract building blocks for the demo contract.
+`security` (overlaps the included security set) and `develop-secure-contracts`
+(AGPL-3.0-only; inclusion decision unchanged) - secure contract work is
+current work. `horizon` - same bounded auxiliary use as `horizon-legacy`.
+
+Useful later (included): `dex-amm` (trading and liquidity; the demo token is
+non-transferable), `seps-anchors` (fiat rails for the real product).
+
+Useful later (not included): `anchors`, `seps` (anchor and KYC standards for
+real money flows), `dex`, `soroswap-sdk` (secondary market and swaps, subject
+to the secondary-market rules), `oracles` (price/valuation feeds),
+`data-indexers`, `openzeppelin-relayer` (production data and transaction
+infrastructure), `scaffold-stellar`, `setup-stellar-contracts`,
+`stellar-builder-quickstart` (the production rebuild),
+`upgrade-stellar-contracts` (contract upgrade path), `stellar-help` (belongs
+with the BMAD workflow set), plus the previously classified `passkeys` and
+`smart-accounts`.
+
+Not a fit (included): `nearx-contributing-guide` (about contributing to a
+different repository).
+
+Not a fit (not included): `bridge`, `cross-chain`, `cross-chain2`,
+`send-payment`, `send-raw`, `check-balance` (EVM bridging and agent-executed
+payments), `privacy`, `zk-proofs` (confidential-transfer tooling pulls
+against a KYC-transparent regulated product).
+
+### EU compliance and legal (46)
+
+Each guide was read in full and re-checked on 2026-10-30 (record above).
+Five are useful now, because their core content applies to the current demo
+work even though their compliance layer targets the real product:
+`eu-compliant-stellar-crowdfunding-engineering` (escrow, refund and
+atomic-settlement mechanics for the Soroban contract),
+`stellar-eu-crowdfunding-smart-contract-auditor` (the audit method applies to
+the demo contract), `stellar-eu-tokenization-api-design` (endpoint and
+XDR-envelope patterns for the demo backend), `fintech-ux-design-for-eu-crowdfunding`
+and `eu-web-accessibility-compliance-wcag-eaa` (both apply to the current
+demo UI). The other 41 are useful but not for now: licensing, investor
+protection, custody, tax, sanctions, treasury and go-to-market groundwork
+that only binds once the platform handles real investors and real money.
+
+### Stellar Community Fund (13)
+
+Unchanged: all 13 useful but not for now (direct fit for an SCF application).
+
+### Product and workflow (BMAD-style)
+
+Useful now: `code-review` (review of ongoing demo changes).
+Useful but not for now: the other 16 - product discovery, PRD, architecture,
+UX, story execution and documentation for the real product build.
+
+### Third-party project skills
+
+Useful now: `sozu-faucet` (unchanged).
+Useful but not for now: `pollar-wallet-auth`, `blux` (wallet onboarding for
+non-crypto-native users), `caatinga` (deployment orchestration for the
+production build), `cosmospay`, `stellartools-payments` (payment/checkout
+integration options; regulated investment flows still need licensed rails),
+`trustless-work-dev` (escrow building blocks; the demo's model is
+all-or-nothing escrow), `lumenloop-mcp-connect` (powers the ecosystem
+scouting set), `stellar-anchor-skill` (fiat on/off-ramp implementation layer;
+the inclusion decision is unchanged).
+Not a fit: `agentic-payments`, `mpp`, `x402`, `x402-stellar-checks`,
+`x402-stellar-context`, `nirium-agentic-payments`, `pay-link`, `pay-per-call`,
+`wasit` (agent-to-agent payment protocols), `xoxno-lending`,
+`xoxno-lending-contracts`, `xoxno-lending-data`, `xoxno-lending-liquidations`,
+`xoxno-lending-sdk`, `xoxno-lending-troubleshooting`, `xoxno-swap-aggregator`,
+`defindex-sdk-skill`, `sodax` (DeFi lending and cross-chain DeFi),
+`cogladius`, `contextio`, `eunomia`, `pmll`, `stellar-agent-search-mcp`
+(unrelated agent tooling).
+
+### Ecosystem intelligence
+
+Unchanged: `stellar-scout` and the 11 not-included scouting skills are useful
+but not for now. `stellar-prices-api` joins them: price display and valuation
+cross-checks belong to the real product, not the testnet demo.
+
+### Research and writing
+
+Useful now: `deep-research` (supports the project's ongoing regulatory and
+ecosystem research). Useful but not for now: `fetch-external-doc` (belongs to
+the SCF workflow). Not a fit: the 12 `crypto-*` skills (academic
+cryptography research and paper writing).
+
+### Agent workflow infrastructure
+
+Useful now: `investigate` (debugging during active demo development).
+Useful but not for now: `agent-browser-webauthn` (previously classified),
+`audit-reviewability`, `review-edge-case-hunter` (codebase hardening before
+production), `ingest-sdk` (production ledger data pipeline), `why` (Stellar
+positioning for SCF and go-to-market).
+Not a fit: `bench-skills`, `cloudflare-observability-review`,
+`golden-truth`, `improvements-pipeline`, `learning-loop`,
+`live-drift-resolution`, `navigate-skills`, `optimize-skills`,
+`retrieval-system-audit`, `run-evals`, `truth-maintenance` (these maintain
+the stellar-build / stellar-raven-codemode skill-collection tooling itself),
+`discover`, `onboard` (MPP/agent-wallet payment tooling), `reprompt`,
+`routing-agent-work`, `skill router stellar new` (orchestration meta-tooling),
+`stellarskills-zk-proofs`, `sub-rosa` (ZK/sealed-bid tooling).
