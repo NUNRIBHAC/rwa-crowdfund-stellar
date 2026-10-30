@@ -2,22 +2,24 @@
 
 This file classifies the full campaign list the user supplied on WhatsApp on 2026-10-30 (19:06 WET). The earlier section 11A of `conda-capital-platform-blueprint-2026-10-30.md` covers only the 12 campaigns in the ZIP archive and stays unchanged. Companion CSV with one row per input entry and per-row evidence: `conda-full-list-by-project-type.csv`.
 
+The 18 activity categories below are an analyst grouping made for this document. They are not CONDA's own taxonomy; CONDA's own industry chip is kept in its own column.
+
 ## 1. Input entries, URLs and assets
 
-| Item                                                                               |                                        Count |
-| ---------------------------------------------------------------------------------- | -------------------------------------------: |
-| Numbered rows supplied (IDs 325-594, no gaps, no duplicate IDs)                    |                                          270 |
-| Numbered rows with a URL                                                           |                                          269 |
-| Numbered rows without a URL (row 378)                                              |                                            1 |
-| Unnumbered URL entries (orphan)                                                    |                                            1 |
-| Distinct URLs supplied (269 numbered + 1 orphan)                                   |                                          270 |
-| German pages (`/kampagnen/`) / English pages (`/en/campaigns/`) among the 270 URLs |                                     250 / 20 |
-| Unique offerings (asset IDs) across the 269 numbered URLs                          |                                          248 |
-| Orphan URL asset                                                                   | same asset as row 474 (adds no new offering) |
+| Item                                                                                           |                                           Count |
+| ---------------------------------------------------------------------------------------------- | ----------------------------------------------: |
+| Numbered rows supplied (IDs 325-594, no gaps, no duplicate IDs)                                |                                             270 |
+| Numbered rows with a URL                                                                       |                                             269 |
+| Numbered rows without a URL (row 378)                                                          |                                               1 |
+| Unnumbered URL entries (orphan)                                                                |                                               1 |
+| Distinct URLs supplied (269 numbered + 1 orphan)                                               |                                             270 |
+| German pages (`/kampagnen/`) / English pages (`/en/campaigns/`) among the 270 URLs             |                                        250 / 20 |
+| Unique offerings across the 269 numbered URLs, counted by the asset ID in each page's metadata |                                             248 |
+| Orphan URL asset                                                                               | same asset ID as row 474 (adds no new offering) |
 
-Row 378 arrived as "| 378 | Not specified |" with no URL. One URL, `https://conda-capital.com/en/campaigns/ubergossene-alm-resort-subordinate-bond`, appeared unnumbered after row 594. They are kept as two separate entries. The orphan page shares its asset ID with row 474 (German Uebergossene Alm page), so it is the English page of the same offering. That proves a translation of 474. It does not prove it belongs to row 378: it is only a candidate. Row 378 is left unclassified.
+Row 378 arrived as "| 378 | Not specified |" with no URL. One URL, `https://conda-capital.com/en/campaigns/ubergossene-alm-resort-subordinate-bond`, appeared unnumbered after row 594. They are kept as two separate entries. The orphan page shares its asset ID with row 474 (German Uebergossene Alm page), so it is the English page of the same offering. That shows a translation of 474. It does not show that it belongs to row 378: it is only a candidate. Row 378 is left unclassified.
 
-All 270 URLs were fetched live on 2026-10-30. Row 378 has no page. The user label on every numbered row is "Not specified".
+All 270 URLs were fetched live on 2026-10-30. Row 378 has no page. The user label on every numbered row is "Not specified". The 248 count rests on the asset ID the page exposes; it was not cross-checked against any other source.
 
 ## 2. Translations and tranches
 
@@ -28,27 +30,29 @@ Distinct tranches, kept separate (different asset IDs): Giesinger Braeu 1-6 (565
 ## 3. Method and limits
 
 - Each page was read live; the CSV `evidence` column quotes the first 200 characters of the page summary or description that the classification rests on.
-- `site_industry_chip` is CONDA's own label. It exists on 63 of 270 pages only. `activity_category` is my classification of what the funded business does, so the two can differ; differences are listed in `chip_conflict`.
-- `basis` shows how solid each row is. Pages 343 (AVORIS Darlehen 2020), 447 (Kollitsch Immobilien Anleihe 2020) and 527 (SCUBAJET) have no description. 343 and 447 are filed as real estate on title and issuer name only. 527 is unclear.
+- `site_industry_chip` is CONDA's own label. It exists on 63 of 270 pages only. `activity_category` is the analyst grouping of what the funded business does, so the two can differ; differences are listed in `chip_conflict`.
+- `basis` shows how solid each row is. Pages 343 (AVORIS Darlehen 2020), 447 (Kollitsch Immobilien Anleihe 2020) and 527 (SCUBAJET) have no description. 343 and 447 are tentatively filed as real estate on title and issuer name only. 527 is unclear.
 - `instrument_hint` comes from titles and contract document names. It is not a verified legal form.
 - Each row has one category. Several are judgement calls (food platforms, bike accessories, HMW Mobility, FMTG as hotel operator). The reasoning is in `evidence`.
 
 ## 4. The seven earlier categories were not enough
 
-They covered only the 12 ZIP campaigns. This list needs 18 activity categories. Counts below are computed from the CSV for the 269 numbered rows with a URL.
+They covered only the 12 ZIP campaigns. This list needs 18 analyst categories (real estate is shown as two rows, confirmed and tentative, so the table has 19 lines). Counts below are computed from the CSV for the 269 numbered rows with a URL.
 
 Through the four-way lens you named:
 
-- Corporate / other operating business: 208
-- Energy: 29
 - Hotel / hospitality: 28
-- Real estate: not verified: 2
-- Real estate: residential + commercial: 1
-- Real estate: commercial/office: 1
+- Energy: 29
+- Real estate: confirmed: 2
+- Real estate: tentative, unverified (title/issuer only): 2
+- Corporate / other operating business: 207
+- Unknown (page empty): 1
 
-### Real estate assertion
+### Real estate
 
-Four rows are real estate projects: 394 Kremplhof (Leoben, page text: living and working, so residential plus commercial), 476 UKO-Tower (office/knowledge park, page text: "Immobilienprojekt"), and 343 and 447, which are real estate on title or issuer only and not verified. No campaign in this list is confirmed as a purely residential development. Prefab or mobile housing makers (448 Heise Haus, 518 McCube, 338 and 586 Wohnwagon) and building product makers (489/593 KAPO windows, 534 LCT light concrete) are filed as building products, not property projects. Hotel operators and holdings (FMTG, Moerwald, Familux, COOEE alpin, Uebergossene Alm, MyGym) are filed as hotels or sports by what they run. Some of those loans may fund hotel buildings; the pages describe corporate funding, so they are not counted as real estate.
+Two rows are confirmed real estate projects from their page text: 394 Kremplhof (Leoben, "Wohnen und Arbeiten", so residential plus commercial) and 476 UKO-Tower (office and knowledge park, described as an "Immobilienprojekt"). Two more, 343 AVORIS Darlehen 2020 and 447 Kollitsch Immobilien Anleihe 2020, are tentative: their pages are empty and the filing rests on title and issuer name only. No campaign is confirmed as a purely residential development.
+
+Prefab or mobile housing makers (448 Heise Haus, 518 McCube, 338 and 586 Wohnwagon) and building product makers (489/593 KAPO windows, 534 LCT light concrete) are filed as building products, not property projects. Hotel operators and holdings (FMTG, Moerwald, Familux, COOEE alpin, Uebergossene Alm, MyGym) are filed by what they run. Some of those loans may fund buildings; the pages describe corporate funding, so they are not counted as real estate.
 
 ## 5. Counts by activity category
 
@@ -68,9 +72,10 @@ Four rows are real estate projects: 394 Kremplhof (Leoben, page text: living and
 | Agriculture, environment and recycling     | 10      | 10               |
 | Building products and prefab housing       | 7       | 6                |
 | Financial services and investment vehicles | 5       | 5                |
-| Real estate projects                       | 4       | 4                |
 | Education and aviation training            | 4       | 2                |
 | Other transport and logistics              | 3       | 3                |
+| Real estate (tentative, unverified)        | 2       | 2                |
+| Real estate projects (confirmed)           | 2       | 2                |
 | Unclear from available evidence            | 1       | 1                |
 | **Total**                                  | **269** | **248**          |
 
@@ -386,15 +391,6 @@ Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplica
 | 536 | INYOVA-CROWDINVESTING           | Yova AG                | -                     | page text                      |       |
 | 557 | Borza terjatev                  | BORZA TERJATEV d.o.o.  | -                     | page text                      |       |
 
-### Real estate projects (4 rows)
-
-| IDs | Campaign                                            | Issuer                              | Chip         | Basis                                            | Notes                                                                                                                                         |
-| --- | --------------------------------------------------- | ----------------------------------- | ------------ | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| 343 | AVORIS Darlehen 2020                                | AVORIS GmbH                         | -            | title/issuer name only (page has no description) | not determined: page has no description; AVORIS also issues 394 (real estate); page has no description; classification from title/issuer only |
-| 394 | Kremplhof Darlehen 2020                             | AVORIS Kremplhof GmbH               | -            | page text                                        | residential + commercial ("Wohnen und Arbeiten", Leoben); page text                                                                           |
-| 447 | KOLLITSCH MANAGEMENT GMBH - IMMOBILIEN ANLEIHE 2020 | KOLLITSCH - IMMOBILIEN ANLEIHE 2020 | -            | title/issuer name only (page has no description) | not determined: title says "Immobilien Anleihe", page has no description; page has no description; classification from title/issuer only      |
-| 476 | INVESTIEREN IN SALZBURGS SILICON VALLEY!            | UKO Holding GmbH                    | Construction | site industry chip + page text                   | commercial/office (UKO-Tower, knowledge park, Salzburg); page text                                                                            |
-
 ### Education and aviation training (4 rows)
 
 | IDs       | Campaign                                           | Issuer                        | Chip                   | Basis                          | Notes |
@@ -409,6 +405,20 @@ Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplica
 | 371 | Camper Gold   | Campergold GmbH    | -    | page text |       |
 | 457 | Lieferschotte | Lieferschotte GmbH | -    | page text |       |
 | 464 | myrobin       | myrobin GmbH       | -    | page text |       |
+
+### Real estate (tentative, unverified) (2 rows)
+
+| IDs | Campaign                                            | Issuer                              | Chip | Basis                                            | Notes                                                                                                                                         |
+| --- | --------------------------------------------------- | ----------------------------------- | ---- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 343 | AVORIS Darlehen 2020                                | AVORIS GmbH                         | -    | title/issuer name only (page has no description) | not determined: page has no description; AVORIS also issues 394 (real estate); page has no description; classification from title/issuer only |
+| 447 | KOLLITSCH MANAGEMENT GMBH - IMMOBILIEN ANLEIHE 2020 | KOLLITSCH - IMMOBILIEN ANLEIHE 2020 | -    | title/issuer name only (page has no description) | not determined: title says "Immobilien Anleihe", page has no description; page has no description; classification from title/issuer only      |
+
+### Real estate projects (confirmed) (2 rows)
+
+| IDs | Campaign                                 | Issuer                | Chip         | Basis                          | Notes                                                               |
+| --- | ---------------------------------------- | --------------------- | ------------ | ------------------------------ | ------------------------------------------------------------------- |
+| 394 | Kremplhof Darlehen 2020                  | AVORIS Kremplhof GmbH | -            | page text                      | residential + commercial ("Wohnen und Arbeiten", Leoben); page text |
+| 476 | INVESTIEREN IN SALZBURGS SILICON VALLEY! | UKO Holding GmbH      | Construction | site industry chip + page text | commercial/office (UKO-Tower, knowledge park, Salzburg); page text  |
 
 ### Unclear from available evidence (1 rows)
 
