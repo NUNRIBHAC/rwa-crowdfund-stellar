@@ -10,11 +10,11 @@ First live deployment of the reviewed crowdfund contract on Stellar testnet. No 
 
 ## Deployed contracts (testnet, Wasm hash `202c9d7e...`, USDC SAC `CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA`)
 
-| Registry id | Contract ID | Goal (USDC) | Deadline | Purpose |
-|---|---|---|---|---|
-| demo-solar | `CCBIMGPHIOUFN6IC6MYPFXOGJQIRJHHDXA2Y7LQDCYBSJOKHULICO6NY` | 500 | 2026-11-05 ~20:50 UTC | User-facing demo |
-| e2e-success | `CAF673HYNQLEJJH5XNNZUMXAJQOBNN5FCAOQFBTPTCZZX45UG6PCF5WJ` | 10 | 2026-10-29 (passed) | Withdraw path test |
-| e2e-refund | `CBKUUNTKEJQ7RRXMG7ROOW7ZKTWKBEZLGHAMTICP3FFQRZLRB7LX6CII` | 10 | 2026-10-29 (passed) | Refund path test |
+| Registry id | Contract ID                                                | Goal (USDC) | Deadline              | Purpose            |
+| ----------- | ---------------------------------------------------------- | ----------- | --------------------- | ------------------ |
+| demo-solar  | `CCBIMGPHIOUFN6IC6MYPFXOGJQIRJHHDXA2Y7LQDCYBSJOKHULICO6NY` | 500         | 2026-11-05 ~20:50 UTC | User-facing demo   |
+| e2e-success | `CAF673HYNQLEJJH5XNNZUMXAJQOBNN5FCAOQFBTPTCZZX45UG6PCF5WJ` | 10          | 2026-10-29 (passed)   | Withdraw path test |
+| e2e-refund  | `CBKUUNTKEJQ7RRXMG7ROOW7ZKTWKBEZLGHAMTICP3FFQRZLRB7LX6CII` | 10          | 2026-10-29 (passed)   | Refund path test   |
 
 Wasm upload tx: `da2ecb9ad406b9245d595866b3ccbbcaa16f294e66cdae8d8a46a802d52e8ad6`.
 

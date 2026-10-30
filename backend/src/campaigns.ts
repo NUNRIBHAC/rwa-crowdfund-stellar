@@ -14,8 +14,7 @@ const dataDir = path.join(backendRoot, 'data');
 // secrets and state outside the repo directory.
 const storePath = () => process.env.CAMPAIGNS_STORE_PATH ?? path.join(dataDir, 'campaigns.json');
 const creatorPath = () => process.env.CREATOR_PATH ?? path.join(backendRoot, '.creator.json');
-const demoInvestorsPath = () =>
-  process.env.DEMO_INVESTORS_PATH ?? path.join(backendRoot, '.demo-investors.json');
+const demoInvestorsPath = () => process.env.DEMO_INVESTORS_PATH ?? path.join(backendRoot, '.demo-investors.json');
 
 export type InvestmentStatus =
   | 'pending_usdc' // signed USDC tx persisted, submission not yet confirmed
@@ -131,12 +130,16 @@ export const deps = {
   ensureTrustline,
   hasTrustline,
   loadAccount: (pub: string): Promise<any> => server.loadAccount(pub),
-  latestLedger: (): Promise<any> => server.ledgers().order('desc').limit(1).call().then(p => p.records[0]),
+  latestLedger: (): Promise<any> =>
+    server
+      .ledgers()
+      .order('desc')
+      .limit(1)
+      .call()
+      .then((p) => p.records[0]),
   submitTransaction: (tx: Transaction) => server.submitTransaction(tx),
-  accountPayments: (pub: string): Promise<any> =>
-    (server as any).payments().forAccount(pub).order('desc').limit(200).call(),
-  lookupTransaction: (hash: string): Promise<any> =>
-    (server as any).transactions().transaction(hash).call(),
+  accountPayments: (pub: string): Promise<any> => (server as any).payments().forAccount(pub).order('desc').limit(200).call(),
+  lookupTransaction: (hash: string): Promise<any> => (server as any).transactions().transaction(hash).call(),
   requirePlatform,
 };
 
@@ -153,8 +156,7 @@ const toCents = (usdc: number): number => {
   }
   return cents;
 };
-const centsToAmountString = (cents: number): string =>
-  `${Math.floor(cents / 100)}.${String(cents % 100).padStart(2, '0')}00000`;
+const centsToAmountString = (cents: number): string => `${Math.floor(cents / 100)}.${String(cents % 100).padStart(2, '0')}00000`;
 const centsToUsdc = (cents: number): number => cents / 100;
 
 const usdcAsset = () => new Asset(USDC.code, USDC.issuer);
@@ -164,9 +166,7 @@ const rwaAsset = (code: string, issuer: string) => new Asset(code, issuer);
 // not refunded. Pending (unconfirmed) intents count too: it is safe to
 // over-reject contributions, never to overshoot the cap.
 function investedCents(c: Campaign): number {
-  return c.investments
-    .filter((i) => i.status !== 'refunded' && i.status !== 'failed_usdc')
-    .reduce((sum, i) => sum + toCents(i.amountUsdc), 0);
+  return c.investments.filter((i) => i.status !== 'refunded' && i.status !== 'failed_usdc').reduce((sum, i) => sum + toCents(i.amountUsdc), 0);
 }
 
 // Integer token math (no float rounding drift).
@@ -185,18 +185,14 @@ function ensureBeforeDeadline(campaign: Campaign): void {
 function ensureAfterDeadline(campaign: Campaign): void {
   if (Date.now() <= Date.parse(campaign.deadline)) {
     throw new Error(
-      `campaign deadline has not passed yet (deadline ${campaign.deadline}); ` +
-        'all-or-nothing: finalize/refund are only allowed after the deadline',
+      `campaign deadline has not passed yet (deadline ${campaign.deadline}); ` + 'all-or-nothing: finalize/refund are only allowed after the deadline',
     );
   }
 }
 
 // Validates the contribution against the all-or-nothing cap. Rejects (never
 // trims) a contribution above the remaining goal; exact fill is allowed.
-function checkContribution(
-  campaign: Campaign,
-  amountUsdc: number,
-): { amountCents: number; tokens: number } {
+function checkContribution(campaign: Campaign, amountUsdc: number): { amountCents: number; tokens: number } {
   if (!Number.isFinite(amountUsdc) || amountUsdc <= 0) throw new Error('amountUsdc must be > 0');
   const amountCents = toCents(amountUsdc);
   if (amountCents <= 0) throw new Error('amountUsdc too small (below 1 cent)');
@@ -204,10 +200,7 @@ function checkContribution(
   const remainingCents = goalCents - investedCents(campaign);
   if (remainingCents <= 0) throw new Error('goal already reached');
   if (amountCents > remainingCents) {
-    throw new Error(
-      `contribution exceeds the remaining goal (${centsToUsdc(remainingCents)} USDC left); ` +
-        'this campaign is capped at the target',
-    );
+    throw new Error(`contribution exceeds the remaining goal (${centsToUsdc(remainingCents)} USDC left); ` + 'this campaign is capped at the target');
   }
   const tokens = tokensFor(amountCents, goalCents, campaign.supply);
   if (tokens <= 0) throw new Error('amount too small: does not generate tokens');
@@ -221,11 +214,7 @@ function loadCreatorKp(): Keypair {
   }
   const kp = Keypair.random();
   fs.mkdirSync(path.dirname(creatorPath()), { recursive: true });
-  fs.writeFileSync(
-    creatorPath(),
-    JSON.stringify({ secret: kp.secret(), publicKey: kp.publicKey() }, null, 2),
-    { encoding: 'utf8', mode: 0o600 },
-  );
+  fs.writeFileSync(creatorPath(), JSON.stringify({ secret: kp.secret(), publicKey: kp.publicKey() }, null, 2), { encoding: 'utf8', mode: 0o600 });
   return kp;
 }
 
@@ -238,8 +227,7 @@ function demoSecretOf(pub: string): string | null {
 
 const errMsg = (e: unknown): string => (e instanceof Error ? e.message : String(e));
 
-const txResultCode = (e: any): string | null =>
-  e?.response?.data?.extras?.result_codes?.transaction ?? null;
+const txResultCode = (e: any): string | null => e?.response?.data?.extras?.result_codes?.transaction ?? null;
 
 // Reconcile a persisted intent hash against the ledger before trusting or
 // discarding it:
@@ -265,13 +253,7 @@ async function reconcileTx(hash: string): Promise<'applied' | 'failed' | 'not_fo
 }
 
 // Build and sign a payment offline; nothing is broadcast here.
-function buildSignedPayment(
-  account: any,
-  from: Keypair,
-  toPub: string,
-  asset: Asset,
-  amountStr: string,
-): { xdr: string; hash: string } {
+function buildSignedPayment(account: any, from: Keypair, toPub: string, asset: Asset, amountStr: string): { xdr: string; hash: string } {
   const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase })
     .addOperation(Operation.payment({ destination: toPub, asset, amount: amountStr }))
     .setTimeout(180)
@@ -418,7 +400,11 @@ async function verifyTokenReturn(
     if (!/^\d+$/.test(String(r?.paging_token)) || !/^\d+$/.test(deliveryOrder)) continue;
     if (BigInt(r.paging_token) <= BigInt(deliveryOrder)) continue;
     let amount: bigint;
-    try { amount = assetUnits(r.amount); } catch { continue; }
+    try {
+      amount = assetUnits(r.amount);
+    } catch {
+      continue;
+    }
     if (amount <= 0n || amount > BigInt(inv.tokens) * 10000000n) continue;
     candidates.set(r.id, { id: r.id, amount });
   }
@@ -452,9 +438,7 @@ export function listDemoInvestors(): string[] {
 
 export async function seedDemoInvestors(amounts?: number[]): Promise<{ investors: string[] }> {
   return withLock(async () => {
-    const map = fs.existsSync(demoInvestorsPath())
-      ? JSON.parse(fs.readFileSync(demoInvestorsPath(), 'utf8'))
-      : {};
+    const map = fs.existsSync(demoInvestorsPath()) ? JSON.parse(fs.readFileSync(demoInvestorsPath(), 'utf8')) : {};
     const plat = deps.requirePlatform();
     const usdc = usdcAsset();
     for (let n = Object.keys(map).length; n < 3; n++) {
@@ -485,12 +469,7 @@ export async function listCampaigns(): Promise<Campaign[]> {
   return loadStore().campaigns;
 }
 
-export async function createCampaign(input: {
-  name: string;
-  goalUsdc: number;
-  deadline?: string;
-  supply?: number;
-}): Promise<Campaign> {
+export async function createCampaign(input: { name: string; goalUsdc: number; deadline?: string; supply?: number }): Promise<Campaign> {
   return withLock(async () => {
     const name = (input.name ?? '').trim();
     const goalCents = toCents(Number(input.goalUsdc));
@@ -500,9 +479,7 @@ export async function createCampaign(input: {
     if (supply <= 0) throw new Error('supply must be > 0');
     if (!hasUsdcConfig) throw new Error('USDC_ISSUER not configured (backend/.env)');
 
-    const deadline = input.deadline
-      ? new Date(input.deadline).toISOString()
-      : new Date(Date.now() + 24 * 3600 * 1000).toISOString();
+    const deadline = input.deadline ? new Date(input.deadline).toISOString() : new Date(Date.now() + 24 * 3600 * 1000).toISOString();
     if (Number.isNaN(Date.parse(deadline))) throw new Error('invalid deadline');
     if (Date.parse(deadline) <= Date.now()) throw new Error('deadline must be in the future');
 
@@ -553,18 +530,14 @@ export async function createCampaign(input: {
 
 // Confirms the persisted USDC intent (if still pending), then delivers tokens,
 // intent-first. Shared by invest(), submitSignedInvest() and retryPending().
-async function settleInvestment(
-  store: Store,
-  campaign: Campaign,
-  inv: Investment,
-): Promise<void> {
+async function settleInvestment(store: Store, campaign: Campaign, inv: Investment): Promise<void> {
   const plat = deps.requirePlatform();
   const rwa = rwaAsset(campaign.code, plat.publicKey());
 
   if (inv.status === 'pending_usdc') {
     // A positive, hash-bound failed ledger record is conclusive: atomic
     // transaction operations did not execute. Absence/expiry never suffices.
-    if (await reconcileTx(inv.usdcTx) === 'failed') {
+    if ((await reconcileTx(inv.usdcTx)) === 'failed') {
       inv.status = 'failed_usdc';
       inv.error = 'USDC transaction conclusively failed on ledger; reservation released, no funds received';
       saveStore(store);
@@ -572,40 +545,33 @@ async function settleInvestment(
     }
     const slot = { xdr: inv.usdcXdr, hash: inv.usdcTx || undefined };
     try {
-    inv.usdcTx = await executePayment(
-      slot,
-      async () => {
-        // This closure only runs when the intent has no persisted hash yet
-        // (a fresh build); once an intent carries a hash, reconcile-and-hold
-        // governs and nothing is rebuilt. Fresh builds are only possible for
-        // demo accounts (the platform holds their secrets). A Freighter-signed
-        // intent that can never apply must be re-signed by the investor: keep
-        // the record pending with an error.
-        const secret = demoSecretOf(inv.investorPub);
-        if (!secret) {
-          throw new Error(
-            'USDC intent expired or invalid and cannot be rebuilt without the investor signature; ' +
-              'the investor must submit a new signed XDR',
-          );
-        }
-        const kp = Keypair.fromSecret(secret);
-        const account = await deps.loadAccount(kp.publicKey());
-        return buildSignedPayment(
-          account,
-          kp,
-          deps.requirePlatform().publicKey(),
-          usdcAsset(),
-          centsToAmountString(toCents(inv.amountUsdc)),
-        );
-      },
-      () => {
-        inv.usdcXdr = slot.xdr;
-        inv.usdcTx = slot.hash ?? inv.usdcTx;
-        saveStore(store);
-      },
-    );
+      inv.usdcTx = await executePayment(
+        slot,
+        async () => {
+          // This closure only runs when the intent has no persisted hash yet
+          // (a fresh build); once an intent carries a hash, reconcile-and-hold
+          // governs and nothing is rebuilt. Fresh builds are only possible for
+          // demo accounts (the platform holds their secrets). A Freighter-signed
+          // intent that can never apply must be re-signed by the investor: keep
+          // the record pending with an error.
+          const secret = demoSecretOf(inv.investorPub);
+          if (!secret) {
+            throw new Error(
+              'USDC intent expired or invalid and cannot be rebuilt without the investor signature; ' + 'the investor must submit a new signed XDR',
+            );
+          }
+          const kp = Keypair.fromSecret(secret);
+          const account = await deps.loadAccount(kp.publicKey());
+          return buildSignedPayment(account, kp, deps.requirePlatform().publicKey(), usdcAsset(), centsToAmountString(toCents(inv.amountUsdc)));
+        },
+        () => {
+          inv.usdcXdr = slot.xdr;
+          inv.usdcTx = slot.hash ?? inv.usdcTx;
+          saveStore(store);
+        },
+      );
     } catch (e) {
-      if (await reconcileTx(inv.usdcTx) === 'failed') {
+      if ((await reconcileTx(inv.usdcTx)) === 'failed') {
         inv.status = 'failed_usdc';
         inv.error = 'USDC transaction conclusively failed on ledger; reservation released, no funds received';
         saveStore(store);
@@ -643,10 +609,7 @@ async function settleInvestment(
   }
 }
 
-export async function invest(
-  id: string,
-  input: { investorPub: string; amountUsdc: number },
-): Promise<Campaign> {
+export async function invest(id: string, input: { investorPub: string; amountUsdc: number }): Promise<Campaign> {
   return withLock(async () => {
     const store = loadStore();
     const campaign = store.campaigns.find((c) => c.id === id);
@@ -670,12 +633,7 @@ export async function invest(
     // Resume an identical persisted intent instead of charging again (e.g. the
     // user clicked twice, or a previous attempt crashed before confirming).
     const amountCents = toCents(Number(input.amountUsdc));
-    let inv = campaign.investments.find(
-      (i) =>
-        i.investorPub === investorPub &&
-        i.status === 'pending_usdc' &&
-        toCents(i.amountUsdc) === amountCents,
-    );
+    let inv = campaign.investments.find((i) => i.investorPub === investorPub && i.status === 'pending_usdc' && toCents(i.amountUsdc) === amountCents);
 
     if (!inv) {
       const { tokens } = checkContribution(campaign, Number(input.amountUsdc));
@@ -700,13 +658,7 @@ export async function invest(
 
       // Build and persist the signed USDC payment intent before broadcasting.
       const account = await deps.loadAccount(investorPub);
-      const intent = buildSignedPayment(
-        account,
-        investor,
-        plat.publicKey(),
-        usdc,
-        centsToAmountString(amountCents),
-      );
+      const intent = buildSignedPayment(account, investor, plat.publicKey(), usdc, centsToAmountString(amountCents));
       inv.usdcXdr = intent.xdr;
       inv.usdcTx = intent.hash;
       saveStore(store);
@@ -729,15 +681,11 @@ export async function finalize(id: string): Promise<Campaign> {
     const totalCents = investedCents(campaign);
     if (totalCents <= 0) throw new Error('no investments; cannot finalize');
     if (totalCents < toCents(campaign.goalUsdc)) {
-      throw new Error(
-        `goal not reached (${centsToUsdc(totalCents)}/${campaign.goalUsdc}); refund instead`,
-      );
+      throw new Error(`goal not reached (${centsToUsdc(totalCents)}/${campaign.goalUsdc}); refund instead`);
     }
     const unsettled = campaign.investments.filter((i) => i.status !== 'confirmed' && i.status !== 'refunded' && i.status !== 'failed_usdc');
     if (unsettled.length > 0) {
-      throw new Error(
-        `investments not fully settled (${unsettled.map((i) => i.id).join(', ')}); run retry-pending first`,
-      );
+      throw new Error(`investments not fully settled (${unsettled.map((i) => i.id).join(', ')}); run retry-pending first`);
     }
 
     // Idempotent payout, intent-first: the signed payout tx is persisted before
@@ -752,13 +700,7 @@ export async function finalize(id: string): Promise<Campaign> {
         slot,
         async () => {
           const account = await deps.loadAccount(plat.publicKey());
-          return buildSignedPayment(
-            account,
-            plat,
-            campaign.creatorPub,
-            usdcAsset(),
-            centsToAmountString(totalCents),
-          );
+          return buildSignedPayment(account, plat, campaign.creatorPub, usdcAsset(), centsToAmountString(totalCents));
         },
         () => {
           campaign.payoutXdr = slot.xdr; // intent only; payoutTx is set after confirmation
@@ -823,8 +765,7 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
             outcome === 'unknown'
               ? `cannot reconcile token delivery ${inv.tokenTx}; refund blocked, retry later`
               : outcome === 'failed'
-                ? `token delivery ${inv.tokenTx} is recorded on the ledger as failed; ` +
-                  'refund held for manual reconciliation'
+                ? `token delivery ${inv.tokenTx} is recorded on the ledger as failed; ` + 'refund held for manual reconciliation'
                 : `token delivery intent ${inv.tokenTx} is not on the ledger in queried history, ` +
                   'which is not proof it cannot execute; refund held for manual reconciliation';
           blocked.push(inv.id);
@@ -896,13 +837,7 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
           slot,
           async () => {
             const account = await deps.loadAccount(plat.publicKey());
-            return buildSignedPayment(
-              account,
-              plat,
-              inv.investorPub,
-              usdcAsset(),
-              centsToAmountString(toCents(inv.amountUsdc)),
-            );
+            return buildSignedPayment(account, plat, inv.investorPub, usdcAsset(), centsToAmountString(toCents(inv.amountUsdc)));
           },
           () => {
             inv.refundXdr = slot.xdr; // intent only; refundTx is set after confirmation
@@ -947,13 +882,7 @@ export async function retryPending(id: string): Promise<Campaign> {
         slot,
         async () => {
           const account = await deps.loadAccount(plat.publicKey());
-          return buildSignedPayment(
-            account,
-            plat,
-            plat.publicKey(),
-            rwaAsset(campaign.code, plat.publicKey()),
-            String(campaign.supply),
-          );
+          return buildSignedPayment(account, plat, plat.publicKey(), rwaAsset(campaign.code, plat.publicKey()), String(campaign.supply));
         },
         () => {
           campaign.mintXdr = slot.xdr;
@@ -1017,7 +946,9 @@ export async function buildInvestXdr(
     const builder = new TransactionBuilder(account, {
       fee: '100',
       networkPassphrase,
-    }).addMemo(Memo.text(campaign.id)).setTimeout(900);
+    })
+      .addMemo(Memo.text(campaign.id))
+      .setTimeout(900);
     for (const op of ops) builder.addOperation(op);
     const tx = builder.build();
 
@@ -1040,10 +971,10 @@ async function validateInvestmentEnvelope(tx: Transaction, pub: string, cents: n
   }
   const now = Math.floor(Date.now() / 1000);
   const bounds = tx.timeBounds;
-  if (!bounds || Number(bounds.minTime) > now || Number(bounds.maxTime) <= now ||
-      Number(bounds.maxTime) > now + 900) throw new Error('investment requires active time bounds of at most 15 minutes');
-  if (tx.ledgerBounds || tx.minAccountSequence || tx.minAccountSequenceAge ||
-      tx.minAccountSequenceLedgerGap || tx.extraSigners?.length) throw new Error('custom preconditions not supported');
+  if (!bounds || Number(bounds.minTime) > now || Number(bounds.maxTime) <= now || Number(bounds.maxTime) > now + 900)
+    throw new Error('investment requires active time bounds of at most 15 minutes');
+  if (tx.ledgerBounds || tx.minAccountSequence || tx.minAccountSequenceAge || tx.minAccountSequenceLedgerGap || tx.extraSigners?.length)
+    throw new Error('custom preconditions not supported');
   const account = await deps.loadAccount(pub);
   const master = account.signers?.find((s: any) => s.key === pub && s.type === 'ed25519_public_key');
   if (!master || master.weight <= 0 || master.weight < Math.max(1, account.thresholds?.low_threshold ?? 1, account.thresholds?.med_threshold ?? 1)) {
@@ -1060,20 +991,23 @@ async function validateInvestmentEnvelope(tx: Transaction, pub: string, cents: n
   const reserve = BigInt(ledger.base_reserve_in_stroops);
   if (BigInt(tx.fee) < BigInt(tx.operations.length) * baseFee) throw new Error('insufficient transaction fee');
   const native = account.balances?.find((b: any) => b.asset_type === 'native');
-  const newLines = tx.operations.filter((op: any) => op.type === 'changeTrust' &&
-    !account.balances.some((b: any) => b.asset_code === op.line?.code && b.asset_issuer === op.line?.issuer)).length;
+  const newLines = tx.operations.filter(
+    (op: any) => op.type === 'changeTrust' && !account.balances.some((b: any) => b.asset_code === op.line?.code && b.asset_issuer === op.line?.issuer),
+  ).length;
   const entries = 2 + (account.subentry_count ?? 0) + (account.num_sponsoring ?? 0) - (account.num_sponsored ?? 0) + newLines;
-  if (!native || reserve <= 0n || entries < 0 || assetUnits(native.balance) - assetUnits(native.selling_liabilities ?? '0') <
-      reserve * BigInt(entries) + BigInt(tx.fee)) throw new Error('insufficient native balance for fee and reserves');
+  if (
+    !native ||
+    reserve <= 0n ||
+    entries < 0 ||
+    assetUnits(native.balance) - assetUnits(native.selling_liabilities ?? '0') < reserve * BigInt(entries) + BigInt(tx.fee)
+  )
+    throw new Error('insufficient native balance for fee and reserves');
   // This is a preflight, not a ledger guarantee. Balance/sequence can race.
   // Every ambiguous broadcast remains held; only a conclusive failed ledger
   // record can release its reservation automatically.
 }
 
-export async function submitSignedInvest(
-  id: string,
-  input: { investorPub: string; xdr: string },
-): Promise<Campaign & { duplicate?: boolean }> {
+export async function submitSignedInvest(id: string, input: { investorPub: string; xdr: string }): Promise<Campaign & { duplicate?: boolean }> {
   return withLock(async () => {
     const store = loadStore();
     const campaign = store.campaigns.find((c) => c.id === id);
@@ -1099,7 +1033,7 @@ export async function submitSignedInvest(
     // already-recorded tx never pays tokens or records twice; a still-pending
     // record is resumed instead.
     const txHash = Buffer.from(tx.hash()).toString('hex');
-    if (store.campaigns.some(c => c.id !== campaign.id && c.investments.some(i => i.usdcTx === txHash))) {
+    if (store.campaigns.some((c) => c.id !== campaign.id && c.investments.some((i) => i.usdcTx === txHash))) {
       throw new Error('transaction already assigned to another campaign');
     }
     const existing = campaign.investments.find((i) => i.usdcTx === txHash);
@@ -1116,14 +1050,16 @@ export async function submitSignedInvest(
     const payments = tx.operations.filter((o) => o.type === 'payment');
     if (payments.length !== 1) throw new Error('XDR must contain exactly one USDC payment');
     const payment = payments[0] as any;
-    if (payment.destination !== plat.publicKey() || payment.asset?.code !== USDC.code ||
-        payment.asset?.issuer !== USDC.issuer) throw new Error('XDR without a USDC payment to the platform');
+    if (payment.destination !== plat.publicKey() || payment.asset?.code !== USDC.code || payment.asset?.issuer !== USDC.issuer)
+      throw new Error('XDR without a USDC payment to the platform');
     for (const op of tx.operations as any[]) {
       if (op.source && op.source !== investorPub) throw new Error('operation source must be the investor');
       if (op.type === 'payment') continue;
-      if (op.type !== 'changeTrust' || op.limit !== '922337203685.4775807' ||
-          !((op.line?.code === USDC.code && op.line?.issuer === USDC.issuer) ||
-            (op.line?.code === campaign.code && op.line?.issuer === plat.publicKey()))) {
+      if (
+        op.type !== 'changeTrust' ||
+        op.limit !== '922337203685.4775807' ||
+        !((op.line?.code === USDC.code && op.line?.issuer === USDC.issuer) || (op.line?.code === campaign.code && op.line?.issuer === plat.publicKey()))
+      ) {
         throw new Error('unsupported investment operation');
       }
     }
@@ -1135,7 +1071,8 @@ export async function submitSignedInvest(
     const paidCents = Number(paidUnits / 100000n);
     if (!Number.isSafeInteger(paidCents)) throw new Error('USDC payment amount out of range');
     if (paidCents <= 0) throw new Error('USDC payment must be positive');
-    if (tx.memo.type !== 'text' || Buffer.from(tx.memo.value as Uint8Array).toString('utf8') !== campaign.id) throw new Error('investment memo must bind campaign id');
+    if (tx.memo.type !== 'text' || Buffer.from(tx.memo.value as Uint8Array).toString('utf8') !== campaign.id)
+      throw new Error('investment memo must bind campaign id');
     await validateInvestmentEnvelope(tx, investorPub, paidCents);
 
     // Re-validate the signed amount against the current cap inside the lock:
@@ -1144,10 +1081,7 @@ export async function submitSignedInvest(
     const remainingCents = goalCents - investedCents(campaign);
     if (remainingCents <= 0) throw new Error('goal already reached');
     if (paidCents > remainingCents) {
-      throw new Error(
-        `XDR pays more than the remaining goal (${centsToUsdc(remainingCents)} USDC left); ` +
-          'this campaign is capped at the target',
-      );
+      throw new Error(`XDR pays more than the remaining goal (${centsToUsdc(remainingCents)} USDC left); ` + 'this campaign is capped at the target');
     }
     const tokens = tokensFor(paidCents, goalCents, campaign.supply);
     if (tokens <= 0) throw new Error('amount too small: does not generate tokens');
@@ -1195,10 +1129,7 @@ export async function buildTrustlineXdr(input: {
   return { xdr: tx.toXDR(), networkPassphrase, assetCode: code };
 }
 
-export async function submitSignedTrustline(input: {
-  investorPub: string;
-  xdr: string;
-}): Promise<{ hash: string; assetCode: string }> {
+export async function submitSignedTrustline(input: { investorPub: string; xdr: string }): Promise<{ hash: string; assetCode: string }> {
   const investorPub = (input.investorPub ?? '').trim();
   if (!investorPub.startsWith('G')) throw new Error('invalid investorPub');
   if (typeof input.xdr !== 'string' || input.xdr.length === 0) throw new Error('xdr is required');
@@ -1241,7 +1172,9 @@ export async function submitSignedTrustline(input: {
       if (found && found.hash === preHash && found.successful === true) {
         return { hash: preHash, assetCode };
       }
-    } catch { /* lookup failed: still ambiguous, report with the hash */ }
+    } catch {
+      /* lookup failed: still ambiguous, report with the hash */
+    }
     throw new Error(`${errMsg(e)} (transaction ${preHash} - check this exact hash before retrying)`, { cause: e });
   }
 

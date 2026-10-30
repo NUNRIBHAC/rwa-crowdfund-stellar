@@ -9,7 +9,10 @@ const credentials = JSON.parse(process.env.INFRA_CREDENTIALS_JSON ?? '[]') as Cr
 if (credentials.length === 0) throw new Error('No infrastructure credentials configured');
 const keys = JSON.parse(process.env.INFRA_VALUATION_KEYS_JSON ?? '{}');
 const app = express();
-app.use('/api/infrastructure', infrastructureRouter(new Infrastructure(new Store(process.env.INFRA_STORE_PATH ?? path.resolve('data/infrastructure.json')), keys), credentials));
+app.use(
+  '/api/infrastructure',
+  infrastructureRouter(new Infrastructure(new Store(process.env.INFRA_STORE_PATH ?? path.resolve('data/infrastructure.json')), keys), credentials),
+);
 // Deliberately never mount legacy payment routes or a live anchor adapter here.
 const port = Number(process.env.INFRA_PORT ?? 4100);
 app.listen(port, '127.0.0.1', () => console.log(`Test-only infrastructure API at http://127.0.0.1:${port}/api/infrastructure/status`));

@@ -57,7 +57,16 @@ describe('IntentPanel state transitions', () => {
     fireEvent.click(screen.getByText('Clear confirmed record'));
     expect(props.onClear).toHaveBeenCalledOnce();
     cleanup();
-    render(<IntentPanel intent={{ ...base, status: 'BUILT' }} busy={true} onSubmit={props.onSubmit} onCheck={props.onCheck} onCancel={props.onCancel} onClear={props.onClear} />);
+    render(
+      <IntentPanel
+        intent={{ ...base, status: 'BUILT' }}
+        busy={true}
+        onSubmit={props.onSubmit}
+        onCheck={props.onCheck}
+        onCancel={props.onCancel}
+        onClear={props.onClear}
+      />,
+    );
     for (const b of screen.getAllByRole('button')) expect((b as HTMLButtonElement).disabled).toBe(true);
   });
 });

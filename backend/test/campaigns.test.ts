@@ -28,24 +28,11 @@ process.env.STELLAR_NETWORK = 'testnet';
 const platformKp = Keypair.fromSecret(process.env.PLATFORM_SECRET);
 
 const campaigns = await import('../src/campaigns.js');
-const {
-  __setDepsForTests,
-  createCampaign,
-  invest,
-  finalize,
-  refund,
-  retryPending,
-  buildInvestXdr,
-  submitSignedInvest,
-  submitSignedTrustline,
-} = campaigns;
+const { __setDepsForTests, createCampaign, invest, finalize, refund, retryPending, buildInvestXdr, submitSignedInvest, submitSignedTrustline } = campaigns;
 
 // ----- fake ledger -----
 const appliedTxHashes = new Set<string>();
-const appliedTxRecords = new Map<
-  string,
-  { hash: string; paging_token: string; created_at: string; successful: boolean; ledger?: number }
->();
+const appliedTxRecords = new Map<string, { hash: string; paging_token: string; created_at: string; successful: boolean; ledger?: number }>();
 let pagingCounter = 0;
 const paymentLog: Array<{ from: string; to: string; code: string; amount: string }> = [];
 const submitLog: string[] = []; // XDRs as submitted
@@ -86,11 +73,15 @@ __setDepsForTests({
   ensureAccount: async () => {},
   ensureTrustline: async () => {},
   hasTrustline: async () => true,
-  loadAccount: async (pub: string) => Object.assign(new Account(pub, String(sequences.get(pub) ?? 1)), {
-    signers: [{ key: pub, type: 'ed25519_public_key', weight: 1 }],
-    thresholds: { low_threshold: 1, med_threshold: 1 },
-    balances: [{ asset_type: 'native', balance: '100' }, { asset_code: 'USDC', asset_issuer: process.env.USDC_ISSUER, balance: '1000', selling_liabilities: '0', is_authorized: true }],
-  }),
+  loadAccount: async (pub: string) =>
+    Object.assign(new Account(pub, String(sequences.get(pub) ?? 1)), {
+      signers: [{ key: pub, type: 'ed25519_public_key', weight: 1 }],
+      thresholds: { low_threshold: 1, med_threshold: 1 },
+      balances: [
+        { asset_type: 'native', balance: '100' },
+        { asset_code: 'USDC', asset_issuer: process.env.USDC_ISSUER, balance: '1000', selling_liabilities: '0', is_authorized: true },
+      ],
+    }),
   latestLedger: async () => ({ base_fee_in_stroops: 100, base_reserve_in_stroops: 5000000 }),
   accountPayments: async () => {
     let i = 0;
@@ -187,15 +178,9 @@ test('cap: rejects contribution above the remaining goal, accepts exact fill', a
   const c = await createCampaign({ name: 'cap', goalUsdc: GOAL });
 
   await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 });
-  await assert.rejects(
-    invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 50 }),
-    /exceeds the remaining goal \(40 USDC left\)/,
-  );
+  await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 50 }), /exceeds the remaining goal \(40 USDC left\)/);
   await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 40 }); // exact fill
-  await assert.rejects(
-    invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 1 }),
-    /goal already reached/,
-  );
+  await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 1 }), /goal already reached/);
 });
 
 test('crash/response lost after USDC broadcast: retry confirms once, tokens delivered once', async () => {
@@ -205,18 +190,14 @@ test('crash/response lost after USDC broadcast: retry confirms once, tokens deli
 
   // The USDC payment is applied on-chain but the response is lost.
   injectedFailure = { type: 'network', applyFirst: true };
-  await assert.rejects(
-    invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 }),
-    /submission uncertain/,
-  );
+  await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 }), /submission uncertain/);
 
   const stored = readStore().campaigns.find((x: any) => x.id === c.id);
   assert.equal(stored.investments.length, 1);
   assert.equal(stored.investments[0].status, 'pending_usdc');
   assert.ok(stored.investments[0].usdcXdr, 'signed intent persisted before broadcast');
   assert.ok(stored.investments[0].usdcTx, 'intent hash persisted before broadcast');
-  const usdcPayments = () =>
-    paymentLog.filter((p) => p.code === 'USDC' && p.from === investor.publicKey());
+  const usdcPayments = () => paymentLog.filter((p) => p.code === 'USDC' && p.from === investor.publicKey());
   assert.equal(usdcPayments().length, 1, 'payment was applied despite the lost response');
 
   const firstXdr = stored.investments[0].usdcXdr;
@@ -230,9 +211,7 @@ test('crash/response lost after USDC broadcast: retry confirms once, tokens deli
   assert.equal(usdcPayments().length, 1, 'USDC must not be charged twice');
   const resubmits = submitLog.filter((x) => x === firstXdr);
   assert.equal(resubmits.length, 2, 'the identical signed tx was resubmitted');
-  const tokenPayments = paymentLog.filter(
-    (p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'),
-  );
+  const tokenPayments = paymentLog.filter((p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'));
   assert.equal(tokenPayments.length, 1, 'tokens must be delivered exactly once');
 });
 
@@ -256,9 +235,7 @@ test('tx_bad_seq with a 404 lookup holds the intent, never rebuilds it', async (
   // A later retry resubmits the identical intent; it applies exactly once.
   const after = await retryPending(c.id);
   assert.equal(after.investments[0].status, 'confirmed');
-  const tokenPayments = paymentLog.filter(
-    (p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'),
-  );
+  const tokenPayments = paymentLog.filter((p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'));
   assert.equal(tokenPayments.length, 1, 'exactly one token payment applied');
   const usdcPayments = paymentLog.filter((p) => p.code === 'USDC');
   assert.equal(usdcPayments.length, 1);
@@ -281,9 +258,7 @@ test('signed submit: replay of the same XDR does not duplicate tokens or records
   assert.equal(replay.duplicate, true);
   assert.equal(replay.investments.length, 1, 'no second investment record');
 
-  const tokenPayments = paymentLog.filter(
-    (p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'),
-  );
+  const tokenPayments = paymentLog.filter((p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'));
   assert.equal(tokenPayments.length, 1, 'no second token payment');
   const usdcPayments = paymentLog.filter((p) => p.code === 'USDC');
   assert.equal(usdcPayments.length, 1, 'no second USDC payment');
@@ -300,10 +275,7 @@ test('signed submit: crash after broadcast, replay resumes and settles once', as
   const signedXdr = tx.toXDR();
 
   injectedFailure = { type: 'network', applyFirst: true }; // applied, response lost
-  await assert.rejects(
-    submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: signedXdr }),
-    /submission uncertain/,
-  );
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: signedXdr }), /submission uncertain/);
   const stored = readStore().campaigns.find((x: any) => x.id === c.id);
   assert.equal(stored.investments[0].status, 'pending_usdc');
 
@@ -334,10 +306,7 @@ test('signed precision: an XDR paying 10.001 USDC is rejected, not rounded into 
     .setTimeout(60)
     .build();
   tx.sign(investor);
-  await assert.rejects(
-    submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: tx.toXDR() }),
-    /at most 2 decimal places/,
-  );
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: tx.toXDR() }), /at most 2 decimal places/);
   const stored = readStore().campaigns.find((x: any) => x.id === c.id);
   assert.equal(stored.investments.length, 0, 'no record created for the rejected payment');
 
@@ -418,8 +387,7 @@ test('refund: time gate, per-investment retry, verified non-demo token return', 
   assert.equal(r1.investments[0].status, 'refund_pending');
   assert.match(r1.investments[0].error ?? '', /clawback failed/);
   assert.equal(r1.investments[1].status, 'awaiting_token_return');
-  const clawbacks = () =>
-    paymentLog.filter((p) => p.from === demoInvestor.publicKey() && p.code.startsWith('CRWD'));
+  const clawbacks = () => paymentLog.filter((p) => p.from === demoInvestor.publicKey() && p.code.startsWith('CRWD'));
   assert.equal(clawbacks().length, 1, 'clawback was applied despite the lost response');
 
   // Retry: the identical clawback tx is resubmitted and replayed (not applied
@@ -427,8 +395,7 @@ test('refund: time gate, per-investment retry, verified non-demo token return', 
   const r2 = await refund(c.id);
   assert.equal(r2.investments[0].status, 'refunded');
   assert.equal(clawbacks().length, 1, 'clawback must not be applied twice');
-  const refundsToDemo = () =>
-    paymentLog.filter((p) => p.to === demoInvestor.publicKey() && p.code === 'USDC');
+  const refundsToDemo = () => paymentLog.filter((p) => p.to === demoInvestor.publicKey() && p.code === 'USDC');
   assert.equal(refundsToDemo().length, 1, 'USDC refund must be paid exactly once');
   assert.equal(refundsToDemo()[0].amount, '30.0000000');
   assert.equal(r2.state, 'funding', 'still blocked by the non-demo investor');
@@ -438,9 +405,7 @@ test('refund: time gate, per-investment retry, verified non-demo token return', 
   assert.match(r3.investments[1].clawbackTx ?? '', /^verified-onchain:op-return-1/);
   assert.equal(r3.investments[1].status, 'refunded');
   assert.equal(r3.state, 'refunded');
-  const refundsToFreighter = paymentLog.filter(
-    (p) => p.to === freighterInvestor.publicKey() && p.code === 'USDC',
-  );
+  const refundsToFreighter = paymentLog.filter((p) => p.to === freighterInvestor.publicKey() && p.code === 'USDC');
   assert.deepEqual(
     refundsToFreighter.map((p) => p.amount),
     ['20.0000000'],
@@ -455,10 +420,7 @@ test('signed submit enforces the campaign deadline', async () => {
   const tx = TransactionBuilder.fromXDR(built.xdr, built.networkPassphrase);
   tx.sign(investor);
   await sleep(1300);
-  await assert.rejects(
-    submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: tx.toXDR() }),
-    /deadline has passed/,
-  );
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: tx.toXDR() }), /deadline has passed/);
 });
 
 test('integer cents: 0.1 + 0.2 fills a 0.3 goal exactly', async () => {
@@ -470,18 +432,25 @@ test('integer cents: 0.1 + 0.2 fills a 0.3 goal exactly', async () => {
   // Cap math is integer cents; stored dollar floats can drift when summed.
   const totalCents = after.investments.reduce((s, i) => s + Math.round(i.amountUsdc * 100), 0);
   assert.equal(totalCents, 30);
-  await assert.rejects(
-    invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 0.01 }),
-    /goal already reached/,
-  );
+  await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 0.01 }), /goal already reached/);
 });
 
 test('active server disables every classic write and protects read-only migration evidence', async () => {
-  const { app } = await import('../src/server.js'); const srv = app.listen(0);
-  await new Promise(r => srv.once('listening', r));
+  const { app } = await import('../src/server.js');
+  const srv = app.listen(0);
+  await new Promise((r) => srv.once('listening', r));
   const base = `http://127.0.0.1:${(srv.address() as any).port}`;
   try {
-    for (const route of ['/api/campaigns', '/api/campaigns/c1/invest', '/api/campaigns/c1/invest/submit', '/api/campaigns/c1/finalize', '/api/campaigns/c1/refund', '/api/campaigns/c1/retry-pending', '/api/demo/seed-investors', '/api/wallet/trustline/submit']) {
+    for (const route of [
+      '/api/campaigns',
+      '/api/campaigns/c1/invest',
+      '/api/campaigns/c1/invest/submit',
+      '/api/campaigns/c1/finalize',
+      '/api/campaigns/c1/refund',
+      '/api/campaigns/c1/retry-pending',
+      '/api/demo/seed-investors',
+      '/api/wallet/trustline/submit',
+    ]) {
       assert.equal((await fetch(base + route, { method: 'POST', headers: { 'x-admin-key': 'test-admin-key' } })).status, 410);
     }
     const legacy = base + '/api/legacy/campaigns';
@@ -491,7 +460,9 @@ test('active server disables every classic write and protects read-only migratio
     delete process.env.ADMIN_SECRET;
     assert.equal((await fetch(legacy)).status, 503);
     process.env.ADMIN_SECRET = 'test-admin-key';
-  } finally { srv.close(); }
+  } finally {
+    srv.close();
+  }
 });
 
 test('reconcile: bad_seq with an actually-applied hash confirms without rebuilding', async () => {
@@ -504,9 +475,7 @@ test('reconcile: bad_seq with an actually-applied hash confirms without rebuildi
   injectedFailure = { type: 'bad_seq', applyFirst: true };
   const after = await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 });
   assert.equal(after.investments[0].status, 'confirmed');
-  const tokenPayments = paymentLog.filter(
-    (p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'),
-  );
+  const tokenPayments = paymentLog.filter((p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'));
   assert.equal(tokenPayments.length, 1, 'exactly one token payment applied');
 });
 
@@ -518,10 +487,7 @@ test('reconcile: persistent bad_seq with 404 holds the intent, never rebuilds', 
   // USDC intent cannot apply (bad_seq, not applied), and the 404 lookup is
   // not proof of non-execution: hold for manual reconciliation, keep intent.
   injectedFailure = { type: 'bad_seq', applyFirst: false, times: 10 };
-  await assert.rejects(
-    invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 }),
-    /not proof it cannot execute/,
-  );
+  await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 }), /not proof it cannot execute/);
   const usdcPayments = paymentLog.filter((p) => p.code === 'USDC');
   assert.equal(usdcPayments.length, 0, 'nothing applied');
   const stored = readStore().campaigns.find((x: any) => x.id === c.id);
@@ -536,10 +502,7 @@ test('reconcile: inconclusive lookup holds the intent instead of rebuilding', as
 
   injectedFailure = { type: 'bad_seq', applyFirst: false };
   forceLookupUnknown = true;
-  await assert.rejects(
-    invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 }),
-    /inconclusive/,
-  );
+  await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 }), /inconclusive/);
   const usdcPayments = paymentLog.filter((p) => p.code === 'USDC');
   assert.equal(usdcPayments.length, 0, 'no payment made while reconciliation is inconclusive');
 });
@@ -565,15 +528,14 @@ test('refund reconciles a pending token delivery before refunding', async () => 
   // and only then refund the USDC.
   const r = await refund(c.id);
   assert.equal(r.state, 'refunded');
-  const clawbacks = paymentLog.filter(
-    (p) => p.from === investor.publicKey() && p.code.startsWith('CRWD'),
-  );
+  const clawbacks = paymentLog.filter((p) => p.from === investor.publicKey() && p.code.startsWith('CRWD'));
   assert.equal(clawbacks.length, 1, 'delivered tokens clawed back before refund');
   const refunds = paymentLog.filter((p) => p.to === investor.publicKey() && p.code === 'USDC');
-  assert.deepEqual(refunds.map((p) => p.amount), ['30.0000000']);
-  const tokenPayments = paymentLog.filter(
-    (p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'),
+  assert.deepEqual(
+    refunds.map((p) => p.amount),
+    ['30.0000000'],
   );
+  const tokenPayments = paymentLog.filter((p) => p.to === investor.publicKey() && p.code.startsWith('CRWD'));
   assert.equal(tokenPayments.length, 1, 'no duplicate token delivery during reconciliation');
 });
 
@@ -624,21 +586,18 @@ test('one on-chain return funds only one refund for the same investor', async ()
   assert.equal(r1.investments[1].status, 'awaiting_token_return', 'same return cannot fund a second refund');
   assert.equal(r1.state, 'funding');
   const refunds = paymentLog.filter((p) => p.to === investor.publicKey() && p.code === 'USDC');
-  assert.deepEqual(refunds.map((p) => p.amount), ['20.0000000']);
+  assert.deepEqual(
+    refunds.map((p) => p.amount),
+    ['20.0000000'],
+  );
 
   // A second, separate return (paginated history) covers the second refund.
-  returnedPaymentPages = [
-    [mkReturn('op-return-2', investor.publicKey(), c.code, '150')],
-    [mkReturn('op-return-1', investor.publicKey(), c.code, '100')],
-  ];
+  returnedPaymentPages = [[mkReturn('op-return-2', investor.publicKey(), c.code, '150')], [mkReturn('op-return-1', investor.publicKey(), c.code, '100')]];
   const r2 = await refund(c.id);
   assert.equal(r2.investments[1].status, 'refunded');
   assert.equal(r2.state, 'refunded');
   const refunds2 = paymentLog.filter((p) => p.to === investor.publicKey() && p.code === 'USDC');
-  assert.deepEqual(
-    refunds2.map((p) => p.amount).sort(),
-    ['20.0000000', '30.0000000'],
-  );
+  assert.deepEqual(refunds2.map((p) => p.amount).sort(), ['20.0000000', '30.0000000']);
 });
 
 test('a return ordered before the token delivery does not count', async () => {
@@ -674,7 +633,7 @@ test('ledger-order binding uses TOIDs: same-ledger later op counts, earlier does
 
   // A return ordered EARLIER in the same ledger (lower tx application order)
   // must not count.
-  const ledgerBits = deliveryPt >> 32n << 32n;
+  const ledgerBits = (deliveryPt >> 32n) << 32n;
   const earlier = (ledgerBits + (((deliveryPt >> 12n) & 0xfffffn) - 1n) * 4096n + 1n).toString();
   returnedPaymentPages = [[mkReturn('op-earlier', investor.publicKey(), c.code, '200', earlier)]];
   const r1 = await refund(c.id);
@@ -707,10 +666,7 @@ test('an oversized return is not credited; an exact return is', async () => {
   assert.equal(refunds1.length, 0);
 
   // Exact return credits the refund.
-  returnedPaymentPages = [
-    [mkReturn('op-exact', investor.publicKey(), c.code, '200')],
-    [mkReturn('op-big', investor.publicKey(), c.code, '300')],
-  ];
+  returnedPaymentPages = [[mkReturn('op-exact', investor.publicKey(), c.code, '200')], [mkReturn('op-big', investor.publicKey(), c.code, '300')]];
   const r2 = await refund(c.id);
   assert.equal(r2.investments[0].status, 'refunded');
   assert.equal(r2.state, 'refunded');
@@ -763,9 +719,7 @@ test('refund holds while an undelivered token intent could still execute', async
   const r2 = await refund(c.id);
   assert.equal(r2.state, 'funding', 'still held after expiry');
   assert.match(r2.investments[0].error ?? '', /not proof it cannot execute/);
-  const clawbacks = paymentLog.filter(
-    (p) => p.from === investor.publicKey() && p.code.startsWith('CRWD'),
-  );
+  const clawbacks = paymentLog.filter((p) => p.from === investor.publicKey() && p.code.startsWith('CRWD'));
   assert.equal(clawbacks.length, 0, 'no clawback while held');
   const refunds2 = paymentLog.filter((p) => p.to === investor.publicKey() && p.code === 'USDC');
   assert.equal(refunds2.length, 0, 'no refund after expiry without manual reconciliation');
@@ -788,7 +742,8 @@ test('a conclusively failed USDC intent releases reservation without rebuilding'
     hash: intentHash,
     paging_token: (1001n << 32n).toString(),
     created_at: new Date().toISOString(),
-    successful: false, ledger: 1000,
+    successful: false,
+    ledger: 1000,
   });
   injectedFailure = { type: 'bad_seq', applyFirst: false }; // force the reconcile path
   await retryPending(c.id); // per-investment errors are recorded, not thrown
@@ -816,7 +771,8 @@ test('refund holds when the token delivery is recorded as failed', async () => {
     hash: mid.investments[0].tokenTx,
     paging_token: (1002n << 32n).toString(),
     created_at: new Date().toISOString(),
-    successful: false, ledger: 1000,
+    successful: false,
+    ledger: 1000,
   });
   await sleep(1600);
   const r = await refund(c.id);
@@ -896,19 +852,23 @@ test('lockup: unfunded, insufficient-USDC and fee-reserve failures never reserve
   const original = campaigns.deps.loadAccount;
   try {
     for (const mode of ['unfunded', 'usdc', 'native', 'sequence', 'threshold']) {
-      __setDepsForTests({ loadAccount: async pub => {
-        if (mode === 'unfunded') throw new Error('source account not found');
-        const account = await original(pub);
-        if (mode === 'usdc') account.balances[1].balance = '1';
-        if (mode === 'native') account.balances[0].balance = '0';
-        if (mode === 'threshold') account.thresholds.med_threshold = 2;
-        if (mode === 'sequence') account.incrementSequenceNumber();
-        return account;
-      } });
+      __setDepsForTests({
+        loadAccount: async (pub) => {
+          if (mode === 'unfunded') throw new Error('source account not found');
+          const account = await original(pub);
+          if (mode === 'usdc') account.balances[1].balance = '1';
+          if (mode === 'native') account.balances[0].balance = '0';
+          if (mode === 'threshold') account.thresholds.med_threshold = 2;
+          if (mode === 'sequence') account.incrementSequenceNumber();
+          return account;
+        },
+      });
       await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr }), /not found|insufficient|sequence|signing/);
       assert.equal(readStore().campaigns[0].investments.length, 0, mode);
     }
-  } finally { __setDepsForTests({ loadAccount: original }); }
+  } finally {
+    __setDepsForTests({ loadAccount: original });
+  }
   assert.equal((await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr })).investments[0].status, 'confirmed');
 });
 
@@ -918,13 +878,29 @@ test('signed envelope rejects two payments and unrelated/source-override operati
   const a = Keypair.random();
   const { Asset, Operation, Memo } = await import('@stellar/stellar-sdk');
   for (const ops of [
-    [Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' }), Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' })],
-    [Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10', source: Keypair.random().publicKey() })],
-    [Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' }), Operation.manageData({ name: 'bad', value: 'x' })],
+    [
+      Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' }),
+      Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' }),
+    ],
+    [
+      Operation.payment({
+        destination: platformKp.publicKey(),
+        asset: new Asset('USDC', process.env.USDC_ISSUER!),
+        amount: '10',
+        source: Keypair.random().publicKey(),
+      }),
+    ],
+    [
+      Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' }),
+      Operation.manageData({ name: 'bad', value: 'x' }),
+    ],
   ]) {
-    const builder = new TransactionBuilder(new Account(a.publicKey(), '1'), { fee: '100', networkPassphrase: 'Test SDF Network ; September 2015' }).addMemo(Memo.text(c.id)).setTimeout(900);
-    ops.forEach(op => builder.addOperation(op));
-    const tx = builder.build(); tx.sign(a);
+    const builder = new TransactionBuilder(new Account(a.publicKey(), '1'), { fee: '100', networkPassphrase: 'Test SDF Network ; September 2015' })
+      .addMemo(Memo.text(c.id))
+      .setTimeout(900);
+    ops.forEach((op) => builder.addOperation(op));
+    const tx = builder.build();
+    tx.sign(a);
     const broadcasts = submitLog.length;
     await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: tx.toXDR() }), /exactly one|operation source|unsupported/);
     assert.equal(submitLog.length, broadcasts);
@@ -933,66 +909,89 @@ test('signed envelope rejects two payments and unrelated/source-override operati
 });
 
 test('wallet build gives 15 minutes; expired signed envelopes reserve nothing', async () => {
-  resetState(); const a = Keypair.random();
+  resetState();
+  const a = Keypair.random();
   const c = await createCampaign({ name: 'window', goalUsdc: GOAL });
   const built = await buildInvestXdr(c.id, { investorPub: a.publicKey(), amountUsdc: 10 });
   const tx = TransactionBuilder.fromXDR(built.xdr, built.networkPassphrase) as Transaction;
-  assert.ok(Number(tx.timeBounds!.maxTime) - Date.now()/1000 > 895);
+  assert.ok(Number(tx.timeBounds!.maxTime) - Date.now() / 1000 > 895);
   const { Asset, Operation, Memo } = await import('@stellar/stellar-sdk');
-  const expired = new TransactionBuilder(new Account(a.publicKey(), '1'), { fee: '100', networkPassphrase: built.networkPassphrase, timebounds: { minTime: '0', maxTime: '1' } }).addMemo(Memo.text(c.id)).addOperation(Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' })).build();
+  const expired = new TransactionBuilder(new Account(a.publicKey(), '1'), {
+    fee: '100',
+    networkPassphrase: built.networkPassphrase,
+    timebounds: { minTime: '0', maxTime: '1' },
+  })
+    .addMemo(Memo.text(c.id))
+    .addOperation(Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '10' }))
+    .build();
   expired.sign(a);
   await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: expired.toXDR() }), /time bounds/);
   assert.equal(readStore().campaigns[0].investments.length, 0);
 });
 
 test('signed pending reservations stay atomic; a post-preflight race remains held on 404', async () => {
-  resetState(); const a = Keypair.random(), b = Keypair.random();
+  resetState();
+  const a = Keypair.random(),
+    b = Keypair.random();
   const c = await createCampaign({ name: 'signedrace', goalUsdc: GOAL });
-  const x = await signedInvestment(c, a, 60), y = await signedInvestment(c, b, 60);
+  const x = await signedInvestment(c, a, 60),
+    y = await signedInvestment(c, b, 60);
   injectedFailure = { type: 'bad_seq', applyFirst: false, times: 5 };
   const result = await Promise.allSettled([
     submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: x }),
     submitSignedInvest(c.id, { investorPub: b.publicKey(), xdr: y }),
   ]);
-  assert.ok(result.every(r => r.status === 'rejected'));
+  assert.ok(result.every((r) => r.status === 'rejected'));
   assert.equal(readStore().campaigns[0].investments.length, 1);
   assert.equal(readStore().campaigns[0].investments[0].status, 'pending_usdc');
   assert.match(readStore().campaigns[0].investments[0].error, /not proof/);
 });
 
 test('partial token returns combine across pages; retries and duplicate IDs cannot double refund', async () => {
-  resetState(); const a = Keypair.random();
+  resetState();
+  const a = Keypair.random();
   const c = await createCampaign({ name: 'partials', goalUsdc: GOAL });
   await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a, 20) });
-  const store = readStore(); store.campaigns[0].deadline = new Date(0).toISOString(); fs.writeFileSync(storePath, JSON.stringify(store));
+  const store = readStore();
+  store.campaigns[0].deadline = new Date(0).toISOString();
+  fs.writeFileSync(storePath, JSON.stringify(store));
   returnedPaymentPages = [[mkReturn('part-a', a.publicKey(), c.code, '75.0000000')]];
   const r1 = await refund(c.id);
   assert.equal(r1.investments[0].status, 'awaiting_token_return');
   assert.equal(r1.investments[0].returnedTokens, '75.0000000');
-  returnedPaymentPages = [[mkReturn('part-b', a.publicKey(), c.code, '125')], [mkReturn('part-a', a.publicKey(), c.code, '75'), mkReturn('part-a', a.publicKey(), c.code, '75')]];
+  returnedPaymentPages = [
+    [mkReturn('part-b', a.publicKey(), c.code, '125')],
+    [mkReturn('part-a', a.publicKey(), c.code, '75'), mkReturn('part-a', a.publicKey(), c.code, '75')],
+  ];
   const r2 = await refund(c.id);
   assert.equal(r2.state, 'refunded');
-  assert.deepEqual(new Set(r2.consumedReturnOps), new Set(['part-a','part-b']));
-  assert.equal(paymentLog.filter(p => p.to === a.publicKey() && p.code === 'USDC').length, 1);
+  assert.deepEqual(new Set(r2.consumedReturnOps), new Set(['part-a', 'part-b']));
+  assert.equal(paymentLog.filter((p) => p.to === a.publicKey() && p.code === 'USDC').length, 1);
 });
 
 test('CORS allowlist rejects untrusted POSTs and preflights, permits configured origins', async () => {
-  const { app } = await import('../src/server.js'); const srv = app.listen(0);
-  await new Promise(r => srv.once('listening', r));
+  const { app } = await import('../src/server.js');
+  const srv = app.listen(0);
+  await new Promise((r) => srv.once('listening', r));
   const url = `http://127.0.0.1:${(srv.address() as any).port}/api/campaigns`;
   try {
     for (const method of ['POST', 'OPTIONS']) {
       const bad = await fetch(url, { method, headers: { origin: 'https://evil.invalid', 'x-admin-key': 'test-admin-key' } });
-      assert.equal(bad.status, 403); assert.equal(bad.headers.get('access-control-allow-origin'), null);
+      assert.equal(bad.status, 403);
+      assert.equal(bad.headers.get('access-control-allow-origin'), null);
     }
     const allowed = await fetch(url, { headers: { origin: 'http://localhost:5173' } });
     assert.equal(allowed.headers.get('access-control-allow-origin'), 'http://localhost:5173');
     assert.equal(allowed.headers.get('cache-control'), 'no-store');
-  } finally { srv.close(); }
+  } finally {
+    srv.close();
+  }
 });
 
 test('conclusive failed USDC payment releases full goal for another investor; no rebroadcast', async () => {
-  resetState(); const a = Keypair.random(), b = Keypair.random();
+  resetState();
+  const a = Keypair.random(),
+    b = Keypair.random();
   const c = await createCampaign({ name: 'failedrelease', goalUsdc: GOAL });
   injectedFailure = { type: 'network', applyFirst: false };
   await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a) }), /uncertain/);
@@ -1004,13 +1003,16 @@ test('conclusive failed USDC payment releases full goal for another investor; no
   assert.equal(submitLog.length, before, 'known failed transaction never resubmitted');
   const done = await submitSignedInvest(c.id, { investorPub: b.publicKey(), xdr: await signedInvestment(c, b) });
   assert.equal(done.investments[1].status, 'confirmed');
-  const store = readStore(); store.campaigns[0].deadline = new Date(0).toISOString(); fs.writeFileSync(storePath, JSON.stringify(store));
+  const store = readStore();
+  store.campaigns[0].deadline = new Date(0).toISOString();
+  fs.writeFileSync(storePath, JSON.stringify(store));
   assert.equal((await finalize(c.id)).state, 'finalized');
-  assert.equal(paymentLog.filter(p => p.from === a.publicKey() && p.code === 'USDC').length, 0);
+  assert.equal(paymentLog.filter((p) => p.from === a.publicKey() && p.code === 'USDC').length, 0);
 });
 
 test('missing/mismatched ledger evidence cannot release a reservation', async () => {
-  resetState(); const a = Keypair.random();
+  resetState();
+  const a = Keypair.random();
   const c = await createCampaign({ name: 'unproven', goalUsdc: GOAL });
   injectedFailure = { type: 'bad_seq', applyFirst: false, times: 20 };
   await assert.rejects(submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a) }), /not proof/);
@@ -1026,7 +1028,8 @@ test('missing/mismatched ledger evidence cannot release a reservation', async ()
 });
 
 test('campaign binding prevents crediting one signed payment twice across campaigns', async () => {
-  resetState(); const a = Keypair.random();
+  resetState();
+  const a = Keypair.random();
   const c = await createCampaign({ name: 'one', goalUsdc: GOAL });
   const other = await createCampaign({ name: 'two', goalUsdc: GOAL });
   const xdr = await signedInvestment(c, a, 20);
@@ -1037,16 +1040,29 @@ test('campaign binding prevents crediting one signed payment twice across campai
 });
 
 test('legacy no-memo pending intents resume unchanged; new no-memo submissions fail', async () => {
-  resetState(); const a = Keypair.random();
+  resetState();
+  const a = Keypair.random();
   const c = await createCampaign({ name: 'legacy', goalUsdc: GOAL });
   const { Asset, Operation } = await import('@stellar/stellar-sdk');
-  const tx = new TransactionBuilder(new Account(a.publicKey(), '1'), { fee: '100', networkPassphrase: 'Test SDF Network ; September 2015' }).addOperation(Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '20' })).setTimeout(900).build();
+  const tx = new TransactionBuilder(new Account(a.publicKey(), '1'), { fee: '100', networkPassphrase: 'Test SDF Network ; September 2015' })
+    .addOperation(Operation.payment({ destination: platformKp.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount: '20' }))
+    .setTimeout(900)
+    .build();
   tx.sign(a);
   const input = { investorPub: a.publicKey(), xdr: tx.toXDR() };
   await assert.rejects(submitSignedInvest(c.id, input), /memo must bind/);
   // Simulate a durable intent persisted by the previous branch version.
   const store = readStore();
-  store.campaigns[0].investments.push({ id: 'i1', investorPub: a.publicKey(), amountUsdc: 20, tokens: 200, usdcXdr: input.xdr, usdcTx: Buffer.from(tx.hash()).toString('hex'), tokenTx: '', status: 'pending_usdc' });
+  store.campaigns[0].investments.push({
+    id: 'i1',
+    investorPub: a.publicKey(),
+    amountUsdc: 20,
+    tokens: 200,
+    usdcXdr: input.xdr,
+    usdcTx: Buffer.from(tx.hash()).toString('hex'),
+    tokenTx: '',
+    status: 'pending_usdc',
+  });
   fs.writeFileSync(storePath, JSON.stringify(store));
   const done = await submitSignedInvest(c.id, input);
   assert.equal(done.investments.length, 1);
@@ -1055,14 +1071,17 @@ test('legacy no-memo pending intents resume unchanged; new no-memo submissions f
 });
 
 test('wallet build with missing trustlines produces an accepted narrow envelope', async () => {
-  resetState(); const a = Keypair.random();
+  resetState();
+  const a = Keypair.random();
   const c = await createCampaign({ name: 'trustlines', goalUsdc: GOAL });
   const original = campaigns.deps.hasTrustline;
   __setDepsForTests({ hasTrustline: async () => false });
   try {
     const done = await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a, 20) });
     assert.equal(done.investments[0].status, 'confirmed');
-  } finally { __setDepsForTests({ hasTrustline: original }); }
+  } finally {
+    __setDepsForTests({ hasTrustline: original });
+  }
 });
 
 test('signed submit: sub-cent and out-of-range payment amounts rejected exactly', async () => {
@@ -1083,10 +1102,7 @@ test('signed submit: sub-cent and out-of-range payment amounts rejected exactly'
   };
 
   // Three decimals must never round into credit (exact parse, not float tolerance).
-  await assert.rejects(
-    submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: await mkTx('25.005') }),
-    /2 decimal places/,
-  );
+  await assert.rejects(submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: await mkTx('25.005') }), /2 decimal places/);
   // Exact two-decimal amounts still work.
   const good = await submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: await mkTx('25.05') });
   assert.equal(good.investments[0].amountUsdc, 25.05);
@@ -1119,8 +1135,5 @@ test('trustline submit: ambiguous broadcast resolves by exact hash; failure repo
   tx2.sign(investor);
   const expectedHash2 = Buffer.from(tx2.hash()).toString('hex');
   injectedFailure = { type: 'network', applyFirst: false };
-  await assert.rejects(
-    submitSignedTrustline({ investorPub: investor.publicKey(), xdr: tx2.toXDR() }),
-    (e: any) => e.message.includes(expectedHash2),
-  );
+  await assert.rejects(submitSignedTrustline({ investorPub: investor.publicKey(), xdr: tx2.toXDR() }), (e: any) => e.message.includes(expectedHash2));
 });

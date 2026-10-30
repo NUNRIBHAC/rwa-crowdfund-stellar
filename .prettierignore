@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+contracts/
+docs/skills-reference/
+package-lock.json
+backend/test/fixtures/

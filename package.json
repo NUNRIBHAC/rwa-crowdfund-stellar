@@ -12,7 +12,9 @@
     "build": "npm --workspace backend run build && npm --workspace frontend run build",
     "setup": "npm --workspace backend run setup",
     "test": "npm --workspace backend run test && npm --workspace frontend run test",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "engines": {
     "node": ">=24 <25"
@@ -22,6 +24,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^6.1.1",
     "globals": "^16.5.0",
+    "prettier": "^3.7.3",
     "typescript-eslint": "^8.46.4"
   }
 }
