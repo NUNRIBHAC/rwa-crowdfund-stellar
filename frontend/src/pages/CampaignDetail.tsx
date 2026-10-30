@@ -42,7 +42,11 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
       <header className="campaign-head">
         <div className="card-tags">
           {profile && <span className="status-chip">{profile.category}</span>}
-          {profile && <span className="status-chip chip-instrument">{composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}</span>}
+          {profile && (
+            <span className="status-chip chip-instrument">
+              {composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}
+            </span>
+          )}
           {profile && <span className="status-chip chip-country">{profile.country}</span>}
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>{statusLabel}</span>
         </div>
@@ -59,7 +63,9 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
       <dl className="metric-cards">
         <div className="metric-card">
           <dt>Asset class</dt>
-          <dd>{profile ? composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays) : 'Contract escrow (testnet)'}</dd>
+          <dd>
+            {profile ? composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays) : 'Contract escrow (testnet)'}
+          </dd>
         </div>
         <div className="metric-card">
           <dt>Interest rate</dt>
@@ -75,9 +81,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
         </div>
       </dl>
 
-      {profile && (
-        <p className="instrument-explainer">{instrumentExplainer(profile)} This is sample educational text, not terms of a live offer.</p>
-      )}
+      {profile && <p className="instrument-explainer">{instrumentExplainer(profile)} This is sample educational text, not terms of a live offer.</p>}
 
       <div className="campaign-columns">
         <div className="campaign-main">
