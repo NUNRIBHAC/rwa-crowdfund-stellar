@@ -617,4 +617,4 @@ Everything in sections 14 and 15 is a proposed design derived from the observed 
 - `secupay_AG_AGB-2026.pdf`
 - `secupay_AG_AGB_20200316_DE.pdf`
 - `secupay_AG_AGB_DE-EN.pdf`
-- `treuhand_und_substanzgenussrechtsvertrag_nixe_29092014.pdf`
+- `treuhand_und_substanzgenussrechtsvertrag_nixe_29092014.pdf
