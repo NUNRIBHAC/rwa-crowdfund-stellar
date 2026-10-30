@@ -3,6 +3,8 @@
 Prepared to inform the frontend redesign. Two sources requested by the project owner:
 the EU registry of crowdfunding platforms, and a directory of tokenised platforms.
 
+Platforms outside the EU and US are in [market-research-world-excl-eu-us-2026-10-30.md](market-research-world-excl-eu-us-2026-10-30.md) (CSV: [market-research-world-excl-eu-us-2026-10-30.csv](market-research-world-excl-eu-us-2026-10-30.csv)).
+
 ## 1. EU registry: ESMA register of ECSPR providers
 
 Under the European Crowdfunding Service Providers Regulation (ECSPR, Regulation
