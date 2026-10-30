@@ -2,8 +2,8 @@ import { useState } from 'react';
 import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
 import { deadlineInfo, formatAmount, percent, shorten } from '../format';
-import { profileFor } from '../data/profiles';
-import { instrumentLabel } from '../data/instruments';
+import { profileFor, type CampaignProfile } from '../data/profiles';
+import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
 
 const TABS = ['Overview', 'Details', 'Documents', 'News'] as const;
@@ -42,7 +42,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
       <header className="campaign-head">
         <div className="card-tags">
           {profile && <span className="status-chip">{profile.category}</span>}
-          {profile && <span className="status-chip chip-instrument">{instrumentLabel(profile.instrumentClass)}</span>}
+          {profile && <span className="status-chip chip-instrument">{composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}</span>}
           {profile && <span className="status-chip chip-country">{profile.country}</span>}
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>{statusLabel}</span>
         </div>
@@ -59,7 +59,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
       <dl className="metric-cards">
         <div className="metric-card">
           <dt>Asset class</dt>
-          <dd>{profile ? instrumentLabel(profile.instrumentClass) : 'Contract escrow (testnet)'}</dd>
+          <dd>{profile ? composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays) : 'Contract escrow (testnet)'}</dd>
         </div>
         <div className="metric-card">
           <dt>Interest rate</dt>
@@ -76,7 +76,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
       </dl>
 
       {profile && (
-        <p className="instrument-explainer">{instrumentExplainer(profile.instrumentClass)} This is sample educational text, not terms of a live offer.</p>
+        <p className="instrument-explainer">{instrumentExplainer(profile)} This is sample educational text, not terms of a live offer.</p>
       )}
 
       <div className="campaign-columns">
@@ -263,15 +263,16 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
   );
 }
 
-function instrumentExplainer(id: string): string {
-  switch (id) {
-    case 'senior-bond':
-      return 'A senior bond is non-subordinated debt: bondholders rank ahead of subordinated capital and equity in insolvency and receive a fixed coupon, with no participation in company growth.';
-    case 'subordinated-bond':
-      return 'A subordinated bond pays a defined coupon but ranks behind senior creditors in insolvency and carries no participation in company growth.';
-    case 'convertible-bond':
-      return 'A convertible bond pays interest until a configured trigger lets holders convert into shares under the issue terms.';
-    default:
-      return 'This instrument class is described in the Learn hub.';
+function instrumentExplainer(profile: CampaignProfile): string {
+  const convertible = (profile.instrumentOverlays ?? []).includes('convertible');
+  if (convertible) {
+    return 'A convertible bond pays interest until a configured trigger lets holders convert into shares under the issue terms. Conversion is a structure overlay on the bond, not a separate instrument.';
   }
+  if (profile.instrumentClass === 'bond' && profile.instrumentSeniority === 'senior') {
+    return 'A senior bond is non-subordinated debt: bondholders rank ahead of subordinated capital and equity in insolvency and receive a fixed coupon, with no participation in company growth.';
+  }
+  if (profile.instrumentClass === 'bond' && profile.instrumentSeniority === 'subordinated') {
+    return 'A subordinated bond pays a defined coupon but ranks behind senior creditors in insolvency and carries no participation in company growth.';
+  }
+  return 'This instrument class is described in the Learn hub.';
 }
