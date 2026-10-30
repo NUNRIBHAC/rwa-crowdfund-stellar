@@ -5,6 +5,8 @@ the EU registry of crowdfunding platforms, and a directory of tokenised platform
 
 Platforms outside the EU and US are in [market-research-world-excl-eu-us-2026-10-30.md](market-research-world-excl-eu-us-2026-10-30.md) (CSV: [market-research-world-excl-eu-us-2026-10-30.csv](market-research-world-excl-eu-us-2026-10-30.csv)).
 
+CSV companion to this file: [market-research-eu-us-2026-10-30.csv](market-research-eu-us-2026-10-30.csv) (the 261 ESMA ECSPR entities and 73 FINRA funding portals below, same columns as the world CSV).
+
 ## 1. EU registry: ESMA register of ECSPR providers
 
 Under the European Crowdfunding Service Providers Regulation (ECSPR, Regulation
