@@ -4,10 +4,10 @@ This file gathers the per-site campaign classifications in one place and grows c
 
 ## Site index
 
-| Site   | Platform                            | Standalone report                                                                          | Companion CSV                                                                                | Input entries                                                            | Added      |
-| ------ | ----------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------- |
-| Site 1 | CONDA (conda-capital.com)           | [conda-full-list-by-project-type.md](conda-full-list-by-project-type.md)                   | [conda-full-list-by-project-type.csv](conda-full-list-by-project-type.csv)                   | 270 entries (269 numbered URLs + 1 unnumbered row), 248 unique offerings | 2026-10-30 |
-| Site 2 | dagobertinvest (dagobertinvest.com) | [dagobertinvest-full-list-by-project-type.md](dagobertinvest-full-list-by-project-type.md) | [dagobertinvest-full-list-by-project-type.csv](dagobertinvest-full-list-by-project-type.csv) | 347 URL entries (342 campaigns, 4 unresolved rows, 1 legacy page)        | 2026-10-30 |
+| Site   | Platform                            | Standalone report                                                                          | Companion CSV                                                                                | Input entries                                                                                                       | Added      |
+| ------ | ----------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Site 1 | CONDA (conda-capital.com)           | [conda-full-list-by-project-type.md](conda-full-list-by-project-type.md)                   | [conda-full-list-by-project-type.csv](conda-full-list-by-project-type.csv)                   | 271 entries (270 numbered rows incl. row 378 without URL, plus 1 unnumbered orphan; 270 URLs), 248 unique offerings | 2026-10-30 |
+| Site 2 | dagobertinvest (dagobertinvest.com) | [dagobertinvest-full-list-by-project-type.md](dagobertinvest-full-list-by-project-type.md) | [dagobertinvest-full-list-by-project-type.csv](dagobertinvest-full-list-by-project-type.csv) | 347 URL entries (342 campaigns, 4 unresolved rows, 1 legacy page)                                                   | 2026-10-30 |
 
 ## How to add a new site
 
