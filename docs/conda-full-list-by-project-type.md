@@ -2,7 +2,7 @@
 
 This file classifies the full campaign list the user supplied on WhatsApp on 2026-10-30 (19:06 WET). The earlier section 11A of `conda-capital-platform-blueprint-2026-10-30.md` covers only the 12 campaigns in the ZIP archive and stays unchanged. Companion CSV with one row per input entry and per-row evidence: `conda-full-list-by-project-type.csv`.
 
-The 18 activity categories below are an analyst grouping made for this document. They are not CONDA's own taxonomy; CONDA's own industry chip is kept in its own column.
+The 17 industry categories below, plus "Unclear from available evidence" as a status (not an industry), use the wording the user supplied on WhatsApp on 2026-10-30 (19:36 and 19:40 WET). They are an analyst grouping made for this document. They are not CONDA's own taxonomy; CONDA's own industry chip is kept in its own column.
 
 ## 1. Input entries, URLs and assets
 
@@ -30,54 +30,54 @@ Distinct tranches, kept separate (different asset IDs): Giesinger Braeu 1-6 (565
 ## 3. Method and limits
 
 - Each page was read live; the CSV `evidence` column quotes the first 200 characters of the page summary or description that the classification rests on.
-- `site_industry_chip` is CONDA's own label. It exists on 63 of 270 pages only. `activity_category` is the analyst grouping of what the funded business does, so the two can differ; differences are listed in `chip_conflict`.
+- `site_industry_chip` is CONDA's own label. It exists on 63 of 270 pages only. `activity_category` is the analyst grouping of what the issuer's business does (the industry), so the two can differ; differences are listed in `chip_conflict`.
 - `basis` shows how solid each row is. Pages 343 (AVORIS Darlehen 2020), 447 (Kollitsch Immobilien Anleihe 2020) and 527 (SCUBAJET) have no description. 343 and 447 are tentatively filed as real estate on title and issuer name only. 527 is unclear.
 - `instrument_hint` comes from titles and contract document names. It is not a verified legal form.
 - Each row has one category. Several are judgement calls (food platforms, bike accessories, HMW Mobility, FMTG as hotel operator). The reasoning is in `evidence`.
 
-## 4. The seven earlier categories were not enough
+## 4. Project/financing type and property type
 
-They covered only the 12 ZIP campaigns. This list needs 18 analyst categories (real estate is shown as two rows, confirmed and tentative, so the table has 19 lines). Counts below are computed from the CSV for the 269 numbered rows with a URL.
+Three separate fields, as the user asked. Industry (section 5 and 6) says what the issuer does. Project/financing type says what kind of financing the entry is. Property type applies only to Real estate.
 
-Through the four-way lens you named:
+| Project/financing type                   | Rows (269 numbered with URL) |
+| ---------------------------------------- | ---------------------------: |
+| Corporate (operating-business issuer)    |                          264 |
+| Property project                         |                            2 |
+| Property project (tentative, unverified) |                            2 |
+| Unclear from available evidence          |                            1 |
+| **Total**                                |                      **269** |
 
-- Hotel / hospitality: 28
-- Energy: 29
-- Real estate: confirmed: 2
-- Real estate: tentative, unverified (title/issuer only): 2
-- Corporate / other operating business: 207
-- Unknown (page empty): 1
+Limits of the financing type: "Corporate" is assigned at issuer level. The page describes an operating business and names no specific property asset. The use of proceeds was not checked against each instrument's terms, so some corporate rows may in fact fund a specific project (a plant, a hotel build-out). No further sub-type (for example asset-specific non-property project) is asserted because the evidence was not read for that. Unknown stays unknown: row 527 (page empty) is "Unclear from available evidence", not corporate. Row 378 has no URL and is not classified. The orphan URL is a duplicate of row 474's offering and is not counted.
 
 ### Real estate
 
-Two rows are confirmed real estate projects from their page text: 394 Kremplhof (Leoben, "Wohnen und Arbeiten", so residential plus commercial) and 476 UKO-Tower (office and knowledge park, described as an "Immobilienprojekt"). Two more, 343 AVORIS Darlehen 2020 and 447 Kollitsch Immobilien Anleihe 2020, are tentative: their pages are empty and the filing rests on title and issuer name only. No campaign is confirmed as a purely residential development.
+Property type: 394 Kremplhof is Mixed-use (residential + commercial; "Wohnen und Arbeiten", Leoben). 476 UKO-Tower is Commercial/office (office and knowledge park, described as an "Immobilienprojekt"). Both are confirmed from page text. 343 AVORIS Darlehen 2020 and 447 Kollitsch Immobilien Anleihe 2020 are tentative: their pages are empty, the filing rests on title and issuer name only, and the property type is not determined. No campaign is confirmed as a purely residential development.
 
-Prefab or mobile housing makers (448 Heise Haus, 518 McCube, 338 and 586 Wohnwagon) and building product makers (489/593 KAPO windows, 534 LCT light concrete) are filed as building products, not property projects. Hotel operators and holdings (FMTG, Moerwald, Familux, COOEE alpin, Uebergossene Alm, MyGym) are filed by what they run. Some of those loans may fund buildings; the pages describe corporate funding, so they are not counted as real estate.
+Prefab or mobile housing makers (448 Heise Haus, 518 McCube, 338 and 586 Wohnwagon) and building product makers (489/593 KAPO windows, 534 LCT light concrete) are filed under Building products and prefab housing, financing type Corporate, not Real estate. Hotel operators and holdings (FMTG, Moerwald, Familux, COOEE alpin, Uebergossene Alm, MyGym) are filed by what they run. Some of those loans may fund buildings; the pages describe corporate funding, so they are not counted as real estate.
 
-## 5. Counts by activity category
+## 5. Counts by industry category
 
-| Activity category                          | Rows    | Unique offerings |
-| ------------------------------------------ | ------- | ---------------- |
-| Food and beverage products                 | 31      | 30               |
-| IT, software and digital platforms         | 29      | 26               |
-| Energy and utilities                       | 29      | 23               |
-| Hotels, hospitality and tourism            | 28      | 24               |
-| E-bikes and light mobility                 | 25      | 24               |
-| Brewery, wine and spirits                  | 20      | 19               |
-| Consumer products, fashion and retail      | 17      | 17               |
-| Sports, leisure and entertainment          | 15      | 14               |
-| Health, wellness and medtech               | 15      | 15               |
-| Industrial technology and manufacturing    | 14      | 14               |
-| Restaurants and gastronomy                 | 12      | 11               |
-| Agriculture, environment and recycling     | 10      | 10               |
-| Building products and prefab housing       | 7       | 6                |
-| Financial services and investment vehicles | 5       | 5                |
-| Education and aviation training            | 4       | 2                |
-| Other transport and logistics              | 3       | 3                |
-| Real estate (tentative, unverified)        | 2       | 2                |
-| Real estate projects (confirmed)           | 2       | 2                |
-| Unclear from available evidence            | 1       | 1                |
-| **Total**                                  | **269** | **248**          |
+| Industry category                                                                 | Rows                         | Unique offerings |
+| --------------------------------------------------------------------------------- | ---------------------------- | ---------------- |
+| Food and beverage products                                                        | 31                           | 30               |
+| Information Technology, software and digital platforms                            | 29                           | 26               |
+| Energy and utilities                                                              | 29                           | 23               |
+| Hotels, hospitality and tourism                                                   | 28                           | 24               |
+| E-bikes and light mobility                                                        | 25                           | 24               |
+| Brewery, wine and spirits                                                         | 20                           | 19               |
+| Consumer products, fashion, apparel and retail                                    | 17                           | 17               |
+| Sports, leisure and entertainment                                                 | 15                           | 14               |
+| Health (Healthcare), wellness and medtech                                         | 15                           | 15               |
+| Industrial technology and manufacturing                                           | 14                           | 14               |
+| Restaurants and gastronomy                                                        | 12                           | 11               |
+| Agriculture, environment and recycling                                            | 10                           | 10               |
+| Building products and prefab housing                                              | 7                            | 6                |
+| Financial services and investment vehicles                                        | 5                            | 5                |
+| Education and aviation training                                                   | 4                            | 2                |
+| Transport and logistics                                                           | 3                            | 3                |
+| Real estate (Residential, Commercial/office, Mixed-use and other property types.) | 4 (2 confirmed, 2 tentative) | 4                |
+| Unclear from available evidence                                                   | 1                            | 1                |
+| **Total**                                                                         | **269**                      | **248**          |
 
 Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplicates row 474.
 
@@ -118,7 +118,7 @@ Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplica
 | 562       | QimiQ                                           | QimiQ Handels GmbH                   | Trade and retail | site industry chip + page text |       |
 | 567       | CUTZ                                            | Jahubi Genuss GmbH                   | -                | page text                      |       |
 
-### IT, software and digital platforms (29 rows)
+### Information Technology, software and digital platforms (29 rows)
 
 | IDs       | Campaign                                                            | Issuer                                         | Chip                   | Basis                          | Notes |
 | --------- | ------------------------------------------------------------------- | ---------------------------------------------- | ---------------------- | ------------------------------ | ----- |
@@ -259,7 +259,7 @@ Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplica
 | 565       | Giesinger Bräu                    | Giesinger Biermanufaktur und Spezialitäten Braugesellschaft mbH | -                | page text                      |       |
 | 566       | Craft Bier Fest                   | Supersud GmbH                                                   | -                | page text                      |       |
 
-### Consumer products, fashion and retail (17 rows)
+### Consumer products, fashion, apparel and retail (17 rows)
 
 | IDs | Campaign                                            | Issuer                                       | Chip                    | Basis                          | Notes                                                              |
 | --- | --------------------------------------------------- | -------------------------------------------- | ----------------------- | ------------------------------ | ------------------------------------------------------------------ |
@@ -300,7 +300,7 @@ Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplica
 | 481       | Rapid InvesTOR 2.0 - 5 Jahre                    | SK Rapid GmbH               | -                       | page text                      |                                                                    |
 | 525       | CAVISTO                                         | CAVISTO GmbH                | -                       | page text                      |                                                                    |
 
-### Health, wellness and medtech (15 rows)
+### Health (Healthcare), wellness and medtech (15 rows)
 
 | IDs | Campaign                                                 | Issuer                                        | Chip       | Basis                          | Notes |
 | --- | -------------------------------------------------------- | --------------------------------------------- | ---------- | ------------------------------ | ----- |
@@ -398,7 +398,7 @@ Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplica
 | 403 / 529 | HMW Mobility - Profit Participation Certificate    | HMW Mobility GmbH             | Education and research | site industry chip + page text |       |
 | 484 / 594 | SKYGATE Aviation funding 1.0 - nachrangige Anleihe | Skygate Aviation Academy GmbH | Education and research | site industry chip + page text |       |
 
-### Other transport and logistics (3 rows)
+### Transport and logistics (3 rows)
 
 | IDs | Campaign      | Issuer             | Chip | Basis     | Notes |
 | --- | ------------- | ------------------ | ---- | --------- | ----- |
@@ -406,21 +406,16 @@ Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplica
 | 457 | Lieferschotte | Lieferschotte GmbH | -    | page text |       |
 | 464 | myrobin       | myrobin GmbH       | -    | page text |       |
 
-### Real estate (tentative, unverified) (2 rows)
+### Real estate (Residential, Commercial/office, Mixed-use and other property types.) (4 rows)
 
-| IDs | Campaign                                            | Issuer                              | Chip | Basis                                            | Notes                                                                                                                                         |
-| --- | --------------------------------------------------- | ----------------------------------- | ---- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| 343 | AVORIS Darlehen 2020                                | AVORIS GmbH                         | -    | title/issuer name only (page has no description) | not determined: page has no description; AVORIS also issues 394 (real estate); page has no description; classification from title/issuer only |
-| 447 | KOLLITSCH MANAGEMENT GMBH - IMMOBILIEN ANLEIHE 2020 | KOLLITSCH - IMMOBILIEN ANLEIHE 2020 | -    | title/issuer name only (page has no description) | not determined: title says "Immobilien Anleihe", page has no description; page has no description; classification from title/issuer only      |
+| IDs | Campaign                                            | Issuer                              | Status                        | Property type                        | Financing type                           |
+| --- | --------------------------------------------------- | ----------------------------------- | ----------------------------- | ------------------------------------ | ---------------------------------------- |
+| 343 | AVORIS Darlehen 2020                                | AVORIS GmbH                         | tentative (title/issuer only) | Not determined (page empty)          | Property project (tentative, unverified) |
+| 394 | Kremplhof Darlehen 2020                             | AVORIS Kremplhof GmbH               | confirmed                     | Mixed-use (residential + commercial) | Property project                         |
+| 447 | KOLLITSCH MANAGEMENT GMBH - IMMOBILIEN ANLEIHE 2020 | KOLLITSCH - IMMOBILIEN ANLEIHE 2020 | tentative (title/issuer only) | Not determined (page empty)          | Property project (tentative, unverified) |
+| 476 | INVESTIEREN IN SALZBURGS SILICON VALLEY!            | UKO Holding GmbH                    | confirmed                     | Commercial/office                    | Property project                         |
 
-### Real estate projects (confirmed) (2 rows)
-
-| IDs | Campaign                                 | Issuer                | Chip         | Basis                          | Notes                                                               |
-| --- | ---------------------------------------- | --------------------- | ------------ | ------------------------------ | ------------------------------------------------------------------- |
-| 394 | Kremplhof Darlehen 2020                  | AVORIS Kremplhof GmbH | -            | page text                      | residential + commercial ("Wohnen und Arbeiten", Leoben); page text |
-| 476 | INVESTIEREN IN SALZBURGS SILICON VALLEY! | UKO Holding GmbH      | Construction | site industry chip + page text | commercial/office (UKO-Tower, knowledge park, Salzburg); page text  |
-
-### Unclear from available evidence (1 rows)
+### Unclear from available evidence (1 row, status not industry)
 
 | IDs | Campaign  | Issuer        | Chip | Basis                                            | Notes                                                          |
 | --- | --------- | ------------- | ---- | ------------------------------------------------ | -------------------------------------------------------------- |
