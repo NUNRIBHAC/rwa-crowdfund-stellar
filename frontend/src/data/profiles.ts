@@ -3,6 +3,7 @@
 // profiles exist ONLY for the sample fixtures and are labeled sample data; a
 // real deployment would load verified, issuer-attested data from the backend.
 import type { Campaign } from '../types';
+import type { SeniorityState } from './instruments';
 
 export type InfoField = { label: string; value: string };
 
@@ -13,6 +14,8 @@ export type CampaignProfile = {
   category: string;
   teaser: string;
   instrumentClass: string;
+  instrumentSeniority?: SeniorityState;
+  instrumentOverlays?: string[];
   interestRate: string;
   term: string;
   minInvestment: string;
@@ -31,7 +34,8 @@ export const SAMPLE_PROFILES: CampaignProfile[] = [
     country: 'PT',
     category: 'Construction',
     teaser: 'Refurbishment of a riverside apartment block in Lisbon, financed through a fixed-rate senior bond. All terms on this page are sample data.',
-    instrumentClass: 'senior-bond',
+    instrumentClass: 'bond',
+    instrumentSeniority: 'senior',
     interestRate: '6.5% p.a. (sample)',
     term: 'Until 2030-12-31 (sample)',
     minInvestment: '250 USDC testnet (sample)',
@@ -66,7 +70,8 @@ export const SAMPLE_PROFILES: CampaignProfile[] = [
     category: 'Energy and utilities',
     teaser:
       'Community solar installation in the Alentejo, financed through a subordinated bond with a cash interest variant. All terms on this page are sample data.',
-    instrumentClass: 'subordinated-bond',
+    instrumentClass: 'bond',
+    instrumentSeniority: 'subordinated',
     interestRate: '7.0% p.a. cash (sample)',
     term: 'Until 2032-06-30 (sample)',
     minInvestment: '250 USDC testnet (sample)',
@@ -96,12 +101,14 @@ export const SAMPLE_PROFILES: CampaignProfile[] = [
     category: 'Transportation and logistics',
     teaser:
       'Tokenization study for a logistics hub near Porto, structured as a convertible bond. This fixture shows a completed campaign. All terms are sample data.',
-    instrumentClass: 'convertible-bond',
+    instrumentClass: 'bond',
+    instrumentSeniority: 'unspecified',
+    instrumentOverlays: ['convertible'],
     interestRate: '8.0% p.a. until conversion (sample)',
     term: 'Until 2031-12-31 (sample)',
     minInvestment: '500 USDC testnet (sample)',
     additionalInfo: [
-      { label: 'Investment product', value: `Convertible bond. ${SAMPLE}` },
+      { label: 'Investment product', value: `Bond with a conversion feature (convertible); seniority not specified in the sample terms. ${SAMPLE}` },
       { label: 'ISIN / WKN', value: 'Not issued - this prototype issues no securities identifiers' },
       { label: 'Nominal amount per unit', value: '500 USDC testnet (sample)' },
       { label: 'Funding threshold', value: '500,000 USDC testnet goal (sample fixture)' },
