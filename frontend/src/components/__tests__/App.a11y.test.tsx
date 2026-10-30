@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, afterEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import App from '../../App';
 import { FIXTURE_CAMPAIGNS } from '../../fixtures';
@@ -12,9 +12,16 @@ vi.mock('../../api', () => ({
   api: vi.fn(async () => ({ campaigns: [FIXTURE_CAMPAIGNS[0]] })),
 }));
 
-afterEach(cleanup);
+beforeEach(() => {
+  window.location.hash = '#/investments';
+});
 
-describe('discovery accessibility semantics', () => {
+afterEach(() => {
+  cleanup();
+  window.location.hash = '';
+});
+
+describe('site chrome accessibility semantics', () => {
   test('skip link targets main content landmark', async () => {
     render(<App />);
     const skip = screen.getByRole('link', { name: 'Skip to main content' });
@@ -23,6 +30,22 @@ describe('discovery accessibility semantics', () => {
     expect(document.getElementById('main')?.tagName).toBe('MAIN');
   });
 
+  test('risk banner is present on every page as a note', async () => {
+    render(<App />);
+    const banner = screen.getByRole('note', { name: '' });
+    expect(banner.textContent).toMatch(/risk of total loss/);
+  });
+
+  test('main navigation exposes current page', async () => {
+    render(<App />);
+    await screen.findByRole('button', { name: 'All' });
+    const nav = screen.getByRole('navigation', { name: 'Main' });
+    const invest = nav.querySelector('a[aria-current="page"]');
+    expect(invest?.textContent).toBe('Invest');
+  });
+});
+
+describe('discovery accessibility semantics', () => {
   test('filter chips expose pressed state and keep it mutually exclusive', async () => {
     render(<App />);
     const all = await screen.findByRole('button', { name: 'All' });

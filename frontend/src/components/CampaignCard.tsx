@@ -1,5 +1,8 @@
 import type { Campaign } from '../types';
 import { deadlineInfo, formatAmount, percent, shorten } from '../format';
+import type { CampaignProfile } from '../data/profiles';
+import { instrumentLabel } from '../data/instruments';
+import { routeHash } from '../router';
 
 export type CampaignStatus = 'open' | 'funded' | 'ended';
 
@@ -11,6 +14,7 @@ export function campaignStatus(c: Campaign): CampaignStatus {
 
 type Props = {
   campaign: Campaign;
+  profile?: CampaignProfile;
   actor: string;
   busy: boolean;
   readOnly: boolean;
@@ -19,21 +23,44 @@ type Props = {
   onPrepare: (action: 'contribute' | 'refund' | 'withdraw') => void;
 };
 
-export default function CampaignCard({ campaign: c, actor, busy, readOnly, amount, onAmount, onPrepare }: Props) {
+export default function CampaignCard({ campaign: c, profile, actor, busy, readOnly, amount, onAmount, onPrepare }: Props) {
   const pct = percent(c.raised, c.config.goal);
   const dl = deadlineInfo(c.config.deadline);
   const status = campaignStatus(c);
   return (
     <article className="card">
       <div className="card-top">
-        <h3 className="card-title">{c.name}</h3>
+        <h3 className="card-title">
+          <a href={routeHash({ name: 'campaign', campaignId: c.id })}>{c.name}</a>
+        </h3>
         <div className="card-tags">
+          {profile && <span className="status-chip chip-instrument">{instrumentLabel(profile.instrumentClass)}</span>}
+          {profile && <span className="status-chip chip-country">{profile.country}</span>}
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>
             {status === 'funded' ? 'Funded' : status === 'ended' ? 'Underfunded' : 'Open'}
           </span>
           {c.withdrawn && <span className="status-chip status-withdrawn">Withdrawn</span>}
         </div>
       </div>
+
+      {profile && <p className="card-teaser">{profile.teaser}</p>}
+
+      {profile && (
+        <dl className="metric-chips">
+          <div>
+            <dt>Interest</dt>
+            <dd>{profile.interestRate}</dd>
+          </div>
+          <div>
+            <dt>Term</dt>
+            <dd>{profile.term}</dd>
+          </div>
+          <div>
+            <dt>Minimum</dt>
+            <dd>{profile.minInvestment}</dd>
+          </div>
+        </dl>
+      )}
 
       <div className="progress-row">
         <div
@@ -78,8 +105,12 @@ export default function CampaignCard({ campaign: c, actor, busy, readOnly, amoun
         </p>
       )}
 
+      <p className="card-details-link">
+        <a href={routeHash({ name: 'campaign', campaignId: c.id })}>View details</a>
+      </p>
+
       <details className="card-details">
-        <summary>Campaign details</summary>
+        <summary>Contract data</summary>
         <dl>
           <div>
             <dt>Contract</dt>
