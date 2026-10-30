@@ -2,7 +2,7 @@ name: Tests and builds
 on:
   pull_request:
   push:
-    branches: [main, hardening-and-infrastructure-prototype]
+    branches: [main, deploy/testnet-demo, hardening-and-infrastructure-prototype]
 permissions:
   contents: read
 jobs:

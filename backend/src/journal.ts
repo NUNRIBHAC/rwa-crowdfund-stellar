@@ -112,17 +112,29 @@ export class PostgresJournal implements Journal {
   }
   async save(store: IntentStore): Promise<void> {
     await this.ready;
-    await this.pool.query('BEGIN');
+    // A multi-statement transaction must run on ONE connection: pool.query
+    // may route each call to a different pooled client, which would silently
+    // split BEGIN/COMMIT and the FOR UPDATE lock across backends. Check out a
+    // dedicated client, as runExclusive does. Fakes without connect() are
+    // single-connection by construction and use the pool surface directly.
+    const connector = (this.pool as any).connect?.bind(this.pool);
+    if (!connector) return this.saveOn(this.pool, store);
+    const client = await connector();
+    try { return await this.saveOn(client, store); }
+    finally { client.release(); }
+  }
+  private async saveOn(db: PgPoolLike, store: IntentStore): Promise<void> {
+    await db.query('BEGIN');
     try {
       for (const i of store.intents) {
         // Refuse a DIFFERENT signed envelope for the same hash outright; the
         // COALESCE below only fills an unsigned slot, never swaps one.
-        const cur = await this.pool.query('SELECT signed_xdr FROM soroban_intents WHERE hash = $1 FOR UPDATE', [i.hash]);
+        const cur = await db.query('SELECT signed_xdr FROM soroban_intents WHERE hash = $1 FOR UPDATE', [i.hash]);
         const existingXdr = cur.rows[0]?.signed_xdr ?? null;
         if (existingXdr != null && i.signedXdr != null && existingXdr !== i.signedXdr) {
           throw new Error(`conflicting signed envelope for intent ${i.hash}; refusing to overwrite`);
         }
-        await this.pool.query(
+        await db.query(
           `INSERT INTO soroban_intents (hash, campaign, actor, action, amount, xdr, signed_xdr, status)
            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
            ON CONFLICT (hash) DO UPDATE SET campaign = EXCLUDED.campaign, actor = EXCLUDED.actor, action = EXCLUDED.action,
@@ -134,9 +146,9 @@ export class PostgresJournal implements Journal {
              status = CASE WHEN soroban_intents.status IN ('SUCCESS','FAILED') THEN soroban_intents.status ELSE EXCLUDED.status END`,
           [i.hash, i.campaign, i.actor, i.action, i.amount ?? null, i.xdr, i.signedXdr ?? null, i.status]);
       }
-      await this.pool.query('COMMIT');
+      await db.query('COMMIT');
     } catch (err) {
-      await this.pool.query('ROLLBACK').catch(() => {});
+      await db.query('ROLLBACK').catch(() => {});
       throw err;
     }
   }

@@ -139,3 +139,34 @@ test('conflicting signed envelope for the same hash is rejected and the original
   await j.save({ intents: [signed] }); // identical re-save is idempotent, not a conflict
   assert.equal((await j.read()).intents.length, 1);
 });
+
+test('postgres save runs its whole transaction on one dedicated connection', async () => {
+  // Regression test for the pool.query transaction bug: pg routes each
+  // pool.query call to any idle client, so BEGIN, the FOR UPDATE check, the
+  // upsert and COMMIT could land on different backends and silently lose the
+  // transaction. save() must check out one client and use it for everything.
+  const connections: string[][] = [];
+  const makeClient = () => {
+    const stmts: string[] = [];
+    connections.push(stmts);
+    return {
+      query: async (text: string) => { stmts.push(text.replace(/\s+/g, ' ').trim().split(' ')[0].toUpperCase()); return { rows: [] }; },
+      release: () => {},
+    };
+  };
+  let poolQueries = 0;
+  const pool = {
+    query: async () => { poolQueries++; return { rows: [] }; },
+    end: async () => {},
+    connect: async () => makeClient(),
+  };
+  const j = new PostgresJournal(pool as any);
+  await j.save({ intents: [sample] });
+  // Connection 1 ran schema init (advisory lock + CREATE TABLE); the save
+  // must take exactly one more connection and run its full transaction there.
+  assert.equal(connections.length, 2, 'schema init plus one save connection');
+  const saveConn = connections[1];
+  assert.deepEqual(saveConn.filter(s => s === 'BEGIN' || s === 'COMMIT'), ['BEGIN', 'COMMIT'], 'single-connection transaction boundaries');
+  assert.ok(saveConn.includes('SELECT') && saveConn.includes('INSERT'), 'conflict check and upsert on the same connection');
+  assert.equal(poolQueries, 0, 'save must not route transaction statements through pool.query');
+});
