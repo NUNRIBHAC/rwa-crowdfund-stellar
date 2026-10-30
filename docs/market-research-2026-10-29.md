@@ -323,8 +323,94 @@ Official sources:
 - Rule text for portal registration: https://www.ecfr.gov/current/title-17/chapter-II/part-227/subpart-D
 - Broker-dealers that run Reg CF offerings are on FINRA's separate broker-dealer list, not the funding portal list.
 
-The full US table is not copied here. Listing status is not a quality rating, and the
-FINRA list changes (suspensions appear on it).
+#### FINRA funding portal list, as read on 2026-10-30
+
+Source: https://www.finra.org/about/entities-we-regulate/funding-portals-we-regulate
+(73 entries: 64 with no suspension note, 9 marked "Suspended" by FINRA, with the effective dates and rule numbers as published).
+Fields are copied as published, including blank other names and websites. This table covers
+funding portals only: it does not include SEC-registered broker-dealers that run Reg CF
+offerings, or rewards and donation platforms. Listing status is not a quality rating, and the
+FINRA list changes.
+
+<!-- prettier-ignore-start -->
+
+| # | Funding portal | Status on FINRA list | SEC file no. | Other names | Website | Address (as published) |
+|---|---|---|---|---|---|---|
+| 1 | Aequitas Invest Inc. | Listed | 7-483 |  |  | 11926 N 58 St, Omaha, NE 68152 |
+| 2 | ALAO Invest LLC | Listed | 7-331 | Commonwealth; CMNWLTH | https://www.joincommonwealth.com/ | 164 Christopher Street, New York, NY 10014 |
+| 3 | Allocations Crowdfunding LLC | Listed | 7-294 |  | www.allocationscf.com | 8 The Green Suite 7105, Dover, DE 19901 |
+| 4 | Alvear Ventures Portal LLC | Listed | 7-370 |  | https://alvearventures.demo-ncmaas.com/; https://www.alvearventures.com/ | One Alhambra Plaza, Floor PH, Miami, FL 33134 |
+| 5 | Angel Estate Development LLC | Listed | 7-384 |  | https://www.angelestate.com/ | 521 Marguerite, Corona Del Mar, CA 92625 |
+| 6 | BigCrowd Portal, LLC | Suspended (effective 10/31/2024, FINRA Rule 9553) | 7-357 |  | https://bigcrowd.com/ | 25 Raspberry Trail, Warren, NJ 07059 |
+| 7 | BioTech Funding Portal LLC | Listed | 7-474 | BioTech Social | www.biotech.fund | 222 W Merchandise Mart Plaza #228, Chicago, IL 60654 |
+| 8 | Blue Dot Media Holdings, llc | Listed | 7-278 | Untold Capital; Film Capital; Untold | https://untoldcapital.com/; Filmcapital.io; https://www.untoldcapital.com/ | 2140 S Dupont Hwy, Camden, DE 19934 |
+| 9 | BRITE Investments, Inc. | Suspended (effective 09/21/2026, FINRA Rule 9552) | 7-218 | BRITE | https://brite.us/ | 8766 Wittenwood CV, Orlando, FL 32836 |
+| 10 | Caravan Funds Portal LLC | Listed | 7-322 |  | https://caravanfunds.com/ | 11603 Caplinger Rd, Silver Spring, MD 20904 |
+| 11 | CineBlockFilms, LLC | Listed | 7-431 | CineBlock | www.cineblockfilms.com | 9841 Washingtonian Blvd, Suite 200, Gaithersburg, MD 20878 |
+| 12 | Climatize Earth Securities LLC | Listed | 7-360 | Climatize | https://www.climatize.earth/; https://apps.apple.com/us/app/climatize-protect-the-planet/id1625951422 | 411 Keystone Way, Santa Cruz, CA 95060 |
+| 13 | CollectiveSun Marketplace, LLC | Listed | 7-71 |  | http://collectivesun.market/ | 3295 Meade Ave., San Diego, CA 92116 |
+| 14 | Common Owner CF LLC | Listed | 7-229 |  | https://commonowner.com/ | 170 Florida Street, Buffalo, NY 14208 |
+| 15 | Community Bond, LLC | Suspended (effective 09/21/2026, FINRA Rule 9552) | 7-443 | Main Street Bond | https://www.mainstreetbond.com/explore | 1972 W 2550 S, Suite D, West Haven, UT 84401 |
+| 16 | CRCLE | Listed | 7-479 |  |  | 158 Neponset Ave Unit 3, Boston, MA 02122 |
+| 17 | Crowd Ignition, Inc. | Listed | 7-106 |  | https://crowdignition.com/ | 1120 Avenue of the Americas, 4th Floor, New York, NY 10036 |
+| 18 | Crowdfund My Deal, LLC | Listed | 7-399 | Crowdfund My Deal | https://invest.crowdfundmydeal.com/; crowdfundmydeal.com | 1431 E. McKinney, Ste 130, Denton, TX 76209 |
+| 19 | CrowdsourceFunded.com | Listed | 7-27 |  | https://crowdsourcefunded.com/ | 1319 Ivy Ln, #104, Naperville, IL 60563 |
+| 20 | Crowdsurf Funding Portal LLC | Listed | 7-395 | Crowdsurf | https://crowdsurf.xyz/ | 5931 Greenville Avenue, PMB 3023, Dallas, TX 75206 |
+| 21 | Dentist Fund LLC | Suspended (effective 09/25/2026, FINRA Rule 9552) | 7-383 |  | https://dentist.fund/ | 791 FM1103 #119, Cibolo, TX 78108 |
+| 22 | Eman Equity LLC | Listed | 7-417 |  | https://emanequity.com/ | 355 E Ohio St, Unit 502, Chicago, IL 60611 |
+| 23 | Equifund Crowd Funding Portal Inc. | Listed | 7-115 |  | https://equifund.com/ | 9200 Freedom Way NE, Albuquerque, NM 87109 |
+| 24 | Equity St. Portal LLC | Listed | 7-412 | Equity St. | https://equityst.com/ | 2931 1st Ave S., Suite A, Seattle, WA 98134 |
+| 25 | FanVestor CF, LLC | Listed | 7-248 |  | https://fanvestor.io/investments | 9663 Santa Monica Blvd, Suite 770, Beverly Hills, CA 90210 |
+| 26 | FlashFunders Funding Portal, LLC | Listed | 7-9 |  | https://www.flashfunders.com | 6 Venture, Suite 395, Irvine, CA 92618 |
+| 27 | Fundify Portal, LLC | Listed | 7-216 | Fundify Portal | https://fundifyportal.com/ | 5900 Balcones Drive, Suite 10888, Austin, TX 78731 |
+| 28 | FundingHope, LLC | Listed | 7-380 | FundingHope | https://fundinghope.com/ | 2003 Canterbury Pl, Wheaton, IL 60189 |
+| 29 | Fundme.com, Inc. | Listed | 7-78 | FundMe | https://www.fundme.com | 4770 South, 900 East, Suite 202, Murray, UT 84117 |
+| 30 | Fundpaas Inc | Suspended (effective 10/14/2026, FINRA Rule 9552) | 7-65 | FundpaaS, Inc. d/b/a Custvestor | http://www.custvestor.com/ | 415 Jackson Street, Suite B, San Francisco, CA 94111 |
+| 31 | Fundrizz, Inc. | Listed | 7-475 | Fundrizz | www.fundrizz.com | 9 Maple Street, Scituate, MA 02066 |
+| 32 | Fursa Capital LLC | Listed | 7-225 | FURSA; Halal Franchise LLC | https://fursa.capital/ | Unit 5 Third Avenue, London E12 6DX GBR |
+| 33 | GigaStar Portal LLC | Listed | 7-376 | GigaStar Market | https://www.gigastarmarket.io/ | 159 N Sangamon St, Suite 200, Chicago, IL 60607 |
+| 34 | Honeycomb Portal LLC | Listed | 7-119 | HoneyComb | https://www.honeycombcredit.com/ | 6008 Broad Street, Pittsburgh, PA 15206 |
+| 35 | Hospitality Multiple LLC | Suspended (effective 10/31/2024, FINRA Rule 9553) | 7-332 | Hospitality Multiple | https://hmxnyc.new.crowdengine.com/explore | 132 West 31st Street, 9th Floor, New York, NY 10001 |
+| 36 | Hycrowd LLC | Listed | 7-96 | Hycrowd | https://www.hycrowd.com/ | 3 SwanCt, Jersey City, NJ 07305 |
+| 37 | Ignite Social Impact, Inc | Suspended (effective 11/15/2023, FINRA Rule 9553) | 7-237 |  | https://www.ignitesocialimpact.com/ | 9508 Burning Tree Road, Bethesda, MD 20817 |
+| 38 | Infrashares Inc. | Listed | 7-107 |  | https://infrashares.com/ | 125 South HWY 101, Solana Beach, CA 92067 |
+| 39 | Invown Funding Portal LLC | Listed | 7-329 |  | https://www.invown.com/ | 33 Dixwell Ave, Ste 330, New Haven, CT 06511 |
+| 40 | IPO Wallet LLC | Listed | 7-170 |  | https://ipowallet.com/ | 13601 Preston Road, Suite 220-E, Dallas, TX 75240 |
+| 41 | Jumpstart Micro, Inc | Listed | 7-8 | Issuance Express | https://issuanceexpress.com/ | 9800 Wilshire Blvd, Beverly Hills, CA 90212 |
+| 42 | Ksdaq Inc. | Listed | 7-42 | Mr. Crowd | https://www.MrCrowd.com | 1302 Decca Industrial Centre, 12 Kut Shing Street, Chai Wan, Hong Kong HKG |
+| 43 | Loupt Portal LLC | Listed | 7-446 |  | https://www.investloupt.com/ | 6 Crimson Drive, Hockessin, DE 19707 |
+| 44 | MainVest, Inc. | Listed | 7-162 |  | https://mainvest.com/ | 81 Washington St, Salem, MA 01970 |
+| 45 | Miventure, Inc. | Listed | 7-227 |  | https://portals.syndicatepath.com/ | 128 Prospect Drive SW, Leesburg, VA 20175 |
+| 46 | MustrdSeed Portal LLC | Suspended (effective 10/05/2026, FINRA Rule 9552) | 7-251 |  | https://mustrdseed.com/ | 384 Northyards Blvd, Bldg 100 Suite 190, Atlanta, GA 30313 |
+| 47 | NetCapital Funding Portal Inc. | Listed | 7-35 |  | https://netcapital.com/ | 1 Lincoln Street, Floor 29, Boston, MA 02111 |
+| 48 | NSSC Funding Portal, LLC | Listed | 7-12 | Small Change | https://www.smallchange.co/ | 947 Liberty Avenue, Pittsburgh, PA 15222 |
+| 49 | OpenDeal Portal LLC | Listed | 7-167 | Republic | https://republic.co; https://republic.com | 149 Fifth Avenue, 10th Floor, New York, NY 10010 |
+| 50 | OverSubscribe Portal, LLC | Listed | 7-185 |  | https://portal.oversubscribe.co/ | 1140 Ave of the Americas, Suite 931, New York, NY 10036 |
+| 51 | PicMii Crowdfunding LLC | Listed | 7-246 | PicMii Crowdfunding; Highlander Crowdfunding | https://www.picmiicrowdfunding.com/; https://www.highlander.ai/ | 212 Spottswood Drive, Lancaster, PA 17601 |
+| 52 | Pocket Properties App Corp | Listed | 7-396 |  | https://www.pocketpropertiesapp.com/ | 1724 Lancashire Dr, Chesterfield, VA 23235 |
+| 53 | Publicks House Portal Inc | Suspended (effective 10/13/2026, FINRA Rule 9552) | 7-317 | Fundhouse | www.fundhouse.io | 1000 Brickell Ave, Suite 1100, Miami, FL 33131 |
+| 54 | PW Capital, Inc. | Listed | 7-429 |  | https://funding.planetwealth.com/ | 1011 SW A Street, Suite 209, Bentonville, AR 72712 |
+| 55 | Pyrium, Inc. | Listed | 7-457 |  |  | 584 Castro Street, #2134, San Francisco, CA 94114 |
+| 56 | RealRise Capital LLC | Listed | 7-324 |  | https://realrisecapital.net/ | 4030 Wake Forest Road, Ste 349, Raleigh, NC 27609 |
+| 57 | Seedstarter, LLC | Listed | 7-382 |  | https://www.myseedstarter.com/ | 109 Miln Street, Cranford, NJ 07016 |
+| 58 | Sengbe Reg CF Portal LLC | Listed | 7-453 | Kingvest | www.kingvest.co | 8746 Apperson, Sunland, CA 91040 |
+| 59 | SM Portal LLC | Listed | 7-311 |  | https://smartmoney.inc/ | 300 Arboretum Place, Suite 530, N. Chesterfield, VA 23236 |
+| 60 | SMBX, Inc. | Listed | 7-129 | SMBX; SMBX LLC | https://www.thesmbx.com/ | 1667 41st Avenue, San Francisco, CA 94122 |
+| 61 | Sprowtt CrowdFunding, Inc. | Listed | 7-44 |  | https://www.sprowttcf.com/ | 3030 N Rocky Point Dr W, Tampa, FL 33607 |
+| 62 | StartEngine Capital LLC | Listed | 7-7 | StartEngine | https://www.startengine.com/ | 4100 W. Alameda Avenue, 3rd Floor, Burbank, CA 91505 |
+| 63 | Startly Portal LLC | Listed | 7-291 |  | https://startlyportal.com/ | 30 N Gould St Ste 9036, Sheridan, WY 82801 |
+| 64 | Thunder Funder Portal LLC | Listed | 7-463 | Thunder Funder | https://thunderfunder.com/ | 1200 Euclid Avenue, #201, Miami Beach, FL 33139 |
+| 65 | Timestamp Portal LLC | Listed | 7-456 |  | https://www.timestampfinancial.com/ | 75 State Street, Suite 100, Boston, MA 02109 |
+| 66 | Title3Funds, LLC | Listed | 7-83 | Title3Funds.com | http://title3funds.com/ | 301 Forest Avenue, Laguna Beach, CA 92651 |
+| 67 | VedasLabs Inc. | Listed | 7-188 |  | https://vedaslabs.io/ | 20 Hallets Point, Unit 601, Queens, NY 11102 |
+| 68 | Vesterr | Listed | 7-341 |  | www.vesterr.com | 2727 Paces Ferry Road SE, Suite 750, Atlanta, GA 30339 |
+| 69 | Vicinity, LLC | Listed | 7-223 | Vicinity Capital; Vicinity | https://marketplace.vicinityventures.co/offers/ | 411 University Ridge, Greenville, SC 29601 |
+| 70 | Wefunder Portal LLC | Listed | 7-33 | Wefunder | https://www.Wefunder.com | 1885 Mission Street, San Francisco, CA 94103 |
+| 71 | WeVidIt, Inc. | Listed | 7-328 | Good Works Investments | https://invest.goodworkshub.com/ | 7521 S. Olympia Ave West, #1063, Tulsa, OK 74132 |
+| 72 | Wunderfund, Inc. | Listed | 7-116 | Wunderfund | https://www.wunderfund.co/ | 178 Shoemaker Dr., Cincinnati, OH 45140 |
+| 73 | WWF Funding Portal LLC | Listed | 7-156 | ClimateWrx | https://www.climatewrx.com/ | 76 W. Adams, #307, Detroit, MI 48226 |
+
+<!-- prettier-ignore-end -->
 
 ## 2. Tokenised platform directory (owner-supplied source)
 
