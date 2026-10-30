@@ -7,8 +7,39 @@ import path from 'node:path';
 // developer) and Postgres (hosted deployments where the filesystem is
 // ephemeral). Backend selection is explicit; a configured Postgres backend
 // that cannot be reached fails closed, never silently falls back to a file.
-export type Intent = { hash: string; campaign: string; actor: string; action: string; xdr: string; signedXdr?: string; status: string; amount?: string };
+export type Intent = { hash: string; campaign: string; actor: string; action: string; xdr: string; signedXdr?: string; status: string; amount?: string; createdAt?: string; updatedAt?: string };
 export type IntentStore = { intents: Intent[] };
+
+const TERMINAL_STATUSES = ['SUCCESS', 'FAILED'];
+// Retention policy: terminal intents are pruned after JOURNAL_TERMINAL_RETENTION_MS
+// (default 30 days) and unsigned, unbroadcastable build intents after
+// JOURNAL_UNSIGNED_EXPIRY_MS (default 24h; prepared envelopes expire 15 minutes
+// after build). Signed non-terminal intents are NEVER pruned: an ambiguous
+// signed envelope is safety state, resolved by its exact hash, not by age.
+// Rows without timestamps (written before this policy) are always kept.
+export function pruneIntents(intents: Intent[], now = Date.now()): Intent[] {
+  const terminalRetentionMs = Number(process.env.JOURNAL_TERMINAL_RETENTION_MS ?? 30 * 24 * 3600 * 1000);
+  const unsignedExpiryMs = Number(process.env.JOURNAL_UNSIGNED_EXPIRY_MS ?? 24 * 3600 * 1000);
+  return intents.filter(i => {
+    if (TERMINAL_STATUSES.includes(i.status)) return i.updatedAt ? now - Date.parse(i.updatedAt) < terminalRetentionMs : true;
+    if (!i.signedXdr) return i.createdAt ? now - Date.parse(i.createdAt) < unsignedExpiryMs : true;
+    return true;
+  });
+}
+// A signed envelope is a bearer instrument until confirmed; once the intent is
+// terminal it carries no remaining value, so it is scrubbed. The hash remains
+// as the durable proof.
+export function purgeTerminalEnvelopes(intents: Intent[]): Intent[] {
+  return intents.map(i => {
+    if (!TERMINAL_STATUSES.includes(i.status) || !i.signedXdr) return i;
+    const { signedXdr, ...rest } = i;
+    return rest;
+  });
+}
+// Wide-event log line for safety-state transitions: one JSON object per event.
+export function logEvent(event: string, fields: Record<string, unknown> = {}): void {
+  console.log(JSON.stringify({ ts: new Date().toISOString(), event, ...fields }));
+}
 
 export interface Journal {
   read(): Promise<IntentStore>;
@@ -25,6 +56,9 @@ class FileJournal implements Journal {
     return fs.existsSync(this.file) ? JSON.parse(fs.readFileSync(this.file, 'utf8')) : { intents: [] };
   }
   async save(store: IntentStore): Promise<void> {
+    const before = store.intents.length;
+    store = { intents: pruneIntents(purgeTerminalEnvelopes(store.intents)) };
+    if (store.intents.length !== before) logEvent('journal.pruned', { backend: 'file', removed: before - store.intents.length });
     fs.mkdirSync(path.dirname(this.file), { recursive: true });
     const tmp = `${this.file}.tmp`; const fd = fs.openSync(tmp, 'w', 0o600);
     try { fs.writeFileSync(fd, JSON.stringify(store)); fs.fsyncSync(fd); } finally { fs.closeSync(fd); }
@@ -58,13 +92,17 @@ export class PostgresJournal implements Journal {
       signed_xdr text,
       status text NOT NULL
     )`;
+    // Idempotent column migration for tables created before timestamps existed.
+    const migrate = `ALTER TABLE soroban_intents
+      ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+      ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now()`;
     const connector = (this.pool as any).connect?.bind(this.pool);
     this.ready = connector
       ? connector().then(async (client: any) => {
-          try { await this.withSessionLock(client, 'soroban_intents_schema_init', () => client.query(ddl)); }
+          try { await this.withSessionLock(client, 'soroban_intents_schema_init', async () => { await client.query(ddl); await client.query(migrate); }); }
           finally { client.release(); }
         })
-      : pool.query(ddl).then(() => {});
+      : pool.query(ddl).then(() => pool.query(migrate)).then(() => {});
   }
   static async connect(url: string | undefined): Promise<PostgresJournal> {
     if (!url) throw new Error('SOROBAN_JOURNAL_BACKEND=postgres requires SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file journal');
@@ -100,13 +138,15 @@ export class PostgresJournal implements Journal {
   }
   async read(): Promise<IntentStore> {
     await this.ready;
-    const r = await this.pool.query('SELECT hash, campaign, actor, action, amount, xdr, signed_xdr, status FROM soroban_intents ORDER BY seq');
+    const r = await this.pool.query('SELECT hash, campaign, actor, action, amount, xdr, signed_xdr, status, created_at, updated_at FROM soroban_intents ORDER BY seq');
     return {
       intents: r.rows.map(row => ({
         hash: row.hash, campaign: row.campaign, actor: row.actor, action: row.action,
         xdr: row.xdr, status: row.status,
         ...(row.signed_xdr != null ? { signedXdr: row.signed_xdr } : {}),
         ...(row.amount != null ? { amount: row.amount } : {}),
+        ...(row.created_at != null ? { createdAt: new Date(row.created_at).toISOString() } : {}),
+        ...(row.updated_at != null ? { updatedAt: new Date(row.updated_at).toISOString() } : {}),
       })),
     };
   }
@@ -132,6 +172,7 @@ export class PostgresJournal implements Journal {
         const cur = await db.query('SELECT signed_xdr FROM soroban_intents WHERE hash = $1 FOR UPDATE', [i.hash]);
         const existingXdr = cur.rows[0]?.signed_xdr ?? null;
         if (existingXdr != null && i.signedXdr != null && existingXdr !== i.signedXdr) {
+          logEvent('journal.conflict', { hash: i.hash, actor: i.actor });
           throw new Error(`conflicting signed envelope for intent ${i.hash}; refusing to overwrite`);
         }
         await db.query(
@@ -142,10 +183,23 @@ export class PostgresJournal implements Journal {
              -- Never regress safety state on last-writer-wins: a stored signed
              -- envelope is never erased by an unsigned one, and a terminal
              -- (SUCCESS/FAILED) status is never overwritten by a stale save.
-             signed_xdr = COALESCE(soroban_intents.signed_xdr, EXCLUDED.signed_xdr),
-             status = CASE WHEN soroban_intents.status IN ('SUCCESS','FAILED') THEN soroban_intents.status ELSE EXCLUDED.status END`,
+             signed_xdr = CASE WHEN EXCLUDED.status IN ('SUCCESS','FAILED') THEN NULL
+               ELSE COALESCE(soroban_intents.signed_xdr, EXCLUDED.signed_xdr) END,
+             status = CASE WHEN soroban_intents.status IN ('SUCCESS','FAILED') THEN soroban_intents.status ELSE EXCLUDED.status END,
+             updated_at = now()`,
           [i.hash, i.campaign, i.actor, i.action, i.amount ?? null, i.xdr, i.signedXdr ?? null, i.status]);
       }
+      // Retention: prune only terminal intents past their retention window and
+      // unsigned expired build intents. Signed non-terminal intents are never
+      // touched: an ambiguous signed envelope resolves by exact hash, not age.
+      const pruned = await db.query(
+        `DELETE FROM soroban_intents
+         WHERE (status IN ('SUCCESS','FAILED') AND updated_at < now() - ($1 * interval '1 millisecond'))
+            OR (signed_xdr IS NULL AND status NOT IN ('SUCCESS','FAILED') AND created_at < now() - ($2 * interval '1 millisecond'))`,
+        [Number(process.env.JOURNAL_TERMINAL_RETENTION_MS ?? 30 * 24 * 3600 * 1000),
+         Number(process.env.JOURNAL_UNSIGNED_EXPIRY_MS ?? 24 * 3600 * 1000)]);
+      const removed = (pruned as any).rowCount ?? 0;
+      if (removed > 0) logEvent('journal.pruned', { backend: 'postgres', removed });
       await db.query('COMMIT');
     } catch (err) {
       await db.query('ROLLBACK').catch(() => {});

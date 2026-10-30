@@ -51,6 +51,11 @@ function fakePool() {
       const sql = text.replace(/\s+/g, ' ').trim();
       calls.push(sql.split(' ')[0].toUpperCase());
       if (/^CREATE TABLE/.test(sql)) return { rows: [] };
+      if (/^ALTER TABLE/.test(sql)) return { rows: [] };
+      if (/^DELETE FROM soroban_intents/.test(sql)) {
+        assert.ok(inTx, 'retention delete outside transaction');
+        return { rows: [], rowCount: 0 };
+      }
       if (sql === 'BEGIN') { assert.equal(inTx, false, 'nested transaction'); inTx = true; return { rows: [] }; }
       if (sql === 'COMMIT') { inTx = false; return { rows: [] }; }
       if (sql === 'ROLLBACK') { inTx = false; return { rows: [] }; }
@@ -124,7 +129,7 @@ test('postgres save never regresses a signed envelope or terminal status in its 
   const j = new PostgresJournal(pool);
   await j.save({ intents: [signed] });
   const upsert = raw.find(c => c.includes('ON CONFLICT'))!;
-  assert.match(upsert, /signed_xdr = COALESCE\(soroban_intents\.signed_xdr, EXCLUDED\.signed_xdr\)/, 'signed envelope never erased');
+  assert.match(upsert, /signed_xdr = CASE WHEN EXCLUDED\.status IN \('SUCCESS','FAILED'\) THEN NULL ELSE COALESCE\(soroban_intents\.signed_xdr, EXCLUDED\.signed_xdr\) END/, 'signed envelope never erased before terminal, scrubbed at terminal');
   assert.match(upsert, /CASE WHEN soroban_intents\.status IN \('SUCCESS','FAILED'\)/, 'terminal status never overwritten');
 });
 
@@ -169,4 +174,34 @@ test('postgres save runs its whole transaction on one dedicated connection', asy
   assert.deepEqual(saveConn.filter(s => s === 'BEGIN' || s === 'COMMIT'), ['BEGIN', 'COMMIT'], 'single-connection transaction boundaries');
   assert.ok(saveConn.includes('SELECT') && saveConn.includes('INSERT'), 'conflict check and upsert on the same connection');
   assert.equal(poolQueries, 0, 'save must not route transaction statements through pool.query');
+});
+
+test('terminal intents have their signed envelope scrubbed and stale terminal rows are pruned', async () => {
+  // File backend policy check: terminal status scrubs signedXdr (bearer
+  // instrument no longer needed; the hash stays as proof), and retention
+  // prunes only old terminal rows and expired unsigned builds - never signed
+  // non-terminal or untimestamped legacy rows.
+  const { pruneIntents, purgeTerminalEnvelopes } = await import('../src/journal.js');
+  const now = Date.now();
+  const old_iso = new Date(now - 40 * 24 * 3600 * 1000).toISOString();
+  const recent_iso = new Date(now - 3600 * 1000).toISOString();
+  const terminalOld: Intent = { ...signed, status: 'SUCCESS', createdAt: old_iso, updatedAt: old_iso };
+  const terminalRecent: Intent = { ...signed, hash: 'b'.repeat(64), status: 'FAILED', createdAt: old_iso, updatedAt: recent_iso };
+  const unsignedOld: Intent = { ...sample, hash: 'c'.repeat(64), createdAt: old_iso };
+  const signedHeld: Intent = { ...sample, hash: 'd'.repeat(64), signedXdr: 'AAAAheld', status: 'NOT_FOUND', createdAt: old_iso };
+  const legacyNoTs: Intent = { ...sample, hash: 'e'.repeat(64), status: 'SUCCESS' };
+  const purged = purgeTerminalEnvelopes([terminalOld, terminalRecent, unsignedOld, signedHeld, legacyNoTs]);
+  assert.equal(purged[0].signedXdr, undefined, 'terminal signed envelope scrubbed');
+  assert.equal(purged[1].signedXdr, undefined);
+  assert.equal(purged[3].signedXdr, 'AAAAheld', 'signed non-terminal kept');
+  const pruned = pruneIntents(purged, now);
+  assert.deepEqual(pruned.map(i => i.hash), [terminalRecent.hash, signedHeld.hash, legacyNoTs.hash],
+    'old terminal and expired unsigned pruned; recent terminal, held signed and legacy kept');
+});
+
+test('postgres retention delete is issued inside the save transaction', async () => {
+  const pool = fakePool();
+  const j = new PostgresJournal(pool);
+  await j.save({ intents: [sample] });
+  assert.ok(pool.calls.includes('DELETE'), 'retention delete issued');
 });
