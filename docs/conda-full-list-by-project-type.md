@@ -21,13 +21,82 @@ Row 378 arrived as "| 378 | Not specified |" with no URL. One URL, `https://cond
 
 All 270 URLs were fetched live on 2026-10-30. Row 378 has no page. The user label on every numbered row is "Not specified". The 248 count rests on the asset ID the page exposes; it was not cross-checked against any other source.
 
-## 2. Translations and tranches
+## 2. Instrument categories
+
+The instrument hint comes from titles and contract document names on each fetched page (all 269 numbered rows with a URL; row 378 has no page and the orphan URL duplicates row 474's offering). It is not a verified legal form (see section 4). The hints are filed into the unified instrument categories the user supplied on WhatsApp on 2026-10-30:
+
+**Participation**
+
+1. Participation right / certificate
+   - Substance profit participation right (Substanzgenussrecht) - subtype of 1
+2. Share - the instrument; a capital increase is the action that creates new shares, not a separate instrument
+3. Indirect participation - an ownership structure, not a distinct instrument
+4. Limited partnership interest
+
+**Debt** - two generic parents, three states each:
+
+5. Loan - state: senior / subordinated / unspecified
+6. Bond - state: senior (non-subordinated) / subordinated / unspecified
+
+**Structure overlays** (combine with 5 or 6, never standalone):
+
+- Zero-coupon (Zero Bond): a coupon structure, not a seniority
+- Convertible: a conversion feature on a bond
+
+**Rank and label qualifiers** (site wording, preserved as-is):
+
+- "junior": a lower-rank label; indicates subordinated ranking but does not by itself establish contractual qualified subordination
+- "qualified / qualifiziert": the site's own wording on loans and bonds; on bonds it is not read as qualified subordination unless the term says subordinated
+- "Mini Bond": small-denomination bond label
+
+**Role overlay**:
+
+- Bridge financing: a financing role (short-term interim funding), not an instrument class and not a seniority. No CONDA campaign hint uses this role.
+
+Mapping of the 7 instrument hints (269 numbered rows with a URL):
+
+| Instrument hint (from title or contract document name)            | Rows    | Category                            | State / structure                                                  |
+| ----------------------------------------------------------------- | ------- | ----------------------------------- | ------------------------------------------------------------------ |
+| Subordinated loan or bond ("nachrangig" in title or contract doc) | 125     | 5 Loan or 6 Bond (unresolved)       | Subordinated; the fetched fields do not distinguish loan from bond |
+| Loan (Darlehen)                                                   | 64      | 5 Loan                              | Seniority unspecified                                              |
+| Not stated in fetched fields                                      | 32      | Unclassified                        | No instrument hint on the page                                     |
+| Profit participation certificate (Genussschein)                   | 21      | 1 Participation right / certificate | Not established as the Substanzgenussrecht subtype                 |
+| Bond                                                              | 19      | 6 Bond                              | Seniority unspecified                                              |
+| Share / equity                                                    | 7       | 2 Share                             | -                                                                  |
+| Convertible bond                                                  | 1       | 6 Bond                              | Seniority unspecified; convertible structure                       |
+| **Total**                                                         | **269** |                                     |                                                                    |
+
+Campaigns per instrument category (row IDs; full details in the section 7 tables):
+
+- 1. Participation right / certificate - profit participation certificate (Genussschein), 21 rows: 326, 330, 338, 353, 358, 368, 381, 403, 407, 482, 486, 487, 491, 493, 498, 504, 508, 511, 518, 529, 590
+  - 1a. Substanzgenussrecht subtype - 0 rows (no hint says Substanzgenussrecht)
+- 2. Share - share/equity hint, 7 rows: 357, 389, 475, 479, 495, 507, 543
+- 3. Indirect participation - 0 rows
+- 4. Limited partnership interest - 0 rows
+- 5. Loan
+  - senior - 0 rows (no hint states a senior loan)
+  - subordinated - unresolved with 6 Bond, see the shared bucket below
+  - seniority unspecified - loan (Darlehen), 64 rows: 327, 334, 337, 339, 343, 345, 354, 359, 367, 369, 373, 374, 377, 379, 383, 386, 388, 392, 394, 398, 404, 418, 422, 423, 425, 432, 444, 446, 449, 464, 477, 483, 488, 506, 509, 513, 515, 519, 520, 522, 528, 532, 537, 538, 544, 546, 550, 553, 554, 556, 560, 562, 563, 564, 566, 572, 574, 575, 577, 580, 581, 583, 585, 587
+- 6. Bond
+  - senior (non-subordinated) - 0 rows (no hint states a senior bond)
+  - subordinated - unresolved with 5 Loan, see the shared bucket below
+  - seniority unspecified - bond, 19 rows: 325, 346, 349, 350, 413, 447, 469, 470, 480, 485, 489, 490, 499, 500, 510, 533, 592, 593, 594
+  - seniority unspecified, convertible structure - convertible bond, 1 row: 523
+- Subordinated loan or bond (subordination stated, loan vs bond unresolved) - "nachrangig" in title or contract doc, 125 rows: 328, 331, 332, 333, 335, 336, 340, 341, 342, 347, 348, 351, 352, 355, 361, 363, 364, 365, 370, 371, 372, 375, 376, 380, 382, 385, 387, 393, 395, 396, 397, 399, 401, 402, 405, 406, 410, 411, 412, 414, 415, 416, 417, 420, 421, 424, 427, 428, 429, 430, 431, 433, 434, 436, 437, 438, 439, 440, 441, 442, 445, 448, 450, 451, 452, 453, 456, 457, 458, 459, 460, 461, 462, 463, 465, 466, 467, 471, 472, 474, 478, 484, 492, 494, 496, 501, 502, 503, 505, 512, 514, 516, 517, 521, 526, 527, 530, 534, 535, 539, 540, 541, 542, 545, 547, 548, 551, 552, 557, 558, 559, 561, 565, 568, 569, 570, 571, 573, 578, 579, 582, 584, 586, 589, 591
+- No instrument stated in fetched fields (unclassified) - 32 rows: 329, 344, 356, 360, 362, 366, 384, 390, 391, 400, 408, 409, 419, 426, 435, 443, 454, 455, 468, 473, 476, 481, 497, 524, 525, 531, 536, 549, 555, 567, 576, 588
+
+- The hint is a label from titles and contract document names, not a verified legal form, and it does not establish contractual qualified subordination: "nachrangig" shows subordinated ranking; whether that subordination is "qualified" was not checked per campaign.
+- Unspecified is not senior: the 64 loans, 19 bonds and 1 convertible bond with no stated seniority stay "unspecified", and the 32 rows with no hint stay unclassified. No CONDA campaign is confirmed as a senior loan or a senior bond on the fetched fields.
+- No CONDA campaign maps to categories 3 (indirect participation) or 4 (limited partnership interest), to the Substanzgenussrecht subtype, to the zero-coupon structure, or to the "junior", "qualified" or "Mini Bond" labels, on the fetched fields.
+- Row 378 (no URL) has no instrument hint and is not classified. The orphan URL (English Übergossene Alm page) carries the hint "subordinated loan or bond"; it duplicates row 474's offering and adds no row.
+
+## 3. Translations and tranches
 
 German + English pairs (same asset ID), 19 in all: 467/384, 364/469, 413/349, 470/592, 471/514, 474/(orphan), 475/479, 484/594, 486/407, 487/353, 489/593, 490/415, 491/391, 498/493, 500/499, 529/403, 533/325, 535/478, 543/389. Also: Green Energy Bond has three pages (350, 485 German; 346 English); eventDATA-services has two German pages (332, 452).
 
 Distinct tranches, kept separate (different asset IDs): Giesinger Braeu 1-6 (565, 335, 440, 340, 395, 396), Olchinger Braumanufaktur 1-3 (526, 352, 367), Rapid InvesTOR (333, 434, 436, 473, 481), nine FMTG campaigns (383, 435, 477, 483, 537, 553, 574, 581, 585), Familux 1.0 (535/478) vs 2.0 (512), Super Power Generation bond 2.0 (364/469) vs Green Energy Bond (350/485/346), Vello (487/353 vs 377), Kaahee (328 vs 393), Innolytics (543/389 vs 507), Wohnwagon (338 vs 586), markta (503 vs 509), Trumer (510 vs 555), Greenstorm (380 vs 439), Moerwald bond (413/349) vs Moerwald hotel (575).
 
-## 3. Method and limits
+## 4. Method and limits
 
 - Each page was read live; the CSV `evidence` column quotes the first 200 characters of the page summary or description that the classification rests on.
 - `site_industry_chip` is CONDA's own label. It exists on 63 of 270 pages only. `activity_category` is the analyst grouping of what the issuer's business does (the industry), so the two can differ; differences are listed in `chip_conflict`.
@@ -35,9 +104,9 @@ Distinct tranches, kept separate (different asset IDs): Giesinger Braeu 1-6 (565
 - `instrument_hint` comes from titles and contract document names. It is not a verified legal form.
 - Each row has one category. Several are judgement calls (food platforms, bike accessories, HMW Mobility, FMTG as hotel operator). The reasoning is in `evidence`.
 
-## 4. Project/financing type and property type
+## 5. Project/financing type and property type
 
-Three separate fields, as the user asked. Industry (section 5 and 6) says what the issuer does. Project/financing type says what kind of financing the entry is. Property type applies only to Real estate.
+Three separate fields, as the user asked. Industry (sections 6 and 7) says what the issuer does. Project/financing type says what kind of financing the entry is. Property type applies only to Real estate.
 
 > **Provisional.** The financing type below is based on the issuer (an operating business), not on a verified use of proceeds. "Corporate" does not mean the financing purpose was confirmed as corporate. Only the 4 property rows rest on page text or title.
 
@@ -55,11 +124,19 @@ Limits of the financing type: "Corporate" is assigned at issuer level. The page 
 
 Property type: 394 Kremplhof is Mixed-use (residential + commercial; "Wohnen und Arbeiten", Leoben). 476 UKO-Tower is Commercial/office (office and knowledge park, described as an "Immobilienprojekt"). Both are confirmed from page text. 343 AVORIS Darlehen 2020 and 447 Kollitsch Immobilien Anleihe 2020 are tentative: their pages are empty, the filing rests on title and issuer name only, and the property type is not determined. No campaign is confirmed as a purely residential development.
 
+| Property type (real estate rows only)                    | Rows                        |
+| -------------------------------------------------------- | --------------------------- |
+| Mixed-use (residential + commercial elements)            | 1 confirmed (394 Kremplhof) |
+| Commercial/office                                        | 1 confirmed (476 UKO-Tower) |
+| Residential (all subtypes, incl. holiday apartments)     | 0 confirmed                 |
+| Other property types                                     | 0 confirmed                 |
+| Not determined (pages empty; title and issuer name only) | 2 tentative (343, 447)      |
+
 Prefab or mobile housing makers (448 Heise Haus, 518 McCube, 338 and 586 Wohnwagon) and building product makers (489/593 KAPO windows, 534 LCT light concrete) are filed under Building products and prefab housing, financing type Corporate, not Real estate. Hotel operators and holdings (FMTG, Moerwald, Familux, COOEE alpin, Uebergossene Alm, MyGym) are filed by what they run. Some of those loans may fund buildings; the pages describe corporate funding, so they are not counted as real estate.
 
-## 5. Counts by industry category
+## 6. Counts by industry category
 
-The industry is what the issuer's business does. It says nothing about use of proceeds (see section 4).
+The industry is what the issuer's business does. It says nothing about use of proceeds (see section 5).
 
 | Industry category                                                                 | Rows                         | Unique offerings |
 | --------------------------------------------------------------------------------- | ---------------------------- | ---------------- |
@@ -85,7 +162,7 @@ The industry is what the issuer's business does. It says nothing about use of pr
 
 Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplicates row 474.
 
-## 6. Campaigns by category
+## 7. Campaigns by category
 
 Every row below has financing type "Corporate (issuer-based, provisional; use of proceeds not verified)" except the real estate rows and the unclear row, which are marked in their own tables.
 
@@ -427,7 +504,7 @@ Every row below has financing type "Corporate (issuer-based, provisional; use of
 | --- | --------- | ------------- | ---- | ------------------------------------------------ | -------------------------------------------------------------- |
 | 527 | SCUBAJET. | Scubajet GmbH | -    | title/issuer name only (page has no description) | page has no description; classification from title/issuer only |
 
-## 7. Not in the counts
+## 8. Not in the counts
 
 - Row 378: no URL supplied.
 - Orphan URL (English Uebergossene Alm page): duplicate of the asset in row 474; candidate for row 378, unproven.
