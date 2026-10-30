@@ -90,8 +90,7 @@ export const INSTRUMENT_CLASSES: InstrumentClass[] = [
     label: 'Indirect participation',
     note: 'An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics.',
     group: 'participation',
-    summary:
-      'Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.',
+    summary: 'Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.',
     opportunities: ['Access to deals that would be hard to hold directly', 'Simplified administration through the intermediary structure'],
     risks: ['An extra layer sits between investor and issuer', 'Return depends on issuer performance', 'Terms of the vehicle govern payouts and exit'],
     suitableFor: 'Investors who want participation economics without holding the underlying interest directly.',
@@ -129,11 +128,7 @@ export const INSTRUMENT_CLASSES: InstrumentClass[] = [
     summary:
       'A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.',
     opportunities: ['Defined coupon and repayment calendar', 'Senior issues rank ahead of subordinated capital and equity in insolvency'],
-    risks: [
-      'Subordination raises loss severity in insolvency',
-      'Still unsecured unless collateral is stated',
-      'No participation in company growth',
-    ],
+    risks: ['Subordination raises loss severity in insolvency', 'Still unsecured unless collateral is stated', 'No participation in company growth'],
     suitableFor: 'Yield-oriented investors who can bear a total loss and do not need the money back early.',
   },
 ];
@@ -157,14 +152,12 @@ export const LABEL_QUALIFIERS: LabelQualifier[] = [
   {
     id: 'junior',
     label: '"Junior"',
-    summary:
-      'A lower-rank label in platform wording. It indicates subordinated ranking but does not by itself establish contractual qualified subordination.',
+    summary: 'A lower-rank label in platform wording. It indicates subordinated ranking but does not by itself establish contractual qualified subordination.',
   },
   {
     id: 'qualified',
     label: '"Qualified / qualifiziert"',
-    summary:
-      'Platform wording found on loans and bonds. On bonds, do not read it as qualified subordination unless the terms themselves say subordinated.',
+    summary: 'Platform wording found on loans and bonds. On bonds, do not read it as qualified subordination unless the terms themselves say subordinated.',
   },
   {
     id: 'mini-bond',
