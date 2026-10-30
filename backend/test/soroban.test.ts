@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { Account, Asset, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, SorobanDataBuilder, xdr } from '@stellar/stellar-sdk';
+import { Account, Asset, Keypair, Networks, Operation, StrKey, Transaction, TransactionBuilder, nativeToScVal, SorobanDataBuilder, xdr } from '@stellar/stellar-sdk';
 import { sorobanDeps, amountUnits, sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban } from '../src/soroban.js';
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'soroban-api-'));
 const actor = Keypair.random();
@@ -219,4 +219,40 @@ test('build and recover rate limits reject bursts per actor', { skip: !fixtureAv
   const r = await recoverSoroban({ actor: c.publicKey(), xdr: signed(b, c) });
   assert.equal(r.recovered, true);
   await assert.rejects(recoverSoroban({ actor: c.publicKey(), xdr: signed(b, c) }), /rate limit/);
+});
+
+test('quarantined journal rows fail API safety holds closed with a reconciliation diagnostic', { skip: !fixtureAvailable }, async () => {
+  // A semantically corrupt journal row (staging-drill scenario) is excluded
+  // from lookups but must never CLEAR a safety hold by its absence: builds
+  // and recoveries refuse until an operator reconciles the preserved row.
+  reset();
+  const { PostgresJournal, injectJournalBackendForTests, resetJournalBackendForTests } = await import('../src/journal.js');
+  const junkHash = 'f'.repeat(64);
+  const seeded = [{ hash: junkHash, campaign: 's1', actor: actor.publicKey(), action: 'contribute', amount: null, xdr: 'not-xdr', signed_xdr: null, status: 'GARBAGE', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }];
+  const handle = async (text: string): Promise<any> => {
+    const sql = text.replace(/\s+/g, ' ').trim();
+    if (/^(CREATE|ALTER)/.test(sql)) return { rows: [] };
+    if (/pg_advisory_(un)?lock/.test(sql)) return { rows: [] };
+    if (/pg_backend_pid/.test(sql)) return { rows: [{ pid: 1 }] };
+    if (/^DELETE FROM soroban_rate_hits/.test(sql)) return { rows: [], rowCount: 0 };
+    if (/^SELECT count\(\*\) AS n FROM soroban_rate_hits/.test(sql)) return { rows: [{ n: '0' }] };
+    if (/^INSERT INTO soroban_rate_hits/.test(sql)) return { rows: [] };
+    if (/^SELECT .* FROM soroban_intents ORDER BY seq$/.test(sql)) return { rows: seeded };
+    throw new Error('unexpected SQL: ' + sql);
+  };
+  const client = { query: handle, release: () => {} };
+  const pool = { query: handle, end: async () => {}, connect: async () => client };
+  injectJournalBackendForTests(new PostgresJournal(pool as any));
+  try {
+    await assert.rejects(buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '10' }), /quarantined record/);
+    await assert.rejects(statusSoroban(junkHash), /quarantined/);
+    const tx = new TransactionBuilder(new Account(actor.publicKey(), '7'), { fee: '100', networkPassphrase: Networks.TESTNET })
+      .addOperation(Operation.payment({ destination: Keypair.random().publicKey(), asset: Asset.native(), amount: '1' }))
+      .setTimeout(60).build();
+    tx.sign(actor);
+    await assert.rejects(recoverSoroban({ actor: actor.publicKey(), xdr: tx.toXDR() }), /quarantined record/);
+    assert.equal(sendCount, 0, 'nothing broadcast while the journal is unreconciled');
+  } finally {
+    resetJournalBackendForTests();
+  }
 });

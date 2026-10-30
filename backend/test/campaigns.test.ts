@@ -210,7 +210,7 @@ test('crash/response lost after USDC broadcast: retry confirms once, tokens deli
     /submission uncertain/,
   );
 
-  let stored = readStore().campaigns.find((x: any) => x.id === c.id);
+  const stored = readStore().campaigns.find((x: any) => x.id === c.id);
   assert.equal(stored.investments.length, 1);
   assert.equal(stored.investments[0].status, 'pending_usdc');
   assert.ok(stored.investments[0].usdcXdr, 'signed intent persisted before broadcast');
@@ -379,7 +379,7 @@ test('finalize: time gate, goal gate, crash-safe idempotent payout', async () =>
   // Payout applied on-chain but the response is lost before the confirm write.
   injectedFailure = { type: 'network', applyFirst: true };
   await assert.rejects(finalize(c.id), /submission uncertain/);
-  let stored = readStore().campaigns.find((x: any) => x.id === c.id);
+  const stored = readStore().campaigns.find((x: any) => x.id === c.id);
   assert.equal(stored.state, 'funding');
   assert.ok(stored.payoutXdr, 'payout intent persisted');
   assert.equal(stored.payoutTx, undefined, 'payout not marked confirmed');
@@ -556,7 +556,7 @@ test('refund reconciles a pending token delivery before refunding', async () => 
   // applied on-chain but the response is lost -> pending_token_delivery.
   injectedFailure = { type: 'network', applyFirst: true };
   await retryPending(c.id); // per-investment errors are recorded, not thrown
-  let stored = readStore().campaigns.find((x: any) => x.id === c.id);
+  const stored = readStore().campaigns.find((x: any) => x.id === c.id);
   assert.equal(stored.investments[0].status, 'pending_token_delivery');
   assert.ok(stored.investments[0].tokenXdr, 'token intent persisted');
 
@@ -791,7 +791,7 @@ test('a conclusively failed USDC intent releases reservation without rebuilding'
     successful: false, ledger: 1000,
   });
   injectedFailure = { type: 'bad_seq', applyFirst: false }; // force the reconcile path
-  const heldResult = await retryPending(c.id); // per-investment errors are recorded, not thrown
+  await retryPending(c.id); // per-investment errors are recorded, not thrown
   const held = readStore().campaigns.find((x: any) => x.id === c.id);
   assert.equal(held.investments[0].status, 'failed_usdc', 'failed intent releases reservation');
   assert.match(held.investments[0].error ?? '', /conclusively failed on ledger/);

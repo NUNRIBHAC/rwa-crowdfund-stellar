@@ -52,7 +52,7 @@ function ensureEnvSecret(name: string, current: string): string {
   return secret;
 }
 
-let platformSecret = ensureEnvSecret('PLATFORM_SECRET', PLATFORM_SECRET);
+const platformSecret = ensureEnvSecret('PLATFORM_SECRET', PLATFORM_SECRET);
 ensureEnvSecret('ADMIN_SECRET', process.env.ADMIN_SECRET ?? '');
 
 const platform = Keypair.fromSecret(platformSecret);

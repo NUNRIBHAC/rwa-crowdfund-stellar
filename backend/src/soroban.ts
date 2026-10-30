@@ -34,18 +34,41 @@ async function save(store: IntentStore): Promise<void> { return (await journalBa
 // Finding 4: bound per-actor open intents and build/recover request rate.
 // The open-intent cap is enforced inside the journal lock against the stored
 // state (unsigned intents expire via journal retention pruning). The request
-// rate limiter is a per-process token window; multi-instance deployments
-// still rely on the open-intent cap as the hard bound.
+// rate limiter is shared across processes through the Postgres backend
+// (per-process fallback on the single-instance file backend).
 const TERMINAL = ['SUCCESS', 'FAILED'];
 const openIntents = (store: IntentStore, actor: string): Intent[] => store.intents.filter(i => i.actor === actor && !TERMINAL.includes(i.status));
 const openIntentCap = (): number => Number.parseInt(process.env.SOROBAN_MAX_OPEN_INTENTS ?? '25', 10);
 const rateHits = new Map<string, number[]>();
-function rateLimit(kind: 'build' | 'recover', actor: string): void {
+// Rate limit is shared across every process on the journal database when the
+// Postgres backend is configured (rolling deploys, multi-instance), falling
+// back to a per-process window on the single-instance file backend.
+async function rateLimit(kind: 'build' | 'recover', actor: string): Promise<void> {
   const limit = Number.parseInt(process.env[kind === 'build' ? 'SOROBAN_BUILD_RATE_PER_MIN' : 'SOROBAN_RECOVER_RATE_PER_MIN'] ?? (kind === 'build' ? '10' : '5'), 10);
-  const now = Date.now(); const key = kind + ':' + actor;
+  const key = kind + ':' + actor;
+  const j = await journalBackend();
+  if (j.rateLimit) {
+    try { await j.rateLimit(key, limit, 60000); }
+    catch (err) { throw new Error(`rate limit exceeded for ${kind}; wait and retry`, { cause: err }); }
+    return;
+  }
+  const now = Date.now();
   const hits = (rateHits.get(key) ?? []).filter(t => now - t < 60000);
   if (hits.length >= limit) throw new Error(`rate limit exceeded for ${kind}; wait and retry`);
   hits.push(now); rateHits.set(key, hits);
+}
+// Quarantined journal rows are excluded from every lookup, so they can never
+// satisfy a status check - but a quarantined row that could be an unresolved
+// signed intent must also never CLEAR a safety hold by its absence. New
+// builds and recoveries fail closed until an operator reconciles the raw
+// record (see journal.malformed_rows logs); the row is never auto-deleted.
+function quarantineHold(store: IntentStore): void {
+  const held = (store.quarantined ?? []).filter(q => q.possiblySigned);
+  if (held.length) throw new Error(`journal holds ${held.length} quarantined record(s) that may be unresolved signed intents; operator reconciliation required before new transactions (journal.malformed_rows log, raw rows preserved)`);
+}
+function quarantinedHash(store: IntentStore, hash: string): string | null {
+  const q = (store.quarantined ?? []).find(q => q.hash === hash);
+  return q ? `journal record for ${hash} is quarantined (${q.reason}); manual reconciliation required - the raw row is preserved` : null;
 }
 function guard(): void {
   if ((process.env.STELLAR_NETWORK ?? 'testnet') !== 'testnet') throw new Error('Soroban integration is testnet-only; public network disabled');
@@ -122,7 +145,7 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
   const e = entry(id), actor = actorAddress(input.actor);
   if (process.env.SOROBAN_RECOVERY_MODE === 'true') throw new Error('recovery mode: journal was restored from backup and is not yet reconciled; new transactions are disabled until an operator completes reconciliation and disables SOROBAN_RECOVERY_MODE');
   if (!['contribute', 'refund', 'withdraw'].includes(input.action)) throw new Error('unsupported action');
-  rateLimit('build', input.actor);
+  await rateLimit('build', input.actor);
   // Phase 1 (no journal lock): every network call - code verification,
   // config read, account load, simulation, assembly.
   const client = sorobanDeps.client(); await verifyCode(client, e);
@@ -146,6 +169,7 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
   // the per-actor open-intent cap against current state, then persist.
   await guarded(async () => {
     const store = await readStore();
+    quarantineHold(store);
     const unresolved = store.intents.find(i => i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
     if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
     const open = openIntents(store, input.actor);
@@ -164,7 +188,7 @@ export async function submitSoroban(id: string, input: { actor: string; xdr: str
   return guarded(async () => {
     const store = await readStore();
     const intent = store.intents.find(i => i.hash === hash && i.campaign === id && i.actor === input.actor);
-    if (!intent) throw new Error('transaction was not prepared by this API');
+    if (!intent) throw new Error(quarantinedHash(store, hash) ?? 'transaction was not prepared by this API');
     if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
     const other = store.intents.find(i => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
     if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
@@ -191,7 +215,7 @@ export async function submitSoroban(id: string, input: { actor: string; xdr: str
 // that wallet (fail-closed) until its exact hash resolves on-chain.
 export async function recoverSoroban(input: { actor: string; xdr: string }): Promise<any> {
   guard(); actorAddress(input.actor);
-  rateLimit('recover', input.actor);
+  await rateLimit('recover', input.actor);
   // Phase 1 (no lock): verify the envelope and poll the network for its hash.
   const tx = verifySignedTx(input.actor, input.xdr);
   const hash = Buffer.from(tx.hash()).toString('hex');
@@ -209,6 +233,7 @@ export async function recoverSoroban(input: { actor: string; xdr: string }): Pro
   // Phase 2 (journal lock): idempotent re-registration of the exact hash.
   return guarded(async () => {
     const store = await readStore();
+    quarantineHold(store);
     const existing = store.intents.find(i => i.hash === hash);
     if (existing) return { hash, status: existing.status, recovered: false };
     store.intents.push({ hash, campaign: campaign ?? 'recovered', actor: input.actor, action: 'recovered', xdr: tx.toXDR(), signedXdr: tx.toXDR(), status });
@@ -221,7 +246,7 @@ export async function statusSoroban(hash: string): Promise<any> {
   guard(); if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error('invalid hash');
   // Phase 1 (no lock): read the journal and poll the network.
   const store = await readStore(), intent = store.intents.find(i => i.hash === hash);
-  if (!intent || !intent.signedXdr) throw new Error('signed intent not found');
+  if (!intent || !intent.signedXdr) throw new Error(quarantinedHash(store, hash) ?? 'signed intent not found');
   if (TERMINAL.includes(intent.status)) return { hash, status: intent.status, confirmed: intent.status === 'SUCCESS' };
   const result = await sorobanDeps.client().getTransaction(hash);
   if (result.txHash !== hash) throw new Error('RPC returned mismatched hash');
