@@ -1,5 +1,4 @@
 import { INSTRUMENT_CLASSES, INSTRUMENT_GROUPS } from '../data/instruments';
-import { GLOSSARY } from '../data/glossary';
 import { routeHash } from '../router';
 
 export default function Learn() {
@@ -47,12 +46,9 @@ export default function Learn() {
 
       <section aria-label="Glossary">
         <h2 className="section-title">Glossary</h2>
-        {GLOSSARY.map((g) => (
-          <details key={g.term} className="accordion">
-            <summary>{g.term}</summary>
-            <p>{g.definition}</p>
-          </details>
-        ))}
+        <p>
+          Key platform and crowdfunding terms live on their own page: <a href={routeHash({ name: 'glossary' })}>open the glossary</a>.
+        </p>
       </section>
 
       <p className="section-link">
