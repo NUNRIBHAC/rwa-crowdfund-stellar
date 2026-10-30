@@ -130,8 +130,9 @@ export default function App() {
 
   return (
     <>
+      <a className="skip-link" href="#main">Skip to main content</a>
       <Header actor={actor} busy={busy} onConnect={() => run(connect)} />
-      <main className="page">
+      <main className="page" id="main">
         <Hero mode={fixtureMode ? 'sample' : loaded && campaigns.length > 0 ? 'live' : 'unknown'} />
 
         {error && <p role="alert" className="error-banner">{error}</p>}
@@ -168,6 +169,7 @@ export default function App() {
                 <button
                   key={f}
                   className={`chip ${statusFilter === f ? 'chip-active' : ''}`}
+                  aria-pressed={statusFilter === f}
                   onClick={() => setStatusFilter(f)}
                 >
                   {f === 'all' ? 'All' : f === 'open' ? 'Open' : f === 'funded' ? 'Funded' : 'Underfunded'}
@@ -188,7 +190,7 @@ export default function App() {
         )}
 
         {base.length > 0 && shown.length === 0 && (
-          <p className="no-matches">No campaigns match the current search and filters.</p>
+          <p className="no-matches" role="status">No campaigns match the current search and filters.</p>
         )}
 
         {showEmpty && <EmptyState fixtureMode={false} onToggleFixtures={toggleFixtures} />}
