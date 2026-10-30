@@ -14,7 +14,7 @@ each with entity name, home member state, host states, competent authority,
 authorisation date and status.
 
 EUROCROWD publishes a readable mirror with a voluntary transparency benchmark
-(*** established / ** developing / * emerging), based on the same ESMA data
+(**\* established / ** developing / \* emerging), based on the same ESMA data
 (accessed 2026-01-16, 246 rows):
 https://eurocrowd.org/platforms-under-ecspr/
 
@@ -34,6 +34,8 @@ Fields are copied as published (names, authority, authorisation date as notified
 Status is as published by ESMA (Active / Inactive); the register gives no further reason in these fields.
 Commercial name and website are as entered by the national authority and are sometimes blank.
 This is a register extract, not a quality rating. Re-pull before relying on it: the register changes.
+
+<!-- prettier-ignore-start -->
 
 | # | Entity name | Commercial name | Home state | Host states | Competent authority | Authorised | Status | Withdrawal / end date | Website |
 |---|---|---|---|---|---|---|---|---|---|
@@ -298,6 +300,8 @@ This is a register extract, not a quality rating. Re-pull before relying on it: 
 | 259 | SBL Finans AB (publ) | Savelend Sweden AB | Sweden |  | Finansinspektionen (FI) | 2023-02-02 | Active |  | https://savelend.se/ |
 | 260 | Tessin Nordic AB (publ) | tessin.com | Sweden |  | Finansinspektionen (FI) | 2023-04-06 | Active |  | https://tessin.com/ |
 | 261 | TRINE AB | TRINE AB | Sweden |  | Finansinspektionen (FI) | 2023-12-11 | Active |  | https://trine.com/ |
+
+<!-- prettier-ignore-end -->
 
 ### 1.2 United States: no single ECSPR equivalent
 
