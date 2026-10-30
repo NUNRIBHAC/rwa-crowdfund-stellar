@@ -61,9 +61,7 @@ export default function Account({ market }: { market: Market }) {
 
   const rows: Row[] = useMemo(
     () =>
-      campaigns
-        .filter((c) => c.balance && BigInt(c.balance) > 0n)
-        .map((c) => ({ id: c.id, name: c.name, balance: c.balance as string, status: rowStatus(c) })),
+      campaigns.filter((c) => c.balance && BigInt(c.balance) > 0n).map((c) => ({ id: c.id, name: c.name, balance: c.balance as string, status: rowStatus(c) })),
     [campaigns],
   );
   const total = rows.reduce((acc, r) => acc + BigInt(r.balance), 0n);
@@ -76,8 +74,8 @@ export default function Account({ market }: { market: Market }) {
       <h1 className="page-title">My account</h1>
       <p className="account-note" role="note">
         Prototype layout of an investor account area, modeled on the logged-in dashboard documented in{' '}
-        <code>docs/conda-capital-platform-blueprint-2026-10-30.md</code> (section 7A). No personal data is collected on this page; positions come from
-        your connected Freighter wallet on Stellar testnet and are worthless.
+        <code>docs/conda-capital-platform-blueprint-2026-10-30.md</code> (section 7A). No personal data is collected on this page; positions come from your
+        connected Freighter wallet on Stellar testnet and are worthless.
       </p>
 
       <section aria-label="Portfolio summary">
@@ -98,11 +96,7 @@ export default function Account({ market }: { market: Market }) {
             <p className="account-stat-sub">Escrowed positions in open or funded campaigns</p>
           </div>
         </div>
-        {!actor && (
-          <p>
-            Connect your Freighter wallet to see your testnet positions. Without a wallet this page shows the layout only.
-          </p>
-        )}
+        {!actor && <p>Connect your Freighter wallet to see your testnet positions. Without a wallet this page shows the layout only.</p>}
         {fixtureMode && <p>Sample campaigns are on screen; sample data carries no per-wallet positions.</p>}
       </section>
 
@@ -124,8 +118,8 @@ export default function Account({ market }: { market: Market }) {
           })}
         </div>
         <p className="account-tabnote">
-          Prototype mapping: Pending = contribution escrowed, campaign open. Paid = campaign funded, still running. Completed = campaign ended after
-          funding. Canceled = ended without reaching the goal; a contributor-signed refund is available on the campaign page.
+          Prototype mapping: Pending = contribution escrowed, campaign open. Paid = campaign funded, still running. Completed = campaign ended after funding.
+          Canceled = ended without reaching the goal; a contributor-signed refund is available on the campaign page.
         </p>
         {shown.length === 0 ? (
           <p className="empty-state">No investments found.</p>
@@ -158,8 +152,8 @@ export default function Account({ market }: { market: Market }) {
         <h2 className="section-title">My wallet</h2>
         {actor ? (
           <p>
-            Connected: <code title={actor}>{shorten(actor)}</code>. Contributions are escrowed by the campaign contracts; refunds are
-            contributor-signed on-chain. No platform-held funds exist in this prototype.
+            Connected: <code title={actor}>{shorten(actor)}</code>. Contributions are escrowed by the campaign contracts; refunds are contributor-signed
+            on-chain. No platform-held funds exist in this prototype.
           </p>
         ) : (
           <p>No wallet connected.</p>
@@ -169,8 +163,8 @@ export default function Account({ market }: { market: Market }) {
       <section aria-label="Account and profile checklist">
         <h2 className="section-title">Account overview and profile data</h2>
         <p>
-          The reference platform gates investing behind profile completion, verification and bank details. This prototype collects none of them; the
-          checklist shows the structure as planned placeholders.
+          The reference platform gates investing behind profile completion, verification and bank details. This prototype collects none of them; the checklist
+          shows the structure as planned placeholders.
         </p>
         <ul className="account-checklist">
           {CHECKLIST.map((item) => (
