@@ -39,13 +39,15 @@ Distinct tranches, kept separate (different asset IDs): Giesinger Braeu 1-6 (565
 
 Three separate fields, as the user asked. Industry (section 5 and 6) says what the issuer does. Project/financing type says what kind of financing the entry is. Property type applies only to Real estate.
 
-| Project/financing type                   | Rows (269 numbered with URL) |
-| ---------------------------------------- | ---------------------------: |
-| Corporate (operating-business issuer)    |                          264 |
-| Property project                         |                            2 |
-| Property project (tentative, unverified) |                            2 |
-| Unclear from available evidence          |                            1 |
-| **Total**                                |                      **269** |
+> **Provisional.** The financing type below is based on the issuer (an operating business), not on a verified use of proceeds. "Corporate" does not mean the financing purpose was confirmed as corporate. Only the 4 property rows rest on page text or title.
+
+| Project/financing type (issuer-based, provisional)                  | Rows (269 numbered with URL) |
+| ------------------------------------------------------------------- | ---------------------------: |
+| Corporate (issuer-based, provisional; use of proceeds not verified) |                          264 |
+| Property project                                                    |                            2 |
+| Property project (tentative, unverified)                            |                            2 |
+| Unclear from available evidence                                     |                            1 |
+| **Total**                                                           |                      **269** |
 
 Limits of the financing type: "Corporate" is assigned at issuer level. The page describes an operating business and names no specific property asset. The use of proceeds was not checked against each instrument's terms, so some corporate rows may in fact fund a specific project (a plant, a hotel build-out). No further sub-type (for example asset-specific non-property project) is asserted because the evidence was not read for that. Unknown stays unknown: row 527 (page empty) is "Unclear from available evidence", not corporate. Row 378 has no URL and is not classified. The orphan URL is a duplicate of row 474's offering and is not counted.
 
@@ -56,6 +58,8 @@ Property type: 394 Kremplhof is Mixed-use (residential + commercial; "Wohnen und
 Prefab or mobile housing makers (448 Heise Haus, 518 McCube, 338 and 586 Wohnwagon) and building product makers (489/593 KAPO windows, 534 LCT light concrete) are filed under Building products and prefab housing, financing type Corporate, not Real estate. Hotel operators and holdings (FMTG, Moerwald, Familux, COOEE alpin, Uebergossene Alm, MyGym) are filed by what they run. Some of those loans may fund buildings; the pages describe corporate funding, so they are not counted as real estate.
 
 ## 5. Counts by industry category
+
+The industry is what the issuer's business does. It says nothing about use of proceeds (see section 4).
 
 | Industry category                                                                 | Rows                         | Unique offerings |
 | --------------------------------------------------------------------------------- | ---------------------------- | ---------------- |
@@ -82,6 +86,8 @@ Prefab or mobile housing makers (448 Heise Haus, 518 McCube, 338 and 586 Wohnwag
 Row 378 (no URL) and the orphan URL are outside these counts; the orphan duplicates row 474.
 
 ## 6. Campaigns by category
+
+Every row below has financing type "Corporate (issuer-based, provisional; use of proceeds not verified)" except the real estate rows and the unclear row, which are marked in their own tables.
 
 ### Food and beverage products (31 rows)
 
