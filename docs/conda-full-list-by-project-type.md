@@ -110,13 +110,14 @@ Three separate fields, as the user asked. Industry (sections 6 and 7) says what 
 
 > **Provisional.** The financing type below is based on the issuer (an operating business), not on a verified use of proceeds. "Corporate" does not mean the financing purpose was confirmed as corporate. Only the 4 property rows rest on page text or title.
 
-| Project/financing type (issuer-based, provisional)                  | Rows (269 numbered with URL) |
-| ------------------------------------------------------------------- | ---------------------------: |
-| Corporate (issuer-based, provisional; use of proceeds not verified) |                          264 |
-| Property project                                                    |                            2 |
-| Property project (tentative, unverified)                            |                            2 |
-| Unclear from available evidence                                     |                            1 |
-| **Total**                                                           |                      **269** |
+| Project/financing type (issuer-based, provisional)                         | Rows (269 numbered with URL)                                     |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------: |
+| Corporate (issuer-based, provisional; use of proceeds not verified)        |                                                              264 |
+| Property project                                                           |                                                                2 |
+| Property project (tentative, unverified)                                   |                                                                2 |
+| Project financing (asset-specific, energy infrastructure; not real estate) | none confirmed (not assessed; corporate rows were not sub-typed) |
+| Unclear from available evidence                                            |                                                                1 |
+| **Total**                                                                  |                                                          **269** |
 
 Limits of the financing type: "Corporate" is assigned at issuer level. The page describes an operating business and names no specific property asset. The use of proceeds was not checked against each instrument's terms, so some corporate rows may in fact fund a specific project (a plant, a hotel build-out). No further sub-type (for example asset-specific non-property project) is asserted because the evidence was not read for that. Unknown stays unknown: row 527 (page empty) is "Unclear from available evidence", not corporate. Row 378 has no URL and is not classified. The orphan URL is a duplicate of row 474's offering and is not counted.
 
@@ -124,13 +125,17 @@ Limits of the financing type: "Corporate" is assigned at issuer level. The page 
 
 Property type: 394 Kremplhof is Mixed-use (residential + commercial; "Wohnen und Arbeiten", Leoben). 476 UKO-Tower is Commercial/office (office and knowledge park, described as an "Immobilienprojekt"). Both are confirmed from page text. 343 AVORIS Darlehen 2020 and 447 Kollitsch Immobilien Anleihe 2020 are tentative: their pages are empty, the filing rests on title and issuer name only, and the property type is not determined. No campaign is confirmed as a purely residential development.
 
-| Property type (real estate rows only)                    | Rows                        |
-| -------------------------------------------------------- | --------------------------- |
-| Mixed-use (residential + commercial elements)            | 1 confirmed (394 Kremplhof) |
-| Commercial/office                                        | 1 confirmed (476 UKO-Tower) |
-| Residential (all subtypes, incl. holiday apartments)     | 0 confirmed                 |
-| Other property types                                     | 0 confirmed                 |
-| Not determined (pages empty; title and issuer name only) | 2 tentative (343, 447)      |
+| Property type (real estate rows only)                     | Rows                        |
+| --------------------------------------------------------- | --------------------------- |
+| Residential (new-build development)                       | 0 confirmed                 |
+| Residential (subtype detail unconfirmed)                  | 0 confirmed                 |
+| Residential (renovation/revitalization)                   | 0 confirmed                 |
+| Residential (renovation + new-build)                      | 0 confirmed                 |
+| Residential (holiday apartments, incl. hotel conversions) | 0 confirmed                 |
+| Commercial/office                                         | 1 confirmed (476 UKO-Tower) |
+| Mixed-use (residential + commercial elements)             | 1 confirmed (394 Kremplhof) |
+| Other property types                                      | 0 confirmed                 |
+| Not determined (pages empty; title and issuer name only)  | 2 tentative (343, 447)      |
 
 Prefab or mobile housing makers (448 Heise Haus, 518 McCube, 338 and 586 Wohnwagon) and building product makers (489/593 KAPO windows, 534 LCT light concrete) are filed under Building products and prefab housing, financing type Corporate, not Real estate. Hotel operators and holdings (FMTG, Moerwald, Familux, COOEE alpin, Uebergossene Alm, MyGym) are filed by what they run. Some of those loans may fund buildings; the pages describe corporate funding, so they are not counted as real estate.
 
