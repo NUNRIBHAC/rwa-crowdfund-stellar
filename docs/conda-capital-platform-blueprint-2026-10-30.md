@@ -1,7 +1,7 @@
 # CONDA Capital Market - Platform and Feature Blueprint
 
 **Purpose:** detailed description of the CONDA Capital Market platform (conda-capital.com) - pages, features, user journeys and instrument structures - as reference material for building your own crowdfunding / RWA investment platform.
-**Evidence base:** your archive `conda-capital.zip` (323.5 MB): 150 full-page screencaptures of conda.capital and its support portal taken 2026-10-30, plus 50 issuer and platform PDF documents. Every load-bearing statement cites its source: **[S-xxx]** = screencapture file (see source index), **[D-name §n]** = PDF document + section. Anatomy of the homepage, investments list, campaign page and knowledge hub was verified against the rendered page images, not only extracted text.
+**Evidence base:** your archive `conda-capital.zip` (323.5 MB): 150 full-page screencaptures of conda.capital and its support portal taken 2026-10-30, plus 50 issuer and platform PDF documents. A second archive, `conda2.zip` (14 full-page screencaptures of the authenticated investor account area, captured 2026-10-30), extends the evidence into the logged-in dashboard (section 7A). Every load-bearing statement cites its source: **[S-xxx]** = screencapture file (see source index), **[D-name §n]** = PDF document + section. Anatomy of the homepage, investments list, campaign page and knowledge hub was verified against the rendered page images, not only extracted text.
 **Labels:** [OBSERVED] = visible in the cited archive evidence. [SITE-CLAIM] = stated on the website or in a dated document; not independently re-verified against a live register. [PROPOSED] = my design recommendation for your build, not a claim about CONDA. [UNKNOWN] = not visible in the archive.
 
 > Use this as a specification reference, not as source text. Do not copy CONDA's branding, texts, legal documents or campaign content. Summaries of CONDA's legal documents below are paraphrases for analysis.
@@ -116,10 +116,47 @@ CONDA also runs a white-label arm ("CONDA Business Solutions", S-005) selling th
 5. **Reflection period** (T&Cs §6.3/§9.1, citing Art. 22 ECSP): non-sophisticated investors can revoke within 4 calendar days, free, via cancellation button or email; afterwards bound until end of the offer period. Sophisticated investors are bound immediately.
 6. **Payment** (S-148, S-145): processed by a licensed payment service provider (secupay; secupay AGB in archive), not by CONDA (T&Cs §1.7, §3.4). Bank transfer uses a per-investment payment reference; a missing/wrong reference parks money in a temporary PSP account until manually allocated (S-148). Joint-account payments are held for manual review (S-145). Credit card exists (KB article "Why isn't my credit card payment working?" seen in S-144 sidebar). Exact checkout screens and the full payment-method list: [UNKNOWN].
 7. **Wallet/funds:** T&Cs §3.4 describe a wallet/user account provided by the payment service provider; CONDA states it provides no payment services and acquires no rights to client funds or instruments (§8.4/8.5). No deposit-guarantee or investor-compensation coverage (§3.4(b)).
-8. **Dashboard** (S-147): "My Investments" with per-investment status messages, status updates and documents; KB covers interest payout conditions and timelines, refunds, and payout-prerequisite forms (Gebrueder Stitch form in archive, D-abfrageformular).
+8. **Dashboard** (S-147): "My Investments" with per-investment status messages, status updates and documents; KB covers interest payout conditions and timelines, refunds, and payout-prerequisite forms (Gebrueder Stitch form in archive, D-abfrageformular). The account area itself is now directly observed; see section 7A.
 9. **Transfers/exit** (S-065 FAQ + T&Cs §7): securities generally transferable; recipient must be registered and verified; "the transfer of the tokens takes place directly between the wallets"; no own secondary market at FAQ time. T&Cs §7 additionally describe a "CONDA Marketplace" bulletin board for publishing buy/sell interests with bilateral closing, CONDA as technical operator only, optional seller fee. No marketplace UI in the archive [UNKNOWN].
 10. **Company accounts** (S-141): individual registers and passes KYC first, then applies for a company account (company register extract <3 months old, IDs of all >25% owners, shareholder list for German companies); manual review by Investor Relations; switcher between personal and company contexts; investments execute in the currently selected account.
 11. **Account lifecycle** (S-139, S-140, S-146): personal data locked after verification (changes via Investor Relations with proof documents); deletion via support request with identity details; password reset by email; accounts are platform-specific across CONDA's separate platforms/white-labels.
+
+---
+
+## 7A. Investor account area - authenticated dashboard [OBSERVED: supplied logged-in captures S-149..S-162, taken 2026-10-30]
+
+The main archive covers public pages and the support portal. Fourteen additional full-page captures (S-149..S-162), supplied separately (`conda2.zip`), show the logged-in investor account area on a freshly registered account with no investments. UI wording below is quoted verbatim; personal identifiers visible in the captures are not reproduced.
+
+**Layout and navigation** [OBSERVED, S-149]:
+
+- Top bar: "Back to home" link, account menu with the account holder's name, language switch (EN), theme toggle. Footer: "CONDA GmbH © 2026". A floating "Feedback" tab on the right edge.
+- Sidebar: "MY INVESTOR PROFILE" card with the account holder's name; "+ Add Company Account"; navigation groups - Dashboard; News; "Account Overview" (Personal Data, Address Data, Contact Details, Security); "Profile Data" (Investor Qualification, Verification, Bank Details, Depot Data, Digital Locker); "My Investments" (My Investments, My Wallet).
+- Incomplete items carry a red marker in the sidebar (on this account: Address Data, Contact Details, Investor Qualification, Verification, Bank Details).
+
+**Pages:**
+
+1. **Dashboard home** (S-149): greeting "Welcome back, <first name>!"; stat cards "Total invested" (EUR amount), "Return received" (EUR amount), "Active Investments" (count); "My Investments" list (empty state "No investments found"); "Recent activity" ("No activity found").
+2. **News** (S-150): "All notifications and transaction history", with message search and an "All types" filter.
+3. **Personal Data** (S-151): first/last name (prefilled from registration), date of birth (DD MM YYYY), nationality, standard language, country of birth, place of birth, gender, and a PEP declaration ("I am a politically exposed person (PEP)", yes/no). Footer note: "\* Required field - Saving without entry not possible".
+4. **Address Data** (S-152): info box - enter the registration address of the first residence, matching the identity card; required for verification and cannot be changed afterwards. Address, postal code, city and country are marked "\*\*": "Extended required field - Investment not possible without providing this information". State is optional.
+5. **Contact Details** (S-153): mobile number is "\*\*" (extended required), phone number optional; email change via "New email address" sends a confirmation email - the new address is used for login and sending only after successful verification.
+6. **Security** (S-154): "Manage Password and Two-Factor Authentication" - change-password flow; 2FA status ("2FA is not set up yet") with "Set up 2FA app".
+7. **Investor Qualification** (S-155): "Your investor data and risk assessment" - a guided survey of knowledge, experience, understanding of risk and investment goals, citing legal requirements and individual interests (matches T&Cs §5, section 7 step 3). Survey status "Pending" with a Start button; a separate "Loss Capacity Calculator" with a Calculate button.
+8. **Verification** (S-156): three-step checklist - 1 "Complete your data" ("Please complete your data to finish creating your account."), 2 "Perform verification" ("To make investments, you must verify your identity."), 3 "Verification successful" ("After successful verification, you can make investments with this account."). Status "Not Started Yet"; KYC runs via signteq (vendor shown in-page); unmet prerequisites are listed inline ("Please complete this data first: Address Data, Contact Details").
+9. **Bank Details** (S-157): "Add and manage the bank accounts you invest and receive payouts with." Empty state "You have not added a bank account yet."; add form: account holder, IBAN, BIC (optional).
+10. **Depot Data** (S-158): optional securities-account details (account holder, securities account number, bank name, BIC or sort code); info text: all fields optional, some offerings request depot data during the investment process, entries are saved automatically.
+11. **Digital Locker** (S-159): explanatory text - securities are held in a personal digital locker tied to the investor's identity and shared across all CONDA-operated investment platforms, so tokens from several platforms appear together; a 6-digit locker PIN is created with the first investment and can be changed on this page. Empty state: "Your Digital Locker will be created with your first investment."
+12. **My Investments** (S-160): "Overview of your portfolio" with a "New investments" button; stat cards "Total invested" / "Active Investments" / "Completed"; status tabs with counts: All / Canceled / Pending / Paid / Completed.
+13. **My Wallet** (S-161): on this empty account the wallet view renders the same dashboard overview cards; the wallet funding/payout UI beyond this remains [UNKNOWN].
+14. **Add Company Account** (S-162): the sidebar action opens a modal - "Would you like to open a company account for your account?" (Yes/No). The company-account process itself is per section 7 step 10 (S-141).
+
+**Structural patterns worth copying** [PROPOSED reading of the observed UI]:
+
+- Granular completion gating: per-item sidebar markers, a two-level required-field system (\* blocks saving, \*\* blocks investing), and KYC prerequisites listed inline at the blocked step.
+- Identity-tied data locks: the registration address matching the ID card is immutable after entry; email changes re-verify (consistent with the lifecycle rules in section 7 step 11).
+- Portfolio status model: All / Canceled / Pending / Paid / Completed.
+- Identity-scoped, platform-spanning custody view (digital locker): one investor, several CONDA-operated platforms, one token view.
+- A persistent feedback channel inside the account area.
 
 ---
 
@@ -311,7 +348,7 @@ The archive's documents describe the following roles. Document dates are given b
 
 ## 13. What the archive does NOT show [UNKNOWN]
 
-- Authenticated invest/checkout screens beyond the sidebar widget (amount entry detail, knowledge-test UI, payment-method selection, wallet UI).
+- Authenticated invest/checkout screens beyond the sidebar widget (amount entry detail, knowledge-test question UI, payment-method selection). The account area itself is now directly observed (section 7A); the wallet funding/payout UI inside it is still not shown.
 - Admin/issuer backend: campaign builder, KYC review queue, payment reconciliation, comment moderation, payout execution.
 - CONDA Marketplace UI (T&Cs §7 only).
 - Email/notification templates, fee amounts, API, data model.
@@ -598,6 +635,25 @@ Everything in sections 14 and 15 is a proposed design derived from the observed 
 - S-146 = `screencapture-support-conda-capital-portal-en-kb-articles-login-problems-or-forgotten-password-2026-10-30-15_06_21.pdf`
 - S-147 = `screencapture-support-conda-capital-portal-en-kb-articles-my-investments-aren-t-listed-in-the-dashboard-what-can-i-do-2026-10-30-15_07_45.pdf`
 - S-148 = `screencapture-support-conda-capital-portal-en-kb-articles-what-can-i-do-if-the-payment-reference-is-missing-or-incorrect-2026-10-30-15_07_07.pdf`
+
+### Authenticated investor account area (supplied captures, `conda2.zip`, 2026-10-30)
+
+Logged-in investor dashboard captures supplied separately from the main archive. The account shown is freshly registered with no investments; personal identifiers visible in the captures are not reproduced in this document.
+
+- S-149 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_11_05.pdf` (Dashboard home)
+- S-150 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_11_22.pdf` (News)
+- S-151 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_11_34.pdf` (Personal Data)
+- S-152 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_11_43.pdf` (Address Data)
+- S-153 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_11_53.pdf` (Contact Details)
+- S-154 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_12_03.pdf` (Security)
+- S-155 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_12_18.pdf` (Investor Qualification)
+- S-156 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_12_34.pdf` (Verification / KYC via signteq)
+- S-157 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_12_45.pdf` (Bank Details)
+- S-158 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_12_54.pdf` (Depot Data)
+- S-159 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_13_05.pdf` (Digital Locker)
+- S-160 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_13_16.pdf` (My Investments)
+- S-161 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_13_26.pdf` (My Wallet)
+- S-162 = `screencapture-conda-capital-en-dashboard-2026-10-30-23_13_38.pdf` (Add Company Account modal)
 
 ### D-alias resolution table (aliases used in the body -> literal archive filename)
 
