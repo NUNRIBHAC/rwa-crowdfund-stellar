@@ -27,6 +27,7 @@ export function infrastructureRouter(service: Infrastructure, credentials: Crede
   route('/cashouts', (r,a) => service.requestCashout(a,r.body));
   route('/cashouts/:key/approve', (r,a) => service.approveCashout(a,String(r.params.key)));
   route('/cashouts/:key/dispatch', (r,a) => service.dispatchCashout(a,String(r.params.key)));
+  route('/cashouts/:key/resolve', (r,a) => service.resolveCashout(a,String(r.params.key),r.body));
   router.get('/audit', (_req,res) => { if (res.locals.actor.role !== 'auditor') { res.status(403).json({ error: 'auditor role required' }); return; } res.json(service.store.read().audit); });
   return router;
 }

@@ -2,13 +2,16 @@
   "name": "rwa-crowdfund-stellar",
   "private": true,
   "version": "0.1.0",
-  "workspaces": ["backend", "frontend"],
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
     "dev:backend": "npm --workspace backend run dev",
     "dev:frontend": "npm --workspace frontend run dev",
     "build": "npm --workspace backend run build && npm --workspace frontend run build",
     "setup": "npm --workspace backend run setup",
-    "test": "npm --workspace backend run test"
+    "test": "npm --workspace backend run test && npm --workspace frontend run test"
   },
   "engines": {
     "node": ">=20.19"

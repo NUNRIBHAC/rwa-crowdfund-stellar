@@ -11,7 +11,8 @@ services:
     plan: free
     buildCommand: npm ci && npm run build
     startCommand: node backend/scripts/host.mjs
-    healthCheckPath: /
+    # /health exercises the API process, not just the static page (finding 10).
+    healthCheckPath: /health
     envVars:
       - key: NODE_VERSION
         value: '22'

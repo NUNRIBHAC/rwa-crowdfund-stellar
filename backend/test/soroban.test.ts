@@ -137,6 +137,10 @@ test('HTTP build/submit/status roundtrip invokes only registered Soroban flow', 
   const post = (url: string, body: any) => fetch(root + url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   try {
     const list = await fetch(root + '/api/campaigns'); assert.equal(list.status, 200);
+    assert.match(list.headers.get('content-security-policy') ?? '', /default-src 'self'/);
+    assert.match(list.headers.get('strict-transport-security') ?? '', /max-age=/);
+    assert.equal(list.headers.get('x-frame-options'), 'DENY');
+    assert.equal(list.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
     assert.equal((await list.json() as any).campaigns[0].mode, 'soroban');
     const build = await post('/api/campaigns/s1/soroban/build', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
     assert.equal(build.status, 200); const b: any = await build.json(); assert.equal(b.feeStroops, '10100');

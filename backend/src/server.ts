@@ -19,6 +19,13 @@ app.use((req, res, next) => {
   }
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  // Web security headers on every response (API, static assets and SPA
+  // fallback all pass through this middleware). CSP allows the Vite-built
+  // bundle and inline style attributes only; no inline script, no framing.
+  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+  res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   next();
 });
 app.use(cors({ origin: (origin, done) => done(null, !origin || allowedOrigins().includes(origin)),

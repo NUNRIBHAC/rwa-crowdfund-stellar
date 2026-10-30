@@ -18,7 +18,7 @@ export default function Hero({ mode }: Props) {
       </div>
       <p className="hero-note">
         {mode === 'live' &&
-          'Testnet demo. Every campaign below is a live Soroban contract on Stellar testnet. Not audited, not production-ready, no real funds.'}
+          'Testnet demo. Every campaign below is a live Soroban contract on Stellar testnet. Not audited, not production-ready, no real funds. Hosted on a free tier: the first request after idle can take up to a minute while the instance wakes.'}
         {mode === 'sample' &&
           'Sample-data preview. The campaigns below are fixtures, not deployed contracts. Not audited, not production-ready.'}
         {mode === 'unknown' &&
