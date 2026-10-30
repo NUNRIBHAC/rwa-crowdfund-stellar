@@ -15,6 +15,7 @@ import Investments from './pages/Investments';
 import CampaignDetail from './pages/CampaignDetail';
 import HowItWorks from './pages/HowItWorks';
 import Learn from './pages/Learn';
+import Glossary from './pages/Glossary';
 import RiskWarnings from './pages/RiskWarnings';
 import Faq from './pages/Faq';
 import About from './pages/About';
@@ -176,6 +177,7 @@ export default function App() {
         {route.name === 'campaign' && <CampaignDetail market={market} campaignId={route.campaignId ?? ''} />}
         {route.name === 'how-it-works' && <HowItWorks />}
         {route.name === 'learn' && <Learn />}
+        {route.name === 'glossary' && <Glossary />}
         {route.name === 'risk-warnings' && <RiskWarnings />}
         {route.name === 'faq' && <Faq />}
         {route.name === 'about' && <About />}
