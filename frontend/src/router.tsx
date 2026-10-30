@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export type RouteName = 'home' | 'investments' | 'campaign' | 'how-it-works' | 'learn' | 'glossary' | 'risk-warnings' | 'faq' | 'financing' | 'about' | 'account';
+export type RouteName =
+  'home' | 'investments' | 'campaign' | 'how-it-works' | 'learn' | 'glossary' | 'risk-warnings' | 'faq' | 'financing' | 'about' | 'account';
 
 export type Route = { name: RouteName; campaignId?: string };
 
