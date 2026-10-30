@@ -6,7 +6,9 @@ This is testnet-only integration code, not a deployed or production-ready servic
 
 ## Rights
 
-All rights reserved - see [NOTICE](NOTICE). No open-source license or patent grant is given. Material under `docs/skills-reference/` keeps its separately stated rights and licenses.
+Copyright (c) 2026 Nuno Ribeiro. All rights reserved. No permission is granted to reuse, modify or redistribute the original code or documentation, except as required by applicable law or GitHub's terms. Material under `docs/skills-reference/` retains its separately stated rights and licenses.
+
+No open-source license or patent grant is given. The same notice is kept in [NOTICE](NOTICE).
 
 ## Run locally
 
