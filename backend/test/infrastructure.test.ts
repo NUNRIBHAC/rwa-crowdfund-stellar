@@ -44,3 +44,33 @@ test('expired valuation blocks a previously approved cashout',async()=>{const f=
 test('cashout never accepts floating point, zero, negative or unrecognised bank data',()=>{const f=fixture();f.ready();for(const amountMinor of ['0','-1','1.5','1e3',100])assert.throws(()=>f.service.requestCashout(op,{...f.request,amountMinor}));assert.throws(()=>f.service.requestCashout(op,{...f.request,iban:'PTFAKE'}));});
 test('rights changes invalidate a previously approved cashout',async()=>{const f=fixture();f.ready();f.service.requestCashout(op,f.request);f.service.approveCashout(compliance,'one');const p=f.service.propose(g1,{kind:'pilot_policy',assetId:'test_asset',jurisdiction:'PT',rightsHash:'b'.repeat(64),economicModel:'equity',assetClass:'fixture_only'});f.service.approve(g2,p.id);f.service.approve(g3,p.id);await assert.rejects(f.service.dispatchCashout(op,'one'),/rights changed/);});
 test('valuation evidence tampering and role confusion fail closed',()=>{const f=fixture();const signature=sign(null,Buffer.from(valuationPayload(f.v)),privateKey).toString('base64');assert.throws(()=>f.service.publishValuation(val,{...f.v,evidenceHash:'b'.repeat(64)},signature),/signature/);assert.throws(()=>f.service.publishValuation(op,f.v,signature),/valuation/);});
+test('operator resolution unwedges dispatching and unknown cashouts with audit',async()=>{
+  // Crash wedge: state stuck at dispatching rejects dispatch (existing behavior).
+  const f=fixture();f.ready();f.service.requestCashout(op,f.request);f.service.approveCashout(compliance,'one');
+  f.store.change(s=>{s.cashouts.one.state='dispatching';});
+  // Role boundary: only operator resolves.
+  for(const role of ['compliance','valuation','governor','auditor'] as const) assert.throws(()=>f.service.resolveCashout(a('x',role),'one',{outcome:'not_dispatched',reason:'adapter confirmed nothing sent'}),/operator/);
+  // Reason is required and meaningful.
+  assert.throws(()=>f.service.resolveCashout(op,'one',{outcome:'not_dispatched',reason:'short'}));
+  // Confirmed payout requires a reference.
+  assert.throws(()=>f.service.resolveCashout(op,'one',{outcome:'simulated',reason:'bank confirmed payout sent'}));
+  // not_dispatched returns to approved; the same record can dispatch again.
+  const before=f.store.read().audit.length;
+  const resolved=f.service.resolveCashout(op,'one',{outcome:'not_dispatched',reason:'adapter confirmed nothing sent'});
+  assert.equal(resolved.state,'approved');
+  const audit=f.store.read().audit;
+  assert.equal(audit.length,before+1);
+  assert.equal(audit.at(-1).action,'cashout.resolved_not_dispatched');
+  assert.equal(audit.at(-1).role,'operator');
+  assert.equal((await f.service.dispatchCashout(op,'one')).state,'simulated');
+  // Terminal state is never rewritten by resolution.
+  assert.throws(()=>f.service.resolveCashout(op,'one',{outcome:'not_dispatched',reason:'adapter confirmed nothing sent'}),/never rewritten/);
+});
+test('operator resolution of unknown state records reference and stays simulation-only',async()=>{
+  const f=fixture({mode:'test_only',submit:async()=>{throw Error('timeout');}});f.ready();f.service.requestCashout(op,f.request);f.service.approveCashout(compliance,'one');
+  assert.equal((await f.service.dispatchCashout(op,'one')).state,'unknown');
+  const r=f.service.resolveCashout(op,'one',{outcome:'simulated',reference:'bank:reconciled-1',reason:'bank statement confirms payout'});
+  assert.equal(r.state,'simulated');assert.equal(r.reference,'bank:reconciled-1');assert.equal(r.simulationOnly,true);
+  assert.equal(f.store.read().audit.at(-1).action,'cashout.resolved_simulated');
+  assert.throws(()=>f.service.resolveCashout(op,'one',{outcome:'simulated',reference:'bank:x',reason:'bank statement confirms payout'}),/never rewritten/);
+});

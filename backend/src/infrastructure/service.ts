@@ -8,6 +8,13 @@ const identity = z.object({ subject: name, country: z.string().regex(/^[A-Z]{2}$
 const valuation = z.object({ assetId: name, amountMinor: amount, currency: z.literal('EUR'), observedAt: z.number().int().nonnegative(), expiresAt: z.number().int().nonnegative(), evidenceHash: z.string().regex(/^[a-f0-9]{64}$/), method: z.enum(['independent_appraisal', 'nav', 'cashflow']), signer: name }).strict();
 const proposal = z.object({ kind: z.enum(['pilot_policy', 'pause', 'resume']), assetId: name, jurisdiction: z.literal('PT'), rightsHash: z.string().regex(/^[a-f0-9]{64}$/), economicModel: z.enum(['loan', 'equity', 'revenue_share', 'reward']), assetClass: name }).strict();
 const cashout = z.object({ subject: name, assetId: name, amountMinor: amount, currency: z.literal('EUR'), destinationRef: name, idempotencyKey: name }).strict();
+// Operator resolution of a wedged cashout (crash between intent persistence
+// and result write leaves 'dispatching'; an adapter timeout leaves 'unknown';
+// both states reject every retry with 'cashout held'). Mirroring the journal
+// recovery rule, resolution never guesses: the operator asserts a confirmed
+// outcome with a reason, and every resolution is audited. Terminal and active
+// states are never rewritten.
+const resolution = z.object({ outcome: z.enum(['simulated', 'not_dispatched']), reference: name.optional(), reason: z.string().min(10).max(500) }).strict();
 export function valuationPayload(input: unknown): string { const v = valuation.parse(input); return JSON.stringify(['rwa-crowdfund:valuation:v1:test_only', v.assetId, v.amountMinor, v.currency, v.observedAt, v.expiresAt, v.evidenceHash, v.method, v.signer]); }
 export interface CashoutAdapter { readonly mode: 'test_only'; submit(id: string): Promise<{ outcome: 'simulated' | 'unknown'; reference?: string }>; }
 export class MockCashoutAdapter implements CashoutAdapter {
@@ -70,5 +77,24 @@ export class Infrastructure {
     let result: Awaited<ReturnType<CashoutAdapter['submit']>>;
     try { result = await this.adapter.submit(intent.id); } catch { result = { outcome: 'unknown' }; }
     return this.store.change(s => { const c = s.cashouts[key]; c.state = result.outcome === 'simulated' ? 'simulated' : 'unknown'; c.reference = result.reference; this.audit(s, actor, 'cashout.result', c.id); return c; });
+  }
+  resolveCashout(actor: Actor, key: string, input: unknown) {
+    this.require(actor, 'operator'); const r = resolution.parse(input);
+    return this.store.change(s => {
+      const c = s.cashouts[key]; if (!c) throw new Error('cashout missing');
+      if (c.state !== 'dispatching' && c.state !== 'unknown') throw new Error('only dispatching or unknown cashouts can be resolved; terminal and active states are never rewritten');
+      if (r.outcome === 'simulated') {
+        // Operator confirmed out-of-band that the payout actually happened.
+        if (!r.reference) throw new Error('confirmed payout requires a reference');
+        c.state = 'simulated'; c.reference = r.reference;
+      } else {
+        // Adapter confirmed nothing was ever sent: back to approved so the
+        // same idempotency record can be dispatched again - never a duplicate.
+        c.state = 'approved'; delete c.reference;
+      }
+      c.resolvedBy = actor.id; c.resolutionReason = r.reason;
+      this.audit(s, actor, `cashout.resolved_${r.outcome}`, c.id);
+      return c;
+    });
   }
 }

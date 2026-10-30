@@ -1,0 +1,43 @@
+# Free-tier hosted demo: Render web service + external Neon Postgres journal.
+# Neon is created separately (console.neon.tech); paste its pooled connection
+# string as SOROBAN_JOURNAL_DATABASE_URL (marked secret, never committed).
+# ADMIN_SECRET is only needed for legacy admin endpoints; leave unset to keep
+# them fail-closed (503). No payment method or paid plan is required for this.
+services:
+  - type: web
+    name: rwa-crowdfund-demo
+    runtime: node
+    region: frankfurt
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: node backend/scripts/host.mjs
+    # /health exercises the API process, not just the static page (finding 10).
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: HOST
+        value: 0.0.0.0
+      - key: STELLAR_NETWORK
+        value: testnet
+      - key: RPC_URL
+        value: https://soroban-testnet.stellar.org
+      - key: HORIZON_URL
+        value: https://horizon-testnet.stellar.org
+      - key: USDC_ISSUER
+        value: GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5
+      # User-facing demo registers demo-solar only; E2E contracts are ended fixtures.
+      - key: SOROBAN_CAMPAIGNS_JSON
+        value: '[{"id":"demo-solar","name":"Demo Solar Farm (testnet)","contractId":"CCBIMGPHIOUFN6IC6MYPFXOGJQIRJHHDXA2Y7LQDCYBSJOKHULICO6NY"}]'
+      - key: SOROBAN_JOURNAL_BACKEND
+        value: postgres
+      - key: SOROBAN_JOURNAL_DATABASE_URL
+        sync: false # Neon DIRECT (non-pooled) connection string - the pooled
+        # endpoint breaks session advisory locks (PgBouncer transaction mode
+        # rebinds backends); the adapter also self-checks backend stability.
+      # The allowlist must include the service's own public origin (same-origin
+      # module loads send Origin). Adjust if the service name/URL differs.
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://rwa-crowdfund-demo.onrender.com
+      - key: ADMIN_SECRET
+        sync: false # optional; unset keeps admin endpoints disabled (fail closed)

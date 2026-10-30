@@ -132,7 +132,7 @@ export default function App() {
     <>
       <Header actor={actor} busy={busy} onConnect={() => run(connect)} />
       <main className="page">
-        <Hero />
+        <Hero mode={fixtureMode ? 'sample' : loaded && campaigns.length > 0 ? 'live' : 'unknown'} />
 
         {error && <p role="alert" className="error-banner">{error}</p>}
 
@@ -143,6 +143,7 @@ export default function App() {
             onSubmit={() => run(submit)}
             onCheck={() => run(check)}
             onCancel={() => retain({ ...intent, status: 'CANCELLED_UNSIGNED' })}
+            onClear={() => { if (isTerminal(intent.status)) { setIntent(null); localStorage.removeItem(INTENT_KEY); } }}
           />
         )}
 

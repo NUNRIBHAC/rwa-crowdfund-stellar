@@ -1,4 +1,6 @@
-export default function Hero() {
+type Props = { mode: 'live' | 'sample' | 'unknown' };
+
+export default function Hero({ mode }: Props) {
   return (
     <section className="hero">
       <h1>All-or-nothing crowdfunding, enforced by a Soroban contract</h1>
@@ -15,8 +17,12 @@ export default function Hero() {
         <span className="badge">Nontransferable records</span>
       </div>
       <p className="hero-note">
-        Testnet integration preview. No contracts are deployed or configured by this app,
-        and it is not audited or production-ready.
+        {mode === 'live' &&
+          'Testnet demo. Every campaign below is a live Soroban contract on Stellar testnet. Not audited, not production-ready, no real funds. Hosted on a free tier: the first request after idle can take up to a minute while the instance wakes.'}
+        {mode === 'sample' &&
+          'Sample-data preview. The campaigns below are fixtures, not deployed contracts. Not audited, not production-ready.'}
+        {mode === 'unknown' &&
+          'Testnet integration preview. Not audited, not production-ready, no real funds.'}
       </p>
       <p className="hero-unavailable">
         Not available in this prototype: identity/KYC onboarding, secondary-market trading,

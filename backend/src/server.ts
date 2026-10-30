@@ -3,7 +3,7 @@ import cors from 'cors';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
-import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban } from './soroban.js';
+import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban } from './soroban.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -19,6 +19,13 @@ app.use((req, res, next) => {
   }
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  // Web security headers on every response (API, static assets and SPA
+  // fallback all pass through this middleware). CSP allows the Vite-built
+  // bundle and inline style attributes only; no inline script, no framing.
+  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+  res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   next();
 });
 app.use(cors({ origin: (origin, done) => done(null, !origin || allowedOrigins().includes(origin)),
@@ -70,6 +77,12 @@ app.post('/api/campaigns/:id/soroban/submit', async (req, res) => {
   try { res.json(await submitSoroban(String(req.params.id), req.body ?? {})); }
   catch (err) { res.status(400).json({ error: err instanceof Error ? err.message : String(err) }); }
 });
+app.post('/api/soroban/recover', async (req, res) => {
+  // Re-register an exact signed envelope lost with the journal. Read-only
+  // against the network: looks up the hash, never submits.
+  try { res.json(await recoverSoroban(req.body ?? {})); }
+  catch (err) { res.status(400).json({ error: err instanceof Error ? err.message : String(err) }); }
+});
 app.get('/api/soroban/transactions/:hash', async (req, res) => {
   try { res.json(await statusSoroban(String(req.params.hash))); }
   catch (err) { res.status(400).json({ error: err instanceof Error ? err.message : String(err) }); }
@@ -81,6 +94,6 @@ app.post('/api/{*path}', (_req, res) => {
 });
 
 export { app };
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && !process.env.EMBEDDED_HOST) {
   app.listen(PORT, process.env.HOST ?? '127.0.0.1', () => console.log(`Soroban test-only API at http://127.0.0.1:${PORT}`));
 }

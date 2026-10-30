@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { Account, Asset, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, SorobanDataBuilder, xdr } from '@stellar/stellar-sdk';
-import { sorobanDeps, amountUnits, sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban } from '../src/soroban.js';
+import { sorobanDeps, amountUnits, sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban } from '../src/soroban.js';
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'soroban-api-'));
 const actor = Keypair.random();
 const contractId = StrKey.encodeContract(Buffer.alloc(32, 2));
@@ -39,6 +39,8 @@ function reset() {
   fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true });
   process.env.SOROBAN_CAMPAIGNS_JSON = JSON.stringify([{ id: 's1', name: 'Soroban test campaign', contractId }]);
   process.env.STELLAR_NETWORK = 'testnet'; sendCount = 0; sends.length = 0; throwsOnSend = false; txStatus = 'NOT_FOUND'; wrongHash = false; badWasm = false; addressAuth = false; restoreRequired = false;
+  process.env.SOROBAN_BUILD_RATE_PER_MIN = '1000'; process.env.SOROBAN_RECOVER_RATE_PER_MIN = '1000';
+  delete process.env.SOROBAN_MAX_OPEN_INTENTS;
 }
 const signed = (built: any, signer = actor) => { const tx = TransactionBuilder.fromXDR(built.xdr, Networks.TESTNET); tx.sign(signer); return tx.toXDR(); };
 // Build tests rely on fixture below that can be reproduced from pinned Rust.
@@ -135,6 +137,10 @@ test('HTTP build/submit/status roundtrip invokes only registered Soroban flow', 
   const post = (url: string, body: any) => fetch(root + url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   try {
     const list = await fetch(root + '/api/campaigns'); assert.equal(list.status, 200);
+    assert.match(list.headers.get('content-security-policy') ?? '', /default-src 'self'/);
+    assert.match(list.headers.get('strict-transport-security') ?? '', /max-age=/);
+    assert.equal(list.headers.get('x-frame-options'), 'DENY');
+    assert.equal(list.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
     assert.equal((await list.json() as any).campaigns[0].mode, 'soroban');
     const build = await post('/api/campaigns/s1/soroban/build', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
     assert.equal(build.status, 200); const b: any = await build.json(); assert.equal(b.feeStroops, '10100');
@@ -144,4 +150,73 @@ test('HTTP build/submit/status roundtrip invokes only registered Soroban flow', 
     const checked: any = await (await fetch(root + '/api/soroban/transactions/' + b.hash)).json();
     assert.equal(checked.confirmed, true); assert.equal(sendCount, 1);
   } finally { srv.close(); }
+});
+
+test('journal-loss recovery re-registers exact signed intent, blocks replacement until resolved', async () => {
+  reset();
+  const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  const signedXdr = signed(b);
+  fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true }); // journal lost
+  const r = await recoverSoroban({ actor: actor.publicKey(), xdr: signedXdr });
+  assert.equal(r.recovered, true); assert.equal(r.status, 'NOT_FOUND'); assert.equal(r.campaign, 's1');
+  await assert.rejects(buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' }), /unresolved/);
+  txStatus = 'SUCCESS';
+  assert.equal((await statusSoroban(b.hash)).status, 'SUCCESS');
+  await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' }); // allowed once terminal
+});
+
+test('recovery never submits and rejects a mismatched RPC hash', async () => {
+  reset(); wrongHash = true;
+  const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true });
+  await assert.rejects(recoverSoroban({ actor: actor.publicKey(), xdr: signed(b) }), /mismatched/);
+  assert.equal(sendCount, 0);
+});
+
+test('recovery mode blocks all builds after a stale restore until operator reconciliation', async () => {
+  reset();
+  // Signed intent exists only in a journal portion a stale backup would lose.
+  const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  const signedXdr = signed(b);
+  // Operator restores an older journal without that intent and starts in recovery mode.
+  fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true });
+  process.env.SOROBAN_RECOVERY_MODE = 'true';
+  // Without the gate this build would create a duplicate while the signed
+  // envelope is outstanding. The gate rejects it for every actor.
+  await assert.rejects(buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' }), /recovery mode/);
+  await assert.rejects(buildSoroban('s1', { actor: Keypair.random().publicKey(), action: 'contribute', amount: '1' }), /recovery mode/);
+  // Reconciliation: the retained envelope is re-registered and resolves.
+  const r = await recoverSoroban({ actor: actor.publicKey(), xdr: signedXdr });
+  assert.equal(r.campaign, 's1');
+  txStatus = 'SUCCESS';
+  assert.equal((await statusSoroban(b.hash)).status, 'SUCCESS');
+  // Operator completes reconciliation and lifts the gate.
+  delete process.env.SOROBAN_RECOVERY_MODE;
+  await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  delete process.env.SOROBAN_RECOVERY_MODE;
+});
+
+test('per-actor open intent cap blocks further builds until intents resolve', { skip: !fixtureAvailable }, async () => {
+  reset(); process.env.SOROBAN_MAX_OPEN_INTENTS = '2';
+  const a = Keypair.random();
+  await buildSoroban('s1', { actor: a.publicKey(), action: 'contribute', amount: '1' });
+  await buildSoroban('s1', { actor: a.publicKey(), action: 'contribute', amount: '1' });
+  await assert.rejects(buildSoroban('s1', { actor: a.publicKey(), action: 'contribute', amount: '1' }), /too many open intents/);
+  // A different actor is unaffected.
+  await buildSoroban('s1', { actor: Keypair.random().publicKey(), action: 'contribute', amount: '1' });
+});
+
+test('build and recover rate limits reject bursts per actor', { skip: !fixtureAvailable }, async () => {
+  reset(); process.env.SOROBAN_BUILD_RATE_PER_MIN = '2'; process.env.SOROBAN_RECOVER_RATE_PER_MIN = '1';
+  const a = Keypair.random();
+  await buildSoroban('s1', { actor: a.publicKey(), action: 'contribute', amount: '1' });
+  await buildSoroban('s1', { actor: a.publicKey(), action: 'contribute', amount: '1' });
+  await assert.rejects(buildSoroban('s1', { actor: a.publicKey(), action: 'contribute', amount: '1' }), /rate limit/);
+  // A separate fresh actor: recover limit is independent of build.
+  const c = Keypair.random();
+  const b = await buildSoroban('s1', { actor: c.publicKey(), action: 'contribute', amount: '1' });
+  fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true }); // journal lost
+  const r = await recoverSoroban({ actor: c.publicKey(), xdr: signed(b, c) });
+  assert.equal(r.recovered, true);
+  await assert.rejects(recoverSoroban({ actor: c.publicKey(), xdr: signed(b, c) }), /rate limit/);
 });

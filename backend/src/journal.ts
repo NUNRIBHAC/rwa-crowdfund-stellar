@@ -1,0 +1,228 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Durable signed-intent journal. The journal is safety state: it records
+// every prepared/signed envelope so broadcast ambiguity is never resolved by
+// building a replacement. Two backends: atomic local file (default, single
+// developer) and Postgres (hosted deployments where the filesystem is
+// ephemeral). Backend selection is explicit; a configured Postgres backend
+// that cannot be reached fails closed, never silently falls back to a file.
+export type Intent = { hash: string; campaign: string; actor: string; action: string; xdr: string; signedXdr?: string; status: string; amount?: string; createdAt?: string; updatedAt?: string };
+export type IntentStore = { intents: Intent[] };
+
+const TERMINAL_STATUSES = ['SUCCESS', 'FAILED'];
+// Retention policy: terminal intents are pruned after JOURNAL_TERMINAL_RETENTION_MS
+// (default 30 days) and unsigned, unbroadcastable build intents after
+// JOURNAL_UNSIGNED_EXPIRY_MS (default 24h; prepared envelopes expire 15 minutes
+// after build). Signed non-terminal intents are NEVER pruned: an ambiguous
+// signed envelope is safety state, resolved by its exact hash, not by age.
+// Rows without timestamps (written before this policy) are always kept.
+export function pruneIntents(intents: Intent[], now = Date.now()): Intent[] {
+  const terminalRetentionMs = Number(process.env.JOURNAL_TERMINAL_RETENTION_MS ?? 30 * 24 * 3600 * 1000);
+  const unsignedExpiryMs = Number(process.env.JOURNAL_UNSIGNED_EXPIRY_MS ?? 24 * 3600 * 1000);
+  return intents.filter(i => {
+    if (TERMINAL_STATUSES.includes(i.status)) return i.updatedAt ? now - Date.parse(i.updatedAt) < terminalRetentionMs : true;
+    if (!i.signedXdr) return i.createdAt ? now - Date.parse(i.createdAt) < unsignedExpiryMs : true;
+    return true;
+  });
+}
+// A signed envelope is a bearer instrument until confirmed; once the intent is
+// terminal it carries no remaining value, so it is scrubbed. The hash remains
+// as the durable proof.
+export function purgeTerminalEnvelopes(intents: Intent[]): Intent[] {
+  return intents.map(i => {
+    if (!TERMINAL_STATUSES.includes(i.status) || !i.signedXdr) return i;
+    const { signedXdr, ...rest } = i;
+    return rest;
+  });
+}
+// Wide-event log line for safety-state transitions: one JSON object per event.
+export function logEvent(event: string, fields: Record<string, unknown> = {}): void {
+  console.log(JSON.stringify({ ts: new Date().toISOString(), event, ...fields }));
+}
+
+export interface Journal {
+  read(): Promise<IntentStore>;
+  save(store: IntentStore): Promise<void>;
+  // Cross-process mutual exclusion for the read-check-save critical section,
+  // when the backend supports it (Postgres advisory lock). The file backend
+  // omits it: single-process deployments rely on the in-process queue only.
+  runExclusive?<T>(key: string, fn: () => Promise<T>): Promise<T>;
+}
+
+class FileJournal implements Journal {
+  constructor(private file: string) {}
+  async read(): Promise<IntentStore> {
+    return fs.existsSync(this.file) ? JSON.parse(fs.readFileSync(this.file, 'utf8')) : { intents: [] };
+  }
+  async save(store: IntentStore): Promise<void> {
+    const before = store.intents.length;
+    store = { intents: pruneIntents(purgeTerminalEnvelopes(store.intents)) };
+    if (store.intents.length !== before) logEvent('journal.pruned', { backend: 'file', removed: before - store.intents.length });
+    fs.mkdirSync(path.dirname(this.file), { recursive: true });
+    const tmp = `${this.file}.tmp`; const fd = fs.openSync(tmp, 'w', 0o600);
+    try { fs.writeFileSync(fd, JSON.stringify(store)); fs.fsyncSync(fd); } finally { fs.closeSync(fd); }
+    fs.renameSync(tmp, this.file);
+    const dir = fs.openSync(path.dirname(this.file), 'r'); try { fs.fsyncSync(dir); } finally { fs.closeSync(dir); }
+  }
+}
+
+// Minimal pool surface so tests can inject a fake; the real implementation is
+// a pg.Pool created from SOROBAN_JOURNAL_DATABASE_URL.
+export interface PgPoolLike {
+  query(text: string, params?: unknown[]): Promise<{ rows: any[] }>;
+  end(): Promise<void>;
+}
+
+export class PostgresJournal implements Journal {
+  private ready: Promise<void>;
+  constructor(private pool: PgPoolLike) {
+    // Concurrent first-boot processes (rolling deploys) can race CREATE TABLE
+    // IF NOT EXISTS into a catalog duplicate-key error. Serialize schema init
+    // with an advisory lock when the pool exposes dedicated clients; fakes
+    // without connect() fall back to a plain query.
+    const ddl = `CREATE TABLE IF NOT EXISTS soroban_intents (
+      seq bigserial PRIMARY KEY,
+      hash text NOT NULL UNIQUE,
+      campaign text NOT NULL,
+      actor text NOT NULL,
+      action text NOT NULL,
+      amount text,
+      xdr text NOT NULL,
+      signed_xdr text,
+      status text NOT NULL
+    )`;
+    // Idempotent column migration for tables created before timestamps existed.
+    const migrate = `ALTER TABLE soroban_intents
+      ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+      ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now()`;
+    const connector = (this.pool as any).connect?.bind(this.pool);
+    this.ready = connector
+      ? connector().then(async (client: any) => {
+          try { await this.withSessionLock(client, 'soroban_intents_schema_init', async () => { await client.query(ddl); await client.query(migrate); }); }
+          finally { client.release(); }
+        })
+      : pool.query(ddl).then(() => pool.query(migrate)).then(() => {});
+  }
+  static async connect(url: string | undefined): Promise<PostgresJournal> {
+    if (!url) throw new Error('SOROBAN_JOURNAL_BACKEND=postgres requires SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file journal');
+    const { Pool } = (await import('pg')).default;
+    // Small pool: Neon direct connections are limited (104 on the free 0.25 CU) and the demo is single-instance.
+    return new PostgresJournal(new Pool({ connectionString: url, max: 5 }));
+  }
+  // Session advisory lock with a backend-stability check. Session locks only
+  // work when every query lands on the same Postgres backend; a transaction
+  // pooler (e.g. PgBouncer transaction mode, Neon pooled endpoint) silently
+  // rebinds queries to different backends and breaks lock semantics. The
+  // backend pid is verified stable across the critical section and any drift
+  // fails closed instead of pretending the lock held. This is defense in
+  // depth, NOT proof of a safe URL: a pooler can reuse one backend and pass
+  // the check. The primary control is the DIRECT (non-pooled) endpoint:
+  // Neon documents PgBouncer transaction mode breaking session-level
+  // advisory locks (neon.com/docs/connect/connection-pooling).
+  private async withSessionLock<T>(client: any, key: string, fn: () => Promise<T>): Promise<T> {
+    await client.query('SELECT pg_advisory_lock(hashtext($1))', [key]);
+    try {
+      const pidBefore = (await client.query('SELECT pg_backend_pid() AS pid')).rows[0]?.pid;
+      const out = await fn();
+      const pidAfter = (await client.query('SELECT pg_backend_pid() AS pid')).rows[0]?.pid;
+      if (pidBefore !== pidAfter) throw new Error('database backend changed mid-locked-section (transaction pooler?); refusing to trust the advisory lock - use a direct non-pooled connection');
+      return out;
+    } finally { await client.query('SELECT pg_advisory_unlock(hashtext($1))', [key]).catch(() => {}); }
+  }
+  async runExclusive<T>(key: string, fn: () => Promise<T>): Promise<T> {
+    await this.ready;
+    const client = await (this.pool as any).connect();
+    try { return await this.withSessionLock(client, key, fn); }
+    finally { client.release(); }
+  }
+  async read(): Promise<IntentStore> {
+    await this.ready;
+    const r = await this.pool.query('SELECT hash, campaign, actor, action, amount, xdr, signed_xdr, status, created_at, updated_at FROM soroban_intents ORDER BY seq');
+    return {
+      intents: r.rows.map(row => ({
+        hash: row.hash, campaign: row.campaign, actor: row.actor, action: row.action,
+        xdr: row.xdr, status: row.status,
+        ...(row.signed_xdr != null ? { signedXdr: row.signed_xdr } : {}),
+        ...(row.amount != null ? { amount: row.amount } : {}),
+        ...(row.created_at != null ? { createdAt: new Date(row.created_at).toISOString() } : {}),
+        ...(row.updated_at != null ? { updatedAt: new Date(row.updated_at).toISOString() } : {}),
+      })),
+    };
+  }
+  async save(store: IntentStore): Promise<void> {
+    await this.ready;
+    // A multi-statement transaction must run on ONE connection: pool.query
+    // may route each call to a different pooled client, which would silently
+    // split BEGIN/COMMIT and the FOR UPDATE lock across backends. Check out a
+    // dedicated client, as runExclusive does. Fakes without connect() are
+    // single-connection by construction and use the pool surface directly.
+    const connector = (this.pool as any).connect?.bind(this.pool);
+    if (!connector) return this.saveOn(this.pool, store);
+    const client = await connector();
+    try { return await this.saveOn(client, store); }
+    finally { client.release(); }
+  }
+  private async saveOn(db: PgPoolLike, store: IntentStore): Promise<void> {
+    await db.query('BEGIN');
+    try {
+      for (const i of store.intents) {
+        // Refuse a DIFFERENT signed envelope for the same hash outright; the
+        // COALESCE below only fills an unsigned slot, never swaps one.
+        const cur = await db.query('SELECT signed_xdr FROM soroban_intents WHERE hash = $1 FOR UPDATE', [i.hash]);
+        const existingXdr = cur.rows[0]?.signed_xdr ?? null;
+        if (existingXdr != null && i.signedXdr != null && existingXdr !== i.signedXdr) {
+          logEvent('journal.conflict', { hash: i.hash, actor: i.actor });
+          throw new Error(`conflicting signed envelope for intent ${i.hash}; refusing to overwrite`);
+        }
+        await db.query(
+          `INSERT INTO soroban_intents (hash, campaign, actor, action, amount, xdr, signed_xdr, status)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+           ON CONFLICT (hash) DO UPDATE SET campaign = EXCLUDED.campaign, actor = EXCLUDED.actor, action = EXCLUDED.action,
+             amount = EXCLUDED.amount, xdr = EXCLUDED.xdr,
+             -- Never regress safety state on last-writer-wins: a stored signed
+             -- envelope is never erased by an unsigned one, and a terminal
+             -- (SUCCESS/FAILED) status is never overwritten by a stale save.
+             signed_xdr = CASE WHEN EXCLUDED.status IN ('SUCCESS','FAILED') THEN NULL
+               ELSE COALESCE(soroban_intents.signed_xdr, EXCLUDED.signed_xdr) END,
+             status = CASE WHEN soroban_intents.status IN ('SUCCESS','FAILED') THEN soroban_intents.status ELSE EXCLUDED.status END,
+             updated_at = now()`,
+          [i.hash, i.campaign, i.actor, i.action, i.amount ?? null, i.xdr, i.signedXdr ?? null, i.status]);
+      }
+      // Retention: prune only terminal intents past their retention window and
+      // unsigned expired build intents. Signed non-terminal intents are never
+      // touched: an ambiguous signed envelope resolves by exact hash, not age.
+      const pruned = await db.query(
+        `DELETE FROM soroban_intents
+         WHERE (status IN ('SUCCESS','FAILED') AND updated_at < now() - ($1 * interval '1 millisecond'))
+            OR (signed_xdr IS NULL AND status NOT IN ('SUCCESS','FAILED') AND created_at < now() - ($2 * interval '1 millisecond'))`,
+        [Number(process.env.JOURNAL_TERMINAL_RETENTION_MS ?? 30 * 24 * 3600 * 1000),
+         Number(process.env.JOURNAL_UNSIGNED_EXPIRY_MS ?? 24 * 3600 * 1000)]);
+      const removed = (pruned as any).rowCount ?? 0;
+      if (removed > 0) logEvent('journal.pruned', { backend: 'postgres', removed });
+      await db.query('COMMIT');
+    } catch (err) {
+      await db.query('ROLLBACK').catch(() => {});
+      throw err;
+    }
+  }
+}
+
+let instance: Promise<Journal> | null = null;
+export function journalBackend(): Promise<Journal> {
+  if (!instance) {
+    const backend = (process.env.SOROBAN_JOURNAL_BACKEND ?? 'file').toLowerCase();
+    if (backend === 'file') {
+      instance = Promise.resolve(new FileJournal(process.env.SOROBAN_INTENTS_PATH ?? path.resolve('data/soroban-intents.json')));
+    } else if (backend === 'postgres') {
+      instance = PostgresJournal.connect(process.env.SOROBAN_JOURNAL_DATABASE_URL);
+    } else {
+      throw new Error(`unknown SOROBAN_JOURNAL_BACKEND '${backend}' (expected file or postgres)`);
+    }
+    // A failed connect must not poison later attempts behind a rejected memo.
+    instance.catch(() => { instance = null; });
+  }
+  return instance;
+}
+// Test hook: reset the memoized backend between scenarios.
+export function resetJournalBackendForTests(): void { instance = null; }
