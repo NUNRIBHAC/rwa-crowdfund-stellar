@@ -8,6 +8,7 @@ type Props = {
   onSubmit: () => void;
   onCheck: () => void;
   onCancel: () => void;
+  onClear: () => void;
 };
 
 function stepClass(intent: Intent, step: number): string {
@@ -23,7 +24,7 @@ function stepClass(intent: Intent, step: number): string {
   return 'step';
 }
 
-export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel }: Props) {
+export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel, onClear }: Props) {
   const terminal = isTerminal(intent.status);
   const steps = ['Prepared', 'Signed', 'Submitted', 'Confirmed'];
   return (
@@ -77,6 +78,9 @@ export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel 
         )}
         {!intent.signedXdr && intent.status === 'BUILT' && (
           <button className="btn btn-ghost" disabled={busy} onClick={onCancel}>Cancel unsigned transaction</button>
+        )}
+        {terminal && (
+          <button className="btn btn-ghost" disabled={busy} onClick={onClear}>Clear confirmed record</button>
         )}
       </div>
     </section>

@@ -143,6 +143,7 @@ export default function App() {
             onSubmit={() => run(submit)}
             onCheck={() => run(check)}
             onCancel={() => retain({ ...intent, status: 'CANCELLED_UNSIGNED' })}
+            onClear={() => { if (isTerminal(intent.status)) { setIntent(null); localStorage.removeItem(INTENT_KEY); } }}
           />
         )}
 
