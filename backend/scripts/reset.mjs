@@ -6,10 +6,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const backendRoot = path.resolve(__dirname, '..');
 
-const targets = [
-  path.join(backendRoot, 'data', 'campaigns.json'),
-  path.join(backendRoot, '.demo-investors.json'),
-];
+const targets = [path.join(backendRoot, 'data', 'campaigns.json'), path.join(backendRoot, '.demo-investors.json')];
 
 let removed = 0;
 for (const p of targets) {

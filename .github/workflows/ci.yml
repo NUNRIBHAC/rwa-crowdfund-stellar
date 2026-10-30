@@ -15,8 +15,12 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
       - run: npm test
       - run: npm run build
+      - name: Dependency audit (fails on high/critical advisories)
+        run: npm audit --audit-level=high
   soroban:
     runs-on: ubuntu-latest
     defaults:

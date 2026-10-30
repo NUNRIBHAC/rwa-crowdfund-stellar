@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # npm workspaces share one root lockfile.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  # Soroban contract (pinned toolchain; CI verifies the built Wasm fixture).
+  - package-ecosystem: cargo
+    directory: /contracts/crowdfund
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

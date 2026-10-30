@@ -84,13 +84,13 @@ Full build/submit flow — the same one Freighter executes — with 3 investors
 (20 USDC from a real Freighter wallet, 12 and 8 USDC from demo accounts),
 40 USDC goal, 1000 token supply, already finalized:
 
-| Step | Tx hash | Explorer (testnet) |
-|---|---|---|
-| Mint CRWD001 supply (escrow on platform) | `879dc3a8c76a83e9865168cb31988851ce274f3b70663bd61a0f15ff73965288` | https://stellar.expert/explorer/testnet/tx/879dc3a8c76a83e9865168cb31988851ce274f3b70663bd61a0f15ff73965288 |
+| Step                                           | Tx hash                                                                                                                                             | Explorer (testnet)                                                                                          |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Mint CRWD001 supply (escrow on platform)       | `879dc3a8c76a83e9865168cb31988851ce274f3b70663bd61a0f15ff73965288`                                                                                  | https://stellar.expert/explorer/testnet/tx/879dc3a8c76a83e9865168cb31988851ce274f3b70663bd61a0f15ff73965288 |
 | Investment 1: 20 USDC → 500 tokens (Freighter) | USDC `7c92d6c9305373d893e6516238fd46aaf57486755a65367c1e8b480a836e521c` / tokens `623b229d9eef3730034bd19de3a02168113c3270e367f221cf5bc1c1b9e4d66e` | https://stellar.expert/explorer/testnet/tx/7c92d6c9305373d893e6516238fd46aaf57486755a65367c1e8b480a836e521c |
-| Investment 2: 12 USDC → 300 tokens | USDC `26e6a938b0fe00241ff7ed1c4d2ae0f16f57c173d0ba79641e1f95857b2ef0a9` / tokens `16474e8ddb9a2342e84546f4c62b5362cacd4c969f9be640be88c1e5ccc15400` | https://stellar.expert/explorer/testnet/tx/26e6a938b0fe00241ff7ed1c4d2ae0f16f57c173d0ba79641e1f95857b2ef0a9 |
-| Investment 3: 8 USDC → 200 tokens | USDC `c265aaf2749d26616848c9217c300324aab81833c95067ec39b5b2bd6ee9e28d` / tokens `9ccd47948512254b8162602fabd430f9f33d56193d3288e2a0fb71bd69dfdb8e` | https://stellar.expert/explorer/testnet/tx/c265aaf2749d26616848c9217c300324aab81833c95067ec39b5b2bd6ee9e28d |
-| Finalize: 40 USDC payout to creator | `52b0556ea49eca1241a787321eea9ae6f30dc4fb740372ebe21ddc6aa0983bc7` | https://stellar.expert/explorer/testnet/tx/52b0556ea49eca1241a787321eea9ae6f30dc4fb740372ebe21ddc6aa0983bc7 |
+| Investment 2: 12 USDC → 300 tokens             | USDC `26e6a938b0fe00241ff7ed1c4d2ae0f16f57c173d0ba79641e1f95857b2ef0a9` / tokens `16474e8ddb9a2342e84546f4c62b5362cacd4c969f9be640be88c1e5ccc15400` | https://stellar.expert/explorer/testnet/tx/26e6a938b0fe00241ff7ed1c4d2ae0f16f57c173d0ba79641e1f95857b2ef0a9 |
+| Investment 3: 8 USDC → 200 tokens              | USDC `c265aaf2749d26616848c9217c300324aab81833c95067ec39b5b2bd6ee9e28d` / tokens `9ccd47948512254b8162602fabd430f9f33d56193d3288e2a0fb71bd69dfdb8e` | https://stellar.expert/explorer/testnet/tx/c265aaf2749d26616848c9217c300324aab81833c95067ec39b5b2bd6ee9e28d |
+| Finalize: 40 USDC payout to creator            | `52b0556ea49eca1241a787321eea9ae6f30dc4fb740372ebe21ddc6aa0983bc7`                                                                                  | https://stellar.expert/explorer/testnet/tx/52b0556ea49eca1241a787321eea9ae6f30dc4fb740372ebe21ddc6aa0983bc7 |
 
 Verified final state: investors hold CRWD001 500/300/200 tokens (recorded in
 `backend/data/campaigns.json` and visible in the transactions above); the payout moved
@@ -113,16 +113,16 @@ npm run dev:frontend                   # app at http://localhost:5173
 
 ### Environment variables (`backend/.env`)
 
-| Variable | Required | Description |
-|---|---|---|
-| `STELLAR_NETWORK` | yes | `testnet` (only network supported in this MVP) |
-| `HORIZON_URL` | no | defaults to `https://horizon-testnet.stellar.org` |
-| `RPC_URL` | no | defaults to `https://soroban-testnet.stellar.org` |
-| `USDC_ISSUER` | yes | Circle USDC testnet SAC issuer: `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5` |
-| `SOZU_FAUCET_URL` | no | defaults to `https://faucet.sozu.capital` |
-| `PLATFORM_SECRET` | yes | secret key of the platform/escrow account (testnet only) |
-| `ADMIN_SECRET` | yes | shared admin key for the money-moving endpoints (`/finalize`, `/refund`, `/retry-pending`, `/demo/seed-investors`); sent as the `x-admin-key` header. `npm run setup` generates one if empty |
-| `PORT` | no | API port, defaults to `4000` |
+| Variable          | Required | Description                                                                                                                                                                                  |
+| ----------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `STELLAR_NETWORK` | yes      | `testnet` (only network supported in this MVP)                                                                                                                                               |
+| `HORIZON_URL`     | no       | defaults to `https://horizon-testnet.stellar.org`                                                                                                                                            |
+| `RPC_URL`         | no       | defaults to `https://soroban-testnet.stellar.org`                                                                                                                                            |
+| `USDC_ISSUER`     | yes      | Circle USDC testnet SAC issuer: `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5`                                                                                                   |
+| `SOZU_FAUCET_URL` | no       | defaults to `https://faucet.sozu.capital`                                                                                                                                                    |
+| `PLATFORM_SECRET` | yes      | secret key of the platform/escrow account (testnet only)                                                                                                                                     |
+| `ADMIN_SECRET`    | yes      | shared admin key for the money-moving endpoints (`/finalize`, `/refund`, `/retry-pending`, `/demo/seed-investors`); sent as the `x-admin-key` header. `npm run setup` generates one if empty |
+| `PORT`            | no       | API port, defaults to `4000`                                                                                                                                                                 |
 
 Generate `PLATFORM_SECRET` with:
 `node -e "console.log(require('@stellar/stellar-sdk').Keypair.random().secret())"`
@@ -151,22 +151,22 @@ Notes:
 
 ## API
 
-| Method | Route | Description |
-|---|---|---|
-| GET | `/health` | API and network status |
-| GET | `/api/campaigns` | list campaigns |
-| POST | `/api/campaigns` | create campaign |
-| POST | `/api/campaigns/:id/invest` | demo investment (backend signs) |
-| POST | `/api/campaigns/:id/invest/build` | build XDR for Freighter signing |
-| POST | `/api/campaigns/:id/invest/submit` | submit signed XDR and deliver tokens |
-| POST | `/api/campaigns/:id/finalize` | finalize and pay the creator (admin key, after deadline, goal met) |
-| POST | `/api/campaigns/:id/refund` | refund investors (admin key, after deadline, goal missed) |
-| POST | `/api/campaigns/:id/retry-pending` | retry token delivery for pending investments (admin key) |
-| GET | `/api/demo/investors` | list demo investors |
-| POST | `/api/demo/seed-investors` | seed demo investors |
-| GET | `/api/demo/wallet/:pub` | account balances |
-| POST | `/api/wallet/trustline/build` | USDC trustline XDR (Freighter) |
-| POST | `/api/wallet/trustline/submit` | submit signed trustline |
+| Method | Route                              | Description                                                        |
+| ------ | ---------------------------------- | ------------------------------------------------------------------ |
+| GET    | `/health`                          | API and network status                                             |
+| GET    | `/api/campaigns`                   | list campaigns                                                     |
+| POST   | `/api/campaigns`                   | create campaign                                                    |
+| POST   | `/api/campaigns/:id/invest`        | demo investment (backend signs)                                    |
+| POST   | `/api/campaigns/:id/invest/build`  | build XDR for Freighter signing                                    |
+| POST   | `/api/campaigns/:id/invest/submit` | submit signed XDR and deliver tokens                               |
+| POST   | `/api/campaigns/:id/finalize`      | finalize and pay the creator (admin key, after deadline, goal met) |
+| POST   | `/api/campaigns/:id/refund`        | refund investors (admin key, after deadline, goal missed)          |
+| POST   | `/api/campaigns/:id/retry-pending` | retry token delivery for pending investments (admin key)           |
+| GET    | `/api/demo/investors`              | list demo investors                                                |
+| POST   | `/api/demo/seed-investors`         | seed demo investors                                                |
+| GET    | `/api/demo/wallet/:pub`            | account balances                                                   |
+| POST   | `/api/wallet/trustline/build`      | USDC trustline XDR (Freighter)                                     |
+| POST   | `/api/wallet/trustline/submit`     | submit signed trustline                                            |
 
 ## Known limitations (demo) and next steps
 

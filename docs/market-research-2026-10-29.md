@@ -36,50 +36,50 @@ operation, industry tags, offering types, minimum investment, advertised return,
 secondary market yes/no, auto-invest yes/no, directory-applied "Regulated" and
 "Verified platform" marks. These are directory/platform claims, not verified facts.
 
-| Platform | HQ | Types | Min | Advertised return | Secondary | Regulated mark |
-|---|---|---|---|---|---|---|
-| 8lends | Switzerland | P2P, Tokenized | 100 USDT | 22.5% | Yes | |
-| FF Forest | Latvia | Tokenized | 1,000 USDT | 18% | No | |
-| skew.net | Switzerland | P2P, Reward, Tokenized | $200 | 12% | No | Regulated |
-| Shipfinex | UAE | Equity, Tokenized | $1,000 | 10% | No | |
-| Headway Nova | South Africa | Tokenized | $25 | 16.7% | Yes | Regulated |
-| 0xequity | Turkey/USA | Equity, Tokenized | $10 | 7% | No | Regulated |
-| Daskapital | Portugal | Equity, Debt, Tokenized | €10 | 9% | Yes | Regulated |
-| InvestaX | Singapore | Tokenized | 100 USDT | 4-10% | Yes | Regulated (MAS CMS + RMO per card) |
-| Invesdor | Germany | Equity, Debt, Tokenized | €250 | 6% | No | Regulated |
-| Bitlauncher | United Kingdom | Tokenized | $150,000 | 4% | No | |
-| DealMaker | USA/Canada | Equity, Debt, Reward | $1 | — | No | Regulated |
-| FundinFolks | Singapore | Equity, Tokenized | $10,000 | 20% | No | |
-| pitchIN | Malaysia | Equity, Tokenized | RM 500 | — | Yes | Regulated |
-| Republic | USA | Equity, Tokenized | $50 | 15% | Yes | Regulated |
-| Hurst | Brazil | Debt, Tokenized | R$ 10,000 | 21.1% | Yes | Regulated |
-| GigaStar Market | USA | Tokenized | $50 | 14% | No | Regulated |
-| Fraxtor | Singapore/Australia | Equity, Tokenized, Buy-to-let | S$ 10,000 | 10% | No | Regulated |
-| BlocHome | Luxembourg | Tokenized | €1,000 | — | No | |
-| Securitize | USA | Tokenized | $1,000 | 10% | Yes | Regulated |
-| Tecra Space | Poland | Reward, Tokenized, Donation | 1 USDT | 15% | Yes | |
-| arttrade | Germany | Tokenized | €1,000 | 9% | No | Regulated |
-| Reental | Spain | Tokenized | €100 | 18% | Yes | |
-| BnkToTheFuture | USA/Canada | Equity, Tokenized | $1 | 15% | Yes | |
-| MountX | Mexico/Canada | Tokenized | $200 | 15% | No | |
-| Alta | Singapore/India | Equity, Debt, Tokenized | $500 | — | Yes | Regulated |
-| Coreestate | Denmark | Tokenized | €100 | 10% | No | |
-| Metawealth | Ireland | Tokenized | $100 | 20% | Yes | |
-| Definder | United Kingdom | Tokenized | $10 | 15% | No | |
-| STOKR | Luxembourg | Tokenized | $100 | 15% | No | |
-| Atlas One Digital Securities | Canada | Equity, Debt, Tokenized | C$ 1,000 | 14% | No | Regulated |
-| Alius Capital | Spain | Equity, Debt, Tokenized | — | — | Yes | Regulated (CNMV-licensed per card) |
-| FINEXITY | Germany | Equity, Debt, Tokenized | €500 | 5-10.4% | Yes | Regulated |
-| Micro Tuber | Singapore | Tokenized | 1 USDT | — | Yes | |
-| Crowd For Angels | United Kingdom | Equity, Debt, Tokenized | £25 | up to 8% p.a. | No | Regulated |
-| Rocksolid Estate | Austria | Tokenized | €100 | 12% | No | |
-| CONDA Capital | Austria | Equity, Debt, Tokenized | €250 | 7% | No | Regulated |
-| RealDeed Proppass | UAE/India | Tokenized | $1,500 | 15% | No | Regulated |
-| Infinite Launch | Singapore | Tokenized | 20 USDT | 40% | Yes | Regulated |
-| TrustPad | Panama | Equity, Tokenized | 1 USDT | — | Yes | |
-| ChainRaise | USA | Equity, Tokenized | $100 | 10% | No | |
-| Meta Yield | Panama | Reward, Tokenized | 1 USDT | — | No | |
-| Grex | India | Equity, Debt, Tokenized | ₹20,000 | 10% | No | |
+| Platform                     | HQ                  | Types                         | Min        | Advertised return | Secondary | Regulated mark                     |
+| ---------------------------- | ------------------- | ----------------------------- | ---------- | ----------------- | --------- | ---------------------------------- |
+| 8lends                       | Switzerland         | P2P, Tokenized                | 100 USDT   | 22.5%             | Yes       |                                    |
+| FF Forest                    | Latvia              | Tokenized                     | 1,000 USDT | 18%               | No        |                                    |
+| skew.net                     | Switzerland         | P2P, Reward, Tokenized        | $200       | 12%               | No        | Regulated                          |
+| Shipfinex                    | UAE                 | Equity, Tokenized             | $1,000     | 10%               | No        |                                    |
+| Headway Nova                 | South Africa        | Tokenized                     | $25        | 16.7%             | Yes       | Regulated                          |
+| 0xequity                     | Turkey/USA          | Equity, Tokenized             | $10        | 7%                | No        | Regulated                          |
+| Daskapital                   | Portugal            | Equity, Debt, Tokenized       | €10        | 9%                | Yes       | Regulated                          |
+| InvestaX                     | Singapore           | Tokenized                     | 100 USDT   | 4-10%             | Yes       | Regulated (MAS CMS + RMO per card) |
+| Invesdor                     | Germany             | Equity, Debt, Tokenized       | €250       | 6%                | No        | Regulated                          |
+| Bitlauncher                  | United Kingdom      | Tokenized                     | $150,000   | 4%                | No        |                                    |
+| DealMaker                    | USA/Canada          | Equity, Debt, Reward          | $1         | —                 | No        | Regulated                          |
+| FundinFolks                  | Singapore           | Equity, Tokenized             | $10,000    | 20%               | No        |                                    |
+| pitchIN                      | Malaysia            | Equity, Tokenized             | RM 500     | —                 | Yes       | Regulated                          |
+| Republic                     | USA                 | Equity, Tokenized             | $50        | 15%               | Yes       | Regulated                          |
+| Hurst                        | Brazil              | Debt, Tokenized               | R$ 10,000  | 21.1%             | Yes       | Regulated                          |
+| GigaStar Market              | USA                 | Tokenized                     | $50        | 14%               | No        | Regulated                          |
+| Fraxtor                      | Singapore/Australia | Equity, Tokenized, Buy-to-let | S$ 10,000  | 10%               | No        | Regulated                          |
+| BlocHome                     | Luxembourg          | Tokenized                     | €1,000     | —                 | No        |                                    |
+| Securitize                   | USA                 | Tokenized                     | $1,000     | 10%               | Yes       | Regulated                          |
+| Tecra Space                  | Poland              | Reward, Tokenized, Donation   | 1 USDT     | 15%               | Yes       |                                    |
+| arttrade                     | Germany             | Tokenized                     | €1,000     | 9%                | No        | Regulated                          |
+| Reental                      | Spain               | Tokenized                     | €100       | 18%               | Yes       |                                    |
+| BnkToTheFuture               | USA/Canada          | Equity, Tokenized             | $1         | 15%               | Yes       |                                    |
+| MountX                       | Mexico/Canada       | Tokenized                     | $200       | 15%               | No        |                                    |
+| Alta                         | Singapore/India     | Equity, Debt, Tokenized       | $500       | —                 | Yes       | Regulated                          |
+| Coreestate                   | Denmark             | Tokenized                     | €100       | 10%               | No        |                                    |
+| Metawealth                   | Ireland             | Tokenized                     | $100       | 20%               | Yes       |                                    |
+| Definder                     | United Kingdom      | Tokenized                     | $10        | 15%               | No        |                                    |
+| STOKR                        | Luxembourg          | Tokenized                     | $100       | 15%               | No        |                                    |
+| Atlas One Digital Securities | Canada              | Equity, Debt, Tokenized       | C$ 1,000   | 14%               | No        | Regulated                          |
+| Alius Capital                | Spain               | Equity, Debt, Tokenized       | —          | —                 | Yes       | Regulated (CNMV-licensed per card) |
+| FINEXITY                     | Germany             | Equity, Debt, Tokenized       | €500       | 5-10.4%           | Yes       | Regulated                          |
+| Micro Tuber                  | Singapore           | Tokenized                     | 1 USDT     | —                 | Yes       |                                    |
+| Crowd For Angels             | United Kingdom      | Equity, Debt, Tokenized       | £25        | up to 8% p.a.     | No        | Regulated                          |
+| Rocksolid Estate             | Austria             | Tokenized                     | €100       | 12%               | No        |                                    |
+| CONDA Capital                | Austria             | Equity, Debt, Tokenized       | €250       | 7%                | No        | Regulated                          |
+| RealDeed Proppass            | UAE/India           | Tokenized                     | $1,500     | 15%               | No        | Regulated                          |
+| Infinite Launch              | Singapore           | Tokenized                     | 20 USDT    | 40%               | Yes       | Regulated                          |
+| TrustPad                     | Panama              | Equity, Tokenized             | 1 USDT     | —                 | Yes       |                                    |
+| ChainRaise                   | USA                 | Equity, Tokenized             | $100       | 10%               | No        |                                    |
+| Meta Yield                   | Panama              | Reward, Tokenized             | 1 USDT     | —                 | No        |                                    |
+| Grex                         | India               | Equity, Debt, Tokenized       | ₹20,000    | 10%               | No        |                                    |
 
 Coverage note: all listing cards were captured (all 5 pages). In-depth profile
 pages were inspected for a sample (Daskapital, Reental, FINEXITY, BlocHome,

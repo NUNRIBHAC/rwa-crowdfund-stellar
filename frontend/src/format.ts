@@ -7,7 +7,9 @@ export function units(v: string): string {
 export function formatAmount(v: string): string {
   const n = BigInt(v);
   const whole = n / 10000000n;
-  const frac = String(n % 10000000n).padStart(7, '0').replace(/0+$/, '');
+  const frac = String(n % 10000000n)
+    .padStart(7, '0')
+    .replace(/0+$/, '');
   const grouped = whole.toLocaleString('en-US');
   return frac ? `${grouped}.${frac}` : grouped;
 }

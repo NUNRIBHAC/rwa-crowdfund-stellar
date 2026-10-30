@@ -10,7 +10,10 @@ const demoFile = path.join(backendRoot, '.demo-investors.json');
 const BASE_URL = process.env.API_URL ?? 'http://localhost:4000';
 
 const log = (msg) => console.log(`[test-build-submit] ${msg}`);
-const fail = (msg) => { console.error(`[test-build-submit] ERROR: ${msg}`); process.exit(1); };
+const fail = (msg) => {
+  console.error(`[test-build-submit] ERROR: ${msg}`);
+  process.exit(1);
+};
 
 async function api(pathname, options) {
   const res = await fetch(`${BASE_URL}${pathname}`, {

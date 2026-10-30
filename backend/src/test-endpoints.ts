@@ -1,15 +1,10 @@
-if (process.env.LEGACY_MAINTENANCE !== 'explicitly_authorized') throw new Error('Legacy classic script disabled. Do not run without a separately reviewed migration/reconciliation plan.');
+if (process.env.LEGACY_MAINTENANCE !== 'explicitly_authorized')
+  throw new Error('Legacy classic script disabled. Do not run without a separately reviewed migration/reconciliation plan.');
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Asset, Keypair, TransactionBuilder } from '@stellar/stellar-sdk';
-import {
-  createCampaign,
-  buildInvestXdr,
-  submitSignedInvest,
-  listCampaigns,
-  finalize,
-} from './campaigns.js';
+import { createCampaign, buildInvestXdr, submitSignedInvest, listCampaigns, finalize } from './campaigns.js';
 import { getBalances, submitPayment } from './chain.js';
 import { USDC } from './config.js';
 import { requirePlatform } from './stellar.js';

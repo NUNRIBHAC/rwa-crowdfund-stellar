@@ -30,5 +30,4 @@ export type Intent = {
 
 export const TERMINAL_STATUSES = ['SUCCESS', 'FAILED', 'CANCELLED_UNSIGNED'] as const;
 
-export const isTerminal = (status: string) =>
-  (TERMINAL_STATUSES as readonly string[]).includes(status);
+export const isTerminal = (status: string) => (TERMINAL_STATUSES as readonly string[]).includes(status);

@@ -27,18 +27,18 @@ Use `npm --workspace backend run infra:dev` with these variables supplied locall
 
 Listens only on 127.0.0.1. Prefix `/api/infrastructure`. Authenticate with `Authorization: Bearer <your-token>`. Status is public; all other endpoints require credentials. This is a local development service, not a hardened internet deployment. Tokens are bootstrap credentials, not identity federation. There is no token issuance, login UI or browser-held secret.
 
-| Method/path | Role | Input / result |
-| --- | --- | --- |
-| GET /status | none | Always declares test_only, no live onboarding/payments or compliance certification |
-| POST /identities | compliance | subject, country, outcome demo_pass/rejected/needs_info, reference; never verifies a real person |
-| POST /valuations | valuation | `{valuation,signature}`; valuation fields below |
-| POST /proposals | governor | kind pilot_policy/pause/resume, assetId, jurisdiction PT, rightsHash, economicModel, assetClass |
-| POST /proposals/:id/approve | governor | Proposer cannot approve; two different additional governors required |
-| POST /eligibility | authenticated | subject, assetId, network testnet; productionEligible is always false |
-| POST /cashouts | operator | subject, assetId, amountMinor, currency EUR, destinationRef, idempotencyKey |
-| POST /cashouts/:key/approve | compliance | Must be a different principal from requester |
-| POST /cashouts/:key/dispatch | operator | Rechecks current eligibility and rights; mock outcome only |
-| GET /audit | auditor | Local event history, not a tamper-proof external audit log |
+| Method/path                  | Role          | Input / result                                                                                   |
+| ---------------------------- | ------------- | ------------------------------------------------------------------------------------------------ |
+| GET /status                  | none          | Always declares test_only, no live onboarding/payments or compliance certification               |
+| POST /identities             | compliance    | subject, country, outcome demo_pass/rejected/needs_info, reference; never verifies a real person |
+| POST /valuations             | valuation     | `{valuation,signature}`; valuation fields below                                                  |
+| POST /proposals              | governor      | kind pilot_policy/pause/resume, assetId, jurisdiction PT, rightsHash, economicModel, assetClass  |
+| POST /proposals/:id/approve  | governor      | Proposer cannot approve; two different additional governors required                             |
+| POST /eligibility            | authenticated | subject, assetId, network testnet; productionEligible is always false                            |
+| POST /cashouts               | operator      | subject, assetId, amountMinor, currency EUR, destinationRef, idempotencyKey                      |
+| POST /cashouts/:key/approve  | compliance    | Must be a different principal from requester                                                     |
+| POST /cashouts/:key/dispatch | operator      | Rechecks current eligibility and rights; mock outcome only                                       |
+| GET /audit                   | auditor       | Local event history, not a tamper-proof external audit log                                       |
 
 All monetary inputs are positive integer strings in minor units. No float conversion or guessed FX rate. Do not supply bank account details or ID documents: destinationRef and identity reference are opaque fake references, and extra fields are rejected for the main domain schemas.
 

@@ -1,31 +1,18 @@
-if (process.env.LEGACY_MAINTENANCE !== 'explicitly_authorized') throw new Error('Legacy classic script disabled. Do not run without a separately reviewed migration/reconciliation plan.');
+if (process.env.LEGACY_MAINTENANCE !== 'explicitly_authorized')
+  throw new Error('Legacy classic script disabled. Do not run without a separately reviewed migration/reconciliation plan.');
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import {
-  Asset,
-  Horizon,
-  Keypair,
-  Networks,
-  Operation,
-  TransactionBuilder,
-} from '@stellar/stellar-sdk';
-import {
-  HORIZON_URL,
-  NETWORK,
-  PLATFORM_SECRET,
-  USDC,
-  hasUsdcConfig,
-} from './config.js';
+import { Asset, Horizon, Keypair, Networks, Operation, TransactionBuilder } from '@stellar/stellar-sdk';
+import { HORIZON_URL, NETWORK, PLATFORM_SECRET, USDC, hasUsdcConfig } from './config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const backendRoot = path.resolve(__dirname, '..');
 const envPath = path.join(backendRoot, '.env');
 const demoFile = path.join(backendRoot, '.demo-investors.json');
 
-const networkPassphrase =
-  NETWORK === 'public' ? Networks.PUBLIC : Networks.TESTNET;
+const networkPassphrase = NETWORK === 'public' ? Networks.PUBLIC : Networks.TESTNET;
 const server = new Horizon.Server(HORIZON_URL);
 const friendbot = 'https://friendbot.stellar.org';
 
@@ -52,7 +39,7 @@ function ensureEnvSecret(name: string, current: string): string {
   return secret;
 }
 
-let platformSecret = ensureEnvSecret('PLATFORM_SECRET', PLATFORM_SECRET);
+const platformSecret = ensureEnvSecret('PLATFORM_SECRET', PLATFORM_SECRET);
 ensureEnvSecret('ADMIN_SECRET', process.env.ADMIN_SECRET ?? '');
 
 const platform = Keypair.fromSecret(platformSecret);
@@ -119,9 +106,7 @@ async function main(): Promise<void> {
   await addUsdcTrustline(demo);
   if (hasUsdcConfig) await claimUsdc(demoPub);
 
-  const investors: Record<string, string> = fs.existsSync(demoFile)
-    ? JSON.parse(fs.readFileSync(demoFile, 'utf8'))
-    : {};
+  const investors: Record<string, string> = fs.existsSync(demoFile) ? JSON.parse(fs.readFileSync(demoFile, 'utf8')) : {};
   investors[demoPub] = demo.secret();
   fs.writeFileSync(demoFile, JSON.stringify(investors, null, 2), 'utf8');
   log(`Demo investors saved to ${demoFile}`);

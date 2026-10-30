@@ -25,7 +25,11 @@ export default function App() {
   const [statusFilter, setStatusFilter] = useState<'all' | CampaignStatus>('all');
   const [sortBy, setSortBy] = useState<'deadline' | 'progress' | 'name'>('deadline');
   const [intent, setIntent] = useState<Intent | null>(() => {
-    try { return JSON.parse(localStorage.getItem(INTENT_KEY) ?? 'null'); } catch { return null; }
+    try {
+      return JSON.parse(localStorage.getItem(INTENT_KEY) ?? 'null');
+    } catch {
+      return null;
+    }
   });
 
   async function refresh(address = actor) {
@@ -41,7 +45,7 @@ export default function App() {
       setFixtureMode(true);
       setLoaded(true);
     }
-    refresh().catch(e => setError(e.message));
+    refresh().catch((e) => setError(e.message));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,9 +57,13 @@ export default function App() {
   async function run(fn: () => Promise<void>) {
     setBusy(true);
     setError('');
-    try { await fn(); }
-    catch (e) { setError(e instanceof Error ? e.message : String(e)); }
-    finally { setBusy(false); }
+    try {
+      await fn();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function connect() {
@@ -115,8 +123,8 @@ export default function App() {
   const base = fixtureMode ? FIXTURE_CAMPAIGNS : campaigns;
   const q = query.trim().toLowerCase();
   const shown = base
-    .filter(c => !q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q))
-    .filter(c => statusFilter === 'all' || campaignStatus(c) === statusFilter)
+    .filter((c) => !q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q))
+    .filter((c) => statusFilter === 'all' || campaignStatus(c) === statusFilter)
     .sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name);
       if (sortBy === 'progress') {
@@ -130,12 +138,18 @@ export default function App() {
 
   return (
     <>
-      <a className="skip-link" href="#main">Skip to main content</a>
+      <a className="skip-link" href="#main">
+        Skip to main content
+      </a>
       <Header actor={actor} busy={busy} onConnect={() => run(connect)} />
       <main className="page" id="main">
         <Hero mode={fixtureMode ? 'sample' : loaded && campaigns.length > 0 ? 'live' : 'unknown'} />
 
-        {error && <p role="alert" className="error-banner">{error}</p>}
+        {error && (
+          <p role="alert" className="error-banner">
+            {error}
+          </p>
+        )}
 
         {intent && (
           <IntentPanel
@@ -144,7 +158,12 @@ export default function App() {
             onSubmit={() => run(submit)}
             onCheck={() => run(check)}
             onCancel={() => retain({ ...intent, status: 'CANCELLED_UNSIGNED' })}
-            onClear={() => { if (isTerminal(intent.status)) { setIntent(null); localStorage.removeItem(INTENT_KEY); } }}
+            onClear={() => {
+              if (isTerminal(intent.status)) {
+                setIntent(null);
+                localStorage.removeItem(INTENT_KEY);
+              }
+            }}
           />
         )}
 
@@ -160,12 +179,12 @@ export default function App() {
             <input
               className="discovery-search"
               value={query}
-              onChange={e => setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Search campaigns by name or contract"
               aria-label="Search campaigns"
             />
             <div className="filter-chips" role="group" aria-label="Filter by status">
-              {(['all', 'open', 'funded', 'ended'] as const).map(f => (
+              {(['all', 'open', 'funded', 'ended'] as const).map((f) => (
                 <button
                   key={f}
                   className={`chip ${statusFilter === f ? 'chip-active' : ''}`}
@@ -179,7 +198,7 @@ export default function App() {
             <select
               className="discovery-sort"
               value={sortBy}
-              onChange={e => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
+              onChange={(e) => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
               aria-label="Sort campaigns"
             >
               <option value="deadline">Deadline soonest</option>
@@ -190,14 +209,16 @@ export default function App() {
         )}
 
         {base.length > 0 && shown.length === 0 && (
-          <p className="no-matches" role="status">No campaigns match the current search and filters.</p>
+          <p className="no-matches" role="status">
+            No campaigns match the current search and filters.
+          </p>
         )}
 
         {showEmpty && <EmptyState fixtureMode={false} onToggleFixtures={toggleFixtures} />}
         {fixtureMode && <EmptyState fixtureMode onToggleFixtures={toggleFixtures} />}
 
         <div className="card-grid">
-          {shown.map(c => (
+          {shown.map((c) => (
             <CampaignCard
               key={c.id}
               campaign={c}
@@ -205,8 +226,8 @@ export default function App() {
               busy={busy}
               readOnly={fixtureMode}
               amount={amounts[c.id] ?? ''}
-              onAmount={v => setAmounts({ ...amounts, [c.id]: v })}
-              onPrepare={action => run(() => prepare(c, action))}
+              onAmount={(v) => setAmounts({ ...amounts, [c.id]: v })}
+              onPrepare={(action) => run(() => prepare(c, action))}
             />
           ))}
         </div>

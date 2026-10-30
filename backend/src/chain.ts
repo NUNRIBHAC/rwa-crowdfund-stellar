@@ -33,10 +33,7 @@ export async function hasTrustline(pub: string, asset: Asset): Promise<boolean> 
     const res = await fetch(`${HORIZON_URL}/accounts/${pub}`);
     if (!res.ok) return false;
     const data: any = await res.json();
-    return (data.balances ?? []).some(
-      (b: { asset_code?: string; asset_issuer?: string }) =>
-        b.asset_code === asset.code && b.asset_issuer === asset.issuer,
-    );
+    return (data.balances ?? []).some((b: { asset_code?: string; asset_issuer?: string }) => b.asset_code === asset.code && b.asset_issuer === asset.issuer);
   } catch {
     return false;
   }
@@ -56,12 +53,7 @@ export async function ensureTrustline(kp: Keypair, asset: Asset): Promise<void> 
   await server.submitTransaction(tx);
 }
 
-export async function submitPayment(
-  from: Keypair,
-  toPub: string,
-  asset: Asset,
-  amount: number | string,
-): Promise<string> {
+export async function submitPayment(from: Keypair, toPub: string, asset: Asset, amount: number | string): Promise<string> {
   const account = await server.loadAccount(from.publicKey());
   const tx = new TransactionBuilder(account, {
     fee: '100',
