@@ -229,7 +229,7 @@ CONDA's site taxonomy (S-080): Bonds; Share, GmbH share via SPV, Participation C
 
 ## 11A. Observed campaigns by project type (industry)
 
-Section 11 groups the archive's campaigns by financial instrument; this section groups the same campaigns by what the funded company or project actually does. CONDA assigns each campaign one industry chip from a fixed taxonomy of ten industries (the listing filters in section 5) [OBSERVED, S-079; chips rendered on campaign headers, e.g. S-022, S-012]. Where a campaign's chip is visible in the archive or on the live page it is cited as the classification; where no chip was captured, the project type is derived from the campaign's own About text or issuer documents and marked as descriptive. Live-page checks were made on 2026-10-30, the same day as the archive captures. None of the campaigns in this archive is real-estate development - the set is operating-company financing, unlike real-estate crowdlending platforms such as dagobertinvest, where almost all campaigns fund residential property projects.
+Section 11 groups the archive's campaigns by financial instrument; this section groups the same campaigns by what the funded company or project actually does. CONDA assigns each campaign one industry chip from a fixed taxonomy of ten industries (the listing filters in section 5) [OBSERVED, S-079; chips rendered on campaign headers, e.g. S-022, S-012]. Where a campaign's chip is visible in the archive or on the live page it is cited as the classification; where no chip was captured, the project type is derived from the campaign's own About text or issuer documents and marked as descriptive. Live-page checks were made on 2026-10-30, the same day as the archive captures. None of the campaigns in this archive is real-estate development - the set is operating-company financing, unlike real-estate crowdlending platforms such as dagobertinvest, where almost all campaigns in the reviewed 347-entry supplied list fund residential property projects.
 
 ### Energy and utilities [site chip observed]
 
@@ -266,7 +266,7 @@ Section 11 groups the archive's campaigns by financial instrument; this section 
 
 ### Platform-design notes [PROPOSED]
 
-- Keep project type (industry) as a controlled-vocabulary field on Campaign (already in the data model, 14.1) with your own taxonomy. CONDA's ten industries are SME-oriented and include no real-estate development category, so if your platform will list property projects - compare the dagobertinvest reference set, which is overwhelmingly residential development - add those types explicitly instead of forcing them into "Construction".
+- Keep project type (industry) as a controlled-vocabulary field on Campaign (already in the data model, 14.1) with your own taxonomy. CONDA's ten industries are SME-oriented and include no real-estate development category, so if your platform will list property projects - compare the reviewed dagobertinvest supplied list, which is overwhelmingly residential development - add those types explicitly instead of forcing them into "Construction".
 - Render the industry chip on listing cards and campaign headers and expose it as a listing filter, as CONDA does (S-079), and keep it data-driven so per-industry risk text or documents can be attached later.
 
 ### Live and external sources used in this section (all retrieved 2026-10-30)
