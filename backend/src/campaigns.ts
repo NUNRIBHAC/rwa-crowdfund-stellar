@@ -575,9 +575,12 @@ async function settleInvestment(
     inv.usdcTx = await executePayment(
       slot,
       async () => {
-        // Rebuild is only possible for demo accounts (the platform holds their
-        // secrets). A Freighter-signed intent that can never apply must be
-        // re-signed by the investor: keep the record pending with an error.
+        // This closure only runs when the intent has no persisted hash yet
+        // (a fresh build); once an intent carries a hash, reconcile-and-hold
+        // governs and nothing is rebuilt. Fresh builds are only possible for
+        // demo accounts (the platform holds their secrets). A Freighter-signed
+        // intent that can never apply must be re-signed by the investor: keep
+        // the record pending with an error.
         const secret = demoSecretOf(inv.investorPub);
         if (!secret) {
           throw new Error(
@@ -1125,7 +1128,12 @@ export async function submitSignedInvest(
       }
     }
     if (tx.operations.length > 3) throw new Error('too many investment operations');
-    const paidCents = toCents(Number(payment.amount));
+    // Parse the signed amount exactly (fixed seven decimals), never through a
+    // float: above ~9e13 USDC Number() silently loses cents.
+    const paidUnits = assetUnits(String(payment.amount));
+    if (paidUnits % 100000n !== 0n) throw new Error('USDC payment supports at most 2 decimal places (cents)');
+    const paidCents = Number(paidUnits / 100000n);
+    if (!Number.isSafeInteger(paidCents)) throw new Error('USDC payment amount out of range');
     if (paidCents <= 0) throw new Error('USDC payment must be positive');
     if (tx.memo.type !== 'text' || Buffer.from(tx.memo.value as Uint8Array).toString('utf8') !== campaign.id) throw new Error('investment memo must bind campaign id');
     await validateInvestmentEnvelope(tx, investorPub, paidCents);
@@ -1216,14 +1224,25 @@ export async function submitSignedTrustline(input: {
     throw new Error('XDR without a changeTrust operation');
   }
 
+  // Compute the hash before broadcasting so an ambiguous submit (timeout,
+  // 5xx after acceptance) is resolvable by its exact hash, never guessed.
+  const preHash = Buffer.from(tx.hash()).toString('hex');
   let hash: string;
   try {
     const resp = await deps.submitTransaction(tx);
-    hash = String(resp.hash ?? Buffer.from(tx.hash()).toString('hex'));
+    hash = String(resp.hash ?? preHash);
   } catch (e: any) {
     const rcs = e?.response?.data?.extras?.result_codes;
     if (rcs) console.error('SUBMIT_TRUSTLINE_FAIL result_codes=', JSON.stringify(rcs, null, 2));
-    throw e;
+    // The submit may have succeeded despite the error: check the ledger for
+    // the exact hash before reporting failure.
+    try {
+      const found = await deps.lookupTransaction(preHash).catch(() => null);
+      if (found && found.hash === preHash && found.successful === true) {
+        return { hash: preHash, assetCode };
+      }
+    } catch { /* lookup failed: still ambiguous, report with the hash */ }
+    throw new Error(`${errMsg(e)} (transaction ${preHash} - check this exact hash before retrying)`, { cause: e });
   }
 
   return { hash, assetCode };

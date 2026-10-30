@@ -50,18 +50,37 @@ export interface Journal {
   runExclusive?<T>(key: string, fn: () => Promise<T>): Promise<T>;
 }
 
+// A journal row is usable only when its identity fields are intact. Malformed
+// rows (null, non-object, missing/empty hash) are excluded from every lookup
+// and update, so one bad row can never break all status lookups; they are
+// logged and preserved verbatim on save, never silently deleted.
+function isIntentRow(r: unknown): r is Intent {
+  return !!r && typeof r === 'object' && typeof (r as any).hash === 'string' && (r as any).hash.length > 0;
+}
+
 class FileJournal implements Journal {
+  private skipped: unknown[] = [];
   constructor(private file: string) {}
   async read(): Promise<IntentStore> {
-    return fs.existsSync(this.file) ? JSON.parse(fs.readFileSync(this.file, 'utf8')) : { intents: [] };
+    if (!fs.existsSync(this.file)) return { intents: [] };
+    const raw = JSON.parse(fs.readFileSync(this.file, 'utf8')) as IntentStore;
+    const rows = Array.isArray(raw?.intents) ? raw.intents : [];
+    const valid: Intent[] = [], skipped: unknown[] = [];
+    for (const r of rows) (isIntentRow(r) ? valid : skipped).push(r as Intent);
+    if (skipped.length !== this.skipped.length) logEvent('journal.malformed_rows', { backend: 'file', skipped: skipped.length });
+    this.skipped = skipped;
+    return { intents: valid };
   }
   async save(store: IntentStore): Promise<void> {
     const before = store.intents.length;
     store = { intents: pruneIntents(purgeTerminalEnvelopes(store.intents)) };
     if (store.intents.length !== before) logEvent('journal.pruned', { backend: 'file', removed: before - store.intents.length });
+    // Malformed rows are re-persisted untouched: pruning/scrubbing never
+    // applies to them and they are never dropped by a read-modify-write.
+    const out = { intents: [...store.intents, ...this.skipped] };
     fs.mkdirSync(path.dirname(this.file), { recursive: true });
     const tmp = `${this.file}.tmp`; const fd = fs.openSync(tmp, 'w', 0o600);
-    try { fs.writeFileSync(fd, JSON.stringify(store)); fs.fsyncSync(fd); } finally { fs.closeSync(fd); }
+    try { fs.writeFileSync(fd, JSON.stringify(out)); fs.fsyncSync(fd); } finally { fs.closeSync(fd); }
     fs.renameSync(tmp, this.file);
     const dir = fs.openSync(path.dirname(this.file), 'r'); try { fs.fsyncSync(dir); } finally { fs.closeSync(dir); }
   }

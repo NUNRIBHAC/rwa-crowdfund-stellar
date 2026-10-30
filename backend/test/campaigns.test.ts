@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { Account, Keypair, TransactionBuilder, type Transaction } from '@stellar/stellar-sdk';
+import { Account, Asset, Keypair, Memo, Networks, Operation, TransactionBuilder, type Transaction } from '@stellar/stellar-sdk';
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'crowdfund-test-'));
 const storePath = path.join(tmp, 'campaigns.json');
@@ -37,6 +37,7 @@ const {
   retryPending,
   buildInvestXdr,
   submitSignedInvest,
+  submitSignedTrustline,
 } = campaigns;
 
 // ----- fake ledger -----
@@ -1062,4 +1063,64 @@ test('wallet build with missing trustlines produces an accepted narrow envelope'
     const done = await submitSignedInvest(c.id, { investorPub: a.publicKey(), xdr: await signedInvestment(c, a, 20) });
     assert.equal(done.investments[0].status, 'confirmed');
   } finally { __setDepsForTests({ hasTrustline: original }); }
+});
+
+test('signed submit: sub-cent and out-of-range payment amounts rejected exactly', async () => {
+  resetState();
+  const investor = Keypair.random();
+  const c = await createCampaign({ name: 'exactamt', goalUsdc: GOAL });
+
+  const mkTx = async (amount: string) => {
+    const account: any = await (campaigns as any).deps.loadAccount(investor.publicKey());
+    const plat = (campaigns as any).deps.requirePlatform();
+    const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase: Networks.TESTNET })
+      .addOperation(Operation.payment({ destination: plat.publicKey(), asset: new Asset('USDC', process.env.USDC_ISSUER!), amount }))
+      .addMemo(Memo.text(c.id))
+      .setTimeout(900)
+      .build();
+    tx.sign(investor);
+    return tx.toXDR();
+  };
+
+  // Three decimals must never round into credit (exact parse, not float tolerance).
+  await assert.rejects(
+    submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: await mkTx('25.005') }),
+    /2 decimal places/,
+  );
+  // Exact two-decimal amounts still work.
+  const good = await submitSignedInvest(c.id, { investorPub: investor.publicKey(), xdr: await mkTx('25.05') });
+  assert.equal(good.investments[0].amountUsdc, 25.05);
+});
+
+test('trustline submit: ambiguous broadcast resolves by exact hash; failure reports the hash', async () => {
+  resetState();
+  const investor = Keypair.random();
+  const account: any = await (campaigns as any).deps.loadAccount(investor.publicKey());
+  const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase: Networks.TESTNET })
+    .addOperation(Operation.changeTrust({ asset: new Asset('USDC', process.env.USDC_ISSUER!) }))
+    .setTimeout(900)
+    .build();
+  tx.sign(investor);
+  const xdr = tx.toXDR();
+  const expectedHash = Buffer.from(tx.hash()).toString('hex');
+
+  // Applied on the ledger but the response was lost: must resolve, not report failure.
+  injectedFailure = { type: 'network', applyFirst: true };
+  const resolved = await submitSignedTrustline({ investorPub: investor.publicKey(), xdr });
+  assert.equal(resolved.hash, expectedHash);
+  assert.equal(resolved.assetCode, 'USDC');
+
+  // Not applied: the error must carry the exact hash for manual reconciliation.
+  const account2: any = await (campaigns as any).deps.loadAccount(investor.publicKey());
+  const tx2 = new TransactionBuilder(account2, { fee: '100', networkPassphrase: Networks.TESTNET })
+    .addOperation(Operation.changeTrust({ asset: new Asset('EURT', process.env.USDC_ISSUER!) }))
+    .setTimeout(900)
+    .build();
+  tx2.sign(investor);
+  const expectedHash2 = Buffer.from(tx2.hash()).toString('hex');
+  injectedFailure = { type: 'network', applyFirst: false };
+  await assert.rejects(
+    submitSignedTrustline({ investorPub: investor.publicKey(), xdr: tx2.toXDR() }),
+    (e: any) => e.message.includes(expectedHash2),
+  );
 });

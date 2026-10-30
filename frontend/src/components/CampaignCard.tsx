@@ -36,7 +36,7 @@ export default function CampaignCard({ campaign: c, actor, busy, readOnly, amoun
       </div>
 
       <div className="progress-row">
-        <div className="progress-track" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+        <div className="progress-track" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={`Funding progress: ${pct}% of goal`}>
           <div className="progress-fill" style={{ width: `${pct}%` }} />
         </div>
         <span className="progress-pct">{pct}%</span>

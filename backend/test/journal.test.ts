@@ -205,3 +205,21 @@ test('postgres retention delete is issued inside the save transaction', async ()
   await j.save({ intents: [sample] });
   assert.ok(pool.calls.includes('DELETE'), 'retention delete issued');
 });
+
+test('malformed journal rows never break lookups and are preserved verbatim on save', async () => {
+  const file = path.join(tmp, 'file-journal-malformed.json');
+  const malformed = [null, {}, 'garbage-row', 42];
+  fs.writeFileSync(file, JSON.stringify({ intents: [sample, ...malformed] }));
+  process.env.SOROBAN_JOURNAL_BACKEND = 'file';
+  process.env.SOROBAN_INTENTS_PATH = file;
+  resetJournalBackendForTests();
+  const j = await journalBackend();
+  // Only intact rows are visible; malformed rows cannot poison iteration.
+  assert.deepEqual(await j.read(), { intents: [sample] });
+  // A read-modify-write keeps malformed rows on disk, never silently deletes.
+  await j.save({ intents: [sample, signed] });
+  const onDisk = JSON.parse(fs.readFileSync(file, 'utf8')).intents;
+  assert.equal(onDisk.length, 4 + 2);
+  for (const m of malformed) assert.ok(onDisk.some((r: any) => JSON.stringify(r) === JSON.stringify(m)));
+  delete process.env.SOROBAN_JOURNAL_BACKEND;
+});
