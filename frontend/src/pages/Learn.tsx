@@ -6,9 +6,9 @@ export default function Learn() {
     <>
       <h1 className="page-title">Learn</h1>
       <p>
-        Plain-language explanations of the instrument model this platform is designed around: four participation-side parents and two debt parents
-        (loan and bond), each debt parent issued senior, subordinated or with seniority unspecified. Structure overlays combine with a debt parent;
-        rank and label qualifiers are platform wording, preserved as-is. Educational content only: no offer, no investment advice.
+        Plain-language explanations of the instrument model this platform is designed around: four participation-side parents and two debt parents (loan and
+        bond), each debt parent issued senior, subordinated or with seniority unspecified. Structure overlays combine with a debt parent; rank and label
+        qualifiers are platform wording, preserved as-is. Educational content only: no offer, no investment advice.
       </p>
 
       {INSTRUMENT_GROUPS.map((g) => (
