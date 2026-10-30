@@ -16,6 +16,7 @@ const NAV: { route: RouteName; label: string }[] = [
   { route: 'financing', label: 'Financing' },
   { route: 'faq', label: 'FAQ' },
   { route: 'about', label: 'About' },
+  { route: 'account', label: 'My account' },
 ];
 
 export default function Header({ actor, busy, onConnect, current }: Props) {
