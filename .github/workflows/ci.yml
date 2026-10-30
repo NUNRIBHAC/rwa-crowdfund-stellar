@@ -9,7 +9,7 @@ jobs:
   javascript:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
@@ -27,7 +27,7 @@ jobs:
       run:
         working-directory: contracts/crowdfund
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install pinned Rust toolchain and target
         run: rustup toolchain install 1.99.1 --profile minimal --target wasm32v1-none
       - run: cargo test --locked
