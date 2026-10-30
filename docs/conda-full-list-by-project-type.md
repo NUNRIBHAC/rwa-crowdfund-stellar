@@ -110,7 +110,7 @@ Three separate fields, as the user asked. Industry (sections 6 and 7) says what 
 
 > **Provisional.** The financing type below is based on the issuer (an operating business), not on a verified use of proceeds. "Corporate" does not mean the financing purpose was confirmed as corporate. Only the 4 property rows rest on page text or title.
 
-| Project/financing type (issuer-based, provisional)                         | Rows (269 numbered with URL)                                     |
+| Project/financing type (issuer-based, provisional)                         |                                     Rows (269 numbered with URL) |
 | -------------------------------------------------------------------------- | ---------------------------------------------------------------: |
 | Corporate (issuer-based, provisional; use of proceeds not verified)        |                                                              264 |
 | Property project                                                           |                                                                2 |
