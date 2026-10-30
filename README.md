@@ -4,6 +4,10 @@ Active campaign flow: Soroban contract escrow, nontransferable contribution bala
 
 This is testnet-only integration code, not a deployed or production-ready service. The default registry is empty. No deployment, migration or real funds are included. The frontend says so explicitly.
 
+## Rights
+
+All rights reserved - see [NOTICE](NOTICE). No open-source license or patent grant is given. Material under `docs/skills-reference/` keeps its separately stated rights and licenses.
+
 ## Run locally
 
 ```sh
