@@ -35,7 +35,9 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
         </h3>
         <div className="card-tags">
           {profile && (
-            <span className="status-chip chip-instrument">{composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}</span>
+            <span className="status-chip chip-instrument">
+              {composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}
+            </span>
           )}
           {profile && <span className="status-chip chip-country">{profile.country}</span>}
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>
