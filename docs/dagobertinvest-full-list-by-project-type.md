@@ -6,22 +6,22 @@ Two separate axes, as the user asked. Industry says what the issuer or project d
 
 ## 1. Input entries, URLs and dates
 
-| Item                                                          | Count                    |
-| ------------------------------------------------------------- | ------------------------ |
-| Numbered rows supplied (1-347, no gaps, no duplicates)        | 347                      |
-| Rows with a URL                                               | 347                      |
-| Distinct URLs                                                 | 347                      |
-| Sitemap lastmod date range                                    | 2021-10-11 to 2026-10-21 |
-| Campaign pages live as of 2026-10-30                          | 343                      |
-| Homepage fragments (standalone campaign page returns 404)     | 2                        |
-| Full 404 pages                                                | 2                        |
-| Live but not a campaign (legacy issuer marketing page, row 5) | 1                        |
+| Item                                                                       | Count                    |
+| -------------------------------------------------------------------------- | ------------------------ |
+| Numbered rows supplied (1-347, no gaps, no duplicates)                     | 347                      |
+| Rows with a URL                                                            | 347                      |
+| Distinct URLs                                                              | 347                      |
+| Sitemap lastmod date range                                                 | 2021-10-11 to 2026-10-21 |
+| Live pages as of 2026-10-30 (342 campaign pages + 1 legacy marketing page) | 343                      |
+| Homepage fragments (standalone campaign page returns 404)                  | 2                        |
+| Full 404 pages                                                             | 2                        |
+| Live but not a campaign (legacy issuer marketing page, row 5)              | 1                        |
 
 Every URL and date in the supplied list equals the corresponding row of the earlier verified review. No additions, removals, spelling changes or date changes were found, so no row had to be re-fetched for this classification.
 
 ## 2. Instrument forms and related tranches
 
-Instrument class from the site's own "Vertragsform" term per campaign page (341 of 346 campaigns; the 4 unclear rows and the non-campaign row have no term):
+Instrument class from the site's own "Vertragsform" term per campaign page (all 342 readable campaign pages have a term; the 4 unresolved rows and the non-campaign row have none):
 
 | Instrument class (site term)                                      | Campaigns |
 | ----------------------------------------------------------------- | --------- |
@@ -42,7 +42,8 @@ Instrument class from the site's own "Vertragsform" term per campaign page (341 
 - The financing type below is based on what the campaign page presents, not on a re-verification of each instrument's legal terms. "Property project" means the page describes a specific property development for that campaign; it does not prove the final flow of funds.
 - For 107 residential rows the page or name shows a residential property campaign but no further detail (new-build vs renovation); their subtype stays unconfirmed and is not guessed.
 - Rows 1, 2, 87 and 88 have no readable campaign page (two homepage fragments whose standalone pages return 404, two full 404 pages). They are "Unclear from available evidence" on both axes; nothing is inferred from their URL slugs.
-- Row 36 (Arcarius) is the one corporate financing: its own page states "Typus Unternehmensfinanzierung / unternehmerische Beteiligung". The provisional qualifier is kept for schema consistency; the industry filing under Financial services and investment vehicles rests on the campaign name ("Exklusive Vermögensanlage") and is likewise provisional.
+- Row 36 (Arcarius) is the one corporate financing: its own page states "Typus Unternehmensfinanzierung / unternehmerische Beteiligung" and offers a participation in all current and future investments of the issuer. Its industry is Health (Healthcare), wellness and medtech, from the page text: Arcarius markets the longevity therapies and products of Prof. Dr. med. Fred Fändrich internationally ("Longevity", extension of healthy lifespan).
+- The 6 hotel campaigns were re-read on 2026-10-30. Each funds named property works, not a hotel operator generally: rows 312, 345 and 346 state Typus "Projektfinanzierung" (renovation and bridge financing of Hotel Vierseithof, Luckenwalde), row 72 names "Mittelverwendung: Sanierung des Anbaus und Umbau zu 12 Serviced Apartments" (Hotel Belair AG, secured loan), row 258 finances part of the property purchase ("Liegenschaftsankauf") for a 25-unit aparthotel new-build, and row 314 is a bridge loan for the conversion of the Kronenhaus into a 114-room hotel. They stay "Property project" on this evidence.
 - One financing type is added beyond the three the user listed, because the evidence supports it and none of the three fits: row 41 (AustriaEnergy wind park in Patagonia, Chile) is an asset-specific project financing but not real estate. It is marked "Project financing (asset-specific, energy infrastructure; not real estate)".
 - No new categories were needed on the industry axis: every classified row fits the user's list.
 
@@ -50,13 +51,13 @@ Instrument class from the site's own "Vertragsform" term per campaign page (341 
 
 > **Provisional.** The financing type rests on the campaign pages, not on a check of each instrument's terms. "Corporate" here is issuer-based and does not mean the financing purpose was confirmed as corporate.
 
-| Project/financing type                                                     | Campaigns (346 with campaign page) |
-| -------------------------------------------------------------------------- | ---------------------------------- |
-| Property project                                                           | 340                                |
-| Corporate (issuer-based, provisional; use of proceeds not verified)        | 1                                  |
-| Project financing (asset-specific, energy infrastructure; not real estate) | 1                                  |
-| Unclear from available evidence                                            | 4                                  |
-| **Total**                                                                  | **346**                            |
+| Project/financing type                                                     | Entries (346 campaigns: 342 with a readable campaign page, 4 unresolved) |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Property project                                                           | 340                                                                      |
+| Corporate (issuer-based, provisional; use of proceeds not verified)        | 1                                                                        |
+| Project financing (asset-specific, energy infrastructure; not real estate) | 1                                                                        |
+| Unclear from available evidence                                            | 4                                                                        |
+| **Total**                                                                  | **346**                                                                  |
 
 Row 5 (legacy issuer marketing page, not a campaign) is outside these counts; see section 7.
 
@@ -83,7 +84,7 @@ The industry is what the issuer or project does. It says nothing about use of pr
 | Real estate (Residential, Commercial/office, Mixed-use and other property types.) | 334       |
 | Hotels, hospitality and tourism                                                   | 6         |
 | Energy and utilities                                                              | 1         |
-| Financial services and investment vehicles                                        | 1         |
+| Health (Healthcare), wellness and medtech                                         | 1         |
 | Unclear from available evidence                                                   | 4         |
 | **Total**                                                                         | **346**   |
 
@@ -91,7 +92,7 @@ Row 5 (not a campaign) is outside these counts.
 
 ## 6. Campaigns by category
 
-Financing type per category: real estate and hotel rows are "Property project"; the energy row is the added project-financing value; the financial services row is "Corporate (issuer-based, provisional; use of proceeds not verified)"; the unclear rows carry no financing type.
+Financing type per category: real estate and hotel rows are "Property project"; the energy row is the added project-financing value; the health row (Arcarius) is "Corporate (issuer-based, provisional; use of proceeds not verified)"; the unclear rows carry no financing type.
 
 ### Real estate (Residential, Commercial/office, Mixed-use and other property types.) (334 campaigns)
 
@@ -463,14 +464,14 @@ Financing type per category: real estate and hotel rows are "Property project"; 
 
 Rows 312, 345 and 346 finance the same hotel project (Haberent Hotel Vierseithof) in separate campaigns.
 
-| Row | Campaign                              | URL                                                                                | Sitemap lastmod | Evidence                      |
-| --- | ------------------------------------- | ---------------------------------------------------------------------------------- | --------------- | ----------------------------- |
-| 72  | Hoteltransformation Zürich            | https://www.dagobertinvest.com/crowdfunding-belair-hotel-wallisellen-ch            | 2026-04-28      | "Hotel" in campaign text      |
-| 258 | Puitalm: Natur Aparthotel im Pitztal  | https://www.dagobertinvest.com/crowdfunding-puitalm-pitztal                        | 2024-10-14      | "Aparthotel" in campaign text |
-| 312 | Hotel-Upgrade nahe Berlin             | https://www.dagobertinvest.com/crowdfunding-unternehmen-haberent-hotel-vierseithof | 2026-03-17      | "Hotel" in campaign text      |
-| 314 | Das Kronenhaus                        | https://www.dagobertinvest.com/crowdfunding-vestwerk-mariahilfer-strasse           | 2026-08-27      | "Hotel" in campaign text      |
-| 345 | Vierseithof - Zero Bond II            | https://www.dagobertinvest.com/crowdfunding-zerobond-II-haberent-hotel-vierseithof | 2026-04-21      | "Hotel" in campaign text      |
-| 346 | Hotel-Upgrade nahe Berlin - Zero Bond | https://www.dagobertinvest.com/crowdfunding-zerobond-haberent-hotel-vierseithof    | 2025-09-20      | "Hotel" in campaign text      |
+| Row | Campaign                              | URL                                                                                | Sitemap lastmod | Evidence                                                                                                                    |
+| --- | ------------------------------------- | ---------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 72  | Hoteltransformation Zürich            | https://www.dagobertinvest.com/crowdfunding-belair-hotel-wallisellen-ch            | 2026-04-28      | "Mittelverwendung: Sanierung des Anbaus und Umbau zu 12 Serviced Apartments" (page); secured loan, borrower Hotel Belair AG |
+| 258 | Puitalm: Natur Aparthotel im Pitztal  | https://www.dagobertinvest.com/crowdfunding-puitalm-pitztal                        | 2024-10-14      | loan finances part of the "Liegenschaftsankauf" (property purchase); 25-unit aparthotel new-build (page)                    |
+| 312 | Hotel-Upgrade nahe Berlin             | https://www.dagobertinvest.com/crowdfunding-unternehmen-haberent-hotel-vierseithof | 2026-03-17      | Typus "Projektfinanzierung" (page); renovation and modernization of Hotel Vierseithof                                       |
+| 314 | Das Kronenhaus                        | https://www.dagobertinvest.com/crowdfunding-vestwerk-mariahilfer-strasse           | 2026-08-27      | bridge loan funds "Vorbereitungsarbeiten" for conversion of the Kronenhaus into a 114-room hotel (page)                     |
+| 345 | Vierseithof - Zero Bond II            | https://www.dagobertinvest.com/crowdfunding-zerobond-II-haberent-hotel-vierseithof | 2026-04-21      | Typus "Projektfinanzierung" (page); bridge financing of remaining renovation works, Hotel Vierseithof                       |
+| 346 | Hotel-Upgrade nahe Berlin - Zero Bond | https://www.dagobertinvest.com/crowdfunding-zerobond-haberent-hotel-vierseithof    | 2025-09-20      | Typus "Projektfinanzierung" (page); bridge financing of remaining renovation works, Hotel Vierseithof                       |
 
 ### Energy and utilities (1 campaign)
 
@@ -478,11 +479,13 @@ Rows 312, 345 and 346 finance the same hotel project (Haberent Hotel Vierseithof
 | --- | -------------------------------------------- | ---------------------------------------------------------------- | --------------- | --------------------------- |
 | 41  | AustriaEnergy: Windpark in Patagonien, Chile | https://www.dagobertinvest.com/crowdfunding-austria-energy-chile | 2026-10-08      | "Windpark" in campaign text |
 
-### Financial services and investment vehicles (1 campaign, provisional)
+### Health (Healthcare), wellness and medtech (1 campaign)
 
-| Row | Campaign                             | URL                                                                 | Sitemap lastmod | Evidence                                                      |
-| --- | ------------------------------------ | ------------------------------------------------------------------- | --------------- | ------------------------------------------------------------- |
-| 36  | Arcarius - Exklusive Vermögensanlage | https://www.dagobertinvest.com/crowdfunding-arcarius-solutions-bond | 2026-07-02      | Typus Unternehmensfinanzierung / unternehmerische Beteiligung |
+Financing type is Corporate, not Property project: the bond is a participation in all current and future investments of Arcarius Solutions GmbH (page: "Typus Unternehmensfinanzierung / unternehmerische Beteiligung").
+
+| Row | Campaign                             | URL                                                                 | Sitemap lastmod | Evidence                                                                                                    |
+| --- | ------------------------------------ | ------------------------------------------------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------- |
+| 36  | Arcarius - Exklusive Vermögensanlage | https://www.dagobertinvest.com/crowdfunding-arcarius-solutions-bond | 2026-07-02      | Typus Unternehmensfinanzierung / unternehmerische Beteiligung; longevity therapies and products (page text) |
 
 ### Unclear from available evidence (4 rows, status not industry)
 
