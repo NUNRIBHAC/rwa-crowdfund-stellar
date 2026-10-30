@@ -227,6 +227,58 @@ CONDA's site taxonomy (S-080): Bonds; Share, GmbH share via SPV, Participation C
 
 ---
 
+## 11A. Observed campaigns by project type (industry)
+
+Section 11 groups the archive's campaigns by financial instrument; this section groups the same campaigns by what the funded company or project actually does. CONDA assigns each campaign one industry chip from a fixed taxonomy of ten industries (the listing filters in section 5) [OBSERVED, S-079; chips rendered on campaign headers, e.g. S-022, S-012]. Where a campaign's chip is visible in the archive or on the live page it is cited as the classification; where no chip was captured, the project type is derived from the campaign's own About text or issuer documents and marked as descriptive. Live-page checks were made on 2026-10-30, the same day as the archive captures. None of the campaigns in this archive is real-estate development - the set is operating-company financing, unlike real-estate crowdlending platforms such as dagobertinvest, where almost all campaigns fund residential property projects.
+
+### Energy and utilities [site chip observed]
+
+- **oekostrom AG energy group - capital increase 2026 (share)** [OBSERVED, S-047..055; chip "Energy and utilities" on the live page]: Austrian renewable-electricity supplier, 100% renewable since 1999, about 130 MW plant portfolio, more than 106,000 customers (About text, live page).
+- **Eternal Power Wasserstoff Invest (subordinated bond)** [OBSERVED, S-022..028; chip "Energy and utilities" verified visually on S-022 and on the live page]: green-hydrogen project developer based in Hamburg, sites in northern Germany and Sweden (About text, live page).
+- **EWIA 3.0 (indirect participation)** [OBSERVED, S-029..038; chip "Energy and utilities" on the live page]: solar project developer and financier electrifying Africa, with operating subsidiaries in Ghana, Nigeria and Cameroon (About text, live page).
+
+### Hospitality and tourism [site chip observed]
+
+- **COOEE alpin - subordinated bond (You Will Like It Hotels GmbH)** [OBSERVED, S-012..021; chip "Hospitality and tourism" verified visually on S-012 and on the live page]: active hotels in the Austrian Alps (Bad Kleinkirchheim, Gosau am Dachstein, St. Johann in Tirol); issue proceeds for the conversion in Kaprun/Zell am See and the development of the Bad Goisern/Hallstatt site (About text, live page).
+- **beets&roots - profit participation certificate** [OBSERVED, S-006..011; chip "Hospitality and tourism" on the live page]: healthy fast-food stores (bowls, salads, wraps) plus delivery and business catering in German cities, per the issuer's own website (beetsandroots.de, external source). Campaign ended "Unsuccessful".
+
+### Information Technology [site chip observed]
+
+- **Innolytics AG (share)** [OBSERVED, S-039..046; chip "Information Technology" on the live page]: AI software that automates complex corporate documentation (About text, live page).
+- **devolo solutions GmbH (senior bond)** [OBSERVED, S-091..101; chip "Informationstechnologie" on the live German page]: home-networking hardware and software (Powerline adapters, WLAN mesh systems, repeaters, routers), based in Aachen (About text, live German page).
+
+### Healthcare [descriptive - no chip captured]
+
+- **ProFem - Going Public Wandelanleihe (convertible bond)** [OBSERVED, S-114..124]: pharmaceutical research company focused on women's health (Vienna); first product Candiplus near market launch after 13 years and more than EUR 15 million of research spending (About text, live German page). No industry chip was recorded in the archive analysis or visible in the extracted live page text; the description maps to the platform's "Healthcare" taxonomy entry.
+
+### Fashion and apparel (consumer goods) [descriptive - no chip captured]
+
+- **Gebrueder Stitch** [OBSERVED, S-102..107]: organic fair-trade jeans, made to measure and off the rack, produced in Vienna. The live campaign page names the issuer "ants in your pants GmbH" (live German page, 2026-10-30); the brand and its 2016 acquisition by ants in your pants GmbH are corroborated by textilzeitung.at (24 November 2016) and Wikipedia (external sources). No industry chip visible on the live page.
+- **aiyp / ants in your pants GmbH (2017 subordinated loan)** [D-aiyp_darlehensvertrag; documents only, no campaign page in this archive]: same issuer legal entity as the Gebrueder Stitch campaign (live page observation above), hence the same project type.
+
+### Food and beverage (brewery) [descriptive - no chip captured]
+
+- **NIXE Bier 2** [OBSERVED, S-108..113]: beer brand - the live German page names issuer NIXE Bier GmbH; CONDA's legacy platform page for the earlier campaign generation describes "NIXE - Deutschlands Low-Carb Bier" by Nixe Deutschland GmbH, Hamburg (conda.at/startup/nixe-deutschland-gmbh, external source). The archive's insolvency documents concern nixe Brau GmbH, the brewery entity of the 2014 campaign generation (D-18a-konkursverfahren, D-insolvenzreport). No industry chip visible on the live page.
+
+### Investment vehicle (multi-sector) [descriptive]
+
+- **Venture Space** [OBSERVED, S-125..128, closed page shell]: not a single-sector operating company - the legacy campaign page describes a vehicle to "invest together in innovative companies" with a 2016-2018 tranche structure and a trustee service, Austria only (conda-capital.com/campaign/venture-space, external source). No industry chip; instrument terms remain unverified as noted in section 11 item 4.
+
+### Platform-design notes [PROPOSED]
+
+- Keep project type (industry) as a controlled-vocabulary field on Campaign (already in the data model, 14.1) with your own taxonomy. CONDA's ten industries are SME-oriented and include no real-estate development category, so if your platform will list property projects - compare the dagobertinvest reference set, which is overwhelmingly residential development - add those types explicitly instead of forcing them into "Construction".
+- Render the industry chip on listing cards and campaign headers and expose it as a listing filter, as CONDA does (S-079), and keep it data-driven so per-industry risk text or documents can be attached later.
+
+### Live and external sources used in this section (all retrieved 2026-10-30)
+
+- Live campaign pages: conda-capital.com/en/campaigns/beetsroots-profit-participation-certificate, /cooee-alpin-subordinated-bond-issued-by-you-will-like-it-hotels-gmbh, /eternal-power-wasserstoff-invest, /ewia-30-indirect-participation, /innolytics-ag-share, /oekostrom-ag-energy-group-capital-increase-2026-stock; German pages conda-capital.com/kampagnen/devolo-solutions-gmbh-anleihe, /gebrueder-stitch, /nixe-bier-2, /profem-going-public-wandelanleihe-4, /venture-space.
+- https://www.beetsandroots.de/ (issuer's own site: healthy fast-food stores and catering)
+- https://www.textilzeitung.at/business/news/gebrueder-stitch-sind-zurueck--3785 and https://en.wikipedia.org/wiki/Gebr%C3%BCder_Stitch (Gebrueder Stitch brand and ants in your pants GmbH)
+- https://www.conda.at/startup/nixe-deutschland-gmbh/ (legacy CONDA page: NIXE low-carb beer)
+- https://conda-capital.com/campaign/venture-space/ (legacy campaign page: Venture Space investment vehicle)
+
+---
+
 ## 12. Partner and technical stack [OBSERVED, with document dates]
 
 The archive's documents describe the following roles. Document dates are given because permissions and providers can change; treat them as "as of" statements, and verify current counterparts for your own build:
