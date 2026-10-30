@@ -20,6 +20,7 @@ import RiskWarnings from './pages/RiskWarnings';
 import Faq from './pages/Faq';
 import About from './pages/About';
 import Financing from './pages/Financing';
+import Account from './pages/Account';
 
 const INTENT_KEY = 'rwa-soroban-intent';
 
@@ -182,6 +183,7 @@ export default function App() {
         {route.name === 'faq' && <Faq />}
         {route.name === 'about' && <About />}
         {route.name === 'financing' && <Financing />}
+        {route.name === 'account' && <Account market={market} />}
 
         <Footer />
       </main>
