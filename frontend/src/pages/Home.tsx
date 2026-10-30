@@ -68,10 +68,10 @@ export default function Home({ market }: { market: Market }) {
       <section aria-label="Instrument classes">
         <h2 className="section-title">Instrument classes this design covers</h2>
         <p>
-          The platform design covers four participation-side parents (participation right / certificate - with Substanzgenussrecht as a subtype -
-          share, indirect participation as an ownership structure, and limited partnership interest) and two debt parents, loan and bond, each
-          issued senior, subordinated or with seniority unspecified, plus structure overlays such as zero-coupon and convertible. This prototype
-          implements contract escrow only; the classes below are educational.
+          The platform design covers four participation-side parents (participation right / certificate - with Substanzgenussrecht as a subtype - share,
+          indirect participation as an ownership structure, and limited partnership interest) and two debt parents, loan and bond, each issued senior,
+          subordinated or with seniority unspecified, plus structure overlays such as zero-coupon and convertible. This prototype implements contract escrow
+          only; the classes below are educational.
         </p>
         <div className="instrument-grid">
           {INSTRUMENT_CLASSES.map((c) => (
