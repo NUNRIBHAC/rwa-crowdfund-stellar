@@ -34,7 +34,7 @@ export const ISSUER_FAQ: FaqEntry[] = [
   },
   {
     q: 'Which financing models does the design cover?',
-    a: 'Eight instrument classes: senior bonds, subordinated bonds and loans, convertible bonds, shares, participation certificates (including Substanzgenussrecht as a subtype), indirect participations and limited partnership interests. The Learn hub explains each.',
+    a: 'Four participation-side parents - participation right / certificate (with Substanzgenussrecht as a subtype), share, indirect participation as an ownership structure, and limited partnership interest - and two debt parents, loan and bond, each issued senior, subordinated or with seniority unspecified. Zero-coupon and convertible are structure overlays on debt. The Learn hub explains each.',
   },
   {
     q: 'What would a real launch require?',

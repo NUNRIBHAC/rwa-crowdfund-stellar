@@ -41,4 +41,38 @@ export const GLOSSARY: GlossaryEntry[] = [
   { term: 'Nominal value', definition: 'The face value of one unit of an instrument, against which interest and repayment are calculated.' },
   { term: 'Bullet repayment', definition: 'Repayment of the full nominal amount in one payment at maturity.' },
   { term: 'act/act, 30E/360', definition: 'Day-count conventions that define how interest accrues between payment dates.' },
+  {
+    term: 'Zero-coupon bond (Zero Bond)',
+    definition:
+      'A bond with no periodic interest: it is issued below its nominal value and repaid at par, so the return is the difference. A coupon structure, not a seniority.',
+  },
+  {
+    term: 'Convertible bond',
+    definition:
+      'A bond with a conversion feature: under the issue terms (trigger, window, conversion price) it can convert into shares. A structure overlay on a bond, not a standalone instrument.',
+  },
+  {
+    term: 'Junior debt',
+    definition:
+      'Platform wording for a lower-rank claim. It indicates subordinated ranking but does not by itself establish contractual qualified subordination.',
+  },
+  {
+    term: 'Qualified subordination',
+    definition:
+      'A contractual form of subordination under which interest and sometimes principal payments stop when the issuer would become over-indebted. Platform wording such as "qualified" alone does not prove it; the terms must say subordinated.',
+  },
+  { term: 'Mini Bond', definition: 'Platform label for a small-denomination bond.' },
+  {
+    term: 'Know your customer (KYC)',
+    definition: 'Identity verification that regulated platforms must complete before an investor can invest. This prototype performs no KYC.',
+  },
+  {
+    term: 'Politically exposed person (PEP)',
+    definition: 'A person holding a prominent public function, subject to enhanced checks under anti-money-laundering rules.',
+  },
+  {
+    term: 'Digital locker',
+    definition:
+      'A custody view where a platform shows an investor their held securities, tied to their verified identity. This prototype holds positions in the campaign contract itself, visible per wallet.',
+  },
 ];

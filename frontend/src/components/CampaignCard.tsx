@@ -1,7 +1,7 @@
 import type { Campaign } from '../types';
 import { deadlineInfo, formatAmount, percent, shorten } from '../format';
 import type { CampaignProfile } from '../data/profiles';
-import { instrumentLabel } from '../data/instruments';
+import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
 
 export type CampaignStatus = 'open' | 'funded' | 'ended';
@@ -34,7 +34,11 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
           <a href={routeHash({ name: 'campaign', campaignId: c.id })}>{c.name}</a>
         </h3>
         <div className="card-tags">
-          {profile && <span className="status-chip chip-instrument">{instrumentLabel(profile.instrumentClass)}</span>}
+          {profile && (
+            <span className="status-chip chip-instrument">
+              {composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}
+            </span>
+          )}
           {profile && <span className="status-chip chip-country">{profile.country}</span>}
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>
             {status === 'funded' ? 'Funded' : status === 'ended' ? 'Underfunded' : 'Open'}
