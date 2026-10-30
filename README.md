@@ -23,6 +23,10 @@ Copy `backend/.env.example` to `backend/.env` and configure only reviewed deploy
 - [Historical classic README, not current behavior](docs/classic-readme-historical.md)
 - [Skills reference collection](docs/skills-reference/README.md) - the skill catalog with per-skill rights status and include now / include for later / not include decisions ([INDEX](docs/skills-reference/INDEX.md), [assessment](docs/skills-reference/ASSESSMENT.md), [attribution](docs/skills-reference/NOTICE.md)). Reference documentation only; nothing there is installed or executed by this repository.
 
+## Demo deployment
+
+The testnet demo at https://rwa-crowdfund-demo.onrender.com deploys from `main` via Render auto-deploy (on commit) using `render.yaml`. Testnet only; no real funds.
+
 ## Checks
 
 CI runs JS tests, backend/frontend builds, Rust tests and Wasm build. Tests use simulated ledger/RPC and the Soroban in-memory environment. Live wallet-to-contract execution and deploy-time creator authorization are not verified. The separate infrastructure modules do not approve real people, define legal rights, or move fiat.
