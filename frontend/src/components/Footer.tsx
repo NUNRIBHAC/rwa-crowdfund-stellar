@@ -33,6 +33,8 @@ export default function Footer() {
             </li>
             <li>
               <a href={routeHash({ name: 'glossary' })}>{m.footer.glossary}</a>
+            </li>
+            <li>
               <a href={routeHash({ name: 'faq' })}>{m.footer.faq}</a>
             </li>
             <li>
