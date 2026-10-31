@@ -1163,21 +1163,20 @@ code {
 .footer-grid p {
   margin: 0;
 }
+.footer-context {
+  max-width: 460px;
+}
 .footer-legal {
-  flex-basis: 100%;
   margin: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: 14px;
   color: rgba(255, 255, 255, 0.6);
 }
 .footer-status {
-  flex-basis: 100%;
   margin: 14px 0 0;
-  color: rgba(255, 255, 255, 0.75);
 }
 .footer-status p {
   margin: 0;
-  max-width: 720px;
 }
 
 /* Card title wrapping: chips must not squeeze the title into per-character wraps */
@@ -1642,8 +1641,7 @@ textarea:focus-visible,
 .footer-tiles {
   position: absolute;
   right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 18px;
   width: 280px;
   height: 175px;
   pointer-events: none;
@@ -1658,6 +1656,7 @@ textarea:focus-visible,
     width: 170px;
     height: 108px;
     right: 12px;
+    bottom: 12px;
   }
 }
 @media (max-width: 560px) {
@@ -1669,16 +1668,9 @@ textarea:focus-visible,
   }
   .footer-tiles {
     position: static;
-    transform: none;
     width: 220px;
     height: 138px;
     order: 4;
-  }
-  .footer-legal {
-    order: 5;
-  }
-  .footer-status {
-    order: 6;
   }
 }
 
