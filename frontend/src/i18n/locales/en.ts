@@ -1423,6 +1423,11 @@ export const en = {
     applicationTitle: 'Apply as an issuer',
     applicationNote:
       'Tell the operator about the project you would like to list. Submitting this form is not an offer, a listing or an approval - it starts a conversation. Demo environment: do not submit real business secrets.',
+    applicationPreviewTitle: 'Application (preview)',
+    applicationPreviewNote:
+      'Preview of the issuer application. Nothing entered here is sent or stored - sign in with your wallet below to submit a real application for operator review.',
+    applicationPreviewPlaceholder: 'Preview only - sign in to apply',
+    applicationPreviewSubmit: 'Submit application (sign in first)',
     applicationFields: {
       projectName: 'Project name',
       country: 'Country',

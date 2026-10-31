@@ -1469,6 +1469,11 @@ export const es: Messages = {
     applicationTitle: 'Solicitar ser emisor',
     applicationNote:
       'Cuéntale al operador el proyecto que te gustaría listar. Enviar este formulario no es una oferta, un listado ni una aprobación: inicia una conversación. Entorno de demostración: no envíes secretos comerciales reales.',
+    applicationPreviewTitle: 'Solicitud (vista previa)',
+    applicationPreviewNote:
+      'Vista previa de la solicitud de emisor. Nada de lo que escriba aquí se envía ni se guarda - inicie sesión con su monedero abajo para enviar una solicitud real para revisión por el operador.',
+    applicationPreviewPlaceholder: 'Solo vista previa - inicie sesión para solicitar',
+    applicationPreviewSubmit: 'Enviar solicitud (inicie sesión primero)',
     applicationFields: {
       projectName: 'Nombre del proyecto',
       country: 'País',

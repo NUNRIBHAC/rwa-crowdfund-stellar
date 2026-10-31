@@ -1455,6 +1455,11 @@ export const de: Messages = {
     applicationTitle: 'Als Emittent bewerben',
     applicationNote:
       'Beschreiben Sie dem Betreiber das Projekt, das Sie listen möchten. Das Absenden dieses Formulars ist kein Angebot, kein Listing und keine Genehmigung - es eröffnet ein Gespräch. Demo-Umgebung: Übermitteln Sie keine echten Geschäftsgeheimnisse.',
+    applicationPreviewTitle: 'Antrag (Vorschau)',
+    applicationPreviewNote:
+      'Vorschau des Emittentenantrags. Nichts, was Sie hier eingeben, wird gesendet oder gespeichert - melden Sie sich unten mit Ihrer Wallet an, um einen echten Antrag zur Prüfung durch den Betreiber einzureichen.',
+    applicationPreviewPlaceholder: 'Nur Vorschau - zum Bewerben anmelden',
+    applicationPreviewSubmit: 'Antrag einreichen (zuerst anmelden)',
     applicationFields: {
       projectName: 'Projektname',
       country: 'Land',

@@ -1382,6 +1382,11 @@ export const ja: Messages = {
     applicationTitle: '発行者として申請',
     applicationNote:
       '掲載したいプロジェクトを運営者にお知らせください。このフォームの送信はオファー、掲載、承認ではありません - 対話の開始です。デモ環境: 実際の企業秘密は送信しないでください。',
+    applicationPreviewTitle: '申請（プレビュー）',
+    applicationPreviewNote:
+      '発行者申請のプレビューです。ここに入力した内容は送信・保存されません。下でウォレットにサインインして、運営者レビュー用の本物の申請を送信してください。',
+    applicationPreviewPlaceholder: 'プレビューのみ - サインインして申請',
+    applicationPreviewSubmit: '申請を送信（先にサインイン）',
     applicationFields: {
       projectName: 'プロジェクト名',
       country: '国',

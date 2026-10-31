@@ -1,6 +1,7 @@
 import { useI18n } from '../i18n';
 import type { Market } from '../market';
 import SignInPanel from '../components/SignInPanel';
+import IssuerApplicationPreview from '../components/IssuerApplicationPreview';
 import IssuerApplicationForm from '../components/IssuerApplicationForm';
 
 // Issuer landing page. The application form is live: a signed-in wallet
@@ -28,6 +29,7 @@ export default function Financing({ market }: { market: Market }) {
         </ol>
       </section>
 
+      <IssuerApplicationPreview />
       <SignInPanel actor={market.actor} />
       <IssuerApplicationForm />
     </>

@@ -1354,6 +1354,11 @@ export const ko: Messages = {
     applicationTitle: '발행인으로 신청',
     applicationNote:
       '상장하고 싶은 프로젝트를 운영자에게 알려 주세요. 이 양식 제출은 청약, 상장 또는 승인이 아니라 대화의 시작입니다. 데모 환경: 실제 영업 비밀은 제출하지 마세요.',
+    applicationPreviewTitle: '신청 (미리보기)',
+    applicationPreviewNote:
+      '발행사 신청 미리보기입니다. 여기에 입력한 내용은 전송되거나 저장되지 않습니다. 아래에서 지갑으로 로그인하여 운영자 검토용 실제 신청을 제출하세요.',
+    applicationPreviewPlaceholder: '미리보기 전용 - 로그인 후 신청',
+    applicationPreviewSubmit: '신청 제출 (먼저 로그인)',
     applicationFields: {
       projectName: '프로젝트 이름',
       country: '국가',
