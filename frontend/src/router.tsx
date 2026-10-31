@@ -22,7 +22,8 @@ export type RouteName =
   | 'events'
   | 'blog'
   | 'press'
-  | 'jobs';
+  | 'jobs'
+  | 'campaign-builder';
 
 export type Route = { name: RouteName; campaignId?: string };
 
@@ -35,6 +36,7 @@ const KNOWN_SEGMENTS = new Set([
   'risk-warnings',
   'faq',
   'financing',
+  'campaign-builder',
   'about',
   'account',
   'terms-of-service',
@@ -73,6 +75,8 @@ export function routeFromPath(pathname: string): Route {
       return { name: 'faq' };
     case 'financing':
       return { name: 'financing' };
+    case 'campaign-builder':
+      return { name: 'campaign-builder' };
     case 'about':
       return { name: 'about' };
     case 'account':

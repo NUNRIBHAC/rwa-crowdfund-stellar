@@ -21,6 +21,7 @@ import RiskWarnings from './pages/RiskWarnings';
 import Faq from './pages/Faq';
 import About from './pages/About';
 import Financing from './pages/Financing';
+import CampaignBuilderDraft from './components/CampaignBuilderDraft';
 import Account from './pages/Account';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -250,6 +251,7 @@ export default function App() {
         {route.name === 'faq' && <Faq />}
         {route.name === 'about' && <About />}
         {route.name === 'financing' && <Financing market={market} />}
+        {route.name === 'campaign-builder' && <CampaignBuilderDraft />}
         {route.name === 'account' && <Account market={market} />}
         {route.name === 'terms-of-service' && <TermsOfService />}
         {route.name === 'privacy-policy' && <PrivacyPolicy />}
