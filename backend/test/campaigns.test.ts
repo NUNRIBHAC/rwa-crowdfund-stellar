@@ -179,6 +179,7 @@ test('cap: rejects contribution above the remaining goal, accepts exact fill', a
 
   await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 60 });
   await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 50 }), /exceeds the remaining goal \(40 USDC left\)/);
+  await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 0 }), /amountUsdc must be > 0/);
   await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 40 }); // exact fill
   await assert.rejects(invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 1 }), /goal already reached/);
 });
