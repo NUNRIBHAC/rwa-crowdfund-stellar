@@ -1,0 +1,29 @@
+# Blockallisto - SEP-1 anchor metadata for the Stellar testnet prototype.
+# Demo deployment: https://blockallisto-demo.onrender.com (example production
+# domain: blockallisto.com). This is a prototype: no live offers, no real funds.
+NETWORK_PASSPHRASE = "Test SDF Network ; September 2015"
+HORIZON_URL = "https://horizon-testnet.stellar.org"
+SOROBAN_RPC_URL = "https://soroban-testnet.stellar.org"
+
+# The demo registers one Soroban crowdfunding campaign contract (all-or-nothing,
+# enforced on-chain): demo-solar = CCBIMGPHIOUFN6IC6MYPFXOGJQIRJHHDXA2Y7LQDCYBSJOKHULICO6NY
+# It is a campaign contract, not an issued token, so it is not a [[CURRENCIES]] entry.
+# No validators are operated and no compliance contacts exist for this prototype;
+# those sections are intentionally omitted rather than filled with placeholders.
+
+ORG_NAME = "Blockallisto"
+ORG_DBA = "Blockallisto"
+ORG_URL = "https://blockallisto-demo.onrender.com"
+ORG_LOGO = "https://blockallisto-demo.onrender.com/og-image.png"
+ORG_DESCRIPTION = "Testnet prototype for all-or-nothing crowdfunding of tokenized real-world assets on Stellar. Educational demo only: no authorised crowdfunding service, no live offers, no real funds."
+
+[[CURRENCIES]]
+code = "USDC"
+issuer = "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5"
+display_decimals = 2
+name = "USD Coin (testnet)"
+desc = "Testnet USDC used for demo contributions. Worthless test asset, no real value."
+status = "test"
+is_asset_anchored = true
+anchor_asset_type = "fiat"
+anchor_asset = "USD"
