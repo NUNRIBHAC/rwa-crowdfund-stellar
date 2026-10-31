@@ -67,4 +67,3 @@ describe('discovery accessibility semantics', () => {
     });
   });
 });
-

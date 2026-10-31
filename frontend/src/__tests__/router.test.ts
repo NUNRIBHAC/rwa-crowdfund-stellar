@@ -44,7 +44,21 @@ describe('routePath', () => {
     expect(routePath({ name: 'campaign', campaignId: 'a b' })).toBe('/campaigns/a%20b');
   });
   test('round-trips through routeFromPath', () => {
-    const names = ['home', 'investments', 'how-it-works', 'learn', 'glossary', 'risk-warnings', 'faq', 'financing', 'about', 'account', 'terms-of-service', 'privacy-policy', 'risk-disclosure'] as const;
+    const names = [
+      'home',
+      'investments',
+      'how-it-works',
+      'learn',
+      'glossary',
+      'risk-warnings',
+      'faq',
+      'financing',
+      'about',
+      'account',
+      'terms-of-service',
+      'privacy-policy',
+      'risk-disclosure',
+    ] as const;
     for (const name of names) {
       expect(routeFromPath(routePath({ name }))).toEqual({ name });
     }

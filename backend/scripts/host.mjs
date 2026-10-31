@@ -20,8 +20,7 @@ app.use(express.static(dist));
 // (/assets/x.js, /og-image.png) 404 honestly instead of serving HTML with the
 // wrong MIME; /api and the discovery endpoints are handled above.
 app.use((req, res, next) => {
-  if (req.method === 'GET' && !req.path.startsWith('/api') && !path.extname(req.path))
-    return res.sendFile(path.join(dist, 'index.html'));
+  if (req.method === 'GET' && !req.path.startsWith('/api') && !path.extname(req.path)) return res.sendFile(path.join(dist, 'index.html'));
   next();
 });
 const port = Number(process.env.PORT ?? 4000);

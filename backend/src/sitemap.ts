@@ -47,9 +47,7 @@ function publicOrigin(req: Request): string | null {
 function sitemapXml(origin: string, campaignIds: string[]): string {
   const lastmod = new Date().toISOString().slice(0, 10);
   const paths = [...PUBLIC_PATHS, ...campaignIds.map((id) => `/campaigns/${encodeURIComponent(id)}`)];
-  const urls = paths
-    .map((p) => `  <url>\n    <loc>${origin}${p}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>\n`)
-    .join('');
+  const urls = paths.map((p) => `  <url>\n    <loc>${origin}${p}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>\n`).join('');
   return '<?xml version="1.0" encoding="UTF-8"?>\n' + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n';
 }
 
