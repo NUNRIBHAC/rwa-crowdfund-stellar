@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Market } from '../market';
 import CampaignCard, { campaignStatus, type CampaignStatus } from '../components/CampaignCard';
+import { compareCampaigns } from '../sort-campaigns';
 import EmptyState from '../components/EmptyState';
 import { categoriesFor, profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
@@ -68,15 +69,7 @@ export default function Investments({ market }: { market: Market }) {
     .filter((c) => !q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q))
     .filter((c) => statusFilter === 'all' || campaignStatus(c) === statusFilter)
     .filter((c) => category === 'all' || categoryOf(c) === category)
-    .sort((a, b) => {
-      if (sortBy === 'name') return a.name.localeCompare(b.name);
-      if (sortBy === 'progress') {
-        const pa = Number((BigInt(a.raised) * 10000n) / BigInt(a.config.goal));
-        const pb = Number((BigInt(b.raised) * 10000n) / BigInt(b.config.goal));
-        return pb - pa;
-      }
-      return Number(a.config.deadline) - Number(b.config.deadline);
-    });
+    .sort(compareCampaigns(sortBy));
   const active = shown.filter((c) => campaignStatus(c) === 'open');
   const completed = shown.filter((c) => campaignStatus(c) !== 'open');
   const showEmpty = loaded && !fixtureMode && campaigns.length === 0;

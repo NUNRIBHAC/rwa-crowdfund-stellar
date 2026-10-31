@@ -1348,6 +1348,50 @@ export const es: Messages = {
     jobsEmpty: 'No hay vacantes abiertas en este momento.',
     jobsSpeculativeNote: 'Las candidaturas espontáneas no se recogen en esta demostración.',
     jobsDemoNote: 'Página de demostración: las vacantes publicadas aparecerán aquí. Actualmente no hay vacantes reales.',
+    eventsHowTitle: 'Cómo funcionarán los eventos',
+    eventsHowBody:
+      'Cuando la plataforma programe un evento real, aparecerá en Próximos con su fecha, formato y forma de inscripción. Los eventos finalizados pasan a Anteriores. Hasta entonces, ambas listas permanecen honestamente vacías.',
+    blogPosts: [
+      {
+        date: '2026-10-31',
+        title: 'Qué es Blockallisto - y qué no es',
+        paragraphs: [
+          'Blockallisto es un prototipo funcional de inversión colectiva tokenizada en la testnet de Stellar. Explora cómo podría funcionar una plataforma de inversión transparente: condiciones de campaña públicas, registro de contribuciones en cadena y reglas de reembolso exigibles.',
+          'No es una plataforma de inversión. No hay ofertas reales, fondos reales ni asesoramiento de inversión en ninguna parte de este sitio. Todas las campañas se ejecutan en la testnet de Stellar, y los activos de testnet no tienen valor por diseño.',
+          'Lo que sí es real es la maquinaria: los contratos inteligentes, los flujos de monedero y este sitio web operan con activos de prueba sin valor mientras el prototipo se ejercita y mejora.',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: 'Cómo funciona una campaña de principio a fin',
+        paragraphs: [
+          'Cada campaña es un contrato inteligente de Soroban con un objetivo y una fecha límite. Los visitantes conectan un monedero Freighter y contribuyen con USDC de testnet; cada contribución confirmada es visible en la cadena y en la barra de progreso de la campaña.',
+          'El contrato impone el resultado sin intermediarios: una vez cumplida la fecha límite, el creador solo puede retirar los fondos si se alcanzó el objetivo. Si la campaña termina por debajo de su objetivo, cada contribuyente firma su propio reembolso y recupera su contribución.',
+          'Tus posiciones, actividad y notificaciones están en Mi cuenta una vez que conectas un monedero: se guardan por monedero, en el servidor, no en una cookie.',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: 'Por qué una demo tiene páginas legales',
+        paragraphs: [
+          'Este prototipo toma su estructura de la regulación real de la inversión colectiva. La UE regula la financiación participativa bajo el ECSPR, y los proveedores autorizados figuran en el registro de la ESMA; Blockallisto no es un proveedor autorizado y no lista ofertas reales.',
+          'Páginas como Advertencias de Riesgo, Conflictos de Interés, Gestión de Reclamaciones y Continuidad del Negocio existen aquí como plantillas ilustrativas marcadas [DEMO]. Muestran la transparencia que una plataforma real debe ofrecer - no son documentos legales y no han sido revisados por un abogado.',
+          'La misma regla se aplica en todo el sitio: los datos ficticios están marcados [DEMO] y nada aquí puede citarse como declaración real de una empresa.',
+        ],
+      },
+    ],
+    pressFactSheetTitle: 'Ficha técnica del proyecto',
+    pressFactStatusLabel: 'Estado',
+    pressFactStatusValue: 'Demostración pública en la testnet de Stellar - sin ofertas reales, sin fondos reales, sin asesoramiento de inversión.',
+    pressFactOperatorLabel: 'Operador',
+    pressFactOperatorValue:
+      'Proyecto prototipo independiente. No se afirma ningún operador registrado; los datos de la página de Aviso Legal están marcados [DEMO].',
+    pressFactTechLabel: 'Tecnología',
+    pressFactTechValue: 'Contratos inteligentes Stellar Soroban, USDC de testnet y el monedero Freighter.',
+    pressFactContactValue: 'Usa el widget de Comentarios en cualquier página; los mensajes quedan registrados como comentarios en esta demostración.',
+    jobsAboutTitle: 'Cómo se construye este proyecto',
+    jobsAboutBody:
+      'Blockallisto se construye actualmente como un pequeño proyecto prototipo. Si alguna vez se abre una vacante real, se publicará en esta página con sus requisitos y cómo aplicar.',
   },
   tour: {
     tourTitle: 'Visita guiada de la campaña',

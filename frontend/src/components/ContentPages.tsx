@@ -49,6 +49,8 @@ export function EventsPage() {
           <p className="community-note">{t.eventsFormatWebinarDesc}</p>
         </li>
       </ul>
+      <h3>{t.eventsHowTitle}</h3>
+      <p className="community-note">{t.eventsHowBody}</p>
     </PageShell>
   );
 }
@@ -58,7 +60,18 @@ export function BlogPage() {
   const t = m.contentPages;
   return (
     <PageShell title={t.blogTitle} intro={t.blogIntro} demoNote={t.blogDemoNote}>
-      <p className="community-note">{t.blogEmpty}</p>
+      {t.blogPosts.length === 0 && <p className="community-note">{t.blogEmpty}</p>}
+      {t.blogPosts.map((post) => (
+        <article className="blog-post" key={post.title}>
+          <h3>{post.title}</h3>
+          <p className="community-note">{post.date}</p>
+          {post.paragraphs.map((para) => (
+            <p className="community-note" key={para.slice(0, 40)}>
+              {para}
+            </p>
+          ))}
+        </article>
+      ))}
     </PageShell>
   );
 }
@@ -69,6 +82,33 @@ export function PressPage() {
   return (
     <PageShell title={t.pressTitle} intro={t.pressIntro} demoNote={t.pressDemoNote}>
       <p className="community-note">{t.pressEmpty}</p>
+      <h3>{t.pressFactSheetTitle}</h3>
+      <dl className="portfolio-list">
+        <div className="portfolio-row">
+          <dt>
+            <strong>{t.pressFactStatusLabel}</strong>
+          </dt>
+          <dd className="community-note">{t.pressFactStatusValue}</dd>
+        </div>
+        <div className="portfolio-row">
+          <dt>
+            <strong>{t.pressFactOperatorLabel}</strong>
+          </dt>
+          <dd className="community-note">{t.pressFactOperatorValue}</dd>
+        </div>
+        <div className="portfolio-row">
+          <dt>
+            <strong>{t.pressFactTechLabel}</strong>
+          </dt>
+          <dd className="community-note">{t.pressFactTechValue}</dd>
+        </div>
+        <div className="portfolio-row">
+          <dt>
+            <strong>{t.pressContactLabel}</strong>
+          </dt>
+          <dd className="community-note">{t.pressFactContactValue}</dd>
+        </div>
+      </dl>
       <h3>{t.pressKitLabel}</h3>
       <p className="community-note">{t.pressKitNote}</p>
     </PageShell>
@@ -81,6 +121,8 @@ export function JobsPage() {
   return (
     <PageShell title={t.jobsTitle} intro={t.jobsIntro} demoNote={t.jobsDemoNote}>
       <p className="community-note">{t.jobsEmpty}</p>
+      <h3>{t.jobsAboutTitle}</h3>
+      <p className="community-note">{t.jobsAboutBody}</p>
       <p className="community-note">{t.jobsSpeculativeNote}</p>
     </PageShell>
   );
