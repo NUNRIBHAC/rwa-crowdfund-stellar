@@ -727,10 +727,12 @@ code {
   }
 }
 @media (max-width: 560px) {
-  /* The side controls (language, testnet badge, theme toggle, Connect) wrap
-     inside the viewport instead of clipping the Connect button at the right
-     edge. */
+  /* The side controls (language, testnet badge, theme toggle, Connect) get
+     their own full-width row and wrap INSIDE the viewport; sharing the brand
+     row let the Connect button clip at the right edge. */
   .header-side {
+    flex: 1 1 100%;
+    order: 2;
     flex-wrap: wrap;
     justify-content: flex-end;
     row-gap: 6px;
@@ -765,6 +767,22 @@ code {
 .nav-link-active {
   color: #fff;
   box-shadow: inset 0 -2px 0 var(--indigo-400, #8b8ef0);
+  animation: nav-active-blink 2.8s ease-in-out infinite;
+}
+/* Selected navbar link: the underline gently pulses, the text itself stays
+   steady. Slow single-property opacity pulse, disabled under reduced motion. */
+@keyframes nav-active-blink {
+  0%, 100% {
+    box-shadow: inset 0 -2px 0 rgba(139, 142, 240, 1);
+  }
+  50% {
+    box-shadow: inset 0 -2px 0 rgba(139, 142, 240, 0.25);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-link-active {
+    animation: none;
+  }
 }
 .brand {
   text-decoration: none;
