@@ -1357,11 +1357,9 @@ export const de: Messages = {
     catIncomeLabel: 'Monatliches Nettoeinkommen (EUR)',
     catPlannedLabel: 'Geplante Investition (EUR)',
     catSimRun: 'Simulation starten',
-    catSimResultOk: 'Der geplante Betrag bleibt innerhalb des 10%-Richtwerts deiner frei verfügbaren Mittel.',
-    catSimResultWarn:
-      'Der geplante Betrag überschreitet 10% deiner frei verfügbaren Mittel. Investiere nur Geld, dessen vollständigen Verlust du dir leisten kannst.',
-    catThresholdNote:
-      'Richtwert aus den Risikohinweisen: Eine gängige Faustregel ist, nicht mehr als 10% der frei verfügbaren Mittel in diese Anlageklasse zu investieren und sie auf Emittenten zu streuen.',
+    catSimResult: ({ pct }: { pct: string }) => `Die geplante Anlage entspricht ${pct} % der eingegebenen frei verfügbaren Mittel.`,
+    catSimNote:
+      'Reine Rechenoperation mit den eingegebenen Beträgen. Dies ist keine regulatorische Prüfung der Verlusttragfähigkeit, Geeignetheit oder Berechtigung; es wird kein Schwellenwert angewendet.',
     catSavedNote: 'Ergebnis nur lokal in diesem Browser gespeichert.',
     catQuestions: [
       {

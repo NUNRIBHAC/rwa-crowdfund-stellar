@@ -1373,10 +1373,9 @@ export const es: Messages = {
     catIncomeLabel: 'Ingresos netos mensuales (EUR)',
     catPlannedLabel: 'Inversión prevista (EUR)',
     catSimRun: 'Ejecutar simulación',
-    catSimResultOk: 'El importe previsto se mantiene dentro del valor de orientación del 10% de tus fondos libremente disponibles.',
-    catSimResultWarn: 'El importe previsto supera el 10% de tus fondos libremente disponibles. Invierte solo dinero cuya pérdida total puedas asumir.',
-    catThresholdNote:
-      'Valor de orientación de las advertencias de riesgo: una pauta común es no invertir más del 10% de los fondos libremente disponibles en esta clase de activos y repartirlo entre varios emisores.',
+    catSimResult: ({ pct }: { pct: string }) => `La inversión prevista equivale al ${pct} % de los fondos disponibles introducidos.`,
+    catSimNote:
+      'Aritmética simple sobre los importes introducidos. No es una evaluación regulatoria de la capacidad de asumir pérdidas, idoneidad o elegibilidad, y no se aplica ningún umbral.',
     catSavedNote: 'Resultado guardado solo localmente en este navegador.',
     catQuestions: [
       {

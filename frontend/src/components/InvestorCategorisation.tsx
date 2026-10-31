@@ -10,14 +10,14 @@ import { useI18n } from '../i18n';
 const STORAGE_KEY = 'blockallisto-investor-categorisation';
 
 export default function InvestorCategorisation() {
-  const { m } = useI18n();
+  const { m, locale } = useI18n();
   const t = m.categorisation;
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [checked, setChecked] = useState(false);
   const [assets, setAssets] = useState('');
   const [income, setIncome] = useState('');
   const [planned, setPlanned] = useState('');
-  const [simResult, setSimResult] = useState<'ok' | 'warn' | null>(null);
+  const [simResult, setSimResult] = useState<string | null>(null);
 
   const questions = t.catQuestions;
   const score = questions.reduce((acc, q, i) => acc + (answers[i] === q.correct ? 1 : 0), 0);
@@ -36,7 +36,7 @@ export default function InvestorCategorisation() {
     const a = Number(assets);
     const p = Number(planned);
     if (!Number.isFinite(a) || !Number.isFinite(p) || a <= 0 || p <= 0) return;
-    setSimResult(p <= a * 0.1 ? 'ok' : 'warn');
+    setSimResult(new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format((p / a) * 100));
   };
 
   return (
@@ -99,11 +99,11 @@ export default function InvestorCategorisation() {
         <button className="btn btn-primary">{t.catSimRun}</button>
       </form>
       {simResult && (
-        <p role="status" className={simResult === 'ok' ? 'community-note' : 'community-error'}>
-          {simResult === 'ok' ? t.catSimResultOk : t.catSimResultWarn}
+        <p role="status" className="community-note">
+          {t.catSimResult({ pct: simResult })}
         </p>
       )}
-      <p className="community-note">{t.catThresholdNote}</p>
+      <p className="community-note">{t.catSimNote}</p>
       <p className="community-note">{t.catSavedNote}</p>
     </section>
   );

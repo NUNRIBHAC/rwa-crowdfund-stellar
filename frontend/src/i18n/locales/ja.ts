@@ -1287,9 +1287,8 @@ export const ja: Messages = {
     catIncomeLabel: '月額手取り収入 (EUR)',
     catPlannedLabel: '投資予定額 (EUR)',
     catSimRun: 'シミュレーションを実行',
-    catSimResultOk: '投資予定額は自由に使える資金の10%という目安の範囲内です。',
-    catSimResultWarn: '投資予定額が自由に使える資金の10%を超えています。全額失っても許容できる資金だけを投資してください。',
-    catThresholdNote: 'リスク警告に基づく目安: 一般的な指針として、自由に使える資金の10%を超えてこの資産クラスに投資せず、複数の発行者に分散すること。',
+    catSimResult: ({ pct }: { pct: string }) => `予定投資額は入力した自由に使える資金の${pct}%に相当します。`,
+    catSimNote: '入力した金額の単純な算術計算です。損失許容度・適合性・適格性の規制上の評価ではなく、しきい値は適用されません。',
     catSavedNote: '結果はこのブラウザにのみローカル保存されます。',
     catQuestions: [
       {

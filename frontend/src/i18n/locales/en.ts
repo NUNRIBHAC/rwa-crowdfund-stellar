@@ -1323,10 +1323,9 @@ export const en = {
     catIncomeLabel: 'Monthly net income (EUR)',
     catPlannedLabel: 'Planned investment (EUR)',
     catSimRun: 'Run simulation',
-    catSimResultOk: 'The planned amount stays within the 10% orientation value of your freely available funds.',
-    catSimResultWarn: 'The planned amount exceeds 10% of your freely available funds. Invest only money you can afford to lose entirely.',
-    catThresholdNote:
-      'Orientation value from the risk warnings: a common guideline is to invest no more than 10% of freely available funds in this asset class and to spread it across issuers.',
+    catSimResult: ({ pct }: { pct: string }) => `The planned investment equals ${pct}% of the freely available funds you entered.`,
+    catSimNote:
+      'Plain arithmetic on the amounts you entered. This is not a regulatory assessment of your ability to bear losses, suitability or eligibility, and no threshold is applied.',
     catSavedNote: 'Result saved locally in this browser only.',
     catQuestions: [
       {

@@ -1375,11 +1375,9 @@ export const fr: Messages = {
     catIncomeLabel: 'Revenu net mensuel (EUR)',
     catPlannedLabel: 'Investissement envisagé (EUR)',
     catSimRun: 'Lancer la simulation',
-    catSimResultOk: "Le montant envisagé reste dans la valeur d'orientation de 10% de vos fonds librement disponibles.",
-    catSimResultWarn:
-      "Le montant envisagé dépasse 10% de vos fonds librement disponibles. N'investissez que de l'argent dont vous pouvez supporter la perte totale.",
-    catThresholdNote:
-      "Valeur d'orientation issue des avertissements: une règle courante est de ne pas investir plus de 10% des fonds librement disponibles dans cette classe d'actifs et de les répartir entre plusieurs émetteurs.",
+    catSimResult: ({ pct }: { pct: string }) => `Le montant prévu correspond à ${pct} % des fonds librement disponibles saisis.`,
+    catSimNote:
+      "Simple calcul arithmétique sur les montants saisis. Il ne s'agit pas d'une évaluation réglementaire de la capacité à supporter des pertes, d'adéquation ou d'éligibilité, et aucun seuil n'est appliqué.",
     catSavedNote: 'Résultat enregistré uniquement localement dans ce navigateur.',
     catQuestions: [
       {

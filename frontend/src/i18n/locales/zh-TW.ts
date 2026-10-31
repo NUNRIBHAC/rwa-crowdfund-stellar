@@ -1173,9 +1173,8 @@ export const zhTW: Messages = {
     catIncomeLabel: '每月淨收入 (EUR)',
     catPlannedLabel: '計畫投資金額 (EUR)',
     catSimRun: '執行模擬',
-    catSimResultOk: '計畫金額在您可自由運用資金 10% 參考值以內。',
-    catSimResultWarn: '計畫金額超過您可自由運用資金的 10%。請只用能承受全部損失的資金進行投資。',
-    catThresholdNote: '風險提示中的參考值:常見指引是在該資產類別中的投資不超過可自由運用資金的 10%,並分散到多個發行方。',
+    catSimResult: ({ pct }: { pct: string }) => `計畫投資金額相當於您輸入的可自由支配資金的${pct}%。`,
+    catSimNote: '僅對您輸入的金額進行簡單算術計算。這不是關於損失承受能力、適當性或資格的監管評估,也不適用任何門檻。',
     catSavedNote: '結果僅儲存在此瀏覽器本機。',
     catQuestions: [
       {

@@ -1263,10 +1263,8 @@ export const ko: Messages = {
     catIncomeLabel: '월 순소득 (EUR)',
     catPlannedLabel: '투자 예정 금액 (EUR)',
     catSimRun: '시뮬레이션 실행',
-    catSimResultOk: '투자 예정 금액이 자유롭게 사용 가능한 자금의 10% 기준치 이내입니다.',
-    catSimResultWarn: '투자 예정 금액이 자유롭게 사용 가능한 자금의 10%를 초과합니다. 전액 손실을 감당할 수 있는 돈만 투자하세요.',
-    catThresholdNote:
-      '리스크 경고의 기준치: 일반적인 지침은 자유롭게 사용 가능한 자금의 10%를 초과하여 이 자산 클래스에 투자하지 않고 여러 발행사에 분산하는 것입니다.',
+    catSimResult: ({ pct }: { pct: string }) => `계획 투자 금액은 입력한 자유 사용 가능 자금의 ${pct}%입니다.`,
+    catSimNote: '입력한 금액에 대한 단순 산술 계산입니다. 손실 감내 능력, 적합성 또는 적격성에 대한 규제 평가가 아니며 어떤 임계값도 적용되지 않습니다.',
     catSavedNote: '결과는 이 브라우저에만 로컬로 저장됩니다.',
     catQuestions: [
       {

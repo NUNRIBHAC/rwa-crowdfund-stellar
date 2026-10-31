@@ -1368,10 +1368,9 @@ export const pt: Messages = {
     catIncomeLabel: 'Rendimento líquido mensal (EUR)',
     catPlannedLabel: 'Investimento planeado (EUR)',
     catSimRun: 'Executar simulação',
-    catSimResultOk: 'O montante planeado mantém-se dentro do valor de referência de 10% dos seus fundos livremente disponíveis.',
-    catSimResultWarn: 'O montante planeado excede 10% dos seus fundos livremente disponíveis. Invista apenas dinheiro cuja perda total possa suportar.',
-    catThresholdNote:
-      'Valor de referência dos avisos de risco: uma orientação comum é não investir mais de 10% dos fundos livremente disponíveis nesta classe de ativos e distribuí-los por vários emitentes.',
+    catSimResult: ({ pct }: { pct: string }) => `O investimento planeado equivale a ${pct}% dos fundos livremente disponíveis que introduziu.`,
+    catSimNote:
+      'Aritmética simples sobre os valores que introduziu. Não é uma avaliação regulamentar da capacidade de suportar perdas, adequação ou elegibilidade, e não é aplicado qualquer limiar.',
     catSavedNote: 'Resultado guardado apenas localmente neste navegador.',
     catQuestions: [
       {

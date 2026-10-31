@@ -1173,9 +1173,8 @@ export const zhCN: Messages = {
     catIncomeLabel: '月净收入 (EUR)',
     catPlannedLabel: '计划投资金额 (EUR)',
     catSimRun: '运行模拟',
-    catSimResultOk: '计划金额在您可自由支配资金 10% 参考值以内。',
-    catSimResultWarn: '计划金额超过您可自由支配资金的 10%。请只用能够承受全部损失的资金进行投资。',
-    catThresholdNote: '风险提示中的参考值:常见指引是在该资产类别中的投资不超过可自由支配资金的 10%,并分散到多个发行方。',
+    catSimResult: ({ pct }: { pct: string }) => `计划投资金额相当于您输入的可自由支配资金的${pct}%。`,
+    catSimNote: '仅对您输入的金额进行简单算术计算。这不是关于损失承受能力、适当性或资格的监管评估,也不适用任何阈值。',
     catSavedNote: '结果仅保存在此浏览器本地。',
     catQuestions: [
       {
