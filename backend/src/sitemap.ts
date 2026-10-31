@@ -14,9 +14,14 @@ import type { Express, Request } from 'express';
 // injected RENDER_EXTERNAL_URL, then the request Host header. This keeps the
 // same build correct on demo, staging and any future domain with zero config.
 
-function publicOrigin(req: Request): string {
+// Canonical origin must be source-backed: PUBLIC_ORIGIN, then Render's
+// injected RENDER_EXTERNAL_URL. Never reflect an arbitrary Host header into
+// sitemap/robots output on a public deployment - the Host fallback exists only
+// for local development. In production with neither env set, fail closed (503).
+function publicOrigin(req: Request): string | null {
   const configured = process.env.PUBLIC_ORIGIN ?? process.env.RENDER_EXTERNAL_URL;
   if (configured) return configured.replace(/\/+$/, '');
+  if (process.env.NODE_ENV === 'production') return null;
   const proto = (req.headers['x-forwarded-proto'] as string | undefined)?.split(',')[0]?.trim() || req.protocol;
   return `${proto}://${req.get('host')}`;
 }
@@ -36,10 +41,13 @@ function sitemapXml(origin: string): string {
 
 export function registerDiscoveryEndpoints(app: Express): void {
   app.get('/sitemap.xml', (req, res) => {
-    res.type('application/xml').send(sitemapXml(publicOrigin(req)));
+    const origin = publicOrigin(req);
+    if (!origin) return res.status(503).json({ error: 'public origin not configured' });
+    res.type('application/xml').send(sitemapXml(origin));
   });
   app.get('/robots.txt', (req, res) => {
     const origin = publicOrigin(req);
+    if (!origin) return res.status(503).json({ error: 'public origin not configured' });
     res.type('text/plain').send(`User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${origin}/sitemap.xml\n`);
   });
 }

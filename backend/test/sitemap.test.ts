@@ -69,3 +69,20 @@ test('robots.txt allows the site, excludes /api, references the sitemap', async 
     delete process.env.RENDER_EXTERNAL_URL;
   }
 });
+
+test('production without a configured origin fails closed (503), never reflects Host', async () => {
+  const saved = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'production';
+  try {
+    const app = express();
+    registerDiscoveryEndpoints(app);
+    await withServer(app, async (base) => {
+      const res = await fetch(`${base}/sitemap.xml`, { headers: { host: 'evil.example.com' } });
+      assert.equal(res.status, 503);
+      const body = await res.text();
+      assert.ok(!body.includes('evil.example.com'), 'request Host never reflected');
+    });
+  } finally {
+    process.env.NODE_ENV = saved;
+  }
+});
