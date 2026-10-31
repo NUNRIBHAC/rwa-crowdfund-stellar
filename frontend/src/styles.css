@@ -669,23 +669,37 @@ code {
    (worst case FR needs ~1650px with the 48px lockup) - wrap to two compact rows: brand + side
    controls on the first, the full-width centred nav on the second. */
 @media (min-width: 721px) and (max-width: 1659px) {
+  /* Two-row layout: the brand lockup spans both rows and centres against the
+     combined height of the controls row and the nav row (user request: align
+     with BOTH, not one row). */
   .header-inner {
-    flex-wrap: wrap;
-    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 24px;
     row-gap: 6px;
+    min-height: 0;
     padding-top: 10px;
     padding-bottom: 10px;
   }
   .header-main {
     display: contents;
   }
+  .brand {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
   .header-side {
+    grid-column: 2;
+    grid-row: 1;
     margin-left: auto;
   }
   .site-nav {
-    order: 3;
-    flex-basis: 100%;
+    grid-column: 1 / -1;
+    grid-row: 2;
     justify-content: center;
+    justify-self: center;
   }
 }
 @media (max-width: 720px) {
