@@ -5,7 +5,7 @@
 # them fail-closed (503). No payment method or paid plan is required for this.
 services:
   - type: web
-    name: rwa-crowdfund-demo
+    name: blockallisto-demo
     runtime: node
     region: frankfurt
     plan: free
@@ -38,6 +38,6 @@ services:
       # The allowlist must include the service's own public origin (same-origin
       # module loads send Origin). Adjust if the service name/URL differs.
       - key: CORS_ALLOWED_ORIGINS
-        value: https://rwa-crowdfund-demo.onrender.com
+        value: https://rwa-crowdfund-demo.onrender.com,https://blockallisto-demo.onrender.com
       - key: ADMIN_SECRET
         sync: false # optional; unset keeps admin endpoints disabled (fail closed)
