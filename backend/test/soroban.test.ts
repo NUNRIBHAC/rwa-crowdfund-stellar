@@ -34,11 +34,15 @@ let sendCount = 0,
   wrongHash = false;
 let badWasm = false,
   addressAuth = false,
-  restoreRequired = false;
+  restoreRequired = false,
+  missingAccount = false;
 const sends: string[] = [];
 const client: any = {
   getContractWasmByContractId: async () => (badWasm ? Buffer.from('wrong') : fs.readFileSync(wasmPath)),
-  getAccount: async (pub: string) => new Account(pub, '1'),
+  getAccount: async (pub: string) => {
+    if (missingAccount) throw new Error('Account not found');
+    return new Account(pub, '1');
+  },
   simulateTransaction: async (tx: Transaction) => {
     prepared = tx;
     const invoke = (tx.operations[0] as any).func.invokeContract;
@@ -127,6 +131,19 @@ test('registry duplicate and unreviewed Wasm fail closed', async () => {
     { id: 's1', name: 'Two', contractId },
   ]);
   await assert.rejects(sorobanCampaigns(), /duplicate/);
+});
+
+test('missing wallet account surfaces as coded SIM_ACCOUNT_MISSING', { skip: !fixtureAvailable }, async () => {
+  reset();
+  missingAccount = true;
+  try {
+    await assert.rejects(buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '10' }), (e: any) => {
+      assert.equal(e.code, 'SIM_ACCOUNT_MISSING');
+      return true;
+    });
+  } finally {
+    missingAccount = false;
+  }
 });
 
 test('RPC adapter prepares contract call with no local contribution reservation', { skip: !fixtureAvailable }, async () => {

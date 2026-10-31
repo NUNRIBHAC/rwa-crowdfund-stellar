@@ -216,7 +216,14 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
   const config = await view(client, e, 'get_config');
   if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
   if (input.action === 'withdraw' && config.creator !== input.actor) throw new Error('only the creator may prepare withdrawal');
-  const account = await client.getAccount(input.actor);
+  const account = await client.getAccount(input.actor).catch((e: unknown) => {
+    if (/account not found/i.test(e instanceof Error ? e.message : String(e))) {
+      const err = new Error('Transaction preparation failed: wallet account does not exist on testnet.');
+      (err as Error & { code?: string }).code = 'SIM_ACCOUNT_MISSING';
+      throw err;
+    }
+    throw e;
+  });
   const args =
     input.action === 'contribute'
       ? [actor.toScVal(), nativeToScVal(amountUnits(input.amount!), { type: 'i128' })]
