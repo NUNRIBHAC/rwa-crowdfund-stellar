@@ -9,6 +9,21 @@ export default function About() {
       </p>
       <p>It is not a company, not an authorised crowdfunding service provider, and not an offer of securities. Market framing: Portugal to the World.</p>
 
+      <section aria-label="Behind the name" className="behind-name">
+        <svg className="star-accent" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M20 6 L22.5 15.5 L32 18 L22.5 20.5 L20 30 L17.5 20.5 L8 18 L17.5 15.5 Z" fill="#4B4FE2" />
+          <path d="M44 28 L45.6 34.4 L52 36 L45.6 37.6 L44 44 L42.4 37.6 L36 36 L42.4 34.4 Z" fill="#8B8EF0" />
+          <path d="M36 48 L37.1 52.9 L42 54 L37.1 55.1 L36 60 L34.9 55.1 L30 54 L34.9 52.9 Z" fill="#C7C8F9" />
+        </svg>
+        <div>
+          <h2 className="behind-name-title">Behind the name</h2>
+          <p>
+            A celestial connection: Callisto is a moon of Jupiter. In Greek mythology, the figure Callisto became Ursa Major, the Great Bear. For Blockallisto,
+            that offers a visual metaphor: individual points coming together into a greater whole.
+          </p>
+        </div>
+      </section>
+
       <section aria-label="Ethical exclusion policy">
         <h2 className="section-title">Ethical exclusion policy</h2>
         <p>A product-level policy for the platform this prototype explores. Issuers in the following sectors are out of scope by design:</p>
