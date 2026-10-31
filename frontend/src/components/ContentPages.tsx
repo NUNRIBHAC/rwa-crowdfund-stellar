@@ -10,9 +10,9 @@ function PageShell({ title, intro, children, demoNote }: { title: string; intro:
   const { m } = useI18n();
   return (
     <section className="community-section" aria-labelledby="content-title">
-      <h2 id="content-title" className="section-title">
+      <h1 id="content-title" className="page-title">
         {title} <span className="demo-badge">{m.community.demoBadge}</span>
-      </h2>
+      </h1>
       <p className="community-note">{intro}</p>
       {children}
       <p className="community-note">{demoNote}</p>
