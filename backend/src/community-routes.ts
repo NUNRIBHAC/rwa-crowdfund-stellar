@@ -22,6 +22,10 @@ import type { Account } from './community-store.js';
 export type CommunityRouterDeps = {
   service: CommunityService;
   requireAdmin: express.RequestHandler;
+  // Read-only operator reconciliation payload provider (wired in server.ts
+  // from the campaign registry + intent journal). Optional so route tests
+  // without chain access stay hermetic; absent means 503, never a guess.
+  reconciliation?: () => Promise<unknown>;
 };
 
 function clientIp(req: express.Request): string | undefined {
@@ -50,7 +54,7 @@ function sendError(res: express.Response, err: unknown): void {
 }
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
-  const { service, requireAdmin } = deps;
+  const { service, requireAdmin, reconciliation } = deps;
   const store = service.store;
   const router = express.Router();
 
@@ -434,6 +438,20 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     operator(async (req, res) => {
       const limit = typeof req.query.limit === 'string' ? Number(req.query.limit) : undefined;
       res.json({ audit: await service.adminAuditLog(limit) });
+    }),
+  );
+  router.get(
+    '/api/operator/reconciliation',
+    operator(async (_req, res) => {
+      if (!reconciliation) {
+        res.status(503).json({ error: 'reconciliation is not wired on this deployment' });
+        return;
+      }
+      try {
+        res.json(await reconciliation());
+      } catch (err) {
+        sendError(res, err);
+      }
     }),
   );
 

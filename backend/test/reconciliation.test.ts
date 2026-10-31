@@ -58,6 +58,18 @@ test('unavailable on-chain read is noted, not guessed', () => {
   assert.ok(r.campaigns[0].notes.some((n) => n.includes('unavailable')));
 });
 
+test('SUCCESS contributes without an amount field are counted, excluded from the sum and disclosed', () => {
+  const r = reconcileCampaigns(
+    [{ id: 'c1', raised: '300' }],
+    [intent({ amount: '100' }), intent({ hash: 'b'.repeat(64), amount: undefined }), intent({ hash: 'c'.repeat(64), amount: undefined })],
+    0,
+  );
+  const c = r.campaigns[0];
+  assert.equal(c.successContributes, 3);
+  assert.equal(c.journalCovered, '100');
+  assert.ok(c.notes.some((n) => n.includes('no amount field')));
+});
+
 test('intents from other campaigns do not leak into a campaign row', () => {
   const r = reconcileCampaigns(
     [{ id: 'c1', raised: '100' }, { id: 'c2', raised: '500' }],

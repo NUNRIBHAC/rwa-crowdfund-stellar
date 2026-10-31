@@ -12,11 +12,16 @@
 // - community/CommunityAuth.tsx: carry isOperator from fetchMe/verifyChallenge
 //   into context and expose it alongside account/token.
 import { useCallback, useEffect, useState } from 'react';
+import { formatTokenAmount } from '../funding-math';
 import {
   closeOperatorTicket,
   fetchOperatorApplications,
+  fetchOperatorAuditLog,
   fetchOperatorComments,
+  fetchOperatorReconciliation,
   fetchOperatorTickets,
+  type AuditEntry,
+  type ReconciliationResponse,
   postOperatorNews,
   setOperatorApplicationStatus,
   setOperatorCommentHidden,
@@ -31,7 +36,7 @@ type Props = {
   campaigns: { id: string; name: string }[];
 };
 
-type Tab = 'applications' | 'comments' | 'tickets' | 'news';
+type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'reconciliation' | 'audit';
 
 export default function OperatorSection({ campaigns }: Props) {
   const { m, locale } = useI18n();
@@ -42,6 +47,8 @@ export default function OperatorSection({ campaigns }: Props) {
   const [applications, setApplications] = useState<IssuerApplication[] | null>(null);
   const [comments, setComments] = useState<OperatorComment[] | null>(null);
   const [tickets, setTickets] = useState<Ticket[] | null>(null);
+  const [reconciliation, setReconciliation] = useState<ReconciliationResponse | null>(null);
+  const [audit, setAudit] = useState<AuditEntry[] | null>(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
@@ -60,6 +67,8 @@ export default function OperatorSection({ campaigns }: Props) {
       guard(fetchOperatorApplications(token), (v) => setApplications(v.applications)),
       guard(fetchOperatorComments(token), (v) => setComments(v.comments)),
       guard(fetchOperatorTickets(token), (v) => setTickets(v.tickets)),
+      guard(fetchOperatorReconciliation(token), setReconciliation),
+      guard(fetchOperatorAuditLog(token), (v) => setAudit(v.audit)),
     ]);
   }, [account, isOperator, token]);
 
@@ -114,7 +123,7 @@ export default function OperatorSection({ campaigns }: Props) {
       </h2>
       <p className="community-note">{labels.demoNote}</p>
       <div className="filter-chips" role="group" aria-label={labels.title}>
-        {(['applications', 'comments', 'tickets', 'news'] as Tab[]).map(tabBtn)}
+        {(['applications', 'comments', 'tickets', 'news', 'reconciliation', 'audit'] as Tab[]).map(tabBtn)}
       </div>
       {error && (
         <p role="alert" className="community-error">
@@ -320,6 +329,88 @@ export default function OperatorSection({ campaigns }: Props) {
           </button>
         </form>
       )}
+      {tab === 'reconciliation' && (
+        <>
+          <p className="community-note">{labels.reconNote}</p>
+          {!reconciliation ? (
+            <p className="community-loading">{m.community.loading}</p>
+          ) : reconciliation.campaigns.length === 0 ? (
+            <p className="community-note">{labels.reconEmpty}</p>
+          ) : (
+            <>
+              <table className="operator-table">
+                <thead>
+                  <tr>
+                    <th>{labels.colCampaign}</th>
+                    <th>{labels.colOnChain}</th>
+                    <th>{labels.colJournalCovered}</th>
+                    <th>{labels.colNotCovered}</th>
+                    <th>{labels.colSucceeded}</th>
+                    <th>{labels.colOpenIntents}</th>
+                    <th>{labels.colNotes}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reconciliation.campaigns.map((c) => (
+                    <tr key={c.campaignId}>
+                      <td>{c.campaignId}</td>
+                      <td className="cell-nowrap">{formatTokenAmount(c.onChainRaised) ?? '\u2014'}</td>
+                      <td className="cell-nowrap">{formatTokenAmount(c.journalCovered) ?? '\u2014'}</td>
+                      <td className="cell-nowrap">{formatTokenAmount(c.notJournalCovered) ?? '\u2014'}</td>
+                      <td>
+                        {c.successContributes}/{c.successRefunds}/{c.successWithdraws}
+                      </td>
+                      <td>{c.openIntentHashes.length}</td>
+                      <td>{c.notes.join(' ')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {reconciliation.quarantinedIntents > 0 && (
+                <p className="community-error">{labels.reconQuarantined(reconciliation.quarantinedIntents)}</p>
+              )}
+              <p className="community-note">
+                {labels.colGenerated}: {new Date(reconciliation.generatedAt).toLocaleString(locale)} ({reconciliation.network})
+              </p>
+            </>
+          )}
+        </>
+      )}
+
+      {tab === 'audit' && (
+        <>
+          <p className="community-note">{labels.auditNote}</p>
+          {!audit ? (
+            <p className="community-loading">{m.community.loading}</p>
+          ) : audit.length === 0 ? (
+            <p className="community-note">{labels.auditEmpty}</p>
+          ) : (
+            <table className="operator-table">
+              <thead>
+                <tr>
+                  <th>{labels.colTime}</th>
+                  <th>{labels.colGate}</th>
+                  <th>{labels.colAction}</th>
+                  <th>{labels.colTargetRef}</th>
+                  <th>{labels.colDetail}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {audit.map((e) => (
+                  <tr key={e.id}>
+                    <td className="cell-nowrap">{fmt(e.at)}</td>
+                    <td>{e.actor}</td>
+                    <td>{e.action}</td>
+                    <td>{e.target}</td>
+                    <td>{e.detail ?? ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
+      )}
+
     </section>
   );
 }

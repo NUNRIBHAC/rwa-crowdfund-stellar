@@ -88,7 +88,7 @@ registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCam
 // down the campaign API: the placeholder answers 503 for community paths and
 // everything else is unaffected.
 const communityRouterReady = communityServiceFromEnv()
-  .then((service) => createCommunityRouter({ service, requireAdmin }))
+  .then((service) => createCommunityRouter({ service, requireAdmin, reconciliation: reconciliationPayload }))
   .catch((err) => {
     console.error('community API disabled:', err instanceof Error ? err.message : err);
     return null;
@@ -126,19 +126,23 @@ app.get('/api/account/activity', async (req, res) => {
     res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
   }
 });
+// Read-only operator aid: journal-recorded SUCCESS contributions vs the
+// on-chain cumulative counter per campaign. See RECONCILIATION_SEMANTICS;
+// no accounting, custody or compliance claim is made or implied.
+const reconciliationPayload = async () => {
+  const campaigns = await sorobanCampaigns();
+  const store = await (await journalBackend()).read();
+  const result = reconcileCampaigns(
+    campaigns.map((c: { id: string; raised?: string | null }) => ({ id: c.id, raised: c.raised ?? null })),
+    store.intents,
+    (store.quarantined ?? []).length,
+  );
+  return { generatedAt: new Date().toISOString(), network: NETWORK, semantics: RECONCILIATION_SEMANTICS, ...result };
+};
+
 app.get('/api/admin/reconciliation', requireAdmin, async (_req, res) => {
-  // Read-only operator aid: journal-recorded SUCCESS contributions vs the
-  // on-chain cumulative counter per campaign. See RECONCILIATION_SEMANTICS;
-  // no accounting, custody or compliance claim is made or implied.
   try {
-    const campaigns = await sorobanCampaigns();
-    const store = await (await journalBackend()).read();
-    const result = reconcileCampaigns(
-      campaigns.map((c: { id: string; raised?: string | null }) => ({ id: c.id, raised: c.raised ?? null })),
-      store.intents,
-      (store.quarantined ?? []).length,
-    );
-    res.json({ generatedAt: new Date().toISOString(), network: NETWORK, semantics: RECONCILIATION_SEMANTICS, ...result });
+    res.json(await reconciliationPayload());
   } catch (err) {
     res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
   }

@@ -48,6 +48,7 @@ export function reconcileCampaigns(
     const mine = intents.filter((i) => i.campaign === c.id);
     const notes: string[] = [];
     let covered = 0n;
+    let missingAmount = 0;
     let successContributes = 0;
     let successRefunds = 0;
     let successWithdraws = 0;
@@ -64,16 +65,25 @@ export function reconcileCampaigns(
       }
       if (i.action === 'contribute') {
         successContributes += 1;
-        try {
-          covered += BigInt(i.amount ?? '0');
-        } catch {
-          notes.push(`intent ${i.hash} has an unparseable amount and is excluded from the covered sum`);
+        if (i.amount === undefined || i.amount === '') {
+          // Rows written before the journal captured amounts: counted as
+          // contributions but excluded from the covered sum, and disclosed.
+          missingAmount += 1;
+        } else {
+          try {
+            covered += BigInt(i.amount);
+          } catch {
+            notes.push(`intent ${i.hash} has an unparseable amount and is excluded from the covered sum`);
+          }
         }
       } else if (i.action === 'refund') {
         successRefunds += 1;
       } else if (i.action === 'withdraw') {
         successWithdraws += 1;
       }
+    }
+    if (missingAmount > 0) {
+      notes.push(`${missingAmount} SUCCESS contribute intent(s) carry no amount field (recorded before amount capture) and are excluded from the covered sum`);
     }
     let notJournalCovered: string | null = null;
     if (c.raised === null) {

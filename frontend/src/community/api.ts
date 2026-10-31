@@ -218,6 +218,35 @@ export const setOperatorCommentHidden = (token: string, id: string, hidden: bool
     token,
   });
 export const fetchOperatorTickets = (token: string) => call<{ tickets: Ticket[] }>('/api/operator/tickets', { token });
+
+// --- Operator read-only operations views ---
+// Reconciliation compares this app's journal against the on-chain cumulative
+// contribution counter. It is an operational debugging aid: no accounting,
+// custody or compliance claim (the server repeats this in `semantics`).
+export type CampaignReconciliation = {
+  campaignId: string;
+  onChainRaised: string | null;
+  journalCovered: string;
+  notJournalCovered: string | null;
+  successContributes: number;
+  successRefunds: number;
+  successWithdraws: number;
+  openIntentHashes: string[];
+  failedIntents: number;
+  notes: string[];
+};
+export type ReconciliationResponse = {
+  generatedAt: string;
+  network: string;
+  semantics: string;
+  campaigns: CampaignReconciliation[];
+  quarantinedIntents: number;
+};
+export type AuditEntry = { id: string; at: number; actor: string; action: string; target: string; detail?: string };
+
+export const fetchOperatorReconciliation = (token: string) => call<ReconciliationResponse>('/api/operator/reconciliation', { token });
+export const fetchOperatorAuditLog = (token: string, limit = 100) =>
+  call<{ audit: AuditEntry[] }>(`/api/operator/audit-log?limit=${Math.max(1, Math.min(500, Math.floor(limit)))}`, { token });
 export const closeOperatorTicket = (token: string, id: string) =>
   call<{ ok: true }>(`/api/operator/tickets/${encodeURIComponent(id)}/close`, { method: 'POST', body: {}, token });
 export const postOperatorNews = (token: string, campaignId: string, title: string, body: string) =>
