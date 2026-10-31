@@ -64,8 +64,9 @@ export default function CampaignTour() {
   // effect runs the button has already unmounted and focus fell back to body.
   useEffect(() => {
     if (!open) return;
-    if (restoreFocusRef.current instanceof HTMLElement && document.contains(restoreFocusRef.current)) return;
-    restoreFocusRef.current = document.activeElement;
+    // The Repeat tour handler captures the invoker before it unmounts; only
+    // fill in here when nothing was captured (auto-open: no invoker).
+    if (restoreFocusRef.current == null) restoreFocusRef.current = document.activeElement;
   }, [open]);
 
   // Dialog behavior: initial focus, focus trap, Escape. On step change, if the
@@ -114,7 +115,8 @@ export default function CampaignTour() {
       /* private mode: no persistence */
     }
     const prev = restoreFocusRef.current;
-    if (prev instanceof HTMLElement) prev.focus();
+    restoreFocusRef.current = null;
+    if (prev instanceof HTMLElement && document.contains(prev)) prev.focus();
   };
 
   if (!open) {
