@@ -59,8 +59,7 @@ code {
   padding: 14px 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 .brand {
@@ -619,14 +618,29 @@ code {
   padding: 7px 16px;
 }
 
-/* Main navigation */
+/* Main navigation: inline beside the brand on desktop, wraps below on small screens */
 .site-nav {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 24px 10px;
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
+  align-items: center;
+}
+.header-side {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+@media (max-width: 720px) {
+  .site-nav {
+    order: 3;
+    flex-basis: 100%;
+  }
+  .header-side {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 .nav-link {
   color: rgba(255, 255, 255, 0.82);
