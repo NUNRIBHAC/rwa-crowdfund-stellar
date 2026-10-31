@@ -564,6 +564,9 @@ code {
   border-color: var(--navy);
   color: #fff;
 }
+/* Sized to its content (no max-width cap): the selected locale label now
+   carries the English name in parentheses (e.g. "العربية (Arabic)"), and the
+   previous 150px cap clipped the parenthetical in the closed control. */
 .lang-select {
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 8px;
@@ -572,7 +575,11 @@ code {
   font-family: inherit;
   background: var(--navy);
   color: #fff;
-  max-width: 150px;
+}
+@media (max-width: 420px) {
+  .lang-select {
+    max-width: 100%;
+  }
 }
 .lang-select option {
   background: var(--card);
