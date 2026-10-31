@@ -91,7 +91,8 @@ const communityRouterReady = communityServiceFromEnv()
     console.error('community API disabled:', err instanceof Error ? err.message : err);
     return null;
   });
-const COMMUNITY_PATH = /^\/api\/(auth|support|issuer-applications)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications)(\/|$)/;
+const COMMUNITY_PATH =
+  /^\/api\/(auth|support|issuer-applications)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications)(\/|$)/;
 app.use((req, res, next) => {
   if (!COMMUNITY_PATH.test(req.path)) return next();
   communityRouterReady.then((router) => {
