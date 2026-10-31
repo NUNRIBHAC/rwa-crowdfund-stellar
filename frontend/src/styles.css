@@ -2505,3 +2505,29 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     max-width: 560px;
   }
 }
+
+/* Account notifications: unread rows are emphasised, the per-item action
+   marks one row read without a reload. */
+.notification-row {
+  align-items: flex-start;
+}
+.notification-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.notification-title {
+  font-weight: 600;
+}
+.notification-unread .notification-title::before {
+  content: '●';
+  color: var(--accent, #2f6fed);
+  margin-right: 6px;
+}
+.notification-body {
+  color: var(--ink-soft);
+}
+.notification-mark {
+  white-space: nowrap;
+}

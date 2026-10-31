@@ -1381,11 +1381,21 @@ export const pt: Messages = {
       title: 'Notificações',
       empty: 'Ainda não há notificações.',
       markAllRead: 'Marcar tudo como lido',
+      markRead: 'Marcar como lida',
       kinds: {
         applicationReceived: 'Candidatura de emitente recebida',
         applicationStatus: 'Atualização da candidatura de emitente',
         commentModerated: 'Comentário ocultado pela moderação',
         ticketClosed: 'Pedido de suporte fechado',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `A sua candidatura de emitente para "${projectName}" foi recebida. A operadora analisa as candidaturas manualmente; a submissão não é uma aprovação, uma listagem nem uma oferta.`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `A sua candidatura de emitente para "${projectName}" está agora "${statusLabel}".`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `O seu comentário na campanha "${campaignId}" foi ocultado pelo moderador.`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `Motivo: ${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `O seu ticket (${kindLabel}) "${subject}" foi fechado.`,
       },
     },
     applicationSubmit: 'Submeter candidatura',

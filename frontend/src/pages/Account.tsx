@@ -7,6 +7,7 @@ import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import SignInPanel from '../components/SignInPanel';
 import MyCommunityActivity from '../components/MyCommunityActivity';
+import NotificationsSection from '../components/NotificationsSection';
 import SupportCenter from '../components/SupportCenter';
 import IssuerApplicationForm from '../components/IssuerApplicationForm';
 
@@ -171,6 +172,8 @@ export default function Account({ market }: { market: Market }) {
           ))}
         </ul>
       </section>
+
+      <NotificationsSection />
 
       <MyCommunityActivity />
       <SignInPanel actor={actor} />

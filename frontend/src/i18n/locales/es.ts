@@ -1386,11 +1386,21 @@ export const es: Messages = {
       title: 'Notificaciones',
       empty: 'Aún no hay notificaciones.',
       markAllRead: 'Marcar todo como leído',
+      markRead: 'Marcar como leída',
       kinds: {
         applicationReceived: 'Solicitud de emisor recibida',
         applicationStatus: 'Actualización de la solicitud de emisor',
         commentModerated: 'Comentario ocultado por moderación',
         ticketClosed: 'Ticket de soporte cerrado',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `Su solicitud de emisor para "${projectName}" ha sido recibida. El operador revisa las solicitudes manualmente; el envío no es una aprobación, un listado ni una oferta.`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `Su solicitud de emisor para "${projectName}" ahora está "${statusLabel}".`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `Su comentario en la campaña "${campaignId}" ha sido ocultado por el moderador.`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `Motivo: ${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Su ticket (${kindLabel}) "${subject}" ha sido cerrado.`,
       },
     },
     applicationSubmit: 'Enviar solicitud',

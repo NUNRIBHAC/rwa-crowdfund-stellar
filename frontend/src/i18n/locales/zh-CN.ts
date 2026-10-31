@@ -1183,11 +1183,21 @@ export const zhCN: Messages = {
       title: '通知',
       empty: '暂无通知。',
       markAllRead: '全部标为已读',
+      markRead: '标记为已读',
       kinds: {
         applicationReceived: '发行方申请已收到',
         applicationStatus: '发行方申请更新',
         commentModerated: '评论已被审核隐藏',
         ticketClosed: '支持工单已关闭',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `您为 "${projectName}" 提交的发行方申请已收到。运营方将人工审核申请；提交不构成批准、上架或要约。`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `您为 "${projectName}" 提交的发行方申请现已更新为 "${statusLabel}"。`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `您在活动 "${campaignId}" 下的评论已被审核员隐藏。`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `原因：${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `您的${kindLabel}工单 "${subject}" 已关闭。`,
       },
     },
     applicationSubmit: '提交申请',

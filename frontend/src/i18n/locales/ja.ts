@@ -1301,11 +1301,21 @@ export const ja: Messages = {
       title: '通知',
       empty: 'まだ通知はありません。',
       markAllRead: 'すべて既読にする',
+      markRead: '既読にする',
       kinds: {
         applicationReceived: '発行者申請を受け付けました',
         applicationStatus: '発行者申請の更新',
         commentModerated: 'コメントがモデレーションにより非表示になりました',
         ticketClosed: 'サポートチケットがクローズされました',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `"${projectName}" の発行者申請を受け付けました。運営者は申請を手動で審査します。提出は承認、掲載、または募集ではありません。`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `"${projectName}" の発行者申請のステータスが "${statusLabel}" になりました。`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `キャンペーン "${campaignId}" へのコメントはモデレーターによって非表示にされました。`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `理由: ${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `${kindLabel}のチケット "${subject}" がクローズされました。`,
       },
     },
     applicationSubmit: '申請を送信',

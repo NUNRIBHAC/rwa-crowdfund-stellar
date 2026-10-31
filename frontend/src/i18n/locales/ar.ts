@@ -1283,11 +1283,21 @@ export const ar: Messages = {
       title: 'الإشعارات',
       empty: 'لا توجد إشعارات بعد.',
       markAllRead: 'وضع علامة مقروء على الكل',
+      markRead: 'وضع علامة مقروء',
       kinds: {
         applicationReceived: 'تم استلام طلب الإصدار',
         applicationStatus: 'تحديث طلب الإصدار',
         commentModerated: 'تم إخفاء التعليق بواسطة الإشراف',
         ticketClosed: 'تم إغلاق تذكرة الدعم',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `تم استلام طلب الإصدار الخاص بك لـ "${projectName}". يراجع المشغّل الطلبات يدوياً؛ التقديم ليس موافقة أو إدراجاً أو عرضاً.`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `طلب الإصدار الخاص بك لـ "${projectName}" أصبح الآن "${statusLabel}".`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `تم إخفاء تعليقك على الحملة "${campaignId}" بواسطة المشرف.`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `السبب: ${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `تم إغلاق تذكرتك (${kindLabel}) "${subject}".`,
       },
     },
     applicationSubmit: 'إرسال الطلب',

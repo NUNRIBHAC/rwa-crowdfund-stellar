@@ -1342,11 +1342,21 @@ export const en = {
       title: 'Notifications',
       empty: 'No notifications yet.',
       markAllRead: 'Mark all as read',
+      markRead: 'Mark as read',
       kinds: {
         applicationReceived: 'Issuer application received',
         applicationStatus: 'Issuer application update',
         commentModerated: 'Comment hidden by moderation',
         ticketClosed: 'Support ticket closed',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `Your issuer application for "${projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `Your issuer application for "${projectName}" is now "${statusLabel}".`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `Your comment on campaign "${campaignId}" was hidden by the moderator.`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `Reason: ${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Your ${kindLabel} ticket "${subject}" was closed.`,
       },
     },
     applicationSubmit: 'Submit application',

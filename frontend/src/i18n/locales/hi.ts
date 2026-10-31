@@ -1333,11 +1333,21 @@ export const hi: Messages = {
       title: 'सूचनाएं',
       empty: 'अभी कोई सूचना नहीं।',
       markAllRead: 'सभी को पढ़ा हुआ चिह्नित करें',
+      markRead: 'पढ़ा हुआ चिह्नित करें',
       kinds: {
         applicationReceived: 'जारीकर्ता आवेदन प्राप्त हुआ',
         applicationStatus: 'जारीकर्ता आवेदन अपडेट',
         commentModerated: 'मॉडरेशन द्वारा टिप्पणी छिपाई गई',
         ticketClosed: 'सहायता टिकट बंद हुआ',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `"${projectName}" के लिए आपका जारीकर्ता आवेदन प्राप्त हो गया है। ऑपरेटर आवेदनों की मैन्युअल रूप से समीक्षा करता है; सबमिशन कोई स्वीकृति, लिस्टिंग या ऑफ़र नहीं है।`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `"${projectName}" के लिए आपका जारीकर्ता आवेदन अब "${statusLabel}" है।`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `अभियान "${campaignId}" पर आपकी टिप्पणी मॉडरेटर द्वारा छिपा दी गई है।`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `कारण: ${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `आपका टिकट (${kindLabel}) "${subject}" बंद कर दिया गया है।`,
       },
     },
     applicationSubmit: 'आवेदन भेजें',

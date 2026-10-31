@@ -1370,11 +1370,21 @@ export const de: Messages = {
       title: 'Benachrichtigungen',
       empty: 'Noch keine Benachrichtigungen.',
       markAllRead: 'Alle als gelesen markieren',
+      markRead: 'Als gelesen markieren',
       kinds: {
         applicationReceived: 'Emittentenantrag eingegangen',
         applicationStatus: 'Update zum Emittentenantrag',
         commentModerated: 'Kommentar durch Moderation ausgeblendet',
         ticketClosed: 'Support-Ticket geschlossen',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `Ihr Emittentenantrag für "${projectName}" ist eingegangen. Der Betreiber prüft Anträge manuell; die Einreichung ist keine Genehmigung, kein Listing und kein Angebot.`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `Ihr Emittentenantrag für "${projectName}" hat jetzt den Status "${statusLabel}".`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `Ihr Kommentar zur Kampagne "${campaignId}" wurde vom Moderator ausgeblendet.`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `Grund: ${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Ihr Ticket (${kindLabel}) "${subject}" wurde geschlossen.`,
       },
     },
     applicationSubmit: 'Bewerbung absenden',

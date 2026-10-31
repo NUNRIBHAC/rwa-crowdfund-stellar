@@ -1275,11 +1275,21 @@ export const ko: Messages = {
       title: '알림',
       empty: '아직 알림이 없습니다.',
       markAllRead: '모두 읽음으로 표시',
+      markRead: '읽음으로 표시',
       kinds: {
         applicationReceived: '발행자 신청이 접수되었습니다',
         applicationStatus: '발행자 신청 업데이트',
         commentModerated: '댓글이 모더레이션으로 인해 숨겨졌습니다',
         ticketClosed: '지원 티켓이 종료되었습니다',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `"${projectName}"에 대한 발행자 신청이 접수되었습니다. 운영자가 신청을 수동으로 검토하며, 제출은 승인, 상장 또는 청약이 아닙니다.`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `"${projectName}"에 대한 발행자 신청이 "${statusLabel}" 상태가 되었습니다.`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `캠페인 "${campaignId}"에 작성한 댓글이 모더레이터에 의해 숨겨졌습니다.`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `사유: ${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `${kindLabel} 티켓 "${subject}"이 종료되었습니다.`,
       },
     },
     applicationSubmit: '신청 제출',

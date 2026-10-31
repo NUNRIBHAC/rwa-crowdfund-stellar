@@ -1183,11 +1183,21 @@ export const zhTW: Messages = {
       title: '通知',
       empty: '目前沒有通知。',
       markAllRead: '全部標為已讀',
+      markRead: '標記為已讀',
       kinds: {
         applicationReceived: '發行方申請已收到',
         applicationStatus: '發行方申請更新',
         commentModerated: '留言已被審核隱藏',
         ticketClosed: '支援工單已關閉',
+      },
+      bodies: {
+        applicationReceived: ({ projectName }: { projectName: string }) =>
+          `您為 "${projectName}" 提交的發行方申請已收到。營運方將人工審核申請；提交不構成批准、上架或要約。`,
+        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
+          `您為 "${projectName}" 提交的發行方申請現已更新為 "${statusLabel}"。`,
+        commentModerated: ({ campaignId }: { campaignId: string }) => `您在活動 "${campaignId}" 下的留言已被審核員隱藏。`,
+        commentModeratedReason: ({ reason }: { reason: string }) => `原因：${reason}`,
+        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `您的${kindLabel}工單 "${subject}" 已關閉。`,
       },
     },
     applicationSubmit: '送出申請',
