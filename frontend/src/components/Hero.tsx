@@ -24,8 +24,7 @@ export default function Hero({ mode }: Props) {
             </a>
           </div>
           <p className="hero-note">
-            <strong>{m.hero.noteStrong}</strong>{' '}
-            {mode === 'live' && m.hero.noteLive}
+            <strong>{m.hero.noteStrong}</strong> {mode === 'live' && m.hero.noteLive}
             {mode === 'sample' && m.hero.noteSample}
             {mode === 'unknown' && m.hero.noteUnknown}
           </p>

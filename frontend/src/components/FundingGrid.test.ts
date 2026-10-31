@@ -48,4 +48,3 @@ test('display conversion keeps full precision', () => {
   expect(formatTokenAmount('0')).toBe('0');
   expect(isValidUnits('9007199254740993000000000')).toBe(true);
 });
-

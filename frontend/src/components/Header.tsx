@@ -45,12 +45,7 @@ export default function Header({ actor, busy, onConnect, current }: Props) {
           </nav>
         </div>
         <div className="header-side">
-          <select
-            className="lang-select"
-            value={locale}
-            onChange={(e) => setLocale(e.target.value as Locale)}
-            aria-label={m.header.languageLabel}
-          >
+          <select className="lang-select" value={locale} onChange={(e) => setLocale(e.target.value as Locale)} aria-label={m.header.languageLabel}>
             {LOCALES.map((l) => (
               <option key={l.id} value={l.id} aria-label={l.accessibleLabel}>
                 {l.label}

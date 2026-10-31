@@ -89,14 +89,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
           <span className="card-funded-blocks">{m.card.progressUnavailable}</span>
         )}
       </p>
-      <div
-        className="progress-track"
-        role="progressbar"
-        aria-valuenow={pct}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={m.card.progressAria(pct)}
-      >
+      <div className="progress-track" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={m.card.progressAria(pct)}>
         <div className="progress-fill" style={{ width: `${pct}%` }} />
       </div>
 

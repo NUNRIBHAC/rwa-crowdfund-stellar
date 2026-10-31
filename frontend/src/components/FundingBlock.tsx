@@ -43,13 +43,7 @@ export default function FundingBlock() {
 
   return (
     <figure className="funding-block" onMouseEnter={replay} onClick={replay} onFocus={replay} tabIndex={0}>
-      <svg
-        key={run}
-        className="funding-block-svg"
-        viewBox="0 0 240 240"
-        role="img"
-        aria-label={m.hero.fundingBlockAria}
-      >
+      <svg key={run} className="funding-block-svg" viewBox="0 0 240 240" role="img" aria-label={m.hero.fundingBlockAria}>
         <rect x="28" y="28" width="184" height="184" rx="26" fill="none" stroke="#14163A" strokeWidth="9" />
         {TILES.map((t, i) => (
           <rect key={i} className="funding-tile" style={{ '--i': i } as React.CSSProperties} x={t.x} y={t.y} width="40" height="40" rx="9" fill={t.fill} />
@@ -72,4 +66,3 @@ export default function FundingBlock() {
     </figure>
   );
 }
-
