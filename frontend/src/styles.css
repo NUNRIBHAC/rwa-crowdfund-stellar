@@ -10,6 +10,9 @@
   --accent-dark: #383ba7;
   --amber: #b54708;
   --red: #d32f2f;
+  /* Error input border follows the brand guide (#FF5252); --red stays for
+     error text where the lighter border color would fail contrast. */
+  --error-border: #ff5252;
   --radius: 16px;
   --accent-hover: #363ab2;
   --accent-active: #24278f;
@@ -2117,7 +2120,7 @@ select:disabled {
 }
 input[aria-invalid='true'],
 .input-error {
-  border-color: var(--red);
+  border-color: var(--error-border);
 }
 .field-error {
   color: var(--red);
