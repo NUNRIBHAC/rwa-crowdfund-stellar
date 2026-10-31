@@ -1,7 +1,20 @@
 import { useEffect, useState } from 'react';
 
 export type RouteName =
-  'home' | 'investments' | 'campaign' | 'how-it-works' | 'learn' | 'glossary' | 'risk-warnings' | 'faq' | 'financing' | 'about' | 'account';
+  | 'home'
+  | 'investments'
+  | 'campaign'
+  | 'how-it-works'
+  | 'learn'
+  | 'glossary'
+  | 'risk-warnings'
+  | 'faq'
+  | 'financing'
+  | 'about'
+  | 'account'
+  | 'terms-of-service'
+  | 'privacy-policy'
+  | 'risk-disclosure';
 
 export type Route = { name: RouteName; campaignId?: string };
 
@@ -29,6 +42,12 @@ export function routeFromHash(hash: string): Route {
       return { name: 'about' };
     case 'account':
       return { name: 'account' };
+    case 'terms-of-service':
+      return { name: 'terms-of-service' };
+    case 'privacy-policy':
+      return { name: 'privacy-policy' };
+    case 'risk-disclosure':
+      return { name: 'risk-disclosure' };
     default:
       return { name: 'home' };
   }
