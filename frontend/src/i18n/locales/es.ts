@@ -368,7 +368,7 @@ export const es: Messages = {
       },
       {
         h: 'Diversificación',
-        p: 'Una orientación común es no invertir más del 10% de los fondos libremente disponibles en esta clase de activos y repartirlos entre varios emisores.',
+        p: 'Reparta las inversiones en esta clase de activos entre varios emisores.',
       },
       {
         h: 'Sin esquema de protección',

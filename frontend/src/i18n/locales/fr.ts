@@ -369,7 +369,7 @@ export const fr: Messages = {
       },
       {
         h: 'Diversification',
-        p: "Une orientation courante est de ne pas investir plus de 10% des fonds librement disponibles dans cette classe d'actifs et de les répartir entre plusieurs émetteurs.",
+        p: "Répartissez les investissements dans cette classe d'actifs entre plusieurs émetteurs.",
       },
       {
         h: 'Aucun mécanisme de protection',

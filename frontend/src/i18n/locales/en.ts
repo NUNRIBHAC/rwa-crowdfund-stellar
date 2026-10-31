@@ -360,7 +360,7 @@ export const en = {
       },
       {
         h: 'Diversification',
-        p: 'A common guideline is to invest no more than 10% of freely available funds in this asset class and to spread it across issuers.',
+        p: 'Spread investments in this asset class across issuers.',
       },
       {
         h: 'No protection scheme',

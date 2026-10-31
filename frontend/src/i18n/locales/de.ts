@@ -366,7 +366,7 @@ export const de: Messages = {
       },
       {
         h: 'Diversifizierung',
-        p: 'Eine übliche Orientierung ist, nicht mehr als 10% der frei verfügbaren Mittel in diese Anlageklasse zu investieren und sie auf mehrere Emittenten zu verteilen.',
+        p: 'Verteilen Sie Anlagen in dieser Anlageklasse auf mehrere Emittenten.',
       },
       {
         h: 'Kein Schutzsystem',
