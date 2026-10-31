@@ -54,13 +54,11 @@ code {
   z-index: 10;
 }
 .header-inner {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 14px 24px;
+  padding: 8px 16px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .brand {
   display: flex;
@@ -624,15 +622,23 @@ code {
   gap: 4px;
   flex-wrap: wrap;
   align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .header-side {
   margin-left: auto;
+  flex: none;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 8px;
+  padding-bottom: 2px;
 }
 @media (max-width: 720px) {
+  .header-inner {
+    flex-wrap: wrap;
+    align-items: center;
+  }
   .site-nav {
     order: 3;
     flex-basis: 100%;
@@ -640,6 +646,7 @@ code {
   .header-side {
     flex-direction: row;
     align-items: center;
+    padding-bottom: 0;
   }
 }
 .nav-link {
@@ -1423,9 +1430,10 @@ textarea:focus-visible,
   }
 }
 
-/* Header brand lockup: keep mark, wordmark and testnet badge on one line */
+/* Header brand lockup: keep mark and wordmark on one line, never shrink */
 .brand {
   flex-wrap: nowrap;
+  flex: none;
 }
 .badge-testnet {
   white-space: nowrap;
