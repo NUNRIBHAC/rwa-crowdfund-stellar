@@ -1843,6 +1843,16 @@ textarea:focus-visible,
   }
 }
 
+/* Legal pages: persistent demo-template notice */
+.legal-demo-notice {
+  border: 1px solid var(--accent);
+  background: var(--indigo-100, #eceefc);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 /* Form inputs (brand form spec): indigo focus border + halo, red error state,
    Paper disabled, 18px checkboxes with 4px radius */
 input[type='text'],
