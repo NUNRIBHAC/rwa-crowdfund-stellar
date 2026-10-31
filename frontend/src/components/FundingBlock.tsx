@@ -40,14 +40,7 @@ export default function FundingBlock() {
   };
 
   return (
-    <figure
-      className="funding-block"
-      onMouseEnter={replay}
-      onClick={replay}
-      onFocus={replay}
-      tabIndex={0}
-      aria-labelledby="funding-block-title"
-    >
+    <figure className="funding-block" onMouseEnter={replay} onClick={replay} onFocus={replay} tabIndex={0} aria-labelledby="funding-block-title">
       <figcaption id="funding-block-title" className="funding-block-title">
         How funding works
       </figcaption>
