@@ -1393,7 +1393,7 @@ export const pt: Messages = {
   },
   builder: {
     title: 'Criador de campanha',
-    badge: 'DRAFT',
+    badge: 'Rascunho',
     intro:
       'Pré-visualização de rascunho de como uma campanha seria configurada para implementação. Nada aqui implementa um contrato nem cria uma campanha: a submissão está desativada nesta demonstração. Os campos seguem as mesmas regras que o contrato e o registo de campanhas aplicam.',
     connectNote:

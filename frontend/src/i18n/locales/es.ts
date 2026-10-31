@@ -1397,7 +1397,7 @@ export const es: Messages = {
   },
   builder: {
     title: 'Creador de campañas',
-    badge: 'DRAFT',
+    badge: 'Borrador',
     intro:
       'Vista previa en borrador de cómo se configuraría una campaña para su despliegue. Nada aquí despliega un contrato ni crea una campaña: el envío está desactivado en esta demostración. Los campos siguen las mismas reglas que aplican el contrato y el registro de campañas.',
     connectNote:

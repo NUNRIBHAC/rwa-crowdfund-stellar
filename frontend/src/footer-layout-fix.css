@@ -16,7 +16,7 @@
      Frees ~150px so five link columns fit next to the brand block at 1280px. */
   .footer-brand-inner {
     gap: 24px;
-    padding: 24px 244px 24px 24px;
+    padding: 24px 244px 24px 0;
   }
 
   /* Tagline wraps to two lines instead of pushing the grid right. */

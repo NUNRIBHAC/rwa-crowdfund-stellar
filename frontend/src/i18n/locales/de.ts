@@ -1383,7 +1383,7 @@ export const de: Messages = {
   },
   builder: {
     title: 'Kampagnen-Builder',
-    badge: 'DRAFT',
+    badge: 'Entwurf',
     intro:
       'Entwurfsvorschau, wie eine Kampagne für die Bereitstellung konfiguriert würde. Nichts hier stellt einen Vertrag bereit oder erstellt eine Kampagne: Das Absenden ist in dieser Demo deaktiviert. Die Felder folgen denselben Regeln, die der Vertrag und das Kampagnenregister durchsetzen.',
     connectNote:

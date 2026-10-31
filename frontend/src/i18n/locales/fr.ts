@@ -1401,7 +1401,7 @@ export const fr: Messages = {
   },
   builder: {
     title: 'Créateur de campagne',
-    badge: 'DRAFT',
+    badge: 'Brouillon',
     intro:
       "Aperçu provisoire de la configuration d'une campagne avant déploiement. Rien ici ne déploie de contrat ni ne crée de campagne : l'envoi est désactivé dans cette démo. Les champs suivent les mêmes règles que celles appliquées par le contrat et le registre des campagnes.",
     connectNote:
