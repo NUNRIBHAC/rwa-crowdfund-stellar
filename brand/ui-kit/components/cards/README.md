@@ -15,6 +15,9 @@ filledBlocks = floor(raised * tileCount / goal)     (BigInt integer math)
 
 - `raised` / `goal`: integer strings in the token's smallest unit, exactly as
   returned by the Soroban contract (7 decimals on Stellar). No float rounding.
+  The card displays them converted to display units with full precision
+  (`formatTokenAmount`: "1554000000000" -> "155,400 USDC"); override the
+  decimals with the `decimals` prop. All math uses the raw integer strings.
 - `grid="detail"` (default): 10x10 = 100 tiles, 1 tile = 1% of the goal.
 - `grid="summary"`: 3x3 = 9 tiles for compact contexts.
 - A partially funded next tile renders in Indigo 400 ("in progress");
@@ -38,6 +41,7 @@ filledBlocks = floor(raised * tileCount / goal)     (BigInt integer math)
 | `deadlineLabel` | string? | e.g. "23 days left" |
 | `status` | "funding" \| "funded" \| "closed" | Maps to StatusBadge tones warning / success / danger |
 | `currencyLabel` | string? | Defaults to "USDC (testnet)" |
+| `decimals` | number? | Display decimals, defaults to 7 (Stellar) |
 | `grid` | "detail" \| "summary" | Defaults to "detail" |
 
 Depends on `../feedback/StatusBadge`. Styling: `AssetCard.css` with the

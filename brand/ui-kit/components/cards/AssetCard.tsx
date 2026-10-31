@@ -12,7 +12,9 @@ import './AssetCard.css';
  *   filledBlocks = floor(raised * tileCount / goal)     (integer math, BigInt)
  *
  * with `raised` and `goal` in the token's smallest unit, as returned by the
- * Soroban contract (7-decimal strings on Stellar, e.g. "1554000000000").
+ * Soroban contract (7-decimal strings on Stellar, e.g. "1554000000000"). The
+ * figures are displayed converted to display units (155,400 USDC); the math
+ * always uses the raw integer strings.
  * One tile = one equal share of the goal: 1% per tile on the 10x10 detail
  * grid, 1/9 per tile on the 3x3 summary grid. A partially funded next tile
  * renders in the "in progress" tone (Indigo 400); unfunded tiles render in
@@ -47,6 +49,8 @@ export type AssetCardProps = {
   status?: AssetCardStatus;
   /** Unit label shown next to the figures, e.g. "USDC (testnet)". */
   currencyLabel?: string;
+  /** Token decimals used to display the figures (Stellar: 7). Math always uses the raw strings. */
+  decimals?: number;
   /** Grid density: "detail" = 10x10 (1 tile = 1%), "summary" = 3x3. */
   grid?: 'detail' | 'summary';
 };
@@ -64,6 +68,26 @@ export function filledTiles(raised: string, goal: string, tileCount: number): { 
   const inProgress = remainder > 0n && filled < tileCount;
   const percent = Number((r * 10000n) / g) / 100; // 2-decimal percent for the figure
   return { filled, inProgress, percent };
+}
+
+/** Display-unit string from an exact smallest-unit integer string: grouped thousands, full precision, trailing zeros trimmed. */
+export function formatTokenAmount(raw: string, decimals = 7): string {
+  let v: bigint;
+  try {
+    v = BigInt(raw || '0');
+  } catch {
+    return '0';
+  }
+  const neg = v < 0n;
+  if (neg) v = -v;
+  const base = 10n ** BigInt(decimals);
+  const whole = v / base;
+  const frac = (v % base)
+    .toString()
+    .padStart(decimals, '0')
+    .replace(/0+$/, '');
+  const grouped = whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return (neg ? '-' : '') + grouped + (frac ? '.' + frac : '');
 }
 
 const STATUS_TONE: Record<AssetCardStatus, StatusBadgeTone> = {
@@ -133,6 +157,7 @@ export default function AssetCard({
   deadlineLabel,
   status = 'funding',
   currencyLabel = 'USDC (testnet)',
+  decimals = 7,
   grid = 'detail',
 }: AssetCardProps) {
   const { filled, percent } = filledTiles(raised, goal, GRIDS[grid].n ** 2);
@@ -174,13 +199,13 @@ export default function AssetCard({
           <div>
             <dt>Raised</dt>
             <dd className="bl-asset-figure">
-              {raised} <span className="bl-asset-unit">{currencyLabel}</span>
+              {formatTokenAmount(raised, decimals)} <span className="bl-asset-unit">{currencyLabel}</span>
             </dd>
           </div>
           <div>
             <dt>Goal</dt>
             <dd className="bl-asset-figure">
-              {goal} <span className="bl-asset-unit">{currencyLabel}</span>
+              {formatTokenAmount(goal, decimals)} <span className="bl-asset-unit">{currencyLabel}</span>
             </dd>
           </div>
           {deadlineLabel && (
