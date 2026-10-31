@@ -557,6 +557,18 @@ code {
     word-break: keep-all;
     padding: 6px 2px;
   }
+  /* Account checklist: the uppercase status chip (long in PT/DE) must not
+     squeeze the title/note into a narrow mid-word-breaking column. Let it
+     wrap to its own row once the text column would drop below ~220px. */
+  .account-checklist-item {
+    flex-wrap: wrap;
+  }
+  .account-checklist-item div {
+    min-width: min(220px, 100%);
+  }
+  .account-checklist-item > .status-chip {
+    flex-shrink: 0;
+  }
 }
 
 /* Discovery bar */
