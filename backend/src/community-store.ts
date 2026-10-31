@@ -82,6 +82,23 @@ export type IssuerApplication = {
   createdAt: number;
 };
 
+export type NotificationKind = 'application_received' | 'application_status' | 'comment_moderated' | 'ticket_closed';
+
+// Owner-scoped notification generated server-side from a real event on the
+// owner's own content (application submitted or status change, comment
+// moderated, ticket closed). Never fabricated marketing content. title/body
+// are server-rendered English fallbacks; clients may localize from kind.
+export type Notification = {
+  id: string;
+  publicKey: string;
+  kind: NotificationKind;
+  title: string;
+  body: string;
+  refId: string | null;
+  createdAt: number;
+  readAt: number | null;
+};
+
 export type CommunityState = {
   version: 1;
   accounts: Record<string, Account>;
@@ -91,6 +108,7 @@ export type CommunityState = {
   news: Record<string, NewsPost>;
   tickets: Record<string, Ticket>;
   applications: Record<string, IssuerApplication>;
+  notifications: Record<string, Notification>;
 };
 
 export function emptyCommunityState(): CommunityState {
@@ -103,10 +121,14 @@ export function emptyCommunityState(): CommunityState {
     news: {},
     tickets: {},
     applications: {},
+    notifications: {},
   };
 }
 
 function validate(state: any): CommunityState {
+  // Forward-compatible default: docs written before notifications existed
+  // gain the collection on first read instead of failing validation.
+  if (state && state.version === 1 && !state.notifications) state.notifications = {};
   if (
     !state ||
     state.version !== 1 ||
@@ -116,7 +138,8 @@ function validate(state: any): CommunityState {
     !state.comments ||
     !state.news ||
     !state.tickets ||
-    !state.applications
+    !state.applications ||
+    !state.notifications
   ) {
     throw new Error('invalid community store; restore or reconcile manually');
   }

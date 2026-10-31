@@ -192,6 +192,27 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }),
   );
 
+  // --- Owner-scoped notifications ---
+  router.get(
+    '/api/notifications',
+    authed(async (_req, res, account) => {
+      res.json(await service.listNotifications(account));
+    }),
+  );
+  router.post(
+    '/api/notifications/read-all',
+    authed(async (_req, res, account) => {
+      res.json(await service.markAllNotificationsRead(account));
+    }),
+  );
+  router.post(
+    '/api/notifications/:id/read',
+    authed(async (req, res, account) => {
+      await service.markNotificationRead(account, String(req.params.id));
+      res.json({ ok: true });
+    }),
+  );
+
   // --- Admin operations (moderation, support desk, issuer pipeline) ---
   router.get('/api/admin/comments', requireAdmin, async (_req, res) => {
     try {

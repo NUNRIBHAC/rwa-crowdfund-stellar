@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
-import type { Account, Comment, CommunityStore, IssuerApplication, NewsPost, Ticket } from './community-store.js';
+import type { Account, Comment, CommunityStore, IssuerApplication, NewsPost, Notification, NotificationKind, Ticket } from './community-store.js';
 import { FileCommunityStore, PostgresCommunityStore } from './community-store.js';
 import { RateLimiter } from './ratelimit.js';
 
@@ -43,6 +43,8 @@ export const LIMITS = {
   newsTitle: 160,
   newsBody: 4000,
   commentsPage: 100,
+  notificationsPage: 50,
+  notificationsPerAccount: 100,
 };
 
 const commentInput = z.object({
@@ -237,7 +239,75 @@ export class CommunityService {
     await this.store.change((state) => {
       state.applications[application.id] = application;
     });
+    await this.notify(
+      account.publicKey,
+      'application_received',
+      'Issuer application received',
+      `Your issuer application for "${application.projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.`,
+      application.id,
+    );
     return application;
+  }
+
+  // --- Owner-scoped notifications ---
+  // Generated only from real events on the owner's own content; there is no
+  // path that fabricates notification content. notify() runs as its own
+  // store.change AFTER the triggering change completes: nesting a change
+  // inside another change's fn would deadlock the Postgres advisory lock.
+  private async notify(publicKey: string, kind: NotificationKind, title: string, body: string, refId: string | null): Promise<void> {
+    const n: Notification = {
+      id: newId('ntf'),
+      publicKey,
+      kind,
+      title,
+      body,
+      refId,
+      createdAt: this.now(),
+      readAt: null,
+    };
+    await this.store.change((state) => {
+      state.notifications[n.id] = n;
+      // Bound growth per account: keep the newest notificationsPerAccount.
+      const own = Object.values(state.notifications)
+        .filter((x) => x.publicKey === publicKey)
+        .sort((a, b) => b.createdAt - a.createdAt);
+      for (const stale of own.slice(LIMITS.notificationsPerAccount)) delete state.notifications[stale.id];
+    });
+  }
+
+  async listNotifications(account: Account): Promise<{ notifications: Notification[]; unreadCount: number }> {
+    const state = await this.store.read();
+    const own = Object.values(state.notifications)
+      .filter((n) => n.publicKey === account.publicKey)
+      .sort((a, b) => b.createdAt - a.createdAt);
+    return {
+      notifications: own.slice(0, LIMITS.notificationsPage),
+      unreadCount: own.filter((n) => n.readAt === null).length,
+    };
+  }
+
+  async markNotificationRead(account: Account, id: string): Promise<void> {
+    const now = this.now();
+    await this.store.change((state) => {
+      const n = state.notifications[id];
+      // Same 404 for missing and other-owned: no cross-account enumeration.
+      if (!n || n.publicKey !== account.publicKey) throw new CommunityError(404, 'notification not found');
+      if (n.readAt === null) n.readAt = now;
+    });
+  }
+
+  async markAllNotificationsRead(account: Account): Promise<{ marked: number }> {
+    const now = this.now();
+    let marked = 0;
+    await this.store.change((state) => {
+      for (const n of Object.values(state.notifications)) {
+        if (n.publicKey === account.publicKey && n.readAt === null) {
+          n.readAt = now;
+          marked++;
+        }
+      }
+    });
+    return { marked };
   }
 
   // Admin operations (router gates them behind x-admin-key).
@@ -246,24 +316,42 @@ export class CommunityService {
     return Object.values(state.comments).sort((a, b) => b.createdAt - a.createdAt);
   }
   async adminSetCommentHidden(id: string, hidden: boolean, reason?: string): Promise<void> {
+    let target: Comment | undefined;
     await this.store.change((state) => {
       const c = state.comments[id];
       if (!c) throw new CommunityError(404, 'comment not found');
       c.hiddenAt = hidden ? this.now() : null;
       c.hiddenReason = hidden ? (reason ?? null) : null;
+      target = c;
     });
+    if (hidden && target) {
+      const c: Comment = target;
+      await this.notify(
+        c.publicKey,
+        'comment_moderated',
+        'Comment hidden by moderation',
+        `Your comment on campaign "${c.campaignId}" was hidden by the moderator.${c.hiddenReason ? ` Reason: ${c.hiddenReason}` : ''}`,
+        c.id,
+      );
+    }
   }
   async adminListTickets(): Promise<Ticket[]> {
     const state = await this.store.read();
     return Object.values(state.tickets).sort((a, b) => b.createdAt - a.createdAt);
   }
   async adminCloseTicket(id: string): Promise<void> {
+    let target: Ticket | undefined;
     await this.store.change((state) => {
       const t = state.tickets[id];
       if (!t) throw new CommunityError(404, 'ticket not found');
       t.status = 'closed';
       t.closedAt = this.now();
+      target = t;
     });
+    if (target) {
+      const t: Ticket = target;
+      await this.notify(t.publicKey, 'ticket_closed', 'Support ticket closed', `Your ${t.kind} ticket "${t.subject}" was closed.`, t.id);
+    }
   }
   async adminListApplications(): Promise<IssuerApplication[]> {
     const state = await this.store.read();
@@ -271,11 +359,23 @@ export class CommunityService {
   }
   async adminSetApplicationStatus(id: string, status: unknown): Promise<void> {
     if (status !== 'received' && status !== 'under_review' && status !== 'closed') throw new CommunityError(400, 'invalid status');
+    let target: IssuerApplication | undefined;
     await this.store.change((state) => {
       const a = state.applications[id];
       if (!a) throw new CommunityError(404, 'application not found');
       a.status = status;
+      target = a;
     });
+    if (target) {
+      const t: IssuerApplication = target;
+      await this.notify(
+        t.publicKey,
+        'application_status',
+        'Issuer application update',
+        `Your issuer application for "${t.projectName}" is now "${status}".`,
+        t.id,
+      );
+    }
   }
 
   // Retention: hard-delete personal submitted content after its retention
@@ -295,6 +395,12 @@ export class CommunityService {
       for (const [id, a] of Object.entries(state.applications)) {
         if (now - a.createdAt > retentionMs) {
           delete state.applications[id];
+          removed++;
+        }
+      }
+      for (const [id, n] of Object.entries(state.notifications)) {
+        if (now - n.createdAt > retentionMs) {
+          delete state.notifications[id];
           removed++;
         }
       }

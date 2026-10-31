@@ -192,6 +192,90 @@ test('news: admin posts are labeled platform-demo and listed publicly', async ()
   assert.equal(listed[0].authorLabel, 'platform-demo');
 });
 
+test('notifications: application submit notifies only the owner; mark read works', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const a = Keypair.random();
+  const b = Keypair.random();
+  const { account: accA } = await login(store, a);
+  const { account: accB } = await login(store, b);
+  const app = await service.submitApplication(accA, {
+    projectName: 'Alentejo Solar Cooperative',
+    country: 'PT',
+    instrumentType: 'subordinated loan',
+    targetAmount: '500000 EUR',
+    description: 'Fictional demo application for a cooperative solar project.',
+  });
+  const mineA = await service.listNotifications(accA);
+  assert.equal(mineA.notifications.length, 1);
+  assert.equal(mineA.unreadCount, 1);
+  assert.equal(mineA.notifications[0].kind, 'application_received');
+  assert.equal(mineA.notifications[0].refId, app.id);
+  assert.match(mineA.notifications[0].body, /not an approval/);
+  // Other accounts see nothing and cannot mark it read.
+  assert.equal((await service.listNotifications(accB)).notifications.length, 0);
+  await assert.rejects(() => service.markNotificationRead(accB, mineA.notifications[0].id), /not found/);
+  await service.markNotificationRead(accA, mineA.notifications[0].id);
+  const after = await service.listNotifications(accA);
+  assert.equal(after.unreadCount, 0);
+  assert.ok(after.notifications[0].readAt !== null);
+});
+
+test('notifications: admin status change, comment hide and ticket close each notify the owner', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const kp = Keypair.random();
+  const { account } = await login(store, kp);
+  const app = await service.submitApplication(account, {
+    projectName: 'Demo Project',
+    country: 'PT',
+    instrumentType: 'equity',
+    targetAmount: '1000 EUR',
+    description: 'Fictional demo application.',
+  });
+  const comment = await service.addComment('demo-solar', account, { body: 'Testnet question' });
+  const ticket = await service.createTicket(account, { kind: 'feedback', subject: 'Tour idea', body: 'Add a guided tour.' });
+  await service.adminSetApplicationStatus(app.id, 'under_review');
+  await service.adminSetCommentHidden(comment.id, true, 'off-topic');
+  await service.adminCloseTicket(ticket.id);
+  const { notifications } = await service.listNotifications(account);
+  const kinds = notifications.map((n) => n.kind).sort();
+  assert.deepEqual(kinds, ['application_received', 'application_status', 'comment_moderated', 'ticket_closed'].sort());
+  const moderated = notifications.find((n) => n.kind === 'comment_moderated');
+  assert.match(moderated?.body ?? '', /off-topic/);
+  // Unhide does not notify again.
+  await service.adminSetCommentHidden(comment.id, false);
+  assert.equal((await service.listNotifications(account)).notifications.length, 4);
+  // read-all clears the unread count.
+  const { marked } = await service.markAllNotificationsRead(account);
+  assert.equal(marked, 4);
+  assert.equal((await service.listNotifications(account)).unreadCount, 0);
+});
+
+test('notifications: per-account growth is bounded', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const kp = Keypair.random();
+  const { account } = await login(store, kp);
+  // Bypass the per-day application rate limit by calling the admin path:
+  // each status flip notifies once.
+  const app = await service.submitApplication(account, {
+    projectName: 'Demo Project',
+    country: 'PT',
+    instrumentType: 'equity',
+    targetAmount: '1000 EUR',
+    description: 'Fictional demo application.',
+  });
+  for (let i = 0; i < 130; i++) {
+    await service.adminSetApplicationStatus(app.id, i % 2 === 0 ? 'under_review' : 'received');
+  }
+  const { notifications } = await service.listNotifications(account);
+  assert.ok(notifications.length <= 50);
+  const state = await store.read();
+  const total = Object.values(state.notifications).filter((n) => n.publicKey === account.publicKey).length;
+  assert.ok(total <= 100, `expected <= 100 stored, got ${total}`);
+});
+
 test('retention prune removes old tickets, applications, sessions and challenges', async () => {
   const store = newStore();
   const service = new CommunityService(store, { retentionDays: 90 });

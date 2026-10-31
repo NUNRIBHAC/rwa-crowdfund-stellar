@@ -68,6 +68,11 @@ test('full login roundtrip through the real app: challenge, sign, verify, replay
   assert.equal(me.status, 200);
 });
 
+test('GET /api/notifications passes the community path gate (401 without token, not 404)', async () => {
+  const res = await fetch(`${base}/api/notifications`);
+  assert.equal(res.status, 401);
+});
+
 test('GET /api/comments/mine passes the community path gate (401 without token, not 404)', async () => {
   const res = await fetch(`${base}/api/comments/mine`);
   assert.equal(res.status, 401);
