@@ -3,8 +3,9 @@ export default function About() {
     <>
       <h1 className="page-title">About this project</h1>
       <p>
-        RWA Crowdfund is a personal prototype exploring tokenized crowdfunding on the Stellar network: campaign funding enforced by a Soroban smart contract,
-        with the wider platform - accounts, verification, instruments, payments - designed and documented openly in the repository.
+        Blockallisto (repository rwa-crowdfund-stellar) is a personal prototype exploring tokenized crowdfunding on the Stellar network: campaign funding
+        enforced by a Soroban smart contract, with the wider platform - accounts, verification, instruments, payments - designed and documented openly in the
+        repository.
       </p>
       <p>It is not a company, not an authorised crowdfunding service provider, and not an offer of securities. Market framing: Portugal to the World.</p>
 
