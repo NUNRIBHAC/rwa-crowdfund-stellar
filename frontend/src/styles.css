@@ -1527,10 +1527,27 @@ textarea:focus-visible,
 .footer-brand {
   position: relative;
   background: var(--navy);
-  border-radius: var(--radius);
-  padding: 32px;
-  margin: 0 0 32px;
+  width: 100vw;
+  margin: 40px 0 -64px calc(50% - 50vw);
   overflow: hidden;
+}
+
+@media (max-width: 520px) {
+  .footer-brand {
+    margin-bottom: -48px;
+  }
+  .footer-tiles {
+    width: 190px;
+    height: 120px;
+    right: 8px;
+    opacity: 0.85;
+  }
+}
+.footer-brand-inner {
+  position: relative;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 24px;
   min-height: 150px;
   display: flex;
   flex-direction: column;
@@ -1673,4 +1690,3 @@ input[type='checkbox'] {
   font-size: 12.5px;
   color: var(--ink-faint);
 }
-
