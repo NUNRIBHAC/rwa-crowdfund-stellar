@@ -6,6 +6,7 @@ import { formatAmount, shorten } from '../format';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import SignInPanel from '../components/SignInPanel';
+import MyCommunityActivity from '../components/MyCommunityActivity';
 import SupportCenter from '../components/SupportCenter';
 import IssuerApplicationForm from '../components/IssuerApplicationForm';
 
@@ -171,6 +172,7 @@ export default function Account({ market }: { market: Market }) {
         </ul>
       </section>
 
+      <MyCommunityActivity />
       <SignInPanel actor={actor} />
       <SupportCenter />
       <IssuerApplicationForm />

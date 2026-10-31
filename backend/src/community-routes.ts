@@ -168,6 +168,21 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }),
   );
 
+  router.get(
+    '/api/issuer-applications',
+    authed(async (_req, res, account) => {
+      res.json({ applications: await service.listOwnApplications(account) });
+    }),
+  );
+
+  // --- Own activity (account dashboard feed) ---
+  router.get(
+    '/api/comments/mine',
+    authed(async (_req, res, account) => {
+      res.json({ comments: await service.listOwnComments(account) });
+    }),
+  );
+
   // --- Admin operations (moderation, support desk, issuer pipeline) ---
   router.get('/api/admin/comments', requireAdmin, async (_req, res) => {
     try {

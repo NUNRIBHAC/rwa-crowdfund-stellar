@@ -1,0 +1,108 @@
+// Owner-scoped community activity for the account dashboard: the signed-in
+// wallet's own issuer applications, support/feedback tickets and comments,
+// fetched from the community backend. Empty states are honest - nothing is
+// invented for wallets with no activity.
+import { useEffect, useState } from 'react';
+import { fetchMyApplications, fetchMyComments, fetchMyTickets } from '../community/api';
+import type { IssuerApplication, OwnComment, Ticket } from '../community/api';
+import { useCommunityAuth } from '../community/CommunityAuth';
+import { useI18n } from '../i18n';
+import { routeHash } from '../router';
+
+export default function MyCommunityActivity() {
+  const { m, locale } = useI18n();
+  const { account, token } = useCommunityAuth();
+  const [applications, setApplications] = useState<IssuerApplication[] | null>(null);
+  const [tickets, setTickets] = useState<Ticket[] | null>(null);
+  const [comments, setComments] = useState<OwnComment[] | null>(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!account) {
+      setApplications(null);
+      setTickets(null);
+      setComments(null);
+      return;
+    }
+    let stale = false;
+    setError('');
+    Promise.all([fetchMyApplications(token), fetchMyTickets(token), fetchMyComments(token)])
+      .then(([a, t, c]) => {
+        if (stale) return;
+        setApplications(a.applications);
+        setTickets(t.tickets);
+        setComments(c.comments);
+      })
+      .catch((e) => {
+        if (!stale) setError(e instanceof Error ? e.message : String(e));
+      });
+    return () => {
+      stale = true;
+    };
+  }, [account, token]);
+
+  if (!account) return null;
+  const fmt = (ts: number) => new Date(ts).toLocaleString(locale);
+
+  return (
+    <>
+      {error && (
+        <p role="alert" className="community-error">
+          {error}
+        </p>
+      )}
+      <section aria-label={m.community.myApplicationsTitle}>
+        <h2 className="section-title">{m.community.myApplicationsTitle}</h2>
+        {!applications || applications.length === 0 ? (
+          <p className="community-note">{m.community.myApplicationsEmpty}</p>
+        ) : (
+          <ul className="portfolio-list">
+            {applications.map((a) => (
+              <li key={a.id} className="portfolio-row">
+                <span>{a.projectName}</span>
+                <span className="doc-note">{fmt(a.createdAt)}</span>
+                <span className={`status-chip status-${a.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.applicationStatus[a.status]}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section aria-label={m.community.myTicketsTitle}>
+        <h2 className="section-title">{m.community.myTicketsTitle}</h2>
+        {!tickets || tickets.length === 0 ? (
+          <p className="community-note">{m.community.ticketsEmpty}</p>
+        ) : (
+          <ul className="portfolio-list">
+            {tickets.map((t) => (
+              <li key={t.id} className="portfolio-row">
+                <span>{t.subject}</span>
+                <span className="doc-note">{fmt(t.createdAt)}</span>
+                <span className={`status-chip status-${t.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.ticketStatus[t.status]}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section aria-label={m.community.myCommentsTitle}>
+        <h2 className="section-title">{m.community.myCommentsTitle}</h2>
+        {!comments || comments.length === 0 ? (
+          <p className="community-note">{m.community.commentsEmpty}</p>
+        ) : (
+          <ul className="portfolio-list">
+            {comments.map((c) => (
+              <li key={c.id} className="portfolio-row">
+                <a href={routeHash({ name: 'campaign', campaignId: c.campaignId })}>{c.campaignId}</a>
+                <span className="doc-note">
+                  {fmt(c.createdAt)}
+                  {c.hidden ? ` - ${m.community.commentHidden}` : ''}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </>
+  );
+}

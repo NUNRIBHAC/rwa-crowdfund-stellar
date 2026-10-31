@@ -203,7 +203,7 @@ export default function App() {
         {route.name === 'risk-warnings' && <RiskWarnings />}
         {route.name === 'faq' && <Faq />}
         {route.name === 'about' && <About />}
-        {route.name === 'financing' && <Financing />}
+        {route.name === 'financing' && <Financing market={market} />}
         {route.name === 'account' && <Account market={market} />}
         {route.name === 'terms-of-service' && <TermsOfService />}
         {route.name === 'privacy-policy' && <PrivacyPolicy />}

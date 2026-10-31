@@ -1,8 +1,12 @@
 import { useI18n } from '../i18n';
+import type { Market } from '../market';
+import SignInPanel from '../components/SignInPanel';
+import IssuerApplicationForm from '../components/IssuerApplicationForm';
 
-// Issuer landing page. The application form is a non-functional preview: issuer
-// onboarding is not wired in this prototype, so the form is disabled and says so.
-export default function Financing() {
+// Issuer landing page. The application form is live: a signed-in wallet
+// submits an application that is stored for operator review (status stays
+// visible to the applicant). Submitting is not an offer, listing or approval.
+export default function Financing({ market }: { market: Market }) {
   const { m } = useI18n();
   return (
     <>
@@ -24,33 +28,8 @@ export default function Financing() {
         </ol>
       </section>
 
-      <section aria-label={m.financing.previewAria}>
-        <h2 className="section-title">{m.financing.previewTitle}</h2>
-        <p className="widget-note">{m.financing.previewNote}</p>
-        <form className="issuer-form" aria-disabled="true" onSubmit={(e) => e.preventDefault()}>
-          <label>
-            {m.financing.companyName}
-            <input disabled placeholder={m.financing.notAvailable} />
-          </label>
-          <label>
-            {m.financing.country}
-            <input disabled placeholder={m.financing.notAvailable} />
-          </label>
-          <label>
-            {m.financing.targetAmount}
-            <input disabled placeholder={m.financing.notAvailable} />
-          </label>
-          <label>
-            {m.financing.instrument}
-            <select disabled>
-              <option>{m.financing.notAvailable}</option>
-            </select>
-          </label>
-          <button className="btn btn-primary" disabled>
-            {m.financing.submit}
-          </button>
-        </form>
-      </section>
+      <SignInPanel actor={market.actor} />
+      <IssuerApplicationForm />
     </>
   );
 }

@@ -156,6 +156,13 @@ export const createTicket = (token: string, input: { kind: 'support' | 'feedback
 export const fetchMyTickets = (token: string) => call<{ tickets: Ticket[] }>('/api/support/tickets', { token });
 
 // --- Issuer applications ---
+export const fetchMyApplications = (token: string) => call<{ applications: IssuerApplication[] }>('/api/issuer-applications', { token });
+
+// --- Own activity (account dashboard feed) ---
+export type OwnComment = CommunityComment & { hidden: boolean };
+
+export const fetchMyComments = (token: string) => call<{ comments: OwnComment[] }>('/api/comments/mine', { token });
+
 export const submitIssuerApplication = (
   token: string,
   input: {

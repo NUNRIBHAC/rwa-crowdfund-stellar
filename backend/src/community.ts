@@ -77,6 +77,9 @@ export function requireCampaignId(id: unknown): string {
 
 export type PublicComment = Pick<Comment, 'id' | 'campaignId' | 'body' | 'createdAt'> & { author: string };
 
+// An owner's own comment, including moderation state they are entitled to see.
+export type OwnComment = PublicComment & { hidden: boolean };
+
 function publicComment(c: Comment): PublicComment {
   return {
     id: c.id,
@@ -189,6 +192,21 @@ export class CommunityService {
     return Object.values(state.tickets)
       .filter((t) => t.publicKey === account.publicKey)
       .sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  async listOwnApplications(account: Account): Promise<IssuerApplication[]> {
+    const state = await this.store.read();
+    return Object.values(state.applications)
+      .filter((a) => a.publicKey === account.publicKey)
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  async listOwnComments(account: Account): Promise<OwnComment[]> {
+    const state = await this.store.read();
+    return Object.values(state.comments)
+      .filter((c) => c.publicKey === account.publicKey)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map((c) => ({ ...publicComment(c), hidden: Boolean(c.hiddenAt) }));
   }
 
   async submitApplication(account: Account, input: unknown): Promise<IssuerApplication> {

@@ -195,6 +195,40 @@ test('issuer application end to end with admin pipeline', async () => {
   );
 });
 
+test('owner-scoped lists: applications and comments mine', async () => {
+  const kpA = Keypair.random();
+  const kpB = Keypair.random();
+  const tokenA = await login(kpA);
+  const tokenB = await login(kpB);
+  await api('POST', '/api/issuer-applications', {
+    token: tokenA,
+    body: {
+      projectName: 'Fictional Solar Coop',
+      country: 'PT',
+      instrumentType: 'bond',
+      targetAmount: '100000 EUR',
+      description: 'Demo application, fictional project.',
+    },
+  });
+  await api('POST', '/api/campaigns/demo-solar/comments', { token: tokenA, body: { body: 'First own comment' } });
+  await api('POST', '/api/campaigns/demo-solar/comments', { token: tokenB, body: { body: 'Someone else comment' } });
+
+  const ownApps = await api('GET', '/api/issuer-applications', { token: tokenA });
+  assert.equal(ownApps.status, 200);
+  assert.equal(ownApps.json.applications.length, 1);
+  assert.equal(ownApps.json.applications[0].projectName, 'Fictional Solar Coop');
+  assert.equal(ownApps.json.applications[0].status, 'received');
+  assert.equal((await api('GET', '/api/issuer-applications', { token: tokenB })).json.applications.length, 0);
+  assert.equal((await api('GET', '/api/issuer-applications')).status, 401);
+
+  const ownComments = await api('GET', '/api/comments/mine', { token: tokenA });
+  assert.equal(ownComments.status, 200);
+  assert.equal(ownComments.json.comments.length, 1);
+  assert.equal(ownComments.json.comments[0].body, 'First own comment');
+  assert.equal(ownComments.json.comments[0].hidden, false);
+  assert.equal((await api('GET', '/api/comments/mine')).status, 401);
+});
+
 test('campaign metadata endpoint serves industry and documents', async () => {
   const res = await api('GET', '/api/campaigns/demo-solar/metadata');
   assert.equal(res.status, 200);
