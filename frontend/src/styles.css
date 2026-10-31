@@ -1225,3 +1225,11 @@ code {
   background: #e0e7ff;
   color: #3730a3;
 }
+@media (max-width: 700px) {
+  /* Narrow screens: stack the state tag below the question, full width text */
+  .accordion summary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
