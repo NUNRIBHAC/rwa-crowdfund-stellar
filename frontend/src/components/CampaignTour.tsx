@@ -119,22 +119,26 @@ export default function CampaignTour() {
     if (prev instanceof HTMLElement && document.contains(prev)) prev.focus();
   };
 
-  if (!open) {
-    return (
-      <button
-        className="btn"
-        onClick={(e) => {
-          // Capture the button itself, not activeElement: a synthetic or
-          // pointer click does not necessarily move focus first.
-          restoreFocusRef.current = e.currentTarget;
-          setIndex(0);
-          setOpen(true);
-        }}
-      >
-        {t.tourRepeat}
-      </button>
-    );
-  }
+  // The Repeat tour trigger stays mounted while the tour is open: focus
+  // restore needs the captured invoker to still be in the document.
+  const trigger = (
+    <button
+      className="btn"
+      aria-haspopup="dialog"
+      aria-expanded={open}
+      onClick={(e) => {
+        // Capture the button itself, not activeElement: a synthetic or
+        // pointer click does not necessarily move focus first.
+        restoreFocusRef.current = e.currentTarget;
+        setIndex(0);
+        setOpen(true);
+      }}
+    >
+      {t.tourRepeat}
+    </button>
+  );
+
+  if (!open) return trigger;
 
   if (available.length === 0) {
     close();
@@ -143,31 +147,34 @@ export default function CampaignTour() {
   const step = available[Math.min(index, available.length - 1)];
 
   return (
-    <div className="tour-overlay">
-      <div className="tour-card" role="dialog" aria-modal="true" aria-label={t.tourTitle} ref={cardRef}>
-        <h3>{step.title}</h3>
-        <p className="community-note">{step.body}</p>
-        <p className="community-note">{t.tourStepOf(index + 1, available.length)}</p>
-        <div className="chip-row">
-          {index > 0 && (
-            <button className="btn" onClick={() => setIndex(index - 1)}>
-              {t.tourBack}
+    <>
+      {trigger}
+      <div className="tour-overlay">
+        <div className="tour-card" role="dialog" aria-modal="true" aria-label={t.tourTitle} ref={cardRef}>
+          <h3>{step.title}</h3>
+          <p className="community-note">{step.body}</p>
+          <p className="community-note">{t.tourStepOf(index + 1, available.length)}</p>
+          <div className="chip-row">
+            {index > 0 && (
+              <button className="btn" onClick={() => setIndex(index - 1)}>
+                {t.tourBack}
+              </button>
+            )}
+            {index < available.length - 1 ? (
+              <button className="btn btn-primary" onClick={() => setIndex(index + 1)}>
+                {t.tourNext}
+              </button>
+            ) : (
+              <button className="btn btn-primary" onClick={close}>
+                {t.tourDone}
+              </button>
+            )}
+            <button className="btn" onClick={close}>
+              {t.tourSkip}
             </button>
-          )}
-          {index < available.length - 1 ? (
-            <button className="btn btn-primary" onClick={() => setIndex(index + 1)}>
-              {t.tourNext}
-            </button>
-          ) : (
-            <button className="btn btn-primary" onClick={close}>
-              {t.tourDone}
-            </button>
-          )}
-          <button className="btn" onClick={close}>
-            {t.tourSkip}
-          </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
