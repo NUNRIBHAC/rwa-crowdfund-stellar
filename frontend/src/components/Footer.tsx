@@ -1,7 +1,9 @@
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
+import { lockupFor, useTheme } from '../theme';
 
 export default function Footer() {
+  const theme = useTheme();
   const { m } = useI18n();
   return (
     <footer className="site-footer">
@@ -52,7 +54,7 @@ export default function Footer() {
       <div className="footer-brand">
         <div className="footer-brand-inner">
           <div className="footer-brand-lockup">
-            <img className="footer-brand-lockup-img" src="/blockallisto-lockup-horizontal-reversed.svg" alt="Blockallisto" />
+            <img className="footer-brand-lockup-img" src={lockupFor(theme)} alt="Blockallisto" />
           </div>
           <p className="footer-tagline">{m.footer.tagline}</p>
           <svg className="footer-tiles" viewBox="0 0 320 200" aria-hidden="true">
