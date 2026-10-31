@@ -6,6 +6,7 @@ import { initTheme } from './theme';
 import './styles.css';
 import './content-surfaces.css';
 import './tour-highlight.css';
+import './footer-layout-fix.css';
 
 initTheme();
 
