@@ -527,6 +527,10 @@ export const zhTW: Messages = {
     walletMismatch: '請連接準備此交易時使用的錢包。',
     walletNoSign: '錢包未簽名',
     apiFailed: 'API 請求失敗',
+    prepareTrustlineMissing: '此錢包尚未設定測試網 USDC（缺少信任線）。請先新增 USDC 信任線，然後重試。',
+    prepareAccountMissing: '此錢包帳戶在測試網上尚不存在。請先為其充值，然後重試。',
+    prepareInsufficientBalance: '此錢包的測試網 USDC 不足以支付該金額。',
+    prepareFailed: '無法準備此交易。請重試。',
   },
   instruments: {
     groups: [

@@ -572,6 +572,10 @@ export const es: Messages = {
     walletMismatch: 'Conecta la cartera que preparó esta transacción.',
     walletNoSign: 'La cartera no firmó',
     apiFailed: 'La solicitud a la API falló',
+    prepareTrustlineMissing: 'Esta cartera aún no está configurada para USDC de prueba (falta la trustline). Añade una trustline de USDC e inténtalo de nuevo.',
+    prepareAccountMissing: 'Esta cuenta de cartera aún no existe en la red de pruebas. Fínanciala primero e inténtalo de nuevo.',
+    prepareInsufficientBalance: 'Esta cartera no tiene suficiente USDC de prueba para este importe.',
+    prepareFailed: 'No se pudo preparar esta transacción. Inténtalo de nuevo.',
   },
   instruments: {
     groups: [

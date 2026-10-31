@@ -233,11 +233,15 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     // server log and return one concise, honest reason to the client.
     const raw = simulation.error ?? '';
     console.warn('soroban build simulation failed:', raw);
-    let reason = 'the network rejected the transaction simulation';
-    if (/trustline entry is missing/i.test(raw)) reason = 'this wallet is not set up for testnet USDC yet (missing trustline)';
-    else if (/account not found/i.test(raw)) reason = 'this wallet account does not exist on testnet yet';
-    else if (/insufficient|balance/i.test(raw)) reason = 'this wallet does not hold enough testnet USDC';
-    throw new Error(`Transaction preparation failed: ${reason}.`);
+    const coded = (code: string, reason: string) => {
+      const err = new Error(`Transaction preparation failed: ${reason}.`);
+      (err as Error & { code?: string }).code = code;
+      return err;
+    };
+    if (/trustline entry is missing/i.test(raw)) throw coded('SIM_TRUSTLINE_MISSING', 'wallet is missing the USDC trustline');
+    if (/account not found/i.test(raw)) throw coded('SIM_ACCOUNT_MISSING', 'wallet account does not exist on testnet');
+    if (/insufficient|balance/i.test(raw)) throw coded('SIM_INSUFFICIENT_BALANCE', 'wallet does not hold enough testnet USDC');
+    throw coded('SIM_REJECTED', 'the network rejected the transaction simulation');
   }
   if (rpc.Api.isSimulationRestore(simulation)) throw new Error('state restoration required; operator must restore before signing');
   if (simulation.result?.auth.some((a) => a.credentials.type !== 'sorobanCredentialsSourceAccount'))

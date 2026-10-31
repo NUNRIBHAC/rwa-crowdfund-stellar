@@ -152,7 +152,8 @@ app.post('/api/campaigns/:id/soroban/build', async (req, res) => {
   try {
     res.json(await buildSoroban(String(req.params.id), req.body ?? {}));
   } catch (err) {
-    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+    const code = (err as { code?: string }).code;
+    res.status(400).json({ error: err instanceof Error ? err.message : String(err), ...(code ? { code } : {}) });
   }
 });
 app.post('/api/campaigns/:id/soroban/submit', async (req, res) => {

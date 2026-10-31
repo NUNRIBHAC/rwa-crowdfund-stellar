@@ -570,6 +570,10 @@ export const de: Messages = {
     walletMismatch: 'Verbinden Sie die Wallet, die diese Transaktion vorbereitet hat.',
     walletNoSign: 'Wallet hat nicht signiert',
     apiFailed: 'API-Anfrage fehlgeschlagen',
+    prepareTrustlineMissing: 'Diese Wallet ist noch nicht für Testnet-USDC eingerichtet (fehlende Trustline). Fügen Sie eine USDC-Trustline hinzu und versuchen Sie es erneut.',
+    prepareAccountMissing: 'Dieses Wallet-Konto existiert im Testnetz noch nicht. Zahlen Sie es zuerst ein und versuchen Sie es erneut.',
+    prepareInsufficientBalance: 'Diese Wallet enthält nicht genügend Testnet-USDC für diesen Betrag.',
+    prepareFailed: 'Die Transaktion konnte nicht vorbereitet werden. Bitte versuchen Sie es erneut.',
   },
   instruments: {
     groups: [

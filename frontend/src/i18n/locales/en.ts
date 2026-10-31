@@ -563,6 +563,10 @@ export const en = {
     walletMismatch: 'Connect the wallet that prepared this transaction.',
     walletNoSign: 'Wallet did not sign',
     apiFailed: 'API request failed',
+    prepareTrustlineMissing: 'This wallet is not set up for testnet USDC yet (missing trustline). Add a USDC trustline, then try again.',
+    prepareAccountMissing: 'This wallet account does not exist on testnet yet. Fund it first, then try again.',
+    prepareInsufficientBalance: 'This wallet does not hold enough testnet USDC for this amount.',
+    prepareFailed: 'We could not prepare this transaction. Please try again.',
   },
   instruments: {
     groups: [

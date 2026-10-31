@@ -558,6 +558,10 @@ export const ja: Messages = {
     walletMismatch: 'このトランザクションを準備したウォレットを接続してください。',
     walletNoSign: 'ウォレットが署名しませんでした',
     apiFailed: 'API リクエストに失敗しました',
+    prepareTrustlineMissing: 'このウォレットはまだテストネットUSDC用に設定されていません（トラストラインがありません）。USDCトラストラインを追加してからもう一度お試しください。',
+    prepareAccountMissing: 'このウォレットアカウントはテストネット上にまだ存在しません。先に入金してからもう一度お試しください。',
+    prepareInsufficientBalance: 'このウォレットにはこの金額に十分なテストネットUSDCがありません。',
+    prepareFailed: 'このトランザクションを準備できませんでした。もう一度お試しください。',
   },
   instruments: {
     groups: [

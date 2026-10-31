@@ -25,11 +25,10 @@ function setup(prepareError?: string) {
   );
 }
 
-test('surfaces a failed build at the card: localized lead-in plus server detail', () => {
-  setup('trustline entry is missing for account');
+test('surfaces a failed build at the card as an alert with the composed message', () => {
+  setup('This wallet is not set up for testnet USDC yet (missing trustline). Add a USDC trustline, then try again.');
   const alert = screen.getByRole('alert');
-  expect(alert.textContent).toContain('API request failed');
-  expect(alert.textContent).toContain('trustline entry is missing');
+  expect(alert.textContent).toContain('missing trustline');
 });
 
 test('renders no build error when none occurred', () => {

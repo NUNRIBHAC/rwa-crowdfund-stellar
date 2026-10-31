@@ -131,8 +131,19 @@ export default function App() {
     } catch (e) {
       // Build failures surface at the card, next to the button that failed,
       // not only in the page-top banner a scrolled-down user never sees.
-      const detail = (e instanceof Error ? e.message : String(e)).split('\n')[0].slice(0, 200);
-      setPrepareErrors((prev) => ({ ...prev, [c.id]: detail }));
+      // Known failures are localized from their stable code; unknown ones get
+      // the generic message and keep their detail in the console, never
+      // parsed or partially translated server text.
+      const code = (e as { code?: string }).code;
+      const known: Record<string, string> = {
+        SIM_TRUSTLINE_MISSING: m.errors.prepareTrustlineMissing,
+        SIM_ACCOUNT_MISSING: m.errors.prepareAccountMissing,
+        SIM_INSUFFICIENT_BALANCE: m.errors.prepareInsufficientBalance,
+        SIM_REJECTED: m.errors.prepareFailed,
+      };
+      const msg = (code && known[code]) || m.errors.prepareFailed;
+      if (!(code && known[code])) console.warn('prepare failed', e);
+      setPrepareErrors((prev) => ({ ...prev, [c.id]: msg }));
       return;
     }
     retain({ ...result, campaign: c.id, actor, status: 'BUILT' });

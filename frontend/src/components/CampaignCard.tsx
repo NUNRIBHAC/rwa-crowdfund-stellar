@@ -196,7 +196,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
           {amountError ? <p className="field-error">{amountError}</p> : null}
           {prepareError ? (
             <p className="field-error" role="alert">
-              {m.errors.apiFailed}: {prepareError}
+              {prepareError}
             </p>
           ) : null}
           <div className="btn-row">
