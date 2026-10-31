@@ -1745,3 +1745,71 @@ input[type='checkbox'] {
 .campaign-photo img {
   aspect-ratio: 16 / 9;
 }
+
+/* Theme toggle button in the header */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.theme-toggle:focus-visible {
+  outline: 2px solid #8b8ef0;
+  outline-offset: 2px;
+}
+
+/* Light theme: the whole chrome (risk banner, header, footer band) goes light.
+   Pages are already light; the navy surfaces and their contents flip. */
+[data-theme='light'] .risk-banner {
+  background: #fdecea;
+  color: #8c1d18;
+}
+[data-theme='light'] .site-header {
+  background: var(--card);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+[data-theme='light'] .nav-link {
+  color: var(--ink-soft);
+}
+[data-theme='light'] .nav-link:hover {
+  color: var(--ink);
+}
+[data-theme='light'] .nav-link-active {
+  color: var(--ink);
+}
+[data-theme='light'] .lang-select {
+  background: var(--card);
+  color: var(--ink);
+  border-color: #c9c9ee;
+}
+[data-theme='light'] .theme-toggle {
+  border-color: #c9c9ee;
+  color: var(--ink);
+}
+[data-theme='light'] .theme-toggle:hover {
+  background: rgba(75, 79, 226, 0.08);
+}
+[data-theme='light'] .wallet-chip {
+  background: rgba(75, 79, 226, 0.08);
+  border-color: #c9c9ee;
+  color: var(--ink);
+}
+[data-theme='light'] .footer-brand {
+  background: #e9e9f8;
+  border-top: 1px solid var(--line);
+}
+[data-theme='light'] .footer-tagline {
+  color: var(--ink-soft);
+}
+[data-theme='light'] .footer-tiles rect[stroke] {
+  stroke: #8b8ef0;
+}
