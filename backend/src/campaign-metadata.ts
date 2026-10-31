@@ -15,11 +15,29 @@ export type CampaignDocument = {
   demo: boolean;
 };
 
+// Rewards are issuer-authored marketing content supplied per campaign, exactly
+// like documents. The platform stores and displays them; it does not promise
+// claimability, fulfillment or any eligibility rule of its own. No competitor's
+// terms are copied into platform copy.
+export type CampaignRewardTier = {
+  id: string;
+  /** Issuer-authored threshold text, e.g. "from EUR 500" - wording is the issuer's, never platform-computed. */
+  threshold: string;
+  /** Issuer-authored reward description. */
+  description: string;
+  /** Issuer-authored eligibility/terms text, when supplied. */
+  terms?: string;
+  /** Fictional sample content; every client must show it as such. */
+  demo?: boolean;
+};
+
 export type CampaignMetadata = {
   campaignId: string;
   industry: string; // taxonomy key, e.g. 'energy-utilities'
   industryLabel: string;
   documents: CampaignDocument[];
+  /** Issuer-supplied reward tiers; absent or empty means none announced - render that honestly. */
+  rewards?: CampaignRewardTier[];
 };
 
 // Checked-in defaults for the known demo campaign. The live campaign id comes
@@ -42,6 +60,15 @@ const DEFAULTS: CampaignMetadata[] = [
         title: '[DEMO] Project overview - fictional sample document',
         kind: 'project',
         url: '/documents/demo-solar-project.html',
+        demo: true,
+      },
+    ],
+    rewards: [
+      {
+        id: 'demo-solar-reward-1',
+        threshold: '[DEMO] fictional sample: from EUR 250',
+        description: '[DEMO] Fictional sample reward tier - not a real offer, no reward exists',
+        terms: "[DEMO] Fictional issuer terms placeholder. Real rewards would carry the issuer's own eligibility terms here.",
         demo: true,
       },
     ],

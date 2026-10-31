@@ -243,6 +243,9 @@ test('campaign metadata endpoint serves industry and documents', async () => {
   assert.equal(res.status, 200);
   assert.equal(res.json.metadata.industry, 'energy-utilities');
   assert.ok(res.json.metadata.documents.every((d: any) => d.demo === true));
+  // Rewards are issuer-authored; demo tiers stay marked fictional end to end.
+  assert.ok(Array.isArray(res.json.metadata.rewards));
+  assert.ok(res.json.metadata.rewards.every((r: any) => r.demo === true && r.description.includes('[DEMO]')));
   const unknown = await api('GET', '/api/campaigns/unknown-campaign/metadata');
   assert.equal(unknown.json.metadata, null);
 });
