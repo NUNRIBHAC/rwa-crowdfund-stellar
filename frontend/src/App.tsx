@@ -42,7 +42,7 @@ export default function App() {
   const route = useRoute();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [actor, setActor] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<{ code?: string; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
   const [amountErrors, setAmountErrors] = useState<Record<string, string>>({});
@@ -57,12 +57,13 @@ export default function App() {
     }
   });
 
-  // Known failures localize from their stable code; anything else keeps its
-  // current message (already-localized wallet errors pass through unchanged).
-  function bannerMessage(e: unknown): string {
+  // Store the failure, not a localized string: the banner resolves known
+  // codes against the ACTIVE dictionary at render, so a locale switch after
+  // the error appears retranslates the banner with the rest of the page.
+  function bannerError(e: unknown): { code?: string; text: string } {
+    const text = e instanceof Error ? e.message : String(e);
     const code = (e as { code?: string } | null)?.code;
-    if (code === 'API_UNAVAILABLE') return m.errors.apiUnavailable;
-    return e instanceof Error ? e.message : String(e);
+    return code ? { code, text } : { text };
   }
 
   async function refresh(address = actor) {
@@ -78,7 +79,7 @@ export default function App() {
       setFixtureMode(true);
       setLoaded(true);
     }
-    refresh().catch((e) => setError(bannerMessage(e)));
+    refresh().catch((e) => setError(bannerError(e)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,11 +90,11 @@ export default function App() {
 
   async function run(fn: () => Promise<void>) {
     setBusy(true);
-    setError('');
+    setError(null);
     try {
       await fn();
     } catch (e) {
-      setError(bannerMessage(e));
+      setError(bannerError(e));
     } finally {
       setBusy(false);
     }
@@ -229,7 +230,7 @@ export default function App() {
       <main className="page" id="main">
         {error && (
           <p role="alert" className="error-banner">
-            {error}
+            {(error.code === 'API_UNAVAILABLE' && m.errors.apiUnavailable) || error.text}
           </p>
         )}
 
