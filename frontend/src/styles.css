@@ -1604,7 +1604,7 @@ textarea:focus-visible,
   position: relative;
   z-index: 1;
   margin: 0;
-  padding: 24px 328px 24px 24px;
+  padding: 24px 424px 24px 24px;
   min-height: 150px;
   display: flex;
   align-items: flex-start;
@@ -1640,10 +1640,11 @@ textarea:focus-visible,
 }
 .footer-tiles {
   position: absolute;
-  right: 24px;
-  bottom: 18px;
-  width: 280px;
-  height: 175px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  height: 100%;
   pointer-events: none;
 }
 /* Shapes drift gently on their own (user request: animation without hover).
@@ -1652,9 +1653,10 @@ textarea:focus-visible,
 .footer-tiles rect {
   transform-box: fill-box;
   transform-origin: center;
-  animation: footer-drift 5s ease-in-out infinite alternate;
+  animation: footer-drift-a 5s ease-in-out infinite alternate;
 }
 .footer-tiles rect:nth-child(2n) {
+  animation-name: footer-drift-b;
   animation-duration: 6.5s;
   animation-delay: -2s;
 }
@@ -1663,14 +1665,24 @@ textarea:focus-visible,
   animation-delay: -4s;
   animation-direction: alternate-reverse;
 }
-@keyframes footer-drift {
+@keyframes footer-drift-a {
   from {
-    translate: -6px 6px;
+    translate: -18px 14px;
     rotate: -3deg;
   }
   to {
-    translate: 6px -6px;
+    translate: 18px -14px;
     rotate: 3deg;
+  }
+}
+@keyframes footer-drift-b {
+  from {
+    translate: 14px -18px;
+    rotate: 2.5deg;
+  }
+  to {
+    translate: -14px 18px;
+    rotate: -2.5deg;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1678,6 +1690,15 @@ textarea:focus-visible,
     animation: none;
   }
 }
+@media (max-width: 1600px) {
+  .footer-brand-inner {
+    padding-right: 344px;
+  }
+  .footer-tiles {
+    width: 320px;
+  }
+}
+
 @media (max-width: 720px) {
   .footer-brand-inner {
     padding-right: 210px;
@@ -1685,8 +1706,9 @@ textarea:focus-visible,
     gap: 24px;
   }
   .footer-tiles {
+    top: auto;
     width: 170px;
-    height: 108px;
+    height: 120px;
     right: 12px;
     bottom: 12px;
   }
@@ -1701,7 +1723,7 @@ textarea:focus-visible,
   .footer-tiles {
     position: static;
     width: 220px;
-    height: 138px;
+    height: 154px;
     order: 4;
   }
 }
