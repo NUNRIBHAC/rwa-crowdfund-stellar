@@ -2610,12 +2610,34 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
    marks one row read without a reload. */
 .notification-row {
   align-items: flex-start;
+  /* Same narrow-viewport treatment as the account checklist: the nowrap
+     mark-read button must not squeeze the text into a mid-word-breaking
+     column. Wrap it below once the text would drop under ~220px. */
+  flex-wrap: wrap;
 }
 .notification-main {
   display: flex;
   flex-direction: column;
   gap: 2px;
   flex: 1;
+  min-width: min(220px, 100%);
+}
+.notification-row > .notification-mark {
+  flex-shrink: 0;
+}
+
+/* Account activity rows (my applications / tickets): the status chip and the
+   date must not squeeze the name, and the chip itself never shrinks below its
+   content - a clipped Arabic chip stacks letters vertically. Same treatment
+   as the checklist and notification rows. */
+.portfolio-row:has(> .status-chip) {
+  flex-wrap: wrap;
+}
+.portfolio-row:has(> .status-chip) > span:first-child {
+  min-width: min(220px, 100%);
+}
+.portfolio-row > .status-chip {
+  flex-shrink: 0;
 }
 .notification-title {
   font-weight: 600;
@@ -2697,12 +2719,34 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   outline-offset: 0;
 }
 
-/* Responsive: tables scroll horizontally on narrow viewports instead of
-   breaking layout; no markup change needed (display:block on the table). */
+/* Responsive: on narrow viewports the operator tables keep a readable column
+   width and the surrounding section scrolls horizontally, instead of the
+   table squeezing cells into mid-word-breaking columns. A global
+   overflow-wrap:anywhere (styles.css top) otherwise shatters plain words like
+   country names. */
 @media (max-width: 720px) {
-  .operator-table {
-    display: block;
+  .community-section:has(.operator-table) {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+  .operator-table {
+    min-width: 560px;
+  }
+  .operator-table th,
+  .operator-table td {
+    overflow-wrap: normal;
+  }
+}
+
+/* Visually hidden but announced to assistive tech (live result counts). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
