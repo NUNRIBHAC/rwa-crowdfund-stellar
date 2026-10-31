@@ -31,7 +31,7 @@ Copy `backend/.env.example` to `backend/.env` and configure only reviewed deploy
 
 ## Demo deployment
 
-The testnet demo at https://rwa-crowdfund-demo.onrender.com is configured to deploy from `main` via Render auto-deploy (on commit) using `render.yaml`; push-trigger verification is in progress and manual deploys remain the fallback. Testnet only; no real funds.
+The testnet demo at https://blockallisto-demo.onrender.com is configured to deploy from `main` via Render auto-deploy (on commit) using `render.yaml`; push-trigger verification is in progress and manual deploys remain the fallback. Testnet only; no real funds.
 
 ## Checks
 
