@@ -4,6 +4,7 @@ import type { Campaign, Intent } from './types';
 import { isTerminal } from './types';
 import { api } from './api';
 import { contributionError, formatAmount } from './format';
+import type { ContributionError } from './format';
 import { FIXTURE_CAMPAIGNS } from './fixtures';
 import type { Market } from './market';
 import { useRoute } from './router';
@@ -45,8 +46,11 @@ export default function App() {
   const [error, setError] = useState<{ code?: string; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
-  const [amountErrors, setAmountErrors] = useState<Record<string, string>>({});
-  const [prepareErrors, setPrepareErrors] = useState<Record<string, string>>({});
+  // Per-card errors store machine codes (not localized strings) so a locale
+  // switch retranslates them at render with the rest of the page, same rule
+  // as the top banner. '' clears the slot.
+  const [amountErrorCodes, setAmountErrorCodes] = useState<Record<string, ContributionError | ''>>({});
+  const [prepareErrorCodes, setPrepareErrorCodes] = useState<Record<string, string>>({});
   const [loaded, setLoaded] = useState(false);
   const [fixtureMode, setFixtureMode] = useState(false);
   const [intent, setIntent] = useState<Intent | null>(() => {
@@ -112,25 +116,37 @@ export default function App() {
     await refresh(r.address);
   }
 
-  function validateAmount(c: Campaign, raw: string): string {
-    const code = contributionError(raw ?? '', c.config.goal, c.raised);
+  function amountErrorText(code: ContributionError, c: Campaign): string {
     if (code === 'required') return m.card.amountRequired;
     if (code === 'invalid') return m.card.amountInvalid;
-    if (code === 'exceeds') return m.card.amountExceeds(formatAmount(String(BigInt(c.config.goal) - BigInt(c.raised)), locale));
-    return '';
+    return m.card.amountExceeds(formatAmount(String(BigInt(c.config.goal) - BigInt(c.raised)), locale));
+  }
+
+  function prepareErrorText(code: string): string {
+    // Known failures localize from their stable code; unknown ones get the
+    // generic message and keep their detail in the console, never parsed or
+    // partially translated server text.
+    const known: Record<string, string> = {
+      SIM_TRUSTLINE_MISSING: m.errors.prepareTrustlineMissing,
+      SIM_ACCOUNT_MISSING: m.errors.prepareAccountMissing,
+      SIM_INSUFFICIENT_BALANCE: m.errors.prepareInsufficientBalance,
+      SIM_REJECTED: m.errors.prepareFailed,
+      API_UNAVAILABLE: m.errors.apiUnavailable,
+    };
+    return known[code] ?? m.errors.prepareFailed;
   }
 
   async function prepare(c: Campaign, action: 'contribute' | 'refund' | 'withdraw') {
     if (!actor) throw new Error(m.errors.connectFirst);
     if (action === 'contribute') {
-      const msg = validateAmount(c, amounts[c.id] ?? '');
-      setAmountErrors({ ...amountErrors, [c.id]: msg });
-      if (msg) return;
+      const code = contributionError(amounts[c.id] ?? '', c.config.goal, c.raised) ?? '';
+      setAmountErrorCodes({ ...amountErrorCodes, [c.id]: code });
+      if (code) return;
     }
     if (intent && !isTerminal(intent.status)) {
       throw new Error(m.errors.resolveSaved);
     }
-    setPrepareErrors((prev) => ({ ...prev, [c.id]: '' }));
+    setPrepareErrorCodes((prev) => ({ ...prev, [c.id]: '' }));
     let result;
     try {
       result = await api(`/api/campaigns/${c.id}/soroban/build`, {
@@ -141,19 +157,11 @@ export default function App() {
     } catch (e) {
       // Build failures surface at the card, next to the button that failed,
       // not only in the page-top banner a scrolled-down user never sees.
-      // Known failures are localized from their stable code; unknown ones get
-      // the generic message and keep their detail in the console, never
-      // parsed or partially translated server text.
-      const code = (e as { code?: string }).code;
-      const known: Record<string, string> = {
-        SIM_TRUSTLINE_MISSING: m.errors.prepareTrustlineMissing,
-        SIM_ACCOUNT_MISSING: m.errors.prepareAccountMissing,
-        SIM_INSUFFICIENT_BALANCE: m.errors.prepareInsufficientBalance,
-        SIM_REJECTED: m.errors.prepareFailed,
-      };
-      const msg = (code && known[code]) || m.errors.prepareFailed;
-      if (!(code && known[code])) console.warn('prepare failed', e);
-      setPrepareErrors((prev) => ({ ...prev, [c.id]: msg }));
+      // The stored code is resolved against the active dictionary at render.
+      const code = (e as { code?: string }).code ?? 'UNKNOWN';
+      const KNOWN = ['SIM_TRUSTLINE_MISSING', 'SIM_ACCOUNT_MISSING', 'SIM_INSUFFICIENT_BALANCE', 'SIM_REJECTED', 'API_UNAVAILABLE'];
+      if (!KNOWN.includes(code)) console.warn('prepare failed', e);
+      setPrepareErrorCodes((prev) => ({ ...prev, [c.id]: code }));
       return;
     }
     retain({ ...result, campaign: c.id, actor, status: 'BUILT' });
@@ -195,6 +203,16 @@ export default function App() {
   }
 
   const base = fixtureMode ? FIXTURE_CAMPAIGNS : campaigns;
+  const amountErrors: Record<string, string> = {};
+  for (const [id, code] of Object.entries(amountErrorCodes)) {
+    if (!code) continue;
+    const c = base.find((x) => x.id === id);
+    if (c) amountErrors[id] = amountErrorText(code, c);
+  }
+  const prepareErrors: Record<string, string> = {};
+  for (const [id, code] of Object.entries(prepareErrorCodes)) {
+    if (code) prepareErrors[id] = prepareErrorText(code);
+  }
   const market: Market = {
     campaigns: base,
     loaded,
@@ -208,7 +226,7 @@ export default function App() {
       setAmounts({ ...amounts, [id]: v });
       const c = campaigns.find((x) => x.id === id);
       if (!c) return;
-      setAmountErrors({ ...amountErrors, [id]: v.trim() === '' ? '' : validateAmount(c, v) });
+      setAmountErrorCodes({ ...amountErrorCodes, [id]: v.trim() === '' ? '' : (contributionError(v, c.config.goal, c.raised) ?? '') });
     },
     onPrepare: (c, action) => run(() => prepare(c, action)),
     onRefresh: () => run(() => refresh()),
