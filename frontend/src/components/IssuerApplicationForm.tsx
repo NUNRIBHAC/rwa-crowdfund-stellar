@@ -87,8 +87,6 @@ export default function IssuerApplicationForm() {
             {m.community.applicationFields.contactEmail}
             <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} maxLength={COMMUNITY_LIMITS.applicationField} />
           </label>
-          // Validation feedback comes from native required/type=email messages plus // server-side zod errors shown above, not from an unexplained disabled
-          button.
           <button className="btn btn-primary" disabled={busy}>
             {m.community.applicationSubmit}
           </button>
