@@ -2450,3 +2450,31 @@ html.rtl-text
   ) {
   direction: ltr;
 }
+
+/* Arabic: multi-cell rows and grids keep their LTR cell order in every
+   locale - only the text inside each cell reads RTL. Applying direction: rtl
+   to a flex row or grid container visually reorders its cells (it swapped
+   raised/goal and deadline/status inside cards and the pledge panel), so
+   these containers stay LTR while the dt/dd/p text inside them still flips. */
+html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .intent-facts, .step-cards, .portfolio-row, .account-checklist-item) {
+  direction: ltr;
+}
+
+@media (min-width: 1151px) and (max-width: 1400px) {
+  /* 1151-1400px: the brand block plus four 200px-min link columns exceed the
+     tile-free zone - measured on staging at 1280px the footer context text
+     reached x1051 (AR) and x972 (EN) while the decorative tiles start at
+     x933, so tiles touched the last context line in both locales. Wrapping
+     the grid below the brand row gives it the full padded width and lets the
+     context column span it, keeping text clear of the tiles. */
+  .footer-brand-inner {
+    flex-wrap: wrap;
+  }
+  .footer-brand-inner .footer-grid {
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+  }
+  .footer-brand-inner .footer-context {
+    grid-column: 1 / -1;
+    max-width: 560px;
+  }
+}
