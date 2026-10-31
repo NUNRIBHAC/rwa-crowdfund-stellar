@@ -10,9 +10,7 @@
  * zero and renders 0 filled, 0%.
  */
 
-export type FundingState =
-  | { kind: 'unavailable' }
-  | { kind: 'ready'; filled: number; inProgress: boolean; percent: number; partial: number };
+export type FundingState = { kind: 'unavailable' } | { kind: 'ready'; filled: number; inProgress: boolean; percent: number; partial: number };
 
 /** True only for a non-negative integer string: a verified on-chain amount. */
 export function isValidUnits(v: string | null | undefined): v is string {
@@ -53,4 +51,3 @@ export function formatTokenAmount(raw: string | null | undefined, decimals = 7):
   const grouped = whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return frac ? `${grouped}.${frac}` : grouped;
 }
-
