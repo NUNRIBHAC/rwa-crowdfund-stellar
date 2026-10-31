@@ -2,41 +2,44 @@ import { useState } from 'react';
 import FundingGrid from '../components/FundingGrid';
 import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
-import { deadlineInfo, formatAmount, shorten } from '../format';
+import { deadlineInfo, formatAmount, regionName, shorten } from '../format';
 import { profileFor, type CampaignProfile } from '../data/profiles';
 import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
+import { useI18n } from '../i18n';
+import type { Messages } from '../i18n/locales/en';
 
-const TABS = ['Overview', 'Details', 'Documents', 'News'] as const;
-type Tab = (typeof TABS)[number];
+const TAB_IDS = ['overview', 'details', 'documents', 'news'] as const;
 
 export default function CampaignDetail({ market, campaignId }: { market: Market; campaignId: string }) {
-  const [tab, setTab] = useState<Tab>('Overview');
+  const { locale, m } = useI18n();
+  const [tab, setTab] = useState<(typeof TAB_IDS)[number]>('overview');
   const campaign = market.campaigns.find((c) => c.id === campaignId);
 
   if (!campaign) {
     return (
       <section>
-        <h1 className="page-title">Campaign not found</h1>
+        <h1 className="page-title">{m.campaign.notFound}</h1>
         <p>
-          No campaign with id <code>{campaignId}</code> is in the current registry{market.fixtureMode ? ' of sample campaigns' : ''}.
+          {m.campaign.notFoundText} <code>{campaignId}</code>
+          {market.fixtureMode ? m.campaign.notFoundFixtureSuffix : ''}.
         </p>
         <p>
-          <a href={routeHash({ name: 'investments' })}>Back to all investments</a>
+          <a href={routeHash({ name: 'investments' })}>{m.campaign.backToAll}</a>
         </p>
       </section>
     );
   }
 
-  const profile = profileFor(campaign, market.fixtureMode);
-  const dl = deadlineInfo(campaign.config.deadline);
+  const profile = profileFor(campaign, market.fixtureMode, m.profiles.list);
+  const dl = deadlineInfo(campaign.config.deadline, m.time);
   const status = campaignStatus(campaign);
-  const statusLabel = status === 'funded' ? 'Successfully financed' : status === 'ended' ? 'Unsuccessful' : dl.label;
+  const statusLabel = status === 'funded' ? m.campaign.statusFunded : status === 'ended' ? m.campaign.statusEnded : dl.label;
 
   return (
     <article className="campaign-page">
       <p className="breadcrumb">
-        <a href={routeHash({ name: 'investments' })}>All investments</a> / {campaign.name}
+        <a href={routeHash({ name: 'investments' })}>{m.campaign.backToAll}</a> / {campaign.name}
       </p>
 
       <header className="campaign-head">
@@ -44,49 +47,53 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           {profile && <span className="status-chip">{profile.category}</span>}
           {profile && (
             <span className="status-chip chip-instrument">
-              {composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}
+              {composeInstrumentLabel(m, profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}
             </span>
           )}
-          {profile && <span className="status-chip chip-country">{profile.country}</span>}
+          {profile && <span className="status-chip chip-country">{regionName(profile.country, locale)}</span>}
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>{statusLabel}</span>
         </div>
         <h1 className="page-title">{campaign.name}</h1>
-        {profile ? (
-          <p className="campaign-issuer">{profile.issuer}</p>
-        ) : (
-          <p className="campaign-issuer">
-            Issuer identity and off-chain terms are not available in this prototype; the data below comes from the on-chain contract.
-          </p>
+        {campaign.id === 'demo-solar' && (
+          <figure className="campaign-photo">
+            <img src="/demo-solar-farm.jpg" alt={m.card.photoAlt} loading="lazy" />
+            <figcaption>{m.card.photoCaption}</figcaption>
+          </figure>
         )}
+        {profile ? <p className="campaign-issuer">{profile.issuer}</p> : <p className="campaign-issuer">{m.campaign.issuerMissing}</p>}
       </header>
 
       <dl className="metric-cards">
         <div className="metric-card">
-          <dt>Asset class</dt>
+          <dt>{m.campaign.assetClass}</dt>
           <dd>
-            {profile ? composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays) : 'Contract escrow (testnet)'}
+            {profile ? composeInstrumentLabel(m, profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays) : m.campaign.escrowTestnet}
           </dd>
         </div>
         <div className="metric-card">
-          <dt>Interest rate</dt>
-          <dd>{profile ? profile.interestRate : 'None - contribution escrow only'}</dd>
+          <dt>{m.campaign.interestRate}</dt>
+          <dd>{profile ? profile.interestRate : m.campaign.noInterest}</dd>
         </div>
         <div className="metric-card">
-          <dt>Term</dt>
-          <dd>{profile ? profile.term : `Deadline ${dl.date}`}</dd>
+          <dt>{m.campaign.term}</dt>
+          <dd>{profile ? profile.term : `${m.campaign.termDeadlinePrefix} ${dl.date}`}</dd>
         </div>
         <div className="metric-card">
-          <dt>Minimum investment</dt>
-          <dd>{profile ? profile.minInvestment : 'Set per transaction, capped at remaining goal'}</dd>
+          <dt>{m.campaign.minInvestment}</dt>
+          <dd>{profile ? profile.minInvestment : m.campaign.minNote}</dd>
         </div>
       </dl>
 
-      {profile && <p className="instrument-explainer">{instrumentExplainer(profile)} This is sample educational text, not terms of a live offer.</p>}
+      {profile && (
+        <p className="instrument-explainer">
+          {instrumentExplainer(m, profile)} {m.campaign.explainerSuffix}
+        </p>
+      )}
 
       <div className="campaign-columns">
         <div className="campaign-main">
-          <section aria-label="Platform facts">
-            <h2 className="section-title">Additional info</h2>
+          <section aria-label={m.campaign.factsAria}>
+            <h2 className="section-title">{m.campaign.additionalInfo}</h2>
             {profile ? (
               <dl className="info-grid">
                 {profile.additionalInfo.map((f) => (
@@ -99,72 +106,68 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
             ) : (
               <dl className="info-grid">
                 <div>
-                  <dt>Funding model</dt>
-                  <dd>All-or-nothing, enforced by the Soroban contract</dd>
+                  <dt>{m.campaign.fundingModel}</dt>
+                  <dd>{m.campaign.aonEnforced}</dd>
                 </div>
                 <div>
-                  <dt>Goal</dt>
-                  <dd>{formatAmount(campaign.config.goal)} USDC (testnet)</dd>
+                  <dt>{m.campaign.goal}</dt>
+                  <dd>
+                    {formatAmount(campaign.config.goal, locale)} {m.campaign.usdcTestnet}
+                  </dd>
                 </div>
                 <div>
-                  <dt>Deadline</dt>
+                  <dt>{m.campaign.deadline}</dt>
                   <dd>{dl.date}</dd>
                 </div>
                 <div>
-                  <dt>Contract</dt>
+                  <dt>{m.campaign.contract}</dt>
                   <dd>
                     <code>{campaign.contractId}</code>
                   </dd>
                 </div>
                 <div>
-                  <dt>Asset</dt>
+                  <dt>{m.campaign.asset}</dt>
                   <dd>
-                    <code>{shorten(campaign.config.token, 10, 6)}</code> (validated by the API as testnet USDC)
+                    <code>{shorten(campaign.config.token, 10, 6)}</code> ({m.campaign.assetValidated})
                   </dd>
                 </div>
                 <div>
-                  <dt>Interest, ISIN, documents</dt>
-                  <dd>Not available - this prototype records contributions only and issues no securities</dd>
+                  <dt>{m.campaign.interestIsinDocs}</dt>
+                  <dd>{m.campaign.interestIsinDocsNote}</dd>
                 </div>
               </dl>
             )}
           </section>
 
-          <div className="marketing-divider" role="separator" aria-label="Marketing content below">
-            <span>Issuer-provided content below - not verified by the platform</span>
+          <div className="marketing-divider" role="separator" aria-label={m.campaign.marketingDividerAria}>
+            <span>{m.campaign.marketingDivider}</span>
           </div>
 
-          <div className="tab-bar" role="group" aria-label="Campaign sections">
-            {TABS.map((t) => (
-              <button key={t} className={`chip ${tab === t ? 'chip-active' : ''}`} aria-pressed={tab === t} onClick={() => setTab(t)}>
-                {t}
+          <div className="tab-bar" role="group" aria-label={m.campaign.tabsAria}>
+            {TAB_IDS.map((id, i) => (
+              <button key={id} className={`chip ${tab === id ? 'chip-active' : ''}`} aria-pressed={tab === id} onClick={() => setTab(id)}>
+                {m.campaign.tabs[i]}
               </button>
             ))}
           </div>
 
-          {tab === 'Overview' && (
-            <section aria-label="Overview">
+          {tab === 'overview' && (
+            <section aria-label={m.campaign.tabs[0]}>
               {(profile?.overview ?? []).map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
-              {!profile && (
-                <p>
-                  Issuer marketing content is not available in this prototype. On a production platform this area would carry the issuer&apos;s own description,
-                  team and business model, clearly separated from platform facts by the divider above.
-                </p>
-              )}
+              {!profile && <p>{m.campaign.overviewMissing}</p>}
             </section>
           )}
-          {tab === 'Details' && (
-            <section aria-label="Details">
+          {tab === 'details' && (
+            <section aria-label={m.campaign.tabs[1]}>
               <p>
-                Business model, market, financials and milestones would appear here as issuer-provided sections.{' '}
-                {profile ? 'This sample campaign ships no detail content.' : 'Not available in this prototype.'}
+                {m.campaign.detailsPre} {profile ? m.campaign.detailsSample : m.campaign.detailsMissing}
               </p>
             </section>
           )}
-          {tab === 'Documents' && (
-            <section aria-label="Documents">
+          {tab === 'documents' && (
+            <section aria-label={m.campaign.tabs[2]}>
               {profile ? (
                 <ul className="doc-list">
                   {profile.documents.map((d) => (
@@ -175,12 +178,12 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
                   ))}
                 </ul>
               ) : (
-                <p>Document hosting is not available in this prototype. A production platform would host the key information sheet and issue terms here.</p>
+                <p>{m.campaign.documentsMissing}</p>
               )}
             </section>
           )}
-          {tab === 'News' && (
-            <section aria-label="News">
+          {tab === 'news' && (
+            <section aria-label={m.campaign.tabs[3]}>
               {profile && profile.news.length > 0 ? (
                 <ul className="doc-list">
                   {profile.news.map((n, i) => (
@@ -191,32 +194,36 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
                   ))}
                 </ul>
               ) : (
-                <p>No updates. Campaign news would appear here.</p>
+                <p>{m.campaign.newsEmpty}</p>
               )}
             </section>
           )}
         </div>
 
-        <aside className="invest-widget" aria-label="Invest">
-          <h2 className="widget-title">{status === 'open' ? 'Contribute' : 'Investment overview'}</h2>
+        <aside className="invest-widget" aria-label={m.nav.investments}>
+          <h2 className="widget-title">{status === 'open' ? m.campaign.widgetContribute : m.campaign.widgetOverview}</h2>
           <FundingGrid raised={campaign.raised} goal={campaign.config.goal} layout="block" />
           <dl className="stat-grid">
             <div>
-              <dt>Raised</dt>
-              <dd>{formatAmount(campaign.raised)} USDC (testnet)</dd>
+              <dt>{m.campaign.raised}</dt>
+              <dd>
+                {formatAmount(campaign.raised, locale)} {m.campaign.usdcTestnet}
+              </dd>
             </div>
             <div>
-              <dt>Goal</dt>
-              <dd>{formatAmount(campaign.config.goal)} USDC (testnet)</dd>
+              <dt>{m.campaign.goal}</dt>
+              <dd>
+                {formatAmount(campaign.config.goal, locale)} {m.campaign.usdcTestnet}
+              </dd>
             </div>
           </dl>
 
           {market.fixtureMode ? (
-            <p className="widget-note">Sample preview. This campaign is a fixture, not a deployed contract, and cannot accept contributions.</p>
+            <p className="widget-note">{m.campaign.widgetFixture}</p>
           ) : status === 'open' ? (
             <div className="card-actions">
               <label className="amount-label">
-                Contribution amount (testnet USDC)
+                {m.card.amountLabel}
                 <input
                   value={market.amounts[campaign.id] ?? ''}
                   onChange={(e) => market.onAmount(campaign.id, e.target.value)}
@@ -226,45 +233,39 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
               </label>
               <div className="btn-row">
                 <button className="btn btn-primary" disabled={market.busy || !market.actor} onClick={() => market.onPrepare(campaign, 'contribute')}>
-                  Contribute
+                  {m.card.contribute}
                 </button>
                 <button
                   className="btn"
                   disabled={market.busy || !market.actor || campaign.balance === null}
                   onClick={() => market.onPrepare(campaign, 'refund')}
                 >
-                  Refund me
+                  {m.card.refundMe}
                 </button>
                 <button
                   className="btn"
                   disabled={market.busy || market.actor !== campaign.config.creator}
                   onClick={() => market.onPrepare(campaign, 'withdraw')}
                 >
-                  Creator withdraw
+                  {m.card.creatorWithdraw}
                 </button>
               </div>
             </div>
           ) : (
-            <p className="widget-note">This campaign has ended. Refunds remain available below the deadline rules described on the investments page.</p>
+            <p className="widget-note">{m.campaign.widgetEnded}</p>
           )}
 
-          <p className="widget-risk">Crowdfunding investments carry a risk of total loss and are illiquid. This prototype uses worthless testnet assets.</p>
+          <p className="widget-risk">{m.campaign.widgetRisk}</p>
         </aside>
       </div>
     </article>
   );
 }
 
-function instrumentExplainer(profile: CampaignProfile): string {
+function instrumentExplainer(m: Messages, profile: CampaignProfile): string {
   const convertible = (profile.instrumentOverlays ?? []).includes('convertible');
-  if (convertible) {
-    return 'A convertible bond pays interest until a configured trigger lets holders convert into shares under the issue terms. Conversion is a structure overlay on the bond, not a separate instrument.';
-  }
-  if (profile.instrumentClass === 'bond' && profile.instrumentSeniority === 'senior') {
-    return 'A senior bond is non-subordinated debt: bondholders rank ahead of subordinated capital and equity in insolvency and receive a fixed coupon, with no participation in company growth.';
-  }
-  if (profile.instrumentClass === 'bond' && profile.instrumentSeniority === 'subordinated') {
-    return 'A subordinated bond pays a defined coupon but ranks behind senior creditors in insolvency and carries no participation in company growth.';
-  }
-  return 'This instrument class is described in the Learn hub.';
+  if (convertible) return m.campaign.explainerConvertible;
+  if (profile.instrumentClass === 'bond' && profile.instrumentSeniority === 'senior') return m.campaign.explainerSeniorBond;
+  if (profile.instrumentClass === 'bond' && profile.instrumentSeniority === 'subordinated') return m.campaign.explainerSubBond;
+  return m.campaign.explainerDefault;
 }

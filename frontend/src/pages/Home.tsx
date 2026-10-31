@@ -2,17 +2,11 @@ import type { Market } from '../market';
 import Hero from '../components/Hero';
 import CampaignCard from '../components/CampaignCard';
 import { profileFor } from '../data/profiles';
-import { INSTRUMENT_CLASSES } from '../data/instruments';
 import { routeHash } from '../router';
-
-const STEPS = [
-  { n: 1, title: 'Connect', text: 'Connect a Freighter wallet on Stellar testnet. No account, no personal data in this prototype.' },
-  { n: 2, title: 'Discover', text: 'Browse campaigns and read the structured terms on each campaign page.' },
-  { n: 3, title: 'Contribute', text: 'Sign one transaction. The contract escrows your contribution and enforces the funding cap atomically.' },
-  { n: 4, title: 'Track', text: 'Follow the funding state here. Refunds are contributor-signed if the goal is missed.' },
-];
+import { useI18n } from '../i18n';
 
 export default function Home({ market }: { market: Market }) {
+  const { m } = useI18n();
   const { campaigns, loaded, fixtureMode } = market;
   const mode = fixtureMode ? 'sample' : loaded && campaigns.length > 0 ? 'live' : 'unknown';
   const latest = [...campaigns].sort((a, b) => Number(a.config.deadline) - Number(b.config.deadline)).slice(0, 3);
@@ -21,28 +15,25 @@ export default function Home({ market }: { market: Market }) {
     <>
       <Hero mode={mode} />
 
-      <section aria-label="Behind the name" className="behind-name">
+      <section aria-label={m.home.behindAria} className="behind-name">
         <svg className="star-accent" viewBox="0 0 64 64" aria-hidden="true">
           <path d="M20 6 L22.5 15.5 L32 18 L22.5 20.5 L20 30 L17.5 20.5 L8 18 L17.5 15.5 Z" fill="#4B4FE2" />
           <path d="M44 28 L45.6 34.4 L52 36 L45.6 37.6 L44 44 L42.4 37.6 L36 36 L42.4 34.4 Z" fill="#8B8EF0" />
           <path d="M36 48 L37.1 52.9 L42 54 L37.1 55.1 L36 60 L34.9 55.1 L30 54 L34.9 52.9 Z" fill="#C7C8F9" />
         </svg>
         <div>
-          <h2 className="behind-name-title">Behind the name</h2>
-          <p>
-            A celestial connection: Callisto is a moon of Jupiter. In Greek mythology, the figure Callisto became Ursa Major, the Great Bear. For Blockallisto,
-            that offers a visual metaphor: individual points coming together into a greater whole.
-          </p>
+          <h2 className="behind-name-title">{m.home.behindTitle}</h2>
+          <p>{m.home.behindText}</p>
         </div>
       </section>
 
-      <section aria-label="How investing works">
-        <h2 className="section-title">4 steps to your first contribution</h2>
+      <section aria-label={m.home.stepsAria}>
+        <h2 className="section-title">{m.home.stepsTitle}</h2>
         <ol className="step-cards">
-          {STEPS.map((s) => (
-            <li key={s.n} className="step-card">
+          {m.home.steps.map((s, i) => (
+            <li key={i} className="step-card">
               <span className="step-num" aria-hidden="true">
-                {s.n}
+                {i + 1}
               </span>
               <h3>{s.title}</h3>
               <p>{s.text}</p>
@@ -50,16 +41,16 @@ export default function Home({ market }: { market: Market }) {
           ))}
         </ol>
         <p className="section-link">
-          <a href={routeHash({ name: 'how-it-works' })}>Full investor journey, with each step marked live or planned</a>
+          <a href={routeHash({ name: 'how-it-works' })}>{m.home.fullJourneyLink}</a>
         </p>
       </section>
 
       {latest.length > 0 && (
-        <section aria-label="Latest campaigns">
+        <section aria-label={m.home.latestAria}>
           <div className="registry-bar">
-            <h2 className="section-title">Latest campaigns</h2>
+            <h2 className="section-title">{m.home.latestTitle}</h2>
             <a className="btn btn-ghost" href={routeHash({ name: 'investments' })}>
-              All investments
+              {m.home.allInvestments}
             </a>
           </div>
           <div className="card-grid">
@@ -67,7 +58,7 @@ export default function Home({ market }: { market: Market }) {
               <CampaignCard
                 key={c.id}
                 campaign={c}
-                profile={profileFor(c, fixtureMode)}
+                profile={profileFor(c, fixtureMode, m.profiles.list)}
                 actor={market.actor}
                 busy={market.busy}
                 readOnly={fixtureMode}
@@ -81,16 +72,11 @@ export default function Home({ market }: { market: Market }) {
         </section>
       )}
 
-      <section aria-label="Instrument classes">
-        <h2 className="section-title">Instrument classes this design covers</h2>
-        <p>
-          The platform design covers four participation-side parents (participation right / certificate - with Substanzgenussrecht as a subtype - share,
-          indirect participation as an ownership structure, and limited partnership interest) and two debt parents, loan and bond, each issued senior,
-          subordinated or with seniority unspecified, plus structure overlays such as zero-coupon and convertible. This prototype implements contract escrow
-          only; the classes below are educational.
-        </p>
+      <section aria-label={m.home.instrumentsAria}>
+        <h2 className="section-title">{m.home.instrumentsTitle}</h2>
+        <p>{m.home.instrumentsIntro}</p>
         <div className="instrument-grid">
-          {INSTRUMENT_CLASSES.map((c) => (
+          {m.instruments.classes.map((c) => (
             <a key={c.id} className="instrument-tile" href={routeHash({ name: 'learn' })}>
               <h3>{c.label}</h3>
               {c.subtypeOf && <p className="instrument-sub">{c.subtypeOf}</p>}
@@ -100,13 +86,12 @@ export default function Home({ market }: { market: Market }) {
         </div>
       </section>
 
-      <section aria-label="Why this platform">
-        <h2 className="section-title">Why this approach</h2>
+      <section aria-label={m.home.whyAria}>
+        <h2 className="section-title">{m.home.whyTitle}</h2>
         <ul className="why-list">
-          <li>Funding rules enforced by a public contract, not by platform bookkeeping.</li>
-          <li>All-or-nothing protection: contributors sign their own refund if the goal is missed.</li>
-          <li>Every transaction is verifiable on a public test network.</li>
-          <li>Open design: instrument classes, investor journey and compliance surface documented in the repository.</li>
+          {m.home.whyPoints.map((p, i) => (
+            <li key={i}>{p}</li>
+          ))}
         </ul>
       </section>
     </>

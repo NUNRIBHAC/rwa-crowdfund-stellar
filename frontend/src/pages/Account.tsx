@@ -4,6 +4,7 @@ import { campaignStatus } from '../components/CampaignCard';
 import type { Campaign } from '../types';
 import { formatAmount, shorten } from '../format';
 import { routeHash } from '../router';
+import { useI18n } from '../i18n';
 
 const INTENT_KEY = 'rwa-soroban-intent';
 
@@ -13,14 +14,8 @@ type Row = { id: string; name: string; balance: string; status: PortfolioStatus 
 
 // Prototype mapping from the contract lifecycle to the portfolio tabs. The
 // reference platform (blueprint section 7A) uses All / Canceled / Pending /
-// Paid / Completed; the labels are kept, the meanings below are ours.
-const TABS: { id: PortfolioStatus | 'all'; label: string }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'canceled', label: 'Canceled' },
-  { id: 'pending', label: 'Pending' },
-  { id: 'paid', label: 'Paid' },
-  { id: 'completed', label: 'Completed' },
-];
+// Paid / Completed; the label keys are kept, the meanings below are ours.
+const TAB_IDS: (PortfolioStatus | 'all')[] = ['all', 'canceled', 'pending', 'paid', 'completed'];
 
 function rowStatus(c: Campaign): PortfolioStatus {
   const s = campaignStatus(c);
@@ -28,22 +23,6 @@ function rowStatus(c: Campaign): PortfolioStatus {
   if (s === 'funded') return 'completed';
   return 'canceled';
 }
-
-const CHECKLIST: { label: string; note: string }[] = [
-  { label: 'Personal data', note: 'Not collected in this prototype.' },
-  { label: 'Address data', note: 'Not collected in this prototype.' },
-  { label: 'Contact details', note: 'Not collected in this prototype.' },
-  { label: 'Security', note: 'Wallet-based access (Freighter). No password or two-factor app in this prototype.' },
-  { label: 'Investor qualification', note: 'Knowledge test and loss-capacity check are planned compliance steps; not implemented here.' },
-  { label: 'Verification (KYC)', note: 'Not implemented. This testnet prototype verifies no identity.' },
-  { label: 'Bank details', note: 'Not collected. Contributions and refunds move as testnet USDC on-chain.' },
-  { label: 'Depot data', note: 'Optional securities-account reference on the reference platform; not collected here.' },
-  {
-    label: 'Digital locker',
-    note: 'Planned custody view of held positions. Here, positions live in each campaign contract and are read per connected wallet.',
-  },
-  { label: 'Company accounts', note: 'The reference platform lets a verified investor add a company account; not implemented in this prototype.' },
-];
 
 function readIntent(): { action?: string; campaign?: string; status?: string } | null {
   try {
@@ -55,6 +34,7 @@ function readIntent(): { action?: string; campaign?: string; status?: string } |
 }
 
 export default function Account({ market }: { market: Market }) {
+  const { locale, m } = useI18n();
   const { campaigns, actor, fixtureMode } = market;
   const [tab, setTab] = useState<PortfolioStatus | 'all'>('all');
   const intent = useMemo(readIntent, []);
@@ -71,110 +51,102 @@ export default function Account({ market }: { market: Market }) {
 
   return (
     <>
-      <h1 className="page-title">My account</h1>
+      <h1 className="page-title">{m.account.title}</h1>
       <p className="account-note" role="note">
-        Prototype layout of an investor account area, modeled on the logged-in dashboard documented in{' '}
-        <code>docs/conda-capital-platform-blueprint-2026-10-30.md</code> (section 7A). No personal data is collected on this page; positions come from your
-        connected Freighter wallet on Stellar testnet and are worthless.
+        {m.account.notePre} <code>docs/conda-capital-platform-blueprint-2026-10-30.md</code> {m.account.notePost}
       </p>
 
-      <section aria-label="Portfolio summary">
+      <section aria-label={m.account.summaryAria}>
         <div className="account-stats">
           <div className="account-stat">
-            <h2>Total contributed</h2>
-            <p className="account-stat-value">{hasPositions ? `${formatAmount(total.toString())} USDC` : '\u2014'}</p>
-            <p className="account-stat-sub">Escrowed on-chain, summed over campaigns</p>
+            <h2>{m.account.totalContributed}</h2>
+            <p className="account-stat-value">{hasPositions ? `${formatAmount(total.toString(), locale)} USDC` : '—'}</p>
+            <p className="account-stat-sub">{m.account.totalSub}</p>
           </div>
           <div className="account-stat">
-            <h2>Return received</h2>
-            <p className="account-stat-value">Not available</p>
-            <p className="account-stat-sub">This prototype tracks no payout history</p>
+            <h2>{m.account.returnReceived}</h2>
+            <p className="account-stat-value">{m.account.returnNa}</p>
+            <p className="account-stat-sub">{m.account.returnSub}</p>
           </div>
           <div className="account-stat">
-            <h2>Active investments</h2>
-            <p className="account-stat-value">{hasPositions ? String(active) : '\u2014'}</p>
-            <p className="account-stat-sub">Escrowed positions in open or funded campaigns</p>
+            <h2>{m.account.activeInvestments}</h2>
+            <p className="account-stat-value">{hasPositions ? String(active) : '—'}</p>
+            <p className="account-stat-sub">{m.account.activeSub}</p>
           </div>
         </div>
-        {!actor && <p>Connect your Freighter wallet to see your testnet positions. Without a wallet this page shows the layout only.</p>}
-        {fixtureMode && <p>Sample campaigns are on screen; sample data carries no per-wallet positions.</p>}
+        {!actor && <p>{m.account.connectNote}</p>}
+        {fixtureMode && <p>{m.account.fixtureNote}</p>}
       </section>
 
-      <section aria-label="My investments">
+      <section aria-label={m.account.investmentsAria}>
         <div className="registry-bar">
-          <h2 className="section-title">My investments</h2>
+          <h2 className="section-title">{m.account.myInvestments}</h2>
           <a className="btn btn-ghost" href={routeHash({ name: 'investments' })}>
-            New investments
+            {m.account.newInvestments}
           </a>
         </div>
-        <div className="filter-chips" role="group" aria-label="Filter portfolio by status">
-          {TABS.map((t) => {
-            const count = t.id === 'all' ? rows.length : rows.filter((r) => r.status === t.id).length;
+        <div className="filter-chips" role="group" aria-label={m.account.filterAria}>
+          {TAB_IDS.map((id) => {
+            const count = id === 'all' ? rows.length : rows.filter((r) => r.status === id).length;
             return (
-              <button key={t.id} className={`chip ${tab === t.id ? 'chip-active' : ''}`} aria-pressed={tab === t.id} onClick={() => setTab(t.id)}>
-                {t.label} ({count})
+              <button key={id} className={`chip ${tab === id ? 'chip-active' : ''}`} aria-pressed={tab === id} onClick={() => setTab(id)}>
+                {m.account.tabs[id]} ({count})
               </button>
             );
           })}
         </div>
-        <p className="account-tabnote">
-          Prototype mapping: Pending = contribution escrowed, campaign open. Paid = campaign funded, still running. Completed = campaign ended after funding.
-          Canceled = ended without reaching the goal; a contributor-signed refund is available on the campaign page.
-        </p>
+        <p className="account-tabnote">{m.account.tabNote}</p>
         {shown.length === 0 ? (
-          <p className="empty-state">No investments found.</p>
+          <p className="empty-state">{m.account.noInvestments}</p>
         ) : (
           <ul className="portfolio-list">
             {shown.map((r) => (
               <li key={r.id} className="portfolio-row">
                 <a href={routeHash({ name: 'campaign', campaignId: r.id })}>{r.name}</a>
-                <span className="portfolio-amount">{formatAmount(r.balance)} USDC</span>
-                <span className={`status-chip status-${r.status}`}>{TABS.find((t) => t.id === r.status)?.label}</span>
+                <span className="portfolio-amount">{formatAmount(r.balance, locale)} USDC</span>
+                <span className={`status-chip status-${r.status}`}>{m.account.tabs[r.status]}</span>
               </li>
             ))}
           </ul>
         )}
       </section>
 
-      <section aria-label="Recent activity">
-        <h2 className="section-title">Recent activity</h2>
+      <section aria-label={m.account.activityAria}>
+        <h2 className="section-title">{m.account.recentActivity}</h2>
         {intent ? (
           <p>
-            Saved transaction: {intent.action ?? 'action'} on campaign <code>{intent.campaign ?? 'unknown'}</code> - status{' '}
-            <strong>{intent.status ?? 'unknown'}</strong>. Resume or clear it from the transaction panel above.
+            {m.account.savedTxPre} {m.intent.actionLabels[intent.action ?? ''] ?? intent.action ?? 'action'} {m.account.savedTxOn}{' '}
+            <code>{intent.campaign ?? m.account.savedTxUnknown}</code> - {m.account.savedTxStatus}{' '}
+            <strong>{m.intent.statusLabels[intent.status ?? ''] ?? intent.status ?? m.account.savedTxUnknown}</strong>. {m.account.savedTxPost}
           </p>
         ) : (
-          <p>No activity found.</p>
+          <p>{m.account.noActivity}</p>
         )}
       </section>
 
-      <section aria-label="Wallet">
-        <h2 className="section-title">My wallet</h2>
+      <section aria-label={m.account.walletAria}>
+        <h2 className="section-title">{m.account.myWallet}</h2>
         {actor ? (
           <p>
-            Connected: <code title={actor}>{shorten(actor)}</code>. Contributions are escrowed by the campaign contracts; refunds are contributor-signed
-            on-chain. No platform-held funds exist in this prototype.
+            {m.account.walletConnectedPre} <code title={actor}>{shorten(actor)}</code>. {m.account.walletConnectedPost}
           </p>
         ) : (
-          <p>No wallet connected.</p>
+          <p>{m.account.noWallet}</p>
         )}
       </section>
 
-      <section aria-label="Account and profile checklist">
-        <h2 className="section-title">Account overview and profile data</h2>
-        <p>
-          The reference platform gates investing behind profile completion, verification and bank details. This prototype collects none of them; the checklist
-          shows the structure as planned placeholders.
-        </p>
+      <section aria-label={m.account.checklistAria}>
+        <h2 className="section-title">{m.account.checklistTitle}</h2>
+        <p>{m.account.checklistIntro}</p>
         <ul className="account-checklist">
-          {CHECKLIST.map((item) => (
+          {m.account.checklist.map((item) => (
             <li key={item.label} className="account-checklist-item">
               <span className="account-checklist-marker" aria-hidden="true" />
               <div>
                 <h3>{item.label}</h3>
                 <p>{item.note}</p>
               </div>
-              <span className="status-chip status-ended">Not set up</span>
+              <span className="status-chip status-ended">{m.account.notSetUp}</span>
             </li>
           ))}
         </ul>

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { FAQ_CATEGORIES, FAQ_STATE_LABELS, type FaqState } from '../data/faq';
+import type { FaqState } from '../data/faq';
+import { useI18n } from '../i18n';
 
 const STATE_CLASS: Record<FaqState, string> = {
   live: 'status-funded',
@@ -8,26 +9,27 @@ const STATE_CLASS: Record<FaqState, string> = {
 };
 
 export default function Faq() {
+  const { m } = useI18n();
   const [cat, setCat] = useState<string>('all');
   const [query, setQuery] = useState('');
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return FAQ_CATEGORIES.filter((c) => cat === 'all' || c.id === cat)
+    return m.faq.categories
+      .filter((c) => cat === 'all' || c.id === cat)
       .map((c) => ({
         ...c,
         entries: q ? c.entries.filter((e) => `${e.q} ${e.a}`.toLowerCase().includes(q)) : c.entries,
       }))
       .filter((c) => c.entries.length > 0);
-  }, [cat, query]);
+  }, [cat, query, m]);
 
   return (
     <>
-      <h1 className="page-title">Frequently asked questions</h1>
+      <h1 className="page-title">{m.faqPage.title}</h1>
       <p>
-        Answers are tagged like the How it works page: <strong>Live in prototype</strong> describes what the code does today,{' '}
-        <strong>Planned - not built</strong> is not implemented anywhere, and <strong>General background</strong> explains crowdfunding practice without
-        claiming this platform does it.
+        {m.faqPage.introPre} <strong>{m.faqPage.introLive}</strong> {m.faqPage.introMid1} <strong>{m.faqPage.introPlanned}</strong> {m.faqPage.introMid2}{' '}
+        <strong>{m.faqPage.introInfo}</strong> {m.faqPage.introPost}
       </p>
       <div className="faq-controls">
         <input
@@ -35,21 +37,21 @@ export default function Faq() {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search questions and answers"
-          aria-label="Search questions"
+          placeholder={m.faqPage.searchPlaceholder}
+          aria-label={m.faqPage.searchAria}
         />
-        <div className="tab-bar" role="group" aria-label="FAQ category">
+        <div className="tab-bar" role="group" aria-label={m.faqPage.categoryAria}>
           <button className={`chip ${cat === 'all' ? 'chip-active' : ''}`} aria-pressed={cat === 'all'} onClick={() => setCat('all')}>
-            All
+            {m.faqPage.all}
           </button>
-          {FAQ_CATEGORIES.map((c) => (
+          {m.faq.categories.map((c) => (
             <button key={c.id} className={`chip ${cat === c.id ? 'chip-active' : ''}`} aria-pressed={cat === c.id} onClick={() => setCat(c.id)}>
               {c.title}
             </button>
           ))}
         </div>
       </div>
-      {visible.length === 0 && <p role="status">No questions match your search.</p>}
+      {visible.length === 0 && <p role="status">{m.faqPage.noMatches}</p>}
       {visible.map((c) => (
         <section key={c.id} aria-label={c.title} className="faq-category">
           <h2 className="section-title">{c.title}</h2>
@@ -57,7 +59,9 @@ export default function Faq() {
             <details key={e.q} className="accordion">
               <summary>
                 <span>{e.q}</span>
-                <span className={`status-chip faq-state ${STATE_CLASS[e.state]}`}>{FAQ_STATE_LABELS[e.state]}</span>
+                <span className={`status-chip faq-state ${STATE_CLASS[(e.state as FaqState) ?? 'info']}`}>
+                  {(m.faq.stateLabels as Record<string, string>)[e.state] ?? e.state}
+                </span>
               </summary>
               <p>{e.a}</p>
             </details>

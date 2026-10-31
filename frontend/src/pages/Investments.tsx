@@ -3,8 +3,10 @@ import type { Market } from '../market';
 import CampaignCard, { campaignStatus, type CampaignStatus } from '../components/CampaignCard';
 import EmptyState from '../components/EmptyState';
 import { categoriesFor, profileFor } from '../data/profiles';
+import { useI18n } from '../i18n';
 
 export default function Investments({ market }: { market: Market }) {
+  const { m } = useI18n();
   const { campaigns, loaded, fixtureMode } = market;
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | CampaignStatus>('all');
@@ -12,13 +14,13 @@ export default function Investments({ market }: { market: Market }) {
   const [sortBy, setSortBy] = useState<'deadline' | 'progress' | 'name'>('deadline');
   const [view, setView] = useState<'grid' | 'list'>('grid');
 
-  const categories = useMemo(() => categoriesFor(campaigns, fixtureMode), [campaigns, fixtureMode]);
+  const categories = useMemo(() => categoriesFor(campaigns, fixtureMode, m.profiles.list), [campaigns, fixtureMode, m]);
 
   const q = query.trim().toLowerCase();
   const shown = campaigns
     .filter((c) => !q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q))
     .filter((c) => statusFilter === 'all' || campaignStatus(c) === statusFilter)
-    .filter((c) => category === 'all' || profileFor(c, fixtureMode)?.category === category)
+    .filter((c) => category === 'all' || profileFor(c, fixtureMode, m.profiles.list)?.category === category)
     .sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name);
       if (sortBy === 'progress') {
@@ -36,7 +38,7 @@ export default function Investments({ market }: { market: Market }) {
     <CampaignCard
       key={c.id}
       campaign={c}
-      profile={profileFor(c, fixtureMode)}
+      profile={profileFor(c, fixtureMode, m.profiles.list)}
       actor={market.actor}
       busy={market.busy}
       readOnly={fixtureMode}
@@ -49,15 +51,11 @@ export default function Investments({ market }: { market: Market }) {
 
   return (
     <>
-      <h1 className="page-title">All investments</h1>
+      <h1 className="page-title">{m.invest.title}</h1>
       <div className="registry-bar">
-        <p className="registry-note">
-          {fixtureMode
-            ? 'Sample campaigns demonstrate the layout. They are not deployed contracts and cannot accept contributions.'
-            : 'Live campaigns are Soroban contracts on Stellar testnet. Testnet assets are worthless.'}
-        </p>
+        <p className="registry-note">{fixtureMode ? m.invest.noteFixture : m.invest.noteLive}</p>
         <button className="btn btn-ghost" disabled={market.busy || fixtureMode} onClick={market.onRefresh}>
-          Refresh contract state
+          {m.invest.refresh}
         </button>
       </div>
 
@@ -67,10 +65,10 @@ export default function Investments({ market }: { market: Market }) {
             className="discovery-search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search campaigns by name or contract"
-            aria-label="Search campaigns"
+            placeholder={m.invest.searchPlaceholder}
+            aria-label={m.invest.searchAria}
           />
-          <div className="filter-chips" role="group" aria-label="Filter by status">
+          <div className="filter-chips" role="group" aria-label={m.invest.filterStatusAria}>
             {(['all', 'open', 'funded', 'ended'] as const).map((f) => (
               <button
                 key={f}
@@ -78,14 +76,14 @@ export default function Investments({ market }: { market: Market }) {
                 aria-pressed={statusFilter === f}
                 onClick={() => setStatusFilter(f)}
               >
-                {f === 'all' ? 'All' : f === 'open' ? 'Open' : f === 'funded' ? 'Funded' : 'Underfunded'}
+                {f === 'all' ? m.invest.all : f === 'open' ? m.invest.open : f === 'funded' ? m.invest.funded : m.invest.underfunded}
               </button>
             ))}
           </div>
           {categories.length > 0 && (
-            <div className="filter-chips" role="group" aria-label="Filter by industry">
+            <div className="filter-chips" role="group" aria-label={m.invest.filterIndustryAria}>
               <button className={`chip ${category === 'all' ? 'chip-active' : ''}`} aria-pressed={category === 'all'} onClick={() => setCategory('all')}>
-                All industries
+                {m.invest.allIndustries}
               </button>
               {categories.map((cat) => (
                 <button key={cat} className={`chip ${category === cat ? 'chip-active' : ''}`} aria-pressed={category === cat} onClick={() => setCategory(cat)}>
@@ -98,18 +96,18 @@ export default function Investments({ market }: { market: Market }) {
             className="discovery-sort"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
-            aria-label="Sort campaigns"
+            aria-label={m.invest.sortAria}
           >
-            <option value="deadline">Deadline soonest</option>
-            <option value="progress">Most funded</option>
-            <option value="name">Name A-Z</option>
+            <option value="deadline">{m.invest.sortDeadline}</option>
+            <option value="progress">{m.invest.sortProgress}</option>
+            <option value="name">{m.invest.sortName}</option>
           </select>
-          <div className="filter-chips" role="group" aria-label="View mode">
+          <div className="filter-chips" role="group" aria-label={m.invest.viewAria}>
             <button className={`chip ${view === 'grid' ? 'chip-active' : ''}`} aria-pressed={view === 'grid'} onClick={() => setView('grid')}>
-              Grid
+              {m.invest.grid}
             </button>
             <button className={`chip ${view === 'list' ? 'chip-active' : ''}`} aria-pressed={view === 'list'} onClick={() => setView('list')}>
-              List
+              {m.invest.list}
             </button>
           </div>
         </div>
@@ -117,7 +115,7 @@ export default function Investments({ market }: { market: Market }) {
 
       {campaigns.length > 0 && shown.length === 0 && (
         <p className="no-matches" role="status">
-          No campaigns match the current search and filters.
+          {m.invest.noMatches}
         </p>
       )}
 
@@ -125,14 +123,14 @@ export default function Investments({ market }: { market: Market }) {
       {fixtureMode && <EmptyState fixtureMode onToggleFixtures={market.onToggleFixtures} />}
 
       {active.length > 0 && (
-        <section aria-label="Active investments">
-          <h2 className="section-title">Active investments</h2>
+        <section aria-label={m.invest.activeAria}>
+          <h2 className="section-title">{m.invest.activeTitle}</h2>
           <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{active.map(renderCard)}</div>
         </section>
       )}
       {completed.length > 0 && (
-        <section aria-label="Completed investments">
-          <h2 className="section-title">Completed investments</h2>
+        <section aria-label={m.invest.completedAria}>
+          <h2 className="section-title">{m.invest.completedTitle}</h2>
           <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{completed.map(renderCard)}</div>
         </section>
       )}
