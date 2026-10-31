@@ -79,17 +79,6 @@ export default function Learn() {
           ))}
         </div>
       </section>
-
-      <section aria-label={m.learn.glossaryAria}>
-        <h2 className="section-title">{m.learn.glossaryTitle}</h2>
-        <p>
-          {m.learn.glossaryPre} <a href={routeHash({ name: 'glossary' })}>{m.learn.glossaryLink}</a>.
-        </p>
-      </section>
-
-      <p className="section-link">
-        {m.learn.riskPre} <a href={routeHash({ name: 'risk-warnings' })}>{m.learn.riskLink}</a>.
-      </p>
     </>
   );
 }
