@@ -1520,7 +1520,6 @@ export const ar: Messages = {
     feedbackPanelIntro: 'أخبرنا بما ينجح وما لا ينجح. تُحفظ الملاحظات كتذكرة دعم لا يراها سواك أنت والمشغل.',
     feedbackSignInPrompt: 'سجّل الدخول بمحفظتك لإرسال الملاحظات.',
     feedbackSubmitted: 'شكرًا - تم إرسال ملاحظاتك.',
-    feedbackAnother: 'إرسال ملاحظات أخرى',
     feedbackClose: 'إغلاق',
   },
 };

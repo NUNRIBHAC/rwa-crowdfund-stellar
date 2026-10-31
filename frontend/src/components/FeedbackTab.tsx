@@ -78,22 +78,7 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
               )}
             </>
           ) : done ? (
-            <>
-              <p className="community-note">{labels.feedbackSubmitted}</p>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  // Intentional fresh form: clearing here, not after submit,
-                  // so a re-render can never resend the same ticket.
-                  setSubject('');
-                  setBody('');
-                  setError('');
-                  setDone(false);
-                }}
-              >
-                {labels.feedbackAnother}
-              </button>
-            </>
+            <p className="community-note">{labels.feedbackSubmitted}</p>
           ) : (
             <form onSubmit={submit}>
               <label>
@@ -115,7 +100,19 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
               </button>
             </form>
           )}
-          <button className="btn" onClick={() => setOpen(false)}>
+          <button
+            className="btn"
+            onClick={() => {
+              // After a successful send, closing finishes it: the next open
+              // starts with a fresh empty form. Fields were already cleared
+              // on submit, so nothing old can be resent or leak back.
+              if (done) {
+                setDone(false);
+                setError('');
+              }
+              setOpen(false);
+            }}
+          >
             {labels.feedbackClose}
           </button>
         </div>

@@ -1416,7 +1416,6 @@ export const zhTW: Messages = {
     feedbackPanelIntro: '告訴我們哪些好用、哪些不好用。意見回饋會儲存為支援工單,僅您和營運者可見。',
     feedbackSignInPrompt: '請使用錢包登入後送出意見回饋。',
     feedbackSubmitted: '謝謝 - 您的意見回饋已送出。',
-    feedbackAnother: '再傳送一則意見回饋',
     feedbackClose: '關閉',
   },
 };

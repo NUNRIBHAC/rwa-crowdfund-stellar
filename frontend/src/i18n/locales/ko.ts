@@ -1511,7 +1511,6 @@ export const ko: Messages = {
     feedbackPanelIntro: '잘 되는 점과 안 되는 점을 알려 주세요. 피드백은 지원 티켓으로 저장되며 본인과 운영자만 볼 수 있습니다.',
     feedbackSignInPrompt: '피드백을 보내려면 지갑으로 로그인하세요.',
     feedbackSubmitted: '감사합니다 - 피드백이 전송되었습니다.',
-    feedbackAnother: '다른 피드백 보내기',
     feedbackClose: '닫기',
   },
 };

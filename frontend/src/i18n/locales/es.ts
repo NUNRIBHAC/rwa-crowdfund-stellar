@@ -1635,7 +1635,6 @@ export const es: Messages = {
     feedbackPanelIntro: 'Cuéntanos qué funciona y qué no. Los comentarios se guardan como un ticket de soporte visible solo para ti y el operador.',
     feedbackSignInPrompt: 'Inicia sesión con tu monedero para enviar comentarios.',
     feedbackSubmitted: 'Gracias - tus comentarios se han enviado.',
-    feedbackAnother: 'Enviar otro comentario',
     feedbackClose: 'Cerrar',
   },
 };

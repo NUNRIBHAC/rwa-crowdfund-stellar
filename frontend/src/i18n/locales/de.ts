@@ -1615,7 +1615,6 @@ export const de: Messages = {
       'Sag uns, was funktioniert und was nicht. Feedback wird als Support-Ticket gespeichert, das nur für dich und den Betreiber sichtbar ist.',
     feedbackSignInPrompt: 'Melde dich mit deiner Wallet an, um Feedback zu senden.',
     feedbackSubmitted: 'Danke - dein Feedback wurde gesendet.',
-    feedbackAnother: 'Weiteres Feedback senden',
     feedbackClose: 'Schließen',
   },
 };

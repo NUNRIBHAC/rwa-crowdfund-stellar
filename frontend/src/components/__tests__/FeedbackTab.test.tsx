@@ -79,7 +79,7 @@ test('connected but not signed in offers the challenge sign-in in place', () => 
   expect(signIn).toHaveBeenCalledWith(actor);
 });
 
-test('after a successful send, "Send another feedback" resets to a fresh empty form', () => {
+test('closing after a successful send resets the panel: reopening shows a fresh empty form', () => {
   authState({ account: { publicKey: actor }, token: 'tok' });
   render(
     <I18nProvider>
@@ -91,11 +91,11 @@ test('after a successful send, "Send another feedback" resets to a fresh empty f
   const body = screen.getByText('Message').parentElement!.querySelector('textarea')!;
   fireEvent.change(subject, { target: { value: 'First' } });
   fireEvent.change(body, { target: { value: 'First body' } });
-  // Simulate the submit path completing: the component sets done after the
-  // createTicket promise resolves; drive it through the real form submit.
   fireEvent.submit(subject.closest('form')!);
   return waitFor(() => screen.getByText('Thank you - your feedback was sent.')).then(() => {
-    fireEvent.click(screen.getByRole('button', { name: 'Send another feedback' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    expect(screen.queryByText('Send feedback')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Feedback' }));
     const freshSubject = screen.getByText('Subject').parentElement!.querySelector('input')!;
     const freshBody = screen.getByText('Message').parentElement!.querySelector('textarea')!;
     expect(freshSubject.value).toBe('');

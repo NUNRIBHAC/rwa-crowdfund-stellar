@@ -1541,7 +1541,6 @@ export const ja: Messages = {
     feedbackPanelIntro: '良い点も悪い点もお聞かせください。フィードバックはサポートチケットとして保存され、あなたとオペレーターだけが見られます。',
     feedbackSignInPrompt: 'フィードバックを送るにはウォレットでサインインしてください。',
     feedbackSubmitted: 'ありがとうございます - フィードバックを送信しました。',
-    feedbackAnother: '別のフィードバックを送信',
     feedbackClose: '閉じる',
   },
 };

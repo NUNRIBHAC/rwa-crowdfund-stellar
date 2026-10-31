@@ -1633,7 +1633,6 @@ export const pt: Messages = {
       'Diga-nos o que funciona e o que não funciona. O feedback é guardado como um pedido de suporte visível apenas para si e para a operadora.',
     feedbackSignInPrompt: 'Inicie sessão com a sua carteira para enviar feedback.',
     feedbackSubmitted: 'Obrigado - o seu feedback foi enviado.',
-    feedbackAnother: 'Enviar outro feedback',
     feedbackClose: 'Fechar',
   },
 };
