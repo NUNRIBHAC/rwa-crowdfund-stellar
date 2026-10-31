@@ -152,6 +152,29 @@ export const fetchNews = (campaignId: string) => call<{ news: NewsPost[] }>(`/ap
 // --- Site-wide news feed (public) ---
 export const fetchNewsFeed = () => call<{ news: NewsPost[] }>('/api/news');
 
+// --- Owner-scoped notifications ---
+// Server-generated from real events on the owner's own content only; kinds
+// are stable so the UI renders localized titles while the body stays the
+// server's English fallback (bodies embed dynamic project/subject text).
+export type NotificationKind = 'application_received' | 'application_status' | 'comment_moderated' | 'ticket_closed';
+
+export type CommunityNotification = {
+  id: string;
+  kind: NotificationKind;
+  title: string;
+  body: string;
+  refId: string | null;
+  createdAt: number;
+  readAt: number | null;
+};
+
+export const fetchNotifications = (token: string) => call<{ notifications: CommunityNotification[]; unreadCount: number }>('/api/notifications', { token });
+
+export const markNotificationRead = (token: string, id: string) =>
+  call<{ ok: true }>(`/api/notifications/${encodeURIComponent(id)}/read`, { method: 'POST', body: {}, token });
+
+export const markAllNotificationsRead = (token: string) => call<{ marked: number }>('/api/notifications/read-all', { method: 'POST', body: {}, token });
+
 // --- Support and feedback tickets ---
 export const createTicket = (token: string, input: { kind: 'support' | 'feedback'; subject: string; body: string }) =>
   call<{ ticket: Ticket }>('/api/support/tickets', { body: input, token });
