@@ -414,7 +414,7 @@ export const en = {
   financing: {
     title: 'Financing for companies',
     intro:
-      'Raise capital from the crowd through a Soroban contract with all-or-nothing funding. This page describes the intended issuer journey; onboarding is not open in this prototype.',
+      'Raise capital from the crowd through a Soroban contract with all-or-nothing funding. Signed-in wallets can submit an issuer application below; applications are stored for operator review. Submitting is not onboarding, listing or approval, and no financing is offered.',
     journeyAria: 'Issuer journey overview',
     journeyTitle: 'The intended journey',
     steps: [
@@ -447,7 +447,8 @@ export const en = {
   },
   account: {
     title: 'My account',
-    notePre: 'Prototype layout of an investor account area, modeled on the logged-in dashboard documented in',
+    notePre:
+      'Your account area: this wallet testnet positions and the community activity saved under it (testnet assets only - no real funds or returns). Layout modeled on the logged-in dashboard documented in',
     notePost:
       '(section 7A). Positions come from your connected Freighter wallet on Stellar testnet and are worthless. The optional community sign-in and the support and issuer forms on this page process the data you enter as described in the privacy policy.',
     summaryAria: 'Portfolio summary',
@@ -1030,7 +1031,7 @@ export const en = {
         entries: [
           {
             q: 'Can I list my company today?',
-            a: 'No. Issuer onboarding is not open in this prototype. The campaign registry is configured by the operator and currently holds only the demo campaign.',
+            a: 'You can submit an issuer application from the Financing page; the operator reviews applications off-site and nothing is listed automatically. The campaign registry currently holds only the demo campaign.',
             state: 'planned',
           },
           {
