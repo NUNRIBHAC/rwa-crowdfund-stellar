@@ -12,6 +12,9 @@ export type CommunityAuthState = {
   /** null = signed out. */
   account: CommunityAccount | null;
   token: string;
+  /** Server-reported OPERATOR_WALLETS membership (display hint only; the
+      operator API re-checks the allow-list on every request). */
+  isOperator: boolean;
   busy: boolean;
   error: string;
   /** True once the stored token (if any) has been checked against the server. */
@@ -33,6 +36,7 @@ type Messages = {
 export function CommunityAuthProvider({ children, messages }: { children: ReactNode; messages: Messages }) {
   const [account, setAccount] = useState<CommunityAccount | null>(null);
   const [token, setToken] = useState('');
+  const [isOperator, setIsOperator] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [restored, setRestored] = useState(false);
@@ -45,9 +49,10 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       return;
     }
     fetchMe(stored)
-      .then(({ account }) => {
+      .then(({ account, isOperator }) => {
         setToken(stored);
         setAccount(account);
+        setIsOperator(isOperator === true);
       })
       .catch(() => saveCommunityToken(''))
       .finally(() => setRestored(true));
@@ -72,6 +77,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         saveCommunityToken(v.token);
         setToken(v.token);
         setAccount(v.account);
+        setIsOperator(v.isOperator === true);
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       } finally {
@@ -90,6 +96,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       saveCommunityToken('');
       setToken('');
       setAccount(null);
+      setIsOperator(false);
       setBusy(false);
     }
   }, [token]);
@@ -115,6 +122,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     () => ({
       account,
       token,
+      isOperator,
       busy,
       error,
       restored,
@@ -123,7 +131,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setDisplayName: setName,
       clearError: () => setError(''),
     }),
-    [account, token, busy, error, restored, signIn, signOut, setName],
+    [account, token, isOperator, busy, error, restored, signIn, signOut, setName],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

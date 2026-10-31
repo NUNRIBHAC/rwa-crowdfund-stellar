@@ -121,11 +121,11 @@ export const requestChallenge = (publicKey: string) =>
   });
 
 export const verifyChallenge = (publicKey: string, signature: string) =>
-  call<{ token: string; expiresAt: number; account: CommunityAccount }>('/api/auth/verify', { body: { publicKey, signature } });
+  call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/verify', { body: { publicKey, signature } });
 
 export const logout = (token: string) => call<{ ok: true }>('/api/auth/logout', { method: 'POST', body: {}, token });
 
-export const fetchMe = (token: string) => call<{ account: CommunityAccount }>('/api/auth/me', { token });
+export const fetchMe = (token: string) => call<{ account: CommunityAccount; isOperator?: boolean }>('/api/auth/me', { token });
 
 export const updateDisplayName = (token: string, displayName: string) =>
   call<{ account: CommunityAccount }>('/api/auth/me', {
@@ -183,9 +183,25 @@ export const markAllNotificationsRead = (token: string) => call<{ marked: number
 export const fetchOperatorApplications = (token: string) => call<{ applications: IssuerApplication[] }>('/api/operator/issuer-applications', { token });
 export const setOperatorApplicationStatus = (token: string, id: string, status: string) =>
   call<{ ok: true }>(`/api/operator/issuer-applications/${encodeURIComponent(id)}/status`, { method: 'POST', body: { status }, token });
-export const fetchOperatorComments = (token: string) => call<{ comments: OwnComment[] }>('/api/operator/comments', { token });
+// Operator comment rows carry the moderation fields (raw author key, hidden
+// state/reason), unlike the public CommunityComment author-label shape.
+export type OperatorComment = {
+  id: string;
+  campaignId: string;
+  publicKey: string;
+  displayName: string | null;
+  body: string;
+  createdAt: number;
+  hiddenAt: number | null;
+  hiddenReason: string | null;
+};
+export const fetchOperatorComments = (token: string) => call<{ comments: OperatorComment[] }>('/api/operator/comments', { token });
 export const setOperatorCommentHidden = (token: string, id: string, hidden: boolean, reason?: string) =>
-  call<{ ok: true }>(`/api/operator/comments/${encodeURIComponent(id)}/${hidden ? 'hide' : 'unhide'}`, { method: 'POST', body: reason ? { reason } : {}, token });
+  call<{ ok: true }>(`/api/operator/comments/${encodeURIComponent(id)}/${hidden ? 'hide' : 'unhide'}`, {
+    method: 'POST',
+    body: reason ? { reason } : {},
+    token,
+  });
 export const fetchOperatorTickets = (token: string) => call<{ tickets: Ticket[] }>('/api/operator/tickets', { token });
 export const closeOperatorTicket = (token: string, id: string) =>
   call<{ ok: true }>(`/api/operator/tickets/${encodeURIComponent(id)}/close`, { method: 'POST', body: {}, token });

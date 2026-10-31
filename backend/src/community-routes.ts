@@ -75,7 +75,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     try {
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`verify-ip:${ip}`, 60, 60 * 60 * 1000)) throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
-      res.json(await verifyChallenge(store, String(req.body?.publicKey ?? ''), String(req.body?.signature ?? '')));
+      const v = await verifyChallenge(store, String(req.body?.publicKey ?? ''), String(req.body?.signature ?? ''));
+      res.json({ ...v, isOperator: operatorWallets().includes(v.account.publicKey) });
     } catch (err) {
       sendError(res, err);
     }

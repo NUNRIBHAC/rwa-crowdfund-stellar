@@ -2574,3 +2574,70 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .notification-mark {
   white-space: nowrap;
 }
+/* OperatorSection (frontend/src/components/OperatorSection.tsx) proposal styles.
+   Brand-aligned: primary #4B4FE2, hover #363AB2, error #FF5252; input border #7376E8;
+   motion limited to 200ms transitions per brand/ui-kit/motion. No new keyframes.
+   RTL: column order stays LTR (tables are containers); text-align uses logical `start`
+   so the existing html.rtl-text flip governs text direction only. */
+
+.operator-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: start;
+}
+
+.operator-table th,
+.operator-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e6e6fb;
+  vertical-align: top;
+}
+
+.operator-table thead th {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-bottom: 1.5px solid #7376e8;
+  white-space: nowrap;
+}
+
+.operator-table tbody tr {
+  transition: background-color 200ms ease;
+}
+
+.operator-table tbody tr:hover {
+  background-color: rgba(75, 79, 226, 0.04);
+}
+
+.operator-table td .btn {
+  margin-inline-end: 8px;
+}
+
+.operator-reason {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.operator-reason input {
+  border: 1px solid #7376e8;
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+.operator-reason input:focus-visible {
+  border-width: 1.5px;
+  outline: 3px solid rgba(75, 79, 226, 0.12);
+  outline-offset: 0;
+}
+
+/* Responsive: tables scroll horizontally on narrow viewports instead of
+   breaking layout; no markup change needed (display:block on the table). */
+@media (max-width: 720px) {
+  .operator-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
