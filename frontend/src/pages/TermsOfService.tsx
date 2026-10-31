@@ -129,6 +129,11 @@ export default function TermsOfService() {
       </p>
       <h2>11. Contact</h2>
       <p>Questions about these Terms: {LEGAL_CONTACT_EMAIL}.</p>
+      <p>
+        <strong>Unresolved operator disclosures:</strong> the DEMO operator particulars in these Terms are illustrative and do not satisfy any mandatory
+        operator-identification duty (such as an imprint or legal notice under Portuguese or EU e-commerce, media or consumer rules). Whether such a duty
+        applies to this prototype service has not been determined; any required disclosures will be added here or on a linked page before any real launch.
+      </p>
     </>
   );
 }
