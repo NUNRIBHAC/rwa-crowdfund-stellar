@@ -2610,12 +2610,20 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
    marks one row read without a reload. */
 .notification-row {
   align-items: flex-start;
+  /* Same narrow-viewport treatment as the account checklist: the nowrap
+     mark-read button must not squeeze the text into a mid-word-breaking
+     column. Wrap it below once the text would drop under ~220px. */
+  flex-wrap: wrap;
 }
 .notification-main {
   display: flex;
   flex-direction: column;
   gap: 2px;
   flex: 1;
+  min-width: min(220px, 100%);
+}
+.notification-row > .notification-mark {
+  flex-shrink: 0;
 }
 .notification-title {
   font-weight: 600;
