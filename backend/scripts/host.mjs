@@ -15,8 +15,13 @@ app.get('/.well-known/stellar.toml', (req, res) => {
   res.sendFile(path.join(dist, '.well-known', 'stellar.toml'), { dotfiles: 'allow' });
 });
 app.use(express.static(dist));
+// SPA fallback for path routing: only extension-less GET page paths get
+// index.html (deep links like /campaigns/demo-solar). Asset-like paths
+// (/assets/x.js, /og-image.png) 404 honestly instead of serving HTML with the
+// wrong MIME; /api and the discovery endpoints are handled above.
 app.use((req, res, next) => {
-  if (req.method === 'GET' && !req.path.startsWith('/api')) return res.sendFile(path.join(dist, 'index.html'));
+  if (req.method === 'GET' && !req.path.startsWith('/api') && !path.extname(req.path))
+    return res.sendFile(path.join(dist, 'index.html'));
   next();
 });
 const port = Number(process.env.PORT ?? 4000);

@@ -1,5 +1,23 @@
 import type { Express, Request } from 'express';
 
+// Public indexable pages (path routing since the hash-router migration).
+// Deliberately excluded: /account (private area), /api/*, and any page that
+// only exists as a plan - sitemap entries must be real, served pages.
+const PUBLIC_PATHS = [
+  '/',
+  '/investments',
+  '/how-it-works',
+  '/learn',
+  '/glossary',
+  '/risk-warnings',
+  '/faq',
+  '/financing',
+  '/about',
+  '/terms-of-service',
+  '/privacy-policy',
+  '/risk-disclosure',
+];
+
 // Machine-readable sitemap + robots endpoints.
 //
 // The SPA uses hash routing (frontend/src/router.tsx): every page lives under
@@ -26,24 +44,32 @@ function publicOrigin(req: Request): string | null {
   return `${proto}://${req.get('host')}`;
 }
 
-function sitemapXml(origin: string): string {
+function sitemapXml(origin: string, campaignIds: string[]): string {
   const lastmod = new Date().toISOString().slice(0, 10);
-  return (
-    '<?xml version="1.0" encoding="UTF-8"?>\n' +
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    '  <url>\n' +
-    `    <loc>${origin}/</loc>\n` +
-    `    <lastmod>${lastmod}</lastmod>\n` +
-    '  </url>\n' +
-    '</urlset>\n'
-  );
+  const paths = [...PUBLIC_PATHS, ...campaignIds.map((id) => `/campaigns/${encodeURIComponent(id)}`)];
+  const urls = paths
+    .map((p) => `  <url>\n    <loc>${origin}${p}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>\n`)
+    .join('');
+  return '<?xml version="1.0" encoding="UTF-8"?>\n' + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n';
 }
 
-export function registerDiscoveryEndpoints(app: Express): void {
-  app.get('/sitemap.xml', (req, res) => {
+export interface DiscoveryOptions {
+  // Live campaign ids, so the sitemap tracks the actual campaign registry on
+  // every request (auto-maintained as campaigns come and go).
+  listCampaignIds?: () => Promise<string[]>;
+}
+
+export function registerDiscoveryEndpoints(app: Express, options: DiscoveryOptions = {}): void {
+  app.get('/sitemap.xml', async (req, res) => {
     const origin = publicOrigin(req);
     if (!origin) return res.status(503).json({ error: 'public origin not configured' });
-    res.type('application/xml').send(sitemapXml(origin));
+    let campaignIds: string[] = [];
+    try {
+      campaignIds = (await options.listCampaignIds?.()) ?? [];
+    } catch {
+      // A campaign-registry failure must not take down the sitemap.
+    }
+    res.type('application/xml').send(sitemapXml(origin, campaignIds));
   });
   app.get('/robots.txt', (req, res) => {
     const origin = publicOrigin(req);

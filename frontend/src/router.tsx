@@ -18,9 +18,28 @@ export type RouteName =
 
 export type Route = { name: RouteName; campaignId?: string };
 
-// Hash routing keeps the single static deploy working without server rewrites.
-export function routeFromHash(hash: string): Route {
-  const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+const KNOWN_SEGMENTS = new Set([
+  'investments',
+  'campaigns',
+  'how-it-works',
+  'learn',
+  'glossary',
+  'risk-warnings',
+  'faq',
+  'financing',
+  'about',
+  'account',
+  'terms-of-service',
+  'privacy-policy',
+  'risk-disclosure',
+]);
+
+// Path routing serves real per-page URLs (needed for the XML sitemap and
+// shareable links); the server SPA fallback covers direct loads. Legacy #/
+// links are upgraded to their path equivalent, so old shared links keep
+// working. Unknown segments keep the historical home fallback for now.
+export function routeFromPath(pathname: string): Route {
+  const parts = pathname.replace(/^\//, '').split('/').filter(Boolean);
   switch (parts[0]) {
     case 'investments':
       return { name: 'investments' };
@@ -53,21 +72,85 @@ export function routeFromHash(hash: string): Route {
   }
 }
 
+export function routePath(route: Route): string {
+  if (route.name === 'campaign') return `/campaigns/${encodeURIComponent(route.campaignId ?? '')}`;
+  if (route.name === 'home') return '/';
+  return `/${route.name}`;
+}
+
+// Backwards compatibility: parse a legacy '#/...' hash into the same route.
+export function routeFromHash(hash: string): Route {
+  return routeFromPath(hash.replace(/^#/, ''));
+}
+
+// Kept name/signature for existing consumers; now emits path URLs so header,
+// footer and campaign links are crawlable per-page URLs. The hash form is
+// still understood and upgraded on arrival.
 export function routeHash(route: Route): string {
-  if (route.name === 'campaign') return `#/campaigns/${encodeURIComponent(route.campaignId ?? '')}`;
-  if (route.name === 'home') return '#/';
-  return `#/${route.name}`;
+  return routePath(route);
+}
+
+function isKnownPath(pathname: string): boolean {
+  const first = pathname.replace(/^\//, '').split('/').filter(Boolean)[0];
+  return first === undefined || KNOWN_SEGMENTS.has(first);
+}
+
+// Resolve the current location, upgrading a legacy '#/route' hash in place
+// (replaceState: no history entry, no loop).
+function currentRoute(): Route {
+  if (window.location.hash.startsWith('#/')) {
+    const route = routeFromHash(window.location.hash);
+    window.history.replaceState(null, '', routePath(route));
+    return route;
+  }
+  return routeFromPath(window.location.pathname);
 }
 
 export function useRoute(): Route {
-  const [route, setRoute] = useState<Route>(() => routeFromHash(window.location.hash));
+  const [route, setRoute] = useState<Route>(currentRoute);
   useEffect(() => {
-    const onChange = () => {
-      setRoute(routeFromHash(window.location.hash));
+    const onPop = () => {
+      setRoute(currentRoute());
       window.scrollTo(0, 0);
     };
-    window.addEventListener('hashchange', onChange);
-    return () => window.removeEventListener('hashchange', onChange);
+    window.addEventListener('popstate', onPop);
+    // A pasted/edited '#/...' hash mid-session upgrades the same way.
+    window.addEventListener('hashchange', onPop);
+
+    // SPA navigation for internal route links only: left-clicks without
+    // modifiers on same-origin, known-route anchors. Downloads, target=_blank,
+    // external links and non-route hash anchors (e.g. the '#main' skip link)
+    // keep their default behavior.
+    const onClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const anchor = (event.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+      if (!anchor || anchor.target || anchor.hasAttribute('download')) return;
+      const url = new URL(anchor.href, window.location.href);
+      if (url.origin !== window.location.origin) return;
+      if (url.hash.startsWith('#/')) {
+        // Legacy hash link rendered by an older bundle or typed by hand.
+        event.preventDefault();
+        const target = routeFromHash(url.hash);
+        window.history.pushState(null, '', routePath(target));
+        setRoute(target);
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (url.hash) return; // same-page anchor, not a route
+      if (!isKnownPath(url.pathname)) return; // assets, api, unknown paths
+      event.preventDefault();
+      const target = routeFromPath(url.pathname);
+      window.history.pushState(null, '', routePath(target));
+      setRoute(target);
+      window.scrollTo(0, 0);
+    };
+    document.addEventListener('click', onClick);
+    return () => {
+      window.removeEventListener('popstate', onPop);
+      window.removeEventListener('hashchange', onPop);
+      document.removeEventListener('click', onClick);
+    };
   }, []);
   return route;
 }

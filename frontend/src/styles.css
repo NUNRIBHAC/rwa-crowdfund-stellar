@@ -1945,12 +1945,17 @@ input[type='checkbox'] {
   line-height: 1.4;
   color: var(--ink-500, #5a5d7a);
 }
+/* The campaign photo fills the full content width ("a foto deve ocupar
+   tudo"): the 720px cap left a wide blank to its right on desktop. Height
+   stays bounded (16:9 up to 560px, cover crop), the illustrative caption
+   stays underneath. */
 .campaign-photo {
   margin: 12px 0 20px;
-  max-width: 720px;
+  max-width: none;
 }
 .campaign-photo img {
   aspect-ratio: 16 / 9;
+  max-height: 560px;
 }
 
 /* Theme toggle button in the header */

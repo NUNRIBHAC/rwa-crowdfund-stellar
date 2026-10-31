@@ -73,7 +73,7 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
 };
 
 // Machine-readable discovery: sitemap.xml + robots.txt (see sitemap.ts).
-registerDiscoveryEndpoints(app);
+registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await listCampaigns()).map((c) => c.id) });
 
 app.get('/health', (_req, res) => {
   res.json({ ok: true, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });

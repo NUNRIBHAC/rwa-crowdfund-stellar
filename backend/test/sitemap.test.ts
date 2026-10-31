@@ -18,9 +18,9 @@ function withServer(app: express.Express, fn: (base: string) => Promise<void>): 
   });
 }
 
-test('sitemap.xml is valid XML containing only the canonical root URL', async () => {
+test('sitemap.xml lists every public page path plus live campaign URLs', async () => {
   const app = express();
-  registerDiscoveryEndpoints(app);
+  registerDiscoveryEndpoints(app, { listCampaignIds: async () => ['demo-solar'] });
   await withServer(app, async (base) => {
     const res = await fetch(`${base}/sitemap.xml`);
     assert.equal(res.status, 200);
@@ -28,11 +28,44 @@ test('sitemap.xml is valid XML containing only the canonical root URL', async ()
     const body = await res.text();
     assert.match(body, /^<\?xml version="1\.0" encoding="UTF-8"\?>/);
     assert.match(body, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
+    const origin = `http://127.0.0.1:${new URL(base).port}`;
     const locs = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-    // Hash-routed SPA: fragments are not indexable, so only the root is listed.
-    assert.deepEqual(locs, [`http://127.0.0.1:${new URL(base).port}/`]);
+    assert.deepEqual(locs, [
+      `${origin}/`,
+      `${origin}/investments`,
+      `${origin}/how-it-works`,
+      `${origin}/learn`,
+      `${origin}/glossary`,
+      `${origin}/risk-warnings`,
+      `${origin}/faq`,
+      `${origin}/financing`,
+      `${origin}/about`,
+      `${origin}/terms-of-service`,
+      `${origin}/privacy-policy`,
+      `${origin}/risk-disclosure`,
+      `${origin}/campaigns/demo-solar`,
+    ]);
+    // Private areas and API paths are never sitemap entries.
+    assert.ok(!locs.some((l) => l.includes('/account')), 'no /account');
+    assert.ok(!locs.some((l) => l.includes('/api')), 'no /api');
     assert.ok(!body.includes('#'), 'no hash-fragment URLs');
     assert.match(body, /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
+  });
+});
+
+test('a campaign-registry failure still serves the static page list', async () => {
+  const app = express();
+  registerDiscoveryEndpoints(app, {
+    listCampaignIds: async () => {
+      throw new Error('registry down');
+    },
+  });
+  await withServer(app, async (base) => {
+    const res = await fetch(`${base}/sitemap.xml`);
+    assert.equal(res.status, 200);
+    const body = await res.text();
+    assert.match(body, /<loc>[^<]+\/investments<\/loc>/);
+    assert.ok(!body.includes('/campaigns/'), 'no campaign URLs without a registry');
   });
 });
 

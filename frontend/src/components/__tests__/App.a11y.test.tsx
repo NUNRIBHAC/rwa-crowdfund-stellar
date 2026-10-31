@@ -13,12 +13,12 @@ vi.mock('../../api', () => ({
 }));
 
 beforeEach(() => {
-  window.location.hash = '#/investments';
+  window.history.replaceState(null, '', '/investments');
 });
 
 afterEach(() => {
   cleanup();
-  window.location.hash = '';
+  window.history.replaceState(null, '', '/');
 });
 
 describe('site chrome accessibility semantics', () => {
@@ -67,3 +67,4 @@ describe('discovery accessibility semantics', () => {
     });
   });
 });
+
