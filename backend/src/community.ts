@@ -297,5 +297,11 @@ export class CommunityService {
 export async function communityStoreFromEnv(): Promise<CommunityStore> {
   const url = process.env.COMMUNITY_DATABASE_URL ?? process.env.SOROBAN_JOURNAL_DATABASE_URL;
   if (url) return PostgresCommunityStore.connect(url);
+  // Fail closed where durable storage is expected: hosted deployments set
+  // SOROBAN_JOURNAL_BACKEND=postgres (Render filesystem is ephemeral, so a
+  // silent file fallback would lose user content on every deploy).
+  if (process.env.SOROBAN_JOURNAL_BACKEND === 'postgres' || process.env.COMMUNITY_REQUIRE_POSTGRES === '1') {
+    throw new Error('community storage requires COMMUNITY_DATABASE_URL or SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file store');
+  }
   return new FileCommunityStore(process.env.COMMUNITY_STORE_PATH ?? './data/community-store.json');
 }
