@@ -24,10 +24,16 @@ export default function Header({ actor, busy, onConnect, current }: Props) {
     <header className="site-header">
       <div className="header-inner">
         <a className="brand" href={routeHash({ name: 'home' })}>
-          <span className="brand-mark" aria-hidden="true">
-            ◆
-          </span>
-          <span className="brand-name">RWA Crowdfund</span>
+          <svg className="brand-mark" viewBox="0 0 240 240" aria-hidden="true">
+            <rect x="28" y="28" width="184" height="184" rx="26" fill="none" stroke="#FFFFFF" strokeWidth="13" />
+            <rect x="50" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
+            <rect x="100" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
+            <rect x="150" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
+            <rect x="50" y="100" width="40" height="40" rx="9" fill="#4B4FE2" />
+            <rect x="100" y="100" width="40" height="40" rx="9" fill="#8B8EF0" />
+            <rect x="50" y="50" width="40" height="40" rx="9" fill="#C7C8F9" />
+          </svg>
+          <span className="brand-name">Blockallisto</span>
           <span className="badge badge-testnet">Stellar testnet</span>
         </a>
         <div className="header-actions">
