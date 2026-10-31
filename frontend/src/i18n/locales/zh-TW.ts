@@ -414,7 +414,8 @@ export const zhTW: Messages = {
   account: {
     title: '我的賬戶',
     notePre: '投資者賬戶區域的原型佈局，參照以下文檔中的登錄後儀表板設計',
-    notePost: '（第 7A 節）。本頁面不收集任何個人數據；持倉來自您在 Stellar 測試網上連接的 Freighter 錢包，不具有任何價值。',
+    notePost:
+      '(第 7A 節)。持倉來自你在 Stellar 測試網連接的 Freighter 錢包，且沒有任何價值。此頁面上的選用社群登入以及支援和發行方表單，會依隱私政策所述處理你輸入的資料。',
     summaryAria: '投資組合概覽',
     totalContributed: '累計出資',
     totalSub: '鏈上託管金額，按項目彙總',
@@ -454,12 +455,21 @@ export const zhTW: Messages = {
     noWallet: '未連接錢包。',
     checklistAria: '賬戶和資料清單',
     checklistTitle: '賬戶概覽和資料數據',
-    checklistIntro: '參考平臺將投資門檻設為資料完善、身份驗證和銀行信息。本原型不收集其中任何一項；此清單以規劃佔位符的形式展示其結構。',
+    checklistIntro: '參考平台以完成個人資料、驗證和銀行資料作為投資門檻。此原型不設投資門檻；此清單以計畫中的佔位形式展示這些投資人驗證要求。',
     notSetUp: '未設置',
     checklist: [
-      { label: '個人數據', note: '本原型不收集。' },
-      { label: '地址數據', note: '本原型不收集。' },
-      { label: '聯繫方式', note: '本原型不收集。' },
+      {
+        label: '個人數據',
+        note: '在此原型中投資不需要；為計畫中的投資人驗證要求。',
+      },
+      {
+        label: '地址數據',
+        note: '在此原型中投資不需要；為計畫中的投資人驗證要求。',
+      },
+      {
+        label: '聯繫方式',
+        note: '在此原型中投資不需要；為計畫中的投資人驗證要求。',
+      },
       {
         label: '安全',
         note: '基於錢包的訪問（Freighter）。本原型沒有密碼或雙重驗證應用。',

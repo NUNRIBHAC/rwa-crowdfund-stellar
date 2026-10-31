@@ -460,7 +460,7 @@ export const fr: Messages = {
     title: 'Mon compte',
     notePre: "Maquette de prototype d'un espace compte investisseur, inspirée du tableau de bord connecté documenté dans",
     notePost:
-      "(section 7A). Aucune donnée personnelle n'est collectée sur cette page ; les positions proviennent de votre portefeuille Freighter connecté sur le testnet Stellar et sont sans valeur.",
+      "(section 7A). Les positions proviennent de votre portefeuille Freighter connecté sur le testnet Stellar et sont sans valeur. La connexion communautaire facultative et les formulaires d'assistance et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
     summaryAria: 'Résumé du portefeuille',
     totalContributed: 'Total contribué',
     totalSub: 'En séquestre on-chain, additionné sur les campagnes',
@@ -502,15 +502,21 @@ export const fr: Messages = {
     checklistAria: 'Liste de contrôle compte et profil',
     checklistTitle: "Vue d'ensemble du compte et données de profil",
     checklistIntro:
-      "La plateforme de référence conditionne l'investissement à la complétion du profil, à la vérification et aux coordonnées bancaires. Ce prototype ne collecte rien de tout cela ; la liste montre la structure sous forme d'emplacements planifiés.",
+      "La plateforme de référence conditionne l'investissement à la complétion du profil, à la vérification et aux coordonnées bancaires. Ce prototype ne conditionne pas l'investissement ; la liste présente ces exigences de vérification de l'investisseur comme des emplacements planifiés.",
     notSetUp: 'Non configuré',
     checklist: [
       {
         label: 'Données personnelles',
-        note: 'Non collectées dans ce prototype.',
+        note: "Non requis pour investir dans ce prototype ; une exigence planifiée de vérification de l'investisseur.",
       },
-      { label: 'Adresse', note: 'Non collectée dans ce prototype.' },
-      { label: 'Coordonnées', note: 'Non collectées dans ce prototype.' },
+      {
+        label: 'Adresse',
+        note: "Non requis pour investir dans ce prototype ; une exigence planifiée de vérification de l'investisseur.",
+      },
+      {
+        label: 'Coordonnées',
+        note: "Non requis pour investir dans ce prototype ; une exigence planifiée de vérification de l'investisseur.",
+      },
       {
         label: 'Sécurité',
         note: "Accès par portefeuille (Freighter). Pas de mot de passe ni d'application à deux facteurs dans ce prototype.",

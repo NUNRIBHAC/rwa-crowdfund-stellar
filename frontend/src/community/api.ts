@@ -10,15 +10,15 @@ export type CommunityAccount = {
   createdAt: number;
 };
 
+// Wire shape is backend PublicComment (community.ts): the server already
+// resolves the author label (display name or shortened key) and never exposes
+// publicKey/displayName/hidden fields on this endpoint.
 export type CommunityComment = {
   id: string;
   campaignId: string;
-  publicKey: string;
-  displayName: string | null;
   body: string;
   createdAt: number;
-  hiddenAt: number | null;
-  hiddenReason: string | null;
+  author: string;
 };
 
 export type NewsPost = {

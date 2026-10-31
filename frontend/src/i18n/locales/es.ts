@@ -459,7 +459,7 @@ export const es: Messages = {
     title: 'Mi cuenta',
     notePre: 'Maqueta de prototipo de un área de cuenta de inversor, inspirada en el panel con sesión iniciada documentado en',
     notePost:
-      '(sección 7A). No se recogen datos personales en esta página; las posiciones provienen de tu cartera Freighter conectada en la testnet de Stellar y no tienen valor.',
+      '(sección 7A). Las posiciones proceden de tu cartera Freighter conectada en la testnet de Stellar y no tienen valor. El acceso opcional a la comunidad y los formularios de soporte y de emisor de esta página tratan los datos que introduzcas como describe la política de privacidad.',
     summaryAria: 'Resumen de la cartera',
     totalContributed: 'Total contribuido',
     totalSub: 'En escrow on-chain, sumado por campañas',
@@ -501,12 +501,21 @@ export const es: Messages = {
     checklistAria: 'Lista de verificación de cuenta y perfil',
     checklistTitle: 'Visión general de la cuenta y datos de perfil',
     checklistIntro:
-      'La plataforma de referencia condiciona la inversión a completar el perfil, la verificación y los datos bancarios. Este prototipo no recoge ninguno de ellos; la lista muestra la estructura como marcadores planeados.',
+      'La plataforma de referencia condiciona la inversión a completar el perfil, la verificación y los datos bancarios. Este prototipo no condiciona la inversión; la lista muestra esos requisitos de verificación del inversor como marcadores planificados.',
     notSetUp: 'No configurado',
     checklist: [
-      { label: 'Datos personales', note: 'No recogidos en este prototipo.' },
-      { label: 'Datos de dirección', note: 'No recogidos en este prototipo.' },
-      { label: 'Datos de contacto', note: 'No recogidos en este prototipo.' },
+      {
+        label: 'Datos personales',
+        note: 'No es necesario para invertir en este prototipo; un requisito planificado de verificación del inversor.',
+      },
+      {
+        label: 'Datos de dirección',
+        note: 'No es necesario para invertir en este prototipo; un requisito planificado de verificación del inversor.',
+      },
+      {
+        label: 'Datos de contacto',
+        note: 'No es necesario para invertir en este prototipo; un requisito planificado de verificación del inversor.',
+      },
       {
         label: 'Seguridad',
         note: 'Acceso basado en cartera (Freighter). Sin contraseña ni aplicación de dos factores en este prototipo.',

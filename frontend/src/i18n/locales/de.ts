@@ -457,7 +457,7 @@ export const de: Messages = {
     title: 'Mein Konto',
     notePre: 'Prototyp-Mockup eines Anleger-Kontobereichs, angelehnt an das in',
     notePost:
-      '(Abschnitt 7A) dokumentierte eingeloggte Dashboard. Auf dieser Seite werden keine personenbezogenen Daten erhoben; die Positionen stammen aus Ihrer verbundenen Freighter-Wallet im Stellar-Testnet und sind wertlos.',
+      '(Abschnitt 7A). Positionen stammen aus deiner verbundenen Freighter-Wallet im Stellar-Testnetz und sind wertlos. Der optionale Community-Zugang und die Support- und Emittentenformulare auf dieser Seite verarbeiten eingegebene Daten wie in der Datenschutzerklärung beschrieben.',
     summaryAria: 'Portfolioübersicht',
     totalContributed: 'Insgesamt beigetragen',
     totalSub: 'On-Chain im Escrow, summiert über Kampagnen',
@@ -499,12 +499,21 @@ export const de: Messages = {
     checklistAria: 'Konto- und Profil-Checkliste',
     checklistTitle: 'Kontoübersicht und Profildaten',
     checklistIntro:
-      'Die Referenzplattform koppelt das Investieren an Profilvollständigkeit, Verifizierung und Bankdaten. Dieser Prototyp erhebt nichts davon; die Checkliste zeigt die Struktur als geplante Platzhalter.',
+      'Die Referenzplattform bindet das Investieren an Profilvollständigkeit, Verifizierung und Bankdaten. Dieser Prototyp bindet das Investieren nicht; die Checkliste zeigt diese Anleger-Verifizierungsanforderungen als geplante Platzhalter.',
     notSetUp: 'Nicht eingerichtet',
     checklist: [
-      { label: 'Persönliche Daten', note: 'In diesem Prototyp nicht erhoben.' },
-      { label: 'Adressdaten', note: 'In diesem Prototyp nicht erhoben.' },
-      { label: 'Kontaktdaten', note: 'In diesem Prototyp nicht erhoben.' },
+      {
+        label: 'Persönliche Daten',
+        note: 'Für das Investieren in diesem Prototyp nicht erforderlich; eine geplante Anleger-Verifizierungsanforderung.',
+      },
+      {
+        label: 'Adressdaten',
+        note: 'Für das Investieren in diesem Prototyp nicht erforderlich; eine geplante Anleger-Verifizierungsanforderung.',
+      },
+      {
+        label: 'Kontaktdaten',
+        note: 'Für das Investieren in diesem Prototyp nicht erforderlich; eine geplante Anleger-Verifizierungsanforderung.',
+      },
       {
         label: 'Sicherheit',
         note: 'Wallet-basierter Zugang (Freighter). Kein Passwort und keine Zwei-Faktor-App in diesem Prototyp.',

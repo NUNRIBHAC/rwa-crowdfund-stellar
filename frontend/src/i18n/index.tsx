@@ -16,15 +16,35 @@ export type Locale = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'zh-TW' | 'zh-CN' | 'ja'
 // Selector labels stay in each language's own words (native labels).
 export const LOCALES: { id: Locale; label: string; accessibleLabel: string }[] = [
   { id: 'en', label: 'English', accessibleLabel: 'English' },
-  { id: 'pt', label: 'Português (Portuguese - Portugal)', accessibleLabel: 'Português (Portugal) - European Portuguese' },
+  {
+    id: 'pt',
+    label: 'Português (Portuguese - Portugal)',
+    accessibleLabel: 'Português (Portugal) - European Portuguese',
+  },
   { id: 'es', label: 'Español (Spanish)', accessibleLabel: 'Español' },
   { id: 'fr', label: 'Français (French)', accessibleLabel: 'Français' },
   { id: 'de', label: 'Deutsch (German)', accessibleLabel: 'Deutsch' },
-  { id: 'zh-TW', label: '繁體中文 (Traditional Chinese)', accessibleLabel: '繁體中文 - Traditional Chinese' },
-  { id: 'zh-CN', label: '简体中文 (Simplified Chinese)', accessibleLabel: '简体中文 - Simplified Chinese' },
-  { id: 'ja', label: '日本語 (Japanese)', accessibleLabel: '日本語 - Japanese' },
+  {
+    id: 'zh-TW',
+    label: '繁體中文 (Traditional Chinese)',
+    accessibleLabel: '繁體中文 - Traditional Chinese',
+  },
+  {
+    id: 'zh-CN',
+    label: '简体中文 (Simplified Chinese)',
+    accessibleLabel: '简体中文 - Simplified Chinese',
+  },
+  {
+    id: 'ja',
+    label: '日本語 (Japanese)',
+    accessibleLabel: '日本語 - Japanese',
+  },
   { id: 'ko', label: '한국어 (Korean)', accessibleLabel: '한국어 - Korean' },
-  { id: 'ar', label: 'العربية (Arabic)', accessibleLabel: 'العربية - Arabic' },
+  {
+    id: 'ar',
+    label: 'العربية (Arabic)',
+    accessibleLabel: 'العربية - Arabic',
+  },
   { id: 'hi', label: 'हिन्दी (Hindi)', accessibleLabel: 'हिन्दी - Hindi' },
 ];
 
@@ -43,10 +63,24 @@ const LANG_TAGS: Record<Locale, string> = {
   hi: 'hi',
 };
 
-// Arabic renders right-to-left; the rest are left-to-right.
-const RTL_LOCALES: ReadonlySet<Locale> = new Set(['ar']);
+// Arabic text reads right-to-left; the rest are left-to-right. Layout
+// geometry stays identical across locales: <html> keeps dir="ltr" and only
+// text-level blocks flip direction via the rtl-text class in styles.css.
+const RTL_TEXT_LOCALES: ReadonlySet<Locale> = new Set(['ar']);
 
-const MESSAGES: Record<Locale, Messages> = { en, pt, es, fr, de, 'zh-TW': zhTW, 'zh-CN': zhCN, ja, ko, ar, hi };
+const MESSAGES: Record<Locale, Messages> = {
+  en,
+  pt,
+  es,
+  fr,
+  de,
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  ja,
+  ko,
+  ar,
+  hi,
+};
 
 const STORAGE_KEY = 'blockallisto-language';
 
@@ -74,7 +108,11 @@ function detectLocale(): Locale {
   return 'en';
 }
 
-export type I18n = { locale: Locale; setLocale: (l: Locale) => void; m: Messages };
+export type I18n = {
+  locale: Locale;
+  setLocale: (l: Locale) => void;
+  m: Messages;
+};
 
 // Default English context lets unit tests render components without a provider.
 const defaultContext: I18n = { locale: 'en', setLocale: () => {}, m: en };
@@ -86,7 +124,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = LANG_TAGS[locale];
-    document.documentElement.dir = RTL_LOCALES.has(locale) ? 'rtl' : 'ltr';
+    document.documentElement.dir = 'ltr';
+    document.documentElement.classList.toggle('rtl-text', RTL_TEXT_LOCALES.has(locale));
     document.title = m.meta.title;
   }, [locale, m]);
 

@@ -449,7 +449,7 @@ export const en = {
     title: 'My account',
     notePre: 'Prototype layout of an investor account area, modeled on the logged-in dashboard documented in',
     notePost:
-      '(section 7A). No personal data is collected on this page; positions come from your connected Freighter wallet on Stellar testnet and are worthless.',
+      '(section 7A). Positions come from your connected Freighter wallet on Stellar testnet and are worthless. The optional community sign-in and the support and issuer forms on this page process the data you enter as described in the privacy policy.',
     summaryAria: 'Portfolio summary',
     totalContributed: 'Total contributed',
     totalSub: 'Escrowed on-chain, summed over campaigns',
@@ -491,12 +491,21 @@ export const en = {
     checklistAria: 'Account and profile checklist',
     checklistTitle: 'Account overview and profile data',
     checklistIntro:
-      'The reference platform gates investing behind profile completion, verification and bank details. This prototype collects none of them; the checklist shows the structure as planned placeholders.',
+      'The reference platform gates investing behind profile completion, verification and bank details. This prototype does not gate investing; the checklist shows those investor-verification requirements as planned placeholders.',
     notSetUp: 'Not set up',
     checklist: [
-      { label: 'Personal data', note: 'Not collected in this prototype.' },
-      { label: 'Address data', note: 'Not collected in this prototype.' },
-      { label: 'Contact details', note: 'Not collected in this prototype.' },
+      {
+        label: 'Personal data',
+        note: 'Not required to invest in this prototype; a planned investor-verification requirement.',
+      },
+      {
+        label: 'Address data',
+        note: 'Not required to invest in this prototype; a planned investor-verification requirement.',
+      },
+      {
+        label: 'Contact details',
+        note: 'Not required to invest in this prototype; a planned investor-verification requirement.',
+      },
       {
         label: 'Security',
         note: 'Wallet-based access (Freighter). No password or two-factor app in this prototype.',

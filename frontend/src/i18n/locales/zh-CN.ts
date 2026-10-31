@@ -414,7 +414,8 @@ export const zhCN: Messages = {
   account: {
     title: '我的账户',
     notePre: '投资者账户区域的原型布局，参照以下文档中的登录后仪表板设计',
-    notePost: '（第 7A 节）。本页面不收集任何个人数据；持仓来自您在 Stellar 测试网上连接的 Freighter 钱包，不具有任何价值。',
+    notePost:
+      '(第 7A 节)。持仓来自你在 Stellar 测试网连接的 Freighter 钱包，且没有任何价值。此页面上的可选社区登录以及支持和发行方表单，会按隐私政策所述处理你输入的数据。',
     summaryAria: '投资组合概览',
     totalContributed: '累计出资',
     totalSub: '链上托管金额，按项目汇总',
@@ -454,12 +455,21 @@ export const zhCN: Messages = {
     noWallet: '未连接钱包。',
     checklistAria: '账户和资料清单',
     checklistTitle: '账户概览和资料数据',
-    checklistIntro: '参考平台将投资门槛设为资料完善、身份验证和银行信息。本原型不收集其中任何一项；此清单以规划占位符的形式展示其结构。',
+    checklistIntro: '参考平台以完成个人资料、验证和银行资料作为投资门槛。此原型不设投资门槛；此清单以计划中的占位形式展示这些投资者验证要求。',
     notSetUp: '未设置',
     checklist: [
-      { label: '个人数据', note: '本原型不收集。' },
-      { label: '地址数据', note: '本原型不收集。' },
-      { label: '联系方式', note: '本原型不收集。' },
+      {
+        label: '个人数据',
+        note: '在此原型中投资不需要；为计划中的投资者验证要求。',
+      },
+      {
+        label: '地址数据',
+        note: '在此原型中投资不需要；为计划中的投资者验证要求。',
+      },
+      {
+        label: '联系方式',
+        note: '在此原型中投资不需要；为计划中的投资者验证要求。',
+      },
       {
         label: '安全',
         note: '基于钱包的访问（Freighter）。本原型没有密码或双重验证应用。',

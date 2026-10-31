@@ -984,7 +984,7 @@ code {
 }
 .instrument-cols ul {
   margin: 0;
-  padding-left: 18px;
+  padding-inline-start: 18px;
   font-size: 13.5px;
   color: var(--ink-soft);
 }
@@ -1126,7 +1126,7 @@ code {
 }
 .doc-list {
   margin: 0;
-  padding-left: 18px;
+  padding-inline-start: 18px;
   line-height: 2;
 }
 .doc-note {
@@ -1179,7 +1179,7 @@ code {
 
 /* Risk warnings */
 .risk-list {
-  padding-left: 20px;
+  padding-inline-start: 20px;
   line-height: 1.6;
 }
 .risk-list h2 {
@@ -2371,4 +2371,73 @@ input[type='checkbox'] {
 }
 .document-list li {
   padding: 4px 0;
+}
+
+/* Arabic text direction: layout geometry stays identical to every other
+   locale (header, hero, cards, grids, footer keep their LTR positions);
+   only text-level blocks flip inline direction so Arabic reads RTL.
+   Tables are deliberately excluded so column order never changes;
+   legal bodies carry dir="ltr" wrappers that the override below protects. */
+html.rtl-text
+  :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    ul,
+    ol,
+    li,
+    dl,
+    dt,
+    dd,
+    td,
+    th,
+    caption,
+    label,
+    legend,
+    blockquote,
+    figcaption,
+    summary,
+    button,
+    input,
+    textarea,
+    select,
+    a
+  ) {
+  direction: rtl;
+}
+html.rtl-text
+  [dir='ltr']
+  :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    ul,
+    ol,
+    li,
+    dl,
+    dt,
+    dd,
+    td,
+    th,
+    caption,
+    label,
+    legend,
+    blockquote,
+    figcaption,
+    summary,
+    button,
+    input,
+    textarea,
+    select,
+    a
+  ) {
+  direction: ltr;
 }

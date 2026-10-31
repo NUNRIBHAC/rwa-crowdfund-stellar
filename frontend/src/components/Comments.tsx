@@ -1,6 +1,6 @@
 // Campaign comments: public read; posting requires a community session
-// (wallet challenge sign-in). Commenters are identified by display name or a
-// shortened public key - never by any personal data.
+// (wallet challenge sign-in). The server resolves each comment's author label
+// (display name or shortened public key); raw keys never reach this client.
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import type { CommunityComment } from '../community/api';
@@ -60,7 +60,7 @@ export default function Comments({ campaignId }: { campaignId: string }) {
           {comments.map((c) => (
             <li key={c.id} className="comment">
               <p className="comment-meta">
-                <strong>{c.displayName ?? shorten(c.publicKey, 6, 4)}</strong> - {new Date(c.createdAt).toLocaleString(locale)}
+                <strong>{c.author}</strong> - {new Date(c.createdAt).toLocaleString(locale)}
               </p>
               <p>{c.body}</p>
             </li>

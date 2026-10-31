@@ -457,7 +457,7 @@ export const pt: Messages = {
     title: 'A minha conta',
     notePre: 'Maqueta de protótipo de uma área de conta de investidor, inspirada no painel com sessão iniciada documentado em',
     notePost:
-      '(secção 7A). Não são recolhidos dados pessoais nesta página; as posições vêm da sua carteira Freighter ligada na testnet Stellar e não têm valor.',
+      '(secção 7A). As posições vêm da sua carteira Freighter ligada na testnet da Stellar e não têm valor. O acesso opcional à comunidade e os formulários de suporte e de emissor nesta página tratam os dados que introduzir conforme descrito na política de privacidade.',
     summaryAria: 'Resumo da carteira',
     totalContributed: 'Total contribuído',
     totalSub: 'Em escrow on-chain, somado por campanhas',
@@ -499,12 +499,21 @@ export const pt: Messages = {
     checklistAria: 'Lista de verificação de conta e perfil',
     checklistTitle: 'Visão geral da conta e dados de perfil',
     checklistIntro:
-      'A plataforma de referência condiciona o investimento à conclusão do perfil, à verificação e aos dados bancários. Este protótipo não recolhe nenhum deles; a lista mostra a estrutura como marcadores planeados.',
+      'A plataforma de referência condiciona o investimento ao preenchimento do perfil, à verificação e aos dados bancários. Este protótipo não condiciona o investimento; a lista mostra esses requisitos de verificação do investidor como marcadores planeados.',
     notSetUp: 'Não configurado',
     checklist: [
-      { label: 'Dados pessoais', note: 'Não recolhidos neste protótipo.' },
-      { label: 'Dados de morada', note: 'Não recolhidos neste protótipo.' },
-      { label: 'Dados de contacto', note: 'Não recolhidos neste protótipo.' },
+      {
+        label: 'Dados pessoais',
+        note: 'Não é necessário para investir neste protótipo; um requisito planeado de verificação do investidor.',
+      },
+      {
+        label: 'Dados de morada',
+        note: 'Não é necessário para investir neste protótipo; um requisito planeado de verificação do investidor.',
+      },
+      {
+        label: 'Dados de contacto',
+        note: 'Não é necessário para investir neste protótipo; um requisito planeado de verificação do investidor.',
+      },
       {
         label: 'Segurança',
         note: 'Acesso baseado em carteira (Freighter). Sem palavra-passe nem aplicação de dois fatores neste protótipo.',
