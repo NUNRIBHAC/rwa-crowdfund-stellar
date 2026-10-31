@@ -1231,12 +1231,12 @@ code {
 }
 .issuer-form input,
 .issuer-form select {
-  border: 1px solid var(--line);
+  border: 1px solid var(--indigo-500);
   border-radius: 8px;
   padding: 9px 12px;
   font-size: 15px;
   font-family: inherit;
-  background: #f9fafb;
+  background: var(--card);
 }
 
 /* Footer */
@@ -2143,6 +2143,28 @@ select[aria-invalid='true']:focus-visible,
 textarea[aria-invalid='true']:focus-visible {
   border-color: var(--error-border);
 }
+/* The container normals (.issuer-form 0-1-2, .community-section form 0-2-1)
+   outrank the base :focus-visible rule, so the focus and error states get
+   their own scoped rules at matching-or-higher specificity. */
+.issuer-form input:focus-visible,
+.issuer-form select:focus-visible,
+.community-section form input:focus-visible,
+.community-section form select:focus-visible,
+.community-section form textarea:focus-visible {
+  outline: none;
+  border-width: 1.5px;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(75, 79, 226, 0.12);
+  margin: -0.5px;
+}
+.issuer-form input[aria-invalid='true'],
+.issuer-form select[aria-invalid='true'],
+.issuer-form input[aria-invalid='true']:focus-visible,
+.issuer-form select[aria-invalid='true']:focus-visible {
+  border-width: 1.5px;
+  border-color: var(--error-border);
+  margin: -0.5px;
+}
 /* The community form base rule (.community-section form input, 0-2-1) beats
    the bare attribute selector above; the invalid state must win on real
    fields without touching normal states. */
@@ -2392,7 +2414,7 @@ input[type='checkbox'] {
 .community-section form textarea {
   font: inherit;
   padding: 8px 10px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--indigo-500);
   border-radius: 8px;
   background: var(--card);
   color: var(--ink);
