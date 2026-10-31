@@ -63,14 +63,14 @@ export default function Footer() {
               </div>
             </div>
           </div>
-          <svg className="footer-tiles" viewBox="0 0 320 200" aria-hidden="true">
-            <rect x="118" y="16" width="66" height="66" rx="15" fill="#8B8EF0" transform="rotate(8 151 49)" />
-            <rect x="258" y="20" width="36" height="36" rx="8" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(12 276 38)" />
-            <rect x="200" y="76" width="70" height="70" rx="16" fill="#4B4FE2" transform="rotate(-6 235 111)" />
-            <rect x="88" y="84" width="46" height="46" rx="11" fill="#C7C8F9" transform="rotate(-14 111 107)" />
-            <rect x="18" y="122" width="38" height="38" rx="9" fill="#4B4FE2" transform="rotate(-24 37 141)" />
-            <rect x="126" y="146" width="28" height="28" rx="7" fill="#8B8EF0" transform="rotate(10 140 160)" />
-            <rect x="192" y="132" width="40" height="40" rx="10" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(10 212 152)" />
+          <svg className="footer-tiles" viewBox="0 0 400 280" aria-hidden="true">
+            <rect x="140" y="34" width="66" height="66" rx="15" fill="#8B8EF0" transform="rotate(8 173 67)" />
+            <rect x="328" y="36" width="36" height="36" rx="8" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(12 346 54)" />
+            <rect x="250" y="104" width="70" height="70" rx="16" fill="#4B4FE2" transform="rotate(-6 285 139)" />
+            <rect x="100" y="110" width="46" height="46" rx="11" fill="#C7C8F9" transform="rotate(-14 123 133)" />
+            <rect x="30" y="170" width="38" height="38" rx="9" fill="#4B4FE2" transform="rotate(-24 49 189)" />
+            <rect x="150" y="206" width="28" height="28" rx="7" fill="#8B8EF0" transform="rotate(10 164 220)" />
+            <rect x="240" y="186" width="40" height="40" rx="10" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(10 260 206)" />
           </svg>
         </div>
       </div>
