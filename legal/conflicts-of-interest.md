@@ -1,0 +1,35 @@
+<!--
+DRAFT v0.1 (2026-10-31) - FOR REVIEW ONLY. Delete this comment block before publishing.
+Prepared as an honest prototype-stage template. It is not legal advice and has not
+been reviewed by a lawyer. Placeholders in [square brackets] must be filled before
+publication. A conflicts-of-interest policy is an ECSPR-style compliance surface
+(Article 8 of Regulation (EU) 2020/1503) and only becomes operative for an
+authorised platform; this document describes intended policy, not current practice.
+A qualified lawyer should review before any real (mainnet) launch.
+-->
+
+# Conflicts of Interest Policy
+
+**Last updated:** [date to be set on publication]
+
+This policy template describes how Blockallisto intends to identify, prevent, manage and disclose conflicts of interest. Blockallisto today is a prototype demonstration on the Stellar testnet: there are no real investors, issuers, funds or offers, so no actual conflict can arise today. This document is a design artifact prepared against the compliance surfaces of established EU crowdfunding platforms and is **not** a description of a live compliance program.
+
+## 1. Why this policy exists
+
+Crowdfunding platforms sit between issuers seeking funds and investors providing them. Regulation (EU) 2020/1503 expects authorised platforms to avoid conflicts of interest and, where they cannot be avoided, to manage and disclose them. This template anticipates that expectation.
+
+## 2. Potential conflicts considered
+
+- **Platform vs investor:** the platform earning fees from completed raises could be tempted to admit weak campaigns. Intended mitigation: published admission criteria, documented due-diligence steps per campaign, and fees that do not depend on campaign marketing claims.
+- **Related parties:** the operator, its managers or their close relations acting as issuers or investors. Intended rule: [related parties may not act as issuers on the platform - to be confirmed by legal advice]; any related-party investing, if ever permitted, would be disclosed on the campaign page.
+- **Proprietary investing:** intended rule: the platform does **not** invest in its own campaigns and does not hold contributed funds at any point; settlement flows through [licensed payment service providers - planned, not live].
+- **Staff incentives:** intended rule: no remuneration tied to the funding success of specific campaigns.
+- **Information asymmetry:** issuer-supplied content could mislead. Intended mitigation: key investment information sheets per campaign, a standardised campaign data structure, and clear separation between verified platform data and issuer-supplied content.
+
+## 3. Identification, management, disclosure
+
+Intended process: (1) conflicts register maintained by [the operator's compliance contact - to be appointed]; (2) assessment before any campaign admission and on any material change; (3) where a conflict cannot be avoided, disclosure to affected users in clear terms before they commit; (4) refusal to operate the conflicting business where avoidance and disclosure are insufficient.
+
+## 4. Current status
+
+None of the above is operative today. The prototype accepts no real funds, lists no real issuers and pays no fees. This page exists so the intended compliance surface is visible and reviewable before any real launch.
