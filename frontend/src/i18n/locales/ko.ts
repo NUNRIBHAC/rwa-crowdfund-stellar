@@ -1264,6 +1264,8 @@ export const ko: Messages = {
       description: '프로젝트 설명',
       contactEmail: '연락처 이메일(선택)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: '내 발행자 신청',
     myApplicationsEmpty: '아직 신청이 없습니다.',
     applicationStatus: { received: '접수됨', under_review: '검토 중', closed: '닫힘' },

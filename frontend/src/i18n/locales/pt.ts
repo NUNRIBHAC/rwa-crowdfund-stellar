@@ -1370,6 +1370,8 @@ export const pt: Messages = {
       description: 'Descrição do projeto',
       contactEmail: 'Email de contacto (opcional)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: 'As minhas candidaturas de emitente',
     myApplicationsEmpty: 'Ainda não há candidaturas.',
     applicationStatus: { received: 'Recebida', under_review: 'Em análise', closed: 'Fechada' },

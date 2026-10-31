@@ -1332,6 +1332,8 @@ export const en = {
       description: 'Project description',
       contactEmail: 'Contact email (optional)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: 'My issuer applications',
     myApplicationsEmpty: 'No applications yet.',
     applicationStatus: { received: 'Received', under_review: 'Under review', closed: 'Closed' },

@@ -229,6 +229,15 @@ test('owner-scoped lists: applications and comments mine', async () => {
   assert.equal((await api('GET', '/api/comments/mine')).status, 401);
 });
 
+test('site-wide news feed aggregates campaigns newest first and is public', async () => {
+  await api('POST', '/api/campaigns/demo-solar/news', { admin: true, body: { title: 'Feed item one', body: 'Body one' } });
+  const res = await api('GET', '/api/news');
+  assert.equal(res.status, 200);
+  assert.equal(res.json.news.length >= 1, true);
+  assert.equal(res.json.news[0].title, 'Feed item one');
+  assert.equal(res.json.news[0].authorLabel, 'platform-demo');
+});
+
 test('campaign metadata endpoint serves industry and documents', async () => {
   const res = await api('GET', '/api/campaigns/demo-solar/metadata');
   assert.equal(res.status, 200);

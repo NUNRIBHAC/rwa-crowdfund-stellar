@@ -144,6 +144,15 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }
   });
 
+  // --- Site-wide news feed (public; same visibility as per-campaign news) ---
+  router.get('/api/news', async (_req, res) => {
+    try {
+      res.json({ news: await service.listAllNews() });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   // --- Support and feedback tickets ---
   router.post(
     '/api/support/tickets',

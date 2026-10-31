@@ -1360,6 +1360,8 @@ export const de: Messages = {
       description: 'Projektbeschreibung',
       contactEmail: 'Kontakt-E-Mail (optional)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: 'Meine Emittentenanträge',
     myApplicationsEmpty: 'Noch keine Anträge.',
     applicationStatus: { received: 'Eingegangen', under_review: 'In Prüfung', closed: 'Geschlossen' },

@@ -73,6 +73,11 @@ test('GET /api/comments/mine passes the community path gate (401 without token, 
   assert.equal(res.status, 401);
 });
 
+test('GET /api/news passes the community path gate (public 200, not 404)', async () => {
+  const res = await fetch(`${base}/api/news`);
+  assert.equal(res.status, 200);
+});
+
 test('legacy campaign write catch-all still answers 410 for non-community POSTs', async () => {
   const res = await fetch(`${base}/api/campaigns`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
   assert.equal(res.status, 410);

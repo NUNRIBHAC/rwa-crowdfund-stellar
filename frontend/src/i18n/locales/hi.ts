@@ -1322,6 +1322,8 @@ export const hi: Messages = {
       description: 'परियोजना विवरण',
       contactEmail: 'संपर्क ईमेल (वैकल्पिक)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: 'मेरे जारीकर्ता आवेदन',
     myApplicationsEmpty: 'अभी कोई आवेदन नहीं।',
     applicationStatus: { received: 'प्राप्त', under_review: 'समीक्षा में', closed: 'बंद' },

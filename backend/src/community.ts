@@ -194,6 +194,16 @@ export class CommunityService {
       .sort((a, b) => b.createdAt - a.createdAt);
   }
 
+  // Latest news across every campaign, newest first. News are public
+  // (same visibility as the per-campaign endpoint); the account feed and any
+  // site-wide news view read through this.
+  async listAllNews(limit = 20): Promise<NewsPost[]> {
+    const state = await this.store.read();
+    return Object.values(state.news)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, Math.min(Math.max(limit, 1), 50));
+  }
+
   async listOwnApplications(account: Account): Promise<IssuerApplication[]> {
     const state = await this.store.read();
     return Object.values(state.applications)

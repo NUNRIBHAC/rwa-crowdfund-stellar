@@ -1172,6 +1172,8 @@ export const zhTW: Messages = {
       description: '專案說明',
       contactEmail: '聯絡電子郵件(選填)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: '我的發行方申請',
     myApplicationsEmpty: '尚無申請。',
     applicationStatus: { received: '已收到', under_review: '審核中', closed: '已關閉' },

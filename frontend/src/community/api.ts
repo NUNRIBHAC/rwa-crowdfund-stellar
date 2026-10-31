@@ -149,6 +149,9 @@ export const postComment = (token: string, campaignId: string, body: string) =>
 // verified against backend/src/community-routes.ts; a regression test pins it.
 export const fetchNews = (campaignId: string) => call<{ news: NewsPost[] }>(`/api/campaigns/${encodeURIComponent(campaignId)}/news`);
 
+// --- Site-wide news feed (public) ---
+export const fetchNewsFeed = () => call<{ news: NewsPost[] }>('/api/news');
+
 // --- Support and feedback tickets ---
 export const createTicket = (token: string, input: { kind: 'support' | 'feedback'; subject: string; body: string }) =>
   call<{ ticket: Ticket }>('/api/support/tickets', { body: input, token });

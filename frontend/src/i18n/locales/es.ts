@@ -1376,6 +1376,8 @@ export const es: Messages = {
       description: 'Descripción del proyecto',
       contactEmail: 'Email de contacto (opcional)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: 'Mis solicitudes de emisor',
     myApplicationsEmpty: 'Aún no hay solicitudes.',
     applicationStatus: { received: 'Recibida', under_review: 'En revisión', closed: 'Cerrada' },

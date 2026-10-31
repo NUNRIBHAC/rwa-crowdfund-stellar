@@ -1271,6 +1271,8 @@ export const ar: Messages = {
       description: 'وصف المشروع',
       contactEmail: 'البريد الإلكتروني للتواصل (اختياري)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: 'طلبات الإصدار الخاصة بي',
     myApplicationsEmpty: 'لا توجد طلبات بعد.',
     applicationStatus: { received: 'تم الاستلام', under_review: 'قيد المراجعة', closed: 'مغلقة' },

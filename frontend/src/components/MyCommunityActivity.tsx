@@ -3,8 +3,8 @@
 // fetched from the community backend. Empty states are honest - nothing is
 // invented for wallets with no activity.
 import { useEffect, useState } from 'react';
-import { fetchMyApplications, fetchMyComments, fetchMyTickets } from '../community/api';
-import type { IssuerApplication, OwnComment, Ticket } from '../community/api';
+import { fetchMyApplications, fetchMyComments, fetchMyTickets, fetchNewsFeed } from '../community/api';
+import type { IssuerApplication, NewsPost, OwnComment, Ticket } from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 import { routeHash } from '../router';
@@ -15,6 +15,7 @@ export default function MyCommunityActivity() {
   const [applications, setApplications] = useState<IssuerApplication[] | null>(null);
   const [tickets, setTickets] = useState<Ticket[] | null>(null);
   const [comments, setComments] = useState<OwnComment[] | null>(null);
+  const [news, setNews] = useState<NewsPost[] | null>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -26,6 +27,12 @@ export default function MyCommunityActivity() {
     }
     let stale = false;
     setError('');
+    // Public feed: latest campaign news across the site (platform-demo posted).
+    fetchNewsFeed()
+      .then((v) => {
+        if (!stale) setNews(v.news);
+      })
+      .catch(() => {});
     // Independent fetches: one failing endpoint must not blank the others.
     const guard = <T,>(p: Promise<T>, apply: (v: T) => void) =>
       p
@@ -83,6 +90,24 @@ export default function MyCommunityActivity() {
                 <span>{t.subject}</span>
                 <span className="doc-note">{fmt(t.createdAt)}</span>
                 <span className={`status-chip status-${t.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.ticketStatus[t.status]}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section aria-label={m.community.newsFeedTitle}>
+        <h2 className="section-title">{m.community.newsFeedTitle}</h2>
+        {!news || news.length === 0 ? (
+          <p className="community-note">{m.community.newsFeedEmpty}</p>
+        ) : (
+          <ul className="portfolio-list">
+            {news.map((n) => (
+              <li key={n.id} className="portfolio-row">
+                <a href={routeHash({ name: 'campaign', campaignId: n.campaignId })}>{n.title}</a>
+                <span className="doc-note">
+                  {fmt(n.createdAt)} - {n.authorLabel}
+                </span>
               </li>
             ))}
           </ul>

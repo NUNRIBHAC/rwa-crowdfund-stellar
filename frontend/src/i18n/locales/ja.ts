@@ -1290,6 +1290,8 @@ export const ja: Messages = {
       description: 'プロジェクトの説明',
       contactEmail: '連絡先メール(任意)',
     },
+    newsFeedTitle: 'Latest campaign news',
+    newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: '自分の発行者申請',
     myApplicationsEmpty: '申請はまだありません。',
     applicationStatus: { received: '受付済み', under_review: '審査中', closed: '完了' },
