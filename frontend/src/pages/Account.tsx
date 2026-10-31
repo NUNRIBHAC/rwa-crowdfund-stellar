@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
 import type { Campaign } from '../types';
@@ -24,6 +24,17 @@ type Row = {
   name: string;
   balance: string;
   status: PortfolioStatus;
+};
+
+// One recorded transaction intent from the platform journal (on-chain-public
+// fields only; the API never returns envelope material).
+type ActivityRow = {
+  hash: string;
+  campaign: string;
+  action: string;
+  amount: string | null;
+  status: string;
+  createdAt: string | null;
 };
 
 // Prototype mapping from the contract lifecycle to the portfolio tabs. The
@@ -56,6 +67,29 @@ export default function Account({ market }: { market: Market }) {
   const { campaigns, actor, fixtureMode } = market;
   const [tab, setTab] = useState<PortfolioStatus | 'all'>('all');
   const intent = useMemo(readIntent, []);
+  const [activity, setActivity] = useState<ActivityRow[] | null>(null);
+
+  // Real activity feed: the wallet's recorded intents from the platform
+  // journal. Falls back to the locally saved intent when the feed is
+  // unavailable or empty, so the section never shows fabricated history.
+  useEffect(() => {
+    if (!actor) {
+      setActivity(null);
+      return;
+    }
+    let live = true;
+    fetch(`/api/account/activity?actor=${encodeURIComponent(actor)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((j) => {
+        if (live) setActivity(Array.isArray(j.activity) ? j.activity : []);
+      })
+      .catch(() => {
+        if (live) setActivity(null);
+      });
+    return () => {
+      live = false;
+    };
+  }, [actor]);
 
   const rows: Row[] = useMemo(
     () =>
@@ -138,7 +172,22 @@ export default function Account({ market }: { market: Market }) {
 
       <section aria-label={m.account.activityAria}>
         <h2 className="section-title">{m.account.recentActivity}</h2>
-        {intent ? (
+        {activity && activity.length > 0 ? (
+          <ul className="activity-list">
+            {activity.map((a) => (
+              <li key={a.hash}>
+                {m.intent.actionLabels[a.action] ?? a.action}
+                {a.amount ? ` ${a.amount} USDC` : ''} - <code>{a.campaign}</code> -{' '}
+                <strong>{m.intent.statusLabels[a.status] ?? a.status}</strong>
+                {a.createdAt ? ` - ${new Date(a.createdAt).toLocaleString(locale)}` : ''} (
+                <a href={`https://stellar.expert/explorer/testnet/tx/${a.hash}`} target="_blank" rel="noreferrer">
+                  tx
+                </a>
+                )
+              </li>
+            ))}
+          </ul>
+        ) : intent ? (
           <p>
             {m.account.savedTxPre} {m.intent.actionLabels[intent.action ?? ''] ?? intent.action ?? 'action'} {m.account.savedTxOn}{' '}
             <code>{intent.campaign ?? m.account.savedTxUnknown}</code> - {m.account.savedTxStatus}{' '}

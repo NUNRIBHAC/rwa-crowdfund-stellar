@@ -336,6 +336,31 @@ export async function recoverSoroban(input: { actor: string; xdr: string }): Pro
   });
 }
 
+// Read-only dashboard feed: one wallet's recorded intents, newest first.
+// Returns only non-sensitive, on-chain-public fields (hash, campaign, action,
+// amount, status, timestamps) - signed envelopes never leave the journal.
+// The journal holds at most one platform's demo intents, so an in-memory
+// filter over the validated read path is correct at this scale and inherits
+// the malformed-row quarantine handling for free.
+export async function accountActivity(actor: string): Promise<any[]> {
+  guard();
+  actorAddress(actor);
+  const store = await readStore();
+  return store.intents
+    .filter((i) => i.actor === actor)
+    .sort((a, b) => (Date.parse(b.createdAt ?? '') || 0) - (Date.parse(a.createdAt ?? '') || 0))
+    .slice(0, 50)
+    .map((i) => ({
+      hash: i.hash,
+      campaign: i.campaign,
+      action: i.action,
+      amount: i.amount ?? null,
+      status: i.status,
+      createdAt: i.createdAt ?? null,
+      updatedAt: i.updatedAt ?? null,
+    }));
+}
+
 export async function statusSoroban(hash: string): Promise<any> {
   guard();
   if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error('invalid hash');
