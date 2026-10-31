@@ -58,10 +58,22 @@ export const pt: Messages = {
     stepsAria: 'Como funciona o investimento',
     stepsTitle: '4 passos para a sua primeira contribuição',
     steps: [
-      { title: 'Ligar', text: 'Ligue uma carteira Freighter na testnet Stellar. Sem conta, sem dados pessoais neste protótipo.' },
-      { title: 'Descobrir', text: 'Explore as campanhas e leia as condições estruturadas na página de cada campanha.' },
-      { title: 'Contribuir', text: 'Assine uma transação. O contrato coloca a sua contribuição em escrow e aplica o limite de financiamento atomicamente.' },
-      { title: 'Acompanhar', text: 'Siga aqui o estado do financiamento. Os reembolsos são assinados pelo contribuinte se o objetivo não for atingido.' },
+      {
+        title: 'Ligar',
+        text: 'Ligue uma carteira Freighter na testnet Stellar. Sem conta, sem dados pessoais neste protótipo.',
+      },
+      {
+        title: 'Descobrir',
+        text: 'Explore as campanhas e leia as condições estruturadas na página de cada campanha.',
+      },
+      {
+        title: 'Contribuir',
+        text: 'Assine uma transação. O contrato coloca a sua contribuição em escrow e aplica o limite de financiamento atomicamente.',
+      },
+      {
+        title: 'Acompanhar',
+        text: 'Siga aqui o estado do financiamento. Os reembolsos são assinados pelo contribuinte se o objetivo não for atingido.',
+      },
     ],
     fullJourneyLink: 'Percurso completo do investidor, com cada passo marcado como existente ou planeado',
     latestAria: 'Campanhas mais recentes',
@@ -291,13 +303,22 @@ export const pt: Messages = {
       },
     ],
     issuerSteps: [
-      { title: 'Candidatura e análise', text: 'O emitente candidata-se, passa a análise de elegibilidade e documentos e assina as condições da plataforma.' },
+      {
+        title: 'Candidatura e análise',
+        text: 'O emitente candidata-se, passa a análise de elegibilidade e documentos e assina as condições da plataforma.',
+      },
       {
         title: 'Construção da campanha',
         text: 'As condições do instrumento, os limites, os documentos e o conteúdo de marketing são configurados e revistos.',
       },
-      { title: 'Campanha ativa', text: 'A demonstração mostra a página pública da campanha com o estado de financiamento on-chain em tempo real.' },
-      { title: 'Liquidação', text: 'Tudo-ou-nada: o criador só levanta os fundos se o objetivo for atingido dentro do prazo, aplicado pelo contrato.' },
+      {
+        title: 'Campanha ativa',
+        text: 'A demonstração mostra a página pública da campanha com o estado de financiamento on-chain em tempo real.',
+      },
+      {
+        title: 'Liquidação',
+        text: 'Tudo-ou-nada: o criador só levanta os fundos se o objetivo for atingido dentro do prazo, aplicado pelo contrato.',
+      },
       {
         title: 'Deveres pós-financiamento',
         text: 'Relatórios, pagamentos de juros e reembolso, e um estado separado do ciclo de vida do emitente. Não implementado.',
@@ -333,8 +354,14 @@ export const pt: Messages = {
   riskWarnings: {
     title: 'Avisos de risco',
     items: [
-      { h: 'Perda total', p: 'Os investimentos em crowdfunding podem perder todo o seu valor. Nunca invista dinheiro cuja perda não pode suportar.' },
-      { h: 'Iliquidez', p: 'Estes instrumentos normalmente não são negociáveis. Assuma que não pode sair antes do vencimento ou de um evento definido.' },
+      {
+        h: 'Perda total',
+        p: 'Os investimentos em crowdfunding podem perder todo o seu valor. Nunca invista dinheiro cuja perda não pode suportar.',
+      },
+      {
+        h: 'Iliquidez',
+        p: 'Estes instrumentos normalmente não são negociáveis. Assuma que não pode sair antes do vencimento ou de um evento definido.',
+      },
       {
         h: 'Diversificação',
         p: 'Uma orientação comum é não investir mais de 10% dos fundos livremente disponíveis nesta classe de ativos e reparti-los por vários emitentes.',
@@ -399,10 +426,22 @@ export const pt: Messages = {
     journeyAria: 'Resumo do percurso do emitente',
     journeyTitle: 'O percurso previsto',
     steps: [
-      { h: 'Candidatar', p: 'Fale-nos da sua empresa, do montante e do instrumento que tem em mente.' },
-      { h: 'Análise', p: 'Análise de elegibilidade e documentos, seguida de uma proposta de financiamento estruturada.' },
-      { h: 'Construir', p: 'Página da campanha, condições do instrumento, documentos e conteúdo de marketing preparados em conjunto.' },
-      { h: 'Financiar', p: 'Campanha tudo-ou-nada. Os fundos só são liquidados se o objetivo for atingido dentro do prazo.' },
+      {
+        h: 'Candidatar',
+        p: 'Fale-nos da sua empresa, do montante e do instrumento que tem em mente.',
+      },
+      {
+        h: 'Análise',
+        p: 'Análise de elegibilidade e documentos, seguida de uma proposta de financiamento estruturada.',
+      },
+      {
+        h: 'Construir',
+        p: 'Página da campanha, condições do instrumento, documentos e conteúdo de marketing preparados em conjunto.',
+      },
+      {
+        h: 'Financiar',
+        p: 'Campanha tudo-ou-nada. Os fundos só são liquidados se o objetivo for atingido dentro do prazo.',
+      },
     ],
     previewAria: 'Pré-visualização da candidatura',
     previewTitle: 'Candidatura (pré-visualização)',
@@ -433,7 +472,13 @@ export const pt: Messages = {
     myInvestments: 'Os meus investimentos',
     newInvestments: 'Novos investimentos',
     filterAria: 'Filtrar carteira por estado',
-    tabs: { all: 'Todos', canceled: 'Cancelados', pending: 'Pendentes', paid: 'Pagos', completed: 'Concluídos' },
+    tabs: {
+      all: 'Todos',
+      canceled: 'Cancelados',
+      pending: 'Pendentes',
+      paid: 'Pagos',
+      completed: 'Concluídos',
+    },
     tabNote:
       'Correspondência do protótipo: Pendente = contribuição em escrow, campanha aberta. Pago = campanha financiada, ainda em curso. Concluído = campanha terminada após financiamento. Cancelado = terminada sem atingir o objetivo; um reembolso assinado pelo contribuinte está disponível na página da campanha.',
     noInvestments: 'Nenhum investimento encontrado.',
@@ -460,14 +505,26 @@ export const pt: Messages = {
       { label: 'Dados pessoais', note: 'Não recolhidos neste protótipo.' },
       { label: 'Dados de morada', note: 'Não recolhidos neste protótipo.' },
       { label: 'Dados de contacto', note: 'Não recolhidos neste protótipo.' },
-      { label: 'Segurança', note: 'Acesso baseado em carteira (Freighter). Sem palavra-passe nem aplicação de dois fatores neste protótipo.' },
+      {
+        label: 'Segurança',
+        note: 'Acesso baseado em carteira (Freighter). Sem palavra-passe nem aplicação de dois fatores neste protótipo.',
+      },
       {
         label: 'Qualificação do investidor',
         note: 'O teste de conhecimentos e a verificação de capacidade de suportar perdas são passos de conformidade planeados; não implementados aqui.',
       },
-      { label: 'Verificação (KYC)', note: 'Não implementada. Este protótipo de testnet não verifica nenhuma identidade.' },
-      { label: 'Dados bancários', note: 'Não recolhidos. As contribuições e os reembolsos movimentam-se como USDC de testnet on-chain.' },
-      { label: 'Dados de conta de títulos', note: 'Referência opcional a conta de valores mobiliários na plataforma de referência; não recolhida aqui.' },
+      {
+        label: 'Verificação (KYC)',
+        note: 'Não implementada. Este protótipo de testnet não verifica nenhuma identidade.',
+      },
+      {
+        label: 'Dados bancários',
+        note: 'Não recolhidos. As contribuições e os reembolsos movimentam-se como USDC de testnet on-chain.',
+      },
+      {
+        label: 'Dados de conta de títulos',
+        note: 'Referência opcional a conta de valores mobiliários na plataforma de referência; não recolhida aqui.',
+      },
       {
         label: 'Cofre digital',
         note: 'Vista planeada de custódia das posições detidas. Aqui, as posições vivem em cada contrato de campanha e são lidas por carteira ligada.',
@@ -698,7 +755,11 @@ export const pt: Messages = {
         summary:
           'Terminologia de plataformas encontrada em empréstimos e obrigações. Nas obrigações, não a leia como subordinação qualificada salvo se as próprias condições disserem subordinada.',
       },
-      { id: 'mini-bond', label: '"Mini Bond"', summary: 'Rótulo de plataforma para uma obrigação de baixo valor unitário.' },
+      {
+        id: 'mini-bond',
+        label: '"Mini Bond"',
+        summary: 'Rótulo de plataforma para uma obrigação de baixo valor unitário.',
+      },
     ],
     chipZeroCoupon: 'Cupão zero',
     chipConvertible: 'Convertível',
@@ -717,7 +778,10 @@ export const pt: Messages = {
       term: 'Limiar de financiamento',
       definition: 'O montante mínimo que uma emissão tem de angariar para fechar. Distinto do investimento mínimo por investidor.',
     },
-    { term: 'Investimento mínimo', definition: 'O menor montante que um investidor pode subscrever, normalmente uma unidade.' },
+    {
+      term: 'Investimento mínimo',
+      definition: 'O menor montante que um investidor pode subscrever, normalmente uma unidade.',
+    },
     {
       term: 'Subordinação',
       definition:
@@ -755,11 +819,26 @@ export const pt: Messages = {
       definition:
         'Fundos detidos por um mecanismo neutro até que as condições se verifiquem. Aqui, o próprio contrato da campanha detém as contribuições em escrow na testnet Stellar.',
     },
-    { term: 'Soroban', definition: 'A plataforma de contratos inteligentes da rede Stellar usada por este protótipo.' },
-    { term: 'Testnet', definition: 'Uma rede de teste pública com ativos sem valor, usada para experimentar software sem dinheiro real.' },
-    { term: 'Valor nominal', definition: 'O valor facial de uma unidade de um instrumento, sobre o qual se calculam juros e reembolso.' },
-    { term: 'Reembolso bullet', definition: 'Reembolso do montante nominal total num único pagamento no vencimento.' },
-    { term: 'act/act, 30E/360', definition: 'Convenções de contagem de dias que definem como os juros acumulam entre datas de pagamento.' },
+    {
+      term: 'Soroban',
+      definition: 'A plataforma de contratos inteligentes da rede Stellar usada por este protótipo.',
+    },
+    {
+      term: 'Testnet',
+      definition: 'Uma rede de teste pública com ativos sem valor, usada para experimentar software sem dinheiro real.',
+    },
+    {
+      term: 'Valor nominal',
+      definition: 'O valor facial de uma unidade de um instrumento, sobre o qual se calculam juros e reembolso.',
+    },
+    {
+      term: 'Reembolso bullet',
+      definition: 'Reembolso do montante nominal total num único pagamento no vencimento.',
+    },
+    {
+      term: 'act/act, 30E/360',
+      definition: 'Convenções de contagem de dias que definem como os juros acumulam entre datas de pagamento.',
+    },
     {
       term: 'Obrigação de cupão zero (Zero Bond)',
       definition:
@@ -780,7 +859,10 @@ export const pt: Messages = {
       definition:
         'Uma forma contratual de subordinação segundo a qual os juros e, por vezes, os pagamentos de capital cessam quando o emitente ficaria sobreendividado. Terminologia de plataforma como "qualificada" por si só não a prova; as condições têm de dizer subordinada.',
     },
-    { term: 'Mini Bond', definition: 'Rótulo de plataforma para uma obrigação de baixo valor unitário.' },
+    {
+      term: 'Mini Bond',
+      definition: 'Rótulo de plataforma para uma obrigação de baixo valor unitário.',
+    },
     {
       term: 'Know your customer (KYC)',
       definition: 'Verificação de identidade que as plataformas reguladas têm de concluir antes de um investidor poder investir. Este protótipo não faz KYC.',
@@ -1025,28 +1107,66 @@ export const pt: Messages = {
         term: 'Até 2030-12-31 (exemplo)',
         minInvestment: '250 USDC de testnet (exemplo)',
         additionalInfo: [
-          { label: 'Produto de investimento', value: 'Obrigação sénior (não subordinada, sem garantias). Dados de exemplo - não é uma oferta real' },
-          { label: 'ISIN / WKN', value: 'Não emitido - este protótipo não emite identificadores de valores mobiliários' },
-          { label: 'Montante nominal por unidade', value: '250 USDC de testnet (exemplo)' },
+          {
+            label: 'Produto de investimento',
+            value: 'Obrigação sénior (não subordinada, sem garantias). Dados de exemplo - não é uma oferta real',
+          },
+          {
+            label: 'ISIN / WKN',
+            value: 'Não emitido - este protótipo não emite identificadores de valores mobiliários',
+          },
+          {
+            label: 'Montante nominal por unidade',
+            value: '250 USDC de testnet (exemplo)',
+          },
           { label: 'Subscrição mínima', value: '1 unidade (exemplo)' },
-          { label: 'Limiar de financiamento', value: 'Igual ao objetivo da campanha; tudo-ou-nada aplicado pelo contrato em modo real' },
-          { label: 'Volume da emissão', value: 'Objetivo de 250.000 USDC de testnet (exemplo)' },
+          {
+            label: 'Limiar de financiamento',
+            value: 'Igual ao objetivo da campanha; tudo-ou-nada aplicado pelo contrato em modo real',
+          },
+          {
+            label: 'Volume da emissão',
+            value: 'Objetivo de 250.000 USDC de testnet (exemplo)',
+          },
           { label: 'Cálculo de juros', value: '30E/360 (exemplo)' },
-          { label: 'Datas de pagamento de juros', value: 'Anualmente a 31 de dezembro, primeiro pagamento em 2027 (exemplo)' },
+          {
+            label: 'Datas de pagamento de juros',
+            value: 'Anualmente a 31 de dezembro, primeiro pagamento em 2027 (exemplo)',
+          },
           { label: 'Reembolso', value: 'No vencimento (exemplo)' },
-          { label: 'Oferecido em', value: 'Sem países de oferta - apenas dados de exemplo' },
-          { label: 'Intermediário', value: 'Nenhum. Este protótipo não é um prestador de serviços de crowdfunding' },
+          {
+            label: 'Oferecido em',
+            value: 'Sem países de oferta - apenas dados de exemplo',
+          },
+          {
+            label: 'Intermediário',
+            value: 'Nenhum. Este protótipo não é um prestador de serviços de crowdfunding',
+          },
         ],
         overview: [
           'Este painel demonstra como o conteúdo de marketing fornecido pelo emitente é separado dos factos da plataforma pelo separador acima.',
           'Dados de exemplo - não é uma oferta real. A descrição do emitente, a equipa, o modelo de negócio e as finanças mostrados numa plataforma real seriam fornecidos pelo emitente e claramente atribuídos.',
         ],
         documents: [
-          { label: 'Ficha de informação fundamental (entrada de exemplo)', note: 'Nenhum ficheiro alojado neste protótipo' },
-          { label: 'Condições da obrigação (entrada de exemplo)', note: 'Nenhum ficheiro alojado neste protótipo' },
-          { label: 'Pitch deck (entrada de exemplo)', note: 'Nenhum ficheiro alojado neste protótipo' },
+          {
+            label: 'Ficha de informação fundamental (entrada de exemplo)',
+            note: 'Nenhum ficheiro alojado neste protótipo',
+          },
+          {
+            label: 'Condições da obrigação (entrada de exemplo)',
+            note: 'Nenhum ficheiro alojado neste protótipo',
+          },
+          {
+            label: 'Pitch deck (entrada de exemplo)',
+            note: 'Nenhum ficheiro alojado neste protótipo',
+          },
         ],
-        news: [{ date: 'Exemplo', text: 'As atualizações da campanha apareceriam aqui. Esta entrada é um marcador, não uma atualização real.' }],
+        news: [
+          {
+            date: 'Exemplo',
+            text: 'As atualizações da campanha apareceriam aqui. Esta entrada é um marcador, não uma atualização real.',
+          },
+        ],
       },
       {
         campaignId: 'fixture-alentejo-solar',
@@ -1062,23 +1182,53 @@ export const pt: Messages = {
         term: 'Até 2032-06-30 (exemplo)',
         minInvestment: '250 USDC de testnet (exemplo)',
         additionalInfo: [
-          { label: 'Produto de investimento', value: 'Obrigação subordinada. Dados de exemplo - não é uma oferta real' },
-          { label: 'ISIN / WKN', value: 'Não emitido - este protótipo não emite identificadores de valores mobiliários' },
-          { label: 'Montante nominal por unidade', value: '250 USDC de testnet (exemplo)' },
-          { label: 'Limiar de financiamento', value: 'Objetivo de 900.000 USDC de testnet (exemplo); tudo-ou-nada em modo real' },
-          { label: 'Subordinação', value: 'Os créditos ficam atrás dos credores seniores em caso de insolvência (condições de exemplo)' },
+          {
+            label: 'Produto de investimento',
+            value: 'Obrigação subordinada. Dados de exemplo - não é uma oferta real',
+          },
+          {
+            label: 'ISIN / WKN',
+            value: 'Não emitido - este protótipo não emite identificadores de valores mobiliários',
+          },
+          {
+            label: 'Montante nominal por unidade',
+            value: '250 USDC de testnet (exemplo)',
+          },
+          {
+            label: 'Limiar de financiamento',
+            value: 'Objetivo de 900.000 USDC de testnet (exemplo); tudo-ou-nada em modo real',
+          },
+          {
+            label: 'Subordinação',
+            value: 'Os créditos ficam atrás dos credores seniores em caso de insolvência (condições de exemplo)',
+          },
           { label: 'Cálculo de juros', value: 'act/act (exemplo)' },
-          { label: 'Datas de pagamento de juros', value: 'Anualmente a 30 de junho, primeiro pagamento em 2028 (exemplo)' },
+          {
+            label: 'Datas de pagamento de juros',
+            value: 'Anualmente a 30 de junho, primeiro pagamento em 2028 (exemplo)',
+          },
           { label: 'Reembolso', value: 'No vencimento (exemplo)' },
-          { label: 'Oferecido em', value: 'Sem países de oferta - apenas dados de exemplo' },
-          { label: 'Intermediário', value: 'Nenhum. Este protótipo não é um prestador de serviços de crowdfunding' },
+          {
+            label: 'Oferecido em',
+            value: 'Sem países de oferta - apenas dados de exemplo',
+          },
+          {
+            label: 'Intermediário',
+            value: 'Nenhum. Este protótipo não é um prestador de serviços de crowdfunding',
+          },
         ],
         overview: [
           'Dados de exemplo - não é uma oferta real. Uma página de campanha real traria a descrição da cooperativa, do local e da venda de energia pelo próprio emitente.',
         ],
         documents: [
-          { label: 'Ficha de informação fundamental (entrada de exemplo)', note: 'Nenhum ficheiro alojado neste protótipo' },
-          { label: 'Condições de emissão (entrada de exemplo)', note: 'Nenhum ficheiro alojado neste protótipo' },
+          {
+            label: 'Ficha de informação fundamental (entrada de exemplo)',
+            note: 'Nenhum ficheiro alojado neste protótipo',
+          },
+          {
+            label: 'Condições de emissão (entrada de exemplo)',
+            note: 'Nenhum ficheiro alojado neste protótipo',
+          },
         ],
         news: [] as { date: string; text: string }[],
       },
@@ -1101,18 +1251,50 @@ export const pt: Messages = {
             value:
               'Obrigação com cláusula de conversão (convertível); senioridade não especificada nas condições de exemplo. Dados de exemplo - não é uma oferta real',
           },
-          { label: 'ISIN / WKN', value: 'Não emitido - este protótipo não emite identificadores de valores mobiliários' },
-          { label: 'Montante nominal por unidade', value: '500 USDC de testnet (exemplo)' },
-          { label: 'Limiar de financiamento', value: 'Objetivo de 500.000 USDC de testnet (exemplo)' },
-          { label: 'Ativação da conversão', value: 'Configurável por emissão; exemplo: um evento de financiamento qualificado anunciado pelo emitente' },
-          { label: 'Janela de conversão', value: 'Configurável por emissão; exemplo: 30 dias após o anúncio da ativação' },
-          { label: 'Cessação de juros', value: 'Os juros acumulam até ao dia da conversão (exemplo)' },
-          { label: 'Reembolso se não convertida', value: 'No vencimento (exemplo)' },
-          { label: 'Oferecido em', value: 'Sem países de oferta - apenas dados de exemplo' },
-          { label: 'Intermediário', value: 'Nenhum. Este protótipo não é um prestador de serviços de crowdfunding' },
+          {
+            label: 'ISIN / WKN',
+            value: 'Não emitido - este protótipo não emite identificadores de valores mobiliários',
+          },
+          {
+            label: 'Montante nominal por unidade',
+            value: '500 USDC de testnet (exemplo)',
+          },
+          {
+            label: 'Limiar de financiamento',
+            value: 'Objetivo de 500.000 USDC de testnet (exemplo)',
+          },
+          {
+            label: 'Ativação da conversão',
+            value: 'Configurável por emissão; exemplo: um evento de financiamento qualificado anunciado pelo emitente',
+          },
+          {
+            label: 'Janela de conversão',
+            value: 'Configurável por emissão; exemplo: 30 dias após o anúncio da ativação',
+          },
+          {
+            label: 'Cessação de juros',
+            value: 'Os juros acumulam até ao dia da conversão (exemplo)',
+          },
+          {
+            label: 'Reembolso se não convertida',
+            value: 'No vencimento (exemplo)',
+          },
+          {
+            label: 'Oferecido em',
+            value: 'Sem países de oferta - apenas dados de exemplo',
+          },
+          {
+            label: 'Intermediário',
+            value: 'Nenhum. Este protótipo não é um prestador de serviços de crowdfunding',
+          },
         ],
         overview: ['Dados de exemplo - não é uma oferta real. As campanhas concluídas permanecem visíveis com o seu estado final de financiamento, como esta.'],
-        documents: [{ label: 'Condições da obrigação convertível (entrada de exemplo)', note: 'Nenhum ficheiro alojado neste protótipo' }],
+        documents: [
+          {
+            label: 'Condições da obrigação convertível (entrada de exemplo)',
+            note: 'Nenhum ficheiro alojado neste protótipo',
+          },
+        ],
         news: [
           {
             date: 'Exemplo',
@@ -1121,5 +1303,65 @@ export const pt: Messages = {
         ],
       },
     ],
+  },
+  community: {
+    loading: 'A carregar...',
+    demoBadge: 'DEMO',
+    documentsTitle: 'Documentos',
+    documentsNote:
+      'Os documentos marcados DEMO são modelos fictícios deste protótipo - não são ofertas, não são aconselhamento, não são informação verificada do emitente.',
+    documentKinds: {
+      kiis: 'KIIS',
+      terms: 'Condições',
+      project: 'Projeto',
+      other: 'Documento',
+    },
+    newsTitle: 'Notícias',
+    newsAuthorDemo: 'publicado pela plataforma (conteúdo de demonstração - sem identidade de emitente verificada)',
+    commentsTitle: 'Comentários',
+    commentsEmpty: 'Ainda não há comentários.',
+    commentLabel: 'O seu comentário',
+    commentSubmit: 'Publicar comentário',
+    commentPostingAs: (name: string) => `A publicar como ${name}. Os comentários são públicos.`,
+    commentsSignInHint: 'Inicie sessão com a sua carteira abaixo para participar na discussão.',
+    signInTitle: 'Início de sessão na comunidade',
+    signInExplainer:
+      'Assine um desafio único com a sua carteira Freighter para provar que controla o endereço. Não é criada nenhuma transação e não se movem fundos. A sessão desbloqueia comentários, pedidos de suporte e candidaturas de emitente.',
+    signInButton: 'Iniciar sessão com a carteira',
+    signInConnectFirst: 'Ligue primeiro a sua carteira Freighter (no topo da página).',
+    signedInTitle: 'Conta da comunidade',
+    signedInAs: 'Sessão iniciada como',
+    displayNameLabel: 'Nome de apresentação (mostrado nos seus comentários)',
+    displayNameSave: 'Guardar nome',
+    signOutButton: 'Terminar sessão',
+    ticketsTitle: 'Suporte e feedback',
+    ticketsNote:
+      'Os pedidos são visíveis apenas para a sua conta de carteira e para a operadora do site. Isto é um protótipo: não inclua dados pessoais, palavras-passe ou dados de pagamento reais.',
+    ticketKindLabel: 'Tipo',
+    ticketKinds: {
+      support: 'Pedido de suporte',
+      feedback: 'Feedback',
+    },
+    ticketSubjectLabel: 'Assunto',
+    ticketBodyLabel: 'Mensagem',
+    ticketSubmit: 'Enviar',
+    ticketsEmpty: 'Ainda não há pedidos.',
+    ticketStatus: {
+      open: 'Aberto',
+      closed: 'Fechado',
+    },
+    applicationTitle: 'Candidatar-se como emitente',
+    applicationNote:
+      'Apresente à operadora o projeto que gostaria de listar. Enviar este formulário não é uma oferta, uma listagem ou uma aprovação - inicia uma conversa. Ambiente de demonstração: não submeta segredos comerciais reais.',
+    applicationFields: {
+      projectName: 'Nome do projeto',
+      country: 'País',
+      instrumentType: 'Tipo de instrumento (ex.: obrigação, capital, partilha de receitas)',
+      targetAmount: 'Montante alvo',
+      description: 'Descrição do projeto',
+      contactEmail: 'Email de contacto (opcional)',
+    },
+    applicationSubmit: 'Submeter candidatura',
+    applicationDone: 'Candidatura recebida. A operadora analisa as candidaturas fora do site; nada é listado automaticamente.',
   },
 };

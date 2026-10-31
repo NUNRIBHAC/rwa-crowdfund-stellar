@@ -52,10 +52,19 @@ export const zhCN: Messages = {
     stepsAria: '投资流程',
     stepsTitle: '4 步完成首次出资',
     steps: [
-      { title: '连接', text: '在 Stellar 测试网上连接 Freighter 钱包。本原型无需账户，不收集个人数据。' },
+      {
+        title: '连接',
+        text: '在 Stellar 测试网上连接 Freighter 钱包。本原型无需账户，不收集个人数据。',
+      },
       { title: '发现', text: '浏览项目，阅读每个项目页面上的结构化条款。' },
-      { title: '出资', text: '签署一笔交易。合约托管您的出资并以原子方式执行融资上限。' },
-      { title: '跟踪', text: '在此跟踪融资状态。若目标未达成，退款由出资者自行签署。' },
+      {
+        title: '出资',
+        text: '签署一笔交易。合约托管您的出资并以原子方式执行融资上限。',
+      },
+      {
+        title: '跟踪',
+        text: '在此跟踪融资状态。若目标未达成，退款由出资者自行签署。',
+      },
     ],
     fullJourneyLink: '完整的投资者旅程，每一步都标注为已上线或计划中',
     latestAria: '最新项目',
@@ -276,11 +285,23 @@ export const zhCN: Messages = {
       },
     ],
     issuerSteps: [
-      { title: '申请和审核', text: '发行方提交申请，通过资格和文件审核，并签署平台条款。' },
+      {
+        title: '申请和审核',
+        text: '发行方提交申请，通过资格和文件审核，并签署平台条款。',
+      },
       { title: '项目构建', text: '配置并审核工具条款、门槛、文件和营销内容。' },
-      { title: '上线项目', text: '演示展示了带有链上实时融资状态的公开项目页面。' },
-      { title: '结算', text: '全有或全无：只有目标在截止期限前达成，创建者才能提款，由合约执行。' },
-      { title: '融资后义务', text: '报告、利息和赎回支付，以及独立的发行方生命周期状态。未实现。' },
+      {
+        title: '上线项目',
+        text: '演示展示了带有链上实时融资状态的公开项目页面。',
+      },
+      {
+        title: '结算',
+        text: '全有或全无：只有目标在截止期限前达成，创建者才能提款，由合约执行。',
+      },
+      {
+        title: '融资后义务',
+        text: '报告、利息和赎回支付，以及独立的发行方生命周期状态。未实现。',
+      },
     ],
   },
   learn: {
@@ -310,8 +331,14 @@ export const zhCN: Messages = {
   riskWarnings: {
     title: '风险提示',
     items: [
-      { h: '全部损失', p: '众筹投资可能损失全部价值。切勿投资您无法承受损失的资金。' },
-      { h: '流动性不足', p: '这些工具通常不可交易。请假定您在到期或约定事件前无法退出。' },
+      {
+        h: '全部损失',
+        p: '众筹投资可能损失全部价值。切勿投资您无法承受损失的资金。',
+      },
+      {
+        h: '流动性不足',
+        p: '这些工具通常不可交易。请假定您在到期或约定事件前无法退出。',
+      },
       {
         h: '分散投资',
         p: '常见指引是投入此类资产的资金不超过可自由支配资金的 10%，并分散到不同发行方。',
@@ -321,7 +348,10 @@ export const zhCN: Messages = {
         h: '不构成建议',
         p: '本网站的任何内容均不构成投资、法律或税务建议。本网站是测试网络上的软件原型，不列出任何真实发行。',
       },
-      { h: '原型状态', p: '测试网资产毫无价值。此处的智能合约未经审计，不得用于真实资金。' },
+      {
+        h: '原型状态',
+        p: '测试网资产毫无价值。此处的智能合约未经审计，不得用于真实资金。',
+      },
     ],
   },
   faqPage: {
@@ -366,7 +396,10 @@ export const zhCN: Messages = {
       { h: '申请', p: '向我们介绍您的公司、所需金额和您考虑的金融工具。' },
       { h: '审核', p: '资格和文件审核，然后给出结构化的融资方案。' },
       { h: '构建', p: '共同准备项目页面、工具条款、文件和营销内容。' },
-      { h: '募资', p: '全有或全无的项目融资。只有在截止期限前达到目标，资金才会结算。' },
+      {
+        h: '募资',
+        p: '全有或全无的项目融资。只有在截止期限前达到目标，资金才会结算。',
+      },
     ],
     previewAria: '申请表预览',
     previewTitle: '申请表（预览）',
@@ -396,7 +429,13 @@ export const zhCN: Messages = {
     myInvestments: '我的投资',
     newInvestments: '新的投资',
     filterAria: '按状态筛选投资组合',
-    tabs: { all: '全部', canceled: '已取消', pending: '待处理', paid: '已支付', completed: '已完成' },
+    tabs: {
+      all: '全部',
+      canceled: '已取消',
+      pending: '待处理',
+      paid: '已支付',
+      completed: '已完成',
+    },
     tabNote:
       '原型映射：待处理 = 出资已托管，项目开放中。已支付 = 项目已融资，仍在进行。已完成 = 项目在融资后结束。已取消 = 未达到目标而结束；出资人可在项目页面签署退款。',
     noInvestments: '未找到投资。',
@@ -421,16 +460,34 @@ export const zhCN: Messages = {
       { label: '个人数据', note: '本原型不收集。' },
       { label: '地址数据', note: '本原型不收集。' },
       { label: '联系方式', note: '本原型不收集。' },
-      { label: '安全', note: '基于钱包的访问（Freighter）。本原型没有密码或双重验证应用。' },
-      { label: '投资者资格', note: '知识测试和损失承受能力检查是规划中的合规步骤；此处未实现。' },
-      { label: '身份验证（KYC）', note: '未实现。本测试网原型不验证任何身份。' },
-      { label: '银行信息', note: '不收集。出资和退款以测试网 USDC 在链上流转。' },
-      { label: '证券账户数据', note: '参考平台上的可选证券账户关联；此处不收集。' },
+      {
+        label: '安全',
+        note: '基于钱包的访问（Freighter）。本原型没有密码或双重验证应用。',
+      },
+      {
+        label: '投资者资格',
+        note: '知识测试和损失承受能力检查是规划中的合规步骤；此处未实现。',
+      },
+      {
+        label: '身份验证（KYC）',
+        note: '未实现。本测试网原型不验证任何身份。',
+      },
+      {
+        label: '银行信息',
+        note: '不收集。出资和退款以测试网 USDC 在链上流转。',
+      },
+      {
+        label: '证券账户数据',
+        note: '参考平台上的可选证券账户关联；此处不收集。',
+      },
       {
         label: '数字保管柜',
         note: '规划中的持仓保管视图。在本原型中，持仓存于各项目合约内，按连接的钱包读取。',
       },
-      { label: '公司账户', note: '参考平台允许已验证的投资者添加公司账户；本原型未实现。' },
+      {
+        label: '公司账户',
+        note: '参考平台允许已验证的投资者添加公司账户；本原型未实现。',
+      },
     ],
   },
   footer: {
@@ -602,7 +659,11 @@ export const zhCN: Messages = {
         label: '"Qualified / qualifiziert"',
         summary: '贷款和债券上出现的平台用语。对于债券，除非条款本身写明次级，否则不要将其理解为合格次级。',
       },
-      { id: 'mini-bond', label: '"Mini Bond"', summary: '平台对小额面值债券的称呼。' },
+      {
+        id: 'mini-bond',
+        label: '"Mini Bond"',
+        summary: '平台对小额面值债券的称呼。',
+      },
     ],
     chipZeroCoupon: '零息',
     chipConvertible: '可转换',
@@ -616,13 +677,22 @@ export const zhCN: Messages = {
       term: '全有或全无融资',
       definition: '只有在截止期限前达到目标，发行方才能收到资金；否则出资将被退还。本原型中的 Soroban 合约在链上强制执行这一规则。',
     },
-    { term: '融资门槛', definition: '一期发行必须募集到才能成交的最低金额。区别于单个投资者的最低投资额。' },
-    { term: '最低投资额', definition: '单个投资者可以认购的最小金额，通常为一个单位。' },
+    {
+      term: '融资门槛',
+      definition: '一期发行必须募集到才能成交的最低金额。区别于单个投资者的最低投资额。',
+    },
+    {
+      term: '最低投资额',
+      definition: '单个投资者可以认购的最小金额，通常为一个单位。',
+    },
     {
       term: '次级',
       definition: '一种受偿顺序规则：破产清算时，次级债权仅在优先债权人之后受偿，因此损失风险更高。',
     },
-    { term: 'ISIN', definition: '国际证券识别编码，用于标识一只证券。本原型不发行证券，也没有 ISIN。' },
+    {
+      term: 'ISIN',
+      definition: '国际证券识别编码，用于标识一只证券。本原型不发行证券，也没有 ISIN。',
+    },
     {
       term: '关键投资信息表（KIIS）',
       definition: '一份标准化的简短文件，载明发行的关键事实和风险，许多欧盟众筹发行都需要提供。',
@@ -648,10 +718,19 @@ export const zhCN: Messages = {
       definition: '由中立的机制保管资金直至条件满足。在本原型中，由项目合约本身在 Stellar 测试网上托管出资。',
     },
     { term: 'Soroban', definition: '本原型使用的 Stellar 网络智能合约平台。' },
-    { term: '测试网', definition: '一种公共测试网络，其中的资产没有价值，可在不动用真实资金的情况下试用软件。' },
-    { term: '名义价值', definition: '金融工具一个单位的面值，利息和偿还均以其为基准计算。' },
+    {
+      term: '测试网',
+      definition: '一种公共测试网络，其中的资产没有价值，可在不动用真实资金的情况下试用软件。',
+    },
+    {
+      term: '名义价值',
+      definition: '金融工具一个单位的面值，利息和偿还均以其为基准计算。',
+    },
     { term: '到期一次还本', definition: '在到期时一次性偿还全部名义金额。' },
-    { term: 'act/act、30E/360', definition: '计息惯例，用于定义利息在付息日之间如何累积。' },
+    {
+      term: 'act/act、30E/360',
+      definition: '计息惯例，用于定义利息在付息日之间如何累积。',
+    },
     {
       term: '零息债券（Zero Bond）',
       definition: '不支付定期利息的债券：以低于名义价值的价格发行，按面值偿还，回报即差额。这是一种票息结构，而非优先级。',
@@ -912,14 +991,23 @@ export const zhCN: Messages = {
         term: '至 2030-12-31（示例）',
         minInvestment: '250 USDC 测试网（示例）',
         additionalInfo: [
-          { label: '投资产品', value: '优先债券（非次级、无担保）。示例数据 - 非真实发行' },
+          {
+            label: '投资产品',
+            value: '优先债券（非次级、无担保）。示例数据 - 非真实发行',
+          },
           { label: 'ISIN / WKN', value: '未发行 - 本原型不发行证券标识符' },
           { label: '每单位名义金额', value: '250 USDC 测试网（示例）' },
           { label: '最低认购', value: '1 个单位（示例）' },
-          { label: '融资门槛', value: '等于项目目标；在实际模式下由合约执行全有或全无' },
+          {
+            label: '融资门槛',
+            value: '等于项目目标；在实际模式下由合约执行全有或全无',
+          },
           { label: '发行规模', value: '250,000 USDC 测试网目标（示例数据）' },
           { label: '计息方式', value: '30E/360（示例）' },
-          { label: '付息日期', value: '每年 12 月 31 日，首次付息 2027 年（示例）' },
+          {
+            label: '付息日期',
+            value: '每年 12 月 31 日，首次付息 2027 年（示例）',
+          },
           { label: '偿还', value: '到期偿还（示例）' },
           { label: '发行地区', value: '无发行国家 - 仅为示例数据' },
           { label: '中介机构', value: '无。本原型不是众筹服务提供商' },
@@ -933,7 +1021,12 @@ export const zhCN: Messages = {
           { label: '债券条款（示例条目）', note: '本原型未托管任何文件' },
           { label: '融资演示文稿（示例条目）', note: '本原型未托管任何文件' },
         ],
-        news: [{ date: '示例', text: '项目更新会显示在这里。本条目是占位符，不是真实更新。' }],
+        news: [
+          {
+            date: '示例',
+            text: '项目更新会显示在这里。本条目是占位符，不是真实更新。',
+          },
+        ],
       },
       {
         campaignId: 'fixture-alentejo-solar',
@@ -951,10 +1044,19 @@ export const zhCN: Messages = {
           { label: '投资产品', value: '次级债券。示例数据 - 非真实发行' },
           { label: 'ISIN / WKN', value: '未发行 - 本原型不发行证券标识符' },
           { label: '每单位名义金额', value: '250 USDC 测试网（示例）' },
-          { label: '融资门槛', value: '900,000 USDC 测试网目标（示例数据）；实际模式下全有或全无' },
-          { label: '次级属性', value: '破产清算时受偿顺序落后于优先债权人（示例条款）' },
+          {
+            label: '融资门槛',
+            value: '900,000 USDC 测试网目标（示例数据）；实际模式下全有或全无',
+          },
+          {
+            label: '次级属性',
+            value: '破产清算时受偿顺序落后于优先债权人（示例条款）',
+          },
           { label: '计息方式', value: 'act/act（示例）' },
-          { label: '付息日期', value: '每年 6 月 30 日，首次付息 2028 年（示例）' },
+          {
+            label: '付息日期',
+            value: '每年 6 月 30 日，首次付息 2028 年（示例）',
+          },
           { label: '偿还', value: '到期偿还（示例）' },
           { label: '发行地区', value: '无发行国家 - 仅为示例数据' },
           { label: '中介机构', value: '无。本原型不是众筹服务提供商' },
@@ -986,7 +1088,10 @@ export const zhCN: Messages = {
           { label: 'ISIN / WKN', value: '未发行 - 本原型不发行证券标识符' },
           { label: '每单位名义金额', value: '500 USDC 测试网（示例）' },
           { label: '融资门槛', value: '500,000 USDC 测试网目标（示例数据）' },
-          { label: '转换触发条件', value: '按发行配置；示例：发行方宣布的合格融资事件' },
+          {
+            label: '转换触发条件',
+            value: '按发行配置；示例：发行方宣布的合格融资事件',
+          },
           { label: '转换窗口', value: '按发行配置；示例：触发公告后 30 天' },
           { label: '利息停止', value: '利息累计至转换日（示例）' },
           { label: '未转换时的偿还', value: '到期偿还（示例）' },
@@ -995,8 +1100,69 @@ export const zhCN: Messages = {
         ],
         overview: ['示例数据 - 非真实发行。已完成的项目会连同其最终融资状态保持可见，如本项目所示。'],
         documents: [{ label: '可转换债券条款（示例条目）', note: '本原型未托管任何文件' }],
-        news: [{ date: '示例', text: '该项目在示例数据中已成功结束。融资后的发行方事件会单独跟踪。' }],
+        news: [
+          {
+            date: '示例',
+            text: '该项目在示例数据中已成功结束。融资后的发行方事件会单独跟踪。',
+          },
+        ],
       },
     ],
+  },
+  community: {
+    loading: '加载中...',
+    demoBadge: 'DEMO',
+    documentsTitle: '文件',
+    documentsNote: '标有 DEMO 的文件为本原型的虚构模板 - 非要约、非建议、非经核验的发行人信息。',
+    documentKinds: {
+      kiis: 'KIIS',
+      terms: '条款',
+      project: '项目',
+      other: '文件',
+    },
+    newsTitle: '最新动态',
+    newsAuthorDemo: '由平台发布(演示内容 - 无经核验的发行人身份)',
+    commentsTitle: '评论',
+    commentsEmpty: '暂无评论。',
+    commentLabel: '您的评论',
+    commentSubmit: '发表评论',
+    commentPostingAs: (name: string) => `以 ${name} 身份发表。评论为公开。`,
+    commentsSignInHint: '在下方使用您的钱包登录以参与讨论。',
+    signInTitle: '社区登录',
+    signInExplainer: '使用您的 Freighter 钱包签署一次性挑战,以证明您控制该地址。不会创建任何交易,也不会移动资金。登录后可使用评论、支持工单和发行人申请。',
+    signInButton: '使用钱包登录',
+    signInConnectFirst: '请先连接您的 Freighter 钱包(页面顶部)。',
+    signedInTitle: '社区账户',
+    signedInAs: '已登录为',
+    displayNameLabel: '显示名称(显示在您的评论中)',
+    displayNameSave: '保存名称',
+    signOutButton: '退出登录',
+    ticketsTitle: '支持与反馈',
+    ticketsNote: '工单仅您的钱包账户与网站运营方可见。此为原型:请勿包含个人数据、密码或真实付款信息。',
+    ticketKindLabel: '类型',
+    ticketKinds: {
+      support: '支持请求',
+      feedback: '意见反馈',
+    },
+    ticketSubjectLabel: '主题',
+    ticketBodyLabel: '消息',
+    ticketSubmit: '发送',
+    ticketsEmpty: '暂无工单。',
+    ticketStatus: {
+      open: '待处理',
+      closed: '已关闭',
+    },
+    applicationTitle: '申请成为发行人',
+    applicationNote: '向运营方介绍您想上架的项目。提交此表单并非要约、上架或批准 - 而是开启对话。演示环境:请勿提交真实商业机密。',
+    applicationFields: {
+      projectName: '项目名称',
+      country: '国家',
+      instrumentType: '工具类型(例如:债券、股权、收益分成)',
+      targetAmount: '目标金额',
+      description: '项目说明',
+      contactEmail: '联系邮箱(选填)',
+    },
+    applicationSubmit: '提交申请',
+    applicationDone: '已收到申请。运营方会在站外审核申请;不会自动上架任何内容。',
   },
 };

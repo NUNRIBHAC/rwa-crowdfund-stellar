@@ -55,10 +55,22 @@ export const en = {
     stepsAria: 'How investing works',
     stepsTitle: '4 steps to your first contribution',
     steps: [
-      { title: 'Connect', text: 'Connect a Freighter wallet on Stellar testnet. No account, no personal data in this prototype.' },
-      { title: 'Discover', text: 'Browse campaigns and read the structured terms on each campaign page.' },
-      { title: 'Contribute', text: 'Sign one transaction. The contract escrows your contribution and enforces the funding cap atomically.' },
-      { title: 'Track', text: 'Follow the funding state here. Refunds are contributor-signed if the goal is missed.' },
+      {
+        title: 'Connect',
+        text: 'Connect a Freighter wallet on Stellar testnet. No account, no personal data in this prototype.',
+      },
+      {
+        title: 'Discover',
+        text: 'Browse campaigns and read the structured terms on each campaign page.',
+      },
+      {
+        title: 'Contribute',
+        text: 'Sign one transaction. The contract escrows your contribution and enforces the funding cap atomically.',
+      },
+      {
+        title: 'Track',
+        text: 'Follow the funding state here. Refunds are contributor-signed if the goal is missed.',
+      },
     ],
     fullJourneyLink: 'Full investor journey, with each step marked live or planned',
     latestAria: 'Latest campaigns',
@@ -286,11 +298,26 @@ export const en = {
       },
     ],
     issuerSteps: [
-      { title: 'Application and review', text: 'Issuer applies, passes eligibility and document review, and signs the platform terms.' },
-      { title: 'Campaign build', text: 'Instrument terms, thresholds, documents and marketing content are configured and reviewed.' },
-      { title: 'Live campaign', text: 'The demo shows the public campaign page with live on-chain funding state.' },
-      { title: 'Settlement', text: 'All-or-nothing: the creator withdraws only if the goal is met by the deadline, enforced by the contract.' },
-      { title: 'Post-funding duties', text: 'Reporting, interest and redemption payments, and a separate issuer-lifecycle status. Not implemented.' },
+      {
+        title: 'Application and review',
+        text: 'Issuer applies, passes eligibility and document review, and signs the platform terms.',
+      },
+      {
+        title: 'Campaign build',
+        text: 'Instrument terms, thresholds, documents and marketing content are configured and reviewed.',
+      },
+      {
+        title: 'Live campaign',
+        text: 'The demo shows the public campaign page with live on-chain funding state.',
+      },
+      {
+        title: 'Settlement',
+        text: 'All-or-nothing: the creator withdraws only if the goal is met by the deadline, enforced by the contract.',
+      },
+      {
+        title: 'Post-funding duties',
+        text: 'Reporting, interest and redemption payments, and a separate issuer-lifecycle status. Not implemented.',
+      },
     ],
   },
   learn: {
@@ -320,18 +347,30 @@ export const en = {
   riskWarnings: {
     title: 'Risk warnings',
     items: [
-      { h: 'Total loss', p: 'Crowdfunding investments can lose their entire value. Never invest money you cannot afford to lose.' },
-      { h: 'Illiquidity', p: 'These instruments are usually not tradable. Assume you cannot exit before maturity or a defined event.' },
+      {
+        h: 'Total loss',
+        p: 'Crowdfunding investments can lose their entire value. Never invest money you cannot afford to lose.',
+      },
+      {
+        h: 'Illiquidity',
+        p: 'These instruments are usually not tradable. Assume you cannot exit before maturity or a defined event.',
+      },
       {
         h: 'Diversification',
         p: 'A common guideline is to invest no more than 10% of freely available funds in this asset class and to spread it across issuers.',
       },
-      { h: 'No protection scheme', p: 'Crowdfunding investments are not covered by deposit-guarantee or investor-compensation schemes.' },
+      {
+        h: 'No protection scheme',
+        p: 'Crowdfunding investments are not covered by deposit-guarantee or investor-compensation schemes.',
+      },
       {
         h: 'No advice',
         p: 'Nothing on this site is investment, legal or tax advice. This site is a software prototype on a test network and lists no live offers.',
       },
-      { h: 'Prototype status', p: 'Testnet assets are worthless. Smart contracts here are not audited and must not be used with real funds.' },
+      {
+        h: 'Prototype status',
+        p: 'Testnet assets are worthless. Smart contracts here are not audited and must not be used with real funds.',
+      },
     ],
   },
   faqPage: {
@@ -379,10 +418,22 @@ export const en = {
     journeyAria: 'Issuer journey overview',
     journeyTitle: 'The intended journey',
     steps: [
-      { h: 'Apply', p: 'Tell us about your company, the amount and the instrument you have in mind.' },
-      { h: 'Review', p: 'Eligibility and document review, then a structured financing offer.' },
-      { h: 'Build', p: 'Campaign page, instrument terms, documents and marketing content prepared together.' },
-      { h: 'Fund', p: 'All-or-nothing campaign. Funds settle only if the goal is met by the deadline.' },
+      {
+        h: 'Apply',
+        p: 'Tell us about your company, the amount and the instrument you have in mind.',
+      },
+      {
+        h: 'Review',
+        p: 'Eligibility and document review, then a structured financing offer.',
+      },
+      {
+        h: 'Build',
+        p: 'Campaign page, instrument terms, documents and marketing content prepared together.',
+      },
+      {
+        h: 'Fund',
+        p: 'All-or-nothing campaign. Funds settle only if the goal is met by the deadline.',
+      },
     ],
     previewAria: 'Application preview',
     previewTitle: 'Application (preview)',
@@ -413,7 +464,13 @@ export const en = {
     myInvestments: 'My investments',
     newInvestments: 'New investments',
     filterAria: 'Filter portfolio by status',
-    tabs: { all: 'All', canceled: 'Canceled', pending: 'Pending', paid: 'Paid', completed: 'Completed' },
+    tabs: {
+      all: 'All',
+      canceled: 'Canceled',
+      pending: 'Pending',
+      paid: 'Paid',
+      completed: 'Completed',
+    },
     tabNote:
       'Prototype mapping: Pending = contribution escrowed, campaign open. Paid = campaign funded, still running. Completed = campaign ended after funding. Canceled = ended without reaching the goal; a contributor-signed refund is available on the campaign page.',
     noInvestments: 'No investments found.',
@@ -440,16 +497,34 @@ export const en = {
       { label: 'Personal data', note: 'Not collected in this prototype.' },
       { label: 'Address data', note: 'Not collected in this prototype.' },
       { label: 'Contact details', note: 'Not collected in this prototype.' },
-      { label: 'Security', note: 'Wallet-based access (Freighter). No password or two-factor app in this prototype.' },
-      { label: 'Investor qualification', note: 'Knowledge test and loss-capacity check are planned compliance steps; not implemented here.' },
-      { label: 'Verification (KYC)', note: 'Not implemented. This testnet prototype verifies no identity.' },
-      { label: 'Bank details', note: 'Not collected. Contributions and refunds move as testnet USDC on-chain.' },
-      { label: 'Depot data', note: 'Optional securities-account reference on the reference platform; not collected here.' },
+      {
+        label: 'Security',
+        note: 'Wallet-based access (Freighter). No password or two-factor app in this prototype.',
+      },
+      {
+        label: 'Investor qualification',
+        note: 'Knowledge test and loss-capacity check are planned compliance steps; not implemented here.',
+      },
+      {
+        label: 'Verification (KYC)',
+        note: 'Not implemented. This testnet prototype verifies no identity.',
+      },
+      {
+        label: 'Bank details',
+        note: 'Not collected. Contributions and refunds move as testnet USDC on-chain.',
+      },
+      {
+        label: 'Depot data',
+        note: 'Optional securities-account reference on the reference platform; not collected here.',
+      },
       {
         label: 'Digital locker',
         note: 'Planned custody view of held positions. Here, positions live in each campaign contract and are read per connected wallet.',
       },
-      { label: 'Company accounts', note: 'The reference platform lets a verified investor add a company account; not implemented in this prototype.' },
+      {
+        label: 'Company accounts',
+        note: 'The reference platform lets a verified investor add a company account; not implemented in this prototype.',
+      },
     ],
   },
   footer: {
@@ -641,7 +716,11 @@ export const en = {
         label: '"Qualified / qualifiziert"',
         summary: 'Platform wording found on loans and bonds. On bonds, do not read it as qualified subordination unless the terms themselves say subordinated.',
       },
-      { id: 'mini-bond', label: '"Mini Bond"', summary: 'Platform label for a small-denomination bond.' },
+      {
+        id: 'mini-bond',
+        label: '"Mini Bond"',
+        summary: 'Platform label for a small-denomination bond.',
+      },
     ],
     chipZeroCoupon: 'Zero-coupon',
     chipConvertible: 'Convertible',
@@ -656,13 +735,22 @@ export const en = {
       definition:
         'The issuer receives the funds only if the goal is reached by the deadline; otherwise contributions are returned. The Soroban contract in this prototype enforces this on-chain.',
     },
-    { term: 'Funding threshold', definition: 'The minimum amount an issue must raise to close. Distinct from the per-investor minimum investment.' },
-    { term: 'Minimum investment', definition: 'The smallest amount one investor can subscribe, usually one unit.' },
+    {
+      term: 'Funding threshold',
+      definition: 'The minimum amount an issue must raise to close. Distinct from the per-investor minimum investment.',
+    },
+    {
+      term: 'Minimum investment',
+      definition: 'The smallest amount one investor can subscribe, usually one unit.',
+    },
     {
       term: 'Subordination',
       definition: 'A ranking rule: subordinated claims are paid only after senior creditors in insolvency, which raises the loss risk.',
     },
-    { term: 'ISIN', definition: 'International Securities Identification Number. Identifies a security. This prototype issues no securities and no ISINs.' },
+    {
+      term: 'ISIN',
+      definition: 'International Securities Identification Number. Identifies a security. This prototype issues no securities and no ISINs.',
+    },
     {
       term: 'Key investment information sheet (KIIS)',
       definition: 'A standardised short document with the key facts and risks of an offer, required for many EU crowdfunding offers.',
@@ -689,11 +777,26 @@ export const en = {
       term: 'Escrow',
       definition: 'Funds held by a neutral mechanism until conditions are met. Here the campaign contract itself escrows contributions on Stellar testnet.',
     },
-    { term: 'Soroban', definition: 'The smart-contract platform on the Stellar network used by this prototype.' },
-    { term: 'Testnet', definition: 'A public test network with worthless assets, used to try software without real money.' },
-    { term: 'Nominal value', definition: 'The face value of one unit of an instrument, against which interest and repayment are calculated.' },
-    { term: 'Bullet repayment', definition: 'Repayment of the full nominal amount in one payment at maturity.' },
-    { term: 'act/act, 30E/360', definition: 'Day-count conventions that define how interest accrues between payment dates.' },
+    {
+      term: 'Soroban',
+      definition: 'The smart-contract platform on the Stellar network used by this prototype.',
+    },
+    {
+      term: 'Testnet',
+      definition: 'A public test network with worthless assets, used to try software without real money.',
+    },
+    {
+      term: 'Nominal value',
+      definition: 'The face value of one unit of an instrument, against which interest and repayment are calculated.',
+    },
+    {
+      term: 'Bullet repayment',
+      definition: 'Repayment of the full nominal amount in one payment at maturity.',
+    },
+    {
+      term: 'act/act, 30E/360',
+      definition: 'Day-count conventions that define how interest accrues between payment dates.',
+    },
     {
       term: 'Zero-coupon bond (Zero Bond)',
       definition:
@@ -714,7 +817,10 @@ export const en = {
       definition:
         'A contractual form of subordination under which interest and sometimes principal payments stop when the issuer would become over-indebted. Platform wording such as "qualified" alone does not prove it; the terms must say subordinated.',
     },
-    { term: 'Mini Bond', definition: 'Platform label for a small-denomination bond.' },
+    {
+      term: 'Mini Bond',
+      definition: 'Platform label for a small-denomination bond.',
+    },
     {
       term: 'Know your customer (KYC)',
       definition: 'Identity verification that regulated platforms must complete before an investor can invest. This prototype performs no KYC.',
@@ -958,28 +1064,66 @@ export const en = {
         term: 'Until 2030-12-31 (sample)',
         minInvestment: '250 USDC testnet (sample)',
         additionalInfo: [
-          { label: 'Investment product', value: 'Senior bond (non-subordinated, unsecured). Sample data - not a live offer' },
-          { label: 'ISIN / WKN', value: 'Not issued - this prototype issues no securities identifiers' },
-          { label: 'Nominal amount per unit', value: '250 USDC testnet (sample)' },
+          {
+            label: 'Investment product',
+            value: 'Senior bond (non-subordinated, unsecured). Sample data - not a live offer',
+          },
+          {
+            label: 'ISIN / WKN',
+            value: 'Not issued - this prototype issues no securities identifiers',
+          },
+          {
+            label: 'Nominal amount per unit',
+            value: '250 USDC testnet (sample)',
+          },
           { label: 'Minimum subscription', value: '1 unit (sample)' },
-          { label: 'Funding threshold', value: 'Equals the campaign goal; all-or-nothing enforced by the contract in live mode' },
-          { label: 'Issue volume', value: '250,000 USDC testnet goal (sample fixture)' },
+          {
+            label: 'Funding threshold',
+            value: 'Equals the campaign goal; all-or-nothing enforced by the contract in live mode',
+          },
+          {
+            label: 'Issue volume',
+            value: '250,000 USDC testnet goal (sample fixture)',
+          },
           { label: 'Interest calculation', value: '30E/360 (sample)' },
-          { label: 'Interest payment dates', value: 'Annually on 31 December, first payment 2027 (sample)' },
+          {
+            label: 'Interest payment dates',
+            value: 'Annually on 31 December, first payment 2027 (sample)',
+          },
           { label: 'Repayment', value: 'At maturity (sample)' },
-          { label: 'Offered in', value: 'No offering countries - sample data only' },
-          { label: 'Intermediary', value: 'None. This prototype is not a crowdfunding service provider' },
+          {
+            label: 'Offered in',
+            value: 'No offering countries - sample data only',
+          },
+          {
+            label: 'Intermediary',
+            value: 'None. This prototype is not a crowdfunding service provider',
+          },
         ],
         overview: [
           'This panel demonstrates how issuer-provided marketing content is separated from platform facts by the divider above.',
           'Sample data - not a live offer. The issuer description, team, business model and financials shown on a real platform would be issuer-supplied and clearly attributed.',
         ],
         documents: [
-          { label: 'Key investment information sheet (sample entry)', note: 'No file hosted in this prototype' },
-          { label: 'Bond terms (sample entry)', note: 'No file hosted in this prototype' },
-          { label: 'Pitch deck (sample entry)', note: 'No file hosted in this prototype' },
+          {
+            label: 'Key investment information sheet (sample entry)',
+            note: 'No file hosted in this prototype',
+          },
+          {
+            label: 'Bond terms (sample entry)',
+            note: 'No file hosted in this prototype',
+          },
+          {
+            label: 'Pitch deck (sample entry)',
+            note: 'No file hosted in this prototype',
+          },
         ],
-        news: [{ date: 'Sample', text: 'Campaign updates would appear here. This entry is a placeholder, not a real update.' }],
+        news: [
+          {
+            date: 'Sample',
+            text: 'Campaign updates would appear here. This entry is a placeholder, not a real update.',
+          },
+        ],
       },
       {
         campaignId: 'fixture-alentejo-solar',
@@ -995,23 +1139,53 @@ export const en = {
         term: 'Until 2032-06-30 (sample)',
         minInvestment: '250 USDC testnet (sample)',
         additionalInfo: [
-          { label: 'Investment product', value: 'Subordinated bond. Sample data - not a live offer' },
-          { label: 'ISIN / WKN', value: 'Not issued - this prototype issues no securities identifiers' },
-          { label: 'Nominal amount per unit', value: '250 USDC testnet (sample)' },
-          { label: 'Funding threshold', value: '900,000 USDC testnet goal (sample fixture); all-or-nothing in live mode' },
-          { label: 'Subordination', value: 'Claims rank behind senior creditors in insolvency (sample terms)' },
+          {
+            label: 'Investment product',
+            value: 'Subordinated bond. Sample data - not a live offer',
+          },
+          {
+            label: 'ISIN / WKN',
+            value: 'Not issued - this prototype issues no securities identifiers',
+          },
+          {
+            label: 'Nominal amount per unit',
+            value: '250 USDC testnet (sample)',
+          },
+          {
+            label: 'Funding threshold',
+            value: '900,000 USDC testnet goal (sample fixture); all-or-nothing in live mode',
+          },
+          {
+            label: 'Subordination',
+            value: 'Claims rank behind senior creditors in insolvency (sample terms)',
+          },
           { label: 'Interest calculation', value: 'act/act (sample)' },
-          { label: 'Interest payment dates', value: 'Annually on 30 June, first payment 2028 (sample)' },
+          {
+            label: 'Interest payment dates',
+            value: 'Annually on 30 June, first payment 2028 (sample)',
+          },
           { label: 'Repayment', value: 'At maturity (sample)' },
-          { label: 'Offered in', value: 'No offering countries - sample data only' },
-          { label: 'Intermediary', value: 'None. This prototype is not a crowdfunding service provider' },
+          {
+            label: 'Offered in',
+            value: 'No offering countries - sample data only',
+          },
+          {
+            label: 'Intermediary',
+            value: 'None. This prototype is not a crowdfunding service provider',
+          },
         ],
         overview: [
           "Sample data - not a live offer. A real campaign page would carry the issuer's own description of the cooperative, the site and the energy off-take.",
         ],
         documents: [
-          { label: 'Key investment information sheet (sample entry)', note: 'No file hosted in this prototype' },
-          { label: 'Emission conditions (sample entry)', note: 'No file hosted in this prototype' },
+          {
+            label: 'Key investment information sheet (sample entry)',
+            note: 'No file hosted in this prototype',
+          },
+          {
+            label: 'Emission conditions (sample entry)',
+            note: 'No file hosted in this prototype',
+          },
         ],
         news: [] as { date: string; text: string }[],
       },
@@ -1033,21 +1207,123 @@ export const en = {
             label: 'Investment product',
             value: 'Bond with a conversion feature (convertible); seniority not specified in the sample terms. Sample data - not a live offer',
           },
-          { label: 'ISIN / WKN', value: 'Not issued - this prototype issues no securities identifiers' },
-          { label: 'Nominal amount per unit', value: '500 USDC testnet (sample)' },
-          { label: 'Funding threshold', value: '500,000 USDC testnet goal (sample fixture)' },
-          { label: 'Conversion trigger', value: 'Configurable per issue; sample: a qualified financing event announced by the issuer' },
-          { label: 'Conversion window', value: 'Configurable per issue; sample: 30 days after the trigger announcement' },
-          { label: 'Interest stop', value: 'Interest accrues until the conversion day (sample)' },
-          { label: 'Repayment if not converted', value: 'At maturity (sample)' },
-          { label: 'Offered in', value: 'No offering countries - sample data only' },
-          { label: 'Intermediary', value: 'None. This prototype is not a crowdfunding service provider' },
+          {
+            label: 'ISIN / WKN',
+            value: 'Not issued - this prototype issues no securities identifiers',
+          },
+          {
+            label: 'Nominal amount per unit',
+            value: '500 USDC testnet (sample)',
+          },
+          {
+            label: 'Funding threshold',
+            value: '500,000 USDC testnet goal (sample fixture)',
+          },
+          {
+            label: 'Conversion trigger',
+            value: 'Configurable per issue; sample: a qualified financing event announced by the issuer',
+          },
+          {
+            label: 'Conversion window',
+            value: 'Configurable per issue; sample: 30 days after the trigger announcement',
+          },
+          {
+            label: 'Interest stop',
+            value: 'Interest accrues until the conversion day (sample)',
+          },
+          {
+            label: 'Repayment if not converted',
+            value: 'At maturity (sample)',
+          },
+          {
+            label: 'Offered in',
+            value: 'No offering countries - sample data only',
+          },
+          {
+            label: 'Intermediary',
+            value: 'None. This prototype is not a crowdfunding service provider',
+          },
         ],
         overview: ['Sample data - not a live offer. Completed campaigns stay visible with their final funding status, like this one.'],
-        documents: [{ label: 'Convertible bond terms (sample entry)', note: 'No file hosted in this prototype' }],
-        news: [{ date: 'Sample', text: 'This campaign closed successfully in the fixture data. Post-funding issuer events would be tracked separately.' }],
+        documents: [
+          {
+            label: 'Convertible bond terms (sample entry)',
+            note: 'No file hosted in this prototype',
+          },
+        ],
+        news: [
+          {
+            date: 'Sample',
+            text: 'This campaign closed successfully in the fixture data. Post-funding issuer events would be tracked separately.',
+          },
+        ],
       },
     ],
+  },
+  community: {
+    loading: 'Loading...',
+    demoBadge: 'DEMO',
+    // Campaign documents (server metadata; demo documents are fictional templates)
+    documentsTitle: 'Documents',
+    documentsNote: 'Documents marked DEMO are fictional templates for this prototype - not offers, not advice, not verified issuer information.',
+    documentKinds: {
+      kiis: 'KIIS',
+      terms: 'Terms',
+      project: 'Project',
+      other: 'Document',
+    },
+    // Campaign news (posted by the operator through the admin key as issuer stand-in)
+    newsTitle: 'News',
+    newsAuthorDemo: 'posted by the platform (demo content - no verified issuer identity)',
+    // Comments
+    commentsTitle: 'Comments',
+    commentsEmpty: 'No comments yet.',
+    commentLabel: 'Your comment',
+    commentSubmit: 'Post comment',
+    commentPostingAs: (name: string) => `Posting as ${name}. Comments are public.`,
+    commentsSignInHint: 'Sign in with your wallet below to join the discussion.',
+    // Community sign-in
+    signInTitle: 'Community sign-in',
+    signInExplainer:
+      'Sign a one-time challenge with your Freighter wallet to prove you control the address. No transaction is created and no funds move. The session unlocks comments, support tickets and issuer applications.',
+    signInButton: 'Sign in with wallet',
+    signInConnectFirst: 'Connect your Freighter wallet first (top of the page).',
+    signedInTitle: 'Community account',
+    signedInAs: 'Signed in as',
+    displayNameLabel: 'Display name (shown on your comments)',
+    displayNameSave: 'Save name',
+    signOutButton: 'Sign out',
+    // Support and feedback tickets
+    ticketsTitle: 'Support and feedback',
+    ticketsNote:
+      'Tickets are visible only to your wallet account and the site operator. This is a prototype: do not include personal data, passwords or real payment details.',
+    ticketKindLabel: 'Type',
+    ticketKinds: {
+      support: 'Support request',
+      feedback: 'Feedback',
+    },
+    ticketSubjectLabel: 'Subject',
+    ticketBodyLabel: 'Message',
+    ticketSubmit: 'Send',
+    ticketsEmpty: 'No tickets yet.',
+    ticketStatus: {
+      open: 'Open',
+      closed: 'Closed',
+    },
+    // Issuer applications
+    applicationTitle: 'Apply as an issuer',
+    applicationNote:
+      'Tell the operator about the project you would like to list. Submitting this form is not an offer, a listing or an approval - it starts a conversation. Demo environment: do not submit real business secrets.',
+    applicationFields: {
+      projectName: 'Project name',
+      country: 'Country',
+      instrumentType: 'Instrument type (e.g. bond, equity, revenue share)',
+      targetAmount: 'Target amount',
+      description: 'Project description',
+      contactEmail: 'Contact email (optional)',
+    },
+    applicationSubmit: 'Submit application',
+    applicationDone: 'Application received. The operator reviews applications off-site; nothing is listed automatically.',
   },
 };
 

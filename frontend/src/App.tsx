@@ -29,6 +29,7 @@ import ConflictsOfInterest from './pages/ConflictsOfInterest';
 import ComplaintsManagement from './pages/ComplaintsManagement';
 import BusinessContinuity from './pages/BusinessContinuity';
 import { useI18n } from './i18n';
+import { CommunityAuthProvider } from './community/CommunityAuth';
 
 const INTENT_KEY = 'rwa-soroban-intent';
 
@@ -101,7 +102,11 @@ export default function App() {
     if (intent && !isTerminal(intent.status)) {
       throw new Error(m.errors.resolveSaved);
     }
-    const result = await api(`/api/campaigns/${c.id}/soroban/build`, { actor, action, amount: amounts[c.id] });
+    const result = await api(`/api/campaigns/${c.id}/soroban/build`, {
+      actor,
+      action,
+      amount: amounts[c.id],
+    });
     retain({ ...result, campaign: c.id, actor, status: 'BUILT' });
     setFixtureMode(false);
   }
@@ -111,7 +116,9 @@ export default function App() {
     if (actor !== intent.actor) throw new Error(m.errors.walletMismatch);
     let current = intent;
     if (!current.signedXdr) {
-      const result = await signTransaction(current.xdr, { networkPassphrase: 'Test SDF Network ; September 2015' });
+      const result = await signTransaction(current.xdr, {
+        networkPassphrase: 'Test SDF Network ; September 2015',
+      });
       if (result.error || !result.signedTxXdr) throw new Error(result.error?.message ?? m.errors.walletNoSign);
       current = { ...current, signedXdr: result.signedTxXdr, status: 'SIGNED' };
       retain(current);
@@ -153,7 +160,12 @@ export default function App() {
   };
 
   return (
-    <>
+    <CommunityAuthProvider
+      messages={{
+        freighterMissing: m.errors.freighterMissing,
+        walletNoSign: m.errors.walletNoSign,
+      }}
+    >
       <a className="skip-link" href="#main">
         {m.meta.skipLink}
       </a>
@@ -203,6 +215,6 @@ export default function App() {
 
         <Footer />
       </main>
-    </>
+    </CommunityAuthProvider>
   );
 }

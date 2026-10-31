@@ -2291,3 +2291,84 @@ input[type='checkbox'] {
 [data-theme='light'] .ft-4 rect {
   fill: #6367e8;
 }
+
+/* Community: sign-in, comments, news, documents, tickets, issuer applications */
+.community-section {
+  margin: 28px 0 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--line);
+}
+.community-section h2 {
+  margin: 0 0 10px;
+  font-size: 19px;
+}
+.community-note {
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  margin: 6px 0;
+}
+.community-loading {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.community-error {
+  color: var(--red);
+}
+.community-success {
+  color: #1e7d46;
+  font-weight: 600;
+}
+.community-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  margin: 12px 0;
+}
+.community-section form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.community-section form input,
+.community-section form select,
+.community-section form textarea {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+}
+.comment-list,
+.ticket-list,
+.document-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.comment,
+.news-post,
+.ticket-list li {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.comment p,
+.news-post p {
+  margin: 4px 0;
+}
+.comment-meta,
+.news-meta {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.document-list li {
+  padding: 4px 0;
+}

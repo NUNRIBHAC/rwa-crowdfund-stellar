@@ -31,9 +31,10 @@ export default function PrivacyPolicy() {
         </p>
         <h2>1. Scope: what the demo does not collect</h2>
         <p>
-          The current prototype has <strong>no user accounts, no registration, no KYC, no newsletters and no payments</strong>. We do not ask for your name,
-          email address, phone number, identity documents or payment card. We do not use analytics or advertising trackers, and the site's fonts and assets are
-          self-hosted.
+          The current prototype has <strong>no KYC, no newsletters and no payments</strong>. Community sign-in is wallet-based: it uses a Stellar wallet
+          signature, not a password or an email address. We do not ask for your full name, phone number, identity documents or payment card. The community
+          features do collect the data described in section 2b: a public key, an optional display name, free-text content you choose to submit, and an optional
+          contact email on issuer applications. We do not use analytics or advertising trackers, and the site's fonts and assets are self-hosted.
         </p>
         <h2>2. Data we process</h2>
         <p>
@@ -50,15 +51,36 @@ export default function PrivacyPolicy() {
           not covered by these rules.
         </p>
         <p>
-          <strong>b) Public blockchain data.</strong> Test contributions are recorded publicly on the Stellar <strong>testnet</strong> and are visible on public
+          <strong>b) Community account and community content.</strong> If you sign in to the community features, the backend stores, in the same Neon Postgres
+          database: your Stellar <strong>public key</strong>, an account creation timestamp, and an optional <strong>display name</strong> (up to 40
+          characters). Sign-in works by signing a one-time server challenge with your wallet (5-minute validity, single use); no password or email is required
+          and your secret key never leaves the wallet. The server keeps only a SHA-256 hash of the session token; the raw token lives in your browser's local
+          storage. Sessions last 30 days, logout deletes the session, and expired challenges and sessions are pruned hourly.
+        </p>
+        <p>
+          <strong>Comments</strong> are public: each comment stores your public key, your display name if set, the body (up to 1000 characters), the campaign
+          and a timestamp, and the latest 100 comments per campaign are shown to every visitor. A comment hidden by the operator leaves the public list
+          immediately and is hard-deleted 30 days after hiding. <strong>Support/feedback tickets</strong> (kind, subject up to 120 characters, body up to 4000
+          characters, status, timestamps) and <strong>issuer applications</strong> (project name, country, instrument type, target amount, description and an
+          optional contact email) are visible only to your wallet account and to the operator's administrator; both are hard-deleted after 90 days (retention
+          window configurable in the application code). Campaign <strong>news</strong> items are written by the operator and labeled as platform demo content.
+          Your IP address is used in memory for rate limiting and swept within 24 hours; the application does not persist it (hosting logs are covered in item
+          e).
+        </p>
+        <p>
+          A caution: public keys, display names and free-text content can identify you even though we never ask for your name. Do not submit sensitive personal
+          information in community fields.
+        </p>
+        <p>
+          <strong>c) Public blockchain data.</strong> Test contributions are recorded publicly on the Stellar <strong>testnet</strong> and are visible on public
           explorers. Blockchain records cannot be altered or deleted by us.
         </p>
         <p>
-          <strong>c) Device preferences.</strong> Your theme (light/dark) and language choices are stored in your browser's local storage. This data stays on
+          <strong>d) Device preferences.</strong> Your theme (light/dark) and language choices are stored in your browser's local storage. This data stays on
           your device and is not sent to us.
         </p>
         <p>
-          <strong>d) Technical logs.</strong> Our hosting provider (Render, Frankfurt region) processes standard server logs (such as IP address and request
+          <strong>e) Technical logs.</strong> Our hosting provider (Render, Frankfurt region) processes standard server logs (such as IP address and request
           metadata) to deliver and protect the Service.
         </p>
         <h2>3. Data we plan to process in future versions (not collected today)</h2>
@@ -82,14 +104,15 @@ export default function PrivacyPolicy() {
           </li>
         </ul>
         <p>
-          None of this data is collected by the current demo. If these features launch, this Policy will be updated first, with the providers, purposes, legal
-          bases and retention periods for each category.
+          With the exception of the optional issuer contact email described in section 2b, none of this data is collected by the current demo. If these features
+          launch, this Policy will be updated first, with the providers, purposes, legal bases and retention periods for each category.
         </p>
         <h2>4. Purposes and legal bases (GDPR)</h2>
         <p>
           We process the data in section 2 to operate, secure and demonstrate the prototype: preparing and tracking test transactions, preventing double-spends
-          and resolving ambiguous transactions, and keeping the Service reliable. The legal basis is our legitimate interest (Art. 6(1)(f) GDPR) in running a
-          safe technical demonstration. We do not use your data for marketing, profiling or sale.
+          and resolving ambiguous transactions, keeping the Service reliable, and operating the community features (publishing and moderating comments,
+          answering support and feedback tickets, and reviewing issuer applications). The legal basis is our legitimate interest (Art. 6(1)(f) GDPR) in running
+          a safe technical demonstration. We do not use your data for marketing, profiling or sale.
         </p>
         <h2>5. Who processes data</h2>
         <ul>
@@ -97,7 +120,7 @@ export default function PrivacyPolicy() {
             <strong>Render</strong> (hosting, Frankfurt, EU) - runs the application.
           </li>
           <li>
-            <strong>Neon</strong> (managed Postgres; {NEON_REGION}) - stores the contribution journal.
+            <strong>Neon</strong> (managed Postgres; {NEON_REGION}) - stores the contribution journal and the community data store.
           </li>
           <li>
             <strong>Stellar testnet</strong> (public network operated by the Stellar Development Foundation, global) - records public test transactions.
@@ -114,8 +137,9 @@ export default function PrivacyPolicy() {
           (Comissao Nacional de Protecao de Dados).
         </p>
         <p>
-          Because the demo does not collect identifying information, we can usually only find your data if you tell us your Stellar public key. Data already
-          written to a public blockchain cannot be erased; we can erase or de-link off-chain journal records on request.
+          We can locate the data tied to you only through your Stellar public key (and any display name or free-text content you chose to submit). Data already
+          written to a public blockchain cannot be erased; we can correct or erase off-chain records (the contribution journal, your community account,
+          comments, tickets and applications) on request, subject to the retention rules in section 2.
         </p>
         <h2>7. Brazil (LGPD)</h2>
         <p>

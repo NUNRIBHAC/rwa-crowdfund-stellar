@@ -5,12 +5,20 @@ import type { Campaign } from '../types';
 import { formatAmount, shorten } from '../format';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
+import SignInPanel from '../components/SignInPanel';
+import SupportCenter from '../components/SupportCenter';
+import IssuerApplicationForm from '../components/IssuerApplicationForm';
 
 const INTENT_KEY = 'rwa-soroban-intent';
 
 type PortfolioStatus = 'pending' | 'paid' | 'completed' | 'canceled';
 
-type Row = { id: string; name: string; balance: string; status: PortfolioStatus };
+type Row = {
+  id: string;
+  name: string;
+  balance: string;
+  status: PortfolioStatus;
+};
 
 // Prototype mapping from the contract lifecycle to the portfolio tabs. The
 // reference platform (blueprint section 7A) uses All / Canceled / Pending /
@@ -24,7 +32,11 @@ function rowStatus(c: Campaign): PortfolioStatus {
   return 'canceled';
 }
 
-function readIntent(): { action?: string; campaign?: string; status?: string } | null {
+function readIntent(): {
+  action?: string;
+  campaign?: string;
+  status?: string;
+} | null {
   try {
     const raw = localStorage.getItem(INTENT_KEY);
     return raw ? JSON.parse(raw) : null;
@@ -41,7 +53,14 @@ export default function Account({ market }: { market: Market }) {
 
   const rows: Row[] = useMemo(
     () =>
-      campaigns.filter((c) => c.balance && BigInt(c.balance) > 0n).map((c) => ({ id: c.id, name: c.name, balance: c.balance as string, status: rowStatus(c) })),
+      campaigns
+        .filter((c) => c.balance && BigInt(c.balance) > 0n)
+        .map((c) => ({
+          id: c.id,
+          name: c.name,
+          balance: c.balance as string,
+          status: rowStatus(c),
+        })),
     [campaigns],
   );
   const total = rows.reduce((acc, r) => acc + BigInt(r.balance), 0n);
@@ -151,6 +170,10 @@ export default function Account({ market }: { market: Market }) {
           ))}
         </ul>
       </section>
+
+      <SignInPanel actor={actor} />
+      <SupportCenter />
+      <IssuerApplicationForm />
     </>
   );
 }

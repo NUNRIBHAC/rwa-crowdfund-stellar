@@ -58,8 +58,14 @@ export const de: Messages = {
     stepsAria: 'So funktioniert das Investieren',
     stepsTitle: '4 Schritte zu Ihrem ersten Beitrag',
     steps: [
-      { title: 'Verbinden', text: 'Verbinden Sie eine Freighter-Wallet im Stellar-Testnet. Kein Konto, keine persönlichen Daten in diesem Prototyp.' },
-      { title: 'Entdecken', text: 'Durchstöbern Sie die Kampagnen und lesen Sie die strukturierten Bedingungen auf jeder Kampagnenseite.' },
+      {
+        title: 'Verbinden',
+        text: 'Verbinden Sie eine Freighter-Wallet im Stellar-Testnet. Kein Konto, keine persönlichen Daten in diesem Prototyp.',
+      },
+      {
+        title: 'Entdecken',
+        text: 'Durchstöbern Sie die Kampagnen und lesen Sie die strukturierten Bedingungen auf jeder Kampagnenseite.',
+      },
       {
         title: 'Beitragen',
         text: 'Signieren Sie eine Transaktion. Der Vertrag legt Ihren Beitrag in Escrow und setzt die Finanzierungsobergrenze atomar durch.',
@@ -301,8 +307,14 @@ export const de: Messages = {
         title: 'Antrag und Prüfung',
         text: 'Der Emittent bewirbt sich, durchläuft die Eignungs- und Dokumentenprüfung und unterschreibt die Plattformbedingungen.',
       },
-      { title: 'Kampagnenaufbau', text: 'Instrumentenbedingungen, Grenzen, Dokumente und Marketinginhalte werden konfiguriert und geprüft.' },
-      { title: 'Aktive Kampagne', text: 'Die Demo zeigt die öffentliche Kampagnenseite mit dem On-Chain-Finanzierungsstand in Echtzeit.' },
+      {
+        title: 'Kampagnenaufbau',
+        text: 'Instrumentenbedingungen, Grenzen, Dokumente und Marketinginhalte werden konfiguriert und geprüft.',
+      },
+      {
+        title: 'Aktive Kampagne',
+        text: 'Die Demo zeigt die öffentliche Kampagnenseite mit dem On-Chain-Finanzierungsstand in Echtzeit.',
+      },
       {
         title: 'Abwicklung',
         text: 'Alles-oder-nichts: Der Ersteller hebt die Mittel nur ab, wenn das Ziel fristgerecht erreicht wird, durchgesetzt durch den Vertrag.',
@@ -353,7 +365,10 @@ export const de: Messages = {
         h: 'Diversifizierung',
         p: 'Eine übliche Orientierung ist, nicht mehr als 10% der frei verfügbaren Mittel in diese Anlageklasse zu investieren und sie auf mehrere Emittenten zu verteilen.',
       },
-      { h: 'Kein Schutzsystem', p: 'Crowdfunding-Investitionen fallen weder unter Einlagensicherungs- noch unter Anlegerentschädigungssysteme.' },
+      {
+        h: 'Kein Schutzsystem',
+        p: 'Crowdfunding-Investitionen fallen weder unter Einlagensicherungs- noch unter Anlegerentschädigungssysteme.',
+      },
       {
         h: 'Keine Beratung',
         p: 'Nichts auf dieser Website ist Anlage-, Rechts- oder Steuerberatung. Diese Website ist ein Software-Prototyp in einem Testnetz und listet keine echten Angebote.',
@@ -410,10 +425,22 @@ export const de: Messages = {
     journeyAria: 'Überblick über den Weg des Emittenten',
     journeyTitle: 'Der geplante Weg',
     steps: [
-      { h: 'Bewerben', p: 'Erzählen Sie uns von Ihrem Unternehmen, dem Betrag und dem Instrument, das Sie im Sinn haben.' },
-      { h: 'Prüfung', p: 'Eignungs- und Dokumentenprüfung, gefolgt von einem strukturierten Finanzierungsvorschlag.' },
-      { h: 'Aufbauen', p: 'Kampagnenseite, Instrumentenbedingungen, Dokumente und Marketinginhalte werden gemeinsam vorbereitet.' },
-      { h: 'Finanzieren', p: 'Alles-oder-nichts-Kampagne. Die Mittel werden nur freigegeben, wenn das Ziel fristgerecht erreicht wird.' },
+      {
+        h: 'Bewerben',
+        p: 'Erzählen Sie uns von Ihrem Unternehmen, dem Betrag und dem Instrument, das Sie im Sinn haben.',
+      },
+      {
+        h: 'Prüfung',
+        p: 'Eignungs- und Dokumentenprüfung, gefolgt von einem strukturierten Finanzierungsvorschlag.',
+      },
+      {
+        h: 'Aufbauen',
+        p: 'Kampagnenseite, Instrumentenbedingungen, Dokumente und Marketinginhalte werden gemeinsam vorbereitet.',
+      },
+      {
+        h: 'Finanzieren',
+        p: 'Alles-oder-nichts-Kampagne. Die Mittel werden nur freigegeben, wenn das Ziel fristgerecht erreicht wird.',
+      },
     ],
     previewAria: 'Antragsvorschau',
     previewTitle: 'Antrag (Vorschau)',
@@ -445,7 +472,13 @@ export const de: Messages = {
     myInvestments: 'Meine Investitionen',
     newInvestments: 'Neue Investitionen',
     filterAria: 'Portfolio nach Status filtern',
-    tabs: { all: 'Alle', canceled: 'Storniert', pending: 'Ausstehend', paid: 'Bezahlt', completed: 'Abgeschlossen' },
+    tabs: {
+      all: 'Alle',
+      canceled: 'Storniert',
+      pending: 'Ausstehend',
+      paid: 'Bezahlt',
+      completed: 'Abgeschlossen',
+    },
     tabNote:
       'Prototyp-Zuordnung: Ausstehend = Beitrag im Escrow, Kampagne offen. Bezahlt = Kampagne finanziert, läuft noch. Abgeschlossen = Kampagne nach Finanzierung beendet. Storniert = ohne Zielerreichung beendet; eine vom Beitragenden signierte Rückerstattung ist auf der Kampagnenseite verfügbar.',
     noInvestments: 'Keine Investitionen gefunden.',
@@ -472,11 +505,26 @@ export const de: Messages = {
       { label: 'Persönliche Daten', note: 'In diesem Prototyp nicht erhoben.' },
       { label: 'Adressdaten', note: 'In diesem Prototyp nicht erhoben.' },
       { label: 'Kontaktdaten', note: 'In diesem Prototyp nicht erhoben.' },
-      { label: 'Sicherheit', note: 'Wallet-basierter Zugang (Freighter). Kein Passwort und keine Zwei-Faktor-App in diesem Prototyp.' },
-      { label: 'Anlegerqualifizierung', note: 'Kenntnistest und Verlusttragfähigkeitsprüfung sind geplante Compliance-Schritte; hier nicht implementiert.' },
-      { label: 'Verifizierung (KYC)', note: 'Nicht implementiert. Dieser Testnet-Prototyp verifiziert keine Identität.' },
-      { label: 'Bankdaten', note: 'Nicht erhoben. Beiträge und Rückerstattungen laufen als Testnet-USDC on-chain.' },
-      { label: 'Depotdaten', note: 'Optionale Wertpapierkonto-Referenz auf der Referenzplattform; hier nicht erhoben.' },
+      {
+        label: 'Sicherheit',
+        note: 'Wallet-basierter Zugang (Freighter). Kein Passwort und keine Zwei-Faktor-App in diesem Prototyp.',
+      },
+      {
+        label: 'Anlegerqualifizierung',
+        note: 'Kenntnistest und Verlusttragfähigkeitsprüfung sind geplante Compliance-Schritte; hier nicht implementiert.',
+      },
+      {
+        label: 'Verifizierung (KYC)',
+        note: 'Nicht implementiert. Dieser Testnet-Prototyp verifiziert keine Identität.',
+      },
+      {
+        label: 'Bankdaten',
+        note: 'Nicht erhoben. Beiträge und Rückerstattungen laufen als Testnet-USDC on-chain.',
+      },
+      {
+        label: 'Depotdaten',
+        note: 'Optionale Wertpapierkonto-Referenz auf der Referenzplattform; hier nicht erhoben.',
+      },
       {
         label: 'Digitales Schließfach',
         note: 'Geplante Verwahrsicht gehaltener Positionen. Hier liegen Positionen in jedem Kampagnenvertrag und werden pro verbundener Wallet gelesen.',
@@ -697,7 +745,11 @@ export const de: Messages = {
         summary:
           'Plattformterminologie bei Darlehen und Anleihen. Bei Anleihen nicht als qualifizierte Nachrangigkeit lesen, es sei denn, die Bedingungen selbst sagen nachrangig.',
       },
-      { id: 'mini-bond', label: '„Mini Bond“', summary: 'Plattformlabel für eine Anleihe mit kleiner Stückelung.' },
+      {
+        id: 'mini-bond',
+        label: '„Mini Bond“',
+        summary: 'Plattformlabel für eine Anleihe mit kleiner Stückelung.',
+      },
     ],
     chipZeroCoupon: 'Nullkupon',
     chipConvertible: 'Wandelbar',
@@ -716,7 +768,10 @@ export const de: Messages = {
       term: 'Finanzierungsschwelle',
       definition: 'Der Mindestbetrag, den eine Emission einnehmen muss, um zu schließen. Unterschiedlich von der Mindestanlage pro Anleger.',
     },
-    { term: 'Mindestanlage', definition: 'Der kleinste Betrag, den ein Anleger zeichnen kann, üblicherweise eine Einheit.' },
+    {
+      term: 'Mindestanlage',
+      definition: 'Der kleinste Betrag, den ein Anleger zeichnen kann, üblicherweise eine Einheit.',
+    },
     {
       term: 'Nachrangigkeit',
       definition:
@@ -755,11 +810,26 @@ export const de: Messages = {
       definition:
         'Mittel, die von einem neutralen Mechanismus gehalten werden, bis die Bedingungen erfüllt sind. Hier verwahrt der Kampagnenvertrag selbst die Beiträge im Escrow im Stellar-Testnet.',
     },
-    { term: 'Soroban', definition: 'Die Smart-Contract-Plattform des Stellar-Netzwerks, die dieser Prototyp verwendet.' },
-    { term: 'Testnet', definition: 'Ein öffentliches Testnetzwerk mit wertlosen Vermögenswerten, um Software ohne echtes Geld auszuprobieren.' },
-    { term: 'Nennwert', definition: 'Der Nominalwert einer Einheit eines Instruments, auf den Zinsen und Tilgung berechnet werden.' },
-    { term: 'Endfällige Tilgung', definition: 'Rückzahlung des vollen Nennbetrags in einer Zahlung bei Fälligkeit.' },
-    { term: 'act/act, 30E/360', definition: 'Zinstagekonventionen, die festlegen, wie Zinsen zwischen Zahlungsterminen auflaufen.' },
+    {
+      term: 'Soroban',
+      definition: 'Die Smart-Contract-Plattform des Stellar-Netzwerks, die dieser Prototyp verwendet.',
+    },
+    {
+      term: 'Testnet',
+      definition: 'Ein öffentliches Testnetzwerk mit wertlosen Vermögenswerten, um Software ohne echtes Geld auszuprobieren.',
+    },
+    {
+      term: 'Nennwert',
+      definition: 'Der Nominalwert einer Einheit eines Instruments, auf den Zinsen und Tilgung berechnet werden.',
+    },
+    {
+      term: 'Endfällige Tilgung',
+      definition: 'Rückzahlung des vollen Nennbetrags in einer Zahlung bei Fälligkeit.',
+    },
+    {
+      term: 'act/act, 30E/360',
+      definition: 'Zinstagekonventionen, die festlegen, wie Zinsen zwischen Zahlungsterminen auflaufen.',
+    },
     {
       term: 'Nullkupon-Anleihe (Zero Bond)',
       definition:
@@ -780,7 +850,10 @@ export const de: Messages = {
       definition:
         'Eine vertragliche Form der Nachrangigkeit, bei der Zins- und teils Tilgungszahlungen aussetzen, wenn der Emittent überschuldet wäre. Plattformsprache wie „qualifiziert“ allein beweist sie nicht; die Bedingungen müssen nachrangig sagen.',
     },
-    { term: 'Mini Bond', definition: 'Plattformlabel für eine Anleihe mit kleiner Stückelung.' },
+    {
+      term: 'Mini Bond',
+      definition: 'Plattformlabel für eine Anleihe mit kleiner Stückelung.',
+    },
     {
       term: 'Know your customer (KYC)',
       definition: 'Identitätsprüfung, die regulierte Plattformen abschließen müssen, bevor ein Anleger investieren kann. Dieser Prototyp führt kein KYC durch.',
@@ -1025,28 +1098,66 @@ export const de: Messages = {
         term: 'Bis 2030-12-31 (Beispiel)',
         minInvestment: '250 Testnet-USDC (Beispiel)',
         additionalInfo: [
-          { label: 'Anlageprodukt', value: 'Senioranleihe (nicht nachrangig, unbesichert). Beispieldaten - kein echtes Angebot' },
-          { label: 'ISIN / WKN', value: 'Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern' },
-          { label: 'Nennbetrag pro Einheit', value: '250 Testnet-USDC (Beispiel)' },
+          {
+            label: 'Anlageprodukt',
+            value: 'Senioranleihe (nicht nachrangig, unbesichert). Beispieldaten - kein echtes Angebot',
+          },
+          {
+            label: 'ISIN / WKN',
+            value: 'Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern',
+          },
+          {
+            label: 'Nennbetrag pro Einheit',
+            value: '250 Testnet-USDC (Beispiel)',
+          },
           { label: 'Mindestzeichnung', value: '1 Einheit (Beispiel)' },
-          { label: 'Finanzierungsschwelle', value: 'Gleich dem Kampagnenziel; Alles-oder-nichts wird im Live-Modus vom Vertrag durchgesetzt' },
-          { label: 'Emissionsvolumen', value: 'Ziel 250.000 Testnet-USDC (Beispiel-Fixture)' },
+          {
+            label: 'Finanzierungsschwelle',
+            value: 'Gleich dem Kampagnenziel; Alles-oder-nichts wird im Live-Modus vom Vertrag durchgesetzt',
+          },
+          {
+            label: 'Emissionsvolumen',
+            value: 'Ziel 250.000 Testnet-USDC (Beispiel-Fixture)',
+          },
           { label: 'Zinsberechnung', value: '30E/360 (Beispiel)' },
-          { label: 'Zinszahlungstermine', value: 'Jährlich am 31. Dezember, erste Zahlung 2027 (Beispiel)' },
+          {
+            label: 'Zinszahlungstermine',
+            value: 'Jährlich am 31. Dezember, erste Zahlung 2027 (Beispiel)',
+          },
           { label: 'Tilgung', value: 'Bei Fälligkeit (Beispiel)' },
-          { label: 'Angeboten in', value: 'Keine Angebotsländer - nur Beispieldaten' },
-          { label: 'Intermediär', value: 'Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister' },
+          {
+            label: 'Angeboten in',
+            value: 'Keine Angebotsländer - nur Beispieldaten',
+          },
+          {
+            label: 'Intermediär',
+            value: 'Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister',
+          },
         ],
         overview: [
           'Dieses Panel zeigt, wie vom Emittenten bereitgestellte Marketinginhalte durch die Trennlinie oben von den Plattform-Fakten getrennt werden.',
           'Beispieldaten - kein echtes Angebot. Die Emittentenbeschreibung, das Team, das Geschäftsmodell und die Finanzen auf einer echten Plattform würden vom Emittenten stammen und klar zugeordnet sein.',
         ],
         documents: [
-          { label: 'Basisinformationsblatt (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' },
-          { label: 'Anleihebedingungen (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' },
-          { label: 'Pitch Deck (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' },
+          {
+            label: 'Basisinformationsblatt (Beispieleintrag)',
+            note: 'Keine Datei in diesem Prototyp gehostet',
+          },
+          {
+            label: 'Anleihebedingungen (Beispieleintrag)',
+            note: 'Keine Datei in diesem Prototyp gehostet',
+          },
+          {
+            label: 'Pitch Deck (Beispieleintrag)',
+            note: 'Keine Datei in diesem Prototyp gehostet',
+          },
         ],
-        news: [{ date: 'Beispiel', text: 'Kampagnen-Updates würden hier erscheinen. Dieser Eintrag ist ein Platzhalter, keine echte Meldung.' }],
+        news: [
+          {
+            date: 'Beispiel',
+            text: 'Kampagnen-Updates würden hier erscheinen. Dieser Eintrag ist ein Platzhalter, keine echte Meldung.',
+          },
+        ],
       },
       {
         campaignId: 'fixture-alentejo-solar',
@@ -1062,23 +1173,53 @@ export const de: Messages = {
         term: 'Bis 2032-06-30 (Beispiel)',
         minInvestment: '250 Testnet-USDC (Beispiel)',
         additionalInfo: [
-          { label: 'Anlageprodukt', value: 'Nachrangige Anleihe. Beispieldaten - kein echtes Angebot' },
-          { label: 'ISIN / WKN', value: 'Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern' },
-          { label: 'Nennbetrag pro Einheit', value: '250 Testnet-USDC (Beispiel)' },
-          { label: 'Finanzierungsschwelle', value: 'Ziel 900.000 Testnet-USDC (Beispiel-Fixture); Alles-oder-nichts im Live-Modus' },
-          { label: 'Nachrangigkeit', value: 'Forderungen stehen im Insolvenzfall hinter vorrangigen Gläubigern (Beispielbedingungen)' },
+          {
+            label: 'Anlageprodukt',
+            value: 'Nachrangige Anleihe. Beispieldaten - kein echtes Angebot',
+          },
+          {
+            label: 'ISIN / WKN',
+            value: 'Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern',
+          },
+          {
+            label: 'Nennbetrag pro Einheit',
+            value: '250 Testnet-USDC (Beispiel)',
+          },
+          {
+            label: 'Finanzierungsschwelle',
+            value: 'Ziel 900.000 Testnet-USDC (Beispiel-Fixture); Alles-oder-nichts im Live-Modus',
+          },
+          {
+            label: 'Nachrangigkeit',
+            value: 'Forderungen stehen im Insolvenzfall hinter vorrangigen Gläubigern (Beispielbedingungen)',
+          },
           { label: 'Zinsberechnung', value: 'act/act (Beispiel)' },
-          { label: 'Zinszahlungstermine', value: 'Jährlich am 30. Juni, erste Zahlung 2028 (Beispiel)' },
+          {
+            label: 'Zinszahlungstermine',
+            value: 'Jährlich am 30. Juni, erste Zahlung 2028 (Beispiel)',
+          },
           { label: 'Tilgung', value: 'Bei Fälligkeit (Beispiel)' },
-          { label: 'Angeboten in', value: 'Keine Angebotsländer - nur Beispieldaten' },
-          { label: 'Intermediär', value: 'Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister' },
+          {
+            label: 'Angeboten in',
+            value: 'Keine Angebotsländer - nur Beispieldaten',
+          },
+          {
+            label: 'Intermediär',
+            value: 'Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister',
+          },
         ],
         overview: [
           'Beispieldaten - kein echtes Angebot. Eine echte Kampagnenseite würde die Beschreibung der Genossenschaft, des Standorts und der Energieabnahme vom Emittenten selbst tragen.',
         ],
         documents: [
-          { label: 'Basisinformationsblatt (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' },
-          { label: 'Emissionsbedingungen (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' },
+          {
+            label: 'Basisinformationsblatt (Beispieleintrag)',
+            note: 'Keine Datei in diesem Prototyp gehostet',
+          },
+          {
+            label: 'Emissionsbedingungen (Beispieleintrag)',
+            note: 'Keine Datei in diesem Prototyp gehostet',
+          },
         ],
         news: [] as { date: string; text: string }[],
       },
@@ -1100,18 +1241,50 @@ export const de: Messages = {
             label: 'Anlageprodukt',
             value: 'Anleihe mit Wandlungsmerkmal (wandelbar); Rangfolge in den Beispielbedingungen nicht angegeben. Beispieldaten - kein echtes Angebot',
           },
-          { label: 'ISIN / WKN', value: 'Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern' },
-          { label: 'Nennbetrag pro Einheit', value: '500 Testnet-USDC (Beispiel)' },
-          { label: 'Finanzierungsschwelle', value: 'Ziel 500.000 Testnet-USDC (Beispiel-Fixture)' },
-          { label: 'Wandlungsauslöser', value: 'Pro Emission konfigurierbar; Beispiel: ein vom Emittenten angekündigtes qualifiziertes Finanzierungsereignis' },
-          { label: 'Wandlungsfenster', value: 'Pro Emission konfigurierbar; Beispiel: 30 Tage nach der Auslöser-Ankündigung' },
-          { label: 'Zins-Stopp', value: 'Zinsen laufen bis zum Wandlungstag (Beispiel)' },
-          { label: 'Tilgung bei Nichtwandlung', value: 'Bei Fälligkeit (Beispiel)' },
-          { label: 'Angeboten in', value: 'Keine Angebotsländer - nur Beispieldaten' },
-          { label: 'Intermediär', value: 'Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister' },
+          {
+            label: 'ISIN / WKN',
+            value: 'Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern',
+          },
+          {
+            label: 'Nennbetrag pro Einheit',
+            value: '500 Testnet-USDC (Beispiel)',
+          },
+          {
+            label: 'Finanzierungsschwelle',
+            value: 'Ziel 500.000 Testnet-USDC (Beispiel-Fixture)',
+          },
+          {
+            label: 'Wandlungsauslöser',
+            value: 'Pro Emission konfigurierbar; Beispiel: ein vom Emittenten angekündigtes qualifiziertes Finanzierungsereignis',
+          },
+          {
+            label: 'Wandlungsfenster',
+            value: 'Pro Emission konfigurierbar; Beispiel: 30 Tage nach der Auslöser-Ankündigung',
+          },
+          {
+            label: 'Zins-Stopp',
+            value: 'Zinsen laufen bis zum Wandlungstag (Beispiel)',
+          },
+          {
+            label: 'Tilgung bei Nichtwandlung',
+            value: 'Bei Fälligkeit (Beispiel)',
+          },
+          {
+            label: 'Angeboten in',
+            value: 'Keine Angebotsländer - nur Beispieldaten',
+          },
+          {
+            label: 'Intermediär',
+            value: 'Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister',
+          },
         ],
         overview: ['Beispieldaten - kein echtes Angebot. Abgeschlossene Kampagnen bleiben mit ihrem endgültigen Finanzierungsstatus sichtbar, wie diese.'],
-        documents: [{ label: 'Wandelanleihebedingungen (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' }],
+        documents: [
+          {
+            label: 'Wandelanleihebedingungen (Beispieleintrag)',
+            note: 'Keine Datei in diesem Prototyp gehostet',
+          },
+        ],
         news: [
           {
             date: 'Beispiel',
@@ -1120,5 +1293,65 @@ export const de: Messages = {
         ],
       },
     ],
+  },
+  community: {
+    loading: 'Wird geladen...',
+    demoBadge: 'DEMO',
+    documentsTitle: 'Dokumente',
+    documentsNote:
+      'Mit DEMO markierte Dokumente sind fiktive Vorlagen dieses Prototyps - keine Angebote, keine Beratung, keine verifizierten Emittenteninformationen.',
+    documentKinds: {
+      kiis: 'KIIS',
+      terms: 'Bedingungen',
+      project: 'Projekt',
+      other: 'Dokument',
+    },
+    newsTitle: 'Neuigkeiten',
+    newsAuthorDemo: 'von der Plattform veröffentlicht (Demo-Inhalt - keine verifizierte Emittentenidentität)',
+    commentsTitle: 'Kommentare',
+    commentsEmpty: 'Noch keine Kommentare.',
+    commentLabel: 'Ihr Kommentar',
+    commentSubmit: 'Kommentar veröffentlichen',
+    commentPostingAs: (name: string) => `Veröffentlichen als ${name}. Kommentare sind öffentlich.`,
+    commentsSignInHint: 'Melden Sie sich unten mit Ihrer Wallet an, um an der Diskussion teilzunehmen.',
+    signInTitle: 'Community-Anmeldung',
+    signInExplainer:
+      'Signieren Sie eine einmalige Challenge mit Ihrer Freighter-Wallet, um zu beweisen, dass Sie die Adresse kontrollieren. Es wird keine Transaktion erstellt und es bewegen sich keine Gelder. Die Sitzung schaltet Kommentare, Support-Tickets und Emittentenbewerbungen frei.',
+    signInButton: 'Mit Wallet anmelden',
+    signInConnectFirst: 'Verbinden Sie zuerst Ihre Freighter-Wallet (oben auf der Seite).',
+    signedInTitle: 'Community-Konto',
+    signedInAs: 'Angemeldet als',
+    displayNameLabel: 'Anzeigename (wird bei Ihren Kommentaren gezeigt)',
+    displayNameSave: 'Namen speichern',
+    signOutButton: 'Abmelden',
+    ticketsTitle: 'Support und Feedback',
+    ticketsNote:
+      'Tickets sind nur für Ihr Wallet-Konto und den Seitenbetreiber sichtbar. Dies ist ein Prototyp: Geben Sie keine persönlichen Daten, Passwörter oder echten Zahlungsdaten ein.',
+    ticketKindLabel: 'Typ',
+    ticketKinds: {
+      support: 'Support-Anfrage',
+      feedback: 'Feedback',
+    },
+    ticketSubjectLabel: 'Betreff',
+    ticketBodyLabel: 'Nachricht',
+    ticketSubmit: 'Senden',
+    ticketsEmpty: 'Noch keine Tickets.',
+    ticketStatus: {
+      open: 'Offen',
+      closed: 'Geschlossen',
+    },
+    applicationTitle: 'Als Emittent bewerben',
+    applicationNote:
+      'Beschreiben Sie dem Betreiber das Projekt, das Sie listen möchten. Das Absenden dieses Formulars ist kein Angebot, kein Listing und keine Genehmigung - es eröffnet ein Gespräch. Demo-Umgebung: Übermitteln Sie keine echten Geschäftsgeheimnisse.',
+    applicationFields: {
+      projectName: 'Projektname',
+      country: 'Land',
+      instrumentType: 'Instrumententyp (z. B. Anleihe, Eigenkapital, Umsatzbeteiligung)',
+      targetAmount: 'Zielbetrag',
+      description: 'Projektbeschreibung',
+      contactEmail: 'Kontakt-E-Mail (optional)',
+    },
+    applicationSubmit: 'Bewerbung absenden',
+    applicationDone: 'Bewerbung erhalten. Der Betreiber prüft Bewerbungen außerhalb der Seite; nichts wird automatisch gelistet.',
   },
 };

@@ -7,6 +7,9 @@ import { profileFor, type CampaignProfile } from '../data/profiles';
 import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
+import DocumentsList from '../components/DocumentsList';
+import NewsList from '../components/NewsList';
+import Comments from '../components/Comments';
 import type { Messages } from '../i18n/locales/en';
 
 const TAB_IDS = ['overview', 'details', 'documents', 'news'] as const;
@@ -176,36 +179,48 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           )}
           {tab === 'documents' && (
             <section aria-label={m.campaign.tabs[2]}>
-              {profile ? (
-                <ul className="doc-list">
-                  {profile.documents.map((d) => (
-                    <li key={d.label}>
-                      <strong>{d.label}</strong>
-                      <span className="doc-note"> - {d.note}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>{m.campaign.documentsMissing}</p>
-              )}
+              <DocumentsList
+                campaignId={campaign.id}
+                fallback={
+                  profile ? (
+                    <ul className="doc-list">
+                      {profile.documents.map((d) => (
+                        <li key={d.label}>
+                          <strong>{d.label}</strong>
+                          <span className="doc-note"> - {d.note}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{m.campaign.documentsMissing}</p>
+                  )
+                }
+              />
             </section>
           )}
           {tab === 'news' && (
             <section aria-label={m.campaign.tabs[3]}>
-              {profile && profile.news.length > 0 ? (
-                <ul className="doc-list">
-                  {profile.news.map((n, i) => (
-                    <li key={i}>
-                      <strong>{n.date}</strong>
-                      <span className="doc-note"> - {n.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>{m.campaign.newsEmpty}</p>
-              )}
+              <NewsList
+                campaignId={campaign.id}
+                fallback={
+                  profile && profile.news.length > 0 ? (
+                    <ul className="doc-list">
+                      {profile.news.map((n, i) => (
+                        <li key={i}>
+                          <strong>{n.date}</strong>
+                          <span className="doc-note"> - {n.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{m.campaign.newsEmpty}</p>
+                  )
+                }
+              />
             </section>
           )}
+
+          <Comments campaignId={campaign.id} />
         </div>
 
         <aside className="invest-widget" aria-label={m.nav.investments}>

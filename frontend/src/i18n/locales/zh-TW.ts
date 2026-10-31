@@ -52,10 +52,19 @@ export const zhTW: Messages = {
     stepsAria: '投資流程',
     stepsTitle: '4 步完成首次出資',
     steps: [
-      { title: '連接', text: '在 Stellar 測試網上連接 Freighter 錢包。本原型無需賬戶，不收集個人數據。' },
+      {
+        title: '連接',
+        text: '在 Stellar 測試網上連接 Freighter 錢包。本原型無需賬戶，不收集個人數據。',
+      },
       { title: '發現', text: '瀏覽項目，閱讀每個項目頁面上的結構化條款。' },
-      { title: '出資', text: '簽署一筆交易。合約託管您的出資並以原子方式執行融資上限。' },
-      { title: '跟蹤', text: '在此跟蹤融資狀態。若目標未達成，退款由出資者自行簽署。' },
+      {
+        title: '出資',
+        text: '簽署一筆交易。合約託管您的出資並以原子方式執行融資上限。',
+      },
+      {
+        title: '跟蹤',
+        text: '在此跟蹤融資狀態。若目標未達成，退款由出資者自行簽署。',
+      },
     ],
     fullJourneyLink: '完整的投資者旅程，每一步都標註為已上線或計劃中',
     latestAria: '最新項目',
@@ -276,11 +285,23 @@ export const zhTW: Messages = {
       },
     ],
     issuerSteps: [
-      { title: '申請和審核', text: '發行方提交申請，通過資格和文件審核，並簽署平臺條款。' },
+      {
+        title: '申請和審核',
+        text: '發行方提交申請，通過資格和文件審核，並簽署平臺條款。',
+      },
       { title: '項目構建', text: '配置並審核工具條款、門檻、文件和營銷內容。' },
-      { title: '上線項目', text: '演示展示了帶有鏈上實時融資狀態的公開項目頁面。' },
-      { title: '結算', text: '全有或全無：只有目標在截止期限前達成，創建者才能提款，由合約執行。' },
-      { title: '融資後義務', text: '報告、利息和贖回支付，以及獨立的發行方生命週期狀態。未實現。' },
+      {
+        title: '上線項目',
+        text: '演示展示了帶有鏈上實時融資狀態的公開項目頁面。',
+      },
+      {
+        title: '結算',
+        text: '全有或全無：只有目標在截止期限前達成，創建者才能提款，由合約執行。',
+      },
+      {
+        title: '融資後義務',
+        text: '報告、利息和贖回支付，以及獨立的發行方生命週期狀態。未實現。',
+      },
     ],
   },
   learn: {
@@ -310,8 +331,14 @@ export const zhTW: Messages = {
   riskWarnings: {
     title: '風險提示',
     items: [
-      { h: '全部損失', p: '眾籌投資可能損失全部價值。切勿投資您無法承受損失的資金。' },
-      { h: '流動性不足', p: '這些工具通常不可交易。請假定您在到期或約定事件前無法退出。' },
+      {
+        h: '全部損失',
+        p: '眾籌投資可能損失全部價值。切勿投資您無法承受損失的資金。',
+      },
+      {
+        h: '流動性不足',
+        p: '這些工具通常不可交易。請假定您在到期或約定事件前無法退出。',
+      },
       {
         h: '分散投資',
         p: '常見指引是投入此類資產的資金不超過可自由支配資金的 10%，並分散到不同發行方。',
@@ -321,7 +348,10 @@ export const zhTW: Messages = {
         h: '不構成建議',
         p: '本網站的任何內容均不構成投資、法律或稅務建議。本網站是測試網絡上的軟件原型，不列出任何真實發行。',
       },
-      { h: '原型狀態', p: '測試網資產毫無價值。此處的智能合約未經審計，不得用於真實資金。' },
+      {
+        h: '原型狀態',
+        p: '測試網資產毫無價值。此處的智能合約未經審計，不得用於真實資金。',
+      },
     ],
   },
   faqPage: {
@@ -366,7 +396,10 @@ export const zhTW: Messages = {
       { h: '申請', p: '向我們介紹您的公司、所需金額和您考慮的金融工具。' },
       { h: '審核', p: '資格和文件審核，然後給出結構化的融資方案。' },
       { h: '構建', p: '共同準備項目頁面、工具條款、文件和營銷內容。' },
-      { h: '募資', p: '全有或全無的項目融資。只有在截止期限前達到目標，資金才會結算。' },
+      {
+        h: '募資',
+        p: '全有或全無的項目融資。只有在截止期限前達到目標，資金才會結算。',
+      },
     ],
     previewAria: '申請表預覽',
     previewTitle: '申請表（預覽）',
@@ -396,7 +429,13 @@ export const zhTW: Messages = {
     myInvestments: '我的投資',
     newInvestments: '新的投資',
     filterAria: '按狀態篩選投資組合',
-    tabs: { all: '全部', canceled: '已取消', pending: '待處理', paid: '已支付', completed: '已完成' },
+    tabs: {
+      all: '全部',
+      canceled: '已取消',
+      pending: '待處理',
+      paid: '已支付',
+      completed: '已完成',
+    },
     tabNote:
       '原型映射：待處理 = 出資已託管，項目開放中。已支付 = 項目已融資，仍在進行。已完成 = 項目在融資後結束。已取消 = 未達到目標而結束；出資人可在項目頁面簽署退款。',
     noInvestments: '未找到投資。',
@@ -421,16 +460,34 @@ export const zhTW: Messages = {
       { label: '個人數據', note: '本原型不收集。' },
       { label: '地址數據', note: '本原型不收集。' },
       { label: '聯繫方式', note: '本原型不收集。' },
-      { label: '安全', note: '基於錢包的訪問（Freighter）。本原型沒有密碼或雙重驗證應用。' },
-      { label: '投資者資格', note: '知識測試和損失承受能力檢查是規劃中的合規步驟；此處未實現。' },
-      { label: '身份驗證（KYC）', note: '未實現。本測試網原型不驗證任何身份。' },
-      { label: '銀行信息', note: '不收集。出資和退款以測試網 USDC 在鏈上流轉。' },
-      { label: '證券賬戶數據', note: '參考平臺上的可選證券賬戶關聯；此處不收集。' },
+      {
+        label: '安全',
+        note: '基於錢包的訪問（Freighter）。本原型沒有密碼或雙重驗證應用。',
+      },
+      {
+        label: '投資者資格',
+        note: '知識測試和損失承受能力檢查是規劃中的合規步驟；此處未實現。',
+      },
+      {
+        label: '身份驗證（KYC）',
+        note: '未實現。本測試網原型不驗證任何身份。',
+      },
+      {
+        label: '銀行信息',
+        note: '不收集。出資和退款以測試網 USDC 在鏈上流轉。',
+      },
+      {
+        label: '證券賬戶數據',
+        note: '參考平臺上的可選證券賬戶關聯；此處不收集。',
+      },
       {
         label: '數字保管櫃',
         note: '規劃中的持倉保管視圖。在本原型中，持倉存於各項目合約內，按連接的錢包讀取。',
       },
-      { label: '公司賬戶', note: '參考平臺允許已驗證的投資者添加公司賬戶；本原型未實現。' },
+      {
+        label: '公司賬戶',
+        note: '參考平臺允許已驗證的投資者添加公司賬戶；本原型未實現。',
+      },
     ],
   },
   footer: {
@@ -602,7 +659,11 @@ export const zhTW: Messages = {
         label: '"Qualified / qualifiziert"',
         summary: '貸款和債券上出現的平臺用語。對於債券，除非條款本身寫明次級，否則不要將其理解為合格次級。',
       },
-      { id: 'mini-bond', label: '"Mini Bond"', summary: '平臺對小額面值債券的稱呼。' },
+      {
+        id: 'mini-bond',
+        label: '"Mini Bond"',
+        summary: '平臺對小額面值債券的稱呼。',
+      },
     ],
     chipZeroCoupon: '零息',
     chipConvertible: '可轉換',
@@ -616,13 +677,22 @@ export const zhTW: Messages = {
       term: '全有或全無融資',
       definition: '只有在截止期限前達到目標，發行方才能收到資金；否則出資將被退還。本原型中的 Soroban 合約在鏈上強制執行這一規則。',
     },
-    { term: '融資門檻', definition: '一期發行必須募集到才能成交的最低金額。區別於單個投資者的最低投資額。' },
-    { term: '最低投資額', definition: '單個投資者可以認購的最小金額，通常為一個單位。' },
+    {
+      term: '融資門檻',
+      definition: '一期發行必須募集到才能成交的最低金額。區別於單個投資者的最低投資額。',
+    },
+    {
+      term: '最低投資額',
+      definition: '單個投資者可以認購的最小金額，通常為一個單位。',
+    },
     {
       term: '次級',
       definition: '一種受償順序規則：破產清算時，次級債權僅在優先債權人之後受償，因此損失風險更高。',
     },
-    { term: 'ISIN', definition: '國際證券識別編碼，用於標識一隻證券。本原型不發行證券，也沒有 ISIN。' },
+    {
+      term: 'ISIN',
+      definition: '國際證券識別編碼，用於標識一隻證券。本原型不發行證券，也沒有 ISIN。',
+    },
     {
       term: '關鍵投資信息表（KIIS）',
       definition: '一份標準化的簡短文件，載明發行的關鍵事實和風險，許多歐盟眾籌發行都需要提供。',
@@ -648,10 +718,19 @@ export const zhTW: Messages = {
       definition: '由中立的機制保管資金直至條件滿足。在本原型中，由項目合約本身在 Stellar 測試網上託管出資。',
     },
     { term: 'Soroban', definition: '本原型使用的 Stellar 網絡智能合約平臺。' },
-    { term: '測試網', definition: '一種公共測試網絡，其中的資產沒有價值，可在不動用真實資金的情況下試用軟件。' },
-    { term: '名義價值', definition: '金融工具一個單位的面值，利息和償還均以其為基準計算。' },
+    {
+      term: '測試網',
+      definition: '一種公共測試網絡，其中的資產沒有價值，可在不動用真實資金的情況下試用軟件。',
+    },
+    {
+      term: '名義價值',
+      definition: '金融工具一個單位的面值，利息和償還均以其為基準計算。',
+    },
     { term: '到期一次還本', definition: '在到期時一次性償還全部名義金額。' },
-    { term: 'act/act、30E/360', definition: '計息慣例，用於定義利息在付息日之間如何累積。' },
+    {
+      term: 'act/act、30E/360',
+      definition: '計息慣例，用於定義利息在付息日之間如何累積。',
+    },
     {
       term: '零息債券（Zero Bond）',
       definition: '不支付定期利息的債券：以低於名義價值的價格發行，按面值償還，回報即差額。這是一種票息結構，而非優先級。',
@@ -912,14 +991,23 @@ export const zhTW: Messages = {
         term: '至 2030-12-31（示例）',
         minInvestment: '250 USDC 測試網（示例）',
         additionalInfo: [
-          { label: '投資產品', value: '優先債券（非次級、無擔保）。示例數據 - 非真實發行' },
+          {
+            label: '投資產品',
+            value: '優先債券（非次級、無擔保）。示例數據 - 非真實發行',
+          },
           { label: 'ISIN / WKN', value: '未發行 - 本原型不發行證券標識符' },
           { label: '每單位名義金額', value: '250 USDC 測試網（示例）' },
           { label: '最低認購', value: '1 個單位（示例）' },
-          { label: '融資門檻', value: '等於項目目標；在實際模式下由合約執行全有或全無' },
+          {
+            label: '融資門檻',
+            value: '等於項目目標；在實際模式下由合約執行全有或全無',
+          },
           { label: '發行規模', value: '250,000 USDC 測試網目標（示例數據）' },
           { label: '計息方式', value: '30E/360（示例）' },
-          { label: '付息日期', value: '每年 12 月 31 日，首次付息 2027 年（示例）' },
+          {
+            label: '付息日期',
+            value: '每年 12 月 31 日，首次付息 2027 年（示例）',
+          },
           { label: '償還', value: '到期償還（示例）' },
           { label: '發行地區', value: '無發行國家 - 僅為示例數據' },
           { label: '中介機構', value: '無。本原型不是眾籌服務提供商' },
@@ -933,7 +1021,12 @@ export const zhTW: Messages = {
           { label: '債券條款（示例條目）', note: '本原型未託管任何文件' },
           { label: '融資演示文稿（示例條目）', note: '本原型未託管任何文件' },
         ],
-        news: [{ date: '示例', text: '項目更新會顯示在這裡。本條目是佔位符，不是真實更新。' }],
+        news: [
+          {
+            date: '示例',
+            text: '項目更新會顯示在這裡。本條目是佔位符，不是真實更新。',
+          },
+        ],
       },
       {
         campaignId: 'fixture-alentejo-solar',
@@ -951,10 +1044,19 @@ export const zhTW: Messages = {
           { label: '投資產品', value: '次級債券。示例數據 - 非真實發行' },
           { label: 'ISIN / WKN', value: '未發行 - 本原型不發行證券標識符' },
           { label: '每單位名義金額', value: '250 USDC 測試網（示例）' },
-          { label: '融資門檻', value: '900,000 USDC 測試網目標（示例數據）；實際模式下全有或全無' },
-          { label: '次級屬性', value: '破產清算時受償順序落後於優先債權人（示例條款）' },
+          {
+            label: '融資門檻',
+            value: '900,000 USDC 測試網目標（示例數據）；實際模式下全有或全無',
+          },
+          {
+            label: '次級屬性',
+            value: '破產清算時受償順序落後於優先債權人（示例條款）',
+          },
           { label: '計息方式', value: 'act/act（示例）' },
-          { label: '付息日期', value: '每年 6 月 30 日，首次付息 2028 年（示例）' },
+          {
+            label: '付息日期',
+            value: '每年 6 月 30 日，首次付息 2028 年（示例）',
+          },
           { label: '償還', value: '到期償還（示例）' },
           { label: '發行地區', value: '無發行國家 - 僅為示例數據' },
           { label: '中介機構', value: '無。本原型不是眾籌服務提供商' },
@@ -986,7 +1088,10 @@ export const zhTW: Messages = {
           { label: 'ISIN / WKN', value: '未發行 - 本原型不發行證券標識符' },
           { label: '每單位名義金額', value: '500 USDC 測試網（示例）' },
           { label: '融資門檻', value: '500,000 USDC 測試網目標（示例數據）' },
-          { label: '轉換觸發條件', value: '按發行配置；示例：發行方宣佈的合格融資事件' },
+          {
+            label: '轉換觸發條件',
+            value: '按發行配置；示例：發行方宣佈的合格融資事件',
+          },
           { label: '轉換窗口', value: '按發行配置；示例：觸發公告後 30 天' },
           { label: '利息停止', value: '利息累計至轉換日（示例）' },
           { label: '未轉換時的償還', value: '到期償還（示例）' },
@@ -995,8 +1100,69 @@ export const zhTW: Messages = {
         ],
         overview: ['示例數據 - 非真實發行。已完成的項目會連同其最終融資狀態保持可見，如本項目所示。'],
         documents: [{ label: '可轉換債券條款（示例條目）', note: '本原型未託管任何文件' }],
-        news: [{ date: '示例', text: '該項目在示例數據中已成功結束。融資後的發行方事件會單獨跟蹤。' }],
+        news: [
+          {
+            date: '示例',
+            text: '該項目在示例數據中已成功結束。融資後的發行方事件會單獨跟蹤。',
+          },
+        ],
       },
     ],
+  },
+  community: {
+    loading: '載入中...',
+    demoBadge: 'DEMO',
+    documentsTitle: '文件',
+    documentsNote: '標示 DEMO 的文件為本原型的虛構範本 - 非要約、非建議、非經驗證的發行人資訊。',
+    documentKinds: {
+      kiis: 'KIIS',
+      terms: '條款',
+      project: '專案',
+      other: '文件',
+    },
+    newsTitle: '最新消息',
+    newsAuthorDemo: '由平台發佈(示範內容 - 無經驗證的發行人身分)',
+    commentsTitle: '留言',
+    commentsEmpty: '尚無留言。',
+    commentLabel: '您的留言',
+    commentSubmit: '發佈留言',
+    commentPostingAs: (name: string) => `以 ${name} 身分發佈。留言為公開。`,
+    commentsSignInHint: '在下方使用您的錢包登入以參與討論。',
+    signInTitle: '社群登入',
+    signInExplainer: '使用您的 Freighter 錢包簽署一次性挑戰,以證明您控制該地址。不會建立任何交易,也不會移動資金。登入後可使用留言、支援工單與發行人申請。',
+    signInButton: '使用錢包登入',
+    signInConnectFirst: '請先連接您的 Freighter 錢包(頁面頂部)。',
+    signedInTitle: '社群帳戶',
+    signedInAs: '已登入為',
+    displayNameLabel: '顯示名稱(顯示於您的留言)',
+    displayNameSave: '儲存名稱',
+    signOutButton: '登出',
+    ticketsTitle: '支援與意見回饋',
+    ticketsNote: '工單僅您的錢包帳戶與網站營運方可見。此為原型:請勿包含個人資料、密碼或真實付款資訊。',
+    ticketKindLabel: '類型',
+    ticketKinds: {
+      support: '支援請求',
+      feedback: '意見回饋',
+    },
+    ticketSubjectLabel: '主旨',
+    ticketBodyLabel: '訊息',
+    ticketSubmit: '送出',
+    ticketsEmpty: '尚無工單。',
+    ticketStatus: {
+      open: '開啟',
+      closed: '已關閉',
+    },
+    applicationTitle: '申請成為發行人',
+    applicationNote: '向營運方介紹您想上架的專案。送出此表單並非要約、上架或核准 - 而是開啟對話。示範環境:請勿提交真實商業機密。',
+    applicationFields: {
+      projectName: '專案名稱',
+      country: '國家',
+      instrumentType: '工具類型(例如:債券、股權、收益分潤)',
+      targetAmount: '目標金額',
+      description: '專案說明',
+      contactEmail: '聯絡電子郵件(選填)',
+    },
+    applicationSubmit: '送出申請',
+    applicationDone: '已收到申請。營運方會在站外審核申請;不會自動上架任何內容。',
   },
 };
