@@ -152,7 +152,7 @@ export default function OperatorSection({ campaigns }: Props) {
                     <td>{a.country}</td>
                     <td>{a.instrumentType}</td>
                     <td>{a.targetAmount}</td>
-                    <td>{fmt(a.createdAt)}</td>
+                    <td className="cell-nowrap">{fmt(a.createdAt)}</td>
                     <td>
                       <span className={`status-chip status-${a.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.applicationStatus[a.status]}</span>
                     </td>
@@ -207,7 +207,7 @@ export default function OperatorSection({ campaigns }: Props) {
                     </td>
                     <td>{c.displayName ?? `${c.publicKey.slice(0, 6)}…${c.publicKey.slice(-4)}`}</td>
                     <td>{c.body}</td>
-                    <td>{fmt(c.createdAt)}</td>
+                    <td className="cell-nowrap">{fmt(c.createdAt)}</td>
                     <td>{c.hiddenAt !== null ? labels.stateHidden : labels.stateVisible}</td>
                     <td>
                       {c.hiddenAt !== null ? (
@@ -272,7 +272,7 @@ export default function OperatorSection({ campaigns }: Props) {
                     <td>{m.community.ticketKinds[t.kind]}</td>
                     <td>{t.subject}</td>
                     <td>{t.body}</td>
-                    <td>{fmt(t.createdAt)}</td>
+                    <td className="cell-nowrap">{fmt(t.createdAt)}</td>
                     <td>
                       <span className={`status-chip status-${t.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.ticketStatus[t.status]}</span>
                     </td>

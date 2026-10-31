@@ -2613,6 +2613,14 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   margin-inline-end: 8px;
 }
 
+/* Status chips and date cells never wrap mid-word; the project/subject
+   cells absorb the squeeze. Scoped to operator tables (not the shared
+   chip class) and bounded on mobile by the <=720px overflow-x wrapper. */
+.operator-table td .status-chip,
+.operator-table td.cell-nowrap {
+  white-space: nowrap;
+}
+
 .operator-reason {
   display: inline-flex;
   align-items: flex-end;
