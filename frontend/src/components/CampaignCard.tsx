@@ -139,7 +139,10 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
 
       {c.balance !== null && (
         <p className="your-position">
-          {m.card.yourPosition} <strong>{formatAmount(c.balance, locale)} {m.card.usdcTestnet}</strong>
+          {m.card.yourPosition}{' '}
+          <strong>
+            {formatAmount(c.balance, locale)} {m.card.usdcTestnet}
+          </strong>
         </p>
       )}
 
