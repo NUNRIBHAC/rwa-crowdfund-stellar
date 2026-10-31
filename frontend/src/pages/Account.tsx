@@ -7,7 +7,9 @@ import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import SignInPanel from '../components/SignInPanel';
 import MyCommunityActivity from '../components/MyCommunityActivity';
+import CompanyAccountsSection from '../components/CompanyAccountsSection';
 import NotificationsSection from '../components/NotificationsSection';
+import SecuritySection from '../components/SecuritySection';
 import OperatorSection from '../components/OperatorSection';
 import SupportCenter from '../components/SupportCenter';
 import IssuerApplicationForm from '../components/IssuerApplicationForm';
@@ -175,6 +177,10 @@ export default function Account({ market }: { market: Market }) {
       </section>
 
       <NotificationsSection />
+
+      <SecuritySection />
+
+      <CompanyAccountsSection />
 
       <OperatorSection campaigns={campaigns.map((c) => ({ id: c.id, name: c.name }))} />
 

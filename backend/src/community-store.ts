@@ -69,6 +69,21 @@ export type Ticket = {
   closedAt: number | null;
 };
 
+export type CompanyApplication = {
+  id: string;
+  publicKey: string;
+  companyName: string;
+  legalForm: string;
+  registrationNumber: string;
+  country: string;
+  // Manual review, same posture as issuer applications: pending until a real
+  // operator decides. Demo honesty: no documents are uploaded or verified in
+  // this prototype; the registry fields are applicant-provided claims.
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: number;
+  decidedAt: number | null;
+};
+
 export type IssuerApplication = {
   id: string;
   publicKey: string;
@@ -82,7 +97,13 @@ export type IssuerApplication = {
   createdAt: number;
 };
 
-export type NotificationKind = 'application_received' | 'application_status' | 'comment_moderated' | 'ticket_closed';
+export type NotificationKind =
+  | 'application_received'
+  | 'application_status'
+  | 'comment_moderated'
+  | 'ticket_closed'
+  | 'company_received'
+  | 'company_status';
 
 // Owner-scoped notification generated server-side from a real event on the
 // owner's own content (application submitted or status change, comment
@@ -113,6 +134,7 @@ export type CommunityState = {
   news: Record<string, NewsPost>;
   tickets: Record<string, Ticket>;
   applications: Record<string, IssuerApplication>;
+  companies: Record<string, CompanyApplication>;
   notifications: Record<string, Notification>;
 };
 
@@ -126,6 +148,7 @@ export function emptyCommunityState(): CommunityState {
     news: {},
     tickets: {},
     applications: {},
+    companies: {},
     notifications: {},
   };
 }
@@ -134,6 +157,7 @@ function validate(state: any): CommunityState {
   // Forward-compatible default: docs written before notifications existed
   // gain the collection on first read instead of failing validation.
   if (state && state.version === 1 && !state.notifications) state.notifications = {};
+  if (state && state.version === 1 && !state.companies) state.companies = {};
   if (
     !state ||
     state.version !== 1 ||
@@ -144,6 +168,7 @@ function validate(state: any): CommunityState {
     !state.news ||
     !state.tickets ||
     !state.applications ||
+    !state.companies ||
     !state.notifications
   ) {
     throw new Error('invalid community store; restore or reconcile manually');

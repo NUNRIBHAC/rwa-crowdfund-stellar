@@ -509,10 +509,6 @@ export const de: Messages = {
         note: 'Für das Investieren in diesem Prototyp nicht erforderlich; eine geplante Anleger-Verifizierungsanforderung.',
       },
       {
-        label: 'Sicherheit',
-        note: 'Wallet-basierter Zugang (Freighter). Kein Passwort und keine Zwei-Faktor-App in diesem Prototyp.',
-      },
-      {
         label: 'Anlegerqualifizierung',
         note: 'Kenntnistest und Verlusttragfähigkeitsprüfung sind geplante Compliance-Schritte; hier nicht implementiert.',
       },
@@ -531,10 +527,6 @@ export const de: Messages = {
       {
         label: 'Digitales Schließfach',
         note: 'Geplante Verwahrsicht gehaltener Positionen. Hier liegen Positionen in jedem Kampagnenvertrag und werden pro verbundener Wallet gelesen.',
-      },
-      {
-        label: 'Firmenkonten',
-        note: 'Die Referenzplattform erlaubt verifizierten Anlegern, ein Firmenkonto hinzuzufügen; in diesem Prototyp nicht implementiert.',
       },
     ],
   },
@@ -1366,6 +1358,39 @@ export const de: Messages = {
       required: 'Bitte füllen Sie dieses Feld aus.',
       emailInvalid: 'Geben Sie eine gültige E-Mail-Adresse ein.',
     },
+    company: {
+      title: 'Firmenkonten',
+      note:
+        'Beantragen Sie ein Firmenkonto, das mit Ihrer Wallet verknüpft ist. Die Prüfung erfolgt manuell, wie bei Emittentenanträgen. Hinweis zur Demo: Die Registerdaten sind Angaben des Antragstellers; in diesem Prototyp werden weder Handelsregisterauszüge noch Ausweise der Eigentümer hochgeladen oder geprüft. Investieren aus einem Firmenkontext ist geplant und hier nicht aktiv.',
+      listTitle: 'Meine Firmenanträge',
+      empty: 'Noch keine Firmenanträge.',
+      formTitle: 'Firmenkonto beantragen',
+      fields: {
+        companyName: 'Firmenname',
+        legalForm: 'Rechtsform (z. B. GmbH, AG)',
+        registrationNumber: 'Registernummer',
+        country: 'Land der Registrierung',
+      },
+      submit: 'Antrag absenden',
+      submitting: 'Wird gesendet...',
+      submitted: 'Antrag erhalten. Er erscheint oben als ausstehende Prüfung.',
+      status: { pending: 'Prüfung ausstehend', approved: 'Genehmigt', rejected: 'Abgelehnt' },
+    },
+    security: {
+      title: 'Sicherheit',
+      authMethodNote:
+        'Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Zugangsberechtigung. Dieser Prototyp hat kein Passwort und keine Zwei-Faktor-App.',
+      sessionsTitle: 'Aktive Sitzungen',
+      sessionLabel: 'Sitzung',
+      currentBadge: 'Diese Sitzung',
+      createdLabel: 'Angemeldet',
+      expiresLabel: 'Läuft ab',
+      revoke: 'Sitzung beenden',
+      revokeOthers: 'Alle anderen Sitzungen abmelden',
+      revokedOthers: ({ count }: { count: number }) =>
+          `${count} ${count === 1 ? 'weitere Sitzung' : 'weitere Sitzungen'} beendet.`,
+      empty: 'Keine aktiven Sitzungen.',
+    },
     notifications: {
       title: 'Benachrichtigungen',
       empty: 'Noch keine Benachrichtigungen.',
@@ -1376,6 +1401,8 @@ export const de: Messages = {
         applicationStatus: 'Update zum Emittentenantrag',
         commentModerated: 'Kommentar durch Moderation ausgeblendet',
         ticketClosed: 'Support-Ticket geschlossen',
+        companyReceived: 'Firmenkontoantrag eingegangen',
+        companyStatus: 'Update zum Firmenkontoantrag',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1385,6 +1412,10 @@ export const de: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `Ihr Kommentar zur Kampagne "${campaignId}" wurde vom Moderator ausgeblendet.`,
         commentModeratedReason: ({ reason }: { reason: string }) => `Grund: ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Ihr Ticket (${kindLabel}) "${subject}" wurde geschlossen.`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `Ihr Firmenkontoantrag für "${companyName}" ist eingegangen. Die Prüfung erfolgt manuell; die Einreichung ist keine Genehmigung.`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `Ihr Firmenkontoantrag für "${companyName}" ist jetzt "${statusLabel}".`,
       },
     },
     operator: {

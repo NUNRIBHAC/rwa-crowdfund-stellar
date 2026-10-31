@@ -510,10 +510,6 @@ export const pt: Messages = {
         note: 'Não é necessário para investir neste protótipo; um requisito planeado de verificação do investidor.',
       },
       {
-        label: 'Segurança',
-        note: 'Acesso baseado em carteira (Freighter). Sem palavra-passe nem aplicação de dois fatores neste protótipo.',
-      },
-      {
         label: 'Qualificação do investidor',
         note: 'O teste de conhecimentos e a verificação de capacidade de suportar perdas são passos de conformidade planeados; não implementados aqui.',
       },
@@ -532,10 +528,6 @@ export const pt: Messages = {
       {
         label: 'Cofre digital',
         note: 'Vista planeada de custódia das posições detidas. Aqui, as posições vivem em cada contrato de campanha e são lidas por carteira ligada.',
-      },
-      {
-        label: 'Contas de empresa',
-        note: 'A plataforma de referência permite a um investidor verificado adicionar uma conta de empresa; não implementado neste protótipo.',
       },
     ],
   },
@@ -1377,6 +1369,39 @@ export const pt: Messages = {
       required: 'Preencha este campo.',
       emailInvalid: 'Introduza um endereço de email válido.',
     },
+    company: {
+      title: 'Contas de empresa',
+      note:
+        'Candidate-se a uma conta de empresa associada à sua carteira. A revisão é manual, tal como nas candidaturas de emitente. Transparência da demonstração: os dados de registo que introduz são fornecidos pelo candidato; neste protótipo não é carregada nem verificada qualquer certidão do registo comercial nem identificações dos titulares. Investir a partir de um contexto de empresa está planeado e não está ativo aqui.',
+      listTitle: 'As minhas candidaturas de empresa',
+      empty: 'Ainda não tem candidaturas de empresa.',
+      formTitle: 'Candidatar-se a uma conta de empresa',
+      fields: {
+        companyName: 'Nome da empresa',
+        legalForm: 'Forma jurídica (ex.: Lda, SA)',
+        registrationNumber: 'Número de registo',
+        country: 'País de registo',
+      },
+      submit: 'Submeter candidatura',
+      submitting: 'A submeter...',
+      submitted: 'Candidatura recebida. Aparece acima como pendente de revisão.',
+      status: { pending: 'Pendente de revisão', approved: 'Aprovada', rejected: 'Rejeitada' },
+    },
+    security: {
+      title: 'Segurança',
+      authMethodNote:
+        'Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Este protótipo não tem palavra-passe nem aplicação de duplo fator.',
+      sessionsTitle: 'Sessões ativas',
+      sessionLabel: 'Sessão',
+      currentBadge: 'Esta sessão',
+      createdLabel: 'Início de sessão',
+      expiresLabel: 'Expira',
+      revoke: 'Terminar sessão',
+      revokeOthers: 'Terminar todas as outras sessões',
+      revokedOthers: ({ count }: { count: number }) =>
+          `Terminada${count === 1 ? '' : 's'} ${count} ${count === 1 ? 'sessão adicional' : 'sessões adicionais'}.`,
+      empty: 'Sem sessões ativas.',
+    },
     notifications: {
       title: 'Notificações',
       empty: 'Ainda não há notificações.',
@@ -1387,6 +1412,8 @@ export const pt: Messages = {
         applicationStatus: 'Atualização da candidatura de emitente',
         commentModerated: 'Comentário ocultado pela moderação',
         ticketClosed: 'Pedido de suporte fechado',
+        companyReceived: 'Candidatura de conta de empresa recebida',
+        companyStatus: 'Atualização da candidatura de conta de empresa',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1396,6 +1423,10 @@ export const pt: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `O seu comentário na campanha "${campaignId}" foi ocultado pelo moderador.`,
         commentModeratedReason: ({ reason }: { reason: string }) => `Motivo: ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `O seu ticket (${kindLabel}) "${subject}" foi fechado.`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `A sua candidatura de conta de empresa para "${companyName}" foi recebida. A revisão é manual; a submissão não é uma aprovação.`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `A sua candidatura de conta de empresa para "${companyName}" está agora "${statusLabel}".`,
       },
     },
     operator: {

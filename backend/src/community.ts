@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
-import type { Account, Comment, CommunityStore, IssuerApplication, NewsPost, Notification, NotificationKind, Ticket } from './community-store.js';
+import type {
+  CompanyApplication, Account, Comment, CommunityStore, IssuerApplication, NewsPost, Notification, NotificationKind, Ticket } from './community-store.js';
 import { FileCommunityStore, PostgresCommunityStore } from './community-store.js';
 import { RateLimiter } from './ratelimit.js';
 
@@ -62,6 +63,12 @@ const applicationInput = z.object({
   targetAmount: z.string().trim().min(1).max(LIMITS.applicationField),
   description: z.string().trim().min(1).max(LIMITS.applicationDescription),
   contactEmail: z.union([z.literal(''), z.string().trim().email().max(LIMITS.applicationField)]).optional(),
+});
+const companyInput = z.object({
+  companyName: z.string().trim().min(1).max(LIMITS.applicationField),
+  legalForm: z.string().trim().min(1).max(120),
+  registrationNumber: z.string().trim().min(1).max(120),
+  country: z.string().trim().min(1).max(120),
 });
 const newsInput = z.object({
   title: z.string().trim().min(1).max(LIMITS.newsTitle),
@@ -366,6 +373,66 @@ export class CommunityService {
       });
     }
   }
+  async applyForCompany(account: Account, input: unknown): Promise<CompanyApplication> {
+    const parsed = companyInput.parse(input ?? {});
+    this.checkRate(`company:${account.publicKey}`, 3, 24 * 60 * 60 * 1000);
+    const company: CompanyApplication = {
+      id: newId('co'),
+      publicKey: account.publicKey,
+      companyName: parsed.companyName,
+      legalForm: parsed.legalForm,
+      registrationNumber: parsed.registrationNumber,
+      country: parsed.country,
+      status: 'pending',
+      createdAt: this.now(),
+      decidedAt: null,
+    };
+    await this.store.change((state) => {
+      state.companies[company.id] = company;
+    });
+    await this.notify(
+      account.publicKey,
+      'company_received',
+      'Company account application received',
+      `Your company account application for "${company.companyName}" was received and is pending manual review.`,
+      company.id,
+      { companyName: company.companyName },
+    );
+    return company;
+  }
+
+  async myCompanies(publicKey: string): Promise<CompanyApplication[]> {
+    const state = await this.store.read();
+    return Object.values(state.companies)
+      .filter((c) => c.publicKey === publicKey)
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  async adminListCompanies(): Promise<CompanyApplication[]> {
+    const state = await this.store.read();
+    return Object.values(state.companies).sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  async adminSetCompanyStatus(id: string, status: unknown): Promise<void> {
+    if (status !== 'approved' && status !== 'rejected') throw new CommunityError(400, 'status must be approved or rejected');
+    const company = await this.store.change((state) => {
+      const c = state.companies[id];
+      if (!c) return null;
+      c.status = status;
+      c.decidedAt = this.now();
+      return { ...c };
+    });
+    if (!company) throw new CommunityError(404, 'company application not found');
+    await this.notify(
+      company.publicKey,
+      'company_status',
+      'Company account application update',
+      `Your company account application for "${company.companyName}" is now ${status}.`,
+      company.id,
+      { companyName: company.companyName, status },
+    );
+  }
+
   async adminListApplications(): Promise<IssuerApplication[]> {
     const state = await this.store.read();
     return Object.values(state.applications).sort((a, b) => b.createdAt - a.createdAt);

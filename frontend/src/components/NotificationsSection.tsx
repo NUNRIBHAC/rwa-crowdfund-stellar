@@ -9,11 +9,16 @@ import type { CommunityNotification, NotificationKind } from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 
-const KIND_KEYS: Record<NotificationKind, 'applicationReceived' | 'applicationStatus' | 'commentModerated' | 'ticketClosed'> = {
+const KIND_KEYS: Record<
+  NotificationKind,
+  'applicationReceived' | 'applicationStatus' | 'commentModerated' | 'ticketClosed' | 'companyReceived' | 'companyStatus'
+> = {
   application_received: 'applicationReceived',
   application_status: 'applicationStatus',
   comment_moderated: 'commentModerated',
   ticket_closed: 'ticketClosed',
+  company_received: 'companyReceived',
+  company_status: 'companyStatus',
 };
 
 export default function NotificationsSection() {
@@ -61,6 +66,13 @@ export default function NotificationsSection() {
         if (!v.campaignId) return n.body;
         const base = labels.bodies.commentModerated({ campaignId: v.campaignId });
         return v.reason ? `${base} ${labels.bodies.commentModeratedReason({ reason: v.reason })}` : base;
+      }
+      case 'company_received':
+        return v.companyName ? labels.bodies.companyReceived({ companyName: v.companyName }) : n.body;
+      case 'company_status': {
+        const cstatus = v.status as keyof typeof m.community.company.status | undefined;
+        const cstatusLabel = cstatus && m.community.company.status[cstatus] ? m.community.company.status[cstatus] : undefined;
+        return v.companyName && cstatusLabel ? labels.bodies.companyStatus({ companyName: v.companyName, statusLabel: cstatusLabel }) : n.body;
       }
       case 'ticket_closed': {
         const kind = v.ticketKind as keyof typeof m.community.ticketKinds | undefined;

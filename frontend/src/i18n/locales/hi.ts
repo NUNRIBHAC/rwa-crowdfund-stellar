@@ -503,10 +503,6 @@ export const hi: Messages = {
         note: 'इस प्रोटोटाइप में निवेश के लिए आवश्यक नहीं; एक योजनाबद्ध निवेशक-सत्यापन आवश्यकता।',
       },
       {
-        label: 'सुरक्षा',
-        note: 'वॉलेट-आधारित पहुंच (Freighter)। इस प्रोटोटाइप में कोई पासवर्ड या दो-कारक ऐप नहीं।',
-      },
-      {
         label: 'निवेशक योग्यता',
         note: 'ज्ञान परीक्षण और हानि-क्षमता जांच योजनाबद्ध अनुपालन कदम हैं; यहां लागू नहीं।',
       },
@@ -525,10 +521,6 @@ export const hi: Messages = {
       {
         label: 'डिजिटल लॉकर',
         note: 'धारित पोज़ीशन का योजनाबद्ध कस्टडी व्यू। यहां पोज़ीशन प्रत्येक कैंपेन कॉन्ट्रैक्ट में रहती हैं और प्रति कनेक्टेड वॉलेट पढ़ी जाती हैं।',
-      },
-      {
-        label: 'कंपनी खाते',
-        note: 'संदर्भ प्लेटफ़ॉर्म सत्यापित निवेशक को कंपनी खाता जोड़ने देता है; इस प्रोटोटाइप में लागू नहीं।',
       },
     ],
   },
@@ -1329,6 +1321,39 @@ export const hi: Messages = {
       required: 'कृपया यह फ़ील्ड भरें।',
       emailInvalid: 'मान्य ईमेल पता दर्ज करें।',
     },
+    company: {
+      title: 'कंपनी खाते',
+      note:
+        'अपने वॉलेट से जुड़े कंपनी खाते के लिए आवेदन करें। जाँच मैन्युअल है, जैसे जारीकर्ता आवेदनों में। डेमो पारदर्शिता: आपके द्वारा दर्ज रजिस्ट्री विवरण आवेदक-प्रदान हैं; इस प्रोटोटाइप में कोई कंपनी रजिस्टर अंश या मालिकों की पहचान अपलोड या सत्यापित नहीं की जाती। कंपनी संदर्भ से निवेश करना नियोजित है और यहाँ सक्रिय नहीं है।',
+      listTitle: 'मेरे कंपनी आवेदन',
+      empty: 'अभी तक कोई कंपनी आवेदन नहीं।',
+      formTitle: 'कंपनी खाते के लिए आवेदन करें',
+      fields: {
+        companyName: 'कंपनी का नाम',
+        legalForm: 'कानूनी रूप (जैसे Lda, GmbH)',
+        registrationNumber: 'पंजीकरण संख्या',
+        country: 'पंजीकरण का देश',
+      },
+      submit: 'आवेदन भेजें',
+      submitting: 'भेजा जा रहा है...',
+      submitted: 'आवेदन प्राप्त हुआ। यह ऊपर समीक्षा लंबित के रूप में दिखता है।',
+      status: { pending: 'समीक्षा लंबित', approved: 'स्वीकृत', rejected: 'अस्वीकृत' },
+    },
+    security: {
+      title: 'सुरक्षा',
+      authMethodNote:
+        'आप अपने Stellar वॉलेट से एक संदेश पर हस्ताक्षर करके साइन इन करते हैं: वॉलेट ही क्रेडेंशियल है। इस प्रोटोटाइप में कोई पासवर्ड या दो-कारक ऐप नहीं है।',
+      sessionsTitle: 'सक्रिय सत्र',
+      sessionLabel: 'सत्र',
+      currentBadge: 'यह सत्र',
+      createdLabel: 'साइन इन',
+      expiresLabel: 'समाप्ति',
+      revoke: 'सत्र समाप्त करें',
+      revokeOthers: 'अन्य सभी सत्रों से साइन आउट करें',
+      revokedOthers: ({ count }: { count: number }) =>
+          `${count} ${count === 1 ? 'अन्य सत्र समाप्त किया गया' : 'अन्य सत्र समाप्त किए गए'}.`,
+      empty: 'कोई सक्रिय सत्र नहीं।',
+    },
     notifications: {
       title: 'सूचनाएं',
       empty: 'अभी कोई सूचना नहीं।',
@@ -1339,6 +1364,8 @@ export const hi: Messages = {
         applicationStatus: 'जारीकर्ता आवेदन अपडेट',
         commentModerated: 'मॉडरेशन द्वारा टिप्पणी छिपाई गई',
         ticketClosed: 'सहायता टिकट बंद हुआ',
+        companyReceived: 'कंपनी खाता आवेदन प्राप्त हुआ',
+        companyStatus: 'कंपनी खाता आवेदन अपडेट',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1348,6 +1375,10 @@ export const hi: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `अभियान "${campaignId}" पर आपकी टिप्पणी मॉडरेटर द्वारा छिपा दी गई है।`,
         commentModeratedReason: ({ reason }: { reason: string }) => `कारण: ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `आपका टिकट (${kindLabel}) "${subject}" बंद कर दिया गया है।`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `"${companyName}" के लिए आपका कंपनी खाता आवेदन प्राप्त हुआ। समीक्षा मैन्युअल है; सबमिट करना स्वीकृति नहीं है।`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `"${companyName}" के लिए आपका कंपनी खाता आवेदन अब "${statusLabel}" है।`,
       },
     },
     operator: {

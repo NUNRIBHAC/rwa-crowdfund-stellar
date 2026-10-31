@@ -1,6 +1,16 @@
 import express from 'express';
 import { ZodError } from 'zod';
-import { authenticate, createChallenge, logout, setDisplayName, verifyChallenge, AuthError } from './accounts.js';
+import {
+  authenticate,
+  createChallenge,
+  listSessions,
+  logout,
+  logoutOtherSessions,
+  revokeSession,
+  setDisplayName,
+  verifyChallenge,
+  AuthError,
+} from './accounts.js';
 import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaignId } from './community.js';
 import { metadataFor } from './campaign-metadata.js';
 import type { Account } from './community-store.js';
@@ -77,6 +87,48 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (ip && !service.limiter.allow(`verify-ip:${ip}`, 60, 60 * 60 * 1000)) throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
       const v = await verifyChallenge(store, String(req.body?.publicKey ?? ''), String(req.body?.signature ?? ''));
       res.json({ ...v, isOperator: operatorWallets().includes(v.account.publicKey) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.get('/api/auth/sessions', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      res.json({ sessions: await listSessions(store, account.publicKey, req.header('authorization')) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.delete('/api/auth/sessions/:id', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      const removed = await revokeSession(store, account.publicKey, String(req.params.id));
+      if (!removed) throw new AuthError(404, 'session not found');
+      res.json({ ok: true });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/logout-others', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      res.json({ removed: await logoutOtherSessions(store, account.publicKey, req.header('authorization')) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.get('/api/companies/mine', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      res.json({ companies: await service.myCompanies(account.publicKey) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/companies', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      res.status(201).json({ company: await service.applyForCompany(account, req.body) });
     } catch (err) {
       sendError(res, err);
     }
@@ -288,6 +340,19 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     '/api/operator/issuer-applications/:id/status',
     operator(async (req, res) => {
       await service.adminSetApplicationStatus(String(req.params.id), req.body?.status);
+      res.json({ ok: true });
+    }),
+  );
+  router.get(
+    '/api/operator/companies',
+    operator(async (_req, res) => {
+      res.json({ companies: await service.adminListCompanies() });
+    }),
+  );
+  router.post(
+    '/api/operator/companies/:id/status',
+    operator(async (req, res) => {
+      await service.adminSetCompanyStatus(String(req.params.id), req.body?.status);
       res.json({ ok: true });
     }),
   );

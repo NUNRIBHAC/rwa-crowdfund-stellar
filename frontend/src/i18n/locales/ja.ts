@@ -497,10 +497,6 @@ export const ja: Messages = {
         note: 'このプロトタイプで投資するには不要です。計画中の投資家確認要件です。',
       },
       {
-        label: 'セキュリティ',
-        note: 'ウォレットベースのアクセス（Freighter）。このプロトタイプにパスワードや二要素認証アプリはありません。',
-      },
-      {
         label: '投資家適格性',
         note: '知識テストと損失承受能力チェックは計画中のコンプライアンスステップで、ここでは未実装です。',
       },
@@ -519,10 +515,6 @@ export const ja: Messages = {
       {
         label: 'デジタルロッカー',
         note: '保有ポジションの保管ビュー（計画中）。ここではポジションは各キャンペーンコントラクトに存在し、接続されたウォレットごとに読み取られます。',
-      },
-      {
-        label: '会社アカウント',
-        note: '参照プラットフォームでは検証済み投資家が会社アカウントを追加できますが、このプロトタイプでは未実装です。',
       },
     ],
   },
@@ -1297,6 +1289,39 @@ export const ja: Messages = {
       required: 'このフィールドを入力してください。',
       emailInvalid: '有効なメールアドレスを入力してください。',
     },
+    company: {
+      title: '法人アカウント',
+      note:
+        'ウォレットに紐づく法人アカウントを申請できます。審査は発行者申請と同様に手動です。デモの透明性: 入力する登記情報は申請者の申告であり、このプロトタイプでは登記簿謄本や所有者の身分証はアップロードも検証もされません。法人コンテキストからの投資は計画中で、ここでは有効ではありません。',
+      listTitle: '法人アカウント申請一覧',
+      empty: '法人アカウントの申請はまだありません。',
+      formTitle: '法人アカウントを申請する',
+      fields: {
+        companyName: '会社名',
+        legalForm: '法形態(例: 株式会社、合同会社)',
+        registrationNumber: '登記番号',
+        country: '登記国',
+      },
+      submit: '申請を送信',
+      submitting: '送信中...',
+      submitted: '申請を受け付けました。上の一覧に審査中と表示されます。',
+      status: { pending: '審査中', approved: '承認済み', rejected: '却下' },
+    },
+    security: {
+      title: 'セキュリティ',
+      authMethodNote:
+        'Stellarウォレットでメッセージに署名してログインします。ウォレットが資格情報です。このプロトタイプにパスワードや二要素認証アプリはありません。',
+      sessionsTitle: 'アクティブなセッション',
+      sessionLabel: 'セッション',
+      currentBadge: 'このセッション',
+      createdLabel: 'ログイン日時',
+      expiresLabel: '有効期限',
+      revoke: 'セッションを終了',
+      revokeOthers: '他のセッションをすべてログアウト',
+      revokedOthers: ({ count }: { count: number }) =>
+          `他の${count}件のセッションを終了しました。`,
+      empty: 'アクティブなセッションはありません。',
+    },
     notifications: {
       title: '通知',
       empty: 'まだ通知はありません。',
@@ -1307,6 +1332,8 @@ export const ja: Messages = {
         applicationStatus: '発行者申請の更新',
         commentModerated: 'コメントがモデレーションにより非表示になりました',
         ticketClosed: 'サポートチケットがクローズされました',
+        companyReceived: '法人アカウント申請を受け付けました',
+        companyStatus: '法人アカウント申請の更新',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1316,6 +1343,10 @@ export const ja: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `キャンペーン "${campaignId}" へのコメントはモデレーターによって非表示にされました。`,
         commentModeratedReason: ({ reason }: { reason: string }) => `理由: ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `${kindLabel}のチケット "${subject}" がクローズされました。`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `「${companyName}」の法人アカウント申請を受け付けました。審査は手動です。送信は承認ではありません。`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `「${companyName}」の法人アカウント申請が「${statusLabel}」になりました。`,
       },
     },
     operator: {

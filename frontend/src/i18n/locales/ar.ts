@@ -495,10 +495,6 @@ export const ar: Messages = {
         note: 'غير مطلوب للاستثمار في هذا النموذج الأولي؛ متطلب مخطط للتحقق من المستثمر.',
       },
       {
-        label: 'الأمان',
-        note: 'وصول بالمحفظة (Freighter). لا كلمة مرور ولا تطبيق تحقق ثنائي في هذا النموذج الأولي.',
-      },
-      {
         label: 'أهلية المستثمر',
         note: 'اختبار المعرفة وفحص القدرة على تحمل الخسارة خطوتان امتثاليتان مخططتان؛ غير مطبقتين هنا.',
       },
@@ -517,10 +513,6 @@ export const ar: Messages = {
       {
         label: 'الخزانة الرقمية',
         note: 'عرض حضانة مخطط للمراكز المملوكة. هنا، تعيش المراكز في عقد كل حملة وتُقرأ لكل محفظة متصلة.',
-      },
-      {
-        label: 'حسابات الشركات',
-        note: 'تتيح المنصة المرجعية للمستثمر الموثق إضافة حساب شركة؛ غير مطبقة في هذا النموذج الأولي.',
       },
     ],
   },
@@ -1279,6 +1271,39 @@ export const ar: Messages = {
       required: 'يرجى ملء هذا الحقل.',
       emailInvalid: 'أدخل عنوان بريد إلكتروني صالحًا.',
     },
+    company: {
+      title: 'حسابات الشركات',
+      note:
+        'قدّم طلبًا لحساب شركة مرتبط بمحفظتك. المراجعة يدوية كما في طلبات الجهات المصدرة. للتوضيح في هذه النسخة التجريبية: بيانات السجل التي تدخلها مقدمة من مقدم الطلب؛ لا يتم رفع أو التحقق من أي مستخرج سجل تجاري أو هويات المالكين في هذا النموذج الأولي. الاستثمار من سياق شركة مخطط له وغير مفعّل هنا.',
+      listTitle: 'طلبات الشركات الخاصة بي',
+      empty: 'لا توجد طلبات شركات بعد.',
+      formTitle: 'التقدم بطلب حساب شركة',
+      fields: {
+        companyName: 'اسم الشركة',
+        legalForm: 'الشكل القانوني (مثال: ذ.م.م)',
+        registrationNumber: 'رقم التسجيل',
+        country: 'بلد التسجيل',
+      },
+      submit: 'إرسال الطلب',
+      submitting: 'جارٍ الإرسال...',
+      submitted: 'تم استلام الطلب. يظهر أعلاه بصفته قيد المراجعة.',
+      status: { pending: 'قيد المراجعة', approved: 'مقبول', rejected: 'مرفوض' },
+    },
+    security: {
+      title: 'الأمان',
+      authMethodNote:
+        'تسجّل الدخول بتوقيع رسالة بمحفظة Stellar الخاصة بك: المحفظة هي بيانات الاعتماد. لا يحتوي هذا النموذج الأولي على كلمة مرور أو تطبيق تحقق بخطوتين.',
+      sessionsTitle: 'الجلسات النشطة',
+      sessionLabel: 'جلسة',
+      currentBadge: 'هذه الجلسة',
+      createdLabel: 'تسجيل الدخول',
+      expiresLabel: 'تنتهي',
+      revoke: 'إنهاء الجلسة',
+      revokeOthers: 'تسجيل الخروج من جميع الجلسات الأخرى',
+      revokedOthers: ({ count }: { count: number }) =>
+          `تم إنهاء ${count} ${count === 1 ? 'جلسة أخرى' : 'جلسات أخرى'}.`,
+      empty: 'لا توجد جلسات نشطة.',
+    },
     notifications: {
       title: 'الإشعارات',
       empty: 'لا توجد إشعارات بعد.',
@@ -1289,6 +1314,8 @@ export const ar: Messages = {
         applicationStatus: 'تحديث طلب الإصدار',
         commentModerated: 'تم إخفاء التعليق بواسطة الإشراف',
         ticketClosed: 'تم إغلاق تذكرة الدعم',
+        companyReceived: 'تم استلام طلب حساب شركة',
+        companyStatus: 'تحديث طلب حساب الشركة',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1298,6 +1325,10 @@ export const ar: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `تم إخفاء تعليقك على الحملة "${campaignId}" بواسطة المشرف.`,
         commentModeratedReason: ({ reason }: { reason: string }) => `السبب: ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `تم إغلاق تذكرتك (${kindLabel}) "${subject}".`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `تم استلام طلب حساب الشركة الخاص بك لـ "${companyName}". المراجعة يدوية؛ الإرسال ليس موافقة.`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `أصبح طلب حساب الشركة الخاص بك لـ "${companyName}" الآن "${statusLabel}".`,
       },
     },
     operator: {

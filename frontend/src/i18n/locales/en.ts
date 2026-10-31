@@ -502,10 +502,6 @@ export const en = {
         note: 'Not required to invest in this prototype; a planned investor-verification requirement.',
       },
       {
-        label: 'Security',
-        note: 'Wallet-based access (Freighter). No password or two-factor app in this prototype.',
-      },
-      {
         label: 'Investor qualification',
         note: 'Knowledge test and loss-capacity check are planned compliance steps; not implemented here.',
       },
@@ -524,10 +520,6 @@ export const en = {
       {
         label: 'Digital locker',
         note: 'Planned custody view of held positions. Here, positions live in each campaign contract and are read per connected wallet.',
-      },
-      {
-        label: 'Company accounts',
-        note: 'The reference platform lets a verified investor add a company account; not implemented in this prototype.',
       },
     ],
   },
@@ -1338,6 +1330,39 @@ export const en = {
       required: 'Please fill in this field.',
       emailInvalid: 'Enter a valid email address.',
     },
+    company: {
+      title: 'Company accounts',
+      note:
+        'Apply for a company account linked to your wallet. Review is manual, like issuer applications. Demo honesty: the registry details you enter are applicant-provided; no company register extract or owner IDs are uploaded or verified in this prototype. Investing from a company context is planned and not active here.',
+      listTitle: 'My company applications',
+      empty: 'No company applications yet.',
+      formTitle: 'Apply for a company account',
+      fields: {
+        companyName: 'Company name',
+        legalForm: 'Legal form (e.g. Lda, GmbH)',
+        registrationNumber: 'Registration number',
+        country: 'Country of registration',
+      },
+      submit: 'Submit application',
+      submitting: 'Submitting...',
+      submitted: 'Application received. It now shows as pending review above.',
+      status: { pending: 'Pending review', approved: 'Approved', rejected: 'Rejected' },
+    },
+    security: {
+      title: 'Security',
+      authMethodNote:
+        'You sign in by signing a message with your Stellar wallet: the wallet is the credential. This prototype has no password and no two-factor app.',
+      sessionsTitle: 'Active sessions',
+      sessionLabel: 'Session',
+      currentBadge: 'This session',
+      createdLabel: 'Signed in',
+      expiresLabel: 'Expires',
+      revoke: 'End session',
+      revokeOthers: 'Sign out all other sessions',
+      revokedOthers: ({ count }: { count: number }) =>
+          `Ended ${count} other ${count === 1 ? 'session' : 'sessions'}.`,
+      empty: 'No active sessions.',
+    },
     notifications: {
       title: 'Notifications',
       empty: 'No notifications yet.',
@@ -1348,6 +1373,8 @@ export const en = {
         applicationStatus: 'Issuer application update',
         commentModerated: 'Comment hidden by moderation',
         ticketClosed: 'Support ticket closed',
+        companyReceived: 'Company account application received',
+        companyStatus: 'Company account application update',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1357,6 +1384,10 @@ export const en = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `Your comment on campaign "${campaignId}" was hidden by the moderator.`,
         commentModeratedReason: ({ reason }: { reason: string }) => `Reason: ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Your ${kindLabel} ticket "${subject}" was closed.`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `Your company account application for "${companyName}" was received. Review is manual; submission is not an approval.`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `Your company account application for "${companyName}" is now "${statusLabel}".`,
       },
     },
     operator: {

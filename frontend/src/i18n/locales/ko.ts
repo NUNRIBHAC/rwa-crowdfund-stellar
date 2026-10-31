@@ -489,10 +489,6 @@ export const ko: Messages = {
         note: '이 프로토타입에서 투자하는 데 필요하지 않습니다. 계획된 투자자 인증 요구 사항입니다.',
       },
       {
-        label: '보안',
-        note: '지갑 기반 액세스(Freighter). 이 프로토타입에는 비밀번호나 2단계 인증 앱이 없습니다.',
-      },
-      {
         label: '투자자 적격성',
         note: '지식 테스트와 손실 감당 능력 확인은 계획된 컴플라이언스 단계이며 여기서는 구현되지 않았습니다.',
       },
@@ -511,10 +507,6 @@ export const ko: Messages = {
       {
         label: '디지털 보관함',
         note: '보유 포지션의 계획된 커스터디 뷰. 여기서는 포지션이 각 캠페인 컨트랙트에 있으며 연결된 지갑별로 읽습니다.',
-      },
-      {
-        label: '회사 계정',
-        note: '참조 플랫폼은 검증된 투자자가 회사 계정을 추가할 수 있게 하지만 이 프로토타입에서는 구현되지 않았습니다.',
       },
     ],
   },
@@ -1271,6 +1263,39 @@ export const ko: Messages = {
       required: '이 필드를 입력하세요.',
       emailInvalid: '유효한 이메일 주소를 입력하세요.',
     },
+    company: {
+      title: '법인 계정',
+      note:
+        '지갑에 연결된 법인 계정을 신청하세요. 심사는 발행자 신청과 마찬가지로 수동입니다. 데모 투명성: 입력하는 등기 정보는 신청자가 제공한 것이며, 이 프로토타입에서는 법인 등기부등본이나 소유자 신분증을 업로드하거나 검증하지 않습니다. 법인 컨텍스트에서의 투자는 계획되어 있으며 여기서는 활성화되어 있지 않습니다.',
+      listTitle: '내 법인 신청',
+      empty: '아직 법인 신청이 없습니다.',
+      formTitle: '법인 계정 신청',
+      fields: {
+        companyName: '회사명',
+        legalForm: '법인 형태(예: 유한회사, 주식회사)',
+        registrationNumber: '등록 번호',
+        country: '등록 국가',
+      },
+      submit: '신청 제출',
+      submitting: '제출 중...',
+      submitted: '신청이 접수되었습니다. 위 목록에 심사 대기로 표시됩니다.',
+      status: { pending: '심사 대기', approved: '승인됨', rejected: '거절됨' },
+    },
+    security: {
+      title: '보안',
+      authMethodNote:
+        'Stellar 지갑으로 메시지에 서명하여 로그인합니다. 지갑이 자격 증명입니다. 이 프로토타입에는 비밀번호나 2단계 인증 앱이 없습니다.',
+      sessionsTitle: '활성 세션',
+      sessionLabel: '세션',
+      currentBadge: '현재 세션',
+      createdLabel: '로그인',
+      expiresLabel: '만료',
+      revoke: '세션 종료',
+      revokeOthers: '다른 모든 세션 로그아웃',
+      revokedOthers: ({ count }: { count: number }) =>
+          `다른 세션 ${count}개를 종료했습니다.`,
+      empty: '활성 세션이 없습니다.',
+    },
     notifications: {
       title: '알림',
       empty: '아직 알림이 없습니다.',
@@ -1281,6 +1306,8 @@ export const ko: Messages = {
         applicationStatus: '발행자 신청 업데이트',
         commentModerated: '댓글이 모더레이션으로 인해 숨겨졌습니다',
         ticketClosed: '지원 티켓이 종료되었습니다',
+        companyReceived: '법인 계정 신청 접수',
+        companyStatus: '법인 계정 신청 업데이트',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1290,6 +1317,10 @@ export const ko: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `캠페인 "${campaignId}"에 작성한 댓글이 모더레이터에 의해 숨겨졌습니다.`,
         commentModeratedReason: ({ reason }: { reason: string }) => `사유: ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `${kindLabel} 티켓 "${subject}"이 종료되었습니다.`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `"${companyName}"에 대한 법인 계정 신청이 접수되었습니다. 심사는 수동이며 제출이 승인은 아닙니다.`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `"${companyName}"에 대한 법인 계정 신청이 이제 "${statusLabel}"입니다.`,
       },
     },
     operator: {

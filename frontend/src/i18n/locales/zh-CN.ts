@@ -466,10 +466,6 @@ export const zhCN: Messages = {
         note: '在此原型中投资不需要；为计划中的投资者验证要求。',
       },
       {
-        label: '安全',
-        note: '基于钱包的访问（Freighter）。本原型没有密码或双重验证应用。',
-      },
-      {
         label: '投资者资格',
         note: '知识测试和损失承受能力检查是规划中的合规步骤；此处未实现。',
       },
@@ -488,10 +484,6 @@ export const zhCN: Messages = {
       {
         label: '数字保管柜',
         note: '规划中的持仓保管视图。在本原型中，持仓存于各项目合约内，按连接的钱包读取。',
-      },
-      {
-        label: '公司账户',
-        note: '参考平台允许已验证的投资者添加公司账户；本原型未实现。',
       },
     ],
   },
@@ -1179,6 +1171,39 @@ export const zhCN: Messages = {
       required: '请填写此字段。',
       emailInvalid: '请输入有效的电子邮件地址。',
     },
+    company: {
+      title: '公司账户',
+      note:
+        '申请与您的钱包关联的公司账户。审核为人工进行,与发行人申请相同。演示说明:您填写的注册信息为申请人自行申报;本原型不会上传或核验公司注册摘录或所有者身份证件。从公司身份进行投资属于计划功能,此处未启用。',
+      listTitle: '我的公司申请',
+      empty: '暂无公司申请。',
+      formTitle: '申请公司账户',
+      fields: {
+        companyName: '公司名称',
+        legalForm: '法律形式(如有限责任公司)',
+        registrationNumber: '注册号',
+        country: '注册国家/地区',
+      },
+      submit: '提交申请',
+      submitting: '提交中...',
+      submitted: '申请已收到。上方列表显示为待审核。',
+      status: { pending: '待审核', approved: '已批准', rejected: '已拒绝' },
+    },
+    security: {
+      title: '安全',
+      authMethodNote:
+        '您通过 Stellar 钱包签名消息来登录:钱包即凭证。本原型没有密码,也没有双重验证应用。',
+      sessionsTitle: '活跃会话',
+      sessionLabel: '会话',
+      currentBadge: '当前会话',
+      createdLabel: '登录时间',
+      expiresLabel: '过期时间',
+      revoke: '结束会话',
+      revokeOthers: '退出所有其他会话',
+      revokedOthers: ({ count }: { count: number }) =>
+          `已退出其他 ${count} 个会话。`,
+      empty: '没有活跃会话。',
+    },
     notifications: {
       title: '通知',
       empty: '暂无通知。',
@@ -1189,6 +1214,8 @@ export const zhCN: Messages = {
         applicationStatus: '发行方申请更新',
         commentModerated: '评论已被审核隐藏',
         ticketClosed: '支持工单已关闭',
+        companyReceived: '公司账户申请已收到',
+        companyStatus: '公司账户申请更新',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1198,6 +1225,10 @@ export const zhCN: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `您在活动 "${campaignId}" 下的评论已被审核员隐藏。`,
         commentModeratedReason: ({ reason }: { reason: string }) => `原因：${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `您的${kindLabel}工单 "${subject}" 已关闭。`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `您为"${companyName}"提交的公司账户申请已收到。审核为人工进行;提交不等于批准。`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `您为"${companyName}"提交的公司账户申请现在为"${statusLabel}"。`,
       },
     },
     operator: {

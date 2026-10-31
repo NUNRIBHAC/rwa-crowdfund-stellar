@@ -512,10 +512,6 @@ export const fr: Messages = {
         note: "Non requis pour investir dans ce prototype ; une exigence planifiée de vérification de l'investisseur.",
       },
       {
-        label: 'Sécurité',
-        note: "Accès par portefeuille (Freighter). Pas de mot de passe ni d'application à deux facteurs dans ce prototype.",
-      },
-      {
         label: "Qualification de l'investisseur",
         note: 'Le test de connaissances et la vérification de capacité de pertes sont des étapes de conformité planifiées ; non implémentés ici.',
       },
@@ -534,10 +530,6 @@ export const fr: Messages = {
       {
         label: 'Coffre numérique',
         note: 'Vue de conservation planifiée des positions détenues. Ici, les positions vivent dans chaque contrat de campagne et se lisent par portefeuille connecté.',
-      },
-      {
-        label: "Comptes d'entreprise",
-        note: "La plateforme de référence permet à un investisseur vérifié d'ajouter un compte d'entreprise ; non implémenté dans ce prototype.",
       },
     ],
   },
@@ -1384,6 +1376,39 @@ export const fr: Messages = {
       required: 'Veuillez remplir ce champ.',
       emailInvalid: 'Saisissez une adresse e-mail valide.',
     },
+    company: {
+      title: 'Comptes d\'entreprise',
+      note:
+        'Demandez un compte d\'entreprise lié à votre portefeuille. L\'examen est manuel, comme pour les candidatures d\'émetteur. Transparence de la démo : les informations de registre saisies sont déclaratives ; aucun extrait de registre ni pièce d\'identité des propriétaires n\'est téléversé ou vérifié dans ce prototype. Investir depuis un contexte d\'entreprise est prévu et n\'est pas actif ici.',
+      listTitle: 'Mes demandes d\'entreprise',
+      empty: 'Aucune demande d\'entreprise pour le moment.',
+      formTitle: 'Demander un compte d\'entreprise',
+      fields: {
+        companyName: 'Nom de l\'entreprise',
+        legalForm: 'Forme juridique (p. ex. SARL, SA)',
+        registrationNumber: 'Numéro d\'immatriculation',
+        country: 'Pays d\'immatriculation',
+      },
+      submit: 'Envoyer la demande',
+      submitting: 'Envoi en cours...',
+      submitted: 'Demande reçue. Elle apparaît ci-dessus comme en attente d\'examen.',
+      status: { pending: 'En attente d\'examen', approved: 'Approuvée', rejected: 'Rejetée' },
+    },
+    security: {
+      title: 'Sécurité',
+      authMethodNote:
+        'Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille fait office d\'identifiant. Ce prototype n\'a ni mot de passe ni application à double facteur.',
+      sessionsTitle: 'Sessions actives',
+      sessionLabel: 'Session',
+      currentBadge: 'Cette session',
+      createdLabel: 'Connexion',
+      expiresLabel: 'Expire',
+      revoke: 'Terminer la session',
+      revokeOthers: 'Déconnecter toutes les autres sessions',
+      revokedOthers: ({ count }: { count: number }) =>
+          `${count} ${count === 1 ? 'autre session terminée' : 'autres sessions terminées'}.`,
+      empty: 'Aucune session active.',
+    },
     notifications: {
       title: 'Notifications',
       empty: 'Aucune notification pour le moment.',
@@ -1394,6 +1419,8 @@ export const fr: Messages = {
         applicationStatus: "Mise à jour de la candidature d'émetteur",
         commentModerated: 'Commentaire masqué par la modération',
         ticketClosed: 'Ticket de support clôturé',
+        companyReceived: 'Demande de compte d\'entreprise reçue',
+        companyStatus: 'Mise à jour de la demande de compte d\'entreprise',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1403,6 +1430,10 @@ export const fr: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `Votre commentaire sur la campagne "${campaignId}" a été masqué par le modérateur.`,
         commentModeratedReason: ({ reason }: { reason: string }) => `Motif : ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Votre ticket (${kindLabel}) "${subject}" a été clôturé.`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `Votre demande de compte d'entreprise pour « ${companyName} » a bien été reçue. L'examen est manuel ; l'envoi ne vaut pas approbation.`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `Votre demande de compte d'entreprise pour « ${companyName} » est désormais « ${statusLabel} ».`,
       },
     },
     operator: {

@@ -300,3 +300,92 @@ test('retention prune removes old tickets, applications, sessions and challenges
   assert.ok(removed >= 3);
   assert.equal((await service.listOwnTickets(account)).length, 0);
 });
+
+test('company application: validate, scope, review status and notifications', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const kpA = Keypair.random();
+  const kpB = Keypair.random();
+  const { account: accA } = await login(store, kpA);
+  const { account: accB } = await login(store, kpB);
+
+  await assert.rejects(
+    () => service.applyForCompany(accA, { companyName: '', legalForm: 'Lda', registrationNumber: '123', country: 'Portugal' }),
+    /companyName/,
+  );
+
+  const company = await service.applyForCompany(accA, {
+    companyName: 'QA Holdings [DEMO]',
+    legalForm: 'Lda',
+    registrationNumber: 'PT-123456',
+    country: 'Portugal',
+  });
+  assert.match(company.id, /^co_[0-9a-f]{24}$/);
+  assert.equal(company.status, 'pending');
+
+  // owner scoping
+  assert.equal((await service.myCompanies(accA.publicKey)).length, 1);
+  assert.equal((await service.myCompanies(accB.publicKey)).length, 0);
+  assert.equal((await service.adminListCompanies()).length, 1);
+
+  // receipt notification to the applicant only
+  const stateAfterApply = await store.read();
+  const receiptNotifs = Object.values(stateAfterApply.notifications).filter((n) => n.kind === 'company_received');
+  assert.equal(receiptNotifs.length, 1);
+  assert.equal(receiptNotifs[0].publicKey, accA.publicKey);
+  assert.deepEqual(receiptNotifs[0].vars, { companyName: 'QA Holdings [DEMO]' });
+
+  // review decision updates status and notifies with structured vars
+  await assert.rejects(() => service.adminSetCompanyStatus(company.id, 'maybe'), /approved or rejected/);
+  await assert.rejects(() => service.adminSetCompanyStatus('co_missing', 'approved'), /not found/);
+  await service.adminSetCompanyStatus(company.id, 'approved');
+  const after = await store.read();
+  assert.equal(after.companies[company.id].status, 'approved');
+  assert.ok(after.companies[company.id].decidedAt);
+  const statusNotifs = Object.values(after.notifications).filter((n) => n.kind === 'company_status');
+  assert.equal(statusNotifs.length, 1);
+  assert.deepEqual(statusNotifs[0].vars, { companyName: 'QA Holdings [DEMO]', status: 'approved' });
+
+  // rate limit: 3 per day
+  await service.applyForCompany(accA, { companyName: 'Two', legalForm: 'Lda', registrationNumber: '2', country: 'Portugal' });
+  await service.applyForCompany(accA, { companyName: 'Three', legalForm: 'Lda', registrationNumber: '3', country: 'Portugal' });
+  await assert.rejects(
+    () => service.applyForCompany(accA, { companyName: 'Four', legalForm: 'Lda', registrationNumber: '4', country: 'Portugal' }),
+    /rate limit/i,
+  );
+});
+
+test('session management: list, revoke by short id, logout others keeps current', async () => {
+  const store = newStore();
+  const kp = Keypair.random();
+  const first = await login(store, kp);
+  const second = await login(store, kp);
+  const third = await login(store, kp);
+
+  const { listSessions, revokeSession, logoutOtherSessions } = await import('../src/accounts.js');
+
+  const sessions = await listSessions(store, kp.publicKey(), `Bearer ${second.token}`);
+  assert.equal(sessions.length, 3);
+  assert.equal(sessions.filter((s) => s.current).length, 1);
+  const current = sessions.find((s) => s.current)!;
+  assert.match(current.id, /^[0-9a-f]{12}$/);
+
+  // revoke one specific other session
+  const target = sessions.find((s) => !s.current)!;
+  assert.equal(await revokeSession(store, kp.publicKey(), target.id), true);
+  assert.equal((await listSessions(store, kp.publicKey(), `Bearer ${second.token}`)).length, 2);
+  assert.equal(await revokeSession(store, kp.publicKey(), target.id), false);
+  await assert.rejects(() => revokeSession(store, kp.publicKey(), 'nope'), AuthError);
+
+  // logout others removes all but the caller's own session
+  const removed = await logoutOtherSessions(store, kp.publicKey(), `Bearer ${second.token}`);
+  assert.equal(removed, 1);
+  const remaining = await listSessions(store, kp.publicKey(), `Bearer ${second.token}`);
+  assert.equal(remaining.length, 1);
+  assert.equal(remaining[0].current, true);
+
+  // the kept session still authenticates; revoked ones do not
+  await authenticate(store, `Bearer ${second.token}`);
+  await assert.rejects(() => authenticate(store, `Bearer ${first.token}`), AuthError);
+  await assert.rejects(() => authenticate(store, `Bearer ${third.token}`), AuthError);
+});

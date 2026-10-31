@@ -157,6 +157,57 @@ export async function logout(store: CommunityStore, authorizationHeader: string 
   });
 }
 
+export type SessionInfo = {
+  // Short non-secret handle: a prefix of the token hash. Enough to address a
+  // session for revocation, useless for authenticating.
+  id: string;
+  createdAt: number;
+  expiresAt: number;
+  current: boolean;
+};
+
+export async function listSessions(store: CommunityStore, publicKey: string, authorizationHeader: string | undefined, now = Date.now()): Promise<SessionInfo[]> {
+  const currentHash = authorizationHeader?.match(/^Bearer (bls_[0-9a-f]{48})$/)?.[1];
+  const current = currentHash ? hashToken(currentHash) : null;
+  const state = await store.read();
+  return Object.values(state.sessions)
+    .filter((sess) => sess.publicKey === publicKey && sess.expiresAt > now)
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .map((sess) => ({
+      id: sess.tokenHash.slice(0, 12),
+      createdAt: sess.createdAt,
+      expiresAt: sess.expiresAt,
+      current: sess.tokenHash === current,
+    }));
+}
+
+export async function revokeSession(store: CommunityStore, publicKey: string, sessionId: string): Promise<boolean> {
+  if (!/^[0-9a-f]{12}$/.test(sessionId)) throw new AuthError(400, 'invalid session id');
+  return store.change((state) => {
+    const entry = Object.values(state.sessions).find(
+      (sess) => sess.publicKey === publicKey && sess.tokenHash.startsWith(sessionId),
+    );
+    if (!entry) return false;
+    delete state.sessions[entry.tokenHash];
+    return true;
+  });
+}
+
+export async function logoutOtherSessions(store: CommunityStore, publicKey: string, authorizationHeader: string | undefined): Promise<number> {
+  const currentHash = authorizationHeader?.match(/^Bearer (bls_[0-9a-f]{48})$/)?.[1];
+  const current = currentHash ? hashToken(currentHash) : null;
+  return store.change((state) => {
+    let removed = 0;
+    for (const sess of Object.values(state.sessions)) {
+      if (sess.publicKey === publicKey && sess.tokenHash !== current) {
+        delete state.sessions[sess.tokenHash];
+        removed += 1;
+      }
+    }
+    return removed;
+  });
+}
+
 export async function setDisplayName(store: CommunityStore, publicKey: string, name: unknown): Promise<Account> {
   const displayName = validateDisplayName(name);
   return store.change((state) => {

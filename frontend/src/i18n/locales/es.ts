@@ -511,10 +511,6 @@ export const es: Messages = {
         note: 'No es necesario para invertir en este prototipo; un requisito planificado de verificación del inversor.',
       },
       {
-        label: 'Seguridad',
-        note: 'Acceso basado en cartera (Freighter). Sin contraseña ni aplicación de dos factores en este prototipo.',
-      },
-      {
         label: 'Cualificación del inversor',
         note: 'La prueba de conocimientos y la comprobación de capacidad de pérdidas son pasos de cumplimiento planeados; no implementados aquí.',
       },
@@ -533,10 +529,6 @@ export const es: Messages = {
       {
         label: 'Taquilla digital',
         note: 'Vista planificada de custodia de las posiciones mantenidas. Aquí, las posiciones viven en cada contrato de campaña y se leen por cartera conectada.',
-      },
-      {
-        label: 'Cuentas de empresa',
-        note: 'La plataforma de referencia permite a un inversor verificado añadir una cuenta de empresa; no implementado en este prototipo.',
       },
     ],
   },
@@ -1382,6 +1374,39 @@ export const es: Messages = {
       required: 'Rellene este campo.',
       emailInvalid: 'Introduzca una dirección de correo electrónico válida.',
     },
+    company: {
+      title: 'Cuentas de empresa',
+      note:
+        'Solicite una cuenta de empresa vinculada a su monedero. La revisión es manual, igual que las solicitudes de emisor. Transparencia de la demo: los datos de registro que introduce son declarados por el solicitante; en este prototipo no se sube ni se verifica ninguna certificación registral ni documentos de identidad de los titulares. Invertir desde un contexto de empresa está planeado y no está activo aquí.',
+      listTitle: 'Mis solicitudes de empresa',
+      empty: 'Aún no hay solicitudes de empresa.',
+      formTitle: 'Solicitar una cuenta de empresa',
+      fields: {
+        companyName: 'Nombre de la empresa',
+        legalForm: 'Forma jurídica (p. ej., SL, SA)',
+        registrationNumber: 'Número de registro',
+        country: 'País de registro',
+      },
+      submit: 'Enviar solicitud',
+      submitting: 'Enviando...',
+      submitted: 'Solicitud recibida. Aparece arriba como pendiente de revisión.',
+      status: { pending: 'Pendiente de revisión', approved: 'Aprobada', rejected: 'Rechazada' },
+    },
+    security: {
+      title: 'Seguridad',
+      authMethodNote:
+        'Inicia sesión firmando un mensaje con su monedero Stellar: el monedero es la credencial. Este prototipo no tiene contraseña ni aplicación de doble factor.',
+      sessionsTitle: 'Sesiones activas',
+      sessionLabel: 'Sesión',
+      currentBadge: 'Esta sesión',
+      createdLabel: 'Inicio de sesión',
+      expiresLabel: 'Expira',
+      revoke: 'Cerrar sesión',
+      revokeOthers: 'Cerrar todas las demás sesiones',
+      revokedOthers: ({ count }: { count: number }) =>
+          `${count} ${count === 1 ? 'sesión adicional cerrada' : 'sesiones adicionales cerradas'}.`,
+      empty: 'No hay sesiones activas.',
+    },
     notifications: {
       title: 'Notificaciones',
       empty: 'Aún no hay notificaciones.',
@@ -1392,6 +1417,8 @@ export const es: Messages = {
         applicationStatus: 'Actualización de la solicitud de emisor',
         commentModerated: 'Comentario ocultado por moderación',
         ticketClosed: 'Ticket de soporte cerrado',
+        companyReceived: 'Solicitud de cuenta de empresa recibida',
+        companyStatus: 'Actualización de la solicitud de cuenta de empresa',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1401,6 +1428,10 @@ export const es: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `Su comentario en la campaña "${campaignId}" ha sido ocultado por el moderador.`,
         commentModeratedReason: ({ reason }: { reason: string }) => `Motivo: ${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Su ticket (${kindLabel}) "${subject}" ha sido cerrado.`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `Su solicitud de cuenta de empresa para "${companyName}" ha sido recibida. La revisión es manual; el envío no es una aprobación.`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `Su solicitud de cuenta de empresa para "${companyName}" ahora está "${statusLabel}".`,
       },
     },
     operator: {

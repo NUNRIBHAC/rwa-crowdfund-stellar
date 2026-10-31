@@ -156,7 +156,13 @@ export const fetchNewsFeed = () => call<{ news: NewsPost[] }>('/api/news');
 // Server-generated from real events on the owner's own content only; kinds
 // are stable so the UI renders localized titles while the body stays the
 // server's English fallback (bodies embed dynamic project/subject text).
-export type NotificationKind = 'application_received' | 'application_status' | 'comment_moderated' | 'ticket_closed';
+export type NotificationKind =
+  | 'application_received'
+  | 'application_status'
+  | 'comment_moderated'
+  | 'ticket_closed'
+  | 'company_received'
+  | 'company_status';
 
 export type CommunityNotification = {
   id: string;
@@ -213,6 +219,38 @@ export const createTicket = (token: string, input: { kind: 'support' | 'feedback
   call<{ ticket: Ticket }>('/api/support/tickets', { body: input, token });
 
 export const fetchMyTickets = (token: string) => call<{ tickets: Ticket[] }>('/api/support/tickets', { token });
+
+// Company accounts: wallet-scoped applications for a company context. Review
+// is manual (operator surface); registry fields are applicant-provided and no
+// documents are uploaded or verified in this prototype.
+export type CompanyApplication = {
+  id: string;
+  companyName: string;
+  legalForm: string;
+  registrationNumber: string;
+  country: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: number;
+  decidedAt: number | null;
+};
+
+export const fetchMyCompanies = (token: string) => call<{ companies: CompanyApplication[] }>('/api/companies/mine', { token });
+
+export const applyForCompany = (
+  token: string,
+  input: { companyName: string; legalForm: string; registrationNumber: string; country: string },
+) => call<{ company: CompanyApplication }>('/api/companies', { body: input, token });
+
+// Session security: list and revoke the wallet account's own sessions. The id
+// is a short non-secret prefix of the server-side token hash.
+export type SessionInfo = { id: string; createdAt: number; expiresAt: number; current: boolean };
+
+export const fetchSessions = (token: string) => call<{ sessions: SessionInfo[] }>('/api/auth/sessions', { token });
+
+export const revokeSession = (token: string, id: string) =>
+  call<{ ok: true }>(`/api/auth/sessions/${encodeURIComponent(id)}`, { method: 'DELETE', token });
+
+export const logoutOtherSessions = (token: string) => call<{ removed: number }>('/api/auth/logout-others', { method: 'POST', body: {}, token });
 
 // --- Issuer applications ---
 export const fetchMyApplications = (token: string) => call<{ applications: IssuerApplication[] }>('/api/issuer-applications', { token });

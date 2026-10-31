@@ -466,10 +466,6 @@ export const zhTW: Messages = {
         note: '在此原型中投資不需要；為計畫中的投資人驗證要求。',
       },
       {
-        label: '安全',
-        note: '基於錢包的訪問（Freighter）。本原型沒有密碼或雙重驗證應用。',
-      },
-      {
         label: '投資者資格',
         note: '知識測試和損失承受能力檢查是規劃中的合規步驟；此處未實現。',
       },
@@ -488,10 +484,6 @@ export const zhTW: Messages = {
       {
         label: '數字保管櫃',
         note: '規劃中的持倉保管視圖。在本原型中，持倉存於各項目合約內，按連接的錢包讀取。',
-      },
-      {
-        label: '公司賬戶',
-        note: '參考平臺允許已驗證的投資者添加公司賬戶；本原型未實現。',
       },
     ],
   },
@@ -1179,6 +1171,39 @@ export const zhTW: Messages = {
       required: '請填寫此欄位。',
       emailInvalid: '請輸入有效的電子郵件地址。',
     },
+    company: {
+      title: '公司帳戶',
+      note:
+        '申請與您的錢包連結的公司帳戶。審核為人工進行,與發行人申請相同。演示說明:您填寫的登記資料為申請人自行申報;本原型不會上傳或核驗公司登記摘錄或所有者身分證件。從公司身分進行投資屬於計畫功能,此處未啟用。',
+      listTitle: '我的公司申請',
+      empty: '尚無公司申請。',
+      formTitle: '申請公司帳戶',
+      fields: {
+        companyName: '公司名稱',
+        legalForm: '法律形式(如有限公司)',
+        registrationNumber: '登記編號',
+        country: '登記國家/地區',
+      },
+      submit: '送出申請',
+      submitting: '送出中...',
+      submitted: '申請已收到。上方清單顯示為待審核。',
+      status: { pending: '待審核', approved: '已核准', rejected: '已拒絕' },
+    },
+    security: {
+      title: '安全性',
+      authMethodNote:
+        '您透過 Stellar 錢包簽署訊息來登入:錢包即憑證。本原型沒有密碼,也沒有兩步驟驗證應用程式。',
+      sessionsTitle: '使用中的工作階段',
+      sessionLabel: '工作階段',
+      currentBadge: '目前的工作階段',
+      createdLabel: '登入時間',
+      expiresLabel: '到期時間',
+      revoke: '結束工作階段',
+      revokeOthers: '登出所有其他工作階段',
+      revokedOthers: ({ count }: { count: number }) =>
+          `已登出其他 ${count} 個工作階段。`,
+      empty: '沒有使用中的工作階段。',
+    },
     notifications: {
       title: '通知',
       empty: '目前沒有通知。',
@@ -1189,6 +1214,8 @@ export const zhTW: Messages = {
         applicationStatus: '發行方申請更新',
         commentModerated: '留言已被審核隱藏',
         ticketClosed: '支援工單已關閉',
+        companyReceived: '公司帳戶申請已收到',
+        companyStatus: '公司帳戶申請更新',
       },
       bodies: {
         applicationReceived: ({ projectName }: { projectName: string }) =>
@@ -1198,6 +1225,10 @@ export const zhTW: Messages = {
         commentModerated: ({ campaignId }: { campaignId: string }) => `您在活動 "${campaignId}" 下的留言已被審核員隱藏。`,
         commentModeratedReason: ({ reason }: { reason: string }) => `原因：${reason}`,
         ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `您的${kindLabel}工單 "${subject}" 已關閉。`,
+        companyReceived: ({ companyName }: { companyName: string }) =>
+          `您為「${companyName}」提交的公司帳戶申請已收到。審核為人工進行;提交不等於核准。`,
+        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
+          `您為「${companyName}」提交的公司帳戶申請現在為「${statusLabel}」。`,
       },
     },
     operator: {
