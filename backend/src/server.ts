@@ -78,10 +78,30 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
 // not the legacy file store.
 registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCampaigns()).map((c) => c.id) });
 // Accounts, community, support, issuer applications and campaign metadata.
-// Boot failures must not take down the campaign API: mount when ready.
-communityServiceFromEnv()
-  .then((service) => app.use(createCommunityRouter({ service, requireAdmin })))
-  .catch((err) => console.error('community API disabled:', err instanceof Error ? err.message : err));
+// The router must be registered synchronously: Express matches in
+// registration order, and a router app.use()d only after the async store boot
+// would land BEHIND the legacy-write catch-all below, so every community POST
+// would be answered 410. Register a lazy placeholder now; requests on
+// community paths wait for the store to boot. Boot failures must not take
+// down the campaign API: the placeholder answers 503 for community paths and
+// everything else is unaffected.
+const communityRouterReady = communityServiceFromEnv()
+  .then((service) => createCommunityRouter({ service, requireAdmin }))
+  .catch((err) => {
+    console.error('community API disabled:', err instanceof Error ? err.message : err);
+    return null;
+  });
+const COMMUNITY_PATH = /^\/api\/(auth|support|issuer-applications)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications)(\/|$)/;
+app.use((req, res, next) => {
+  if (!COMMUNITY_PATH.test(req.path)) return next();
+  communityRouterReady.then((router) => {
+    if (!router) {
+      res.status(503).json({ error: 'Community API unavailable: community storage is not configured or failed to start' });
+      return;
+    }
+    router(req, res, next);
+  }, next);
+});
 app.get('/health', (_req, res) => {
   res.json({ ok: true, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
 });
