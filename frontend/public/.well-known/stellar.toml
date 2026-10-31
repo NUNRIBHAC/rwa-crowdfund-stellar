@@ -17,13 +17,13 @@ ORG_URL = "https://blockallisto-demo.onrender.com"
 ORG_LOGO = "https://blockallisto-demo.onrender.com/og-image.png"
 ORG_DESCRIPTION = "Testnet prototype for all-or-nothing crowdfunding of tokenized real-world assets on Stellar. Educational demo only: no authorised crowdfunding service, no live offers, no real funds."
 
+# Third-party supported currency, not issued by Blockallisto: the demo accepts
+# testnet USDC from the public SDF testnet issuer below. Blockallisto does not
+# issue this asset and operates no anchor or validator.
 [[CURRENCIES]]
 code = "USDC"
 issuer = "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5"
 display_decimals = 2
 name = "USD Coin (testnet)"
-desc = "Testnet USDC used for demo contributions. Worthless test asset, no real value."
+desc = "Third-party testnet USDC (public SDF testnet issuer) accepted for demo contributions. Worthless test asset, no real value. Not issued by Blockallisto."
 status = "test"
-is_asset_anchored = true
-anchor_asset_type = "fiat"
-anchor_asset = "USD"
