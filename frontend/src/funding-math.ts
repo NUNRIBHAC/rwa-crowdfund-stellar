@@ -10,7 +10,9 @@
  * zero and renders 0 filled, 0%.
  */
 
-export type FundingState = { kind: 'unavailable' } | { kind: 'ready'; filled: number; inProgress: boolean; percent: number };
+export type FundingState =
+  | { kind: 'unavailable' }
+  | { kind: 'ready'; filled: number; inProgress: boolean; percent: number; partial: number };
 
 /** True only for a non-negative integer string: a verified on-chain amount. */
 export function isValidUnits(v: string | null | undefined): v is string {
@@ -29,8 +31,11 @@ export function fundingState(raised: string | null | undefined, goal: string | n
   if (filled > tileCount) filled = tileCount;
   const remainder = scaled % g;
   const inProgress = remainder > 0n && filled < tileCount;
+  // Exact fractional fill of the next tile (0-1), so the grid shows the
+  // campaign filling up progressively, not just a tinted "partial" tile.
+  const partial = inProgress ? Number((remainder * 1000000n) / g) / 1000000 : 0;
   const percent = Number((r * 10000n) / g) / 100; // 2-decimal percent, same integers
-  return { kind: 'ready', filled, inProgress, percent };
+  return { kind: 'ready', filled, inProgress, percent, partial };
 }
 
 /**
@@ -48,3 +53,4 @@ export function formatTokenAmount(raw: string | null | undefined, decimals = 7):
   const grouped = whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return frac ? `${grouped}.${frac}` : grouped;
 }
+

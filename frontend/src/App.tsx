@@ -21,10 +21,12 @@ import Faq from './pages/Faq';
 import About from './pages/About';
 import Financing from './pages/Financing';
 import Account from './pages/Account';
+import { useI18n } from './i18n';
 
 const INTENT_KEY = 'rwa-soroban-intent';
 
 export default function App() {
+  const { m } = useI18n();
   const route = useRoute();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [actor, setActor] = useState('');
@@ -79,18 +81,18 @@ export default function App() {
     // Without the extension, requestAccess waits indefinitely (only the
     // connection-status probe has a timeout), so fail with a clear error first.
     const conn = await isConnected();
-    if (!conn.isConnected) throw new Error('Freighter wallet extension not detected. Install Freighter, then retry Connect.');
+    if (!conn.isConnected) throw new Error(m.errors.freighterMissing);
     const r = await requestAccess();
-    if (r.error || !r.address) throw new Error(r.error?.message ?? 'Wallet access failed');
+    if (r.error || !r.address) throw new Error(r.error?.message ?? m.errors.walletAccessFailed);
     setActor(r.address);
     setFixtureMode(false);
     await refresh(r.address);
   }
 
   async function prepare(c: Campaign, action: 'contribute' | 'refund' | 'withdraw') {
-    if (!actor) throw new Error('Connect Freighter first.');
+    if (!actor) throw new Error(m.errors.connectFirst);
     if (intent && !isTerminal(intent.status)) {
-      throw new Error('Resolve the saved transaction before preparing another.');
+      throw new Error(m.errors.resolveSaved);
     }
     const result = await api(`/api/campaigns/${c.id}/soroban/build`, { actor, action, amount: amounts[c.id] });
     retain({ ...result, campaign: c.id, actor, status: 'BUILT' });
@@ -99,11 +101,11 @@ export default function App() {
 
   async function submit() {
     if (!intent) return;
-    if (actor !== intent.actor) throw new Error('Connect the wallet that prepared this transaction.');
+    if (actor !== intent.actor) throw new Error(m.errors.walletMismatch);
     let current = intent;
     if (!current.signedXdr) {
       const result = await signTransaction(current.xdr, { networkPassphrase: 'Test SDF Network ; September 2015' });
-      if (result.error || !result.signedTxXdr) throw new Error(result.error?.message ?? 'Wallet did not sign');
+      if (result.error || !result.signedTxXdr) throw new Error(result.error?.message ?? m.errors.walletNoSign);
       current = { ...current, signedXdr: result.signedTxXdr, status: 'SIGNED' };
       retain(current);
     }
@@ -146,7 +148,7 @@ export default function App() {
   return (
     <>
       <a className="skip-link" href="#main">
-        Skip to main content
+        {m.meta.skipLink}
       </a>
       <RiskBanner />
       <Header actor={actor} busy={busy} onConnect={() => run(connect)} current={route.name} />
@@ -190,3 +192,4 @@ export default function App() {
     </>
   );
 }
+
