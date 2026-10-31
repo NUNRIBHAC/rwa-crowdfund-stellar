@@ -21,6 +21,9 @@ import Faq from './pages/Faq';
 import About from './pages/About';
 import Financing from './pages/Financing';
 import Account from './pages/Account';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import RiskDisclosure from './pages/RiskDisclosure';
 import { useI18n } from './i18n';
 
 const INTENT_KEY = 'rwa-soroban-intent';
@@ -186,6 +189,9 @@ export default function App() {
         {route.name === 'about' && <About />}
         {route.name === 'financing' && <Financing />}
         {route.name === 'account' && <Account market={market} />}
+        {route.name === 'terms-of-service' && <TermsOfService />}
+        {route.name === 'privacy-policy' && <PrivacyPolicy />}
+        {route.name === 'risk-disclosure' && <RiskDisclosure />}
 
         <Footer />
       </main>
