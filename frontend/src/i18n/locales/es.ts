@@ -1417,6 +1417,9 @@ export const es: Messages = {
     documentsTitle: 'Documentos',
     documentsNote:
       'Los documentos marcados DEMO son plantillas ficticias de este prototipo: no son ofertas, ni asesoramiento, ni información verificada del emisor.',
+    rewardsTitle: 'Recompensas',
+    rewardsNote: 'Los niveles de recompensa mostrados son contenido de marketing proporcionado por el emisor. La plataforma no promete que ninguna recompensa pueda reclamarse ni que vaya a cumplirse.',
+    rewardsNone: 'No se han anunciado recompensas para esta campaña.',
     documentKinds: {
       kiis: 'KIIS',
       terms: 'Condiciones',

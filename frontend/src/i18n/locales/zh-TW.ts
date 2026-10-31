@@ -1216,6 +1216,9 @@ export const zhTW: Messages = {
     demoBadge: 'DEMO',
     documentsTitle: '文件',
     documentsNote: '標示 DEMO 的文件為本原型的虛構範本 - 非要約、非建議、非經驗證的發行人資訊。',
+    rewardsTitle: '獎勵',
+    rewardsNote: '此處顯示的獎勵等級由發行方作為行銷內容提供。平台不承諾任何獎勵可以申領或將會兌現。',
+    rewardsNone: '此專案尚未公布任何獎勵。',
     documentKinds: {
       kiis: 'KIIS',
       terms: '條款',

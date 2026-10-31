@@ -1367,6 +1367,9 @@ export const en = {
     // Campaign documents (server metadata; demo documents are fictional templates)
     documentsTitle: 'Documents',
     documentsNote: 'Documents marked DEMO are fictional templates for this prototype - not offers, not advice, not verified issuer information.',
+    rewardsTitle: 'Rewards',
+    rewardsNote: 'Reward tiers shown here are provided by the issuer as marketing content. The platform does not promise that any reward can be claimed or will be fulfilled.',
+    rewardsNone: 'No rewards announced for this campaign.',
     documentKinds: {
       kiis: 'KIIS',
       terms: 'Terms',

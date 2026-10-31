@@ -1330,6 +1330,9 @@ export const ja: Messages = {
     documentsTitle: 'ドキュメント',
     documentsNote:
       'DEMO と表示されたドキュメントは本プロトタイプの架空のテンプレートです - オファーではなく、助言ではなく、検証済みの発行者情報でもありません。',
+    rewardsTitle: 'リワード',
+    rewardsNote: 'ここに表示されるリワードティアは、発行者がマーケティングコンテンツとして提供するものです。プラットフォームは、リワードの請求可能性や履行を約束しません。',
+    rewardsNone: 'このキャンペーンのリワードは発表されていません。',
     documentKinds: {
       kiis: 'KIIS',
       terms: '条件',

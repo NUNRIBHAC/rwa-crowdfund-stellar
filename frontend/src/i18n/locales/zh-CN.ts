@@ -1216,6 +1216,9 @@ export const zhCN: Messages = {
     demoBadge: 'DEMO',
     documentsTitle: '文件',
     documentsNote: '标有 DEMO 的文件为本原型的虚构模板 - 非要约、非建议、非经核验的发行人信息。',
+    rewardsTitle: '奖励',
+    rewardsNote: '此处显示的奖励等级由发行方作为营销内容提供。平台不承诺任何奖励可以申领或将会兑现。',
+    rewardsNone: '该活动尚未公布任何奖励。',
     documentKinds: {
       kiis: 'KIIS',
       terms: '条款',

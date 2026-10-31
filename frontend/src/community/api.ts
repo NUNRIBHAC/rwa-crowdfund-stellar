@@ -64,11 +64,20 @@ export type CampaignDocument = {
   demo: boolean;
 };
 
+export type CampaignRewardTier = {
+  id: string;
+  threshold: string;
+  description: string;
+  terms?: string;
+  demo?: boolean;
+};
+
 export type CampaignMetadata = {
   campaignId: string;
   industry: string;
   industryLabel: string;
   documents: CampaignDocument[];
+  rewards?: CampaignRewardTier[];
 };
 
 // Server-side input limits (backend/src/community.ts LIMITS + accounts.ts).

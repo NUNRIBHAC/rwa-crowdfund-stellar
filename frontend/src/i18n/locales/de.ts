@@ -1401,6 +1401,9 @@ export const de: Messages = {
     documentsTitle: 'Dokumente',
     documentsNote:
       'Mit DEMO markierte Dokumente sind fiktive Vorlagen dieses Prototyps - keine Angebote, keine Beratung, keine verifizierten Emittenteninformationen.',
+    rewardsTitle: 'Prämien',
+    rewardsNote: 'Die hier gezeigten Prämienstufen werden vom Emittenten als Marketinginhalt bereitgestellt. Die Plattform verspricht nicht, dass eine Prämie eingefordert werden kann oder erfüllt wird.',
+    rewardsNone: 'Für diese Kampagne wurden keine Prämien angekündigt.',
     documentKinds: {
       kiis: 'KIIS',
       terms: 'Bedingungen',

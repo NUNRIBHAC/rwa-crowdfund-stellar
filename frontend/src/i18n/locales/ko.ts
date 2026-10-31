@@ -1305,6 +1305,9 @@ export const ko: Messages = {
     demoBadge: 'DEMO',
     documentsTitle: '문서',
     documentsNote: 'DEMO로 표시된 문서는 이 프로토타입의 가상 템플릿입니다 - 청약이 아니며, 조언이 아니며, 검증된 발행인 정보가 아닙니다.',
+    rewardsTitle: '리워드',
+    rewardsNote: '여기에 표시된 리워드 등급은 발행자가 마케팅 콘텐츠로 제공하는 것입니다. 플랫폼은 리워드의 청구 가능성이나 이행을 약속하지 않습니다.',
+    rewardsNone: '이 캠페인에 발표된 리워드가 없습니다.',
     documentKinds: {
       kiis: 'KIIS',
       terms: '조건',

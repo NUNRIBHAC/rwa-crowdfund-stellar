@@ -8,6 +8,7 @@ import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import DocumentsList from '../components/DocumentsList';
+import RewardsList from '../components/RewardsList';
 import NewsList from '../components/NewsList';
 import Comments from '../components/Comments';
 import type { Messages } from '../i18n/locales/en';
@@ -176,6 +177,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
               <p>
                 {m.campaign.detailsPre} {profile ? m.campaign.detailsSample : m.campaign.detailsMissing}
               </p>
+              <RewardsList campaignId={campaign.id} />
             </section>
           )}
           {tab === 'documents' && (
@@ -258,6 +260,11 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
                 />
               </label>
               {market.amountErrors[campaign.id] ? <p className="field-error">{market.amountErrors[campaign.id]}</p> : null}
+              {market.prepareErrors[campaign.id] ? (
+                <p className="field-error" role="alert">
+                  {market.prepareErrors[campaign.id]}
+                </p>
+              ) : null}
               <div className="btn-row">
                 <button className="btn btn-primary" disabled={market.busy || !market.actor} onClick={() => market.onPrepare(campaign, 'contribute')}>
                   {m.card.contribute}
