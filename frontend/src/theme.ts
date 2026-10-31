@@ -4,6 +4,7 @@ export type Theme = 'navy' | 'light';
 
 const STORAGE_KEY = 'blockallisto-theme';
 const LOCKUP_NAVY = '/blockallisto-lockup-horizontal-reversed.svg';
+export const FOOTER_LOCKUP = LOCKUP_NAVY;
 const LOCKUP_LIGHT = '/blockallisto-lockup-horizontal.svg';
 
 export function lockupFor(theme: Theme): string {

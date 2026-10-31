@@ -469,13 +469,13 @@ code {
 /* Footer */
 .site-footer {
   margin-top: 48px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-  color: var(--ink-faint);
   font-size: 13px;
 }
 .site-footer a {
-  color: var(--accent-dark);
+  color: #c7c8f9;
+}
+.site-footer a:hover {
+  color: #fff;
 }
 
 @media (max-width: 520px) {
@@ -1150,7 +1150,7 @@ code {
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  color: var(--ink-faint);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0 0 8px;
 }
 .footer-grid ul {
@@ -1163,8 +1163,11 @@ code {
   margin: 0;
 }
 .footer-legal {
-  border-top: 1px solid var(--line);
+  flex-basis: 100%;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: 14px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Card title wrapping: chips must not squeeze the title into per-character wraps */
@@ -1595,9 +1598,20 @@ textarea:focus-visible,
   padding: 56px 328px 40px 24px;
   min-height: 150px;
   display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+.footer-brand-word {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 14px;
+  flex: none;
+}
+.footer-brand-inner .footer-grid {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+  color: rgba(255, 255, 255, 0.75);
 }
 .footer-brand-lockup {
   display: flex;
@@ -1627,6 +1641,8 @@ textarea:focus-visible,
 @media (max-width: 720px) {
   .footer-brand-inner {
     padding-right: 210px;
+    flex-wrap: wrap;
+    gap: 24px;
   }
   .footer-tiles {
     width: 170px;
@@ -1639,12 +1655,17 @@ textarea:focus-visible,
      stack it below the tagline at a readable size instead of hiding it. */
   .footer-brand-inner {
     padding: 40px 24px 32px;
+    flex-direction: column;
   }
   .footer-tiles {
     position: static;
     transform: none;
     width: 220px;
     height: 138px;
+    order: 4;
+  }
+  .footer-legal {
+    order: 5;
   }
 }
 
@@ -1835,13 +1856,5 @@ input[type='checkbox'] {
   border-color: #c9c9ee;
   color: var(--ink);
 }
-[data-theme='light'] .footer-brand {
-  background: #e9e9f8;
-  border-top: 1px solid var(--line);
-}
-[data-theme='light'] .footer-tagline {
-  color: var(--ink-soft);
-}
-[data-theme='light'] .footer-tiles rect[stroke] {
-  stroke: #8b8ef0;
-}
+/* The footer band stays navy in both themes (explicit user request:
+   "sempre com o background azul escuro"), so no light overrides here. */
