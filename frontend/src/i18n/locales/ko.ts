@@ -1266,10 +1266,21 @@ export const ko: Messages = {
     applicationStatus: { received: '접수됨', under_review: '검토 중', closed: '닫힘' },
     myTicketsTitle: '내 지원 및 피드백 티켓',
     myCommentsTitle: '내 댓글',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: '모더레이션으로 숨겨짐',
     applicationValidation: {
       required: '이 필드를 입력하세요.',
       emailInvalid: '유효한 이메일 주소를 입력하세요.',
+    },
+    notifications: {
+      title: '알림',
+      empty: '아직 알림이 없습니다.',
+      markAllRead: '모두 읽음으로 표시',
+      kinds: {
+        applicationReceived: '발행자 신청이 접수되었습니다',
+        applicationStatus: '발행자 신청 업데이트',
+        commentModerated: '댓글이 모더레이션으로 인해 숨겨졌습니다',
+        ticketClosed: '지원 티켓이 종료되었습니다',
+      },
     },
     applicationSubmit: '신청 제출',
     applicationDone: '신청이 접수되었습니다. 운영자는 사이트 밖에서 신청을 검토하며, 자동으로 상장되지 않습니다.',

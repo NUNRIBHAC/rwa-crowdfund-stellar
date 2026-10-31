@@ -1174,10 +1174,21 @@ export const zhTW: Messages = {
     applicationStatus: { received: '已收到', under_review: '審核中', closed: '已關閉' },
     myTicketsTitle: '我的支援與意見回饋工單',
     myCommentsTitle: '我的留言',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: '已被審核隱藏',
     applicationValidation: {
       required: '請填寫此欄位。',
       emailInvalid: '請輸入有效的電子郵件地址。',
+    },
+    notifications: {
+      title: '通知',
+      empty: '目前沒有通知。',
+      markAllRead: '全部標為已讀',
+      kinds: {
+        applicationReceived: '發行方申請已收到',
+        applicationStatus: '發行方申請更新',
+        commentModerated: '留言已被審核隱藏',
+        ticketClosed: '支援工單已關閉',
+      },
     },
     applicationSubmit: '送出申請',
     applicationDone: '已收到申請。營運方會在站外審核申請;不會自動上架任何內容。',

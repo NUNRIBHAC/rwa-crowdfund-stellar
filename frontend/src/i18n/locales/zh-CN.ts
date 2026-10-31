@@ -1174,10 +1174,21 @@ export const zhCN: Messages = {
     applicationStatus: { received: '已收到', under_review: '审核中', closed: '已关闭' },
     myTicketsTitle: '我的支持与反馈工单',
     myCommentsTitle: '我的评论',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: '已被审核隐藏',
     applicationValidation: {
       required: '请填写此字段。',
       emailInvalid: '请输入有效的电子邮件地址。',
+    },
+    notifications: {
+      title: '通知',
+      empty: '暂无通知。',
+      markAllRead: '全部标为已读',
+      kinds: {
+        applicationReceived: '发行方申请已收到',
+        applicationStatus: '发行方申请更新',
+        commentModerated: '评论已被审核隐藏',
+        ticketClosed: '支持工单已关闭',
+      },
     },
     applicationSubmit: '提交申请',
     applicationDone: '已收到申请。运营方会在站外审核申请;不会自动上架任何内容。',

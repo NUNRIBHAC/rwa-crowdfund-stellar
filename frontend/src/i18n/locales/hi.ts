@@ -1324,10 +1324,21 @@ export const hi: Messages = {
     applicationStatus: { received: 'प्राप्त', under_review: 'समीक्षा में', closed: 'बंद' },
     myTicketsTitle: 'मेरे सहायता और प्रतिक्रिया टिकट',
     myCommentsTitle: 'मेरी टिप्पणियाँ',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: 'मॉडरेशन द्वारा छिपाया गया',
     applicationValidation: {
       required: 'कृपया यह फ़ील्ड भरें।',
       emailInvalid: 'मान्य ईमेल पता दर्ज करें।',
+    },
+    notifications: {
+      title: 'सूचनाएं',
+      empty: 'अभी कोई सूचना नहीं।',
+      markAllRead: 'सभी को पढ़ा हुआ चिह्नित करें',
+      kinds: {
+        applicationReceived: 'जारीकर्ता आवेदन प्राप्त हुआ',
+        applicationStatus: 'जारीकर्ता आवेदन अपडेट',
+        commentModerated: 'मॉडरेशन द्वारा टिप्पणी छिपाई गई',
+        ticketClosed: 'सहायता टिकट बंद हुआ',
+      },
     },
     applicationSubmit: 'आवेदन भेजें',
     applicationDone: 'आवेदन प्राप्त हुआ। ऑपरेटर आवेदनों की समीक्षा साइट के बाहर करता है; कुछ भी स्वचालित रूप से सूचीबद्ध नहीं होता।',

@@ -1372,10 +1372,21 @@ export const pt: Messages = {
     applicationStatus: { received: 'Recebida', under_review: 'Em análise', closed: 'Fechada' },
     myTicketsTitle: 'Os meus pedidos de suporte e feedback',
     myCommentsTitle: 'Os meus comentários',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: 'Ocultado pela moderação',
     applicationValidation: {
       required: 'Preencha este campo.',
       emailInvalid: 'Introduza um endereço de email válido.',
+    },
+    notifications: {
+      title: 'Notificações',
+      empty: 'Ainda não há notificações.',
+      markAllRead: 'Marcar tudo como lido',
+      kinds: {
+        applicationReceived: 'Candidatura de emitente recebida',
+        applicationStatus: 'Atualização da candidatura de emitente',
+        commentModerated: 'Comentário ocultado pela moderação',
+        ticketClosed: 'Pedido de suporte fechado',
+      },
     },
     applicationSubmit: 'Submeter candidatura',
     applicationDone: 'Candidatura recebida. A operadora analisa as candidaturas fora do site; nada é listado automaticamente.',

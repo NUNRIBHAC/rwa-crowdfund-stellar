@@ -1292,10 +1292,21 @@ export const ja: Messages = {
     applicationStatus: { received: '受付済み', under_review: '審査中', closed: '完了' },
     myTicketsTitle: '自分のサポート・フィードバックチケット',
     myCommentsTitle: '自分のコメント',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: 'モデレーションにより非表示',
     applicationValidation: {
       required: 'このフィールドを入力してください。',
       emailInvalid: '有効なメールアドレスを入力してください。',
+    },
+    notifications: {
+      title: '通知',
+      empty: 'まだ通知はありません。',
+      markAllRead: 'すべて既読にする',
+      kinds: {
+        applicationReceived: '発行者申請を受け付けました',
+        applicationStatus: '発行者申請の更新',
+        commentModerated: 'コメントがモデレーションにより非表示になりました',
+        ticketClosed: 'サポートチケットがクローズされました',
+      },
     },
     applicationSubmit: '申請を送信',
     applicationDone: '申請を受け付けました。運営者はサイト外で申請を審査します; 自動で掲載されるものはありません。',

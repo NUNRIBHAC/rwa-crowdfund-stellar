@@ -1338,6 +1338,17 @@ export const en = {
       required: 'Please fill in this field.',
       emailInvalid: 'Enter a valid email address.',
     },
+    notifications: {
+      title: 'Notifications',
+      empty: 'No notifications yet.',
+      markAllRead: 'Mark all as read',
+      kinds: {
+        applicationReceived: 'Issuer application received',
+        applicationStatus: 'Issuer application update',
+        commentModerated: 'Comment hidden by moderation',
+        ticketClosed: 'Support ticket closed',
+      },
+    },
     applicationSubmit: 'Submit application',
     applicationDone: 'Application received. The operator reviews applications off-site; nothing is listed automatically.',
   },

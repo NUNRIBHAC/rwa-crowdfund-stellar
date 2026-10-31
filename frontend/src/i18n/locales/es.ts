@@ -1377,10 +1377,21 @@ export const es: Messages = {
     applicationStatus: { received: 'Recibida', under_review: 'En revisión', closed: 'Cerrada' },
     myTicketsTitle: 'Mis tickets de soporte y feedback',
     myCommentsTitle: 'Mis comentarios',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: 'Ocultado por moderación',
     applicationValidation: {
       required: 'Rellene este campo.',
       emailInvalid: 'Introduzca una dirección de correo electrónico válida.',
+    },
+    notifications: {
+      title: 'Notificaciones',
+      empty: 'Aún no hay notificaciones.',
+      markAllRead: 'Marcar todo como leído',
+      kinds: {
+        applicationReceived: 'Solicitud de emisor recibida',
+        applicationStatus: 'Actualización de la solicitud de emisor',
+        commentModerated: 'Comentario ocultado por moderación',
+        ticketClosed: 'Ticket de soporte cerrado',
+      },
     },
     applicationSubmit: 'Enviar solicitud',
     applicationDone: 'Solicitud recibida. El operador revisa las solicitudes fuera del sitio; nada se lista automáticamente.',

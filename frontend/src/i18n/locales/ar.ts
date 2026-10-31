@@ -1274,10 +1274,21 @@ export const ar: Messages = {
     applicationStatus: { received: 'تم الاستلام', under_review: 'قيد المراجعة', closed: 'مغلقة' },
     myTicketsTitle: 'تذاكر الدعم والملاحظات الخاصة بي',
     myCommentsTitle: 'تعليقاتي',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: 'مخفي بواسطة الإشراف',
     applicationValidation: {
       required: 'يرجى ملء هذا الحقل.',
       emailInvalid: 'أدخل عنوان بريد إلكتروني صالحًا.',
+    },
+    notifications: {
+      title: 'الإشعارات',
+      empty: 'لا توجد إشعارات بعد.',
+      markAllRead: 'وضع علامة مقروء على الكل',
+      kinds: {
+        applicationReceived: 'تم استلام طلب الإصدار',
+        applicationStatus: 'تحديث طلب الإصدار',
+        commentModerated: 'تم إخفاء التعليق بواسطة الإشراف',
+        ticketClosed: 'تم إغلاق تذكرة الدعم',
+      },
     },
     applicationSubmit: 'إرسال الطلب',
     applicationDone: 'تم استلام الطلب. يراجع المشغّل الطلبات خارج الموقع؛ لا يتم إدراج أي شيء تلقائياً.',

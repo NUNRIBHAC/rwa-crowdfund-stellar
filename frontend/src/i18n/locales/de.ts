@@ -1361,10 +1361,21 @@ export const de: Messages = {
     applicationStatus: { received: 'Eingegangen', under_review: 'In Prüfung', closed: 'Geschlossen' },
     myTicketsTitle: 'Meine Support- und Feedback-Tickets',
     myCommentsTitle: 'Meine Kommentare',
-    commentHidden: 'Hidden by moderation',
+    commentHidden: 'Durch Moderation ausgeblendet',
     applicationValidation: {
       required: 'Bitte füllen Sie dieses Feld aus.',
       emailInvalid: 'Geben Sie eine gültige E-Mail-Adresse ein.',
+    },
+    notifications: {
+      title: 'Benachrichtigungen',
+      empty: 'Noch keine Benachrichtigungen.',
+      markAllRead: 'Alle als gelesen markieren',
+      kinds: {
+        applicationReceived: 'Emittentenantrag eingegangen',
+        applicationStatus: 'Update zum Emittentenantrag',
+        commentModerated: 'Kommentar durch Moderation ausgeblendet',
+        ticketClosed: 'Support-Ticket geschlossen',
+      },
     },
     applicationSubmit: 'Bewerbung absenden',
     applicationDone: 'Bewerbung erhalten. Der Betreiber prüft Bewerbungen außerhalb der Seite; nichts wird automatisch gelistet.',
