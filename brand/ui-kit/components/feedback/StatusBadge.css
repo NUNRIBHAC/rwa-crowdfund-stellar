@@ -1,0 +1,36 @@
+/* StatusBadge - Blockallisto UI kit.
+   Tokens come from brand/brand-tokens.css (--bl-*). Fallbacks are inlined so
+   the component also renders standalone. */
+
+.bl-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: var(--bl-font-text, 'Inter', system-ui, sans-serif);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  /* WCAG pairing: Ink text on the bright support tones, always. */
+  color: var(--bl-ink, #14163a);
+}
+
+.bl-status-badge-success {
+  background: var(--bl-success, #1de9b6);
+}
+.bl-status-badge-warning {
+  background: var(--bl-warning, #ffa726);
+}
+.bl-status-badge-danger {
+  background: var(--bl-danger, #ff5252);
+}
+
+.bl-status-badge-dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--bl-ink, #14163a);
+}
