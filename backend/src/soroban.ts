@@ -228,7 +228,17 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     .setTimeout(900)
     .build();
   const simulation = await client.simulateTransaction(tx);
-  if (rpc.Api.isSimulationError(simulation)) throw new Error(`simulation failed: ${simulation.error}`);
+  if (rpc.Api.isSimulationError(simulation)) {
+    // The SDK dump is a multi-hundred-line diagnostic log - keep it in the
+    // server log and return one concise, honest reason to the client.
+    const raw = simulation.error ?? '';
+    console.warn('soroban build simulation failed:', raw);
+    let reason = 'the network rejected the transaction simulation';
+    if (/trustline entry is missing/i.test(raw)) reason = 'this wallet is not set up for testnet USDC yet (missing trustline)';
+    else if (/account not found/i.test(raw)) reason = 'this wallet account does not exist on testnet yet';
+    else if (/insufficient|balance/i.test(raw)) reason = 'this wallet does not hold enough testnet USDC';
+    throw new Error(`Transaction preparation failed: ${reason}.`);
+  }
   if (rpc.Api.isSimulationRestore(simulation)) throw new Error('state restoration required; operator must restore before signing');
   if (simulation.result?.auth.some((a) => a.credentials.type !== 'sorobanCredentialsSourceAccount'))
     throw new Error('separate address authorization is unsupported');

@@ -131,7 +131,8 @@ export default function App() {
     } catch (e) {
       // Build failures surface at the card, next to the button that failed,
       // not only in the page-top banner a scrolled-down user never sees.
-      setPrepareErrors((prev) => ({ ...prev, [c.id]: e instanceof Error ? e.message : String(e) }));
+      const detail = (e instanceof Error ? e.message : String(e)).split('\n')[0].slice(0, 200);
+      setPrepareErrors((prev) => ({ ...prev, [c.id]: detail }));
       return;
     }
     retain({ ...result, campaign: c.id, actor, status: 'BUILT' });
