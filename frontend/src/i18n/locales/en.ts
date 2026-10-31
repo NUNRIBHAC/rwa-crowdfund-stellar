@@ -22,6 +22,8 @@ export const en = {
     connect: 'Connect Freighter',
     connectedPrefix: 'Connected',
     languageLabel: 'Site language',
+    themeToLight: 'Switch to light theme',
+    themeToDark: 'Switch to dark theme',
   },
   riskBanner: 'Crowdfunding investments carry a risk of total loss. This is a Stellar testnet prototype: no live offers, no real funds, no investment advice.',
   hero: {

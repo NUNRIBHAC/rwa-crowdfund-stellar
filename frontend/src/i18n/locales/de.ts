@@ -23,6 +23,8 @@ export const de: Messages = {
     connect: 'Freighter verbinden',
     connectedPrefix: 'Verbunden',
     languageLabel: 'Sprache der Website',
+    themeToLight: 'Zum hellen Design wechseln',
+    themeToDark: 'Zum dunklen Design wechseln',
   },
   riskBanner:
     'Crowdfunding-Investitionen bergen ein Totalverlustrisiko. Dies ist ein Prototyp im Stellar-Testnet: keine echten Angebote, keine echten Gelder, keine Anlageberatung.',

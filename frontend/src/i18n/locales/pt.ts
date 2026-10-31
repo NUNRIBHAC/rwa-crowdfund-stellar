@@ -23,6 +23,8 @@ export const pt: Messages = {
     connect: 'Ligar Freighter',
     connectedPrefix: 'Ligado',
     languageLabel: 'Idioma do site',
+    themeToLight: 'Mudar para o tema claro',
+    themeToDark: 'Mudar para o tema escuro',
   },
   riskBanner:
     'Os investimentos em crowdfunding comportam um risco de perda total. Isto é um protótipo na testnet Stellar: sem ofertas reais, sem fundos reais, sem aconselhamento de investimento.',
