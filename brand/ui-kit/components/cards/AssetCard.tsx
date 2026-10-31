@@ -82,10 +82,7 @@ export function formatTokenAmount(raw: string, decimals = 7): string {
   if (neg) v = -v;
   const base = 10n ** BigInt(decimals);
   const whole = v / base;
-  const frac = (v % base)
-    .toString()
-    .padStart(decimals, '0')
-    .replace(/0+$/, '');
+  const frac = (v % base).toString().padStart(decimals, '0').replace(/0+$/, '');
   const grouped = whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return (neg ? '-' : '') + grouped + (frac ? '.' + frac : '');
 }
