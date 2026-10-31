@@ -1,4 +1,5 @@
 import StatusBadge, { type StatusBadgeTone } from '../feedback/StatusBadge';
+import { formatTokenAmount, fundingState } from './funding-math';
 import './AssetCard.css';
 
 /**
@@ -15,13 +16,12 @@ import './AssetCard.css';
  * Soroban contract (7-decimal strings on Stellar, e.g. "1554000000000"). The
  * figures are displayed converted to display units (155,400 USDC); the math
  * always uses the raw integer strings.
- * One tile = one equal share of the goal: 1% per tile on the 10x10 detail
- * grid, 1/9 per tile on the 3x3 summary grid. A partially funded next tile
- * renders in the "in progress" tone (Indigo 400); unfunded tiles render in
- * the "open" tone (Indigo 200). Geometry follows the spec: gap = tile / 4,
- * inner padding = tile x 0.55, tile corner radius = 22.5% of tile, block
- * corner radius = 14.1% of block, fill order bottom row first, left to
- * right, then upward.
+ *
+ * Data honesty: pass null/undefined (or forward an invalid string) when the
+ * chain read has not landed or failed - the card then renders "Data
+ * unavailable" with an empty grid, never a fabricated 0%. A verified "0"
+ * raised renders a real zero. The status badge only renders when the caller
+ * passes an explicit status from the source.
  */
 
 export type AssetCardStatus = 'funding' | 'funded' | 'closed';
@@ -40,12 +40,13 @@ export type AssetCardProps = {
   interestRate?: string;
   term?: string;
   minInvestment?: string;
-  /** Exact on-chain raised amount, smallest token unit (integer string). */
-  raised: string;
-  /** Exact on-chain funding goal, smallest token unit (integer string). */
-  goal: string;
+  /** Exact on-chain raised amount, smallest token unit (integer string), or null/undefined when not loaded. */
+  raised?: string | null;
+  /** Exact on-chain funding goal, smallest token unit (integer string), or null/undefined when not loaded. */
+  goal?: string | null;
   /** Human deadline line, e.g. "Ends 24 Nov 2026" or "23 days left". */
   deadlineLabel?: string;
+  /** Status from the source; no badge renders when omitted. */
   status?: AssetCardStatus;
   /** Unit label shown next to the figures, e.g. "USDC (testnet)". */
   currencyLabel?: string;
@@ -55,37 +56,7 @@ export type AssetCardProps = {
   grid?: 'detail' | 'summary';
 };
 
-/** Exact filled-tile count from chain values; never rounds up. */
-export function filledTiles(raised: string, goal: string, tileCount: number): { filled: number; inProgress: boolean; percent: number } {
-  const r = BigInt(raised || '0');
-  const g = BigInt(goal || '0');
-  if (g <= 0n) return { filled: 0, inProgress: false, percent: 0 };
-  const total = BigInt(tileCount);
-  const scaled = r * total;
-  let filled = Number(scaled / g);
-  if (filled > tileCount) filled = tileCount;
-  const remainder = scaled % g;
-  const inProgress = remainder > 0n && filled < tileCount;
-  const percent = Number((r * 10000n) / g) / 100; // 2-decimal percent for the figure
-  return { filled, inProgress, percent };
-}
-
-/** Display-unit string from an exact smallest-unit integer string: grouped thousands, full precision, trailing zeros trimmed. */
-export function formatTokenAmount(raw: string, decimals = 7): string {
-  let v: bigint;
-  try {
-    v = BigInt(raw || '0');
-  } catch {
-    return '0';
-  }
-  const neg = v < 0n;
-  if (neg) v = -v;
-  const base = 10n ** BigInt(decimals);
-  const whole = v / base;
-  const frac = (v % base).toString().padStart(decimals, '0').replace(/0+$/, '');
-  const grouped = whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return (neg ? '-' : '') + grouped + (frac ? '.' + frac : '');
-}
+export { formatTokenAmount, fundingState };
 
 const STATUS_TONE: Record<AssetCardStatus, StatusBadgeTone> = {
   funded: 'success',
@@ -104,10 +75,10 @@ const GRIDS: Record<'detail' | 'summary', GridSpec> = {
   summary: { n: 3, tile: 40 },
 };
 
-function FundingGrid({ raised, goal, density }: { raised: string; goal: string; density: 'detail' | 'summary' }) {
+function FundingGrid({ raised, goal, density }: { raised?: string | null; goal?: string | null; density: 'detail' | 'summary' }) {
   const { n, tile } = GRIDS[density];
   const count = n * n;
-  const { filled, inProgress, percent } = filledTiles(raised, goal, count);
+  const state = fundingState(raised, goal, count);
   const gap = tile / 4;
   const pad = Math.round(tile * 0.55);
   const block = pad * 2 + n * tile + (n - 1) * gap;
@@ -116,6 +87,13 @@ function FundingGrid({ raised, goal, density }: { raised: string; goal: string; 
   const tileRx = +(tile * 0.225).toFixed(2);
   const blockRx = +(block * 0.141).toFixed(2);
 
+  const filled = state.kind === 'ready' ? state.filled : 0;
+  const inProgress = state.kind === 'ready' ? state.inProgress : false;
+  const ariaLabel =
+    state.kind === 'ready'
+      ? `Funding progress: ${state.filled} of ${count} blocks filled, ${state.percent}% of the goal`
+      : 'Funding progress unavailable: on-chain data not loaded';
+
   const tiles = [];
   for (let i = 0; i < count; i++) {
     // fill order: bottom row first, left to right, then upward
@@ -123,17 +101,12 @@ function FundingGrid({ raised, goal, density }: { raised: string; goal: string; 
     const rowFromBottom = Math.floor(i / n);
     const x = off + pad + col * (tile + gap);
     const y = off + pad + (n - 1 - rowFromBottom) * (tile + gap);
-    const state = i < filled ? 'funded' : i === filled && inProgress ? 'progress' : 'open';
-    tiles.push(<rect key={i} className={`bl-asset-grid-tile is-${state}`} x={x} y={y} width={tile} height={tile} rx={tileRx} />);
+    const state2 = i < filled ? 'funded' : i === filled && inProgress ? 'progress' : 'open';
+    tiles.push(<rect key={i} className={`bl-asset-grid-tile is-${state2}`} x={x} y={y} width={tile} height={tile} rx={tileRx} />);
   }
 
   return (
-    <svg
-      className="bl-asset-grid"
-      viewBox={`0 0 ${view} ${view}`}
-      role="img"
-      aria-label={`Funding progress: ${filled} of ${count} blocks filled, ${percent}% of the goal`}
-    >
+    <svg className="bl-asset-grid" viewBox={`0 0 ${view} ${view}`} role="img" aria-label={ariaLabel}>
       <rect className="bl-asset-grid-block" x={off} y={off} width={block} height={block} rx={blockRx} />
       {tiles}
     </svg>
@@ -152,12 +125,14 @@ export default function AssetCard({
   raised,
   goal,
   deadlineLabel,
-  status = 'funding',
+  status,
   currencyLabel = 'USDC (testnet)',
   decimals = 7,
   grid = 'detail',
 }: AssetCardProps) {
-  const { filled, percent } = filledTiles(raised, goal, GRIDS[grid].n ** 2);
+  const state = fundingState(raised, goal, GRIDS[grid].n ** 2);
+  const raisedLabel = formatTokenAmount(raised, decimals);
+  const goalLabel = formatTokenAmount(goal, decimals);
   return (
     <article className="bl-asset-card">
       <div className="bl-asset-card-main">
@@ -166,7 +141,7 @@ export default function AssetCard({
           <div className="bl-asset-card-tags">
             {instrumentLabel && <span className="bl-asset-chip">{instrumentLabel}</span>}
             {country && <span className="bl-asset-chip">{country}</span>}
-            <StatusBadge tone={STATUS_TONE[status]}>{STATUS_LABEL[status]}</StatusBadge>
+            {status && <StatusBadge tone={STATUS_TONE[status]}>{STATUS_LABEL[status]}</StatusBadge>}
           </div>
         </div>
         {teaser && <p className="bl-asset-card-teaser">{teaser}</p>}
@@ -196,13 +171,13 @@ export default function AssetCard({
           <div>
             <dt>Raised</dt>
             <dd className="bl-asset-figure">
-              {formatTokenAmount(raised, decimals)} <span className="bl-asset-unit">{currencyLabel}</span>
+              {raisedLabel ?? 'Data unavailable'} {raisedLabel && <span className="bl-asset-unit">{currencyLabel}</span>}
             </dd>
           </div>
           <div>
             <dt>Goal</dt>
             <dd className="bl-asset-figure">
-              {formatTokenAmount(goal, decimals)} <span className="bl-asset-unit">{currencyLabel}</span>
+              {goalLabel ?? 'Data unavailable'} {goalLabel && <span className="bl-asset-unit">{currencyLabel}</span>}
             </dd>
           </div>
           {deadlineLabel && (
@@ -216,7 +191,13 @@ export default function AssetCard({
       <div className="bl-asset-card-grid">
         <FundingGrid raised={raised} goal={goal} density={grid} />
         <p className="bl-asset-grid-caption">
-          <span className="bl-asset-figure">{percent}%</span> funded - {filled} of {GRIDS[grid].n ** 2} blocks
+          {state.kind === 'ready' ? (
+            <>
+              <span className="bl-asset-figure">{state.percent}%</span> funded - {state.filled} of {GRIDS[grid].n ** 2} blocks
+            </>
+          ) : (
+            'Progress unavailable - on-chain data not loaded'
+          )}
         </p>
       </div>
     </article>
