@@ -13,6 +13,7 @@ import NewsList from '../components/NewsList';
 import Comments from '../components/Comments';
 import type { Messages } from '../i18n/locales/en';
 import CampaignTour from '../components/CampaignTour';
+import { CAMPAIGN_PHOTOS } from '../data/campaignPhotos';
 
 const TAB_IDS = ['overview', 'details', 'documents', 'news'] as const;
 
@@ -69,12 +70,12 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>{statusLabel}</span>
         </div>
         <h1 className="page-title">{campaign.name}</h1>
-        {campaign.id === 'demo-solar' && (
+        {CAMPAIGN_PHOTOS[campaign.id] ? (
           <figure className="campaign-photo">
-            <img src="/demo-solar-farm.jpg" alt={m.card.photoAlt} loading="lazy" />
+            <img src={CAMPAIGN_PHOTOS[campaign.id]} alt={m.card.photoAlt} loading="lazy" />
             <figcaption>{m.card.photoCaption}</figcaption>
           </figure>
-        )}
+        ) : null}
         {profile ? <p className="campaign-issuer">{profile.issuer}</p> : <p className="campaign-issuer">{m.campaign.issuerMissing}</p>}
       </header>
 

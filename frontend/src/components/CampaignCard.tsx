@@ -5,6 +5,7 @@ import FundingGrid from './FundingGrid';
 import type { CampaignProfile } from '../data/profiles';
 import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
+import { CAMPAIGN_PHOTOS } from '../data/campaignPhotos';
 import { useI18n } from '../i18n';
 
 export type CampaignStatus = 'open' | 'funded' | 'ended';
@@ -36,14 +37,18 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
   const dl = deadlineInfo(c.config.deadline, m.time);
   const status = campaignStatus(c);
   const state = fundingState(c.raised, c.config.goal, 20);
+  // Mirror the campaign-page widget state rules (849db5b): never offer an
+  // action the contract is known to reject in the current state.
+  const fundedNow = status === 'funded';
+  const ended = dl.state === 'ended';
   return (
     <article className="card">
-      {c.id === 'demo-solar' && (
+      {CAMPAIGN_PHOTOS[c.id] ? (
         <figure className="card-photo">
-          <img src="/demo-solar-farm.jpg" alt={m.card.photoAlt} loading="lazy" />
+          <img src={CAMPAIGN_PHOTOS[c.id]} alt={m.card.photoAlt} loading="lazy" />
           <figcaption>{m.card.photoCaption}</figcaption>
         </figure>
-      )}
+      ) : null}
       <div className="card-top">
         <div className="card-id">
           <svg className="card-mark" viewBox="0 0 240 240" aria-hidden="true">
@@ -181,7 +186,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
         </dl>
       </details>
 
-      {!readOnly && (
+      {!readOnly && status === 'open' ? (
         <div className="card-actions">
           <label className="amount-label">
             {m.card.amountLabel}
@@ -203,16 +208,43 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
             <button className="btn btn-primary" disabled={busy || !actor} onClick={() => onPrepare('contribute')}>
               {m.card.contribute}
             </button>
-            <button className="btn" disabled={busy || !actor || c.balance === null} onClick={() => onPrepare('refund')}>
-              {m.card.refundMe}
-            </button>
-            <button className="btn" disabled={busy || actor !== c.config.creator} onClick={() => onPrepare('withdraw')}>
-              {m.card.creatorWithdraw}
-            </button>
           </div>
           <p className="card-rules">{m.card.rules}</p>
         </div>
-      )}
+      ) : null}
+      {!readOnly && status !== 'open' ? (
+        <div className="card-actions">
+          <p className="widget-note">
+            {ended
+              ? fundedNow
+                ? c.withdrawn
+                  ? m.campaign.widgetEndedWithdrawn
+                  : m.campaign.widgetEndedFunded
+                : m.campaign.widgetEndedRefundable
+              : m.campaign.widgetFundedOpen}
+          </p>
+          {prepareError ? (
+            <p className="field-error" role="alert">
+              {prepareError}
+            </p>
+          ) : null}
+          {ended && !fundedNow ? (
+            <div className="btn-row">
+              <button className="btn" disabled={busy || !actor || c.balance === null || c.balance === '0'} onClick={() => onPrepare('refund')}>
+                {m.card.refundMe}
+              </button>
+            </div>
+          ) : null}
+          {ended && fundedNow && !c.withdrawn ? (
+            <div className="btn-row">
+              <button className="btn" disabled={busy || actor !== c.config.creator} onClick={() => onPrepare('withdraw')}>
+                {m.card.creatorWithdraw}
+              </button>
+            </div>
+          ) : null}
+          <p className="card-rules">{m.card.rules}</p>
+        </div>
+      ) : null}
     </article>
   );
 }
