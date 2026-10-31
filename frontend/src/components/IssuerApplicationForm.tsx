@@ -2,11 +2,20 @@
 // states clearly that submitting is not an offer, listing or approval - the
 // application goes to the operator for review (status stays visible as
 // 'received' in this prototype; review happens off-site).
+//
+// Validation: native required/type=email constraint validation stays the
+// authority (localized browser messages, focus management). On top of it,
+// invalid fields get aria-invalid + an inline message (aria-describedby) so
+// the error state is visible and announced beyond the transient native
+// bubble; the message text is the browser's own validationMessage, already
+// localized. Server zod errors keep surfacing in the role=alert region.
 import { useState } from 'react';
-import type { FormEvent } from 'react';
+import type { FormEvent, InvalidEvent } from 'react';
 import { COMMUNITY_LIMITS, submitIssuerApplication } from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
+
+type FieldKey = 'projectName' | 'country' | 'instrumentType' | 'targetAmount' | 'description' | 'contactEmail';
 
 export default function IssuerApplicationForm() {
   const { m } = useI18n();
@@ -19,9 +28,44 @@ export default function IssuerApplicationForm() {
   const [contactEmail, setContactEmail] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldKey, string>>>({});
   const [done, setDone] = useState(false);
 
   if (!account) return null;
+
+  function markInvalid(e: InvalidEvent<HTMLFormElement>) {
+    const el = e.target as HTMLInputElement | HTMLTextAreaElement;
+    const key = el.name as FieldKey;
+    if (!key) return;
+    setFieldErrors((prev) => ({ ...prev, [key]: el.validationMessage }));
+  }
+
+  function revalidate(key: FieldKey, el: HTMLInputElement | HTMLTextAreaElement) {
+    setFieldErrors((prev) => {
+      if (!prev[key] || !el.checkValidity()) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  }
+
+  function fieldProps(key: FieldKey) {
+    const message = fieldErrors[key];
+    return {
+      name: key,
+      'aria-invalid': message ? true : undefined,
+      'aria-describedby': message ? `issuer-error-${key}` : undefined,
+    };
+  }
+
+  function fieldMessage(key: FieldKey) {
+    const message = fieldErrors[key];
+    return message ? (
+      <p className="field-error" id={`issuer-error-${key}`}>
+        {message}
+      </p>
+    ) : null;
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -36,6 +80,7 @@ export default function IssuerApplicationForm() {
         description: description.trim(),
         contactEmail: contactEmail.trim(),
       });
+      setFieldErrors({});
       setDone(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -56,36 +101,91 @@ export default function IssuerApplicationForm() {
       {done ? (
         <p className="community-success">{m.community.applicationDone}</p>
       ) : (
-        <form onSubmit={submit} className="application-form">
+        <form onSubmit={submit} onInvalidCapture={markInvalid} className="application-form">
           <label>
             {m.community.applicationFields.projectName}
-            <input value={projectName} onChange={(e) => setProjectName(e.target.value)} maxLength={COMMUNITY_LIMITS.applicationField} required />
+            <input
+              value={projectName}
+              onChange={(e) => {
+                setProjectName(e.target.value);
+                revalidate('projectName', e.target);
+              }}
+              maxLength={COMMUNITY_LIMITS.applicationField}
+              required
+              {...fieldProps('projectName')}
+            />
+            {fieldMessage('projectName')}
           </label>
           <label>
             {m.community.applicationFields.country}
-            <input value={country} onChange={(e) => setCountry(e.target.value)} maxLength={COMMUNITY_LIMITS.applicationField} required />
+            <input
+              value={country}
+              onChange={(e) => {
+                setCountry(e.target.value);
+                revalidate('country', e.target);
+              }}
+              maxLength={COMMUNITY_LIMITS.applicationField}
+              required
+              {...fieldProps('country')}
+            />
+            {fieldMessage('country')}
           </label>
           <label>
             {m.community.applicationFields.instrumentType}
-            <input value={instrumentType} onChange={(e) => setInstrumentType(e.target.value)} maxLength={COMMUNITY_LIMITS.applicationField} required />
+            <input
+              value={instrumentType}
+              onChange={(e) => {
+                setInstrumentType(e.target.value);
+                revalidate('instrumentType', e.target);
+              }}
+              maxLength={COMMUNITY_LIMITS.applicationField}
+              required
+              {...fieldProps('instrumentType')}
+            />
+            {fieldMessage('instrumentType')}
           </label>
           <label>
             {m.community.applicationFields.targetAmount}
-            <input value={targetAmount} onChange={(e) => setTargetAmount(e.target.value)} maxLength={COMMUNITY_LIMITS.applicationField} required />
+            <input
+              value={targetAmount}
+              onChange={(e) => {
+                setTargetAmount(e.target.value);
+                revalidate('targetAmount', e.target);
+              }}
+              maxLength={COMMUNITY_LIMITS.applicationField}
+              required
+              {...fieldProps('targetAmount')}
+            />
+            {fieldMessage('targetAmount')}
           </label>
           <label>
             {m.community.applicationFields.description}
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                revalidate('description', e.target);
+              }}
               maxLength={COMMUNITY_LIMITS.applicationDescription}
               rows={5}
               required
+              {...fieldProps('description')}
             />
+            {fieldMessage('description')}
           </label>
           <label>
             {m.community.applicationFields.contactEmail}
-            <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} maxLength={COMMUNITY_LIMITS.applicationField} />
+            <input
+              type="email"
+              value={contactEmail}
+              onChange={(e) => {
+                setContactEmail(e.target.value);
+                revalidate('contactEmail', e.target);
+              }}
+              maxLength={COMMUNITY_LIMITS.applicationField}
+              {...fieldProps('contactEmail')}
+            />
+            {fieldMessage('contactEmail')}
           </label>
           <button className="btn btn-primary" disabled={busy}>
             {m.community.applicationSubmit}
