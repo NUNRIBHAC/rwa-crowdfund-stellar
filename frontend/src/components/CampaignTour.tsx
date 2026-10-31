@@ -1,11 +1,13 @@
 // Guided campaign-page tour (CONDA S-022 pattern: tour + "Repeat tour" link).
-// v2: each step scrolls its target into view and rings it with a brand
-// highlight that punches through the dimming overlay, so the card is visually
-// connected to the element it describes (v1 showed an unanchored modal).
-// Shows once per browser (localStorage flag), then offers a repeat link.
+// v3: step target scrolls into view and stays BRIGHT above the dim (the dim
+// now comes from the target's own 9999px box-shadow, not a page-wide overlay
+// tint), ringed with a brand outline. Accessible dialog: aria-modal, initial
+// focus on the primary action, Tab/Shift+Tab trapped inside the card, Escape
+// closes, focus restored to the invoking element on close. Background pointer
+// interaction stays suppressed by the full-viewport overlay layer.
+// Step selectors verified against the live campaign page (tab-bar chip row).
 // Steps whose target is missing are skipped, so layout changes never break it.
-// Mount on the campaign detail route.
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n';
 
 const SEEN_KEY = 'blockallisto-campaign-tour-seen';
@@ -19,6 +21,8 @@ export default function CampaignTour() {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [seen, setSeen] = useState(true);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef<Element | null>(null);
 
   useEffect(() => {
     let wasSeen = false;
@@ -33,7 +37,7 @@ export default function CampaignTour() {
 
   const steps: Step[] = [
     { selector: '.fund-grid-wrap', title: t.tourStepFundingTitle, body: t.tourStepFundingBody },
-    { selector: '.campaign-tabs, [role="tablist"]', title: t.tourStepTabsTitle, body: t.tourStepTabsBody },
+    { selector: '.tab-bar, .campaign-tabs, [role="tablist"]', title: t.tourStepTabsTitle, body: t.tourStepTabsBody },
     { selector: '.risk-warning, .risk-banner, [class*="risk"]', title: t.tourStepRiskTitle, body: t.tourStepRiskBody },
     { selector: '.campaign-news, [class*="news"], .community-section', title: t.tourStepNewsTitle, body: t.tourStepNewsBody },
   ];
@@ -54,6 +58,47 @@ export default function CampaignTour() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, index]);
 
+  // Capture the invoking element once per opening, before focus moves.
+  useEffect(() => {
+    if (!open) return;
+    restoreFocusRef.current = document.activeElement;
+  }, [open]);
+
+  // Dialog behavior: initial focus, focus trap, Escape. On step change, if the
+  // focused button unmounted (Next -> Done swap), pull focus back into the card.
+  useEffect(() => {
+    if (!open) return;
+    const card = cardRef.current;
+    const focusables = () => Array.from(card?.querySelectorAll<HTMLElement>('button') ?? []);
+    if (!card?.contains(document.activeElement)) {
+      focusables()
+        .find((b) => b.className.includes('btn-primary'))
+        ?.focus();
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', onKey, true);
+    return () => document.removeEventListener('keydown', onKey, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, index]);
+
   if (!open && !seen) return null;
 
   const close = () => {
@@ -64,6 +109,8 @@ export default function CampaignTour() {
     } catch {
       /* private mode: no persistence */
     }
+    const prev = restoreFocusRef.current;
+    if (prev instanceof HTMLElement) prev.focus();
   };
 
   if (!open) {
@@ -87,8 +134,8 @@ export default function CampaignTour() {
   const step = available[Math.min(index, available.length - 1)];
 
   return (
-    <div className="tour-overlay" role="dialog" aria-label={t.tourTitle}>
-      <div className="tour-card">
+    <div className="tour-overlay">
+      <div className="tour-card" role="dialog" aria-modal="true" aria-label={t.tourTitle} ref={cardRef}>
         <h3>{step.title}</h3>
         <p className="community-note">{step.body}</p>
         <p className="community-note">{t.tourStepOf(index + 1, available.length)}</p>

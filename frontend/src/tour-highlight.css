@@ -1,10 +1,28 @@
-/* CampaignTour v2 highlight: rings the step target above the dimming overlay.
-   Brand ring (primary at 60%), 200ms transition per motion spec; no keyframes. */
+/* CampaignTour v3: the dim comes from the highlighted target's own full-screen
+   box-shadow, so the target stays bright and readable while everything behind
+   the card is shaded; the overlay layer is transparent and only blocks pointer
+   interaction with the background. Brand ring, 200ms transition, no keyframes. */
+.tour-overlay {
+  position: fixed;
+  inset: 0;
+  /* Above the z-61 highlighted target: the transparent layer keeps the bright
+     target non-interactive and the card is never under the target's dim shadow. */
+  z-index: 62;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px;
+  background: transparent;
+}
+
 .tour-highlight {
   position: relative;
   z-index: 61;
+  /* Belt and braces: the highlighted element itself never takes pointer input. */
+  pointer-events: none;
   outline: 3px solid rgba(75, 79, 226, 0.6);
   outline-offset: 4px;
   border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(15, 16, 40, 0.45);
   transition: outline-color 200ms ease;
 }
