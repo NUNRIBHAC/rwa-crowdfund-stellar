@@ -2119,7 +2119,17 @@ select:disabled {
   cursor: not-allowed;
 }
 input[aria-invalid='true'],
+select[aria-invalid='true'],
+textarea[aria-invalid='true'],
 .input-error {
+  border-color: var(--error-border);
+}
+/* The community form base rule (.community-section form input, 0-2-1) beats
+   the bare attribute selector above; the invalid state must win on real
+   fields without touching normal states. */
+.community-section form input[aria-invalid='true'],
+.community-section form select[aria-invalid='true'],
+.community-section form textarea[aria-invalid='true'] {
   border-color: var(--error-border);
 }
 .field-error {
