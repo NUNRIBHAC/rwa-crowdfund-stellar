@@ -63,7 +63,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
                     {m.header.connectedPrefix}: {shorten(actor)}
                   </span>
                   <button
-                    className="btn"
+                    className="btn btn-disconnect"
                     disabled={busy}
                     onClick={() => {
                       // Clears this browser's app connection and community
