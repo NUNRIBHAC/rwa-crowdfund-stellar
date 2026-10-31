@@ -1363,6 +1363,10 @@ export const ar: Messages = {
     applicationTitle: 'التقدم كمصدر',
     applicationNote:
       'أخبر المشغّل عن المشروع الذي ترغب في إدراجه. إرسال هذا النموذج ليس عرضاً ولا إدراجاً ولا موافقة - بل بداية حوار. بيئة تجريبية: لا ترسل أسراراً تجارية حقيقية.',
+    applicationPreviewTitle: 'الطلب (معاينة)',
+    applicationPreviewNote: 'معاينة لطلب المُصدر. لا يُرسَل أو يُحفَظ شيء مما تدخله هنا - سجّل الدخول بمحفظتك أدناه لتقديم طلب حقيقي لمراجعة المشغّل.',
+    applicationPreviewPlaceholder: 'للمعاينة فقط - سجّل الدخول للتقديم',
+    applicationPreviewSubmit: 'إرسال الطلب (سجّل الدخول أولاً)',
     applicationFields: {
       projectName: 'اسم المشروع',
       country: 'البلد',

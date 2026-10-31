@@ -25,7 +25,7 @@ const userKp = Keypair.random();
 
 async function tokenFor(kp: Keypair): Promise<string> {
   const { message } = await createChallenge(store, kp.publicKey());
-  const sig = Buffer.from(kp.sign(Buffer.from(message, 'utf8'))).toString('base64');
+  const sig = Buffer.from(kp.signMessage(message)).toString('base64');
   return (await verifyChallenge(store, kp.publicKey(), sig)).token;
 }
 

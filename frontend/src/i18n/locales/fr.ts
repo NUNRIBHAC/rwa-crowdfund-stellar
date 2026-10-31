@@ -1473,6 +1473,11 @@ export const fr: Messages = {
     applicationTitle: 'Candidater comme émetteur',
     applicationNote:
       "Présentez à l'opérateur le projet que vous souhaitez lister. Envoyer ce formulaire n'est ni une offre, ni un listage, ni une approbation - cela ouvre une conversation. Environnement de démonstration : ne soumettez pas de vrais secrets commerciaux.",
+    applicationPreviewTitle: 'Candidature (aperçu)',
+    applicationPreviewNote:
+      "Aperçu de la candidature d'émetteur. Rien de ce que vous saisissez ici n'est envoyé ni conservé - connectez-vous avec votre portefeuille ci-dessous pour soumettre une vraie candidature pour examen par l'opérateur.",
+    applicationPreviewPlaceholder: 'Aperçu uniquement - connectez-vous pour postuler',
+    applicationPreviewSubmit: "Soumettre la candidature (connectez-vous d'abord)",
     applicationFields: {
       projectName: 'Nom du projet',
       country: 'Pays',

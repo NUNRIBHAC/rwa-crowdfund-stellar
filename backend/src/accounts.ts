@@ -128,7 +128,10 @@ export async function verifyChallenge(
 
 function verifySignature(publicKey: string, message: string, signature: Buffer): boolean {
   try {
-    return Keypair.fromPublicKey(publicKey).verify(Buffer.from(message, 'utf8'), signature);
+    // Freighter (freighter-api v5+) signs per SEP-53: ed25519 over
+    // SHA-256("Stellar Signed Message:\n" || message-utf8). verifyMessage
+    // applies that framing; raw-message signatures are rejected.
+    return Keypair.fromPublicKey(publicKey).verifyMessage(message, signature);
   } catch {
     return false;
   }

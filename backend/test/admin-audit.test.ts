@@ -15,7 +15,7 @@ const newService = (store: FileCommunityStore) => new CommunityService(store, { 
 
 async function login(store: FileCommunityStore, kp: Keypair) {
   const { message } = await createChallenge(store, kp.publicKey());
-  const sig = Buffer.from(kp.sign(Buffer.from(message, 'utf8'))).toString('base64');
+  const sig = Buffer.from(kp.signMessage(message)).toString('base64');
   return verifyChallenge(store, kp.publicKey(), sig);
 }
 

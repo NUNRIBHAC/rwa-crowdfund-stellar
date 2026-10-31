@@ -49,7 +49,7 @@ test('full login roundtrip through the real app: challenge, sign, verify, replay
   });
   assert.equal(challengeRes.status, 200);
   const { message } = (await challengeRes.json()) as { message: string };
-  const signature = Buffer.from(kp.sign(Buffer.from(message, 'utf8'))).toString('base64');
+  const signature = Buffer.from(kp.signMessage(message)).toString('base64');
   const verifyRes = await fetch(`${base}/api/auth/verify`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },

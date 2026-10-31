@@ -38,7 +38,7 @@ async function makeServer(withProvider: boolean) {
   const base = `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;
   const tokenFor = async (kp: Keypair) => {
     const { message } = await createChallenge(store, kp.publicKey());
-    const sig = Buffer.from(kp.sign(Buffer.from(message, 'utf8'))).toString('base64');
+    const sig = Buffer.from(kp.signMessage(message)).toString('base64');
     return (await verifyChallenge(store, kp.publicKey(), sig)).token;
   };
   return { srv, base, tokenFor };

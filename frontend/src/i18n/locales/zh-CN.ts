@@ -1262,6 +1262,10 @@ export const zhCN: Messages = {
     },
     applicationTitle: '申请成为发行人',
     applicationNote: '向运营方介绍您想上架的项目。提交此表单并非要约、上架或批准 - 而是开启对话。演示环境:请勿提交真实商业机密。',
+    applicationPreviewTitle: '申请（预览）',
+    applicationPreviewNote: '发行人申请预览。此处输入的任何内容都不会被发送或保存 - 请在下方使用钱包登录，提交真实申请以供运营方审核。',
+    applicationPreviewPlaceholder: '仅预览 - 登录后申请',
+    applicationPreviewSubmit: '提交申请（请先登录）',
     applicationFields: {
       projectName: '项目名称',
       country: '国家',

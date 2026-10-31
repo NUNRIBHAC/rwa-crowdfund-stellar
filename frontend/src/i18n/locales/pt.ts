@@ -1465,6 +1465,11 @@ export const pt: Messages = {
     applicationTitle: 'Candidatar-se como emitente',
     applicationNote:
       'Apresente à operadora o projeto que gostaria de listar. Enviar este formulário não é uma oferta, uma listagem ou uma aprovação - inicia uma conversa. Ambiente de demonstração: não submeta segredos comerciais reais.',
+    applicationPreviewTitle: 'Candidatura (pré-visualização)',
+    applicationPreviewNote:
+      'Pré-visualização da candidatura de emitente. Nada do que escrever aqui é enviado ou guardado - inicie sessão com a sua carteira abaixo para submeter uma candidatura real para revisão pelo operador.',
+    applicationPreviewPlaceholder: 'Apenas pré-visualização - inicie sessão para se candidatar',
+    applicationPreviewSubmit: 'Submeter candidatura (inicie sessão primeiro)',
     applicationFields: {
       projectName: 'Nome do projeto',
       country: 'País',

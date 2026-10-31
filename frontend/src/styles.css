@@ -2409,6 +2409,23 @@ input[type='checkbox'] {
   font-weight: 600;
   font-size: 14px;
 }
+/* The signed-out application preview is a div (no form semantics), so it
+   needs the same field stacking the real form gets from the rules above. */
+.community-section .application-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.community-section .application-form input {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--indigo-500);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+}
 .community-section form input,
 .community-section form select,
 .community-section form textarea {

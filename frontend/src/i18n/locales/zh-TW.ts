@@ -1262,6 +1262,10 @@ export const zhTW: Messages = {
     },
     applicationTitle: '申請成為發行人',
     applicationNote: '向營運方介紹您想上架的專案。送出此表單並非要約、上架或核准 - 而是開啟對話。示範環境:請勿提交真實商業機密。',
+    applicationPreviewTitle: '申請（預覽）',
+    applicationPreviewNote: '發行人申請預覽。此處輸入的任何內容都不會傳送或儲存 - 請在下方使用錢包登入，送出真實申請以供營運方審核。',
+    applicationPreviewPlaceholder: '僅預覽 - 登入後申請',
+    applicationPreviewSubmit: '送出申請（請先登入）',
     applicationFields: {
       projectName: '專案名稱',
       country: '國家',

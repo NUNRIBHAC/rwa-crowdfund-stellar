@@ -14,7 +14,7 @@ const newStore = () => new FileCommunityStore(path.join(dir, `store-${counter++}
 
 async function login(store: FileCommunityStore, kp: Keypair) {
   const { message } = await createChallenge(store, kp.publicKey());
-  const sig = Buffer.from(kp.sign(Buffer.from(message, 'utf8'))).toString('base64');
+  const sig = Buffer.from(kp.signMessage(message)).toString('base64');
   return verifyChallenge(store, kp.publicKey(), sig);
 }
 
@@ -32,7 +32,7 @@ test('challenge is single-use: replaying the same signature fails', async () => 
   const store = newStore();
   const kp = Keypair.random();
   const { message } = await createChallenge(store, kp.publicKey());
-  const sig = Buffer.from(kp.sign(Buffer.from(message, 'utf8'))).toString('base64');
+  const sig = Buffer.from(kp.signMessage(message)).toString('base64');
   await verifyChallenge(store, kp.publicKey(), sig);
   await assert.rejects(() => verifyChallenge(store, kp.publicKey(), sig), AuthError);
 });
@@ -42,11 +42,21 @@ test('expired challenge and wrong signature are rejected', async () => {
   const kp = Keypair.random();
   const past = Date.now() - 10 * 60 * 1000;
   const { message } = await createChallenge(store, kp.publicKey(), past);
-  const sig = Buffer.from(kp.sign(Buffer.from(message, 'utf8'))).toString('base64');
+  const sig = Buffer.from(kp.signMessage(message)).toString('base64');
   await assert.rejects(() => verifyChallenge(store, kp.publicKey(), sig), AuthError);
   const fresh = await createChallenge(store, kp.publicKey());
-  const wrong = Buffer.from(Keypair.random().sign(Buffer.from(fresh.message, 'utf8'))).toString('base64');
+  const wrong = Buffer.from(Keypair.random().signMessage(fresh.message)).toString('base64');
   await assert.rejects(() => verifyChallenge(store, kp.publicKey(), wrong), AuthError);
+});
+
+test('raw non-SEP-53 signatures are rejected (native Freighter signs SEP-53)', async () => {
+  const store = newStore();
+  const kp = Keypair.random();
+  const { message } = await createChallenge(store, kp.publicKey());
+  // Legacy clients signed the raw message bytes; Freighter v5+ signs per
+  // SEP-53. A raw signature must not verify.
+  const raw = Buffer.from(kp.sign(Buffer.from(message, 'utf8'))).toString('base64');
+  await assert.rejects(() => verifyChallenge(store, kp.publicKey(), raw), /no matching login challenge/);
 });
 
 test('invalid public keys and malformed signatures are 400s', async () => {
