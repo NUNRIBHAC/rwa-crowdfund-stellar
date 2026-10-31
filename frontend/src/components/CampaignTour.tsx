@@ -58,9 +58,13 @@ export default function CampaignTour() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, index]);
 
-  // Capture the invoking element once per opening, before focus moves.
+  // Capture the invoking element once per opening, before focus moves. For
+  // auto-open there is no invoker (activeElement is body); the Repeat tour
+  // button captures itself in its click handler, because by the time this
+  // effect runs the button has already unmounted and focus fell back to body.
   useEffect(() => {
     if (!open) return;
+    if (restoreFocusRef.current instanceof HTMLElement && document.contains(restoreFocusRef.current)) return;
     restoreFocusRef.current = document.activeElement;
   }, [open]);
 
@@ -118,6 +122,7 @@ export default function CampaignTour() {
       <button
         className="btn"
         onClick={() => {
+          restoreFocusRef.current = document.activeElement;
           setIndex(0);
           setOpen(true);
         }}
