@@ -3,6 +3,7 @@ import cors from 'cors';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
+import { registerDiscoveryEndpoints } from './sitemap.js';
 import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban } from './soroban.js';
 
 const app = express();
@@ -70,6 +71,9 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
   }
   next();
 };
+
+// Machine-readable discovery: sitemap.xml + robots.txt (see sitemap.ts).
+registerDiscoveryEndpoints(app);
 
 app.get('/health', (_req, res) => {
   res.json({ ok: true, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
