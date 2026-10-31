@@ -28,6 +28,18 @@ export default function Footer() {
                   <a href={routeHash({ name: 'financing' })}>{m.footer.financingIssuers}</a>
                 </li>
               </ul>
+              <h2 className="footer-heading footer-legal-heading">{m.footer.legal}</h2>
+              <ul>
+                <li>
+                  <a href={routeHash({ name: 'terms-of-service' })}>{m.footer.termsOfService}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'privacy-policy' })}>{m.footer.privacyPolicy}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'risk-disclosure' })}>{m.footer.riskDisclosure}</a>
+                </li>
+              </ul>
             </div>
             <div>
               <h2 className="footer-heading">{m.footer.learn}</h2>
@@ -63,15 +75,32 @@ export default function Footer() {
               </div>
             </div>
           </div>
-          <svg className="footer-tiles" viewBox="0 0 400 280" aria-hidden="true">
-            <rect x="140" y="34" width="66" height="66" rx="15" fill="#8B8EF0" transform="rotate(8 173 67)" />
-            <rect x="328" y="36" width="36" height="36" rx="8" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(12 346 54)" />
-            <rect x="250" y="104" width="70" height="70" rx="16" fill="#4B4FE2" transform="rotate(-6 285 139)" />
-            <rect x="100" y="110" width="46" height="46" rx="11" fill="#C7C8F9" transform="rotate(-14 123 133)" />
-            <rect x="30" y="170" width="38" height="38" rx="9" fill="#4B4FE2" transform="rotate(-24 49 189)" />
-            <rect x="150" y="206" width="28" height="28" rx="7" fill="#8B8EF0" transform="rotate(10 164 220)" />
-            <rect x="240" y="186" width="40" height="40" rx="10" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(10 260 206)" />
-          </svg>
+          <div className="footer-tiles" aria-hidden="true">
+            {/* Each shape is its own svg whose box has slack around the rotated
+                rect, so no corner is ever clipped by an internal boundary; the
+                only clipping that can occur is at the footer's own edges. */}
+            <svg className="ft ft-1" viewBox="-7 -7 80 80">
+              <rect x="0" y="0" width="66" height="66" rx="15" fill="#8B8EF0" transform="rotate(8 33 33)" />
+            </svg>
+            <svg className="ft ft-2" viewBox="-7 -7 50 50">
+              <rect x="0" y="0" width="36" height="36" rx="8" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(12 18 18)" />
+            </svg>
+            <svg className="ft ft-3" viewBox="-7 -7 84 84">
+              <rect x="0" y="0" width="70" height="70" rx="16" fill="#4B4FE2" transform="rotate(-6 35 35)" />
+            </svg>
+            <svg className="ft ft-4" viewBox="-7 -7 60 60">
+              <rect x="0" y="0" width="46" height="46" rx="11" fill="#C7C8F9" transform="rotate(-14 23 23)" />
+            </svg>
+            <svg className="ft ft-5" viewBox="-8 -8 54 54">
+              <rect x="0" y="0" width="38" height="38" rx="9" fill="#4B4FE2" transform="rotate(-24 19 19)" />
+            </svg>
+            <svg className="ft ft-6" viewBox="-4 -4 36 36">
+              <rect x="0" y="0" width="28" height="28" rx="7" fill="#8B8EF0" transform="rotate(10 14 14)" />
+            </svg>
+            <svg className="ft ft-7" viewBox="-6 -6 52 52">
+              <rect x="0" y="0" width="40" height="40" rx="10" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(10 20 20)" />
+            </svg>
+          </div>
         </div>
       </div>
     </footer>
