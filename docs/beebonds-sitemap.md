@@ -213,4 +213,4 @@ All entries from `post-sitemap.xml` in original sitemap order. Topics (from slug
 
 | URL                                    | Last modified |
 | -------------------------------------- | ------------- |
-| https://www.beebonds.com/locations.kml | 2024-09-24    
+| https://www.beebonds.com/locations.kml | 2024-09-24    |
