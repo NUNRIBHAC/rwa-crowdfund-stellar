@@ -660,10 +660,24 @@ code {
   margin-left: auto;
   flex: none;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  padding-bottom: 2px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Mid widths (721-1150px): the 8-item nav, language selector, testnet badge and
+   Connect button cannot share one 76px row - wrap to two rows like mobile. */
+@media (min-width: 721px) and (max-width: 1150px) {
+  .header-inner {
+    flex-wrap: wrap;
+    min-height: 0;
+    row-gap: 8px;
+  }
+  .site-nav {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+  }
 }
 @media (max-width: 720px) {
   .header-inner {
