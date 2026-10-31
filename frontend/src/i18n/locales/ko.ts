@@ -559,6 +559,7 @@ export const ko: Messages = {
     walletMismatch: '이 트랜잭션을 준비한 지갑을 연결하세요.',
     walletNoSign: '지갑이 서명하지 않았습니다',
     apiFailed: 'API 요청 실패',
+    apiUnavailable: '서비스를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
     prepareTrustlineMissing: '이 지갑은 아직 테스트넷 USDC용으로 설정되지 않았습니다(트러스트라인 없음). USDC 트러스트라인을 추가한 후 다시 시도하세요.',
     prepareAccountMissing: '이 지갑 계정은 아직 테스트넷에 존재하지 않습니다. 먼저 자금을 충전한 후 다시 시도하세요.',
     prepareInsufficientBalance: '이 지갑에는 이 금액에 충분한 테스트넷 USDC가 없습니다.',

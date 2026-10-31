@@ -584,6 +584,7 @@ export const fr: Messages = {
     walletMismatch: 'Connectez le portefeuille qui a préparé cette transaction.',
     walletNoSign: "Le portefeuille n'a pas signé",
     apiFailed: 'La requête API a échoué',
+    apiUnavailable: 'Le service est temporairement indisponible. Veuillez réessayer dans un instant.',
     prepareTrustlineMissing:
       "Ce portefeuille n'est pas encore configuré pour l'USDC de test (trustline manquante). Ajoutez une trustline USDC, puis réessayez.",
     prepareAccountMissing: "Ce compte de portefeuille n'existe pas encore sur le réseau de test. Financez-le d'abord, puis réessayez.",

@@ -581,6 +581,7 @@ export const de: Messages = {
     walletMismatch: 'Verbinden Sie die Wallet, die diese Transaktion vorbereitet hat.',
     walletNoSign: 'Wallet hat nicht signiert',
     apiFailed: 'API-Anfrage fehlgeschlagen',
+    apiUnavailable: 'Der Dienst ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in Kürze erneut.',
     prepareTrustlineMissing:
       'Diese Wallet ist noch nicht für Testnet-USDC eingerichtet (fehlende Trustline). Fügen Sie eine USDC-Trustline hinzu und versuchen Sie es erneut.',
     prepareAccountMissing: 'Dieses Wallet-Konto existiert im Testnetz noch nicht. Zahlen Sie es zuerst ein und versuchen Sie es erneut.',

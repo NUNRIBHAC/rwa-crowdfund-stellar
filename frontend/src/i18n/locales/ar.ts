@@ -565,6 +565,7 @@ export const ar: Messages = {
     walletMismatch: 'اربط المحفظة التي أعدّت هذه المعاملة.',
     walletNoSign: 'المحفظة لم توقّع',
     apiFailed: 'فشل طلب الواجهة البرمجية',
+    apiUnavailable: 'الخدمة غير متاحة مؤقتًا. يُرجى المحاولة مرة أخرى بعد قليل.',
     prepareTrustlineMissing: 'هذه المحفظة غير مهيأة بعد لعملة USDC التجريبية (خط الثقة مفقود). أضف خط ثقة USDC ثم حاول مرة أخرى.',
     prepareAccountMissing: 'حساب هذه المحفظة غير موجود بعد على الشبكة التجريبية. موّله أولاً ثم حاول مرة أخرى.',
     prepareInsufficientBalance: 'لا تحتوي هذه المحفظة على ما يكفي من USDC التجريبية لهذا المبلغ.',

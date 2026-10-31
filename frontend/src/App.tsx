@@ -57,6 +57,14 @@ export default function App() {
     }
   });
 
+  // Known failures localize from their stable code; anything else keeps its
+  // current message (already-localized wallet errors pass through unchanged).
+  function bannerMessage(e: unknown): string {
+    const code = (e as { code?: string } | null)?.code;
+    if (code === 'API_UNAVAILABLE') return m.errors.apiUnavailable;
+    return e instanceof Error ? e.message : String(e);
+  }
+
   async function refresh(address = actor) {
     const data = await api(`/api/campaigns${address ? `?actor=${encodeURIComponent(address)}` : ''}`);
     setCampaigns(data.campaigns);
@@ -70,7 +78,7 @@ export default function App() {
       setFixtureMode(true);
       setLoaded(true);
     }
-    refresh().catch((e) => setError(e.message));
+    refresh().catch((e) => setError(bannerMessage(e)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -85,7 +93,7 @@ export default function App() {
     try {
       await fn();
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      setError(bannerMessage(e));
     } finally {
       setBusy(false);
     }
