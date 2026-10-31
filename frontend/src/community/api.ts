@@ -178,6 +178,20 @@ export const markNotificationRead = (token: string, id: string) =>
 
 export const markAllNotificationsRead = (token: string) => call<{ marked: number }>('/api/notifications/read-all', { method: 'POST', body: {}, token });
 
+// --- Operator surface (demo admin dashboard; OPERATOR_WALLETS allow-list,
+// wallet bearer auth, fail-closed server-side) ---
+export const fetchOperatorApplications = (token: string) => call<{ applications: IssuerApplication[] }>('/api/operator/issuer-applications', { token });
+export const setOperatorApplicationStatus = (token: string, id: string, status: string) =>
+  call<{ ok: true }>(`/api/operator/issuer-applications/${encodeURIComponent(id)}/status`, { method: 'POST', body: { status }, token });
+export const fetchOperatorComments = (token: string) => call<{ comments: OwnComment[] }>('/api/operator/comments', { token });
+export const setOperatorCommentHidden = (token: string, id: string, hidden: boolean, reason?: string) =>
+  call<{ ok: true }>(`/api/operator/comments/${encodeURIComponent(id)}/${hidden ? 'hide' : 'unhide'}`, { method: 'POST', body: reason ? { reason } : {}, token });
+export const fetchOperatorTickets = (token: string) => call<{ tickets: Ticket[] }>('/api/operator/tickets', { token });
+export const closeOperatorTicket = (token: string, id: string) =>
+  call<{ ok: true }>(`/api/operator/tickets/${encodeURIComponent(id)}/close`, { method: 'POST', body: {}, token });
+export const postOperatorNews = (token: string, campaignId: string, title: string, body: string) =>
+  call<{ post: NewsPost }>(`/api/operator/campaigns/${encodeURIComponent(campaignId)}/news`, { method: 'POST', body: { title, body }, token });
+
 // --- Support and feedback tickets ---
 export const createTicket = (token: string, input: { kind: 'support' | 'feedback'; subject: string; body: string }) =>
   call<{ ticket: Ticket }>('/api/support/tickets', { body: input, token });

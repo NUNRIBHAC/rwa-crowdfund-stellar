@@ -44,6 +44,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   const store = service.store;
   const router = express.Router();
 
+  const operatorWallets = (): string[] =>
+    (process.env.OPERATOR_WALLETS ?? '')
+      .split(',')
+      .map((w) => w.trim())
+      .filter(Boolean);
+
   const authed =
     (handler: (req: express.Request, res: express.Response, account: Account) => Promise<void>) => async (req: express.Request, res: express.Response) => {
       try {
@@ -84,7 +90,10 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.get(
     '/api/auth/me',
     authed(async (_req, res, account) => {
-      res.json({ account });
+      // isOperator lets the signed-in UI reveal the operator dashboard; it is
+      // a display hint only - every /api/operator/* route re-checks the
+      // allow-list server-side per request.
+      res.json({ account, isOperator: operatorWallets().includes(account.publicKey) });
     }),
   );
   router.put(
@@ -221,11 +230,6 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // reaches the frontend. Fail closed when the allow-list is unset, same
   // posture as requireAdmin. Demo-grade designation; production needs real
   // operator identities (multisig), as noted in server.ts.
-  const operatorWallets = (): string[] =>
-    (process.env.OPERATOR_WALLETS ?? '')
-      .split(',')
-      .map((w) => w.trim())
-      .filter(Boolean);
   const operator = (handler: (req: express.Request, res: express.Response, account: Account) => Promise<void>) =>
     authed(async (req, res, account) => {
       const wallets = operatorWallets();

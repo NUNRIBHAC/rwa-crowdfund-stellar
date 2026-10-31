@@ -63,6 +63,14 @@ test('operator endpoints fail closed when OPERATOR_WALLETS is unset', async () =
   assert.match((await res.json()).error ?? '', /OPERATOR_WALLETS not configured/);
 });
 
+test('/api/auth/me reports operator designation for the UI reveal hint', async () => {
+  process.env.OPERATOR_WALLETS = operatorKp.publicKey();
+  const opMe = await (await call('/api/auth/me', { headers: { authorization: `Bearer ${await tokenFor(operatorKp)}` } })).json();
+  assert.equal(opMe.isOperator, true);
+  const userMe = await (await call('/api/auth/me', { headers: { authorization: `Bearer ${await tokenFor(userKp)}` } })).json();
+  assert.equal(userMe.isOperator, false);
+});
+
 test('operator endpoints reject anonymous and non-operator wallets', async () => {
   process.env.OPERATOR_WALLETS = operatorKp.publicKey();
   const anon = await call('/api/operator/tickets');
