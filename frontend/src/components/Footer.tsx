@@ -14,18 +14,18 @@ export default function Footer() {
               <img className="footer-brand-lockup-img" src={lockupFor(theme)} alt="Blockallisto" />
             </div>
             <p className="footer-tagline">{m.footer.tagline}</p>
-          {/* Social icons: visual presence only until the real profile URLs exist (tracked);
+            {/* Social icons: visual presence only until the real profile URLs exist (tracked);
               aria-label is hardcoded English until the locale batch adds footer keys. */}
-          <div className="footer-social" aria-label="Social media profiles (links not yet published; LinkedIn pending official brand asset)">
-            <img src="/social/x.svg" alt="" />
-            <img src="/social/instagram.svg" alt="" />
-            <img src="/social/facebook.svg" alt="" />
-            <img src="/social/threads.svg" alt="" />
-            <img src="/social/youtube.svg" alt="" />
-            <img src="/social/telegram.svg" alt="" />
-            <img src="/social/discord.svg" alt="" />
-            <img src="/social/farcaster.svg" alt="" />
-          </div>
+            <div className="footer-social" aria-label="Social media profiles (links not yet published; LinkedIn pending official brand asset)">
+              <img src="/social/x.svg" alt="" />
+              <img src="/social/instagram.svg" alt="" />
+              <img src="/social/facebook.svg" alt="" />
+              <img src="/social/threads.svg" alt="" />
+              <img src="/social/youtube.svg" alt="" />
+              <img src="/social/telegram.svg" alt="" />
+              <img src="/social/discord.svg" alt="" />
+              <img src="/social/farcaster.svg" alt="" />
+            </div>
           </div>
           <div className="footer-grid">
             <div>
