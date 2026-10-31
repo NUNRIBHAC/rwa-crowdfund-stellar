@@ -127,3 +127,12 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
+
+/* Headings in content rows must wrap at word boundaries: the global body
+   overflow-wrap:anywhere (kept for wallet addresses and tx hashes) would
+   otherwise split words mid-letter at narrow widths (visible in Arabic).
+   break-word still breaks a single word that exceeds the line, so long
+   compounds (e.g. German) keep their narrow-width fallback. */
+.portfolio-row strong {
+  overflow-wrap: break-word;
+}
