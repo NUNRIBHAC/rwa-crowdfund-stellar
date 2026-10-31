@@ -21,6 +21,11 @@ export default function About() {
             A celestial connection: Callisto is a moon of Jupiter. In Greek mythology, the figure Callisto became Ursa Major, the Great Bear. For Blockallisto,
             that offers a visual metaphor: individual points coming together into a greater whole.
           </p>
+          <p>
+            In Ancient Greece, Callisto became Ursa Major - a constellation where individual points of light join to form a greater, imperishable figure. At
+            Blockallisto, we bring that same truth to global finance through the Stellar network. We connect small investors and digital fractions to fill
+            blocks of real assets. Alone, a token is only a point. Together, we are the democratization of investment.
+          </p>
         </div>
       </section>
 
