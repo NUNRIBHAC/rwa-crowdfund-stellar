@@ -1650,25 +1650,27 @@ textarea:focus-visible,
    translate/rotate compose with each rect's base SVG rotation. Small 8px/3deg
    amplitudes keep every shape fully inside the viewBox. */
 .footer-tiles rect {
-  animation: footer-drift 7s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: footer-drift 5s ease-in-out infinite alternate;
 }
 .footer-tiles rect:nth-child(2n) {
-  animation-duration: 9s;
-  animation-delay: -2.5s;
+  animation-duration: 6.5s;
+  animation-delay: -2s;
 }
 .footer-tiles rect:nth-child(3n) {
-  animation-duration: 11s;
-  animation-delay: -5s;
+  animation-duration: 8s;
+  animation-delay: -4s;
   animation-direction: alternate-reverse;
 }
 @keyframes footer-drift {
   from {
-    translate: 0 4px;
-    rotate: -1.5deg;
+    translate: -6px 6px;
+    rotate: -3deg;
   }
   to {
-    translate: 0 -4px;
-    rotate: 1.5deg;
+    translate: 6px -6px;
+    rotate: 3deg;
   }
 }
 @media (prefers-reduced-motion: reduce) {
