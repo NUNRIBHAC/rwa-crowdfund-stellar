@@ -1200,3 +1200,29 @@ code {
   border: 2px solid var(--red);
   flex-shrink: 0;
 }
+
+
+/* FAQ: category sections, search, answer state tags */
+.faq-controls {
+  margin: 4px 0 8px;
+}
+.faq-controls .discovery-search {
+  width: 100%;
+  max-width: 420px;
+}
+.faq-category {
+  margin-top: 22px;
+}
+.accordion summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.faq-state {
+  flex-shrink: 0;
+}
+.status-info {
+  background: #e0e7ff;
+  color: #3730a3;
+}
