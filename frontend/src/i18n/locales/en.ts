@@ -21,6 +21,7 @@ export const en = {
     testnetBadge: 'Stellar testnet',
     connect: 'Connect Freighter',
     connectedPrefix: 'Connected',
+    disconnect: 'Disconnect',
     languageLabel: 'Site language',
     themeToLight: 'Switch to light theme',
     themeToDark: 'Switch to dark theme',
@@ -1380,6 +1381,12 @@ export const en = {
       terms: 'Terms',
       project: 'Project',
       other: 'Document',
+    },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] Key investment information sheet - fictional template, not an offer',
+      'demo-solar-project': '[DEMO] Project overview - fictional sample document',
+      'staging-load-kiis': '[DEMO] Key investment information sheet - fictional template, not an offer',
+      'staging-load-project': '[DEMO] Project overview - fictional sample document',
     },
     // Campaign news (posted by the operator through the admin key as issuer stand-in)
     newsTitle: 'News',

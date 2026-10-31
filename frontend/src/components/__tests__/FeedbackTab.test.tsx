@@ -5,6 +5,11 @@ vi.mock('../../community/CommunityAuth', () => ({
   useCommunityAuth: vi.fn(),
 }));
 
+vi.mock('../../community/api', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../community/api')>();
+  return { ...actual, createTicket: vi.fn().mockResolvedValue({ id: 'tkt_test' }) };
+});
+
 import { useCommunityAuth } from '../../community/CommunityAuth';
 import FeedbackTab from '../FeedbackTab';
 import { I18nProvider } from '../../i18n';
@@ -72,6 +77,31 @@ test('connected but not signed in offers the challenge sign-in in place', () => 
   const btn = screen.getByRole('button', { name: 'Sign in with wallet' });
   fireEvent.click(btn);
   expect(signIn).toHaveBeenCalledWith(actor);
+});
+
+test('closing after a successful send resets the panel: reopening shows a fresh empty form', () => {
+  authState({ account: { publicKey: actor }, token: 'tok' });
+  render(
+    <I18nProvider>
+      <FeedbackTab actor={actor} onConnect={vi.fn()} />
+    </I18nProvider>,
+  );
+  fireEvent.click(screen.getByRole('button', { name: 'Feedback' }));
+  const subject = screen.getByText('Subject').parentElement!.querySelector('input')!;
+  const body = screen.getByText('Message').parentElement!.querySelector('textarea')!;
+  fireEvent.change(subject, { target: { value: 'First' } });
+  fireEvent.change(body, { target: { value: 'First body' } });
+  fireEvent.submit(subject.closest('form')!);
+  return waitFor(() => screen.getByText('Thank you - your feedback was sent.')).then(() => {
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    expect(screen.queryByText('Send feedback')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Feedback' }));
+    const freshSubject = screen.getByText('Subject').parentElement!.querySelector('input')!;
+    const freshBody = screen.getByText('Message').parentElement!.querySelector('textarea')!;
+    expect(freshSubject.value).toBe('');
+    expect(freshBody.value).toBe('');
+    expect(screen.queryByText('Thank you - your feedback was sent.')).toBeNull();
+  });
 });
 
 test('signed-in visitor sees the ticket form', () => {

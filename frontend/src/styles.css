@@ -92,6 +92,24 @@ code {
   font-family: ui-monospace, Menlo, monospace;
 }
 
+/* Disconnect sits on the navy header: a plain .btn there is navy-on-navy
+   (found in the 390px Arabic pixel pass, 2026-10-31). Give it an explicit
+   light surface on the dark header. The light-theme header keeps the
+   standard outlined .btn look (rule with the light-theme header rules). */
+.header-actions .btn-disconnect {
+  background: #fff;
+  border-color: #fff;
+  color: var(--ink);
+}
+.header-actions .btn-disconnect:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+.header-actions .btn-disconnect:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.75);
+}
+
 /* Layout */
 .page {
   max-width: 1120px;
@@ -252,7 +270,7 @@ code {
   gap: 10px;
 }
 .progress-track {
-  flex: 1;
+  flex: none;
   height: 8px;
   background: #eaecf0;
   border-radius: 999px;
@@ -538,6 +556,18 @@ code {
     overflow-wrap: normal;
     word-break: keep-all;
     padding: 6px 2px;
+  }
+  /* Account checklist: the uppercase status chip (long in PT/DE) must not
+     squeeze the title/note into a narrow mid-word-breaking column. Let it
+     wrap to its own row once the text column would drop below ~220px. */
+  .account-checklist-item {
+    flex-wrap: wrap;
+  }
+  .account-checklist-item div {
+    min-width: min(220px, 100%);
+  }
+  .account-checklist-item > .status-chip {
+    flex-shrink: 0;
   }
 }
 
@@ -2330,6 +2360,16 @@ input[type='checkbox'] {
 [data-theme='light'] .wallet-chip {
   background: rgba(75, 79, 226, 0.08);
   border-color: #c9c9ee;
+  color: var(--ink);
+}
+[data-theme='light'] .header-actions .btn-disconnect {
+  background: transparent;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+[data-theme='light'] .header-actions .btn-disconnect:hover:not(:disabled) {
+  background: var(--bg);
+  border-color: var(--ink);
   color: var(--ink);
 }
 /* Footer follows the theme (user correction 2026-10-31: "quando carrego na

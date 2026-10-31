@@ -38,7 +38,7 @@ export default function DocumentsList({ campaignId, fallback = null }: { campaig
         {metadata.documents.map((d) => (
           <li key={d.id}>
             <a href={d.url} target="_blank" rel="noopener noreferrer">
-              {d.title}
+              {d.demo ? ((m.community.demoDocumentTitles as Record<string, string>)[d.id] ?? d.title) : d.title}
             </a>{' '}
             <span className="status-chip chip-instrument">{m.community.documentKinds[d.kind]}</span>{' '}
             {d.demo && <span className="status-chip chip-demo">{m.community.demoBadge}</span>}

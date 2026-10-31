@@ -30,6 +30,16 @@
   outline-offset: 2px;
 }
 
+/* The fixed tab owns a ~32px strip on the physical right edge. Reserve it in
+   the page padding so it never covers content at rest (390px Arabic pixel
+   pass, 2026-10-31: the tab hid 18px of the heading's leading edge; EN lost
+   trailing text). This file loads after styles.css, so this padding-right
+   wins over the base and <=520px .page paddings in every locale (physical
+   right matches the tab in LTR and RTL). */
+.page {
+  padding-right: 56px;
+}
+
 .feedback-panel {
   position: fixed;
   right: 0;

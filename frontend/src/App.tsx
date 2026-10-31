@@ -216,7 +216,7 @@ export default function App() {
         {m.meta.skipLink}
       </a>
       <RiskBanner />
-      <Header actor={actor} busy={busy} onConnect={() => run(connect)} current={route.name} />
+      <Header actor={actor} busy={busy} onConnect={() => run(connect)} onDisconnect={() => setActor('')} current={route.name} />
       <main className="page" id="main">
         {error && (
           <p role="alert" className="error-banner">

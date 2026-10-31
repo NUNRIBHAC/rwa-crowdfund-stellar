@@ -100,7 +100,19 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
               </button>
             </form>
           )}
-          <button className="btn" onClick={() => setOpen(false)}>
+          <button
+            className="btn"
+            onClick={() => {
+              // After a successful send, closing finishes it: the next open
+              // starts with a fresh empty form. Fields were already cleared
+              // on submit, so nothing old can be resent or leak back.
+              if (done) {
+                setDone(false);
+                setError('');
+              }
+              setOpen(false);
+            }}
+          >
             {labels.feedbackClose}
           </button>
         </div>
