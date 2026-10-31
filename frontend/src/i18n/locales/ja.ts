@@ -21,6 +21,7 @@ export const ja: Messages = {
     testnetBadge: 'Stellar テストネット',
     connect: 'Freighter を接続',
     connectedPrefix: '接続済み',
+    disconnect: '切断',
     languageLabel: 'サイトの言語',
     themeToLight: 'ライトテーマに切り替え',
     themeToDark: 'ダークテーマに切り替え',
@@ -1540,6 +1541,7 @@ export const ja: Messages = {
     feedbackPanelIntro: '良い点も悪い点もお聞かせください。フィードバックはサポートチケットとして保存され、あなたとオペレーターだけが見られます。',
     feedbackSignInPrompt: 'フィードバックを送るにはウォレットでサインインしてください。',
     feedbackSubmitted: 'ありがとうございます - フィードバックを送信しました。',
+    feedbackAnother: '別のフィードバックを送信',
     feedbackClose: '閉じる',
   },
 };

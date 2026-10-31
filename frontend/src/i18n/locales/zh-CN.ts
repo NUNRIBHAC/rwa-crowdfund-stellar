@@ -21,6 +21,7 @@ export const zhCN: Messages = {
     testnetBadge: 'Stellar 测试网',
     connect: '连接 Freighter',
     connectedPrefix: '已连接',
+    disconnect: '断开连接',
     languageLabel: '网站语言',
     themeToLight: '切换到浅色主题',
     themeToDark: '切换到深色主题',
@@ -1415,6 +1416,7 @@ export const zhCN: Messages = {
     feedbackPanelIntro: '告诉我们哪些好用、哪些不好用。反馈会保存为支持工单,仅您和运营者可见。',
     feedbackSignInPrompt: '请使用钱包登录后发送反馈。',
     feedbackSubmitted: '谢谢 - 您的反馈已发送。',
+    feedbackAnother: '再发送一条反馈',
     feedbackClose: '关闭',
   },
 };

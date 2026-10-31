@@ -21,6 +21,7 @@ export const en = {
     testnetBadge: 'Stellar testnet',
     connect: 'Connect Freighter',
     connectedPrefix: 'Connected',
+    disconnect: 'Disconnect',
     languageLabel: 'Site language',
     themeToLight: 'Switch to light theme',
     themeToDark: 'Switch to dark theme',
@@ -1581,6 +1582,7 @@ export const en = {
     feedbackPanelIntro: 'Tell us what works and what does not. Feedback is stored as a support ticket visible only to you and the operator.',
     feedbackSignInPrompt: 'Sign in with your wallet to send feedback.',
     feedbackSubmitted: 'Thank you - your feedback was sent.',
+    feedbackAnother: 'Send another feedback',
     feedbackClose: 'Close',
   },
 };

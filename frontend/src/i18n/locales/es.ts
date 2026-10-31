@@ -22,6 +22,7 @@ export const es: Messages = {
     testnetBadge: 'Testnet de Stellar',
     connect: 'Conectar Freighter',
     connectedPrefix: 'Conectado',
+    disconnect: 'Desconectar',
     languageLabel: 'Idioma del sitio',
     themeToLight: 'Cambiar al tema claro',
     themeToDark: 'Cambiar al tema oscuro',
@@ -1634,6 +1635,7 @@ export const es: Messages = {
     feedbackPanelIntro: 'Cuéntanos qué funciona y qué no. Los comentarios se guardan como un ticket de soporte visible solo para ti y el operador.',
     feedbackSignInPrompt: 'Inicia sesión con tu monedero para enviar comentarios.',
     feedbackSubmitted: 'Gracias - tus comentarios se han enviado.',
+    feedbackAnother: 'Enviar otro comentario',
     feedbackClose: 'Cerrar',
   },
 };

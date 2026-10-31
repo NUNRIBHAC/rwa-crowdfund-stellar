@@ -21,6 +21,7 @@ export const ar: Messages = {
     testnetBadge: 'شبكة Stellar التجريبية',
     connect: 'ربط Freighter',
     connectedPrefix: 'متصل',
+    disconnect: 'قطع الاتصال',
     languageLabel: 'لغة الموقع',
     themeToLight: 'التبديل إلى السمة الفاتحة',
     themeToDark: 'التبديل إلى السمة الداكنة',
@@ -1519,6 +1520,7 @@ export const ar: Messages = {
     feedbackPanelIntro: 'أخبرنا بما ينجح وما لا ينجح. تُحفظ الملاحظات كتذكرة دعم لا يراها سواك أنت والمشغل.',
     feedbackSignInPrompt: 'سجّل الدخول بمحفظتك لإرسال الملاحظات.',
     feedbackSubmitted: 'شكرًا - تم إرسال ملاحظاتك.',
+    feedbackAnother: 'إرسال ملاحظات أخرى',
     feedbackClose: 'إغلاق',
   },
 };

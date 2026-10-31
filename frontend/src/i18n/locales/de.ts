@@ -22,6 +22,7 @@ export const de: Messages = {
     testnetBadge: 'Stellar-Testnet',
     connect: 'Freighter verbinden',
     connectedPrefix: 'Verbunden',
+    disconnect: 'Trennen',
     languageLabel: 'Sprache der Website',
     themeToLight: 'Zum hellen Design wechseln',
     themeToDark: 'Zum dunklen Design wechseln',
@@ -1614,6 +1615,7 @@ export const de: Messages = {
       'Sag uns, was funktioniert und was nicht. Feedback wird als Support-Ticket gespeichert, das nur für dich und den Betreiber sichtbar ist.',
     feedbackSignInPrompt: 'Melde dich mit deiner Wallet an, um Feedback zu senden.',
     feedbackSubmitted: 'Danke - dein Feedback wurde gesendet.',
+    feedbackAnother: 'Weiteres Feedback senden',
     feedbackClose: 'Schließen',
   },
 };

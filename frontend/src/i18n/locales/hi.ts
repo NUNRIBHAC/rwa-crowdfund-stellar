@@ -21,6 +21,7 @@ export const hi: Messages = {
     testnetBadge: 'Stellar टेस्टनेट',
     connect: 'Freighter कनेक्ट करें',
     connectedPrefix: 'कनेक्टेड',
+    disconnect: 'डिस्कनेक्ट करें',
     languageLabel: 'साइट की भाषा',
     themeToLight: 'लाइट थीम पर बदलें',
     themeToDark: 'डार्क थीम पर बदलें',
@@ -1573,6 +1574,7 @@ export const hi: Messages = {
     feedbackPanelIntro: 'बताएँ क्या काम करता है और क्या नहीं। प्रतिक्रिया सहायता टिकट के रूप में सहेजी जाती है, जो केवल आपको और ऑपरेटर को दिखती है।',
     feedbackSignInPrompt: 'प्रतिक्रिया भेजने के लिए अपने वॉलेट से साइन इन करें।',
     feedbackSubmitted: 'धन्यवाद - आपकी प्रतिक्रिया भेज दी गई।',
+    feedbackAnother: 'एक और प्रतिक्रिया भेजें',
     feedbackClose: 'बंद करें',
   },
 };

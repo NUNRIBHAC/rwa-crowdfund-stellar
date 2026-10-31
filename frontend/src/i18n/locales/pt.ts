@@ -22,6 +22,7 @@ export const pt: Messages = {
     testnetBadge: 'Testnet Stellar',
     connect: 'Ligar Freighter',
     connectedPrefix: 'Ligado',
+    disconnect: 'Desligar',
     languageLabel: 'Idioma do site',
     themeToLight: 'Mudar para o tema claro',
     themeToDark: 'Mudar para o tema escuro',
@@ -1632,6 +1633,7 @@ export const pt: Messages = {
       'Diga-nos o que funciona e o que não funciona. O feedback é guardado como um pedido de suporte visível apenas para si e para a operadora.',
     feedbackSignInPrompt: 'Inicie sessão com a sua carteira para enviar feedback.',
     feedbackSubmitted: 'Obrigado - o seu feedback foi enviado.',
+    feedbackAnother: 'Enviar outro feedback',
     feedbackClose: 'Fechar',
   },
 };
