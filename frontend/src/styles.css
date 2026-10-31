@@ -19,6 +19,7 @@
   --indigo-100: #ededfc;
   --indigo-200: #c7c8f9;
   --indigo-400: #8b8ef0;
+  --indigo-500: #7376e8;
   --font-display: 'Montserrat', 'Inter', system-ui, sans-serif;
   --font-figures: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 }
@@ -323,16 +324,25 @@ code {
   font-weight: 600;
 }
 .amount-label input {
-  border: 1px solid var(--line);
+  border: 1px solid var(--indigo-500);
   border-radius: 8px;
   padding: 9px 12px;
   font-size: 15px;
   font-family: inherit;
 }
-.amount-label input:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
-  border-color: transparent;
+.amount-label input:focus-visible {
+  outline: none;
+  border-width: 1.5px;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(75, 79, 226, 0.12);
+  margin: -0.5px;
+}
+/* Error beats the amount-label normal/focus specificity (0-2-2). */
+.amount-label input[aria-invalid='true'],
+.amount-label input[aria-invalid='true']:focus-visible {
+  border-width: 1.5px;
+  border-color: var(--error-border);
+  margin: -0.5px;
 }
 .card-rules {
   margin: 0;
@@ -2096,7 +2106,7 @@ input[type='number'],
 input:not([type]),
 textarea,
 select {
-  border: 1px solid var(--line);
+  border: 1px solid var(--indigo-500);
   border-radius: 8px;
   background: var(--card);
   color: var(--ink);
@@ -2108,8 +2118,10 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
   outline: none;
+  border-width: 1.5px;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(75, 79, 226, 0.18);
+  box-shadow: 0 0 0 3px rgba(75, 79, 226, 0.12);
+  margin: -0.5px;
 }
 input:disabled,
 textarea:disabled,
@@ -2122,6 +2134,13 @@ input[aria-invalid='true'],
 select[aria-invalid='true'],
 textarea[aria-invalid='true'],
 .input-error {
+  border-width: 1.5px;
+  border-color: var(--error-border);
+  margin: -0.5px;
+}
+input[aria-invalid='true']:focus-visible,
+select[aria-invalid='true']:focus-visible,
+textarea[aria-invalid='true']:focus-visible {
   border-color: var(--error-border);
 }
 /* The community form base rule (.community-section form input, 0-2-1) beats
@@ -2130,7 +2149,9 @@ textarea[aria-invalid='true'],
 .community-section form input[aria-invalid='true'],
 .community-section form select[aria-invalid='true'],
 .community-section form textarea[aria-invalid='true'] {
+  border-width: 1.5px;
   border-color: var(--error-border);
+  margin: -0.5px;
 }
 .field-error {
   color: var(--red);
