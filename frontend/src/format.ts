@@ -1,7 +1,19 @@
 // Display-only formatting. Amounts stay integer strings in 7-decimal units everywhere else.
 import type { Locale } from './i18n';
 
-const INTL_TAGS: Record<Locale, string> = { en: 'en-US', pt: 'pt-PT', es: 'es-ES', fr: 'fr-FR', de: 'de-DE' };
+const INTL_TAGS: Record<Locale, string> = {
+  en: 'en-US',
+  pt: 'pt-PT',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  de: 'de-DE',
+  'zh-TW': 'zh-TW',
+  'zh-CN': 'zh-CN',
+  ja: 'ja-JP',
+  ko: 'ko-KR',
+  ar: 'ar',
+  hi: 'hi-IN',
+};
 
 export function units(v: string): string {
   const n = BigInt(v);

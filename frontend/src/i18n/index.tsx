@@ -4,8 +4,14 @@ import { pt } from './locales/pt';
 import { es } from './locales/es';
 import { fr } from './locales/fr';
 import { de } from './locales/de';
+import { zhTW } from './locales/zh-TW';
+import { zhCN } from './locales/zh-CN';
+import { ja } from './locales/ja';
+import { ko } from './locales/ko';
+import { ar } from './locales/ar';
+import { hi } from './locales/hi';
 
-export type Locale = 'en' | 'pt' | 'es' | 'fr' | 'de';
+export type Locale = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'zh-TW' | 'zh-CN' | 'ja' | 'ko' | 'ar' | 'hi';
 
 // Selector labels stay in each language's own words (native labels).
 export const LOCALES: { id: Locale; label: string; accessibleLabel: string }[] = [
@@ -14,17 +20,38 @@ export const LOCALES: { id: Locale; label: string; accessibleLabel: string }[] =
   { id: 'es', label: 'Español', accessibleLabel: 'Español' },
   { id: 'fr', label: 'Français', accessibleLabel: 'Français' },
   { id: 'de', label: 'Deutsch', accessibleLabel: 'Deutsch' },
+  { id: 'zh-TW', label: '繁體中文', accessibleLabel: '繁體中文 - Traditional Chinese' },
+  { id: 'zh-CN', label: '简体中文', accessibleLabel: '简体中文 - Simplified Chinese' },
+  { id: 'ja', label: '日本語', accessibleLabel: '日本語 - Japanese' },
+  { id: 'ko', label: '한국어', accessibleLabel: '한국어 - Korean' },
+  { id: 'ar', label: 'العربية', accessibleLabel: 'العربية - Arabic' },
+  { id: 'hi', label: 'हिन्दी', accessibleLabel: 'हिन्दी - Hindi' },
 ];
 
 // BCP 47 values for <html lang>; pt is European Portuguese.
-const LANG_TAGS: Record<Locale, string> = { en: 'en', pt: 'pt-PT', es: 'es-ES', fr: 'fr', de: 'de' };
+const LANG_TAGS: Record<Locale, string> = {
+  en: 'en',
+  pt: 'pt-PT',
+  es: 'es-ES',
+  fr: 'fr',
+  de: 'de',
+  'zh-TW': 'zh-TW',
+  'zh-CN': 'zh-CN',
+  ja: 'ja',
+  ko: 'ko',
+  ar: 'ar',
+  hi: 'hi',
+};
 
-const MESSAGES: Record<Locale, Messages> = { en, pt, es, fr, de };
+// Arabic renders right-to-left; the rest are left-to-right.
+const RTL_LOCALES: ReadonlySet<Locale> = new Set(['ar']);
+
+const MESSAGES: Record<Locale, Messages> = { en, pt, es, fr, de, 'zh-TW': zhTW, 'zh-CN': zhCN, ja, ko, ar, hi };
 
 const STORAGE_KEY = 'blockallisto-language';
 
 function isLocale(v: string | null): v is Locale {
-  return v === 'en' || v === 'pt' || v === 'es' || v === 'fr' || v === 'de';
+  return ['en', 'pt', 'es', 'fr', 'de', 'zh-TW', 'zh-CN', 'ja', 'ko', 'ar', 'hi'].includes(v ?? '');
 }
 
 function detectLocale(): Locale {
@@ -39,6 +66,11 @@ function detectLocale(): Locale {
   if (nav.startsWith('es')) return 'es';
   if (nav.startsWith('fr')) return 'fr';
   if (nav.startsWith('de')) return 'de';
+  if (nav.startsWith('zh')) return nav.includes('tw') || nav.includes('hk') || nav.includes('hant') ? 'zh-TW' : 'zh-CN';
+  if (nav.startsWith('ja')) return 'ja';
+  if (nav.startsWith('ko')) return 'ko';
+  if (nav.startsWith('ar')) return 'ar';
+  if (nav.startsWith('hi')) return 'hi';
   return 'en';
 }
 
@@ -54,6 +86,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = LANG_TAGS[locale];
+    document.documentElement.dir = RTL_LOCALES.has(locale) ? 'rtl' : 'ltr';
     document.title = m.meta.title;
   }, [locale, m]);
 

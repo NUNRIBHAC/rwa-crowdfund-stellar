@@ -7,8 +7,14 @@ import { pt } from './locales/pt';
 import { es } from './locales/es';
 import { fr } from './locales/fr';
 import { de } from './locales/de';
+import { ar } from './locales/ar';
+import { zhCN } from './locales/zh-CN';
+import { zhTW } from './locales/zh-TW';
+import { ja } from './locales/ja';
+import { ko } from './locales/ko';
+import { hi } from './locales/hi';
 
-const LOCALES = { pt, es, fr, de } as const;
+const LOCALES = { pt, es, fr, de, ar, zhCN, zhTW, ja, ko, hi } as const;
 
 function walk(a: unknown, b: unknown, path: string, errors: string[]) {
   if (Array.isArray(a)) {
