@@ -45,7 +45,9 @@ export default function Footer() {
                   <a href={routeHash({ name: 'financing' })}>{m.footer.financingIssuers}</a>
                 </li>
               </ul>
-              <h2 className="footer-heading footer-legal-heading">{m.footer.legal}</h2>
+            </div>
+            <div>
+              <h2 className="footer-heading">{m.footer.legal}</h2>
               <ul>
                 <li>
                   <a href={routeHash({ name: 'terms-of-service' })}>{m.footer.termsOfService}</a>

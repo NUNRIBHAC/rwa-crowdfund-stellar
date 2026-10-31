@@ -1241,9 +1241,6 @@ code {
   padding: 0;
   line-height: 2;
 }
-.footer-legal-heading {
-  margin-top: 18px;
-}
 .footer-grid p {
   margin: 0;
 }
@@ -1712,7 +1709,7 @@ textarea:focus-visible,
   flex: 1 1 auto;
   margin-bottom: 0;
   color: rgba(255, 255, 255, 0.75);
-  grid-template-columns: minmax(140px, auto) minmax(140px, auto) minmax(240px, 1fr);
+  grid-template-columns: repeat(3, minmax(140px, auto)) minmax(240px, 1fr);
   column-gap: 28px;
 }
 .footer-brand-lockup {
