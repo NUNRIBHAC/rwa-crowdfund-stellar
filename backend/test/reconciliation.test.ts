@@ -72,7 +72,10 @@ test('SUCCESS contributes without an amount field are counted, excluded from the
 
 test('intents from other campaigns do not leak into a campaign row', () => {
   const r = reconcileCampaigns(
-    [{ id: 'c1', raised: '100' }, { id: 'c2', raised: '500' }],
+    [
+      { id: 'c1', raised: '100' },
+      { id: 'c2', raised: '500' },
+    ],
     [intent({ amount: '100' }), intent({ campaign: 'c2', hash: 'b'.repeat(64), amount: '500' })],
     0,
   );

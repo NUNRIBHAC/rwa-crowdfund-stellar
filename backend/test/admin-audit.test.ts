@@ -57,10 +57,21 @@ test('audit log caps at 500 entries, dropping oldest', async () => {
 
 test('state documents written before the audit log still validate', async () => {
   const file = path.join(dir, 'legacy.json');
-  fs.writeFileSync(file, JSON.stringify({
-    version: 1, accounts: {}, challenges: {}, sessions: {}, comments: {},
-    news: {}, tickets: {}, applications: {}, companies: {}, notifications: {},
-  }));
+  fs.writeFileSync(
+    file,
+    JSON.stringify({
+      version: 1,
+      accounts: {},
+      challenges: {},
+      sessions: {},
+      comments: {},
+      news: {},
+      tickets: {},
+      applications: {},
+      companies: {},
+      notifications: {},
+    }),
+  );
   const store = new FileCommunityStore(file);
   const state = await store.read();
   assert.deepEqual(state.audit, []);

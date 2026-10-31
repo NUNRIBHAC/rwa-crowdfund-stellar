@@ -177,8 +177,7 @@ export default function Account({ market }: { market: Market }) {
             {activity.map((a) => (
               <li key={a.hash}>
                 {m.intent.actionLabels[a.action] ?? a.action}
-                {a.amount ? ` ${a.amount} USDC` : ''} - <code>{a.campaign}</code> -{' '}
-                <strong>{m.intent.statusLabels[a.status] ?? a.status}</strong>
+                {a.amount ? ` ${a.amount} USDC` : ''} - <code>{a.campaign}</code> - <strong>{m.intent.statusLabels[a.status] ?? a.status}</strong>
                 {a.createdAt ? ` - ${new Date(a.createdAt).toLocaleString(locale)}` : ''} (
                 <a href={`https://stellar.expert/explorer/testnet/tx/${a.hash}`} target="_blank" rel="noreferrer">
                   tx

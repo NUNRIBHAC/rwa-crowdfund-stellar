@@ -1,4 +1,4 @@
-import { test, before, after } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -25,7 +25,9 @@ async function makeServer(withProvider: boolean) {
       service,
       requireAdmin: (_req, _res, next) => next(),
       ...(withProvider
-        ? { reconciliation: async () => ({ generatedAt: '2026-10-31T16:00:00.000Z', network: 'testnet', semantics: 's', campaigns: [], quarantinedIntents: 0 }) }
+        ? {
+            reconciliation: async () => ({ generatedAt: '2026-10-31T16:00:00.000Z', network: 'testnet', semantics: 's', campaigns: [], quarantinedIntents: 0 }),
+          }
         : {}),
     }),
   );

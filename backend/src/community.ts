@@ -1,7 +1,17 @@
 import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
 import type {
-  CompanyApplication, Account, Comment, CommunityStore, IssuerApplication, NewsPost, Notification, NotificationKind, Ticket, AuditEntry } from './community-store.js';
+  CompanyApplication,
+  Account,
+  Comment,
+  CommunityStore,
+  IssuerApplication,
+  NewsPost,
+  Notification,
+  NotificationKind,
+  Ticket,
+  AuditEntry,
+} from './community-store.js';
 import { FileCommunityStore, PostgresCommunityStore } from './community-store.js';
 import { RateLimiter } from './ratelimit.js';
 

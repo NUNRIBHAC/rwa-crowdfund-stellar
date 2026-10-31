@@ -40,8 +40,7 @@ export default function RewardsList({ campaignId }: { campaignId: string }) {
             {rewards.map((r) => (
               <li key={r.id}>
                 <strong>{r.threshold}</strong>
-                <span className="doc-note"> - {r.description}</span>{' '}
-                {r.demo && <span className="status-chip chip-demo">{m.community.demoBadge}</span>}
+                <span className="doc-note"> - {r.description}</span> {r.demo && <span className="status-chip chip-demo">{m.community.demoBadge}</span>}
                 {r.terms && <p className="community-note">{r.terms}</p>}
               </li>
             ))}

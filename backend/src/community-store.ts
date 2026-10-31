@@ -97,13 +97,7 @@ export type IssuerApplication = {
   createdAt: number;
 };
 
-export type NotificationKind =
-  | 'application_received'
-  | 'application_status'
-  | 'comment_moderated'
-  | 'ticket_closed'
-  | 'company_received'
-  | 'company_status';
+export type NotificationKind = 'application_received' | 'application_status' | 'comment_moderated' | 'ticket_closed' | 'company_received' | 'company_status';
 
 // Owner-scoped notification generated server-side from a real event on the
 // owner's own content (application submitted or status change, comment

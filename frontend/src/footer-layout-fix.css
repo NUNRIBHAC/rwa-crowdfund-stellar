@@ -53,13 +53,48 @@
      220px zone (max right edge 71%*220 + 38 = 194 <= 220). Square sizes
      UNCHANGED (24-58px). Reduced-motion keeps the static spread composition
      (styles.css sets base left/top = spread vars). */
-  .ft-1 { --sx: 6%;  --sy: 4%;  --gx: 30%; --gy: 10%; }
-  .ft-2 { --sx: 60%; --sy: 10%; --gx: 70%; --gy: 11%; }
-  .ft-3 { --sx: 29%; --sy: 22%; --gx: 51%; --gy: 15%; }
-  .ft-4 { --sx: 71%; --sy: 38%; --gx: 26%; --gy: 20%; }
-  .ft-5 { --sx: 10%; --sy: 52%; --gx: 8%;  --gy: 30%; }
-  .ft-6 { --sx: 50%; --sy: 70%; --gx: 43%; --gy: 33%; }
-  .ft-7 { --sx: 26%; --sy: 88%; --gx: 61%; --gy: 38%; }
+  .ft-1 {
+    --sx: 6%;
+    --sy: 4%;
+    --gx: 30%;
+    --gy: 10%;
+  }
+  .ft-2 {
+    --sx: 60%;
+    --sy: 10%;
+    --gx: 70%;
+    --gy: 11%;
+  }
+  .ft-3 {
+    --sx: 29%;
+    --sy: 22%;
+    --gx: 51%;
+    --gy: 15%;
+  }
+  .ft-4 {
+    --sx: 71%;
+    --sy: 38%;
+    --gx: 26%;
+    --gy: 20%;
+  }
+  .ft-5 {
+    --sx: 10%;
+    --sy: 52%;
+    --gx: 8%;
+    --gy: 30%;
+  }
+  .ft-6 {
+    --sx: 50%;
+    --sy: 70%;
+    --gx: 43%;
+    --gy: 33%;
+  }
+  .ft-7 {
+    --sx: 26%;
+    --sy: 88%;
+    --gx: 61%;
+    --gy: 38%;
+  }
 }
 
 /* Narrow viewports keep today's wrapped behavior: two-column grid, context+Status full width. */

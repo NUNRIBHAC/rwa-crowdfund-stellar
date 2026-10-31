@@ -92,7 +92,8 @@ export function reconcileCampaigns(
       try {
         const diff = BigInt(c.raised) - covered;
         notJournalCovered = diff.toString();
-        if (diff > 0n) notes.push('on-chain volume exceeds this app journal: contributions came from outside this app (CLI tests, other tooling or pre-journal history)');
+        if (diff > 0n)
+          notes.push('on-chain volume exceeds this app journal: contributions came from outside this app (CLI tests, other tooling or pre-journal history)');
         if (diff < 0n) notes.push('journal-covered sum exceeds the on-chain counter: journal rows reference different deployment or registry history');
       } catch {
         notes.push('on-chain raised value is unparseable');

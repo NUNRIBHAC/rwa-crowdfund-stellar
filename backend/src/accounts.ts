@@ -166,7 +166,12 @@ export type SessionInfo = {
   current: boolean;
 };
 
-export async function listSessions(store: CommunityStore, publicKey: string, authorizationHeader: string | undefined, now = Date.now()): Promise<SessionInfo[]> {
+export async function listSessions(
+  store: CommunityStore,
+  publicKey: string,
+  authorizationHeader: string | undefined,
+  now = Date.now(),
+): Promise<SessionInfo[]> {
   const currentHash = authorizationHeader?.match(/^Bearer (bls_[0-9a-f]{48})$/)?.[1];
   const current = currentHash ? hashToken(currentHash) : null;
   const state = await store.read();
@@ -184,9 +189,7 @@ export async function listSessions(store: CommunityStore, publicKey: string, aut
 export async function revokeSession(store: CommunityStore, publicKey: string, sessionId: string): Promise<boolean> {
   if (!/^[0-9a-f]{12}$/.test(sessionId)) throw new AuthError(400, 'invalid session id');
   return store.change((state) => {
-    const entry = Object.values(state.sessions).find(
-      (sess) => sess.publicKey === publicKey && sess.tokenHash.startsWith(sessionId),
-    );
+    const entry = Object.values(state.sessions).find((sess) => sess.publicKey === publicKey && sess.tokenHash.startsWith(sessionId));
     if (!entry) return false;
     delete state.sessions[entry.tokenHash];
     return true;

@@ -13,8 +13,29 @@ const bob = Keypair.random().publicKey();
 const fakeJournal = {
   read: async () => ({
     intents: [
-      { hash: 'h1', campaign: 'demo', actor: alice, action: 'contribute', xdr: 'UNSIGNED', signedXdr: 'SIGNED', status: 'SUCCESS', amount: '10.5', createdAt: '2026-10-30T10:00:00Z', updatedAt: '2026-10-30T10:01:00Z' },
-      { hash: 'h2', campaign: 'demo', actor: bob, action: 'contribute', xdr: 'UNSIGNED', signedXdr: 'SIGNED', status: 'PENDING', amount: '5', createdAt: '2026-10-30T11:00:00Z' },
+      {
+        hash: 'h1',
+        campaign: 'demo',
+        actor: alice,
+        action: 'contribute',
+        xdr: 'UNSIGNED',
+        signedXdr: 'SIGNED',
+        status: 'SUCCESS',
+        amount: '10.5',
+        createdAt: '2026-10-30T10:00:00Z',
+        updatedAt: '2026-10-30T10:01:00Z',
+      },
+      {
+        hash: 'h2',
+        campaign: 'demo',
+        actor: bob,
+        action: 'contribute',
+        xdr: 'UNSIGNED',
+        signedXdr: 'SIGNED',
+        status: 'PENDING',
+        amount: '5',
+        createdAt: '2026-10-30T11:00:00Z',
+      },
       { hash: 'h3', campaign: 'demo', actor: alice, action: 'refund', xdr: 'UNSIGNED', status: 'SUBMITTED', createdAt: '2026-10-31T09:00:00Z' },
     ],
   }),
@@ -23,7 +44,7 @@ const fakeJournal = {
   },
 };
 
-test('accountActivity returns only the actor\'s intents, newest first, without envelope material', async () => {
+test("accountActivity returns only the actor's intents, newest first, without envelope material", async () => {
   injectJournalBackendForTests(fakeJournal as any);
   try {
     const rows = await accountActivity(alice);

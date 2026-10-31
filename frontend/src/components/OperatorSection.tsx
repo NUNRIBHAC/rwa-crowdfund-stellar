@@ -366,9 +366,7 @@ export default function OperatorSection({ campaigns }: Props) {
                   ))}
                 </tbody>
               </table>
-              {reconciliation.quarantinedIntents > 0 && (
-                <p className="community-error">{labels.reconQuarantined(reconciliation.quarantinedIntents)}</p>
-              )}
+              {reconciliation.quarantinedIntents > 0 && <p className="community-error">{labels.reconQuarantined(reconciliation.quarantinedIntents)}</p>}
               <p className="community-note">
                 {labels.colGenerated}: {new Date(reconciliation.generatedAt).toLocaleString(locale)} ({reconciliation.network})
               </p>
@@ -410,7 +408,6 @@ export default function OperatorSection({ campaigns }: Props) {
           )}
         </>
       )}
-
     </section>
   );
 }

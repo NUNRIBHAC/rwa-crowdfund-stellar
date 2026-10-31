@@ -22,7 +22,12 @@ test('renders issuer-authored tiers with the no-promise note and DEMO badge', as
       industryLabel: 'Energy and utilities',
       documents: [],
       rewards: [
-        { id: 'r1', threshold: '[DEMO] fictional sample: from EUR 250', description: '[DEMO] Fictional sample reward tier - not a real offer, no reward exists', demo: true },
+        {
+          id: 'r1',
+          threshold: '[DEMO] fictional sample: from EUR 250',
+          description: '[DEMO] Fictional sample reward tier - not a real offer, no reward exists',
+          demo: true,
+        },
       ],
     },
   });

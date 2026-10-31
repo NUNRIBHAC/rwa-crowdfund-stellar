@@ -77,8 +77,7 @@ export default function SecuritySection() {
             <li key={s.id} className="account-checklist-item">
               <div>
                 <h3>
-                  {labels.sessionLabel} <code>{s.id}</code>{' '}
-                  {s.current ? <span className="status-chip status-pending">{labels.currentBadge}</span> : null}
+                  {labels.sessionLabel} <code>{s.id}</code> {s.current ? <span className="status-chip status-pending">{labels.currentBadge}</span> : null}
                 </h3>
                 <p>
                   {labels.createdLabel}: {fmt(s.createdAt)} - {labels.expiresLabel}: {fmt(s.expiresAt)}
