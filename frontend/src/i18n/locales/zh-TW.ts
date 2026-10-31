@@ -97,6 +97,7 @@ export const zhTW: Messages = {
     funded: '已融資',
     underfunded: '未達標',
     filterIndustryAria: '按行業篩選',
+    industryLabels: { 'energy-utilities': '能源與公用事業' } as Record<string, string>,
     allIndustries: '全部行業',
     sortAria: '排序項目',
     sortDeadline: '截止最近',

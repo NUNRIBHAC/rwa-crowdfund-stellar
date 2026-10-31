@@ -97,6 +97,7 @@ export const zhCN: Messages = {
     funded: '已融资',
     underfunded: '未达标',
     filterIndustryAria: '按行业筛选',
+    industryLabels: { 'energy-utilities': '能源与公用事业' } as Record<string, string>,
     allIndustries: '全部行业',
     sortAria: '排序项目',
     sortDeadline: '截止最近',

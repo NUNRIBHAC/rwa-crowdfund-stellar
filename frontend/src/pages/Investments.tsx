@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Market } from '../market';
 import CampaignCard, { campaignStatus, type CampaignStatus } from '../components/CampaignCard';
 import EmptyState from '../components/EmptyState';
 import { categoriesFor, profileFor } from '../data/profiles';
+import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
 
 export default function Investments({ market }: { market: Market }) {
@@ -14,13 +15,59 @@ export default function Investments({ market }: { market: Market }) {
   const [sortBy, setSortBy] = useState<'deadline' | 'progress' | 'name'>('deadline');
   const [view, setView] = useState<'grid' | 'list'>('grid');
 
-  const categories = useMemo(() => categoriesFor(campaigns, fixtureMode, m.profiles.list), [campaigns, fixtureMode, m]);
+  // Industry classification: fixture mode uses the localized sample profiles;
+  // live mode surfaces the operator-curated backend metadata
+  // (/api/campaigns/:id/metadata). Campaigns without curated metadata have no
+  // industry - the chips simply do not offer them, nothing is invented.
+  const [industries, setIndustries] = useState<Record<string, { key: string; label: string }>>({});
+  useEffect(() => {
+    if (fixtureMode || campaigns.length === 0) {
+      setIndustries({});
+      return;
+    }
+    let cancelled = false;
+    Promise.all(
+      campaigns.map((c) =>
+        fetchCampaignMetadata(c.id)
+          .then((r) => [c.id, r.metadata] as const)
+          .catch(() => [c.id, null] as const),
+      ),
+    ).then((entries) => {
+      if (cancelled) return;
+      const map: Record<string, { key: string; label: string }> = {};
+      for (const [id, md] of entries) {
+        if (md && md.industry) map[id] = { key: md.industry, label: md.industryLabel };
+      }
+      setIndustries(map);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [campaigns, fixtureMode]);
+
+  const categoryOf = (c: (typeof campaigns)[number]): string | undefined => {
+    if (fixtureMode) return profileFor(c, fixtureMode, m.profiles.list)?.category;
+    const ind = industries[c.id];
+    if (!ind) return undefined;
+    return m.invest.industryLabels[ind.key] ?? ind.label;
+  };
+
+  const categories = useMemo(() => {
+    if (fixtureMode) return categoriesFor(campaigns, fixtureMode, m.profiles.list);
+    const set = new Set<string>();
+    for (const c of campaigns) {
+      const cat = categoryOf(c);
+      if (cat) set.add(cat);
+    }
+    return [...set].sort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [campaigns, fixtureMode, m, industries]);
 
   const q = query.trim().toLowerCase();
   const shown = campaigns
     .filter((c) => !q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q))
     .filter((c) => statusFilter === 'all' || campaignStatus(c) === statusFilter)
-    .filter((c) => category === 'all' || profileFor(c, fixtureMode, m.profiles.list)?.category === category)
+    .filter((c) => category === 'all' || categoryOf(c) === category)
     .sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name);
       if (sortBy === 'progress') {
@@ -116,14 +163,8 @@ export default function Investments({ market }: { market: Market }) {
       )}
 
       {campaigns.length > 0 && (
-        <p className="sr-only" role="status">
-          {m.invest.resultCount(shown.length)}
-        </p>
-      )}
-
-      {campaigns.length > 0 && shown.length === 0 && (
-        <p className="no-matches" role="status">
-          {m.invest.noMatches}
+        <p className={shown.length === 0 ? 'no-matches' : 'sr-only'} role="status">
+          {shown.length === 0 ? m.invest.noMatches : m.invest.resultCount(shown.length)}
         </p>
       )}
 

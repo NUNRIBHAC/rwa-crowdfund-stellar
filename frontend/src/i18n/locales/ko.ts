@@ -103,6 +103,7 @@ export const ko: Messages = {
     funded: '달성',
     underfunded: '미달',
     filterIndustryAria: '업종으로 필터',
+    industryLabels: { 'energy-utilities': '에너지 및 유틸리티' } as Record<string, string>,
     allIndustries: '모든 업종',
     sortAria: '캠페인 정렬',
     sortDeadline: '마감 임박순',

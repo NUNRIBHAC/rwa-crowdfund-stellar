@@ -104,6 +104,7 @@ export const hi: Messages = {
     funded: 'फंडेड',
     underfunded: 'अल्पवित्तित',
     filterIndustryAria: 'उद्योग से फ़िल्टर करें',
+    industryLabels: { 'energy-utilities': 'ऊर्जा और उपयोगिताएं' } as Record<string, string>,
     allIndustries: 'सभी उद्योग',
     sortAria: 'कैंपेन क्रमबद्ध करें',
     sortDeadline: 'समय सीमा निकटतम',

@@ -106,6 +106,7 @@ export const es: Messages = {
     funded: 'Financiadas',
     underfunded: 'No financiadas',
     filterIndustryAria: 'Filtrar por sector',
+    industryLabels: { 'energy-utilities': 'Energía y servicios públicos' } as Record<string, string>,
     allIndustries: 'Todos los sectores',
     sortAria: 'Ordenar campañas',
     sortDeadline: 'Plazo más próximo',

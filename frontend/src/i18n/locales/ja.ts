@@ -104,6 +104,7 @@ export const ja: Messages = {
     funded: '達成',
     underfunded: '未達',
     filterIndustryAria: '業種で絞り込む',
+    industryLabels: { 'energy-utilities': 'エネルギー・公益' } as Record<string, string>,
     allIndustries: 'すべての業種',
     sortAria: 'キャンペーンの並べ替え',
     sortDeadline: '期限が近い順',

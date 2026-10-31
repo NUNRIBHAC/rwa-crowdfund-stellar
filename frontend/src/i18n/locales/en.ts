@@ -103,6 +103,7 @@ export const en = {
     funded: 'Funded',
     underfunded: 'Underfunded',
     filterIndustryAria: 'Filter by industry',
+    industryLabels: { 'energy-utilities': 'Energy and utilities' } as Record<string, string>,
     allIndustries: 'All industries',
     sortAria: 'Sort campaigns',
     sortDeadline: 'Deadline soonest',

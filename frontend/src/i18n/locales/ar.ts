@@ -104,6 +104,7 @@ export const ar: Messages = {
     funded: 'ممولة',
     underfunded: 'دون الهدف',
     filterIndustryAria: 'تصفية حسب القطاع',
+    industryLabels: { 'energy-utilities': 'الطاقة والمرافق' } as Record<string, string>,
     allIndustries: 'كل القطاعات',
     sortAria: 'فرز الحملات',
     sortDeadline: 'الموعد الأقرب',
