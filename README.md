@@ -4,6 +4,10 @@ Active campaign flow: Soroban contract escrow, nontransferable contribution bala
 
 This is testnet-only integration code, not a deployed or production-ready service. The default registry is empty. No deployment, migration or real funds are included. The frontend says so explicitly.
 
+## Brand
+
+The Blockallisto visual identity (Fraction logo, palette, typography, UI kit and motion specifications) lives in [brand/](brand/README.md): editable SVG logos, ready-to-use PNG exports, icons, social graphics, the hero concept and machine-readable design tokens. The frontend applies this identity, including the "How funding works" block-fill illustration, which is an explanatory animation - not live funding activity. The identity is a draft for this prototype; no trademark search or registration has been done. The same all-rights-reserved terms apply.
+
 ## Rights
 
 Copyright (c) 2026 Nuno Ribeiro. All rights reserved. No permission is granted to reuse, modify or redistribute the original code or documentation, except as required by applicable law or GitHub's terms. Material under `docs/skills-reference/` retains its separately stated rights and licenses.
