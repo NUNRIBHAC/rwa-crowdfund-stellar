@@ -53,10 +53,6 @@ export const ja: Messages = {
     emptyCta: 'サンプルキャンペーンでプレビュー',
   },
   home: {
-    behindAria: '名前の由来',
-    behindTitle: '名前の由来',
-    behindText:
-      '天体とのつながり：Callisto は木星の衛星です。ギリシャ神話では、Callisto は大熊座（Ursa Major）になりました。Blockallisto にとって、それは視覚的な比喩です：個々の光点が集まり、より大きな全体を形づくります。',
     stepsAria: '投資の進め方',
     stepsTitle: '初めての出資までの4ステップ',
     steps: [
@@ -190,6 +186,7 @@ export const ja: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: 'キャンペーンを読み込み中…',
     notFound: 'キャンペーンが見つかりません',
     notFoundText: 'この ID のキャンペーンは現在のレジストリにありません',
     notFoundFixtureSuffix: '（サンプルキャンペーン内）',

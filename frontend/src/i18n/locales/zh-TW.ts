@@ -49,10 +49,6 @@ export const zhTW: Messages = {
     emptyCta: '用示例項目預覽',
   },
   home: {
-    behindAria: '名稱由來',
-    behindTitle: '名稱由來',
-    behindText:
-      '一個與星空的聯繫：Callisto 是木星的衛星。在希臘神話中，Callisto 化身為大熊座。這為 Blockallisto 提供了一個視覺隱喻：一個個獨立的點匯聚成更偉大的整體。',
     stepsAria: '投資流程',
     stepsTitle: '4 步完成首次出資',
     steps: [
@@ -184,6 +180,7 @@ export const zhTW: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: '正在載入活動…',
     notFound: '未找到項目',
     notFoundText: '當前註冊表中沒有此 ID 的項目',
     notFoundFixtureSuffix: '（示例項目中）',

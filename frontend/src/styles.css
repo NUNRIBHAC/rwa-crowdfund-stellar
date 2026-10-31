@@ -183,6 +183,7 @@ code {
   gap: 20px;
 }
 .card {
+  position: relative;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -202,6 +203,29 @@ code {
   margin: 0;
   font-size: 17.5px;
   line-height: 1.3;
+}
+
+/* Whole-card navigation (stretched-link pattern): the campaign title link's
+   hit area covers the whole card, so clicking the photo or any card surface
+   opens that campaign's page. The anchor keeps normal semantics (keyboard
+   focus, open-in-new-tab, per-campaign href); no extra anchors are added.
+   Interactive controls (amount input, buttons, contract details) stay above
+   the overlay so they are never hijacked. */
+.card-title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+}
+.card-actions,
+.card-details,
+.card-details-link {
+  position: relative;
+  z-index: 1;
+}
+.card:has(.card-title a:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .card-tags {
   display: flex;
@@ -1732,7 +1756,7 @@ textarea:focus-visible,
   --sx: 24px;
   --sy: 30px;
   --gx: 125px;
-  --gy: 145px;
+  --gy: 75px;
 }
 .ft-2 {
   width: 30px;
@@ -1742,7 +1766,7 @@ textarea:focus-visible,
   --sx: 250px;
   --sy: 80px;
   --gx: 295px;
-  --gy: 155px;
+  --gy: 85px;
 }
 .ft-3 {
   width: 56px;
@@ -1752,7 +1776,7 @@ textarea:focus-visible,
   --sx: 120px;
   --sy: 170px;
   --gx: 215px;
-  --gy: 185px;
+  --gy: 115px;
 }
 .ft-4 {
   width: 38px;
@@ -1762,7 +1786,7 @@ textarea:focus-visible,
   --sx: 300px;
   --sy: 260px;
   --gx: 110px;
-  --gy: 230px;
+  --gy: 160px;
 }
 .ft-5 {
   width: 34px;
@@ -1772,7 +1796,7 @@ textarea:focus-visible,
   --sx: 40px;
   --sy: 330px;
   --gx: 35px;
-  --gy: 305px;
+  --gy: 235px;
 }
 .ft-6 {
   width: 24px;
@@ -1782,7 +1806,7 @@ textarea:focus-visible,
   --sx: 210px;
   --sy: 420px;
   --gx: 180px;
-  --gy: 325px;
+  --gy: 255px;
 }
 .ft-7 {
   width: 34px;
@@ -1792,7 +1816,7 @@ textarea:focus-visible,
   --sx: 110px;
   --sy: 480px;
   --gx: 255px;
-  --gy: 295px;
+  --gy: 225px;
 }
 @keyframes footer-gather {
   0%,
@@ -1839,19 +1863,19 @@ textarea:focus-visible,
     --sx: 210px;
     --sy: 80px;
     --gx: 255px;
-    --gy: 140px;
+    --gy: 70px;
   }
   .ft-4 {
     --sx: 240px;
     --sy: 260px;
     --gx: 95px;
-    --gy: 215px;
+    --gy: 145px;
   }
   .ft-6 {
     --sx: 180px;
     --sy: 420px;
     --gx: 160px;
-    --gy: 310px;
+    --gy: 240px;
   }
 }
 
@@ -1868,43 +1892,43 @@ textarea:focus-visible,
     --sx: 16px;
     --sy: 40px;
     --gx: 60px;
-    --gy: 175px;
+    --gy: 115px;
   }
   .ft-2 {
     --sx: 130px;
     --sy: 120px;
     --gx: 120px;
-    --gy: 195px;
+    --gy: 135px;
   }
   .ft-3 {
     --sx: 40px;
     --sy: 210px;
     --gx: 30px;
-    --gy: 230px;
+    --gy: 170px;
   }
   .ft-4 {
     --sx: 120px;
     --sy: 330px;
     --gx: 95px;
-    --gy: 275px;
+    --gy: 215px;
   }
   .ft-5 {
     --sx: 16px;
     --sy: 430px;
     --gx: 25px;
-    --gy: 320px;
+    --gy: 260px;
   }
   .ft-6 {
     --sx: 110px;
     --sy: 540px;
     --gx: 115px;
-    --gy: 335px;
+    --gy: 275px;
   }
   .ft-7 {
     --sx: 50px;
     --sy: 620px;
     --gx: 55px;
-    --gy: 365px;
+    --gy: 305px;
   }
 }
 @media (max-width: 560px) {
@@ -1924,43 +1948,43 @@ textarea:focus-visible,
     --sx: 6%;
     --sy: 16px;
     --gx: 24%;
-    --gy: 25px;
+    --gy: 15px;
   }
   .ft-2 {
     --sx: 38%;
     --sy: 96px;
     --gx: 52%;
-    --gy: 18px;
+    --gy: 8px;
   }
   .ft-3 {
     --sx: 60%;
     --sy: 20px;
     --gx: 42%;
-    --gy: 70px;
+    --gy: 60px;
   }
   .ft-4 {
     --sx: 28%;
     --sy: 140px;
     --gx: 30%;
-    --gy: 115px;
+    --gy: 105px;
   }
   .ft-5 {
     --sx: 76%;
     --sy: 130px;
     --gx: 64%;
-    --gy: 125px;
+    --gy: 115px;
   }
   .ft-6 {
     --sx: 14%;
     --sy: 150px;
     --gx: 16%;
-    --gy: 95px;
+    --gy: 85px;
   }
   .ft-7 {
     --sx: 52%;
     --sy: 180px;
     --gx: 56%;
-    --gy: 165px;
+    --gy: 155px;
   }
 }
 

@@ -53,10 +53,6 @@ export const ar: Messages = {
     emptyCta: 'عاين بحملات تجريبية',
   },
   home: {
-    behindAria: 'خلف الاسم',
-    behindTitle: 'خلف الاسم',
-    behindText:
-      'صلة سماوية: Callisto أحد أقمار المشتري. في الأساطير اليونانية، تحوّلت شخصية Callisto إلى الدب الأكبر. يقدم ذلك لـ Blockallisto استعارة بصرية: نقاط فردية تجتمع لتكوّن كلًّا أعظم.',
     stepsAria: 'كيف يعمل الاستثمار',
     stepsTitle: '4 خطوات إلى مساهمتك الأولى',
     steps: [
@@ -190,6 +186,7 @@ export const ar: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: 'جارٍ تحميل الحملة…',
     notFound: 'الحملة غير موجودة',
     notFoundText: 'لا توجد حملة بهذا المعرف في السجل الحالي',
     notFoundFixtureSuffix: ' من الحملات التجريبية',

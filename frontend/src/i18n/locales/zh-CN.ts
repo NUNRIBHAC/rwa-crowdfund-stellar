@@ -49,10 +49,6 @@ export const zhCN: Messages = {
     emptyCta: '用示例项目预览',
   },
   home: {
-    behindAria: '名称由来',
-    behindTitle: '名称由来',
-    behindText:
-      '一个与星空的联系：Callisto 是木星的卫星。在希腊神话中，Callisto 化身为大熊座。这为 Blockallisto 提供了一个视觉隐喻：一个个独立的点汇聚成更伟大的整体。',
     stepsAria: '投资流程',
     stepsTitle: '4 步完成首次出资',
     steps: [
@@ -184,6 +180,7 @@ export const zhCN: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: '正在加载活动…',
     notFound: '未找到项目',
     notFoundText: '当前注册表中没有此 ID 的项目',
     notFoundFixtureSuffix: '（示例项目中）',

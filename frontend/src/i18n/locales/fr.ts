@@ -55,10 +55,6 @@ export const fr: Messages = {
     emptyCta: 'Aperçu avec des campagnes exemples',
   },
   home: {
-    behindAria: 'Derrière le nom',
-    behindTitle: 'Derrière le nom',
-    behindText:
-      "Un lien céleste : Callisto est une lune de Jupiter. Dans la mythologie grecque, la figure de Callisto est devenue la Grande Ourse. Pour Blockallisto, c'est une métaphore visuelle : des points individuels qui se rejoignent en un tout plus grand.",
     stepsAria: "Comment fonctionne l'investissement",
     stepsTitle: '4 étapes pour votre première contribution',
     steps: [
@@ -196,6 +192,7 @@ export const fr: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: 'Chargement de la campagne…',
     notFound: 'Campagne introuvable',
     notFoundText: "Aucune campagne avec cet id n'est dans le registre actuel",
     notFoundFixtureSuffix: ' de campagnes exemples',

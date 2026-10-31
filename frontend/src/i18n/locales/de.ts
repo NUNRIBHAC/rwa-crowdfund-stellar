@@ -55,10 +55,6 @@ export const de: Messages = {
     emptyCta: 'Vorschau mit Beispielkampagnen',
   },
   home: {
-    behindAria: 'Hinter dem Namen',
-    behindTitle: 'Hinter dem Namen',
-    behindText:
-      'Eine himmlische Verbindung: Kallisto ist ein Mond des Jupiter. In der griechischen Mythologie wurde die Figur Kallisto zum Großen Bären. Für Blockallisto ist das eine visuelle Metapher: einzelne Punkte, die sich zu einem größeren Ganzen verbinden.',
     stepsAria: 'So funktioniert das Investieren',
     stepsTitle: '4 Schritte zu Ihrem ersten Beitrag',
     steps: [
@@ -198,6 +194,7 @@ export const de: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: 'Kampagne wird geladen…',
     notFound: 'Kampagne nicht gefunden',
     notFoundText: 'Keine Kampagne mit dieser ID ist im aktuellen Register',
     notFoundFixtureSuffix: ' von Beispielkampagnen',

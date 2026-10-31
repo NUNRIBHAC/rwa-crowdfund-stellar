@@ -55,10 +55,6 @@ export const pt: Messages = {
     emptyCta: 'Pré-visualizar com campanhas de exemplo',
   },
   home: {
-    behindAria: 'Por trás do nome',
-    behindTitle: 'Por trás do nome',
-    behindText:
-      'Uma ligação celestial: Calisto é uma lua de Júpiter. Na mitologia grega, a figura de Calisto transformou-se na Ursa Maior. Para a Blockallisto, é uma metáfora visual: pontos individuais que se unem num todo maior.',
     stepsAria: 'Como funciona o investimento',
     stepsTitle: '4 passos para a sua primeira contribuição',
     steps: [
@@ -193,6 +189,7 @@ export const pt: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: 'A carregar a campanha…',
     notFound: 'Campanha não encontrada',
     notFoundText: 'Nenhuma campanha com este id está no registo atual',
     notFoundFixtureSuffix: ' de campanhas de exemplo',

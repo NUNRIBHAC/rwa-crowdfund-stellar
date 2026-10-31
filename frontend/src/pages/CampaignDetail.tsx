@@ -17,6 +17,14 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
   const campaign = market.campaigns.find((c) => c.id === campaignId);
 
   if (!campaign) {
+    if (!market.loaded) {
+      // Registry still loading: never claim "not found" before the fetch settles.
+      return (
+        <section aria-live="polite">
+          <h1 className="page-title">{m.campaign.loading}</h1>
+        </section>
+      );
+    }
     return (
       <section>
         <h1 className="page-title">{m.campaign.notFound}</h1>

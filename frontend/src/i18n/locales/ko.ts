@@ -52,10 +52,6 @@ export const ko: Messages = {
     emptyCta: '샘플 캠페인으로 미리보기',
   },
   home: {
-    behindAria: '이름의 유래',
-    behindTitle: '이름의 유래',
-    behindText:
-      '천체와의 연결: Callisto는 목성의 위성입니다. 그리스 신화에서 Callisto는 큰곰자리(Ursa Major)가 되었습니다. Blockallisto에게 그것은 시각적 은유를 제공합니다: 개별의 빛점들이 모여 더 큰 전체를 이룹니다.',
     stepsAria: '투자 방법',
     stepsTitle: '첫 출자까지 4단계',
     steps: [
@@ -189,6 +185,7 @@ export const ko: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: '캠페인을 불러오는 중…',
     notFound: '캠페인을 찾을 수 없습니다',
     notFoundText: '이 ID의 캠페인이 현재 레지스트리에 없습니다',
     notFoundFixtureSuffix: '(샘플 캠페인 중)',

@@ -52,10 +52,6 @@ export const en = {
     emptyCta: 'Preview with sample campaigns',
   },
   home: {
-    behindAria: 'Behind the name',
-    behindTitle: 'Behind the name',
-    behindText:
-      'A celestial connection: Callisto is a moon of Jupiter. In Greek mythology, the figure Callisto became Ursa Major, the Great Bear. For Blockallisto, that offers a visual metaphor: individual points coming together into a greater whole.',
     stepsAria: 'How investing works',
     stepsTitle: '4 steps to your first contribution',
     steps: [
@@ -189,6 +185,7 @@ export const en = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: 'Loading campaign…',
     notFound: 'Campaign not found',
     notFoundText: 'No campaign with this id is in the current registry',
     notFoundFixtureSuffix: ' of sample campaigns',

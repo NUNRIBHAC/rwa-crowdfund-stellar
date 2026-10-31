@@ -53,10 +53,6 @@ export const hi: Messages = {
     emptyCta: 'सैंपल कैंपेन से पूर्वावलोकन करें',
   },
   home: {
-    behindAria: 'नाम के पीछे',
-    behindTitle: 'नाम के पीछे',
-    behindText:
-      'खगोलीय संबंध: Callisto बृहस्पति का एक चंद्रमा है। यूनानी पौराणिक कथाओं में, Callisto अर्सा मेजर, सप्तर्षि बनी। Blockallisto के लिए, यह एक दृश्य रूपक देता है: अलग-अलग बिंदु मिलकर एक बड़ी संरचना बनाते हैं।',
     stepsAria: 'निवेश कैसे काम करता है',
     stepsTitle: 'पहले योगदान तक 4 कदम',
     steps: [
@@ -190,6 +186,7 @@ export const hi: Messages = {
     } as Record<string, string>,
   },
   campaign: {
+    loading: 'कैंपेन लोड हो रहा है…',
     notFound: 'कैंपेन नहीं मिला',
     notFoundText: 'इस आईडी का कोई कैंपेन वर्तमान रजिस्ट्री में नहीं है',
     notFoundFixtureSuffix: ' सैंपल कैंपेन में से',
