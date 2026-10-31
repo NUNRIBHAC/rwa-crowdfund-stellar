@@ -29,6 +29,10 @@ export default function Financing({ market }: { market: Market }) {
         </ol>
       </section>
 
+      <p className="community-note">
+        {m.financing.builderDraftLead} <a href="/campaign-builder">{m.financing.builderDraftLink}</a>
+      </p>
+
       <IssuerApplicationPreview />
       <SignInPanel actor={market.actor} />
       <IssuerApplicationForm />

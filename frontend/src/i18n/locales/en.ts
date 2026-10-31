@@ -426,6 +426,8 @@ export const en = {
     intro:
       'Raise capital from the crowd through a Soroban contract with all-or-nothing funding. Signed-in wallets can submit an issuer application below; applications are stored for operator review. Submitting is not onboarding, listing or approval, and no financing is offered.',
     journeyAria: 'Issuer journey overview',
+    builderDraftLead: 'Draft preview:',
+    builderDraftLink: 'See how a campaign would be configured for deployment - disabled in this demo',
     journeyTitle: 'The intended journey',
     steps: [
       {

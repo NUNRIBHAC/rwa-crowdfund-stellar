@@ -438,6 +438,8 @@ export const fr: Messages = {
     intro:
       "Levez des capitaux auprès de la foule via un contrat Soroban à financement tout-ou-rien. Les portefeuilles connectés peuvent soumettre une candidature d'émetteur ci-dessous ; les candidatures sont conservées pour examen par l'opérateur. Soumettre ne constitue ni une intégration, ni une cotation, ni une approbation, et aucun financement n'est proposé.",
     journeyAria: "Résumé du parcours de l'émetteur",
+    builderDraftLead: 'Aperçu provisoire :',
+    builderDraftLink: 'Découvrez comment une campagne serait configurée pour le déploiement - désactivé dans cette démo',
     journeyTitle: 'Le parcours prévu',
     steps: [
       {

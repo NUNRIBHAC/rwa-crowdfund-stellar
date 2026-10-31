@@ -435,6 +435,8 @@ export const de: Messages = {
     intro:
       'Nehmen Sie Kapital von der Menge über einen Soroban-Vertrag mit Alles-oder-nichts-Finanzierung auf. Angemeldete Wallets können unten einen Emittentenantrag einreichen; Anträge werden zur Prüfung durch den Betreiber gespeichert. Das Einreichen ist kein Onboarding, keine Listung und keine Genehmigung, und es wird keine Finanzierung angeboten.',
     journeyAria: 'Überblick über den Weg des Emittenten',
+    builderDraftLead: 'Entwurfsvorschau:',
+    builderDraftLink: 'Sehen Sie, wie eine Kampagne für die Bereitstellung konfiguriert würde - in dieser Demo deaktiviert',
     journeyTitle: 'Der geplante Weg',
     steps: [
       {

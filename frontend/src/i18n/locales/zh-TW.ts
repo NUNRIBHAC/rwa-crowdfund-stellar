@@ -401,6 +401,8 @@ export const zhTW: Messages = {
     intro:
       '通過具有全有或全無融資機制的 Soroban 合約向公眾募集資金。已登入的錢包可在下方提交發行方申請；申請將被保存以供營運方審核。提交不等於入駐、上市或獲准，亦不構成任何融資要約。',
     journeyAria: '發行方流程概覽',
+    builderDraftLead: '草稿預覽：',
+    builderDraftLink: '查看活動將如何進行部署設定 - 本示範中已停用',
     journeyTitle: '設計中的流程',
     steps: [
       { h: '申請', p: '向我們介紹您的公司、所需金額和您考慮的金融工具。' },

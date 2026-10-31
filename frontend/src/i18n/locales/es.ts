@@ -436,6 +436,8 @@ export const es: Messages = {
     intro:
       'Capta capital de la multitud a través de un contrato Soroban con financiación todo-o-nada. Las carteras con sesión iniciada pueden enviar una solicitud de emisor abajo; las solicitudes se almacenan para su revisión por el operador. Enviar no constituye incorporación, cotización ni aprobación, y no se ofrece financiación.',
     journeyAria: 'Resumen del recorrido del emisor',
+    builderDraftLead: 'Vista previa en borrador:',
+    builderDraftLink: 'Vea cómo se configuraría una campaña para su despliegue - desactivado en esta demostración',
     journeyTitle: 'El recorrido previsto',
     steps: [
       {

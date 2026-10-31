@@ -401,6 +401,8 @@ export const zhCN: Messages = {
     intro:
       '通过具有全有或全无融资机制的 Soroban 合约向公众募集资金。已登录的钱包可在下方提交发行方申请；申请将被保存以供运营方审核。提交不等于入驻、上市或获批，也不构成任何融资要约。',
     journeyAria: '发行方流程概览',
+    builderDraftLead: '草稿预览：',
+    builderDraftLink: '查看活动将如何进行部署配置 - 本演示中已禁用',
     journeyTitle: '设计中的流程',
     steps: [
       { h: '申请', p: '向我们介绍您的公司、所需金额和您考虑的金融工具。' },

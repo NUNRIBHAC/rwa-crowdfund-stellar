@@ -435,6 +435,8 @@ export const pt: Messages = {
     intro:
       'Angarie capital junto da multidão através de um contrato Soroban com financiamento tudo-ou-nada. As carteiras com sessão iniciada podem submeter uma candidatura de emissor abaixo; as candidaturas são guardadas para análise pelo operador. Submeter não constitui adesão, listagem ou aprovação, e não é oferecido qualquer financiamento.',
     journeyAria: 'Resumo do percurso do emitente',
+    builderDraftLead: 'Pré-visualização em rascunho:',
+    builderDraftLink: 'Veja como uma campanha seria configurada para lançamento - desativado nesta demonstração',
     journeyTitle: 'O percurso previsto',
     steps: [
       {
