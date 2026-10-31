@@ -1379,6 +1379,12 @@ export const hi: Messages = {
       project: 'परियोजना',
       other: 'दस्तावेज़',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] प्रमुख निवेशक सूचना पत्रिका - काल्पनिक टेम्पलेट, कोई प्रस्ताव नहीं',
+      'demo-solar-project': '[DEMO] परियोजना अवलोकन - काल्पनिक नमूना दस्तावेज़',
+      'staging-load-kiis': '[DEMO] प्रमुख निवेशक सूचना पत्रिका - काल्पनिक टेम्पलेट, कोई प्रस्ताव नहीं',
+      'staging-load-project': '[DEMO] परियोजना अवलोकन - काल्पनिक नमूना दस्तावेज़',
+    },
     newsTitle: 'समाचार',
     newsAuthorDemo: 'प्लेटफ़ॉर्म द्वारा पोस्ट (डेमो सामग्री - कोई सत्यापित जारीकर्ता पहचान नहीं)',
     commentsTitle: 'टिप्पणियाँ',

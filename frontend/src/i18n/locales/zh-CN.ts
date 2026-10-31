@@ -1229,6 +1229,12 @@ export const zhCN: Messages = {
       project: '项目',
       other: '文件',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] 关键投资信息说明书 - 虚构模板，并非要约',
+      'demo-solar-project': '[DEMO] 项目概览 - 虚构示例文件',
+      'staging-load-kiis': '[DEMO] 关键投资信息说明书 - 虚构模板，并非要约',
+      'staging-load-project': '[DEMO] 项目概览 - 虚构示例文件',
+    },
     newsTitle: '最新动态',
     newsAuthorDemo: '由平台发布(演示内容 - 无经核验的发行人身份)',
     commentsTitle: '评论',

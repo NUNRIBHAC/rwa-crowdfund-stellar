@@ -1328,6 +1328,12 @@ export const ar: Messages = {
       project: 'المشروع',
       other: 'مستند',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] ورقة المعلومات الأساسية للمستثمر - نموذج افتراضي، ليست عرضًا',
+      'demo-solar-project': '[DEMO] نظرة عامة على المشروع - مستند نموذجي افتراضي',
+      'staging-load-kiis': '[DEMO] ورقة المعلومات الأساسية للمستثمر - نموذج افتراضي، ليست عرضًا',
+      'staging-load-project': '[DEMO] نظرة عامة على المشروع - مستند نموذجي افتراضي',
+    },
     newsTitle: 'الأخبار',
     newsAuthorDemo: 'منشور من المنصة (محتوى تجريبي - لا توجد هوية موثقة للمصدر)',
     commentsTitle: 'التعليقات',

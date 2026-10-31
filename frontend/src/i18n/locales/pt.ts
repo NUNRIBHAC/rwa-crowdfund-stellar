@@ -1429,6 +1429,12 @@ export const pt: Messages = {
       project: 'Projeto',
       other: 'Documento',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] Ficha de informação fundamental ao investidor - modelo fictício, não é uma oferta',
+      'demo-solar-project': '[DEMO] Visão geral do projeto - documento de exemplo fictício',
+      'staging-load-kiis': '[DEMO] Ficha de informação fundamental ao investidor - modelo fictício, não é uma oferta',
+      'staging-load-project': '[DEMO] Visão geral do projeto - documento de exemplo fictício',
+    },
     newsTitle: 'Notícias',
     newsAuthorDemo: 'publicado pela plataforma (conteúdo de demonstração - sem identidade de emitente verificada)',
     commentsTitle: 'Comentários',

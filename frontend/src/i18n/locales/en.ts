@@ -1382,6 +1382,12 @@ export const en = {
       project: 'Project',
       other: 'Document',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] Key investment information sheet - fictional template, not an offer',
+      'demo-solar-project': '[DEMO] Project overview - fictional sample document',
+      'staging-load-kiis': '[DEMO] Key investment information sheet - fictional template, not an offer',
+      'staging-load-project': '[DEMO] Project overview - fictional sample document',
+    },
     // Campaign news (posted by the operator through the admin key as issuer stand-in)
     newsTitle: 'News',
     newsAuthorDemo: 'posted by the platform (demo content - no verified issuer identity)',

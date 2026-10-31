@@ -1433,6 +1433,12 @@ export const es: Messages = {
       project: 'Proyecto',
       other: 'Documento',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] Ficha de información clave para el inversor - plantilla ficticia, no es una oferta',
+      'demo-solar-project': '[DEMO] Descripción del proyecto - documento de muestra ficticio',
+      'staging-load-kiis': '[DEMO] Ficha de información clave para el inversor - plantilla ficticia, no es una oferta',
+      'staging-load-project': '[DEMO] Descripción del proyecto - documento de muestra ficticio',
+    },
     newsTitle: 'Noticias',
     newsAuthorDemo: 'publicado por la plataforma (contenido de demostración - sin identidad de emisor verificada)',
     commentsTitle: 'Comentarios',

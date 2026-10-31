@@ -1346,6 +1346,12 @@ export const ja: Messages = {
       project: 'プロジェクト',
       other: 'ドキュメント',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] 投資家向け重要情報シート - 架空のテンプレート、オファーではありません',
+      'demo-solar-project': '[DEMO] プロジェクト概要 - 架空のサンプル文書',
+      'staging-load-kiis': '[DEMO] 投資家向け重要情報シート - 架空のテンプレート、オファーではありません',
+      'staging-load-project': '[DEMO] プロジェクト概要 - 架空のサンプル文書',
+    },
     newsTitle: 'ニュース',
     newsAuthorDemo: 'プラットフォームによる投稿(デモコンテンツ - 検証済みの発行者身元ではありません)',
     commentsTitle: 'コメント',

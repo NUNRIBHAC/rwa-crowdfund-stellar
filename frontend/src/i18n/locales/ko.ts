@@ -1319,6 +1319,12 @@ export const ko: Messages = {
       project: '프로젝트',
       other: '문서',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] 핵심 투자 정보 문서 - 가상의 템플릿, 청약이 아님',
+      'demo-solar-project': '[DEMO] 프로젝트 개요 - 가상의 샘플 문서',
+      'staging-load-kiis': '[DEMO] 핵심 투자 정보 문서 - 가상의 템플릿, 청약이 아님',
+      'staging-load-project': '[DEMO] 프로젝트 개요 - 가상의 샘플 문서',
+    },
     newsTitle: '소식',
     newsAuthorDemo: '플랫폼 게시(데모 콘텐츠 - 검증된 발행인 신원 아님)',
     commentsTitle: '댓글',

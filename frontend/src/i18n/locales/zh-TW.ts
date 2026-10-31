@@ -1229,6 +1229,12 @@ export const zhTW: Messages = {
       project: '專案',
       other: '文件',
     },
+    demoDocumentTitles: {
+      'demo-solar-kiis': '[DEMO] 關鍵投資資訊說明書 - 虛構範本，並非要約',
+      'demo-solar-project': '[DEMO] 專案概覽 - 虛構範例文件',
+      'staging-load-kiis': '[DEMO] 關鍵投資資訊說明書 - 虛構範本，並非要約',
+      'staging-load-project': '[DEMO] 專案概覽 - 虛構範例文件',
+    },
     newsTitle: '最新消息',
     newsAuthorDemo: '由平台發佈(示範內容 - 無經驗證的發行人身分)',
     commentsTitle: '留言',
