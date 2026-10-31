@@ -199,7 +199,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
 
         <aside className="invest-widget" aria-label="Invest">
           <h2 className="widget-title">{status === 'open' ? 'Contribute' : 'Investment overview'}</h2>
-          <FundingGrid raised={campaign.raised} goal={campaign.config.goal} tileCount={100} />
+          <FundingGrid raised={campaign.raised} goal={campaign.config.goal} layout="block" />
           <dl className="stat-grid">
             <div>
               <dt>Raised</dt>
@@ -268,3 +268,4 @@ function instrumentExplainer(profile: CampaignProfile): string {
   }
   return 'This instrument class is described in the Learn hub.';
 }
+
