@@ -1604,7 +1604,7 @@ textarea:focus-visible,
   position: relative;
   z-index: 1;
   margin: 0;
-  padding: 56px 328px 40px 24px;
+  padding: 24px 328px 24px 24px;
   min-height: 150px;
   display: flex;
   align-items: flex-start;
@@ -1663,7 +1663,7 @@ textarea:focus-visible,
   /* The tile figure must stay fully visible ("a figura tem que se ver toda"):
      stack it below the tagline at a readable size instead of hiding it. */
   .footer-brand-inner {
-    padding: 40px 24px 32px;
+    padding: 24px 24px 24px;
     flex-direction: column;
   }
   .footer-tiles {
