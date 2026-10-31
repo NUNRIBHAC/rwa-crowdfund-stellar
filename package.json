@@ -11,7 +11,8 @@
     "dev:frontend": "npm --workspace frontend run dev",
     "build": "npm --workspace backend run build && npm --workspace frontend run build",
     "setup": "npm --workspace backend run setup",
-    "test": "npm --workspace backend run test && npm --workspace frontend run test",
+    "test": "npm --workspace backend run test && npm --workspace frontend run test && npm run test:ui-kit",
+    "test:ui-kit": "node --test brand/ui-kit/components/cards/funding-math.test.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
