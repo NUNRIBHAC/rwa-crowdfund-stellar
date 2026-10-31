@@ -49,10 +49,6 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-            <div>
-              <h2 className="footer-heading">{m.footer.status}</h2>
-              <p>{m.footer.statusText}</p>
-            </div>
           </div>
           <p className="footer-legal">
             {m.footer.legalPre}{' '}
@@ -61,6 +57,10 @@ export default function Footer() {
             </a>
             {m.footer.legalPost}
           </p>
+          <div className="footer-status">
+            <h2 className="footer-heading">{m.footer.status}</h2>
+            <p>{m.footer.statusText}</p>
+          </div>
           <svg className="footer-tiles" viewBox="0 0 320 200" aria-hidden="true">
             <rect x="118" y="16" width="66" height="66" rx="15" fill="#8B8EF0" transform="rotate(8 151 49)" />
             <rect x="258" y="20" width="36" height="36" rx="8" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(12 276 38)" />
