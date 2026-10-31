@@ -15,7 +15,7 @@ The instrument hierarchy, financing types, property types, the 17 industry categ
 | Total entries / total URLs                                                                                          |      152 / 152 |
 | Distinct round URLs (no duplicates among the 141)                                                                   |            141 |
 | Round pages live / round page returning a 404 error page                                                            | 140 / 1 (R139) |
-| Unique offerings across the 141 round URLs, counting repeat issuers once                                            |            125 |
+| Distinct issuers across the 141 rounds (each round is a separate offering; repeat issuers counted once)             |            125 |
 
 The supplied number 7 appears twice: `7. https://www.invesdor.com/invest-in-companies/fixedincome` and `7. https://www.invesdor.com/success-stories/neoh`. Both are kept, in supplied order, and nothing was renumbered. The 141 round URLs arrived unnumbered; R-numbers are analysis IDs assigned in supplied order, not user labels. All 152 URLs were fetched live on 2026-10-31 (00:37-00:38 WET). One round page (R139, `https://www.invesdor.com/rounds/47efa3c1-a425-41d9-91b5-9f78406f58be`) renders the site's 404 error page; see section 3.
 
@@ -99,7 +99,7 @@ No new instrument category is required by the evidence: every supplied round is 
 
 ## 4. Repeat issuers, translations and page state
 
-Repeat issuers (separate round pages with distinct round IDs, kept as separate rows; offerings counted once in the unique-offering count):
+Repeat issuers (13 issuers raised more than one round; every round is a separate offering with its own round ID, campaign and raised amount, and stays its own row. The 125 below counts distinct issuers, not offerings):
 
 | Issuer              | Rows             |
 | ------------------- | ---------------- |
@@ -161,7 +161,7 @@ Self-storage operators are filed under Real estate as a judgment call (self-stor
 
 ## 7. Counts by industry category
 
-| Industry category                                      | Rows    | Unique offerings |
+| Industry category                                      | Rows    | Distinct issuers |
 | ------------------------------------------------------ | ------- | ---------------- |
 | Food and beverage products                             | 9       | 7                |
 | Information Technology, software and digital platforms | 20      | 18               |
