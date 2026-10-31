@@ -1,16 +1,17 @@
 // Floating right-edge feedback tab (CONDA S-048/S-149 pattern), visible on
 // every page. Opens a small panel that posts a support ticket with kind
 // 'feedback' through the existing community API - no new backend needed.
-// Signed-out visitors get a sign-in prompt instead of the form.
+// Signed-out visitors get a working route in: connect the wallet and sign
+// the challenge without leaving the panel, then the form appears.
 // Mount once at app root (below the header so the theme/nav z-order is kept).
 import { useState } from 'react';
 import { createTicket } from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 
-export default function FeedbackTab() {
+export default function FeedbackTab({ actor, onConnect }: { actor: string; onConnect: () => Promise<void> }) {
   const { m } = useI18n();
-  const { account, token } = useCommunityAuth();
+  const { account, token, signIn, busy: authBusy, error: authError } = useCommunityAuth();
   const labels = m.community;
   const [open, setOpen] = useState(false);
   const [subject, setSubject] = useState('');
@@ -18,6 +19,16 @@ export default function FeedbackTab() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
+  const [connectBusy, setConnectBusy] = useState(false);
+  const [connectError, setConnectError] = useState('');
+
+  const connect = () => {
+    setConnectBusy(true);
+    setConnectError('');
+    onConnect()
+      .catch((err) => setConnectError(err instanceof Error ? err.message : String(err)))
+      .finally(() => setConnectBusy(false));
+  };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +55,28 @@ export default function FeedbackTab() {
           <h3>{labels.feedbackPanelTitle}</h3>
           <p className="community-note">{labels.feedbackPanelIntro}</p>
           {!account ? (
-            <p className="community-note">{labels.feedbackSignInPrompt}</p>
+            <>
+              <p className="community-note">{labels.feedbackSignInPrompt}</p>
+              {connectError && (
+                <p role="alert" className="community-error">
+                  {connectError}
+                </p>
+              )}
+              {authError && (
+                <p role="alert" className="community-error">
+                  {authError}
+                </p>
+              )}
+              {!actor ? (
+                <button className="btn btn-primary" disabled={connectBusy} onClick={connect}>
+                  {m.header.connect}
+                </button>
+              ) : (
+                <button className="btn btn-primary" disabled={authBusy} onClick={() => signIn(actor)}>
+                  {labels.signInButton}
+                </button>
+              )}
+            </>
           ) : done ? (
             <p className="community-note">{labels.feedbackSubmitted}</p>
           ) : (
