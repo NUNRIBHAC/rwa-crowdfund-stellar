@@ -74,9 +74,8 @@ code {
 }
 .brand-lockup {
   display: block;
-  height: 36px;
+  height: 48px;
   width: auto;
-  min-width: 102px;
   flex: none;
 }
 .wallet-chip {
@@ -662,16 +661,26 @@ code {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-/* Mid widths (721-1150px): the 8-item nav, language selector, testnet badge and
-   Connect button cannot share one 76px row - wrap to two rows like mobile. */
-@media (min-width: 721px) and (max-width: 1150px) {
+/* Mid widths (721-1599px): the 8-item nav, language selector, testnet badge,
+   theme toggle and Connect button cannot share one 76px row below ~1660px
+   (worst case FR needs ~1650px with the 48px lockup) - wrap to two compact rows: brand + side
+   controls on the first, the full-width centred nav on the second. */
+@media (min-width: 721px) and (max-width: 1659px) {
   .header-inner {
     flex-wrap: wrap;
     min-height: 0;
-    row-gap: 8px;
+    row-gap: 6px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .header-main {
+    display: contents;
+  }
+  .header-side {
+    margin-left: auto;
   }
   .site-nav {
     order: 3;
@@ -687,7 +696,7 @@ code {
     padding: 10px 16px;
   }
   .brand-lockup {
-    height: 30px;
+    height: 34px;
   }
   .nav-link {
     font-size: 15px;
@@ -707,7 +716,7 @@ code {
   text-decoration: none;
   font-size: 16px;
   font-weight: 500;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 8px;
 }
 .nav-link:hover {
@@ -1583,7 +1592,7 @@ textarea:focus-visible,
 }
 .footer-brand-lockup-img {
   display: block;
-  height: 26px;
+  height: 36px;
   width: auto;
   flex: none;
 }
