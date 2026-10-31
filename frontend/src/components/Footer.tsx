@@ -92,6 +92,23 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
+            <div>
+              <h2 className="footer-heading">{m.footer.communication}</h2>
+              <ul>
+                <li>
+                  <a href={routeHash({ name: 'events' })}>{m.contentPages.eventsTitle}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'blog' })}>{m.contentPages.blogTitle}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'press' })}>{m.contentPages.pressTitle}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'jobs' })}>{m.contentPages.jobsTitle}</a>
+                </li>
+              </ul>
+            </div>
             <div className="footer-context">
               <p className="footer-legal">
                 {m.footer.legalPre}{' '}

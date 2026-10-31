@@ -18,7 +18,11 @@ export type RouteName =
   | 'legal-notice'
   | 'conflicts-of-interest'
   | 'complaints-management'
-  | 'business-continuity';
+  | 'business-continuity'
+  | 'events'
+  | 'blog'
+  | 'press'
+  | 'jobs';
 
 export type Route = { name: RouteName; campaignId?: string };
 
@@ -40,6 +44,10 @@ const KNOWN_SEGMENTS = new Set([
   'conflicts-of-interest',
   'complaints-management',
   'business-continuity',
+  'events',
+  'blog',
+  'press',
+  'jobs',
 ]);
 
 // Path routing serves real per-page URLs (needed for the XML sitemap and
@@ -83,6 +91,14 @@ export function routeFromPath(pathname: string): Route {
       return { name: 'complaints-management' };
     case 'business-continuity':
       return { name: 'business-continuity' };
+    case 'events':
+      return { name: 'events' };
+    case 'blog':
+      return { name: 'blog' };
+    case 'press':
+      return { name: 'press' };
+    case 'jobs':
+      return { name: 'jobs' };
     default:
       return { name: 'home' };
   }

@@ -1,0 +1,129 @@
+/* Content surfaces slice: feedback tab, campaign tour, investor categorisation.
+   Brand tokens only: primary #4B4FE2, hover #363AB2, error #FF5252, border #7376E8;
+   transitions 200ms per brand/ui-kit/motion; no new keyframes.
+   RTL rule: fixed tab/panel keep physical right edge in every locale (containers LTR);
+   text alignment stays logical so html.rtl-text flips text only. */
+
+.feedback-tab {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  z-index: 40;
+  background: #4b4fe2;
+  color: #fff;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  padding: 16px 8px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.feedback-tab:hover {
+  background: #363ab2;
+}
+
+.feedback-tab:focus-visible {
+  outline: 3px solid rgba(75, 79, 226, 0.12);
+  outline-offset: 2px;
+}
+
+.feedback-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(400px, 100vw);
+  z-index: 50;
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--card, #fff);
+  border-left: 1px solid #e6e6fb;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.08);
+  text-align: start;
+}
+
+.feedback-panel label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.feedback-panel input,
+.feedback-panel textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  border: 1px solid #7376e8;
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+.feedback-panel input:focus-visible,
+.feedback-panel textarea:focus-visible {
+  border-width: 1.5px;
+  outline: 3px solid rgba(75, 79, 226, 0.12);
+  outline-offset: 0;
+}
+
+.tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 16, 40, 0.4);
+}
+
+.tour-card {
+  max-width: 480px;
+  width: 100%;
+  padding: 24px;
+  border-radius: 8px;
+  background: var(--card, #fff);
+  text-align: start;
+}
+
+.cat-question {
+  border: 1px solid #e6e6fb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.cat-question legend {
+  font-weight: 600;
+  padding: 0 8px;
+}
+
+.cat-option {
+  display: block;
+  margin: 8px 0;
+}
+
+.cat-option input {
+  margin-inline-end: 8px;
+}
+
+/* Integration glue: chip-row and demo-badge were referenced by community
+   components but never styled; defined here with the same brand tokens. */
+.chip-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.demo-badge {
+  display: inline-block;
+  vertical-align: middle;
+  background: #4b4fe2;
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.65em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}

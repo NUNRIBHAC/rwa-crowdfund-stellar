@@ -29,6 +29,8 @@ import LegalNotice from './pages/LegalNotice';
 import ConflictsOfInterest from './pages/ConflictsOfInterest';
 import ComplaintsManagement from './pages/ComplaintsManagement';
 import BusinessContinuity from './pages/BusinessContinuity';
+import FeedbackTab from './components/FeedbackTab';
+import { BlogPage, EventsPage, JobsPage, PressPage } from './components/ContentPages';
 import { useI18n } from './i18n';
 import { CommunityAuthProvider } from './community/CommunityAuth';
 
@@ -233,8 +235,13 @@ export default function App() {
         {route.name === 'conflicts-of-interest' && <ConflictsOfInterest />}
         {route.name === 'complaints-management' && <ComplaintsManagement />}
         {route.name === 'business-continuity' && <BusinessContinuity />}
+        {route.name === 'events' && <EventsPage />}
+        {route.name === 'blog' && <BlogPage />}
+        {route.name === 'press' && <PressPage />}
+        {route.name === 'jobs' && <JobsPage />}
 
         <Footer />
+        <FeedbackTab />
       </main>
     </CommunityAuthProvider>
   );

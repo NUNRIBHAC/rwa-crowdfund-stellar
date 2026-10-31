@@ -11,6 +11,7 @@ import DocumentsList from '../components/DocumentsList';
 import NewsList from '../components/NewsList';
 import Comments from '../components/Comments';
 import type { Messages } from '../i18n/locales/en';
+import CampaignTour from '../components/CampaignTour';
 
 const TAB_IDS = ['overview', 'details', 'documents', 'news'] as const;
 
@@ -221,6 +222,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           )}
 
           <Comments campaignId={campaign.id} />
+          <CampaignTour />
         </div>
 
         <aside className="invest-widget" aria-label={m.nav.investments}>
