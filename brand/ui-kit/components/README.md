@@ -19,7 +19,9 @@ components/
   cards/
     AssetCard.tsx        Asset card (React + TypeScript) - funding progress
     AssetCard.css        renders the exact number of filled blocks computed
-    README.md            from the on-chain raised/goal values
+    funding-math.ts      from the on-chain raised/goal values (BigInt, exact)
+    funding-math.test.ts regression tests (node:test, no dependencies)
+    README.md
   feedback/
     StatusBadge.tsx      Small status labels (success / warning / danger)
     StatusBadge.css      always paired with Ink #14163A text (WCAG)
@@ -34,8 +36,19 @@ they are now grouped one folder per component family. The motion spec stays at
 
 The code components are React + TypeScript, styled with the `--bl-*` design
 tokens from `brand/brand-tokens.css` (fallbacks are inlined, so they also
-render without the token file). They are library components: not yet wired
-into the live frontend, which keeps its own `frontend/src/components/`.
+render without the token file). The live frontend wires the same grid through
+`frontend/src/components/FundingGrid.tsx` (strip layout on campaign cards,
+block layout on the campaign detail page) with the same math in
+`frontend/src/funding-math.ts`.
+
+## Data honesty
+
+`raised` / `goal` accept `null` (or an invalid string) for a chain read that
+has not landed or failed: the card then renders "Data unavailable" with an
+empty grid and unknown progress - never a fabricated 0%. A verified `"0"` is
+a real zero. The status badge only renders when an explicit `status` is
+passed from the source. Regression tests for these cases live in
+`cards/funding-math.test.ts` (`node --test`, also covered by `npm test`).
 
 ```tsx
 import AssetCard from './components/cards/AssetCard';
