@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import FundingGrid from '../components/FundingGrid';
 import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
-import { deadlineInfo, formatAmount, percent, shorten } from '../format';
+import { deadlineInfo, formatAmount, shorten } from '../format';
 import { profileFor, type CampaignProfile } from '../data/profiles';
 import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
@@ -28,7 +29,6 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
   }
 
   const profile = profileFor(campaign, market.fixtureMode);
-  const pct = percent(campaign.raised, campaign.config.goal);
   const dl = deadlineInfo(campaign.config.deadline);
   const status = campaignStatus(campaign);
   const statusLabel = status === 'funded' ? 'Successfully financed' : status === 'ended' ? 'Unsuccessful' : dl.label;
@@ -199,19 +199,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
 
         <aside className="invest-widget" aria-label="Invest">
           <h2 className="widget-title">{status === 'open' ? 'Contribute' : 'Investment overview'}</h2>
-          <div className="progress-row">
-            <div
-              className="progress-track"
-              role="progressbar"
-              aria-valuenow={pct}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-label={`Funding progress: ${pct}% of goal`}
-            >
-              <div className="progress-fill" style={{ width: `${pct}%` }} />
-            </div>
-            <span className="progress-pct">{pct}%</span>
-          </div>
+          <FundingGrid raised={campaign.raised} goal={campaign.config.goal} tileCount={100} />
           <dl className="stat-grid">
             <div>
               <dt>Raised</dt>

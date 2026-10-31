@@ -71,6 +71,7 @@ export default function Home({ market }: { market: Market }) {
                 actor={market.actor}
                 busy={market.busy}
                 readOnly={fixtureMode}
+                demo={fixtureMode}
                 amount={market.amounts[c.id] ?? ''}
                 onAmount={(v) => market.onAmount(c.id, v)}
                 onPrepare={(action) => market.onPrepare(c, action)}
