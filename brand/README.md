@@ -49,14 +49,25 @@ brand-tokens.css / brand-tokens.json   Design tokens (colors, fonts, radii, spac
                                        layout grid, motion, component states)
 
 ui-kit/            Interface foundations for the platform
-  components/layout-foundations.svg    Grid (12-col desktop / 4-col mobile, 24px margins),
-                                       spacing scale, corner radius scale
-  components/buttons-states.svg        Button states: default, hover, active, disabled
-                                       (primary Indigo + secondary outline)
-  components/form-inputs.svg           Text inputs and checkboxes: normal, focus, error,
-                                       disabled
-  components/funding-grid-spec.svg     Scaling the token block as a progress grid
-                                       (3x3 summaries to 10x10 detail, 1 tile = 1%)
+  components/buttons/buttons-states.svg        Button states: default, hover, active,
+                                               disabled (primary Indigo + secondary outline)
+  components/forms/form-inputs.svg             Text inputs and checkboxes: normal, focus,
+                                               error, disabled
+  components/funding-grid/funding-grid-spec.svg  Scaling the token block as a progress
+                                               grid (3x3 summaries to 10x10 detail,
+                                               1 tile = 1%)
+  components/layout/layout-foundations.svg     Grid (12-col desktop / 4-col mobile,
+                                               24px margins), spacing scale, corner
+                                               radius scale
+  components/cards/AssetCard.tsx (+ .css, README)  Asset card component (React + TS):
+                                               the funding progress renders the exact
+                                               number of filled blocks computed from the
+                                               on-chain raised/goal values (BigInt math,
+                                               10x10 detail or 3x3 summary grid)
+  components/feedback/StatusBadge.tsx (+ .css, README)  Status labels (success, warning,
+                                               danger) always paired with Ink #14163A
+                                               text for WCAG contrast
+  components/README.md                         Component library index and usage
   motion/token-fitting-spec.json       Motion values: global transition, token docking,
                                        loading pulse, reduced-motion behavior
 
