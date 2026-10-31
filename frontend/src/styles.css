@@ -1578,7 +1578,7 @@ textarea:focus-visible,
   position: relative;
   z-index: 1;
   margin: 0;
-  padding: 32px 24px;
+  padding: 56px 328px 40px 24px;
   min-height: 150px;
   display: flex;
   flex-direction: column;
@@ -1592,7 +1592,7 @@ textarea:focus-visible,
 }
 .footer-brand-lockup-img {
   display: block;
-  height: 36px;
+  height: 60px;
   width: auto;
   flex: none;
 }
@@ -1611,6 +1611,9 @@ textarea:focus-visible,
   pointer-events: none;
 }
 @media (max-width: 720px) {
+  .footer-brand-inner {
+    padding-right: 210px;
+  }
   .footer-tiles {
     width: 170px;
     height: 108px;
@@ -1618,10 +1621,16 @@ textarea:focus-visible,
   }
 }
 @media (max-width: 560px) {
-  /* Decorative tiles would overlap the tagline block: hide them outright
-     rather than dim them behind text. */
+  /* The tile figure must stay fully visible ("a figura tem que se ver toda"):
+     stack it below the tagline at a readable size instead of hiding it. */
+  .footer-brand-inner {
+    padding: 40px 24px 32px;
+  }
   .footer-tiles {
-    display: none;
+    position: static;
+    transform: none;
+    width: 220px;
+    height: 138px;
   }
 }
 
