@@ -64,7 +64,7 @@ async function login(kp: Keypair): Promise<string> {
     body: { publicKey: kp.publicKey() },
   });
   assert.equal(ch.status, 200);
-  const sig = Buffer.from(kp.sign(Buffer.from(ch.json.message, 'utf8'))).toString('base64');
+  const sig = Buffer.from(kp.signMessage(ch.json.message)).toString('base64');
   const v = await api('POST', '/api/auth/verify', {
     body: { publicKey: kp.publicKey(), signature: sig },
   });
