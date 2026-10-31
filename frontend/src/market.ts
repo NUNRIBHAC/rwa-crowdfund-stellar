@@ -8,6 +8,7 @@ export type Market = {
   actor: string;
   busy: boolean;
   amounts: Record<string, string>;
+  amountErrors: Record<string, string>;
   onAmount: (id: string, v: string) => void;
   onPrepare: (c: Campaign, action: 'contribute' | 'refund' | 'withdraw') => void;
   onRefresh: () => void;

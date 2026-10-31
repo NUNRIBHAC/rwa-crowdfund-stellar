@@ -52,6 +52,7 @@ export default function Home({ market }: { market: Market }) {
                 readOnly={fixtureMode}
                 demo={fixtureMode}
                 amount={market.amounts[c.id] ?? ''}
+                amountError={market.amountErrors[c.id]}
                 onAmount={(v) => market.onAmount(c.id, v)}
                 onPrepare={(action) => market.onPrepare(c, action)}
               />

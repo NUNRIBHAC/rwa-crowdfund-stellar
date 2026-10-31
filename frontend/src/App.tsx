@@ -3,6 +3,7 @@ import { isConnected, requestAccess, signTransaction } from '@stellar/freighter-
 import type { Campaign, Intent } from './types';
 import { isTerminal } from './types';
 import { api } from './api';
+import { contributionError, formatAmount } from './format';
 import { FIXTURE_CAMPAIGNS } from './fixtures';
 import type { Market } from './market';
 import { useRoute } from './router';
@@ -34,13 +35,14 @@ import { CommunityAuthProvider } from './community/CommunityAuth';
 const INTENT_KEY = 'rwa-soroban-intent';
 
 export default function App() {
-  const { m } = useI18n();
+  const { m, locale } = useI18n();
   const route = useRoute();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [actor, setActor] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
+  const [amountErrors, setAmountErrors] = useState<Record<string, string>>({});
   const [loaded, setLoaded] = useState(false);
   const [fixtureMode, setFixtureMode] = useState(false);
   const [intent, setIntent] = useState<Intent | null>(() => {
@@ -97,8 +99,21 @@ export default function App() {
     await refresh(r.address);
   }
 
+  function validateAmount(c: Campaign, raw: string): string {
+    const code = contributionError(raw ?? '', c.config.goal, c.raised);
+    if (code === 'required') return m.card.amountRequired;
+    if (code === 'invalid') return m.card.amountInvalid;
+    if (code === 'exceeds') return m.card.amountExceeds(formatAmount(String(BigInt(c.config.goal) - BigInt(c.raised)), locale));
+    return '';
+  }
+
   async function prepare(c: Campaign, action: 'contribute' | 'refund' | 'withdraw') {
     if (!actor) throw new Error(m.errors.connectFirst);
+    if (action === 'contribute') {
+      const msg = validateAmount(c, amounts[c.id] ?? '');
+      setAmountErrors({ ...amountErrors, [c.id]: msg });
+      if (msg) return;
+    }
     if (intent && !isTerminal(intent.status)) {
       throw new Error(m.errors.resolveSaved);
     }
@@ -153,7 +168,13 @@ export default function App() {
     actor,
     busy,
     amounts,
-    onAmount: (id, v) => setAmounts({ ...amounts, [id]: v }),
+    amountErrors,
+    onAmount: (id, v) => {
+      setAmounts({ ...amounts, [id]: v });
+      const c = campaigns.find((x) => x.id === id);
+      if (!c) return;
+      setAmountErrors({ ...amountErrors, [id]: v.trim() === '' ? '' : validateAmount(c, v) });
+    },
     onPrepare: (c, action) => run(() => prepare(c, action)),
     onRefresh: () => run(() => refresh()),
     onToggleFixtures: toggleFixtures,

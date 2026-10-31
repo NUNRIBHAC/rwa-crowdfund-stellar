@@ -252,8 +252,10 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
                   onChange={(e) => market.onAmount(campaign.id, e.target.value)}
                   placeholder="10.00"
                   inputMode="decimal"
+                  aria-invalid={market.amountErrors[campaign.id] ? true : undefined}
                 />
               </label>
+              {market.amountErrors[campaign.id] ? <p className="field-error">{market.amountErrors[campaign.id]}</p> : null}
               <div className="btn-row">
                 <button className="btn btn-primary" disabled={market.busy || !market.actor} onClick={() => market.onPrepare(campaign, 'contribute')}>
                   {m.card.contribute}

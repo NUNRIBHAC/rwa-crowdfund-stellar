@@ -86,3 +86,18 @@ export function deadlineInfo(seconds: string, l: DeadlineLabels): { date: string
 export function shorten(id: string, head = 6, tail = 4): string {
   return id.length > head + tail + 3 ? `${id.slice(0, head)}...${id.slice(-tail)}` : id;
 }
+
+// Client-side contribution validation mirrors backend amountUnits (decimal
+// string, at most 7 places, positive i128) plus the remaining-goal cap.
+export type ContributionError = 'required' | 'invalid' | 'exceeds';
+
+export function contributionError(amount: string, goal: string, raised: string): ContributionError | null {
+  const v = amount.trim();
+  if (v === '') return 'required';
+  if (!/^\d+(\.\d{1,7})?$/.test(v)) return 'invalid';
+  const [whole, fraction = ''] = v.split('.');
+  const amountUnits = BigInt(whole) * 10000000n + BigInt((fraction + '0000000').slice(0, 7));
+  if (amountUnits <= 0n) return 'invalid';
+  if (amountUnits > BigInt(goal) - BigInt(raised)) return 'exceeds';
+  return null;
+}
