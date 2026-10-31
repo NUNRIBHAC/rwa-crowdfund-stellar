@@ -59,13 +59,14 @@ code {
   z-index: 10;
 }
 .header-inner {
-  padding: 14px 24px;
-  min-height: 76px;
+  padding: 10px 24px;
   box-sizing: border-box;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
   align-items: center;
-  gap: 24px;
-  flex-wrap: nowrap;
+  column-gap: 24px;
+  row-gap: 6px;
 }
 .brand {
   display: flex;
@@ -211,6 +212,12 @@ code {
    focus, open-in-new-tab, per-campaign href); no extra anchors are added.
    Interactive controls (amount input, buttons, contract details) stay above
    the overlay so they are never hijacked. */
+/* Campaign titles read as headings, not underlined links (user request
+   2026-10-31); the card keeps its visited-color pin and the focus-visible
+   outline below keeps keyboard focus visible. */
+.card-title a {
+  text-decoration: none;
+}
 .card-title a::after {
   content: '';
   position: absolute;
@@ -575,6 +582,7 @@ code {
   font-family: inherit;
   background: var(--navy);
   color: #fff;
+  flex: none;
 }
 @media (max-width: 420px) {
   .lang-select {
@@ -675,81 +683,70 @@ code {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.45;
-  padding: 12px 16px;
+  padding: 12px 52px;
+  position: relative;
+}
+/* Theme toggle at the banner's inline end (user target, 2026-10-31). The
+   symmetric banner padding keeps the text centred and clear of the button. */
+.risk-theme-toggle {
+  position: absolute;
+  inset-inline-end: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-/* Brand + main navigation: grouped and shifted toward the centre of the bar;
-   the testnet badge and Connect Freighter stay at the right edge. */
+/* Header arrangement (user target, 2026-10-31): the brand spans both rows on
+   the left; the right column carries the testnet badge + Connect on the top
+   row with the language selector directly below; the nav sits on the lower
+   middle row. The grid follows the document direction, so Arabic mirrors the
+   whole arrangement for free. */
 .header-main {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-  flex-wrap: wrap;
+  display: contents;
+}
+.brand {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  justify-self: start;
 }
 .site-nav {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
   align-items: center;
-  flex: 0 1 auto;
   min-width: 0;
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: center;
 }
 .header-side {
   margin-left: auto;
-  flex: none;
+  grid-column: 3;
+  grid-row: 1 / span 2;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+}
+.header-side-top {
+  display: flex;
   align-items: center;
   gap: 8px;
 }
-
-/* Mid widths (721-1599px): the 8-item nav, language selector, testnet badge,
-   theme toggle and Connect button cannot share one 76px row below ~1660px
-   (worst case FR needs ~1650px with the 48px lockup) - wrap to two compact rows: brand + side
-   controls on the first, the full-width centred nav on the second. */
-@media (min-width: 721px) and (max-width: 1659px) {
-  /* Two-row layout: the brand lockup spans both rows and centres against the
-     combined height of the controls row and the nav row (user request: align
-     with BOTH, not one row). */
-  .header-inner {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    column-gap: 24px;
-    row-gap: 6px;
-    min-height: 0;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  .header-main {
-    display: contents;
-  }
-  .brand {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    align-self: center;
-    justify-self: start;
-  }
-  .header-side {
-    grid-column: 2;
-    grid-row: 1;
-    margin-left: auto;
-  }
+@media (max-width: 1119px) {
+  /* Below ~1120px the middle column cannot hold the 8-item nav between the
+     brand and the side controls: let it span the full second row instead. */
   .site-nav {
     grid-column: 1 / -1;
     grid-row: 2;
-    justify-content: center;
-    justify-self: center;
   }
 }
+
 @media (max-width: 720px) {
   .header-inner {
+    display: flex;
     flex-wrap: wrap;
     align-items: center;
-    min-height: 0;
     padding: 10px 16px;
   }
   .brand-lockup {
@@ -761,23 +758,25 @@ code {
   .site-nav {
     order: 3;
     flex-basis: 100%;
-  }
-  .header-side {
-    flex-direction: row;
-    align-items: center;
-    padding-bottom: 0;
+    justify-content: center;
   }
 }
 @media (max-width: 560px) {
-  /* The side controls (language, testnet badge, theme toggle, Connect) get
-     their own full-width row and wrap INSIDE the viewport; sharing the brand
-     row let the Connect button clip at the right edge. */
+  /* The side controls (language, testnet badge, Connect) get their own
+     full-width row and wrap INSIDE the viewport; sharing the brand row let
+     the Connect button clip at the right edge. The select keeps its natural
+     width so the full locale label stays readable. */
   .header-side {
     flex: 1 1 100%;
     order: 2;
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-end;
+    align-items: center;
     row-gap: 6px;
+  }
+  .header-side-top {
+    display: contents;
   }
   .header-inner {
     column-gap: 12px;
@@ -785,9 +784,6 @@ code {
   .badge-testnet {
     font-size: 11px;
     padding: 4px 8px;
-  }
-  .lang-select {
-    max-width: 110px;
   }
   .header-actions .btn {
     padding: 8px 12px;
@@ -1681,7 +1677,12 @@ textarea:focus-visible,
   position: relative;
   background: var(--navy);
   width: 100vw;
-  margin: 40px 0 -64px calc(50% - 50vw);
+  margin-block: 40px -64px;
+  /* margin-inline-start (not physical margin-left): in RTL an over-constrained
+     block ignores margin-left, which left the band right-anchored and shifted
+     111px off the viewport's left edge. The logical margin keeps the band
+     centred in both directions. */
+  margin-inline-start: calc(50% - 50vw);
   overflow: hidden;
 }
 
