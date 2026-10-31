@@ -1147,6 +1147,47 @@ export const zhTW: Messages = {
     jobsEmpty: '目前沒有開放職缺。',
     jobsSpeculativeNote: '此示範不收集自薦申請。',
     jobsDemoNote: '示範頁面:發布的職缺將顯示在這裡。目前沒有真實職缺。',
+    eventsHowTitle: '活動將如何運作',
+    eventsHowBody: '當平台安排真實活動時,活動會顯示在「即將舉行」下,包含日期、形式和報名方式。已結束的活動會移至「往期」。在此之前,兩個清單都如實保持空白。',
+    blogPosts: [
+      {
+        date: '2026-10-31',
+        title: 'Blockallisto 是什麼 - 以及不是什麼',
+        paragraphs: [
+          'Blockallisto 是在 Stellar 測試網上運行的代幣化群眾募資投資工作原型。它探索透明投資平台可能的運作方式:公開的活動條款、鏈上出資記錄和可執行的退款規則。',
+          '它不是投資平台。本網站沒有任何真實發行、真實資金或投資建議。所有活動都在 Stellar 測試網上運行,而測試網資產在設計上毫無價值。',
+          '真實的是這套機制:智能合約、錢包流程和本網站以毫無價值的測試資產運作,同時原型持續被使用和打磨。',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: '一個活動從頭到尾如何運作',
+        paragraphs: [
+          '每個活動都是一個帶有目標和截止日期的 Soroban 智能合約。訪客連接 Freighter 錢包並出資測試網 USDC;每筆已確認的出資在鏈上和活動進度條中都可見。',
+          '合約在沒有中間人的情況下執行結果:截止後,只有達到目標,建立者才能提款。如果活動結束時低於目標,每位出資者簽署自己的退款並取回出資。',
+          '連接錢包後,您的持倉、動態和通知都在「我的帳戶」下 - 按錢包保存在伺服器上,而不是 cookie 中。',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: '為什麼示範網站也有法律頁面',
+        paragraphs: [
+          '本原型的結構借鑒自真實的群眾募資監管。歐盟根據 ECSPR 監管群眾募資,獲授權的服務商列入 ESMA 註冊名錄;Blockallisto 不是獲授權的服務商,也不列出任何真實發行。',
+          '風險提示、利益衝突、投訴管理和業務連續性等頁面在這裡作為標註 [DEMO] 的說明性範本存在。它們展示真實平台必須提供的透明度 - 它們不是法律文件,也未經律師審閱。',
+          '同樣的規則適用於本網站的每個角落:虛構資訊均標註 [DEMO],此處任何內容都不得被引用為真實公司的聲明。',
+        ],
+      },
+    ],
+    pressFactSheetTitle: '專案資料表',
+    pressFactStatusLabel: '狀態',
+    pressFactStatusValue: 'Stellar 測試網上的公開示範 - 無真實發行、無真實資金、無投資建議。',
+    pressFactOperatorLabel: '營運方',
+    pressFactOperatorValue: '獨立原型專案。未聲明任何註冊營運方;法律聲明頁面上的資訊均標註 [DEMO]。',
+    pressFactTechLabel: '技術',
+    pressFactTechValue: 'Stellar Soroban 智能合約、測試網 USDC 和 Freighter 錢包。',
+    pressFactContactValue: '請使用任意頁面上的意見回饋小工具;訊息會作為回饋保存在本示範中。',
+    jobsAboutTitle: '本專案如何建構',
+    jobsAboutBody: 'Blockallisto 目前作為一個小型原型專案建構。如果將來有真實職缺開放,將會連同任職要求和申請方式發布在本頁面。',
   },
   tour: {
     tourTitle: '活動導覽',

@@ -40,9 +40,9 @@ export const blocks: LegalBlock[] = [
       [['Handelsname'], ['Blockallisto']],
       [['Rechtsform'], ['"Lda." [DEMO]']],
       [['Eingetragener Sitz'], ['"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal" [DEMO]']],
-      [['Handelsregister'], ['"Registo Comercial de [Lisboa], Nummer 000 000 000" [DEMO]']],
+      [['Handels­register'], ['"Registo Comercial de [Lisboa], Nummer 000 000 000" [DEMO]']],
       [['USt-IdNr.'], ['"PT 000 000 000" [DEMO]']],
-      [['Geschäftsführer'], ['"Nome Demonstracao" [DEMO]']],
+      [['Geschäfts­führer'], ['"Nome Demonstracao" [DEMO]']],
       [
         ['Kontakt'],
         [

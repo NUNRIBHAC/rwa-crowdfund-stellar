@@ -1297,6 +1297,47 @@ export const en = {
     jobsEmpty: 'No open positions at the moment.',
     jobsSpeculativeNote: 'Speculative applications are not collected in this demo.',
     jobsDemoNote: 'Demo page: published positions will appear here. There are currently no real vacancies.',
+    eventsHowTitle: 'How events will work',
+    eventsHowBody: 'When the platform schedules a real event it appears under Upcoming with its date, format and how to register. Finished events move to Past. Until then both lists stay honestly empty.',
+    blogPosts: [
+      {
+        date: '2026-10-31',
+        title: 'What Blockallisto is - and what it is not',
+        paragraphs: [
+          'Blockallisto is a working prototype for tokenised crowd investing on the Stellar testnet. It explores how a transparent investment platform could work: public campaign terms, on-chain contribution tracking and enforceable refund rules.',
+          'It is not an investment platform. There are no live offers, no real funds and no investment advice anywhere on this site. Every campaign runs on the Stellar testnet, and testnet assets are worthless by design.',
+          'What is real is the machinery: the smart contracts, the wallet flows and this website operate with valueless test assets while the prototype is exercised and improved.',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: 'How a campaign works end to end',
+        paragraphs: [
+          'Each campaign is a Soroban smart contract with a goal and a deadline. Visitors connect a Freighter wallet and contribute testnet USDC; every confirmed contribution is visible on chain and in the campaign progress bar.',
+          'The contract enforces the outcome without a middleman: once the deadline has passed, the creator can withdraw only if the goal was reached. If the campaign ends below its goal, each contributor signs their own refund and takes their contribution back.',
+          'Your own positions, activity and notifications live under My account once you connect a wallet - saved per wallet, on the server, not in a cookie.',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: 'Why a demo has legal pages',
+        paragraphs: [
+          'This prototype borrows its structure from real crowd-investing regulation. The EU regulates crowdfunding under ECSPR, and authorised providers appear in the ESMA register; Blockallisto is not an authorised provider and lists no live offers.',
+          'Pages such as Risk Warnings, Conflicts of Interest, Complaints Management and Business Continuity exist here as illustrative templates marked [DEMO]. They show the transparency a real platform must provide - they are not legal documents and have not been reviewed by a lawyer.',
+          'The same rule applies everywhere on this site: fictional particulars are marked [DEMO], and nothing here may be quoted as a real company statement.',
+        ],
+      },
+    ],
+    pressFactSheetTitle: 'Project fact sheet',
+    pressFactStatusLabel: 'Status',
+    pressFactStatusValue: 'Public demo on the Stellar testnet - no live offers, no real funds, no investment advice.',
+    pressFactOperatorLabel: 'Operator',
+    pressFactOperatorValue: 'Independent prototype project. No registered operator is asserted; the particulars on the Legal Notice page are marked [DEMO].',
+    pressFactTechLabel: 'Technology',
+    pressFactTechValue: 'Stellar Soroban smart contracts, testnet USDC and the Freighter wallet.',
+    pressFactContactValue: 'Use the Feedback widget on any page; messages are stored as feedback in this demo.',
+    jobsAboutTitle: 'How this project is built',
+    jobsAboutBody: 'Blockallisto is currently built as a small prototype project. If a real position ever opens it will be published on this page with its requirements and how to apply.',
   },
   tour: {
     tourTitle: 'Campaign tour',

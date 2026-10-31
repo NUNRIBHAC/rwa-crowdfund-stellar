@@ -46,6 +46,15 @@ body {
   overflow-wrap: anywhere;
 }
 
+/* German long compounds: hyphenate at proper points instead of shattering
+   mid-word (overflow-wrap:anywhere stays the last-resort fallback). Scoped
+   to lang=de so no other locale's layout changes; German strings for the
+   longest legal terms also carry explicit soft hyphens. */
+html[lang='de'] body {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
 code {
   font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   font-size: 0.85em;
@@ -2736,6 +2745,29 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   .operator-table td {
     overflow-wrap: normal;
   }
+}
+
+/* Legal document tables (e.g. operator particulars in the legal notice): on
+   narrow screens give the label column a readable share so labels hyphenate
+   instead of fragmenting; values keep the remaining width and wrap at word
+   boundaries. A width hint, not a min-width, so values never overflow. */
+@media (max-width: 720px) {
+  html[lang='de'] .legal-table th:first-child,
+  html[lang='de'] .legal-table td:first-child {
+    width: 40%;
+  }
+}
+
+/* Blog articles: stacked card, never the multi-column portfolio grid. */
+.blog-post {
+  display: block;
+  border: 1px solid var(--color-border, #e2e2ea);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.blog-post h3 {
+  margin-top: 0;
 }
 
 /* Visually hidden but announced to assistive tech (live result counts). */

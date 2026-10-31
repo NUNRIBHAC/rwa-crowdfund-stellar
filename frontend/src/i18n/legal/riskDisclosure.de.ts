@@ -155,7 +155,7 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ['Über künftige Anlegerschutzmechanismen'],
+    text: ['Über künftige Anleger­schutz­mechanismen'],
   },
   {
     t: 'p',

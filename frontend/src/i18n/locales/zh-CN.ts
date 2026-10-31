@@ -1147,6 +1147,47 @@ export const zhCN: Messages = {
     jobsEmpty: '目前没有空缺职位。',
     jobsSpeculativeNote: '本演示不收集自荐申请。',
     jobsDemoNote: '演示页面:发布的职位将显示在这里。目前没有真实职位空缺。',
+    eventsHowTitle: '活动将如何运作',
+    eventsHowBody: '当平台安排真实活动时,活动将显示在"即将举行"下,包含日期、形式和报名方式。已结束的活动会移至"往期"。在此之前,两个列表都如实保持为空。',
+    blogPosts: [
+      {
+        date: '2026-10-31',
+        title: 'Blockallisto 是什么 - 以及不是什么',
+        paragraphs: [
+          'Blockallisto 是在 Stellar 测试网上运行的代币化众筹投资工作原型。它探索透明投资平台可能的运作方式:公开的活动条款、链上出资记录和可执行的退款规则。',
+          '它不是投资平台。本网站没有任何真实发行、真实资金或投资建议。所有活动都在 Stellar 测试网上运行,而测试网资产在设计上毫无价值。',
+          '真实的是这套机制:智能合约、钱包流程和本网站以毫无价值的测试资产运行,同时原型在不断被使用和打磨。',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: '一个活动从头到尾如何运作',
+        paragraphs: [
+          '每个活动都是一个带有目标和截止日期的 Soroban 智能合约。访客连接 Freighter 钱包并出资测试网 USDC;每笔已确认的出资在链上和活动进度条中都可见。',
+          '合约在没有中间人的情况下执行结果:截止后,只有达到目标,创建者才能提款。如果活动结束时低于目标,每位出资者签署自己的退款并取回出资。',
+          '连接钱包后,您的持仓、动态和通知都在"我的账户"下 - 按钱包保存在服务器上,而不是 cookie 中。',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: '为什么演示站点也有法律页面',
+        paragraphs: [
+          '本原型的结构借鉴自真实的众筹监管。欧盟根据 ECSPR 监管众筹,获授权的服务商列入 ESMA 注册名录;Blockallisto 不是获授权的服务商,也不列出任何真实发行。',
+          '风险提示、利益冲突、投诉管理和业务连续性等页面在这里作为标注 [DEMO] 的说明性模板存在。它们展示真实平台必须提供的透明度 - 它们不是法律文件,也未经律师审阅。',
+          '同样的规则适用于本网站的每个角落:虚构信息均标注 [DEMO],此处任何内容都不得被引用为真实公司的声明。',
+        ],
+      },
+    ],
+    pressFactSheetTitle: '项目资料表',
+    pressFactStatusLabel: '状态',
+    pressFactStatusValue: 'Stellar 测试网上的公开演示 - 无真实发行、无真实资金、无投资建议。',
+    pressFactOperatorLabel: '运营方',
+    pressFactOperatorValue: '独立原型项目。未声明任何注册运营方;法律声明页面上的信息均标注 [DEMO]。',
+    pressFactTechLabel: '技术',
+    pressFactTechValue: 'Stellar Soroban 智能合约、测试网 USDC 和 Freighter 钱包。',
+    pressFactContactValue: '请使用任意页面上的反馈小部件;消息将作为反馈保存在本演示中。',
+    jobsAboutTitle: '本项目如何构建',
+    jobsAboutBody: 'Blockallisto 目前作为一个小型原型项目构建。如果将来有真实职位开放,将会连同任职要求和申请方式发布在本页面。',
   },
   tour: {
     tourTitle: '活动导览',

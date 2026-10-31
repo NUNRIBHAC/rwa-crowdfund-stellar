@@ -1352,6 +1352,47 @@ export const fr: Messages = {
     jobsEmpty: 'Aucun poste ouvert pour le moment.',
     jobsSpeculativeNote: 'Les candidatures spontanées ne sont pas collectées dans cette démo.',
     jobsDemoNote: "Page de démonstration: les postes publiés apparaîtront ici. Il n'y a actuellement aucun poste réel à pourvoir.",
+    eventsHowTitle: 'Comment fonctionneront les événements',
+    eventsHowBody: "Lorsque la plateforme planifiera un événement réel, il apparaîtra sous À venir avec sa date, son format et la façon de s'inscrire. Les événements terminés passeront dans Passés. D'ici là, les deux listes restent honnêtement vides.",
+    blogPosts: [
+      {
+        date: '2026-10-31',
+        title: "Ce qu'est Blockallisto - et ce qu'elle n'est pas",
+        paragraphs: [
+          "Blockallisto est un prototype fonctionnel d'investissement participatif tokenisé sur le testnet Stellar. Il explore comment une plateforme d'investissement transparente pourrait fonctionner : conditions de campagne publiques, suivi des contributions sur la chaîne et règles de remboursement opposables.",
+          "Ce n'est pas une plateforme d'investissement. Il n'y a aucune offre réelle, aucun fonds réel et aucun conseil en investissement sur ce site. Chaque campagne s'exécute sur le testnet Stellar, et les actifs de testnet sont sans valeur par conception.",
+          "Ce qui est réel, c'est la mécanique : les contrats intelligents, les flux de portefeuille et ce site web fonctionnent avec des actifs de test sans valeur pendant que le prototype est exercé et amélioré.",
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: 'Comment fonctionne une campagne, de bout en bout',
+        paragraphs: [
+          'Chaque campagne est un contrat intelligent Soroban avec un objectif et une date limite. Les visiteurs connectent un portefeuille Freighter et contribuent en USDC de testnet ; chaque contribution confirmée est visible sur la chaîne et dans la barre de progression de la campagne.',
+          "Le contrat impose le résultat sans intermédiaire : une fois la date limite passée, le créateur ne peut retirer les fonds que si l'objectif a été atteint. Si la campagne se termine en dessous de son objectif, chaque contributeur signe son propre remboursement et récupère sa contribution.",
+          'Vos positions, votre activité et vos notifications se trouvent sous Mon compte une fois le portefeuille connecté - enregistrées par portefeuille, sur le serveur, pas dans un cookie.',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: 'Pourquoi une démo a des pages légales',
+        paragraphs: [
+          "Ce prototype emprunte sa structure à la réglementation réelle du financement participatif. L'UE encadre le crowdfunding par le règlement ECSPR, et les prestataires agréés figurent dans le registre de l'ESMA ; Blockallisto n'est pas un prestataire agréé et ne liste aucune offre réelle.",
+          "Des pages comme Avertissements sur les risques, Conflits d'intérêts, Gestion des réclamations et Continuité d'activité existent ici comme modèles illustratifs marqués [DEMO]. Elles montrent la transparence qu'une plateforme réelle doit offrir - ce ne sont pas des documents juridiques et elles n'ont pas été relues par un avocat.",
+          "La même règle s'applique partout sur ce site : les mentions fictives sont marquées [DEMO] et rien ici ne peut être cité comme une déclaration réelle d'une entreprise.",
+        ],
+      },
+    ],
+    pressFactSheetTitle: "Fiche d'information du projet",
+    pressFactStatusLabel: 'Statut',
+    pressFactStatusValue: 'Démo publique sur le testnet Stellar - aucune offre réelle, aucun fonds réel, aucun conseil en investissement.',
+    pressFactOperatorLabel: 'Opérateur',
+    pressFactOperatorValue: "Projet prototype indépendant. Aucun opérateur enregistré n'est affirmé ; les mentions de la page Mentions légales sont marquées [DEMO].",
+    pressFactTechLabel: 'Technologie',
+    pressFactTechValue: 'Contrats intelligents Stellar Soroban, USDC de testnet et le portefeuille Freighter.',
+    pressFactContactValue: "Utilisez le widget Commentaires sur n'importe quelle page ; les messages sont enregistrés comme commentaires dans cette démo.",
+    jobsAboutTitle: 'Comment ce projet est construit',
+    jobsAboutBody: "Blockallisto est actuellement construit comme un petit projet prototype. Si un poste réel s'ouvre un jour, il sera publié sur cette page avec ses exigences et la façon de postuler.",
   },
   tour: {
     tourTitle: 'Visite guidée de la campagne',

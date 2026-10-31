@@ -1344,6 +1344,47 @@ export const pt: Messages = {
     jobsEmpty: 'De momento não há vagas abertas.',
     jobsSpeculativeNote: 'As candidaturas espontâneas não são recolhidas nesta demonstração.',
     jobsDemoNote: 'Página de demonstração: as vagas publicadas aparecerão aqui. Atualmente não existem vagas reais.',
+    eventsHowTitle: 'Como vão funcionar os eventos',
+    eventsHowBody: 'Quando a plataforma agendar um evento real, ele aparece em Próximos com a data, o formato e a forma de inscrição. Os eventos terminados passam para Anteriores. Até lá, as duas listas ficam honestamente vazias.',
+    blogPosts: [
+      {
+        date: '2026-10-31',
+        title: 'O que é a Blockallisto - e o que não é',
+        paragraphs: [
+          'A Blockallisto é um protótipo funcional de investimento colaborativo tokenizado na testnet da Stellar. Explora como uma plataforma de investimento transparente poderia funcionar: condições de campanha públicas, registo de contribuições em cadeia e regras de reembolso aplicáveis.',
+          'Não é uma plataforma de investimento. Não há ofertas reais, fundos reais nem aconselhamento de investimento em lado nenhum deste site. Todas as campanhas correm na testnet da Stellar, e os ativos de testnet não têm valor por definição.',
+          'O que é real é a maquinaria: os contratos inteligentes, os fluxos de carteira e este site operam com ativos de teste sem valor enquanto o protótipo é exercido e melhorado.',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: 'Como funciona uma campanha, do início ao fim',
+        paragraphs: [
+          'Cada campanha é um contrato inteligente Soroban com um objetivo e um prazo. Os visitantes ligam uma carteira Freighter e contribuem com USDC de testnet; cada contribuição confirmada fica visível na cadeia e na barra de progresso da campanha.',
+          'O contrato impõe o resultado sem intermediários: terminado o prazo, o criador só pode levantar os fundos se o objetivo tiver sido atingido. Se a campanha terminar abaixo do objetivo, cada contribuinte assina o seu próprio reembolso e recupera a sua contribuição.',
+          'As suas posições, atividade e notificações ficam em A minha conta depois de ligar uma carteira - guardadas por carteira, no servidor, não num cookie.',
+        ],
+      },
+      {
+        date: '2026-10-31',
+        title: 'Porque é que uma demo tem páginas legais',
+        paragraphs: [
+          'Este protótipo inspira a sua estrutura na regulamentação real do investimento colaborativo. A UE regula o crowdfunding ao abrigo do ECSPR, e os prestadores autorizados constam do registo da ESMA; a Blockallisto não é um prestador autorizado e não lista ofertas reais.',
+          'Páginas como Avisos de Risco, Conflitos de Interesses, Gestão de Reclamações e Continuidade de Negócio existem aqui como modelos ilustrativos marcados [DEMO]. Mostram a transparência que uma plataforma real tem de garantir - não são documentos legais e não foram revistos por um advogado.',
+          'A mesma regra se aplica em todo o site: os dados fictícios estão marcados [DEMO] e nada aqui pode ser citado como declaração real de uma empresa.',
+        ],
+      },
+    ],
+    pressFactSheetTitle: 'Ficha informativa do projeto',
+    pressFactStatusLabel: 'Estado',
+    pressFactStatusValue: 'Demonstração pública na testnet da Stellar - sem ofertas reais, sem fundos reais, sem aconselhamento de investimento.',
+    pressFactOperatorLabel: 'Operador',
+    pressFactOperatorValue: 'Projeto-protótipo independente. Não é afirmado nenhum operador registado; os dados da página de Aviso Legal estão marcados [DEMO].',
+    pressFactTechLabel: 'Tecnologia',
+    pressFactTechValue: 'Contratos inteligentes Stellar Soroban, USDC de testnet e a carteira Freighter.',
+    pressFactContactValue: 'Use o widget de Feedback em qualquer página; as mensagens ficam registadas como feedback nesta demonstração.',
+    jobsAboutTitle: 'Como este projeto é construído',
+    jobsAboutBody: 'A Blockallisto é atualmente construída como um pequeno projeto-protótipo. Se alguma vez abrir uma vaga real, será publicada nesta página com os requisitos e a forma de candidatura.',
   },
   tour: {
     tourTitle: 'Visita guiada da campanha',
