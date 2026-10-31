@@ -1,6 +1,6 @@
 # Invesdor full supplied list by project type (2026-10-31)
 
-This file classifies the full Invesdor list the user supplied on WhatsApp on 2026-10-31 (00:35 WET). It mirrors the structure of `conda-full-list-by-project-type.md`. Companion CSV with one row per input entry and per-row evidence: `invesdor-full-list-by-project-type.csv`. The existing `invesdor-sitemap.md` covers the 50 static pages of the site sitemap only; it is not a round list and stays unchanged.
+This file classifies the full Invesdor list the user supplied on WhatsApp on 2026-10-31 (00:35 WET). It mirrors the structure of `conda-full-list-by-project-type.md`. Companion CSV with one row per input entry and per-row evidence: `invesdor-full-list-by-project-type.csv`. The companion `invesdor-sitemap.md` holds the 50 official XML sitemap URLs plus a separate user-supplied section listing these same 141 round URLs (user-supplied, not discovered in the XML sitemap).
 
 The instrument hierarchy, financing types, property types, the 17 industry categories plus "Unclear from available evidence", the structure overlays and the rank/label qualifiers below use the wording the user supplied in the same WhatsApp message. They are an analyst grouping made for this document. They are not Invesdor's own taxonomy; Invesdor's own product tag and "Type" field are kept in their own columns in the CSV.
 
