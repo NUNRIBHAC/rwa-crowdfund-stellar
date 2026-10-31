@@ -1238,7 +1238,8 @@ export const ko: Messages = {
     jobsSpeculativeNote: '이 데모에서는 자유 지원서를 받지 않습니다.',
     jobsDemoNote: '데모 페이지: 게시된 포지션이 여기에 표시됩니다. 현재 실제 채용 공고는 없습니다.',
     eventsHowTitle: '이벤트 운영 방식(예정)',
-    eventsHowBody: '플랫폼이 실제 이벤트를 예정하면 날짜, 형식, 등록 방법과 함께 "예정된 이벤트"에 표시됩니다. 종료된 이벤트는 "지난 이벤트"로 이동합니다. 그 전까지 두 목록은 정직하게 비어 있습니다.',
+    eventsHowBody:
+      '플랫폼이 실제 이벤트를 예정하면 날짜, 형식, 등록 방법과 함께 "예정된 이벤트"에 표시됩니다. 종료된 이벤트는 "지난 이벤트"로 이동합니다. 그 전까지 두 목록은 정직하게 비어 있습니다.',
     blogPosts: [
       {
         date: '2026-10-31',
@@ -1277,7 +1278,8 @@ export const ko: Messages = {
     pressFactTechValue: 'Stellar Soroban 스마트 컨트랙트, 테스트넷 USDC, Freighter 지갑.',
     pressFactContactValue: '모든 페이지의 피드백 위젯을 사용하세요. 메시지는 이 데모에 피드백으로 저장됩니다.',
     jobsAboutTitle: '이 프로젝트가 만들어지는 방식',
-    jobsAboutBody: 'Blockallisto는 현재 작은 프로토타입 프로젝트로 구축되고 있습니다. 실제 채용 공고가 생기면 요건과 지원 방법과 함께 이 페이지에 게시될 것입니다.',
+    jobsAboutBody:
+      'Blockallisto는 현재 작은 프로토타입 프로젝트로 구축되고 있습니다. 실제 채용 공고가 생기면 요건과 지원 방법과 함께 이 페이지에 게시될 것입니다.',
   },
   tour: {
     tourTitle: '캠페인 둘러보기',

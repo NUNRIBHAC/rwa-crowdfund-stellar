@@ -1353,7 +1353,8 @@ export const fr: Messages = {
     jobsSpeculativeNote: 'Les candidatures spontanées ne sont pas collectées dans cette démo.',
     jobsDemoNote: "Page de démonstration: les postes publiés apparaîtront ici. Il n'y a actuellement aucun poste réel à pourvoir.",
     eventsHowTitle: 'Comment fonctionneront les événements',
-    eventsHowBody: "Lorsque la plateforme planifiera un événement réel, il apparaîtra sous À venir avec sa date, son format et la façon de s'inscrire. Les événements terminés passeront dans Passés. D'ici là, les deux listes restent honnêtement vides.",
+    eventsHowBody:
+      "Lorsque la plateforme planifiera un événement réel, il apparaîtra sous À venir avec sa date, son format et la façon de s'inscrire. Les événements terminés passeront dans Passés. D'ici là, les deux listes restent honnêtement vides.",
     blogPosts: [
       {
         date: '2026-10-31',
@@ -1387,12 +1388,14 @@ export const fr: Messages = {
     pressFactStatusLabel: 'Statut',
     pressFactStatusValue: 'Démo publique sur le testnet Stellar - aucune offre réelle, aucun fonds réel, aucun conseil en investissement.',
     pressFactOperatorLabel: 'Opérateur',
-    pressFactOperatorValue: "Projet prototype indépendant. Aucun opérateur enregistré n'est affirmé ; les mentions de la page Mentions légales sont marquées [DEMO].",
+    pressFactOperatorValue:
+      "Projet prototype indépendant. Aucun opérateur enregistré n'est affirmé ; les mentions de la page Mentions légales sont marquées [DEMO].",
     pressFactTechLabel: 'Technologie',
     pressFactTechValue: 'Contrats intelligents Stellar Soroban, USDC de testnet et le portefeuille Freighter.',
     pressFactContactValue: "Utilisez le widget Commentaires sur n'importe quelle page ; les messages sont enregistrés comme commentaires dans cette démo.",
     jobsAboutTitle: 'Comment ce projet est construit',
-    jobsAboutBody: "Blockallisto est actuellement construit comme un petit projet prototype. Si un poste réel s'ouvre un jour, il sera publié sur cette page avec ses exigences et la façon de postuler.",
+    jobsAboutBody:
+      "Blockallisto est actuellement construit comme un petit projet prototype. Si un poste réel s'ouvre un jour, il sera publié sur cette page avec ses exigences et la façon de postuler.",
   },
   tour: {
     tourTitle: 'Visite guidée de la campagne',

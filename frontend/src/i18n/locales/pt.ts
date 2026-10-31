@@ -1345,7 +1345,8 @@ export const pt: Messages = {
     jobsSpeculativeNote: 'As candidaturas espontâneas não são recolhidas nesta demonstração.',
     jobsDemoNote: 'Página de demonstração: as vagas publicadas aparecerão aqui. Atualmente não existem vagas reais.',
     eventsHowTitle: 'Como vão funcionar os eventos',
-    eventsHowBody: 'Quando a plataforma agendar um evento real, ele aparece em Próximos com a data, o formato e a forma de inscrição. Os eventos terminados passam para Anteriores. Até lá, as duas listas ficam honestamente vazias.',
+    eventsHowBody:
+      'Quando a plataforma agendar um evento real, ele aparece em Próximos com a data, o formato e a forma de inscrição. Os eventos terminados passam para Anteriores. Até lá, as duas listas ficam honestamente vazias.',
     blogPosts: [
       {
         date: '2026-10-31',
@@ -1379,12 +1380,14 @@ export const pt: Messages = {
     pressFactStatusLabel: 'Estado',
     pressFactStatusValue: 'Demonstração pública na testnet da Stellar - sem ofertas reais, sem fundos reais, sem aconselhamento de investimento.',
     pressFactOperatorLabel: 'Operador',
-    pressFactOperatorValue: 'Projeto-protótipo independente. Não é afirmado nenhum operador registado; os dados da página de Aviso Legal estão marcados [DEMO].',
+    pressFactOperatorValue:
+      'Projeto-protótipo independente. Não é afirmado nenhum operador registado; os dados da página de Aviso Legal estão marcados [DEMO].',
     pressFactTechLabel: 'Tecnologia',
     pressFactTechValue: 'Contratos inteligentes Stellar Soroban, USDC de testnet e a carteira Freighter.',
     pressFactContactValue: 'Use o widget de Feedback em qualquer página; as mensagens ficam registadas como feedback nesta demonstração.',
     jobsAboutTitle: 'Como este projeto é construído',
-    jobsAboutBody: 'A Blockallisto é atualmente construída como um pequeno projeto-protótipo. Se alguma vez abrir uma vaga real, será publicada nesta página com os requisitos e a forma de candidatura.',
+    jobsAboutBody:
+      'A Blockallisto é atualmente construída como um pequeno projeto-protótipo. Se alguma vez abrir uma vaga real, será publicada nesta página com os requisitos e a forma de candidatura.',
   },
   tour: {
     tourTitle: 'Visita guiada da campanha',

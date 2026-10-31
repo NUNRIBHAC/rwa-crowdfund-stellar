@@ -1298,7 +1298,8 @@ export const en = {
     jobsSpeculativeNote: 'Speculative applications are not collected in this demo.',
     jobsDemoNote: 'Demo page: published positions will appear here. There are currently no real vacancies.',
     eventsHowTitle: 'How events will work',
-    eventsHowBody: 'When the platform schedules a real event it appears under Upcoming with its date, format and how to register. Finished events move to Past. Until then both lists stay honestly empty.',
+    eventsHowBody:
+      'When the platform schedules a real event it appears under Upcoming with its date, format and how to register. Finished events move to Past. Until then both lists stay honestly empty.',
     blogPosts: [
       {
         date: '2026-10-31',
@@ -1337,7 +1338,8 @@ export const en = {
     pressFactTechValue: 'Stellar Soroban smart contracts, testnet USDC and the Freighter wallet.',
     pressFactContactValue: 'Use the Feedback widget on any page; messages are stored as feedback in this demo.',
     jobsAboutTitle: 'How this project is built',
-    jobsAboutBody: 'Blockallisto is currently built as a small prototype project. If a real position ever opens it will be published on this page with its requirements and how to apply.',
+    jobsAboutBody:
+      'Blockallisto is currently built as a small prototype project. If a real position ever opens it will be published on this page with its requirements and how to apply.',
   },
   tour: {
     tourTitle: 'Campaign tour',
