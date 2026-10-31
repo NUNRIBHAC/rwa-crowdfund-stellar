@@ -43,18 +43,23 @@
     width: 220px;
   }
 
-  /* Tile travel endpoints rescaled ~0.6x horizontally for the 220px zone and ~0.45x
-     vertically for the single-row footer (~260-300px tall after the layout fix).
-     Square sizes are UNCHANGED (24-58px, matching the original 5d5f35e on-screen
-     25-61px); only travel ranges shrink, keeping every square fully inside the zone
-     (max right edge: ft-4 at 180+38=218 <= 220; max bottom edge: ft-7 at 216+34=250). */
-  .ft-1 { --sx: 14px; --sy: 14px; --gx: 75px; --gy: 34px; }
-  .ft-2 { --sx: 150px; --sy: 36px; --gx: 177px; --gy: 38px; }
-  .ft-3 { --sx: 72px; --sy: 77px; --gx: 129px; --gy: 52px; }
-  .ft-4 { --sx: 180px; --sy: 117px; --gx: 66px; --gy: 72px; }
-  .ft-5 { --sx: 24px; --sy: 149px; --gx: 21px; --gy: 106px; }
-  .ft-6 { --sx: 126px; --sy: 189px; --gx: 108px; --gy: 115px; }
-  .ft-7 { --sx: 66px; --sy: 216px; --gx: 153px; --gy: 101px; }
+  /* Tile travel endpoints: percentages so squares roam the full height of the
+     footer zone (user: "deve correr em toda a dimensão do footer sem sair",
+     2026-10-31 08:46) instead of a 250px px-bounded band. 4% top -> 88% near
+     bottom; deepest square bottom edge = 0.88*H + 34px, inside for H >= ~280px
+     (EN 470 / DE 554 / AR 467 measured). The footer's own edges remain the only
+     limit (overflow:hidden on .footer-tiles); the zone is the reserved right
+     padding band, clear of text. Horizontal percentages keep squares inside the
+     220px zone (max right edge 71%*220 + 38 = 194 <= 220). Square sizes
+     UNCHANGED (24-58px). Reduced-motion keeps the static spread composition
+     (styles.css sets base left/top = spread vars). */
+  .ft-1 { --sx: 6%;  --sy: 4%;  --gx: 30%; --gy: 10%; }
+  .ft-2 { --sx: 60%; --sy: 10%; --gx: 70%; --gy: 11%; }
+  .ft-3 { --sx: 29%; --sy: 22%; --gx: 51%; --gy: 15%; }
+  .ft-4 { --sx: 71%; --sy: 38%; --gx: 26%; --gy: 20%; }
+  .ft-5 { --sx: 10%; --sy: 52%; --gx: 8%;  --gy: 30%; }
+  .ft-6 { --sx: 50%; --sy: 70%; --gx: 43%; --gy: 33%; }
+  .ft-7 { --sx: 26%; --sy: 88%; --gx: 61%; --gy: 38%; }
 }
 
 /* Narrow viewports keep today's wrapped behavior: two-column grid, context+Status full width. */
