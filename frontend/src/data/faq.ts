@@ -36,7 +36,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
       },
       {
         q: 'Who can invest on a platform like this in production?',
-        a: 'A production platform must verify each investor\'s identity (KYC) and, where the regime requires it, test knowledge and simulate loss-bearing capacity before larger amounts. Residence restrictions can also apply. None of that exists here, because testnet funds are worthless.',
+        a: "A production platform must verify each investor's identity (KYC) and, where the regime requires it, test knowledge and simulate loss-bearing capacity before larger amounts. Residence restrictions can also apply. None of that exists here, because testnet funds are worthless.",
         state: 'info',
       },
     ],
@@ -114,7 +114,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
       },
       {
         q: 'Where are my contributions held?',
-        a: 'In the contract\'s escrow on the public test network, not with the platform operator. Your wallet keys stay in Freighter on your own device; losing them would lose access to the contribution record, exactly like any self-custody setup.',
+        a: "In the contract's escrow on the public test network, not with the platform operator. Your wallet keys stay in Freighter on your own device; losing them would lose access to the contribution record, exactly like any self-custody setup.",
         state: 'live',
       },
     ],
@@ -183,7 +183,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
       },
       {
         q: 'Are taxes deducted from returns?',
-        a: 'This prototype pays no returns, so nothing is taxed or withheld. On real platforms the treatment depends on your country of residence, the instrument and the issuer\'s country; some providers withhold tax or issue annual certificates, and the investor stays responsible for correct declaration.',
+        a: "This prototype pays no returns, so nothing is taxed or withheld. On real platforms the treatment depends on your country of residence, the instrument and the issuer's country; some providers withhold tax or issue annual certificates, and the investor stays responsible for correct declaration.",
         state: 'info',
       },
     ],
