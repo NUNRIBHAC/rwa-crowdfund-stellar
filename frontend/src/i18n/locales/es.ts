@@ -423,7 +423,7 @@ export const es: Messages = {
   financing: {
     title: 'Financiación para empresas',
     intro:
-      'Capta capital de la multitud a través de un contrato Soroban con financiación todo-o-nada. Esta página describe el recorrido previsto del emisor; la incorporación no está abierta en este prototipo.',
+      'Capta capital de la multitud a través de un contrato Soroban con financiación todo-o-nada. Las carteras con sesión iniciada pueden enviar una solicitud de emisor abajo; las solicitudes se almacenan para su revisión por el operador. Enviar no constituye incorporación, cotización ni aprobación, y no se ofrece financiación.',
     journeyAria: 'Resumen del recorrido del emisor',
     journeyTitle: 'El recorrido previsto',
     steps: [
@@ -444,20 +444,11 @@ export const es: Messages = {
         p: 'Campaña todo-o-nada. Los fondos solo se liquidan si el objetivo se alcanza dentro del plazo.',
       },
     ],
-    previewAria: 'Vista previa de la solicitud',
-    previewTitle: 'Solicitud (vista previa)',
-    previewNote:
-      'La incorporación de emisores no está conectada en este prototipo: este formulario está desactivado y nada de lo que se escriba aquí se envía ni se guarda.',
-    companyName: 'Nombre de la empresa',
-    country: 'País de registro',
-    targetAmount: 'Importe objetivo',
-    instrument: 'Instrumento de interés',
-    notAvailable: 'No disponible en este prototipo',
-    submit: 'Enviar solicitud (no disponible)',
   },
   account: {
     title: 'Mi cuenta',
-    notePre: 'Maqueta de prototipo de un área de cuenta de inversor, inspirada en el panel con sesión iniciada documentado en',
+    notePre:
+      'Su área de cuenta: las posiciones de testnet de esta cartera y la actividad de la comunidad guardada bajo ella (solo activos de testnet: sin fondos reales ni rendimientos). Diseño inspirado en el panel con sesión iniciada documentado en',
     notePost:
       '(sección 7A). Las posiciones proceden de tu cartera Freighter conectada en la testnet de Stellar y no tienen valor. El acceso opcional a la comunidad y los formularios de soporte y de emisor de esta página tratan los datos que introduzcas como describe la política de privacidad.',
     summaryAria: 'Resumen de la cartera',
@@ -1078,7 +1069,7 @@ export const es: Messages = {
         entries: [
           {
             q: '¿Puedo listar mi empresa hoy?',
-            a: 'No. La incorporación de emisores no está abierta en este prototipo. El registro de campañas lo configura el operador y actualmente solo contiene la campaña de demostración.',
+            a: 'Puedes enviar una solicitud de emisor desde la página Financiación; el operador revisa las solicitudes fuera de la plataforma y nada se lista automáticamente. El registro de campañas actualmente solo contiene la campaña de demostración.',
             state: 'planned',
           },
           {

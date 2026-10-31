@@ -424,7 +424,7 @@ export const fr: Messages = {
   financing: {
     title: 'Financement pour les entreprises',
     intro:
-      "Levez des capitaux auprès de la foule via un contrat Soroban à financement tout-ou-rien. Cette page décrit le parcours prévu de l'émetteur ; l'intégration n'est pas ouverte dans ce prototype.",
+      "Levez des capitaux auprès de la foule via un contrat Soroban à financement tout-ou-rien. Les portefeuilles connectés peuvent soumettre une candidature d'émetteur ci-dessous ; les candidatures sont conservées pour examen par l'opérateur. Soumettre ne constitue ni une intégration, ni une cotation, ni une approbation, et aucun financement n'est proposé.",
     journeyAria: "Résumé du parcours de l'émetteur",
     journeyTitle: 'Le parcours prévu',
     steps: [
@@ -445,20 +445,11 @@ export const fr: Messages = {
         p: "Campagne tout-ou-rien. Les fonds ne sont débloqués que si l'objectif est atteint dans les délais.",
       },
     ],
-    previewAria: 'Aperçu de la candidature',
-    previewTitle: 'Candidature (aperçu)',
-    previewNote:
-      "L'intégration des émetteurs n'est pas connectée dans ce prototype : ce formulaire est désactivé et rien de ce qui y est écrit n'est envoyé ni enregistré.",
-    companyName: "Nom de l'entreprise",
-    country: "Pays d'enregistrement",
-    targetAmount: 'Montant visé',
-    instrument: "Instrument d'intérêt",
-    notAvailable: 'Non disponible dans ce prototype',
-    submit: 'Envoyer la candidature (non disponible)',
   },
   account: {
     title: 'Mon compte',
-    notePre: "Maquette de prototype d'un espace compte investisseur, inspirée du tableau de bord connecté documenté dans",
+    notePre:
+      "Votre espace compte : les positions testnet de ce portefeuille et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds réel ni rendement). Mise en page inspirée du tableau de bord connecté documenté dans",
     notePost:
       "(section 7A). Les positions proviennent de votre portefeuille Freighter connecté sur le testnet Stellar et sont sans valeur. La connexion communautaire facultative et les formulaires d'assistance et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
     summaryAria: 'Résumé du portefeuille',
@@ -1080,7 +1071,7 @@ export const fr: Messages = {
         entries: [
           {
             q: "Puis-je lister mon entreprise aujourd'hui ?",
-            a: "Non. L'intégration des émetteurs n'est pas ouverte dans ce prototype. Le registre des campagnes est configuré par l'opérateur et ne contient actuellement que la campagne de démonstration.",
+            a: "Vous pouvez soumettre une candidature d'émetteur depuis la page Financement ; l'opérateur examine les candidatures hors plateforme et rien n'est coté automatiquement. Le registre des campagnes ne contient actuellement que la campagne de démonstration.",
             state: 'planned',
           },
           {

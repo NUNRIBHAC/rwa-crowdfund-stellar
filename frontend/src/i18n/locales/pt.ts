@@ -422,7 +422,7 @@ export const pt: Messages = {
   financing: {
     title: 'Financiamento para empresas',
     intro:
-      'Angarie capital junto da multidão através de um contrato Soroban com financiamento tudo-ou-nada. Esta página descreve o percurso previsto do emitente; a adesão não está aberta neste protótipo.',
+      'Angarie capital junto da multidão através de um contrato Soroban com financiamento tudo-ou-nada. As carteiras com sessão iniciada podem submeter uma candidatura de emissor abaixo; as candidaturas são guardadas para análise pelo operador. Submeter não constitui adesão, listagem ou aprovação, e não é oferecido qualquer financiamento.',
     journeyAria: 'Resumo do percurso do emitente',
     journeyTitle: 'O percurso previsto',
     steps: [
@@ -443,19 +443,11 @@ export const pt: Messages = {
         p: 'Campanha tudo-ou-nada. Os fundos só são liquidados se o objetivo for atingido dentro do prazo.',
       },
     ],
-    previewAria: 'Pré-visualização da candidatura',
-    previewTitle: 'Candidatura (pré-visualização)',
-    previewNote: 'A adesão de emitentes não está ligada neste protótipo: este formulário está desativado e nada do que aqui for escrito é enviado ou guardado.',
-    companyName: 'Nome da empresa',
-    country: 'País de registo',
-    targetAmount: 'Montante pretendido',
-    instrument: 'Instrumento de interesse',
-    notAvailable: 'Não disponível neste protótipo',
-    submit: 'Submeter candidatura (não disponível)',
   },
   account: {
     title: 'A minha conta',
-    notePre: 'Maqueta de protótipo de uma área de conta de investidor, inspirada no painel com sessão iniciada documentado em',
+    notePre:
+      'A sua área de conta: as posições de testnet desta carteira e a atividade da comunidade guardada sob a mesma (apenas ativos de testnet - sem fundos reais ou rendimentos). Layout inspirado no painel com sessão iniciada documentado em',
     notePost:
       '(secção 7A). As posições vêm da sua carteira Freighter ligada na testnet da Stellar e não têm valor. O acesso opcional à comunidade e os formulários de suporte e de emissor nesta página tratam os dados que introduzir conforme descrito na política de privacidade.',
     summaryAria: 'Resumo da carteira',
@@ -1072,7 +1064,7 @@ export const pt: Messages = {
         entries: [
           {
             q: 'Posso listar a minha empresa hoje?',
-            a: 'Não. A adesão de emitentes não está aberta neste protótipo. O registo de campanhas é configurado pelo operador e atualmente contém apenas a campanha de demonstração.',
+            a: 'Pode submeter uma candidatura de emissor na página Financiamento; o operador analisa as candidaturas fora da plataforma e nada é listado automaticamente. O registo de campanhas contém atualmente apenas a campanha de demonstração.',
             state: 'planned',
           },
           {

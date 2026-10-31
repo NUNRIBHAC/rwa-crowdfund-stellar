@@ -421,7 +421,7 @@ export const de: Messages = {
   financing: {
     title: 'Finanzierung für Unternehmen',
     intro:
-      'Nehmen Sie Kapital von der Menge über einen Soroban-Vertrag mit Alles-oder-nichts-Finanzierung auf. Diese Seite beschreibt den geplanten Weg des Emittenten; das Onboarding ist in diesem Prototyp nicht geöffnet.',
+      'Nehmen Sie Kapital von der Menge über einen Soroban-Vertrag mit Alles-oder-nichts-Finanzierung auf. Angemeldete Wallets können unten einen Emittentenantrag einreichen; Anträge werden zur Prüfung durch den Betreiber gespeichert. Das Einreichen ist kein Onboarding, keine Listung und keine Genehmigung, und es wird keine Finanzierung angeboten.',
     journeyAria: 'Überblick über den Weg des Emittenten',
     journeyTitle: 'Der geplante Weg',
     steps: [
@@ -442,20 +442,11 @@ export const de: Messages = {
         p: 'Alles-oder-nichts-Kampagne. Die Mittel werden nur freigegeben, wenn das Ziel fristgerecht erreicht wird.',
       },
     ],
-    previewAria: 'Antragsvorschau',
-    previewTitle: 'Antrag (Vorschau)',
-    previewNote:
-      'Das Emittenten-Onboarding ist in diesem Prototyp nicht angebunden: Dieses Formular ist deaktiviert, und nichts, was hier eingegeben wird, wird gesendet oder gespeichert.',
-    companyName: 'Firmenname',
-    country: 'Land der Eintragung',
-    targetAmount: 'Zielbetrag',
-    instrument: 'Gewünschtes Instrument',
-    notAvailable: 'In diesem Prototyp nicht verfügbar',
-    submit: 'Antrag einreichen (nicht verfügbar)',
   },
   account: {
     title: 'Mein Konto',
-    notePre: 'Prototyp-Mockup eines Anleger-Kontobereichs, angelehnt an das in',
+    notePre:
+      'Ihr Kontobereich: die Testnet-Positionen dieser Wallet und die darunter gespeicherte Community-Aktivität (nur Testnet-Assets - keine echten Gelder oder Erträge). Layout angelehnt an das in',
     notePost:
       '(Abschnitt 7A). Positionen stammen aus deiner verbundenen Freighter-Wallet im Stellar-Testnetz und sind wertlos. Der optionale Community-Zugang und die Support- und Emittentenformulare auf dieser Seite verarbeiten eingegebene Daten wie in der Datenschutzerklärung beschrieben.',
     summaryAria: 'Portfolioübersicht',
@@ -1063,7 +1054,7 @@ export const de: Messages = {
         entries: [
           {
             q: 'Kann ich mein Unternehmen heute listen?',
-            a: 'Nein. Das Emittenten-Onboarding ist in diesem Prototyp nicht geöffnet. Das Kampagnenregister wird vom Betreiber konfiguriert und enthält derzeit nur die Demo-Kampagne.',
+            a: 'Sie können auf der Seite Finanzierung einen Emittentenantrag einreichen; der Betreiber prüft Anträge außerhalb der Plattform und nichts wird automatisch gelistet. Das Kampagnenregister enthält derzeit nur die Demo-Kampagne.',
             state: 'planned',
           },
           {
