@@ -69,9 +69,14 @@ function renderBlock(block: LegalBlock, i: number): ReactNode {
 export default function LegalDoc({ doc }: { doc: LegalDocId }) {
   const { locale } = useI18n();
   const { blocks, renderedLocale } = legalBlocks(doc, locale);
+  // Arabic renders with no dir attribute: the wrapper inherits ltr so tables
+  // and blocks keep identical geometry across locales, while the global
+  // html.rtl-text rules flip text direction inside cells and paragraphs.
+  // Non-Arabic keeps dir=ltr so an English fallback under an Arabic UI locale
+  // does not get flipped by those same rtl-text rules.
   const rtl = renderedLocale === 'ar';
   return (
-    <div lang={renderedLocale} dir={rtl ? 'rtl' : 'ltr'}>
+    <div lang={renderedLocale} dir={rtl ? undefined : 'ltr'}>
       {blocks.map(renderBlock)}
     </div>
   );
