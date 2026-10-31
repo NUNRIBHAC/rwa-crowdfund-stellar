@@ -47,7 +47,6 @@ export default function FundingBlock() {
       onFocus={replay}
       tabIndex={0}
       aria-labelledby="funding-block-title"
-      aria-describedby="funding-block-note"
     >
       <figcaption id="funding-block-title" className="funding-block-title">
         How funding works
@@ -78,9 +77,6 @@ export default function FundingBlock() {
         />
         <rect className="funding-token" x="150" y="50" width="40" height="40" rx="9" />
       </svg>
-      <p id="funding-block-note" className="funding-block-note">
-        Illustration - the block fills up as the crowd funds it. Not live funding activity. Hover or tap to replay.
-      </p>
     </figure>
   );
 }
