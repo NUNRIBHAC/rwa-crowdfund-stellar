@@ -268,4 +268,3 @@ function instrumentExplainer(profile: CampaignProfile): string {
   }
   return 'This instrument class is described in the Learn hub.';
 }
-
