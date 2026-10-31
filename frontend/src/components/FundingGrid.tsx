@@ -8,14 +8,14 @@ import { useI18n } from '../i18n';
  * (BigInt, floor, never rounds up). Missing or invalid chain data renders an
  * empty grid with a "Progress unavailable" caption - never a fabricated 0%.
  *
- * layout "strip": 2 rows x 8 tiles (campaign cards, per the approved card
+ * layout "strip": 2 rows x 10 tiles (campaign cards, per the approved card
  *   reference; fill left to right, top row first).
  * layout "block": 10x10 tiles inside the Ink frame (campaign detail page;
  *   fill bottom row first, left to right, then upward, per the spec).
  */
 export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised?: string | null; goal?: string | null; layout?: 'strip' | 'block' }) {
   const { m } = useI18n();
-  const cols = layout === 'strip' ? 8 : 10;
+  const cols = 10;
   const rows = layout === 'strip' ? 2 : 10;
   const count = cols * rows;
   const tile = layout === 'strip' ? 26 : 16;

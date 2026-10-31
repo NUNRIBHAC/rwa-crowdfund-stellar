@@ -33,7 +33,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
   const pct = percent(c.raised, c.config.goal);
   const dl = deadlineInfo(c.config.deadline, m.time);
   const status = campaignStatus(c);
-  const state = fundingState(c.raised, c.config.goal, 16);
+  const state = fundingState(c.raised, c.config.goal, 20);
   return (
     <article className="card">
       {c.id === 'demo-solar' && (
@@ -81,10 +81,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
 
       <p className="card-funded">
         {state.kind === 'ready' ? (
-          <>
-            <span className="card-funded-pct">{m.card.fundedPct(state.percent)}</span>{' '}
-            <span className="card-funded-blocks">{m.card.blocksFilled(state.filled, 16)}</span>
-          </>
+          <span className="card-funded-pct">{m.card.fundedPct(state.percent)}</span>
         ) : (
           <span className="card-funded-blocks">{m.card.progressUnavailable}</span>
         )}

@@ -23,17 +23,17 @@ test('exact BigInt units: 62.16% fills 5 of 9 summary tiles with one in progress
 });
 
 test('fills the next tile geometrically as confirmed funds arrive', () => {
-  // 56.5 of 500 USDC over 16 tiles = 1 full tile + 80.8% of the next
-  const s = fundingState('565000000', '5000000000', 16);
+  // 56.5 of 500 USDC over 20 card tiles = 2 full tiles + 26% of the next
+  const s = fundingState('565000000', '5000000000', 20);
   expect(s.kind).toBe('ready');
   if (s.kind !== 'ready') return;
-  expect(s.filled).toBe(1);
-  expect(s.partial).toBeCloseTo(0.808, 3);
+  expect(s.filled).toBe(2);
+  expect(s.partial).toBeCloseTo(0.26, 3);
   expect(s.percent).toBe(11.3);
   // a later confirmed contribution strictly increases the fill
-  const later = fundingState('5650000000', '5000000000', 16);
+  const later = fundingState('5650000000', '5000000000', 20);
   if (later.kind !== 'ready') throw new Error('unreachable');
-  expect(later.filled).toBe(16);
+  expect(later.filled).toBe(20);
   expect(later.inProgress).toBe(false);
 });
 
