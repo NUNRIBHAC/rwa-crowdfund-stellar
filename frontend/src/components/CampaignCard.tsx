@@ -23,13 +23,14 @@ type Props = {
   readOnly: boolean;
   amount: string;
   amountError?: string;
+  prepareError?: string;
   /** True when the campaign is sample fixture data; renders the DEMO badge and disclaimer. */
   demo?: boolean;
   onAmount: (v: string) => void;
   onPrepare: (action: 'contribute' | 'refund' | 'withdraw') => void;
 };
 
-export default function CampaignCard({ campaign: c, profile, actor, busy, readOnly, amount, amountError, demo, onAmount, onPrepare }: Props) {
+export default function CampaignCard({ campaign: c, profile, actor, busy, readOnly, amount, amountError, prepareError, demo, onAmount, onPrepare }: Props) {
   const { locale, m } = useI18n();
   const pct = percent(c.raised, c.config.goal);
   const dl = deadlineInfo(c.config.deadline, m.time);
@@ -193,6 +194,11 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
             />
           </label>
           {amountError ? <p className="field-error">{amountError}</p> : null}
+          {prepareError ? (
+            <p className="field-error" role="alert">
+              {m.errors.apiFailed}: {prepareError}
+            </p>
+          ) : null}
           <div className="btn-row">
             <button className="btn btn-primary" disabled={busy || !actor} onClick={() => onPrepare('contribute')}>
               {m.card.contribute}

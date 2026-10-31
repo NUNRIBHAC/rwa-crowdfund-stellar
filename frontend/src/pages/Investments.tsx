@@ -45,6 +45,7 @@ export default function Investments({ market }: { market: Market }) {
       demo={fixtureMode}
       amount={market.amounts[c.id] ?? ''}
       amountError={market.amountErrors[c.id]}
+      prepareError={market.prepareErrors[c.id]}
       onAmount={(v) => market.onAmount(c.id, v)}
       onPrepare={(action) => market.onPrepare(c, action)}
     />

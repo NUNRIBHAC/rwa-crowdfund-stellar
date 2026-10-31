@@ -45,6 +45,7 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
   const [amountErrors, setAmountErrors] = useState<Record<string, string>>({});
+  const [prepareErrors, setPrepareErrors] = useState<Record<string, string>>({});
   const [loaded, setLoaded] = useState(false);
   const [fixtureMode, setFixtureMode] = useState(false);
   const [intent, setIntent] = useState<Intent | null>(() => {
@@ -119,11 +120,20 @@ export default function App() {
     if (intent && !isTerminal(intent.status)) {
       throw new Error(m.errors.resolveSaved);
     }
-    const result = await api(`/api/campaigns/${c.id}/soroban/build`, {
-      actor,
-      action,
-      amount: amounts[c.id],
-    });
+    setPrepareErrors((prev) => ({ ...prev, [c.id]: '' }));
+    let result;
+    try {
+      result = await api(`/api/campaigns/${c.id}/soroban/build`, {
+        actor,
+        action,
+        amount: amounts[c.id],
+      });
+    } catch (e) {
+      // Build failures surface at the card, next to the button that failed,
+      // not only in the page-top banner a scrolled-down user never sees.
+      setPrepareErrors((prev) => ({ ...prev, [c.id]: e instanceof Error ? e.message : String(e) }));
+      return;
+    }
     retain({ ...result, campaign: c.id, actor, status: 'BUILT' });
     setFixtureMode(false);
   }
@@ -171,6 +181,7 @@ export default function App() {
     busy,
     amounts,
     amountErrors,
+    prepareErrors,
     onAmount: (id, v) => {
       setAmounts({ ...amounts, [id]: v });
       const c = campaigns.find((x) => x.id === id);
