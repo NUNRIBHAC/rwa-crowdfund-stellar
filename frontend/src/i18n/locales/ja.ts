@@ -1293,6 +1293,10 @@ export const ja: Messages = {
     myTicketsTitle: '自分のサポート・フィードバックチケット',
     myCommentsTitle: '自分のコメント',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: 'このフィールドを入力してください。',
+      emailInvalid: '有効なメールアドレスを入力してください。',
+    },
     applicationSubmit: '申請を送信',
     applicationDone: '申請を受け付けました。運営者はサイト外で申請を審査します; 自動で掲載されるものはありません。',
   },

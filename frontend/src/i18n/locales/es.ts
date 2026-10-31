@@ -1378,6 +1378,10 @@ export const es: Messages = {
     myTicketsTitle: 'Mis tickets de soporte y feedback',
     myCommentsTitle: 'Mis comentarios',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: 'Rellene este campo.',
+      emailInvalid: 'Introduzca una dirección de correo electrónico válida.',
+    },
     applicationSubmit: 'Enviar solicitud',
     applicationDone: 'Solicitud recibida. El operador revisa las solicitudes fuera del sitio; nada se lista automáticamente.',
   },

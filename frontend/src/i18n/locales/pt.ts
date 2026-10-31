@@ -1373,6 +1373,10 @@ export const pt: Messages = {
     myTicketsTitle: 'Os meus pedidos de suporte e feedback',
     myCommentsTitle: 'Os meus comentários',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: 'Preencha este campo.',
+      emailInvalid: 'Introduza um endereço de email válido.',
+    },
     applicationSubmit: 'Submeter candidatura',
     applicationDone: 'Candidatura recebida. A operadora analisa as candidaturas fora do site; nada é listado automaticamente.',
   },

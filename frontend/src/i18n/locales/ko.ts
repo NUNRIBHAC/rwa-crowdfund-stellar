@@ -1267,6 +1267,10 @@ export const ko: Messages = {
     myTicketsTitle: '내 지원 및 피드백 티켓',
     myCommentsTitle: '내 댓글',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: '이 필드를 입력하세요.',
+      emailInvalid: '유효한 이메일 주소를 입력하세요.',
+    },
     applicationSubmit: '신청 제출',
     applicationDone: '신청이 접수되었습니다. 운영자는 사이트 밖에서 신청을 검토하며, 자동으로 상장되지 않습니다.',
   },

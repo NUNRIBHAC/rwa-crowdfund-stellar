@@ -7,8 +7,8 @@
 // authority (localized browser messages, focus management). On top of it,
 // invalid fields get aria-invalid + an inline message (aria-describedby) so
 // the error state is visible and announced beyond the transient native
-// bubble; the message text is the browser's own validationMessage, already
-// localized. Server zod errors keep surfacing in the role=alert region.
+// bubble; the inline text uses the site locale via m.community keys, with
+// the browser's validationMessage as fallback for unconstrained cases. Server zod errors keep surfacing in the role=alert region.
 import { useState } from 'react';
 import type { FormEvent, InvalidEvent } from 'react';
 import { COMMUNITY_LIMITS, submitIssuerApplication } from '../community/api';
@@ -37,7 +37,14 @@ export default function IssuerApplicationForm() {
     const el = e.target as HTMLInputElement | HTMLTextAreaElement;
     const key = el.name as FieldKey;
     if (!key) return;
-    setFieldErrors((prev) => ({ ...prev, [key]: el.validationMessage }));
+    // Site-locale messages for the cases this form can produce (required,
+    // email format); anything else keeps the browser's own validationMessage.
+    const message = el.validity.valueMissing
+      ? m.community.applicationValidation.required
+      : el.validity.typeMismatch && el.type === 'email'
+        ? m.community.applicationValidation.emailInvalid
+        : el.validationMessage;
+    setFieldErrors((prev) => ({ ...prev, [key]: message }));
   }
 
   function revalidate(key: FieldKey, el: HTMLInputElement | HTMLTextAreaElement) {

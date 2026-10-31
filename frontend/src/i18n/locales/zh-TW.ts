@@ -1175,6 +1175,10 @@ export const zhTW: Messages = {
     myTicketsTitle: '我的支援與意見回饋工單',
     myCommentsTitle: '我的留言',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: '請填寫此欄位。',
+      emailInvalid: '請輸入有效的電子郵件地址。',
+    },
     applicationSubmit: '送出申請',
     applicationDone: '已收到申請。營運方會在站外審核申請;不會自動上架任何內容。',
   },

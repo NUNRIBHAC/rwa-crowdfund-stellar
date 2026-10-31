@@ -1362,6 +1362,10 @@ export const de: Messages = {
     myTicketsTitle: 'Meine Support- und Feedback-Tickets',
     myCommentsTitle: 'Meine Kommentare',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: 'Bitte füllen Sie dieses Feld aus.',
+      emailInvalid: 'Geben Sie eine gültige E-Mail-Adresse ein.',
+    },
     applicationSubmit: 'Bewerbung absenden',
     applicationDone: 'Bewerbung erhalten. Der Betreiber prüft Bewerbungen außerhalb der Seite; nichts wird automatisch gelistet.',
   },

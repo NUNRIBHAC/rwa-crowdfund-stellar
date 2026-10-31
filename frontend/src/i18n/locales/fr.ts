@@ -1380,6 +1380,10 @@ export const fr: Messages = {
     myTicketsTitle: 'Mes tickets de support et feedback',
     myCommentsTitle: 'Mes commentaires',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: 'Veuillez remplir ce champ.',
+      emailInvalid: 'Saisissez une adresse e-mail valide.',
+    },
     applicationSubmit: 'Envoyer la candidature',
     applicationDone: "Candidature reçue. L'opérateur examine les candidatures hors du site ; rien n'est listé automatiquement.",
   },

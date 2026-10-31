@@ -1325,6 +1325,10 @@ export const hi: Messages = {
     myTicketsTitle: 'मेरे सहायता और प्रतिक्रिया टिकट',
     myCommentsTitle: 'मेरी टिप्पणियाँ',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: 'कृपया यह फ़ील्ड भरें।',
+      emailInvalid: 'मान्य ईमेल पता दर्ज करें।',
+    },
     applicationSubmit: 'आवेदन भेजें',
     applicationDone: 'आवेदन प्राप्त हुआ। ऑपरेटर आवेदनों की समीक्षा साइट के बाहर करता है; कुछ भी स्वचालित रूप से सूचीबद्ध नहीं होता।',
   },

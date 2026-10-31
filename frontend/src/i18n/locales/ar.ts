@@ -1275,6 +1275,10 @@ export const ar: Messages = {
     myTicketsTitle: 'تذاكر الدعم والملاحظات الخاصة بي',
     myCommentsTitle: 'تعليقاتي',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: 'يرجى ملء هذا الحقل.',
+      emailInvalid: 'أدخل عنوان بريد إلكتروني صالحًا.',
+    },
     applicationSubmit: 'إرسال الطلب',
     applicationDone: 'تم استلام الطلب. يراجع المشغّل الطلبات خارج الموقع؛ لا يتم إدراج أي شيء تلقائياً.',
   },

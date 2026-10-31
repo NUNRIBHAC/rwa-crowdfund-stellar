@@ -1334,6 +1334,10 @@ export const en = {
     myTicketsTitle: 'My support and feedback tickets',
     myCommentsTitle: 'My comments',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: 'Please fill in this field.',
+      emailInvalid: 'Enter a valid email address.',
+    },
     applicationSubmit: 'Submit application',
     applicationDone: 'Application received. The operator reviews applications off-site; nothing is listed automatically.',
   },

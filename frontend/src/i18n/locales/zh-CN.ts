@@ -1175,6 +1175,10 @@ export const zhCN: Messages = {
     myTicketsTitle: '我的支持与反馈工单',
     myCommentsTitle: '我的评论',
     commentHidden: 'Hidden by moderation',
+    applicationValidation: {
+      required: '请填写此字段。',
+      emailInvalid: '请输入有效的电子邮件地址。',
+    },
     applicationSubmit: '提交申请',
     applicationDone: '已收到申请。运营方会在站外审核申请;不会自动上架任何内容。',
   },
