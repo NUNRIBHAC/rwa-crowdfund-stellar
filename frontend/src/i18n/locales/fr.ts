@@ -25,7 +25,7 @@ export const fr: Messages = {
     languageLabel: 'Langue du site',
   },
   riskBanner:
-    "Les investissements en crowdfunding comportent un risque de perte totale. Ceci est un prototype sur le testnet Stellar : aucune offre réelle, aucun fonds réel, aucun conseil en investissement.",
+    'Les investissements en crowdfunding comportent un risque de perte totale. Ceci est un prototype sur le testnet Stellar : aucune offre réelle, aucun fonds réel, aucun conseil en investissement.',
   hero: {
     eyebrow: 'Des actifs du monde réel tokenisés, sur Stellar',
     titleA: 'Des actifs réels.',
@@ -40,17 +40,16 @@ export const fr: Messages = {
     noteUnknown: 'Non audité, non prêt pour la production.',
     unavailable:
       "Non disponible dans ce prototype : inscription avec identité/KYC, négociation sur un marché secondaire, tokens d'actifs ou de reçus transférables, paiements en monnaie fiduciaire, offres d'investissement réelles. Les registres de contribution sont incessibles - ceci est du crowdfunding, pas une bourse d'investissement.",
-    fundingBlockAria:
-      "Illustration : de petits blocs violets glissent un à un et remplissent le contour d'un actif partagé, token par token",
+    fundingBlockAria: "Illustration : de petits blocs violets glissent un à un et remplissent le contour d'un actif partagé, token par token",
   },
   emptyState: {
     fixtureStrong: 'Aperçu avec exemples actif.',
     fixtureText:
-      "Les campagnes ci-dessous sont des exemples pour montrer la mise en page. Ce ne sont pas des contrats déployés, pas des offres réelles et elles ne peuvent pas accepter de contributions.",
+      'Les campagnes ci-dessous sont des exemples pour montrer la mise en page. Ce ne sont pas des contrats déployés, pas des offres réelles et elles ne peuvent pas accepter de contributions.',
     fixtureBack: 'Retour au registre réel',
     emptyTitle: 'Aucune campagne déployée configurée',
     emptyText:
-      "Un opérateur doit déployer et vérifier séparément le contrat révisé, puis définir SOROBAN_CAMPAIGNS_JSON. Le déploiement et la migration ne se font pas ici. Les anciennes campagnes sont en lecture seule et exigent une réconciliation.",
+      'Un opérateur doit déployer et vérifier séparément le contrat révisé, puis définir SOROBAN_CAMPAIGNS_JSON. Le déploiement et la migration ne se font pas ici. Les anciennes campagnes sont en lecture seule et exigent une réconciliation.',
     emptyCta: 'Aperçu avec des campagnes exemples',
   },
   home: {
@@ -63,7 +62,10 @@ export const fr: Messages = {
     steps: [
       { title: 'Connecter', text: 'Connectez un portefeuille Freighter sur le testnet Stellar. Sans compte, sans données personnelles dans ce prototype.' },
       { title: 'Découvrir', text: 'Parcourez les campagnes et lisez les conditions structurées sur la page de chaque campagne.' },
-      { title: 'Contribuer', text: 'Signez une transaction. Le contrat place votre contribution en séquestre et applique le plafond de financement de façon atomique.' },
+      {
+        title: 'Contribuer',
+        text: 'Signez une transaction. Le contrat place votre contribution en séquestre et applique le plafond de financement de façon atomique.',
+      },
       { title: 'Suivre', text: "Suivez ici l'état du financement. Les remboursements sont signés par le contributeur si l'objectif n'est pas atteint." },
     ],
     fullJourneyLink: "Parcours complet de l'investisseur, chaque étape marquée comme existante ou planifiée",
@@ -85,7 +87,7 @@ export const fr: Messages = {
   },
   invest: {
     title: 'Tous les investissements',
-    noteFixture: "Les campagnes exemples montrent la mise en page. Ce ne sont pas des contrats déployés et elles ne peuvent pas accepter de contributions.",
+    noteFixture: 'Les campagnes exemples montrent la mise en page. Ce ne sont pas des contrats déployés et elles ne peuvent pas accepter de contributions.',
     noteLive: 'Les vraies campagnes sont des contrats Soroban sur le testnet Stellar. Les actifs de testnet sont sans valeur.',
     refresh: "Actualiser l'état du contrat",
     searchPlaceholder: 'Rechercher des campagnes par nom ou contrat',
@@ -129,7 +131,7 @@ export const fr: Messages = {
     status: 'Statut',
     yourPosition: 'Votre registre de contribution :',
     viewDetails: 'Voir les détails',
-    demoNote: "Données de démonstration illustratives - pas une offre réelle.",
+    demoNote: 'Données de démonstration illustratives - pas une offre réelle.',
     photoAlt: "Photographie aérienne d'une ferme solaire (illustrative)",
     photoCaption: 'Photo illustrative - pas le projet réel.',
     contractData: 'Données du contrat',
@@ -197,7 +199,8 @@ export const fr: Messages = {
     notFoundText: "Aucune campagne avec cet id n'est dans le registre actuel",
     notFoundFixtureSuffix: ' de campagnes exemples',
     backToAll: 'Retour à tous les investissements',
-    issuerMissing: "L'identité de l'émetteur et les conditions off-chain ne sont pas disponibles dans ce prototype ; les données ci-dessous proviennent du contrat on-chain.",
+    issuerMissing:
+      "L'identité de l'émetteur et les conditions off-chain ne sont pas disponibles dans ce prototype ; les données ci-dessous proviennent du contrat on-chain.",
     assetClass: "Classe d'actif",
     escrowTestnet: 'Séquestre par contrat (testnet)',
     interestRate: "Taux d'intérêt",
@@ -226,7 +229,8 @@ export const fr: Messages = {
     detailsPre: "Le modèle économique, le marché, les finances et les jalons apparaîtraient ici comme sections fournies par l'émetteur.",
     detailsSample: "Cette campagne exemple n'inclut pas de contenu de détail.",
     detailsMissing: 'Non disponible dans ce prototype.',
-    documentsMissing: "L'hébergement de documents n'est pas disponible dans ce prototype. Une plateforme en production hébergerait ici la fiche d'information fondamentale et les conditions de l'émission.",
+    documentsMissing:
+      "L'hébergement de documents n'est pas disponible dans ce prototype. Une plateforme en production hébergerait ici la fiche d'information fondamentale et les conditions de l'émission.",
     newsEmpty: 'Aucune actualité. Les nouvelles de la campagne apparaîtraient ici.',
     statusFunded: 'Financée avec succès',
     statusEnded: 'Sans succès',
@@ -234,7 +238,8 @@ export const fr: Messages = {
     widgetOverview: "Résumé de l'investissement",
     widgetFixture: "Aperçu d'exemple. Cette campagne est un exemple (fixture), pas un contrat déployé, et ne peut pas accepter de contributions.",
     widgetEnded: "Cette campagne est terminée. Les remboursements restent disponibles selon les règles d'échéance décrites sur la page des investissements.",
-    widgetRisk: "Les investissements en crowdfunding comportent un risque de perte totale et sont illiquides. Ce prototype utilise des actifs de testnet sans valeur.",
+    widgetRisk:
+      'Les investissements en crowdfunding comportent un risque de perte totale et sont illiquides. Ce prototype utilise des actifs de testnet sans valeur.',
     raised: 'Collecté',
     usdcTestnet: 'USDC (testnet)',
     explainerSuffix: "Ceci est un texte éducatif d'exemple, pas les conditions d'une offre réelle.",
@@ -281,7 +286,7 @@ export const fr: Messages = {
       },
       {
         title: 'Paiement',
-        text: "Une plateforme en production règle via un prestataire de paiement agréé avec des références par investissement. Ici, la transaction sur le testnet Stellar est le règlement, avec des actifs sans valeur.",
+        text: 'Une plateforme en production règle via un prestataire de paiement agréé avec des références par investissement. Ici, la transaction sur le testnet Stellar est le règlement, avec des actifs sans valeur.',
       },
       {
         title: 'Tableau de bord et paiements',
@@ -293,11 +298,20 @@ export const fr: Messages = {
       },
     ],
     issuerSteps: [
-      { title: 'Candidature et analyse', text: "L'émetteur candidate, passe l'analyse d'éligibilité et de documents et signe les conditions de la plateforme." },
-      { title: 'Construction de la campagne', text: "Les conditions de l'instrument, les seuils, les documents et le contenu marketing sont configurés et relus." },
+      {
+        title: 'Candidature et analyse',
+        text: "L'émetteur candidate, passe l'analyse d'éligibilité et de documents et signe les conditions de la plateforme.",
+      },
+      {
+        title: 'Construction de la campagne',
+        text: "Les conditions de l'instrument, les seuils, les documents et le contenu marketing sont configurés et relus.",
+      },
       { title: 'Campagne active', text: "La démo montre la page publique de la campagne avec l'état de financement on-chain en temps réel." },
       { title: 'Règlement', text: "Tout-ou-rien : le créateur ne lève les fonds que si l'objectif est atteint dans les délais, appliqué par le contrat." },
-      { title: 'Obligations post-financement', text: "Rapports, paiements d'intérêts et remboursement, et un état séparé du cycle de vie de l'émetteur. Non implémenté." },
+      {
+        title: 'Obligations post-financement',
+        text: "Rapports, paiements d'intérêts et remboursement, et un état séparé du cycle de vie de l'émetteur. Non implémenté.",
+      },
     ],
   },
   learn: {
@@ -313,7 +327,8 @@ export const fr: Messages = {
     overlaysIntro: "Les superpositions se combinent avec une catégorie mère de prêt ou d'obligation et n'existent jamais seules comme instruments.",
     qualifiersAria: "Qualificatifs de rang et d'étiquette",
     qualifiersTitle: "Qualificatifs de rang et d'étiquette",
-    qualifiersIntro: "Terminologie de plateformes que vous pouvez rencontrer dans des offres. Ces étiquettes qualifient un instrument ; ce ne sont pas des classes d'instruments en soi.",
+    qualifiersIntro:
+      "Terminologie de plateformes que vous pouvez rencontrer dans des offres. Ces étiquettes qualifient un instrument ; ce ne sont pas des classes d'instruments en soi.",
     glossaryAria: 'Glossaire',
     glossaryTitle: 'Glossaire',
     glossaryPre: 'Les termes clés de la plateforme et du crowdfunding ont leur propre page :',
@@ -323,7 +338,8 @@ export const fr: Messages = {
   },
   glossaryPage: {
     title: 'Glossaire',
-    intro: "Termes clés utilisés sur cette plateforme et dans les offres de crowdfunding en général. Contenu uniquement éducatif : ce n'est ni une offre ni un conseil en investissement.",
+    intro:
+      "Termes clés utilisés sur cette plateforme et dans les offres de crowdfunding en général. Contenu uniquement éducatif : ce n'est ni une offre ni un conseil en investissement.",
     sectionAria: 'Termes du glossaire',
     backPre: 'Retour à la page',
     backLink: 'Apprendre',
@@ -333,18 +349,30 @@ export const fr: Messages = {
   riskWarnings: {
     title: 'Avertissements de risque',
     items: [
-      { h: 'Perte totale', p: "Les investissements en crowdfunding peuvent perdre toute leur valeur. N'investissez jamais d'argent dont vous ne pouvez pas supporter la perte." },
-      { h: 'Illiquidité', p: "Ces instruments ne sont généralement pas négociables. Partez du principe que vous ne pouvez pas sortir avant l'échéance ou un événement défini." },
+      {
+        h: 'Perte totale',
+        p: "Les investissements en crowdfunding peuvent perdre toute leur valeur. N'investissez jamais d'argent dont vous ne pouvez pas supporter la perte.",
+      },
+      {
+        h: 'Illiquidité',
+        p: "Ces instruments ne sont généralement pas négociables. Partez du principe que vous ne pouvez pas sortir avant l'échéance ou un événement défini.",
+      },
       {
         h: 'Diversification',
         p: "Une orientation courante est de ne pas investir plus de 10% des fonds librement disponibles dans cette classe d'actifs et de les répartir entre plusieurs émetteurs.",
       },
-      { h: 'Aucun mécanisme de protection', p: "Les investissements en crowdfunding ne sont couverts ni par des mécanismes de garantie des dépôts ni par des mécanismes d'indemnisation des investisseurs." },
+      {
+        h: 'Aucun mécanisme de protection',
+        p: "Les investissements en crowdfunding ne sont couverts ni par des mécanismes de garantie des dépôts ni par des mécanismes d'indemnisation des investisseurs.",
+      },
       {
         h: 'Aucun conseil',
-        p: "Rien sur ce site ne constitue un conseil en investissement, juridique ou fiscal. Ce site est un prototype logiciel sur un réseau de test et ne liste aucune offre réelle.",
+        p: 'Rien sur ce site ne constitue un conseil en investissement, juridique ou fiscal. Ce site est un prototype logiciel sur un réseau de test et ne liste aucune offre réelle.',
       },
-      { h: 'Statut de prototype', p: "Les actifs de testnet sont sans valeur. Les contrats intelligents ici ne sont pas audités et ne doivent pas être utilisés avec des fonds réels." },
+      {
+        h: 'Statut de prototype',
+        p: 'Les actifs de testnet sont sans valeur. Les contrats intelligents ici ne sont pas audités et ne doivent pas être utilisés avec des fonds réels.',
+      },
     ],
   },
   faqPage: {
@@ -364,18 +392,19 @@ export const fr: Messages = {
   },
   about: {
     title: 'À propos de ce projet',
-    p1: "Blockallisto (dépôt rwa-crowdfund-stellar) est un prototype personnel qui explore le crowdfunding tokenisé sur le réseau Stellar : financement de campagnes appliqué par un contrat intelligent Soroban, avec la plateforme plus large - comptes, vérification, instruments, paiements - conçue et documentée ouvertement dans le dépôt.",
+    p1: 'Blockallisto (dépôt rwa-crowdfund-stellar) est un prototype personnel qui explore le crowdfunding tokenisé sur le réseau Stellar : financement de campagnes appliqué par un contrat intelligent Soroban, avec la plateforme plus large - comptes, vérification, instruments, paiements - conçue et documentée ouvertement dans le dépôt.',
     p2: "Ce n'est ni une entreprise, ni un prestataire de services de crowdfunding agréé, ni une offre de titres. Contexte de marché : du Portugal vers le monde.",
     ethicsAria: "Politique d'exclusion éthique",
     ethicsTitle: "Politique d'exclusion éthique",
-    ethicsIntro: 'Une politique au niveau du produit pour la plateforme que ce prototype explore. Les émetteurs des secteurs suivants sont hors de portée par conception :',
+    ethicsIntro:
+      'Une politique au niveau du produit pour la plateforme que ce prototype explore. Les émetteurs des secteurs suivants sont hors de portée par conception :',
     ethicsPoints: [
       'Tabac, jeux de hasard et armes',
       'Combustibles fossiles, mines et énergie nucléaire',
       'Prisons et services de détention',
       'Organismes génétiquement modifiés et industries liées aux minerais de conflit',
     ],
-    ethicsNote: "Ceci est un engagement de conception du projet, pas une affirmation sur une quelconque opération réelle.",
+    ethicsNote: 'Ceci est un engagement de conception du projet, pas une affirmation sur une quelconque opération réelle.',
     techAria: 'Technologie',
     techTitle: 'Technologie',
     techText:
@@ -399,7 +428,8 @@ export const fr: Messages = {
     ],
     previewAria: 'Aperçu de la candidature',
     previewTitle: 'Candidature (aperçu)',
-    previewNote: "L'intégration des émetteurs n'est pas connectée dans ce prototype : ce formulaire est désactivé et rien de ce qui y est écrit n'est envoyé ni enregistré.",
+    previewNote:
+      "L'intégration des émetteurs n'est pas connectée dans ce prototype : ce formulaire est désactivé et rien de ce qui y est écrit n'est envoyé ni enregistré.",
     companyName: "Nom de l'entreprise",
     country: "Pays d'enregistrement",
     targetAmount: 'Montant visé',
@@ -417,7 +447,7 @@ export const fr: Messages = {
     totalSub: 'En séquestre on-chain, additionné sur les campagnes',
     returnReceived: 'Rendement reçu',
     returnNa: 'Non disponible',
-    returnSub: "Ce prototype ne suit aucun historique de paiements",
+    returnSub: 'Ce prototype ne suit aucun historique de paiements',
     activeInvestments: 'Investissements actifs',
     activeSub: 'Positions en séquestre dans des campagnes ouvertes ou financées',
     connectNote: "Connectez votre portefeuille Freighter pour voir vos positions de testnet. Sans portefeuille, cette page n'affiche que la structure.",
@@ -454,15 +484,21 @@ export const fr: Messages = {
       { label: 'Adresse', note: 'Non collectée dans ce prototype.' },
       { label: 'Coordonnées', note: 'Non collectées dans ce prototype.' },
       { label: 'Sécurité', note: "Accès par portefeuille (Freighter). Pas de mot de passe ni d'application à deux facteurs dans ce prototype." },
-      { label: "Qualification de l'investisseur", note: "Le test de connaissances et la vérification de capacité de pertes sont des étapes de conformité planifiées ; non implémentés ici." },
-      { label: 'Vérification (KYC)', note: "Non implémentée. Ce prototype de testnet ne vérifie aucune identité." },
+      {
+        label: "Qualification de l'investisseur",
+        note: 'Le test de connaissances et la vérification de capacité de pertes sont des étapes de conformité planifiées ; non implémentés ici.',
+      },
+      { label: 'Vérification (KYC)', note: 'Non implémentée. Ce prototype de testnet ne vérifie aucune identité.' },
       { label: 'Coordonnées bancaires', note: 'Non collectées. Les contributions et remboursements se font en USDC de testnet on-chain.' },
       { label: 'Compte-titres', note: 'Référence optionnelle à un compte-titres sur la plateforme de référence ; non collectée ici.' },
       {
         label: 'Coffre numérique',
         note: 'Vue de conservation planifiée des positions détenues. Ici, les positions vivent dans chaque contrat de campagne et se lisent par portefeuille connecté.',
       },
-      { label: "Comptes d'entreprise", note: "La plateforme de référence permet à un investisseur vérifié d'ajouter un compte d'entreprise ; non implémenté dans ce prototype." },
+      {
+        label: "Comptes d'entreprise",
+        note: "La plateforme de référence permet à un investisseur vérifié d'ajouter un compte d'entreprise ; non implémenté dans ce prototype.",
+      },
     ],
   },
   footer: {
@@ -478,8 +514,7 @@ export const fr: Messages = {
     status: 'Statut',
     statusText:
       "Prototype de testnet. Aucun déploiement automatique ni conversion de soldes hérités. Les intents et soldes classiques existants sont préservés, pas effacés. L'infrastructure séparée d'identité/valorisation reste uniquement simulée.",
-    legalPre:
-      "Contexte de marché : l'UE régule le crowdfunding sous le régime ECSPR ; les prestataires agréés figurent dans le",
+    legalPre: "Contexte de marché : l'UE régule le crowdfunding sous le régime ECSPR ; les prestataires agréés figurent dans le",
     legalLink: "registre de l'AEMF",
     legalPost: ". Cette application n'est pas un prestataire de services de crowdfunding agréé et ne liste aucune offre réelle.",
     tagline: 'Des actifs réels. Des possibilités partagées.',
@@ -498,7 +533,7 @@ export const fr: Messages = {
     resolveSaved: "Réglez la transaction enregistrée avant d'en préparer une autre.",
     walletMismatch: 'Connectez le portefeuille qui a préparé cette transaction.',
     walletNoSign: "Le portefeuille n'a pas signé",
-    apiFailed: "La requête API a échoué",
+    apiFailed: 'La requête API a échoué',
   },
   instruments: {
     groups: [
@@ -530,8 +565,15 @@ export const fr: Messages = {
         seniorityStates: [] as string[],
         summary:
           "Un droit (souvent titrisé comme certificat participatif) à une part des bénéfices et au remboursement de la valeur nominale, sans les droits de gouvernance complets d'un actionnaire.",
-        opportunities: ['Part aux bénéfices sans acheter des capitaux propres complets', 'Combine souvent un droit de remboursement de base avec une participation aux bénéfices'],
-        risks: ["La part des bénéfices dépend entièrement de la performance de l'émetteur", 'Peut passer après les créanciers ordinaires', "Généralement illiquide jusqu'à l'échéance"],
+        opportunities: [
+          'Part aux bénéfices sans acheter des capitaux propres complets',
+          'Combine souvent un droit de remboursement de base avec une participation aux bénéfices',
+        ],
+        risks: [
+          "La part des bénéfices dépend entièrement de la performance de l'émetteur",
+          'Peut passer après les créanciers ordinaires',
+          "Généralement illiquide jusqu'à l'échéance",
+        ],
         suitableFor: 'Investisseurs qui veulent une exposition aux résultats de l\u2019entreprise et acceptent un risque proche des capitaux propres.',
       },
       {
@@ -543,7 +585,10 @@ export const fr: Messages = {
         seniorityStates: [] as string[],
         summary:
           "Un droit participatif lié à la base d'actifs (la « substance ») de l'émetteur plutôt qu'à son seul bénéfice annuel. La structuration et les émetteurs éligibles varient selon la juridiction et les statuts.",
-        opportunities: ["Participation à la valeur des actifs de l'émetteur", 'Peut être structuré pour de plus petits émetteurs lorsque les statuts le permettent'],
+        opportunities: [
+          "Participation à la valeur des actifs de l'émetteur",
+          'Peut être structuré pour de plus petits émetteurs lorsque les statuts le permettent',
+        ],
         risks: [
           "La forme juridique et la protection de l'investisseur varient fortement selon la juridiction",
           "Peut impliquer un fiduciaire ou un véhicule entre l'investisseur et l'émetteur",
@@ -561,7 +606,11 @@ export const fr: Messages = {
         summary:
           "Capitaux propres directs de la société émettrice : droit aux dividendes et participation à la valeur de l'entreprise, avec des droits fixés par les statuts. Les nouvelles actions parviennent aux investisseurs via une augmentation de capital.",
         opportunities: ["Participation pleine à la croissance de l'entreprise", "Droits de vote ou d'information selon la classe d'actions"],
-        risks: ["Aucun droit de remboursement fixe ; les dividendes ne sont pas garantis", 'Perte totale possible', "Les actions de crowdfunding ne sont généralement pas négociables en bourse"],
+        risks: [
+          'Aucun droit de remboursement fixe ; les dividendes ne sont pas garantis',
+          'Perte totale possible',
+          'Les actions de crowdfunding ne sont généralement pas négociables en bourse',
+        ],
         suitableFor: 'Investisseurs à horizon long qui veulent la propriété et acceptent le risque entrepreneurial plein.',
       },
       {
@@ -571,9 +620,14 @@ export const fr: Messages = {
         note: "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie.",
         group: 'participation',
         seniorityStates: [] as string[],
-        summary: "Les investisseurs participent indirectement à un investissement dans une PME - par exemple via un véhicule ou un fiduciaire - avec un traitement simplifié.",
-        opportunities: ['Accès à des opérations difficiles à détenir directement', "Administration simplifiée via la structure intermédiaire"],
-        risks: ["Une couche supplémentaire entre l'investisseur et l'émetteur", "Le rendement dépend de la performance de l'émetteur", 'Les conditions du véhicule régissent les paiements et la sortie'],
+        summary:
+          'Les investisseurs participent indirectement à un investissement dans une PME - par exemple via un véhicule ou un fiduciaire - avec un traitement simplifié.',
+        opportunities: ['Accès à des opérations difficiles à détenir directement', 'Administration simplifiée via la structure intermédiaire'],
+        risks: [
+          "Une couche supplémentaire entre l'investisseur et l'émetteur",
+          "Le rendement dépend de la performance de l'émetteur",
+          'Les conditions du véhicule régissent les paiements et la sortie',
+        ],
         suitableFor: "Investisseurs qui veulent l'économie de la participation sans détenir directement l'intérêt sous-jacent.",
       },
       {
@@ -589,7 +643,7 @@ export const fr: Messages = {
         risks: [
           'La participation aux pertes peut réduire ou annuler la part',
           'La sortie est souvent restreinte par le contrat de société',
-          "Les obligations fiscales et de reporting peuvent être plus lourdes",
+          'Les obligations fiscales et de reporting peuvent être plus lourdes',
         ],
         suitableFor: 'Investisseurs qui comprennent les structures de sociétés de personnes et acceptent le risque entrepreneurial.',
       },
@@ -602,8 +656,15 @@ export const fr: Messages = {
         seniorityStates: ['senior', 'subordinated', 'unspecified'],
         summary:
           "Un prêt direct à l'émetteur avec un taux d'intérêt et un calendrier de remboursement définis. La même catégorie mère de prêt peut être senior, subordonnée (y compris des variantes participatives aux bénéfices) ou laisser la seniorité non spécifiée.",
-        opportunities: ["Un calendrier fixe est plus facile à modéliser que des capitaux propres", "Les variantes subordonnées paient un intérêt plus élevé en échange du rang inférieur"],
-        risks: ["Le défaut de l'émetteur peut signifier une perte totale", "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité", 'Aucune garantie de dépôts'],
+        opportunities: [
+          'Un calendrier fixe est plus facile à modéliser que des capitaux propres',
+          'Les variantes subordonnées paient un intérêt plus élevé en échange du rang inférieur',
+        ],
+        risks: [
+          "Le défaut de l'émetteur peut signifier une perte totale",
+          "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
+          'Aucune garantie de dépôts',
+        ],
         suitableFor: 'Investisseurs qui acceptent le risque de crédit sans protection bancaire.',
       },
       {
@@ -614,9 +675,16 @@ export const fr: Messages = {
         group: 'debt',
         seniorityStates: ['senior', 'subordinated', 'unspecified'],
         summary:
-          "Un instrument de dette titrisé avec coupon et durée définis. Émise en senior (non subordonnée), subordonnée (y compris obligations qualifiées explicitement subordonnées et Mini Bonds subordonnés) ou avec seniorité non spécifiée.",
-        opportunities: ['Coupon et calendrier de remboursement définis', "Les émissions senior ont priorité sur le capital subordonné et les capitaux propres en cas d'insolvabilité"],
-        risks: ["La subordination augmente la gravité de la perte en cas d'insolvabilité", "Reste non garantie sauf si une sûreté est indiquée", "Pas de participation à la croissance de l'entreprise"],
+          'Un instrument de dette titrisé avec coupon et durée définis. Émise en senior (non subordonnée), subordonnée (y compris obligations qualifiées explicitement subordonnées et Mini Bonds subordonnés) ou avec seniorité non spécifiée.',
+        opportunities: [
+          'Coupon et calendrier de remboursement définis',
+          "Les émissions senior ont priorité sur le capital subordonné et les capitaux propres en cas d'insolvabilité",
+        ],
+        risks: [
+          "La subordination augmente la gravité de la perte en cas d'insolvabilité",
+          'Reste non garantie sauf si une sûreté est indiquée',
+          "Pas de participation à la croissance de l'entreprise",
+        ],
         suitableFor: "Investisseurs orientés rendement qui supportent une perte totale et n'ont pas besoin du capital avant l'échéance.",
       },
     ],
@@ -638,12 +706,14 @@ export const fr: Messages = {
       {
         id: 'junior',
         label: '« Junior »',
-        summary: "Une étiquette de rang inférieur dans la terminologie des plateformes. Elle indique un rang subordonné mais n'établit pas à elle seule une subordination qualifiée contractuelle.",
+        summary:
+          "Une étiquette de rang inférieur dans la terminologie des plateformes. Elle indique un rang subordonné mais n'établit pas à elle seule une subordination qualifiée contractuelle.",
       },
       {
         id: 'qualified',
         label: '« Qualifiée / qualifiziert »',
-        summary: "Terminologie de plateformes rencontrée sur des prêts et obligations. Sur les obligations, ne la lisez pas comme subordination qualifiée sauf si les conditions elles-mêmes disent subordonnée.",
+        summary:
+          'Terminologie de plateformes rencontrée sur des prêts et obligations. Sur les obligations, ne la lisez pas comme subordination qualifiée sauf si les conditions elles-mêmes disent subordonnée.',
       },
       { id: 'mini-bond', label: '« Mini Bond »', summary: 'Étiquette de plateforme pour une obligation de faible valeur unitaire.' },
     ],
@@ -660,9 +730,16 @@ export const fr: Messages = {
       definition:
         "L'émetteur ne reçoit les fonds que si l'objectif est atteint dans les délais ; sinon, les contributions sont restituées. Le contrat Soroban de ce prototype l'applique on-chain.",
     },
-    { term: 'Seuil de financement', definition: "Le montant minimum qu'une émission doit lever pour être bouclée. Distinct de l'investissement minimum par investisseur." },
+    {
+      term: 'Seuil de financement',
+      definition: "Le montant minimum qu'une émission doit lever pour être bouclée. Distinct de l'investissement minimum par investisseur.",
+    },
     { term: 'Investissement minimum', definition: 'Le plus petit montant qu\u2019un investisseur peut souscrire, généralement une unité.' },
-    { term: 'Subordination', definition: "Une règle de rang : les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité, ce qui augmente le risque de perte." },
+    {
+      term: 'Subordination',
+      definition:
+        "Une règle de rang : les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité, ce qui augmente le risque de perte.",
+    },
     { term: 'ISIN', definition: "Numéro international d'identification des titres. Identifie un titre. Ce prototype n'émet ni titres ni ISIN." },
     {
       term: "Fiche d'information fondamentale (KIIS)",
@@ -675,11 +752,13 @@ export const fr: Messages = {
     },
     {
       term: 'Test de connaissances',
-      definition: "Une vérification de la compréhension des risques du crowdfunding par l'investisseur, exigée par certains régimes avant que des investisseurs non avertis puissent investir.",
+      definition:
+        "Une vérification de la compréhension des risques du crowdfunding par l'investisseur, exigée par certains régimes avant que des investisseurs non avertis puissent investir.",
     },
     {
       term: 'Simulation de capacité à supporter des pertes',
-      definition: "Une estimation de la capacité de l'investisseur à supporter la perte de l'investissement, exigée par certains régimes pour les investisseurs non avertis.",
+      definition:
+        "Une estimation de la capacité de l'investisseur à supporter la perte de l'investissement, exigée par certains régimes pour les investisseurs non avertis.",
     },
     {
       term: 'ECSPR',
@@ -688,7 +767,8 @@ export const fr: Messages = {
     },
     {
       term: 'Séquestre (escrow)',
-      definition: "Fonds détenus par un mécanisme neutre jusqu'à ce que les conditions soient remplies. Ici, le contrat de la campagne lui-même conserve les contributions en séquestre sur le testnet Stellar.",
+      definition:
+        "Fonds détenus par un mécanisme neutre jusqu'à ce que les conditions soient remplies. Ici, le contrat de la campagne lui-même conserve les contributions en séquestre sur le testnet Stellar.",
     },
     { term: 'Soroban', definition: 'La plateforme de contrats intelligents du réseau Stellar utilisée par ce prototype.' },
     { term: 'Testnet', definition: 'Un réseau de test public avec des actifs sans valeur, utilisé pour essayer des logiciels sans argent réel.' },
@@ -698,7 +778,7 @@ export const fr: Messages = {
     {
       term: 'Obligation zéro-coupon (Zero Bond)',
       definition:
-        "Une obligation sans intérêts périodiques : elle est émise sous sa valeur nominale et remboursée au pair, donc le rendement est la différence. Une structure de coupon, pas une seniorité.",
+        'Une obligation sans intérêts périodiques : elle est émise sous sa valeur nominale et remboursée au pair, donc le rendement est la différence. Une structure de coupon, pas une seniorité.',
     },
     {
       term: 'Obligation convertible',
@@ -718,7 +798,8 @@ export const fr: Messages = {
     { term: 'Mini Bond', definition: 'Étiquette de plateforme pour une obligation de faible valeur unitaire.' },
     {
       term: 'Know your customer (KYC)',
-      definition: "Vérification d'identité que les plateformes régulées doivent compléter avant qu'un investisseur puisse investir. Ce prototype n'effectue aucun KYC.",
+      definition:
+        "Vérification d'identité que les plateformes régulées doivent compléter avant qu'un investisseur puisse investir. Ce prototype n'effectue aucun KYC.",
     },
     {
       term: 'Personne politiquement exposée (PPE)',
@@ -783,13 +864,13 @@ export const fr: Messages = {
             state: 'live',
           },
           {
-            q: "Que se passe-t-il quand une campagne atteint son objectif ?",
+            q: 'Que se passe-t-il quand une campagne atteint son objectif ?',
             a: "Le plafond est appliqué par le contrat, donc pas de sursouscription : une fois l'objectif atteint, les contributions suivantes sont rejetées. Passé le délai, le créateur de la campagne peut retirer les fonds en séquestre.",
             state: 'live',
           },
           {
             q: 'Comment vérifier que ma contribution est passée ?',
-            a: "Connectez votre portefeuille et ouvrez la page de la campagne pour voir les totaux en séquestre rapportés par le contrat. Comme le règlement est une transaction sur le testnet Stellar, vous pouvez aussi la vérifier indépendamment sur un explorateur public de testnet.",
+            a: 'Connectez votre portefeuille et ouvrez la page de la campagne pour voir les totaux en séquestre rapportés par le contrat. Comme le règlement est une transaction sur le testnet Stellar, vous pouvez aussi la vérifier indépendamment sur un explorateur public de testnet.',
             state: 'live',
           },
         ],
@@ -820,18 +901,18 @@ export const fr: Messages = {
         title: 'Tokenisation sur Stellar',
         entries: [
           {
-            q: "Que signifie la tokenisation ici ?",
+            q: 'Que signifie la tokenisation ici ?',
             a: "La tokenisation signifie représenter numériquement les droits et obligations d'un investissement, afin que la propriété et les transferts puissent être enregistrés et vérifiés sur un registre partagé. Ce prototype fait un premier pas : les registres de contribution vivent dans un contrat intelligent Soroban sur le réseau de test Stellar, appliqués par du code plutôt que par la comptabilité de la plateforme.",
             state: 'info',
           },
           {
-            q: "Que fait exactement le contrat intelligent ?",
+            q: 'Que fait exactement le contrat intelligent ?',
             a: "Le séquestre des contributions, le plafond de financement à chaque transaction, le délai de la campagne, le règlement tout-ou-rien (retrait par le créateur uniquement après un délai réussi) et les remboursements signés par les contributeurs après un délai échoué. Ce qu'il ne fait pas est couvert par les étapes planifiées de la page Fonctionnement.",
             state: 'live',
           },
           {
             q: 'Y a-t-il un token négociable ?',
-            a: "Non. Les soldes de contribution dans ce premier contrat sont délibérément incessibles. Un token de titre négociable nécessiterait un registre légalement reconnu, des détenteurs vérifiés et la surface de conformité décrite dans les documents du projet avant de pouvoir représenter un investissement réel.",
+            a: 'Non. Les soldes de contribution dans ce premier contrat sont délibérément incessibles. Un token de titre négociable nécessiterait un registre légalement reconnu, des détenteurs vérifiés et la surface de conformité décrite dans les documents du projet avant de pouvoir représenter un investissement réel.',
             state: 'planned',
           },
           {
@@ -921,7 +1002,7 @@ export const fr: Messages = {
           },
           {
             q: 'Quels modèles de financement la conception couvre-t-elle ?',
-            a: "Quatre catégories mères du côté de la participation - droit / certificat participatif (avec le Substanzgenussrecht comme sous-type), action, participation indirecte comme structure de détention et part de société en commandite - et deux catégories mères de dette, prêt et obligation, chacune émise en senior, subordonnée ou avec seniorité non spécifiée. Zéro-coupon et convertible sont des superpositions de structure sur la dette. Le hub Apprendre explique chacune.",
+            a: 'Quatre catégories mères du côté de la participation - droit / certificat participatif (avec le Substanzgenussrecht comme sous-type), action, participation indirecte comme structure de détention et part de société en commandite - et deux catégories mères de dette, prêt et obligation, chacune émise en senior, subordonnée ou avec seniorité non spécifiée. Zéro-coupon et convertible sont des superpositions de structure sur la dette. Le hub Apprendre explique chacune.',
             state: 'info',
           },
           {
@@ -930,7 +1011,7 @@ export const fr: Messages = {
             state: 'live',
           },
           {
-            q: "Que faudrait-il pour un lancement réel ?",
+            q: 'Que faudrait-il pour un lancement réel ?',
             a: "Une voie d'agrément (autorisation propre ou partenariat avec un prestataire agréé), un registre légalement reconnu pour chaque instrument et juridiction, un traitement des paiements via un prestataire agréé, KYC/AML et les pages et documents de conformité décrits dans les documents du projet. Ce sont des décisions ouvertes, pas des fonctionnalités implémentées.",
             state: 'info',
           },
@@ -951,7 +1032,8 @@ export const fr: Messages = {
         issuer: "Riverside Development Lda (émetteur d'exemple)",
         country: 'PT',
         category: 'Construction',
-        teaser: "Réhabilitation d'un immeuble d'appartements au bord du fleuve à Lisbonne, financée par une obligation senior à taux fixe. Toutes les conditions de cette page sont des données d'exemple.",
+        teaser:
+          "Réhabilitation d'un immeuble d'appartements au bord du fleuve à Lisbonne, financée par une obligation senior à taux fixe. Toutes les conditions de cette page sont des données d'exemple.",
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
         instrumentOverlays: [] as string[],
@@ -965,8 +1047,8 @@ export const fr: Messages = {
           { label: 'Souscription minimale', value: '1 unité (exemple)' },
           { label: 'Seuil de financement', value: "Égal à l'objectif de la campagne ; tout-ou-rien appliqué par le contrat en mode réel" },
           { label: "Volume de l'émission", value: 'Objectif de 250 000 USDC de testnet (exemple)' },
-          { label: "Calcul des intérêts", value: '30E/360 (exemple)' },
-          { label: "Dates de paiement des intérêts", value: 'Annuellement le 31 décembre, premier paiement en 2027 (exemple)' },
+          { label: 'Calcul des intérêts', value: '30E/360 (exemple)' },
+          { label: 'Dates de paiement des intérêts', value: 'Annuellement le 31 décembre, premier paiement en 2027 (exemple)' },
           { label: 'Remboursement', value: "À l'échéance (exemple)" },
           { label: 'Offert en', value: "Aucun pays d'offre - données d'exemple uniquement" },
           { label: 'Intermédiaire', value: "Aucun. Ce prototype n'est pas un prestataire de services de crowdfunding" },
@@ -980,7 +1062,7 @@ export const fr: Messages = {
           { label: "Conditions de l'obligation (entrée d'exemple)", note: 'Aucun fichier hébergé dans ce prototype' },
           { label: "Pitch deck (entrée d'exemple)", note: 'Aucun fichier hébergé dans ce prototype' },
         ],
-        news: [{ date: 'Exemple', text: "Les actualités de la campagne apparaîtraient ici. Cette entrée est un espace réservé, pas une vraie actualité." }],
+        news: [{ date: 'Exemple', text: 'Les actualités de la campagne apparaîtraient ici. Cette entrée est un espace réservé, pas une vraie actualité.' }],
       },
       {
         campaignId: 'fixture-alentejo-solar',
@@ -1001,13 +1083,15 @@ export const fr: Messages = {
           { label: 'Montant nominal par unité', value: '250 USDC de testnet (exemple)' },
           { label: 'Seuil de financement', value: 'Objectif de 900 000 USDC de testnet (exemple) ; tout-ou-rien en mode réel' },
           { label: 'Subordination', value: "Les créances passent après les créanciers seniors en cas d'insolvabilité (conditions d'exemple)" },
-          { label: "Calcul des intérêts", value: 'act/act (exemple)' },
-          { label: "Dates de paiement des intérêts", value: 'Annuellement le 30 juin, premier paiement en 2028 (exemple)' },
+          { label: 'Calcul des intérêts', value: 'act/act (exemple)' },
+          { label: 'Dates de paiement des intérêts', value: 'Annuellement le 30 juin, premier paiement en 2028 (exemple)' },
           { label: 'Remboursement', value: "À l'échéance (exemple)" },
           { label: 'Offert en', value: "Aucun pays d'offre - données d'exemple uniquement" },
           { label: 'Intermédiaire', value: "Aucun. Ce prototype n'est pas un prestataire de services de crowdfunding" },
         ],
-        overview: ["Données d'exemple - pas une offre réelle. Une vraie page de campagne porterait la description de la coopérative, du site et de la vente d'énergie par l'émetteur lui-même."],
+        overview: [
+          "Données d'exemple - pas une offre réelle. Une vraie page de campagne porterait la description de la coopérative, du site et de la vente d'énergie par l'émetteur lui-même.",
+        ],
         documents: [
           { label: "Fiche d'information fondamentale (entrée d'exemple)", note: 'Aucun fichier hébergé dans ce prototype' },
           { label: "Conditions d'émission (entrée d'exemple)", note: 'Aucun fichier hébergé dans ce prototype' },
@@ -1028,20 +1112,29 @@ export const fr: Messages = {
         term: "Jusqu'au 2031-12-31 (exemple)",
         minInvestment: '500 USDC de testnet (exemple)',
         additionalInfo: [
-          { label: "Produit d'investissement", value: "Obligation avec clause de conversion (convertible) ; seniorité non spécifiée dans les conditions d'exemple. Données d'exemple - pas une offre réelle" },
+          {
+            label: "Produit d'investissement",
+            value:
+              "Obligation avec clause de conversion (convertible) ; seniorité non spécifiée dans les conditions d'exemple. Données d'exemple - pas une offre réelle",
+          },
           { label: 'ISIN / WKN', value: "Non émis - ce prototype n'émet aucun identifiant de titres" },
           { label: 'Montant nominal par unité', value: '500 USDC de testnet (exemple)' },
-          { label: 'Seuil de financement', value: "Objectif de 500 000 USDC de testnet (exemple)" },
+          { label: 'Seuil de financement', value: 'Objectif de 500 000 USDC de testnet (exemple)' },
           { label: 'Déclencheur de conversion', value: "Configurable par émission ; exemple : un événement de financement qualifié annoncé par l'émetteur" },
           { label: 'Fenêtre de conversion', value: "Configurable par émission ; exemple : 30 jours après l'annonce du déclencheur" },
-          { label: "Arrêt des intérêts", value: "Les intérêts courent jusqu'au jour de la conversion (exemple)" },
+          { label: 'Arrêt des intérêts', value: "Les intérêts courent jusqu'au jour de la conversion (exemple)" },
           { label: 'Remboursement si non convertie', value: "À l'échéance (exemple)" },
           { label: 'Offert en', value: "Aucun pays d'offre - données d'exemple uniquement" },
           { label: 'Intermédiaire', value: "Aucun. Ce prototype n'est pas un prestataire de services de crowdfunding" },
         ],
         overview: ["Données d'exemple - pas une offre réelle. Les campagnes terminées restent visibles avec leur statut final de financement, comme celle-ci."],
         documents: [{ label: "Conditions de l'obligation convertible (entrée d'exemple)", note: 'Aucun fichier hébergé dans ce prototype' }],
-        news: [{ date: 'Exemple', text: "Cette campagne s'est clôturée avec succès dans les données d'exemple. Les événements de l'émetteur post-financement seraient suivis séparément." }],
+        news: [
+          {
+            date: 'Exemple',
+            text: "Cette campagne s'est clôturée avec succès dans les données d'exemple. Les événements de l'émetteur post-financement seraient suivis séparément.",
+          },
+        ],
       },
     ],
   },

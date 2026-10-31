@@ -40,8 +40,7 @@ export const de: Messages = {
     noteUnknown: 'Nicht geprüft, nicht produktionsreif.',
     unavailable:
       'In diesem Prototyp nicht verfügbar: Registrierung mit Identität/KYC, Handel auf einem Sekundärmarkt, übertragbare Vermögens- oder Quittungs-Token, Zahlungen in Fiatwährung, echte Investitionsangebote. Beitragsregister sind nicht übertragbar - dies ist Crowdfunding, keine Investmentbörse.',
-    fundingBlockAria:
-      'Illustration: Kleine violette Blöcke gleiten nacheinander herein und füllen den Umriss eines geteilten Vermögenswerts, Token für Token',
+    fundingBlockAria: 'Illustration: Kleine violette Blöcke gleiten nacheinander herein und füllen den Umriss eines geteilten Vermögenswerts, Token für Token',
   },
   emptyState: {
     fixtureStrong: 'Beispielvorschau aktiv.',
@@ -63,8 +62,14 @@ export const de: Messages = {
     steps: [
       { title: 'Verbinden', text: 'Verbinden Sie eine Freighter-Wallet im Stellar-Testnet. Kein Konto, keine persönlichen Daten in diesem Prototyp.' },
       { title: 'Entdecken', text: 'Durchstöbern Sie die Kampagnen und lesen Sie die strukturierten Bedingungen auf jeder Kampagnenseite.' },
-      { title: 'Beitragen', text: 'Signieren Sie eine Transaktion. Der Vertrag legt Ihren Beitrag in Escrow und setzt die Finanzierungsobergrenze atomar durch.' },
-      { title: 'Verfolgen', text: 'Verfolgen Sie hier den Finanzierungsstand. Rückerstattungen werden vom Beitragenden signiert, wenn das Ziel nicht erreicht wird.' },
+      {
+        title: 'Beitragen',
+        text: 'Signieren Sie eine Transaktion. Der Vertrag legt Ihren Beitrag in Escrow und setzt die Finanzierungsobergrenze atomar durch.',
+      },
+      {
+        title: 'Verfolgen',
+        text: 'Verfolgen Sie hier den Finanzierungsstand. Rückerstattungen werden vom Beitragenden signiert, wenn das Ziel nicht erreicht wird.',
+      },
     ],
     fullJourneyLink: 'Der vollständige Anlegerweg, jeder Schritt als vorhanden oder geplant markiert',
     latestAria: 'Neueste Kampagnen',
@@ -151,8 +156,7 @@ export const de: Messages = {
       'Tragen Sie vor der Frist bis zum verbleibenden Zielbetrag bei. Nach der Frist kann der Ersteller die Mittel nur abheben, wenn das Ziel vollständig erreicht wurde; andernfalls signiert jeder Beitragende seine eigene Rückerstattung. Der Vertrag setzt diese Regeln atomar durch.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) =>
-      `Finanzierungsfortschritt: ${filled} von ${count} Blöcken gefüllt, ${percent}% des Ziels`,
+    ariaReady: (filled: number, count: number, percent: number) => `Finanzierungsfortschritt: ${filled} von ${count} Blöcken gefüllt, ${percent}% des Ziels`,
     ariaUnavailable: 'Finanzierungsfortschritt nicht verfügbar: On-Chain-Daten nicht geladen',
     fundedTail: (filled: number, count: number) => `finanziert - ${filled} von ${count} Blöcken`,
     captionUnavailable: 'Fortschritt nicht verfügbar - On-Chain-Daten nicht geladen',
@@ -197,7 +201,8 @@ export const de: Messages = {
     notFoundText: 'Keine Kampagne mit dieser ID ist im aktuellen Register',
     notFoundFixtureSuffix: ' von Beispielkampagnen',
     backToAll: 'Zurück zu allen Investitionen',
-    issuerMissing: 'Die Identität des Emittenten und die Off-Chain-Bedingungen sind in diesem Prototyp nicht verfügbar; die Daten unten stammen aus dem On-Chain-Vertrag.',
+    issuerMissing:
+      'Die Identität des Emittenten und die Off-Chain-Bedingungen sind in diesem Prototyp nicht verfügbar; die Daten unten stammen aus dem On-Chain-Vertrag.',
     assetClass: 'Anlageklasse',
     escrowTestnet: 'Vertrags-Escrow (Testnet)',
     interestRate: 'Zinssatz',
@@ -226,7 +231,8 @@ export const de: Messages = {
     detailsPre: 'Geschäftsmodell, Markt, Finanzen und Meilensteine würden hier als vom Emittenten bereitgestellte Abschnitte erscheinen.',
     detailsSample: 'Diese Beispielkampagne enthält keine Detailinhalte.',
     detailsMissing: 'In diesem Prototyp nicht verfügbar.',
-    documentsMissing: 'Dokumentenhosting ist in diesem Prototyp nicht verfügbar. Eine Produktionsplattform würde hier das Basisinformationsblatt und die Emissionsbedingungen hosten.',
+    documentsMissing:
+      'Dokumentenhosting ist in diesem Prototyp nicht verfügbar. Eine Produktionsplattform würde hier das Basisinformationsblatt und die Emissionsbedingungen hosten.',
     newsEmpty: 'Keine Neuigkeiten. Kampagnenmeldungen würden hier erscheinen.',
     statusFunded: 'Erfolgreich finanziert',
     statusEnded: 'Nicht erfolgreich',
@@ -293,11 +299,20 @@ export const de: Messages = {
       },
     ],
     issuerSteps: [
-      { title: 'Antrag und Prüfung', text: 'Der Emittent bewirbt sich, durchläuft die Eignungs- und Dokumentenprüfung und unterschreibt die Plattformbedingungen.' },
+      {
+        title: 'Antrag und Prüfung',
+        text: 'Der Emittent bewirbt sich, durchläuft die Eignungs- und Dokumentenprüfung und unterschreibt die Plattformbedingungen.',
+      },
       { title: 'Kampagnenaufbau', text: 'Instrumentenbedingungen, Grenzen, Dokumente und Marketinginhalte werden konfiguriert und geprüft.' },
       { title: 'Aktive Kampagne', text: 'Die Demo zeigt die öffentliche Kampagnenseite mit dem On-Chain-Finanzierungsstand in Echtzeit.' },
-      { title: 'Abwicklung', text: 'Alles-oder-nichts: Der Ersteller hebt die Mittel nur ab, wenn das Ziel fristgerecht erreicht wird, durchgesetzt durch den Vertrag.' },
-      { title: 'Pflichten nach der Finanzierung', text: 'Berichte, Zinszahlungen und Tilgung sowie ein separater Lebenszyklusstatus des Emittenten. Nicht implementiert.' },
+      {
+        title: 'Abwicklung',
+        text: 'Alles-oder-nichts: Der Ersteller hebt die Mittel nur ab, wenn das Ziel fristgerecht erreicht wird, durchgesetzt durch den Vertrag.',
+      },
+      {
+        title: 'Pflichten nach der Finanzierung',
+        text: 'Berichte, Zinszahlungen und Tilgung sowie ein separater Lebenszyklusstatus des Emittenten. Nicht implementiert.',
+      },
     ],
   },
   learn: {
@@ -313,7 +328,8 @@ export const de: Messages = {
     overlaysIntro: 'Überlagerungen kombinieren sich mit einer Darlehens- oder Anleihe-Mutterkategorie und existieren nie allein als Instrumente.',
     qualifiersAria: 'Rang- und Label-Qualifikatoren',
     qualifiersTitle: 'Rang- und Label-Qualifikatoren',
-    qualifiersIntro: 'Plattformterminologie, die Ihnen in Angeboten begegnen kann. Diese Labels qualifizieren ein Instrument; sie sind keine eigenen Instrumentenklassen.',
+    qualifiersIntro:
+      'Plattformterminologie, die Ihnen in Angeboten begegnen kann. Diese Labels qualifizieren ein Instrument; sie sind keine eigenen Instrumentenklassen.',
     glossaryAria: 'Glossar',
     glossaryTitle: 'Glossar',
     glossaryPre: 'Die zentralen Begriffe der Plattform und des Crowdfundings haben eine eigene Seite:',
@@ -333,8 +349,14 @@ export const de: Messages = {
   riskWarnings: {
     title: 'Risikohinweise',
     items: [
-      { h: 'Totalverlust', p: 'Crowdfunding-Investitionen können ihren gesamten Wert verlieren. Investieren Sie niemals Geld, dessen Verlust Sie nicht tragen können.' },
-      { h: 'Illiquidität', p: 'Diese Instrumente sind normalerweise nicht handelbar. Gehen Sie davon aus, dass Sie vor Fälligkeit oder einem definierten Ereignis nicht aussteigen können.' },
+      {
+        h: 'Totalverlust',
+        p: 'Crowdfunding-Investitionen können ihren gesamten Wert verlieren. Investieren Sie niemals Geld, dessen Verlust Sie nicht tragen können.',
+      },
+      {
+        h: 'Illiquidität',
+        p: 'Diese Instrumente sind normalerweise nicht handelbar. Gehen Sie davon aus, dass Sie vor Fälligkeit oder einem definierten Ereignis nicht aussteigen können.',
+      },
       {
         h: 'Diversifizierung',
         p: 'Eine übliche Orientierung ist, nicht mehr als 10% der frei verfügbaren Mittel in diese Anlageklasse zu investieren und sie auf mehrere Emittenten zu verteilen.',
@@ -344,7 +366,10 @@ export const de: Messages = {
         h: 'Keine Beratung',
         p: 'Nichts auf dieser Website ist Anlage-, Rechts- oder Steuerberatung. Diese Website ist ein Software-Prototyp in einem Testnetz und listet keine echten Angebote.',
       },
-      { h: 'Prototyp-Status', p: 'Testnet-Vermögenswerte sind wertlos. Die Smart Contracts hier sind nicht geprüft und dürfen nicht mit echten Geldern verwendet werden.' },
+      {
+        h: 'Prototyp-Status',
+        p: 'Testnet-Vermögenswerte sind wertlos. Die Smart Contracts hier sind nicht geprüft und dürfen nicht mit echten Geldern verwendet werden.',
+      },
     ],
   },
   faqPage: {
@@ -368,7 +393,8 @@ export const de: Messages = {
     p2: 'Es ist kein Unternehmen, kein zugelassener Crowdfunding-Dienstleister und kein Wertpapierangebot. Marktkontext: von Portugal in die Welt.',
     ethicsAria: 'Ethische Ausschlussrichtlinie',
     ethicsTitle: 'Ethische Ausschlussrichtlinie',
-    ethicsIntro: 'Eine Richtlinie auf Produktebene für die Plattform, die dieser Prototyp erkundet. Emittenten aus folgenden Sektoren sind bewusst ausgeschlossen:',
+    ethicsIntro:
+      'Eine Richtlinie auf Produktebene für die Plattform, die dieser Prototyp erkundet. Emittenten aus folgenden Sektoren sind bewusst ausgeschlossen:',
     ethicsPoints: [
       'Tabak, Glücksspiel und Waffen',
       'Fossile Brennstoffe, Bergbau und Kernenergie',
@@ -399,7 +425,8 @@ export const de: Messages = {
     ],
     previewAria: 'Antragsvorschau',
     previewTitle: 'Antrag (Vorschau)',
-    previewNote: 'Das Emittenten-Onboarding ist in diesem Prototyp nicht angebunden: Dieses Formular ist deaktiviert, und nichts, was hier eingegeben wird, wird gesendet oder gespeichert.',
+    previewNote:
+      'Das Emittenten-Onboarding ist in diesem Prototyp nicht angebunden: Dieses Formular ist deaktiviert, und nichts, was hier eingegeben wird, wird gesendet oder gespeichert.',
     companyName: 'Firmenname',
     country: 'Land der Eintragung',
     targetAmount: 'Zielbetrag',
@@ -462,7 +489,10 @@ export const de: Messages = {
         label: 'Digitales Schließfach',
         note: 'Geplante Verwahrsicht gehaltener Positionen. Hier liegen Positionen in jedem Kampagnenvertrag und werden pro verbundener Wallet gelesen.',
       },
-      { label: 'Firmenkonten', note: 'Die Referenzplattform erlaubt verifizierten Anlegern, ein Firmenkonto hinzuzufügen; in diesem Prototyp nicht implementiert.' },
+      {
+        label: 'Firmenkonten',
+        note: 'Die Referenzplattform erlaubt verifizierten Anlegern, ein Firmenkonto hinzuzufügen; in diesem Prototyp nicht implementiert.',
+      },
     ],
   },
   footer: {
@@ -478,8 +508,7 @@ export const de: Messages = {
     status: 'Status',
     statusText:
       'Testnet-Prototyp. Keine automatische Bereitstellung oder Umwandlung alter Guthaben. Bestehende klassische Intents und Guthaben bleiben erhalten, werden nicht gelöscht. Die separate Identitäts-/Bewertungsinfrastruktur bleibt nur simuliert.',
-    legalPre:
-      'Marktkontext: Die EU reguliert Crowdfunding nach der ECSPR; zugelassene Anbieter sind im',
+    legalPre: 'Marktkontext: Die EU reguliert Crowdfunding nach der ECSPR; zugelassene Anbieter sind im',
     legalLink: 'ESMA-Register',
     legalPost: ' gelistet. Diese App ist kein zugelassener Crowdfunding-Dienstleister und listet keine echten Angebote.',
     tagline: 'Reale Vermögenswerte. Geteilte Möglichkeiten.',
@@ -531,7 +560,11 @@ export const de: Messages = {
         summary:
           'Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs.',
         opportunities: ['Gewinnbeteiligung ohne vollständigen Eigenkapitalerwerb', 'Kombiniert oft einen Basis-Rückzahlungsanspruch mit Gewinnbeteiligung'],
-        risks: ['Der Gewinnanteil hängt vollständig von der Leistung des Emittenten ab', 'Kann hinter gewöhnlichen Gläubigern stehen', 'Meist illiquide bis zur Fälligkeit'],
+        risks: [
+          'Der Gewinnanteil hängt vollständig von der Leistung des Emittenten ab',
+          'Kann hinter gewöhnlichen Gläubigern stehen',
+          'Meist illiquide bis zur Fälligkeit',
+        ],
         suitableFor: 'Anleger, die eine Beteiligung an den Geschäftsergebnissen wollen und eigenkapitalähnliches Risiko akzeptieren.',
       },
       {
@@ -561,7 +594,11 @@ export const de: Messages = {
         summary:
           'Direktes Eigenkapital an der emittierenden Gesellschaft: Dividendenanspruch und Beteiligung am Unternehmenswert, mit Rechten nach der Satzung. Neue Aktien erreichen Anleger über eine Kapitalerhöhung.',
         opportunities: ['Volle Teilhabe am Unternehmenswachstum', 'Stimm- oder Informationsrechte je nach Aktiengattung'],
-        risks: ['Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert', 'Totalverlust möglich', 'Crowdfunding-Aktien sind meist nicht börsenhandelbar'],
+        risks: [
+          'Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert',
+          'Totalverlust möglich',
+          'Crowdfunding-Aktien sind meist nicht börsenhandelbar',
+        ],
         suitableFor: 'Anleger mit langem Horizont, die Eigentum wollen und volles Unternehmerrisiko akzeptieren.',
       },
       {
@@ -573,7 +610,11 @@ export const de: Messages = {
         seniorityStates: [] as string[],
         summary: 'Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.',
         opportunities: ['Zugang zu Geschäften, die direkt schwer zu halten wären', 'Vereinfachte Verwaltung über die Zwischenstruktur'],
-        risks: ['Eine zusätzliche Ebene zwischen Anleger und Emittent', 'Die Rendite hängt von der Leistung des Emittenten ab', 'Die Bedingungen des Vehikels regeln Auszahlungen und Ausstieg'],
+        risks: [
+          'Eine zusätzliche Ebene zwischen Anleger und Emittent',
+          'Die Rendite hängt von der Leistung des Emittenten ab',
+          'Die Bedingungen des Vehikels regeln Auszahlungen und Ausstieg',
+        ],
         suitableFor: 'Anleger, die die Ökonomie einer Beteiligung wollen, ohne das zugrunde liegende Interesse direkt zu halten.',
       },
       {
@@ -603,7 +644,11 @@ export const de: Messages = {
         summary:
           'Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.',
         opportunities: ['Ein fester Plan ist leichter zu modellieren als Eigenkapital', 'Nachrangige Varianten zahlen höhere Zinsen für den niedrigeren Rang'],
-        risks: ['Der Ausfall des Emittenten kann Totalverlust bedeuten', 'Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient', 'Keine Einlagensicherung'],
+        risks: [
+          'Der Ausfall des Emittenten kann Totalverlust bedeuten',
+          'Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient',
+          'Keine Einlagensicherung',
+        ],
         suitableFor: 'Anleger, die Kreditrisiko ohne bankenähnlichen Schutz akzeptieren.',
       },
       {
@@ -616,7 +661,11 @@ export const de: Messages = {
         summary:
           'Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.',
         opportunities: ['Definierter Kupon und Tilgungskalender', 'Seniorserien haben im Insolvenzfall Vorrang vor nachrangigem Kapital und Eigenkapital'],
-        risks: ['Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall', 'Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind', 'Keine Beteiligung am Unternehmenswachstum'],
+        risks: [
+          'Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall',
+          'Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind',
+          'Keine Beteiligung am Unternehmenswachstum',
+        ],
         suitableFor: 'Renditeorientierte Anleger, die einen Totalverlust tragen können und das Geld nicht vorzeitig benötigen.',
       },
     ],
@@ -638,12 +687,14 @@ export const de: Messages = {
       {
         id: 'junior',
         label: '„Junior“',
-        summary: 'Ein Label für niedrigeren Rang in der Plattformsprache. Es deutet auf Nachrangigkeit hin, begründet aber für sich keine vertragliche qualifizierte Nachrangigkeit.',
+        summary:
+          'Ein Label für niedrigeren Rang in der Plattformsprache. Es deutet auf Nachrangigkeit hin, begründet aber für sich keine vertragliche qualifizierte Nachrangigkeit.',
       },
       {
         id: 'qualified',
         label: '„Qualified / qualifiziert“',
-        summary: 'Plattformterminologie bei Darlehen und Anleihen. Bei Anleihen nicht als qualifizierte Nachrangigkeit lesen, es sei denn, die Bedingungen selbst sagen nachrangig.',
+        summary:
+          'Plattformterminologie bei Darlehen und Anleihen. Bei Anleihen nicht als qualifizierte Nachrangigkeit lesen, es sei denn, die Bedingungen selbst sagen nachrangig.',
       },
       { id: 'mini-bond', label: '„Mini Bond“', summary: 'Plattformlabel für eine Anleihe mit kleiner Stückelung.' },
     ],
@@ -660,13 +711,24 @@ export const de: Messages = {
       definition:
         'Der Emittent erhält die Mittel nur, wenn das Ziel bis zur Frist erreicht wird; andernfalls werden die Beiträge zurückerstattet. Der Soroban-Vertrag dieses Prototyps setzt dies on-chain durch.',
     },
-    { term: 'Finanzierungsschwelle', definition: 'Der Mindestbetrag, den eine Emission einnehmen muss, um zu schließen. Unterschiedlich von der Mindestanlage pro Anleger.' },
+    {
+      term: 'Finanzierungsschwelle',
+      definition: 'Der Mindestbetrag, den eine Emission einnehmen muss, um zu schließen. Unterschiedlich von der Mindestanlage pro Anleger.',
+    },
     { term: 'Mindestanlage', definition: 'Der kleinste Betrag, den ein Anleger zeichnen kann, üblicherweise eine Einheit.' },
-    { term: 'Nachrangigkeit', definition: 'Eine Rangfolgeregel: Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient, was das Verlustrisiko erhöht.' },
-    { term: 'ISIN', definition: 'Internationale Wertpapier-Identifikationsnummer. Identifiziert ein Wertpapier. Dieser Prototyp begibt keine Wertpapiere und keine ISINs.' },
+    {
+      term: 'Nachrangigkeit',
+      definition:
+        'Eine Rangfolgeregel: Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient, was das Verlustrisiko erhöht.',
+    },
+    {
+      term: 'ISIN',
+      definition: 'Internationale Wertpapier-Identifikationsnummer. Identifiziert ein Wertpapier. Dieser Prototyp begibt keine Wertpapiere und keine ISINs.',
+    },
     {
       term: 'Basisinformationsblatt (KIIS)',
-      definition: 'Ein standardisiertes Kurzdokument mit den wesentlichen Fakten und Risiken eines Angebots, für viele EU-Crowdfunding-Angebote vorgeschrieben.',
+      definition:
+        'Ein standardisiertes Kurzdokument mit den wesentlichen Fakten und Risiken eines Angebots, für viele EU-Crowdfunding-Angebote vorgeschrieben.',
     },
     {
       term: 'Widerrufsfrist',
@@ -675,7 +737,8 @@ export const de: Messages = {
     },
     {
       term: 'Kenntnistest',
-      definition: 'Eine Prüfung des Verständnisses der Crowdfunding-Risiken durch den Anleger, die manche Regime verlangen, bevor nicht-sophistierte Anleger investieren dürfen.',
+      definition:
+        'Eine Prüfung des Verständnisses der Crowdfunding-Risiken durch den Anleger, die manche Regime verlangen, bevor nicht-sophistierte Anleger investieren dürfen.',
     },
     {
       term: 'Verlusttragfähigkeitssimulation',
@@ -688,7 +751,8 @@ export const de: Messages = {
     },
     {
       term: 'Escrow',
-      definition: 'Mittel, die von einem neutralen Mechanismus gehalten werden, bis die Bedingungen erfüllt sind. Hier verwahrt der Kampagnenvertrag selbst die Beiträge im Escrow im Stellar-Testnet.',
+      definition:
+        'Mittel, die von einem neutralen Mechanismus gehalten werden, bis die Bedingungen erfüllt sind. Hier verwahrt der Kampagnenvertrag selbst die Beiträge im Escrow im Stellar-Testnet.',
     },
     { term: 'Soroban', definition: 'Die Smart-Contract-Plattform des Stellar-Netzwerks, die dieser Prototyp verwendet.' },
     { term: 'Testnet', definition: 'Ein öffentliches Testnetzwerk mit wertlosen Vermögenswerten, um Software ohne echtes Geld auszuprobieren.' },
@@ -951,7 +1015,8 @@ export const de: Messages = {
         issuer: 'Riverside Development Lda (Beispiel-Emittent)',
         country: 'PT',
         category: 'Bauwesen',
-        teaser: 'Sanierung eines Flussufer-Apartmentgebäudes in Lissabon, finanziert über eine Senioranleihe mit festem Zinssatz. Alle Bedingungen auf dieser Seite sind Beispieldaten.',
+        teaser:
+          'Sanierung eines Flussufer-Apartmentgebäudes in Lissabon, finanziert über eine Senioranleihe mit festem Zinssatz. Alle Bedingungen auf dieser Seite sind Beispieldaten.',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
         instrumentOverlays: [] as string[],
@@ -1007,7 +1072,9 @@ export const de: Messages = {
           { label: 'Angeboten in', value: 'Keine Angebotsländer - nur Beispieldaten' },
           { label: 'Intermediär', value: 'Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister' },
         ],
-        overview: ['Beispieldaten - kein echtes Angebot. Eine echte Kampagnenseite würde die Beschreibung der Genossenschaft, des Standorts und der Energieabnahme vom Emittenten selbst tragen.'],
+        overview: [
+          'Beispieldaten - kein echtes Angebot. Eine echte Kampagnenseite würde die Beschreibung der Genossenschaft, des Standorts und der Energieabnahme vom Emittenten selbst tragen.',
+        ],
         documents: [
           { label: 'Basisinformationsblatt (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' },
           { label: 'Emissionsbedingungen (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' },
@@ -1028,7 +1095,10 @@ export const de: Messages = {
         term: 'Bis 2031-12-31 (Beispiel)',
         minInvestment: '500 Testnet-USDC (Beispiel)',
         additionalInfo: [
-          { label: 'Anlageprodukt', value: 'Anleihe mit Wandlungsmerkmal (wandelbar); Rangfolge in den Beispielbedingungen nicht angegeben. Beispieldaten - kein echtes Angebot' },
+          {
+            label: 'Anlageprodukt',
+            value: 'Anleihe mit Wandlungsmerkmal (wandelbar); Rangfolge in den Beispielbedingungen nicht angegeben. Beispieldaten - kein echtes Angebot',
+          },
           { label: 'ISIN / WKN', value: 'Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern' },
           { label: 'Nennbetrag pro Einheit', value: '500 Testnet-USDC (Beispiel)' },
           { label: 'Finanzierungsschwelle', value: 'Ziel 500.000 Testnet-USDC (Beispiel-Fixture)' },
@@ -1041,7 +1111,12 @@ export const de: Messages = {
         ],
         overview: ['Beispieldaten - kein echtes Angebot. Abgeschlossene Kampagnen bleiben mit ihrem endgültigen Finanzierungsstatus sichtbar, wie diese.'],
         documents: [{ label: 'Wandelanleihebedingungen (Beispieleintrag)', note: 'Keine Datei in diesem Prototyp gehostet' }],
-        news: [{ date: 'Beispiel', text: 'Diese Kampagne ist in den Fixture-Daten erfolgreich geschlossen. Emittentenereignisse nach der Finanzierung würden separat verfolgt.' }],
+        news: [
+          {
+            date: 'Beispiel',
+            text: 'Diese Kampagne ist in den Fixture-Daten erfolgreich geschlossen. Emittentenereignisse nach der Finanzierung würden separat verfolgt.',
+          },
+        ],
       },
     ],
   },

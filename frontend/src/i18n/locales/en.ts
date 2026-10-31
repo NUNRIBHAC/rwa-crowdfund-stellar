@@ -23,8 +23,7 @@ export const en = {
     connectedPrefix: 'Connected',
     languageLabel: 'Site language',
   },
-  riskBanner:
-    'Crowdfunding investments carry a risk of total loss. This is a Stellar testnet prototype: no live offers, no real funds, no investment advice.',
+  riskBanner: 'Crowdfunding investments carry a risk of total loss. This is a Stellar testnet prototype: no live offers, no real funds, no investment advice.',
   hero: {
     eyebrow: 'Tokenized real-world assets, on Stellar',
     titleA: 'Real assets.',
@@ -39,13 +38,11 @@ export const en = {
     noteUnknown: 'Not audited, not production-ready.',
     unavailable:
       'Not available in this prototype: identity/KYC onboarding, secondary-market trading, transferable asset or receipt tokens, fiat payments, live investment offers. Contribution records are nontransferable - this is crowdfunding, not an investment exchange.',
-    fundingBlockAria:
-      'Illustration: small purple blocks slide in one by one and fill a shared asset outline, token by token',
+    fundingBlockAria: 'Illustration: small purple blocks slide in one by one and fill a shared asset outline, token by token',
   },
   emptyState: {
     fixtureStrong: 'Sample preview active.',
-    fixtureText:
-      'The campaigns below are fixtures to show the layout. They are not deployed contracts, not live offers, and cannot accept contributions.',
+    fixtureText: 'The campaigns below are fixtures to show the layout. They are not deployed contracts, not live offers, and cannot accept contributions.',
     fixtureBack: 'Back to live registry',
     emptyTitle: 'No deployed campaign configured',
     emptyText:
@@ -150,8 +147,7 @@ export const en = {
       'Contribute before the deadline, up to the remaining goal. After the deadline the creator withdraws only if fully funded; otherwise each contributor signs their own refund. The contract enforces these rules atomically.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) =>
-      `Funding progress: ${filled} of ${count} blocks filled, ${percent}% of the goal`,
+    ariaReady: (filled: number, count: number, percent: number) => `Funding progress: ${filled} of ${count} blocks filled, ${percent}% of the goal`,
     ariaUnavailable: 'Funding progress unavailable: on-chain data not loaded',
     fundedTail: (filled: number, count: number) => `funded - ${filled} of ${count} blocks`,
     captionUnavailable: 'Progress unavailable - on-chain data not loaded',
@@ -477,8 +473,7 @@ export const en = {
     status: 'Status',
     statusText:
       'Testnet prototype. No automatic deployment or legacy balance conversion. Existing classic intents and balances are preserved, not cleared. The separate identity/valuation infrastructure remains mock-only.',
-    legalPre:
-      'Market context: the EU regulates crowdfunding under ECSPR; authorised providers are listed in the',
+    legalPre: 'Market context: the EU regulates crowdfunding under ECSPR; authorised providers are listed in the',
     legalLink: 'ESMA register',
     legalPost: '. This app is not an authorised crowdfunding service provider and lists no live offers.',
     tagline: 'Real assets. Shared possibilities.',
@@ -637,7 +632,8 @@ export const en = {
       {
         id: 'junior',
         label: '"Junior"',
-        summary: 'A lower-rank label in platform wording. It indicates subordinated ranking but does not by itself establish contractual qualified subordination.',
+        summary:
+          'A lower-rank label in platform wording. It indicates subordinated ranking but does not by itself establish contractual qualified subordination.',
       },
       {
         id: 'qualified',
@@ -661,7 +657,10 @@ export const en = {
     },
     { term: 'Funding threshold', definition: 'The minimum amount an issue must raise to close. Distinct from the per-investor minimum investment.' },
     { term: 'Minimum investment', definition: 'The smallest amount one investor can subscribe, usually one unit.' },
-    { term: 'Subordination', definition: 'A ranking rule: subordinated claims are paid only after senior creditors in insolvency, which raises the loss risk.' },
+    {
+      term: 'Subordination',
+      definition: 'A ranking rule: subordinated claims are paid only after senior creditors in insolvency, which raises the loss risk.',
+    },
     { term: 'ISIN', definition: 'International Securities Identification Number. Identifies a security. This prototype issues no securities and no ISINs.' },
     {
       term: 'Key investment information sheet (KIIS)',
@@ -1006,7 +1005,9 @@ export const en = {
           { label: 'Offered in', value: 'No offering countries - sample data only' },
           { label: 'Intermediary', value: 'None. This prototype is not a crowdfunding service provider' },
         ],
-        overview: ["Sample data - not a live offer. A real campaign page would carry the issuer's own description of the cooperative, the site and the energy off-take."],
+        overview: [
+          "Sample data - not a live offer. A real campaign page would carry the issuer's own description of the cooperative, the site and the energy off-take.",
+        ],
         documents: [
           { label: 'Key investment information sheet (sample entry)', note: 'No file hosted in this prototype' },
           { label: 'Emission conditions (sample entry)', note: 'No file hosted in this prototype' },
@@ -1027,7 +1028,10 @@ export const en = {
         term: 'Until 2031-12-31 (sample)',
         minInvestment: '500 USDC testnet (sample)',
         additionalInfo: [
-          { label: 'Investment product', value: 'Bond with a conversion feature (convertible); seniority not specified in the sample terms. Sample data - not a live offer' },
+          {
+            label: 'Investment product',
+            value: 'Bond with a conversion feature (convertible); seniority not specified in the sample terms. Sample data - not a live offer',
+          },
           { label: 'ISIN / WKN', value: 'Not issued - this prototype issues no securities identifiers' },
           { label: 'Nominal amount per unit', value: '500 USDC testnet (sample)' },
           { label: 'Funding threshold', value: '500,000 USDC testnet goal (sample fixture)' },
