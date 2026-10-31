@@ -450,10 +450,7 @@ export const es: Messages = {
   },
   account: {
     title: 'Mi cuenta',
-    notePre:
-      'Su área de cuenta: las posiciones de testnet de esta cartera y la actividad de la comunidad guardada bajo ella (solo activos de testnet: sin fondos reales ni rendimientos). Diseño inspirado en el panel con sesión iniciada documentado en',
-    notePost:
-      '(sección 7A). Las posiciones proceden de tu cartera Freighter conectada en la testnet de Stellar y no tienen valor. El acceso opcional a la comunidad y los formularios de soporte y de emisor de esta página tratan los datos que introduzcas como describe la política de privacidad.',
+    note: 'Tu área de cuenta: las posiciones de testnet de este monedero y la actividad de la comunidad guardada bajo él (solo activos de testnet - sin fondos ni rendimientos reales). Las posiciones proceden de tu monedero Freighter conectado en la testnet de Stellar y no tienen valor. El inicio de sesión opcional en la comunidad y los formularios de soporte y de emisor de esta página tratan los datos introducidos como se describe en la política de privacidad.',
     summaryAria: 'Resumen de la cartera',
     totalContributed: 'Total contribuido',
     totalSub: 'En escrow on-chain, sumado por campañas',

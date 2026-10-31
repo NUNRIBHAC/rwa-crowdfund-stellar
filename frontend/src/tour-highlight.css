@@ -1,0 +1,10 @@
+/* CampaignTour v2 highlight: rings the step target above the dimming overlay.
+   Brand ring (primary at 60%), 200ms transition per motion spec; no keyframes. */
+.tour-highlight {
+  position: relative;
+  z-index: 61;
+  outline: 3px solid rgba(75, 79, 226, 0.6);
+  outline-offset: 4px;
+  border-radius: 8px;
+  transition: outline-color 200ms ease;
+}

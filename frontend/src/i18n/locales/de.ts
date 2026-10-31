@@ -448,10 +448,7 @@ export const de: Messages = {
   },
   account: {
     title: 'Mein Konto',
-    notePre:
-      'Ihr Kontobereich: die Testnet-Positionen dieser Wallet und die darunter gespeicherte Community-Aktivität (nur Testnet-Assets - keine echten Gelder oder Erträge). Layout angelehnt an das in',
-    notePost:
-      '(Abschnitt 7A). Positionen stammen aus deiner verbundenen Freighter-Wallet im Stellar-Testnetz und sind wertlos. Der optionale Community-Zugang und die Support- und Emittentenformulare auf dieser Seite verarbeiten eingegebene Daten wie in der Datenschutzerklärung beschrieben.',
+    note: 'Dein Kontobereich: die Testnet-Positionen dieser Wallet und die darunter gespeicherten Community-Aktivitäten (nur Testnet-Assets - keine echten Gelder oder Erträge). Positionen stammen aus deiner verbundenen Freighter-Wallet auf dem Stellar-Testnet und sind wertlos. Die optionale Community-Anmeldung und die Support- und Emittentenformulare auf dieser Seite verarbeiten die eingegebenen Daten wie in der Datenschutzerklärung beschrieben.',
     summaryAria: 'Portfolioübersicht',
     totalContributed: 'Insgesamt beigetragen',
     totalSub: 'On-Chain im Escrow, summiert über Kampagnen',

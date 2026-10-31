@@ -451,10 +451,7 @@ export const fr: Messages = {
   },
   account: {
     title: 'Mon compte',
-    notePre:
-      "Votre espace compte : les positions testnet de ce portefeuille et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds réel ni rendement). Mise en page inspirée du tableau de bord connecté documenté dans",
-    notePost:
-      "(section 7A). Les positions proviennent de votre portefeuille Freighter connecté sur le testnet Stellar et sont sans valeur. La connexion communautaire facultative et les formulaires d'assistance et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
+    note: "Votre espace compte: les positions testnet de ce portefeuille et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds ni rendement réel). Les positions proviennent de votre portefeuille Freighter connecté sur le testnet Stellar et sont sans valeur. La connexion communautaire optionnelle et les formulaires de support et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
     summaryAria: 'Résumé du portefeuille',
     totalContributed: 'Total contribué',
     totalSub: 'En séquestre on-chain, additionné sur les campagnes',

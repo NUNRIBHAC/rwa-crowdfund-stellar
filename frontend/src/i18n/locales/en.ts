@@ -441,10 +441,7 @@ export const en = {
   },
   account: {
     title: 'My account',
-    notePre:
-      'Your account area: this wallet testnet positions and the community activity saved under it (testnet assets only - no real funds or returns). Layout modeled on the logged-in dashboard documented in',
-    notePost:
-      '(section 7A). Positions come from your connected Freighter wallet on Stellar testnet and are worthless. The optional community sign-in and the support and issuer forms on this page process the data you enter as described in the privacy policy.',
+    note: 'Your account area: the testnet positions of this wallet and the community activity saved under it (testnet assets only - no real funds or returns). Positions come from your connected Freighter wallet on the Stellar testnet and are worthless. The optional community sign-in and the support and issuer forms on this page process the data you enter as described in the privacy policy.',
     summaryAria: 'Portfolio summary',
     totalContributed: 'Total contributed',
     totalSub: 'Escrowed on-chain, summed over campaigns',

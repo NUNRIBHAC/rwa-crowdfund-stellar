@@ -1,12 +1,15 @@
 // Guided campaign-page tour (CONDA S-022 pattern: tour + "Repeat tour" link).
+// v2: each step scrolls its target into view and rings it with a brand
+// highlight that punches through the dimming overlay, so the card is visually
+// connected to the element it describes (v1 showed an unanchored modal).
 // Shows once per browser (localStorage flag), then offers a repeat link.
-// Steps point at stable selectors on the campaign page; a step whose target
-// is missing is skipped, so the tour never breaks on layout changes.
+// Steps whose target is missing are skipped, so layout changes never break it.
 // Mount on the campaign detail route.
 import { useEffect, useState } from 'react';
 import { useI18n } from '../i18n';
 
 const SEEN_KEY = 'blockallisto-campaign-tour-seen';
+const HIGHLIGHT_CLASS = 'tour-highlight';
 
 type Step = { selector: string; title: string; body: string };
 
@@ -36,8 +39,22 @@ export default function CampaignTour() {
   ];
 
   const available = steps.filter((s) => document.querySelector(s.selector));
+
+  // Anchor the current step: scroll the target into view and ring it.
+  useEffect(() => {
+    if (!open) return;
+    const step = available[Math.min(index, Math.max(available.length - 1, 0))];
+    const el = step && (document.querySelector(step.selector) as HTMLElement | null);
+    if (!el) return;
+    // Honor reduced motion: instant jump instead of a smooth scroll.
+    const reduce = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    el.classList.add(HIGHLIGHT_CLASS);
+    return () => el.classList.remove(HIGHLIGHT_CLASS);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, index]);
+
   if (!open && !seen) return null;
-  const step = available[Math.min(index, Math.max(available.length - 1, 0))];
 
   const close = () => {
     setOpen(false);
@@ -63,10 +80,11 @@ export default function CampaignTour() {
     );
   }
 
-  if (!step) {
+  if (available.length === 0) {
     close();
     return null;
   }
+  const step = available[Math.min(index, available.length - 1)];
 
   return (
     <div className="tour-overlay" role="dialog" aria-label={t.tourTitle}>

@@ -78,7 +78,7 @@ export default function Account({ market }: { market: Market }) {
     <>
       <h1 className="page-title">{m.account.title}</h1>
       <p className="account-note" role="note">
-        {m.account.notePre} <code>docs/conda-capital-platform-blueprint-2026-10-30.md</code> {m.account.notePost}
+        {m.account.note}
       </p>
 
       <section aria-label={m.account.summaryAria}>
