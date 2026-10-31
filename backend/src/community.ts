@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
 import type {
-  CompanyApplication, Account, Comment, CommunityStore, IssuerApplication, NewsPost, Notification, NotificationKind, Ticket } from './community-store.js';
+  CompanyApplication, Account, Comment, CommunityStore, IssuerApplication, NewsPost, Notification, NotificationKind, Ticket, AuditEntry } from './community-store.js';
 import { FileCommunityStore, PostgresCommunityStore } from './community-store.js';
 import { RateLimiter } from './ratelimit.js';
 
@@ -160,7 +160,7 @@ export class CommunityService {
   // Admin-gated at the router. News are platform stand-in posts for the demo
   // campaign: the author label is fixed so readers are never misled into
   // thinking a verified issuer published them.
-  async addNews(campaignId: string, input: unknown): Promise<NewsPost> {
+  async addNews(campaignId: string, input: unknown, actor = 'admin-area'): Promise<NewsPost> {
     requireCampaignId(campaignId);
     const { title, body } = newsInput.parse(input ?? {});
     const post: NewsPost = {
@@ -174,6 +174,7 @@ export class CommunityService {
     await this.store.change((state) => {
       state.news[post.id] = post;
     });
+    await this.recordAudit(actor, 'news.post', post.id, `campaign=${campaignId} title=${post.title}`);
     return post;
   }
 
@@ -327,11 +328,31 @@ export class CommunityService {
   }
 
   // Admin operations (router gates them behind x-admin-key).
+  // Recent-history audit of gated mutations. Audit write failures are
+  // logged but never mask a committed mutation; the entry records the gate
+  // the action came through, not a verified identity beyond that.
+  async recordAudit(actor: string, action: string, target: string, detail?: string): Promise<void> {
+    try {
+      await this.store.change((state) => {
+        state.audit.push({ id: newId('audit'), at: this.now(), actor, action, target, ...(detail ? { detail } : {}) });
+        if (state.audit.length > 500) state.audit.splice(0, state.audit.length - 500);
+      });
+    } catch (err) {
+      console.error('audit write failed:', err instanceof Error ? err.message : err);
+    }
+  }
+
+  async adminAuditLog(limit = 100): Promise<AuditEntry[]> {
+    const state = await this.store.read();
+    const capped = Math.max(1, Math.min(500, Math.floor(limit)));
+    return [...state.audit].sort((a, b) => b.at - a.at).slice(0, capped);
+  }
+
   async adminListComments(): Promise<Comment[]> {
     const state = await this.store.read();
     return Object.values(state.comments).sort((a, b) => b.createdAt - a.createdAt);
   }
-  async adminSetCommentHidden(id: string, hidden: boolean, reason?: string): Promise<void> {
+  async adminSetCommentHidden(id: string, hidden: boolean, reason?: string, actor = 'admin-area'): Promise<void> {
     let target: Comment | undefined;
     await this.store.change((state) => {
       const c = state.comments[id];
@@ -340,6 +361,7 @@ export class CommunityService {
       c.hiddenReason = hidden ? (reason ?? null) : null;
       target = c;
     });
+    await this.recordAudit(actor, hidden ? 'comment.hide' : 'comment.unhide', id, hidden ? reason : undefined);
     if (hidden && target) {
       const c: Comment = target;
       await this.notify(
@@ -356,7 +378,7 @@ export class CommunityService {
     const state = await this.store.read();
     return Object.values(state.tickets).sort((a, b) => b.createdAt - a.createdAt);
   }
-  async adminCloseTicket(id: string): Promise<void> {
+  async adminCloseTicket(id: string, actor = 'admin-area'): Promise<void> {
     let target: Ticket | undefined;
     await this.store.change((state) => {
       const t = state.tickets[id];
@@ -365,6 +387,7 @@ export class CommunityService {
       t.closedAt = this.now();
       target = t;
     });
+    await this.recordAudit(actor, 'ticket.close', id);
     if (target) {
       const t: Ticket = target;
       await this.notify(t.publicKey, 'ticket_closed', 'Support ticket closed', `Your ${t.kind} ticket "${t.subject}" was closed.`, t.id, {
@@ -413,7 +436,7 @@ export class CommunityService {
     return Object.values(state.companies).sort((a, b) => b.createdAt - a.createdAt);
   }
 
-  async adminSetCompanyStatus(id: string, status: unknown): Promise<void> {
+  async adminSetCompanyStatus(id: string, status: unknown, actor = 'admin-area'): Promise<void> {
     if (status !== 'approved' && status !== 'rejected') throw new CommunityError(400, 'status must be approved or rejected');
     const company = await this.store.change((state) => {
       const c = state.companies[id];
@@ -423,6 +446,7 @@ export class CommunityService {
       return { ...c };
     });
     if (!company) throw new CommunityError(404, 'company application not found');
+    await this.recordAudit(actor, 'company.status', id, String(status));
     await this.notify(
       company.publicKey,
       'company_status',
@@ -437,7 +461,7 @@ export class CommunityService {
     const state = await this.store.read();
     return Object.values(state.applications).sort((a, b) => b.createdAt - a.createdAt);
   }
-  async adminSetApplicationStatus(id: string, status: unknown): Promise<void> {
+  async adminSetApplicationStatus(id: string, status: unknown, actor = 'admin-area'): Promise<void> {
     if (status !== 'received' && status !== 'under_review' && status !== 'closed') throw new CommunityError(400, 'invalid status');
     let target: IssuerApplication | undefined;
     await this.store.change((state) => {
@@ -446,6 +470,7 @@ export class CommunityService {
       a.status = status;
       target = a;
     });
+    await this.recordAudit(actor, 'application.status', id, String(status));
     if (target) {
       const t: IssuerApplication = target;
       await this.notify(

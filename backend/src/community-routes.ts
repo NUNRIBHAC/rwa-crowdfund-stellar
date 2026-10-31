@@ -199,7 +199,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.post('/api/campaigns/:id/news', requireAdmin, async (req, res) => {
     try {
       res.status(201).json({
-        post: await service.addNews(requireCampaignId(req.params.id), req.body),
+        post: await service.addNews(requireCampaignId(req.params.id), req.body, 'admin-key'),
       });
     } catch (err) {
       sendError(res, err);
@@ -305,15 +305,15 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   );
   router.post(
     '/api/operator/comments/:id/hide',
-    operator(async (req, res) => {
-      await service.adminSetCommentHidden(String(req.params.id), true, req.body?.reason);
+    operator(async (req, res, account) => {
+      await service.adminSetCommentHidden(String(req.params.id), true, req.body?.reason, `operator:${account.publicKey}`);
       res.json({ ok: true });
     }),
   );
   router.post(
     '/api/operator/comments/:id/unhide',
-    operator(async (req, res) => {
-      await service.adminSetCommentHidden(String(req.params.id), false);
+    operator(async (req, res, account) => {
+      await service.adminSetCommentHidden(String(req.params.id), false, undefined, `operator:${account.publicKey}`);
       res.json({ ok: true });
     }),
   );
@@ -325,8 +325,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   );
   router.post(
     '/api/operator/tickets/:id/close',
-    operator(async (req, res) => {
-      await service.adminCloseTicket(String(req.params.id));
+    operator(async (req, res, account) => {
+      await service.adminCloseTicket(String(req.params.id), `operator:${account.publicKey}`);
       res.json({ ok: true });
     }),
   );
@@ -338,8 +338,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   );
   router.post(
     '/api/operator/issuer-applications/:id/status',
-    operator(async (req, res) => {
-      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status);
+    operator(async (req, res, account) => {
+      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status, `operator:${account.publicKey}`);
       res.json({ ok: true });
     }),
   );
@@ -351,16 +351,16 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   );
   router.post(
     '/api/operator/companies/:id/status',
-    operator(async (req, res) => {
-      await service.adminSetCompanyStatus(String(req.params.id), req.body?.status);
+    operator(async (req, res, account) => {
+      await service.adminSetCompanyStatus(String(req.params.id), req.body?.status, `operator:${account.publicKey}`);
       res.json({ ok: true });
     }),
   );
   router.post(
     '/api/operator/campaigns/:id/news',
-    operator(async (req, res) => {
+    operator(async (req, res, account) => {
       res.status(201).json({
-        post: await service.addNews(requireCampaignId(req.params.id), req.body),
+        post: await service.addNews(requireCampaignId(req.params.id), req.body, `operator:${account.publicKey}`),
       });
     }),
   );
@@ -375,7 +375,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.post('/api/admin/comments/:id/hide', requireAdmin, async (req, res) => {
     try {
-      await service.adminSetCommentHidden(String(req.params.id), true, req.body?.reason);
+      await service.adminSetCommentHidden(String(req.params.id), true, req.body?.reason, 'admin-key');
       res.json({ ok: true });
     } catch (err) {
       sendError(res, err);
@@ -383,7 +383,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.post('/api/admin/comments/:id/unhide', requireAdmin, async (req, res) => {
     try {
-      await service.adminSetCommentHidden(String(req.params.id), false);
+      await service.adminSetCommentHidden(String(req.params.id), false, undefined, 'admin-key');
       res.json({ ok: true });
     } catch (err) {
       sendError(res, err);
@@ -398,7 +398,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.post('/api/admin/tickets/:id/close', requireAdmin, async (req, res) => {
     try {
-      await service.adminCloseTicket(String(req.params.id));
+      await service.adminCloseTicket(String(req.params.id), 'admin-key');
       res.json({ ok: true });
     } catch (err) {
       sendError(res, err);
@@ -413,12 +413,29 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.post('/api/admin/issuer-applications/:id/status', requireAdmin, async (req, res) => {
     try {
-      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status);
+      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status, 'admin-key');
       res.json({ ok: true });
     } catch (err) {
       sendError(res, err);
     }
   });
+
+  router.get('/api/admin/audit-log', requireAdmin, async (req, res) => {
+    try {
+      const limit = typeof req.query.limit === 'string' ? Number(req.query.limit) : undefined;
+      res.json({ audit: await service.adminAuditLog(limit) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
+  router.get(
+    '/api/operator/audit-log',
+    operator(async (req, res) => {
+      const limit = typeof req.query.limit === 'string' ? Number(req.query.limit) : undefined;
+      res.json({ audit: await service.adminAuditLog(limit) });
+    }),
+  );
 
   return router;
 }

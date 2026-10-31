@@ -5,6 +5,8 @@ import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
 import { registerDiscoveryEndpoints } from './sitemap.js';
 import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban, accountActivity } from './soroban.js';
+import { journalBackend } from './journal.js';
+import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
 
 const app = express();
@@ -92,7 +94,7 @@ const communityRouterReady = communityServiceFromEnv()
     return null;
   });
 const COMMUNITY_PATH =
-  /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications)(\/|$)|^\/api\/operator(\/|$)/;
+  /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log)(\/|$)|^\/api\/operator(\/|$)/;
 app.use((req, res, next) => {
   if (!COMMUNITY_PATH.test(req.path)) return next();
   communityRouterReady.then((router) => {
@@ -124,6 +126,24 @@ app.get('/api/account/activity', async (req, res) => {
     res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
   }
 });
+app.get('/api/admin/reconciliation', requireAdmin, async (_req, res) => {
+  // Read-only operator aid: journal-recorded SUCCESS contributions vs the
+  // on-chain cumulative counter per campaign. See RECONCILIATION_SEMANTICS;
+  // no accounting, custody or compliance claim is made or implied.
+  try {
+    const campaigns = await sorobanCampaigns();
+    const store = await (await journalBackend()).read();
+    const result = reconcileCampaigns(
+      campaigns.map((c: { id: string; raised?: string | null }) => ({ id: c.id, raised: c.raised ?? null })),
+      store.intents,
+      (store.quarantined ?? []).length,
+    );
+    res.json({ generatedAt: new Date().toISOString(), network: NETWORK, semantics: RECONCILIATION_SEMANTICS, ...result });
+  } catch (err) {
+    res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
+
 app.get('/api/legacy/campaigns', requireAdmin, async (_req, res) => {
   // Migration evidence only. Never return signed XDRs or private keys.
   const campaigns = await listCampaigns();

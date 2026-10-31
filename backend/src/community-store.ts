@@ -125,6 +125,19 @@ export type Notification = {
   readAt: number | null;
 };
 
+// Append-only operator/admin action record. Entries are facts about which
+// gated mutation ran, when, and on what target - not a security audit
+// opinion. Capped (see CommunityService.recordAudit): oldest entries drop
+// off, so this is an operational recent-history aid, not an archive.
+export type AuditEntry = {
+  id: string;
+  at: number;
+  actor: string; // 'admin-key' or `operator:<wallet>` - which gate the action came through
+  action: string; // e.g. 'comment.hide', 'company.status'
+  target: string; // entity id the action touched
+  detail?: string;
+};
+
 export type CommunityState = {
   version: 1;
   accounts: Record<string, Account>;
@@ -136,6 +149,7 @@ export type CommunityState = {
   applications: Record<string, IssuerApplication>;
   companies: Record<string, CompanyApplication>;
   notifications: Record<string, Notification>;
+  audit: AuditEntry[];
 };
 
 export function emptyCommunityState(): CommunityState {
@@ -150,6 +164,7 @@ export function emptyCommunityState(): CommunityState {
     applications: {},
     companies: {},
     notifications: {},
+    audit: [],
   };
 }
 
@@ -157,6 +172,8 @@ function validate(state: any): CommunityState {
   // Forward-compatible default: docs written before notifications existed
   // gain the collection on first read instead of failing validation.
   if (state && state.version === 1 && !state.notifications) state.notifications = {};
+  // Same forward-compatible default for docs written before the audit log.
+  if (state && state.version === 1 && !state.audit) state.audit = [];
   if (state && state.version === 1 && !state.companies) state.companies = {};
   if (
     !state ||
