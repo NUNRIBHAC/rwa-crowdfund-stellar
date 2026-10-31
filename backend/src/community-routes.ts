@@ -213,6 +213,88 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }),
   );
 
+  // --- Operator surface for the demo admin dashboard ---
+  // Browser operators authenticate with the EXISTING community wallet
+  // sign-in (signed challenge bearer token); authorization is membership of
+  // the OPERATOR_WALLETS env allow-list, checked server-side on every
+  // request. The x-admin-key shared secret stays server/CLI-only and never
+  // reaches the frontend. Fail closed when the allow-list is unset, same
+  // posture as requireAdmin. Demo-grade designation; production needs real
+  // operator identities (multisig), as noted in server.ts.
+  const operatorWallets = (): string[] =>
+    (process.env.OPERATOR_WALLETS ?? '')
+      .split(',')
+      .map((w) => w.trim())
+      .filter(Boolean);
+  const operator = (handler: (req: express.Request, res: express.Response, account: Account) => Promise<void>) =>
+    authed(async (req, res, account) => {
+      const wallets = operatorWallets();
+      if (wallets.length === 0) {
+        res.status(503).json({ error: 'OPERATOR_WALLETS not configured; operator endpoints disabled' });
+        return;
+      }
+      if (!wallets.includes(account.publicKey)) {
+        res.status(403).json({ error: 'this wallet is not a designated operator' });
+        return;
+      }
+      await handler(req, res, account);
+    });
+
+  router.get(
+    '/api/operator/comments',
+    operator(async (_req, res) => {
+      res.json({ comments: await service.adminListComments() });
+    }),
+  );
+  router.post(
+    '/api/operator/comments/:id/hide',
+    operator(async (req, res) => {
+      await service.adminSetCommentHidden(String(req.params.id), true, req.body?.reason);
+      res.json({ ok: true });
+    }),
+  );
+  router.post(
+    '/api/operator/comments/:id/unhide',
+    operator(async (req, res) => {
+      await service.adminSetCommentHidden(String(req.params.id), false);
+      res.json({ ok: true });
+    }),
+  );
+  router.get(
+    '/api/operator/tickets',
+    operator(async (_req, res) => {
+      res.json({ tickets: await service.adminListTickets() });
+    }),
+  );
+  router.post(
+    '/api/operator/tickets/:id/close',
+    operator(async (req, res) => {
+      await service.adminCloseTicket(String(req.params.id));
+      res.json({ ok: true });
+    }),
+  );
+  router.get(
+    '/api/operator/issuer-applications',
+    operator(async (_req, res) => {
+      res.json({ applications: await service.adminListApplications() });
+    }),
+  );
+  router.post(
+    '/api/operator/issuer-applications/:id/status',
+    operator(async (req, res) => {
+      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status);
+      res.json({ ok: true });
+    }),
+  );
+  router.post(
+    '/api/operator/campaigns/:id/news',
+    operator(async (req, res) => {
+      res.status(201).json({
+        post: await service.addNews(requireCampaignId(req.params.id), req.body),
+      });
+    }),
+  );
+
   // --- Admin operations (moderation, support desk, issuer pipeline) ---
   router.get('/api/admin/comments', requireAdmin, async (_req, res) => {
     try {
