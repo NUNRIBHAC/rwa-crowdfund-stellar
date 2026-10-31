@@ -118,7 +118,6 @@ export const pt: Messages = {
     statusOpen: 'Aberta',
     withdrawn: 'Levantado',
     fundedPct: (percent: number) => `${percent}% financiado`,
-    blocksFilled: (filled: number, count: number) => `${filled} de ${count} blocos`,
     progressUnavailable: 'Progresso indisponível - dados on-chain não carregados',
     progressAria: (pct: number) => `Progresso do financiamento: ${pct}% do objetivo`,
     interest: 'Juros',
@@ -484,6 +483,10 @@ export const pt: Messages = {
   },
   footer: {
     platform: 'Plataforma',
+    legal: 'Legal',
+    termsOfService: 'Termos de Utilização',
+    privacyPolicy: 'Política de Privacidade',
+    riskDisclosure: 'Aviso de Risco',
     invest: 'Investir',
     howItWorks: 'Como funciona',
     financingIssuers: 'Financiamento para emitentes',

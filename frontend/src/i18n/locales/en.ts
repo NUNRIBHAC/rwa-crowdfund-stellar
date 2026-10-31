@@ -115,7 +115,6 @@ export const en = {
     statusOpen: 'Open',
     withdrawn: 'Withdrawn',
     fundedPct: (percent: number) => `${percent}% funded`,
-    blocksFilled: (filled: number, count: number) => `${filled} of ${count} blocks`,
     progressUnavailable: 'Progress unavailable - on-chain data not loaded',
     progressAria: (pct: number) => `Funding progress: ${pct}% of goal`,
     interest: 'Interest',
@@ -458,6 +457,10 @@ export const en = {
   },
   footer: {
     platform: 'Platform',
+    legal: 'Legal',
+    termsOfService: 'Terms of Service',
+    privacyPolicy: 'Privacy Policy',
+    riskDisclosure: 'Risk Disclosure',
     invest: 'Invest',
     howItWorks: 'How it works',
     financingIssuers: 'Financing for issuers',
