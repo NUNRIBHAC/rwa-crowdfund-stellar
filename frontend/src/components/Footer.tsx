@@ -49,17 +49,19 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-          </div>
-          <p className="footer-legal">
-            {m.footer.legalPre}{' '}
-            <a href="https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_upreg" target="_blank" rel="noreferrer">
-              {m.footer.legalLink}
-            </a>
-            {m.footer.legalPost}
-          </p>
-          <div className="footer-status">
-            <h2 className="footer-heading">{m.footer.status}</h2>
-            <p>{m.footer.statusText}</p>
+            <div className="footer-context">
+              <p className="footer-legal">
+                {m.footer.legalPre}{' '}
+                <a href="https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_upreg" target="_blank" rel="noreferrer">
+                  {m.footer.legalLink}
+                </a>
+                {m.footer.legalPost}
+              </p>
+              <div className="footer-status">
+                <h2 className="footer-heading">{m.footer.status}</h2>
+                <p>{m.footer.statusText}</p>
+              </div>
+            </div>
           </div>
           <svg className="footer-tiles" viewBox="0 0 320 200" aria-hidden="true">
             <rect x="118" y="16" width="66" height="66" rx="15" fill="#8B8EF0" transform="rotate(8 151 49)" />
