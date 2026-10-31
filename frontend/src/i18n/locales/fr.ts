@@ -511,6 +511,7 @@ export const fr: Messages = {
     learn: 'Apprendre',
     instrumentHub: 'Hub des instruments',
     riskWarnings: 'Avertissements de risque',
+    glossary: 'Glossaire',
     faq: 'FAQ',
     aboutProject: 'À propos de ce projet',
     status: 'Statut',

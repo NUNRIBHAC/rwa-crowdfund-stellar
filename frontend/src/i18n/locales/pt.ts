@@ -496,6 +496,7 @@ export const pt: Messages = {
     learn: 'Aprender',
     instrumentHub: 'Hub de instrumentos',
     riskWarnings: 'Avisos de risco',
+    glossary: 'Glossário',
     faq: 'FAQ',
     aboutProject: 'Sobre este projeto',
     status: 'Estado',

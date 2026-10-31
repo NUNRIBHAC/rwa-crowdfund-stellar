@@ -505,6 +505,7 @@ export const de: Messages = {
     learn: 'Lernen',
     instrumentHub: 'Instrumenten-Hub',
     riskWarnings: 'Risikohinweise',
+    glossary: 'Glossar',
     faq: 'FAQ',
     aboutProject: 'Über dieses Projekt',
     status: 'Status',

@@ -470,6 +470,7 @@ export const en = {
     learn: 'Learn',
     instrumentHub: 'Instrument hub',
     riskWarnings: 'Risk warnings',
+    glossary: 'Glossary',
     faq: 'FAQ',
     aboutProject: 'About this project',
     status: 'Status',
