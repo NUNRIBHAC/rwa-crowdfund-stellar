@@ -163,6 +163,9 @@ export type CommunityNotification = {
   kind: NotificationKind;
   title: string;
   body: string;
+  // Structured event vars for localized body templates; absent on rows
+  // written before vars existed - fall back to title/body there.
+  vars?: Record<string, string>;
   refId: string | null;
   createdAt: number;
   readAt: number | null;

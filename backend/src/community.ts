@@ -245,6 +245,7 @@ export class CommunityService {
       'Issuer application received',
       `Your issuer application for "${application.projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.`,
       application.id,
+      { projectName: application.projectName },
     );
     return application;
   }
@@ -254,13 +255,21 @@ export class CommunityService {
   // path that fabricates notification content. notify() runs as its own
   // store.change AFTER the triggering change completes: nesting a change
   // inside another change's fn would deadlock the Postgres advisory lock.
-  private async notify(publicKey: string, kind: NotificationKind, title: string, body: string, refId: string | null): Promise<void> {
+  private async notify(
+    publicKey: string,
+    kind: NotificationKind,
+    title: string,
+    body: string,
+    refId: string | null,
+    vars: Record<string, string>,
+  ): Promise<void> {
     const n: Notification = {
       id: newId('ntf'),
       publicKey,
       kind,
       title,
       body,
+      vars,
       refId,
       createdAt: this.now(),
       readAt: null,
@@ -332,6 +341,7 @@ export class CommunityService {
         'Comment hidden by moderation',
         `Your comment on campaign "${c.campaignId}" was hidden by the moderator.${c.hiddenReason ? ` Reason: ${c.hiddenReason}` : ''}`,
         c.id,
+        c.hiddenReason ? { campaignId: c.campaignId, reason: c.hiddenReason } : { campaignId: c.campaignId },
       );
     }
   }
@@ -350,7 +360,10 @@ export class CommunityService {
     });
     if (target) {
       const t: Ticket = target;
-      await this.notify(t.publicKey, 'ticket_closed', 'Support ticket closed', `Your ${t.kind} ticket "${t.subject}" was closed.`, t.id);
+      await this.notify(t.publicKey, 'ticket_closed', 'Support ticket closed', `Your ${t.kind} ticket "${t.subject}" was closed.`, t.id, {
+        ticketKind: t.kind,
+        subject: t.subject,
+      });
     }
   }
   async adminListApplications(): Promise<IssuerApplication[]> {
@@ -374,6 +387,7 @@ export class CommunityService {
         'Issuer application update',
         `Your issuer application for "${t.projectName}" is now "${status}".`,
         t.id,
+        { projectName: t.projectName, status },
       );
     }
   }

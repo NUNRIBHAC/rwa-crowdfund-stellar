@@ -94,6 +94,11 @@ export type Notification = {
   kind: NotificationKind;
   title: string;
   body: string;
+  // Structured event data captured at generation time so clients can render
+  // localized body templates with verbatim variables instead of parsing the
+  // English fallback strings. Absent on rows written before this field
+  // existed - clients fall back to title/body there.
+  vars?: Record<string, string>;
   refId: string | null;
   createdAt: number;
   readAt: number | null;

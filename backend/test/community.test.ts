@@ -212,6 +212,7 @@ test('notifications: application submit notifies only the owner; mark read works
   assert.equal(mineA.notifications[0].kind, 'application_received');
   assert.equal(mineA.notifications[0].refId, app.id);
   assert.match(mineA.notifications[0].body, /not an approval/);
+  assert.deepEqual(mineA.notifications[0].vars, { projectName: 'Alentejo Solar Cooperative' });
   // Other accounts see nothing and cannot mark it read.
   assert.equal((await service.listNotifications(accB)).notifications.length, 0);
   await assert.rejects(() => service.markNotificationRead(accB, mineA.notifications[0].id), /not found/);
@@ -243,6 +244,9 @@ test('notifications: admin status change, comment hide and ticket close each not
   assert.deepEqual(kinds, ['application_received', 'application_status', 'comment_moderated', 'ticket_closed'].sort());
   const moderated = notifications.find((n) => n.kind === 'comment_moderated');
   assert.match(moderated?.body ?? '', /off-topic/);
+  assert.deepEqual(moderated?.vars, { campaignId: 'demo-solar', reason: 'off-topic' });
+  assert.deepEqual(notifications.find((n) => n.kind === 'application_status')?.vars, { projectName: 'Demo Project', status: 'under_review' });
+  assert.deepEqual(notifications.find((n) => n.kind === 'ticket_closed')?.vars, { ticketKind: 'feedback', subject: 'Tour idea' });
   // Unhide does not notify again.
   await service.adminSetCommentHidden(comment.id, false);
   assert.equal((await service.listNotifications(account)).notifications.length, 4);
