@@ -323,12 +323,6 @@ export const pt: Messages = {
     qualifiersTitle: 'Qualificadores de ranking e de rótulo',
     qualifiersIntro:
       'Terminologia de plataformas que pode encontrar em ofertas. Estes rótulos qualificam um instrumento; não são classes de instrumentos em si.',
-    glossaryAria: 'Glossário',
-    glossaryTitle: 'Glossário',
-    glossaryPre: 'Os principais termos da plataforma e do crowdfunding estão numa página própria:',
-    glossaryLink: 'abrir o glossário',
-    riskPre: 'Antes de qualquer decisão com dinheiro real, leia os',
-    riskLink: 'avisos de risco',
   },
   glossaryPage: {
     title: 'Glossário',

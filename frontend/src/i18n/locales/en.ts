@@ -311,12 +311,6 @@ export const en = {
     qualifiersAria: 'Rank and label qualifiers',
     qualifiersTitle: 'Rank and label qualifiers',
     qualifiersIntro: 'Platform wording you may meet on offers. These labels qualify an instrument; they are not instrument classes themselves.',
-    glossaryAria: 'Glossary',
-    glossaryTitle: 'Glossary',
-    glossaryPre: 'Key platform and crowdfunding terms live on their own page:',
-    glossaryLink: 'open the glossary',
-    riskPre: 'Before any real-money decision, read the',
-    riskLink: 'risk warnings',
   },
   glossaryPage: {
     title: 'Glossary',

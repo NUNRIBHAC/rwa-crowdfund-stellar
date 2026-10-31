@@ -324,12 +324,6 @@ export const es: Messages = {
     qualifiersTitle: 'Calificadores de rango y de etiqueta',
     qualifiersIntro:
       'Terminología de plataformas que puedes encontrar en ofertas. Estas etiquetas califican un instrumento; no son clases de instrumentos en sí mismas.',
-    glossaryAria: 'Glosario',
-    glossaryTitle: 'Glosario',
-    glossaryPre: 'Los términos clave de la plataforma y del crowdfunding están en una página propia:',
-    glossaryLink: 'abrir el glosario',
-    riskPre: 'Antes de cualquier decisión con dinero real, lee los',
-    riskLink: 'avisos de riesgo',
   },
   glossaryPage: {
     title: 'Glosario',

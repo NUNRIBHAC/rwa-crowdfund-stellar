@@ -331,12 +331,6 @@ export const fr: Messages = {
     qualifiersTitle: "Qualificatifs de rang et d'étiquette",
     qualifiersIntro:
       "Terminologie de plateformes que vous pouvez rencontrer dans des offres. Ces étiquettes qualifient un instrument ; ce ne sont pas des classes d'instruments en soi.",
-    glossaryAria: 'Glossaire',
-    glossaryTitle: 'Glossaire',
-    glossaryPre: 'Les termes clés de la plateforme et du crowdfunding ont leur propre page :',
-    glossaryLink: 'ouvrir le glossaire',
-    riskPre: "Avant toute décision avec de l'argent réel, lisez les",
-    riskLink: 'avertissements de risque',
   },
   glossaryPage: {
     title: 'Glossaire',

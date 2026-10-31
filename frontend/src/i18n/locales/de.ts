@@ -332,12 +332,6 @@ export const de: Messages = {
     qualifiersTitle: 'Rang- und Label-Qualifikatoren',
     qualifiersIntro:
       'Plattformterminologie, die Ihnen in Angeboten begegnen kann. Diese Labels qualifizieren ein Instrument; sie sind keine eigenen Instrumentenklassen.',
-    glossaryAria: 'Glossar',
-    glossaryTitle: 'Glossar',
-    glossaryPre: 'Die zentralen Begriffe der Plattform und des Crowdfundings haben eine eigene Seite:',
-    glossaryLink: 'Glossar öffnen',
-    riskPre: 'Vor jeder Entscheidung mit echtem Geld lesen Sie die',
-    riskLink: 'Risikohinweise',
   },
   glossaryPage: {
     title: 'Glossar',
