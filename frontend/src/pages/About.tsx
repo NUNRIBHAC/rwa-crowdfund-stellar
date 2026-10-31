@@ -20,7 +20,8 @@ export default function About() {
           <p>
             In Ancient Greece, Callisto became Ursa Major - a constellation where individual points of light join to form a greater, imperishable figure. At
             Blockallisto, we bring that same truth to global finance through the Stellar network. We connect small investors and digital fractions to fill
-            blocks of real assets. Alone, a token is only a point. Together, we are the democratization of investment.
+            blocks of real assets. Alone, a token is only a point. Together, we are the democratization of investment: individual points coming together into a
+            greater whole.
           </p>
         </div>
       </section>
