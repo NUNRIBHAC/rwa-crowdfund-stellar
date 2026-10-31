@@ -148,11 +148,18 @@ R132 (Helsinki Pool) describes a confirmed building permit and the development o
 
 ### Real estate
 
-| Property type (rows with property character)              | Rows                                                              |
+Property-type labels follow the user's updated unified list supplied on WhatsApp on 2026-10-31 (01:07 WET), which adds the "Other property types - ..." categories this site's data surfaced.
+
+| Property type inside real estate                          | Rows                                                              |
 | --------------------------------------------------------- | ----------------------------------------------------------------- |
-| Residential (all subtypes)                                | 0                                                                 |
-| Commercial/office                                         | 0                                                                 |
+| Residential (new-build development)                       | 0                                                                 |
+| Residential (subtype detail unconfirmed)                  | 0                                                                 |
+| Residential (renovation/revitalization)                   | 0                                                                 |
+| Residential (renovation + new-build)                      | 0                                                                 |
 | Mixed-use (residential + commercial elements)             | 0                                                                 |
+| Residential (holiday apartments, incl. hotel conversions) | 0                                                                 |
+| Commercial/office                                         | 0                                                                 |
+| other property types                                      | 0                                                                 |
 | Other property types - self-storage                       | 2 (R124 Mini-Holding / Minilaod, R138 Cityvarasto)                |
 | Other property types - sea pool / spa complex (tentative) | 2 (R113, R132; industry filed as Hotels, hospitality and tourism) |
 | Not determined                                            | 0                                                                 |
