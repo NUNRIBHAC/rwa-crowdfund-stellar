@@ -270,7 +270,7 @@ code {
   gap: 10px;
 }
 .progress-track {
-  flex: 1;
+  flex: none;
   height: 8px;
   background: #eaecf0;
   border-radius: 999px;
