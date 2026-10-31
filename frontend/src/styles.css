@@ -689,6 +689,7 @@ code {
     grid-column: 1;
     grid-row: 1 / span 2;
     align-self: center;
+    justify-self: start;
   }
   .header-side {
     grid-column: 2;
@@ -1168,6 +1169,15 @@ code {
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: 14px;
   color: rgba(255, 255, 255, 0.6);
+}
+.footer-status {
+  flex-basis: 100%;
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+.footer-status p {
+  margin: 0;
+  max-width: 720px;
 }
 
 /* Card title wrapping: chips must not squeeze the title into per-character wraps */
@@ -1666,6 +1676,9 @@ textarea:focus-visible,
   }
   .footer-legal {
     order: 5;
+  }
+  .footer-status {
+    order: 6;
   }
 }
 
