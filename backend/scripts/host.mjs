@@ -8,6 +8,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const { app } = await import('../dist/server.js');
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../frontend/dist');
+// SEP-1: stellar.toml must be fetchable cross-origin as text/plain.
+app.get('/.well-known/stellar.toml', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.type('text/plain');
+  res.sendFile(path.join(dist, '.well-known', 'stellar.toml'));
+});
 app.use(express.static(dist));
 app.use((req, res, next) => {
   if (req.method === 'GET' && !req.path.startsWith('/api')) return res.sendFile(path.join(dist, 'index.html'));
