@@ -1646,6 +1646,36 @@ textarea:focus-visible,
   height: 175px;
   pointer-events: none;
 }
+/* Shapes drift gently on their own (user request: animation without hover).
+   translate/rotate compose with each rect's base SVG rotation. Small 8px/3deg
+   amplitudes keep every shape fully inside the viewBox. */
+.footer-tiles rect {
+  animation: footer-drift 7s ease-in-out infinite alternate;
+}
+.footer-tiles rect:nth-child(2n) {
+  animation-duration: 9s;
+  animation-delay: -2.5s;
+}
+.footer-tiles rect:nth-child(3n) {
+  animation-duration: 11s;
+  animation-delay: -5s;
+  animation-direction: alternate-reverse;
+}
+@keyframes footer-drift {
+  from {
+    translate: 0 4px;
+    rotate: -1.5deg;
+  }
+  to {
+    translate: 0 -4px;
+    rotate: 1.5deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-tiles rect {
+    animation: none;
+  }
+}
 @media (max-width: 720px) {
   .footer-brand-inner {
     padding-right: 210px;
