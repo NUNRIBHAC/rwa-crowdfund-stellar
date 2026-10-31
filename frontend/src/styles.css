@@ -1160,6 +1160,9 @@ code {
   padding: 0;
   line-height: 2;
 }
+.footer-legal-heading {
+  margin-top: 18px;
+}
 .footer-grid p {
   margin: 0;
 }
@@ -1643,50 +1646,101 @@ textarea:focus-visible,
   top: 0;
   bottom: 0;
   right: 0;
-  width: 400px;
-  height: 100%;
+  width: 420px;
+  overflow: hidden;
   pointer-events: none;
 }
-/* Shapes drift gently on their own (user request: animation without hover).
-   translate/rotate compose with each rect's base SVG rotation. Small 8px/3deg
-   amplitudes keep every shape fully inside the viewBox. */
-.footer-tiles rect {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: footer-drift-a 5s ease-in-out infinite alternate;
+/* Each shape is an independent absolutely positioned svg. Its viewBox carries
+   slack around the rotated rect, so the animation can never clip a corner
+   against an internal box; shapes roam the full height of the footer's right
+   zone and only the footer's own edges can crop them. */
+.ft {
+  position: absolute;
+  display: block;
+  animation: footer-drift-a 6s ease-in-out infinite alternate;
 }
-.footer-tiles rect:nth-child(2n) {
+.ft-1 {
+  width: 80px;
+  height: 80px;
+  left: 24px;
+  top: 30px;
+}
+.ft-2 {
+  width: 50px;
+  height: 50px;
+  left: 250px;
+  top: 80px;
   animation-name: footer-drift-b;
-  animation-duration: 6.5s;
+  animation-duration: 7.5s;
   animation-delay: -2s;
 }
-.footer-tiles rect:nth-child(3n) {
-  animation-duration: 8s;
+.ft-3 {
+  width: 84px;
+  height: 84px;
+  left: 120px;
+  top: 170px;
+  animation-duration: 9s;
   animation-delay: -4s;
-  animation-direction: alternate-reverse;
+}
+.ft-4 {
+  width: 60px;
+  height: 60px;
+  left: 300px;
+  top: 260px;
+  animation-name: footer-drift-b;
+  animation-duration: 6.8s;
+  animation-delay: -1s;
+}
+.ft-5 {
+  width: 54px;
+  height: 54px;
+  left: 40px;
+  top: 330px;
+  animation-duration: 8.2s;
+  animation-delay: -3s;
+}
+.ft-6 {
+  width: 36px;
+  height: 36px;
+  left: 210px;
+  top: 420px;
+  animation-name: footer-drift-b;
+  animation-duration: 5.6s;
+}
+.ft-7 {
+  width: 52px;
+  height: 52px;
+  left: 110px;
+  top: 480px;
+  animation-duration: 7s;
+  animation-delay: -5s;
 }
 @keyframes footer-drift-a {
   from {
-    translate: -18px 14px;
-    rotate: -3deg;
+    margin-left: -14px;
+    margin-top: 12px;
+    transform: rotate(-3deg);
   }
   to {
-    translate: 18px -14px;
-    rotate: 3deg;
+    margin-left: 14px;
+    margin-top: -12px;
+    transform: rotate(3deg);
   }
 }
 @keyframes footer-drift-b {
   from {
-    translate: 14px -18px;
-    rotate: 2.5deg;
+    margin-left: 12px;
+    margin-top: -14px;
+    transform: rotate(2.5deg);
   }
   to {
-    translate: -14px 18px;
-    rotate: -2.5deg;
+    margin-left: -12px;
+    margin-top: 14px;
+    transform: rotate(-2.5deg);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .footer-tiles rect {
+  .ft {
     animation: none;
   }
 }
@@ -1695,7 +1749,16 @@ textarea:focus-visible,
     padding-right: 344px;
   }
   .footer-tiles {
-    width: 320px;
+    width: 340px;
+  }
+  .ft-2 {
+    left: 210px;
+  }
+  .ft-4 {
+    left: 240px;
+  }
+  .ft-6 {
+    left: 180px;
   }
 }
 
@@ -1706,25 +1769,77 @@ textarea:focus-visible,
     gap: 24px;
   }
   .footer-tiles {
-    top: auto;
-    width: 170px;
-    height: 120px;
-    right: 12px;
-    bottom: 12px;
+    width: 200px;
+  }
+  .ft-1 {
+    left: 12px;
+    top: 40px;
+  }
+  .ft-2 {
+    left: 130px;
+    top: 120px;
+  }
+  .ft-3 {
+    left: 40px;
+    top: 210px;
+  }
+  .ft-4 {
+    left: 120px;
+    top: 330px;
+  }
+  .ft-5 {
+    left: 16px;
+    top: 430px;
+  }
+  .ft-6 {
+    left: 110px;
+    top: 540px;
+  }
+  .ft-7 {
+    left: 50px;
+    top: 620px;
   }
 }
 @media (max-width: 560px) {
   /* The tile figure must stay fully visible ("a figura tem que se ver toda"):
-     stack it below the tagline at a readable size instead of hiding it. */
+     stack it below the tagline as a full-width band, still animating. */
   .footer-brand-inner {
     padding: 24px 24px 24px;
     flex-direction: column;
   }
   .footer-tiles {
-    position: static;
-    width: 220px;
-    height: 154px;
+    position: relative;
+    width: 100%;
+    height: 260px;
     order: 4;
+  }
+  .ft-1 {
+    left: 4%;
+    top: 16px;
+  }
+  .ft-2 {
+    left: 38%;
+    top: 96px;
+  }
+  .ft-3 {
+    left: 60%;
+    top: 20px;
+  }
+  .ft-4 {
+    left: 28%;
+    top: 140px;
+  }
+  .ft-5 {
+    left: 76%;
+    top: 130px;
+  }
+  .ft-6 {
+    left: 14%;
+    top: 150px;
+  }
+  .ft-7 {
+    left: 52%;
+    top: 180px;
   }
 }
 
