@@ -26,16 +26,20 @@ export default function MyCommunityActivity() {
     }
     let stale = false;
     setError('');
-    Promise.all([fetchMyApplications(token), fetchMyTickets(token), fetchMyComments(token)])
-      .then(([a, t, c]) => {
-        if (stale) return;
-        setApplications(a.applications);
-        setTickets(t.tickets);
-        setComments(c.comments);
-      })
-      .catch((e) => {
-        if (!stale) setError(e instanceof Error ? e.message : String(e));
-      });
+    // Independent fetches: one failing endpoint must not blank the others.
+    const guard = <T,>(p: Promise<T>, apply: (v: T) => void) =>
+      p
+        .then((v) => {
+          if (!stale) apply(v);
+        })
+        .catch((e) => {
+          if (!stale) setError(e instanceof Error ? e.message : String(e));
+        });
+    void Promise.all([
+      guard(fetchMyApplications(token), (v) => setApplications(v.applications)),
+      guard(fetchMyTickets(token), (v) => setTickets(v.tickets)),
+      guard(fetchMyComments(token), (v) => setComments(v.comments)),
+    ]);
     return () => {
       stale = true;
     };

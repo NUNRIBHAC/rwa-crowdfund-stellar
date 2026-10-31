@@ -68,6 +68,11 @@ test('full login roundtrip through the real app: challenge, sign, verify, replay
   assert.equal(me.status, 200);
 });
 
+test('GET /api/comments/mine passes the community path gate (401 without token, not 404)', async () => {
+  const res = await fetch(`${base}/api/comments/mine`);
+  assert.equal(res.status, 401);
+});
+
 test('legacy campaign write catch-all still answers 410 for non-community POSTs', async () => {
   const res = await fetch(`${base}/api/campaigns`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
   assert.equal(res.status, 410);

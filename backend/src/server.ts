@@ -92,7 +92,7 @@ const communityRouterReady = communityServiceFromEnv()
     return null;
   });
 const COMMUNITY_PATH =
-  /^\/api\/(auth|support|issuer-applications)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications)(\/|$)/;
+  /^\/api\/(auth|support|issuer-applications|comments)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications)(\/|$)/;
 app.use((req, res, next) => {
   if (!COMMUNITY_PATH.test(req.path)) return next();
   communityRouterReady.then((router) => {
