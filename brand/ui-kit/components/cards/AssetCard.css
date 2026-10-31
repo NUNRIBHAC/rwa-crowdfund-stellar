@@ -1,0 +1,129 @@
+/* AssetCard - Blockallisto UI kit.
+   Tokens come from brand/brand-tokens.css (--bl-*). Fallbacks are inlined so
+   the component also renders standalone. */
+
+.bl-asset-card {
+  display: flex;
+  gap: var(--bl-space-24, 24px);
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: var(--bl-white, #ffffff);
+  border: 1px solid var(--bl-line, #e6e6fb);
+  border-radius: var(--bl-radius-lg, 16px); /* asset cards: radius lg */
+  padding: var(--bl-space-24, 24px);
+  color: var(--bl-text, #14163a);
+  font-family: var(--bl-font-text, 'Inter', system-ui, sans-serif);
+}
+
+.bl-asset-card-main {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.bl-asset-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--bl-space-12, 12px);
+  flex-wrap: wrap;
+}
+
+.bl-asset-card-title {
+  margin: 0;
+  font-family: var(--bl-font-display, 'Montserrat', system-ui, sans-serif);
+  font-size: 18px;
+  font-weight: 700;
+}
+.bl-asset-card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+.bl-asset-card-title a:hover {
+  text-decoration: underline;
+}
+
+.bl-asset-card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.bl-asset-chip {
+  border: 1px solid var(--bl-line, #e6e6fb);
+  background: var(--bl-paper, #f6f6fe);
+  color: var(--bl-text, #14163a);
+  border-radius: var(--bl-radius-sm, 4px);
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bl-asset-card-teaser {
+  margin: var(--bl-space-8, 8px) 0 0;
+  color: var(--bl-text-2, #5a5c75);
+  font-size: 14px;
+}
+
+.bl-asset-metrics,
+.bl-asset-figures {
+  display: flex;
+  gap: var(--bl-space-24, 24px);
+  flex-wrap: wrap;
+  margin: var(--bl-space-16, 16px) 0 0;
+  padding: 0;
+}
+.bl-asset-metrics dt,
+.bl-asset-figures dt {
+  font-size: 12px;
+  color: var(--bl-text-3, #9596a6);
+}
+.bl-asset-metrics dd,
+.bl-asset-figures dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Key UI figures: Plus Jakarta Sans Bold, slightly larger (brand rule). */
+.bl-asset-figure {
+  font-family: var(--bl-font-figures, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 16px;
+}
+.bl-asset-unit {
+  font-family: var(--bl-font-text, 'Inter', system-ui, sans-serif);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--bl-text-3, #9596a6);
+}
+
+.bl-asset-card-grid {
+  flex: none;
+  text-align: center;
+}
+.bl-asset-grid {
+  width: 160px;
+  height: 160px;
+  display: block;
+}
+.bl-asset-grid-block {
+  fill: none;
+  stroke: var(--bl-ink, #14163a);
+  stroke-width: 5;
+}
+.bl-asset-grid-tile.is-funded {
+  fill: var(--bl-indigo, #4b4fe2);
+}
+.bl-asset-grid-tile.is-progress {
+  fill: var(--bl-indigo-400, #8b8ef0);
+}
+.bl-asset-grid-tile.is-open {
+  fill: var(--bl-indigo-200, #c7c8f9);
+}
+.bl-asset-grid-caption {
+  margin: var(--bl-space-8, 8px) 0 0;
+  font-size: 12.5px;
+  color: var(--bl-text-2, #5a5c75);
+}
