@@ -123,8 +123,10 @@ export default function CampaignTour() {
     return (
       <button
         className="btn"
-        onClick={() => {
-          restoreFocusRef.current = document.activeElement;
+        onClick={(e) => {
+          // Capture the button itself, not activeElement: a synthetic or
+          // pointer click does not necessarily move focus first.
+          restoreFocusRef.current = e.currentTarget;
           setIndex(0);
           setOpen(true);
         }}
