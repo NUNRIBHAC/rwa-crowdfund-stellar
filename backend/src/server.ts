@@ -73,7 +73,9 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
 };
 
 // Machine-readable discovery: sitemap.xml + robots.txt (see sitemap.ts).
-registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await listCampaigns()).map((c) => c.id) });
+// Live campaign URLs come from the Soroban registry (same source as /api/campaigns),
+// not the legacy file store.
+registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCampaigns()).map((c) => c.id) });
 
 app.get('/health', (_req, res) => {
   res.json({ ok: true, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
