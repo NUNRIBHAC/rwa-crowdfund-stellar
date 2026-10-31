@@ -2705,13 +2705,22 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   outline-offset: 0;
 }
 
-/* Responsive: tables scroll horizontally on narrow viewports instead of
-   breaking layout; no markup change needed (display:block on the table). */
+/* Responsive: on narrow viewports the operator tables keep a readable column
+   width and the surrounding section scrolls horizontally, instead of the
+   table squeezing cells into mid-word-breaking columns. A global
+   overflow-wrap:anywhere (styles.css top) otherwise shatters plain words like
+   country names. */
 @media (max-width: 720px) {
-  .operator-table {
-    display: block;
+  .community-section:has(.operator-table) {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+  .operator-table {
+    min-width: 560px;
+  }
+  .operator-table th,
+  .operator-table td {
+    overflow-wrap: normal;
   }
 }
 
