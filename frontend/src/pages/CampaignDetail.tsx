@@ -47,6 +47,8 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
   const profile = profileFor(campaign, market.fixtureMode, m.profiles.list);
   const dl = deadlineInfo(campaign.config.deadline, m.time);
   const status = campaignStatus(campaign);
+  const fundedNow = status === 'funded';
+  const ended = dl.state === 'ended';
   const statusLabel = status === 'funded' ? m.campaign.statusFunded : status === 'ended' ? m.campaign.statusEnded : dl.label;
 
   return (
@@ -269,24 +271,47 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
                 <button className="btn btn-primary" disabled={market.busy || !market.actor} onClick={() => market.onPrepare(campaign, 'contribute')}>
                   {m.card.contribute}
                 </button>
-                <button
-                  className="btn"
-                  disabled={market.busy || !market.actor || campaign.balance === null}
-                  onClick={() => market.onPrepare(campaign, 'refund')}
-                >
-                  {m.card.refundMe}
-                </button>
-                <button
-                  className="btn"
-                  disabled={market.busy || market.actor !== campaign.config.creator}
-                  onClick={() => market.onPrepare(campaign, 'withdraw')}
-                >
-                  {m.card.creatorWithdraw}
-                </button>
               </div>
             </div>
           ) : (
-            <p className="widget-note">{m.campaign.widgetEnded}</p>
+            <div className="card-actions">
+              <p className="widget-note">
+                {ended
+                  ? fundedNow
+                    ? campaign.withdrawn
+                      ? m.campaign.widgetEndedWithdrawn
+                      : m.campaign.widgetEndedFunded
+                    : m.campaign.widgetEndedRefundable
+                  : m.campaign.widgetFundedOpen}
+              </p>
+              {market.prepareErrors[campaign.id] ? (
+                <p className="field-error" role="alert">
+                  {market.prepareErrors[campaign.id]}
+                </p>
+              ) : null}
+              {ended && !fundedNow ? (
+                <div className="btn-row">
+                  <button
+                    className="btn"
+                    disabled={market.busy || !market.actor || campaign.balance === null || campaign.balance === '0'}
+                    onClick={() => market.onPrepare(campaign, 'refund')}
+                  >
+                    {m.card.refundMe}
+                  </button>
+                </div>
+              ) : null}
+              {ended && fundedNow && !campaign.withdrawn ? (
+                <div className="btn-row">
+                  <button
+                    className="btn"
+                    disabled={market.busy || market.actor !== campaign.config.creator}
+                    onClick={() => market.onPrepare(campaign, 'withdraw')}
+                  >
+                    {m.card.creatorWithdraw}
+                  </button>
+                </div>
+              ) : null}
+            </div>
           )}
 
           <p className="widget-risk">{m.campaign.widgetRisk}</p>

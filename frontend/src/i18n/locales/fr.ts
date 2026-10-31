@@ -247,7 +247,10 @@ export const fr: Messages = {
     widgetContribute: 'Contribuer',
     widgetOverview: "Résumé de l'investissement",
     widgetFixture: "Aperçu d'exemple. Cette campagne est un exemple (fixture), pas un contrat déployé, et ne peut pas accepter de contributions.",
-    widgetEnded: "Cette campagne est terminée. Les remboursements restent disponibles selon les règles d'échéance décrites sur la page des investissements.",
+    widgetFundedOpen: "L'objectif de financement a été atteint et cette campagne est intégralement souscrite. Aucune contribution supplémentaire n'est acceptée ; après la date limite, le créateur peut retirer les fonds collectés selon la règle du tout-ou-rien.",
+    widgetEndedFunded: "Cette campagne s'est terminée après avoir atteint son objectif. Selon la règle du tout-ou-rien, le créateur peut désormais retirer les fonds collectés.",
+    widgetEndedWithdrawn: "Cette campagne s'est terminée après avoir atteint son objectif, et le créateur a retiré les fonds collectés.",
+    widgetEndedRefundable: "Cette campagne s'est terminée en dessous de son objectif. Les contributions sont remboursables : connectez le portefeuille contributeur et utilisez le bouton de remboursement ci-dessous.",
     widgetRisk:
       'Les investissements en crowdfunding comportent un risque de perte totale et sont illiquides. Ce prototype utilise des actifs de testnet sans valeur.',
     raised: 'Collecté',
