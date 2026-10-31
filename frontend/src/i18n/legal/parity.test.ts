@@ -30,9 +30,30 @@ function blockSkeleton(blocks: LegalBlock[]): string {
     })
     .join('\n');
 }
+function leafStrings(inlines: LegalInline[]): string[] {
+  return inlines.flatMap((x) => (typeof x === 'string' ? [x] : 'b' in x ? leafStrings(x.b) : 'i' in x ? leafStrings(x.i) : []));
+}
+function blockStrings(blocks: LegalBlock[]): string[] {
+  return blocks.flatMap((b) => {
+    if (b.t === 'table') return [...b.head, ...b.rows].flatMap((r) => r.flatMap(leafStrings));
+    if (b.t === 'ul') return b.items.flatMap(leafStrings);
+    return leafStrings(b.text);
+  });
+}
+// Bracketed markers ([DEMO], template placeholders) live in the TEXT content
+// only. Regexing the JSON serialization would capture its own array brackets
+// and make every genuine translation "fail". Placeholder sentences can exceed
+// 120 chars, especially translated, so the span cap stays generous.
 function markers(blocks: LegalBlock[]): string[] {
-  const text = JSON.stringify(blocks);
-  return text.match(/\[[^\]\n]{1,120}\]/g) ?? [];
+  return blockStrings(blocks).flatMap((t) => t.match(/\[[^\]\n]{1,400}\]/g) ?? []);
+}
+// Contract: identical marker COUNT per document (no placeholder dropped or
+// unbracketed) and every literal [DEMO] marker preserved verbatim. The text
+// INSIDE other placeholders may be translated; the brackets mark it as
+// unresolved either way.
+function markerCounts(blocks: LegalBlock[]): { total: number; demo: number } {
+  const m = markers(blocks);
+  return { total: m.length, demo: m.filter((x) => x === '[DEMO]').length };
 }
 
 describe('legal render smoke', () => {
@@ -66,12 +87,12 @@ describe('legal structural parity', () => {
     for (const doc of DOC_IDS) {
       const per = LEGAL_REGISTRY[doc];
       const enSkeleton = blockSkeleton(per.en);
-      const enMarkers = markers(per.en);
+      const enMarkers = markerCounts(per.en);
       for (const locale of LOCALES) {
         const translated = per[locale];
         if (!translated || locale === 'en') continue;
         expect(blockSkeleton(translated), `${doc}.${locale} skeleton`).toBe(enSkeleton);
-        expect(markers(translated), `${doc}.${locale} [DEMO]/placeholder markers`).toEqual(enMarkers);
+        expect(markerCounts(translated), `${doc}.${locale} [DEMO]/placeholder marker counts`).toEqual(enMarkers);
       }
     }
   });
