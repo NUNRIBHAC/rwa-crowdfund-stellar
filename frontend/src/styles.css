@@ -2625,6 +2625,20 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .notification-row > .notification-mark {
   flex-shrink: 0;
 }
+
+/* Account activity rows (my applications / tickets): the status chip and the
+   date must not squeeze the name, and the chip itself never shrinks below its
+   content - a clipped Arabic chip stacks letters vertically. Same treatment
+   as the checklist and notification rows. */
+.portfolio-row:has(> .status-chip) {
+  flex-wrap: wrap;
+}
+.portfolio-row:has(> .status-chip) > span:first-child {
+  min-width: min(220px, 100%);
+}
+.portfolio-row > .status-chip {
+  flex-shrink: 0;
+}
 .notification-title {
   font-weight: 600;
 }
