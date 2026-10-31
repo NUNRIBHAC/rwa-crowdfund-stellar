@@ -254,8 +254,6 @@ export const pt: Messages = {
     issuerTitle: 'Percurso do emitente',
     live: 'Existe no protótipo',
     planned: 'Planeado - não construído',
-    faqLinkPre: 'Perguntas práticas por tema, cada uma marcada como existente ou planeada:',
-    faqLink: 'abrir as FAQ',
     investorSteps: [
       {
         title: 'Registo e início de sessão',

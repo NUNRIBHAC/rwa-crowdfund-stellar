@@ -254,8 +254,6 @@ export const de: Messages = {
     issuerTitle: 'Weg des Emittenten',
     live: 'Im Prototyp vorhanden',
     planned: 'Geplant - nicht gebaut',
-    faqLinkPre: 'Praktische Fragen nach Thema, jede als vorhanden oder geplant markiert:',
-    faqLink: 'FAQ öffnen',
     investorSteps: [
       {
         title: 'Registrierung und Anmeldung',

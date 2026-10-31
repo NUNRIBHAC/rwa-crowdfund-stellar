@@ -253,8 +253,6 @@ export const en = {
     issuerTitle: 'Issuer journey',
     live: 'Live in prototype',
     planned: 'Planned - not built',
-    faqLinkPre: 'Practical questions by topic, each tagged live or planned:',
-    faqLink: 'open the FAQ',
     investorSteps: [
       {
         title: 'Registration and login',
