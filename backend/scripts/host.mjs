@@ -12,7 +12,7 @@ const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../f
 app.get('/.well-known/stellar.toml', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.type('text/plain');
-  res.sendFile(path.join(dist, '.well-known', 'stellar.toml'));
+  res.sendFile(path.join(dist, '.well-known', 'stellar.toml'), { dotfiles: 'allow' });
 });
 app.use(express.static(dist));
 app.use((req, res, next) => {
