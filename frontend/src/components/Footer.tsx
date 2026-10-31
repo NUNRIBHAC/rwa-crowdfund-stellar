@@ -15,8 +15,11 @@ export default function Footer() {
             </div>
             <p className="footer-tagline">{m.footer.tagline}</p>
             {/* Social icons: visual presence only until the real profile URLs exist (tracked);
-              aria-label is hardcoded English until the locale batch adds footer keys. */}
-            <div className="footer-social" aria-label="Social media profiles (links not yet published; LinkedIn pending official brand asset)">
+              aria-label is hardcoded English until the locale batch adds footer keys.
+              linkedin.png is the official [in] Bug (InBug-Black, padded to a square
+              transparent canvas) from LinkedIn's brand download:
+              https://brand.linkedin.com/downloads -> in-logo.zip (content.linkedin.com). */}
+            <div className="footer-social" aria-label="Social media profiles (links not yet published)">
               <img src="/social/x.svg" alt="" />
               <img src="/social/instagram.svg" alt="" />
               <img src="/social/facebook.svg" alt="" />
@@ -25,6 +28,7 @@ export default function Footer() {
               <img src="/social/telegram.svg" alt="" />
               <img src="/social/discord.svg" alt="" />
               <img src="/social/farcaster.svg" alt="" />
+              <img src="/social/linkedin.png" alt="LinkedIn" />
             </div>
           </div>
           <div className="footer-grid">
