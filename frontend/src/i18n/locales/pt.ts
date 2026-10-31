@@ -115,6 +115,7 @@ export const pt: Messages = {
     grid: 'Grelha',
     list: 'Lista',
     noMatches: 'Nenhuma campanha corresponde à pesquisa e aos filtros atuais.',
+    resultCount: (n: number) => (n === 1 ? '1 campanha visível' : `${n} campanhas visíveis`),
     activeAria: 'Investimentos ativos',
     activeTitle: 'Investimentos ativos',
     completedAria: 'Investimentos concluídos',

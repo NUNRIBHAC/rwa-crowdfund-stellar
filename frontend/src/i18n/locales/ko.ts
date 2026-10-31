@@ -112,6 +112,7 @@ export const ko: Messages = {
     grid: '그리드',
     list: '리스트',
     noMatches: '현재 검색 및 필터와 일치하는 캠페인이 없습니다.',
+    resultCount: (n: number) => `캠페인 ${n}개 표시됨`,
     activeAria: '진행 중인 투자',
     activeTitle: '진행 중인 투자',
     completedAria: '종료된 투자',

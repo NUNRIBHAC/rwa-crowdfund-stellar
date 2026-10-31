@@ -113,6 +113,7 @@ export const ar: Messages = {
     grid: 'شبكة',
     list: 'قائمة',
     noMatches: 'لا حملات تطابق البحث والمرشحات الحالية.',
+    resultCount: (n: number) => `عدد الحملات المعروضة: ${n}`,
     activeAria: 'استثمارات نشطة',
     activeTitle: 'استثمارات نشطة',
     completedAria: 'استثمارات مكتملة',

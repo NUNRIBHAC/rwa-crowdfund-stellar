@@ -115,6 +115,7 @@ export const fr: Messages = {
     grid: 'Grille',
     list: 'Liste',
     noMatches: 'Aucune campagne ne correspond à la recherche et aux filtres actuels.',
+    resultCount: (n: number) => (n === 1 ? '1 campagne affichée' : `${n} campagnes affichées`),
     activeAria: 'Investissements actifs',
     activeTitle: 'Investissements actifs',
     completedAria: 'Investissements terminés',

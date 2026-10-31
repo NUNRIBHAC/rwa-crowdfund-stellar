@@ -113,6 +113,7 @@ export const hi: Messages = {
     grid: 'ग्रिड',
     list: 'सूची',
     noMatches: 'वर्तमान खोज और फ़िल्टर से कोई कैंपेन मेल नहीं खाता।',
+    resultCount: (n: number) => `${n} अभियान दिखाए गए`,
     activeAria: 'सक्रिय निवेश',
     activeTitle: 'सक्रिय निवेश',
     completedAria: 'पूर्ण निवेश',

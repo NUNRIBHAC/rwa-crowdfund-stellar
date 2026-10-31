@@ -115,6 +115,7 @@ export const de: Messages = {
     grid: 'Raster',
     list: 'Liste',
     noMatches: 'Keine Kampagne entspricht der aktuellen Suche und den Filtern.',
+    resultCount: (n: number) => (n === 1 ? '1 Kampagne angezeigt' : `${n} Kampagnen angezeigt`),
     activeAria: 'Aktive Investitionen',
     activeTitle: 'Aktive Investitionen',
     completedAria: 'Abgeschlossene Investitionen',

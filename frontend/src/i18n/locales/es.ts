@@ -115,6 +115,7 @@ export const es: Messages = {
     grid: 'Cuadrícula',
     list: 'Lista',
     noMatches: 'Ninguna campaña coincide con la búsqueda y los filtros actuales.',
+    resultCount: (n: number) => (n === 1 ? '1 campaña visible' : `${n} campañas visibles`),
     activeAria: 'Inversiones activas',
     activeTitle: 'Inversiones activas',
     completedAria: 'Inversiones completadas',

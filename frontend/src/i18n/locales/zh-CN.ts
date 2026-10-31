@@ -106,6 +106,7 @@ export const zhCN: Messages = {
     grid: '网格',
     list: '列表',
     noMatches: '没有符合当前搜索和筛选条件的项目。',
+    resultCount: (n: number) => `显示 ${n} 个众筹项目`,
     activeAria: '进行中的投资',
     activeTitle: '进行中的投资',
     completedAria: '已完成的投资',

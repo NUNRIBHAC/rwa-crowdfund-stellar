@@ -113,6 +113,7 @@ export const ja: Messages = {
     grid: 'グリッド',
     list: 'リスト',
     noMatches: '現在の検索とフィルターに一致するキャンペーンはありません。',
+    resultCount: (n: number) => `${n} 件のキャンペーンを表示中`,
     activeAria: '進行中の投資',
     activeTitle: '進行中の投資',
     completedAria: '終了した投資',

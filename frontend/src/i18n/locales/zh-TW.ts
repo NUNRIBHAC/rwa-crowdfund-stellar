@@ -106,6 +106,7 @@ export const zhTW: Messages = {
     grid: '網格',
     list: '列表',
     noMatches: '沒有符合當前搜索和篩選條件的項目。',
+    resultCount: (n: number) => `顯示 ${n} 個募資專案`,
     activeAria: '進行中的投資',
     activeTitle: '進行中的投資',
     completedAria: '已完成的投資',

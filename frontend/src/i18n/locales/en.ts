@@ -112,6 +112,7 @@ export const en = {
     grid: 'Grid',
     list: 'List',
     noMatches: 'No campaigns match the current search and filters.',
+    resultCount: (n: number) => (n === 1 ? '1 campaign shown' : `${n} campaigns shown`),
     activeAria: 'Active investments',
     activeTitle: 'Active investments',
     completedAria: 'Completed investments',

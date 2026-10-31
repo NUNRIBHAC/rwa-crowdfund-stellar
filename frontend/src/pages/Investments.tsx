@@ -115,6 +115,12 @@ export default function Investments({ market }: { market: Market }) {
         </div>
       )}
 
+      {campaigns.length > 0 && (
+        <p className="sr-only" role="status">
+          {m.invest.resultCount(shown.length)}
+        </p>
+      )}
+
       {campaigns.length > 0 && shown.length === 0 && (
         <p className="no-matches" role="status">
           {m.invest.noMatches}
