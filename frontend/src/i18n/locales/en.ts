@@ -57,7 +57,7 @@ export const en = {
     steps: [
       {
         title: 'Connect',
-        text: 'Connect a Freighter wallet on Stellar testnet. No account, no personal data in this prototype.',
+        text: 'Connect a Freighter wallet on Stellar testnet. Community sign-in is optional and needs no email or password.',
       },
       {
         title: 'Discover',
@@ -262,11 +262,11 @@ export const en = {
     investorSteps: [
       {
         title: 'Registration and login',
-        text: 'A production platform requires an account with email confirmation and credentials. This prototype has no accounts: the Freighter wallet is the only identity.',
+        text: 'A production platform requires an account with email confirmation and credentials. This prototype has an optional community sign-in instead: you prove control of your Freighter wallet by signing a one-time challenge - no email registration, no password. The wallet is the only identity.',
       },
       {
         title: 'Identity verification (KYC)',
-        text: 'Document and selfie verification with a verification provider, plus AML data where required. Not implemented; no personal data is collected here.',
+        text: 'Document and selfie verification with a verification provider, plus AML data where required. Not implemented; no identity data is collected here.',
       },
       {
         title: 'Investor categorisation',
@@ -989,12 +989,12 @@ export const en = {
         entries: [
           {
             q: 'Do I need an account?',
-            a: 'No. There is no registration, no login and no password. The Freighter wallet is the only identity, and connecting it never shares your keys with the site.',
+            a: 'No email registration and no password. An optional community sign-in proves control of your Freighter wallet by signing a one-time challenge. The wallet is the only identity, and connecting or signing never shares your keys with the site.',
             state: 'live',
           },
           {
             q: 'What personal data does this prototype collect?',
-            a: 'None. No name, email or identity document is asked for. Your browser keeps only a local record of a pending transaction so it cannot be duplicated, and the backend keeps a technical journal of requests. A production platform would have to meet GDPR duties: access, correction, erasure and portability of your data.',
+            a: 'Only what the community features store if you use them: your Stellar public key, an optional display name, and the comments, support tickets or issuer applications you submit (issuer applications may include an optional contact email). Comments are public. No full name or identity document is asked for. Your browser keeps a local record of a pending transaction so it cannot be duplicated, and the backend keeps a technical journal of requests; the Privacy Policy lists storage and retention. A production platform would have to meet GDPR duties: access, correction, erasure and portability of your data.',
             state: 'live',
           },
         ],

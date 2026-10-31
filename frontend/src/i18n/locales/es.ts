@@ -60,7 +60,7 @@ export const es: Messages = {
     steps: [
       {
         title: 'Conectar',
-        text: 'Conecta una cartera Freighter en la testnet de Stellar. Sin cuenta, sin datos personales en este prototipo.',
+        text: 'Conecta una cartera Freighter en la testnet de Stellar. El acceso a la comunidad es opcional y no necesita correo electrónico ni contraseña.',
       },
       {
         title: 'Descubrir',
@@ -268,11 +268,11 @@ export const es: Messages = {
     investorSteps: [
       {
         title: 'Registro e inicio de sesión',
-        text: 'Una plataforma en producción exige una cuenta con confirmación de correo y credenciales. Este prototipo no tiene cuentas: la cartera Freighter es la única identidad.',
+        text: 'Una plataforma en producción exige una cuenta con confirmación de correo y credenciales. Este prototipo tiene en su lugar un inicio de sesión comunitario opcional: demuestras el control de tu cartera Freighter firmando un reto único - sin registro por correo, sin contraseña. La cartera es la única identidad.',
       },
       {
         title: 'Verificación de identidad (KYC)',
-        text: 'Verificación de documento y selfie con un proveedor de verificación, más datos AML cuando se exijan. No implementado; aquí no se recogen datos personales.',
+        text: 'Verificación de documento y selfie con un proveedor de verificación, más datos AML cuando se exijan. No implementado; aquí no se recogen datos de identidad.',
       },
       {
         title: 'Categorización del inversor',
@@ -1037,12 +1037,12 @@ export const es: Messages = {
         entries: [
           {
             q: '¿Necesito una cuenta?',
-            a: 'No. No hay registro, inicio de sesión ni contraseña. La cartera Freighter es la única identidad, y conectarla nunca comparte tus claves con el sitio.',
+            a: 'Sin registro por correo y sin contraseña. Un inicio de sesión comunitario opcional demuestra el control de tu cartera Freighter firmando un reto único. La cartera es la única identidad, y conectar o firmar nunca comparte tus claves con el sitio.',
             state: 'live',
           },
           {
             q: '¿Qué datos personales recoge este prototipo?',
-            a: 'Ninguno. No se piden nombre, correo ni documento de identidad. Tu navegador solo guarda un registro local de una transacción pendiente para que no pueda duplicarse, y el backend mantiene un registro técnico de solicitudes. Una plataforma en producción tendría que cumplir los deberes del RGPD: acceso, rectificación, supresión y portabilidad de tus datos.',
+            a: 'Solo lo que las funciones comunitarias guardan si las usas: tu clave pública de Stellar, un nombre visible opcional y los comentarios, tickets de soporte o solicitudes de emisor que envíes (las solicitudes pueden incluir un email de contacto opcional). Los comentarios son públicos. No se pide nombre completo ni documento de identidad. Tu navegador guarda un registro local de una transacción pendiente para que no se duplique, y el backend mantiene un diario técnico de solicitudes; la Política de Privacidad detalla almacenamiento y retención. Una plataforma en producción tendría que cumplir los deberes del RGPD: acceso, rectificación, supresión y portabilidad de tus datos.',
             state: 'live',
           },
         ],

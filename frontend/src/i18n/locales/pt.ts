@@ -60,7 +60,7 @@ export const pt: Messages = {
     steps: [
       {
         title: 'Ligar',
-        text: 'Ligue uma carteira Freighter na testnet Stellar. Sem conta, sem dados pessoais neste protótipo.',
+        text: 'Ligue uma carteira Freighter na testnet da Stellar. O acesso à comunidade é opcional e não precisa de e-mail nem palavra-passe.',
       },
       {
         title: 'Descobrir',
@@ -267,11 +267,11 @@ export const pt: Messages = {
     investorSteps: [
       {
         title: 'Registo e início de sessão',
-        text: 'Uma plataforma em produção exige uma conta com confirmação de email e credenciais. Este protótipo não tem contas: a carteira Freighter é a única identidade.',
+        text: 'Uma plataforma em produção exige uma conta com confirmação de email e credenciais. Este protótipo tem antes um início de sessão comunitário opcional: prova o controlo da sua carteira Freighter assinando um desafio único - sem registo por email, sem palavra-passe. A carteira é a única identidade.',
       },
       {
         title: 'Verificação de identidade (KYC)',
-        text: 'Verificação de documento e selfie com um fornecedor de verificação, mais dados AML quando exigidos. Não implementado; aqui não são recolhidos dados pessoais.',
+        text: 'Verificação de documento e selfie com um fornecedor de verificação, mais dados AML quando exigidos. Não implementado; aqui não são recolhidos dados de identidade.',
       },
       {
         title: 'Categorização do investidor',
@@ -1031,12 +1031,12 @@ export const pt: Messages = {
         entries: [
           {
             q: 'Preciso de uma conta?',
-            a: 'Não. Não há registo, início de sessão nem palavra-passe. A carteira Freighter é a única identidade, e ligá-la nunca partilha as suas chaves com o site.',
+            a: 'Sem registo por email e sem palavra-passe. Um início de sessão comunitário opcional prova o controlo da sua carteira Freighter assinando um desafio único. A carteira é a única identidade, e ligar ou assinar nunca partilha as suas chaves com o site.',
             state: 'live',
           },
           {
             q: 'Que dados pessoais este protótipo recolhe?',
-            a: 'Nenhuns. Não são pedidos nome, email nem documento de identidade. O seu navegador guarda apenas um registo local de uma transação pendente para que não possa ser duplicada, e o backend mantém um registo técnico de pedidos. Uma plataforma em produção teria de cumprir os deveres do RGPD: acesso, retificação, apagamento e portabilidade dos seus dados.',
+            a: 'Apenas o que as funcionalidades comunitárias guardam se as usar: a sua chave pública Stellar, um nome de apresentação opcional e os comentários, pedidos de suporte ou candidaturas de emitente que submeter (as candidaturas podem incluir um email de contacto opcional). Os comentários são públicos. Não é pedido nome completo nem documento de identidade. O seu navegador guarda um registo local de uma transação pendente para não ser duplicada, e o backend mantém um diário técnico de pedidos; a Política de Privacidade lista o armazenamento e a retenção. Uma plataforma em produção teria de cumprir deveres do RGPD: acesso, correção, eliminação e portabilidade dos seus dados.',
             state: 'live',
           },
         ],

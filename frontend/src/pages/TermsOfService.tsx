@@ -69,10 +69,11 @@ export default function TermsOfService() {
         <h2>3. Planned features (not yet live)</h2>
         <p>
           Blockallisto is being designed against the compliance surfaces of established EU crowdfunding platforms. Future versions <strong>may</strong> include:
-          user accounts and registration; identity verification (KYC/AML), including beneficial-owner and source-of-funds checks for company investors; investor
-          categorisation with an entry knowledge test and a loss-bearing-capacity simulation; a pre-contractual reflection period for non-sophisticated
-          investors; key investment information sheets per campaign; payments processed by licensed payment service providers (never by us holding client
-          funds); complaints management and conflicts-of-interest policies; and jurisdiction-based selling restrictions.
+          full user accounts with email registration (beyond the optional community sign-in); identity verification (KYC/AML), including beneficial-owner and
+          source-of-funds checks for company investors; investor categorisation with an entry knowledge test and a loss-bearing-capacity simulation; a
+          pre-contractual reflection period for non-sophisticated investors; key investment information sheets per campaign; payments processed by licensed
+          payment service providers (never by us holding client funds); complaints management and conflicts-of-interest policies; and jurisdiction-based selling
+          restrictions.
         </p>
         <p>
           None of this exists today. The list above is indicative design direction drawn from our research corpus, not a specification: details, thresholds and

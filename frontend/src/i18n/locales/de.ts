@@ -60,7 +60,7 @@ export const de: Messages = {
     steps: [
       {
         title: 'Verbinden',
-        text: 'Verbinden Sie eine Freighter-Wallet im Stellar-Testnet. Kein Konto, keine persönlichen Daten in diesem Prototyp.',
+        text: 'Verbinde eine Freighter-Wallet im Stellar-Testnetz. Der Community-Zugang ist optional und braucht weder E-Mail noch Passwort.',
       },
       {
         title: 'Entdecken',
@@ -267,11 +267,11 @@ export const de: Messages = {
     investorSteps: [
       {
         title: 'Registrierung und Anmeldung',
-        text: 'Eine Produktionsplattform verlangt ein Konto mit E-Mail-Bestätigung und Zugangsdaten. Dieser Prototyp hat keine Konten: Die Freighter-Wallet ist die einzige Identität.',
+        text: 'Eine Produktionsplattform verlangt ein Konto mit E-Mail-Bestätigung und Zugangsdaten. Dieser Prototyp hat stattdessen eine optionale Community-Anmeldung: Sie beweisen die Kontrolle über Ihre Freighter-Wallet durch Signieren einer einmaligen Challenge - ohne E-Mail-Registrierung, ohne Passwort. Die Wallet ist die einzige Identität.',
       },
       {
         title: 'Identitätsprüfung (KYC)',
-        text: 'Dokumenten- und Selfie-Prüfung mit einem Verifizierungsanbieter, plus AML-Daten wo erforderlich. Nicht implementiert; hier werden keine personenbezogenen Daten erhoben.',
+        text: 'Dokumenten- und Selfie-Prüfung mit einem Verifizierungsanbieter, plus AML-Daten wo erforderlich. Nicht implementiert; hier werden keine Identitätsdaten erhoben.',
       },
       {
         title: 'Anlegerkategorisierung',
@@ -1022,12 +1022,12 @@ export const de: Messages = {
         entries: [
           {
             q: 'Brauche ich ein Konto?',
-            a: 'Nein. Keine Registrierung, kein Login, kein Passwort. Die Freighter-Wallet ist die einzige Identität, und das Verbinden teilt Ihre Schlüssel nie mit der Website.',
+            a: 'Keine E-Mail-Registrierung und kein Passwort. Eine optionale Community-Anmeldung beweist die Kontrolle über Ihre Freighter-Wallet durch Signieren einer einmaligen Challenge. Die Wallet ist die einzige Identität, und Verbinden oder Signieren teilt Ihre Schlüssel nie mit der Website.',
             state: 'live',
           },
           {
             q: 'Welche personenbezogenen Daten erhebt dieser Prototyp?',
-            a: 'Keine. Weder Name, E-Mail noch Ausweisdokument werden abgefragt. Ihr Browser hält nur einen lokalen Eintrag einer ausstehenden Transaktion vor, damit sie nicht dupliziert werden kann, und das Backend führt ein technisches Anfragenjournal. Eine Produktionsplattform müsste DSGVO-Pflichten erfüllen: Auskunft, Berichtigung, Löschung und Übertragbarkeit Ihrer Daten.',
+            a: 'Nur was die Community-Funktionen speichern, wenn Sie sie nutzen: Ihren Stellar Public Key, einen optionalen Anzeigenamen und die Kommentare, Support-Tickets oder Emittentenbewerbungen, die Sie absenden (Bewerbungen können eine optionale Kontakt-E-Mail enthalten). Kommentare sind öffentlich. Weder vollständiger Name noch Ausweisdokument werden abgefragt. Ihr Browser hält eine lokale Aufzeichnung einer ausstehenden Transaktion gegen Duplikate, und das Backend führt ein technisches Journal der Anfragen; die Datenschutzerklärung listet Speicherung und Aufbewahrung. Eine Produktionsplattform müsste DSGVO-Pflichten erfüllen: Auskunft, Berichtigung, Löschung und Datenübertragbarkeit.',
             state: 'live',
           },
         ],

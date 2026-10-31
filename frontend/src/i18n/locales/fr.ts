@@ -60,7 +60,7 @@ export const fr: Messages = {
     steps: [
       {
         title: 'Connecter',
-        text: 'Connectez un portefeuille Freighter sur le testnet Stellar. Sans compte, sans données personnelles dans ce prototype.',
+        text: "Connectez un portefeuille Freighter sur le testnet Stellar. L'accès à la communauté est facultatif et ne demande ni e-mail ni mot de passe.",
       },
       {
         title: 'Découvrir',
@@ -269,11 +269,11 @@ export const fr: Messages = {
     investorSteps: [
       {
         title: 'Inscription et connexion',
-        text: "Une plateforme en production exige un compte avec confirmation d'email et identifiants. Ce prototype n'a pas de comptes : le portefeuille Freighter est la seule identité.",
+        text: "Une plateforme en production exige un compte avec confirmation d'email et identifiants. Ce prototype propose à la place une connexion communautaire optionnelle : vous prouvez le contrôle de votre portefeuille Freighter en signant un défi unique - sans inscription par email, sans mot de passe. Le portefeuille est la seule identité.",
       },
       {
         title: "Vérification d'identité (KYC)",
-        text: "Vérification de document et selfie avec un prestataire de vérification, plus des données AML lorsqu'exigées. Non implémenté ; aucune donnée personnelle n'est collectée ici.",
+        text: "Vérification de document et selfie avec un prestataire de vérification, plus des données AML lorsqu'exigées. Non implémenté ; aucune donnée d'identité n'est collectée ici.",
       },
       {
         title: "Catégorisation de l'investisseur",
@@ -1042,12 +1042,12 @@ export const fr: Messages = {
         entries: [
           {
             q: 'Ai-je besoin d\u2019un compte ?',
-            a: "Non. Pas d'inscription, pas de connexion, pas de mot de passe. Le portefeuille Freighter est la seule identité, et le connecter ne partage jamais vos clés avec le site.",
+            a: "Pas d'inscription par email et pas de mot de passe. Une connexion communautaire optionnelle prouve le contrôle de votre portefeuille Freighter en signant un défi unique. Le portefeuille est la seule identité, et le connecter ou signer ne partage jamais vos clés avec le site.",
             state: 'live',
           },
           {
             q: 'Quelles données personnelles ce prototype collecte-t-il ?',
-            a: "Aucune. Ni nom, ni email, ni document d'identité ne sont demandés. Votre navigateur ne garde qu'un enregistrement local d'une transaction en attente pour qu'elle ne puisse pas être dupliquée, et le backend tient un journal technique des requêtes. Une plateforme en production devrait remplir les obligations du RGPD : accès, rectification, effacement et portabilité de vos données.",
+            a: "Uniquement ce que les fonctions communautaires stockent si vous les utilisez : votre clé publique Stellar, un nom d'affichage optionnel, et les commentaires, tickets de support ou candidatures d'émetteur que vous soumettez (les candidatures peuvent inclure un email de contact optionnel). Les commentaires sont publics. Aucun nom complet ni document d'identité n'est demandé. Votre navigateur garde un enregistrement local d'une transaction en cours pour éviter les doublons, et le backend conserve un journal technique des requêtes ; la Politique de confidentialité détaille stockage et durées de conservation. Une plateforme en production devrait respecter les obligations du RGPD : accès, rectification, effacement et portabilité de vos données.",
             state: 'live',
           },
         ],
