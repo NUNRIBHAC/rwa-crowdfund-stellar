@@ -83,6 +83,8 @@ function StepList({ title, steps }: { title: string; steps: Step[] }) {
   );
 }
 
+import { routeHash } from '../router';
+
 export default function HowItWorks() {
   return (
     <>
@@ -93,6 +95,9 @@ export default function HowItWorks() {
       </p>
       <StepList title="Investor journey" steps={INVESTOR_STEPS} />
       <StepList title="Issuer journey" steps={ISSUER_STEPS} />
+      <p className="section-link">
+        Practical questions by topic, each tagged live or planned: <a href={routeHash({ name: 'faq' })}>open the FAQ</a>.
+      </p>
     </>
   );
 }
