@@ -797,6 +797,11 @@ code {
   .header-side {
     grid-row: 1;
   }
+  /* The brand must also shrink back to row 1: spanning both rows put its box
+     on top of the full-width nav row (first link painted over the logo). */
+  .brand {
+    grid-row: 1;
+  }
 }
 
 @media (max-width: 720px) {
