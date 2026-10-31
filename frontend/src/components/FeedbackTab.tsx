@@ -78,7 +78,22 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
               )}
             </>
           ) : done ? (
-            <p className="community-note">{labels.feedbackSubmitted}</p>
+            <>
+              <p className="community-note">{labels.feedbackSubmitted}</p>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  // Intentional fresh form: clearing here, not after submit,
+                  // so a re-render can never resend the same ticket.
+                  setSubject('');
+                  setBody('');
+                  setError('');
+                  setDone(false);
+                }}
+              >
+                {labels.feedbackAnother}
+              </button>
+            </>
           ) : (
             <form onSubmit={submit}>
               <label>
