@@ -34,35 +34,37 @@ export default function Header({ actor, busy, onConnect, current }: Props) {
             <rect x="50" y="50" width="40" height="40" rx="9" fill="#C7C8F9" />
           </svg>
           <span className="brand-name">Blockallisto</span>
-          <span className="badge badge-testnet">Stellar testnet</span>
         </a>
-        <div className="header-actions">
-          {actor ? (
-            <span className="wallet-chip" title={actor}>
-              Connected: {shorten(actor)}
-            </span>
-          ) : (
-            <button className="btn btn-primary" disabled={busy} onClick={onConnect}>
-              Connect Freighter
-            </button>
-          )}
+        <nav className="site-nav" aria-label="Main">
+          {NAV.map((item) => {
+            const active = item.route === current || (item.route === 'investments' && current === 'campaign');
+            return (
+              <a
+                key={item.route}
+                className={`nav-link ${active ? 'nav-link-active' : ''}`}
+                aria-current={active ? 'page' : undefined}
+                href={routeHash({ name: item.route })}
+              >
+                {item.label}
+              </a>
+            );
+          })}
+        </nav>
+        <div className="header-side">
+          <span className="badge badge-testnet">Stellar testnet</span>
+          <div className="header-actions">
+            {actor ? (
+              <span className="wallet-chip" title={actor}>
+                Connected: {shorten(actor)}
+              </span>
+            ) : (
+              <button className="btn btn-primary" disabled={busy} onClick={onConnect}>
+                Connect Freighter
+              </button>
+            )}
+          </div>
         </div>
       </div>
-      <nav className="site-nav" aria-label="Main">
-        {NAV.map((item) => {
-          const active = item.route === current || (item.route === 'investments' && current === 'campaign');
-          return (
-            <a
-              key={item.route}
-              className={`nav-link ${active ? 'nav-link-active' : ''}`}
-              aria-current={active ? 'page' : undefined}
-              href={routeHash({ name: item.route })}
-            >
-              {item.label}
-            </a>
-          );
-        })}
-      </nav>
     </header>
   );
 }
