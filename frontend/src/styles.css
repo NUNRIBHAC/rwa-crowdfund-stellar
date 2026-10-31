@@ -1697,7 +1697,10 @@ textarea:focus-visible,
   position: relative;
   z-index: 1;
   margin: 0;
-  padding: 24px 424px 24px 24px;
+  /* Right reserve = tile width + 44px slack: the animated tiles roam the
+     whole tile zone, so the text-to-zone gap must be comfortable, not the
+     previous 4px (424 reserve over 420px tiles). */
+  padding: 24px 464px 24px 24px;
   min-height: 150px;
   display: flex;
   align-items: flex-start;
@@ -1871,8 +1874,10 @@ textarea:focus-visible,
   .footer-brand-inner {
     flex-wrap: wrap;
   }
+  /* Column min 140px (min grid 300px) so the grid still fits the tile-free
+     width at 721px after the right reserve grew to 384px (721-24-384 = 313). */
   .footer-brand-inner .footer-grid {
-    grid-template-columns: repeat(2, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
   }
   .footer-brand-inner .footer-context {
     grid-column: 1 / -1;
@@ -1882,7 +1887,8 @@ textarea:focus-visible,
 
 @media (max-width: 1600px) {
   .footer-brand-inner {
-    padding-right: 344px;
+    /* 44px slack over the 340px tiles, same reason as the base rule. */
+    padding-right: 384px;
   }
   .footer-tiles {
     width: 340px;
@@ -1909,9 +1915,15 @@ textarea:focus-visible,
 
 @media (max-width: 720px) {
   .footer-brand-inner {
-    padding-right: 210px;
+    /* 50px slack over the 200px tiles, same reason as the base rule. */
+    padding-right: 250px;
     flex-wrap: wrap;
     gap: 24px;
+  }
+  .footer-brand-inner .footer-grid {
+    /* Min grid 260px <= 561-24-250 = 287px, fixing the 561-573px overlap
+       where the old 340px minimum exceeded the 327px tile-free width. */
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
   }
   .footer-tiles {
     width: 200px;
@@ -2460,12 +2472,14 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   direction: ltr;
 }
 
-@media (min-width: 1151px) and (max-width: 1400px) {
-  /* 1151-1400px: the brand block plus four 200px-min link columns exceed the
+@media (min-width: 1151px) and (max-width: 1440px) {
+  /* 1151-1440px: the brand block plus four 200px-min link columns exceed the
      tile-free zone - measured on staging at 1280px the footer context text
      reached x1051 (AR) and x972 (EN) while the decorative tiles start at
-     x933, so tiles touched the last context line in both locales. Wrapping
-     the grid below the brand row gives it the full padded width and lets the
+     x933, so tiles touched the last context line in both locales. The upper
+     bound is 1440px because the animated tiles roam the tile zone: at 1401px
+     the side-by-side row left only 3px to the zone edge, too thin a margin.
+     Wrapping the grid below the brand row gives it the full padded width and lets the
      context column span it, keeping text clear of the tiles. */
   .footer-brand-inner {
     flex-wrap: wrap;
