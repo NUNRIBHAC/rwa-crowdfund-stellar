@@ -16,16 +16,16 @@ export type Locale = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'zh-TW' | 'zh-CN' | 'ja'
 // Selector labels stay in each language's own words (native labels).
 export const LOCALES: { id: Locale; label: string; accessibleLabel: string }[] = [
   { id: 'en', label: 'English', accessibleLabel: 'English' },
-  { id: 'pt', label: 'Português (Portugal)', accessibleLabel: 'Português (Portugal) - European Portuguese' },
-  { id: 'es', label: 'Español', accessibleLabel: 'Español' },
-  { id: 'fr', label: 'Français', accessibleLabel: 'Français' },
-  { id: 'de', label: 'Deutsch', accessibleLabel: 'Deutsch' },
-  { id: 'zh-TW', label: '繁體中文', accessibleLabel: '繁體中文 - Traditional Chinese' },
-  { id: 'zh-CN', label: '简体中文', accessibleLabel: '简体中文 - Simplified Chinese' },
-  { id: 'ja', label: '日本語', accessibleLabel: '日本語 - Japanese' },
-  { id: 'ko', label: '한국어', accessibleLabel: '한국어 - Korean' },
-  { id: 'ar', label: 'العربية', accessibleLabel: 'العربية - Arabic' },
-  { id: 'hi', label: 'हिन्दी', accessibleLabel: 'हिन्दी - Hindi' },
+  { id: 'pt', label: 'Português (Portuguese - Portugal)', accessibleLabel: 'Português (Portugal) - European Portuguese' },
+  { id: 'es', label: 'Español (Spanish)', accessibleLabel: 'Español' },
+  { id: 'fr', label: 'Français (French)', accessibleLabel: 'Français' },
+  { id: 'de', label: 'Deutsch (German)', accessibleLabel: 'Deutsch' },
+  { id: 'zh-TW', label: '繁體中文 (Traditional Chinese)', accessibleLabel: '繁體中文 - Traditional Chinese' },
+  { id: 'zh-CN', label: '简体中文 (Simplified Chinese)', accessibleLabel: '简体中文 - Simplified Chinese' },
+  { id: 'ja', label: '日本語 (Japanese)', accessibleLabel: '日本語 - Japanese' },
+  { id: 'ko', label: '한국어 (Korean)', accessibleLabel: '한국어 - Korean' },
+  { id: 'ar', label: 'العربية (Arabic)', accessibleLabel: 'العربية - Arabic' },
+  { id: 'hi', label: 'हिन्दी (Hindi)', accessibleLabel: 'हिन्दी - Hindi' },
 ];
 
 // BCP 47 values for <html lang>; pt is European Portuguese.

@@ -1988,6 +1988,33 @@ textarea:focus-visible,
   }
 }
 
+/* Visited links keep their normal color ("não deve mudar para roxo ao
+   clicar"): :visited is pinned to the same color as :link for every public
+   link scope; hover/focus/active states are untouched. The global value
+   matches the previous UA unvisited blue, so only the visited appearance
+   changes. */
+a:visited {
+  color: #0000ee;
+}
+.brand:visited {
+  color: inherit;
+}
+.nav-link:visited {
+  color: rgba(255, 255, 255, 0.85);
+}
+.btn:visited {
+  color: var(--ink);
+}
+.btn-primary:visited {
+  color: #fff;
+}
+.site-footer a:visited {
+  color: #c7c8f9;
+}
+[data-theme='light'] .site-footer a:visited {
+  color: #3b3fd0;
+}
+
 /* Legal pages: persistent demo-template notice */
 .legal-demo-notice {
   border: 1px solid var(--accent);
