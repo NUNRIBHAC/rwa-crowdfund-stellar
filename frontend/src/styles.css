@@ -726,6 +726,30 @@ code {
     padding-bottom: 0;
   }
 }
+@media (max-width: 560px) {
+  /* The side controls (language, testnet badge, theme toggle, Connect) wrap
+     inside the viewport instead of clipping the Connect button at the right
+     edge. */
+  .header-side {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 6px;
+  }
+  .header-inner {
+    column-gap: 12px;
+  }
+  .badge-testnet {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  .lang-select {
+    max-width: 110px;
+  }
+  .header-actions .btn {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
 .nav-link {
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
@@ -1175,7 +1199,6 @@ code {
   padding-top: 14px;
   color: rgba(255, 255, 255, 0.6);
   overflow-wrap: break-word;
-  hyphens: auto;
 }
 .footer-status {
   margin: 14px 0 0;
@@ -1183,7 +1206,6 @@ code {
 .footer-status p {
   margin: 0;
   overflow-wrap: break-word;
-  hyphens: auto;
 }
 
 /* Card title wrapping: chips must not squeeze the title into per-character wraps */
@@ -1683,13 +1705,13 @@ textarea:focus-visible,
    properties carry the spread (--sx/--sy) and cluster (--gx/--gy) positions.
    Base left/top equal the spread state, so reduced-motion (animation: none)
    leaves the spread composition statically visible. */
-.ft-1 { width: 52px; height: 52px; left: var(--sx); top: var(--sy); --sx: 24px; --sy: 30px; --gx: 125px; --gy: 215px; }
-.ft-2 { width: 30px; height: 30px; left: var(--sx); top: var(--sy); --sx: 250px; --sy: 80px; --gx: 295px; --gy: 225px; }
-.ft-3 { width: 56px; height: 56px; left: var(--sx); top: var(--sy); --sx: 120px; --sy: 170px; --gx: 215px; --gy: 255px; }
-.ft-4 { width: 38px; height: 38px; left: var(--sx); top: var(--sy); --sx: 300px; --sy: 260px; --gx: 110px; --gy: 300px; }
-.ft-5 { width: 34px; height: 34px; left: var(--sx); top: var(--sy); --sx: 40px; --sy: 330px; --gx: 35px; --gy: 375px; }
-.ft-6 { width: 24px; height: 24px; left: var(--sx); top: var(--sy); --sx: 210px; --sy: 420px; --gx: 180px; --gy: 395px; }
-.ft-7 { width: 34px; height: 34px; left: var(--sx); top: var(--sy); --sx: 110px; --sy: 480px; --gx: 255px; --gy: 365px; }
+.ft-1 { width: 52px; height: 52px; left: var(--sx); top: var(--sy); --sx: 24px; --sy: 30px; --gx: 125px; --gy: 145px; }
+.ft-2 { width: 30px; height: 30px; left: var(--sx); top: var(--sy); --sx: 250px; --sy: 80px; --gx: 295px; --gy: 155px; }
+.ft-3 { width: 56px; height: 56px; left: var(--sx); top: var(--sy); --sx: 120px; --sy: 170px; --gx: 215px; --gy: 185px; }
+.ft-4 { width: 38px; height: 38px; left: var(--sx); top: var(--sy); --sx: 300px; --sy: 260px; --gx: 110px; --gy: 230px; }
+.ft-5 { width: 34px; height: 34px; left: var(--sx); top: var(--sy); --sx: 40px; --sy: 330px; --gx: 35px; --gy: 305px; }
+.ft-6 { width: 24px; height: 24px; left: var(--sx); top: var(--sy); --sx: 210px; --sy: 420px; --gx: 180px; --gy: 325px; }
+.ft-7 { width: 34px; height: 34px; left: var(--sx); top: var(--sy); --sx: 110px; --sy: 480px; --gx: 255px; --gy: 295px; }
 @keyframes footer-gather {
   0%, 22% {
     left: var(--gx);
@@ -1729,9 +1751,9 @@ textarea:focus-visible,
   .footer-tiles {
     width: 340px;
   }
-  .ft-2 { --sx: 210px; --sy: 80px; --gx: 255px; --gy: 210px; }
-  .ft-4 { --sx: 240px; --sy: 260px; --gx: 95px; --gy: 285px; }
-  .ft-6 { --sx: 180px; --sy: 420px; --gx: 160px; --gy: 380px; }
+  .ft-2 { --sx: 210px; --sy: 80px; --gx: 255px; --gy: 140px; }
+  .ft-4 { --sx: 240px; --sy: 260px; --gx: 95px; --gy: 215px; }
+  .ft-6 { --sx: 180px; --sy: 420px; --gx: 160px; --gy: 310px; }
 }
 
 @media (max-width: 720px) {
@@ -1743,13 +1765,13 @@ textarea:focus-visible,
   .footer-tiles {
     width: 200px;
   }
-  .ft-1 { --sx: 16px; --sy: 40px; --gx: 60px; --gy: 240px; }
-  .ft-2 { --sx: 130px; --sy: 120px; --gx: 120px; --gy: 260px; }
-  .ft-3 { --sx: 40px; --sy: 210px; --gx: 30px; --gy: 296px; }
-  .ft-4 { --sx: 120px; --sy: 330px; --gx: 95px; --gy: 340px; }
-  .ft-5 { --sx: 16px; --sy: 430px; --gx: 25px; --gy: 385px; }
-  .ft-6 { --sx: 110px; --sy: 540px; --gx: 115px; --gy: 400px; }
-  .ft-7 { --sx: 50px; --sy: 620px; --gx: 55px; --gy: 430px; }
+  .ft-1 { --sx: 16px; --sy: 40px; --gx: 60px; --gy: 175px; }
+  .ft-2 { --sx: 130px; --sy: 120px; --gx: 120px; --gy: 195px; }
+  .ft-3 { --sx: 40px; --sy: 210px; --gx: 30px; --gy: 230px; }
+  .ft-4 { --sx: 120px; --sy: 330px; --gx: 95px; --gy: 275px; }
+  .ft-5 { --sx: 16px; --sy: 430px; --gx: 25px; --gy: 320px; }
+  .ft-6 { --sx: 110px; --sy: 540px; --gx: 115px; --gy: 335px; }
+  .ft-7 { --sx: 50px; --sy: 620px; --gx: 55px; --gy: 365px; }
 }
 @media (max-width: 560px) {
   /* The tile figure must stay fully visible ("a figura tem que se ver toda"):
@@ -1764,13 +1786,13 @@ textarea:focus-visible,
     height: 260px;
     order: 4;
   }
-  .ft-1 { --sx: 6%; --sy: 16px; --gx: 24%; --gy: 40px; }
-  .ft-2 { --sx: 38%; --sy: 96px; --gx: 52%; --gy: 30px; }
-  .ft-3 { --sx: 60%; --sy: 20px; --gx: 42%; --gy: 85px; }
-  .ft-4 { --sx: 28%; --sy: 140px; --gx: 30%; --gy: 130px; }
-  .ft-5 { --sx: 76%; --sy: 130px; --gx: 64%; --gy: 140px; }
-  .ft-6 { --sx: 14%; --sy: 150px; --gx: 16%; --gy: 110px; }
-  .ft-7 { --sx: 52%; --sy: 180px; --gx: 56%; --gy: 180px; }
+  .ft-1 { --sx: 6%; --sy: 16px; --gx: 24%; --gy: 25px; }
+  .ft-2 { --sx: 38%; --sy: 96px; --gx: 52%; --gy: 18px; }
+  .ft-3 { --sx: 60%; --sy: 20px; --gx: 42%; --gy: 70px; }
+  .ft-4 { --sx: 28%; --sy: 140px; --gx: 30%; --gy: 115px; }
+  .ft-5 { --sx: 76%; --sy: 130px; --gx: 64%; --gy: 125px; }
+  .ft-6 { --sx: 14%; --sy: 150px; --gx: 16%; --gy: 95px; }
+  .ft-7 { --sx: 52%; --sy: 180px; --gx: 56%; --gy: 165px; }
 }
 
 /* Legal pages: persistent demo-template notice */
