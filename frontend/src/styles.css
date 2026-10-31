@@ -735,10 +735,15 @@ code {
 }
 @media (max-width: 1119px) {
   /* Below ~1120px the middle column cannot hold the 8-item nav between the
-     brand and the side controls: let it span the full second row instead. */
+     brand and the side controls: let it span the full second row instead.
+     The side controls must also shrink back to row 1 - spanning both rows
+     put the language select on top of the centered nav (landscape phones). */
   .site-nav {
     grid-column: 1 / -1;
     grid-row: 2;
+  }
+  .header-side {
+    grid-row: 1;
   }
 }
 
@@ -1859,6 +1864,13 @@ textarea:focus-visible,
   }
 }
 @media (max-width: 1150px) {
+  /* Below ~1028px the 2-column link grid no longer fits beside the brand
+     block within the tile-free zone and spilled over the decorative tiles
+     (they covered link text at 150% zoom / narrow landscape). Wrapping the
+     row gives the grid the full padded width. */
+  .footer-brand-inner {
+    flex-wrap: wrap;
+  }
   .footer-brand-inner .footer-grid {
     grid-template-columns: repeat(2, minmax(160px, 1fr));
   }
