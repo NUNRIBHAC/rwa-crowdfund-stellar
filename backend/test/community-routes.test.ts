@@ -1,0 +1,205 @@
+import { test, before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import express from 'express';
+import { createHash, timingSafeEqual } from 'node:crypto';
+import { Keypair } from '@stellar/stellar-sdk';
+import type { AddressInfo } from 'node:net';
+import { FileCommunityStore } from '../src/community-store.js';
+import { CommunityService } from '../src/community.js';
+import { createCommunityRouter } from '../src/community-routes.js';
+
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'community-routes-'));
+const ADMIN = 'test-admin-secret';
+
+// Mirror of server.ts's admin gate, kept local so the router is tested
+// against the same contract.
+const requireAdmin: express.RequestHandler = (req, res, next) => {
+  const ok = timingSafeEqual(
+    createHash('sha256')
+      .update(req.header('x-admin-key') ?? '')
+      .digest(),
+    createHash('sha256').update(ADMIN).digest(),
+  );
+  if (!ok) {
+    res.status(401).json({ error: 'missing or invalid admin key' });
+    return;
+  }
+  next();
+};
+
+let base = '';
+let server: ReturnType<express.Express['listen']>;
+
+before(async () => {
+  const app = express();
+  app.use(express.json({ limit: '64kb' }));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const service = new CommunityService(store);
+  app.use(createCommunityRouter({ service, requireAdmin }));
+  await new Promise<void>((resolve) => {
+    server = app.listen(0, '127.0.0.1', () => resolve());
+  });
+  base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+});
+after(() => server.close());
+
+async function api(method: string, path: string, opts: { token?: string; admin?: boolean; body?: unknown } = {}) {
+  const res = await fetch(base + path, {
+    method,
+    headers: {
+      'content-type': 'application/json',
+      ...(opts.token ? { authorization: `Bearer ${opts.token}` } : {}),
+      ...(opts.admin ? { 'x-admin-key': ADMIN } : {}),
+    },
+    body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
+  });
+  return { status: res.status, json: (await res.json()) as any };
+}
+
+async function login(kp: Keypair): Promise<string> {
+  const ch = await api('POST', '/api/auth/challenge', {
+    body: { publicKey: kp.publicKey() },
+  });
+  assert.equal(ch.status, 200);
+  const sig = Buffer.from(kp.sign(Buffer.from(ch.json.message, 'utf8'))).toString('base64');
+  const v = await api('POST', '/api/auth/verify', {
+    body: { publicKey: kp.publicKey(), signature: sig },
+  });
+  assert.equal(v.status, 200);
+  return v.json.token;
+}
+
+test('full auth flow over HTTP: challenge, verify, me, rename, logout', async () => {
+  const kp = Keypair.random();
+  const token = await login(kp);
+  const me = await api('GET', '/api/auth/me', { token });
+  assert.equal(me.status, 200);
+  assert.equal(me.json.account.publicKey, kp.publicKey());
+  const renamed = await api('PUT', '/api/auth/me', {
+    token,
+    body: { displayName: 'SolarFan' },
+  });
+  assert.equal(renamed.json.account.displayName, 'SolarFan');
+  const out = await api('POST', '/api/auth/logout', { token });
+  assert.equal(out.status, 200);
+  assert.equal((await api('GET', '/api/auth/me', { token })).status, 401);
+});
+
+test('writes without a session are rejected', async () => {
+  assert.equal(
+    (
+      await api('POST', '/api/campaigns/demo-solar/comments', {
+        body: { body: 'hi' },
+      })
+    ).status,
+    401,
+  );
+  assert.equal(
+    (
+      await api('POST', '/api/support/tickets', {
+        body: { kind: 'support', subject: 'a', body: 'b' },
+      })
+    ).status,
+    401,
+  );
+  assert.equal((await api('POST', '/api/issuer-applications', { body: {} })).status, 401);
+});
+
+test('comment lifecycle over HTTP with author masking', async () => {
+  const kp = Keypair.random();
+  const token = await login(kp);
+  const created = await api('POST', '/api/campaigns/demo-solar/comments', {
+    token,
+    body: { body: 'Nice testnet demo.' },
+  });
+  assert.equal(created.status, 201);
+  const listed = await api('GET', '/api/campaigns/demo-solar/comments');
+  assert.equal(listed.json.comments.length, 1);
+  assert.ok(!JSON.stringify(listed.json).includes(kp.publicKey()));
+  // Admin moderation requires the admin key.
+  const id = created.json.comment.id;
+  assert.equal((await api('POST', `/api/admin/comments/${id}/hide`, { body: {} })).status, 401);
+  assert.equal(
+    (
+      await api('POST', `/api/admin/comments/${id}/hide`, {
+        admin: true,
+        body: { reason: 'test' },
+      })
+    ).status,
+    200,
+  );
+  assert.equal((await api('GET', '/api/campaigns/demo-solar/comments')).json.comments.length, 0);
+});
+
+test('tickets are private to their owner over HTTP', async () => {
+  const a = Keypair.random();
+  const b = Keypair.random();
+  const tokenA = await login(a);
+  const tokenB = await login(b);
+  await api('POST', '/api/support/tickets', {
+    token: tokenA,
+    body: { kind: 'support', subject: 'Help', body: 'Question body' },
+  });
+  assert.equal((await api('GET', '/api/support/tickets', { token: tokenA })).json.tickets.length, 1);
+  assert.equal((await api('GET', '/api/support/tickets', { token: tokenB })).json.tickets.length, 0);
+  assert.equal((await api('GET', '/api/admin/tickets')).status, 401);
+  assert.equal((await api('GET', '/api/admin/tickets', { admin: true })).json.tickets.length, 1);
+});
+
+test('news posting is admin-only and labeled', async () => {
+  assert.equal(
+    (
+      await api('POST', '/api/campaigns/demo-solar/news', {
+        body: { title: 't', body: 'b' },
+      })
+    ).status,
+    401,
+  );
+  const posted = await api('POST', '/api/campaigns/demo-solar/news', {
+    admin: true,
+    body: { title: 'Update', body: 'Fictional demo update.' },
+  });
+  assert.equal(posted.status, 201);
+  assert.equal(posted.json.post.authorLabel, 'platform-demo');
+  const listed = await api('GET', '/api/campaigns/demo-solar/news');
+  assert.equal(listed.json.news.length, 1);
+});
+
+test('issuer application end to end with admin pipeline', async () => {
+  const kp = Keypair.random();
+  const token = await login(kp);
+  const created = await api('POST', '/api/issuer-applications', {
+    token,
+    body: {
+      projectName: 'Fictional Wind Coop',
+      country: 'PT',
+      instrumentType: 'participation right',
+      targetAmount: '250000 EUR',
+      description: 'Demo application, fictional project.',
+    },
+  });
+  assert.equal(created.status, 201);
+  const id = created.json.application.id;
+  assert.equal((await api('GET', '/api/admin/issuer-applications', { admin: true })).json.applications.length, 1);
+  assert.equal(
+    (
+      await api('POST', `/api/admin/issuer-applications/${id}/status`, {
+        admin: true,
+        body: { status: 'under_review' },
+      })
+    ).status,
+    200,
+  );
+});
+
+test('campaign metadata endpoint serves industry and documents', async () => {
+  const res = await api('GET', '/api/campaigns/demo-solar/metadata');
+  assert.equal(res.status, 200);
+  assert.equal(res.json.metadata.industry, 'energy-utilities');
+  assert.ok(res.json.metadata.documents.every((d: any) => d.demo === true));
+  const unknown = await api('GET', '/api/campaigns/unknown-campaign/metadata');
+  assert.equal(unknown.json.metadata, null);
+});

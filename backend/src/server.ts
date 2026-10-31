@@ -5,6 +5,7 @@ import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
 import { registerDiscoveryEndpoints } from './sitemap.js';
 import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban } from './soroban.js';
+import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -39,7 +40,7 @@ app.use(
   cors({
     origin: (origin, done) => done(null, !origin || allowedOrigins().includes(origin)),
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'x-admin-key'],
+    allowedHeaders: ['Content-Type', 'x-admin-key', 'authorization'],
   }),
 );
 app.use(express.json({ limit: '64kb' }));
@@ -76,7 +77,11 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
 // Live campaign URLs come from the Soroban registry (same source as /api/campaigns),
 // not the legacy file store.
 registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCampaigns()).map((c) => c.id) });
-
+// Accounts, community, support, issuer applications and campaign metadata.
+// Boot failures must not take down the campaign API: mount when ready.
+communityServiceFromEnv()
+  .then((service) => app.use(createCommunityRouter({ service, requireAdmin })))
+  .catch((err) => console.error('community API disabled:', err instanceof Error ? err.message : err));
 app.get('/health', (_req, res) => {
   res.json({ ok: true, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
 });

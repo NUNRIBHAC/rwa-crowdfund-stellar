@@ -1,0 +1,301 @@
+import { randomBytes } from 'node:crypto';
+import { z } from 'zod';
+import type { Account, Comment, CommunityStore, IssuerApplication, NewsPost, Ticket } from './community-store.js';
+import { FileCommunityStore, PostgresCommunityStore } from './community-store.js';
+import { RateLimiter } from './ratelimit.js';
+
+// Community and support features for the demo platform: campaign comments,
+// campaign news, support/feedback tickets and issuer applications.
+//
+// Security and privacy posture (reviewed before deployment):
+//  - Writes require a wallet-login session (accounts.ts); there is no
+//    anonymous write path. Auth proves key ownership only, never identity.
+//  - Ownership: users see only their own tickets/applications. Admin reads
+//    and moderation sit behind the existing x-admin-key gate (demo-grade
+//    shared secret; production needs real admin identities).
+//  - Abuse: per-account and per-IP sliding-window rate limits, strict length
+//    caps, no HTML rendering contract (clients must render as plain text),
+//    no links in display names.
+//  - Data minimization: no email, name or IP is persisted beyond the
+//    submitted content itself; display name is optional.
+//  - Retention: tickets and issuer applications are hard-deleted after
+//    COMMUNITY_RETENTION_DAYS (default 90); hidden comments after 30 days;
+//    expired challenges and sessions are pruned. pruneCommunity runs on boot
+//    and hourly.
+//  - Errors are safe JSON {error} strings; internals are never returned.
+
+export class CommunityError extends Error {
+  constructor(
+    public readonly status: number,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+export const LIMITS = {
+  campaignId: /^[a-z0-9][a-z0-9-]{0,63}$/,
+  commentBody: 1000,
+  ticketSubject: 120,
+  ticketBody: 4000,
+  applicationField: 200,
+  applicationDescription: 4000,
+  newsTitle: 160,
+  newsBody: 4000,
+  commentsPage: 100,
+};
+
+const commentInput = z.object({
+  body: z.string().min(1).max(LIMITS.commentBody),
+});
+const ticketInput = z.object({
+  kind: z.enum(['support', 'feedback']),
+  subject: z.string().trim().min(1).max(LIMITS.ticketSubject),
+  body: z.string().trim().min(1).max(LIMITS.ticketBody),
+});
+const applicationInput = z.object({
+  projectName: z.string().trim().min(1).max(LIMITS.applicationField),
+  country: z.string().trim().min(1).max(LIMITS.applicationField),
+  instrumentType: z.string().trim().min(1).max(LIMITS.applicationField),
+  targetAmount: z.string().trim().min(1).max(LIMITS.applicationField),
+  description: z.string().trim().min(1).max(LIMITS.applicationDescription),
+  contactEmail: z.union([z.literal(''), z.string().trim().email().max(LIMITS.applicationField)]).optional(),
+});
+const newsInput = z.object({
+  title: z.string().trim().min(1).max(LIMITS.newsTitle),
+  body: z.string().trim().min(1).max(LIMITS.newsBody),
+});
+
+function newId(prefix: string): string {
+  return `${prefix}_${randomBytes(12).toString('hex')}`;
+}
+
+export function requireCampaignId(id: unknown): string {
+  if (typeof id !== 'string' || !LIMITS.campaignId.test(id)) throw new CommunityError(400, 'invalid campaign id');
+  return id;
+}
+
+export type PublicComment = Pick<Comment, 'id' | 'campaignId' | 'body' | 'createdAt'> & { author: string };
+
+function publicComment(c: Comment): PublicComment {
+  return {
+    id: c.id,
+    campaignId: c.campaignId,
+    body: c.body,
+    createdAt: c.createdAt,
+    // Never expose the full wallet key; display name if set, else a hint.
+    author: c.displayName ?? `${c.publicKey.slice(0, 4)}…${c.publicKey.slice(-4)}`,
+  };
+}
+
+export class CommunityService {
+  readonly limiter = new RateLimiter();
+  constructor(
+    public readonly store: CommunityStore,
+    private opts: { retentionDays: number; now?: () => number } = {
+      retentionDays: 90,
+    },
+  ) {}
+  private now(): number {
+    return this.opts.now?.() ?? Date.now();
+  }
+
+  checkRate(key: string, limit: number, windowMs: number): void {
+    if (!this.limiter.allow(key, limit, windowMs)) throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+  }
+
+  async listComments(campaignId: string): Promise<PublicComment[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.comments)
+      .filter((c) => c.campaignId === campaignId && !c.hiddenAt)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, LIMITS.commentsPage)
+      .map(publicComment);
+  }
+
+  async addComment(campaignId: string, account: Account, input: unknown, ip?: string): Promise<PublicComment> {
+    requireCampaignId(campaignId);
+    const { body } = commentInput.parse(input ?? {});
+    this.checkRate(`comment:${account.publicKey}`, 10, 60 * 60 * 1000);
+    if (ip) this.checkRate(`comment-ip:${ip}`, 30, 60 * 60 * 1000);
+    const now = this.now();
+    const comment: Comment = {
+      id: newId('cmt'),
+      campaignId,
+      publicKey: account.publicKey,
+      displayName: account.displayName,
+      body,
+      createdAt: now,
+      hiddenAt: null,
+      hiddenReason: null,
+    };
+    await this.store.change((state) => {
+      state.comments[comment.id] = comment;
+    });
+    return publicComment(comment);
+  }
+
+  async listNews(campaignId: string): Promise<NewsPost[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.news)
+      .filter((n) => n.campaignId === campaignId)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, LIMITS.commentsPage);
+  }
+
+  // Admin-gated at the router. News are platform stand-in posts for the demo
+  // campaign: the author label is fixed so readers are never misled into
+  // thinking a verified issuer published them.
+  async addNews(campaignId: string, input: unknown): Promise<NewsPost> {
+    requireCampaignId(campaignId);
+    const { title, body } = newsInput.parse(input ?? {});
+    const post: NewsPost = {
+      id: newId('news'),
+      campaignId,
+      title,
+      body,
+      authorLabel: 'platform-demo',
+      createdAt: this.now(),
+    };
+    await this.store.change((state) => {
+      state.news[post.id] = post;
+    });
+    return post;
+  }
+
+  async createTicket(account: Account, input: unknown): Promise<Ticket> {
+    const parsed = ticketInput.parse(input ?? {});
+    this.checkRate(`ticket:${account.publicKey}`, 5, 24 * 60 * 60 * 1000);
+    const ticket: Ticket = {
+      id: newId('tkt'),
+      kind: parsed.kind,
+      publicKey: account.publicKey,
+      subject: parsed.subject,
+      body: parsed.body,
+      status: 'open',
+      createdAt: this.now(),
+      closedAt: null,
+    };
+    await this.store.change((state) => {
+      state.tickets[ticket.id] = ticket;
+    });
+    return ticket;
+  }
+
+  async listOwnTickets(account: Account): Promise<Ticket[]> {
+    const state = await this.store.read();
+    return Object.values(state.tickets)
+      .filter((t) => t.publicKey === account.publicKey)
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  async submitApplication(account: Account, input: unknown): Promise<IssuerApplication> {
+    const parsed = applicationInput.parse(input ?? {});
+    this.checkRate(`application:${account.publicKey}`, 3, 24 * 60 * 60 * 1000);
+    const application: IssuerApplication = {
+      id: newId('app'),
+      publicKey: account.publicKey,
+      projectName: parsed.projectName,
+      country: parsed.country,
+      instrumentType: parsed.instrumentType,
+      targetAmount: parsed.targetAmount,
+      description: parsed.description,
+      contactEmail: parsed.contactEmail ? parsed.contactEmail : null,
+      status: 'received',
+      createdAt: this.now(),
+    };
+    await this.store.change((state) => {
+      state.applications[application.id] = application;
+    });
+    return application;
+  }
+
+  // Admin operations (router gates them behind x-admin-key).
+  async adminListComments(): Promise<Comment[]> {
+    const state = await this.store.read();
+    return Object.values(state.comments).sort((a, b) => b.createdAt - a.createdAt);
+  }
+  async adminSetCommentHidden(id: string, hidden: boolean, reason?: string): Promise<void> {
+    await this.store.change((state) => {
+      const c = state.comments[id];
+      if (!c) throw new CommunityError(404, 'comment not found');
+      c.hiddenAt = hidden ? this.now() : null;
+      c.hiddenReason = hidden ? (reason ?? null) : null;
+    });
+  }
+  async adminListTickets(): Promise<Ticket[]> {
+    const state = await this.store.read();
+    return Object.values(state.tickets).sort((a, b) => b.createdAt - a.createdAt);
+  }
+  async adminCloseTicket(id: string): Promise<void> {
+    await this.store.change((state) => {
+      const t = state.tickets[id];
+      if (!t) throw new CommunityError(404, 'ticket not found');
+      t.status = 'closed';
+      t.closedAt = this.now();
+    });
+  }
+  async adminListApplications(): Promise<IssuerApplication[]> {
+    const state = await this.store.read();
+    return Object.values(state.applications).sort((a, b) => b.createdAt - a.createdAt);
+  }
+  async adminSetApplicationStatus(id: string, status: unknown): Promise<void> {
+    if (status !== 'received' && status !== 'under_review' && status !== 'closed') throw new CommunityError(400, 'invalid status');
+    await this.store.change((state) => {
+      const a = state.applications[id];
+      if (!a) throw new CommunityError(404, 'application not found');
+      a.status = status;
+    });
+  }
+
+  // Retention: hard-delete personal submitted content after its retention
+  // window, hidden comments after 30 days, and expired auth artifacts.
+  async prune(): Promise<{ removed: number }> {
+    const now = this.now();
+    const retentionMs = this.opts.retentionDays * 24 * 60 * 60 * 1000;
+    const hiddenCommentMs = 30 * 24 * 60 * 60 * 1000;
+    let removed = 0;
+    await this.store.change((state) => {
+      for (const [id, t] of Object.entries(state.tickets)) {
+        if (now - t.createdAt > retentionMs) {
+          delete state.tickets[id];
+          removed++;
+        }
+      }
+      for (const [id, a] of Object.entries(state.applications)) {
+        if (now - a.createdAt > retentionMs) {
+          delete state.applications[id];
+          removed++;
+        }
+      }
+      for (const [id, c] of Object.entries(state.comments)) {
+        if (c.hiddenAt && now - c.hiddenAt > hiddenCommentMs) {
+          delete state.comments[id];
+          removed++;
+        }
+      }
+      for (const [id, ch] of Object.entries(state.challenges)) {
+        if (ch.expiresAt <= now) {
+          delete state.challenges[id];
+          removed++;
+        }
+      }
+      for (const [id, s] of Object.entries(state.sessions)) {
+        if (s.expiresAt <= now) {
+          delete state.sessions[id];
+          removed++;
+        }
+      }
+    });
+    this.limiter.sweep(24 * 60 * 60 * 1000);
+    return { removed };
+  }
+}
+
+export async function communityStoreFromEnv(): Promise<CommunityStore> {
+  const url = process.env.COMMUNITY_DATABASE_URL ?? process.env.SOROBAN_JOURNAL_DATABASE_URL;
+  if (url) return PostgresCommunityStore.connect(url);
+  return new FileCommunityStore(process.env.COMMUNITY_STORE_PATH ?? './data/community-store.json');
+}
