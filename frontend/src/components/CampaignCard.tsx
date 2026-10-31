@@ -1,16 +1,17 @@
 import type { Campaign } from '../types';
-import { deadlineInfo, formatAmount, percent, shorten } from '../format';
+import { deadlineInfo, deadlineState, formatAmount, percent, regionName, shorten } from '../format';
 import { fundingState } from '../funding-math';
 import FundingGrid from './FundingGrid';
 import type { CampaignProfile } from '../data/profiles';
 import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
+import { useI18n } from '../i18n';
 
 export type CampaignStatus = 'open' | 'funded' | 'ended';
 
 export function campaignStatus(c: Campaign): CampaignStatus {
   if (percent(c.raised, c.config.goal) >= 100) return 'funded';
-  if (deadlineInfo(c.config.deadline).state === 'ended') return 'ended';
+  if (deadlineState(c.config.deadline) === 'ended') return 'ended';
   return 'open';
 }
 
@@ -28,12 +29,19 @@ type Props = {
 };
 
 export default function CampaignCard({ campaign: c, profile, actor, busy, readOnly, amount, demo, onAmount, onPrepare }: Props) {
+  const { locale, m } = useI18n();
   const pct = percent(c.raised, c.config.goal);
-  const dl = deadlineInfo(c.config.deadline);
+  const dl = deadlineInfo(c.config.deadline, m.time);
   const status = campaignStatus(c);
   const state = fundingState(c.raised, c.config.goal, 16);
   return (
     <article className="card">
+      {c.id === 'demo-solar' && (
+        <figure className="card-photo">
+          <img src="/demo-solar-farm.jpg" alt={m.card.photoAlt} loading="lazy" />
+          <figcaption>{m.card.photoCaption}</figcaption>
+        </figure>
+      )}
       <div className="card-top">
         <div className="card-id">
           <svg className="card-mark" viewBox="0 0 240 240" aria-hidden="true">
@@ -50,20 +58,20 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
             <h3 className="card-title">
               <a href={routeHash({ name: 'campaign', campaignId: c.id })}>{c.name}</a>
             </h3>
-            {profile && <p className="card-location">{profile.country}</p>}
+            {profile && <p className="card-location">{regionName(profile.country, locale)}</p>}
           </div>
         </div>
         <div className="card-tags">
-          {demo && <span className="status-chip chip-demo">Demo</span>}
+          {demo && <span className="status-chip chip-demo">{m.card.demo}</span>}
           {profile && (
             <span className="status-chip chip-instrument">
-              {composeInstrumentLabel(profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}
+              {composeInstrumentLabel(m, profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)}
             </span>
           )}
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>
-            {status === 'funded' ? 'Funded' : status === 'ended' ? 'Underfunded' : 'Open'}
+            {status === 'funded' ? m.card.statusFunded : status === 'ended' ? m.card.statusEnded : m.card.statusOpen}
           </span>
-          {c.withdrawn && <span className="status-chip status-withdrawn">Withdrawn</span>}
+          {c.withdrawn && <span className="status-chip status-withdrawn">{m.card.withdrawn}</span>}
         </div>
       </div>
 
@@ -74,10 +82,11 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
       <p className="card-funded">
         {state.kind === 'ready' ? (
           <>
-            <span className="card-funded-pct">{state.percent}% funded</span> <span className="card-funded-blocks">{state.filled} of 16 blocks</span>
+            <span className="card-funded-pct">{m.card.fundedPct(state.percent)}</span>{' '}
+            <span className="card-funded-blocks">{m.card.blocksFilled(state.filled, 16)}</span>
           </>
         ) : (
-          <span className="card-funded-blocks">Progress unavailable - on-chain data not loaded</span>
+          <span className="card-funded-blocks">{m.card.progressUnavailable}</span>
         )}
       </p>
       <div
@@ -86,7 +95,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
         aria-valuenow={pct}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={`Funding progress: ${pct}% of goal`}
+        aria-label={m.card.progressAria(pct)}
       >
         <div className="progress-fill" style={{ width: `${pct}%` }} />
       </div>
@@ -94,15 +103,15 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
       {profile && (
         <dl className="metric-chips">
           <div>
-            <dt>Interest</dt>
+            <dt>{m.card.interest}</dt>
             <dd>{profile.interestRate}</dd>
           </div>
           <div>
-            <dt>Term</dt>
+            <dt>{m.card.term}</dt>
             <dd>{profile.term}</dd>
           </div>
           <div>
-            <dt>Minimum</dt>
+            <dt>{m.card.minimum}</dt>
             <dd>{profile.minInvestment}</dd>
           </div>
         </dl>
@@ -110,72 +119,72 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
 
       <dl className="stat-grid">
         <div>
-          <dt>Raised</dt>
+          <dt>{m.card.raised}</dt>
           <dd>
-            {formatAmount(c.raised)} <span className="stat-unit">USDC (testnet)</span>
+            {formatAmount(c.raised, locale)} <span className="stat-unit">{m.card.usdcTestnet}</span>
           </dd>
         </div>
         <div>
-          <dt>Goal</dt>
+          <dt>{m.card.goal}</dt>
           <dd>
-            {formatAmount(c.config.goal)} <span className="stat-unit">USDC (testnet)</span>
+            {formatAmount(c.config.goal, locale)} <span className="stat-unit">{m.card.usdcTestnet}</span>
           </dd>
         </div>
         <div>
-          <dt>Deadline</dt>
+          <dt>{m.card.deadline}</dt>
           <dd>{dl.date}</dd>
         </div>
         <div>
-          <dt>Status</dt>
+          <dt>{m.card.status}</dt>
           <dd className={dl.state === 'closing' ? 'deadline-closing' : ''}>{dl.label}</dd>
         </div>
       </dl>
 
       {c.balance !== null && (
         <p className="your-position">
-          Your contribution record: <strong>{formatAmount(c.balance)} USDC (testnet)</strong>
+          {m.card.yourPosition} <strong>{formatAmount(c.balance, locale)} USDC (testnet)</strong>
         </p>
       )}
 
       <p className="card-details-link">
-        <a href={routeHash({ name: 'campaign', campaignId: c.id })}>View details</a>
+        <a href={routeHash({ name: 'campaign', campaignId: c.id })}>{m.card.viewDetails}</a>
       </p>
 
-      {demo && <p className="card-demo-note">Illustrative demo data - not a real offering.</p>}
+      {demo && <p className="card-demo-note">{m.card.demoNote}</p>}
 
       <details className="card-details">
-        <summary>Contract data</summary>
+        <summary>{m.card.contractData}</summary>
         <dl>
           <div>
-            <dt>Contract</dt>
+            <dt>{m.card.contract}</dt>
             <dd>
               <code>{c.contractId}</code>
             </dd>
           </div>
           <div>
-            <dt>Creator</dt>
+            <dt>{m.card.creator}</dt>
             <dd>
               <code>{c.config.creator}</code>
             </dd>
           </div>
           <div>
-            <dt>Asset contract</dt>
+            <dt>{m.card.assetContract}</dt>
             <dd>
-              <code>{shorten(c.config.token, 10, 6)}</code> (validated by the API as testnet USDC)
+              <code>{shorten(c.config.token, 10, 6)}</code> ({m.card.assetValidated})
             </dd>
           </div>
           <div>
-            <dt>Exact raised / goal</dt>
+            <dt>{m.card.exactRaisedGoal}</dt>
             <dd>
               <code>
                 {c.raised} / {c.config.goal}
               </code>{' '}
-              (7-decimal units)
+              ({m.card.unitsNote})
             </dd>
           </div>
           <div>
-            <dt>Creator withdrawn</dt>
-            <dd>{c.withdrawn ? 'Yes' : 'No'}</dd>
+            <dt>{m.card.creatorWithdrawn}</dt>
+            <dd>{c.withdrawn ? m.card.yes : m.card.no}</dd>
           </div>
         </dl>
       </details>
@@ -183,24 +192,21 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
       {!readOnly && (
         <div className="card-actions">
           <label className="amount-label">
-            Contribution amount (testnet USDC)
+            {m.card.amountLabel}
             <input value={amount} onChange={(e) => onAmount(e.target.value)} placeholder="10.00" inputMode="decimal" />
           </label>
           <div className="btn-row">
             <button className="btn btn-primary" disabled={busy || !actor} onClick={() => onPrepare('contribute')}>
-              Contribute
+              {m.card.contribute}
             </button>
             <button className="btn" disabled={busy || !actor || c.balance === null} onClick={() => onPrepare('refund')}>
-              Refund me
+              {m.card.refundMe}
             </button>
             <button className="btn" disabled={busy || actor !== c.config.creator} onClick={() => onPrepare('withdraw')}>
-              Creator withdraw
+              {m.card.creatorWithdraw}
             </button>
           </div>
-          <p className="card-rules">
-            Contribute before the deadline, up to the remaining goal. After the deadline the creator withdraws only if fully funded; otherwise each contributor
-            signs their own refund. The contract enforces these rules atomically.
-          </p>
+          <p className="card-rules">{m.card.rules}</p>
         </div>
       )}
     </article>

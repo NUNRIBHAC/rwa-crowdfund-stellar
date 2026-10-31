@@ -1,5 +1,6 @@
 import { shorten } from '../format';
 import { routeHash, type RouteName } from '../router';
+import { LOCALES, useI18n, type Locale } from '../i18n';
 
 type Props = {
   actor: string;
@@ -8,38 +9,26 @@ type Props = {
   current: RouteName;
 };
 
-const NAV: { route: RouteName; label: string }[] = [
-  { route: 'home', label: 'Home' },
-  { route: 'investments', label: 'Invest' },
-  { route: 'how-it-works', label: 'How it works' },
-  { route: 'learn', label: 'Learn' },
-  { route: 'financing', label: 'Financing' },
-  { route: 'faq', label: 'FAQ' },
-  { route: 'about', label: 'About' },
-  { route: 'account', label: 'My account' },
-];
-
 export default function Header({ actor, busy, onConnect, current }: Props) {
+  const { locale, setLocale, m } = useI18n();
+  const NAV: { route: RouteName; label: string }[] = [
+    { route: 'home', label: m.nav.home },
+    { route: 'investments', label: m.nav.investments },
+    { route: 'how-it-works', label: m.nav.howItWorks },
+    { route: 'learn', label: m.nav.learn },
+    { route: 'financing', label: m.nav.financing },
+    { route: 'faq', label: m.nav.faq },
+    { route: 'about', label: m.nav.about },
+    { route: 'account', label: m.nav.account },
+  ];
   return (
     <header className="site-header">
       <div className="header-inner">
         <div className="header-main">
           <a className="brand" href={routeHash({ name: 'home' })}>
-            <svg className="brand-mark" viewBox="0 0 240 240" aria-hidden="true">
-              <rect x="28" y="28" width="184" height="184" rx="26" fill="none" stroke="#FFFFFF" strokeWidth="13" />
-              <rect x="50" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
-              <rect x="100" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
-              <rect x="150" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
-              <rect x="50" y="100" width="40" height="40" rx="9" fill="#4B4FE2" />
-              <rect x="100" y="100" width="40" height="40" rx="9" fill="#8B8EF0" />
-              <rect x="50" y="50" width="40" height="40" rx="9" fill="#C7C8F9" />
-            </svg>
-            <span className="brand-name">
-              <span className="brand-name-strong">Block</span>
-              <span className="brand-name-light">allisto</span>
-            </span>
+            <img className="brand-lockup" src="/blockallisto-lockup-horizontal-reversed.svg" alt="Blockallisto" />
           </a>
-          <nav className="site-nav" aria-label="Main">
+          <nav className="site-nav" aria-label={m.nav.ariaMain}>
             {NAV.map((item) => {
               const active = item.route === current || (item.route === 'investments' && current === 'campaign');
               return (
@@ -56,15 +45,27 @@ export default function Header({ actor, busy, onConnect, current }: Props) {
           </nav>
         </div>
         <div className="header-side">
-          <span className="badge badge-testnet">Stellar testnet</span>
+          <select
+            className="lang-select"
+            value={locale}
+            onChange={(e) => setLocale(e.target.value as Locale)}
+            aria-label={m.header.languageLabel}
+          >
+            {LOCALES.map((l) => (
+              <option key={l.id} value={l.id} aria-label={l.accessibleLabel}>
+                {l.label}
+              </option>
+            ))}
+          </select>
+          <span className="badge badge-testnet">{m.header.testnetBadge}</span>
           <div className="header-actions">
             {actor ? (
               <span className="wallet-chip" title={actor}>
-                Connected: {shorten(actor)}
+                {m.header.connectedPrefix}: {shorten(actor)}
               </span>
             ) : (
               <button className="btn btn-primary" disabled={busy} onClick={onConnect}>
-                Connect Freighter
+                {m.header.connect}
               </button>
             )}
           </div>

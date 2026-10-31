@@ -1,6 +1,7 @@
 import type { Intent } from '../types';
 import { isTerminal } from '../types';
 import { formatAmount, shorten } from '../format';
+import { useI18n } from '../i18n';
 
 type Props = {
   intent: Intent;
@@ -25,19 +26,21 @@ function stepClass(intent: Intent, step: number): string {
 }
 
 export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel, onClear }: Props) {
+  const { locale, m } = useI18n();
   const terminal = isTerminal(intent.status);
-  const steps = ['Prepared', 'Signed', 'Submitted', 'Confirmed'];
+  const statusLabel = m.intent.statusLabels[intent.status] ?? intent.status;
+  const actionLabel = m.intent.actionLabels[intent.action] ?? intent.action;
   return (
     <section className="intent-panel" aria-live="polite">
       <div className="intent-head">
-        <h2>Saved transaction</h2>
+        <h2>{m.intent.title}</h2>
         <span className={`status-chip ${intent.status === 'SUCCESS' ? 'status-funded' : intent.status === 'FAILED' ? 'status-ended' : 'status-pending'}`}>
-          {intent.status}
+          {statusLabel}
         </span>
       </div>
 
       <div className="step-track">
-        {steps.map((s, i) => (
+        {m.intent.steps.map((s, i) => (
           <span key={s} className={stepClass(intent, i)}>
             {s}
           </span>
@@ -46,70 +49,59 @@ export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel,
 
       <dl className="intent-facts">
         <div>
-          <dt>Action</dt>
+          <dt>{m.intent.action}</dt>
           <dd>
-            {intent.action}
-            {intent.amount ? ` ${intent.amount} USDC (testnet)` : ''}
+            {actionLabel}
+            {intent.amount ? ` ${intent.amount} ${m.intent.usdcTestnet}` : ''}
           </dd>
         </div>
         <div>
-          <dt>Campaign</dt>
+          <dt>{m.intent.campaign}</dt>
           <dd>{intent.campaign}</dd>
         </div>
         {intent.contractId && (
           <div>
-            <dt>Contract</dt>
+            <dt>{m.intent.contract}</dt>
             <dd>
               <code title={intent.contractId}>{shorten(intent.contractId, 10, 6)}</code>
             </dd>
           </div>
         )}
         <div>
-          <dt>Max fee</dt>
-          <dd>{intent.feeStroops ? `${formatAmount(intent.feeStroops)} testnet XLM` : 'check wallet'}</dd>
+          <dt>{m.intent.maxFee}</dt>
+          <dd>{intent.feeStroops ? `${formatAmount(intent.feeStroops, locale)} ${m.intent.xlmTestnet}` : m.intent.checkWallet}</dd>
         </div>
         <div className="intent-hash">
-          <dt>Hash</dt>
+          <dt>{m.intent.hash}</dt>
           <dd>
             <code title={intent.hash}>{shorten(intent.hash, 12, 8)}</code>
           </dd>
         </div>
       </dl>
 
-      {!terminal && (
-        <p className="intent-warning">
-          Submission is not confirmation. A missing result does not mean failure. Check the status or retry this exact signed transaction; never create a
-          replacement while uncertain.
-        </p>
-      )}
-      {intent.status === 'SUCCESS' && (
-        <p className="intent-warning intent-confirmed">Confirmed on Stellar testnet. This exact transaction is final; the hash above is its permanent proof.</p>
-      )}
-      {intent.status === 'NOT_FOUND' && (
-        <p className="intent-warning intent-notfound">
-          Uncertain outcome retained. The RPC may have limited history. Do not clear or replace it based on expiry.
-        </p>
-      )}
+      {!terminal && <p className="intent-warning">{m.intent.warningPending}</p>}
+      {intent.status === 'SUCCESS' && <p className="intent-warning intent-confirmed">{m.intent.confirmed}</p>}
+      {intent.status === 'NOT_FOUND' && <p className="intent-warning intent-notfound">{m.intent.notFound}</p>}
 
       <div className="btn-row">
         {!terminal && (
           <button className="btn btn-primary" disabled={busy} onClick={onSubmit}>
-            {intent.signedXdr ? 'Retry identical transaction' : 'Sign and submit'}
+            {intent.signedXdr ? m.intent.retry : m.intent.signSubmit}
           </button>
         )}
         {intent.signedXdr && !terminal && (
           <button className="btn" disabled={busy} onClick={onCheck}>
-            Check ledger result
+            {m.intent.checkLedger}
           </button>
         )}
         {!intent.signedXdr && intent.status === 'BUILT' && (
           <button className="btn btn-ghost" disabled={busy} onClick={onCancel}>
-            Cancel unsigned transaction
+            {m.intent.cancelUnsigned}
           </button>
         )}
         {terminal && (
           <button className="btn btn-ghost" disabled={busy} onClick={onClear}>
-            Clear confirmed record
+            {m.intent.clearConfirmed}
           </button>
         )}
       </div>

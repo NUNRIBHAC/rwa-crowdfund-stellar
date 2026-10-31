@@ -1,29 +1,28 @@
+import { useI18n } from '../i18n';
+
 type Props = {
   fixtureMode: boolean;
   onToggleFixtures: () => void;
 };
 
 export default function EmptyState({ fixtureMode, onToggleFixtures }: Props) {
+  const { m } = useI18n();
   if (fixtureMode) {
     return (
       <div className="fixture-banner" role="note">
-        <strong>Sample preview active.</strong> The campaigns below are fixtures to show the layout. They are not deployed contracts, not live offers, and
-        cannot accept contributions.{' '}
+        <strong>{m.emptyState.fixtureStrong}</strong> {m.emptyState.fixtureText}{' '}
         <button className="btn btn-ghost" onClick={onToggleFixtures}>
-          Back to live registry
+          {m.emptyState.fixtureBack}
         </button>
       </div>
     );
   }
   return (
     <section className="empty-state">
-      <h2>No deployed campaign configured</h2>
-      <p>
-        An operator must deploy and verify the reviewed contract separately, then set SOROBAN_CAMPAIGNS_JSON. Deployment and migration are not performed here.
-        Legacy campaigns are read-only and require reconciliation.
-      </p>
+      <h2>{m.emptyState.emptyTitle}</h2>
+      <p>{m.emptyState.emptyText}</p>
       <button className="btn" onClick={onToggleFixtures}>
-        Preview with sample campaigns
+        {m.emptyState.emptyCta}
       </button>
     </section>
   );

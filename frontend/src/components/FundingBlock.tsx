@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useI18n } from '../i18n';
 
 // Token slots of the Fraction mark, in funding order: the bottom row fills
 // first, then the next rows. Geometry matches brand/logo/svg sources.
@@ -24,6 +25,7 @@ const SEQUENCE_MS = DOCK_DELAY_MS + 800;
 // filled state with no animation. It explains the funding concept - it is not
 // live funding activity and changes no campaign totals.
 export default function FundingBlock() {
+  const { m } = useI18n();
   const [run, setRun] = useState(0);
   const busy = useRef(true);
 
@@ -46,7 +48,7 @@ export default function FundingBlock() {
         className="funding-block-svg"
         viewBox="0 0 240 240"
         role="img"
-        aria-label="Illustration: small purple blocks slide in one by one and fill a shared asset outline, token by token"
+        aria-label={m.hero.fundingBlockAria}
       >
         <rect x="28" y="28" width="184" height="184" rx="26" fill="none" stroke="#14163A" strokeWidth="9" />
         {TILES.map((t, i) => (
@@ -70,3 +72,4 @@ export default function FundingBlock() {
     </figure>
   );
 }
+

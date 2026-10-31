@@ -1,75 +1,60 @@
 import { routeHash } from '../router';
+import { useI18n } from '../i18n';
 
 export default function Footer() {
+  const { m } = useI18n();
   return (
     <footer className="site-footer">
       <div className="footer-grid">
         <div>
-          <h2 className="footer-heading">Platform</h2>
+          <h2 className="footer-heading">{m.footer.platform}</h2>
           <ul>
             <li>
-              <a href={routeHash({ name: 'investments' })}>Invest</a>
+              <a href={routeHash({ name: 'investments' })}>{m.footer.invest}</a>
             </li>
             <li>
-              <a href={routeHash({ name: 'how-it-works' })}>How it works</a>
+              <a href={routeHash({ name: 'how-it-works' })}>{m.footer.howItWorks}</a>
             </li>
             <li>
-              <a href={routeHash({ name: 'financing' })}>Financing for issuers</a>
+              <a href={routeHash({ name: 'financing' })}>{m.footer.financingIssuers}</a>
             </li>
           </ul>
         </div>
         <div>
-          <h2 className="footer-heading">Learn</h2>
+          <h2 className="footer-heading">{m.footer.learn}</h2>
           <ul>
             <li>
-              <a href={routeHash({ name: 'learn' })}>Instrument hub</a>
+              <a href={routeHash({ name: 'learn' })}>{m.footer.instrumentHub}</a>
             </li>
             <li>
-              <a href={routeHash({ name: 'risk-warnings' })}>Risk warnings</a>
+              <a href={routeHash({ name: 'risk-warnings' })}>{m.footer.riskWarnings}</a>
             </li>
             <li>
-              <a href={routeHash({ name: 'faq' })}>FAQ</a>
+              <a href={routeHash({ name: 'faq' })}>{m.footer.faq}</a>
             </li>
             <li>
-              <a href={routeHash({ name: 'about' })}>About this project</a>
+              <a href={routeHash({ name: 'about' })}>{m.footer.aboutProject}</a>
             </li>
           </ul>
         </div>
         <div>
-          <h2 className="footer-heading">Status</h2>
-          <p>
-            Testnet prototype. No automatic deployment or legacy balance conversion. Existing classic intents and balances are preserved, not cleared. The
-            separate identity/valuation infrastructure remains mock-only.
-          </p>
+          <h2 className="footer-heading">{m.footer.status}</h2>
+          <p>{m.footer.statusText}</p>
         </div>
       </div>
       <p className="footer-legal">
-        Market context: the EU regulates crowdfunding under ECSPR; authorised providers are listed in the{' '}
+        {m.footer.legalPre}{' '}
         <a href="https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_upreg" target="_blank" rel="noreferrer">
-          ESMA register
+          {m.footer.legalLink}
         </a>
-        . This app is not an authorised crowdfunding service provider and lists no live offers.
+        {m.footer.legalPost}
       </p>
       <div className="footer-brand">
         <div className="footer-brand-inner">
           <div className="footer-brand-lockup">
-            <svg className="footer-brand-mark" viewBox="0 0 240 240" aria-hidden="true">
-              <rect x="28" y="28" width="184" height="184" rx="26" fill="none" stroke="#FFFFFF" strokeWidth="13" />
-              <rect x="50" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
-              <rect x="100" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
-              <rect x="150" y="150" width="40" height="40" rx="9" fill="#4B4FE2" />
-              <rect x="50" y="100" width="40" height="40" rx="9" fill="#4B4FE2" />
-              <rect x="100" y="100" width="40" height="40" rx="9" fill="#8B8EF0" />
-              <rect x="150" y="100" width="40" height="40" rx="9" fill="none" stroke="#C7C8F9" strokeWidth="6" strokeDasharray="8 7" />
-              <rect x="50" y="50" width="40" height="40" rx="9" fill="#C7C8F9" />
-              <rect x="196" y="6" width="38" height="38" rx="9" fill="#4B4FE2" />
-            </svg>
-            <span className="brand-name footer-brand-name">
-              <span className="brand-name-strong">Block</span>
-              <span className="brand-name-light">allisto</span>
-            </span>
+            <img className="footer-brand-lockup-img" src="/blockallisto-lockup-horizontal-reversed.svg" alt="Blockallisto" />
           </div>
-          <p className="footer-tagline">Real assets. Shared possibilities.</p>
+          <p className="footer-tagline">{m.footer.tagline}</p>
           <svg className="footer-tiles" viewBox="0 0 320 200" aria-hidden="true">
             <rect x="238" y="8" width="64" height="64" rx="14" fill="#8B8EF0" transform="rotate(8 270 40)" />
             <rect x="292" y="60" width="44" height="44" rx="10" fill="none" stroke="#E6E6FB" strokeWidth="4" transform="rotate(12 314 82)" />

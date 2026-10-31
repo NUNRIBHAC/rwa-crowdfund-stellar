@@ -1,4 +1,5 @@
 import { fundingState } from '../funding-math';
+import { useI18n } from '../i18n';
 
 /**
  * FundingGrid - the Fraction token grid as the funding progress indicator
@@ -13,6 +14,7 @@ import { fundingState } from '../funding-math';
  *   fill bottom row first, left to right, then upward, per the spec).
  */
 export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised?: string | null; goal?: string | null; layout?: 'strip' | 'block' }) {
+  const { m } = useI18n();
   const cols = layout === 'strip' ? 8 : 10;
   const rows = layout === 'strip' ? 2 : 10;
   const count = cols * rows;
@@ -31,10 +33,8 @@ export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised
 
   const filled = state.kind === 'ready' ? state.filled : 0;
   const inProgress = state.kind === 'ready' ? state.inProgress : false;
-  const ariaLabel =
-    state.kind === 'ready'
-      ? `Funding progress: ${state.filled} of ${count} blocks filled, ${state.percent}% of the goal`
-      : 'Funding progress unavailable: on-chain data not loaded';
+  const partial = state.kind === 'ready' ? state.partial : 0;
+  const ariaLabel = state.kind === 'ready' ? m.grid.ariaReady(filled, count, state.percent) : m.grid.ariaUnavailable;
 
   const tiles = [];
   for (let i = 0; i < count; i++) {
@@ -43,8 +43,19 @@ export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised
     const row = layout === 'strip' ? Math.floor(i / cols) : rows - 1 - Math.floor(i / cols);
     const x = offX + pad + col * (tile + gap);
     const y = offY + pad + row * (tile + gap);
-    const s = i < filled ? 'funded' : i === filled && inProgress ? 'progress' : 'open';
-    tiles.push(<rect key={i} className={`fund-grid-tile is-${s}`} x={x} y={y} width={tile} height={tile} rx={tileRx} />);
+    if (i === filled && inProgress) {
+      // Next tile fills geometrically with the exact confirmed fraction.
+      const w = Math.max(1, Math.round(tile * partial * 100) / 100);
+      tiles.push(
+        <g key={i}>
+          <rect className="fund-grid-tile is-open" x={x} y={y} width={tile} height={tile} rx={tileRx} />
+          <rect className="fund-grid-tile is-funded" x={x} y={y} width={w} height={tile} rx={Math.min(tileRx, w / 2)} />
+        </g>,
+      );
+    } else {
+      const s = i < filled ? 'funded' : 'open';
+      tiles.push(<rect key={i} className={`fund-grid-tile is-${s}`} x={x} y={y} width={tile} height={tile} rx={tileRx} />);
+    }
   }
 
   return (
@@ -57,10 +68,10 @@ export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised
         <p className="fund-grid-caption">
           {state.kind === 'ready' ? (
             <>
-              <strong>{state.percent}%</strong> funded - {state.filled} of {count} blocks
+              <strong>{state.percent}%</strong> {m.grid.fundedTail(state.filled, count)}
             </>
           ) : (
-            'Progress unavailable - on-chain data not loaded'
+            m.grid.captionUnavailable
           )}
         </p>
       )}
