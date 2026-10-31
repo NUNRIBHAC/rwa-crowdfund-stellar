@@ -13,9 +13,11 @@ export const BUILDER_SLUG_RE = /^[a-zA-Z0-9_-]{1,48}$/;
 export const BUILDER_NAME_MAX = 120;
 export const TOKEN_DECIMALS = 7;
 export const DECIMAL_FACTOR = 10_000_000n;
+// The constructor takes goal: i128, so base units must fit the i128 range.
+export const GOAL_UNITS_MAX = 170141183460469231731687303715884105727n; // 2^127 - 1
 
 export type BuilderField = 'name' | 'slug' | 'goal' | 'deadline';
-export type BuilderError = 'nameTooLong' | 'slugInvalid' | 'goalInvalid' | 'deadlinePast';
+export type BuilderError = 'nameTooLong' | 'slugInvalid' | 'goalInvalid' | 'goalOutOfRange' | 'deadlinePast';
 
 /** Exact decimal-string to base-units conversion; null when not a positive
  *  amount with at most TOKEN_DECIMALS decimal places. */
@@ -43,7 +45,11 @@ export function validateBuilder(
   const errors: Partial<Record<BuilderField, BuilderError>> = {};
   if (input.name.length > BUILDER_NAME_MAX) errors.name = 'nameTooLong';
   if (input.slug !== '' && !BUILDER_SLUG_RE.test(input.slug)) errors.slug = 'slugInvalid';
-  if (input.goal.trim() !== '' && goalToUnits(input.goal) === null) errors.goal = 'goalInvalid';
+  if (input.goal.trim() !== '') {
+    const units = goalToUnits(input.goal);
+    if (units === null) errors.goal = 'goalInvalid';
+    else if (units > GOAL_UNITS_MAX) errors.goal = 'goalOutOfRange';
+  }
   if (input.deadline !== '') {
     const ts = deadlineToTimestamp(input.deadline);
     if (ts === null || ts <= nowSeconds) errors.deadline = 'deadlinePast';
@@ -57,6 +63,7 @@ export function builderComplete(input: { name: string; slug: string; goal: strin
     input.name.length <= BUILDER_NAME_MAX &&
     BUILDER_SLUG_RE.test(input.slug) &&
     goalToUnits(input.goal) !== null &&
+    goalToUnits(input.goal)! <= GOAL_UNITS_MAX &&
     (deadlineToTimestamp(input.deadline) ?? 0) > nowSeconds &&
     creator !== null
   );

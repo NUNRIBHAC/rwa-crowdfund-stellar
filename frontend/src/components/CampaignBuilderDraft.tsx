@@ -30,6 +30,7 @@ export default function CampaignBuilderDraft() {
     nameTooLong: t.nameErrorTooLong,
     slugInvalid: t.slugErrorInvalid,
     goalInvalid: t.goalErrorInvalid,
+    goalOutOfRange: t.goalErrorRange,
     deadlinePast: t.deadlineErrorPast,
   } as const;
 

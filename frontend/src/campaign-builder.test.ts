@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { builderComplete, builderPreview, deadlineToTimestamp, goalToUnits, validateBuilder } from './campaign-builder';
+import { builderComplete, builderPreview, deadlineToTimestamp, GOAL_UNITS_MAX, goalToUnits, validateBuilder } from './campaign-builder';
 
 // Fixed reference instant: 2026-11-15T12:00:00Z.
 const NOW = Math.floor(Date.parse('2026-11-15T12:00:00Z') / 1000);
@@ -22,6 +22,20 @@ describe('goalToUnits', () => {
     expect(goalToUnits('abc')).toBeNull();
     expect(goalToUnits('')).toBeNull();
     expect(goalToUnits('1.')).toBeNull();
+  });
+});
+
+describe('goal i128 range (constructor takes goal: i128)', () => {
+  it('accepts exactly the i128 maximum and rejects one unit above', () => {
+    const maxGoal = (GOAL_UNITS_MAX / 10_000_000n).toString() + '.' + (GOAL_UNITS_MAX % 10_000_000n).toString().padStart(7, '0');
+    const overGoal = ((GOAL_UNITS_MAX + 1n) / 10_000_000n).toString() + '.' + ((GOAL_UNITS_MAX + 1n) % 10_000_000n).toString().padStart(7, '0');
+    expect(goalToUnits(maxGoal)).toBe(GOAL_UNITS_MAX);
+    expect(goalToUnits(overGoal)).toBe(GOAL_UNITS_MAX + 1n);
+    const base = { name: 'P', slug: 'p', deadline: '2026-11-16' };
+    expect(validateBuilder({ ...base, goal: maxGoal }, NOW).goal).toBeUndefined();
+    expect(validateBuilder({ ...base, goal: overGoal }, NOW).goal).toBe('goalOutOfRange');
+    expect(builderComplete({ ...base, goal: maxGoal }, NOW, 'GCREATOR')).toBe(true);
+    expect(builderComplete({ ...base, goal: overGoal }, NOW, 'GCREATOR')).toBe(false);
   });
 });
 
