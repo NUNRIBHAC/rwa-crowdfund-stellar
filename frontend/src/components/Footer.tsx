@@ -52,6 +52,18 @@ export default function Footer() {
                 <li>
                   <a href={routeHash({ name: 'risk-disclosure' })}>{m.footer.riskDisclosure}</a>
                 </li>
+                <li>
+                  <a href={routeHash({ name: 'legal-notice' })}>{m.footer.legalNotice}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'conflicts-of-interest' })}>{m.footer.conflictsOfInterest}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'complaints-management' })}>{m.footer.complaintsManagement}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'business-continuity' })}>{m.footer.businessContinuity}</a>
+                </li>
               </ul>
             </div>
             <div>

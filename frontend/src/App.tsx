@@ -24,6 +24,10 @@ import Account from './pages/Account';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import RiskDisclosure from './pages/RiskDisclosure';
+import LegalNotice from './pages/LegalNotice';
+import ConflictsOfInterest from './pages/ConflictsOfInterest';
+import ComplaintsManagement from './pages/ComplaintsManagement';
+import BusinessContinuity from './pages/BusinessContinuity';
 import { useI18n } from './i18n';
 
 const INTENT_KEY = 'rwa-soroban-intent';
@@ -192,6 +196,10 @@ export default function App() {
         {route.name === 'terms-of-service' && <TermsOfService />}
         {route.name === 'privacy-policy' && <PrivacyPolicy />}
         {route.name === 'risk-disclosure' && <RiskDisclosure />}
+        {route.name === 'legal-notice' && <LegalNotice />}
+        {route.name === 'conflicts-of-interest' && <ConflictsOfInterest />}
+        {route.name === 'complaints-management' && <ComplaintsManagement />}
+        {route.name === 'business-continuity' && <BusinessContinuity />}
 
         <Footer />
       </main>

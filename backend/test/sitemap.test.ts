@@ -43,6 +43,10 @@ test('sitemap.xml lists every public page path plus live campaign URLs', async (
       `${origin}/terms-of-service`,
       `${origin}/privacy-policy`,
       `${origin}/risk-disclosure`,
+      `${origin}/legal-notice`,
+      `${origin}/conflicts-of-interest`,
+      `${origin}/complaints-management`,
+      `${origin}/business-continuity`,
       `${origin}/campaigns/demo-solar`,
     ]);
     // Private areas and API paths are never sitemap entries.

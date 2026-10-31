@@ -16,17 +16,18 @@ const PUBLIC_PATHS = [
   '/terms-of-service',
   '/privacy-policy',
   '/risk-disclosure',
+  '/legal-notice',
+  '/conflicts-of-interest',
+  '/complaints-management',
+  '/business-continuity',
 ];
 
 // Machine-readable sitemap + robots endpoints.
 //
-// The SPA uses hash routing (frontend/src/router.tsx): every page lives under
-// the root URL with a #/fragment. URL fragments are never sent to servers and
-// are not separately indexable, so an honest sitemap lists exactly the canonical
-// root URL. Listing #/ routes would produce invalid/unindexable sitemap entries
-// and claim pages search engines cannot see. If the frontend later moves to
-// path routing with server rewrites, extend the URL list here (backend owns
-// this endpoint so it stays correct on every deploy without touching dist).
+// The SPA uses path routing (frontend/src/router.tsx) with a server-side
+// extension-less-GET fallback, so every PUBLIC_PATHS entry is a real,
+// independently indexable URL. Keep this list in sync with the router:
+// every public page belongs here; /account and /api stay out.
 //
 // Origin resolution order: PUBLIC_ORIGIN env (set in production), then Render's
 // injected RENDER_EXTERNAL_URL, then the request Host header. This keeps the

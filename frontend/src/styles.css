@@ -2043,6 +2043,25 @@ a:visited {
   line-height: 1.5;
 }
 
+.legal-table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 640px;
+  margin: 8px 0 16px;
+  font-size: 14.5px;
+}
+.legal-table th,
+.legal-table td {
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+  text-align: start;
+  vertical-align: top;
+}
+.legal-table th {
+  background: var(--card);
+  font-weight: 600;
+}
+
 /* Form inputs (brand form spec): indigo focus border + halo, red error state,
    Paper disabled, 18px checkboxes with 4px radius */
 input[type='text'],
