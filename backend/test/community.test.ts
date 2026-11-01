@@ -237,6 +237,24 @@ test('reports: operator-submitted reports are labeled platform-demo, listed per 
   assert.ok(audit.some((e) => e.action === 'report.publish' && e.actor === 'operator:test'));
 });
 
+test('contributors: durable registry records confirmed contributors idempotently', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const kp = Keypair.random();
+  assert.equal(await service.hasContributed('demo-solar', kp.publicKey()), false);
+  await service.recordContributor('demo-solar', kp.publicKey());
+  const first = (await store.read()).contributors[`demo-solar:${kp.publicKey()}`].firstConfirmedAt;
+  // Idempotent: a repeat confirmation keeps the original timestamp and does
+  // not duplicate the audit entry.
+  await service.recordContributor('demo-solar', kp.publicKey());
+  const state = await store.read();
+  assert.equal(state.contributors[`demo-solar:${kp.publicKey()}`].firstConfirmedAt, first);
+  assert.equal(state.audit.filter((e) => e.action === 'contributor.record').length, 1);
+  assert.equal(await service.hasContributed('demo-solar', kp.publicKey()), true);
+  assert.equal(await service.hasContributed('other-campaign', kp.publicKey()), false);
+  await assert.rejects(() => service.recordContributor('demo-solar', 'not-a-key'));
+});
+
 test('reports: stored state written before reports existed gains the collection on read', async () => {
   const store = newStore();
   const service = new CommunityService(store);
@@ -246,6 +264,7 @@ test('reports: stored state written before reports existed gains the collection 
   const legacyPath = path.join(dir, `store-legacy-${counter++}.json`);
   const doc = (await store.read()) as unknown as Record<string, unknown>;
   delete doc.reports;
+  delete doc.contributors;
   fs.writeFileSync(legacyPath, JSON.stringify(doc));
   const legacyService = new CommunityService(new FileCommunityStore(legacyPath));
   assert.deepEqual(await legacyService.listReports('demo-solar'), []);

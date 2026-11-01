@@ -8,6 +8,7 @@ import type {
   IssuerApplication,
   NewsPost,
   PostFundingReport,
+  ContributorRecord,
   PodcastEpisode,
   AppropriatenessInformation,
   AppropriatenessRecord,
@@ -390,6 +391,29 @@ export class CommunityService {
     });
     await this.recordAudit(actor, 'report.publish', report.id, `campaign=${campaignId} kind=${report.kind} title=${report.title}`);
     return report;
+  }
+
+  // Durable contributor registry. Written only by the backend's own
+  // submit/status confirmation path (and its startup backfill from the
+  // journal), keyed idempotently; never written from client-supplied data.
+  async recordContributor(campaignId: string, publicKey: string): Promise<void> {
+    requireCampaignId(campaignId);
+    if (!/^G[A-Z2-7]{55}$/.test(publicKey)) throw new Error('invalid contributor public key');
+    const key = `${campaignId}:${publicKey}`;
+    let inserted = false;
+    await this.store.change((state) => {
+      if (!state.contributors[key]) {
+        state.contributors[key] = { campaignId, publicKey, firstConfirmedAt: this.now() };
+        inserted = true;
+      }
+    });
+    if (inserted) await this.recordAudit('backend-journal', 'contributor.record', key, `campaign=${campaignId}`);
+  }
+
+  async hasContributed(campaignId: string, publicKey: string): Promise<boolean> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Boolean(state.contributors[`${campaignId}:${publicKey}`]);
   }
 
   async listReports(campaignId: string): Promise<PostFundingReport[]> {

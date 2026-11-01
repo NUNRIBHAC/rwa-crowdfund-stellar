@@ -41,7 +41,10 @@ export type CommunityRouterDeps = {
   // tests without chain access stay hermetic; absent means report reads
   // answer 503 - reports are investor-scoped, never public, so a missing or
   // failed entitlement check fails closed instead of opening access.
-  investorEntitlement?: (campaignId: string, publicKey: string) => Promise<{ registered: boolean; balanceUnits: bigint }>;
+  // contributedBefore grounds access for REFUNDED investors: the contract
+  // removes the balance entry on refund, so current balance alone would
+  // silently revoke access from people who did invest.
+  investorEntitlement?: (campaignId: string, publicKey: string) => Promise<{ registered: boolean; balanceUnits: bigint; contributedBefore: boolean }>;
 };
 
 function clientIp(req: express.Request): string | undefined {
@@ -367,7 +370,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         res.status(503).json({ error: 'investor entitlement verification is not configured; report access disabled' });
         return;
       }
-      let entitlement: { registered: boolean; balanceUnits: bigint };
+      let entitlement: { registered: boolean; balanceUnits: bigint; contributedBefore: boolean };
       try {
         entitlement = await investorEntitlement(campaignId, account.publicKey);
       } catch (err) {
@@ -382,7 +385,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       }
       const wallets = operatorWallets();
       const isOperator = wallets.length > 0 && wallets.includes(account.publicKey);
-      if (!isOperator && entitlement.balanceUnits <= 0n) {
+      if (!isOperator && entitlement.balanceUnits <= 0n && !entitlement.contributedBefore) {
         res.status(403).json({ error: 'post-funding reports are available to investors in this campaign' });
         return;
       }

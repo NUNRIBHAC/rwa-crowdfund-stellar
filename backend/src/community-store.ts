@@ -114,6 +114,19 @@ export type PostFundingReport = {
   createdAt: number;
 };
 
+// Durable record that a wallet's contribution to a campaign was confirmed
+// on-chain (SUCCESS in the intent journal, written by the backend's own
+// submit/status paths - never client-asserted). Exists because the
+// contract's balance_of entry is REMOVED when a contributor refunds, so a
+// current-balance read alone would silently revoke report access from
+// refunded investors. Unlike the intent journal (terminal rows pruned after
+// ~30 days), this collection is never pruned.
+export type ContributorRecord = {
+  campaignId: string;
+  publicKey: string;
+  firstConfirmedAt: number;
+};
+
 // ECSPR Art. 21 entry knowledge test + loss-simulation record (RTS
 // 2022/2114). Data scopes are deliberately distinct: knowledge-test OUTCOME
 // and self-declared experience/objectives are provider assessment evidence;
@@ -295,6 +308,8 @@ export type CommunityState = {
   comments: Record<string, Comment>;
   news: Record<string, NewsPost>;
   reports: Record<string, PostFundingReport>;
+  // Keyed `${campaignId}:${publicKey}`.
+  contributors: Record<string, ContributorRecord>;
   episodes: Record<string, PodcastEpisode>;
   tickets: Record<string, Ticket>;
   applications: Record<string, IssuerApplication>;
@@ -314,6 +329,7 @@ export function emptyCommunityState(): CommunityState {
     comments: {},
     news: {},
     reports: {},
+    contributors: {},
     episodes: {},
     tickets: {},
     applications: {},
@@ -337,6 +353,8 @@ function validate(state: any): CommunityState {
   if (state && state.version === 1 && !state.episodes) state.episodes = {};
   // Same forward-compatible default for docs written before post-funding reports.
   if (state && state.version === 1 && !state.reports) state.reports = {};
+  // Same forward-compatible default for docs written before contributor records.
+  if (state && state.version === 1 && !state.contributors) state.contributors = {};
   // Same forward-compatible default for docs written before appropriateness records.
   if (state && state.version === 1 && !state.appropriateness) state.appropriateness = {};
   if (
@@ -348,6 +366,7 @@ function validate(state: any): CommunityState {
     !state.comments ||
     !state.news ||
     !state.reports ||
+    !state.contributors ||
     !state.episodes ||
     !state.tickets ||
     !state.applications ||

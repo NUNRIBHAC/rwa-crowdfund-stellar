@@ -96,6 +96,43 @@ registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCam
 // community paths wait for the store to boot. Boot failures must not take
 // down the campaign API: the placeholder answers 503 for community paths and
 // everything else is unaffected.
+// Durable contributor registry writes, driven only by the backend's own
+// submit/status confirmation path. The intent journal prunes terminal rows
+// (~30 days) and the contract REMOVES a contributor's balance entry on
+// refund, so neither is a durable historical ground on its own; this
+// registry (community store, never pruned) is. Best-effort alongside the
+// on-chain primary: a failure here must not break the transaction response.
+const recordConfirmedContributor = async (hash: string | undefined): Promise<void> => {
+  if (!hash) return;
+  try {
+    const journal = await (await journalBackend()).read();
+    const intent = journal.intents.find((i) => i.hash === hash);
+    if (intent && intent.status === 'SUCCESS' && intent.action === 'contribute') {
+      const service = await communityServiceFromEnv();
+      await service.recordContributor(intent.campaign, intent.actor);
+    }
+  } catch (err) {
+    console.error('contributor registry write failed:', err instanceof Error ? err.message : err);
+  }
+};
+
+// One-time startup backfill: seed the durable registry from the journal's
+// surviving SUCCESS contribute intents (covers at least the retention
+// window; earlier history predates the registry and is not recoverable from
+// the journal).
+const backfillContributorRegistry = async (): Promise<void> => {
+  try {
+    const service = await communityServiceFromEnv();
+    const journal = await (await journalBackend()).read();
+    for (const i of journal.intents) {
+      if (i.status === 'SUCCESS' && i.action === 'contribute') await service.recordContributor(i.campaign, i.actor);
+    }
+  } catch (err) {
+    console.error('contributor registry backfill failed:', err instanceof Error ? err.message : err);
+  }
+};
+void backfillContributorRegistry();
+
 const communityRouterReady = communityServiceFromEnv()
   .then((service) =>
     createCommunityRouter({
@@ -103,7 +140,18 @@ const communityRouterReady = communityServiceFromEnv()
       requireAdmin,
       reconciliation: reconciliationPayload,
       fundingState: sorobanCampaignFundingState,
-      investorEntitlement: sorobanInvestorEntitlement,
+      investorEntitlement: async (campaignId: string, publicKey: string) => {
+        // On-chain failure propagates so the route fails closed (503).
+        const chain = await sorobanInvestorEntitlement(campaignId, publicKey);
+        // Registry failure degrades to chain-only access (narrower, never wider).
+        let contributedBefore = false;
+        try {
+          contributedBefore = await service.hasContributed(campaignId, publicKey);
+        } catch (err) {
+          console.error('contributor registry read failed:', err instanceof Error ? err.message : err);
+        }
+        return { ...chain, contributedBefore };
+      },
     }),
   )
   .catch((err) => {
@@ -199,7 +247,9 @@ app.post('/api/campaigns/:id/soroban/build', async (req, res) => {
 });
 app.post('/api/campaigns/:id/soroban/submit', async (req, res) => {
   try {
-    res.json(await submitSoroban(String(req.params.id), req.body ?? {}));
+    const out = await submitSoroban(String(req.params.id), req.body ?? {});
+    await recordConfirmedContributor((out as { hash?: string }).hash);
+    res.json(out);
   } catch (err) {
     res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
   }
@@ -215,7 +265,9 @@ app.post('/api/soroban/recover', async (req, res) => {
 });
 app.get('/api/soroban/transactions/:hash', async (req, res) => {
   try {
-    res.json(await statusSoroban(String(req.params.hash)));
+    const out = await statusSoroban(String(req.params.hash));
+    await recordConfirmedContributor(String(req.params.hash));
+    res.json(out);
   } catch (err) {
     res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
   }

@@ -166,7 +166,7 @@ const futureDeadline = () => ({ id: 'demo-solar', goal: '100', raised: '100', de
 async function withReportsApp(
   fundingState: ((id: string) => Promise<any>) | undefined,
   run: (callApp: (path: string, init?: RequestInit) => Promise<Response>, tokenForApp: (kp: Keypair) => Promise<string>) => Promise<void>,
-  entitlement?: (campaignId: string, publicKey: string) => Promise<{ registered: boolean; balanceUnits: bigint }>,
+  entitlement?: (campaignId: string, publicKey: string) => Promise<{ registered: boolean; balanceUnits: bigint; contributedBefore: boolean }>,
 ) {
   const dir2 = fs.mkdtempSync(path.join(os.tmpdir(), 'reports-test-'));
   const store2 = new FileCommunityStore(path.join(dir2, 'store.json'));
@@ -287,6 +287,7 @@ test('reports: publish gate enforces verified post-close state', async () => {
   const entitlementByWallet = async (_id: string, pk: string) => ({
     registered: true,
     balanceUnits: pk === investorKp.publicKey() ? 5n : 0n,
+    contributedBefore: false,
   });
   await withReportsApp(
     async () => pastDeadline(),
@@ -363,6 +364,31 @@ test('reports: publish gate enforces verified post-close state', async () => {
       });
       assert.equal(res.status, 404);
     },
-    async () => ({ registered: false, balanceUnits: 0n }),
+    async () => ({ registered: false, balanceUnits: 0n, contributedBefore: false }),
+  );
+
+  // Refunded investor: the contract REMOVED their balance entry on refund,
+  // so current balance is 0 - access is grounded on the durable contributor
+  // registry instead (main's requirement: refunds must not silently revoke).
+  await withReportsApp(
+    async () => pastDeadline(),
+    async (callApp, tokenForApp) => {
+      const res = await callApp('/api/campaigns/demo-solar/reports', {
+        headers: { authorization: `Bearer ${await tokenForApp(investorKp)}` },
+      });
+      assert.equal(res.status, 200);
+    },
+    async () => ({ registered: true, balanceUnits: 0n, contributedBefore: true }),
+  );
+  // Balance 0 AND no registry record -> still 403.
+  await withReportsApp(
+    async () => pastDeadline(),
+    async (callApp, tokenForApp) => {
+      const res = await callApp('/api/campaigns/demo-solar/reports', {
+        headers: { authorization: `Bearer ${await tokenForApp(investorKp)}` },
+      });
+      assert.equal(res.status, 403);
+    },
+    async () => ({ registered: true, balanceUnits: 0n, contributedBefore: false }),
   );
 });
