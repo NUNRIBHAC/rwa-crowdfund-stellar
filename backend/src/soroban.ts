@@ -200,6 +200,98 @@ async function recordStatus(hash: string, status: string): Promise<void> {
     await save(store);
   });
 }
+// Funding state for one registered campaign, for the post-funding report
+// publish gate: reads the same on-chain views as the campaign listing
+// (code hash verified, configured asset checked) so a report can only be
+// published for a campaign whose funding period has actually ended. Returns
+// null for an unregistered campaign id; throws on RPC/verification failure
+// so callers fail closed instead of guessing lifecycle.
+export async function sorobanCampaignFundingState(
+  id: string,
+): Promise<{ id: string; goal: string; raised: string; deadlineSeconds: number; withdrawn: boolean } | null> {
+  const e = entries().find((x) => x.id === id);
+  if (!e) return null;
+  const client = sorobanDeps.client();
+  await verifyCode(client, e);
+  const config = await view(client, e, 'get_config');
+  if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+  const raised = await view(client, e, 'total_raised');
+  const withdrawn = await view(client, e, 'is_withdrawn');
+  const raw = Number(config.deadline);
+  // Contracts store the deadline in unix seconds; tolerate a millisecond value.
+  const deadlineSeconds = raw > 1e12 ? Math.floor(raw / 1000) : raw;
+  return { id, goal: String(config.goal), raised: String(raised), deadlineSeconds, withdrawn: Boolean(withdrawn) };
+}
+
+// Investor entitlement for post-funding report reads: whether the wallet
+// holds a contribution balance in the campaign contract. Same code-hash and
+// asset verification as the campaign listing. registered=false means the
+// campaign id is not in the registry; throws on RPC/verification failure so
+// readers fail closed rather than fall back to public access.
+export async function sorobanInvestorEntitlement(id: string, actor: string): Promise<{ registered: boolean; balanceUnits: bigint }> {
+  actorAddress(actor);
+  const e = entries().find((x) => x.id === id);
+  if (!e) return { registered: false, balanceUnits: 0n };
+  const client = sorobanDeps.client();
+  await verifyCode(client, e);
+  const config = await view(client, e, 'get_config');
+  if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+  const balance = await view(client, e, 'balance_of', [actorAddress(actor).toScVal()], actor);
+  return { registered: true, balanceUnits: BigInt(balance ?? 0) };
+}
+
+// Derive a durable contributor-registry record from NETWORK-confirmed facts
+// only: the RPC-confirmed transaction envelope itself must carry exactly one
+// invokeContract call to the registered campaign contract, function
+// 'contribute', whose contributor argument is the envelope source account,
+// and the contract's code hash and configured asset must verify. Journal
+// row fields (which originate from the build request) are never trusted for
+// the write; the journal only supplies candidate hashes. Throws when nothing
+// can be confirmed right now (RPC outage, missing envelope, archived state)
+// so the caller preserves the record and retries before journal retention
+// expiry; returns null when the hash is definitively not a confirmed
+// contribution to a registered campaign.
+export async function confirmedContribution(hash: string): Promise<{ campaignId: string; contributor: string } | null> {
+  const store = await readStore();
+  const intent = store.intents.find((i) => i.hash === hash);
+  if (!intent || intent.status !== 'SUCCESS' || intent.action !== 'contribute') return null;
+  const client = sorobanDeps.client();
+  const result = await client.getTransaction(hash);
+  if (result.txHash !== hash) throw new Error('RPC returned mismatched hash');
+  if (result.status !== 'SUCCESS') throw new Error(`network confirmation unavailable for ${hash} (status ${result.status})`);
+  const envXdr: any = (result as any).envelopeXdr;
+  if (!envXdr) throw new Error('RPC response carries no transaction envelope; cannot derive contribution facts');
+  let tx: Transaction;
+  try {
+    const parsed = TransactionBuilder.fromXDR(typeof envXdr === 'string' ? envXdr : envXdr.toXDR('base64'), passphrase);
+    if (!(parsed instanceof Transaction)) return null;
+    tx = parsed;
+  } catch {
+    throw new Error('could not parse the network-confirmed envelope');
+  }
+  if (Buffer.from(tx.hash()).toString('hex') !== hash) throw new Error('network envelope hash mismatch');
+  if (tx.operations.length !== 1) return null;
+  let contractId = '';
+  let fnName = '';
+  let contributor = '';
+  try {
+    const ic = (tx.operations[0] as any).func.invokeContract;
+    if (ic?.contractAddress?.type === 'scAddressTypeContract' && ic.contractAddress.contractId?.value) {
+      contractId = StrKey.encodeContract(Buffer.from(ic.contractAddress.contractId.value));
+    }
+    fnName = ic?.functionName?.toString?.() ?? '';
+    contributor = String(scValToNative(ic?.args?.[0]) ?? '');
+  } catch {
+    return null;
+  }
+  const e = entries().find((x) => x.id === intent.campaign);
+  if (!e || e.contractId !== contractId || fnName !== 'contribute' || contributor !== tx.source) return null;
+  await verifyCode(client, e);
+  const config = await view(client, e, 'get_config');
+  if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+  return { campaignId: e.id, contributor };
+}
+
 export async function buildSoroban(id: string, input: { actor: string; action: string; amount?: string }): Promise<any> {
   const e = entry(id),
     actor = actorAddress(input.actor);

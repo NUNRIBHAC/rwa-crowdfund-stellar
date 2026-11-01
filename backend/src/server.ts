@@ -4,7 +4,17 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
 import { registerDiscoveryEndpoints } from './sitemap.js';
-import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban, accountActivity } from './soroban.js';
+import {
+  sorobanCampaigns,
+  sorobanCampaignFundingState,
+  sorobanInvestorEntitlement,
+  confirmedContribution,
+  buildSoroban,
+  submitSoroban,
+  statusSoroban,
+  recoverSoroban,
+  accountActivity,
+} from './soroban.js';
 import { journalBackend } from './journal.js';
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
@@ -87,14 +97,81 @@ registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCam
 // community paths wait for the store to boot. Boot failures must not take
 // down the campaign API: the placeholder answers 503 for community paths and
 // everything else is unaffected.
+// Durable contributor registry, written only from network-confirmed,
+// envelope-derived contribution facts (confirmedContribution): the journal
+// row alone is never trusted because its fields originate from the build
+// request. Two write paths:
+//  - immediate: the submit/status routes attempt the record when a hash
+//    confirms; a failure DEFERS to reconciliation (transaction responses
+//    stay truthful - success is reported even if this secondary write fails)
+//  - reconciliation: startup + every 30 minutes, every unrecorded SUCCESS
+//    contribute intent is retried, so a record lost to an RPC/storage outage
+//    is recovered well within the journal's ~30-day terminal retention.
+// The journal row itself is the durable unresolved record until then.
+const recordConfirmedContributor = async (hash: string | undefined): Promise<void> => {
+  if (!hash) return;
+  try {
+    const confirmed = await confirmedContribution(hash);
+    if (confirmed) {
+      const service = await communityServiceFromEnv();
+      await service.recordContributor(confirmed.campaignId, confirmed.contributor);
+    }
+  } catch (err) {
+    console.error('contributor registry write deferred to reconciliation:', hash, err instanceof Error ? err.message : err);
+  }
+};
+
+const reconcileContributorRegistry = async (): Promise<void> => {
+  try {
+    const service = await communityServiceFromEnv();
+    const journal = await (await journalBackend()).read();
+    for (const i of journal.intents) {
+      if (i.status !== 'SUCCESS' || i.action !== 'contribute') continue;
+      if (await service.hasContributed(i.campaign, i.actor)) continue;
+      try {
+        const confirmed = await confirmedContribution(i.hash);
+        if (confirmed) await service.recordContributor(confirmed.campaignId, confirmed.contributor);
+      } catch (err) {
+        // Unresolvable right now (e.g. RPC outage): the journal row remains
+        // the durable record and the next pass retries within retention.
+        console.error('contributor reconciliation deferred:', i.hash, err instanceof Error ? err.message : err);
+      }
+    }
+  } catch (err) {
+    console.error('contributor reconciliation failed:', err instanceof Error ? err.message : err);
+  }
+};
+void reconcileContributorRegistry();
+const contributorReconcileTimer = setInterval(() => void reconcileContributorRegistry(), 30 * 60 * 1000);
+contributorReconcileTimer.unref();
+
 const communityRouterReady = communityServiceFromEnv()
-  .then((service) => createCommunityRouter({ service, requireAdmin, reconciliation: reconciliationPayload }))
+  .then((service) =>
+    createCommunityRouter({
+      service,
+      requireAdmin,
+      reconciliation: reconciliationPayload,
+      fundingState: sorobanCampaignFundingState,
+      investorEntitlement: async (campaignId: string, publicKey: string) => {
+        // On-chain failure propagates so the route fails closed (503).
+        const chain = await sorobanInvestorEntitlement(campaignId, publicKey);
+        // Registry failure degrades to chain-only access (narrower, never wider).
+        let contributedBefore = false;
+        try {
+          contributedBefore = await service.hasContributed(campaignId, publicKey);
+        } catch (err) {
+          console.error('contributor registry read failed:', err instanceof Error ? err.message : err);
+        }
+        return { ...chain, contributedBefore };
+      },
+    }),
+  )
   .catch((err) => {
     console.error('community API disabled:', err instanceof Error ? err.message : err);
     return null;
   });
 const COMMUNITY_PATH =
-  /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log)(\/|$)|^\/api\/operator(\/|$)/;
+  /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast|reports)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log)(\/|$)|^\/api\/operator(\/|$)/;
 app.use((req, res, next) => {
   if (!COMMUNITY_PATH.test(req.path)) return next();
   communityRouterReady.then((router) => {
@@ -182,7 +259,9 @@ app.post('/api/campaigns/:id/soroban/build', async (req, res) => {
 });
 app.post('/api/campaigns/:id/soroban/submit', async (req, res) => {
   try {
-    res.json(await submitSoroban(String(req.params.id), req.body ?? {}));
+    const out = await submitSoroban(String(req.params.id), req.body ?? {});
+    await recordConfirmedContributor((out as { hash?: string }).hash);
+    res.json(out);
   } catch (err) {
     res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
   }
@@ -198,7 +277,9 @@ app.post('/api/soroban/recover', async (req, res) => {
 });
 app.get('/api/soroban/transactions/:hash', async (req, res) => {
   try {
-    res.json(await statusSoroban(String(req.params.hash)));
+    const out = await statusSoroban(String(req.params.hash));
+    await recordConfirmedContributor(String(req.params.hash));
+    res.json(out);
   } catch (err) {
     res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
   }

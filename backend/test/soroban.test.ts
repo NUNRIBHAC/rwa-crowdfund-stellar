@@ -16,7 +16,16 @@ import {
   SorobanDataBuilder,
   xdr,
 } from '@stellar/stellar-sdk';
-import { sorobanDeps, amountUnits, sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban } from '../src/soroban.js';
+import {
+  sorobanDeps,
+  amountUnits,
+  sorobanCampaigns,
+  buildSoroban,
+  submitSoroban,
+  statusSoroban,
+  recoverSoroban,
+  confirmedContribution,
+} from '../src/soroban.js';
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'soroban-api-'));
 const actor = Keypair.random();
 const contractId = StrKey.encodeContract(Buffer.alloc(32, 2));
@@ -36,6 +45,7 @@ let badWasm = false,
   addressAuth = false,
   restoreRequired = false,
   missingAccount = false;
+let lastEnvelope = '';
 const sends: string[] = [];
 const client: any = {
   getContractWasmByContractId: async () => (badWasm ? Buffer.from('wrong') : fs.readFileSync(wasmPath)),
@@ -77,10 +87,16 @@ const client: any = {
   sendTransaction: async (tx: Transaction) => {
     sendCount++;
     sends.push(tx.toXDR());
+    lastEnvelope = tx.toXDR();
     if (throwsOnSend) throw new Error('response lost');
     return { hash: Buffer.from(tx.hash()).toString('hex'), status: 'PENDING' };
   },
-  getTransaction: async (hash: string) => ({ txHash: wrongHash ? 'wrong' : hash, status: txStatus, ledger: 100 }),
+  getTransaction: async (hash: string) => ({
+    txHash: wrongHash ? 'wrong' : hash,
+    status: txStatus,
+    ledger: 100,
+    envelopeXdr: lastEnvelope,
+  }),
 };
 sorobanDeps.client = () => client;
 function reset() {
@@ -92,6 +108,7 @@ function reset() {
   throwsOnSend = false;
   txStatus = 'NOT_FOUND';
   wrongHash = false;
+  lastEnvelope = '';
   badWasm = false;
   addressAuth = false;
   restoreRequired = false;
@@ -183,6 +200,32 @@ test('signed intent survives response loss, holds on NOT_FOUND and retries ident
   assert.equal(success.confirmed, true);
   await submitSoroban('s1', { actor: actor.publicKey(), xdr: x });
   assert.equal(sendCount, 2, 'confirmed hash never resent');
+});
+
+test('confirmedContribution derives the record from the network-confirmed envelope, never journal fields', { skip: !fixtureAvailable }, async () => {
+  reset();
+  const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '10' });
+  await submitSoroban('s1', { actor: actor.publicKey(), xdr: signed(b) });
+  txStatus = 'SUCCESS';
+  await statusSoroban(b.hash);
+  // Derived from the network envelope: registered campaign + contract,
+  // function contribute, contributor = envelope source.
+  assert.deepEqual(await confirmedContribution(b.hash), { campaignId: 's1', contributor: actor.publicKey() });
+  // Unknown hash, non-contribute action and non-SUCCESS intents are null.
+  assert.equal(await confirmedContribution('0'.repeat(64)), null);
+  // Network response without an envelope is retryable (throw), never a
+  // journal-field guess.
+  const saved = lastEnvelope;
+  lastEnvelope = '';
+  await assert.rejects(confirmedContribution(b.hash), /no transaction envelope/);
+  lastEnvelope = saved;
+  // A tampered journal campaign field fails closed against the envelope's
+  // contract id (definitive null, no record written).
+  const p = process.env.SOROBAN_INTENTS_PATH!;
+  const doc = JSON.parse(fs.readFileSync(p, 'utf8'));
+  doc.intents[0].campaign = 'unregistered';
+  fs.writeFileSync(p, JSON.stringify(doc));
+  assert.equal(await confirmedContribution(b.hash), null);
 });
 
 test('terminal intent status stays readable after the journal purges its signed envelope', { skip: !fixtureAvailable }, async () => {
