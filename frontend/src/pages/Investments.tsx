@@ -135,16 +135,25 @@ export default function Investments({ market }: { market: Market }) {
               ))}
             </div>
           )}
-          <select
-            className="discovery-sort"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
-            aria-label={m.invest.sortAria}
-          >
-            <option value="deadline">{m.invest.sortDeadline}</option>
-            <option value="progress">{m.invest.sortProgress}</option>
-            <option value="name">{m.invest.sortName}</option>
-          </select>
+          {/* Stable wrapper: browser automation layers and some extensions
+              wrap native selects in an injected container, moving the select
+              out of its React parent; if React's sibling anchor is the select
+              itself, the next conditional insertion (industry chips) throws
+              NotFoundError and unmounts the page. The anchor must be a node
+              only React manages. display:contents keeps the wrapper
+              layout-neutral. */}
+          <div className="discovery-sort-slot">
+            <select
+              className="discovery-sort"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
+              aria-label={m.invest.sortAria}
+            >
+              <option value="deadline">{m.invest.sortDeadline}</option>
+              <option value="progress">{m.invest.sortProgress}</option>
+              <option value="name">{m.invest.sortName}</option>
+            </select>
+          </div>
           <div className="filter-chips" role="group" aria-label={m.invest.viewAria}>
             <button className={`chip ${view === 'grid' ? 'chip-active' : ''}`} aria-pressed={view === 'grid'} onClick={() => setView('grid')}>
               {m.invest.grid}
