@@ -9,6 +9,7 @@ import {
   sorobanCampaignFundingState,
   sorobanInvestorEntitlement,
   confirmedContribution,
+  deriveContributionFromNetwork,
   buildSoroban,
   submitSoroban,
   statusSoroban,
@@ -16,6 +17,7 @@ import {
   accountActivity,
 } from './soroban.js';
 import { journalBackend } from './journal.js';
+import { drainPendingContributors, pendContribution } from './pending-contributors.js';
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
 
@@ -97,33 +99,45 @@ registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCam
 // community paths wait for the store to boot. Boot failures must not take
 // down the campaign API: the placeholder answers 503 for community paths and
 // everything else is unaffected.
-// Durable contributor registry, written only from network-confirmed,
-// envelope-derived contribution facts (confirmedContribution): the journal
-// row alone is never trusted because its fields originate from the build
-// request. Two write paths:
+// Durable contributor registry, written only from network-derived
+// contribution facts (journal row fields originate from the build request
+// and are never trusted). Reliability layers:
 //  - immediate: the submit/status routes attempt the record when a hash
-//    confirms; a failure DEFERS to reconciliation (transaction responses
-//    stay truthful - success is reported even if this secondary write fails)
-//  - reconciliation: startup + every 30 minutes, every unrecorded SUCCESS
-//    contribute intent is retried, so a record lost to an RPC/storage outage
-//    is recovered well within the journal's ~30-day terminal retention.
-// The journal row itself is the durable unresolved record until then.
+//    confirms; transaction responses stay truthful - success is reported
+//    even if this secondary write fails
+//  - durable pending-proof queue (pending-contributors.ts, file-backed and
+//    independent of the journal AND the community store): every deferral is
+//    persisted, so the journal's ~30-day terminal pruning can never strand
+//    an unrecorded confirmed contribution the way a journal-only retry
+//    would during an extended outage
+//  - reconciliation: startup + every 30 minutes drains the pending queue
+//    (hash-only entries re-derive from the network, post-prune-safe), then
+//    re-scans the journal's surviving SUCCESS contribute intents.
 const recordConfirmedContributor = async (hash: string | undefined): Promise<void> => {
   if (!hash) return;
   try {
     const confirmed = await confirmedContribution(hash);
-    if (confirmed) {
-      const service = await communityServiceFromEnv();
-      await service.recordContributor(confirmed.campaignId, confirmed.contributor);
-    }
+    if (!confirmed) return;
+    const service = await communityServiceFromEnv();
+    await service.recordContributor(confirmed.campaignId, confirmed.contributor);
   } catch (err) {
-    console.error('contributor registry write deferred to reconciliation:', hash, err instanceof Error ? err.message : err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('contributor registry write deferred to pending queue:', hash, message);
+    // Hash-only entry: facts were not established here, so the drain will
+    // re-derive from the network. If facts WERE established above and only
+    // the registry write failed, the drain re-derives identically.
+    pendContribution({ hash, lastError: message });
   }
 };
 
 const reconcileContributorRegistry = async (): Promise<void> => {
   try {
     const service = await communityServiceFromEnv();
+    const drain = await drainPendingContributors({
+      record: (campaignId, contributor) => service.recordContributor(campaignId, contributor),
+      derive: deriveContributionFromNetwork,
+    });
+    if (drain.pending > 0) console.error('contributor pending queue not fully drained:', drain.pending);
     const journal = await (await journalBackend()).read();
     for (const i of journal.intents) {
       if (i.status !== 'SUCCESS' || i.action !== 'contribute') continue;
@@ -132,9 +146,9 @@ const reconcileContributorRegistry = async (): Promise<void> => {
         const confirmed = await confirmedContribution(i.hash);
         if (confirmed) await service.recordContributor(confirmed.campaignId, confirmed.contributor);
       } catch (err) {
-        // Unresolvable right now (e.g. RPC outage): the journal row remains
-        // the durable record and the next pass retries within retention.
-        console.error('contributor reconciliation deferred:', i.hash, err instanceof Error ? err.message : err);
+        const message = err instanceof Error ? err.message : String(err);
+        console.error('contributor reconciliation deferred to pending queue:', i.hash, message);
+        pendContribution({ hash: i.hash, lastError: message });
       }
     }
   } catch (err) {
