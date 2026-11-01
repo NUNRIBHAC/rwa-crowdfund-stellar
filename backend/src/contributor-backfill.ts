@@ -95,7 +95,11 @@ export async function backfillCampaignContributors(opts: {
   const filters = [{ type: 'contract', contractIds: [opts.contractId], topics: [[CONTRIBUTED_TOPIC, '*']] }];
 
   const probe = await client.getEvents({ startLedger: start, filters, limit: 1 }).catch((err: unknown) => {
-    const m = RANGE_ERROR.exec(err instanceof Error ? err.message : String(err));
+    // The Soroban RPC rejects with a plain { code, message } object, not an
+    // Error instance: String(err) would be "[object Object]" and the range
+    // probe would never match. Read the message field directly first.
+    const message = typeof (err as { message?: unknown } | null)?.message === 'string' ? (err as { message: string }).message : String(err);
+    const m = RANGE_ERROR.exec(message);
     if (!m) throw err; // generic RPC/network/config failure: move nothing
     return { rangeError: { floor: Number(m[1]), latest: Number(m[2]) } };
   });
