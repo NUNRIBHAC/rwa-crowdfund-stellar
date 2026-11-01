@@ -1,7 +1,7 @@
 import { tpl } from '../format';
 // Operator dashboard (demo admin surface): issuer application triage, comment
-// moderation, ticket closure and campaign news posting for wallets on the
-// server-side OPERATOR_WALLETS allow-list. The allow-list is enforced on every
+// moderation, ticket closure, campaign news and podcast episode publishing
+// for wallets on the server-side OPERATOR_WALLETS allow-list. The allow-list is enforced on every
 // request server-side; the isOperator flag from /api/auth/me only reveals this
 // section in the UI. News posts always carry the platform-demo author label -
 // there is no verified issuer identity, so the form copy bans approval,
@@ -23,6 +23,7 @@ import {
   fetchOperatorTickets,
   type AuditEntry,
   type ReconciliationResponse,
+  postOperatorEpisode,
   postOperatorNews,
   setOperatorApplicationStatus,
   setOperatorCommentHidden,
@@ -37,7 +38,7 @@ type Props = {
   campaigns: { id: string; name: string }[];
 };
 
-type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'reconciliation' | 'audit';
+type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'podcast' | 'reconciliation' | 'audit';
 
 export default function OperatorSection({ campaigns }: Props) {
   const { m, locale } = useI18n();
@@ -58,6 +59,10 @@ export default function OperatorSection({ campaigns }: Props) {
   const [newsCampaign, setNewsCampaign] = useState('');
   const [newsTitle, setNewsTitle] = useState('');
   const [newsBody, setNewsBody] = useState('');
+  const [epTitle, setEpTitle] = useState('');
+  const [epDescription, setEpDescription] = useState('');
+  const [epAudio, setEpAudio] = useState('');
+  const [epCampaign, setEpCampaign] = useState('');
 
   const load = useCallback(() => {
     if (!account || !isOperator) return;
@@ -111,6 +116,27 @@ export default function OperatorSection({ campaigns }: Props) {
     setNewsBody('');
   };
 
+  const submitEpisode = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!epTitle.trim() || !epDescription.trim() || !epAudio.trim().startsWith('https://')) {
+      setError(labels.epValidation);
+      return;
+    }
+    run(
+      postOperatorEpisode(token, {
+        title: epTitle.trim(),
+        description: epDescription.trim(),
+        audioUrl: epAudio.trim(),
+        campaignId: epCampaign || null,
+      }),
+      labels.epPosted,
+    );
+    setEpTitle('');
+    setEpDescription('');
+    setEpAudio('');
+    setEpCampaign('');
+  };
+
   const tabBtn = (id: Tab) => (
     <button key={id} className={`chip ${tab === id ? 'chip-active' : ''}`} onClick={() => setTab(id)} aria-pressed={tab === id}>
       {labels.tabs[id]}
@@ -124,7 +150,7 @@ export default function OperatorSection({ campaigns }: Props) {
       </h2>
       <p className="community-note">{labels.demoNote}</p>
       <div className="filter-chips" role="group" aria-label={labels.title}>
-        {(['applications', 'comments', 'tickets', 'news', 'reconciliation', 'audit'] as Tab[]).map(tabBtn)}
+        {(['applications', 'comments', 'tickets', 'news', 'podcast', 'reconciliation', 'audit'] as Tab[]).map(tabBtn)}
       </div>
       {error && (
         <p role="alert" className="community-error">
@@ -327,6 +353,38 @@ export default function OperatorSection({ campaigns }: Props) {
           <p className="community-note">{m.community.newsAuthorDemo}</p>
           <button className="btn btn-primary" disabled={busy || !newsCampaign || !newsTitle.trim() || !newsBody.trim()}>
             {labels.newsSubmit}
+          </button>
+        </form>
+      )}
+      {tab === 'podcast' && (
+        <form onSubmit={submitEpisode}>
+          <h3>{labels.epFormTitle}</h3>
+          <label>
+            {labels.epTitleLabel}
+            <input value={epTitle} onChange={(e) => setEpTitle(e.target.value)} maxLength={200} required />
+          </label>
+          <label>
+            {labels.epDescriptionLabel}
+            <textarea value={epDescription} onChange={(e) => setEpDescription(e.target.value)} maxLength={4000} required />
+          </label>
+          <label>
+            {labels.epAudioLabel}
+            <input type="url" value={epAudio} onChange={(e) => setEpAudio(e.target.value)} maxLength={2000} required />
+          </label>
+          <label>
+            {labels.epCampaignLabel}
+            <select value={epCampaign} onChange={(e) => setEpCampaign(e.target.value)}>
+              <option value="">{labels.epPlatformOption}</option>
+              {campaigns.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <p className="community-note">{labels.epNote}</p>
+          <button className="btn btn-primary" disabled={busy || !epTitle.trim() || !epDescription.trim() || !epAudio.trim()}>
+            {labels.epSubmit}
           </button>
         </form>
       )}

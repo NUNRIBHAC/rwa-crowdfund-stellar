@@ -107,3 +107,87 @@ test('failing operator endpoints surface the error banner with retry, not fake d
   expect(screen.getByRole('alert').textContent).toContain('operator endpoints disabled');
   expect(screen.queryByText('staging-load')).toBeNull();
 });
+
+test('podcast tab publishes an episode through the operator route as platform demo content', async () => {
+  let posted: Record<string, unknown> | null = null;
+  const routes: Record<string, unknown> = {
+    '/api/auth/me': { account: { publicKey: ACTOR, displayName: null }, isOperator: true },
+    '/api/operator/applications': { applications: [] },
+    '/api/operator/comments': { comments: [] },
+    '/api/operator/tickets': { tickets: [] },
+    '/api/operator/reconciliation': RECON,
+    '/api/operator/audit-log': { audit: AUDIT },
+  };
+  vi.stubGlobal('fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input);
+    if (url.includes('/api/operator/podcast/episodes') && init?.method === 'POST') {
+      posted = JSON.parse(String(init.body)) as Record<string, unknown>;
+      return {
+        ok: true,
+        status: 201,
+        json: async () => ({ episode: { id: 'ep_new', ...posted, authorLabel: 'platform-demo', createdAt: 1 } }),
+      } as Response;
+    }
+    for (const [k, v] of Object.entries(routes)) {
+      if (url.includes(k)) return { ok: true, status: 200, json: async () => v } as Response;
+    }
+    return { ok: false, status: 404, json: async () => ({ error: 'not found' }) } as Response;
+  });
+  render(
+    <I18nProvider>
+      <CommunityAuthProvider messages={{ freighterMissing: 'x', walletNoSign: 'y' }}>
+        <OperatorSection campaigns={[{ id: 'staging-load', name: 'Staging Load' }]} />
+      </CommunityAuthProvider>
+    </I18nProvider>,
+  );
+  fireEvent.click(await screen.findByRole('button', { name: 'Podcast' }));
+  fireEvent.change(await screen.findByLabelText('Episode title'), { target: { value: 'QA episode two' } });
+  fireEvent.change(screen.getByLabelText('Description'), { target: { value: 'Synthetic QA episode, not real content.' } });
+  fireEvent.change(screen.getByLabelText('Audio URL (https)'), { target: { value: 'https://audio.example.com/ep-two.mp3' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Publish episode' }));
+  await waitFor(() => expect(posted).toBeTruthy());
+  expect(posted).toEqual({
+    title: 'QA episode two',
+    description: 'Synthetic QA episode, not real content.',
+    audioUrl: 'https://audio.example.com/ep-two.mp3',
+    campaignId: null,
+  });
+  expect(await screen.findByText('Episode published as platform demo content.')).toBeTruthy();
+});
+
+test('podcast tab rejects a non-https audio URL without posting', async () => {
+  let posts = 0;
+  const routes: Record<string, unknown> = {
+    '/api/auth/me': { account: { publicKey: ACTOR, displayName: null }, isOperator: true },
+    '/api/operator/applications': { applications: [] },
+    '/api/operator/comments': { comments: [] },
+    '/api/operator/tickets': { tickets: [] },
+    '/api/operator/reconciliation': RECON,
+    '/api/operator/audit-log': { audit: AUDIT },
+  };
+  vi.stubGlobal('fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input);
+    if (url.includes('/api/operator/podcast/episodes') && init?.method === 'POST') {
+      posts += 1;
+      return { ok: true, status: 201, json: async () => ({ episode: {} }) } as Response;
+    }
+    for (const [k, v] of Object.entries(routes)) {
+      if (url.includes(k)) return { ok: true, status: 200, json: async () => v } as Response;
+    }
+    return { ok: false, status: 404, json: async () => ({ error: 'not found' }) } as Response;
+  });
+  render(
+    <I18nProvider>
+      <CommunityAuthProvider messages={{ freighterMissing: 'x', walletNoSign: 'y' }}>
+        <OperatorSection campaigns={[]} />
+      </CommunityAuthProvider>
+    </I18nProvider>,
+  );
+  fireEvent.click(await screen.findByRole('button', { name: 'Podcast' }));
+  fireEvent.change(await screen.findByLabelText('Episode title'), { target: { value: 'Bad scheme' } });
+  fireEvent.change(screen.getByLabelText('Description'), { target: { value: 'Must not be posted.' } });
+  fireEvent.change(screen.getByLabelText('Audio URL (https)'), { target: { value: 'http://insecure.example.com/ep.mp3' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Publish episode' }));
+  expect(await screen.findByText('Title, description and an https audio URL are required.')).toBeTruthy();
+  expect(posts).toBe(0);
+});
