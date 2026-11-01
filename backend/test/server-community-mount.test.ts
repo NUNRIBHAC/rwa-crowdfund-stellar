@@ -125,9 +125,13 @@ test('GET /api/auth/sessions passes the community path gate (401 without token, 
   assert.equal(res.status, 401);
 });
 
-test('GET /api/auth/appropriateness passes the community path gate (401 without token, not 404)', async () => {
+test('GET /api/auth/appropriateness passes the community path gate (503 hold-gate, not 404)', async () => {
+  // APPROPRIATENESS_COLLECT is unset in this env: the fail-closed hold gate
+  // answers 503, proving the request reached the community router (a 404
+  // would mean the COMMUNITY_PATH gate rejected the path).
   const res = await fetch(`${base}/api/auth/appropriateness`);
-  assert.equal(res.status, 401);
+  assert.equal(res.status, 503);
+  assert.match((await res.json()).error ?? '', /held/);
 });
 
 test('GET /api/operator/companies passes the community path gate (401 without token, not 404)', async () => {

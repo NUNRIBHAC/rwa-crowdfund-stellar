@@ -230,34 +230,56 @@ test('owner-scoped lists: applications and comments mine', async () => {
 });
 
 test('appropriateness endpoints require auth and run the full flow', async () => {
-  assert.equal((await api('GET', '/api/auth/appropriateness')).status, 401);
-  assert.equal((await api('POST', '/api/auth/appropriateness/knowledge', { body: {} })).status, 401);
-  assert.equal((await api('POST', '/api/auth/appropriateness/simulation-result', { body: {} })).status, 401);
-  assert.equal((await api('POST', '/api/auth/appropriateness/acknowledge-warning', { body: {} })).status, 401);
+  // Hold gate first: with APPROPRIATENESS_COLLECT unset, every endpoint is
+  // 503 fail-closed (demo/production posture), authenticated or not.
+  assert.equal((await api('GET', '/api/auth/appropriateness')).status, 503);
+  assert.equal((await api('POST', '/api/auth/appropriateness/knowledge', { body: {} })).status, 503);
+  assert.equal((await api('POST', '/api/auth/appropriateness/simulation-result', { body: {} })).status, 503);
+  assert.equal((await api('POST', '/api/auth/appropriateness/acknowledge-warning', { body: {} })).status, 503);
 
-  const kp = Keypair.random();
-  const token = await login(kp);
-  const empty = await api('GET', '/api/auth/appropriateness', { token });
-  assert.equal(empty.status, 200);
-  assert.equal(empty.json.assessment, null);
+  process.env.APPROPRIATENESS_COLLECT = '1';
+  try {
+    assert.equal((await api('GET', '/api/auth/appropriateness')).status, 401);
+    assert.equal((await api('POST', '/api/auth/appropriateness/knowledge', { body: {} })).status, 401);
+    assert.equal((await api('POST', '/api/auth/appropriateness/simulation-result', { body: {} })).status, 401);
+    assert.equal((await api('POST', '/api/auth/appropriateness/acknowledge-warning', { body: {} })).status, 401);
 
-  const fail = await api('POST', '/api/auth/appropriateness/knowledge', {
-    token,
-    body: { experienceLevel: 'none', objective: 'growth', answers: [1, 1, 1, 1, 1] },
-  });
-  assert.equal(fail.status, 200);
-  assert.equal(fail.json.assessment.outcome, 'warning_issued');
+    const kp = Keypair.random();
+    const token = await login(kp);
+    const empty = await api('GET', '/api/auth/appropriateness', { token });
+    assert.equal(empty.status, 200);
+    assert.equal(empty.json.assessment, null);
 
-  const sim = await api('POST', '/api/auth/appropriateness/simulation-result', {
-    token,
-    body: { netWorthEur: 80000, capacityEur: 8000 },
-  });
-  assert.equal(sim.status, 200);
-  assert.equal(sim.json.assessment.simulation.capacityEur, 8000);
+    const fail = await api('POST', '/api/auth/appropriateness/knowledge', {
+      token,
+      body: { experienceLevel: 'none', objective: 'growth', answers: [1, 1, 1, 1, 1] },
+    });
+    assert.equal(fail.status, 200);
+    assert.equal(fail.json.assessment.outcome, 'warning_issued');
 
-  const ack = await api('POST', '/api/auth/appropriateness/acknowledge-warning', { token, body: {} });
-  assert.equal(ack.status, 200);
-  assert.ok(ack.json.assessment.warningAcknowledgedAt);
+    const sim = await api('POST', '/api/auth/appropriateness/simulation-result', {
+      token,
+      body: { netWorthEur: 80000, capacityEur: 8000 },
+    });
+    assert.equal(sim.status, 200);
+    assert.equal(sim.json.assessment.simulation.capacityEur, 8000);
+
+    const ack = await api('POST', '/api/auth/appropriateness/acknowledge-warning', { token, body: {} });
+    assert.equal(ack.status, 200);
+    assert.ok(ack.json.assessment.warningAcknowledgedAt);
+
+    // Financial inputs can never be smuggled into the result transmission:
+    // .strict() rejects any extra field (income/assets/commitments breakdown).
+    const smuggle = await api('POST', '/api/auth/appropriateness/simulation-result', {
+      token,
+      body: { netWorthEur: 80000, capacityEur: 8000, annualIncome: 45000 },
+    });
+    assert.equal(smuggle.status, 400);
+  } finally {
+    delete process.env.APPROPRIATENESS_COLLECT;
+  }
+  // Gate closed again after the flag is removed.
+  assert.equal((await api('GET', '/api/auth/appropriateness')).status, 503);
 });
 
 test('site-wide news feed aggregates campaigns newest first and is public', async () => {

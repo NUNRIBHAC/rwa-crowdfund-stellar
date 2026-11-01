@@ -105,15 +105,22 @@ const episodeInput = z.object({
 // answers are scored and then discarded (only the outcome is stored);
 // simulation transmits ONLY the result (net worth + 10% capacity), never the
 // income/asset/commitment breakdown (RTS Art. 5(5) provider non-access).
-const knowledgeInput = z.object({
-  experienceLevel: z.enum(['none', 'some', 'experienced']),
-  objective: z.enum(['capital_preservation', 'income', 'growth', 'other']),
-  answers: z.array(z.number().int().min(0)).min(1).max(50),
-});
-const simulationResultInput = z.object({
-  netWorthEur: z.number().finite().min(0).max(1_000_000_000),
-  capacityEur: z.number().finite().min(0).max(100_000_000),
-});
+const knowledgeInput = z
+  .object({
+    experienceLevel: z.enum(['none', 'some', 'experienced']),
+    objective: z.enum(['capital_preservation', 'income', 'growth', 'other']),
+    answers: z.array(z.number().int().min(0)).min(1).max(50),
+  })
+  .strict();
+// .strict(): any financial input field (income, assets, commitments
+// breakdown) sent by a client is REJECTED, not silently stripped - the
+// server structurally cannot receive the simulation inputs (RTS Art. 5(5)).
+const simulationResultInput = z
+  .object({
+    netWorthEur: z.number().finite().min(0).max(1_000_000_000),
+    capacityEur: z.number().finite().min(0).max(100_000_000),
+  })
+  .strict();
 
 // Demo knowledge test (synthetic content, marked demo in the UI). Scope
 // follows RTS 2022/2114 Art. 1: risks of investing in general plus risks of

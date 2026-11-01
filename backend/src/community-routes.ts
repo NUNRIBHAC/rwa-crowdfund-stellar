@@ -148,7 +148,19 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // endpoints (client-side computation; RTS Art. 5(5) non-access rule);
   // only the transmitted RESULT is stored. Paths sit under the gated
   // /api/auth prefix, so no COMMUNITY_PATH change is needed.
-  router.get('/api/auth/appropriateness', async (req, res) => {
+  // HOLD GATE (fail-closed): live collection is held until separately
+  // approved. APPROPRIATENESS_COLLECT must be set explicitly (staging QA
+  // only); unset on demo/production, so real accounts have NO live
+  // submission path - every appropriateness request answers 503, enforced
+  // here, not by report caveat. Read at request time so tests can toggle.
+  const appropriatenessHeld: express.RequestHandler = (_req, res, next) => {
+    if (!process.env.APPROPRIATENESS_COLLECT) {
+      res.status(503).json({ error: 'appropriateness collection is disabled on this deployment (held)' });
+      return;
+    }
+    next();
+  };
+  router.get('/api/auth/appropriateness', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
       res.json({ assessment: await service.getAppropriateness(account) });
@@ -156,7 +168,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       sendError(res, err);
     }
   });
-  router.post('/api/auth/appropriateness/knowledge', async (req, res) => {
+  router.post('/api/auth/appropriateness/knowledge', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
       service.checkRate(`appr-knowledge:${account.publicKey}`, 10, 60 * 60 * 1000);
@@ -165,7 +177,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       sendError(res, err);
     }
   });
-  router.post('/api/auth/appropriateness/simulation-result', async (req, res) => {
+  router.post('/api/auth/appropriateness/simulation-result', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
       service.checkRate(`appr-sim:${account.publicKey}`, 20, 60 * 60 * 1000);
@@ -174,7 +186,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       sendError(res, err);
     }
   });
-  router.post('/api/auth/appropriateness/acknowledge-warning', async (req, res) => {
+  router.post('/api/auth/appropriateness/acknowledge-warning', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
       res.json({ assessment: await service.acknowledgeWarning(account) });
