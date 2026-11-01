@@ -1,5 +1,5 @@
 import type { Campaign } from '../types';
-import { deadlineInfo, deadlineState, formatAmount, percent, regionName, shorten } from '../format';
+import { deadlineInfo, deadlineState, formatAmount, percent, regionName, shorten, tpl } from '../format';
 import { fundingState } from '../funding-math';
 import FundingGrid from './FundingGrid';
 import type { CampaignProfile } from '../data/profiles';
@@ -88,12 +88,19 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
 
       <p className="card-funded">
         {state.kind === 'ready' ? (
-          <span className="card-funded-pct">{m.card.fundedPct(state.percent)}</span>
+          <span className="card-funded-pct">{tpl(m.card.fundedPct, { percent: state.percent })}</span>
         ) : (
           <span className="card-funded-blocks">{m.card.progressUnavailable}</span>
         )}
       </p>
-      <div className="progress-track" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={m.card.progressAria(pct)}>
+      <div
+        className="progress-track"
+        role="progressbar"
+        aria-valuenow={pct}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={tpl(m.card.progressAria, { pct: pct })}
+      >
         <div className="progress-fill" style={{ width: `${pct}%` }} />
       </div>
 

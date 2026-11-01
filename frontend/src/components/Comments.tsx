@@ -7,7 +7,7 @@ import type { CommunityComment } from '../community/api';
 import { COMMUNITY_LIMITS, fetchComments, postComment } from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
-import { shorten } from '../format';
+import { shorten, tpl } from '../format';
 
 export default function Comments({ campaignId }: { campaignId: string }) {
   const { m, locale } = useI18n();
@@ -73,7 +73,7 @@ export default function Comments({ campaignId }: { campaignId: string }) {
             {m.community.commentLabel}
             <textarea value={body} onChange={(e) => setBody(e.target.value)} maxLength={COMMUNITY_LIMITS.commentBody} rows={3} required />
           </label>
-          <p className="community-note">{m.community.commentPostingAs(account.displayName ?? shorten(account.publicKey, 6, 4))}</p>
+          <p className="community-note">{tpl(m.community.commentPostingAs, { name: account.displayName ?? shorten(account.publicKey, 6, 4) })}</p>
           <button className="btn btn-primary" disabled={busy || !body.trim()}>
             {m.community.commentSubmit}
           </button>

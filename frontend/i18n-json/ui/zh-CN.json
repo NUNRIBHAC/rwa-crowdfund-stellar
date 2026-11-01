@@ -1,0 +1,1633 @@
+{
+  "meta": {
+    "title": "Blockallisto - 真实资产，共享可能。",
+    "skipLink": "跳至主要内容"
+  },
+  "nav": {
+    "ariaMain": "主导航",
+    "home": "首页",
+    "investments": "投资",
+    "howItWorks": "运作方式",
+    "learn": "学习",
+    "financing": "融资",
+    "faq": "常见问题",
+    "about": "关于",
+    "account": "我的账户"
+  },
+  "header": {
+    "testnetBadge": "Stellar 测试网",
+    "connect": "连接 Freighter",
+    "connectedPrefix": "已连接",
+    "disconnect": "断开连接",
+    "languageLabel": "网站语言",
+    "themeToLight": "切换到浅色主题",
+    "themeToDark": "切换到深色主题"
+  },
+  "riskBanner": "众筹投资存在全部损失的风险。这是 Stellar 测试网原型：无真实发行、无真实资金、无投资建议。",
+  "hero": {
+    "eyebrow": "Stellar 上的代币化真实资产",
+    "titleA": "真实资产。",
+    "titleB": "共享可能。",
+    "sub": "Blockallisto 是由 Soroban 合约强制执行的\"全有或全无\"众筹：每笔出资都在 Stellar 上托管，融资上限检查在同一原子交易中执行。只有目标在截止期限前达成，创建者才能提款，否则每位出资者自行签署退款。从葡萄牙走向世界。",
+    "ctaBrowse": "浏览项目",
+    "ctaHow": "运作方式",
+    "noteStrong": "Stellar 测试网原型 - 无真实资金。",
+    "noteLive": "下方每个项目都是 Stellar 测试网上的真实 Soroban 合约。未经审计，非生产环境。托管于免费套餐：闲置后的首个请求可能需要长达一分钟等待实例唤醒。",
+    "noteSample": "下方项目为演示用固定数据，并非已部署合约。未经审计，非生产环境。",
+    "noteUnknown": "未经审计，非生产环境。",
+    "unavailable": "本原型不提供：身份/KYC 开户、二级市场交易、可转让的资产或凭证代币、法币支付、真实投资发行。出资记录不可转让——这是众筹，不是投资交易所。",
+    "fundingBlockAria": "示意图：紫色小方块逐一滑入，逐个代币地填满共享资产的轮廓"
+  },
+  "emptyState": {
+    "fixtureStrong": "示例预览已启用。",
+    "fixtureText": "下方项目为展示布局的固定数据。它们不是已部署合约，不是真实发行，也无法接受出资。",
+    "fixtureBack": "返回真实注册表",
+    "emptyTitle": "未配置已部署项目",
+    "emptyText": "运营方必须单独部署并验证已审计的合约，然后设置 SOROBAN_CAMPAIGNS_JSON。此处不执行部署和迁移。旧项目为只读，需要进行对账处理。",
+    "emptyCta": "用示例项目预览"
+  },
+  "home": {
+    "stepsAria": "投资流程",
+    "stepsTitle": "4 步完成首次出资",
+    "steps": [
+      {
+        "title": "连接",
+        "text": "在 Stellar 测试网连接 Freighter 钱包。社区登录为可选，无需电子邮件或密码。"
+      },
+      {
+        "title": "发现",
+        "text": "浏览项目，阅读每个项目页面上的结构化条款。"
+      },
+      {
+        "title": "出资",
+        "text": "签署一笔交易。合约托管您的出资并以原子方式执行融资上限。"
+      },
+      {
+        "title": "跟踪",
+        "text": "在此跟踪融资状态。若目标未达成，退款由出资者自行签署。"
+      }
+    ],
+    "fullJourneyLink": "完整的投资者旅程，每一步都标注为已上线或计划中",
+    "latestAria": "最新项目",
+    "latestTitle": "最新项目",
+    "allInvestments": "全部投资",
+    "instrumentsAria": "工具类别",
+    "instrumentsTitle": "本设计涵盖的工具类别",
+    "instrumentsIntro": "平台设计涵盖四个参与方母类（参与权/证书——以 Substanzgenussrecht 为子类型——股份、作为所有权结构的间接参与，以及有限合伙权益）和两个债务母类（贷款和债券），各自可按优先、次级或未指定优先级发行，另有零息、可转换等结构叠加。本原型仅实现合约托管；以下类别为教学内容。",
+    "whyAria": "为何选择本平台",
+    "whyTitle": "为何采用这种方式",
+    "whyPoints": [
+      "融资规则由公开合约执行，而非平台记账。",
+      "\"全有或全无\"保护：目标未达成时，出资者自行签署退款。",
+      "每笔交易都可在公共测试网络上验证。",
+      "开放设计：工具类别、投资者旅程和合规范围均在仓库中文档化。"
+    ]
+  },
+  "invest": {
+    "title": "全部投资",
+    "noteFixture": "示例项目用于展示布局。它们不是已部署合约，无法接受出资。",
+    "noteLive": "真实项目是 Stellar 测试网上的 Soroban 合约。测试网资产毫无价值。",
+    "refresh": "刷新合约状态",
+    "searchPlaceholder": "按名称或合约搜索项目",
+    "searchAria": "搜索项目",
+    "filterStatusAria": "按状态筛选",
+    "all": "全部",
+    "open": "开放中",
+    "funded": "已融资",
+    "underfunded": "未达标",
+    "filterIndustryAria": "按行业筛选",
+    "industryLabels": {
+      "energy-utilities": "能源与公用事业"
+    },
+    "allIndustries": "全部行业",
+    "sortAria": "排序项目",
+    "sortDeadline": "截止最近",
+    "sortProgress": "融资最多",
+    "sortName": "名称 A-Z",
+    "viewAria": "视图模式",
+    "grid": "网格",
+    "list": "列表",
+    "noMatches": "没有符合当前搜索和筛选条件的项目。",
+    "resultCount": {
+      "one": "显示 {n} 个众筹项目",
+      "other": "显示 {n} 个众筹项目"
+    },
+    "activeAria": "进行中的投资",
+    "activeTitle": "进行中的投资",
+    "completedAria": "已完成的投资",
+    "completedTitle": "已完成的投资"
+  },
+  "card": {
+    "demo": "演示",
+    "statusFunded": "已融资",
+    "statusEnded": "未达标",
+    "statusOpen": "开放中",
+    "withdrawn": "已提取",
+    "fundedPct": "已融资 {percent}%",
+    "progressUnavailable": "进度不可用 - 链上数据未加载",
+    "progressAria": "融资进度：目标的 {pct}%",
+    "interest": "利率",
+    "term": "期限",
+    "minimum": "最低额",
+    "raised": "已募集",
+    "goal": "目标",
+    "deadline": "截止期限",
+    "status": "状态",
+    "yourPosition": "您的出资记录：",
+    "viewDetails": "查看详情",
+    "demoNote": "演示用示例数据 - 并非真实发行。",
+    "photoAlt": "太阳能发电场航拍照片（示意）",
+    "photoCaption": "示意照片 - 并非实际项目。",
+    "contractData": "合约数据",
+    "contract": "合约",
+    "creator": "创建者",
+    "assetContract": "资产合约",
+    "assetValidated": "经 API 验证为测试网 USDC",
+    "exactRaisedGoal": "精确的已募集 / 目标",
+    "unitsNote": "7 位小数单位",
+    "creatorWithdrawn": "创建者已提取",
+    "yes": "是",
+    "no": "否",
+    "amountLabel": "出资金额（测试网 USDC）",
+    "amountRequired": "请输入出资金额。",
+    "amountInvalid": "请输入有效金额:仅限数字,最多 7 位小数,且大于零。",
+    "amountExceeds": "金额超过剩余目标 {remaining} USDC(测试网)。",
+    "usdcTestnet": "USDC（测试网）",
+    "contribute": "出资",
+    "refundMe": "申请退款",
+    "creatorWithdraw": "创建者提款",
+    "rules": "在截止期限前出资，上限为目标的剩余额度。截止期限后，只有完全融资时创建者才能提款；否则每位出资者自行签署退款。合约以原子方式执行这些规则。"
+  },
+  "grid": {
+    "ariaReady": "融资进度：{count} 个方块中已填 {filled} 个，达目标的 {percent}%",
+    "ariaUnavailable": "融资进度不可用：链上数据未加载",
+    "fundedTail": "已融资 - {count} 个方块中的 {filled} 个",
+    "captionUnavailable": "进度不可用 - 链上数据未加载"
+  },
+  "intent": {
+    "title": "已保存的交易",
+    "steps": ["已准备", "已签署", "已提交", "已确认"],
+    "action": "操作",
+    "campaign": "项目",
+    "contract": "合约",
+    "maxFee": "最高费用",
+    "checkWallet": "检查钱包",
+    "hash": "哈希",
+    "usdcTestnet": "USDC（测试网）",
+    "xlmTestnet": "测试网 XLM",
+    "warningPending": "提交不等于确认。没有结果并不意味着失败。请检查状态或重试这笔完全相同的已签名交易；在不确定时切勿创建替代交易。",
+    "confirmed": "已在 Stellar 测试网上确认。这笔交易是最终的；上面的哈希是其永久凭证。",
+    "notFound": "保留了不确定的结果。RPC 的历史记录可能有限。不要因过期而清除或替换它。",
+    "retry": "重试相同交易",
+    "signSubmit": "签署并提交",
+    "checkLedger": "查询账本结果",
+    "cancelUnsigned": "取消未签名的交易",
+    "clearConfirmed": "清除已确认的记录",
+    "statusLabels": {
+      "BUILT": "已准备",
+      "SIGNED": "已签署",
+      "PENDING": "待处理",
+      "SUCCESS": "成功",
+      "FAILED": "失败",
+      "NOT_FOUND": "未找到",
+      "CANCELLED_UNSIGNED": "未签名已取消"
+    },
+    "actionLabels": {
+      "contribute": "出资",
+      "refund": "退款",
+      "withdraw": "提款"
+    }
+  },
+  "campaign": {
+    "loading": "正在加载活动…",
+    "notFound": "未找到项目",
+    "notFoundText": "当前注册表中没有此 ID 的项目",
+    "notFoundFixtureSuffix": "（示例项目中）",
+    "backToAll": "返回全部投资",
+    "issuerMissing": "本原型不提供发行方身份和链下条款；以下数据来自链上合约。",
+    "assetClass": "资产类别",
+    "escrowTestnet": "合约托管（测试网）",
+    "interestRate": "利率",
+    "noInterest": "无 - 仅出资托管",
+    "term": "期限",
+    "termDeadlinePrefix": "截止期限",
+    "minInvestment": "最低投资额",
+    "minNote": "按交易设定，上限为目标剩余额度",
+    "additionalInfo": "附加信息",
+    "factsAria": "平台事实",
+    "fundingModel": "融资模式",
+    "aonEnforced": "全有或全无，由 Soroban 合约强制执行",
+    "goal": "目标",
+    "deadline": "截止期限",
+    "contract": "合约",
+    "asset": "资产",
+    "assetValidated": "经 API 验证为测试网 USDC",
+    "interestIsinDocs": "利率、ISIN、文件",
+    "interestIsinDocsNote": "不可用 - 本原型仅记录出资，不发行任何证券",
+    "marketingDivider": "以下内容为发行方提供 - 未经平台核实",
+    "marketingDividerAria": "以下为营销内容",
+    "tabs": ["概览", "详情", "文件", "动态"],
+    "tabsAria": "项目栏目",
+    "overviewMissing": "本原型不提供发行方营销内容。在生产平台上，此区域将展示发行方自己的介绍、团队和商业模式，并通过上方的分隔线与平台事实明确区分。",
+    "detailsPre": "商业模式、市场、财务和里程碑将以发行方提供的栏目形式显示在这里。",
+    "detailsSample": "此示例项目不包含详情内容。",
+    "detailsMissing": "本原型不提供。",
+    "documentsMissing": "本原型不提供文件托管。生产平台将在此托管关键信息说明书和发行条款。",
+    "newsEmpty": "暂无动态。项目动态将显示在这里。",
+    "statusFunded": "融资成功",
+    "statusEnded": "未成功",
+    "widgetContribute": "出资",
+    "widgetOverview": "投资概览",
+    "widgetFixture": "示例预览。此项目是固定数据，不是已部署合约，无法接受出资。",
+    "widgetFundedOpen": "募资目标已达成，本次活动已全额认购。不再接受更多出资；截止后，创建者可根据全有或全无规则提取所募资金。",
+    "widgetEndedFunded": "本次活动在达成目标后结束。根据全有或全无规则，创建者现在可以提取所募资金。",
+    "widgetEndedWithdrawn": "本次活动在达成目标后结束，创建者已提取所募资金。",
+    "widgetEndedRefundable": "本次活动未达目标而结束。出资可退款：请连接出资钱包并使用下方的退款按钮。",
+    "widgetRisk": "众筹投资存在全部损失的风险，且流动性差。本原型使用毫无价值的测试网资产。",
+    "raised": "已募集",
+    "usdcTestnet": "USDC（测试网）",
+    "explainerSuffix": "这是示例教学文本，不是真实发行的条款。",
+    "explainerConvertible": "可转换债券支付利息，直到设定的触发条件允许持有人按发行条款转换为股份。转换是债券上的结构叠加，不是独立工具。",
+    "explainerSeniorBond": "优先债券是非次级债务：破产时债券持有人的受偿顺序优先于次级资本和股权，获得固定票息，不参与公司成长。",
+    "explainerSubBond": "次级债券支付约定票息，但破产时受偿顺序落后于优先债权人，且不参与公司成长。",
+    "explainerDefault": "该工具类别在学习中心中有说明。"
+  },
+  "howItWorks": {
+    "title": "运作方式",
+    "intro": "一个真实的众筹平台必须支持的完整旅程，以及本原型究竟实现了哪些部分。标注为\"计划中\"的步骤在代码中并不存在，本网站的任何内容都不会假装它们存在。",
+    "investorTitle": "投资者旅程",
+    "issuerTitle": "发行方旅程",
+    "live": "原型中已上线",
+    "planned": "计划中 - 尚未构建",
+    "investorSteps": [
+      {
+        "title": "注册和登录",
+        "text": "正式平台需要以电子邮件确认与凭证创建账户。本原型改为可选的社区登录:您通过签署一次性挑战来证明对 Freighter 钱包的控制 - 无需电子邮件注册、无密码。钱包是唯一身份。"
+      },
+      {
+        "title": "身份验证（KYC）",
+        "text": "通过验证服务商进行证件和自拍验证，必要时附加反洗钱数据。未实现；此处不收集任何身份数据。"
+      },
+      {
+        "title": "投资者分类",
+        "text": "在适用法规要求时：投资前进行知识测试和亏损承受能力模拟，超过法定门槛时给出更严格的警示。"
+      },
+      {
+        "title": "发现项目",
+        "text": "浏览注册表、筛选和排序，并阅读每个项目页面上的结构化条款。"
+      },
+      {
+        "title": "投资",
+        "text": "连接 Freighter，输入金额并签署一笔交易。合约托管出资并以原子方式执行上限。在生产平台上，点击即构成对发行方的有约束力要约。"
+      },
+      {
+        "title": "冷静期",
+        "text": "在适用法规要求时，受保护投资者可在设定期限内撤销要约（欧盟制度下非成熟投资者为 4 个日历日）。未实现；测试网出资不构成要约。"
+      },
+      {
+        "title": "支付",
+        "text": "生产平台通过持牌支付服务商结算，每笔投资有独立参考号。此处以 Stellar 测试网交易作为结算，资产毫无价值。"
+      },
+      {
+        "title": "仪表板和派息",
+        "text": "个人仪表板展示投资状态、文件和利息派发。未实现；连接钱包后可按项目读取出资记录。"
+      },
+      {
+        "title": "转让和退出",
+        "text": "在已验证用户之间转让头寸，可能还有公告板式市场。本原型中的出资记录被有意设计为不可转让。"
+      }
+    ],
+    "issuerSteps": [
+      {
+        "title": "申请和审核",
+        "text": "发行方提交申请，通过资格和文件审核，并签署平台条款。"
+      },
+      {
+        "title": "项目构建",
+        "text": "配置并审核工具条款、门槛、文件和营销内容。"
+      },
+      {
+        "title": "上线项目",
+        "text": "演示展示了带有链上实时融资状态的公开项目页面。"
+      },
+      {
+        "title": "结算",
+        "text": "全有或全无：只有目标在截止期限前达成，创建者才能提款，由合约执行。"
+      },
+      {
+        "title": "融资后义务",
+        "text": "报告、利息和赎回支付，以及独立的发行方生命周期状态。未实现。"
+      }
+    ]
+  },
+  "learn": {
+    "title": "学习",
+    "intro": "用平实的语言解释本平台设计所围绕的工具模型：四个参与方母类和两个债务母类（贷款和债券），每个债务母类按优先、次级或未指定优先级发行。结构叠加与债务母类组合；优先级和标签限定词是平台用语，按原样保留。仅供教学：不构成发行，也不构成投资建议。",
+    "seniorityStatesLabel": "优先级状态：",
+    "opportunities": "机会",
+    "risks": "风险",
+    "suitableLabel": "适合人群：",
+    "overlaysAria": "结构叠加",
+    "overlaysTitle": "结构叠加",
+    "overlaysIntro": "叠加与贷款或债券母类组合，绝不能独立成为工具。",
+    "qualifiersAria": "优先级和标签限定词",
+    "qualifiersTitle": "优先级和标签限定词",
+    "qualifiersIntro": "您可能在发行中遇到的平台用语。这些标签用于修饰工具；它们本身不是工具类别。"
+  },
+  "glossaryPage": {
+    "title": "术语表",
+    "intro": "本平台和一般众筹发行中使用的关键术语。仅供教学：不构成发行，也不构成投资建议。",
+    "sectionAria": "术语表条目",
+    "backPre": "返回",
+    "backLink": "学习页面",
+    "riskPre": "在做出任何真实资金决策前，请阅读",
+    "riskLink": "风险提示"
+  },
+  "riskWarnings": {
+    "title": "风险提示",
+    "items": [
+      {
+        "h": "全部损失",
+        "p": "众筹投资可能损失全部价值。切勿投资您无法承受损失的资金。"
+      },
+      {
+        "h": "流动性不足",
+        "p": "这些工具通常不可交易。请假定您在到期或约定事件前无法退出。"
+      },
+      {
+        "h": "分散投资",
+        "p": "将此类资产的投资分散到不同发行方。"
+      },
+      {
+        "h": "无保障机制",
+        "p": "众筹投资不受存款保障或投资者赔偿机制覆盖。"
+      },
+      {
+        "h": "不构成建议",
+        "p": "本网站的任何内容均不构成投资、法律或税务建议。本网站是测试网络上的软件原型，不列出任何真实发行。"
+      },
+      {
+        "h": "原型状态",
+        "p": "测试网资产毫无价值。此处的智能合约未经审计，不得用于真实资金。"
+      }
+    ]
+  },
+  "faqPage": {
+    "title": "常见问题",
+    "introPre": "答案按\"运作方式\"页面的方式标注：",
+    "introLive": "原型中已上线",
+    "introMid1": "描述代码目前的实际行为，",
+    "introPlanned": "计划中 - 尚未构建",
+    "introMid2": "尚未在任何地方实现，而",
+    "introInfo": "一般背景",
+    "introPost": "解释众筹实践，但不声称本平台已实现。",
+    "searchPlaceholder": "搜索问题和答案",
+    "searchAria": "搜索问题",
+    "categoryAria": "问题分类",
+    "all": "全部",
+    "noMatches": "没有符合您搜索的问题。"
+  },
+  "about": {
+    "title": "关于本项目",
+    "p1": "Blockallisto（仓库 rwa-crowdfund-stellar）是一个个人原型，探索在 Stellar 网络上进行代币化众筹：由 Soroban 智能合约强制执行项目融资，而更完整的平台——账户、验证、金融工具、支付——在仓库中以开放方式设计和记录。",
+    "p2": "它不是一家公司，不是持牌众筹服务提供商，也不构成证券发行。市场定位：从葡萄牙走向世界。",
+    "ethicsAria": "伦理排除政策",
+    "ethicsTitle": "伦理排除政策",
+    "ethicsIntro": "这是为本原型所探索的平台设计的产品级政策。以下行业的发行方在设计上被排除在外：",
+    "ethicsPoints": ["烟草、博彩和武器", "化石燃料、采矿和核电", "监狱和拘留服务", "转基因生物和与冲突矿产相关的行业"],
+    "ethicsNote": "这是本项目的设计承诺，不代表任何实际运营。",
+    "techAria": "技术",
+    "techTitle": "技术",
+    "techText": "React 前端、Node 后端、用于托管的 Soroban（Rust）合约、用于签名的 Freighter 钱包、Stellar 测试网 USDC。托管和数据库均运行在免费套餐上。详细信息和测试报告见仓库文档。",
+    "behindAria": "名字由来",
+    "behindTitle": "名字由来",
+    "behindText": "在古希腊神话中，Callisto 化身为大熊座——无数独立的光点汇聚成一个更伟大、永不消逝的星座。在 Blockallisto，我们通过 Stellar 网络把同样的理念带入全球金融。我们连接小额投资者，共同填满真实资产的区块。我们共同就是投资的民主化：个体的光点汇聚成更伟大的整体。"
+  },
+  "financing": {
+    "title": "企业融资",
+    "intro": "通过具有全有或全无融资机制的 Soroban 合约向公众募集资金。已登录的钱包可在下方提交发行方申请；申请将被保存以供运营方审核。提交不等于入驻、上市或获批，也不构成任何融资要约。",
+    "journeyAria": "发行方流程概览",
+    "builderDraftLead": "草稿预览：",
+    "builderDraftLink": "查看活动将如何进行部署配置 - 本演示中已禁用",
+    "journeyTitle": "设计中的流程",
+    "steps": [
+      {
+        "h": "申请",
+        "p": "向我们介绍您的公司、所需金额和您考虑的金融工具。"
+      },
+      {
+        "h": "审核",
+        "p": "资格和文件审核，然后给出结构化的融资方案。"
+      },
+      {
+        "h": "构建",
+        "p": "共同准备项目页面、工具条款、文件和营销内容。"
+      },
+      {
+        "h": "募资",
+        "p": "全有或全无的项目融资。只有在截止期限前达到目标，资金才会结算。"
+      }
+    ]
+  },
+  "account": {
+    "title": "我的账户",
+    "note": "您的账户区域:此钱包的测试网头寸以及保存在其下的社区活动(仅限测试网资产 - 无真实资金或收益)。头寸来自您在 Stellar 测试网上连接的 Freighter 钱包,不具有任何价值。本页面上可选的社区登录以及支持和发行方表单将按照隐私政策所述处理您输入的数据。",
+    "summaryAria": "投资组合概览",
+    "totalContributed": "累计出资",
+    "totalSub": "链上托管金额，按项目汇总",
+    "returnReceived": "已收到回报",
+    "returnNa": "不可用",
+    "returnSub": "本原型不跟踪任何支付历史",
+    "activeInvestments": "进行中的投资",
+    "activeSub": "开放或已融资项目中的托管持仓",
+    "connectNote": "连接您的 Freighter 钱包以查看测试网持仓。未连接钱包时，本页面仅展示布局。",
+    "fixtureNote": "页面显示的是示例项目；示例数据不包含任何钱包持仓。",
+    "investmentsAria": "我的投资",
+    "myInvestments": "我的投资",
+    "newsFeedAria": "活动新闻",
+    "newsFeedTitle": "活动新闻",
+    "newsFeedEmpty": "您投资的活动暂无新闻。",
+    "newsFeedNoInvestments": "您投资的活动新闻将显示在这里。",
+    "newInvestments": "新的投资",
+    "filterAria": "按状态筛选投资组合",
+    "tabs": {
+      "all": "全部",
+      "canceled": "已取消",
+      "pending": "待处理",
+      "paid": "已支付",
+      "completed": "已完成"
+    },
+    "tabNote": "原型映射：待处理 = 出资已托管，项目开放中。已支付 = 项目已融资，仍在进行。已完成 = 项目在融资后结束。已取消 = 未达到目标而结束；出资人可在项目页面签署退款。",
+    "noInvestments": "未找到投资。",
+    "activityAria": "最近活动",
+    "recentActivity": "最近活动",
+    "savedTxPre": "已保存的交易：",
+    "savedTxOn": "所属项目",
+    "savedTxStatus": "状态",
+    "savedTxPost": "可在上方交易面板中继续或清除它。",
+    "savedTxUnknown": "未知",
+    "noActivity": "暂无活动。",
+    "walletAria": "钱包",
+    "myWallet": "我的钱包",
+    "walletConnectedPre": "已连接：",
+    "walletConnectedPost": "出资由项目合约托管；退款由出资人在链上签署。本原型中不存在平台代管的资金。",
+    "noWallet": "未连接钱包。",
+    "checklistAria": "账户和资料清单",
+    "checklistTitle": "账户概览和资料数据",
+    "checklistIntro": "参考平台以完成个人资料、验证和银行资料作为投资门槛。此原型不设投资门槛；此清单以计划中的占位形式展示这些投资者验证要求。",
+    "notSetUp": "未设置",
+    "checklist": [
+      {
+        "label": "个人数据",
+        "note": "在此原型中投资不需要；为计划中的投资者验证要求。"
+      },
+      {
+        "label": "地址数据",
+        "note": "在此原型中投资不需要；为计划中的投资者验证要求。"
+      },
+      {
+        "label": "联系方式",
+        "note": "在此原型中投资不需要；为计划中的投资者验证要求。"
+      },
+      {
+        "label": "投资者资格",
+        "note": "知识测试和损失承受能力检查是规划中的合规步骤；此处未实现。"
+      },
+      {
+        "label": "身份验证（KYC）",
+        "note": "未实现。本测试网原型不验证任何身份。"
+      },
+      {
+        "label": "银行信息",
+        "note": "不收集。出资和退款以测试网 USDC 在链上流转。"
+      },
+      {
+        "label": "证券账户数据",
+        "note": "参考平台上的可选证券账户关联；此处不收集。"
+      },
+      {
+        "label": "数字保管柜",
+        "note": "规划中的持仓保管视图。在本原型中，持仓存于各项目合约内，按连接的钱包读取。"
+      }
+    ]
+  },
+  "footer": {
+    "communication": "沟通",
+    "platform": "平台",
+    "legal": "法律",
+    "termsOfService": "服务条款",
+    "privacyPolicy": "隐私政策",
+    "riskDisclosure": "风险披露",
+    "legalNotice": "法律声明",
+    "conflictsOfInterest": "利益冲突",
+    "complaintsManagement": "投诉管理",
+    "businessContinuity": "业务连续性",
+    "invest": "投资",
+    "howItWorks": "运作方式",
+    "financingIssuers": "发行方融资",
+    "learn": "学习",
+    "instrumentHub": "工具中心",
+    "riskWarnings": "风险提示",
+    "glossary": "术语表",
+    "faq": "常见问题",
+    "aboutProject": "关于本项目",
+    "status": "状态",
+    "statusText": "测试网原型。不进行自动部署或旧余额转换。现有的传统意向和余额予以保留，不会清除。独立的身份/估值基础设施仍仅为模拟。",
+    "legalPre": "市场背景：欧盟依据 ECSPR 监管众筹；持牌服务提供商列于",
+    "legalLink": "ESMA 登记册",
+    "legalPost": "。本应用不是持牌众筹服务提供商，不列出任何真实发行。",
+    "tagline": "真实资产，共享可能。"
+  },
+  "time": {
+    "ended": "已结束",
+    "underMinute": "剩余不到一分钟",
+    "minutesLeft": {
+      "one": "剩余 {n} 分钟",
+      "other": "剩余 {n} 分钟"
+    },
+    "hoursLeft": {
+      "one": "剩余 {n} 小时",
+      "other": "剩余 {n} 小时"
+    },
+    "daysLeft": {
+      "one": "剩余 {n} 天",
+      "other": "剩余 {n} 天"
+    }
+  },
+  "errors": {
+    "freighterMissing": "未检测到 Freighter 钱包扩展。请安装 Freighter，然后重试连接。",
+    "walletAccessFailed": "钱包访问失败",
+    "connectFirst": "请先连接 Freighter。",
+    "resolveSaved": "请先处理已保存的交易，再准备新交易。",
+    "walletMismatch": "请连接准备此交易时使用的钱包。",
+    "walletNoSign": "钱包未签名",
+    "apiFailed": "API 请求失败",
+    "apiUnavailable": "服务暂时不可用。请稍后重试。",
+    "prepareTrustlineMissing": "此钱包尚未设置测试网 USDC（缺少信任线）。请先添加 USDC 信任线，然后重试。",
+    "prepareAccountMissing": "此钱包账户在测试网上尚不存在。请先为其充值，然后重试。",
+    "prepareInsufficientBalance": "此钱包的测试网 USDC 不足以支付该金额。",
+    "prepareFailed": "无法准备此交易。请重试。"
+  },
+  "instruments": {
+    "groups": [
+      {
+        "id": "participation",
+        "title": "参与型工具",
+        "intro": "回报取决于发行方经营成果的工具：利润参与权和股权。间接参与作为一种持有结构列于此处，而非独立工具。"
+      },
+      {
+        "id": "debt",
+        "title": "债务型工具",
+        "intro": "两个通用母类——贷款和债券——各以三种优先级状态之一发行：优先、次级或未指定优先级。投资者以债权人身份受偿。"
+      }
+    ],
+    "seniorityLabels": {
+      "senior": "优先（非次级）",
+      "subordinated": "次级（破产清算时受偿顺序落后于优先债权人）",
+      "unspecified": "条款中未指定优先级"
+    },
+    "classes": [
+      {
+        "id": "participation-certificate",
+        "label": "参与权 / 参与凭证",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "一种分享利润并要求偿还名义价值的权利（通常以参与凭证的形式证券化），但不享有股东的完整治理权。",
+        "opportunities": ["无需购买完整股权即可分享利润", "通常将基础偿还请求权与利润参与相结合"],
+        "risks": ["利润分享完全取决于发行方业绩", "受偿顺序可能落后于普通债权人", "到期前通常缺乏流动性"],
+        "suitableFor": "希望获得与经营成果挂钩的收益、并接受类股权风险的投资者。"
+      },
+      {
+        "id": "substanzgenussrecht",
+        "label": "Substanzgenussrecht",
+        "subtypeOf": "参与权 / 参与凭证的子类型",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "一种与发行方资产基础（\"substance\"）而非仅年度利润挂钩的参与权。其结构和合格发行方因司法辖区和公司章程而异。",
+        "opportunities": ["参与发行方的资产价值", "在章程允许的情况下可为较小型发行方设计"],
+        "risks": ["法律形式和投资者保护因司法辖区差异很大", "投资者与发行方之间可能涉及受托人或载体", "通常缺乏流动性"],
+        "suitableFor": "能够接受定制结构、并会先仔细阅读确切合同条款的投资者。"
+      },
+      {
+        "id": "share",
+        "label": "股份",
+        "note": "增资是创造新股份的公司行为，不是独立的金融工具。",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "对发行公司的直接股权：股息分配权和公司价值参与，权利由公司章程规定。新股份通过增资到达投资者手中。",
+        "opportunities": ["完整参与公司成长", "视股份类别享有投票权或信息权"],
+        "risks": ["无固定偿还请求权；股息无保障", "可能全部损失", "众筹股份通常无法在交易所交易"],
+        "suitableFor": "期限较长、希望拥有所有权并接受全部创业风险的投资者。"
+      },
+      {
+        "id": "indirect-participation",
+        "label": "间接参与",
+        "note": "一种持有结构，而非独立工具：投资者通过载体或受托人间接持有基础参与权益，经济收益由基础权益决定。",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "投资者间接参与中小企业投资——例如通过载体或受托人——手续更为简化。",
+        "opportunities": ["可以接触难以直接持有的项目", "通过中间结构简化管理"],
+        "risks": ["投资者与发行方之间多出一层结构", "回报取决于发行方业绩", "载体的条款决定分配和退出"],
+        "suitableFor": "希望获得参与型收益、但不想直接持有基础权益的投资者。"
+      },
+      {
+        "id": "limited-partnership",
+        "label": "有限合伙份额",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "作为有限合伙人持有合伙企业的份额：按合伙协议参与盈亏，责任以出资额为限。",
+        "opportunities": ["直接穿透享有合伙企业经营成果", "责任以出资额为上限"],
+        "risks": ["亏损参与可能减损或清零份额", "退出通常受合伙协议限制", "税务和申报义务可能更复杂"],
+        "suitableFor": "理解合伙企业结构并接受创业风险的投资者。"
+      },
+      {
+        "id": "loan",
+        "label": "贷款",
+        "group": "debt",
+        "seniorityStates": ["senior", "subordinated", "unspecified"],
+        "summary": "对发行方的直接贷款，具有确定的利率和还款计划。同一贷款母类可以是优先、次级（包括利润参与型变体），或不指定优先级。",
+        "opportunities": ["固定计划比股权更容易建模", "次级变体以更低受偿顺位换取更高利息"],
+        "risks": ["发行方违约可能导致全部损失", "破产清算时次级债权在优先债权人之后受偿", "无存款保障"],
+        "suitableFor": "能够接受信用风险、且没有类银行存款保障的投资者。"
+      },
+      {
+        "id": "bond",
+        "label": "债券",
+        "group": "debt",
+        "seniorityStates": ["senior", "subordinated", "unspecified"],
+        "summary": "具有确定票息和期限的证券化债务工具。可以优先（非次级）、次级（包括明确次级的合格债券和次级 Mini Bond）或未指定优先级发行。",
+        "opportunities": ["确定的票息和还款日程", "破产清算时优先债券的受偿顺序先于次级资本和股权"],
+        "risks": ["次级属性会加重破产时的损失程度", "除非注明担保，否则仍为无担保", "不参与公司成长"],
+        "suitableFor": "以收益为导向、能够承受全部损失且不急于收回资金的投资者。"
+      }
+    ],
+    "overlays": [
+      {
+        "id": "zero-coupon",
+        "label": "零息（Zero Bond）",
+        "summary": "贷款或债券上的一种票息结构，而非优先级：不支付定期利息；回报来自低于名义价值发行、按面值偿还的差额。仅与债务母类组合，从不单独存在。"
+      },
+      {
+        "id": "convertible",
+        "label": "可转换",
+        "summary": "债券上的一种转换特性：在约定的条款下（触发事件、行权窗口、转换价格、利息停止规则），债券可转换为股份。仅与债券母类组合，从不单独存在。"
+      }
+    ],
+    "qualifiers": [
+      {
+        "id": "junior",
+        "label": "\"Junior\"",
+        "summary": "平台用语中的低顺位标签。它表示次级受偿顺序，但本身并不构成合同上的合格次级。"
+      },
+      {
+        "id": "qualified",
+        "label": "\"Qualified / qualifiziert\"",
+        "summary": "贷款和债券上出现的平台用语。对于债券，除非条款本身写明次级，否则不要将其理解为合格次级。"
+      },
+      {
+        "id": "mini-bond",
+        "label": "\"Mini Bond\"",
+        "summary": "平台对小额面值债券的称呼。"
+      }
+    ],
+    "chipZeroCoupon": "零息",
+    "chipConvertible": "可转换",
+    "chipSenior": "优先",
+    "chipSubordinated": "次级",
+    "chipUnspecifiedSuffix": "（未指定优先级）",
+    "chipCompose": "concat"
+  },
+  "glossary": [
+    {
+      "term": "全有或全无融资",
+      "definition": "只有在截止期限前达到目标，发行方才能收到资金；否则出资将被退还。本原型中的 Soroban 合约在链上强制执行这一规则。"
+    },
+    {
+      "term": "融资门槛",
+      "definition": "一期发行必须募集到才能成交的最低金额。区别于单个投资者的最低投资额。"
+    },
+    {
+      "term": "最低投资额",
+      "definition": "单个投资者可以认购的最小金额，通常为一个单位。"
+    },
+    {
+      "term": "次级",
+      "definition": "一种受偿顺序规则：破产清算时，次级债权仅在优先债权人之后受偿，因此损失风险更高。"
+    },
+    {
+      "term": "ISIN",
+      "definition": "国际证券识别编码，用于标识一只证券。本原型不发行证券，也没有 ISIN。"
+    },
+    {
+      "term": "关键投资信息表（KIIS）",
+      "definition": "一份标准化的简短文件，载明发行的关键事实和风险，许多欧盟众筹发行都需要提供。"
+    },
+    {
+      "term": "冷静期",
+      "definition": "在适用制度要求时，某些投资者可在投资发行后的一段时间内免费撤销。期限和适用性取决于投资者类别和制度。"
+    },
+    {
+      "term": "知识测试",
+      "definition": "某些制度要求在非专业投资者投资之前，检查其对众筹风险的理解。"
+    },
+    {
+      "term": "损失承受能力模拟",
+      "definition": "评估投资者是否能够承受投资损失的测试，某些制度对非专业投资者有此要求。"
+    },
+    {
+      "term": "ECSPR",
+      "definition": "关于欧洲众筹服务提供商的（欧盟）2020/1503 号条例。持牌提供商可在 ESMA 登记册中查询。本原型不是持牌提供商。"
+    },
+    {
+      "term": "托管",
+      "definition": "由中立的机制保管资金直至条件满足。在本原型中，由项目合约本身在 Stellar 测试网上托管出资。"
+    },
+    {
+      "term": "Soroban",
+      "definition": "本原型使用的 Stellar 网络智能合约平台。"
+    },
+    {
+      "term": "测试网",
+      "definition": "一种公共测试网络，其中的资产没有价值，可在不动用真实资金的情况下试用软件。"
+    },
+    {
+      "term": "名义价值",
+      "definition": "金融工具一个单位的面值，利息和偿还均以其为基准计算。"
+    },
+    {
+      "term": "到期一次还本",
+      "definition": "在到期时一次性偿还全部名义金额。"
+    },
+    {
+      "term": "act/act、30E/360",
+      "definition": "计息惯例，用于定义利息在付息日之间如何累积。"
+    },
+    {
+      "term": "零息债券（Zero Bond）",
+      "definition": "不支付定期利息的债券：以低于名义价值的价格发行，按面值偿还，回报即差额。这是一种票息结构，而非优先级。"
+    },
+    {
+      "term": "可转换债券",
+      "definition": "带有转换特性的债券：在发行条款下（触发条件、窗口、转换价格）可转换为股份。这是债券上的结构叠加，而非独立工具。"
+    },
+    {
+      "term": "Junior 债务",
+      "definition": "平台用语中的低顺位债权。它表示次级受偿顺序，但本身并不构成合同上的合格次级。"
+    },
+    {
+      "term": "合格次级",
+      "definition": "一种合同形式的次级：当发行方将陷入过度负债时，利息（有时包括本金）停止支付。仅有\"qualified\"之类的平台用语并不足以证明；条款本身必须写明次级。"
+    },
+    {
+      "term": "Mini Bond",
+      "definition": "平台对小额面值债券的称呼。"
+    },
+    {
+      "term": "了解你的客户（KYC）",
+      "definition": "受监管平台在投资者可以投资之前必须完成的身份验证。本原型不执行任何 KYC。"
+    },
+    {
+      "term": "政治公众人物（PEP）",
+      "definition": "担任重要公职的人士，根据反洗钱规则须接受强化审查。"
+    },
+    {
+      "term": "数字保管柜",
+      "definition": "平台向投资者展示其持有证券的保管视图，与其已验证身份绑定。本原型将持仓保存在项目合约本身中，按钱包可见。"
+    }
+  ],
+  "faq": {
+    "stateLabels": {
+      "live": "原型中已上线",
+      "planned": "已规划 - 未实现",
+      "info": "一般背景"
+    },
+    "categories": [
+      {
+        "id": "about",
+        "title": "关于本平台",
+        "entries": [
+          {
+            "q": "这是一个真实的投资平台吗？",
+            "a": "不是。这是 Stellar 测试网上的技术原型。它不列出真实发行，不接受真实资金，也不是持牌众筹服务提供商。持牌的欧盟提供商可在 ESMA 登记册中查询。",
+            "state": "info"
+          },
+          {
+            "q": "试用需要什么？",
+            "a": "安装 Freighter 钱包扩展，切换到测试网，从水龙头或朋友处获取免费的测试网 XLM 和测试网 USDC，然后在此连接。测试网资产没有价值。",
+            "state": "live"
+          },
+          {
+            "q": "我需要自己的钱包吗？",
+            "a": "需要。本设计将密钥留在用户手中：Freighter 钱包是唯一的身份，并签署每一笔交易。平台不持有任何密钥，也不保有自己的余额。一些生产平台会通过专业合作伙伴托管资产；本原型刻意不这样做。",
+            "state": "live"
+          },
+          {
+            "q": "在生产环境中，谁可以在这样的平台上投资？",
+            "a": "生产平台必须验证每位投资者的身份（KYC），并在制度要求时、对较大金额之前进行知识测试和损失承受能力模拟。还可能适用居住地限制。这些在这里都不存在，因为测试网资金没有价值。",
+            "state": "info"
+          }
+        ]
+      },
+      {
+        "id": "contributing",
+        "title": "出资和支付",
+        "entries": [
+          {
+            "q": "出资如何运作？",
+            "a": "选择一个项目，输入金额，在 Freighter 中签署一笔交易。Soroban 合约托管您的出资，并以原子方式强制执行融资上限。应用会保留确切的已签名交易，网络错误绝不会造成重复。",
+            "state": "live"
+          },
+          {
+            "q": "可以使用哪些支付方式？",
+            "a": "仅可通过您的 Freighter 钱包发送测试网 USDC。没有银行卡、没有银行转账，完全没有法币。生产版本会通过持牌支付提供商按每笔投资的参考号结算；该步骤已规划，尚未实现。",
+            "state": "live"
+          },
+          {
+            "q": "可以对同一项目多次出资吗？",
+            "a": "可以。每笔出资都是独立的签名交易，合约每次都会检查融资上限下的剩余额度。会使项目超过目标的金额会被合约拒绝，而不是被平台记账拒绝。",
+            "state": "live"
+          },
+          {
+            "q": "项目达到目标后会发生什么？",
+            "a": "上限由合约执行，因此不存在超额认购：一旦达到目标，后续出资将被拒绝。截止期限过后，项目创建者可以提取托管的资金。",
+            "state": "live"
+          },
+          {
+            "q": "如何确认我的出资成功了？",
+            "a": "连接您的钱包并打开项目页面，即可查看合约报告的托管总额。由于结算是 Stellar 测试网交易，您也可以在公共测试网浏览器上独立验证。",
+            "state": "live"
+          }
+        ]
+      },
+      {
+        "id": "refunds",
+        "title": "退款和取消",
+        "entries": [
+          {
+            "q": "退款如何运作？",
+            "a": "如果项目在截止期限前未达到目标，每位出资人签署自己的退款交易。如果达到目标，只有项目创建者可以提款，且只能在截止期限之后。",
+            "state": "live"
+          },
+          {
+            "q": "签名后可以取消出资吗？",
+            "a": "在本原型中不行：已签名的测试网交易是最终的。取消功能已规划。作为对照，欧盟众筹制度给予非专业投资者 4 个日历日的冷静期，可在真实平台上撤具有约束力的报价。",
+            "state": "planned"
+          },
+          {
+            "q": "项目进行期间资金由谁保管？",
+            "a": "Soroban 合约本身将出资托管至截止期限。任何运营方账户都无法动用：代码只允许创建者在成功截止后提款，或出资人在失败截止后退款。",
+            "state": "live"
+          }
+        ]
+      },
+      {
+        "id": "tokenization",
+        "title": "Stellar 上的代币化",
+        "entries": [
+          {
+            "q": "这里的代币化是什么意思？",
+            "a": "代币化是指以数字方式表示一项投资的权利和义务，使所有权和转让可以在共享账本上记录和核验。本原型迈出了第一步：出资记录存于 Stellar 测试网上的 Soroban 智能合约中，由代码而非平台记账执行。",
+            "state": "info"
+          },
+          {
+            "q": "智能合约实际执行什么？",
+            "a": "出资的托管、每笔交易上的融资上限、项目截止期限、全有或全无的结算（创建者仅在成功截止后才能提款），以及失败截止后由出资人签署的退款。它不做的部分，见\"运作方式\"页面上的规划步骤。",
+            "state": "live"
+          },
+          {
+            "q": "有可交易的代币吗？",
+            "a": "没有。这第一个合约中的出资余额被刻意设计为不可转让。可转让的证券型代币需要法律认可的登记册、经验证的持有人以及项目文档中描述的合规体系，才能代表真实投资。",
+            "state": "planned"
+          },
+          {
+            "q": "我的出资存放在哪里？",
+            "a": "在公共测试网络上的合约托管中，而不是在平台运营方手中。您的钱包密钥留在您自己设备上的 Freighter 中；丢失密钥就会失去对出资记录的访问，这与任何自托管方案完全相同。",
+            "state": "live"
+          }
+        ]
+      },
+      {
+        "id": "risks",
+        "title": "风险和资格",
+        "entries": [
+          {
+            "q": "真实众筹有哪些风险？",
+            "a": "可能全部损失，投资缺乏流动性，也不适用存款保障。常见的经验法则是只投入可自由支配资金的一小部分，并进行分散投资。风险提示页面对此有详细说明。",
+            "state": "info"
+          },
+          {
+            "q": "投资者为什么要分散投资？",
+            "a": "将资金分散到多个项目、行业和工具类型，可以降低某一个项目失败带来的影响。把所有资金集中在一个发行中，会让结果完全取决于一家公司。",
+            "state": "info"
+          },
+          {
+            "q": "这个平台受监管吗？",
+            "a": "不受监管。它不是持牌众筹服务提供商，也不列出真实发行。在欧盟，众筹提供商依据 ECSPR 制度获得授权，并列于公开的 ESMA 登记册中，每个页面的页脚都有链接。",
+            "state": "info"
+          }
+        ]
+      },
+      {
+        "id": "transfers",
+        "title": "转让和出售",
+        "entries": [
+          {
+            "q": "我可以出售、赠予或转让出资吗？",
+            "a": "不可以。本原型中的出资记录在设计上不可转让。在生产平台上，转让取决于各工具的合同条款，通常需要发行方同意，并且始终要求接收方完成身份识别。这里没有二级市场。",
+            "state": "live"
+          },
+          {
+            "q": "以后可以转让吗？",
+            "a": "已验证用户之间的转让，以及可能的公告板式交易场所，是规划中的设计步骤。它们首先需要身份验证和每种工具的合同规则，而这两者在现有代码中都不存在。",
+            "state": "planned"
+          }
+        ]
+      },
+      {
+        "id": "account",
+        "title": "账户和数据",
+        "entries": [
+          {
+            "q": "我需要注册账户吗？",
+            "a": "无需电子邮件注册,也无需密码。可选的社区登录通过签署一次性挑战来证明您对 Freighter 钱包的控制。钱包是唯一身份,连接或签署绝不会与网站分享您的密钥。",
+            "state": "live"
+          },
+          {
+            "q": "这个原型收集哪些个人数据？",
+            "a": "仅在您使用社区功能时存储的内容:您的 Stellar 公钥、可选的显示名称,以及您提交的评论、支持工单或发行人申请(申请可含选填的联系邮箱)。评论为公开。不会要求完整姓名或身份证件。您的浏览器会保存待处理交易的本地记录以防重复,后端则保存请求的技术日志;《隐私政策》列出存储与保留方式。正式平台须履行 GDPR 义务:您数据的访问、更正、删除与可携带性。",
+            "state": "live"
+          }
+        ]
+      },
+      {
+        "id": "documents",
+        "title": "文件和税务",
+        "entries": [
+          {
+            "q": "我的合同文件和凭证在哪里？",
+            "a": "目前还没有：文件托管和个人投资组合是规划中的步骤。生产平台会按每笔投资存储合同文件，并在投资达成后出具确认。",
+            "state": "planned"
+          },
+          {
+            "q": "回报会被扣税吗？",
+            "a": "本原型不支付任何回报，因此不涉及任何征税或预扣。在真实平台上，税务处理取决于您的居住国、金融工具和发行方所在国；一些提供商会预扣税款或出具年度证明，而投资者始终负有正确申报的责任。",
+            "state": "info"
+          }
+        ]
+      },
+      {
+        "id": "issuers",
+        "title": "面向企业",
+        "entries": [
+          {
+            "q": "我今天可以上线我的公司吗？",
+            "a": "您可以在“融资”页面提交发行方申请；运营方在站外审核申请，不会自动上市任何项目。活动注册表目前仅包含演示活动。",
+            "state": "planned"
+          },
+          {
+            "q": "设计涵盖哪些融资模式？",
+            "a": "四个参与方母类——参与权/参与凭证（Substanzgenussrecht 为其子类型）、股份、作为持有结构的间接参与、有限合伙份额——以及两个债务母类：贷款和债券，各以优先、次级或未指定优先级发行。零息和可转换是债务上的结构叠加。学习中心对每一个都有解释。",
+            "state": "info"
+          },
+          {
+            "q": "发行方如何收到资金？",
+            "a": "全有或全无：只有达到目标，且只能在截止期限之后，项目创建者才能提取托管的资金。该规则由智能合约执行，而不是平台的承诺。",
+            "state": "live"
+          },
+          {
+            "q": "真实上线需要什么？",
+            "a": "许可路径（自行取得授权或与持牌提供商合作）、每种工具和司法辖区的法律认可登记册、通过持牌提供商的支付处理、KYC/AML，以及项目文档中描述的合规页面和文件。这些是待决事项，不是已实现的功能。",
+            "state": "info"
+          },
+          {
+            "q": "费用是多少？",
+            "a": "本原型运行在免费套餐托管和测试网基础设施上。没有为发行方或投资者定义或收取任何费用模式。",
+            "state": "info"
+          }
+        ]
+      }
+    ]
+  },
+  "profiles": {
+    "sampleMarker": "示例数据 - 非真实发行",
+    "list": [
+      {
+        "campaignId": "fixture-lisbon-riverside",
+        "issuer": "Riverside Development Lda（示例发行方）",
+        "country": "PT",
+        "category": "建筑",
+        "teaser": "里斯本一栋滨河公寓楼的翻新项目，通过固定利率优先债券融资。本页面上的所有条款均为示例数据。",
+        "instrumentClass": "bond",
+        "instrumentSeniority": "senior",
+        "instrumentOverlays": [],
+        "interestRate": "6.5% 年利率（示例）",
+        "term": "至 2030-12-31（示例）",
+        "minInvestment": "250 USDC 测试网（示例）",
+        "additionalInfo": [
+          {
+            "label": "投资产品",
+            "value": "优先债券（非次级、无担保）。示例数据 - 非真实发行"
+          },
+          {
+            "label": "ISIN / WKN",
+            "value": "未发行 - 本原型不发行证券标识符"
+          },
+          {
+            "label": "每单位名义金额",
+            "value": "250 USDC 测试网（示例）"
+          },
+          {
+            "label": "最低认购",
+            "value": "1 个单位（示例）"
+          },
+          {
+            "label": "融资门槛",
+            "value": "等于项目目标；在实际模式下由合约执行全有或全无"
+          },
+          {
+            "label": "发行规模",
+            "value": "250,000 USDC 测试网目标（示例数据）"
+          },
+          {
+            "label": "计息方式",
+            "value": "30E/360（示例）"
+          },
+          {
+            "label": "付息日期",
+            "value": "每年 12 月 31 日，首次付息 2027 年（示例）"
+          },
+          {
+            "label": "偿还",
+            "value": "到期偿还（示例）"
+          },
+          {
+            "label": "发行地区",
+            "value": "无发行国家 - 仅为示例数据"
+          },
+          {
+            "label": "中介机构",
+            "value": "无。本原型不是众筹服务提供商"
+          }
+        ],
+        "overview": [
+          "本面板演示发行方提供的营销内容如何通过上方的分隔线与平台事实区分开。",
+          "示例数据 - 非真实发行。真实平台上展示的发行方介绍、团队、商业模式和财务数据将由发行方提供并明确标注来源。"
+        ],
+        "documents": [
+          {
+            "label": "关键投资信息表（示例条目）",
+            "note": "本原型未托管任何文件"
+          },
+          {
+            "label": "债券条款（示例条目）",
+            "note": "本原型未托管任何文件"
+          },
+          {
+            "label": "融资演示文稿（示例条目）",
+            "note": "本原型未托管任何文件"
+          }
+        ],
+        "news": [
+          {
+            "date": "示例",
+            "text": "项目更新会显示在这里。本条目是占位符，不是真实更新。"
+          }
+        ]
+      },
+      {
+        "campaignId": "fixture-alentejo-solar",
+        "issuer": "Alentejo Solar Cooperative（示例发行方）",
+        "country": "PT",
+        "category": "能源与公用事业",
+        "teaser": "阿连特茹的社区太阳能项目，通过带现金利息变体的次级债券融资。本页面上的所有条款均为示例数据。",
+        "instrumentClass": "bond",
+        "instrumentSeniority": "subordinated",
+        "instrumentOverlays": [],
+        "interestRate": "7.0% 年利率现金（示例）",
+        "term": "至 2032-06-30（示例）",
+        "minInvestment": "250 USDC 测试网（示例）",
+        "additionalInfo": [
+          {
+            "label": "投资产品",
+            "value": "次级债券。示例数据 - 非真实发行"
+          },
+          {
+            "label": "ISIN / WKN",
+            "value": "未发行 - 本原型不发行证券标识符"
+          },
+          {
+            "label": "每单位名义金额",
+            "value": "250 USDC 测试网（示例）"
+          },
+          {
+            "label": "融资门槛",
+            "value": "900,000 USDC 测试网目标（示例数据）；实际模式下全有或全无"
+          },
+          {
+            "label": "次级属性",
+            "value": "破产清算时受偿顺序落后于优先债权人（示例条款）"
+          },
+          {
+            "label": "计息方式",
+            "value": "act/act（示例）"
+          },
+          {
+            "label": "付息日期",
+            "value": "每年 6 月 30 日，首次付息 2028 年（示例）"
+          },
+          {
+            "label": "偿还",
+            "value": "到期偿还（示例）"
+          },
+          {
+            "label": "发行地区",
+            "value": "无发行国家 - 仅为示例数据"
+          },
+          {
+            "label": "中介机构",
+            "value": "无。本原型不是众筹服务提供商"
+          }
+        ],
+        "overview": ["示例数据 - 非真实发行。真实的项目页面会包含发行方自己对合作社、场地和电力消纳的介绍。"],
+        "documents": [
+          {
+            "label": "关键投资信息表（示例条目）",
+            "note": "本原型未托管任何文件"
+          },
+          {
+            "label": "发行条件（示例条目）",
+            "note": "本原型未托管任何文件"
+          }
+        ],
+        "news": []
+      },
+      {
+        "campaignId": "fixture-porto-logistics",
+        "issuer": "Porto Logistics Hub SA（示例发行方）",
+        "country": "PT",
+        "category": "运输与物流",
+        "teaser": "波尔图附近物流中心的代币化研究，结构为可转换债券。本示例展示一个已完成的项目。所有条款均为示例数据。",
+        "instrumentClass": "bond",
+        "instrumentSeniority": "unspecified",
+        "instrumentOverlays": ["convertible"],
+        "interestRate": "8.0% 年利率直至转换（示例）",
+        "term": "至 2031-12-31（示例）",
+        "minInvestment": "500 USDC 测试网（示例）",
+        "additionalInfo": [
+          {
+            "label": "投资产品",
+            "value": "带转换特性的债券（可转换）；示例条款中未指定优先级。示例数据 - 非真实发行"
+          },
+          {
+            "label": "ISIN / WKN",
+            "value": "未发行 - 本原型不发行证券标识符"
+          },
+          {
+            "label": "每单位名义金额",
+            "value": "500 USDC 测试网（示例）"
+          },
+          {
+            "label": "融资门槛",
+            "value": "500,000 USDC 测试网目标（示例数据）"
+          },
+          {
+            "label": "转换触发条件",
+            "value": "按发行配置；示例：发行方宣布的合格融资事件"
+          },
+          {
+            "label": "转换窗口",
+            "value": "按发行配置；示例：触发公告后 30 天"
+          },
+          {
+            "label": "利息停止",
+            "value": "利息累计至转换日（示例）"
+          },
+          {
+            "label": "未转换时的偿还",
+            "value": "到期偿还（示例）"
+          },
+          {
+            "label": "发行地区",
+            "value": "无发行国家 - 仅为示例数据"
+          },
+          {
+            "label": "中介机构",
+            "value": "无。本原型不是众筹服务提供商"
+          }
+        ],
+        "overview": ["示例数据 - 非真实发行。已完成的项目会连同其最终融资状态保持可见，如本项目所示。"],
+        "documents": [
+          {
+            "label": "可转换债券条款（示例条目）",
+            "note": "本原型未托管任何文件"
+          }
+        ],
+        "news": [
+          {
+            "date": "示例",
+            "text": "该项目在示例数据中已成功结束。融资后的发行方事件会单独跟踪。"
+          }
+        ]
+      }
+    ]
+  },
+  "contentPages": {
+    "eventsTitle": "活动",
+    "eventsIntro": "路演之夜、投资者见面会和网络研讨会。本演示环境仅展示计划中的形式;没有可预订的真实活动。",
+    "eventsLive": "即将举行",
+    "eventsPast": "往期",
+    "eventsEmptyLive": "此演示中暂无即将举行的活动。",
+    "eventsEmptyPast": "暂无往期活动。",
+    "eventsFilterAll": "全部",
+    "eventsFormatsTitle": "计划中的形式",
+    "eventsFormatPitch": "路演之夜",
+    "eventsFormatPitchDesc": "发行方用五分钟介绍项目,并现场回答投资者提问。",
+    "eventsFormatLounge": "投资者见面会",
+    "eventsFormatLoungeDesc": "讨论众筹投资和当前活动的小型本地聚会。",
+    "eventsFormatWebinar": "网络研讨会",
+    "eventsFormatWebinarDesc": "关于平台功能、工具和风险基础知识的在线课程。",
+    "eventsDemoNote": "演示页面:平台安排真实活动后,日期、城市和报名入口将显示在这里。",
+    "blogTitle": "博客",
+    "blogIntro": "关于众筹投资、工具和平台的背景文章。",
+    "blogEmpty": "尚未发布任何文章。",
+    "blogDemoNote": "演示页面:编辑文章将显示在这里。本页面的任何内容均不构成投资建议。",
+    "pressTitle": "媒体",
+    "pressIntro": "新闻稿、媒体联系方式和宣传资料。",
+    "pressContactLabel": "媒体联系",
+    "pressKitLabel": "新闻资料包",
+    "pressKitNote": "徽标和品牌资料将在此提供下载。",
+    "pressEmpty": "尚未发布新闻稿。",
+    "pressDemoNote": "演示页面:未发布过任何新闻稿;此处任何内容均不得作为公司真实声明引用。",
+    "jobsTitle": "招聘",
+    "jobsIntro": "加入平台工作。",
+    "jobsEmpty": "目前没有空缺职位。",
+    "jobsSpeculativeNote": "本演示不收集自荐申请。",
+    "jobsDemoNote": "演示页面:发布的职位将显示在这里。目前没有真实职位空缺。",
+    "podcastTitle": "播客",
+    "podcastIntro": "关于众筹投资、发行方和平台的音频节目规划形式。本演示环境展示规划形式；尚未录制任何节目。",
+    "podcastEmpty": "尚未发布任何节目。",
+    "podcastFormatsTitle": "规划形式",
+    "podcastFormatInterviews": "发行方访谈",
+    "podcastFormatInterviewsDesc": "与活动创建者就其项目、计划和风险进行的对话。",
+    "podcastFormatEducation": "投资者教育",
+    "podcastFormatEducationDesc": "关于投资工具、多元化以及众筹投资风险基础的节目。",
+    "podcastFormatUpdates": "平台动态",
+    "podcastFormatUpdatesDesc": "以通俗易懂的语言介绍平台的变化及原因。",
+    "podcastDemoNote": "演示页面：平台实际发布播客后，节目和音频播放器将显示在这里。本页面内容不构成要约或投资建议。",
+    "eventsHowTitle": "活动将如何运作",
+    "eventsHowBody": "当平台安排真实活动时,活动将显示在\"即将举行\"下,包含日期、形式和报名方式。已结束的活动会移至\"往期\"。在此之前,两个列表都如实保持为空。",
+    "blogPosts": [
+      {
+        "date": "2026-10-31",
+        "title": "Blockallisto 是什么 - 以及不是什么",
+        "paragraphs": [
+          "Blockallisto 是在 Stellar 测试网上运行的代币化众筹投资工作原型。它探索透明投资平台可能的运作方式:公开的活动条款、链上出资记录和可执行的退款规则。",
+          "它不是投资平台。本网站没有任何真实发行、真实资金或投资建议。所有活动都在 Stellar 测试网上运行,而测试网资产在设计上毫无价值。",
+          "真实的是这套机制:智能合约、钱包流程和本网站以毫无价值的测试资产运行,同时原型在不断被使用和打磨。"
+        ]
+      },
+      {
+        "date": "2026-10-31",
+        "title": "一个活动从头到尾如何运作",
+        "paragraphs": [
+          "每个活动都是一个带有目标和截止日期的 Soroban 智能合约。访客连接 Freighter 钱包并出资测试网 USDC;每笔已确认的出资在链上和活动进度条中都可见。",
+          "合约在没有中间人的情况下执行结果:截止后,只有达到目标,创建者才能提款。如果活动结束时低于目标,每位出资者签署自己的退款并取回出资。",
+          "连接钱包后,您的持仓、动态和通知都在\"我的账户\"下 - 按钱包保存在服务器上,而不是 cookie 中。"
+        ]
+      },
+      {
+        "date": "2026-10-31",
+        "title": "为什么演示站点也有法律页面",
+        "paragraphs": [
+          "本原型的结构借鉴自真实的众筹监管。欧盟根据 ECSPR 监管众筹,获授权的服务商列入 ESMA 注册名录;Blockallisto 不是获授权的服务商,也不列出任何真实发行。",
+          "风险提示、利益冲突、投诉管理和业务连续性等页面在这里作为标注 [DEMO] 的说明性模板存在。它们展示真实平台必须提供的透明度 - 它们不是法律文件,也未经律师审阅。",
+          "同样的规则适用于本网站的每个角落:虚构信息均标注 [DEMO],此处任何内容都不得被引用为真实公司的声明。"
+        ]
+      }
+    ],
+    "pressFactSheetTitle": "项目资料表",
+    "pressFactStatusLabel": "状态",
+    "pressFactStatusValue": "Stellar 测试网上的公开演示 - 无真实发行、无真实资金、无投资建议。",
+    "pressFactOperatorLabel": "运营方",
+    "pressFactOperatorValue": "独立原型项目。未声明任何注册运营方;法律声明页面上的信息均标注 [DEMO]。",
+    "pressFactTechLabel": "技术",
+    "pressFactTechValue": "Stellar Soroban 智能合约、测试网 USDC 和 Freighter 钱包。",
+    "pressFactContactValue": "请使用任意页面上的反馈小部件;消息将作为反馈保存在本演示中。",
+    "jobsAboutTitle": "本项目如何构建",
+    "jobsAboutBody": "Blockallisto 目前作为一个小型原型项目构建。如果将来有真实职位开放,将会连同任职要求和申请方式发布在本页面。"
+  },
+  "builder": {
+    "title": "活动创建器",
+    "badge": "草稿",
+    "intro": "这是活动部署配置的草稿预览。此处不会部署任何合约或创建任何活动:本演示中提交功能已禁用。各字段遵循合约和活动注册表所执行的相同规则。",
+    "connectNote": "请在\"我的账户\"下连接钱包以预览创建者地址。只有创建者钱包可以授权部署,并且只有在截止后且达到目标时才能提款。",
+    "nameLabel": "项目名称",
+    "nameErrorTooLong": "最多 120 个字符(注册表规则)。",
+    "slugLabel": "活动标识(URL slug)",
+    "slugPlaceholder": "my-project",
+    "slugErrorInvalid": "仅限字母、数字、- 和 _,最多 48 个字符(注册表规则)。",
+    "industryLabel": "行业",
+    "goalLabel": "募资目标(测试网 USDC)",
+    "goalPlaceholder": "10000",
+    "goalErrorInvalid": "目标必须为正数且最多 7 位小数(代币规则)。",
+    "goalErrorRange": "目标超出合约可存储的最大金额(合约规则)。",
+    "deadlineLabel": "截止日期",
+    "deadlineNote": "截止日期为所选日期的 00:00 UTC,因此今天已经太晚。",
+    "deadlineErrorPast": "截止日期必须在未来(合约规则)。",
+    "creatorLabel": "创建者钱包",
+    "creatorPlaceholder": "请先连接钱包",
+    "tokenLabel": "代币",
+    "previewAria": "部署预览",
+    "previewTitle": "部署将使用的参数",
+    "previewConstructor": "合约构造函数参数(创建者必须签署部署):",
+    "previewRegistry": "活动注册表条目:",
+    "deployDisabled": "本演示未启用部署"
+  },
+  "tour": {
+    "tourTitle": "活动导览",
+    "tourStepOf": "第 {current} 步,共 {total} 步",
+    "tourNext": "下一步",
+    "tourBack": "上一步",
+    "tourDone": "完成",
+    "tourSkip": "跳过导览",
+    "tourRepeat": "重新导览",
+    "tourStepFundingTitle": "募资状态",
+    "tourStepFundingBody": "已筹金额、目标和剩余时间。贡献在链上确认后面板会更新。",
+    "tourStepTabsTitle": "详情和文件",
+    "tourStepTabsBody": "概览、条款和活动文件,如发行条件和信息说明。",
+    "tourStepRiskTitle": "风险提示",
+    "tourStepRiskBody": "每项活动都可能损失全部价值。投资前请阅读风险提示。",
+    "tourStepNewsTitle": "动态和问答",
+    "tourStepNewsBody": "活动更新和公开评论。演示动态始终标注为 platform-demo。"
+  },
+  "categorisation": {
+    "catTitle": "投资者分类",
+    "catPrototypeNote": "非约束性原型:此检查不会授予或限制访问权限,仅保存在此浏览器中。",
+    "catKnowledgeTitle": "知识测试",
+    "catKnowledgeIntro": "关于众筹投资风险的五道简答题。",
+    "catSubmit": "检查答案",
+    "catRetake": "重新测试",
+    "catResultPass": "全部回答正确。",
+    "catResultReview": "有 {n} 道题需要复核 - 请阅读解析后重试。",
+    "catScoreLabel": "{total} 题中答对 {correct} 题",
+    "catSimTitle": "亏损承受能力模拟",
+    "catSimIntro": "将计划投资金额与您的可自由支配资金进行比较。",
+    "catAssetsLabel": "可自由支配资金 (EUR)",
+    "catIncomeLabel": "月净收入 (EUR)",
+    "catPlannedLabel": "计划投资金额 (EUR)",
+    "catSimRun": "运行模拟",
+    "catSimResult": "计划投资金额相当于您输入的可自由支配资金的{pct}%。",
+    "catSimNote": "仅对您输入的金额进行简单算术计算。这不是关于损失承受能力、适当性或资格的监管评估,也不适用任何阈值。",
+    "catSavedNote": "结果仅保存在此浏览器本地。",
+    "catQuestions": [
+      {
+        "q": "众筹投资最多可能损失多少?",
+        "options": ["仅手续费", "全部投资额", "一半投资额"],
+        "why": "众筹投资可能损失全部价值(全额亏损)。"
+      },
+      {
+        "q": "通常出售众筹投资有多容易?",
+        "options": ["随时可在交易所出售", "通常无法出售 - 缺乏流动性", "仅年底可以"],
+        "why": "一般没有二级市场;请按持有至到期来规划。"
+      },
+      {
+        "q": "如果发行公司倒闭,谁承担损失?",
+        "options": ["平台", "支付服务商", "投资者"],
+        "why": "投资是与发行方签订的合同;平台不承担损失。"
+      },
+      {
+        "q": "分散投资是什么意思?",
+        "options": ["将资金分散到多项投资", "全部投入一个活动", "全部持有现金"],
+        "why": "分散投资可以降低单笔全额亏损的影响。"
+      },
+      {
+        "q": "众筹投资的收益有保障吗?",
+        "options": ["有,法律保障", "有,平台保障", "没有"],
+        "why": "利息和本金偿还取决于发行方;没有任何收益是有保障的。"
+      }
+    ]
+  },
+  "community": {
+    "loading": "加载中...",
+    "demoBadge": "DEMO",
+    "documentsTitle": "文件",
+    "documentsNote": "标有 DEMO 的文件为本原型的虚构模板 - 非要约、非建议、非经核验的发行人信息。",
+    "rewardsTitle": "奖励",
+    "rewardsNote": "此处显示的奖励等级由发行方作为营销内容提供。平台不承诺任何奖励可以申领或将会兑现。",
+    "rewardsNone": "该活动尚未公布任何奖励。",
+    "documentKinds": {
+      "kiis": "KIIS",
+      "terms": "条款",
+      "project": "项目",
+      "other": "文件"
+    },
+    "demoDocumentTitles": {
+      "demo-solar-kiis": "[DEMO] 关键投资信息说明书 - 虚构模板，并非要约",
+      "demo-solar-project": "[DEMO] 项目概览 - 虚构示例文件",
+      "staging-load-kiis": "[DEMO] 关键投资信息说明书 - 虚构模板，并非要约",
+      "staging-load-project": "[DEMO] 项目概览 - 虚构示例文件"
+    },
+    "newsTitle": "最新动态",
+    "newsAuthorDemo": "由平台发布(演示内容 - 无经核验的发行人身份)",
+    "commentsTitle": "评论",
+    "commentsEmpty": "暂无评论。",
+    "commentLabel": "您的评论",
+    "commentSubmit": "发表评论",
+    "commentPostingAs": "以 {name} 身份发表。评论为公开。",
+    "commentsSignInHint": "在下方使用您的钱包登录以参与讨论。",
+    "signInTitle": "社区登录",
+    "signInExplainer": "使用您的 Freighter 钱包签署一次性挑战,以证明您控制该地址。不会创建任何交易,也不会移动资金。登录后可使用评论、支持工单和发行人申请。",
+    "signInButton": "使用钱包登录",
+    "signInConnectFirst": "请先连接您的 Freighter 钱包(页面顶部)。",
+    "signedInTitle": "社区账户",
+    "signedInAs": "已登录为",
+    "displayNameLabel": "显示名称(显示在您的评论中)",
+    "displayNameSave": "保存名称",
+    "signOutButton": "退出登录",
+    "ticketsTitle": "支持与反馈",
+    "ticketsNote": "工单仅您的钱包账户与网站运营方可见。此为原型:请勿包含个人数据、密码或真实付款信息。",
+    "ticketKindLabel": "类型",
+    "ticketKinds": {
+      "support": "支持请求",
+      "feedback": "意见反馈"
+    },
+    "ticketSubjectLabel": "主题",
+    "ticketBodyLabel": "消息",
+    "ticketSubmit": "发送",
+    "ticketsEmpty": "暂无工单。",
+    "ticketStatus": {
+      "open": "待处理",
+      "closed": "已关闭"
+    },
+    "applicationTitle": "申请成为发行人",
+    "applicationNote": "向运营方介绍您想上架的项目。提交此表单并非要约、上架或批准 - 而是开启对话。演示环境:请勿提交真实商业机密。",
+    "applicationPreviewTitle": "申请（预览）",
+    "applicationPreviewNote": "发行人申请预览。此处输入的任何内容都不会被发送或保存 - 请在下方使用钱包登录，提交真实申请以供运营方审核。",
+    "applicationPreviewPlaceholder": "仅预览 - 登录后申请",
+    "applicationPreviewSubmit": "提交申请（请先登录）",
+    "applicationFields": {
+      "projectName": "项目名称",
+      "country": "国家",
+      "instrumentType": "工具类型(例如:债券、股权、收益分成)",
+      "targetAmount": "目标金额",
+      "description": "项目说明",
+      "contactEmail": "联系邮箱(选填)"
+    },
+    "newsFeedTitle": "最新项目动态",
+    "newsFeedEmpty": "暂无项目动态。",
+    "myApplicationsTitle": "我的发行方申请",
+    "myApplicationsEmpty": "暂无申请。",
+    "applicationStatus": {
+      "received": "已收到",
+      "under_review": "审核中",
+      "closed": "已关闭"
+    },
+    "myTicketsTitle": "我的支持与反馈工单",
+    "myCommentsTitle": "我的评论",
+    "commentHidden": "已被审核隐藏",
+    "applicationValidation": {
+      "required": "请填写此字段。",
+      "emailInvalid": "请输入有效的电子邮件地址。"
+    },
+    "company": {
+      "title": "公司账户",
+      "note": "申请与您的钱包关联的公司账户。审核为人工进行,与发行人申请相同。演示说明:您填写的注册信息为申请人自行申报;本原型不会上传或核验公司注册摘录或所有者身份证件。从公司身份进行投资属于计划功能,此处未启用。",
+      "listTitle": "我的公司申请",
+      "empty": "暂无公司申请。",
+      "formTitle": "申请公司账户",
+      "fields": {
+        "companyName": "公司名称",
+        "legalForm": "法律形式(如有限责任公司)",
+        "registrationNumber": "注册号",
+        "country": "注册国家/地区"
+      },
+      "submit": "提交申请",
+      "submitting": "提交中...",
+      "submitted": "申请已收到。上方列表显示为待审核。",
+      "status": {
+        "pending": "待审核",
+        "approved": "已批准",
+        "rejected": "已拒绝"
+      }
+    },
+    "security": {
+      "title": "安全",
+      "authMethodNote": "您通过 Stellar 钱包签名消息来登录:钱包即凭证。本原型没有密码,也没有双重验证应用。",
+      "sessionsTitle": "活跃会话",
+      "sessionLabel": "会话",
+      "currentBadge": "当前会话",
+      "createdLabel": "登录时间",
+      "expiresLabel": "过期时间",
+      "revoke": "结束会话",
+      "revokeOthers": "退出所有其他会话",
+      "revokedOthers": {
+        "one": "已退出其他 {count} 个会话。",
+        "other": "已退出其他 {count} 个会话。"
+      },
+      "empty": "没有活跃会话。"
+    },
+    "notifications": {
+      "title": "通知",
+      "empty": "暂无通知。",
+      "markAllRead": "全部标为已读",
+      "markRead": "标记为已读",
+      "kinds": {
+        "applicationReceived": "发行方申请已收到",
+        "applicationStatus": "发行方申请更新",
+        "commentModerated": "评论已被审核隐藏",
+        "ticketClosed": "支持工单已关闭",
+        "companyReceived": "公司账户申请已收到",
+        "companyStatus": "公司账户申请更新"
+      },
+      "bodies": {
+        "applicationReceived": "您为 \"{projectName}\" 提交的发行方申请已收到。运营方将人工审核申请；提交不构成批准、上架或要约。",
+        "applicationStatus": "您为 \"{projectName}\" 提交的发行方申请现已更新为 \"{statusLabel}\"。",
+        "commentModerated": "您在活动 \"{campaignId}\" 下的评论已被审核员隐藏。",
+        "commentModeratedReason": "原因：{reason}",
+        "ticketClosed": "您的{kindLabel}工单 \"{subject}\" 已关闭。",
+        "companyReceived": "您为\"{companyName}\"提交的公司账户申请已收到。审核为人工进行;提交不等于批准。",
+        "companyStatus": "您为\"{companyName}\"提交的公司账户申请现在为\"{statusLabel}\"。"
+      }
+    },
+    "operator": {
+      "title": "运营方控制面板",
+      "demoNote": "测试环境的运营工具。新闻始终标注为平台演示内容；没有经过验证的发行方身份。请勿发布有关批准、上架或收益的声明。",
+      "loadError": "无法加载运营数据。",
+      "retry": "重试",
+      "tabs": {
+        "applications": "申请",
+        "comments": "评论",
+        "tickets": "工单",
+        "news": "新闻",
+        "reconciliation": "对账",
+        "audit": "操作日志"
+      },
+      "applicationsEmpty": "暂无发行方申请。",
+      "commentsEmpty": "暂无评论。",
+      "ticketsEmpty": "暂无工单。",
+      "reconNote": "只读运营辅助工具，将本应用的账本与链上累计出资计数器进行比较。超出账本覆盖额的链上金额来自本应用之外（CLI 测试、其他工具、账本之前的历史），并非丢失资金。不构成会计、托管或合规声明。",
+      "colOnChain": "链上计数器",
+      "colJournalCovered": "账本已覆盖",
+      "colNotCovered": "账本未覆盖",
+      "colSucceeded": "成功（出资/退款/提取）",
+      "colOpenIntents": "未完结意向",
+      "colNotes": "备注",
+      "colGenerated": "生成时间",
+      "reconEmpty": "注册表中没有活动。",
+      "auditNote": "受保护管理操作的近期运营历史（最新 500 条）。条目会过期且写入为非阻塞式 - 这不是不可变的审计追踪。",
+      "auditEmpty": "暂无记录的管理操作。",
+      "colTime": "时间",
+      "colGate": "入口",
+      "colAction": "操作",
+      "colTargetRef": "目标",
+      "colDetail": "详情",
+      "reconQuarantined": "{n} 条被隔离的账本行需要运营者复核。",
+      "colProject": "项目",
+      "colCountry": "国家",
+      "colInstrument": "工具类型",
+      "colTarget": "目标金额",
+      "colSubmitted": "提交时间",
+      "colStatus": "状态",
+      "colActions": "操作",
+      "colCampaign": "活动",
+      "colAuthor": "作者",
+      "colComment": "评论",
+      "colPosted": "发布时间",
+      "colState": "状态",
+      "colKind": "类型",
+      "colSubject": "主题",
+      "colMessage": "内容",
+      "colOpened": "创建时间",
+      "stateVisible": "可见",
+      "stateHidden": "已隐藏",
+      "markUnderReview": "标记为审核中",
+      "closeApplication": "关闭",
+      "reopenApplication": "重新打开",
+      "statusUpdated": "状态已更新。",
+      "hide": "隐藏",
+      "unhide": "恢复显示",
+      "hideReasonLabel": "隐藏原因 (可选，将向作者显示)",
+      "hideReasonPlaceholder": "简短审核原因",
+      "confirmHide": "确认隐藏",
+      "cancel": "取消",
+      "closeTicket": "关闭工单",
+      "closedNote": "关闭后将通知作者，且无法在此撤销。",
+      "newsFormTitle": "发布活动新闻",
+      "newsCampaignLabel": "活动",
+      "newsTitleLabel": "标题",
+      "newsBodyLabel": "正文",
+      "newsSubmit": "发布新闻",
+      "newsPosted": "新闻已发布。",
+      "newsValidation": "标题和正文为必填项。",
+      "actionFailed": "操作失败，请重试。"
+    },
+    "applicationSubmit": "提交申请",
+    "applicationDone": "已收到申请。运营方会在站外审核申请;不会自动上架任何内容。",
+    "feedbackTabLabel": "反馈",
+    "feedbackPanelTitle": "发送反馈",
+    "feedbackPanelIntro": "告诉我们哪些好用、哪些不好用。反馈会保存为支持工单,仅您和运营者可见。",
+    "feedbackSignInPrompt": "请使用钱包登录后发送反馈。",
+    "feedbackSubmitted": "谢谢 - 您的反馈已发送。",
+    "feedbackClose": "关闭"
+  }
+}

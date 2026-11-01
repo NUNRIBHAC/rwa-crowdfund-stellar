@@ -1,0 +1,1671 @@
+{
+  "meta": {
+    "title": "Blockallisto - Reale Vermögenswerte. Geteilte Möglichkeiten.",
+    "skipLink": "Zum Hauptinhalt springen"
+  },
+  "nav": {
+    "ariaMain": "Hauptnavigation",
+    "home": "Start",
+    "investments": "Investieren",
+    "howItWorks": "So funktioniert es",
+    "learn": "Lernen",
+    "financing": "Finanzierung",
+    "faq": "FAQ",
+    "about": "Über uns",
+    "account": "Mein Konto"
+  },
+  "header": {
+    "testnetBadge": "Stellar-Testnet",
+    "connect": "Freighter verbinden",
+    "connectedPrefix": "Verbunden",
+    "disconnect": "Trennen",
+    "languageLabel": "Sprache der Website",
+    "themeToLight": "Zum hellen Design wechseln",
+    "themeToDark": "Zum dunklen Design wechseln"
+  },
+  "riskBanner": "Crowdfunding-Investitionen bergen ein Totalverlustrisiko. Dies ist ein Prototyp im Stellar-Testnet: keine echten Angebote, keine echten Gelder, keine Anlageberatung.",
+  "hero": {
+    "eyebrow": "Tokenisierte reale Vermögenswerte, auf Stellar",
+    "titleA": "Reale Vermögenswerte.",
+    "titleB": "Geteilte Möglichkeiten.",
+    "sub": "Blockallisto ist Alles-oder-nichts-Crowdfunding, durchgesetzt durch einen Soroban-Vertrag: Jeder Beitrag bleibt auf Stellar im Escrow und die Prüfung der Finanzierungsobergrenze erfolgt in derselben atomaren Transaktion. Der Ersteller kann die Mittel nur abheben, wenn das Ziel fristgerecht erreicht wird; andernfalls signiert jeder Beitragende seine eigene Rückerstattung. Von Portugal in die Welt.",
+    "ctaBrowse": "Kampagnen ansehen",
+    "ctaHow": "So funktioniert es",
+    "noteStrong": "Prototyp im Stellar-Testnet - keine echten Gelder.",
+    "noteLive": "Jede Kampagne unten ist ein echter Soroban-Vertrag im Stellar-Testnet. Nicht geprüft, nicht produktionsreif. Auf einem kostenlosen Tarif gehostet: Die erste Anfrage nach Inaktivität kann bis zu einer Minute dauern, während die Instanz aufwacht.",
+    "noteSample": "Die Kampagnen unten sind Beispiele (Fixtures), keine bereitgestellten Verträge. Nicht geprüft, nicht produktionsreif.",
+    "noteUnknown": "Nicht geprüft, nicht produktionsreif.",
+    "unavailable": "In diesem Prototyp nicht verfügbar: Registrierung mit Identität/KYC, Handel auf einem Sekundärmarkt, übertragbare Vermögens- oder Quittungs-Token, Zahlungen in Fiatwährung, echte Investitionsangebote. Beitragsregister sind nicht übertragbar - dies ist Crowdfunding, keine Investmentbörse.",
+    "fundingBlockAria": "Illustration: Kleine violette Blöcke gleiten nacheinander herein und füllen den Umriss eines geteilten Vermögenswerts, Token für Token"
+  },
+  "emptyState": {
+    "fixtureStrong": "Beispielvorschau aktiv.",
+    "fixtureText": "Die Kampagnen unten sind Beispiele zur Darstellung des Layouts. Sie sind keine bereitgestellten Verträge, keine echten Angebote und können keine Beiträge annehmen.",
+    "fixtureBack": "Zurück zum echten Register",
+    "emptyTitle": "Keine bereitgestellte Kampagne konfiguriert",
+    "emptyText": "Ein Betreiber muss den geprüften Vertrag separat bereitstellen und verifizieren und dann SOROBAN_CAMPAIGNS_JSON setzen. Bereitstellung und Migration erfolgen nicht hier. Alte Kampagnen sind schreibgeschützt und erfordern Abgleich.",
+    "emptyCta": "Vorschau mit Beispielkampagnen"
+  },
+  "home": {
+    "stepsAria": "So funktioniert das Investieren",
+    "stepsTitle": "4 Schritte zu Ihrem ersten Beitrag",
+    "steps": [
+      {
+        "title": "Verbinden",
+        "text": "Verbinde eine Freighter-Wallet im Stellar-Testnetz. Der Community-Zugang ist optional und braucht weder E-Mail noch Passwort."
+      },
+      {
+        "title": "Entdecken",
+        "text": "Durchstöbern Sie die Kampagnen und lesen Sie die strukturierten Bedingungen auf jeder Kampagnenseite."
+      },
+      {
+        "title": "Beitragen",
+        "text": "Signieren Sie eine Transaktion. Der Vertrag legt Ihren Beitrag in Escrow und setzt die Finanzierungsobergrenze atomar durch."
+      },
+      {
+        "title": "Verfolgen",
+        "text": "Verfolgen Sie hier den Finanzierungsstand. Rückerstattungen werden vom Beitragenden signiert, wenn das Ziel nicht erreicht wird."
+      }
+    ],
+    "fullJourneyLink": "Der vollständige Anlegerweg, jeder Schritt als vorhanden oder geplant markiert",
+    "latestAria": "Neueste Kampagnen",
+    "latestTitle": "Neueste Kampagnen",
+    "allInvestments": "Alle Investitionen",
+    "instrumentsAria": "Instrumentenklassen",
+    "instrumentsTitle": "Von diesem Design abgedeckte Instrumentenklassen",
+    "instrumentsIntro": "Das Plattformdesign umfasst vier Mutterkategorien auf der Beteiligungsseite (Beteiligungsrecht/-zertifikat - mit dem Substanzgenussrecht als Untertyp - Aktie, indirekte Beteiligung als Haltestruktur und Kommanditbeteiligung) und zwei Fremdkapital-Mutterkategorien, Darlehen und Anleihe, jeweils senior, nachrangig oder mit nicht angegebener Rangfolge begeben, plus Strukturüberlagerungen wie Nullkupon und Wandelanleihe. Dieser Prototyp implementiert nur den Vertrags-Escrow; die Klassen unten sind lehrhaft.",
+    "whyAria": "Warum diese Plattform",
+    "whyTitle": "Warum dieser Ansatz",
+    "whyPoints": [
+      "Finanzierungsregeln werden von einem öffentlichen Vertrag durchgesetzt, nicht von der Plattformbuchhaltung.",
+      "Alles-oder-nichts-Schutz: Beitragende signieren ihre eigene Rückerstattung, wenn das Ziel nicht erreicht wird.",
+      "Jede Transaktion ist in einem öffentlichen Testnetz überprüfbar.",
+      "Offenes Design: Instrumentenklassen, Anlegerweg und Compliance-Oberfläche im Repository dokumentiert."
+    ]
+  },
+  "invest": {
+    "title": "Alle Investitionen",
+    "noteFixture": "Die Beispielkampagnen demonstrieren das Layout. Sie sind keine bereitgestellten Verträge und können keine Beiträge annehmen.",
+    "noteLive": "Die echten Kampagnen sind Soroban-Verträge im Stellar-Testnet. Testnet-Vermögenswerte sind wertlos.",
+    "refresh": "Vertragsstatus aktualisieren",
+    "searchPlaceholder": "Kampagnen nach Name oder Vertrag suchen",
+    "searchAria": "Kampagnen suchen",
+    "filterStatusAria": "Nach Status filtern",
+    "all": "Alle",
+    "open": "Offen",
+    "funded": "Finanziert",
+    "underfunded": "Nicht finanziert",
+    "filterIndustryAria": "Nach Branche filtern",
+    "industryLabels": {
+      "energy-utilities": "Energie und Versorgung"
+    },
+    "allIndustries": "Alle Branchen",
+    "sortAria": "Kampagnen sortieren",
+    "sortDeadline": "Nächste Frist",
+    "sortProgress": "Am meisten finanziert",
+    "sortName": "Name A-Z",
+    "viewAria": "Ansichtsmodus",
+    "grid": "Raster",
+    "list": "Liste",
+    "noMatches": "Keine Kampagne entspricht der aktuellen Suche und den Filtern.",
+    "resultCount": {
+      "one": "{n} Kampagne angezeigt",
+      "other": "{n} Kampagnen angezeigt"
+    },
+    "activeAria": "Aktive Investitionen",
+    "activeTitle": "Aktive Investitionen",
+    "completedAria": "Abgeschlossene Investitionen",
+    "completedTitle": "Abgeschlossene Investitionen"
+  },
+  "card": {
+    "demo": "Demo",
+    "statusFunded": "Finanziert",
+    "statusEnded": "Nicht finanziert",
+    "statusOpen": "Offen",
+    "withdrawn": "Abgehoben",
+    "fundedPct": "{percent}% finanziert",
+    "progressUnavailable": "Fortschritt nicht verfügbar - On-Chain-Daten nicht geladen",
+    "progressAria": "Finanzierungsfortschritt: {pct}% des Ziels",
+    "interest": "Zinsen",
+    "term": "Laufzeit",
+    "minimum": "Minimum",
+    "raised": "Eingenommen",
+    "goal": "Ziel",
+    "deadline": "Frist",
+    "status": "Status",
+    "yourPosition": "Ihr Beitragsregister:",
+    "viewDetails": "Details ansehen",
+    "demoNote": "Illustrative Demo-Daten - kein echtes Angebot.",
+    "photoAlt": "Luftaufnahme einer Solaranlage (illustrativ)",
+    "photoCaption": "Illustratives Foto - nicht das tatsächliche Projekt.",
+    "contractData": "Vertragsdaten",
+    "contract": "Vertrag",
+    "creator": "Ersteller",
+    "assetContract": "Vertrag des Vermögenswerts",
+    "assetValidated": "von der API als Testnet-USDC validiert",
+    "exactRaisedGoal": "Exakt eingenommen / Ziel",
+    "unitsNote": "Einheiten mit 7 Dezimalstellen",
+    "creatorWithdrawn": "Abhebung durch Ersteller",
+    "yes": "Ja",
+    "no": "Nein",
+    "amountLabel": "Beitragsbetrag (Testnet-USDC)",
+    "amountRequired": "Geben Sie einen Beitragsbetrag ein.",
+    "amountInvalid": "Geben Sie einen gültigen Betrag ein: nur Ziffern, bis zu 7 Dezimalstellen, größer als null.",
+    "amountExceeds": "Der Betrag übersteigt das verbleibende Ziel von {remaining} USDC (Testnet).",
+    "usdcTestnet": "USDC (Testnet)",
+    "contribute": "Beitragen",
+    "refundMe": "Rückerstattung an mich",
+    "creatorWithdraw": "Abhebung des Erstellers",
+    "rules": "Tragen Sie vor der Frist bis zum verbleibenden Zielbetrag bei. Nach der Frist kann der Ersteller die Mittel nur abheben, wenn das Ziel vollständig erreicht wurde; andernfalls signiert jeder Beitragende seine eigene Rückerstattung. Der Vertrag setzt diese Regeln atomar durch."
+  },
+  "grid": {
+    "ariaReady": "Finanzierungsfortschritt: {filled} von {count} Blöcken gefüllt, {percent}% des Ziels",
+    "ariaUnavailable": "Finanzierungsfortschritt nicht verfügbar: On-Chain-Daten nicht geladen",
+    "fundedTail": "finanziert - {filled} von {count} Blöcken",
+    "captionUnavailable": "Fortschritt nicht verfügbar - On-Chain-Daten nicht geladen"
+  },
+  "intent": {
+    "title": "Gespeicherte Transaktion",
+    "steps": ["Vorbereitet", "Signiert", "Gesendet", "Bestätigt"],
+    "action": "Aktion",
+    "campaign": "Kampagne",
+    "contract": "Vertrag",
+    "maxFee": "Max. Gebühr",
+    "checkWallet": "Wallet prüfen",
+    "hash": "Hash",
+    "usdcTestnet": "USDC (Testnet)",
+    "xlmTestnet": "Testnet-XLM",
+    "warningPending": "Senden ist nicht Bestätigen. Ein fehlendes Ergebnis bedeutet keinen Fehlschlag. Prüfen Sie den Status oder wiederholen Sie diese exakt signierte Transaktion; erstellen Sie bei Zweifeln niemals eine Ersatztransaktion.",
+    "confirmed": "Im Stellar-Testnet bestätigt. Diese exakte Transaktion ist endgültig; der obige Hash ist Ihr permanenter Nachweis.",
+    "notFound": "Unsicheres Ergebnis aufbewahrt. Der RPC kann begrenzten Verlauf haben. Nicht löschen oder ersetzen aufgrund eines Ablaufs.",
+    "retry": "Identische Transaktion wiederholen",
+    "signSubmit": "Signieren und senden",
+    "checkLedger": "Ergebnis im Ledger prüfen",
+    "cancelUnsigned": "Nicht signierte Transaktion abbrechen",
+    "clearConfirmed": "Bestätigten Eintrag löschen",
+    "statusLabels": {
+      "BUILT": "VORBEREITET",
+      "SIGNED": "SIGNIERT",
+      "PENDING": "AUSSTEHEND",
+      "SUCCESS": "BESTÄTIGT",
+      "FAILED": "FEHLGESCHLAGEN",
+      "NOT_FOUND": "NICHT GEFUNDEN",
+      "CANCELLED_UNSIGNED": "OHNE SIGNATUR ABGEBROCHEN"
+    },
+    "actionLabels": {
+      "contribute": "beitragen",
+      "refund": "rückerstattung",
+      "withdraw": "abhebung"
+    }
+  },
+  "campaign": {
+    "loading": "Kampagne wird geladen…",
+    "notFound": "Kampagne nicht gefunden",
+    "notFoundText": "Keine Kampagne mit dieser ID ist im aktuellen Register",
+    "notFoundFixtureSuffix": " von Beispielkampagnen",
+    "backToAll": "Zurück zu allen Investitionen",
+    "issuerMissing": "Die Identität des Emittenten und die Off-Chain-Bedingungen sind in diesem Prototyp nicht verfügbar; die Daten unten stammen aus dem On-Chain-Vertrag.",
+    "assetClass": "Anlageklasse",
+    "escrowTestnet": "Vertrags-Escrow (Testnet)",
+    "interestRate": "Zinssatz",
+    "noInterest": "Keiner - nur Beitrags-Escrow",
+    "term": "Laufzeit",
+    "termDeadlinePrefix": "Frist",
+    "minInvestment": "Mindestanlage",
+    "minNote": "Pro Transaktion festgelegt, begrenzt auf den verbleibenden Zielbetrag",
+    "additionalInfo": "Zusätzliche Informationen",
+    "factsAria": "Plattform-Fakten",
+    "fundingModel": "Finanzierungsmodell",
+    "aonEnforced": "Alles-oder-nichts, durchgesetzt durch den Soroban-Vertrag",
+    "goal": "Ziel",
+    "deadline": "Frist",
+    "contract": "Vertrag",
+    "asset": "Vermögenswert",
+    "assetValidated": "von der API als Testnet-USDC validiert",
+    "interestIsinDocs": "Zinsen, ISIN, Dokumente",
+    "interestIsinDocsNote": "Nicht verfügbar - dieser Prototyp erfasst nur Beiträge und begibt keine Wertpapiere",
+    "marketingDivider": "Vom Emittenten bereitgestellter Inhalt unten - nicht von der Plattform geprüft",
+    "marketingDividerAria": "Marketinginhalt unten",
+    "tabs": ["Übersicht", "Details", "Dokumente", "Neuigkeiten"],
+    "tabsAria": "Kampagnenbereiche",
+    "overviewMissing": "Der Marketinginhalt des Emittenten ist in diesem Prototyp nicht verfügbar. Auf einer Produktionsplattform würde dieser Bereich die Beschreibung, das Team und das Geschäftsmodell des Emittenten selbst zeigen, durch die Trennlinie oben klar von den Plattform-Fakten getrennt.",
+    "detailsPre": "Geschäftsmodell, Markt, Finanzen und Meilensteine würden hier als vom Emittenten bereitgestellte Abschnitte erscheinen.",
+    "detailsSample": "Diese Beispielkampagne enthält keine Detailinhalte.",
+    "detailsMissing": "In diesem Prototyp nicht verfügbar.",
+    "documentsMissing": "Dokumentenhosting ist in diesem Prototyp nicht verfügbar. Eine Produktionsplattform würde hier das Basisinformationsblatt und die Emissionsbedingungen hosten.",
+    "newsEmpty": "Keine Neuigkeiten. Kampagnenmeldungen würden hier erscheinen.",
+    "statusFunded": "Erfolgreich finanziert",
+    "statusEnded": "Nicht erfolgreich",
+    "widgetContribute": "Beitragen",
+    "widgetOverview": "Anlageübersicht",
+    "widgetFixture": "Beispielvorschau. Diese Kampagne ist ein Beispiel (Fixture), kein bereitgestellter Vertrag, und kann keine Beiträge annehmen.",
+    "widgetFundedOpen": "Das Finanzierungsziel wurde erreicht und diese Kampagne ist vollständig gezeichnet. Weitere Beiträge werden nicht angenommen; nach Ablauf der Frist kann der Ersteller die eingesammelten Mittel nach der Alles-oder-nichts-Regel abheben.",
+    "widgetEndedFunded": "Diese Kampagne endete nach Erreichen ihres Ziels. Nach der Alles-oder-nichts-Regel kann der Ersteller die eingesammelten Mittel nun abheben.",
+    "widgetEndedWithdrawn": "Diese Kampagne endete nach Erreichen ihres Ziels, und der Ersteller hat die eingesammelten Mittel abgehoben.",
+    "widgetEndedRefundable": "Diese Kampagne endete unter ihrem Ziel. Beiträge sind erstattbar: Verbinde die beitragende Wallet und nutze die Erstattungsschaltfläche unten.",
+    "widgetRisk": "Crowdfunding-Investitionen bergen ein Totalverlustrisiko und sind illiquide. Dieser Prototyp verwendet wertlose Testnet-Vermögenswerte.",
+    "raised": "Eingenommen",
+    "usdcTestnet": "USDC (Testnet)",
+    "explainerSuffix": "Dies ist beispielhafter Lehrtext, nicht die Bedingungen eines echten Angebots.",
+    "explainerConvertible": "Eine Wandelanleihe zahlt Zinsen, bis ein konfiguriertes Ereignis den Inhabern die Umwandlung in Aktien gemäß den Emissionsbedingungen ermöglicht. Die Umwandlung ist eine Strukturüberlagerung auf der Anleihe, kein eigenständiges Instrument.",
+    "explainerSeniorBond": "Eine Senioranleihe ist nicht nachrangiges Fremdkapital: Die Anleihegläubiger haben im Insolvenzfall Vorrang vor nachrangigem Kapital und Eigenkapital und erhalten einen festen Kupon, ohne Beteiligung am Unternehmenswachstum.",
+    "explainerSubBond": "Eine nachrangige Anleihe zahlt einen definierten Kupon, steht im Insolvenzfall aber hinter den vorrangigen Gläubigern und partizipiert nicht am Unternehmenswachstum.",
+    "explainerDefault": "Diese Instrumentenklasse wird im Lern-Hub beschrieben."
+  },
+  "howItWorks": {
+    "title": "So funktioniert es",
+    "intro": "Der Weg, den eine echte Crowdfunding-Plattform unterstützen muss, und genau welche Teile dieser Prototyp bereits implementiert. Als geplant markierte Schritte existieren nicht im Code, und nichts auf dieser Website tut so, als würden sie existieren.",
+    "investorTitle": "Weg des Anlegers",
+    "issuerTitle": "Weg des Emittenten",
+    "live": "Im Prototyp vorhanden",
+    "planned": "Geplant - nicht gebaut",
+    "investorSteps": [
+      {
+        "title": "Registrierung und Anmeldung",
+        "text": "Eine Produktionsplattform verlangt ein Konto mit E-Mail-Bestätigung und Zugangsdaten. Dieser Prototyp hat stattdessen eine optionale Community-Anmeldung: Sie beweisen die Kontrolle über Ihre Freighter-Wallet durch Signieren einer einmaligen Challenge - ohne E-Mail-Registrierung, ohne Passwort. Die Wallet ist die einzige Identität."
+      },
+      {
+        "title": "Identitätsprüfung (KYC)",
+        "text": "Dokumenten- und Selfie-Prüfung mit einem Verifizierungsanbieter, plus AML-Daten wo erforderlich. Nicht implementiert; hier werden keine Identitätsdaten erhoben."
+      },
+      {
+        "title": "Anlegerkategorisierung",
+        "text": "Wo das anwendbare Regime es verlangt: Kenntnistest und Verlusttragfähigkeitssimulation vor dem Investieren, mit stärkeren Warnungen oberhalb der gesetzlichen Schwellen."
+      },
+      {
+        "title": "Kampagnen entdecken",
+        "text": "Durchstöbern Sie das Register, filtern und sortieren Sie und lesen Sie die strukturierten Bedingungen auf jeder Kampagnenseite."
+      },
+      {
+        "title": "Investieren",
+        "text": "Verbinden Sie Freighter, geben Sie einen Betrag ein und signieren Sie eine Transaktion. Der Vertrag legt den Beitrag in Escrow und setzt die Obergrenze atomar durch. Auf einer Produktionsplattform ist der Klick ein verbindliches Angebot an den Emittenten."
+      },
+      {
+        "title": "Widerrufsfrist",
+        "text": "Wo das anwendbare Regime es verlangt, können betroffene Anleger ein Angebot innerhalb einer konfigurierten Frist widerrufen (4 Kalendertage im EU-Regime für nicht-sophistierte Anleger). Nicht implementiert; Testnet-Beiträge sind keine Angebote."
+      },
+      {
+        "title": "Zahlung",
+        "text": "Eine Produktionsplattform wickelt über einen lizenzierten Zahlungsdienstleister mit Referenzen pro Investition ab. Hier ist die Transaktion im Stellar-Testnet die Abwicklung, mit wertlosen Vermögenswerten."
+      },
+      {
+        "title": "Dashboard und Zahlungen",
+        "text": "Ein persönliches Dashboard mit Investitionsstatus, Dokumenten und Zinszahlungen. Nicht implementiert; Beitragsregister sind pro Kampagne mit verbundener Wallet lesbar."
+      },
+      {
+        "title": "Übertragungen und Ausstieg",
+        "text": "Übertragung von Positionen zwischen verifizierten Nutzern und möglicherweise ein Schwarzes Brett. Beitragsregister in diesem Prototyp sind bewusst nicht übertragbar."
+      }
+    ],
+    "issuerSteps": [
+      {
+        "title": "Antrag und Prüfung",
+        "text": "Der Emittent bewirbt sich, durchläuft die Eignungs- und Dokumentenprüfung und unterschreibt die Plattformbedingungen."
+      },
+      {
+        "title": "Kampagnenaufbau",
+        "text": "Instrumentenbedingungen, Grenzen, Dokumente und Marketinginhalte werden konfiguriert und geprüft."
+      },
+      {
+        "title": "Aktive Kampagne",
+        "text": "Die Demo zeigt die öffentliche Kampagnenseite mit dem On-Chain-Finanzierungsstand in Echtzeit."
+      },
+      {
+        "title": "Abwicklung",
+        "text": "Alles-oder-nichts: Der Ersteller hebt die Mittel nur ab, wenn das Ziel fristgerecht erreicht wird, durchgesetzt durch den Vertrag."
+      },
+      {
+        "title": "Pflichten nach der Finanzierung",
+        "text": "Berichte, Zinszahlungen und Tilgung sowie ein separater Lebenszyklusstatus des Emittenten. Nicht implementiert."
+      }
+    ]
+  },
+  "learn": {
+    "title": "Lernen",
+    "intro": "Erklärungen in einfacher Sprache zum Instrumentenmodell, auf dem diese Plattform aufbaut: vier Mutterkategorien auf der Beteiligungsseite und zwei Fremdkapital-Mutterkategorien (Darlehen und Anleihe), jede als senior, nachrangig oder mit nicht angegebener Rangfolge begeben. Strukturüberlagerungen kombinieren sich mit einer Fremdkapital-Mutterkategorie; Rang- und Label-Qualifikatoren sind Plattformterminologie, unverändert übernommen. Nur lehrhafter Inhalt: kein Angebot und keine Anlageberatung.",
+    "seniorityStatesLabel": "Rangfolge-Stati:",
+    "opportunities": "Chancen",
+    "risks": "Risiken",
+    "suitableLabel": "Für wen geeignet:",
+    "overlaysAria": "Strukturüberlagerungen",
+    "overlaysTitle": "Strukturüberlagerungen",
+    "overlaysIntro": "Überlagerungen kombinieren sich mit einer Darlehens- oder Anleihe-Mutterkategorie und existieren nie allein als Instrumente.",
+    "qualifiersAria": "Rang- und Label-Qualifikatoren",
+    "qualifiersTitle": "Rang- und Label-Qualifikatoren",
+    "qualifiersIntro": "Plattformterminologie, die Ihnen in Angeboten begegnen kann. Diese Labels qualifizieren ein Instrument; sie sind keine eigenen Instrumentenklassen."
+  },
+  "glossaryPage": {
+    "title": "Glossar",
+    "intro": "Zentrale Begriffe dieser Plattform und von Crowdfunding-Angeboten im Allgemeinen. Nur lehrhafter Inhalt: kein Angebot und keine Anlageberatung.",
+    "sectionAria": "Glossarbegriffe",
+    "backPre": "Zurück zur Seite",
+    "backLink": "Lernen",
+    "riskPre": "Vor jeder Entscheidung mit echtem Geld lesen Sie die",
+    "riskLink": "Risikohinweise"
+  },
+  "riskWarnings": {
+    "title": "Risikohinweise",
+    "items": [
+      {
+        "h": "Totalverlust",
+        "p": "Crowdfunding-Investitionen können ihren gesamten Wert verlieren. Investieren Sie niemals Geld, dessen Verlust Sie nicht tragen können."
+      },
+      {
+        "h": "Illiquidität",
+        "p": "Diese Instrumente sind normalerweise nicht handelbar. Gehen Sie davon aus, dass Sie vor Fälligkeit oder einem definierten Ereignis nicht aussteigen können."
+      },
+      {
+        "h": "Diversifizierung",
+        "p": "Verteilen Sie Anlagen in dieser Anlageklasse auf mehrere Emittenten."
+      },
+      {
+        "h": "Kein Schutzsystem",
+        "p": "Crowdfunding-Investitionen fallen weder unter Einlagensicherungs- noch unter Anlegerentschädigungssysteme."
+      },
+      {
+        "h": "Keine Beratung",
+        "p": "Nichts auf dieser Website ist Anlage-, Rechts- oder Steuerberatung. Diese Website ist ein Software-Prototyp in einem Testnetz und listet keine echten Angebote."
+      },
+      {
+        "h": "Prototyp-Status",
+        "p": "Testnet-Vermögenswerte sind wertlos. Die Smart Contracts hier sind nicht geprüft und dürfen nicht mit echten Geldern verwendet werden."
+      }
+    ]
+  },
+  "faqPage": {
+    "title": "Häufige Fragen",
+    "introPre": "Die Antworten sind wie auf der Seite So funktioniert es markiert:",
+    "introLive": "Im Prototyp vorhanden",
+    "introMid1": "beschreibt, was der Code heute tut,",
+    "introPlanned": "Geplant - nicht gebaut",
+    "introMid2": "ist nirgends implementiert, und",
+    "introInfo": "Allgemeiner Hintergrund",
+    "introPost": "erklärt die Crowdfunding-Praxis, ohne zu behaupten, dass diese Plattform sie tut.",
+    "searchPlaceholder": "Fragen und Antworten suchen",
+    "searchAria": "Fragen suchen",
+    "categoryAria": "FAQ-Kategorie",
+    "all": "Alle",
+    "noMatches": "Keine Frage entspricht Ihrer Suche."
+  },
+  "about": {
+    "title": "Über dieses Projekt",
+    "p1": "Blockallisto (Repository rwa-crowdfund-stellar) ist ein persönlicher Prototyp, der tokenisiertes Crowdfunding im Stellar-Netzwerk erkundet: Kampagnenfinanzierung, durchgesetzt durch einen Soroban-Smart-Contract, mit der breiteren Plattform - Konten, Verifizierung, Instrumente, Zahlungen - offen im Repository entworfen und dokumentiert.",
+    "p2": "Es ist kein Unternehmen, kein zugelassener Crowdfunding-Dienstleister und kein Wertpapierangebot. Marktkontext: von Portugal in die Welt.",
+    "ethicsAria": "Ethische Ausschlussrichtlinie",
+    "ethicsTitle": "Ethische Ausschlussrichtlinie",
+    "ethicsIntro": "Eine Richtlinie auf Produktebene für die Plattform, die dieser Prototyp erkundet. Emittenten aus folgenden Sektoren sind bewusst ausgeschlossen:",
+    "ethicsPoints": [
+      "Tabak, Glücksspiel und Waffen",
+      "Fossile Brennstoffe, Bergbau und Kernenergie",
+      "Gefängnisse und Hafteinrichtungen",
+      "Gentechnisch veränderte Organismen und Industrien mit Bezug zu Konfliktmineralien"
+    ],
+    "ethicsNote": "Dies ist eine Design-Verpflichtung des Projekts, keine Aussage über einen echten Betrieb.",
+    "techAria": "Technologie",
+    "techTitle": "Technologie",
+    "techText": "Frontend in React, Backend in Node, Soroban-Vertrag (Rust) für Escrow, Freighter-Wallet zum Signieren, USDC im Stellar-Testnet. Hosting und Datenbank laufen auf kostenlosen Tarifen. Details und Testberichte stehen in der Repository-Dokumentation.",
+    "behindAria": "Hinter dem Namen",
+    "behindTitle": "Hinter dem Namen",
+    "behindText": "Im antiken Griechenland wurde Kallisto zum Großen Bären - ein Sternbild, in dem sich einzelne Lichtpunkte zu einer größeren, unvergänglichen Figur verbinden. Bei Blockallisto bringen wir genau diese Wahrheit über das Stellar-Netzwerk in die globale Finanzwelt. Wir verbinden Kleinanleger, um Blöcke realer Vermögenswerte zu füllen. Gemeinsam sind wir die Demokratisierung der Geldanlage: einzelne Punkte, die sich zu einem größeren Ganzen verbinden."
+  },
+  "financing": {
+    "title": "Finanzierung für Unternehmen",
+    "intro": "Nehmen Sie Kapital von der Menge über einen Soroban-Vertrag mit Alles-oder-nichts-Finanzierung auf. Angemeldete Wallets können unten einen Emittentenantrag einreichen; Anträge werden zur Prüfung durch den Betreiber gespeichert. Das Einreichen ist kein Onboarding, keine Listung und keine Genehmigung, und es wird keine Finanzierung angeboten.",
+    "journeyAria": "Überblick über den Weg des Emittenten",
+    "builderDraftLead": "Entwurfsvorschau:",
+    "builderDraftLink": "Sehen Sie, wie eine Kampagne für die Bereitstellung konfiguriert würde - in dieser Demo deaktiviert",
+    "journeyTitle": "Der geplante Weg",
+    "steps": [
+      {
+        "h": "Bewerben",
+        "p": "Erzählen Sie uns von Ihrem Unternehmen, dem Betrag und dem Instrument, das Sie im Sinn haben."
+      },
+      {
+        "h": "Prüfung",
+        "p": "Eignungs- und Dokumentenprüfung, gefolgt von einem strukturierten Finanzierungsvorschlag."
+      },
+      {
+        "h": "Aufbauen",
+        "p": "Kampagnenseite, Instrumentenbedingungen, Dokumente und Marketinginhalte werden gemeinsam vorbereitet."
+      },
+      {
+        "h": "Finanzieren",
+        "p": "Alles-oder-nichts-Kampagne. Die Mittel werden nur freigegeben, wenn das Ziel fristgerecht erreicht wird."
+      }
+    ]
+  },
+  "account": {
+    "title": "Mein Konto",
+    "note": "Dein Kontobereich: die Testnet-Positionen dieser Wallet und die darunter gespeicherten Community-Aktivitäten (nur Testnet-Assets - keine echten Gelder oder Erträge). Positionen stammen aus deiner verbundenen Freighter-Wallet auf dem Stellar-Testnet und sind wertlos. Die optionale Community-Anmeldung und die Support- und Emittentenformulare auf dieser Seite verarbeiten die eingegebenen Daten wie in der Datenschutzerklärung beschrieben.",
+    "summaryAria": "Portfolioübersicht",
+    "totalContributed": "Insgesamt beigetragen",
+    "totalSub": "On-Chain im Escrow, summiert über Kampagnen",
+    "returnReceived": "Erhaltene Rendite",
+    "returnNa": "Nicht verfügbar",
+    "returnSub": "Dieser Prototyp erfasst keine Auszahlungshistorie",
+    "activeInvestments": "Aktive Investitionen",
+    "activeSub": "Escrow-Positionen in offenen oder finanzierten Kampagnen",
+    "connectNote": "Verbinden Sie Ihre Freighter-Wallet, um Ihre Testnet-Positionen zu sehen. Ohne Wallet zeigt diese Seite nur das Layout.",
+    "fixtureNote": "Beispielkampagnen auf dem Bildschirm; Beispieldaten haben keine Positionen pro Wallet.",
+    "investmentsAria": "Meine Investitionen",
+    "myInvestments": "Meine Investitionen",
+    "newsFeedAria": "Kampagnen-News",
+    "newsFeedTitle": "Kampagnen-News",
+    "newsFeedEmpty": "Noch keine News zu den Kampagnen, in die Sie investiert haben.",
+    "newsFeedNoInvestments": "News zu Kampagnen, in die Sie investieren, erscheinen hier.",
+    "newInvestments": "Neue Investitionen",
+    "filterAria": "Portfolio nach Status filtern",
+    "tabs": {
+      "all": "Alle",
+      "canceled": "Storniert",
+      "pending": "Ausstehend",
+      "paid": "Bezahlt",
+      "completed": "Abgeschlossen"
+    },
+    "tabNote": "Prototyp-Zuordnung: Ausstehend = Beitrag im Escrow, Kampagne offen. Bezahlt = Kampagne finanziert, läuft noch. Abgeschlossen = Kampagne nach Finanzierung beendet. Storniert = ohne Zielerreichung beendet; eine vom Beitragenden signierte Rückerstattung ist auf der Kampagnenseite verfügbar.",
+    "noInvestments": "Keine Investitionen gefunden.",
+    "activityAria": "Letzte Aktivitäten",
+    "recentActivity": "Letzte Aktivitäten",
+    "savedTxPre": "Gespeicherte Transaktion:",
+    "savedTxOn": "bei Kampagne",
+    "savedTxStatus": "Status",
+    "savedTxPost": "Setzen Sie sie fort oder löschen Sie sie im Transaktionspanel oben.",
+    "savedTxUnknown": "unbekannt",
+    "noActivity": "Keine Aktivität gefunden.",
+    "walletAria": "Wallet",
+    "myWallet": "Meine Wallet",
+    "walletConnectedPre": "Verbunden:",
+    "walletConnectedPost": "Beiträge liegen im Escrow der Kampagnenverträge; Rückerstattungen werden vom Beitragenden on-chain signiert. Es gibt keine plattformverwahrten Mittel in diesem Prototyp.",
+    "noWallet": "Keine Wallet verbunden.",
+    "checklistAria": "Konto- und Profil-Checkliste",
+    "checklistTitle": "Kontoübersicht und Profildaten",
+    "checklistIntro": "Die Referenzplattform bindet das Investieren an Profilvollständigkeit, Verifizierung und Bankdaten. Dieser Prototyp bindet das Investieren nicht; die Checkliste zeigt diese Anleger-Verifizierungsanforderungen als geplante Platzhalter.",
+    "notSetUp": "Nicht eingerichtet",
+    "checklist": [
+      {
+        "label": "Persönliche Daten",
+        "note": "Für das Investieren in diesem Prototyp nicht erforderlich; eine geplante Anleger-Verifizierungsanforderung."
+      },
+      {
+        "label": "Adressdaten",
+        "note": "Für das Investieren in diesem Prototyp nicht erforderlich; eine geplante Anleger-Verifizierungsanforderung."
+      },
+      {
+        "label": "Kontaktdaten",
+        "note": "Für das Investieren in diesem Prototyp nicht erforderlich; eine geplante Anleger-Verifizierungsanforderung."
+      },
+      {
+        "label": "Anlegerqualifizierung",
+        "note": "Kenntnistest und Verlusttragfähigkeitsprüfung sind geplante Compliance-Schritte; hier nicht implementiert."
+      },
+      {
+        "label": "Verifizierung (KYC)",
+        "note": "Nicht implementiert. Dieser Testnet-Prototyp verifiziert keine Identität."
+      },
+      {
+        "label": "Bankdaten",
+        "note": "Nicht erhoben. Beiträge und Rückerstattungen laufen als Testnet-USDC on-chain."
+      },
+      {
+        "label": "Depotdaten",
+        "note": "Optionale Wertpapierkonto-Referenz auf der Referenzplattform; hier nicht erhoben."
+      },
+      {
+        "label": "Digitales Schließfach",
+        "note": "Geplante Verwahrsicht gehaltener Positionen. Hier liegen Positionen in jedem Kampagnenvertrag und werden pro verbundener Wallet gelesen."
+      }
+    ]
+  },
+  "footer": {
+    "communication": "Kommunikation",
+    "platform": "Plattform",
+    "legal": "Rechtliches",
+    "termsOfService": "Nutzungsbedingungen",
+    "privacyPolicy": "Datenschutzerklärung",
+    "riskDisclosure": "Risikohinweis",
+    "legalNotice": "Impressum",
+    "conflictsOfInterest": "Interessenkonflikte",
+    "complaintsManagement": "Beschwerde­manage­ment",
+    "businessContinuity": "Geschäftskontinuität",
+    "invest": "Investieren",
+    "howItWorks": "So funktioniert es",
+    "financingIssuers": "Finanzierung für Emittenten",
+    "learn": "Lernen",
+    "instrumentHub": "Instrumenten-Hub",
+    "riskWarnings": "Risikohinweise",
+    "glossary": "Glossar",
+    "faq": "FAQ",
+    "aboutProject": "Über dieses Projekt",
+    "status": "Status",
+    "statusText": "Testnet-Prototyp. Keine automatische Bereitstellung oder Umwandlung alter Guthaben. Bestehende klassische Intents und Guthaben bleiben erhalten, werden nicht gelöscht. Die separate Identitäts-/Bewertungsinfrastruktur bleibt nur simuliert.",
+    "legalPre": "Marktkontext: Die EU reguliert Crowdfunding nach der ECSPR; zugelassene Anbieter sind im",
+    "legalLink": "ESMA-Register",
+    "legalPost": " gelistet. Diese App ist kein zugelassener Crowdfunding-Dienstleister und listet keine echten Angebote.",
+    "tagline": "Reale Vermögenswerte. Geteilte Möglichkeiten."
+  },
+  "time": {
+    "ended": "Beendet",
+    "underMinute": "Weniger als eine Minute übrig",
+    "minutesLeft": {
+      "one": "{n} Minute übrig",
+      "other": "{n} Minuten übrig"
+    },
+    "hoursLeft": {
+      "one": "{n} Stunde übrig",
+      "other": "{n} Stunden übrig"
+    },
+    "daysLeft": {
+      "one": "{n} Tag übrig",
+      "other": "{n} Tage übrig"
+    }
+  },
+  "errors": {
+    "freighterMissing": "Freighter-Wallet-Erweiterung nicht erkannt. Installieren Sie Freighter und versuchen Sie Verbinden erneut.",
+    "walletAccessFailed": "Wallet-Zugriff fehlgeschlagen",
+    "connectFirst": "Verbinden Sie zuerst Freighter.",
+    "resolveSaved": "Bereinigen Sie die gespeicherte Transaktion, bevor Sie eine weitere vorbereiten.",
+    "walletMismatch": "Verbinden Sie die Wallet, die diese Transaktion vorbereitet hat.",
+    "walletNoSign": "Wallet hat nicht signiert",
+    "apiFailed": "API-Anfrage fehlgeschlagen",
+    "apiUnavailable": "Der Dienst ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in Kürze erneut.",
+    "prepareTrustlineMissing": "Diese Wallet ist noch nicht für Testnet-USDC eingerichtet (fehlende Trustline). Fügen Sie eine USDC-Trustline hinzu und versuchen Sie es erneut.",
+    "prepareAccountMissing": "Dieses Wallet-Konto existiert im Testnetz noch nicht. Zahlen Sie es zuerst ein und versuchen Sie es erneut.",
+    "prepareInsufficientBalance": "Diese Wallet enthält nicht genügend Testnet-USDC für diesen Betrag.",
+    "prepareFailed": "Die Transaktion konnte nicht vorbereitet werden. Bitte versuchen Sie es erneut."
+  },
+  "instruments": {
+    "groups": [
+      {
+        "id": "participation",
+        "title": "Beteiligungsinstrumente",
+        "intro": "Instrumente, deren Rendite vom Geschäftserfolg des Emittenten abhängt: gewinnberechtigte Beteiligungsrechte und Eigenkapital. Die indirekte Beteiligung ist hier als Haltestruktur aufgeführt, nicht als eigenes Instrument."
+      },
+      {
+        "id": "debt",
+        "title": "Fremdkapitalinstrumente",
+        "intro": "Zwei generische Mutterkategorien - Darlehen und Anleihe - jeweils in einem von drei Rangfolge-Stati begeben: senior, nachrangig oder Rangfolge nicht angegeben. Anleger treten als Gläubiger auf."
+      }
+    ],
+    "seniorityLabels": {
+      "senior": "Senior (nicht nachrangig)",
+      "subordinated": "Nachrangig (steht im Insolvenzfall hinter den vorrangigen Gläubigern)",
+      "unspecified": "Rangfolge in den Bedingungen nicht angegeben"
+    },
+    "classes": [
+      {
+        "id": "participation-certificate",
+        "label": "Beteiligungsrecht / -zertifikat",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs.",
+        "opportunities": ["Gewinnbeteiligung ohne vollständigen Eigenkapitalerwerb", "Kombiniert oft einen Basis-Rückzahlungsanspruch mit Gewinnbeteiligung"],
+        "risks": [
+          "Der Gewinnanteil hängt vollständig von der Leistung des Emittenten ab",
+          "Kann hinter gewöhnlichen Gläubigern stehen",
+          "Meist illiquide bis zur Fälligkeit"
+        ],
+        "suitableFor": "Anleger, die eine Beteiligung an den Geschäftsergebnissen wollen und eigenkapitalähnliches Risiko akzeptieren."
+      },
+      {
+        "id": "substanzgenussrecht",
+        "label": "Substanzgenussrecht",
+        "subtypeOf": "Untertyp von Beteiligungsrecht / -zertifikat",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung.",
+        "opportunities": ["Beteiligung am Substanzwert des Emittenten", "Kann für kleinere Emittenten strukturiert werden, wenn die Satzung es erlaubt"],
+        "risks": [
+          "Rechtsform und Anlegerschutz unterscheiden sich je nach Jurisdiktion stark",
+          "Kann einen Treuhänder oder ein Vehikel zwischen Anleger und Emittent einschieben",
+          "Meist illiquide"
+        ],
+        "suitableFor": "Anleger, die mit maßgeschneiderten Strukturen vertraut sind und zuerst die genauen Vertragsbedingungen lesen."
+      },
+      {
+        "id": "share",
+        "label": "Aktie",
+        "note": "Eine Kapitalerhöhung ist der gesellschaftsrechtliche Vorgang, der neue Aktien schafft; sie ist kein eigenes Instrument.",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "Direktes Eigenkapital an der emittierenden Gesellschaft: Dividendenanspruch und Beteiligung am Unternehmenswert, mit Rechten nach der Satzung. Neue Aktien erreichen Anleger über eine Kapitalerhöhung.",
+        "opportunities": ["Volle Teilhabe am Unternehmenswachstum", "Stimm- oder Informationsrechte je nach Aktiengattung"],
+        "risks": [
+          "Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert",
+          "Totalverlust möglich",
+          "Crowdfunding-Aktien sind meist nicht börsenhandelbar"
+        ],
+        "suitableFor": "Anleger mit langem Horizont, die Eigentum wollen und volles Unternehmerrisiko akzeptieren."
+      },
+      {
+        "id": "indirect-participation",
+        "label": "Indirekte Beteiligung",
+        "note": "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie.",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
+        "opportunities": ["Zugang zu Geschäften, die direkt schwer zu halten wären", "Vereinfachte Verwaltung über die Zwischenstruktur"],
+        "risks": [
+          "Eine zusätzliche Ebene zwischen Anleger und Emittent",
+          "Die Rendite hängt von der Leistung des Emittenten ab",
+          "Die Bedingungen des Vehikels regeln Auszahlungen und Ausstieg"
+        ],
+        "suitableFor": "Anleger, die die Ökonomie einer Beteiligung wollen, ohne das zugrunde liegende Interesse direkt zu halten."
+      },
+      {
+        "id": "limited-partnership",
+        "label": "Kommanditbeteiligung",
+        "group": "participation",
+        "seniorityStates": [],
+        "summary": "Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage.",
+        "opportunities": ["Direkte Durchleitung der Gesellschaftsergebnisse", "Haftung auf die Einlage begrenzt"],
+        "risks": [
+          "Die Verlustbeteiligung kann die Beteiligung schmälern oder auslöschen",
+          "Der Ausstieg ist oft durch den Gesellschaftsvertrag beschränkt",
+          "Steuer- und Meldepflichten können aufwendiger sein"
+        ],
+        "suitableFor": "Anleger, die Personengesellschaftsstrukturen verstehen und Unternehmerrisiko akzeptieren."
+      },
+      {
+        "id": "loan",
+        "label": "Darlehen",
+        "group": "debt",
+        "seniorityStates": ["senior", "subordinated", "unspecified"],
+        "summary": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+        "opportunities": [
+          "Ein fester Plan ist leichter zu modellieren als Eigenkapital",
+          "Nachrangige Varianten zahlen höhere Zinsen für den niedrigeren Rang"
+        ],
+        "risks": [
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "suitableFor": "Anleger, die Kreditrisiko ohne bankenähnlichen Schutz akzeptieren."
+      },
+      {
+        "id": "bond",
+        "label": "Anleihe",
+        "group": "debt",
+        "seniorityStates": ["senior", "subordinated", "unspecified"],
+        "summary": "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
+        "opportunities": ["Definierter Kupon und Tilgungskalender", "Seniorserien haben im Insolvenzfall Vorrang vor nachrangigem Kapital und Eigenkapital"],
+        "risks": [
+          "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
+          "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
+          "Keine Beteiligung am Unternehmenswachstum"
+        ],
+        "suitableFor": "Renditeorientierte Anleger, die einen Totalverlust tragen können und das Geld nicht vorzeitig benötigen."
+      }
+    ],
+    "overlays": [
+      {
+        "id": "zero-coupon",
+        "label": "Nullkupon (Zero Bond)",
+        "summary": "Eine Kupon-Struktur auf einem Darlehen oder einer Anleihe, keine Rangfolge: keine periodischen Zinsen; die Rendite kommt aus der Emission unter dem Nennwert und der Rückzahlung zum Pari. Kombiniert mit einer Fremdkapital-Mutterkategorie, steht nie allein."
+      },
+      {
+        "id": "convertible",
+        "label": "Wandelanleihe",
+        "summary": "Ein Wandlungsmerkmal auf einer Anleihe: Nach konfigurierten Bedingungen (Auslöseereignis, Ausübungsfenster, Wandlungspreis, Zins-Stopp-Regeln) wandelt die Anleihe in Aktien. Kombiniert mit der Mutterkategorie Anleihe, steht nie allein."
+      }
+    ],
+    "qualifiers": [
+      {
+        "id": "junior",
+        "label": "„Junior“",
+        "summary": "Ein Label für niedrigeren Rang in der Plattformsprache. Es deutet auf Nachrangigkeit hin, begründet aber für sich keine vertragliche qualifizierte Nachrangigkeit."
+      },
+      {
+        "id": "qualified",
+        "label": "„Qualified / qualifiziert“",
+        "summary": "Plattformterminologie bei Darlehen und Anleihen. Bei Anleihen nicht als qualifizierte Nachrangigkeit lesen, es sei denn, die Bedingungen selbst sagen nachrangig."
+      },
+      {
+        "id": "mini-bond",
+        "label": "„Mini Bond“",
+        "summary": "Plattformlabel für eine Anleihe mit kleiner Stückelung."
+      }
+    ],
+    "chipZeroCoupon": "Nullkupon",
+    "chipConvertible": "Wandelbar",
+    "chipSenior": "Senior",
+    "chipSubordinated": "Nachrangig",
+    "chipUnspecifiedSuffix": "(Rangfolge nicht angegeben)",
+    "chipCompose": "space-lower"
+  },
+  "glossary": [
+    {
+      "term": "Alles-oder-nichts-Finanzierung",
+      "definition": "Der Emittent erhält die Mittel nur, wenn das Ziel bis zur Frist erreicht wird; andernfalls werden die Beiträge zurückerstattet. Der Soroban-Vertrag dieses Prototyps setzt dies on-chain durch."
+    },
+    {
+      "term": "Finanzierungsschwelle",
+      "definition": "Der Mindestbetrag, den eine Emission einnehmen muss, um zu schließen. Unterschiedlich von der Mindestanlage pro Anleger."
+    },
+    {
+      "term": "Mindestanlage",
+      "definition": "Der kleinste Betrag, den ein Anleger zeichnen kann, üblicherweise eine Einheit."
+    },
+    {
+      "term": "Nachrangigkeit",
+      "definition": "Eine Rangfolgeregel: Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient, was das Verlustrisiko erhöht."
+    },
+    {
+      "term": "ISIN",
+      "definition": "Internationale Wertpapier-Identifikationsnummer. Identifiziert ein Wertpapier. Dieser Prototyp begibt keine Wertpapiere und keine ISINs."
+    },
+    {
+      "term": "Basisinformationsblatt (KIIS)",
+      "definition": "Ein standardisiertes Kurzdokument mit den wesentlichen Fakten und Risiken eines Angebots, für viele EU-Crowdfunding-Angebote vorgeschrieben."
+    },
+    {
+      "term": "Widerrufsfrist",
+      "definition": "Ein Zeitfenster nach einem Investitionsangebot, in dem bestimmte Anleger kostenfrei widerrufen können, wenn das anwendbare Regime es verlangt. Dauer und Anwendbarkeit hängen von Anlegerklasse und Regime ab."
+    },
+    {
+      "term": "Kenntnistest",
+      "definition": "Eine Prüfung des Verständnisses der Crowdfunding-Risiken durch den Anleger, die manche Regime verlangen, bevor nicht-sophistierte Anleger investieren dürfen."
+    },
+    {
+      "term": "Verlusttragfähigkeitssimulation",
+      "definition": "Eine Schätzung, ob ein Anleger den Verlust der Investition tragen kann, von manchen Regimen für nicht-sophistierte Anleger vorgeschrieben."
+    },
+    {
+      "term": "ECSPR",
+      "definition": "Verordnung (EU) 2020/1503 über europäische Crowdfunding-Dienstleister. Zugelassene Anbieter stehen im ESMA-Register. Dieser Prototyp ist kein zugelassener Anbieter."
+    },
+    {
+      "term": "Escrow",
+      "definition": "Mittel, die von einem neutralen Mechanismus gehalten werden, bis die Bedingungen erfüllt sind. Hier verwahrt der Kampagnenvertrag selbst die Beiträge im Escrow im Stellar-Testnet."
+    },
+    {
+      "term": "Soroban",
+      "definition": "Die Smart-Contract-Plattform des Stellar-Netzwerks, die dieser Prototyp verwendet."
+    },
+    {
+      "term": "Testnet",
+      "definition": "Ein öffentliches Testnetzwerk mit wertlosen Vermögenswerten, um Software ohne echtes Geld auszuprobieren."
+    },
+    {
+      "term": "Nennwert",
+      "definition": "Der Nominalwert einer Einheit eines Instruments, auf den Zinsen und Tilgung berechnet werden."
+    },
+    {
+      "term": "Endfällige Tilgung",
+      "definition": "Rückzahlung des vollen Nennbetrags in einer Zahlung bei Fälligkeit."
+    },
+    {
+      "term": "act/act, 30E/360",
+      "definition": "Zinstagekonventionen, die festlegen, wie Zinsen zwischen Zahlungsterminen auflaufen."
+    },
+    {
+      "term": "Nullkupon-Anleihe (Zero Bond)",
+      "definition": "Eine Anleihe ohne periodische Zinsen: Sie wird unter ihrem Nennwert begeben und zum Pari zurückgezahlt, sodass die Rendite die Differenz ist. Eine Kupon-Struktur, keine Rangfolge."
+    },
+    {
+      "term": "Wandelanleihe",
+      "definition": "Eine Anleihe mit Wandlungsmerkmal: Nach den Emissionsbedingungen (Auslöser, Fenster, Wandlungspreis) kann sie in Aktien wandeln. Eine Strukturüberlagerung auf einer Anleihe, kein eigenständiges Instrument."
+    },
+    {
+      "term": "Juniorforderung",
+      "definition": "Plattformsprache für eine Forderung niedrigeren Rangs. Sie deutet auf Nachrangigkeit hin, begründet aber für sich keine vertragliche qualifizierte Nachrangigkeit."
+    },
+    {
+      "term": "Qualifizierte Nachrangigkeit",
+      "definition": "Eine vertragliche Form der Nachrangigkeit, bei der Zins- und teils Tilgungszahlungen aussetzen, wenn der Emittent überschuldet wäre. Plattformsprache wie „qualifiziert“ allein beweist sie nicht; die Bedingungen müssen nachrangig sagen."
+    },
+    {
+      "term": "Mini Bond",
+      "definition": "Plattformlabel für eine Anleihe mit kleiner Stückelung."
+    },
+    {
+      "term": "Know your customer (KYC)",
+      "definition": "Identitätsprüfung, die regulierte Plattformen abschließen müssen, bevor ein Anleger investieren kann. Dieser Prototyp führt kein KYC durch."
+    },
+    {
+      "term": "Politisch exponierte Person (PEP)",
+      "definition": "Eine Person mit einem prominenten öffentlichen Amt, die nach Geldwäschevorschriften verstärkten Prüfungen unterliegt."
+    },
+    {
+      "term": "Digitales Schließfach",
+      "definition": "Eine Verwahrsicht, in der eine Plattform dem Anleger seine gehaltenen Wertpapiere zeigt, an seine verifizierte Identität gebunden. Dieser Prototyp hält Positionen im Kampagnenvertrag selbst, pro Wallet sichtbar."
+    }
+  ],
+  "faq": {
+    "stateLabels": {
+      "live": "Im Prototyp vorhanden",
+      "planned": "Geplant - nicht gebaut",
+      "info": "Allgemeiner Hintergrund"
+    },
+    "categories": [
+      {
+        "id": "about",
+        "title": "Über diese Plattform",
+        "entries": [
+          {
+            "q": "Ist das eine echte Anlageplattform?",
+            "a": "Nein. Dies ist ein technischer Prototyp im Stellar-Testnet. Er listet keine echten Angebote, nimmt keine echten Gelder an und ist kein zugelassener Crowdfunding-Dienstleister. Zugelassene EU-Anbieter stehen im ESMA-Register.",
+            "state": "info"
+          },
+          {
+            "q": "Was brauche ich zum Ausprobieren?",
+            "a": "Installieren Sie die Freighter-Wallet-Erweiterung, stellen Sie sie auf Testnet, laden Sie sie mit kostenlosem Testnet-XLM und Testnet-USDC von einem Faucet oder einem Freund auf und verbinden Sie sie hier. Testnet-Vermögenswerte sind wertlos.",
+            "state": "live"
+          },
+          {
+            "q": "Brauche ich eine eigene Wallet?",
+            "a": "Ja. Dieses Design belässt die Schlüssel beim Nutzer: Die Freighter-Wallet ist die einzige Identität und signiert jede Transaktion. Die Plattform hält weder Schlüssel noch eigene Guthaben. Manche Produktionsplattformen verwahren Vermögenswerte über spezialisierte Partner; dieser Prototyp tut das bewusst nicht.",
+            "state": "live"
+          },
+          {
+            "q": "Wer kann auf einer solchen Plattform in Produktion investieren?",
+            "a": "Eine Produktionsplattform muss die Identität jedes Anlegers prüfen (KYC) und, wo das Regime es verlangt, Kenntnisse testen und die Verlusttragfähigkeit vor größeren Beträgen simulieren. Auch Wohnsitzbeschränkungen können gelten. Nichts davon existiert hier, weil Testnet-Gelder wertlos sind.",
+            "state": "info"
+          }
+        ]
+      },
+      {
+        "id": "contributing",
+        "title": "Beitragen und Zahlungen",
+        "entries": [
+          {
+            "q": "Wie funktioniert ein Beitrag?",
+            "a": "Sie wählen eine Kampagne, geben einen Betrag ein und signieren eine Transaktion in Freighter. Der Soroban-Vertrag legt Ihren Beitrag in Escrow und setzt die Finanzierungsobergrenze atomar durch. Die App bewahrt die exakt signierte Transaktion auf, damit ein Netzwerkfehler nie ein Duplikat erzeugt.",
+            "state": "live"
+          },
+          {
+            "q": "Welche Zahlungsmethoden kann ich nutzen?",
+            "a": "Nur Testnet-USDC über Ihre Freighter-Wallet. Keine Karten, keine Banküberweisungen, keinerlei Fiatgeld. Eine Produktionsversion würde über einen lizenzierten Zahlungsdienstleister mit Referenz pro Investition abwickeln; dieser Schritt ist geplant, nicht gebaut.",
+            "state": "live"
+          },
+          {
+            "q": "Kann ich mehrmals zur selben Kampagne beitragen?",
+            "a": "Ja. Jeder Beitrag ist eine eigene signierte Transaktion, und der Vertrag prüft bei jedem den verbleibenden Raum unter der Obergrenze. Ein Betrag, der die Kampagne über das Ziel hinausführen würde, wird vom Vertrag abgelehnt, nicht von der Plattformbuchhaltung.",
+            "state": "live"
+          },
+          {
+            "q": "Was passiert, wenn eine Kampagne ihr Ziel erreicht?",
+            "a": "Die Obergrenze wird vom Vertrag durchgesetzt, also keine Überzeichnung: Sobald das Ziel erreicht ist, werden weitere Beiträge abgelehnt. Nach Ablauf der Frist kann der Kampagnenersteller die Escrow-Mittel abheben.",
+            "state": "live"
+          },
+          {
+            "q": "Wie prüfe ich, ob mein Beitrag durchgegangen ist?",
+            "a": "Verbinden Sie Ihre Wallet und öffnen Sie die Kampagnenseite, um die vom Vertrag gemeldeten Escrow-Summen zu sehen. Da die Abwicklung eine Stellar-Testnet-Transaktion ist, können Sie sie auch unabhängig in einem öffentlichen Testnet-Explorer verifizieren.",
+            "state": "live"
+          }
+        ]
+      },
+      {
+        "id": "refunds",
+        "title": "Rückerstattungen und Stornierung",
+        "entries": [
+          {
+            "q": "Wie funktionieren Rückerstattungen?",
+            "a": "Wenn eine Kampagne ihr Ziel bis zur Frist verfehlt, signiert jeder Beitragende seine eigene Rückerstattungstransaktion. Wird das Ziel erreicht, kann nur der Kampagnenersteller abheben, und erst nach der Frist.",
+            "state": "live"
+          },
+          {
+            "q": "Kann ich einen Beitrag nach dem Signieren stornieren?",
+            "a": "Nicht in diesem Prototyp: Eine signierte Testnet-Transaktion ist endgültig. Die Stornierung ist ein geplanter Schritt. Zum Vergleich: Das EU-Crowdfunding-Regime räumt nicht-sophistierten Anlegern eine Widerrufsfrist von 4 Kalendertagen ein, um ein verbindliches Angebot auf einer echten Plattform zurückzunehmen.",
+            "state": "planned"
+          },
+          {
+            "q": "Wer hält das Geld während der Kampagne?",
+            "a": "Der Soroban-Vertrag selbst verwahrt die Beiträge bis zur Frist im Escrow. Kein Betreiberkonto kann sie bewegen: Der Code erlaubt nur eine Ersteller-Abhebung nach erfolgreicher Frist oder Beitragenden-Rückerstattungen nach einer gescheiterten.",
+            "state": "live"
+          }
+        ]
+      },
+      {
+        "id": "tokenization",
+        "title": "Tokenisierung auf Stellar",
+        "entries": [
+          {
+            "q": "Was bedeutet Tokenisierung hier?",
+            "a": "Tokenisierung bedeutet, die Rechte und Pflichten einer Investition digital abzubilden, sodass Eigentum und Übertragungen in einem gemeinsamen Ledger erfasst und geprüft werden können. Dieser Prototyp macht einen ersten Schritt: Beitragsregister liegen in einem Soroban-Smart-Contract im Stellar-Testnetz, durchgesetzt durch Code statt Plattformbuchhaltung.",
+            "state": "info"
+          },
+          {
+            "q": "Was setzt der Smart Contract tatsächlich durch?",
+            "a": "Escrow der Beiträge, die Finanzierungsobergrenze bei jeder Transaktion, die Kampagnenfrist, die Alles-oder-nichts-Abwicklung (Ersteller-Abhebung nur nach erfolgreicher Frist) und beitragendensignierte Rückerstattungen nach einer gescheiterten. Was er nicht tut, decken die geplanten Schritte auf der Seite So funktioniert es ab.",
+            "state": "live"
+          },
+          {
+            "q": "Gibt es einen handelbaren Token?",
+            "a": "Nein. Beitragsguthaben in diesem ersten Vertrag sind bewusst nicht übertragbar. Ein übertragbarer Wertpapier-Token bräuchte ein rechtlich anerkanntes Register, verifizierte Inhaber und die in den Projektdokumenten beschriebene Compliance-Oberfläche, bevor er eine echte Investition abbilden könnte.",
+            "state": "planned"
+          },
+          {
+            "q": "Wo werden meine Beiträge gehalten?",
+            "a": "Im Escrow des Vertrags im öffentlichen Testnetz, nicht beim Plattformbetreiber. Ihre Wallet-Schlüssel bleiben in Freighter auf Ihrem eigenen Gerät; ihr Verlust würde den Zugang zum Beitragsregister kosten, genau wie bei jeder Selbstverwahrung.",
+            "state": "live"
+          }
+        ]
+      },
+      {
+        "id": "risks",
+        "title": "Risiken und Eignung",
+        "entries": [
+          {
+            "q": "Was sind die Risiken von echtem Crowdfunding?",
+            "a": "Totalverlust ist möglich, Investitionen sind illiquide, und keine Einlagensicherung gilt. Eine übliche Faustregel ist, nur einen kleinen Teil frei verfügbarer Mittel zu investieren und zu diversifizieren. Die Seite Risikohinweise behandelt das im Detail.",
+            "state": "info"
+          },
+          {
+            "q": "Warum sollten Anleger diversifizieren?",
+            "a": "Die Verteilung auf mehrere Projekte, Branchen und Instrumententypen mildert die Wirkung, wenn ein Projekt scheitert. Alles in einem einzigen Angebot zu konzentrieren, macht das Ergebnis von einem einzigen Unternehmen abhängig.",
+            "state": "info"
+          },
+          {
+            "q": "Ist diese Plattform reguliert?",
+            "a": "Nein. Sie ist kein zugelassener Crowdfunding-Dienstleister und listet keine echten Angebote. In der EU werden Crowdfunding-Anbieter nach dem ECSPR-Regime zugelassen und im öffentlichen ESMA-Register gelistet, das in der Fußzeile jeder Seite verlinkt ist.",
+            "state": "info"
+          }
+        ]
+      },
+      {
+        "id": "transfers",
+        "title": "Übertragungen und Verkauf",
+        "entries": [
+          {
+            "q": "Kann ich einen Beitrag verkaufen, verschenken oder übertragen?",
+            "a": "Nein. Beitragsregister in diesem Prototyp sind bewusst nicht übertragbar. Auf Produktionsplattformen hängen Übertragungen von den Vertragsbedingungen jedes Instruments ab, benötigen oft die Zustimmung des Emittenten und setzen immer voraus, dass der Empfänger identifiziert wird. Es gibt hier keinen Sekundärmarkt.",
+            "state": "live"
+          },
+          {
+            "q": "Werden Übertragungen später möglich sein?",
+            "a": "Übertragungen zwischen verifizierten Nutzern und möglicherweise ein Schwarzes Brett sind geplante Design-Schritte. Sie brauchen zuerst Identitätsprüfung und vertragliche Regeln pro Instrument, und beides existiert heute nicht im Code.",
+            "state": "planned"
+          }
+        ]
+      },
+      {
+        "id": "account",
+        "title": "Konto und Daten",
+        "entries": [
+          {
+            "q": "Brauche ich ein Konto?",
+            "a": "Keine E-Mail-Registrierung und kein Passwort. Eine optionale Community-Anmeldung beweist die Kontrolle über Ihre Freighter-Wallet durch Signieren einer einmaligen Challenge. Die Wallet ist die einzige Identität, und Verbinden oder Signieren teilt Ihre Schlüssel nie mit der Website.",
+            "state": "live"
+          },
+          {
+            "q": "Welche personenbezogenen Daten erhebt dieser Prototyp?",
+            "a": "Nur was die Community-Funktionen speichern, wenn Sie sie nutzen: Ihren Stellar Public Key, einen optionalen Anzeigenamen und die Kommentare, Support-Tickets oder Emittentenbewerbungen, die Sie absenden (Bewerbungen können eine optionale Kontakt-E-Mail enthalten). Kommentare sind öffentlich. Weder vollständiger Name noch Ausweisdokument werden abgefragt. Ihr Browser hält eine lokale Aufzeichnung einer ausstehenden Transaktion gegen Duplikate, und das Backend führt ein technisches Journal der Anfragen; die Datenschutzerklärung listet Speicherung und Aufbewahrung. Eine Produktionsplattform müsste DSGVO-Pflichten erfüllen: Auskunft, Berichtigung, Löschung und Datenübertragbarkeit.",
+            "state": "live"
+          }
+        ]
+      },
+      {
+        "id": "documents",
+        "title": "Dokumente und Steuern",
+        "entries": [
+          {
+            "q": "Wo sind meine Vertragsdokumente und Belege?",
+            "a": "Noch nirgends: Dokumentenhosting und ein persönliches Portfolio sind geplante Schritte. Eine Produktionsplattform hinterlegt die Vertragsdokumente pro Investition und stellt nach Abschluss einer Investition eine Bestätigung aus.",
+            "state": "planned"
+          },
+          {
+            "q": "Werden Steuern von Erträgen abgezogen?",
+            "a": "Dieser Prototyp zahlt keine Erträge, also wird nichts besteuert oder einbehalten. Auf echten Plattformen hängt die Behandlung von Ihrem Wohnsitzland, dem Instrument und dem Land des Emittenten ab; manche Anbieter behalten Steuern ein oder stellen Jahresbescheinigungen aus, und der Anleger bleibt für die korrekte Erklärung verantwortlich.",
+            "state": "info"
+          }
+        ]
+      },
+      {
+        "id": "issuers",
+        "title": "Für Unternehmen",
+        "entries": [
+          {
+            "q": "Kann ich mein Unternehmen heute listen?",
+            "a": "Sie können auf der Seite Finanzierung einen Emittentenantrag einreichen; der Betreiber prüft Anträge außerhalb der Plattform und nichts wird automatisch gelistet. Das Kampagnenregister enthält derzeit nur die Demo-Kampagne.",
+            "state": "planned"
+          },
+          {
+            "q": "Welche Finanzierungsmodelle deckt das Design ab?",
+            "a": "Vier Mutterkategorien auf der Beteiligungsseite - Beteiligungsrecht / -zertifikat (mit dem Substanzgenussrecht als Untertyp), Aktie, indirekte Beteiligung als Haltestruktur und Kommanditbeteiligung - und zwei Fremdkapital-Mutterkategorien, Darlehen und Anleihe, jeweils senior, nachrangig oder mit nicht angegebener Rangfolge begeben. Nullkupon und Wandelbar sind Strukturüberlagerungen auf Fremdkapital. Der Lern-Hub erklärt jede.",
+            "state": "info"
+          },
+          {
+            "q": "Wie würde ein Emittent die Mittel erhalten?",
+            "a": "Alles-oder-nichts: Der Kampagnenersteller kann die Escrow-Mittel nur abheben, wenn das Ziel erreicht ist, und erst nach der Frist. Die Regel wird vom Smart Contract durchgesetzt, nicht von einem Plattformversprechen.",
+            "state": "live"
+          },
+          {
+            "q": "Was würde ein echter Start erfordern?",
+            "a": "Einen Lizenzweg (eigene Zulassung oder Partnerschaft mit einem lizenzierten Anbieter), ein rechtlich anerkanntes Register für jedes Instrument und jede Jurisdiktion, Zahlungsabwicklung über einen lizenzierten Anbieter, KYC/AML und die in den Projektdokumenten beschriebenen Compliance-Seiten und -Dokumente. Das sind offene Entscheidungen, keine implementierten Funktionen.",
+            "state": "info"
+          },
+          {
+            "q": "Was kostet es?",
+            "a": "Der Prototyp läuft auf kostenlosem Hosting und Testnet-Infrastruktur. Kein Gebührenmodell für Emittenten oder Anleger ist definiert oder wird erhoben.",
+            "state": "info"
+          }
+        ]
+      }
+    ]
+  },
+  "profiles": {
+    "sampleMarker": "Beispieldaten - kein echtes Angebot",
+    "list": [
+      {
+        "campaignId": "fixture-lisbon-riverside",
+        "issuer": "Riverside Development Lda (Beispiel-Emittent)",
+        "country": "PT",
+        "category": "Bauwesen",
+        "teaser": "Sanierung eines Flussufer-Apartmentgebäudes in Lissabon, finanziert über eine Senioranleihe mit festem Zinssatz. Alle Bedingungen auf dieser Seite sind Beispieldaten.",
+        "instrumentClass": "bond",
+        "instrumentSeniority": "senior",
+        "instrumentOverlays": [],
+        "interestRate": "6,5% p.a. (Beispiel)",
+        "term": "Bis 2030-12-31 (Beispiel)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Senioranleihe (nicht nachrangig, unbesichert). Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "ISIN / WKN",
+            "value": "Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern"
+          },
+          {
+            "label": "Nennbetrag pro Einheit",
+            "value": "250 Testnet-USDC (Beispiel)"
+          },
+          {
+            "label": "Mindestzeichnung",
+            "value": "1 Einheit (Beispiel)"
+          },
+          {
+            "label": "Finanzierungsschwelle",
+            "value": "Gleich dem Kampagnenziel; Alles-oder-nichts wird im Live-Modus vom Vertrag durchgesetzt"
+          },
+          {
+            "label": "Emissionsvolumen",
+            "value": "Ziel 250.000 Testnet-USDC (Beispiel-Fixture)"
+          },
+          {
+            "label": "Zinsberechnung",
+            "value": "30E/360 (Beispiel)"
+          },
+          {
+            "label": "Zinszahlungstermine",
+            "value": "Jährlich am 31. Dezember, erste Zahlung 2027 (Beispiel)"
+          },
+          {
+            "label": "Tilgung",
+            "value": "Bei Fälligkeit (Beispiel)"
+          },
+          {
+            "label": "Angeboten in",
+            "value": "Keine Angebotsländer - nur Beispieldaten"
+          },
+          {
+            "label": "Intermediär",
+            "value": "Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister"
+          }
+        ],
+        "overview": [
+          "Dieses Panel zeigt, wie vom Emittenten bereitgestellte Marketinginhalte durch die Trennlinie oben von den Plattform-Fakten getrennt werden.",
+          "Beispieldaten - kein echtes Angebot. Die Emittentenbeschreibung, das Team, das Geschäftsmodell und die Finanzen auf einer echten Plattform würden vom Emittenten stammen und klar zugeordnet sein."
+        ],
+        "documents": [
+          {
+            "label": "Basisinformationsblatt (Beispieleintrag)",
+            "note": "Keine Datei in diesem Prototyp gehostet"
+          },
+          {
+            "label": "Anleihebedingungen (Beispieleintrag)",
+            "note": "Keine Datei in diesem Prototyp gehostet"
+          },
+          {
+            "label": "Pitch Deck (Beispieleintrag)",
+            "note": "Keine Datei in diesem Prototyp gehostet"
+          }
+        ],
+        "news": [
+          {
+            "date": "Beispiel",
+            "text": "Kampagnen-Updates würden hier erscheinen. Dieser Eintrag ist ein Platzhalter, keine echte Meldung."
+          }
+        ]
+      },
+      {
+        "campaignId": "fixture-alentejo-solar",
+        "issuer": "Alentejo Solar Cooperative (Beispiel-Emittent)",
+        "country": "PT",
+        "category": "Energie und Versorgung",
+        "teaser": "Gemeinschafts-Solaranlage im Alentejo, finanziert über eine nachrangige Anleihe mit Barzins-Variante. Alle Bedingungen auf dieser Seite sind Beispieldaten.",
+        "instrumentClass": "bond",
+        "instrumentSeniority": "subordinated",
+        "instrumentOverlays": [],
+        "interestRate": "7,0% p.a. in bar (Beispiel)",
+        "term": "Bis 2032-06-30 (Beispiel)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Nachrangige Anleihe. Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "ISIN / WKN",
+            "value": "Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern"
+          },
+          {
+            "label": "Nennbetrag pro Einheit",
+            "value": "250 Testnet-USDC (Beispiel)"
+          },
+          {
+            "label": "Finanzierungsschwelle",
+            "value": "Ziel 900.000 Testnet-USDC (Beispiel-Fixture); Alles-oder-nichts im Live-Modus"
+          },
+          {
+            "label": "Nachrangigkeit",
+            "value": "Forderungen stehen im Insolvenzfall hinter vorrangigen Gläubigern (Beispielbedingungen)"
+          },
+          {
+            "label": "Zinsberechnung",
+            "value": "act/act (Beispiel)"
+          },
+          {
+            "label": "Zinszahlungstermine",
+            "value": "Jährlich am 30. Juni, erste Zahlung 2028 (Beispiel)"
+          },
+          {
+            "label": "Tilgung",
+            "value": "Bei Fälligkeit (Beispiel)"
+          },
+          {
+            "label": "Angeboten in",
+            "value": "Keine Angebotsländer - nur Beispieldaten"
+          },
+          {
+            "label": "Intermediär",
+            "value": "Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot. Eine echte Kampagnenseite würde die Beschreibung der Genossenschaft, des Standorts und der Energieabnahme vom Emittenten selbst tragen."
+        ],
+        "documents": [
+          {
+            "label": "Basisinformationsblatt (Beispieleintrag)",
+            "note": "Keine Datei in diesem Prototyp gehostet"
+          },
+          {
+            "label": "Emissionsbedingungen (Beispieleintrag)",
+            "note": "Keine Datei in diesem Prototyp gehostet"
+          }
+        ],
+        "news": []
+      },
+      {
+        "campaignId": "fixture-porto-logistics",
+        "issuer": "Porto Logistics Hub SA (Beispiel-Emittent)",
+        "country": "PT",
+        "category": "Transport und Logistik",
+        "teaser": "Tokenisierungsstudie für einen Logistik-Hub bei Porto, strukturiert als Wandelanleihe. Dieses Fixture zeigt eine abgeschlossene Kampagne. Alle Bedingungen sind Beispieldaten.",
+        "instrumentClass": "bond",
+        "instrumentSeniority": "unspecified",
+        "instrumentOverlays": ["convertible"],
+        "interestRate": "8,0% p.a. bis zur Wandlung (Beispiel)",
+        "term": "Bis 2031-12-31 (Beispiel)",
+        "minInvestment": "500 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Anleihe mit Wandlungsmerkmal (wandelbar); Rangfolge in den Beispielbedingungen nicht angegeben. Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "ISIN / WKN",
+            "value": "Nicht begeben - dieser Prototyp vergibt keine Wertpapierkennnummern"
+          },
+          {
+            "label": "Nennbetrag pro Einheit",
+            "value": "500 Testnet-USDC (Beispiel)"
+          },
+          {
+            "label": "Finanzierungsschwelle",
+            "value": "Ziel 500.000 Testnet-USDC (Beispiel-Fixture)"
+          },
+          {
+            "label": "Wandlungsauslöser",
+            "value": "Pro Emission konfigurierbar; Beispiel: ein vom Emittenten angekündigtes qualifiziertes Finanzierungsereignis"
+          },
+          {
+            "label": "Wandlungsfenster",
+            "value": "Pro Emission konfigurierbar; Beispiel: 30 Tage nach der Auslöser-Ankündigung"
+          },
+          {
+            "label": "Zins-Stopp",
+            "value": "Zinsen laufen bis zum Wandlungstag (Beispiel)"
+          },
+          {
+            "label": "Tilgung bei Nichtwandlung",
+            "value": "Bei Fälligkeit (Beispiel)"
+          },
+          {
+            "label": "Angeboten in",
+            "value": "Keine Angebotsländer - nur Beispieldaten"
+          },
+          {
+            "label": "Intermediär",
+            "value": "Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister"
+          }
+        ],
+        "overview": ["Beispieldaten - kein echtes Angebot. Abgeschlossene Kampagnen bleiben mit ihrem endgültigen Finanzierungsstatus sichtbar, wie diese."],
+        "documents": [
+          {
+            "label": "Wandelanleihebedingungen (Beispieleintrag)",
+            "note": "Keine Datei in diesem Prototyp gehostet"
+          }
+        ],
+        "news": [
+          {
+            "date": "Beispiel",
+            "text": "Diese Kampagne ist in den Fixture-Daten erfolgreich geschlossen. Emittentenereignisse nach der Finanzierung würden separat verfolgt."
+          }
+        ]
+      }
+    ]
+  },
+  "contentPages": {
+    "eventsTitle": "Veranstaltungen",
+    "eventsIntro": "Pitch-Abende, Investoren-Lounges und Webinare. Diese Demo-Umgebung zeigt die geplanten Formate; es gibt keine echten Veranstaltungen zu buchen.",
+    "eventsLive": "Bevorstehend",
+    "eventsPast": "Vergangen",
+    "eventsEmptyLive": "Keine bevorstehenden Veranstaltungen in dieser Demo.",
+    "eventsEmptyPast": "Noch keine vergangenen Veranstaltungen.",
+    "eventsFilterAll": "Alle",
+    "eventsFormatsTitle": "Geplante Formate",
+    "eventsFormatPitch": "Pitch-Abende",
+    "eventsFormatPitchDesc": "Emittenten stellen ihr Projekt in fünf Minuten vor und beantworten live Fragen der Anleger.",
+    "eventsFormatLounge": "Investoren-Lounges",
+    "eventsFormatLoungeDesc": "Kleine lokale Treffen, um über Crowdinvesting und aktuelle Kampagnen zu sprechen.",
+    "eventsFormatWebinar": "Webinare",
+    "eventsFormatWebinarDesc": "Online-Sessions zu Plattformfunktionen, Instrumenten und Risikogrundlagen.",
+    "eventsDemoNote": "Demo-Seite: Termine, Orte und Anmeldung erscheinen hier, sobald die Plattform echte Veranstaltungen plant.",
+    "blogTitle": "Blog",
+    "blogIntro": "Hintergrundartikel zu Crowdinvesting, Instrumenten und der Plattform.",
+    "blogEmpty": "Noch keine Artikel veröffentlicht.",
+    "blogDemoNote": "Demo-Seite: Redaktionelle Artikel erscheinen hier. Nichts auf dieser Seite ist eine Anlageberatung.",
+    "pressTitle": "Presse",
+    "pressIntro": "Pressemitteilungen, Medienkontakt und Pressematerial.",
+    "pressContactLabel": "Pressekontakt",
+    "pressKitLabel": "Pressemappe",
+    "pressKitNote": "Logo- und Markenmaterial wird hier als Download bereitgestellt.",
+    "pressEmpty": "Noch keine Pressemitteilungen.",
+    "pressDemoNote": "Demo-Seite: Es wurden keine Pressemitteilungen veröffentlicht; nichts hier darf als echte Unternehmensaussage zitiert werden.",
+    "jobsTitle": "Jobs",
+    "jobsIntro": "Arbeite an der Plattform mit.",
+    "jobsEmpty": "Derzeit keine offenen Stellen.",
+    "jobsSpeculativeNote": "Initiativbewerbungen werden in dieser Demo nicht entgegengenommen.",
+    "jobsDemoNote": "Demo-Seite: Veröffentlichte Stellen erscheinen hier. Derzeit gibt es keine echten Vakanzen.",
+    "podcastTitle": "Podcast",
+    "podcastIntro": "Geplante Audioformate zu Crowdinvesting, Emittenten und der Plattform. Diese Demo-Umgebung zeigt die geplanten Formate; es wurden keine Episoden aufgezeichnet.",
+    "podcastEmpty": "Noch keine Episoden veröffentlicht.",
+    "podcastFormatsTitle": "Geplante Formate",
+    "podcastFormatInterviews": "Emittenten-Interviews",
+    "podcastFormatInterviewsDesc": "Gespräche mit Kampagnen-Erstellern über ihre Projekte, Pläne und Risiken.",
+    "podcastFormatEducation": "Investorenbildung",
+    "podcastFormatEducationDesc": "Episoden zu Instrumenten, Diversifikation und den Grundlagen des Crowdinvesting-Risikos.",
+    "podcastFormatUpdates": "Plattform-Updates",
+    "podcastFormatUpdatesDesc": "Was sich auf der Plattform geändert hat und warum, in einfacher Sprache.",
+    "podcastDemoNote": "Demo-Seite: Episoden und Audio-Player erscheinen hier, sobald die Plattform tatsächlich einen Podcast veröffentlicht. Nichts auf dieser Seite ist ein Angebot oder eine Anlageberatung.",
+    "eventsHowTitle": "Wie Veranstaltungen funktionieren werden",
+    "eventsHowBody": "Wenn die Plattform eine echte Veranstaltung plant, erscheint sie unter Demnächst mit Datum, Format und Anmeldung. Abgeschlossene Veranstaltungen wandern zu Vergangen. Bis dahin bleiben beide Listen ehrlich leer.",
+    "blogPosts": [
+      {
+        "date": "2026-10-31",
+        "title": "Was Blockallisto ist - und was nicht",
+        "paragraphs": [
+          "Blockallisto ist ein funktionierender Prototyp für tokenisiertes Crowdinvesting im Stellar-Testnet. Er erkundet, wie eine transparente Anlageplattform funktionieren könnte: öffentliche Kampagnenbedingungen, Beitragsverfolgung auf der Kette und durchsetzbare Erstattungsregeln.",
+          "Es ist keine Anlageplattform. Es gibt keine echten Angebote, keine echten Gelder und keine Anlageberatung auf dieser Website. Jede Kampagne läuft im Stellar-Testnet, und Testnet-Assets sind konstruktionsbedingt wertlos.",
+          "Was echt ist, ist die Maschinerie: Die Smart Contracts, die Wallet-Abläufe und diese Website arbeiten mit wertlosen Test-Assets, während der Prototyp erprobt und verbessert wird."
+        ]
+      },
+      {
+        "date": "2026-10-31",
+        "title": "Wie eine Kampagne von Anfang bis Ende funktioniert",
+        "paragraphs": [
+          "Jede Kampagne ist ein Soroban-Smart-Contract mit einem Ziel und einer Frist. Besucher verbinden ein Freighter-Wallet und zahlen Testnet-USDC ein; jeder bestätigte Beitrag ist auf der Kette und im Fortschrittsbalken der Kampagne sichtbar.",
+          "Der Vertrag setzt das Ergebnis ohne Mittelsmann durch: Nach Ablauf der Frist kann der Ersteller nur auszahlen, wenn das Ziel erreicht wurde. Endet die Kampagne unter ihrem Ziel, signiert jeder Beitragende seine eigene Erstattung und erhält seinen Beitrag zurück.",
+          "Ihre Positionen, Aktivitäten und Benachrichtigungen liegen unter Mein Konto, sobald Sie ein Wallet verbinden - pro Wallet auf dem Server gespeichert, nicht in einem Cookie."
+        ]
+      },
+      {
+        "date": "2026-10-31",
+        "title": "Warum eine Demo Rechtsseiten hat",
+        "paragraphs": [
+          "Dieser Prototyp leiht seine Struktur aus der echten Crowdfunding-Regulierung. Die EU reguliert Crowdfunding nach der ECSPR, und zugelassene Anbieter stehen im ESMA-Register; Blockallisto ist kein zugelassener Anbieter und listet keine echten Angebote.",
+          "Seiten wie Risikohinweise, Interessenkonflikte, Beschwerdemanagement und Geschäftskontinuität existieren hier als illustrative, mit [DEMO] gekennzeichnete Vorlagen. Sie zeigen die Transparenz, die eine echte Plattform bieten muss - sie sind keine Rechtsdokumente und wurden nicht von einem Anwalt geprüft.",
+          "Die gleiche Regel gilt überall auf dieser Website: Fiktive Angaben sind mit [DEMO] gekennzeichnet, und nichts hier darf als echte Unternehmenserklärung zitiert werden."
+        ]
+      }
+    ],
+    "pressFactSheetTitle": "Projekt-Faktenblatt",
+    "pressFactStatusLabel": "Status",
+    "pressFactStatusValue": "Öffentliche Demo im Stellar-Testnet - keine echten Angebote, keine echten Gelder, keine Anlageberatung.",
+    "pressFactOperatorLabel": "Betreiber",
+    "pressFactOperatorValue": "Unabhängiges Prototyp-Projekt. Es wird kein registrierter Betreiber behauptet; die Angaben auf der Impressumsseite sind mit [DEMO] gekennzeichnet.",
+    "pressFactTechLabel": "Technologie",
+    "pressFactTechValue": "Stellar-Soroban-Smart-Contracts, Testnet-USDC und das Freighter-Wallet.",
+    "pressFactContactValue": "Nutzen Sie das Feedback-Widget auf jeder Seite; Nachrichten werden in dieser Demo als Feedback gespeichert.",
+    "jobsAboutTitle": "Wie dieses Projekt gebaut wird",
+    "jobsAboutBody": "Blockallisto wird derzeit als kleines Prototyp-Projekt gebaut. Sollte je eine echte Stelle geöffnet werden, wird sie auf dieser Seite mit Anforderungen und Bewerbungsweg veröffentlicht."
+  },
+  "builder": {
+    "title": "Kampagnen-Builder",
+    "badge": "Entwurf",
+    "intro": "Entwurfsvorschau, wie eine Kampagne für die Bereitstellung konfiguriert würde. Nichts hier stellt einen Vertrag bereit oder erstellt eine Kampagne: Das Absenden ist in dieser Demo deaktiviert. Die Felder folgen denselben Regeln, die der Vertrag und das Kampagnenregister durchsetzen.",
+    "connectNote": "Verbinden Sie ein Wallet unter Mein Konto, um die Erstelleradresse in der Vorschau zu sehen. Nur das Ersteller-Wallet kann eine Bereitstellung autorisieren, und es kann erst nach Ablauf der Frist und nur dann auszahlen, wenn das Ziel erreicht wurde.",
+    "nameLabel": "Projektname",
+    "nameErrorTooLong": "Maximal 120 Zeichen (Register-Regel).",
+    "slugLabel": "Kampagnen-ID (URL-Slug)",
+    "slugPlaceholder": "mein-projekt",
+    "slugErrorInvalid": "Nur Buchstaben, Ziffern, - und _, bis zu 48 Zeichen (Register-Regel).",
+    "industryLabel": "Branche",
+    "goalLabel": "Finanzierungsziel (Testnet-USDC)",
+    "goalPlaceholder": "10000",
+    "goalErrorInvalid": "Das Ziel muss ein positiver Betrag mit höchstens 7 Dezimalstellen sein (Token-Regel).",
+    "goalErrorRange": "Das Ziel überschreitet den Höchstbetrag, den der Vertrag speichern kann (Vertragsregel).",
+    "deadlineLabel": "Frist",
+    "deadlineNote": "Die Frist ist 00:00 UTC am gewählten Datum; heute ist also bereits zu spät.",
+    "deadlineErrorPast": "Die Frist muss in der Zukunft liegen (Vertragsregel).",
+    "creatorLabel": "Ersteller-Wallet",
+    "creatorPlaceholder": "Verbinden Sie zuerst ein Wallet",
+    "tokenLabel": "Token",
+    "previewAria": "Bereitstellungsvorschau",
+    "previewTitle": "Was eine Bereitstellung verwenden würde",
+    "previewConstructor": "Konstruktorargumente des Vertrags (der Ersteller muss die Bereitstellung signieren):",
+    "previewRegistry": "Eintrag im Kampagnenregister:",
+    "deployDisabled": "Die Bereitstellung ist in dieser Demo nicht aktiviert"
+  },
+  "tour": {
+    "tourTitle": "Kampagnen-Tour",
+    "tourStepOf": "Schritt {current} von {total}",
+    "tourNext": "Weiter",
+    "tourBack": "Zurück",
+    "tourDone": "Fertig",
+    "tourSkip": "Tour überspringen",
+    "tourRepeat": "Tour wiederholen",
+    "tourStepFundingTitle": "Finanzierungsstand",
+    "tourStepFundingBody": "Erreichter Betrag, Ziel und verbleibende Zeit. Das Panel aktualisiert sich, sobald Beiträge on-chain bestätigt sind.",
+    "tourStepTabsTitle": "Details und Dokumente",
+    "tourStepTabsBody": "Übersicht, Konditionen und Kampagnendokumente wie Bedingungen und Informationsblätter.",
+    "tourStepRiskTitle": "Risikohinweis",
+    "tourStepRiskBody": "Jede Kampagne kann ihren gesamten Wert verlieren. Lies die Risikohinweise, bevor du investierst.",
+    "tourStepNewsTitle": "News und Fragen",
+    "tourStepNewsBody": "Kampagnen-Updates und öffentliche Kommentare. Demo-News sind immer als platform-demo gekennzeichnet."
+  },
+  "categorisation": {
+    "catTitle": "Anlegerkategorisierung",
+    "catPrototypeNote": "Unverbindlicher Prototyp: Diese Prüfung gewährt oder beschränkt keinen Zugang und wird nur in diesem Browser gespeichert.",
+    "catKnowledgeTitle": "Wissenstest",
+    "catKnowledgeIntro": "Fünf kurze Fragen zu den Risiken von Crowdinvesting.",
+    "catSubmit": "Antworten prüfen",
+    "catRetake": "Test wiederholen",
+    "catResultPass": "Alle Antworten richtig.",
+    "catResultReview": "{n} Antwort(en) zum Überprüfen - lies die Erklärungen und versuche es erneut.",
+    "catScoreLabel": "{correct} von {total} richtig",
+    "catSimTitle": "Simulation der Verlusttragfähigkeit",
+    "catSimIntro": "Vergleiche eine geplante Investition mit deinen frei verfügbaren Mitteln.",
+    "catAssetsLabel": "Frei verfügbare Mittel (EUR)",
+    "catIncomeLabel": "Monatliches Nettoeinkommen (EUR)",
+    "catPlannedLabel": "Geplante Investition (EUR)",
+    "catSimRun": "Simulation starten",
+    "catSimResult": "Die geplante Anlage entspricht {pct} % der eingegebenen frei verfügbaren Mittel.",
+    "catSimNote": "Reine Rechenoperation mit den eingegebenen Beträgen. Dies ist keine regulatorische Prüfung der Verlusttragfähigkeit, Geeignetheit oder Berechtigung; es wird kein Schwellenwert angewendet.",
+    "catSavedNote": "Ergebnis nur lokal in diesem Browser gespeichert.",
+    "catQuestions": [
+      {
+        "q": "Was ist das Maximum, das du bei einer Crowdfunding-Investition verlieren kannst?",
+        "options": ["Nur die Gebühren", "Die gesamte Investition", "Die Hälfte der Investition"],
+        "why": "Crowdfunding-Investitionen können ihren gesamten Wert verlieren (Totalverlust)."
+      },
+      {
+        "q": "Wie leicht kannst du eine Crowdfunding-Investition normalerweise verkaufen?",
+        "options": ["Jederzeit an der Börse", "Meist gar nicht - sie ist illiquide", "Nur am Jahresende"],
+        "why": "Es gibt in der Regel keinen Sekundärmarkt; plane, bis zum Ende der Laufzeit zu halten."
+      },
+      {
+        "q": "Wer trägt den Verlust, wenn das emittierende Unternehmen scheitert?",
+        "options": ["Die Plattform", "Der Zahlungsdienstleister", "Der Anleger"],
+        "why": "Die Investition ist ein Vertrag mit dem Emittenten; die Plattform deckt keine Verluste."
+      },
+      {
+        "q": "Was bedeutet Diversifikation?",
+        "options": ["Geld auf mehrere Investitionen verteilen", "Alles in eine Kampagne investieren", "Alles in bar halten"],
+        "why": "Gestreute Investitionen verringern die Wirkung eines einzelnen Totalverlusts."
+      },
+      {
+        "q": "Sind Renditen bei Crowdfunding-Investitionen garantiert?",
+        "options": ["Ja, per Gesetz", "Ja, durch die Plattform", "Nein"],
+        "why": "Zinsen und Rückzahlung hängen vom Emittenten ab; keine Rendite ist garantiert."
+      }
+    ]
+  },
+  "community": {
+    "loading": "Wird geladen...",
+    "demoBadge": "DEMO",
+    "documentsTitle": "Dokumente",
+    "documentsNote": "Mit DEMO markierte Dokumente sind fiktive Vorlagen dieses Prototyps - keine Angebote, keine Beratung, keine verifizierten Emittenteninformationen.",
+    "rewardsTitle": "Prämien",
+    "rewardsNote": "Die hier gezeigten Prämienstufen werden vom Emittenten als Marketinginhalt bereitgestellt. Die Plattform verspricht nicht, dass eine Prämie eingefordert werden kann oder erfüllt wird.",
+    "rewardsNone": "Für diese Kampagne wurden keine Prämien angekündigt.",
+    "documentKinds": {
+      "kiis": "KIIS",
+      "terms": "Bedingungen",
+      "project": "Projekt",
+      "other": "Dokument"
+    },
+    "demoDocumentTitles": {
+      "demo-solar-kiis": "[DEMO] Basisinformationsblatt für Anleger - fiktive Vorlage, kein Angebot",
+      "demo-solar-project": "[DEMO] Projektübersicht - fiktives Beispieldokument",
+      "staging-load-kiis": "[DEMO] Basisinformationsblatt für Anleger - fiktive Vorlage, kein Angebot",
+      "staging-load-project": "[DEMO] Projektübersicht - fiktives Beispieldokument"
+    },
+    "newsTitle": "Neuigkeiten",
+    "newsAuthorDemo": "von der Plattform veröffentlicht (Demo-Inhalt - keine verifizierte Emittentenidentität)",
+    "commentsTitle": "Kommentare",
+    "commentsEmpty": "Noch keine Kommentare.",
+    "commentLabel": "Ihr Kommentar",
+    "commentSubmit": "Kommentar veröffentlichen",
+    "commentPostingAs": "Veröffentlichen als {name}. Kommentare sind öffentlich.",
+    "commentsSignInHint": "Melden Sie sich unten mit Ihrer Wallet an, um an der Diskussion teilzunehmen.",
+    "signInTitle": "Community-Anmeldung",
+    "signInExplainer": "Signieren Sie eine einmalige Challenge mit Ihrer Freighter-Wallet, um zu beweisen, dass Sie die Adresse kontrollieren. Es wird keine Transaktion erstellt und es bewegen sich keine Gelder. Die Sitzung schaltet Kommentare, Support-Tickets und Emittentenbewerbungen frei.",
+    "signInButton": "Mit Wallet anmelden",
+    "signInConnectFirst": "Verbinden Sie zuerst Ihre Freighter-Wallet (oben auf der Seite).",
+    "signedInTitle": "Community-Konto",
+    "signedInAs": "Angemeldet als",
+    "displayNameLabel": "Anzeigename (wird bei Ihren Kommentaren gezeigt)",
+    "displayNameSave": "Namen speichern",
+    "signOutButton": "Abmelden",
+    "ticketsTitle": "Support und Feedback",
+    "ticketsNote": "Tickets sind nur für Ihr Wallet-Konto und den Seitenbetreiber sichtbar. Dies ist ein Prototyp: Geben Sie keine persönlichen Daten, Passwörter oder echten Zahlungsdaten ein.",
+    "ticketKindLabel": "Typ",
+    "ticketKinds": {
+      "support": "Support-Anfrage",
+      "feedback": "Feedback"
+    },
+    "ticketSubjectLabel": "Betreff",
+    "ticketBodyLabel": "Nachricht",
+    "ticketSubmit": "Senden",
+    "ticketsEmpty": "Noch keine Tickets.",
+    "ticketStatus": {
+      "open": "Offen",
+      "closed": "Geschlossen"
+    },
+    "applicationTitle": "Als Emittent bewerben",
+    "applicationNote": "Beschreiben Sie dem Betreiber das Projekt, das Sie listen möchten. Das Absenden dieses Formulars ist kein Angebot, kein Listing und keine Genehmigung - es eröffnet ein Gespräch. Demo-Umgebung: Übermitteln Sie keine echten Geschäftsgeheimnisse.",
+    "applicationPreviewTitle": "Antrag (Vorschau)",
+    "applicationPreviewNote": "Vorschau des Emittentenantrags. Nichts, was Sie hier eingeben, wird gesendet oder gespeichert - melden Sie sich unten mit Ihrer Wallet an, um einen echten Antrag zur Prüfung durch den Betreiber einzureichen.",
+    "applicationPreviewPlaceholder": "Nur Vorschau - zum Bewerben anmelden",
+    "applicationPreviewSubmit": "Antrag einreichen (zuerst anmelden)",
+    "applicationFields": {
+      "projectName": "Projektname",
+      "country": "Land",
+      "instrumentType": "Instrumententyp (z. B. Anleihe, Eigenkapital, Umsatzbeteiligung)",
+      "targetAmount": "Zielbetrag",
+      "description": "Projektbeschreibung",
+      "contactEmail": "Kontakt-E-Mail (optional)"
+    },
+    "newsFeedTitle": "Neueste Kampagnen-Neuigkeiten",
+    "newsFeedEmpty": "Noch keine Kampagnen-Neuigkeiten.",
+    "myApplicationsTitle": "Meine Emittentenanträge",
+    "myApplicationsEmpty": "Noch keine Anträge.",
+    "applicationStatus": {
+      "received": "Eingegangen",
+      "under_review": "In Prüfung",
+      "closed": "Geschlossen"
+    },
+    "myTicketsTitle": "Meine Support- und Feedback-Tickets",
+    "myCommentsTitle": "Meine Kommentare",
+    "commentHidden": "Durch Moderation ausgeblendet",
+    "applicationValidation": {
+      "required": "Bitte füllen Sie dieses Feld aus.",
+      "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein."
+    },
+    "company": {
+      "title": "Firmenkonten",
+      "note": "Beantragen Sie ein Firmenkonto, das mit Ihrer Wallet verknüpft ist. Die Prüfung erfolgt manuell, wie bei Emittentenanträgen. Hinweis zur Demo: Die Registerdaten sind Angaben des Antragstellers; in diesem Prototyp werden weder Handelsregisterauszüge noch Ausweise der Eigentümer hochgeladen oder geprüft. Investieren aus einem Firmenkontext ist geplant und hier nicht aktiv.",
+      "listTitle": "Meine Firmenanträge",
+      "empty": "Noch keine Firmenanträge.",
+      "formTitle": "Firmenkonto beantragen",
+      "fields": {
+        "companyName": "Firmenname",
+        "legalForm": "Rechtsform (z. B. GmbH, AG)",
+        "registrationNumber": "Registernummer",
+        "country": "Land der Registrierung"
+      },
+      "submit": "Antrag absenden",
+      "submitting": "Wird gesendet...",
+      "submitted": "Antrag erhalten. Er erscheint oben als ausstehende Prüfung.",
+      "status": {
+        "pending": "Prüfung ausstehend",
+        "approved": "Genehmigt",
+        "rejected": "Abgelehnt"
+      }
+    },
+    "security": {
+      "title": "Sicherheit",
+      "authMethodNote": "Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Zugangsberechtigung. Dieser Prototyp hat kein Passwort und keine Zwei-Faktor-App.",
+      "sessionsTitle": "Aktive Sitzungen",
+      "sessionLabel": "Sitzung",
+      "currentBadge": "Diese Sitzung",
+      "createdLabel": "Angemeldet",
+      "expiresLabel": "Läuft ab",
+      "revoke": "Sitzung beenden",
+      "revokeOthers": "Alle anderen Sitzungen abmelden",
+      "revokedOthers": {
+        "one": "{count} weitere Sitzung beendet.",
+        "other": "{count} weitere Sitzungen beendet."
+      },
+      "empty": "Keine aktiven Sitzungen."
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "empty": "Noch keine Benachrichtigungen.",
+      "markAllRead": "Alle als gelesen markieren",
+      "markRead": "Als gelesen markieren",
+      "kinds": {
+        "applicationReceived": "Emittentenantrag eingegangen",
+        "applicationStatus": "Update zum Emittentenantrag",
+        "commentModerated": "Kommentar durch Moderation ausgeblendet",
+        "ticketClosed": "Support-Ticket geschlossen",
+        "companyReceived": "Firmenkontoantrag eingegangen",
+        "companyStatus": "Update zum Firmenkontoantrag"
+      },
+      "bodies": {
+        "applicationReceived": "Ihr Emittentenantrag für \"{projectName}\" ist eingegangen. Der Betreiber prüft Anträge manuell; die Einreichung ist keine Genehmigung, kein Listing und kein Angebot.",
+        "applicationStatus": "Ihr Emittentenantrag für \"{projectName}\" hat jetzt den Status \"{statusLabel}\".",
+        "commentModerated": "Ihr Kommentar zur Kampagne \"{campaignId}\" wurde vom Moderator ausgeblendet.",
+        "commentModeratedReason": "Grund: {reason}",
+        "ticketClosed": "Ihr Ticket ({kindLabel}) \"{subject}\" wurde geschlossen.",
+        "companyReceived": "Ihr Firmenkontoantrag für \"{companyName}\" ist eingegangen. Die Prüfung erfolgt manuell; die Einreichung ist keine Genehmigung.",
+        "companyStatus": "Ihr Firmenkontoantrag für \"{companyName}\" ist jetzt \"{statusLabel}\"."
+      }
+    },
+    "operator": {
+      "title": "Operator-Dashboard",
+      "demoNote": "Operator-Werkzeuge der Testumgebung. News-Beiträge werden immer als Plattform-Demo-Inhalt gekennzeichnet; es gibt keine verifizierte Emittentenidentität. Veröffentlichen Sie keine Aussagen über Genehmigungen, Listings oder Renditen.",
+      "loadError": "Operator-Daten konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "tabs": {
+        "applications": "Anträge",
+        "comments": "Kommentare",
+        "tickets": "Tickets",
+        "news": "News",
+        "reconciliation": "Abgleich",
+        "audit": "Aktionsprotokoll"
+      },
+      "applicationsEmpty": "Noch keine Emittentenanträge.",
+      "commentsEmpty": "Noch keine Kommentare.",
+      "ticketsEmpty": "Noch keine Tickets.",
+      "reconNote": "Nur-Lese-Hilfe, die das Journal dieser App mit dem kumulativen On-Chain-Beitragszähler vergleicht. On-Chain-Beträge oberhalb der journal-abgedeckten Summe stammen von außerhalb dieser App (CLI-Tests, andere Werkzeuge, Zeit vor dem Journal) - nicht fehlende Gelder. Keine Buchhaltungs-, Verwahrungs- oder Compliance-Aussage.",
+      "colOnChain": "On-Chain-Zähler",
+      "colJournalCovered": "Journal-abgedeckt",
+      "colNotCovered": "Nicht journal-abgedeckt",
+      "colSucceeded": "Erfolgreich (Beitrag/Erstattung/Abhebung)",
+      "colOpenIntents": "Offene Intents",
+      "colNotes": "Hinweise",
+      "colGenerated": "Erstellt",
+      "reconEmpty": "Keine Kampagnen in der Registry.",
+      "auditNote": "Jüngste Betriebshistorie abgesicherter Admin-Aktionen (neueste 500). Einträge veralten und Schreibvorgänge sind nicht blockierend - dies ist kein unveränderliches Prüfprotokoll.",
+      "auditEmpty": "Noch keine Admin-Aktionen aufgezeichnet.",
+      "colTime": "Zeit",
+      "colGate": "Gate",
+      "colAction": "Aktion",
+      "colTargetRef": "Ziel",
+      "colDetail": "Detail",
+      "reconQuarantined": "{n} unter Quarantäne gestellte Journal-Zeile(n) erfordern eine Operator-Prüfung.",
+      "colProject": "Projekt",
+      "colCountry": "Land",
+      "colInstrument": "Instrument",
+      "colTarget": "Ziel",
+      "colSubmitted": "Eingereicht",
+      "colStatus": "Status",
+      "colActions": "Aktionen",
+      "colCampaign": "Kampagne",
+      "colAuthor": "Autor",
+      "colComment": "Kommentar",
+      "colPosted": "Veröffentlicht",
+      "colState": "Status",
+      "colKind": "Typ",
+      "colSubject": "Betreff",
+      "colMessage": "Nachricht",
+      "colOpened": "Geöffnet",
+      "stateVisible": "Sichtbar",
+      "stateHidden": "Ausgeblendet",
+      "markUnderReview": "In Prüfung markieren",
+      "closeApplication": "Schließen",
+      "reopenApplication": "Wieder öffnen",
+      "statusUpdated": "Status aktualisiert.",
+      "hide": "Ausblenden",
+      "unhide": "Einblenden",
+      "hideReasonLabel": "Grund für das Ausblenden (optional, für den Autor sichtbar)",
+      "hideReasonPlaceholder": "Kurzer Moderationsgrund",
+      "confirmHide": "Ausblenden bestätigen",
+      "cancel": "Abbrechen",
+      "closeTicket": "Ticket schließen",
+      "closedNote": "Das Schließen benachrichtigt den Autor und kann hier nicht rückgängig gemacht werden.",
+      "newsFormTitle": "Kampagnen-News veröffentlichen",
+      "newsCampaignLabel": "Kampagne",
+      "newsTitleLabel": "Titel",
+      "newsBodyLabel": "Text",
+      "newsSubmit": "News-Beitrag veröffentlichen",
+      "newsPosted": "News-Beitrag wurde veröffentlicht.",
+      "newsValidation": "Titel und Text sind erforderlich.",
+      "actionFailed": "Die Aktion ist fehlgeschlagen. Erneut versuchen."
+    },
+    "applicationSubmit": "Bewerbung absenden",
+    "applicationDone": "Bewerbung erhalten. Der Betreiber prüft Bewerbungen außerhalb der Seite; nichts wird automatisch gelistet.",
+    "feedbackTabLabel": "Feedback",
+    "feedbackPanelTitle": "Feedback senden",
+    "feedbackPanelIntro": "Sag uns, was funktioniert und was nicht. Feedback wird als Support-Ticket gespeichert, das nur für dich und den Betreiber sichtbar ist.",
+    "feedbackSignInPrompt": "Melde dich mit deiner Wallet an, um Feedback zu senden.",
+    "feedbackSubmitted": "Danke - dein Feedback wurde gesendet.",
+    "feedbackClose": "Schließen"
+  }
+}

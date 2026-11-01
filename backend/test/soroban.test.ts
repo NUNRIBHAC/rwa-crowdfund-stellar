@@ -185,6 +185,23 @@ test('signed intent survives response loss, holds on NOT_FOUND and retries ident
   assert.equal(sendCount, 2, 'confirmed hash never resent');
 });
 
+test('terminal intent status stays readable after the journal purges its signed envelope', { skip: !fixtureAvailable }, async () => {
+  reset();
+  const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '10' });
+  await submitSoroban('s1', { actor: actor.publicKey(), xdr: signed(b) });
+  txStatus = 'SUCCESS';
+  const first = await statusSoroban(b.hash);
+  assert.equal(first.confirmed, true);
+  // Once terminal, the journal's retention policy scrubs signedXdr
+  // (purgeTerminalEnvelopes on read); a later status check must still return
+  // the recorded terminal status instead of 400ing as 'signed intent not found'.
+  const stored = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents[0];
+  assert.equal(stored.status, 'SUCCESS');
+  const again = await statusSoroban(b.hash);
+  assert.equal(again.status, 'SUCCESS');
+  assert.equal(again.confirmed, true);
+});
+
 test('wrong signer, unknown signed envelope and mismatched status hashes are rejected', { skip: !fixtureAvailable }, async () => {
   reset();
   const b = await buildSoroban('s1', { actor: actor.publicKey(), action: 'refund' });

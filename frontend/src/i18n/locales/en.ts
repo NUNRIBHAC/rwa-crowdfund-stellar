@@ -1,6 +1,6 @@
-// English master dictionary. Every other locale file is typed as Messages,
-// so tsc fails the build on any missing or extra key. Content arrays are
-// length-checked across locales by i18n/parity.test.ts.
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 export const en = {
   meta: {
     title: 'Blockallisto - Real assets. Shared possibilities.',
@@ -103,7 +103,9 @@ export const en = {
     funded: 'Funded',
     underfunded: 'Underfunded',
     filterIndustryAria: 'Filter by industry',
-    industryLabels: { 'energy-utilities': 'Energy and utilities' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': 'Energy and utilities',
+    } as Record<string, string>,
     allIndustries: 'All industries',
     sortAria: 'Sort campaigns',
     sortDeadline: 'Deadline soonest',
@@ -113,7 +115,10 @@ export const en = {
     grid: 'Grid',
     list: 'List',
     noMatches: 'No campaigns match the current search and filters.',
-    resultCount: (n: number) => (n === 1 ? '1 campaign shown' : `${n} campaigns shown`),
+    resultCount: {
+      one: '{n} campaign shown',
+      other: '{n} campaigns shown',
+    },
     activeAria: 'Active investments',
     activeTitle: 'Active investments',
     completedAria: 'Completed investments',
@@ -125,9 +130,9 @@ export const en = {
     statusEnded: 'Underfunded',
     statusOpen: 'Open',
     withdrawn: 'Withdrawn',
-    fundedPct: (percent: number) => `${percent}% funded`,
+    fundedPct: '{percent}% funded',
     progressUnavailable: 'Progress unavailable - on-chain data not loaded',
-    progressAria: (pct: number) => `Funding progress: ${pct}% of goal`,
+    progressAria: 'Funding progress: {pct}% of goal',
     interest: 'Interest',
     term: 'Term',
     minimum: 'Minimum',
@@ -153,7 +158,7 @@ export const en = {
     amountLabel: 'Contribution amount (testnet USDC)',
     amountRequired: 'Enter a contribution amount.',
     amountInvalid: 'Enter a valid amount: numbers only, up to 7 decimal places, greater than zero.',
-    amountExceeds: (remaining: string) => `Amount exceeds the remaining goal of ${remaining} USDC (testnet).`,
+    amountExceeds: 'Amount exceeds the remaining goal of {remaining} USDC (testnet).',
     usdcTestnet: 'USDC (testnet)',
     contribute: 'Contribute',
     refundMe: 'Refund me',
@@ -162,9 +167,9 @@ export const en = {
       'Contribute before the deadline, up to the remaining goal. After the deadline the creator withdraws only if fully funded; otherwise each contributor signs their own refund. The contract enforces these rules atomically.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `Funding progress: ${filled} of ${count} blocks filled, ${percent}% of the goal`,
+    ariaReady: 'Funding progress: {filled} of {count} blocks filled, {percent}% of the goal',
     ariaUnavailable: 'Funding progress unavailable: on-chain data not loaded',
-    fundedTail: (filled: number, count: number) => `funded - ${filled} of ${count} blocks`,
+    fundedTail: 'funded - {filled} of {count} blocks',
     captionUnavailable: 'Progress unavailable - on-chain data not loaded',
   },
   intent: {
@@ -463,6 +468,10 @@ export const en = {
     fixtureNote: 'Sample campaigns are on screen; sample data carries no per-wallet positions.',
     investmentsAria: 'My investments',
     myInvestments: 'My investments',
+    newsFeedAria: 'Campaign news',
+    newsFeedTitle: 'Campaign news',
+    newsFeedEmpty: 'No news yet for the campaigns you invested in.',
+    newsFeedNoInvestments: 'News from campaigns you invest in will appear here.',
     newInvestments: 'New investments',
     filterAria: 'Filter portfolio by status',
     tabs: {
@@ -560,9 +569,18 @@ export const en = {
   time: {
     ended: 'Ended',
     underMinute: 'Under a minute left',
-    minutesLeft: (n: number) => `${n} minute${n === 1 ? '' : 's'} left`,
-    hoursLeft: (n: number) => `${n} hour${n === 1 ? '' : 's'} left`,
-    daysLeft: (n: number) => `${n} day${n === 1 ? '' : 's'} left`,
+    minutesLeft: {
+      one: '{n} minute left',
+      other: '{n} minutes left',
+    },
+    hoursLeft: {
+      one: '{n} hour left',
+      other: '{n} hours left',
+    },
+    daysLeft: {
+      one: '{n} day left',
+      other: '{n} days left',
+    },
   },
   errors: {
     freighterMissing: 'Freighter wallet extension not detected. Install Freighter, then retry Connect.',
@@ -605,7 +623,7 @@ export const en = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'A right (often securitised as a participation certificate) to a profit share and to repayment of the nominal value, without the full governance rights of a shareholder.',
         opportunities: ['Share in profits without buying full equity', 'Often combines a base repayment claim with profit participation'],
@@ -618,7 +636,7 @@ export const en = {
         subtypeOf: 'Subtype of participation right / certificate',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'A participation right linked to the issuer\'s asset base ("substance") rather than only its annual profit. Structuring and eligible issuers vary by jurisdiction and statute.',
         opportunities: ["Participation in the issuer's asset value", 'Can be structured for smaller issuers where statutes allow'],
@@ -635,7 +653,7 @@ export const en = {
         subtypeOf: '',
         note: 'A capital increase is the corporate action that creates new shares; it is not a separate instrument.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Direct equity in the issuing company: dividend entitlement and participation in company value, with rights set by the articles. New shares reach investors through a capital increase.',
         opportunities: ['Full participation in company growth', 'Voting or information rights depending on share class'],
@@ -648,7 +666,7 @@ export const en = {
         subtypeOf: '',
         note: 'An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.',
         opportunities: ['Access to deals that would be hard to hold directly', 'Simplified administration through the intermediary structure'],
         risks: ['An extra layer sits between investor and issuer', 'Return depends on issuer performance', 'Terms of the vehicle govern payouts and exit'],
@@ -660,7 +678,7 @@ export const en = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'An interest as limited partner in a partnership: profit and loss participation per the partnership agreement, liability limited to the contribution.',
         opportunities: ['Direct pass-through of partnership results', 'Liability capped at the contribution'],
@@ -735,7 +753,7 @@ export const en = {
     chipSenior: 'Senior',
     chipSubordinated: 'Subordinated',
     chipUnspecifiedSuffix: '(seniority unspecified)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base.toLowerCase()}` : base),
+    chipCompose: 'space-lower',
   },
   glossary: [
     {
@@ -1067,7 +1085,7 @@ export const en = {
         teaser: 'Refurbishment of a riverside apartment block in Lisbon, financed through a fixed-rate senior bond. All terms on this page are sample data.',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '6.5% p.a. (sample)',
         term: 'Until 2030-12-31 (sample)',
         minInvestment: '250 USDC testnet (sample)',
@@ -1084,7 +1102,10 @@ export const en = {
             label: 'Nominal amount per unit',
             value: '250 USDC testnet (sample)',
           },
-          { label: 'Minimum subscription', value: '1 unit (sample)' },
+          {
+            label: 'Minimum subscription',
+            value: '1 unit (sample)',
+          },
           {
             label: 'Funding threshold',
             value: 'Equals the campaign goal; all-or-nothing enforced by the contract in live mode',
@@ -1093,12 +1114,18 @@ export const en = {
             label: 'Issue volume',
             value: '250,000 USDC testnet goal (sample fixture)',
           },
-          { label: 'Interest calculation', value: '30E/360 (sample)' },
+          {
+            label: 'Interest calculation',
+            value: '30E/360 (sample)',
+          },
           {
             label: 'Interest payment dates',
             value: 'Annually on 31 December, first payment 2027 (sample)',
           },
-          { label: 'Repayment', value: 'At maturity (sample)' },
+          {
+            label: 'Repayment',
+            value: 'At maturity (sample)',
+          },
           {
             label: 'Offered in',
             value: 'No offering countries - sample data only',
@@ -1142,7 +1169,7 @@ export const en = {
           'Community solar installation in the Alentejo, financed through a subordinated bond with a cash interest variant. All terms on this page are sample data.',
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '7.0% p.a. cash (sample)',
         term: 'Until 2032-06-30 (sample)',
         minInvestment: '250 USDC testnet (sample)',
@@ -1167,12 +1194,18 @@ export const en = {
             label: 'Subordination',
             value: 'Claims rank behind senior creditors in insolvency (sample terms)',
           },
-          { label: 'Interest calculation', value: 'act/act (sample)' },
+          {
+            label: 'Interest calculation',
+            value: 'act/act (sample)',
+          },
           {
             label: 'Interest payment dates',
             value: 'Annually on 30 June, first payment 2028 (sample)',
           },
-          { label: 'Repayment', value: 'At maturity (sample)' },
+          {
+            label: 'Repayment',
+            value: 'At maturity (sample)',
+          },
           {
             label: 'Offered in',
             value: 'No offering countries - sample data only',
@@ -1195,7 +1228,7 @@ export const en = {
             note: 'No file hosted in this prototype',
           },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1300,6 +1333,19 @@ export const en = {
     jobsEmpty: 'No open positions at the moment.',
     jobsSpeculativeNote: 'Speculative applications are not collected in this demo.',
     jobsDemoNote: 'Demo page: published positions will appear here. There are currently no real vacancies.',
+    podcastTitle: 'Podcast',
+    podcastIntro:
+      'Planned audio formats on crowd investing, issuers and the platform. This demo environment presents the planned formats; no episodes have been recorded.',
+    podcastEmpty: 'No episodes published yet.',
+    podcastFormatsTitle: 'Planned formats',
+    podcastFormatInterviews: 'Issuer interviews',
+    podcastFormatInterviewsDesc: 'Conversations with campaign creators about their projects, plans and risks.',
+    podcastFormatEducation: 'Investor education',
+    podcastFormatEducationDesc: 'Episodes on instruments, diversification and the basics of crowd-investing risk.',
+    podcastFormatUpdates: 'Platform updates',
+    podcastFormatUpdatesDesc: 'What changed on the platform and why, in plain language.',
+    podcastDemoNote:
+      'Demo page: episodes and audio players will appear here once the platform actually publishes a podcast. Nothing on this page is an offer or investment advice.',
     eventsHowTitle: 'How events will work',
     eventsHowBody:
       'When the platform schedules a real event it appears under Upcoming with its date, format and how to register. Finished events move to Past. Until then both lists stay honestly empty.',
@@ -1375,7 +1421,7 @@ export const en = {
   },
   tour: {
     tourTitle: 'Campaign tour',
-    tourStepOf: (current: number, total: number) => `Step ${current} of ${total}`,
+    tourStepOf: 'Step {current} of {total}',
     tourNext: 'Next',
     tourBack: 'Back',
     tourDone: 'Done',
@@ -1398,15 +1444,15 @@ export const en = {
     catSubmit: 'Check answers',
     catRetake: 'Retake test',
     catResultPass: 'All answers correct.',
-    catResultReview: (n: number) => `${n} answer(s) to review - read the explanations and try again.`,
-    catScoreLabel: (correct: number, total: number) => `${correct} of ${total} correct`,
+    catResultReview: '{n} answer(s) to review - read the explanations and try again.',
+    catScoreLabel: '{correct} of {total} correct',
     catSimTitle: 'Loss-bearing capacity simulation',
     catSimIntro: 'Compare a planned investment with your freely available funds.',
     catAssetsLabel: 'Freely available funds (EUR)',
     catIncomeLabel: 'Monthly net income (EUR)',
     catPlannedLabel: 'Planned investment (EUR)',
     catSimRun: 'Run simulation',
-    catSimResult: ({ pct }: { pct: string }) => `The planned investment equals ${pct}% of the freely available funds you entered.`,
+    catSimResult: 'The planned investment equals {pct}% of the freely available funds you entered.',
     catSimNote:
       'Plain arithmetic on the amounts you entered. This is not a regulatory assessment of your ability to bear losses, suitability or eligibility, and no threshold is applied.',
     catSavedNote: 'Result saved locally in this browser only.',
@@ -1446,7 +1492,6 @@ export const en = {
   community: {
     loading: 'Loading...',
     demoBadge: 'DEMO',
-    // Campaign documents (server metadata; demo documents are fictional templates)
     documentsTitle: 'Documents',
     documentsNote: 'Documents marked DEMO are fictional templates for this prototype - not offers, not advice, not verified issuer information.',
     rewardsTitle: 'Rewards',
@@ -1465,17 +1510,14 @@ export const en = {
       'staging-load-kiis': '[DEMO] Key investment information sheet - fictional template, not an offer',
       'staging-load-project': '[DEMO] Project overview - fictional sample document',
     },
-    // Campaign news (posted by the operator through the admin key as issuer stand-in)
     newsTitle: 'News',
     newsAuthorDemo: 'posted by the platform (demo content - no verified issuer identity)',
-    // Comments
     commentsTitle: 'Comments',
     commentsEmpty: 'No comments yet.',
     commentLabel: 'Your comment',
     commentSubmit: 'Post comment',
-    commentPostingAs: (name: string) => `Posting as ${name}. Comments are public.`,
+    commentPostingAs: 'Posting as {name}. Comments are public.',
     commentsSignInHint: 'Sign in with your wallet below to join the discussion.',
-    // Community sign-in
     signInTitle: 'Community sign-in',
     signInExplainer:
       'Sign a one-time challenge with your Freighter wallet to prove you control the address. No transaction is created and no funds move. The session unlocks comments, support tickets and issuer applications.',
@@ -1486,7 +1528,6 @@ export const en = {
     displayNameLabel: 'Display name (shown on your comments)',
     displayNameSave: 'Save name',
     signOutButton: 'Sign out',
-    // Support and feedback tickets
     ticketsTitle: 'Support and feedback',
     ticketsNote:
       'Tickets are visible only to your wallet account and the site operator. This is a prototype: do not include personal data, passwords or real payment details.',
@@ -1503,7 +1544,6 @@ export const en = {
       open: 'Open',
       closed: 'Closed',
     },
-    // Issuer applications
     applicationTitle: 'Apply as an issuer',
     applicationNote:
       'Tell the operator about the project you would like to list. Submitting this form is not an offer, a listing or an approval - it starts a conversation. Demo environment: do not submit real business secrets.',
@@ -1524,7 +1564,11 @@ export const en = {
     newsFeedEmpty: 'No campaign news yet.',
     myApplicationsTitle: 'My issuer applications',
     myApplicationsEmpty: 'No applications yet.',
-    applicationStatus: { received: 'Received', under_review: 'Under review', closed: 'Closed' },
+    applicationStatus: {
+      received: 'Received',
+      under_review: 'Under review',
+      closed: 'Closed',
+    },
     myTicketsTitle: 'My support and feedback tickets',
     myCommentsTitle: 'My comments',
     commentHidden: 'Hidden by moderation',
@@ -1547,7 +1591,11 @@ export const en = {
       submit: 'Submit application',
       submitting: 'Submitting...',
       submitted: 'Application received. It now shows as pending review above.',
-      status: { pending: 'Pending review', approved: 'Approved', rejected: 'Rejected' },
+      status: {
+        pending: 'Pending review',
+        approved: 'Approved',
+        rejected: 'Rejected',
+      },
     },
     security: {
       title: 'Security',
@@ -1560,7 +1608,10 @@ export const en = {
       expiresLabel: 'Expires',
       revoke: 'End session',
       revokeOthers: 'Sign out all other sessions',
-      revokedOthers: ({ count }: { count: number }) => `Ended ${count} other ${count === 1 ? 'session' : 'sessions'}.`,
+      revokedOthers: {
+        one: 'Ended {count} other session.',
+        other: 'Ended {count} other sessions.',
+      },
       empty: 'No active sessions.',
     },
     notifications: {
@@ -1577,17 +1628,14 @@ export const en = {
         companyStatus: 'Company account application update',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `Your issuer application for "${projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `Your issuer application for "${projectName}" is now "${statusLabel}".`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `Your comment on campaign "${campaignId}" was hidden by the moderator.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `Reason: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Your ${kindLabel} ticket "${subject}" was closed.`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `Your company account application for "${companyName}" was received. Review is manual; submission is not an approval.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `Your company account application for "${companyName}" is now "${statusLabel}".`,
+        applicationReceived:
+          'Your issuer application for "{projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.',
+        applicationStatus: 'Your issuer application for "{projectName}" is now "{statusLabel}".',
+        commentModerated: 'Your comment on campaign "{campaignId}" was hidden by the moderator.',
+        commentModeratedReason: 'Reason: {reason}',
+        ticketClosed: 'Your {kindLabel} ticket "{subject}" was closed.',
+        companyReceived: 'Your company account application for "{companyName}" was received. Review is manual; submission is not an approval.',
+        companyStatus: 'Your company account application for "{companyName}" is now "{statusLabel}".',
       },
     },
     operator: {
@@ -1596,7 +1644,14 @@ export const en = {
         'Staging operator tools. News posts are always labeled as platform demo content; there is no verified issuer identity. Do not post claims of approval, listing or returns.',
       loadError: 'Operator data could not be loaded.',
       retry: 'Retry',
-      tabs: { applications: 'Applications', comments: 'Comments', tickets: 'Tickets', news: 'News', reconciliation: 'Reconciliation', audit: 'Audit log' },
+      tabs: {
+        applications: 'Applications',
+        comments: 'Comments',
+        tickets: 'Tickets',
+        news: 'News',
+        reconciliation: 'Reconciliation',
+        audit: 'Audit log',
+      },
       applicationsEmpty: 'No issuer applications yet.',
       commentsEmpty: 'No comments yet.',
       ticketsEmpty: 'No tickets yet.',
@@ -1618,7 +1673,7 @@ export const en = {
       colAction: 'Action',
       colTargetRef: 'Target',
       colDetail: 'Detail',
-      reconQuarantined: (n: number) => `${n} quarantined journal row(s) require operator review.`,
+      reconQuarantined: '{n} quarantined journal row(s) require operator review.',
       colProject: 'Project',
       colCountry: 'Country',
       colInstrument: 'Instrument',

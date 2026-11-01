@@ -20,6 +20,11 @@ const PUBLIC_PATHS = [
   '/conflicts-of-interest',
   '/complaints-management',
   '/business-continuity',
+  '/events',
+  '/blog',
+  '/press',
+  '/jobs',
+  '/podcast',
 ];
 
 // Machine-readable sitemap + robots endpoints.

@@ -50,12 +50,25 @@ export function percent(raised: string, goal: string): number {
   return Math.min(100, Number((r * 10000n) / g) / 100);
 }
 
+// Locale dictionaries are plain data (JSON-exportable for translation
+// tooling): parameterized strings carry {placeholders} resolved by tpl, and
+// plural pairs select with the same n === 1 rule the old function leaves used.
+export function tpl(template: string, vars: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (m, key) => (key in vars ? String(vars[key]) : m));
+}
+
+export type PluralText = { one: string; other: string };
+
+export function pluralText(forms: PluralText, n: number): string {
+  return tpl(n === 1 ? forms.one : forms.other, { n });
+}
+
 export type DeadlineLabels = {
   ended: string;
   underMinute: string;
-  minutesLeft: (n: number) => string;
-  hoursLeft: (n: number) => string;
-  daysLeft: (n: number) => string;
+  minutesLeft: PluralText;
+  hoursLeft: PluralText;
+  daysLeft: PluralText;
 };
 
 // Locale-independent lifecycle state; the label is built separately with the
@@ -75,12 +88,12 @@ export function deadlineInfo(seconds: string, l: DeadlineLabels): { date: string
   if (rem <= 0) return { date, label: l.ended, state: 'ended' };
   const mins = Math.floor(rem / 60000);
   if (mins < 1) return { date, label: l.underMinute, state: 'closing' };
-  if (mins < 60) return { date, label: l.minutesLeft(mins), state: 'closing' };
+  if (mins < 60) return { date, label: pluralText(l.minutesLeft, mins), state: 'closing' };
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return { date, label: l.hoursLeft(hours), state: 'closing' };
+  if (hours < 24) return { date, label: pluralText(l.hoursLeft, hours), state: 'closing' };
   const days = Math.ceil(rem / 86400000);
-  if (days <= 3) return { date, label: l.daysLeft(days), state: 'closing' };
-  return { date, label: l.daysLeft(days), state: 'open' };
+  if (days <= 3) return { date, label: pluralText(l.daysLeft, days), state: 'closing' };
+  return { date, label: pluralText(l.daysLeft, days), state: 'open' };
 }
 
 export function shorten(id: string, head = 6, tail = 4): string {

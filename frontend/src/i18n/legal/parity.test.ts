@@ -18,8 +18,18 @@ import type { LegalBlock, LegalDocId, LegalInline } from './types';
 const DOC_IDS = Object.keys(LEGAL_REGISTRY) as LegalDocId[];
 const LOCALES = ['en', 'pt', 'es', 'fr', 'de', 'zh-TW', 'zh-CN', 'ja', 'ko', 'ar', 'hi'] as const;
 
+// Empty-string fragments are inert (no content, no markup) and the Weblate
+// JSON projection drops them; they must not count as structure here. Text
+// runs collapse to a single 's' and items are compared as a sorted multiset:
+// translators legitimately move a bolded term across word-order boundaries
+// (CJK), so the contract is that no markup node or bound constant is dropped,
+// added or swapped - not that tokens keep English positions. Block sequence
+// stays strictly ordered; only the inline level is order-free.
 function skeleton(inlines: LegalInline[]): string {
-  return inlines.map((x) => (typeof x === 'string' ? 's' : 'b' in x ? `b(${skeleton(x.b)})` : 'i' in x ? `i(${skeleton(x.i)})` : `v(${x.v})`)).join('|');
+  const parts = inlines.filter((x) => x !== '');
+  const nodes = parts.filter((x) => typeof x !== 'string').map((x) => ('b' in x ? `b(${skeleton(x.b)})` : 'i' in x ? `i(${skeleton(x.i)})` : `v(${x.v})`));
+  if (parts.some((x) => typeof x === 'string')) nodes.push('s');
+  return nodes.sort().join('|');
 }
 function blockSkeleton(blocks: LegalBlock[]): string {
   return blocks

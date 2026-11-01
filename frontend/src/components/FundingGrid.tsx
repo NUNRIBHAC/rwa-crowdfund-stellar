@@ -1,3 +1,4 @@
+import { tpl } from '../format';
 import { fundingState } from '../funding-math';
 import { useI18n } from '../i18n';
 
@@ -34,7 +35,7 @@ export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised
   const filled = state.kind === 'ready' ? state.filled : 0;
   const inProgress = state.kind === 'ready' ? state.inProgress : false;
   const partial = state.kind === 'ready' ? state.partial : 0;
-  const ariaLabel = state.kind === 'ready' ? m.grid.ariaReady(filled, count, state.percent) : m.grid.ariaUnavailable;
+  const ariaLabel = state.kind === 'ready' ? tpl(m.grid.ariaReady, { filled, count, percent: state.percent }) : m.grid.ariaUnavailable;
 
   const tiles = [];
   for (let i = 0; i < count; i++) {
@@ -68,7 +69,7 @@ export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised
         <p className="fund-grid-caption">
           {state.kind === 'ready' ? (
             <>
-              <strong>{state.percent}%</strong> {m.grid.fundedTail(state.filled, count)}
+              <strong>{state.percent}%</strong> {tpl(m.grid.fundedTail, { filled: state.filled, count })}
             </>
           ) : (
             m.grid.captionUnavailable

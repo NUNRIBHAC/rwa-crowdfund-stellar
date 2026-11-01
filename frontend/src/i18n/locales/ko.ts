@@ -1,4 +1,6 @@
-// Korean (ko).
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { Messages } from './en';
 
 export const ko: Messages = {
@@ -103,7 +105,9 @@ export const ko: Messages = {
     funded: '달성',
     underfunded: '미달',
     filterIndustryAria: '업종으로 필터',
-    industryLabels: { 'energy-utilities': '에너지 및 유틸리티' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': '에너지 및 유틸리티',
+    } as Record<string, string>,
     allIndustries: '모든 업종',
     sortAria: '캠페인 정렬',
     sortDeadline: '마감 임박순',
@@ -113,7 +117,10 @@ export const ko: Messages = {
     grid: '그리드',
     list: '리스트',
     noMatches: '현재 검색 및 필터와 일치하는 캠페인이 없습니다.',
-    resultCount: (n: number) => `캠페인 ${n}개 표시됨`,
+    resultCount: {
+      one: '캠페인 {n}개 표시됨',
+      other: '캠페인 {n}개 표시됨',
+    },
     activeAria: '진행 중인 투자',
     activeTitle: '진행 중인 투자',
     completedAria: '종료된 투자',
@@ -125,9 +132,9 @@ export const ko: Messages = {
     statusEnded: '미달',
     statusOpen: '모집 중',
     withdrawn: '인출됨',
-    fundedPct: (percent: number) => `${percent}% 달성`,
+    fundedPct: '{percent}% 달성',
     progressUnavailable: '진행률을 사용할 수 없음 - 온체인 데이터가 로드되지 않음',
-    progressAria: (pct: number) => `자금 조달 진행률: 목표의 ${pct}%`,
+    progressAria: '자금 조달 진행률: 목표의 {pct}%',
     interest: '이자',
     term: '기간',
     minimum: '최소',
@@ -153,7 +160,7 @@ export const ko: Messages = {
     amountLabel: '출자 금액(테스트넷 USDC)',
     amountRequired: '출자 금액을 입력하세요.',
     amountInvalid: '유효한 금액을 입력하세요: 숫자만, 소수점 이하 7자리까지, 0보다 커야 합니다.',
-    amountExceeds: (remaining: string) => `금액이 남은 목표액 ${remaining} USDC(테스트넷)을 초과합니다.`,
+    amountExceeds: '금액이 남은 목표액 {remaining} USDC(테스트넷)을 초과합니다.',
     usdcTestnet: 'USDC(테스트넷)',
     contribute: '출자하기',
     refundMe: '환불받기',
@@ -162,9 +169,9 @@ export const ko: Messages = {
       '마감 전까지 남은 목표 범위 내에서 출자하세요. 마감 후에는 완전히 모집된 경우에만 생성자가 인출하고, 그렇지 않으면 각 출자자가 직접 환불에 서명합니다. 컨트랙트가 이 규칙을 아토믹하게 강제합니다.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `자금 조달 진행률: ${count}개 블록 중 ${filled}개 채워짐, 목표의 ${percent}%`,
+    ariaReady: '자금 조달 진행률: {count}개 블록 중 {filled}개 채워짐, 목표의 {percent}%',
     ariaUnavailable: '자금 조달 진행률을 사용할 수 없음: 온체인 데이터가 로드되지 않음',
-    fundedTail: (filled: number, count: number) => `달성 - ${count}개 블록 중 ${filled}개`,
+    fundedTail: '달성 - {count}개 블록 중 {filled}개',
     captionUnavailable: '진행률을 사용할 수 없음 - 온체인 데이터가 로드되지 않음',
   },
   intent: {
@@ -424,8 +431,14 @@ export const ko: Messages = {
     builderDraftLink: '캠페인이 배포를 위해 어떻게 구성되는지 확인하세요 - 이 데모에서는 비활성화됨',
     journeyTitle: '의도된 여정',
     steps: [
-      { h: '신청', p: '회사, 금액, 생각하고 있는 금융상품에 대해 알려주세요.' },
-      { h: '심사', p: '적격성 및 서류 심사 후 구조화된 자금 조달 제안.' },
+      {
+        h: '신청',
+        p: '회사, 금액, 생각하고 있는 금융상품에 대해 알려주세요.',
+      },
+      {
+        h: '심사',
+        p: '적격성 및 서류 심사 후 구조화된 자금 조달 제안.',
+      },
       {
         h: '구축',
         p: '캠페인 페이지, 금융상품 조건, 문서, 마케팅 콘텐츠를 함께 준비합니다.',
@@ -451,6 +464,10 @@ export const ko: Messages = {
     fixtureNote: '샘플 캠페인이 표시되어 있습니다. 샘플 데이터에는 지갑별 포지션이 없습니다.',
     investmentsAria: '내 투자',
     myInvestments: '내 투자',
+    newsFeedAria: '캠페인 뉴스',
+    newsFeedTitle: '캠페인 뉴스',
+    newsFeedEmpty: '투자한 캠페인의 뉴스가 아직 없습니다.',
+    newsFeedNoInvestments: '투자한 캠페인의 뉴스가 여기에 표시됩니다.',
     newInvestments: '새로운 투자',
     filterAria: '상태로 포트폴리오 필터',
     tabs: {
@@ -547,9 +564,18 @@ export const ko: Messages = {
   time: {
     ended: '종료됨',
     underMinute: '1분 미만 남음',
-    minutesLeft: (n: number) => `${n}분 남음`,
-    hoursLeft: (n: number) => `${n}시간 남음`,
-    daysLeft: (n: number) => `${n}일 남음`,
+    minutesLeft: {
+      one: '{n}분 남음',
+      other: '{n}분 남음',
+    },
+    hoursLeft: {
+      one: '{n}시간 남음',
+      other: '{n}시간 남음',
+    },
+    daysLeft: {
+      one: '{n}일 남음',
+      other: '{n}일 남음',
+    },
   },
   errors: {
     freighterMissing: 'Freighter 지갑 확장 프로그램이 감지되지 않았습니다. Freighter를 설치한 후 연결을 다시 시도하세요.',
@@ -591,7 +617,7 @@ export const ko: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '이익 배분과 명목가치 상환에 대한 권리(종종 수익증서로 증권화)로, 주주의 완전한 거버넌스 권한은 없습니다.',
         opportunities: ['완전한 지분 없이 이익 참여', '기본 상환 청구권과 이익 참여를 결합하는 경우가 많음'],
         risks: ['이익 배분은 전적으로 발행자 실적에 의존', '일반 채권자보다 후순위가 될 수 있음', '만기까지 보통 비유동적'],
@@ -603,7 +629,7 @@ export const ko: Messages = {
         subtypeOf: '참여권 / 수익증서의 하위 유형',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '연간 이익뿐 아니라 발행자의 자산 기반("substance")에 연동된 참여권. 구조화와 적격 발행자는 관할권과 정관에 따라 다릅니다.',
         opportunities: ['발행자의 자산 가치 참여', '정관이 허용하는 경우 소규모 발행자용으로 구조화 가능'],
         risks: ['법적 형태와 투자자 보호가 관할권별로 크게 다름', '투자자와 발행자 사이에 수탁자나 비히클이 개입할 수 있음', '보통 비유동적'],
@@ -615,7 +641,7 @@ export const ko: Messages = {
         subtypeOf: '',
         note: '증자는 새 주식을 만드는 회사 행위이며 별도의 금융상품이 아닙니다.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '발행 회사에 대한 직접 지분: 배당 청구권과 기업 가치 참여, 권리는 정관이 정합니다. 신주는 증자를 통해 투자자에게 이릅니다.',
         opportunities: ['기업 성장에 완전히 참여', '주식 클래스에 따른 의결권 또는 정보권'],
         risks: ['고정 상환 청구권 없음, 배당 보장 없음', '전액 손실 가능', '크라우드펀딩 주식은 보통 거래소에서 거래되지 않음'],
@@ -627,7 +653,7 @@ export const ko: Messages = {
         subtypeOf: '',
         note: '별도의 상품이 아니라 소유 구조: 투자자는 비히클이나 수탁자를 통해 기초 참여 지분을 보유하며, 경제적 결과는 기초 지분이 결정합니다.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '투자자는 예를 들어 비히클이나 수탁자를 통해 간소화된 절차로 중소기업 투자에 간접 참여합니다.',
         opportunities: ['직접 보유하기 어려운 딜에 대한 접근', '중개 구조를 통한 관리 간소화'],
         risks: ['투자자와 발행자 사이에 추가 계층 존재', '수익은 발행자 실적에 의존', '비히클 조건이 지급과 출구를 규율'],
@@ -639,7 +665,7 @@ export const ko: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '파트너십의 유한책임사원으로서의 지분: 파트너십 계약에 따른 손익 참여, 책임은 출자액으로 제한.',
         opportunities: ['파트너십 결과의 직접 패스스루', '책임은 출자액으로 제한'],
         risks: ['손실 참여로 지분이 감소하거나 소멸할 수 있음', '출구는 종종 파트너십 계약으로 제한됨', '세무 및 보고 의무가 더 복잡할 수 있음'],
@@ -708,7 +734,7 @@ export const ko: Messages = {
     chipSenior: '우선',
     chipSubordinated: '후순위',
     chipUnspecifiedSuffix: '(우선순위 미지정)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base}` : base),
+    chipCompose: 'space',
   },
   glossary: [
     {
@@ -796,7 +822,10 @@ export const ko: Messages = {
       definition:
         '발행자가 과다부채 상태가 되면 이자와 때로는 원금 지급이 중단되는 계약상 후순위 형태. "qualified" 같은 플랫폼 표현만으로는 증명되지 않으며, 조건에 후순위라고 명시되어야 합니다.',
     },
-    { term: 'Mini Bond', definition: '소액 단위 채권에 대한 플랫폼 라벨.' },
+    {
+      term: 'Mini Bond',
+      definition: '소액 단위 채권에 대한 플랫폼 라벨.',
+    },
     {
       term: '고객확인(KYC)',
       definition: '규제 대상 플랫폼이 투자자의 투자 전에 완료해야 하는 신원 확인. 이 프로토타입은 KYC를 수행하지 않습니다.',
@@ -1035,7 +1064,7 @@ export const ko: Messages = {
         teaser: '리스본 강변 아파트 블록의 리노베이션, 고정금리 우선사채로 자금 조달. 이 페이지의 모든 조건은 샘플 데이터입니다.',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '연 6.5%(샘플)',
         term: '2030-12-31까지(샘플)',
         minInvestment: '250 USDC 테스트넷(샘플)',
@@ -1048,8 +1077,14 @@ export const ko: Messages = {
             label: 'ISIN / WKN',
             value: '미발행 - 이 프로토타입은 유가증권 식별자를 발행하지 않습니다',
           },
-          { label: '단위당 명목 금액', value: '250 USDC 테스트넷(샘플)' },
-          { label: '최소 청약', value: '1단위(샘플)' },
+          {
+            label: '단위당 명목 금액',
+            value: '250 USDC 테스트넷(샘플)',
+          },
+          {
+            label: '최소 청약',
+            value: '1단위(샘플)',
+          },
           {
             label: '자금 조달 임계값',
             value: '캠페인 목표와 동일. 라이브 모드에서는 컨트랙트가 올오어낫싱을 강제',
@@ -1058,13 +1093,22 @@ export const ko: Messages = {
             label: '발행 규모',
             value: '250,000 USDC 테스트넷 목표(샘플 픽스처)',
           },
-          { label: '이자 계산', value: '30E/360(샘플)' },
+          {
+            label: '이자 계산',
+            value: '30E/360(샘플)',
+          },
           {
             label: '이자 지급일',
             value: '매년 12월 31일, 첫 지급 2027년(샘플)',
           },
-          { label: '상환', value: '만기 시(샘플)' },
-          { label: '공모 지역', value: '공모 국가 없음 - 샘플 데이터만' },
+          {
+            label: '상환',
+            value: '만기 시(샘플)',
+          },
+          {
+            label: '공모 지역',
+            value: '공모 국가 없음 - 샘플 데이터만',
+          },
           {
             label: '중개인',
             value: '없음. 이 프로토타입은 크라우드펀딩 서비스 제공자가 아닙니다',
@@ -1103,7 +1147,7 @@ export const ko: Messages = {
         teaser: '알렌테주의 커뮤니티 태양광 설비, 현금 이자 변형이 있는 후순위사채로 자금 조달. 이 페이지의 모든 조건은 샘플 데이터입니다.',
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '연 7.0% 현금(샘플)',
         term: '2032-06-30까지(샘플)',
         minInvestment: '250 USDC 테스트넷(샘플)',
@@ -1116,7 +1160,10 @@ export const ko: Messages = {
             label: 'ISIN / WKN',
             value: '미발행 - 이 프로토타입은 유가증권 식별자를 발행하지 않습니다',
           },
-          { label: '단위당 명목 금액', value: '250 USDC 테스트넷(샘플)' },
+          {
+            label: '단위당 명목 금액',
+            value: '250 USDC 테스트넷(샘플)',
+          },
           {
             label: '자금 조달 임계값',
             value: '900,000 USDC 테스트넷 목표(샘플 픽스처). 라이브 모드에서는 올오어낫싱',
@@ -1125,13 +1172,22 @@ export const ko: Messages = {
             label: '후순위',
             value: '파산 시 우선 채권자 뒤에 변제(샘플 조건)',
           },
-          { label: '이자 계산', value: 'act/act(샘플)' },
+          {
+            label: '이자 계산',
+            value: 'act/act(샘플)',
+          },
           {
             label: '이자 지급일',
             value: '매년 6월 30일, 첫 지급 2028년(샘플)',
           },
-          { label: '상환', value: '만기 시(샘플)' },
-          { label: '공모 지역', value: '공모 국가 없음 - 샘플 데이터만' },
+          {
+            label: '상환',
+            value: '만기 시(샘플)',
+          },
+          {
+            label: '공모 지역',
+            value: '공모 국가 없음 - 샘플 데이터만',
+          },
           {
             label: '중개인',
             value: '없음. 이 프로토타입은 크라우드펀딩 서비스 제공자가 아닙니다',
@@ -1148,7 +1204,7 @@ export const ko: Messages = {
             note: '이 프로토타입에는 파일이 호스팅되지 않습니다',
           },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1171,7 +1227,10 @@ export const ko: Messages = {
             label: 'ISIN / WKN',
             value: '미발행 - 이 프로토타입은 유가증권 식별자를 발행하지 않습니다',
           },
-          { label: '단위당 명목 금액', value: '500 USDC 테스트넷(샘플)' },
+          {
+            label: '단위당 명목 금액',
+            value: '500 USDC 테스트넷(샘플)',
+          },
           {
             label: '자금 조달 임계값',
             value: '500,000 USDC 테스트넷 목표(샘플 픽스처)',
@@ -1184,9 +1243,18 @@ export const ko: Messages = {
             label: '전환 기간',
             value: '발행별로 구성 가능. 샘플: 트리거 발표 후 30일',
           },
-          { label: '이자 중단', value: '이자는 전환일까지 발생(샘플)' },
-          { label: '전환되지 않을 경우 상환', value: '만기 시(샘플)' },
-          { label: '공모 지역', value: '공모 국가 없음 - 샘플 데이터만' },
+          {
+            label: '이자 중단',
+            value: '이자는 전환일까지 발생(샘플)',
+          },
+          {
+            label: '전환되지 않을 경우 상환',
+            value: '만기 시(샘플)',
+          },
+          {
+            label: '공모 지역',
+            value: '공모 국가 없음 - 샘플 데이터만',
+          },
           {
             label: '중개인',
             value: '없음. 이 프로토타입은 크라우드펀딩 서비스 제공자가 아닙니다',
@@ -1240,6 +1308,18 @@ export const ko: Messages = {
     jobsEmpty: '현재 열려 있는 포지션이 없습니다.',
     jobsSpeculativeNote: '이 데모에서는 자유 지원서를 받지 않습니다.',
     jobsDemoNote: '데모 페이지: 게시된 포지션이 여기에 표시됩니다. 현재 실제 채용 공고는 없습니다.',
+    podcastTitle: '팟캐스트',
+    podcastIntro: '크라우드 투자, 발행사, 플랫폼에 관한 예정된 오디오 형식입니다. 이 데모 환경은 예정된 형식을 보여주며, 녹음된 에피소드는 없습니다.',
+    podcastEmpty: '아직 게시된 에피소드가 없습니다.',
+    podcastFormatsTitle: '예정된 형식',
+    podcastFormatInterviews: '발행사 인터뷰',
+    podcastFormatInterviewsDesc: '캠페인 생성자와의 프로젝트, 계획, 리스크에 대한 대화.',
+    podcastFormatEducation: '투자자 교육',
+    podcastFormatEducationDesc: '투자 상품, 분산 투자, 크라우드 투자 리스크의 기초에 관한 에피소드.',
+    podcastFormatUpdates: '플랫폼 업데이트',
+    podcastFormatUpdatesDesc: '플랫폼에서 무엇이 바뀌었고 왜 바뀌었는지를 쉬운 말로.',
+    podcastDemoNote:
+      '데모 페이지: 플랫폼이 실제로 팟캐스트를 게시하면 에피소드와 오디오 플레이어가 여기에 표시됩니다. 이 페이지의 어떤 내용도 투자 권유나 투자 조언이 아닙니다.',
     eventsHowTitle: '이벤트 운영 방식(예정)',
     eventsHowBody:
       '플랫폼이 실제 이벤트를 예정하면 날짜, 형식, 등록 방법과 함께 "예정된 이벤트"에 표시됩니다. 종료된 이벤트는 "지난 이벤트"로 이동합니다. 그 전까지 두 목록은 정직하게 비어 있습니다.',
@@ -1315,7 +1395,7 @@ export const ko: Messages = {
   },
   tour: {
     tourTitle: '캠페인 둘러보기',
-    tourStepOf: (current: number, total: number) => `${total}단계 중 ${current}단계`,
+    tourStepOf: '{total}단계 중 {current}단계',
     tourNext: '다음',
     tourBack: '이전',
     tourDone: '완료',
@@ -1338,15 +1418,15 @@ export const ko: Messages = {
     catSubmit: '답변 확인',
     catRetake: '테스트 다시 하기',
     catResultPass: '모든 답변이 정답입니다.',
-    catResultReview: (n: number) => `검토할 답변 ${n}개 - 설명을 읽고 다시 시도하세요.`,
-    catScoreLabel: (correct: number, total: number) => `${total}개 중 ${correct}개 정답`,
+    catResultReview: '검토할 답변 {n}개 - 설명을 읽고 다시 시도하세요.',
+    catScoreLabel: '{total}개 중 {correct}개 정답',
     catSimTitle: '손실 감내 능력 시뮬레이션',
     catSimIntro: '투자 예정 금액을 자유롭게 사용 가능한 자금과 비교하세요.',
     catAssetsLabel: '자유롭게 사용 가능한 자금 (EUR)',
     catIncomeLabel: '월 순소득 (EUR)',
     catPlannedLabel: '투자 예정 금액 (EUR)',
     catSimRun: '시뮬레이션 실행',
-    catSimResult: ({ pct }: { pct: string }) => `계획 투자 금액은 입력한 자유 사용 가능 자금의 ${pct}%입니다.`,
+    catSimResult: '계획 투자 금액은 입력한 자유 사용 가능 자금의 {pct}%입니다.',
     catSimNote: '입력한 금액에 대한 단순 산술 계산입니다. 손실 감내 능력, 적합성 또는 적격성에 대한 규제 평가가 아니며 어떤 임계값도 적용되지 않습니다.',
     catSavedNote: '결과는 이 브라우저에만 로컬로 저장됩니다.',
     catQuestions: [
@@ -1408,7 +1488,7 @@ export const ko: Messages = {
     commentsEmpty: '아직 댓글이 없습니다.',
     commentLabel: '내 댓글',
     commentSubmit: '댓글 게시',
-    commentPostingAs: (name: string) => `${name}(으)로 게시합니다. 댓글은 공개됩니다.`,
+    commentPostingAs: '{name}(으)로 게시합니다. 댓글은 공개됩니다.',
     commentsSignInHint: '아래에서 지갑으로 로그인하여 토론에 참여하세요.',
     signInTitle: '커뮤니티 로그인',
     signInExplainer:
@@ -1455,7 +1535,11 @@ export const ko: Messages = {
     newsFeedEmpty: '아직 캠페인 소식이 없습니다.',
     myApplicationsTitle: '내 발행자 신청',
     myApplicationsEmpty: '아직 신청이 없습니다.',
-    applicationStatus: { received: '접수됨', under_review: '검토 중', closed: '닫힘' },
+    applicationStatus: {
+      received: '접수됨',
+      under_review: '검토 중',
+      closed: '닫힘',
+    },
     myTicketsTitle: '내 지원 및 피드백 티켓',
     myCommentsTitle: '내 댓글',
     commentHidden: '모더레이션으로 숨겨짐',
@@ -1478,7 +1562,11 @@ export const ko: Messages = {
       submit: '신청 제출',
       submitting: '제출 중...',
       submitted: '신청이 접수되었습니다. 위 목록에 심사 대기로 표시됩니다.',
-      status: { pending: '심사 대기', approved: '승인됨', rejected: '거절됨' },
+      status: {
+        pending: '심사 대기',
+        approved: '승인됨',
+        rejected: '거절됨',
+      },
     },
     security: {
       title: '보안',
@@ -1490,7 +1578,10 @@ export const ko: Messages = {
       expiresLabel: '만료',
       revoke: '세션 종료',
       revokeOthers: '다른 모든 세션 로그아웃',
-      revokedOthers: ({ count }: { count: number }) => `다른 세션 ${count}개를 종료했습니다.`,
+      revokedOthers: {
+        one: '다른 세션 {count}개를 종료했습니다.',
+        other: '다른 세션 {count}개를 종료했습니다.',
+      },
       empty: '활성 세션이 없습니다.',
     },
     notifications: {
@@ -1507,17 +1598,13 @@ export const ko: Messages = {
         companyStatus: '법인 계정 신청 업데이트',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `"${projectName}"에 대한 발행자 신청이 접수되었습니다. 운영자가 신청을 수동으로 검토하며, 제출은 승인, 상장 또는 청약이 아닙니다.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `"${projectName}"에 대한 발행자 신청이 "${statusLabel}" 상태가 되었습니다.`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `캠페인 "${campaignId}"에 작성한 댓글이 모더레이터에 의해 숨겨졌습니다.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `사유: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `${kindLabel} 티켓 "${subject}"이 종료되었습니다.`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `"${companyName}"에 대한 법인 계정 신청이 접수되었습니다. 심사는 수동이며 제출이 승인은 아닙니다.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `"${companyName}"에 대한 법인 계정 신청이 이제 "${statusLabel}"입니다.`,
+        applicationReceived: '"{projectName}"에 대한 발행자 신청이 접수되었습니다. 운영자가 신청을 수동으로 검토하며, 제출은 승인, 상장 또는 청약이 아닙니다.',
+        applicationStatus: '"{projectName}"에 대한 발행자 신청이 "{statusLabel}" 상태가 되었습니다.',
+        commentModerated: '캠페인 "{campaignId}"에 작성한 댓글이 모더레이터에 의해 숨겨졌습니다.',
+        commentModeratedReason: '사유: {reason}',
+        ticketClosed: '{kindLabel} 티켓 "{subject}"이 종료되었습니다.',
+        companyReceived: '"{companyName}"에 대한 법인 계정 신청이 접수되었습니다. 심사는 수동이며 제출이 승인은 아닙니다.',
+        companyStatus: '"{companyName}"에 대한 법인 계정 신청이 이제 "{statusLabel}"입니다.',
       },
     },
     operator: {
@@ -1526,7 +1613,14 @@ export const ko: Messages = {
         '테스트 환경의 운영자 도구입니다. 뉴스는 항상 플랫폼 데모 콘텐츠로 표시되며, 검증된 발행자 신원이 없습니다. 승인, 상장 또는 수익에 대한 주장을 게시하지 마세요.',
       loadError: '운영자 데이터를 불러오지 못했습니다.',
       retry: '다시 시도',
-      tabs: { applications: '신청', comments: '댓글', tickets: '티켓', news: '뉴스', reconciliation: '대사', audit: '작업 로그' },
+      tabs: {
+        applications: '신청',
+        comments: '댓글',
+        tickets: '티켓',
+        news: '뉴스',
+        reconciliation: '대사',
+        audit: '작업 로그',
+      },
       applicationsEmpty: '아직 발행자 신청이 없습니다.',
       commentsEmpty: '아직 댓글이 없습니다.',
       ticketsEmpty: '아직 티켓이 없습니다.',
@@ -1547,7 +1641,7 @@ export const ko: Messages = {
       colAction: '작업',
       colTargetRef: '대상',
       colDetail: '세부 정보',
-      reconQuarantined: (n: number) => `격리된 저널 행 ${n}건은 운영자 검토가 필요합니다.`,
+      reconQuarantined: '격리된 저널 행 {n}건은 운영자 검토가 필요합니다.',
       colProject: '프로젝트',
       colCountry: '국가',
       colInstrument: '상품',

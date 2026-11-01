@@ -1,0 +1,503 @@
+{
+  "termsOfService": {
+    "b00": {
+      "notice": "Modelo de demonstração: esta página é um documento ilustrativo do protótipo Blockallisto, não é aconselhamento jurídico. Não foi revisto por um advogado e não é prova de qualquer registo societário ou autorização regulamentar. Os dados societários marcados [DEMO] são dados fictícios de demonstração."
+    },
+    "b01": {
+      "p": "<b>Última atualização:</b> {v:lastUpdated}"
+    },
+    "b02": {
+      "p": "Estes Termos de Serviço (\"Termos\") regem a sua utilização do website e da aplicação de demonstração Blockallisto (o \"Serviço\"), um projeto-protótipo operado pela Blockallisto (\"nós\"). Os dados societários apresentados para a Blockallisto nestes Termos são dados fictícios de demonstração - forma jurídica \"Lda.\" [DEMO], sede \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], número de registo \"000 000 000\" [DEMO]. A denominação social, a forma jurídica, a sede e o estatuto de registo da Blockallisto não foram verificados, e nenhum registo é afirmado. Contacto: {v:contactEmail}."
+    },
+    "b03": {
+      "p": "Ao utilizar o Serviço, aceita estes Termos. Se não concordar, não utilize o Serviço."
+    },
+    "b04": {
+      "h2": "1. O que é a Blockallisto hoje"
+    },
+    "b05": {
+      "p": "A Blockallisto é uma <b>demonstração de protótipo</b> de um conceito de crowdfunding de ativos reais tokenizados, a correr inteiramente na <b>rede de teste da Stellar (testnet)</b>."
+    },
+    "b06": {
+      "p": "Isto significa, de forma simples:"
+    },
+    "b07": {
+      "ul": {
+        "i00": "O Serviço <b>não</b> é uma plataforma de crowdfunding no sentido legal. Nós <b>não</b> somos um prestador de serviços de crowdfunding autorizado ao abrigo do Regulamento (UE) 2020/1503 (ECSPR) ou de qualquer outro regime, e não fazemos <b>quaisquer ofertas reais</b> de investimento.",
+        "i01": "Nada no Serviço constitui uma oferta, uma solicitação, uma recomendação ou aconselhamento de investimento, jurídico, fiscal ou financeiro, em qualquer jurisdição.",
+        "i02": "Não está envolvido dinheiro real. As contribuições na demonstração usam <b>tokens da testnet Stellar (USDC de teste) sem qualquer valor monetário</b> e não podem ser trocados por fundos reais.",
+        "i03": "As campanhas de exemplo são ilustrações fictícias. As identidades dos emitentes, as avaliações, os valores e os resultados apresentados na demonstração são <b>dados fictícios</b>, não oportunidades reais."
+      }
+    },
+    "b08": {
+      "h2": "2. O que o Serviço lhe permite fazer"
+    },
+    "b09": {
+      "ul": {
+        "i00": "Navegar e filtrar campanhas de investimento de exemplo e ler os respetivos termos estruturados.",
+        "i01": "Usar o centro de aprendizagem, o glossário e as FAQ para compreender os instrumentos de investimento.",
+        "i02": "Ligar uma carteira <b>Freighter</b> (uma extensão do navegador) e fazer <b>contribuições de teste</b> à campanha de demonstração na testnet da Stellar."
+      }
+    },
+    "b10": {
+      "p": "As contribuições de teste são tratadas por um contrato inteligente Soroban com o seguinte comportamento: financiamento tudo-ou-nada, pagamento à campanha apenas após o respetivo prazo, contribuições limitadas ao objetivo da campanha e saldos registados no contrato. Não é emitido nenhum token transmissível."
+    },
+    "b11": {
+      "h2": "3. Funcionalidades planeadas (ainda não ativas)"
+    },
+    "b12": {
+      "p": "A Blockallisto está a ser desenhada tendo em conta as superfícies de conformidade de plataformas de crowdfunding europeias estabelecidas. Versões futuras <b>poderão</b> incluir: contas de utilizador completas com registo por email (para além do acesso comunitário opcional); verificação de identidade (KYC/AML), incluindo verificações de beneficiário efetivo e de origem dos fundos para investidores empresariais; categorização de investidores com um teste inicial de conhecimentos e uma simulação de capacidade de suportar perdas; um período de reflexão pré-contratual para investidores não sofisticados; fichas de informação fundamental de investimento por campanha; pagamentos processados por prestadores de serviços de pagamento licenciados (nunca por nós detendo fundos de clientes); gestão de reclamações e políticas de conflitos de interesses; e restrições de venda por jurisdição."
+    },
+    "b13": {
+      "p": "Nada disto existe hoje. A lista acima é uma orientação indicativa de desenho retirada do nosso corpus de investigação, não uma especificação: detalhes, limites e funcionalidades inteiras podem mudar com o trabalho de desenho e o aconselhamento jurídico. Estas funcionalidades só serão lançadas sob termos atualizados e juridicamente revistos, e apenas ao abrigo das autorizações regulamentares que exigirem. Nada nesta secção constitui um compromisso quanto a uma data de lançamento ou a uma licença."
+    },
+    "b14": {
+      "h2": "4. Elegibilidade e utilização aceitável"
+    },
+    "b15": {
+      "p": "O Serviço destina-se a adultos (18+). Não se dirige a qualquer pessoa numa jurisdição onde a visualização de conteúdo de crowdfunding deste tipo seja restringida, e não deve ser apresentado a pessoas dos EUA como uma oportunidade de investimento."
+    },
+    "b16": {
+      "p": "Concorda em não: atacar, sondar ou perturbar o Serviço ou a sua infraestrutura; abusar, extrair dados a ritmos abusivos ou interferir com outros utilizadores; apresentar falsamente a demonstração como um serviço de investimento real; ou usar o Serviço para qualquer fim ilegal."
+    },
+    "b17": {
+      "h2": "5. A sua carteira e as suas chaves"
+    },
+    "b18": {
+      "ul": {
+        "i00": "A sua carteira é <b>não custodial</b>: a sua chave secreta e a sua frase de recuperação permanecem dentro da sua própria extensão Freighter. Nunca as vemos, guardamos ou pedimos.",
+        "i01": "<b>Nunca</b> introduza a sua chave secreta ou frase de recuperação em qualquer website, incluindo este. Quem lhas pedir está a tentar roubá-lo.",
+        "i02": "Cada transação é assinada por si na sua carteira. As transações na testnet da Stellar são registadas publicamente e podem ser consultadas em exploradores públicos da testnet."
+      }
+    },
+    "b19": {
+      "h2": "6. Propriedade intelectual"
+    },
+    "b20": {
+      "p": "O Serviço, o seu conteúdo e o seu código são Copyright (c) 2026 Nuno Ribeiro, todos os direitos reservados. Não é concedida qualquer licença de código aberto ou de patente. Pode ver e usar a demonstração para avaliação; não pode copiá-la, republicá-la ou revendê-la."
+    },
+    "b21": {
+      "h2": "7. Disponibilidade e alterações"
+    },
+    "b22": {
+      "p": "O Serviço corre em alojamento de nível gratuito e pode ser lento a arrancar, estar indisponível, ser alterado ou retirado a qualquer momento sem aviso. As funcionalidades assinaladas como \"não construídas\" (contas, KYC, pagamentos em moeda fiduciária, painel do investidor) ainda não existem."
+    },
+    "b23": {
+      "h2": "8. Exclusões de responsabilidade e limitação de responsabilidade"
+    },
+    "b24": {
+      "p": "O Serviço é fornecido <b>\"tal como está\" e \"conforme disponível\"</b>, sem garantias de qualquer tipo, expressas ou implícitas, incluindo de exatidão, adequação a um fim específico ou não infração. Na medida máxima permitida por lei, não somos responsáveis por quaisquer danos indiretos, incidentais ou consequenciais, nem por qualquer perda resultante da sua utilização do Serviço, da sua carteira ou da rede Stellar. Nada nestes Termos exclui responsabilidade que não possa ser excluída por lei."
+    },
+    "b25": {
+      "h2": "9. Lei aplicável"
+    },
+    "b26": {
+      "p": "Estes Termos são regidos pelas leis de <b>Portugal</b> e pelo direito da União Europeia aplicável, sem prejuízo das normas imperativas de defesa do consumidor do seu país de residência."
+    },
+    "b27": {
+      "h2": "10. Alterações a estes Termos"
+    },
+    "b28": {
+      "p": "Podemos atualizar estes Termos a qualquer momento. A data de \"Última atualização\" indica a versão atual. A utilização continuada após uma alteração significa que aceita os novos Termos."
+    },
+    "b29": {
+      "h2": "11. Contacto"
+    },
+    "b30": {
+      "p": "Questões sobre estes Termos: {v:contactEmail}."
+    },
+    "b31": {
+      "p": "<b>Divulgações do operador por resolver:</b> os dados de operador DEMO nestes Termos são ilustrativos e não satisfazem qualquer dever obrigatório de identificação do operador (como um impressum ou aviso legal ao abrigo das regras portuguesas ou europeias de comércio eletrónico, comunicação social ou defesa do consumidor). Não foi determinado se tal dever se aplica a este serviço-protótipo; quaisquer divulgações exigidas serão adicionadas aqui ou numa página ligada antes de qualquer lançamento real."
+    }
+  },
+  "privacyPolicy": {
+    "b00": {
+      "notice": "Modelo de demonstração: esta página é um documento ilustrativo do protótipo Blockallisto, não é aconselhamento jurídico. Não foi revisto por um advogado e não é prova de qualquer registo societário ou autorização regulamentar. Os dados societários marcados [DEMO] são dados fictícios de demonstração."
+    },
+    "b01": {
+      "p": "<b>Última atualização:</b> {v:lastUpdated}"
+    },
+    "b02": {
+      "p": "Esta Política de Privacidade explica que dados pessoais o protótipo Blockallisto (o \"Serviço\") trata, porquê, e que direitos tem. O Serviço é um projeto-protótipo operado sob o nome Blockallisto. Os dados societários apresentados para a Blockallisto nestes documentos são dados fictícios de demonstração (forma jurídica \"Lda.\" [DEMO], sede \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], número de registo \"000 000 000\" [DEMO]); a identidade jurídica registada por detrás do nome Blockallisto não foi verificada, e nomear o projeto não identifica por si só o responsável pelo tratamento dos dados. [O responsável pelo tratamento - a pessoa ou entidade efetivamente responsável por este tratamento - será confirmado antes da publicação.] Os pedidos de privacidade são respondidos em {v:contactEmail}."
+    },
+    "b03": {
+      "h2": "1. Âmbito: o que a demonstração não recolhe"
+    },
+    "b04": {
+      "p": "O protótipo atual não tem <b>KYC, newsletters nem pagamentos</b>. O acesso comunitário é baseado na carteira: usa uma assinatura de carteira Stellar, não uma palavra-passe nem um endereço de email. Não pedimos o seu nome completo, número de telefone, documentos de identidade ou cartão de pagamento. As funcionalidades comunitárias recolhem os dados descritos na secção 2b: uma chave pública, um nome de apresentação opcional, conteúdo de texto livre que decida submeter e um email de contacto opcional nas candidaturas de emissor. Não usamos analítica nem rastreadores de publicidade, e os tipos de letra e recursos do site são autoalojados."
+    },
+    "b05": {
+      "h2": "2. Dados que tratamos"
+    },
+    "b06": {
+      "p": "<b>a) Dados da carteira e das contribuições.</b> Se ligar uma carteira Freighter e fizer uma contribuição de teste, o backend regista, numa base de dados Postgres (alojada pela Neon), um diário de segurança contendo: a sua <b>chave pública</b> Stellar (nunca a sua chave secreta), o identificador da campanha, a ação, o montante da contribuição, os envelopes da transação, o hash e o estado da transação, e carimbos temporais. Uma chave pública Stellar é um dado pseudonimizado; não a associamos à sua identidade."
+    },
+    "b07": {
+      "p": "<i>Retenção:</i> as transações preparadas não assinadas expiram após 24 horas; as transações concluídas ou falhadas são eliminadas após 30 dias; uma transação assinada cujo resultado esteja por resolver é conservada até se resolver, porque apagá-la poderia perder o rasto de uma transação difundida. Os envelopes assinados são limpos assim que a transação atinge um estado final. Estas são as regras de limpeza configuradas no próprio código da aplicação: descrevem o que a aplicação apaga. Os registos de servidor e as cópias de segurança dos nossos fornecedores de alojamento podem conservar dados por períodos diferentes ao abrigo das respetivas políticas de privacidade, e não são abrangidos por estas regras."
+    },
+    "b08": {
+      "p": "<b>b) Conta comunitária e conteúdo comunitário.</b> Se iniciar sessão nas funcionalidades comunitárias, o backend guarda, na mesma base de dados Postgres da Neon: a sua <b>chave pública</b>, um carimbo temporal de criação da conta e um <b>nome de apresentação</b> opcional (até 40 caracteres). O início de sessão funciona assinando um desafio único do servidor com a sua carteira (validade de 5 minutos, utilização única); não é necessária palavra-passe nem email e a sua chave secreta nunca sai da carteira. O servidor guarda apenas um hash SHA-256 do token de sessão; o token em bruto fica no armazenamento local do seu navegador. As sessões duram 30 dias, o terminar de sessão apaga a sessão, e os desafios e sessões expirados são limpos de hora a hora."
+    },
+    "b09": {
+      "p": "<b>Os comentários</b> são públicos: cada comentário guarda a sua chave pública, o seu nome de apresentação se definido, o texto (até 1000 caracteres), a campanha e um carimbo temporal, e os 100 comentários mais recentes por campanha são mostrados a todos os visitantes. Um comentário ocultado pelo operador sai imediatamente da lista pública e é definitivamente apagado 30 dias após a ocultação. <b>Os pedidos de suporte/feedback</b> (tipo, assunto até 120 caracteres, texto até 4000 caracteres, estado, carimbos temporais) e as <b>candidaturas de emissor</b> (nome do projeto, país, tipo de instrumento, montante-alvo, descrição e um email de contacto opcional) são visíveis apenas para a sua conta de carteira e para o administrador do operador; ambos são definitivamente apagados após 90 dias (janela de retenção configurável no código da aplicação). Os itens de <b>notícias</b> da campanha são escritos pelo operador e assinalados como conteúdo de demonstração da plataforma. O seu endereço IP é usado em memória para limitação de ritmo e eliminado dentro de 24 horas; a aplicação não o persiste (os registos de alojamento são abrangidos no ponto e)."
+    },
+    "b10": {
+      "p": "Um aviso: chaves públicas, nomes de apresentação e conteúdo de texto livre podem identificá-lo mesmo sem nunca pedirmos o seu nome. Não submeta informação pessoal sensível nos campos comunitários."
+    },
+    "b11": {
+      "p": "<b>c) Dados públicos da blockchain.</b> As contribuições de teste são registadas publicamente na <b>testnet</b> da Stellar e são visíveis em exploradores públicos. Os registos na blockchain não podem ser alterados nem apagados por nós."
+    },
+    "b12": {
+      "p": "<b>d) Preferências do dispositivo.</b> As suas escolhas de tema (claro/escuro) e de idioma são guardadas no armazenamento local do seu navegador. Estes dados ficam no seu dispositivo e não nos são enviados."
+    },
+    "b13": {
+      "p": "<b>e) Registos técnicos.</b> O nosso fornecedor de alojamento (Render, região de Frankfurt) trata registos de servidor padrão (como endereço IP e metadados de pedidos) para fornecer e proteger o Serviço."
+    },
+    "b14": {
+      "h2": "3. Dados que planeamos tratar em versões futuras (não recolhidos hoje)"
+    },
+    "b15": {
+      "p": "O desenho indicativo para versões futuras da Blockallisto - seguindo as superfícies de conformidade de plataformas de crowdfunding europeias estabelecidas - é tratar categorias adicionais de dados pessoais <b>quando e se</b> essas funcionalidades forem lançadas. As categorias exatas, os fornecedores e os limites podem mudar com o trabalho de desenho e o aconselhamento jurídico:"
+    },
+    "b16": {
+      "ul": {
+        "i00": "<b>Dados de registo:</b> nome completo (exatamente como no seu documento de identidade), endereço de email, país de residência e residência fiscal.",
+        "i01": "<b>Verificação de identidade (KYC/AML):</b> imagens do documento de identidade, uma selfie, número de telemóvel e resultados da verificação, tratados com fornecedores terceiros especializados em verificação; para investidores empresariais, beneficiários efetivos (tipicamente quem detenha mais de 25%) e origem dos fundos; declarações de pessoa politicamente exposta (PEP).",
+        "i02": "<b>Dados de pagamento e de levantamento:</b> dados de conta bancária (como IBAN) tratados por prestadores de serviços de pagamento licenciados, não por nós detendo fundos de clientes."
+      }
+    },
+    "b17": {
+      "p": "Com exceção do email de contacto opcional do emissor descrito na secção 2b, nenhum destes dados é recolhido pela demonstração atual. Se estas funcionalidades forem lançadas, esta Política será atualizada primeiro, com os fornecedores, as finalidades, as bases jurídicas e os períodos de conservação de cada categoria."
+    },
+    "b18": {
+      "h2": "4. Finalidades e bases jurídicas (RGPD)"
+    },
+    "b19": {
+      "p": "Tratamos os dados da secção 2 para operar, proteger e demonstrar o protótipo: preparar e acompanhar transações de teste, prevenir gastos duplos e resolver transações ambíguas, manter o Serviço fiável e operar as funcionalidades comunitárias (publicar e moderar comentários, responder a pedidos de suporte e feedback e analisar candidaturas de emissor). A base jurídica é o nosso interesse legítimo (art. 6.º, n.º 1, alínea f), do RGPD) em executar uma demonstração técnica segura. Não usamos os seus dados para marketing, definição de perfis ou venda."
+    },
+    "b20": {
+      "h2": "5. Quem trata os dados"
+    },
+    "b21": {
+      "ul": {
+        "i00": "<b>Render</b> (alojamento, Frankfurt, UE) - executa a aplicação.",
+        "i01": "<b>Neon</b> (Postgres gerido; região AWS Europa (Frankfurt), UE - verificado na consola Neon em {v:lastUpdated}) - guarda o diário de contribuições e o armazenamento de dados da comunidade.",
+        "i02": "<b>Testnet da Stellar</b> (rede pública operada pela Stellar Development Foundation, global) - regista transações públicas de teste.",
+        "i03": "<b>GitHub</b> - aloja o código-fonte (sem dados de utilizadores)."
+      }
+    },
+    "b22": {
+      "p": "Quando o tratamento ocorre fora da UE/EEE (por exemplo na rede global da Stellar), envolve apenas dados pseudonimizados da testnet."
+    },
+    "b23": {
+      "h2": "6. Os seus direitos ao abrigo do RGPD"
+    },
+    "b24": {
+      "p": "Tem o direito de aceder, retificar, apagar, limitar ou opor-se ao tratamento dos seus dados pessoais, e à portabilidade dos dados, ao abrigo do Regulamento (UE) 2016/679 (RGPD). Tem também o direito de apresentar reclamação à autoridade de controlo portuguesa, a <b>CNPD</b> (Comissão Nacional de Proteção de Dados)."
+    },
+    "b25": {
+      "p": "Conseguimos localizar os dados associados a si apenas através da sua chave pública Stellar (e de qualquer nome de apresentação ou conteúdo de texto livre que tenha decidido submeter). Os dados já escritos numa blockchain pública não podem ser apagados; podemos corrigir ou apagar os registos fora da cadeia (o diário de contribuições, a sua conta comunitária, comentários, pedidos e candidaturas) a pedido, sujeito às regras de retenção da secção 2."
+    },
+    "b26": {
+      "h2": "7. Brasil (LGPD)"
+    },
+    "b27": {
+      "p": "A demonstração é operada a partir de Portugal. A Lei Geral de Proteção de Dados do Brasil (Lei n.º 13.709/2018 - LGPD) pode aplicar-se a tratamentos que visem ou envolvam pessoas no Brasil; se se aplica a este protótipo é uma questão jurídica a confirmar com advogados. Se e na medida em que a LGPD se aplicar, confere-lhe direitos sobre os seus dados pessoais semelhantes aos acima, e pode contactar a ANPD (Autoridade Nacional de Proteção de Dados). Use o mesmo contacto acima para qualquer pedido."
+    },
+    "b28": {
+      "h2": "8. Segurança"
+    },
+    "b29": {
+      "p": "As chaves da sua carteira nunca saem da sua extensão Freighter; o Serviço foi desenhado de forma a não lhes poder aceder. A aplicação é servida sobre TLS e os pontos de administração estão desativados por omissão (fail-closed). Nenhum método é absoluto, mas o desenho do protótipo minimiza os dados que existem para serem atacados."
+    },
+    "b30": {
+      "h2": "9. Crianças"
+    },
+    "b31": {
+      "p": "O Serviço é uma demonstração técnica e não se dirige a crianças."
+    },
+    "b32": {
+      "h2": "10. Alterações"
+    },
+    "b33": {
+      "p": "Podemos atualizar esta Política à medida que o protótipo evolui. A data de \"Última atualização\" indica a versão atual. As alterações materiais serão refletidas aqui antes de produzirem efeitos."
+    },
+    "b34": {
+      "h2": "11. Contacto"
+    },
+    "b35": {
+      "p": "Questões e pedidos de privacidade: {v:contactEmail}."
+    }
+  },
+  "riskDisclosure": {
+    "b00": {
+      "notice": "Modelo de demonstração: esta página é um documento ilustrativo do protótipo Blockallisto, não é aconselhamento jurídico. Não foi revisto por um advogado e não é prova de qualquer registo societário ou autorização regulamentar. Os dados societários marcados [DEMO] são dados fictícios de demonstração."
+    },
+    "b01": {
+      "p": "<b>Última atualização:</b> {v:lastUpdated}"
+    },
+    "b02": {
+      "h2": "Leia isto primeiro: a demonstração de hoje não envolve dinheiro real"
+    },
+    "b03": {
+      "p": "A Blockallisto é atualmente um <b>protótipo na testnet da Stellar</b>. Todas as contribuições usam tokens de teste <b>sem valor monetário</b>. Não pode perder dinheiro real nesta demonstração, e nada nela constitui uma oportunidade real de investimento."
+    },
+    "b04": {
+      "p": "Os avisos abaixo explicam os riscos que <b>se aplicariam</b> ao tipo de investimento que a Blockallisto demonstra - crowdfunding em ativos reais através de infraestrutura de criptoativos. São publicados agora para que a conversa sobre risco faça parte do produto desde o primeiro dia."
+    },
+    "b05": {
+      "h2": "Aviso geral"
+    },
+    "b06": {
+      "p": "Investir em projetos de crowdfunding - quer em ativos reais como imóveis ou empresas, quer através de criptoativos e tokens - é de <b>alto risco</b>. Pode perder <b>todo o dinheiro que investir</b>. Estes investimentos não estão tipicamente <b>cobertos</b> por regimes de garantia de depósitos ou de indemnização de investidores."
+    },
+    "b07": {
+      "p": "<b>Nunca invista dinheiro que não possa perder.</b> Para ter uma noção de escala, as plataformas de referência do nosso corpus de investigação trazem orientações concretas de diversificação: a página de avisos de risco da CONDA aconselha a não investir mais de cerca de 10% dos seus fundos livremente disponíveis nesta classe de ativos, e a ficha-padrão austríaca do investidor em crowdfunding (regime AltFG, observada na dagobertinvest) alerta contra investir mais de 10% do património líquido. Esta é a prática observada de comunicação de risco de plataformas estabelecidas, citada como ponto de referência - não é uma regra de lei aplicável a esta demonstração, nem uma garantia de que qualquer percentagem seja segura para a sua situação. Distribuir um montante menor por vários projetos reduz, mas nunca elimina, o risco de perda total."
+    },
+    "b08": {
+      "h2": "Riscos específicos"
+    },
+    "b09": {
+      "ul": {
+        "i00": "<b>Perda de capital.</b> O projeto que apoiar pode falhar, ter desempenho abaixo do esperado ou perder todo o valor. Os emitentes podem e tornam-se insolventes após angariações bem-sucedidas. Os rendimentos nunca são garantidos.",
+        "i01": "<b>Iliquidez.</b> As posições de crowdfunding e tokenizadas podem ser difíceis ou impossíveis de vender. Pode não existir mercado secundário, as transmissões podem exigir o consentimento do emitente ou da plataforma e um destinatário verificado, e pode ter de manter a posição até ao fim do projeto - ou mais. (No protótipo atual nem sequer existe um token transmissível.)",
+        "i02": "<b>Subordinação.</b> Os instrumentos subordinados ou \"júnior\" ficam atrás de outros credores; com subordinação qualificada pode não receber nada enquanto o emitente estiver sobre-endividado, e os créditos de juros ou de reembolso podem ser totalmente suspensos.",
+        "i03": "<b>Risco de prazo e de extensão.</b> Os empréstimos e as obrigações podem ser prolongados para além do prazo indicado ao abrigo dos respetivos contratos, atrasando o reembolso.",
+        "i04": "<b>Risco de avaliação.</b> Os ativos reais são difíceis de avaliar; as avaliações apresentadas podem estar erradas ou desatualizadas. (Nesta demonstração, todas as avaliações e identidades de emitentes são dados fictícios.)",
+        "i05": "<b>Risco de contrato inteligente.</b> O código pode conter erros ou ser explorado, e as transações numa blockchain são geralmente irreversíveis.",
+        "i06": "<b>Risco de rede.</b> As redes blockchain podem sofrer congestão, falhas, forks ou alterações de protocolo fora do controlo de qualquer parte.",
+        "i07": "<b>Risco de chaves e de carteira.</b> Se perder a chave secreta ou a frase de recuperação da sua carteira, ou se alguém as roubar, os seus fundos desaparecem e ninguém os pode repor.",
+        "i08": "<b>Risco regulamentar.</b> As regras para o crowdfunding (ECSPR na UE) e para os criptoativos (MiCA) estão em evolução. Uma estrutura possível hoje pode mudar, e as ofertas podem ser restringidas onde vive.",
+        "i09": "<b>Risco de volatilidade e cambial.</b> Os preços dos criptoativos podem oscilar fortemente; as stablecoins podem perder a paridade; as taxas de câmbio movem-se.",
+        "i10": "<b>Risco de contraparte e de fraude.</b> Os emitentes podem gerir mal os fundos ou deturpar os seus projetos. As verificações da plataforma reduzem, mas não eliminam, este risco."
+      }
+    },
+    "b10": {
+      "h2": "Sobre as futuras proteções do investidor"
+    },
+    "b11": {
+      "p": "O regulamento europeu de crowdfunding (o ECSPR, Regulamento (UE) 2020/1503) exige que as plataformas autorizadas ofereçam categorização de investidores, um teste inicial de conhecimentos, uma simulação da capacidade de suportar perdas e um período de reflexão pré-contratual de quatro dias de calendário para investidores não sofisticados antes de uma oferta se tornar vinculativa; as plataformas de referência do nosso corpus de investigação implementam-nas ao abrigo das respetivas autorizações. A demonstração da Blockallisto não tem nenhum destes mecanismos, porque nenhum investimento real é possível. Se uma versão regulada for um dia lançada, essas proteções - e os seus limites - serão descritas nos respetivos documentos juridicamente revistos. Proteções como os períodos de reflexão permitem retirar uma oferta; não reduzem o risco de investimento subjacente."
+    },
+    "b12": {
+      "h2": "Sem aconselhamento"
+    },
+    "b13": {
+      "p": "Nada neste Serviço constitui aconselhamento de investimento, jurídico ou fiscal, nem uma recomendação de compra ou venda de seja o que for. O desempenho passado - real ou simulado - não prevê resultados futuros. Considere aconselhamento profissional independente e diversifique: não concentre as suas poupanças num único projeto ou tipo de ativo."
+    },
+    "b14": {
+      "h2": "Reconhecimento"
+    },
+    "b15": {
+      "p": "Ao utilizar esta demonstração, reconhece que leu e compreendeu esta Divulgação de Riscos. Antes de qualquer lançamento real futuro, aplicar-se-á uma declaração de riscos mais completa e juridicamente revista."
+    }
+  },
+  "legalNotice": {
+    "b00": {
+      "notice": "Modelo de demonstração: esta página é um documento ilustrativo do protótipo Blockallisto, não é aconselhamento jurídico. Não foi revisto por um advogado e não é prova de qualquer registo societário ou autorização regulamentar. Os dados societários marcados [DEMO] são dados fictícios de demonstração."
+    },
+    "b01": {
+      "p": "<b>Última atualização:</b> {v:lastUpdated}"
+    },
+    "b02": {
+      "p": "Este Aviso Legal identifica o operador do website e da aplicação de demonstração Blockallisto (o \"Serviço\"). Os dados societários apresentados abaixo são dados fictícios de demonstração: forma jurídica \"Lda.\" [DEMO], sede \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], número de registo \"000 000 000\" [DEMO], capital social \"EUR 0\" [DEMO], gerente \"Nome Demonstracao\" [DEMO]. A denominação social, a forma jurídica, a sede e o estatuto de registo da Blockallisto não foram verificados, e nenhum registo é afirmado. Contacto: {v:contactEmail}."
+    },
+    "b03": {
+      "h2": "1. Operador"
+    },
+    "b04": {
+      "table": {
+        "head": {
+          "r00": {
+            "c00": "Campo",
+            "c01": "Valor"
+          }
+        },
+        "rows": {
+          "r00": {
+            "c00": "Nome comercial",
+            "c01": "Blockallisto"
+          },
+          "r01": {
+            "c00": "Forma jurídica",
+            "c01": "\"Lda.\" [DEMO]"
+          },
+          "r02": {
+            "c00": "Sede",
+            "c01": "\"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO]"
+          },
+          "r03": {
+            "c00": "Registo comercial",
+            "c01": "\"Registo Comercial de [Lisboa], número 000 000 000\" [DEMO]"
+          },
+          "r04": {
+            "c00": "NIF",
+            "c01": "\"PT 000 000 000\" [DEMO]"
+          },
+          "r05": {
+            "c00": "Gerente",
+            "c01": "\"Nome Demonstracao\" [DEMO]"
+          },
+          "r06": {
+            "c00": "Contacto",
+            "c01": "{v:contactEmail}"
+          }
+        }
+      }
+    },
+    "b05": {
+      "p": "Substitua todos os valores [DEMO] pelos dados registados reais do operador antes de qualquer publicação para além do protótipo."
+    },
+    "b06": {
+      "h2": "2. Estatuto regulamentar"
+    },
+    "b07": {
+      "p": "A Blockallisto é hoje uma <b>demonstração de protótipo</b> a correr inteiramente na rede de teste da Stellar (testnet). O operador <b>não</b> está autorizado como prestador de serviços de crowdfunding ao abrigo do Regulamento (UE) 2020/1503 (ECSPR), <b>não</b> está supervisionado pela CMVM ou por qualquer outra autoridade competente nessa qualidade, e não faz <b>qualquer oferta</b> de investimento. Nada no Serviço constitui uma oferta, solicitação, recomendação ou aconselhamento de investimento, jurídico, fiscal ou financeiro. Não está envolvido dinheiro real; os tokens da testnet não têm valor monetário."
+    },
+    "b08": {
+      "p": "Se e quando um lançamento real for preparado, este aviso será atualizado com o estatuto de autorização do operador, a sua autoridade de supervisão competente e quaisquer divulgações exigidas no mercado único antes de qualquer oferta real."
+    },
+    "b09": {
+      "h2": "3. Conteúdo e responsabilidade"
+    },
+    "b10": {
+      "p": "O conteúdo do Serviço é fornecido tal como está, para avaliação de um protótipo. As campanhas, os emitentes, os valores e os resultados de exemplo são ilustrações fictícias. O operador não aceita responsabilidade por decisões tomadas com base em conteúdo da demonstração. As ligações externas, quando presentes, levam a conteúdo de terceiros que o operador não controla."
+    },
+    "b11": {
+      "h2": "4. Propriedade intelectual"
+    },
+    "b12": {
+      "p": "O Serviço, o seu conteúdo e o seu código são Copyright (c) 2026 Nuno Ribeiro, todos os direitos reservados. Não é concedida qualquer licença de código aberto ou de patente. Pode ver e usar a demonstração para avaliação; não pode copiá-la, republicá-la ou revendê-la."
+    },
+    "b13": {
+      "h2": "5. Enquadramento aplicável [a rever]"
+    },
+    "b14": {
+      "p": "As cláusulas de lei aplicável e de jurisdição para um lançamento real exigem aconselhamento jurídico e dependem do registo final do operador. Este modelo deliberadamente não afirma qualquer lei aplicável para o protótipo."
+    }
+  },
+  "conflictsOfInterest": {
+    "b00": {
+      "notice": "Modelo de demonstração: esta página é um documento ilustrativo do protótipo Blockallisto, não é aconselhamento jurídico. Não foi revisto por um advogado e não é prova de qualquer registo societário ou autorização regulamentar. Os dados societários marcados [DEMO] são dados fictícios de demonstração."
+    },
+    "b01": {
+      "p": "<b>Última atualização:</b> {v:lastUpdated}"
+    },
+    "b02": {
+      "p": "Este modelo de política descreve como a Blockallisto tenciona identificar, prevenir, gerir e divulgar conflitos de interesses. A Blockallisto é hoje uma demonstração de protótipo na testnet da Stellar: não existem investidores, emitentes, fundos ou ofertas reais, pelo que nenhum conflito efetivo pode surgir hoje. Este documento é um artefacto de desenho preparado tendo em conta as superfícies de conformidade de plataformas de crowdfunding europeias estabelecidas e <b>não</b> é uma descrição de um programa de conformidade em funcionamento."
+    },
+    "b03": {
+      "h2": "1. Porque existe esta política"
+    },
+    "b04": {
+      "p": "As plataformas de crowdfunding situam-se entre emitentes que procuram fundos e investidores que os fornecem. O Regulamento (UE) 2020/1503 espera que as plataformas autorizadas evitem conflitos de interesses e, quando não possam ser evitados, os gerenciem e divulguem. Este modelo antecipa essa expectativa."
+    },
+    "b05": {
+      "h2": "2. Potenciais conflitos considerados"
+    },
+    "b06": {
+      "ul": {
+        "i00": "<b>Plataforma vs investidor:</b> a plataforma, ao ganhar comissões de angariações concluídas, poderia ser tentada a admitir campanhas fracas. Mitigação prevista: critérios de admissão publicados, passos documentados de due diligence por campanha e comissões que não dependem das alegações de marketing das campanhas.",
+        "i01": "<b>Partes relacionadas:</b> o operador, os seus gerentes ou respetivos familiares próximos a atuar como emitentes ou investidores. Regra prevista: [as partes relacionadas não podem atuar como emitentes na plataforma - a confirmar por aconselhamento jurídico]; qualquer investimento de partes relacionadas, se alguma vez for permitido, seria divulgado na página da campanha.",
+        "i02": "<b>Investimento por conta própria:</b> regra prevista: a plataforma <b>não</b> investe nas suas próprias campanhas e não detém fundos contribuídos em momento algum; a liquidação flui através de [prestadores de serviços de pagamento licenciados - planeado, não ativo].",
+        "i03": "<b>Incentivos do pessoal:</b> regra prevista: nenhuma remuneração ligada ao sucesso de financiamento de campanhas específicas.",
+        "i04": "<b>Assimetria de informação:</b> o conteúdo fornecido pelo emitente pode induzir em erro. Mitigação prevista: fichas de informação fundamental de investimento por campanha, uma estrutura de dados de campanha normalizada e uma separação clara entre dados verificados da plataforma e conteúdo fornecido pelo emitente."
+      }
+    },
+    "b07": {
+      "h2": "3. Identificação, gestão, divulgação"
+    },
+    "b08": {
+      "p": "Processo previsto: (1) registo de conflitos mantido por [o contacto de conformidade do operador - a nomear]; (2) avaliação antes de qualquer admissão de campanha e em qualquer alteração material; (3) quando um conflito não puder ser evitado, divulgação aos utilizadores afetados em termos claros antes de se comprometerem; (4) recusa de operar o negócio em conflito quando a evitação e a divulgação forem insuficientes."
+    },
+    "b09": {
+      "h2": "4. Estado atual"
+    },
+    "b10": {
+      "p": "Nada do acima está operativo hoje. O protótipo não aceita fundos reais, não lista emitentes reais e não paga comissões. Esta página existe para que a superfície de conformidade prevista seja visível e revista antes de qualquer lançamento real."
+    }
+  },
+  "complaintsManagement": {
+    "b00": {
+      "notice": "Modelo de demonstração: esta página é um documento ilustrativo do protótipo Blockallisto, não é aconselhamento jurídico. Não foi revisto por um advogado e não é prova de qualquer registo societário ou autorização regulamentar. Os dados societários marcados [DEMO] são dados fictícios de demonstração."
+    },
+    "b01": {
+      "p": "<b>Última atualização:</b> {v:lastUpdated}"
+    },
+    "b02": {
+      "p": "Esta página explica como reclamar sobre o protótipo Blockallisto e como as reclamações são tratadas. A Blockallisto é hoje uma demonstração na testnet da Stellar sem fundos reais envolvidos; o processo de tratamento abaixo é real para a demonstração, enquanto o enquadramento regulamentar formal que espelha se aplica apenas a uma plataforma autorizada."
+    },
+    "b03": {
+      "h2": "1. Como reclamar"
+    },
+    "b04": {
+      "p": "Envie um email para {v:contactEmail} com o assunto \"Complaint\". Inclua: o que aconteceu, quando, a página ou funcionalidade envolvida e o resultado que pede. As reclamações são gratuitas."
+    },
+    "b05": {
+      "p": "Para o protótipo existe também um formulário de pedido de suporte no site; as reclamações enviadas por aí são tratadas da mesma forma."
+    },
+    "b06": {
+      "h2": "2. O que acontece a seguir"
+    },
+    "b07": {
+      "ul": {
+        "i00": "<b>Confirmação de receção:</b> confirmamos a receção dentro de [10 dias úteis - valor de modelo].",
+        "i01": "<b>Investigação:</b> o operador analisa a reclamação contra os registos (conteúdo da página, eventos do contrato, histórico de suporte). Pode ser-lhe pedido um esclarecimento.",
+        "i02": "<b>Resposta:</b> uma resposta fundamentada dentro de [20 dias úteis - valor de modelo] após a confirmação de receção. Se for necessário mais tempo, dizemo-lo e explicamos porquê.",
+        "i03": "<b>Registo:</b> as reclamações e os resultados são registados num livro de reclamações conservado por [5 anos - valor de modelo], contendo a reclamação, a investigação e a resolução."
+      }
+    },
+    "b08": {
+      "p": "Os prazos do modelo são valores indicativos retirados da prática comum de plataformas europeias, não compromissos jurídicos; os valores finais exigem aconselhamento jurídico."
+    },
+    "b09": {
+      "h2": "3. Se não ficar satisfeito"
+    },
+    "b10": {
+      "p": "Para o protótipo não existe via de escalação a uma autoridade de supervisão, porque o operador não é um prestador de serviços de crowdfunding autorizado e não existe qualquer serviço de investimento real. Para uma futura plataforma autorizada, esta secção nomeará o canal de reclamação da autoridade competente (em Portugal, a CMVM) e qualquer organismo aplicável de resolução extrajudicial de litígios antes de qualquer oferta real."
+    },
+    "b11": {
+      "h2": "4. Usar as reclamações para melhorar"
+    },
+    "b12": {
+      "p": "Os temas recorrentes das reclamações são analisados e alimentam correções de produto e de conteúdo. O roteiro do próprio protótipo trata os dados de reclamações como um contributo para alterações de desenho, não apenas para resolução caso a caso."
+    }
+  },
+  "businessContinuity": {
+    "b00": {
+      "notice": "Modelo de demonstração: esta página é um documento ilustrativo do protótipo Blockallisto, não é aconselhamento jurídico. Não foi revisto por um advogado e não é prova de qualquer registo societário ou autorização regulamentar. Os dados societários marcados [DEMO] são dados fictícios de demonstração."
+    },
+    "b01": {
+      "p": "<b>Última atualização:</b> {v:lastUpdated}"
+    },
+    "b02": {
+      "p": "Esta página descreve o que mantém o protótipo Blockallisto disponível e recuperável, e que planeamento de continuidade se pretende para uma futura plataforma autorizada. A primeira secção é factual sobre a demonstração em execução; a segunda é intenção de desenho, não prática atual."
+    },
+    "b03": {
+      "h2": "1. Postura de continuidade do protótipo (atual)"
+    },
+    "b04": {
+      "ul": {
+        "i00": "<b>Sem ativos de clientes em risco:</b> a demonstração não detém dinheiro, fundos de clientes nem custódia. As contribuições são tokens da testnet sem valor monetário, liquidadas por um contrato inteligente Soroban na testnet pública da Stellar. O estado do contrato vive no ledger da testnet, independentemente deste website.",
+        "i01": "<b>Alojamento:</b> o site e a API correm no nível gratuito da Render; os dados operacionais (diário de transações, dados da comunidade) vivem numa base de dados Postgres da Neon no seu nível gratuito. Ambos são serviços de terceiros com as respetivas propriedades de disponibilidade; não é garantido qualquer tempo de atividade para a demonstração.",
+        "i02": "<b>Cópias de segurança:</b> [agendamento e retenção de cópias de segurança a definir - os níveis gratuitos não fornecem cópias geridas; o estado do contrato na testnet é recuperável a partir do ledger público].",
+        "i03": "<b>Separação de ambientes:</b> a demonstração virada para o utilizador, um ambiente de staging separado e cópias descartáveis da base de dados são mantidos separados para que os testes não possam corromper a demonstração.",
+        "i04": "<b>Se a demonstração estiver indisponível:</b> nenhum utilizador perde nada de valor. O estado da campanha permanece legível em exploradores públicos da testnet da Stellar, e as contribuições permanecem regidas pelo contrato, não por este site."
+      }
+    },
+    "b05": {
+      "h2": "2. Plano de continuidade previsto para uma plataforma autorizada (não ativo)"
+    },
+    "b06": {
+      "p": "Uma plataforma real que trate ofertas reguladas precisaria, antes do lançamento: de objetivos documentados de tempo e de ponto de recuperação [valores RTO/RPO a definir com aconselhamento jurídico e de infraestrutura]; cópias de segurança geridas com procedimentos de restauro testados; um acordo de serviços de pagamento em que os fundos dos clientes nunca são detidos pela plataforma, para que uma falha da plataforma não possa bloquear o dinheiro dos investidores; um plano ordeiro de encerramento que assegure que as campanhas em curso podem concluir-se ou reembolsar se a plataforma cessar a atividade; e procedimentos de comunicação para incidentes que afetem os utilizadores."
+    },
+    "b07": {
+      "p": "Nada disto está operativo hoje. Publicá-lo como modelo mantém a superfície de conformidade prevista visível e revista."
+    },
+    "b08": {
+      "h2": "3. Contacto para incidentes"
+    },
+    "b09": {
+      "p": "Para reportar um incidente de segurança ou de disponibilidade que afete o protótipo: {v:contactEmail}, assunto \"Incident\"."
+    }
+  }
+}

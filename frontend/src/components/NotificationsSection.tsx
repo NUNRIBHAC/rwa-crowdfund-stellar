@@ -1,3 +1,4 @@
+import { tpl } from '../format';
 // Owner-scoped notifications for the account dashboard: issuer application
 // updates, comment moderation and ticket closures for the signed-in wallet,
 // fetched from the community backend. Bodies render from structured event
@@ -56,28 +57,28 @@ export default function NotificationsSection() {
     if (!v) return n.body;
     switch (n.kind) {
       case 'application_received':
-        return v.projectName ? labels.bodies.applicationReceived({ projectName: v.projectName }) : n.body;
+        return v.projectName ? tpl(labels.bodies.applicationReceived, { projectName: v.projectName }) : n.body;
       case 'application_status': {
         const status = v.status as keyof typeof m.community.applicationStatus | undefined;
         const statusLabel = status && m.community.applicationStatus[status] ? m.community.applicationStatus[status] : undefined;
-        return v.projectName && statusLabel ? labels.bodies.applicationStatus({ projectName: v.projectName, statusLabel }) : n.body;
+        return v.projectName && statusLabel ? tpl(labels.bodies.applicationStatus, { projectName: v.projectName, statusLabel }) : n.body;
       }
       case 'comment_moderated': {
         if (!v.campaignId) return n.body;
-        const base = labels.bodies.commentModerated({ campaignId: v.campaignId });
-        return v.reason ? `${base} ${labels.bodies.commentModeratedReason({ reason: v.reason })}` : base;
+        const base = tpl(labels.bodies.commentModerated, { campaignId: v.campaignId });
+        return v.reason ? `${base} ${tpl(labels.bodies.commentModeratedReason, { reason: v.reason })}` : base;
       }
       case 'company_received':
-        return v.companyName ? labels.bodies.companyReceived({ companyName: v.companyName }) : n.body;
+        return v.companyName ? tpl(labels.bodies.companyReceived, { companyName: v.companyName }) : n.body;
       case 'company_status': {
         const cstatus = v.status as keyof typeof m.community.company.status | undefined;
         const cstatusLabel = cstatus && m.community.company.status[cstatus] ? m.community.company.status[cstatus] : undefined;
-        return v.companyName && cstatusLabel ? labels.bodies.companyStatus({ companyName: v.companyName, statusLabel: cstatusLabel }) : n.body;
+        return v.companyName && cstatusLabel ? tpl(labels.bodies.companyStatus, { companyName: v.companyName, statusLabel: cstatusLabel }) : n.body;
       }
       case 'ticket_closed': {
         const kind = v.ticketKind as keyof typeof m.community.ticketKinds | undefined;
         const kindLabel = kind && m.community.ticketKinds[kind] ? m.community.ticketKinds[kind] : undefined;
-        return kindLabel && v.subject ? labels.bodies.ticketClosed({ kindLabel, subject: v.subject }) : n.body;
+        return kindLabel && v.subject ? tpl(labels.bodies.ticketClosed, { kindLabel, subject: v.subject }) : n.body;
       }
     }
   };
