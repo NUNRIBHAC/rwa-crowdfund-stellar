@@ -25,6 +25,7 @@ import {
   statusSoroban,
   recoverSoroban,
   confirmedContribution,
+  deriveContributionFromNetwork,
 } from '../src/soroban.js';
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'soroban-api-'));
 const actor = Keypair.random();
@@ -219,13 +220,18 @@ test('confirmedContribution derives the record from the network-confirmed envelo
   lastEnvelope = '';
   await assert.rejects(confirmedContribution(b.hash), /no transaction envelope/);
   lastEnvelope = saved;
-  // A tampered journal campaign field fails closed against the envelope's
-  // contract id (definitive null, no record written).
+  // Journal row fields are never trusted: even a tampered campaign field is
+  // ignored - derivation is authoritative from the network envelope and the
+  // registry (matched by contract id).
   const p = process.env.SOROBAN_INTENTS_PATH!;
   const doc = JSON.parse(fs.readFileSync(p, 'utf8'));
   doc.intents[0].campaign = 'unregistered';
   fs.writeFileSync(p, JSON.stringify(doc));
-  assert.equal(await confirmedContribution(b.hash), null);
+  assert.deepEqual(await confirmedContribution(b.hash), { campaignId: 's1', contributor: actor.publicKey() });
+  // Network-only derivation works without any journal row at all (post-prune).
+  fs.rmSync(p, { force: true });
+  assert.equal(await confirmedContribution(b.hash), null, 'journal filter: unknown hash is null');
+  assert.deepEqual(await deriveContributionFromNetwork(b.hash), { campaignId: 's1', contributor: actor.publicKey() });
 });
 
 test('terminal intent status stays readable after the journal purges its signed envelope', { skip: !fixtureAvailable }, async () => {
