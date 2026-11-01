@@ -200,6 +200,29 @@ async function recordStatus(hash: string, status: string): Promise<void> {
     await save(store);
   });
 }
+// Funding state for one registered campaign, for the post-funding report
+// publish gate: reads the same on-chain views as the campaign listing
+// (code hash verified, configured asset checked) so a report can only be
+// published for a campaign whose funding period has actually ended. Returns
+// null for an unregistered campaign id; throws on RPC/verification failure
+// so callers fail closed instead of guessing lifecycle.
+export async function sorobanCampaignFundingState(
+  id: string,
+): Promise<{ id: string; goal: string; raised: string; deadlineSeconds: number; withdrawn: boolean } | null> {
+  const e = entries().find((x) => x.id === id);
+  if (!e) return null;
+  const client = sorobanDeps.client();
+  await verifyCode(client, e);
+  const config = await view(client, e, 'get_config');
+  if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+  const raised = await view(client, e, 'total_raised');
+  const withdrawn = await view(client, e, 'is_withdrawn');
+  const raw = Number(config.deadline);
+  // Contracts store the deadline in unix seconds; tolerate a millisecond value.
+  const deadlineSeconds = raw > 1e12 ? Math.floor(raw / 1000) : raw;
+  return { id, goal: String(config.goal), raised: String(raised), deadlineSeconds, withdrawn: Boolean(withdrawn) };
+}
+
 export async function buildSoroban(id: string, input: { actor: string; action: string; amount?: string }): Promise<any> {
   const e = entry(id),
     actor = actorAddress(input.actor);

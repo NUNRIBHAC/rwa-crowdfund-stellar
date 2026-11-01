@@ -7,6 +7,7 @@ import type {
   CommunityStore,
   IssuerApplication,
   NewsPost,
+  PostFundingReport,
   PodcastEpisode,
   AppropriatenessInformation,
   AppropriatenessRecord,
@@ -85,6 +86,12 @@ const companyInput = z.object({
   country: z.string().trim().min(1).max(120),
 });
 const newsInput = z.object({
+  title: z.string().trim().min(1).max(LIMITS.newsTitle),
+  body: z.string().trim().min(1).max(LIMITS.newsBody),
+});
+
+const reportInput = z.object({
+  kind: z.enum(['funding_outcome', 'use_of_proceeds', 'milestone', 'other']),
   title: z.string().trim().min(1).max(LIMITS.newsTitle),
   body: z.string().trim().min(1).max(LIMITS.newsBody),
 });
@@ -359,6 +366,39 @@ export class CommunityService {
     });
     await this.recordAudit(actor, 'news.post', post.id, `campaign=${campaignId} title=${post.title}`);
     return post;
+  }
+
+  // Post-funding reports to investors. The post-close gate (deadline passed,
+  // read from the on-chain campaign state) is enforced at the router before
+  // this is called; the service stores exactly what the operator submitted,
+  // never generates content. Same stand-in honesty as news: fixed
+  // 'platform-demo' author label, no verified issuer identity.
+  async addReport(campaignId: string, input: unknown, actor = 'admin-area'): Promise<PostFundingReport> {
+    requireCampaignId(campaignId);
+    const { kind, title, body } = reportInput.parse(input ?? {});
+    const report: PostFundingReport = {
+      id: newId('report'),
+      campaignId,
+      kind,
+      title,
+      body,
+      authorLabel: 'platform-demo',
+      createdAt: this.now(),
+    };
+    await this.store.change((state) => {
+      state.reports[report.id] = report;
+    });
+    await this.recordAudit(actor, 'report.publish', report.id, `campaign=${campaignId} kind=${report.kind} title=${report.title}`);
+    return report;
+  }
+
+  async listReports(campaignId: string): Promise<PostFundingReport[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.reports)
+      .filter((r) => r.campaignId === campaignId)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, LIMITS.commentsPage);
   }
 
   // Podcast episodes. Admin/operator-gated at the router, same honesty

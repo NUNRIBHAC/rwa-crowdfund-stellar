@@ -4,7 +4,7 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
 import { registerDiscoveryEndpoints } from './sitemap.js';
-import { sorobanCampaigns, buildSoroban, submitSoroban, statusSoroban, recoverSoroban, accountActivity } from './soroban.js';
+import { sorobanCampaigns, sorobanCampaignFundingState, buildSoroban, submitSoroban, statusSoroban, recoverSoroban, accountActivity } from './soroban.js';
 import { journalBackend } from './journal.js';
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
@@ -88,13 +88,13 @@ registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCam
 // down the campaign API: the placeholder answers 503 for community paths and
 // everything else is unaffected.
 const communityRouterReady = communityServiceFromEnv()
-  .then((service) => createCommunityRouter({ service, requireAdmin, reconciliation: reconciliationPayload }))
+  .then((service) => createCommunityRouter({ service, requireAdmin, reconciliation: reconciliationPayload, fundingState: sorobanCampaignFundingState }))
   .catch((err) => {
     console.error('community API disabled:', err instanceof Error ? err.message : err);
     return null;
   });
 const COMMUNITY_PATH =
-  /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log)(\/|$)|^\/api\/operator(\/|$)/;
+  /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast|reports)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log)(\/|$)|^\/api\/operator(\/|$)/;
 app.use((req, res, next) => {
   if (!COMMUNITY_PATH.test(req.path)) return next();
   communityRouterReady.then((router) => {

@@ -202,6 +202,55 @@ test('news: admin posts are labeled platform-demo and listed publicly', async ()
   assert.equal(listed[0].authorLabel, 'platform-demo');
 });
 
+test('reports: operator-submitted reports are labeled platform-demo, listed per campaign, schema-enforced', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  // The post-close on-chain gate lives at the router; the service stores
+  // exactly what it is given and never generates content.
+  const report = await service.addReport(
+    'demo-solar',
+    {
+      kind: 'funding_outcome',
+      title: 'Funding outcome report',
+      body: 'Fictional post-funding outcome for the demo campaign.',
+    },
+    'operator:test',
+  );
+  assert.equal(report.authorLabel, 'platform-demo');
+  assert.equal(report.kind, 'funding_outcome');
+  await service.addReport('other-campaign', {
+    kind: 'milestone',
+    title: 'Other campaign report',
+    body: 'Belongs to another campaign.',
+  });
+  const listed = await service.listReports('demo-solar');
+  assert.equal(listed.length, 1);
+  assert.equal(listed[0].id, report.id);
+  assert.equal(listed[0].authorLabel, 'platform-demo');
+  // Unknown kind and empty body are rejected by the schema.
+  await assert.rejects(() => service.addReport('demo-solar', { kind: 'audit', title: 'x', body: 'y' }));
+  await assert.rejects(() => service.addReport('demo-solar', { kind: 'milestone', title: 'x', body: ' ' }));
+  // Invalid campaign ids are rejected.
+  await assert.rejects(() => service.listReports('Bad Id'));
+  // Publish was audit-logged.
+  const audit = (await store.read()).audit;
+  assert.ok(audit.some((e) => e.action === 'report.publish' && e.actor === 'operator:test'));
+});
+
+test('reports: stored state written before reports existed gains the collection on read', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  await service.addNews('demo-solar', { title: 't', body: 'b' });
+  // Simulate a legacy document by removing the reports collection, then read
+  // through a fresh store: the forward-compatible default must apply.
+  const legacyPath = path.join(dir, `store-legacy-${counter++}.json`);
+  const doc = (await store.read()) as unknown as Record<string, unknown>;
+  delete doc.reports;
+  fs.writeFileSync(legacyPath, JSON.stringify(doc));
+  const legacyService = new CommunityService(new FileCommunityStore(legacyPath));
+  assert.deepEqual(await legacyService.listReports('demo-solar'), []);
+});
+
 test('appropriateness: knowledge test, warning path, simulation result, review cycles', async () => {
   const store = newStore();
   const service = new CommunityService(store);
