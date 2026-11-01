@@ -1266,7 +1266,7 @@
     "jobsDemoNote": "데모 페이지: 게시된 포지션이 여기에 표시됩니다. 현재 실제 채용 공고는 없습니다.",
     "podcastTitle": "팟캐스트",
     "podcastIntro": "크라우드 투자, 발행사, 플랫폼에 관한 예정된 오디오 형식입니다. 이 데모 환경은 예정된 형식을 보여주며, 녹음된 에피소드는 없습니다.",
-    "podcastIntroWithEpisodes": "크라우드 투자, 발행사, 플랫폼에 관한 예정된 오디오 형식입니다. 게시된 에피소드는 위에 표시되며 플랫폼 데모 콘텐츠로 표시됩니다.",
+    "podcastIntroWithEpisodes": "크라우드 투자, 발행사, 플랫폼에 관한 예정된 오디오 형식입니다. 게시된 에피소드는 플랫폼 데모 콘텐츠로 표시됩니다.",
     "podcastEmpty": "아직 게시된 에피소드가 없습니다.",
     "podcastFormatsTitle": "예정된 형식",
     "podcastFormatInterviews": "발행사 인터뷰",

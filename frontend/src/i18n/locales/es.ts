@@ -1389,7 +1389,7 @@ export const es: Messages = {
     podcastIntro:
       'Formatos de audio previstos sobre inversión colectiva, emisores y la plataforma. Este entorno de demostración presenta los formatos previstos; no se han grabado episodios.',
     podcastIntroWithEpisodes:
-      'Formatos de audio previstos sobre inversión colectiva, emisores y la plataforma. Los episodios publicados aparecen arriba y están etiquetados como contenido de demostración de la plataforma.',
+      'Formatos de audio previstos sobre inversión colectiva, emisores y la plataforma. Los episodios publicados están etiquetados como contenido de demostración de la plataforma.',
     podcastEmpty: 'Aún no se han publicado episodios.',
     podcastFormatsTitle: 'Formatos previstos',
     podcastFormatInterviews: 'Entrevistas con emisores',

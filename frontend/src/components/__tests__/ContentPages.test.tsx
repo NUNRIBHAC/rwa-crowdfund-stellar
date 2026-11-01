@@ -65,7 +65,7 @@ describe('PodcastPage', () => {
     // and the intro no longer claims that nothing was recorded.
     expect(screen.queryByText('No episodes published yet.')).toBeNull();
     expect(screen.queryByText(/no episodes have been recorded/)).toBeNull();
-    expect(screen.getByText(/Published episodes appear above and are labeled as platform demo content\./)).toBeTruthy();
+    expect(screen.getByText(/Published episodes are labeled as platform demo content\./)).toBeTruthy();
     // Native audio player, no autoplay: preload="none" and the external URL.
     const audio = document.querySelector('audio');
     expect(audio).toBeTruthy();
