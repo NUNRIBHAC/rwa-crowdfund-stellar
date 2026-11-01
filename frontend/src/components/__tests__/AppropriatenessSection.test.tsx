@@ -26,7 +26,7 @@ const ASSESSMENT_OK = {
   objective: 'growth',
   knowledgeScore: 5,
   knowledgeTotal: 5,
-  outcome: 'appropriate',
+  outcome: 'knowledge_check_passed',
   warningAcknowledgedAt: null,
   simulation: null,
   completedAt: 1730000000000,
@@ -94,13 +94,13 @@ describe('AppropriatenessSection', () => {
     const spy = vi.fn().mockImplementation((url: string, init?: RequestInit) => {
       const u = String(url);
       const method = init?.method ?? 'GET';
-      if (u.endsWith('/api/auth/appropriateness') && method === 'GET') return Promise.resolve(ok({ assessment: null }));
-      if (u.endsWith('/knowledge')) return Promise.resolve(ok({ assessment: ASSESSMENT_WARN }));
-      if (u.endsWith('/acknowledge-warning')) return Promise.resolve(ok({ assessment: { ...ASSESSMENT_WARN, warningAcknowledgedAt: 1730000001000 } }));
+      if (u.endsWith('/api/auth/appropriateness') && method === 'GET') return Promise.resolve(ok({ record: null }));
+      if (u.endsWith('/knowledge')) return Promise.resolve(ok({ record: ASSESSMENT_WARN }));
+      if (u.endsWith('/acknowledge-warning')) return Promise.resolve(ok({ record: { ...ASSESSMENT_WARN, warningAcknowledgedAt: 1730000001000 } }));
       if (u.endsWith('/simulation-result'))
         return Promise.resolve(
           ok({
-            assessment: {
+            record: {
               ...ASSESSMENT_WARN,
               warningAcknowledgedAt: 1730000001000,
               simulation: { netWorthEur: 42000, capacityEur: 4200, transmittedAt: 1730000002000 },
@@ -167,15 +167,16 @@ describe('AppropriatenessSection', () => {
 
   it('shows an existing assessment with its review dates', async () => {
     globalThis.__authMock = auth();
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(ok({ assessment: ASSESSMENT_OK })));
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(ok({ record: ASSESSMENT_OK })));
     render(
       <I18nProvider>
         <AppropriatenessSection />
       </I18nProvider>,
     );
-    expect(await screen.findByText('Your assessment')).toBeTruthy();
-    expect(screen.getByText('Appropriate')).toBeTruthy();
+    expect(await screen.findByText('Your results')).toBeTruthy();
+    expect(screen.getByText('Passed')).toBeTruthy();
     expect(screen.getByText(/5 of 5 correct/)).toBeTruthy();
     expect(screen.getByText('This result does not classify you as a sophisticated or professional investor.')).toBeTruthy();
+    expect(screen.getByText(/not the appropriateness assessment required by ECSPR Article 21\(1\)/)).toBeTruthy();
   });
 });

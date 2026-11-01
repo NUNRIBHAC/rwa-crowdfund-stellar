@@ -1416,8 +1416,8 @@ export const ar: Messages = {
     tourStepNewsBody: 'تحديثات الحملة والتعليقات العامة. أخبار العرض التجريبي موسومة دائمًا بـ platform-demo.',
   },
   appropriateness: {
-    title: 'تقييم ملاءمة المستثمر',
-    intro: 'اختبار المعرفة التمهيدي ومحاكاة القدرة على تحمل الخسارة وفقًا للائحة الأوروبية للتمويل الجماعي (ECSPR المادة 21).',
+    title: 'اختبار المعرفة الأولي ومحاكاة الخسارة',
+    intro: 'تنفيذ تجريبي لأجزاء من تقييم الملاءمة الذي تتطلبه اللائحة الأوروبية للتمويل الجماعي (ECSPR المادة 21).',
     signInNote: 'سجّل الدخول بمحفظتك لإجراء التقييم.',
     heldNote: 'تقييم الملاءمة لا يجمع الردود على هذا النشر.',
     limitedNote: 'على هذا النشر، يقتصر التقييم على حسابات اختبار محددة.',
@@ -1433,6 +1433,8 @@ export const ar: Messages = {
     scoreLabel: '{score} من {total} صحيحة',
     outcomeLabel: 'النتيجة',
     noSophisticatedNote: 'هذه النتيجة لا تصنفك كمستثمر متمرس أو محترف.',
+    notFullAssessmentNote:
+      'فحص المعرفة هذا ليس تقييم الملاءمة المطلوب بموجب المادة 21(1) من ECSPR. التقييم الكامل - الذي يشمل الاستثمارات التي تعرفها وسجل معاملاتك وتعليمك ومهنتك وفترة الاحتفاظ وملف المخاطرة وتفضيلات الاستدامة - غير منفذ في هذا النشر.',
     reviewExplanations: 'شروحات الأسئلة التي أجبت عنها للتو:',
     warningTitle: 'تحذير من المخاطر',
     warningText: 'يتضمن الاستثمار في مشروع تمويل جماعي مخاطر خسارة كامل المبلغ المستثمر.',
@@ -1456,8 +1458,8 @@ export const ar: Messages = {
     simTransmitted: 'آخر نتيجة أُرسلت في {date}.',
     simInvalid: 'أدخل مبالغ تساوي صفرًا أو أكثر لتشغيل المحاكاة.',
     simRecalculate: 'إعادة الحساب',
-    statusTitle: 'تقييمك',
-    statusOutcome: 'نتيجة اختبار المعرفة',
+    statusTitle: 'نتائجك',
+    statusOutcome: 'فحص المعرفة الأولي',
     completedAt: 'اكتمل في {date}.',
     reviewAssessmentDue: 'مراجعة التقييم مستحقة بحلول {date}.',
     reviewSimulationDue: 'مراجعة المحاكاة مستحقة بحلول {date}.',
@@ -1473,7 +1475,7 @@ export const ar: Messages = {
       other: 'أخرى',
     },
     outcomeLabels: {
-      appropriate: 'ملائم',
+      knowledge_check_passed: 'تم الاجتياز',
       warning_issued: 'صدر تحذير',
     },
     questions: [

@@ -1477,8 +1477,8 @@ export const de: Messages = {
     tourStepNewsBody: 'Kampagnen-Updates und öffentliche Kommentare. Demo-News sind immer als platform-demo gekennzeichnet.',
   },
   appropriateness: {
-    title: 'Geeignetheitsprüfung für Anleger',
-    intro: 'Einstiegs-Kenntnistest und Simulation der Verlusttragfähigkeit nach der europäischen Crowdfunding-Verordnung (ECSPR, Artikel 21).',
+    title: 'Einstiegs-Kenntnistest und Verlustsimulation',
+    intro: 'Demo-Implementierung von Teilen der Angemessenheitsprüfung, die die europäische Crowdfunding-Verordnung (ECSPR, Artikel 21) vorschreibt.',
     signInNote: 'Melden Sie sich mit Ihrer Wallet an, um die Prüfung durchzuführen.',
     heldNote: 'Die Geeignetheitsprüfung erfasst auf dieser Bereitstellung keine Antworten.',
     limitedNote: 'Auf dieser Bereitstellung ist die Prüfung auf festgelegte Testkonten beschränkt.',
@@ -1495,6 +1495,8 @@ export const de: Messages = {
     scoreLabel: '{score} von {total} richtig',
     outcomeLabel: 'Ergebnis',
     noSophisticatedNote: 'Dieses Ergebnis stuft Sie nicht als professionellen oder besonders erfahrenen Anleger ein.',
+    notFullAssessmentNote:
+      'Diese Kenntnisprüfung ist nicht die nach ECSPR Artikel 21 Absatz 1 vorgeschriebene Angemessenheitsprüfung. Die vollständige Prüfung - die die Ihnen bekannten Anlagen, Ihre Transaktionshistorie, Ausbildung und Beruf, Haltedauer, Risikoprofil und Nachhaltigkeitspräferenzen umfasst - ist auf dieser Bereitstellung nicht implementiert.',
     reviewExplanations: 'Erläuterungen zu den Fragen, die Sie gerade beantwortet haben:',
     warningTitle: 'Risikowarnung',
     warningText: 'Eine Investition in ein Crowdfunding-Projekt beinhaltet das Risiko, das gesamte investierte Geld zu verlieren.',
@@ -1519,8 +1521,8 @@ export const de: Messages = {
     simTransmitted: 'Letztes Ergebnis übermittelt am {date}.',
     simInvalid: 'Geben Sie Beträge von null oder mehr ein, um die Simulation auszuführen.',
     simRecalculate: 'Neu berechnen',
-    statusTitle: 'Ihre Prüfung',
-    statusOutcome: 'Ergebnis des Kenntnistests',
+    statusTitle: 'Ihre Ergebnisse',
+    statusOutcome: 'Einstiegs-Kenntnisprüfung',
     completedAt: 'Abgeschlossen am {date}.',
     reviewAssessmentDue: 'Überprüfung der Prüfung fällig bis {date}.',
     reviewSimulationDue: 'Überprüfung der Simulation fällig bis {date}.',
@@ -1536,7 +1538,7 @@ export const de: Messages = {
       other: 'Sonstiges',
     },
     outcomeLabels: {
-      appropriate: 'Geeignet',
+      knowledge_check_passed: 'Bestanden',
       warning_issued: 'Warnung ausgegeben',
     },
     questions: [

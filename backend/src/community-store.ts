@@ -116,10 +116,16 @@ export type AppropriatenessRecord = {
   // Knowledge-test outcome; raw answers are not stored (data minimization).
   knowledgeScore: number;
   knowledgeTotal: number;
-  // 'appropriate': services may be appropriate. 'warning_issued': Art. 21(4)
-  // path - information missing or knowledge insufficient; the mandated risk
-  // warning was shown and must be expressly acknowledged.
-  outcome: 'appropriate' | 'warning_issued';
+  // 'knowledge_check_passed': the entry knowledge quiz scored above the demo
+  // pass mark. This is NOT an ECSPR Art. 21(1) appropriateness determination:
+  // the full information request under Art. 21(2) / RTS Art. 2 (types of
+  // familiar investments, nature/volume/frequency/period of past transactions,
+  // education and profession, holding period, risk profile, sustainability
+  // preferences) is NOT implemented, so no service is ever determined to be
+  // appropriate for anyone here. 'warning_issued': Art. 21(4) path -
+  // information missing or knowledge insufficient; the mandated risk warning
+  // was shown and must be expressly acknowledged.
+  outcome: 'knowledge_check_passed' | 'warning_issued';
   warningAcknowledgedAt: number | null;
   // Transmitted simulation result (RTS Art. 12): the only financial figures
   // the server ever sees. Never the input breakdown.
