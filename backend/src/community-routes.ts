@@ -153,7 +153,24 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // only); unset on demo/production, so real accounts have NO live
   // submission path - every appropriateness request answers 503, enforced
   // here, not by report caveat. Read at request time so tests can toggle.
-  const appropriatenessHeld: express.RequestHandler = (_req, res, next) => {
+  // Two-layer hold, both fail-closed, both read at request time:
+  //  1. APPROPRIATENESS_COLLECT must be set explicitly (staging QA only);
+  //     unset on demo/production, so real accounts have NO live submission
+  //     path - every appropriateness request answers 503.
+  //  2. APPROPRIATENESS_ALLOWLIST (comma-separated Stellar public keys)
+  //     restricts collection to designated synthetic QA wallets even where
+  //     the flag is set; empty/absent allowlist collects from NOBODY (403),
+  //     so enabling the flag can never open blanket collection.
+  const appropriatenessGate = (account: Account): CommunityError | null => {
+    if (!process.env.APPROPRIATENESS_COLLECT) return new CommunityError(503, 'appropriateness collection is disabled on this deployment (held)');
+    const allowed = (process.env.APPROPRIATENESS_ALLOWLIST ?? '')
+      .split(',')
+      .map((k) => k.trim())
+      .filter(Boolean);
+    if (!allowed.includes(account.publicKey)) return new CommunityError(403, 'appropriateness collection is limited to designated QA accounts');
+    return null;
+  };
+  const appropriatenessHeld: express.RequestHandler = (req, res, next) => {
     if (!process.env.APPROPRIATENESS_COLLECT) {
       res.status(503).json({ error: 'appropriateness collection is disabled on this deployment (held)' });
       return;
@@ -163,6 +180,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.get('/api/auth/appropriateness', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
+      const denied = appropriatenessGate(account);
+      if (denied) throw denied;
       res.json({ assessment: await service.getAppropriateness(account) });
     } catch (err) {
       sendError(res, err);
@@ -171,6 +190,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.post('/api/auth/appropriateness/knowledge', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
+      const denied = appropriatenessGate(account);
+      if (denied) throw denied;
       service.checkRate(`appr-knowledge:${account.publicKey}`, 10, 60 * 60 * 1000);
       res.json({ assessment: await service.submitKnowledgeAssessment(account, req.body) });
     } catch (err) {
@@ -180,6 +201,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.post('/api/auth/appropriateness/simulation-result', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
+      const denied = appropriatenessGate(account);
+      if (denied) throw denied;
       service.checkRate(`appr-sim:${account.publicKey}`, 20, 60 * 60 * 1000);
       res.json({ assessment: await service.transmitSimulationResult(account, req.body) });
     } catch (err) {
@@ -189,6 +212,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.post('/api/auth/appropriateness/acknowledge-warning', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
+      const denied = appropriatenessGate(account);
+      if (denied) throw denied;
       res.json({ assessment: await service.acknowledgeWarning(account) });
     } catch (err) {
       sendError(res, err);

@@ -245,6 +245,7 @@ test('appropriateness endpoints require auth and run the full flow', async () =>
     assert.equal((await api('POST', '/api/auth/appropriateness/acknowledge-warning', { body: {} })).status, 401);
 
     const kp = Keypair.random();
+    process.env.APPROPRIATENESS_ALLOWLIST = kp.publicKey();
     const token = await login(kp);
     const empty = await api('GET', '/api/auth/appropriateness', { token });
     assert.equal(empty.status, 200);
@@ -277,6 +278,7 @@ test('appropriateness endpoints require auth and run the full flow', async () =>
     assert.equal(smuggle.status, 400);
   } finally {
     delete process.env.APPROPRIATENESS_COLLECT;
+    delete process.env.APPROPRIATENESS_ALLOWLIST;
   }
   // Gate closed again after the flag is removed.
   assert.equal((await api('GET', '/api/auth/appropriateness')).status, 503);
