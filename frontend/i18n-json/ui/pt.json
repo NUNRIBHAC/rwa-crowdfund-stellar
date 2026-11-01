@@ -1407,50 +1407,84 @@
     "tourStepNewsTitle": "Notícias e perguntas",
     "tourStepNewsBody": "Atualizações da campanha e comentários públicos. As notícias de demonstração são sempre identificadas como platform-demo."
   },
-  "categorisation": {
-    "catTitle": "Categorização do investidor",
-    "catPrototypeNote": "Protótipo não vinculativo: esta verificação não concede nem restringe o acesso e é guardada apenas neste navegador.",
-    "catKnowledgeTitle": "Teste de conhecimentos",
-    "catKnowledgeIntro": "Cinco perguntas curtas sobre os riscos do investimento colaborativo.",
-    "catSubmit": "Verificar respostas",
-    "catRetake": "Repetir teste",
-    "catResultPass": "Todas as respostas corretas.",
-    "catResultReview": "{n} resposta(s) para rever - leia as explicações e tente novamente.",
-    "catScoreLabel": "{correct} de {total} corretas",
-    "catSimTitle": "Simulação de capacidade de suportar perdas",
-    "catSimIntro": "Compare um investimento planeado com os seus fundos livremente disponíveis.",
-    "catAssetsLabel": "Fundos livremente disponíveis (EUR)",
-    "catIncomeLabel": "Rendimento líquido mensal (EUR)",
-    "catPlannedLabel": "Investimento planeado (EUR)",
-    "catSimRun": "Executar simulação",
-    "catSimResult": "O investimento planeado equivale a {pct}% dos fundos livremente disponíveis que introduziu.",
-    "catSimNote": "Aritmética simples sobre os valores que introduziu. Não é uma avaliação regulamentar da capacidade de suportar perdas, adequação ou elegibilidade, e não é aplicado qualquer limiar.",
-    "catSavedNote": "Resultado guardado apenas localmente neste navegador.",
-    "catQuestions": [
+  "appropriateness": {
+    "title": "Avaliação de adequação do investidor",
+    "intro": "Teste de conhecimentos de entrada e simulação da capacidade de suportar perdas exigidos pelo regulamento europeu de financiamento colaborativo (ECSPR, artigo 21.º).",
+    "signInNote": "Inicie sessão com a sua carteira para fazer a avaliação.",
+    "heldNote": "A avaliação de adequação não está a recolher respostas nesta instalação.",
+    "limitedNote": "Nesta instalação, a avaliação está limitada a contas de teste designadas.",
+    "knowledgeTitle": "Teste de conhecimentos de entrada",
+    "knowledgeIntro": "Cinco perguntas rápidas de sim/não sobre os riscos do investimento em financiamento colaborativo. As respostas são pontuadas e depois descartadas - só o resultado é guardado.",
+    "experienceLabel": "Experiência de investimento",
+    "objectiveLabel": "Objetivo de investimento",
+    "selectPlaceholder": "Selecionar...",
+    "yes": "Sim",
+    "no": "Não",
+    "submitKnowledge": "Submeter respostas",
+    "retake": "Repetir o teste",
+    "scoreLabel": "{score} de {total} corretas",
+    "outcomeLabel": "Resultado",
+    "noSophisticatedNote": "Este resultado não o classifica como investidor sofisticado ou profissional.",
+    "reviewExplanations": "Explicações das perguntas que acabou de responder:",
+    "warningTitle": "Aviso de risco",
+    "warningText": "Um investimento num projeto de financiamento colaborativo inclui o risco de perder a totalidade do dinheiro investido.",
+    "warningNote": "O teste de conhecimentos identificou lacunas na sua compreensão dos riscos. Leia este aviso com atenção; permanece visível até o reconhecer.",
+    "warningAck": "Li e reconheço este aviso de risco",
+    "warningAcknowledgedAt": "Aviso reconhecido em {date}.",
+    "simTitle": "Simulação da capacidade de suportar perdas",
+    "simIntro": "Estime o seu património líquido: o rendimento líquido anual mais os ativos líquidos totais, menos os compromissos financeiros anuais. A simulação é 10% desse património - o montante que poderia investir e perder sem um impacto significativo na sua situação financeira.",
+    "simIncomeLabel": "Rendimento líquido anual (EUR)",
+    "simAssetsLabel": "Ativos líquidos totais (EUR)",
+    "simCommitmentsLabel": "Compromissos financeiros anuais (EUR)",
+    "simExclusionsNote": "Os ativos líquidos não incluem imóveis, direitos de pensão ou ações não resgatáveis, incluindo investimentos anteriores em financiamento colaborativo. Use valores à data de 31 de dezembro do ano passado ou uma avaliação mais recente.",
+    "simPrivacyNote": "Os montantes que introduz são usados apenas para este cálculo no seu navegador. Nunca são enviados à plataforma nem registados. Apenas os dois totais resultantes são transmitidos, e só quando decidir enviá-los.",
+    "simRun": "Calcular",
+    "simNetWorth": "Património líquido estimado: {amount}",
+    "simCapacity": "Capacidade de suportar perdas de 10%: {amount}",
+    "simTransmit": "Transmitir resultado",
+    "simTransmitted": "Último resultado transmitido em {date}.",
+    "simInvalid": "Introduza montantes iguais ou superiores a zero para executar a simulação.",
+    "simRecalculate": "Recalcular",
+    "statusTitle": "A sua avaliação",
+    "statusOutcome": "Resultado do teste de conhecimentos",
+    "completedAt": "Concluída em {date}.",
+    "reviewAssessmentDue": "Revisão da avaliação até {date}.",
+    "reviewSimulationDue": "Revisão da simulação até {date}.",
+    "experienceOptions": {
+      "none": "Ainda sem experiência",
+      "some": "Alguma experiência",
+      "experienced": "Investidor experiente"
+    },
+    "objectiveOptions": {
+      "capital_preservation": "Preservação de capital",
+      "income": "Rendimento regular",
+      "growth": "Crescimento",
+      "other": "Outro"
+    },
+    "outcomeLabels": {
+      "appropriate": "Adequado",
+      "warning_issued": "Aviso emitido"
+    },
+    "questions": [
       {
-        "q": "Qual é o máximo que pode perder num investimento colaborativo?",
-        "options": ["Apenas as comissões", "A totalidade do investimento", "Metade do investimento"],
-        "why": "Os investimentos colaborativos podem perder a totalidade do valor (perda total)."
+        "q": "Pode perder a totalidade do dinheiro que investe num projeto de financiamento colaborativo?",
+        "why": "Os investimentos em financiamento colaborativo podem perder todo o valor - a perda total é possível."
       },
       {
-        "q": "Com que facilidade pode normalmente vender um investimento colaborativo?",
-        "options": ["A qualquer momento em bolsa", "Normalmente não pode - é ilíquido", "Apenas no fim do ano"],
-        "why": "Regra geral não existe mercado secundário; planeie manter o investimento até ao fim do prazo."
+        "q": "Os investimentos em financiamento colaborativo estão cobertos por sistemas de garantia de depósitos?",
+        "why": "Os sistemas de garantia de depósitos não cobrem investimentos em financiamento colaborativo; o investidor suporta a perda."
       },
       {
-        "q": "Quem suporta a perda se a empresa emitente falir?",
-        "options": ["A plataforma", "O prestador de pagamentos", "O investidor"],
-        "why": "O investimento é um contrato com o emitente; a plataforma não cobre perdas."
+        "q": "Consegue normalmente revender um investimento em financiamento colaborativo com facilidade a qualquer momento?",
+        "why": "Em geral não existe mercado secundário, por isso planeie manter o investimento até ao final do prazo."
       },
       {
-        "q": "O que significa diversificação?",
-        "options": ["Distribuir o dinheiro por vários investimentos", "Investir tudo numa campanha", "Manter todo o dinheiro em numerário"],
-        "why": "Distribuir os investimentos reduz o impacto de uma única perda total."
+        "q": "Os empréstimos a empresas em fase inicial são geralmente mais arriscados do que obrigações cotadas?",
+        "why": "As empresas em fase inicial falham com mais frequência, pelo que os seus empréstimos têm maior risco de incumprimento."
       },
       {
-        "q": "Os rendimentos dos investimentos colaborativos são garantidos?",
-        "options": ["Sim, por lei", "Sim, pela plataforma", "Não"],
-        "why": "Os juros e o reembolso dependem do emitente; nenhum rendimento é garantido."
+        "q": "Distribuir o dinheiro por vários investimentos reduz o impacto de uma única perda total?",
+        "why": "A diversificação reduz o impacto de uma falência, mas não elimina o risco de perda."
       }
     ]
   },

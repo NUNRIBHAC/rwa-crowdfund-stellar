@@ -146,3 +146,22 @@
 .portfolio-row strong {
   overflow-wrap: break-word;
 }
+
+/* Appropriateness risk warning (RTS 2022/2114 Art. 4): prominent, bordered,
+   unmissable until acknowledged - must not look like a dismissible note. */
+.appr-warning {
+  border: 2px solid var(--amber, #b45309);
+  border-radius: 8px;
+  background: rgba(180, 83, 9, 0.08);
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.appr-warning h3 {
+  margin-top: 0;
+}
+
+.appr-warning-text {
+  font-weight: 700;
+  font-size: 1.05em;
+}
