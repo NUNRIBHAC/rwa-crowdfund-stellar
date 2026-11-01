@@ -19,7 +19,6 @@ export default function SecuritySection() {
   const [busy, setBusy] = useState(false);
 
   const labels = m.community.security;
-  const t = m.community;
   const [totpPhase, setTotpPhase] = useState<'idle' | 'enroll' | 'recovery' | 'disable'>('idle');
   const [totpEnroll, setTotpEnroll] = useState<{ otpauthUrl: string; manualKey: string } | null>(null);
   const [totpCode, setTotpCode] = useState('');

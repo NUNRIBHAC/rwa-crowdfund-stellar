@@ -168,7 +168,7 @@ function totpServerSecret(): string {
   return secret;
 }
 
-export async function enrollTotp(store: CommunityStore, publicKey: string, now = Date.now()): Promise<{ otpauthUrl: string; manualKey: string }> {
+export async function enrollTotp(store: CommunityStore, publicKey: string): Promise<{ otpauthUrl: string; manualKey: string }> {
   const serverSecret = totpServerSecret();
   const seed = generateSecret();
   const encSeed = encryptSeed(serverSecret, seed);
