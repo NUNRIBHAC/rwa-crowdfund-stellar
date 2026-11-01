@@ -1361,50 +1361,84 @@
     "tourStepNewsTitle": "소식과 질문",
     "tourStepNewsBody": "캠페인 업데이트와 공개 댓글. 데모 소식에는 항상 platform-demo 라벨이 붙습니다."
   },
-  "categorisation": {
-    "catTitle": "투자자 분류",
-    "catPrototypeNote": "구속력 없는 프로토타입: 이 확인은 접근을 허용하거나 제한하지 않으며 이 브라우저에만 저장됩니다.",
-    "catKnowledgeTitle": "지식 테스트",
-    "catKnowledgeIntro": "크라우드 투자 리스크에 관한 짧은 질문 5개.",
-    "catSubmit": "답변 확인",
-    "catRetake": "테스트 다시 하기",
-    "catResultPass": "모든 답변이 정답입니다.",
-    "catResultReview": "검토할 답변 {n}개 - 설명을 읽고 다시 시도하세요.",
-    "catScoreLabel": "{total}개 중 {correct}개 정답",
-    "catSimTitle": "손실 감내 능력 시뮬레이션",
-    "catSimIntro": "투자 예정 금액을 자유롭게 사용 가능한 자금과 비교하세요.",
-    "catAssetsLabel": "자유롭게 사용 가능한 자금 (EUR)",
-    "catIncomeLabel": "월 순소득 (EUR)",
-    "catPlannedLabel": "투자 예정 금액 (EUR)",
-    "catSimRun": "시뮬레이션 실행",
-    "catSimResult": "계획 투자 금액은 입력한 자유 사용 가능 자금의 {pct}%입니다.",
-    "catSimNote": "입력한 금액에 대한 단순 산술 계산입니다. 손실 감내 능력, 적합성 또는 적격성에 대한 규제 평가가 아니며 어떤 임계값도 적용되지 않습니다.",
-    "catSavedNote": "결과는 이 브라우저에만 로컬로 저장됩니다.",
-    "catQuestions": [
+  "appropriateness": {
+    "title": "투자자 적합성 평가",
+    "intro": "유럽 크라우드펀딩 규정(ECSPR 제21조)에 따른 입문 지식 테스트와 손실 감내 능력 시뮬레이션입니다.",
+    "signInNote": "지갑으로 로그인하여 평가를 진행하세요.",
+    "heldNote": "이 배포에서는 적합성 평가 응답을 수집하지 않습니다.",
+    "limitedNote": "이 배포에서는 평가가 지정된 테스트 계정으로 제한됩니다.",
+    "knowledgeTitle": "입문 지식 테스트",
+    "knowledgeIntro": "크라우드펀딩 투자 위험에 관한 5개의 짧은 예/아니요 질문입니다. 답변은 채점 후 폐기되며 결과만 저장됩니다.",
+    "experienceLabel": "투자 경험",
+    "objectiveLabel": "투자 목표",
+    "selectPlaceholder": "선택하세요...",
+    "yes": "예",
+    "no": "아니요",
+    "submitKnowledge": "답변 제출",
+    "retake": "테스트 다시 응시",
+    "scoreLabel": "{total}문항 중 {score}문항 정답",
+    "outcomeLabel": "결과",
+    "noSophisticatedNote": "이 결과는 귀하를 숙련된 또는 전문 투자자로 분류하지 않습니다.",
+    "reviewExplanations": "방금 답변한 질문에 대한 해설:",
+    "warningTitle": "위험 경고",
+    "warningText": "크라우드펀딩 프로젝트에 대한 투자에는 투자한 전액을 잃을 위험이 포함됩니다.",
+    "warningNote": "지식 테스트에서 위험 이해에 부족한 부분이 발견되었습니다. 이 경고를 주의 깊게 읽으세요. 확인하기 전까지 계속 표시됩니다.",
+    "warningAck": "이 위험 경고를 읽었으며 이를 확인합니다",
+    "warningAcknowledgedAt": "{date}에 경고를 확인했습니다.",
+    "simTitle": "손실 감내 능력 시뮬레이션",
+    "simIntro": "순자산을 추정하세요: 연간 순소득에 유동자산 총액을 더하고 연간 재정 부담을 뺍니다. 시뮬레이션은 그 순자산의 10%로, 재정 상황에 중대한 영향 없이 투자하고 감수할 수 있는 금액입니다.",
+    "simIncomeLabel": "연간 순소득(EUR)",
+    "simAssetsLabel": "유동자산 총액(EUR)",
+    "simCommitmentsLabel": "연간 재정 부담(EUR)",
+    "simExclusionsNote": "유동자산에는 부동산, 연금 수급권, 상환 불가 주식(이전 크라우드펀딩 투자 포함)이 포함되지 않습니다. 지난해 12월 31일 또는 더 최근 평가액을 사용하세요.",
+    "simPrivacyNote": "입력한 금액은 브라우저에서 이 계산에만 사용됩니다. 플랫폼으로 전송되거나 기록되지 않습니다. 두 개의 결과 합계만 전송되며, 귀하가 보내기를 선택할 때만 전송됩니다.",
+    "simRun": "계산",
+    "simNetWorth": "추정 순자산: {amount}",
+    "simCapacity": "10% 손실 감내 능력: {amount}",
+    "simTransmit": "결과 전송",
+    "simTransmitted": "마지막 결과 전송일: {date}.",
+    "simInvalid": "시뮬레이션을 실행하려면 0 이상의 금액을 입력하세요.",
+    "simRecalculate": "다시 계산",
+    "statusTitle": "내 평가",
+    "statusOutcome": "지식 테스트 결과",
+    "completedAt": "{date}에 완료.",
+    "reviewAssessmentDue": "평가 검토 기한: {date}.",
+    "reviewSimulationDue": "시뮬레이션 검토 기한: {date}.",
+    "experienceOptions": {
+      "none": "경험 없음",
+      "some": "약간의 경험",
+      "experienced": "경험 많은 투자자"
+    },
+    "objectiveOptions": {
+      "capital_preservation": "자본 보존",
+      "income": "정기 수입",
+      "growth": "성장",
+      "other": "기타"
+    },
+    "outcomeLabels": {
+      "appropriate": "적합",
+      "warning_issued": "경고 발행됨"
+    },
+    "questions": [
       {
-        "q": "크라우드펀딩 투자로 잃을 수 있는 최대 금액은?",
-        "options": ["수수료만", "투자금 전액", "투자금의 절반"],
-        "why": "크라우드펀딩 투자는 전액을 잃을 수 있습니다(전액 손실)."
+        "q": "크라우드펀딩 프로젝트에 투자한 전액을 잃을 수 있습니까?",
+        "why": "크라우드펀딩 투자는 전액 손실이 가능합니다."
       },
       {
-        "q": "크라우드펀딩 투자는 보통 얼마나 쉽게 팔 수 있나요?",
-        "options": ["거래소에서 언제든지", "보통 팔 수 없음 - 유동성이 없음", "연말에만"],
-        "why": "일반적으로 유통 시장이 없습니다. 만기까지 보유할 계획으로 임하세요."
+        "q": "크라우드펀딩 투자는 예금 보호 제도의 대상입니까?",
+        "why": "예금 보호 제도는 크라우드펀딩 투자를 보호하지 않으며, 손실은 투자자가 부담합니다."
       },
       {
-        "q": "발행 기업이 실패하면 누가 손실을 부담하나요?",
-        "options": ["플랫폼", "결제 사업자", "투자자"],
-        "why": "투자는 발행사와의 계약입니다. 플랫폼은 손실을 보전하지 않습니다."
+        "q": "크라우드펀딩 투자를 보통 언제든 쉽게 되팔 수 있습니까?",
+        "why": "일반적으로 유통 시장이 없으므로 만기까지 보유할 계획을 세우세요."
       },
       {
-        "q": "분산 투자란 무엇인가요?",
-        "options": ["여러 투자에 자금을 나누는 것", "한 캠페인에 전부 투자하는 것", "모두 현금으로 보유하는 것"],
-        "why": "투자를 분산하면 한 건의 전액 손실 영향을 줄일 수 있습니다."
+        "q": "초기 단계 기업에 대한 대출이 상장 채권보다 일반적으로 더 위험합니까?",
+        "why": "초기 단계 기업은 더 자주 실패하므로 대출의 부실 위험이 더 높습니다."
       },
       {
-        "q": "크라우드펀딩 투자의 수익은 보장되나요?",
-        "options": ["네, 법으로", "네, 플랫폼이", "아니요"],
-        "why": "이자와 상환은 발행사에 달려 있습니다. 보장되는 수익은 없습니다."
+        "q": "여러 투자에 자금을 분산하면 단일 전액 손실의 영향이 줄어듭니까?",
+        "why": "분산 투자는 단일 실패의 영향을 줄이지만 손실 위험을 없애지는 않습니다."
       }
     ]
   },

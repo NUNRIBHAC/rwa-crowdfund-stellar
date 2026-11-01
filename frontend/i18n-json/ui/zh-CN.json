@@ -1361,50 +1361,84 @@
     "tourStepNewsTitle": "动态和问答",
     "tourStepNewsBody": "活动更新和公开评论。演示动态始终标注为 platform-demo。"
   },
-  "categorisation": {
-    "catTitle": "投资者分类",
-    "catPrototypeNote": "非约束性原型:此检查不会授予或限制访问权限,仅保存在此浏览器中。",
-    "catKnowledgeTitle": "知识测试",
-    "catKnowledgeIntro": "关于众筹投资风险的五道简答题。",
-    "catSubmit": "检查答案",
-    "catRetake": "重新测试",
-    "catResultPass": "全部回答正确。",
-    "catResultReview": "有 {n} 道题需要复核 - 请阅读解析后重试。",
-    "catScoreLabel": "{total} 题中答对 {correct} 题",
-    "catSimTitle": "亏损承受能力模拟",
-    "catSimIntro": "将计划投资金额与您的可自由支配资金进行比较。",
-    "catAssetsLabel": "可自由支配资金 (EUR)",
-    "catIncomeLabel": "月净收入 (EUR)",
-    "catPlannedLabel": "计划投资金额 (EUR)",
-    "catSimRun": "运行模拟",
-    "catSimResult": "计划投资金额相当于您输入的可自由支配资金的{pct}%。",
-    "catSimNote": "仅对您输入的金额进行简单算术计算。这不是关于损失承受能力、适当性或资格的监管评估,也不适用任何阈值。",
-    "catSavedNote": "结果仅保存在此浏览器本地。",
-    "catQuestions": [
+  "appropriateness": {
+    "title": "投资者适当性评估",
+    "intro": "欧洲众筹法规（ECSPR 第21条）要求的入门知识测试和亏损承受能力模拟。",
+    "signInNote": "请使用您的钱包登录以完成评估。",
+    "heldNote": "此部署未开启适当性评估的收集。",
+    "limitedNote": "在此部署上，评估仅限于指定的测试账户。",
+    "knowledgeTitle": "入门知识测试",
+    "knowledgeIntro": "五道关于众筹投资风险的简短是/否问题。您的答案评分后即被丢弃，仅保存结果。",
+    "experienceLabel": "投资经验",
+    "objectiveLabel": "投资目标",
+    "selectPlaceholder": "请选择...",
+    "yes": "是",
+    "no": "否",
+    "submitKnowledge": "提交答案",
+    "retake": "重新测试",
+    "scoreLabel": "{total} 题中答对 {score} 题",
+    "outcomeLabel": "结果",
+    "noSophisticatedNote": "此结果不会将您归类为资深或专业投资者。",
+    "reviewExplanations": "您刚回答的问题的解析：",
+    "warningTitle": "风险警告",
+    "warningText": "投资于众筹项目包含损失全部投资资金的风险。",
+    "warningNote": "知识测试发现您对风险的理解存在不足。请仔细阅读此警告；在您确认之前它将一直显示。",
+    "warningAck": "我已阅读并确认此风险警告",
+    "warningAcknowledgedAt": "警告已于 {date} 确认。",
+    "simTitle": "亏损承受能力模拟",
+    "simIntro": "估算您的净资产：年度净收入加上流动资产总额，减去年度财务承诺。模拟额度为该净资产的 10%，即您可以投资并承受亏损而不会对财务状况造成重大影响的金额。",
+    "simIncomeLabel": "年度净收入（欧元）",
+    "simAssetsLabel": "流动资产总额（欧元）",
+    "simCommitmentsLabel": "年度财务承诺（欧元）",
+    "simExclusionsNote": "流动资产不包括房地产、养老金权益或不可赎回的股份，包括此前的众筹投资。请使用上一年 12 月 31 日或更新日期的估值。",
+    "simPrivacyNote": "您输入的金额仅用于浏览器中的此计算。它们永远不会发送到平台或被记录。仅传输两个结果总额，且仅在您选择发送时。",
+    "simRun": "计算",
+    "simNetWorth": "估算净资产：{amount}",
+    "simCapacity": "10% 亏损承受能力：{amount}",
+    "simTransmit": "传输结果",
+    "simTransmitted": "最近一次结果传输于 {date}。",
+    "simInvalid": "请输入大于或等于零的金额以运行模拟。",
+    "simRecalculate": "重新计算",
+    "statusTitle": "您的评估",
+    "statusOutcome": "知识测试结果",
+    "completedAt": "完成于 {date}。",
+    "reviewAssessmentDue": "评估复核截止日期为 {date}。",
+    "reviewSimulationDue": "模拟复核截止日期为 {date}。",
+    "experienceOptions": {
+      "none": "暂无经验",
+      "some": "有一些经验",
+      "experienced": "经验丰富的投资者"
+    },
+    "objectiveOptions": {
+      "capital_preservation": "资本保值",
+      "income": "定期收益",
+      "growth": "增值",
+      "other": "其他"
+    },
+    "outcomeLabels": {
+      "appropriate": "适当",
+      "warning_issued": "已发出警告"
+    },
+    "questions": [
       {
-        "q": "众筹投资最多可能损失多少?",
-        "options": ["仅手续费", "全部投资额", "一半投资额"],
-        "why": "众筹投资可能损失全部价值(全额亏损)。"
+        "q": "您可能会损失投资于众筹项目的全部资金吗？",
+        "why": "众筹投资可能损失全部价值，全部亏损是可能的。"
       },
       {
-        "q": "通常出售众筹投资有多容易?",
-        "options": ["随时可在交易所出售", "通常无法出售 - 缺乏流动性", "仅年底可以"],
-        "why": "一般没有二级市场;请按持有至到期来规划。"
+        "q": "众筹投资是否受存款保障计划保障？",
+        "why": "存款保障计划不涵盖众筹投资；损失由投资者承担。"
       },
       {
-        "q": "如果发行公司倒闭,谁承担损失?",
-        "options": ["平台", "支付服务商", "投资者"],
-        "why": "投资是与发行方签订的合同;平台不承担损失。"
+        "q": "您通常可以随时轻松转售众筹投资吗？",
+        "why": "一般没有二级市场，请计划持有至期满。"
       },
       {
-        "q": "分散投资是什么意思?",
-        "options": ["将资金分散到多项投资", "全部投入一个活动", "全部持有现金"],
-        "why": "分散投资可以降低单笔全额亏损的影响。"
+        "q": "向早期公司提供的贷款通常比上市债券风险更高吗？",
+        "why": "早期公司失败更频繁，因此其贷款违约风险更高。"
       },
       {
-        "q": "众筹投资的收益有保障吗?",
-        "options": ["有,法律保障", "有,平台保障", "没有"],
-        "why": "利息和本金偿还取决于发行方;没有任何收益是有保障的。"
+        "q": "将资金分散于多项投资能否降低单一全部亏损的影响？",
+        "why": "分散投资可降低单一失败的影响，但不能消除亏损风险。"
       }
     ]
   },
