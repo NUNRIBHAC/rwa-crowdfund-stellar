@@ -15,10 +15,13 @@ import {
   statusSoroban,
   recoverSoroban,
   accountActivity,
+  sorobanRegisteredCampaigns,
+  sorobanDeps,
 } from './soroban.js';
 import { journalBackend } from './journal.js';
 import { drainPendingContributors, pendContribution, readPending } from './pending-contributors.js';
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
+import { backfillCampaignContributors } from './contributor-backfill.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
 
 const app = express();
@@ -159,6 +162,42 @@ void reconcileContributorRegistry();
 const contributorReconcileTimer = setInterval(() => void reconcileContributorRegistry(), 30 * 60 * 1000);
 contributorReconcileTimer.unref();
 
+// Chain-history backfill (contributor-backfill.ts): recovers registry
+// records from on-chain Contributed events for contributions that bypassed
+// the app submit path. Bounded by the configured RPC's retention; any
+// unverifiable window is flagged per campaign and surfaced on the
+// reconciliation endpoint, never filled by inference. Per-campaign failures
+// move nothing: the durable checkpoint only advances past fully processed
+// ledger windows.
+const backfillContributorRegistry = async (): Promise<void> => {
+  let campaigns: { id: string; contractId: string }[];
+  try {
+    campaigns = sorobanRegisteredCampaigns();
+  } catch (err) {
+    console.error('contributor backfill unavailable:', err instanceof Error ? err.message : err);
+    return;
+  }
+  const service = await communityServiceFromEnv();
+  for (const c of campaigns) {
+    try {
+      const r = await backfillCampaignContributors({
+        client: sorobanDeps.client(),
+        campaignId: c.id,
+        contractId: c.contractId,
+        readCheckpoint: (id) => service.getContributorBackfillCheckpoint(id),
+        record: (id, contributor) => service.recordContributor(id, contributor, 'backend-backfill'),
+        checkpoint: (id, cp) => service.setContributorBackfillCheckpoint(id, cp),
+      });
+      if (r.gap) console.error('contributor backfill gap:', c.id, r.gap);
+    } catch (err) {
+      console.error('contributor backfill failed:', c.id, err instanceof Error ? err.message : err);
+    }
+  }
+};
+void backfillContributorRegistry();
+const contributorBackfillTimer = setInterval(() => void backfillContributorRegistry(), 30 * 60 * 1000);
+contributorBackfillTimer.unref();
+
 const communityRouterReady = communityServiceFromEnv()
   .then((service) =>
     createCommunityRouter({
@@ -231,7 +270,23 @@ const reconciliationPayload = async () => {
     // contribution proofs is operator-visible here, not only in logs.
     readPending().length,
   );
-  return { generatedAt: new Date().toISOString(), network: NETWORK, semantics: RECONCILIATION_SEMANTICS, ...result };
+  // Backfill coverage per campaign: durable cursor plus any honestly
+  // flagged unverifiable window (gap). A missing entry means the backfill
+  // has never completed a window for that campaign. Store failure omits
+  // the field rather than blocking reconciliation.
+  let contributorBackfill: Record<string, unknown> | undefined;
+  try {
+    contributorBackfill = await (await communityServiceFromEnv()).listContributorBackfillCheckpoints();
+  } catch (err) {
+    console.error('contributor backfill coverage read failed:', err instanceof Error ? err.message : err);
+  }
+  return {
+    generatedAt: new Date().toISOString(),
+    network: NETWORK,
+    semantics: RECONCILIATION_SEMANTICS,
+    ...result,
+    ...(contributorBackfill !== undefined ? { contributorBackfill } : {}),
+  };
 };
 
 app.get('/api/admin/reconciliation', requireAdmin, async (_req, res) => {
