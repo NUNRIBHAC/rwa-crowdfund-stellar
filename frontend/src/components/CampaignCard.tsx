@@ -33,7 +33,6 @@ type Props = {
 
 export default function CampaignCard({ campaign: c, profile, actor, busy, readOnly, amount, amountError, prepareError, demo, onAmount, onPrepare }: Props) {
   const { locale, m } = useI18n();
-  const pct = percent(c.raised, c.config.goal);
   const dl = deadlineInfo(c.config.deadline, m.time);
   const status = campaignStatus(c);
   const state = fundingState(c.raised, c.config.goal, 20);
@@ -93,16 +92,28 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
           <span className="card-funded-blocks">{m.card.progressUnavailable}</span>
         )}
       </p>
-      <div
-        className="progress-track"
-        role="progressbar"
-        aria-valuenow={pct}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={tpl(m.card.progressAria, { pct: pct })}
-      >
-        <div className="progress-fill" style={{ width: `${pct}%` }} />
-      </div>
+      {/*
+        Honesty rule (funding-math.ts): when chain data is missing or invalid
+        the state is 'unavailable' - render no progressbar and no fabricated
+        value, mirroring FundingGrid's unavailable graphic. A screen reader
+        gets the visible 'Progress unavailable' text and the labelled track;
+        assistive tech never hears a false 0%. aria-valuenow stays capped at
+        100 (aria-valuemax) even when state.percent exceeds it (overfunded).
+      */}
+      {state.kind === 'ready' ? (
+        <div
+          className="progress-track"
+          role="progressbar"
+          aria-valuenow={Math.min(100, state.percent)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={tpl(m.card.progressAria, { pct: Math.min(100, state.percent) })}
+        >
+          <div className="progress-fill" style={{ width: `${Math.min(100, state.percent)}%` }} />
+        </div>
+      ) : (
+        <div className="progress-track" role="img" aria-label={m.grid.ariaUnavailable} />
+      )}
 
       {profile && (
         <dl className="metric-chips">
