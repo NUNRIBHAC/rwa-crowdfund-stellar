@@ -25,6 +25,7 @@ import {
   type ReconciliationResponse,
   postOperatorEpisode,
   postOperatorNews,
+  postOperatorReport,
   setOperatorApplicationStatus,
   setOperatorCommentHidden,
 } from '../community/api';
@@ -38,7 +39,7 @@ type Props = {
   campaigns: { id: string; name: string }[];
 };
 
-type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'podcast' | 'reconciliation' | 'audit';
+type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'reports' | 'podcast' | 'reconciliation' | 'audit';
 
 export default function OperatorSection({ campaigns }: Props) {
   const { m, locale } = useI18n();
@@ -59,6 +60,10 @@ export default function OperatorSection({ campaigns }: Props) {
   const [newsCampaign, setNewsCampaign] = useState('');
   const [newsTitle, setNewsTitle] = useState('');
   const [newsBody, setNewsBody] = useState('');
+  const [repCampaign, setRepCampaign] = useState('');
+  const [repKind, setRepKind] = useState<'funding_outcome' | 'use_of_proceeds' | 'milestone' | 'other'>('funding_outcome');
+  const [repTitle, setRepTitle] = useState('');
+  const [repBody, setRepBody] = useState('');
   const [epTitle, setEpTitle] = useState('');
   const [epDescription, setEpDescription] = useState('');
   const [epAudio, setEpAudio] = useState('');
@@ -116,6 +121,20 @@ export default function OperatorSection({ campaigns }: Props) {
     setNewsBody('');
   };
 
+  const submitReport = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!repCampaign || !repTitle.trim() || !repBody.trim()) {
+      setError(labels.repValidation);
+      return;
+    }
+    // The server refuses unless the campaign's on-chain deadline has passed
+    // (and, for use_of_proceeds, the withdrawal is recorded); a 409/503 from
+    // the gate is surfaced verbatim via the error state.
+    run(postOperatorReport(token, repCampaign, repKind, repTitle.trim(), repBody.trim()), labels.repPosted);
+    setRepTitle('');
+    setRepBody('');
+  };
+
   const submitEpisode = (e: React.FormEvent) => {
     e.preventDefault();
     if (!epTitle.trim() || !epDescription.trim() || !epAudio.trim().startsWith('https://')) {
@@ -150,7 +169,7 @@ export default function OperatorSection({ campaigns }: Props) {
       </h2>
       <p className="community-note">{labels.demoNote}</p>
       <div className="filter-chips" role="group" aria-label={labels.title}>
-        {(['applications', 'comments', 'tickets', 'news', 'podcast', 'reconciliation', 'audit'] as Tab[]).map(tabBtn)}
+        {(['applications', 'comments', 'tickets', 'news', 'reports', 'podcast', 'reconciliation', 'audit'] as Tab[]).map(tabBtn)}
       </div>
       {error && (
         <p role="alert" className="community-error">
@@ -353,6 +372,45 @@ export default function OperatorSection({ campaigns }: Props) {
           <p className="community-note">{m.community.newsAuthorDemo}</p>
           <button className="btn btn-primary" disabled={busy || !newsCampaign || !newsTitle.trim() || !newsBody.trim()}>
             {labels.newsSubmit}
+          </button>
+        </form>
+      )}
+      {tab === 'reports' && (
+        <form onSubmit={submitReport}>
+          <h3>{labels.repFormTitle}</h3>
+          <p className="community-note">{labels.repGateNote}</p>
+          <label>
+            {labels.newsCampaignLabel}
+            <select value={repCampaign} onChange={(e) => setRepCampaign(e.target.value)} required>
+              <option value="">-</option>
+              {campaigns.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            {labels.repKindLabel}
+            <select value={repKind} onChange={(e) => setRepKind(e.target.value as typeof repKind)} required>
+              {(['funding_outcome', 'use_of_proceeds', 'milestone', 'other'] as const).map((k) => (
+                <option key={k} value={k}>
+                  {m.community.reportKinds[k]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            {labels.newsTitleLabel}
+            <input value={repTitle} onChange={(e) => setRepTitle(e.target.value)} maxLength={160} required />
+          </label>
+          <label>
+            {labels.newsBodyLabel}
+            <textarea value={repBody} onChange={(e) => setRepBody(e.target.value)} maxLength={4000} required />
+          </label>
+          <p className="community-note">{m.community.newsAuthorDemo}</p>
+          <button className="btn btn-primary" disabled={busy || !repCampaign || !repTitle.trim() || !repBody.trim()}>
+            {labels.repSubmit}
           </button>
         </form>
       )}

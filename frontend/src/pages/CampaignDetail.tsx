@@ -10,6 +10,7 @@ import { useI18n } from '../i18n';
 import DocumentsList from '../components/DocumentsList';
 import RewardsList from '../components/RewardsList';
 import NewsList from '../components/NewsList';
+import ReportsList from '../components/ReportsList';
 import PodcastList from '../components/PodcastList';
 import Comments from '../components/Comments';
 import type { Messages } from '../i18n/locales/en';
@@ -226,6 +227,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
               />
             </section>
           )}
+          {tab === 'news' && <ReportsList campaignId={campaign.id} />}
           {tab === 'podcast' && (
             <section aria-label={m.campaign.tabs[4]}>
               <PodcastList campaignId={campaign.id} fallback={<p>{m.campaign.podcastEmpty}</p>} />
