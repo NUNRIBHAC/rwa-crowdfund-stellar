@@ -645,6 +645,11 @@ code {
   background: var(--card);
   color: var(--ink);
 }
+.discovery-sort-slot {
+  /* Layout-neutral stable anchor for the sort select (see Investments.tsx). */
+  display: contents;
+}
+
 .discovery-sort {
   border: 1px solid var(--line);
   border-radius: 8px;
