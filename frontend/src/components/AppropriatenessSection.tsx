@@ -1,7 +1,11 @@
 // ECSPR Art. 21 entry knowledge test + loss-bearing capacity simulation
 // (RTS 2022/2114): a partial demo implementation backed by the community
-// server (PR #29). The full Art. 21(1) appropriateness assessment is NOT
-// implemented, and the quiz result is labelled accordingly. Data scopes stay
+// server (PR #29). The full ECSPR Art. 21(2) / RTS Art. 2 background
+// information request IS collected (v2), but no Art. 21(1) assessment
+// methodology runs on it, and the quiz result is labelled accordingly.
+// Investor categorisation follows ECSPR Art. 2(1)(j)/(k) + Annex II: only
+// the Annex II Section II request template is captured - there is no
+// approval path, so every account stays non-sophisticated. Data scopes stay
 // distinct by design:
 //  - the knowledge test sends answers for server-side scoring; only the
 //    outcome is stored;
@@ -19,7 +23,15 @@
 // to an explicit QA allowlist (403) - both states render honestly.
 // Replaces the old localStorage-only InvestorCategorisation prototype.
 import { useCallback, useEffect, useState } from 'react';
-import { acknowledgeWarning, fetchAppropriateness, submitKnowledgeAssessment, transmitSimulationResult, type AppropriatenessRecord } from '../community/api';
+import {
+  acknowledgeWarning,
+  fetchAppropriateness,
+  requestSophistication,
+  submitKnowledgeAssessment,
+  transmitSimulationResult,
+  type AppropriatenessInformation,
+  type AppropriatenessRecord,
+} from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 import { tpl } from '../format';
@@ -62,6 +74,27 @@ export default function AppropriatenessSection() {
   const [simError, setSimError] = useState('');
   const [simEditing, setSimEditing] = useState(false);
 
+  // Art. 21(2)/RTS Art. 2 information form state (submitted with the test).
+  const [familiar, setFamiliar] = useState<string[]>([]);
+  const [natures, setNatures] = useState<string[]>([]);
+  const [frequency, setFrequency] = useState('');
+  const [volume, setVolume] = useState('');
+  const [period, setPeriod] = useState('');
+  const [education, setEducation] = useState('');
+  const [profession, setProfession] = useState('');
+  const [crowdfundExp, setCrowdfundExp] = useState('');
+  const [holding, setHolding] = useState('');
+  const [risk, setRisk] = useState('');
+  const [sustainability, setSustainability] = useState('');
+
+  // Annex II categorisation request form state (capture-only).
+  const [sophRoute, setSophRoute] = useState<'annex_ii_attestation' | 'mifid_professional_client'>('annex_ii_attestation');
+  const [sophPerson, setSophPerson] = useState('');
+  const [sophCriteria, setSophCriteria] = useState<string[]>([]);
+  const [sophProof, setSophProof] = useState('');
+  const [sophAware, setSophAware] = useState(false);
+  const [sophLiable, setSophLiable] = useState(false);
+
   const fmtDate = (ts: number) => new Date(ts).toLocaleDateString(locale, { dateStyle: 'medium' });
   const fmtEur = (v: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(v);
 
@@ -91,9 +124,65 @@ export default function AppropriatenessSection() {
     setJustSubmitted(false);
     setSim(null);
     setSimEditing(false);
+    resetInfoForm();
+    resetSophForm();
     if (account) load();
     else setState('loading');
   }, [account, load]);
+
+  // 'none' answers stand alone: selecting 'none' clears the rest, and
+  // selecting a real type clears 'none' (mirrors the server-side rule).
+  const toggleExclusive = (list: string[], v: string): string[] => {
+    if (v === 'none') return list.includes('none') ? [] : ['none'];
+    const without = list.filter((x) => x !== 'none');
+    return without.includes(v) ? without.filter((x) => x !== v) : [...without, v];
+  };
+
+  function resetInfoForm() {
+    setFamiliar([]);
+    setNatures([]);
+    setFrequency('');
+    setVolume('');
+    setPeriod('');
+    setEducation('');
+    setProfession('');
+    setCrowdfundExp('');
+    setHolding('');
+    setRisk('');
+    setSustainability('');
+  }
+
+  function resetSophForm() {
+    setSophRoute('annex_ii_attestation');
+    setSophPerson('');
+    setSophCriteria([]);
+    setSophProof('');
+    setSophAware(false);
+    setSophLiable(false);
+  }
+
+  const infoValid =
+    familiar.length > 0 &&
+    natures.length > 0 &&
+    !!frequency &&
+    !!volume &&
+    !!period &&
+    !!education &&
+    crowdfundExp !== '' &&
+    !!holding &&
+    !!risk &&
+    !!sustainability;
+
+  const buildInformation = (): AppropriatenessInformation => ({
+    familiarInvestmentTypes: familiar,
+    pastTransactions: { natures, annualFrequencyBand: frequency, totalVolumeBandEur: volume, periodYearsBand: period },
+    educationLevel: education,
+    professionOrFormer: profession.trim() ? profession.trim() : null,
+    crowdfundingProfessionalExperience: crowdfundExp === 'yes',
+    holdingPeriod: holding,
+    riskProfile: risk,
+    sustainabilityPreference: sustainability,
+  });
 
   const fail = (e: unknown) => setError(e instanceof Error ? e.message : String(e));
 
@@ -104,6 +193,7 @@ export default function AppropriatenessSection() {
       experienceLevel: experience,
       objective,
       answers: t.questions.map((_, i) => answers[i] ?? -1),
+      information: buildInformation(),
     })
       .then((v) => {
         setAssessment(v.record);
@@ -150,6 +240,36 @@ export default function AppropriatenessSection() {
       .catch(fail)
       .finally(() => setBusy(false));
   };
+
+  const submitSoph = () => {
+    setBusy(true);
+    setError('');
+    requestSophistication(token, {
+      route: sophRoute,
+      personType: sophRoute === 'mifid_professional_client' ? null : (sophPerson as 'natural' | 'legal'),
+      attestedCriteria: sophRoute === 'mifid_professional_client' ? [] : sophCriteria,
+      professionalClientProof: sophRoute === 'mifid_professional_client' ? sophProof.trim() : null,
+      awarenessStatementAccepted: true,
+      liabilityStatementAccepted: true,
+    })
+      .then((v) => {
+        setAssessment(v.record);
+        resetSophForm();
+      })
+      .catch(fail)
+      .finally(() => setBusy(false));
+  };
+
+  const sophValid =
+    sophAware &&
+    sophLiable &&
+    (sophRoute === 'mifid_professional_client'
+      ? sophProof.trim().length > 0
+      : sophPerson === 'natural'
+        ? sophCriteria.length >= 2
+        : sophPerson === 'legal'
+          ? sophCriteria.length >= 1
+          : false);
 
   const showForm = state === 'ready' && (!assessment || retaking);
   const warningPending = !!assessment && assessment.outcome === 'warning_issued' && !assessment.warningAcknowledgedAt;
@@ -218,7 +338,126 @@ export default function AppropriatenessSection() {
               </label>
             </fieldset>
           ))}
-          <button className="btn btn-primary" type="submit" disabled={busy || !experience || !objective || !allAnswered}>
+          <h3>{t.infoTitle}</h3>
+          <p className="community-note">{t.infoIntro}</p>
+          <p className="community-note">{t.accuracyNotice}</p>
+          <fieldset className="cat-question">
+            <legend>{t.infoFamiliarLabel}</legend>
+            {Object.entries(t.infoFamiliarOptions).map(([v, label]) => (
+              <label key={v} className="cat-option">
+                <input type="checkbox" checked={familiar.includes(v)} onChange={() => setFamiliar(toggleExclusive(familiar, v))} />
+                {label}
+              </label>
+            ))}
+          </fieldset>
+          <fieldset className="cat-question">
+            <legend>{t.infoNatureLabel}</legend>
+            {Object.entries(t.infoNatureOptions).map(([v, label]) => (
+              <label key={v} className="cat-option">
+                <input type="checkbox" checked={natures.includes(v)} onChange={() => setNatures(toggleExclusive(natures, v))} />
+                {label}
+              </label>
+            ))}
+          </fieldset>
+          <p>
+            <label>
+              {t.infoFrequencyLabel}{' '}
+              <select value={frequency} onChange={(e) => setFrequency(e.target.value)}>
+                <option value="">{t.selectPlaceholder}</option>
+                {Object.entries(t.infoFrequencyOptions).map(([v, label]) => (
+                  <option key={v} value={v}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>{' '}
+            <label>
+              {t.infoVolumeLabel}{' '}
+              <select value={volume} onChange={(e) => setVolume(e.target.value)}>
+                <option value="">{t.selectPlaceholder}</option>
+                {Object.entries(t.infoVolumeOptions).map(([v, label]) => (
+                  <option key={v} value={v}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>{' '}
+            <label>
+              {t.infoPeriodLabel}{' '}
+              <select value={period} onChange={(e) => setPeriod(e.target.value)}>
+                <option value="">{t.selectPlaceholder}</option>
+                {Object.entries(t.infoPeriodOptions).map(([v, label]) => (
+                  <option key={v} value={v}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </p>
+          <p>
+            <label>
+              {t.infoEducationLabel}{' '}
+              <select value={education} onChange={(e) => setEducation(e.target.value)}>
+                <option value="">{t.selectPlaceholder}</option>
+                {Object.entries(t.infoEducationOptions).map(([v, label]) => (
+                  <option key={v} value={v}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>{' '}
+            <label>
+              {t.infoProfessionLabel}{' '}
+              <input type="text" maxLength={200} placeholder={t.infoProfessionPlaceholder} value={profession} onChange={(e) => setProfession(e.target.value)} />
+            </label>
+          </p>
+          <fieldset className="cat-question">
+            <legend>{t.infoCrowdfundExpLabel}</legend>
+            <label className="cat-option">
+              <input type="radio" name="appr-crowdfund-exp" checked={crowdfundExp === 'yes'} onChange={() => setCrowdfundExp('yes')} />
+              {t.yes}
+            </label>
+            <label className="cat-option">
+              <input type="radio" name="appr-crowdfund-exp" checked={crowdfundExp === 'no'} onChange={() => setCrowdfundExp('no')} />
+              {t.no}
+            </label>
+          </fieldset>
+          <p>
+            <label>
+              {t.infoHoldingLabel}{' '}
+              <select value={holding} onChange={(e) => setHolding(e.target.value)}>
+                <option value="">{t.selectPlaceholder}</option>
+                {Object.entries(t.infoHoldingOptions).map(([v, label]) => (
+                  <option key={v} value={v}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>{' '}
+            <label>
+              {t.infoRiskLabel}{' '}
+              <select value={risk} onChange={(e) => setRisk(e.target.value)}>
+                <option value="">{t.selectPlaceholder}</option>
+                {Object.entries(t.infoRiskOptions).map(([v, label]) => (
+                  <option key={v} value={v}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>{' '}
+            <label>
+              {t.infoSustainabilityLabel}{' '}
+              <select value={sustainability} onChange={(e) => setSustainability(e.target.value)}>
+                <option value="">{t.selectPlaceholder}</option>
+                {Object.entries(t.infoSustainabilityOptions).map(([v, label]) => (
+                  <option key={v} value={v}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </p>
+          <button className="btn btn-primary" type="submit" disabled={busy || !experience || !objective || !allAnswered || !infoValid}>
             {t.submitKnowledge}
           </button>
         </form>
@@ -237,6 +476,7 @@ export default function AppropriatenessSection() {
           {assessment.warningAcknowledgedAt && (
             <p className="community-note">{tpl(t.warningAcknowledgedAt, { date: fmtDate(assessment.warningAcknowledgedAt) })}</p>
           )}
+          <p className="community-note">{assessment.information ? t.infoStatusProvided : t.infoStatusMissing}</p>
           <p className="community-note">{t.noSophisticatedNote}</p>
           <p className="community-note">{t.notFullAssessmentNote}</p>
           {justSubmitted && (
@@ -259,10 +499,145 @@ export default function AppropriatenessSection() {
               setExperience('');
               setObjective('');
               setJustSubmitted(false);
+              resetInfoForm();
             }}
           >
             {t.retake}
           </button>
+        </div>
+      )}
+
+      {account && assessment && !retaking && (
+        <div>
+          <h3>{t.categorisationTitle}</h3>
+          <p className="community-note">{t.categorisationNote}</p>
+          <p>
+            {t.categorisationStatusLabel}: <strong>{t.categorisationStatusLabels[assessment.categorisation.status]}</strong>
+          </p>
+          {assessment.categorisation.request ? (
+            <p className="community-note">
+              {tpl(t.sophRequestedAt, { date: fmtDate(assessment.categorisation.request.requestedAt) })}{' '}
+              {t.sophRouteUsed[assessment.categorisation.request.route]}
+            </p>
+          ) : (
+            <div>
+              <fieldset className="cat-question">
+                <legend>{t.sophRouteLabel}</legend>
+                <label className="cat-option">
+                  <input
+                    type="radio"
+                    name="soph-route"
+                    checked={sophRoute === 'annex_ii_attestation'}
+                    onChange={() => {
+                      setSophRoute('annex_ii_attestation');
+                      setSophProof('');
+                    }}
+                  />
+                  {t.sophRouteAnnex}
+                </label>
+                <label className="cat-option">
+                  <input
+                    type="radio"
+                    name="soph-route"
+                    checked={sophRoute === 'mifid_professional_client'}
+                    onChange={() => {
+                      setSophRoute('mifid_professional_client');
+                      setSophPerson('');
+                      setSophCriteria([]);
+                    }}
+                  />
+                  {t.sophRouteMifid}
+                </label>
+              </fieldset>
+              {sophRoute === 'annex_ii_attestation' && (
+                <div>
+                  <fieldset className="cat-question">
+                    <legend>{t.sophPersonTypeLabel}</legend>
+                    <label className="cat-option">
+                      <input
+                        type="radio"
+                        name="soph-person"
+                        checked={sophPerson === 'natural'}
+                        onChange={() => {
+                          setSophPerson('natural');
+                          setSophCriteria([]);
+                        }}
+                      />
+                      {t.sophPersonNatural}
+                    </label>
+                    <label className="cat-option">
+                      <input
+                        type="radio"
+                        name="soph-person"
+                        checked={sophPerson === 'legal'}
+                        onChange={() => {
+                          setSophPerson('legal');
+                          setSophCriteria([]);
+                        }}
+                      />
+                      {t.sophPersonLegal}
+                    </label>
+                  </fieldset>
+                  {sophPerson === 'natural' && (
+                    <fieldset className="cat-question">
+                      <legend>{t.sophCriteriaLabel}</legend>
+                      <p className="community-note">{t.sophCriteriaNaturalRule}</p>
+                      {Object.entries(t.sophCriteriaNatural).map(([v, label]) => (
+                        <label key={v} className="cat-option">
+                          <input
+                            type="checkbox"
+                            checked={sophCriteria.includes(v)}
+                            onChange={() => setSophCriteria(sophCriteria.includes(v) ? sophCriteria.filter((x) => x !== v) : [...sophCriteria, v])}
+                          />
+                          {label}
+                        </label>
+                      ))}
+                    </fieldset>
+                  )}
+                  {sophPerson === 'legal' && (
+                    <fieldset className="cat-question">
+                      <legend>{t.sophCriteriaLabel}</legend>
+                      <p className="community-note">{t.sophCriteriaLegalRule}</p>
+                      {Object.entries(t.sophCriteriaLegal).map(([v, label]) => (
+                        <label key={v} className="cat-option">
+                          <input
+                            type="checkbox"
+                            checked={sophCriteria.includes(v)}
+                            onChange={() => setSophCriteria(sophCriteria.includes(v) ? sophCriteria.filter((x) => x !== v) : [...sophCriteria, v])}
+                          />
+                          {label}
+                        </label>
+                      ))}
+                    </fieldset>
+                  )}
+                </div>
+              )}
+              {sophRoute === 'mifid_professional_client' && (
+                <p>
+                  <label>
+                    {t.sophProofLabel}{' '}
+                    <input type="text" maxLength={500} placeholder={t.sophProofPlaceholder} value={sophProof} onChange={(e) => setSophProof(e.target.value)} />
+                  </label>
+                </p>
+              )}
+              <div className="appr-warning">
+                <p className="appr-warning-text">{t.sophWarning}</p>
+              </div>
+              <label className="cat-option">
+                <input type="checkbox" checked={sophAware} onChange={(e) => setSophAware(e.target.checked)} />
+                {t.sophAwareness}
+              </label>
+              <label className="cat-option">
+                <input type="checkbox" checked={sophLiable} onChange={(e) => setSophLiable(e.target.checked)} />
+                {t.sophLiability}
+              </label>
+              <p>
+                <button className="btn btn-primary" disabled={busy || !sophValid} onClick={submitSoph}>
+                  {t.sophSubmit}
+                </button>
+              </p>
+            </div>
+          )}
         </div>
       )}
 
