@@ -240,7 +240,7 @@ export const de: Messages = {
     interestIsinDocsNote: 'Nicht verfügbar - dieser Prototyp erfasst nur Beiträge und begibt keine Wertpapiere',
     marketingDivider: 'Vom Emittenten bereitgestellter Inhalt unten - nicht von der Plattform geprüft',
     marketingDividerAria: 'Marketinginhalt unten',
-    tabs: ['Übersicht', 'Details', 'Dokumente', 'Neuigkeiten'],
+    tabs: ['Übersicht', 'Details', 'Dokumente', 'Neuigkeiten', 'Podcast'],
     tabsAria: 'Kampagnenbereiche',
     overviewMissing:
       'Der Marketinginhalt des Emittenten ist in diesem Prototyp nicht verfügbar. Auf einer Produktionsplattform würde dieser Bereich die Beschreibung, das Team und das Geschäftsmodell des Emittenten selbst zeigen, durch die Trennlinie oben klar von den Plattform-Fakten getrennt.',
@@ -250,6 +250,7 @@ export const de: Messages = {
     documentsMissing:
       'Dokumentenhosting ist in diesem Prototyp nicht verfügbar. Eine Produktionsplattform würde hier das Basisinformationsblatt und die Emissionsbedingungen hosten.',
     newsEmpty: 'Keine Neuigkeiten. Kampagnenmeldungen würden hier erscheinen.',
+    podcastEmpty: 'Keine Episoden. Kampagnen-Podcast-Episoden würden hier erscheinen.',
     statusFunded: 'Erfolgreich finanziert',
     statusEnded: 'Nicht erfolgreich',
     widgetContribute: 'Beitragen',

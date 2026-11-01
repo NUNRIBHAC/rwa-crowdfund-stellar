@@ -202,6 +202,66 @@ test('news: admin posts are labeled platform-demo and listed publicly', async ()
   assert.equal(listed[0].authorLabel, 'platform-demo');
 });
 
+test('podcast: episodes are labeled platform-demo, listed publicly, and require https audio', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const ep = await service.addEpisode({
+    title: 'QA episode one',
+    description: 'Synthetic QA episode, not real content.',
+    audioUrl: 'https://audio.example.com/qa-episode-one.mp3',
+    campaignId: 'demo-solar',
+  });
+  assert.equal(ep.authorLabel, 'platform-demo');
+  assert.equal(ep.campaignId, 'demo-solar');
+
+  // Platform-wide listing is newest first and includes the episode.
+  const all = await service.listEpisodes();
+  assert.equal(all.length, 1);
+  assert.equal(all[0].id, ep.id);
+
+  // Campaign-scoped listing filters by campaignId.
+  const forCampaign = await service.listCampaignEpisodes('demo-solar');
+  assert.equal(forCampaign.length, 1);
+  const other = await service.listCampaignEpisodes('staging-load');
+  assert.equal(other.length, 0);
+
+  // Platform-wide episode (no campaignId) appears in the global list only.
+  await service.addEpisode({
+    title: 'QA platform episode',
+    description: 'Synthetic QA episode, not real content.',
+    audioUrl: 'https://audio.example.com/qa-platform.mp3',
+  });
+  assert.equal((await service.listEpisodes()).length, 2);
+  assert.equal((await service.listCampaignEpisodes('demo-solar')).length, 1);
+
+  // Metadata-only entries are refused: no audioUrl, no episode.
+  await assert.rejects(
+    () => service.addEpisode({ title: 'No audio', description: 'Should fail' }),
+    () => true,
+  );
+  // Non-https audio URLs are refused.
+  await assert.rejects(
+    () =>
+      service.addEpisode({
+        title: 'Insecure audio',
+        description: 'Should fail',
+        audioUrl: 'http://audio.example.com/insecure.mp3',
+      }),
+    () => true,
+  );
+  // Junk URLs are refused.
+  await assert.rejects(
+    () =>
+      service.addEpisode({
+        title: 'Junk audio',
+        description: 'Should fail',
+        audioUrl: 'not-a-url',
+      }),
+    () => true,
+  );
+  assert.equal((await service.listEpisodes()).length, 2);
+});
+
 test('notifications: application submit notifies only the owner; mark read works', async () => {
   const store = newStore();
   const service = new CommunityService(store);

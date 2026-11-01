@@ -7,6 +7,7 @@ import type {
   CommunityStore,
   IssuerApplication,
   NewsPost,
+  PodcastEpisode,
   Notification,
   NotificationKind,
   Ticket,
@@ -83,6 +84,20 @@ const companyInput = z.object({
 const newsInput = z.object({
   title: z.string().trim().min(1).max(LIMITS.newsTitle),
   body: z.string().trim().min(1).max(LIMITS.newsBody),
+});
+
+const episodeInput = z.object({
+  title: z.string().trim().min(1).max(LIMITS.newsTitle),
+  description: z.string().trim().min(1).max(LIMITS.newsBody),
+  // External https audio URL only: the platform does not host audio files.
+  // The URL must parse and use https; anything else is rejected.
+  audioUrl: z
+    .string()
+    .trim()
+    .max(500)
+    .url()
+    .refine((u) => u.startsWith('https://'), { message: 'audioUrl must use https' }),
+  campaignId: z.string().trim().regex(LIMITS.campaignId).nullish(),
 });
 
 function newId(prefix: string): string {
@@ -186,6 +201,48 @@ export class CommunityService {
     });
     await this.recordAudit(actor, 'news.post', post.id, `campaign=${campaignId} title=${post.title}`);
     return post;
+  }
+
+  // Podcast episodes. Admin/operator-gated at the router, same honesty
+  // posture as news: the author label is fixed 'platform-demo' because there
+  // is no verified issuer identity. Audio is never hosted by the platform;
+  // only an external https URL is stored. Metadata-only entries (no audioUrl)
+  // are refused by episodeInput, so no fake episodes can be published.
+  async addEpisode(input: unknown, actor = 'admin-area'): Promise<PodcastEpisode> {
+    const { title, description, audioUrl, campaignId } = episodeInput.parse(input ?? {});
+    if (campaignId) requireCampaignId(campaignId);
+    const episode: PodcastEpisode = {
+      id: newId('ep'),
+      campaignId: campaignId ?? null,
+      title,
+      description,
+      audioUrl,
+      authorLabel: 'platform-demo',
+      createdAt: this.now(),
+    };
+    await this.store.change((state) => {
+      state.episodes[episode.id] = episode;
+    });
+    await this.recordAudit(actor, 'podcast.publish', episode.id, `campaign=${episode.campaignId ?? 'platform'} title=${episode.title}`);
+    return episode;
+  }
+
+  // Latest episodes across the platform, newest first. Episodes are public
+  // (same visibility as news); the podcast page and campaign tabs read
+  // through these.
+  async listEpisodes(limit = 20): Promise<PodcastEpisode[]> {
+    const state = await this.store.read();
+    return Object.values(state.episodes)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, Math.min(Math.max(limit, 1), 50));
+  }
+
+  async listCampaignEpisodes(campaignId: string): Promise<PodcastEpisode[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.episodes)
+      .filter((e) => e.campaignId === campaignId)
+      .sort((a, b) => b.createdAt - a.createdAt);
   }
 
   async createTicket(account: Account, input: unknown): Promise<Ticket> {

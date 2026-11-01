@@ -237,7 +237,7 @@ export const ko: Messages = {
     interestIsinDocsNote: '사용 불가 - 이 프로토타입은 출자만 기록하며 유가증권을 발행하지 않습니다',
     marketingDivider: '아래는 발행자 제공 콘텐츠입니다 - 플랫폼이 검증하지 않음',
     marketingDividerAria: '아래는 마케팅 콘텐츠입니다',
-    tabs: ['개요', '상세', '문서', '뉴스'],
+    tabs: ['개요', '상세', '문서', '뉴스', '팟캐스트'],
     tabsAria: '캠페인 섹션',
     overviewMissing:
       '이 프로토타입에서는 발행자 마케팅 콘텐츠를 사용할 수 없습니다. 프로덕션 플랫폼에서는 이 영역에 발행자 자체 설명, 팀, 비즈니스 모델이 위 구분선으로 플랫폼 사실과 명확히 구분되어 표시됩니다.',
@@ -246,6 +246,7 @@ export const ko: Messages = {
     detailsMissing: '이 프로토타입에서는 사용할 수 없습니다.',
     documentsMissing: '이 프로토타입에서는 문서 호스팅을 사용할 수 없습니다. 프로덕션 플랫폼은 여기에 핵심정보서와 발행 조건을 제공합니다.',
     newsEmpty: '업데이트가 없습니다. 캠페인 뉴스가 여기에 표시됩니다.',
+    podcastEmpty: '에피소드가 없습니다. 캠페인 팟캐스트 에피소드가 여기에 표시됩니다.',
     statusFunded: '자금 조달 성공',
     statusEnded: '실패',
     widgetContribute: '출자하기',
