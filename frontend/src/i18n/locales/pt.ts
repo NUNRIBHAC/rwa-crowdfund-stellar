@@ -1376,6 +1376,19 @@ export const pt: Messages = {
     jobsEmpty: 'De momento não há vagas abertas.',
     jobsSpeculativeNote: 'As candidaturas espontâneas não são recolhidas nesta demonstração.',
     jobsDemoNote: 'Página de demonstração: as vagas publicadas aparecerão aqui. Atualmente não existem vagas reais.',
+    podcastTitle: 'Podcast',
+    podcastIntro:
+      'Formatos de áudio planeados sobre investimento colaborativo, emitentes e a plataforma. Este ambiente de demonstração apresenta os formatos planeados; não foram gravados episódios.',
+    podcastEmpty: 'Ainda não foram publicados episódios.',
+    podcastFormatsTitle: 'Formatos planeados',
+    podcastFormatInterviews: 'Entrevistas a emitentes',
+    podcastFormatInterviewsDesc: 'Conversas com os criadores de campanhas sobre os seus projetos, planos e riscos.',
+    podcastFormatEducation: 'Educação do investidor',
+    podcastFormatEducationDesc: 'Episódios sobre instrumentos, diversificação e os fundamentos do risco do investimento colaborativo.',
+    podcastFormatUpdates: 'Atualizações da plataforma',
+    podcastFormatUpdatesDesc: 'O que mudou na plataforma e porquê, em linguagem simples.',
+    podcastDemoNote:
+      'Página de demonstração: os episódios e os leitores de áudio aparecerão aqui quando a plataforma publicar efetivamente um podcast. Nada nesta página constitui uma oferta ou aconselhamento de investimento.',
     eventsHowTitle: 'Como vão funcionar os eventos',
     eventsHowBody:
       'Quando a plataforma agendar um evento real, ele aparece em Próximos com a data, o formato e a forma de inscrição. Os eventos terminados passam para Anteriores. Até lá, as duas listas ficam honestamente vazias.',

@@ -1304,6 +1304,18 @@ export const ko: Messages = {
     jobsEmpty: '현재 열려 있는 포지션이 없습니다.',
     jobsSpeculativeNote: '이 데모에서는 자유 지원서를 받지 않습니다.',
     jobsDemoNote: '데모 페이지: 게시된 포지션이 여기에 표시됩니다. 현재 실제 채용 공고는 없습니다.',
+    podcastTitle: '팟캐스트',
+    podcastIntro: '크라우드 투자, 발행사, 플랫폼에 관한 예정된 오디오 형식입니다. 이 데모 환경은 예정된 형식을 보여주며, 녹음된 에피소드는 없습니다.',
+    podcastEmpty: '아직 게시된 에피소드가 없습니다.',
+    podcastFormatsTitle: '예정된 형식',
+    podcastFormatInterviews: '발행사 인터뷰',
+    podcastFormatInterviewsDesc: '캠페인 생성자와의 프로젝트, 계획, 리스크에 대한 대화.',
+    podcastFormatEducation: '투자자 교육',
+    podcastFormatEducationDesc: '투자 상품, 분산 투자, 크라우드 투자 리스크의 기초에 관한 에피소드.',
+    podcastFormatUpdates: '플랫폼 업데이트',
+    podcastFormatUpdatesDesc: '플랫폼에서 무엇이 바뀌었고 왜 바뀌었는지를 쉬운 말로.',
+    podcastDemoNote:
+      '데모 페이지: 플랫폼이 실제로 팟캐스트를 게시하면 에피소드와 오디오 플레이어가 여기에 표시됩니다. 이 페이지의 어떤 내용도 투자 권유나 투자 조언이 아닙니다.',
     eventsHowTitle: '이벤트 운영 방식(예정)',
     eventsHowBody:
       '플랫폼이 실제 이벤트를 예정하면 날짜, 형식, 등록 방법과 함께 "예정된 이벤트"에 표시됩니다. 종료된 이벤트는 "지난 이벤트"로 이동합니다. 그 전까지 두 목록은 정직하게 비어 있습니다.',

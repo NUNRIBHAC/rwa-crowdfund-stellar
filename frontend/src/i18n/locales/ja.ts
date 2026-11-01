@@ -1311,6 +1311,19 @@ export const ja: Messages = {
     jobsEmpty: '現在募集中のポジションはありません。',
     jobsSpeculativeNote: 'このデモでは自発的な応募は受け付けていません。',
     jobsDemoNote: 'デモページ: 公開されたポジションはここに表示されます。現在、実際の募集はありません。',
+    podcastTitle: 'ポッドキャスト',
+    podcastIntro:
+      'クラウド投資、発行者、プラットフォームに関する音声番組の予定形式です。このデモ環境では予定形式を紹介しています。録音されたエピソードはありません。',
+    podcastEmpty: '公開されたエピソードはまだありません。',
+    podcastFormatsTitle: '予定している形式',
+    podcastFormatInterviews: '発行者インタビュー',
+    podcastFormatInterviewsDesc: 'キャンペーン作成者との、プロジェクト・計画・リスクについての対話。',
+    podcastFormatEducation: '投資家教育',
+    podcastFormatEducationDesc: '商品、分散投資、クラウド投資リスクの基礎に関するエピソード。',
+    podcastFormatUpdates: 'プラットフォームの最新情報',
+    podcastFormatUpdatesDesc: 'プラットフォームの変更点とその理由を、わかりやすい言葉で。',
+    podcastDemoNote:
+      'デモページ: プラットフォームが実際にポッドキャストを公開したら、エピソードとオーディオプレーヤーがここに表示されます。このページの内容はオファーまたは投資助言ではありません。',
     eventsHowTitle: 'イベントの仕組み(予定)',
     eventsHowBody:
       'プラットフォームが実際のイベントを開催する場合、日付・形式・登録方法とともに「開催予定」に表示されます。終了したイベントは「過去のイベント」に移ります。それまでは、両方のリストは正直に空のままです。',

@@ -107,6 +107,9 @@ export default function Footer() {
                 <li>
                   <a href={routeHash({ name: 'jobs' })}>{m.contentPages.jobsTitle}</a>
                 </li>
+                <li>
+                  <a href={routeHash({ name: 'podcast' })}>{m.contentPages.podcastTitle}</a>
+                </li>
               </ul>
             </div>
             <div className="footer-context">

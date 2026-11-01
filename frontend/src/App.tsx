@@ -32,7 +32,7 @@ import ConflictsOfInterest from './pages/ConflictsOfInterest';
 import ComplaintsManagement from './pages/ComplaintsManagement';
 import BusinessContinuity from './pages/BusinessContinuity';
 import FeedbackTab from './components/FeedbackTab';
-import { BlogPage, EventsPage, JobsPage, PressPage } from './components/ContentPages';
+import { BlogPage, EventsPage, JobsPage, PodcastPage, PressPage } from './components/ContentPages';
 import { useI18n } from './i18n';
 import { CommunityAuthProvider } from './community/CommunityAuth';
 
@@ -291,6 +291,7 @@ export default function App() {
         {route.name === 'blog' && <BlogPage />}
         {route.name === 'press' && <PressPage />}
         {route.name === 'jobs' && <JobsPage />}
+        {route.name === 'podcast' && <PodcastPage />}
 
         <Footer />
         <FeedbackTab actor={actor} onConnect={connect} />

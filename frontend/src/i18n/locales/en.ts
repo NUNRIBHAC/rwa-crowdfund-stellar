@@ -1329,6 +1329,19 @@ export const en = {
     jobsEmpty: 'No open positions at the moment.',
     jobsSpeculativeNote: 'Speculative applications are not collected in this demo.',
     jobsDemoNote: 'Demo page: published positions will appear here. There are currently no real vacancies.',
+    podcastTitle: 'Podcast',
+    podcastIntro:
+      'Planned audio formats on crowd investing, issuers and the platform. This demo environment presents the planned formats; no episodes have been recorded.',
+    podcastEmpty: 'No episodes published yet.',
+    podcastFormatsTitle: 'Planned formats',
+    podcastFormatInterviews: 'Issuer interviews',
+    podcastFormatInterviewsDesc: 'Conversations with campaign creators about their projects, plans and risks.',
+    podcastFormatEducation: 'Investor education',
+    podcastFormatEducationDesc: 'Episodes on instruments, diversification and the basics of crowd-investing risk.',
+    podcastFormatUpdates: 'Platform updates',
+    podcastFormatUpdatesDesc: 'What changed on the platform and why, in plain language.',
+    podcastDemoNote:
+      'Demo page: episodes and audio players will appear here once the platform actually publishes a podcast. Nothing on this page is an offer or investment advice.',
     eventsHowTitle: 'How events will work',
     eventsHowBody:
       'When the platform schedules a real event it appears under Upcoming with its date, format and how to register. Finished events move to Past. Until then both lists stay honestly empty.',
