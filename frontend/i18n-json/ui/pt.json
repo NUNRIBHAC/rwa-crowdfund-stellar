@@ -1408,8 +1408,8 @@
     "tourStepNewsBody": "Atualizações da campanha e comentários públicos. As notícias de demonstração são sempre identificadas como platform-demo."
   },
   "appropriateness": {
-    "title": "Avaliação de adequação do investidor",
-    "intro": "Teste de conhecimentos de entrada e simulação da capacidade de suportar perdas exigidos pelo regulamento europeu de financiamento colaborativo (ECSPR, artigo 21.º).",
+    "title": "Teste inicial de conhecimentos e simulação de perdas",
+    "intro": "Implementação de demonstração de partes da avaliação de adequação exigida pelo regulamento europeu de crowdfunding (ECSPR, artigo 21).",
     "signInNote": "Inicie sessão com a sua carteira para fazer a avaliação.",
     "heldNote": "A avaliação de adequação não está a recolher respostas nesta instalação.",
     "limitedNote": "Nesta instalação, a avaliação está limitada a contas de teste designadas.",
@@ -1425,6 +1425,7 @@
     "scoreLabel": "{score} de {total} corretas",
     "outcomeLabel": "Resultado",
     "noSophisticatedNote": "Este resultado não o classifica como investidor sofisticado ou profissional.",
+    "notFullAssessmentNote": "Esta verificação de conhecimentos não é a avaliação de adequação exigida pelo artigo 21.º, n.º 1, do ECSPR. A avaliação completa - que abrange os investimentos que conhece, o seu histórico de transações, educação e profissão, período de detenção, perfil de risco e preferências de sustentabilidade - não está implementada nesta instalação.",
     "reviewExplanations": "Explicações das perguntas que acabou de responder:",
     "warningTitle": "Aviso de risco",
     "warningText": "Um investimento num projeto de financiamento colaborativo inclui o risco de perder a totalidade do dinheiro investido.",
@@ -1445,8 +1446,8 @@
     "simTransmitted": "Último resultado transmitido em {date}.",
     "simInvalid": "Introduza montantes iguais ou superiores a zero para executar a simulação.",
     "simRecalculate": "Recalcular",
-    "statusTitle": "A sua avaliação",
-    "statusOutcome": "Resultado do teste de conhecimentos",
+    "statusTitle": "Os seus resultados",
+    "statusOutcome": "Verificação inicial de conhecimentos",
     "completedAt": "Concluída em {date}.",
     "reviewAssessmentDue": "Revisão da avaliação até {date}.",
     "reviewSimulationDue": "Revisão da simulação até {date}.",
@@ -1462,7 +1463,7 @@
       "other": "Outro"
     },
     "outcomeLabels": {
-      "appropriate": "Adequado",
+      "knowledge_check_passed": "Aprovado",
       "warning_issued": "Aviso emitido"
     },
     "questions": [

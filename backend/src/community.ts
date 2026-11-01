@@ -133,7 +133,25 @@ export const KNOWLEDGE_QUESTIONS: { id: string; correct: number }[] = [
   { id: 'default-risk', correct: 0 }, // early-stage loans riskier than listed bonds? -> yes
   { id: 'diversification', correct: 0 }, // spreading investments reduces risk? -> yes
 ];
-const KNOWLEDGE_PASS = 4; // of 5; below this ECSPR Art. 21(4) warning path applies
+const KNOWLEDGE_PASS = 4; // of 5; below this ECSPR Art. 21(4) warning path applies. Demo-chosen threshold; the RTS mandates no pass mark.
+
+// ECSPR Art. 21(3)/(6): the assessment is reviewed "every two years" and the
+// simulation "every year" after the initial one - calendar anniversaries,
+// not fixed 730/365-day spans (leap years drift those from the legal
+// anniversary; e.g. 2026-11-01 + 730 days lands 2028-10-31, one day early).
+function addCalendarYears(ts: number, years: number): number {
+  const d = new Date(ts);
+  d.setFullYear(d.getFullYear() + years);
+  return d.getTime();
+}
+
+// Records written before the outcome rename carry 'appropriate'; normalize
+// on read so the API never presents quiz completion as an Art. 21(1)
+// appropriateness determination.
+function normalizeOutcome(rec: AppropriatenessRecord): AppropriatenessRecord {
+  if ((rec.outcome as string) === 'appropriate') rec.outcome = 'knowledge_check_passed';
+  return rec;
+}
 
 function newId(prefix: string): string {
   return `${prefix}_${randomBytes(12).toString('hex')}`;
@@ -289,7 +307,8 @@ export class CommunityService {
 
   async getAppropriateness(account: Account): Promise<AppropriatenessRecord | null> {
     const state = await this.store.read();
-    return state.appropriateness[account.publicKey] ?? null;
+    const rec = state.appropriateness[account.publicKey];
+    return rec ? normalizeOutcome(rec) : null;
   }
 
   // Knowledge test + self-declared experience/objectives (Art. 21(1)-(2)).
@@ -301,7 +320,7 @@ export class CommunityService {
     answers.forEach((a, i) => {
       if (a === KNOWLEDGE_QUESTIONS[i].correct) score += 1;
     });
-    const outcome: AppropriatenessRecord['outcome'] = score >= KNOWLEDGE_PASS ? 'appropriate' : 'warning_issued';
+    const outcome: AppropriatenessRecord['outcome'] = score >= KNOWLEDGE_PASS ? 'knowledge_check_passed' : 'warning_issued';
     const now = this.now();
     const record: AppropriatenessRecord = {
       publicKey: account.publicKey,
@@ -316,7 +335,7 @@ export class CommunityService {
       warningAcknowledgedAt: null,
       simulation: null,
       completedAt: now,
-      reviewAssessmentDueAt: now + 2 * 365 * 24 * 60 * 60 * 1000,
+      reviewAssessmentDueAt: addCalendarYears(now, 2),
       reviewSimulationDueAt: null,
     };
     await this.store.change((state) => {
@@ -353,8 +372,8 @@ export class CommunityService {
       const rec = state.appropriateness[account.publicKey];
       if (!rec) throw new CommunityError(409, 'complete the knowledge assessment before transmitting a simulation result');
       rec.simulation = { netWorthEur, capacityEur, transmittedAt: now };
-      rec.reviewSimulationDueAt = now + 365 * 24 * 60 * 60 * 1000;
-      return rec;
+      rec.reviewSimulationDueAt = addCalendarYears(now, 1);
+      return normalizeOutcome(rec);
     });
     await this.recordAudit(`account:${account.publicKey}`, 'appropriateness.simulation', account.publicKey, `capacity=${capacityEur}`);
     return record;
@@ -370,7 +389,7 @@ export class CommunityService {
       if (rec.outcome !== 'warning_issued') throw new CommunityError(409, 'no risk warning is pending acknowledgment');
       if (rec.warningAcknowledgedAt) throw new CommunityError(409, 'risk warning already acknowledged');
       rec.warningAcknowledgedAt = this.now();
-      return rec;
+      return normalizeOutcome(rec);
     });
     await this.recordAudit(`account:${account.publicKey}`, 'appropriateness.warning_ack', account.publicKey, 'art21(4) warning acknowledged');
     return record;

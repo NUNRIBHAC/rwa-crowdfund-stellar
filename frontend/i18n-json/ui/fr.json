@@ -1411,8 +1411,8 @@
     "tourStepNewsBody": "Mises à jour de la campagne et commentaires publics. Les actualités de démo sont toujours étiquetées platform-demo."
   },
   "appropriateness": {
-    "title": "Évaluation de l'adéquation de l'investisseur",
-    "intro": "Test de connaissances d'entrée et simulation de la capacité à supporter des pertes exigés par le règlement européen sur le financement participatif (ECSPR, article 21).",
+    "title": "Test initial de connaissances et simulation de pertes",
+    "intro": "Mise en œuvre de démonstration de certaines parties de l'évaluation du caractère approprié exigée par le règlement européen sur le financement participatif (ECSPR, article 21).",
     "signInNote": "Connectez-vous avec votre portefeuille pour passer l'évaluation.",
     "heldNote": "L'évaluation de l'adéquation ne collecte pas de réponses sur ce déploiement.",
     "limitedNote": "Sur ce déploiement, l'évaluation est limitée à des comptes de test désignés.",
@@ -1428,6 +1428,7 @@
     "scoreLabel": "{score} sur {total} correctes",
     "outcomeLabel": "Résultat",
     "noSophisticatedNote": "Ce résultat ne vous classe pas comme investisseur sophistiqué ou professionnel.",
+    "notFullAssessmentNote": "Cette vérification des connaissances n'est pas l'évaluation du caractère approprié exigée par l'article 21, paragraphe 1, de l'ECSPR. L'évaluation complète - couvrant les investissements que vous connaissez, votre historique de transactions, votre formation et votre profession, la durée de détention, le profil de risque et les préférences en matière de durabilité - n'est pas mise en œuvre sur ce déploiement.",
     "reviewExplanations": "Explications des questions auxquelles vous venez de répondre :",
     "warningTitle": "Avertissement sur les risques",
     "warningText": "Un investissement dans un projet de financement participatif comporte le risque de perdre la totalité de l'argent investi.",
@@ -1448,8 +1449,8 @@
     "simTransmitted": "Dernier résultat transmis le {date}.",
     "simInvalid": "Saisissez des montants supérieurs ou égaux à zéro pour lancer la simulation.",
     "simRecalculate": "Recalculer",
-    "statusTitle": "Votre évaluation",
-    "statusOutcome": "Résultat du test de connaissances",
+    "statusTitle": "Vos résultats",
+    "statusOutcome": "Vérification initiale des connaissances",
     "completedAt": "Terminée le {date}.",
     "reviewAssessmentDue": "Révision de l'évaluation avant le {date}.",
     "reviewSimulationDue": "Révision de la simulation avant le {date}.",
@@ -1465,7 +1466,7 @@
       "other": "Autre"
     },
     "outcomeLabels": {
-      "appropriate": "Adéquat",
+      "knowledge_check_passed": "Réussi",
       "warning_issued": "Avertissement émis"
     },
     "questions": [

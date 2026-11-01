@@ -249,25 +249,25 @@ test('appropriateness endpoints require auth and run the full flow', async () =>
     const token = await login(kp);
     const empty = await api('GET', '/api/auth/appropriateness', { token });
     assert.equal(empty.status, 200);
-    assert.equal(empty.json.assessment, null);
+    assert.equal(empty.json.record, null);
 
     const fail = await api('POST', '/api/auth/appropriateness/knowledge', {
       token,
       body: { experienceLevel: 'none', objective: 'growth', answers: [1, 1, 1, 1, 1] },
     });
     assert.equal(fail.status, 200);
-    assert.equal(fail.json.assessment.outcome, 'warning_issued');
+    assert.equal(fail.json.record.outcome, 'warning_issued');
 
     const sim = await api('POST', '/api/auth/appropriateness/simulation-result', {
       token,
       body: { netWorthEur: 80000, capacityEur: 8000 },
     });
     assert.equal(sim.status, 200);
-    assert.equal(sim.json.assessment.simulation.capacityEur, 8000);
+    assert.equal(sim.json.record.simulation.capacityEur, 8000);
 
     const ack = await api('POST', '/api/auth/appropriateness/acknowledge-warning', { token, body: {} });
     assert.equal(ack.status, 200);
-    assert.ok(ack.json.assessment.warningAcknowledgedAt);
+    assert.ok(ack.json.record.warningAcknowledgedAt);
 
     // Financial inputs can never be smuggled into the result transmission:
     // .strict() rejects any extra field (income/assets/commitments breakdown).

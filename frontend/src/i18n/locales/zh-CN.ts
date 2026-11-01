@@ -1385,8 +1385,8 @@ export const zhCN: Messages = {
     tourStepNewsBody: '活动更新和公开评论。演示动态始终标注为 platform-demo。',
   },
   appropriateness: {
-    title: '投资者适当性评估',
-    intro: '欧洲众筹法规（ECSPR 第21条）要求的入门知识测试和亏损承受能力模拟。',
+    title: '入门知识测试与损失模拟',
+    intro: '本演示实现了欧洲众筹条例（ECSPR 第21条）所要求的适当性评估的部分内容。',
     signInNote: '请使用您的钱包登录以完成评估。',
     heldNote: '此部署未开启适当性评估的收集。',
     limitedNote: '在此部署上，评估仅限于指定的测试账户。',
@@ -1402,6 +1402,8 @@ export const zhCN: Messages = {
     scoreLabel: '{total} 题中答对 {score} 题',
     outcomeLabel: '结果',
     noSophisticatedNote: '此结果不会将您归类为资深或专业投资者。',
+    notFullAssessmentNote:
+      '此知识检查并非 ECSPR 第21条第1款所要求的适当性评估。完整评估（涵盖您了解的投资、交易历史、教育与职业、持有期限、风险状况和可持续性偏好）未在此部署中实现。',
     reviewExplanations: '您刚回答的问题的解析：',
     warningTitle: '风险警告',
     warningText: '投资于众筹项目包含损失全部投资资金的风险。',
@@ -1423,8 +1425,8 @@ export const zhCN: Messages = {
     simTransmitted: '最近一次结果传输于 {date}。',
     simInvalid: '请输入大于或等于零的金额以运行模拟。',
     simRecalculate: '重新计算',
-    statusTitle: '您的评估',
-    statusOutcome: '知识测试结果',
+    statusTitle: '您的结果',
+    statusOutcome: '入门知识检查',
     completedAt: '完成于 {date}。',
     reviewAssessmentDue: '评估复核截止日期为 {date}。',
     reviewSimulationDue: '模拟复核截止日期为 {date}。',
@@ -1440,7 +1442,7 @@ export const zhCN: Messages = {
       other: '其他',
     },
     outcomeLabels: {
-      appropriate: '适当',
+      knowledge_check_passed: '通过',
       warning_issued: '已发出警告',
     },
     questions: [

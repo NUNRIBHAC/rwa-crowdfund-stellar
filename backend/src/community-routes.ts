@@ -182,7 +182,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const account = await authenticate(store, req.header('authorization'));
       const denied = appropriatenessGate(account);
       if (denied) throw denied;
-      res.json({ assessment: await service.getAppropriateness(account) });
+      res.json({ record: await service.getAppropriateness(account) });
     } catch (err) {
       sendError(res, err);
     }
@@ -193,7 +193,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const denied = appropriatenessGate(account);
       if (denied) throw denied;
       service.checkRate(`appr-knowledge:${account.publicKey}`, 10, 60 * 60 * 1000);
-      res.json({ assessment: await service.submitKnowledgeAssessment(account, req.body) });
+      res.json({ record: await service.submitKnowledgeAssessment(account, req.body) });
     } catch (err) {
       sendError(res, err);
     }
@@ -204,7 +204,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const denied = appropriatenessGate(account);
       if (denied) throw denied;
       service.checkRate(`appr-sim:${account.publicKey}`, 20, 60 * 60 * 1000);
-      res.json({ assessment: await service.transmitSimulationResult(account, req.body) });
+      res.json({ record: await service.transmitSimulationResult(account, req.body) });
     } catch (err) {
       sendError(res, err);
     }
@@ -214,7 +214,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const account = await authenticate(store, req.header('authorization'));
       const denied = appropriatenessGate(account);
       if (denied) throw denied;
-      res.json({ assessment: await service.acknowledgeWarning(account) });
+      res.json({ record: await service.acknowledgeWarning(account) });
     } catch (err) {
       sendError(res, err);
     }

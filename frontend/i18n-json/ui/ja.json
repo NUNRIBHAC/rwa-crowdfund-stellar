@@ -1368,8 +1368,8 @@
     "tourStepNewsBody": "キャンペーンの更新と公開コメント。デモのニュースには常に platform-demo のラベルが付きます。"
   },
   "appropriateness": {
-    "title": "投資家適合性評価",
-    "intro": "欧州クラウドファンディング規則（ECSPR 第21条）に基づく入門知識テストと損失耐性シミュレーションです。",
+    "title": "入門知識テストと損失シミュレーション",
+    "intro": "欧州クラウドファンディング規則（ECSPR 第21条）が求める適切性評価の一部のデモ実装です。",
     "signInNote": "ウォレットでサインインして評価を行ってください。",
     "heldNote": "このデプロイでは適合性評価の回答収集は行われていません。",
     "limitedNote": "このデプロイでは、評価は指定されたテストアカウントに限定されています。",
@@ -1385,6 +1385,7 @@
     "scoreLabel": "{total}問中{score}問正解",
     "outcomeLabel": "結果",
     "noSophisticatedNote": "この結果は、あなたを熟練投資家またはプロ投資家として分類するものではありません。",
+    "notFullAssessmentNote": "この知識チェックは、ECSPR第21条1項が求める適切性評価ではありません。知っている投資、取引履歴、学歴・職業、保有期間、リスクプロファイル、サステナビリティ選好を含む完全な評価は、このデプロイメントには実装されていません。",
     "reviewExplanations": "回答した質問の解説：",
     "warningTitle": "リスク警告",
     "warningText": "クラウドファンディングプロジェクトへの投資には、投資した資金の全額を失うリスクが含まれます。",
@@ -1405,8 +1406,8 @@
     "simTransmitted": "最終送信日：{date}。",
     "simInvalid": "シミュレーションを実行するには、0以上の金額を入力してください。",
     "simRecalculate": "再計算",
-    "statusTitle": "あなたの評価",
-    "statusOutcome": "知識テストの結果",
+    "statusTitle": "結果",
+    "statusOutcome": "入門知識チェック",
     "completedAt": "{date} に完了。",
     "reviewAssessmentDue": "評価の見直し期限：{date}。",
     "reviewSimulationDue": "シミュレーションの見直し期限：{date}。",
@@ -1422,7 +1423,7 @@
       "other": "その他"
     },
     "outcomeLabels": {
-      "appropriate": "適合",
+      "knowledge_check_passed": "合格",
       "warning_issued": "警告が発行されました"
     },
     "questions": [

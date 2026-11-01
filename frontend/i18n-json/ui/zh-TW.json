@@ -1362,8 +1362,8 @@
     "tourStepNewsBody": "活動更新和公開留言。示範動態始終標註為 platform-demo。"
   },
   "appropriateness": {
-    "title": "投資者適當性評估",
-    "intro": "歐洲群眾募資法規（ECSPR 第21條）要求的入門知識測驗與虧損承受能力模擬。",
+    "title": "入門知識測試與損失模擬",
+    "intro": "本示範實作了歐洲群眾募資條例（ECSPR 第21條）所要求的適當性評估的部分內容。",
     "signInNote": "請使用您的錢包登入以完成評估。",
     "heldNote": "此部署未開啟適當性評估的收集。",
     "limitedNote": "在此部署上，評估僅限指定的測試帳戶。",
@@ -1379,6 +1379,7 @@
     "scoreLabel": "{total} 題中答對 {score} 題",
     "outcomeLabel": "結果",
     "noSophisticatedNote": "此結果不會將您歸類為資深或專業投資者。",
+    "notFullAssessmentNote": "此知識檢查並非 ECSPR 第21條第1項所要求的適當性評估。完整評估（涵蓋您了解的投資、交易歷史、教育與職業、持有期間、風險屬性和永續性偏好）未在此部署中實作。",
     "reviewExplanations": "您剛回答的問題的解析：",
     "warningTitle": "風險警告",
     "warningText": "投資於群眾募資專案包含損失全部投資資金的風險。",
@@ -1399,8 +1400,8 @@
     "simTransmitted": "最近一次結果傳輸於 {date}。",
     "simInvalid": "請輸入大於或等於零的金額以執行模擬。",
     "simRecalculate": "重新計算",
-    "statusTitle": "您的評估",
-    "statusOutcome": "知識測驗結果",
+    "statusTitle": "您的結果",
+    "statusOutcome": "入門知識檢查",
     "completedAt": "完成於 {date}。",
     "reviewAssessmentDue": "評估複核截止日期為 {date}。",
     "reviewSimulationDue": "模擬複核截止日期為 {date}。",
@@ -1416,7 +1417,7 @@
       "other": "其他"
     },
     "outcomeLabels": {
-      "appropriate": "適當",
+      "knowledge_check_passed": "通過",
       "warning_issued": "已發出警告"
     },
     "questions": [

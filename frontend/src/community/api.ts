@@ -196,7 +196,8 @@ export const fetchNewsFeed = () => call<{ news: NewsPost[] }>('/api/news');
 // computes CLIENT-SIDE and transmits ONLY the result figures (net worth +
 // 10% capacity) - the income/asset/commitment inputs never leave the
 // browser (RTS Art. 5(5) provider non-access rule). Quiz success never
-// labels an investor sophisticated.
+// labels an investor sophisticated and is never presented as the Art.
+// 21(1) appropriateness assessment.
 export type AppropriatenessRecord = {
   publicKey: string;
   version: 1;
@@ -204,7 +205,7 @@ export type AppropriatenessRecord = {
   objective: 'capital_preservation' | 'income' | 'growth' | 'other';
   knowledgeScore: number;
   knowledgeTotal: number;
-  outcome: 'appropriate' | 'warning_issued';
+  outcome: 'knowledge_check_passed' | 'warning_issued';
   warningAcknowledgedAt: number | null;
   simulation: { netWorthEur: number; capacityEur: number; transmittedAt: number } | null;
   completedAt: number;
@@ -212,13 +213,13 @@ export type AppropriatenessRecord = {
   reviewSimulationDueAt: number | null;
 };
 
-export const fetchAppropriateness = (token: string) => call<{ assessment: AppropriatenessRecord | null }>('/api/auth/appropriateness', { token });
+export const fetchAppropriateness = (token: string) => call<{ record: AppropriatenessRecord | null }>('/api/auth/appropriateness', { token });
 export const submitKnowledgeAssessment = (token: string, input: { experienceLevel: string; objective: string; answers: number[] }) =>
-  call<{ assessment: AppropriatenessRecord }>('/api/auth/appropriateness/knowledge', { method: 'POST', body: input, token });
+  call<{ record: AppropriatenessRecord }>('/api/auth/appropriateness/knowledge', { method: 'POST', body: input, token });
 export const transmitSimulationResult = (token: string, input: { netWorthEur: number; capacityEur: number }) =>
-  call<{ assessment: AppropriatenessRecord }>('/api/auth/appropriateness/simulation-result', { method: 'POST', body: input, token });
+  call<{ record: AppropriatenessRecord }>('/api/auth/appropriateness/simulation-result', { method: 'POST', body: input, token });
 export const acknowledgeWarning = (token: string) =>
-  call<{ assessment: AppropriatenessRecord }>('/api/auth/appropriateness/acknowledge-warning', { method: 'POST', body: {}, token });
+  call<{ record: AppropriatenessRecord }>('/api/auth/appropriateness/acknowledge-warning', { method: 'POST', body: {}, token });
 
 // --- Podcast episodes (public; external https audio only) ---
 export const fetchEpisodes = () => call<{ episodes: PodcastEpisode[] }>('/api/podcast/episodes');
