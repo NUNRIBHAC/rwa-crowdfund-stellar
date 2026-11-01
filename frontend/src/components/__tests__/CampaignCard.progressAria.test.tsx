@@ -30,7 +30,8 @@ test('unavailable raised renders no progressbar and no fabricated 0%', () => {
   const track = container.querySelector('.progress-track') as HTMLElement;
   expect(track.getAttribute('role')).toBe('img');
   expect(track.getAttribute('aria-label')).toBe('Funding progress unavailable: on-chain data not loaded');
-  expect(screen.getByText('Progress unavailable - on-chain data not loaded')).toBeTruthy();
+  // Visible text AND the raised stat both state unavailability (no fabricated 0 anywhere).
+  expect(screen.getAllByText('Progress unavailable - on-chain data not loaded').length).toBe(2);
   expect(container.querySelector('.progress-track .progress-fill')).toBeNull();
 });
 
@@ -41,6 +42,15 @@ test('zero goal is unavailable, not 0%', () => {
   expect(track.getAttribute('role')).toBe('img');
   expect(track.getAttribute('aria-label')).toBe('Funding progress unavailable: on-chain data not loaded');
   expect(container.querySelector('.progress-track .progress-fill')).toBeNull();
+});
+
+test('malformed raised renders unavailable without throwing', () => {
+  // Defense in depth: campaignStatus must not throw on a non-numeric
+  // payload; the card falls back to the unavailable state.
+  const { container } = setup({ ...base, id: 'fixture-malformed', raised: 'not-a-number' });
+  expect(screen.queryByRole('progressbar')).toBeNull();
+  const track = container.querySelector('.progress-track') as HTMLElement;
+  expect(track.getAttribute('role')).toBe('img');
 });
 
 test('verified real zero raised still announces a truthful 0% progressbar', () => {

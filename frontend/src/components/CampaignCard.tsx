@@ -1,6 +1,6 @@
 import type { Campaign } from '../types';
 import { deadlineInfo, deadlineState, formatAmount, percent, regionName, shorten, tpl } from '../format';
-import { fundingState } from '../funding-math';
+import { fundingState, isValidUnits } from '../funding-math';
 import FundingGrid from './FundingGrid';
 import type { CampaignProfile } from '../data/profiles';
 import { composeInstrumentLabel } from '../data/instruments';
@@ -11,7 +11,9 @@ import { useI18n } from '../i18n';
 export type CampaignStatus = 'open' | 'funded' | 'ended';
 
 export function campaignStatus(c: Campaign): CampaignStatus {
-  if (percent(c.raised, c.config.goal) >= 100) return 'funded';
+  // Malformed chain data cannot establish 'funded' (funding-math honesty
+  // rule); skip the percent check instead of throwing in BigInt parsing.
+  if (isValidUnits(c.raised) && isValidUnits(c.config.goal) && percent(c.raised, c.config.goal) >= 100) return 'funded';
   if (deadlineState(c.config.deadline) === 'ended') return 'ended';
   return 'open';
 }
@@ -136,7 +138,13 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
         <div>
           <dt>{m.card.raised}</dt>
           <dd>
-            {formatAmount(c.raised, locale)} <span className="stat-unit">{m.card.usdcTestnet}</span>
+            {isValidUnits(c.raised) ? (
+              <>
+                {formatAmount(c.raised, locale)} <span className="stat-unit">{m.card.usdcTestnet}</span>
+              </>
+            ) : (
+              m.card.progressUnavailable
+            )}
           </dd>
         </div>
         <div>
