@@ -23,6 +23,7 @@ export type RouteName =
   | 'blog'
   | 'press'
   | 'jobs'
+  | 'podcast'
   | 'campaign-builder';
 
 export type Route = { name: RouteName; campaignId?: string };
@@ -50,6 +51,7 @@ const KNOWN_SEGMENTS = new Set([
   'blog',
   'press',
   'jobs',
+  'podcast',
 ]);
 
 // Path routing serves real per-page URLs (needed for the XML sitemap and
@@ -103,6 +105,8 @@ export function routeFromPath(pathname: string): Route {
       return { name: 'press' };
     case 'jobs':
       return { name: 'jobs' };
+    case 'podcast':
+      return { name: 'podcast' };
     default:
       return { name: 'home' };
   }

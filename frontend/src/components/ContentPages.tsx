@@ -1,9 +1,10 @@
-// Content surfaces from the CONDA audit slice: events, blog, press, jobs.
-// All four are honest demo shells: structure + planned formats + explicit
-// empty states and demo notes. No fictional events, articles, press releases
-// or vacancies - content appears only when the platform actually publishes it.
-// Routes (backend wires them): /events, /blog, /press, /jobs.
-// Footer proposal: Communication column links to these four pages.
+// Content surfaces from the CONDA audit slice: events, blog, press, jobs,
+// podcast. All five are honest demo shells: structure + planned formats +
+// explicit empty states and demo notes. No fictional events, articles, press
+// releases, vacancies or episodes - content appears only when the platform
+// actually publishes it. Routes (backend wires them): /events, /blog,
+// /press, /jobs, /podcast.
+// Footer: Communication column links to these five pages.
 import { useI18n } from '../i18n';
 
 function PageShell({ title, intro, children, demoNote }: { title: string; intro: string; children?: React.ReactNode; demoNote: string }) {
@@ -124,6 +125,31 @@ export function JobsPage() {
       <h3>{t.jobsAboutTitle}</h3>
       <p className="community-note">{t.jobsAboutBody}</p>
       <p className="community-note">{t.jobsSpeculativeNote}</p>
+    </PageShell>
+  );
+}
+
+export function PodcastPage() {
+  const { m } = useI18n();
+  const t = m.contentPages;
+  return (
+    <PageShell title={t.podcastTitle} intro={t.podcastIntro} demoNote={t.podcastDemoNote}>
+      <p className="community-note">{t.podcastEmpty}</p>
+      <h3>{t.podcastFormatsTitle}</h3>
+      <ul className="portfolio-list">
+        <li className="portfolio-row">
+          <strong>{t.podcastFormatInterviews}</strong>
+          <p className="community-note">{t.podcastFormatInterviewsDesc}</p>
+        </li>
+        <li className="portfolio-row">
+          <strong>{t.podcastFormatEducation}</strong>
+          <p className="community-note">{t.podcastFormatEducationDesc}</p>
+        </li>
+        <li className="portfolio-row">
+          <strong>{t.podcastFormatUpdates}</strong>
+          <p className="community-note">{t.podcastFormatUpdatesDesc}</p>
+        </li>
+      </ul>
     </PageShell>
   );
 }
