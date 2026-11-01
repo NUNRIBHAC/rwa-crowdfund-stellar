@@ -1,6 +1,7 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { Keypair, StrKey } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore } from './community-store.js';
+import { generateSecret, encryptSeed, decryptSeed, verifyTotp, generateRecoveryCodes, hashRecoveryCode } from './totp.js';
 
 // Wallet-challenge authentication for the demo platform.
 //
@@ -78,7 +79,7 @@ export async function verifyChallenge(
   publicKey: string,
   signatureBase64: string,
   now = Date.now(),
-): Promise<{ token: string; expiresAt: number; account: Account }> {
+): Promise<{ token: string; expiresAt: number; account: Account } | { requiresTotp: true; ticket: string; expiresAt: number; account: Account }> {
   if (!isValidPublicKey(publicKey)) throw new AuthError(400, 'invalid Stellar public key');
   let signature: Buffer;
   try {
@@ -103,6 +104,14 @@ export async function verifyChallenge(
         displayName: null,
         createdAt: now,
       });
+    // Second factor: wallet signature alone is not enough when TOTP is
+    // enabled - issue a one-purpose ticket instead of a session.
+    if (account.totp?.status === 'enabled') {
+      const ticket = `blt_${randomBytes(24).toString('hex')}`;
+      const expiresAt = now + TOTP_TICKET_TTL_MS;
+      state.totpTickets[ticket] = { id: ticket, publicKey, expiresAt };
+      return { requiresTotp: true as const, ticket, expiresAt, account: { ...account }, challenge };
+    }
     const token = `bls_${randomBytes(24).toString('hex')}`;
     const session = {
       tokenHash: hashToken(token),
@@ -119,11 +128,175 @@ export async function verifyChallenge(
     };
   });
   if (!found) throw new AuthError(401, 'no matching login challenge: request a new challenge, check the signature, and retry before expiry');
+  if ('requiresTotp' in found) {
+    const ticketed = found as { requiresTotp: true; ticket: string; expiresAt: number; account: Account };
+    return { requiresTotp: true, ticket: ticketed.ticket, expiresAt: ticketed.expiresAt, account: ticketed.account };
+  }
   return {
     token: found.token,
     expiresAt: found.expiresAt,
     account: found.account,
   };
+}
+
+// What clients may ever see of an account. The TOTP enrollment (encrypted
+// seed, recovery hashes, counters) is server-only and NEVER serialized.
+export function publicAccount(account: Account): {
+  publicKey: string;
+  displayName: string | null;
+  createdAt: number;
+  totpEnabled: boolean;
+} {
+  return {
+    publicKey: account.publicKey,
+    displayName: account.displayName,
+    createdAt: account.createdAt,
+    totpEnabled: account.totp?.status === 'enabled',
+  };
+}
+
+export const TOTP_TICKET_TTL_MS = 5 * 60 * 1000;
+export const TOTP_MAX_FAILURES = 5;
+export const TOTP_LOCK_MS = 5 * 60 * 1000;
+
+// Server secret for seed encryption: dedicated env first, the platform
+// secret as fallback; missing either means 2FA is honestly unavailable
+// (fail closed, no plaintext fallback).
+function totpServerSecret(): string {
+  const secret = process.env.COMMUNITY_TOTP_KEY ?? process.env.PLATFORM_SECRET;
+  if (!secret) throw new AuthError(503, 'second factor is not configured on this deployment');
+  return secret;
+}
+
+export async function enrollTotp(store: CommunityStore, publicKey: string, now = Date.now()): Promise<{ otpauthUrl: string; manualKey: string }> {
+  const serverSecret = totpServerSecret();
+  const seed = generateSecret();
+  const encSeed = encryptSeed(serverSecret, seed);
+  const result = await store.change((state) => {
+    const account = state.accounts[publicKey];
+    if (!account) throw new AuthError(404, 'account not found');
+    if (account.totp?.status === 'enabled') throw new AuthError(409, 'second factor already enabled; disable it first');
+    account.totp = {
+      status: 'pending',
+      encSeed,
+      lastUsedStep: -1,
+      recoveryHashes: [],
+      enabledAt: null,
+      failedAttempts: 0,
+      lockUntil: null,
+    };
+    return true;
+  });
+  if (!result) throw new AuthError(500, 'enrollment failed');
+  const label = encodeURIComponent(`Blockallisto:${publicKey.slice(0, 8)}`);
+  const issuer = encodeURIComponent('Blockallisto (demo)');
+  return {
+    otpauthUrl: `otpauth://totp/${label}?secret=${seed}&issuer=${issuer}`,
+    manualKey: seed,
+  };
+}
+
+export async function enableTotp(store: CommunityStore, publicKey: string, code: string, now = Date.now()): Promise<{ recoveryCodes: string[] }> {
+  const serverSecret = totpServerSecret();
+  const outcome = await store.change((state) => {
+    const account = state.accounts[publicKey];
+    const enrollment = account?.totp;
+    if (!account || !enrollment) throw new AuthError(400, 'no pending second-factor enrollment');
+    if (enrollment.status === 'enabled') throw new AuthError(409, 'second factor already enabled');
+    const seed = decryptSeed(serverSecret, enrollment.encSeed);
+    const step = verifyTotp(seed, code, Math.floor(now / 1000), enrollment.lastUsedStep);
+    if (step === null) return null;
+    const recoveryCodes = generateRecoveryCodes();
+    enrollment.status = 'enabled';
+    enrollment.enabledAt = now;
+    // The enrollment code verifies but does NOT consume its step: the first
+    // login usually happens inside the same 30s window with the same code
+    // shown by the authenticator. Replay protection (lastUsedStep) applies
+    // to logins from then on.
+    enrollment.recoveryHashes = recoveryCodes.map(hashRecoveryCode);
+    enrollment.failedAttempts = 0;
+    enrollment.lockUntil = null;
+    return recoveryCodes;
+  });
+  if (!outcome) throw new AuthError(401, 'code did not match; check your authenticator and retry');
+  return { recoveryCodes: outcome };
+}
+
+export async function completeTotpLogin(
+  store: CommunityStore,
+  ticket: string,
+  code: string,
+  now = Date.now(),
+): Promise<{ token: string; expiresAt: number; account: Account }> {
+  const serverSecret = totpServerSecret();
+  const found = await store.change((state) => {
+    const t = state.totpTickets[ticket];
+    if (!t || t.expiresAt <= now) return null;
+    const account = state.accounts[t.publicKey];
+    const enrollment = account?.totp;
+    if (!account || !enrollment || enrollment.status !== 'enabled') return null;
+    if (enrollment.lockUntil && enrollment.lockUntil > now) {
+      throw new AuthError(429, 'too many failed attempts; retry in a few minutes');
+    }
+    const seed = decryptSeed(serverSecret, enrollment.encSeed);
+    const step = verifyTotp(seed, code, Math.floor(now / 1000), enrollment.lastUsedStep);
+    let ok = false;
+    if (step !== null) {
+      enrollment.lastUsedStep = step;
+      ok = true;
+    } else {
+      // Recovery code path: single-use, consumed atomically in this change.
+      const hash = hashRecoveryCode(code);
+      const idx = enrollment.recoveryHashes.findIndex((h) => h.length === hash.length && timingSafeEqual(Buffer.from(h), Buffer.from(hash)));
+      if (idx !== -1) {
+        enrollment.recoveryHashes.splice(idx, 1);
+        ok = true;
+      }
+    }
+    if (!ok) {
+      enrollment.failedAttempts += 1;
+      if (enrollment.failedAttempts >= TOTP_MAX_FAILURES) {
+        enrollment.lockUntil = now + TOTP_LOCK_MS;
+        enrollment.failedAttempts = 0;
+      }
+      return null;
+    }
+    enrollment.failedAttempts = 0;
+    enrollment.lockUntil = null;
+    delete state.totpTickets[ticket];
+    const token = `bls_${randomBytes(24).toString('hex')}`;
+    const session = {
+      tokenHash: hashToken(token),
+      publicKey: account.publicKey,
+      createdAt: now,
+      expiresAt: now + SESSION_TTL_MS,
+    };
+    state.sessions[session.tokenHash] = session;
+    return { token, expiresAt: session.expiresAt, account: { ...account } };
+  });
+  if (!found) throw new AuthError(401, 'invalid or expired ticket or wrong code; sign in again');
+  return found;
+}
+
+export async function disableTotp(store: CommunityStore, publicKey: string, code: string, now = Date.now()): Promise<void> {
+  const serverSecret = totpServerSecret();
+  const ok = await store.change((state) => {
+    const account = state.accounts[publicKey];
+    const enrollment = account?.totp;
+    if (!account || !enrollment || enrollment.status !== 'enabled') throw new AuthError(400, 'second factor is not enabled');
+    const seed = decryptSeed(serverSecret, enrollment.encSeed);
+    const step = verifyTotp(seed, code, Math.floor(now / 1000), enrollment.lastUsedStep);
+    if (step !== null) {
+      enrollment.lastUsedStep = step;
+    } else {
+      const hash = hashRecoveryCode(code);
+      const idx = enrollment.recoveryHashes.findIndex((h) => h.length === hash.length && timingSafeEqual(Buffer.from(h), Buffer.from(hash)));
+      if (idx === -1) return false;
+    }
+    delete account.totp;
+    return true;
+  });
+  if (!ok) throw new AuthError(401, 'code did not match; second factor not disabled');
 }
 
 function verifySignature(publicKey: string, message: string, signature: Buffer): boolean {
