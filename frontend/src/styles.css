@@ -2241,6 +2241,30 @@ input[type='checkbox'] {
   border-radius: 4px;
   accent-color: var(--accent);
 }
+
+/* Option rows (radio/checkbox + label) stay inline. The generic community
+   form rules above put every label in a column flex (stacking the control
+   above its text) and stretch inputs to full row width - which turned
+   radios into row-wide pills with a centered circle and detached the label.
+   Option rows keep the control at a fixed size beside its natively
+   associated, clickable label; row direction flips automatically in RTL. */
+.community-section form label.cat-option {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.community-section form label.cat-option input[type='radio'],
+.community-section form label.cat-option input[type='checkbox'] {
+  flex: none;
+  padding: 0;
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+.community-section form label.cat-option input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+}
 /* Campaign card reference: identity row, funded figure, demo labeling */
 .card-id {
   display: flex;
