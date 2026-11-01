@@ -435,6 +435,8 @@ export const de: Messages = {
     intro:
       'Nehmen Sie Kapital von der Menge über einen Soroban-Vertrag mit Alles-oder-nichts-Finanzierung auf. Angemeldete Wallets können unten einen Emittentenantrag einreichen; Anträge werden zur Prüfung durch den Betreiber gespeichert. Das Einreichen ist kein Onboarding, keine Listung und keine Genehmigung, und es wird keine Finanzierung angeboten.',
     journeyAria: 'Überblick über den Weg des Emittenten',
+    builderDraftLead: 'Entwurfsvorschau:',
+    builderDraftLink: 'Sehen Sie, wie eine Kampagne für die Bereitstellung konfiguriert würde - in dieser Demo deaktiviert',
     journeyTitle: 'Der geplante Weg',
     steps: [
       {
@@ -579,6 +581,7 @@ export const de: Messages = {
     walletMismatch: 'Verbinden Sie die Wallet, die diese Transaktion vorbereitet hat.',
     walletNoSign: 'Wallet hat nicht signiert',
     apiFailed: 'API-Anfrage fehlgeschlagen',
+    apiUnavailable: 'Der Dienst ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in Kürze erneut.',
     prepareTrustlineMissing:
       'Diese Wallet ist noch nicht für Testnet-USDC eingerichtet (fehlende Trustline). Fügen Sie eine USDC-Trustline hinzu und versuchen Sie es erneut.',
     prepareAccountMissing: 'Dieses Wallet-Konto existiert im Testnetz noch nicht. Zahlen Sie es zuerst ein und versuchen Sie es erneut.',
@@ -1378,6 +1381,35 @@ export const de: Messages = {
     jobsAboutTitle: 'Wie dieses Projekt gebaut wird',
     jobsAboutBody:
       'Blockallisto wird derzeit als kleines Prototyp-Projekt gebaut. Sollte je eine echte Stelle geöffnet werden, wird sie auf dieser Seite mit Anforderungen und Bewerbungsweg veröffentlicht.',
+  },
+  builder: {
+    title: 'Kampagnen-Builder',
+    badge: 'Entwurf',
+    intro:
+      'Entwurfsvorschau, wie eine Kampagne für die Bereitstellung konfiguriert würde. Nichts hier stellt einen Vertrag bereit oder erstellt eine Kampagne: Das Absenden ist in dieser Demo deaktiviert. Die Felder folgen denselben Regeln, die der Vertrag und das Kampagnenregister durchsetzen.',
+    connectNote:
+      'Verbinden Sie ein Wallet unter Mein Konto, um die Erstelleradresse in der Vorschau zu sehen. Nur das Ersteller-Wallet kann eine Bereitstellung autorisieren, und es kann erst nach Ablauf der Frist und nur dann auszahlen, wenn das Ziel erreicht wurde.',
+    nameLabel: 'Projektname',
+    nameErrorTooLong: 'Maximal 120 Zeichen (Register-Regel).',
+    slugLabel: 'Kampagnen-ID (URL-Slug)',
+    slugPlaceholder: 'mein-projekt',
+    slugErrorInvalid: 'Nur Buchstaben, Ziffern, - und _, bis zu 48 Zeichen (Register-Regel).',
+    industryLabel: 'Branche',
+    goalLabel: 'Finanzierungsziel (Testnet-USDC)',
+    goalPlaceholder: '10000',
+    goalErrorInvalid: 'Das Ziel muss ein positiver Betrag mit höchstens 7 Dezimalstellen sein (Token-Regel).',
+    goalErrorRange: 'Das Ziel überschreitet den Höchstbetrag, den der Vertrag speichern kann (Vertragsregel).',
+    deadlineLabel: 'Frist',
+    deadlineNote: 'Die Frist ist 00:00 UTC am gewählten Datum; heute ist also bereits zu spät.',
+    deadlineErrorPast: 'Die Frist muss in der Zukunft liegen (Vertragsregel).',
+    creatorLabel: 'Ersteller-Wallet',
+    creatorPlaceholder: 'Verbinden Sie zuerst ein Wallet',
+    tokenLabel: 'Token',
+    previewAria: 'Bereitstellungsvorschau',
+    previewTitle: 'Was eine Bereitstellung verwenden würde',
+    previewConstructor: 'Konstruktorargumente des Vertrags (der Ersteller muss die Bereitstellung signieren):',
+    previewRegistry: 'Eintrag im Kampagnenregister:',
+    deployDisabled: 'Die Bereitstellung ist in dieser Demo nicht aktiviert',
   },
   tour: {
     tourTitle: 'Kampagnen-Tour',

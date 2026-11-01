@@ -420,6 +420,8 @@ export const ko: Messages = {
     intro:
       '올오어낫싱 자금 조달이 있는 Soroban 컨트랙트를 통해 대중으로부터 자본을 조달하세요. 로그인한 지갑은 아래에서 발행사 신청서를 제출할 수 있으며, 신청서는 운영자 검토를 위해 저장됩니다. 제출은 온보딩, 상장 또는 승인이 아니며, 어떠한 자금 조달도 제공되지 않습니다.',
     journeyAria: '발행자 여정 개요',
+    builderDraftLead: '초안 미리보기:',
+    builderDraftLink: '캠페인이 배포를 위해 어떻게 구성되는지 확인하세요 - 이 데모에서는 비활성화됨',
     journeyTitle: '의도된 여정',
     steps: [
       { h: '신청', p: '회사, 금액, 생각하고 있는 금융상품에 대해 알려주세요.' },
@@ -557,6 +559,7 @@ export const ko: Messages = {
     walletMismatch: '이 트랜잭션을 준비한 지갑을 연결하세요.',
     walletNoSign: '지갑이 서명하지 않았습니다',
     apiFailed: 'API 요청 실패',
+    apiUnavailable: '서비스를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
     prepareTrustlineMissing: '이 지갑은 아직 테스트넷 USDC용으로 설정되지 않았습니다(트러스트라인 없음). USDC 트러스트라인을 추가한 후 다시 시도하세요.',
     prepareAccountMissing: '이 지갑 계정은 아직 테스트넷에 존재하지 않습니다. 먼저 자금을 충전한 후 다시 시도하세요.',
     prepareInsufficientBalance: '이 지갑에는 이 금액에 충분한 테스트넷 USDC가 없습니다.',
@@ -1280,6 +1283,35 @@ export const ko: Messages = {
     jobsAboutTitle: '이 프로젝트가 만들어지는 방식',
     jobsAboutBody:
       'Blockallisto는 현재 작은 프로토타입 프로젝트로 구축되고 있습니다. 실제 채용 공고가 생기면 요건과 지원 방법과 함께 이 페이지에 게시될 것입니다.',
+  },
+  builder: {
+    title: '캠페인 빌더',
+    badge: '초안',
+    intro:
+      '캠페인이 배포를 위해 어떻게 구성되는지 보여주는 초안 미리보기입니다. 여기서는 컨트랙트를 배포하거나 캠페인을 생성하지 않습니다. 이 데모에서는 제출이 비활성화되어 있습니다. 각 필드는 컨트랙트와 캠페인 레지스트리가 적용하는 것과 동일한 규칙을 따릅니다.',
+    connectNote:
+      '생성자 주소를 미리 보려면 "내 계정"에서 지갑을 연결하세요. 생성자 지갑만 배포를 승인할 수 있으며, 마감일이 지난 후 목표가 달성된 경우에만 출금할 수 있습니다.',
+    nameLabel: '프로젝트 이름',
+    nameErrorTooLong: '최대 120자입니다(레지스트리 규칙).',
+    slugLabel: '캠페인 ID(URL 슬러그)',
+    slugPlaceholder: 'my-project',
+    slugErrorInvalid: '문자, 숫자, -, _ 만 사용 가능하며 최대 48자입니다(레지스트리 규칙).',
+    industryLabel: '업종',
+    goalLabel: '모금 목표(테스트넷 USDC)',
+    goalPlaceholder: '10000',
+    goalErrorInvalid: '목표는 소수점 7자리까지의 양수 금액이어야 합니다(토큰 규칙).',
+    goalErrorRange: '목표가 컨트랙트에 저장할 수 있는 최대 금액을 초과합니다(컨트랙트 규칙).',
+    deadlineLabel: '마감일',
+    deadlineNote: '마감일은 선택한 날짜의 00:00 UTC입니다. 따라서 오늘은 이미 너무 늦습니다.',
+    deadlineErrorPast: '마감일은 미래여야 합니다(컨트랙트 규칙).',
+    creatorLabel: '생성자 지갑',
+    creatorPlaceholder: '먼저 지갑을 연결하세요',
+    tokenLabel: '토큰',
+    previewAria: '배포 미리보기',
+    previewTitle: '배포에 사용될 내용',
+    previewConstructor: '컨트랙트 생성자 인수(생성자가 배포에 서명해야 합니다):',
+    previewRegistry: '캠페인 레지스트리 항목:',
+    deployDisabled: '이 데모에서는 배포가 활성화되어 있지 않습니다',
   },
   tour: {
     tourTitle: '캠페인 둘러보기',

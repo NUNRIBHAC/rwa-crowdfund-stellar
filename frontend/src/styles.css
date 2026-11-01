@@ -797,6 +797,11 @@ code {
   .header-side {
     grid-row: 1;
   }
+  /* The brand must also shrink back to row 1: spanning both rows put its box
+     on top of the full-width nav row (first link painted over the logo). */
+  .brand {
+    grid-row: 1;
+  }
 }
 
 @media (max-width: 720px) {
@@ -1730,14 +1735,15 @@ textarea:focus-visible,
 .footer-brand {
   position: relative;
   background: var(--navy);
-  width: 100vw;
+  /* Full-bleed background without escaping the page column: the box itself
+     stays inside the .page content column (so footer content shares the page
+     gutters exactly, in both LTR and RTL), and the navy background is painted
+     to the viewport edges with the box-shadow + clip-path pair. The previous
+     width:100vw + margin calc(50% - 50vw) trick drifted (-16px at 1280/844,
+     -21px at 390), leaving content near-flush against the viewport edge. */
+  box-shadow: 0 0 0 100vmax var(--navy);
+  clip-path: inset(0 -100vmax);
   margin-block: 40px -64px;
-  /* margin-inline-start (not physical margin-left): in RTL an over-constrained
-     block ignores margin-left, which left the band right-anchored and shifted
-     111px off the viewport's left edge. The logical margin keeps the band
-     centred in both directions. */
-  margin-inline-start: calc(50% - 50vw);
-  overflow: hidden;
 }
 
 @media (max-width: 520px) {
@@ -1751,8 +1757,10 @@ textarea:focus-visible,
   margin: 0;
   /* Right reserve = tile width + 44px slack: the animated tiles roam the
      whole tile zone, so the text-to-zone gap must be comfortable, not the
-     previous 4px (424 reserve over 420px tiles). */
-  padding: 24px 464px 24px 24px;
+     previous 4px (424 reserve over 420px tiles). Left padding is 0: the band
+     box already sits inside the page column, so content starts exactly at
+     the shared page gutter. */
+  padding: 24px 464px 24px 0;
   min-height: 150px;
   display: flex;
   align-items: flex-start;
@@ -2027,7 +2035,7 @@ textarea:focus-visible,
   /* The tile figure must stay fully visible ("a figura tem que se ver toda"):
      stack it below the tagline as a full-width band, still animating. */
   .footer-brand-inner {
-    padding: 24px 24px 24px;
+    padding: 24px 0;
     flex-direction: column;
   }
   .footer-tiles {
@@ -2758,6 +2766,21 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   }
 }
 
+/* Campaign-builder draft: the disabled deploy action stays legible (the
+   browser-default disabled styling is too faint to read its own label). */
+.builder-deploy-disabled {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #9aa0b4;
+  border-radius: 8px;
+  background: #e6e8f0;
+  color: #3a3f55;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  cursor: not-allowed;
+}
+
 /* Blog articles: stacked card, never the multi-column portfolio grid. */
 .blog-post {
   display: block;
@@ -2781,4 +2804,11 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Campaign-builder draft: constructor/registry JSON wraps instead of clipping
+   at narrow viewports (long base32 addresses otherwise overflow the pre). */
+.builder-preview-json {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }

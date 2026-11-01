@@ -426,6 +426,8 @@ export const en = {
     intro:
       'Raise capital from the crowd through a Soroban contract with all-or-nothing funding. Signed-in wallets can submit an issuer application below; applications are stored for operator review. Submitting is not onboarding, listing or approval, and no financing is offered.',
     journeyAria: 'Issuer journey overview',
+    builderDraftLead: 'Draft preview:',
+    builderDraftLink: 'See how a campaign would be configured for deployment - disabled in this demo',
     journeyTitle: 'The intended journey',
     steps: [
       {
@@ -570,6 +572,7 @@ export const en = {
     walletMismatch: 'Connect the wallet that prepared this transaction.',
     walletNoSign: 'Wallet did not sign',
     apiFailed: 'API request failed',
+    apiUnavailable: 'The service is temporarily unavailable. Please try again in a moment.',
     prepareTrustlineMissing: 'This wallet is not set up for testnet USDC yet (missing trustline). Add a USDC trustline, then try again.',
     prepareAccountMissing: 'This wallet account does not exist on testnet yet. Fund it first, then try again.',
     prepareInsufficientBalance: 'This wallet does not hold enough testnet USDC for this amount.',
@@ -1340,6 +1343,35 @@ export const en = {
     jobsAboutTitle: 'How this project is built',
     jobsAboutBody:
       'Blockallisto is currently built as a small prototype project. If a real position ever opens it will be published on this page with its requirements and how to apply.',
+  },
+  builder: {
+    title: 'Campaign builder',
+    badge: 'DRAFT',
+    intro:
+      'Draft preview of how a campaign would be configured for deployment. Nothing here deploys a contract or creates a campaign: submission is disabled in this demo. Fields follow the same rules the contract and the campaign registry enforce.',
+    connectNote:
+      'Connect a wallet under My account to preview the creator address. Only the creator wallet can authorise a deployment, and it can withdraw only after the deadline and only if the goal was reached.',
+    nameLabel: 'Project name',
+    nameErrorTooLong: 'Maximum 120 characters (registry rule).',
+    slugLabel: 'Campaign id (URL slug)',
+    slugPlaceholder: 'my-project',
+    slugErrorInvalid: 'Letters, digits, - and _ only, up to 48 characters (registry rule).',
+    industryLabel: 'Industry',
+    goalLabel: 'Funding goal (testnet USDC)',
+    goalPlaceholder: '10000',
+    goalErrorInvalid: 'Goal must be a positive amount with at most 7 decimal places (token rule).',
+    goalErrorRange: 'Goal exceeds the maximum amount the contract can store (contract rule).',
+    deadlineLabel: 'Deadline',
+    deadlineNote: 'The deadline is 00:00 UTC on the chosen date, so today is already too late.',
+    deadlineErrorPast: 'Deadline must be in the future (contract rule).',
+    creatorLabel: 'Creator wallet',
+    creatorPlaceholder: 'Connect a wallet first',
+    tokenLabel: 'Token',
+    previewAria: 'Deployment preview',
+    previewTitle: 'What a deployment would use',
+    previewConstructor: 'Contract constructor arguments (creator must sign the deployment):',
+    previewRegistry: 'Campaign registry entry:',
+    deployDisabled: 'Deployment is not enabled in this demo',
   },
   tour: {
     tourTitle: 'Campaign tour',

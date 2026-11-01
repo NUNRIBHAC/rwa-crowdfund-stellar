@@ -436,6 +436,8 @@ export const es: Messages = {
     intro:
       'Capta capital de la multitud a través de un contrato Soroban con financiación todo-o-nada. Las carteras con sesión iniciada pueden enviar una solicitud de emisor abajo; las solicitudes se almacenan para su revisión por el operador. Enviar no constituye incorporación, cotización ni aprobación, y no se ofrece financiación.',
     journeyAria: 'Resumen del recorrido del emisor',
+    builderDraftLead: 'Vista previa en borrador:',
+    builderDraftLink: 'Vea cómo se configuraría una campaña para su despliegue - desactivado en esta demostración',
     journeyTitle: 'El recorrido previsto',
     steps: [
       {
@@ -580,6 +582,7 @@ export const es: Messages = {
     walletMismatch: 'Conecta la cartera que preparó esta transacción.',
     walletNoSign: 'La cartera no firmó',
     apiFailed: 'La solicitud a la API falló',
+    apiUnavailable: 'El servicio no está disponible temporalmente. Inténtelo de nuevo en unos instantes.',
     prepareTrustlineMissing: 'Esta cartera aún no está configurada para USDC de prueba (falta la trustline). Añade una trustline de USDC e inténtalo de nuevo.',
     prepareAccountMissing: 'Esta cuenta de cartera aún no existe en la red de pruebas. Fínanciala primero e inténtalo de nuevo.',
     prepareInsufficientBalance: 'Esta cartera no tiene suficiente USDC de prueba para este importe.',
@@ -1392,6 +1395,35 @@ export const es: Messages = {
     jobsAboutTitle: 'Cómo se construye este proyecto',
     jobsAboutBody:
       'Blockallisto se construye actualmente como un pequeño proyecto prototipo. Si alguna vez se abre una vacante real, se publicará en esta página con sus requisitos y cómo aplicar.',
+  },
+  builder: {
+    title: 'Creador de campañas',
+    badge: 'Borrador',
+    intro:
+      'Vista previa en borrador de cómo se configuraría una campaña para su despliegue. Nada aquí despliega un contrato ni crea una campaña: el envío está desactivado en esta demostración. Los campos siguen las mismas reglas que aplican el contrato y el registro de campañas.',
+    connectNote:
+      'Conecta un monedero en Mi cuenta para previsualizar la dirección del creador. Solo el monedero del creador puede autorizar un despliegue, y solo puede retirar los fondos después de la fecha límite y únicamente si se alcanzó el objetivo.',
+    nameLabel: 'Nombre del proyecto',
+    nameErrorTooLong: 'Máximo 120 caracteres (regla del registro).',
+    slugLabel: 'Identificador de campaña (slug de URL)',
+    slugPlaceholder: 'mi-proyecto',
+    slugErrorInvalid: 'Solo letras, dígitos, - y _, hasta 48 caracteres (regla del registro).',
+    industryLabel: 'Sector',
+    goalLabel: 'Objetivo de financiación (USDC de testnet)',
+    goalPlaceholder: '10000',
+    goalErrorInvalid: 'El objetivo debe ser un importe positivo con un máximo de 7 decimales (regla del token).',
+    goalErrorRange: 'El objetivo supera el importe máximo que el contrato puede almacenar (regla del contrato).',
+    deadlineLabel: 'Fecha límite',
+    deadlineNote: 'La fecha límite es a las 00:00 UTC de la fecha elegida, por lo que hoy ya es demasiado tarde.',
+    deadlineErrorPast: 'La fecha límite debe ser futura (regla del contrato).',
+    creatorLabel: 'Monedero del creador',
+    creatorPlaceholder: 'Conecta primero un monedero',
+    tokenLabel: 'Token',
+    previewAria: 'Vista previa de despliegue',
+    previewTitle: 'Lo que usaría un despliegue',
+    previewConstructor: 'Argumentos del constructor del contrato (el creador debe firmar el despliegue):',
+    previewRegistry: 'Entrada del registro de campañas:',
+    deployDisabled: 'El despliegue no está habilitado en esta demostración',
   },
   tour: {
     tourTitle: 'Visita guiada de la campaña',

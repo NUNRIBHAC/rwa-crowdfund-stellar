@@ -438,6 +438,8 @@ export const fr: Messages = {
     intro:
       "Levez des capitaux auprès de la foule via un contrat Soroban à financement tout-ou-rien. Les portefeuilles connectés peuvent soumettre une candidature d'émetteur ci-dessous ; les candidatures sont conservées pour examen par l'opérateur. Soumettre ne constitue ni une intégration, ni une cotation, ni une approbation, et aucun financement n'est proposé.",
     journeyAria: "Résumé du parcours de l'émetteur",
+    builderDraftLead: 'Aperçu provisoire :',
+    builderDraftLink: 'Découvrez comment une campagne serait configurée pour le déploiement - désactivé dans cette démo',
     journeyTitle: 'Le parcours prévu',
     steps: [
       {
@@ -582,6 +584,7 @@ export const fr: Messages = {
     walletMismatch: 'Connectez le portefeuille qui a préparé cette transaction.',
     walletNoSign: "Le portefeuille n'a pas signé",
     apiFailed: 'La requête API a échoué',
+    apiUnavailable: 'Le service est temporairement indisponible. Veuillez réessayer dans un instant.',
     prepareTrustlineMissing:
       "Ce portefeuille n'est pas encore configuré pour l'USDC de test (trustline manquante). Ajoutez une trustline USDC, puis réessayez.",
     prepareAccountMissing: "Ce compte de portefeuille n'existe pas encore sur le réseau de test. Financez-le d'abord, puis réessayez.",
@@ -1396,6 +1399,35 @@ export const fr: Messages = {
     jobsAboutTitle: 'Comment ce projet est construit',
     jobsAboutBody:
       "Blockallisto est actuellement construit comme un petit projet prototype. Si un poste réel s'ouvre un jour, il sera publié sur cette page avec ses exigences et la façon de postuler.",
+  },
+  builder: {
+    title: 'Créateur de campagne',
+    badge: 'Brouillon',
+    intro:
+      "Aperçu provisoire de la configuration d'une campagne avant déploiement. Rien ici ne déploie de contrat ni ne crée de campagne : l'envoi est désactivé dans cette démo. Les champs suivent les mêmes règles que celles appliquées par le contrat et le registre des campagnes.",
+    connectNote:
+      "Connectez un portefeuille sous Mon compte pour prévisualiser l'adresse du créateur. Seul le portefeuille du créateur peut autoriser un déploiement, et il ne peut retirer les fonds qu'après la date limite et uniquement si l'objectif a été atteint.",
+    nameLabel: 'Nom du projet',
+    nameErrorTooLong: '120 caractères maximum (règle du registre).',
+    slugLabel: 'Identifiant de campagne (slug URL)',
+    slugPlaceholder: 'mon-projet',
+    slugErrorInvalid: 'Lettres, chiffres, - et _ uniquement, 48 caractères maximum (règle du registre).',
+    industryLabel: 'Secteur',
+    goalLabel: 'Objectif de financement (USDC de testnet)',
+    goalPlaceholder: '10000',
+    goalErrorInvalid: "L'objectif doit être un montant positif avec au maximum 7 décimales (règle du jeton).",
+    goalErrorRange: "L'objectif dépasse le montant maximal que le contrat peut stocker (règle du contrat).",
+    deadlineLabel: 'Date limite',
+    deadlineNote: "La date limite est fixée à 00:00 UTC le jour choisi ; aujourd'hui est donc déjà trop tard.",
+    deadlineErrorPast: 'La date limite doit être dans le futur (règle du contrat).',
+    creatorLabel: 'Portefeuille du créateur',
+    creatorPlaceholder: "Connectez d'abord un portefeuille",
+    tokenLabel: 'Jeton',
+    previewAria: 'Aperçu de déploiement',
+    previewTitle: "Ce qu'utiliserait un déploiement",
+    previewConstructor: 'Arguments du constructeur du contrat (le créateur doit signer le déploiement) :',
+    previewRegistry: 'Entrée du registre des campagnes :',
+    deployDisabled: "Le déploiement n'est pas activé dans cette démo",
   },
   tour: {
     tourTitle: 'Visite guidée de la campagne',

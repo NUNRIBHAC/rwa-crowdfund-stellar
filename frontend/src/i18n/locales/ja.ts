@@ -421,6 +421,8 @@ export const ja: Messages = {
     intro:
       'オール・オア・ナッシングの資金調達を備えた Soroban コントラクトを通じて、クラウドから資金を調達します。サインインしたウォレットは下のフォームから発行者申請を提出でき、申請は運営者の審査のために保存されます。提出はオンボーディング、上場、承認のいずれでもなく、資金調達の提供でもありません。',
     journeyAria: '発行者ジャーニーの概要',
+    builderDraftLead: '下書きプレビュー:',
+    builderDraftLink: 'キャンペーンのデプロイ設定を確認できます - このデモでは無効です',
     journeyTitle: '想定されるジャーニー',
     steps: [
       {
@@ -565,6 +567,7 @@ export const ja: Messages = {
     walletMismatch: 'このトランザクションを準備したウォレットを接続してください。',
     walletNoSign: 'ウォレットが署名しませんでした',
     apiFailed: 'API リクエストに失敗しました',
+    apiUnavailable: 'サービスは一時的に利用できません。しばらくしてからもう一度お試しください。',
     prepareTrustlineMissing:
       'このウォレットはまだテストネットUSDC用に設定されていません（トラストラインがありません）。USDCトラストラインを追加してからもう一度お試しください。',
     prepareAccountMissing: 'このウォレットアカウントはテストネット上にまだ存在しません。先に入金してからもう一度お試しください。',
@@ -1305,6 +1308,35 @@ export const ja: Messages = {
     jobsAboutTitle: 'このプロジェクトの作られ方',
     jobsAboutBody:
       'Blockallisto は現在、小さなプロトタイププロジェクトとして構築されています。実際の求人が発生した場合には、要件と応募方法とともにこのページに掲載されます。',
+  },
+  builder: {
+    title: 'キャンペーンビルダー',
+    badge: '下書き',
+    intro:
+      'キャンペーンのデプロイ設定の下書きプレビューです。ここではコントラクトのデプロイもキャンペーンの作成も行われません。このデモでは送信は無効です。各フィールドはコントラクトとキャンペーンレジストリが適用するのと同じルールに従います。',
+    connectNote:
+      '作成者アドレスをプレビューするには、「マイアカウント」でウォレットを接続してください。デプロイを承認できるのは作成者ウォレットのみで、引き出しは期限経過後かつ目標達成時に限られます。',
+    nameLabel: 'プロジェクト名',
+    nameErrorTooLong: '最大120文字です(レジストリルール)。',
+    slugLabel: 'キャンペーンID(URLスラッグ)',
+    slugPlaceholder: 'my-project',
+    slugErrorInvalid: '英数字、-、_ のみ、最大48文字です(レジストリルール)。',
+    industryLabel: '業種',
+    goalLabel: '調達目標(テストネット USDC)',
+    goalPlaceholder: '10000',
+    goalErrorInvalid: '目標は小数点以下7桁までの正の金額である必要があります(トークンルール)。',
+    goalErrorRange: '目標がコントラクトに保存できる上限額を超えています(コントラクトルール)。',
+    deadlineLabel: '期限',
+    deadlineNote: '期限は選択した日付の 00:00 UTC です。そのため、今日はすでに遅すぎます。',
+    deadlineErrorPast: '期限は未来の日付である必要があります(コントラクトルール)。',
+    creatorLabel: '作成者ウォレット',
+    creatorPlaceholder: '先にウォレットを接続してください',
+    tokenLabel: 'トークン',
+    previewAria: 'デプロイプレビュー',
+    previewTitle: 'デプロイで使用される内容',
+    previewConstructor: 'コントラクトのコンストラクタ引数(作成者がデプロイに署名する必要があります):',
+    previewRegistry: 'キャンペーンレジストリエントリ:',
+    deployDisabled: 'このデモではデプロイは有効になっていません',
   },
   tour: {
     tourTitle: 'キャンペーンツアー',

@@ -4,6 +4,7 @@ import type { Campaign, Intent } from './types';
 import { isTerminal } from './types';
 import { api } from './api';
 import { contributionError, formatAmount } from './format';
+import type { ContributionError } from './format';
 import { FIXTURE_CAMPAIGNS } from './fixtures';
 import type { Market } from './market';
 import { useRoute } from './router';
@@ -21,6 +22,7 @@ import RiskWarnings from './pages/RiskWarnings';
 import Faq from './pages/Faq';
 import About from './pages/About';
 import Financing from './pages/Financing';
+import CampaignBuilderDraft from './components/CampaignBuilderDraft';
 import Account from './pages/Account';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -41,11 +43,14 @@ export default function App() {
   const route = useRoute();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [actor, setActor] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<{ code?: string; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
-  const [amountErrors, setAmountErrors] = useState<Record<string, string>>({});
-  const [prepareErrors, setPrepareErrors] = useState<Record<string, string>>({});
+  // Per-card errors store machine codes (not localized strings) so a locale
+  // switch retranslates them at render with the rest of the page, same rule
+  // as the top banner. '' clears the slot.
+  const [amountErrorCodes, setAmountErrorCodes] = useState<Record<string, ContributionError | ''>>({});
+  const [prepareErrorCodes, setPrepareErrorCodes] = useState<Record<string, string>>({});
   const [loaded, setLoaded] = useState(false);
   const [fixtureMode, setFixtureMode] = useState(false);
   const [intent, setIntent] = useState<Intent | null>(() => {
@@ -55,6 +60,15 @@ export default function App() {
       return null;
     }
   });
+
+  // Store the failure, not a localized string: the banner resolves known
+  // codes against the ACTIVE dictionary at render, so a locale switch after
+  // the error appears retranslates the banner with the rest of the page.
+  function bannerError(e: unknown): { code?: string; text: string } {
+    const text = e instanceof Error ? e.message : String(e);
+    const code = (e as { code?: string } | null)?.code;
+    return code ? { code, text } : { text };
+  }
 
   async function refresh(address = actor) {
     const data = await api(`/api/campaigns${address ? `?actor=${encodeURIComponent(address)}` : ''}`);
@@ -69,7 +83,7 @@ export default function App() {
       setFixtureMode(true);
       setLoaded(true);
     }
-    refresh().catch((e) => setError(e.message));
+    refresh().catch((e) => setError(bannerError(e)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -80,11 +94,11 @@ export default function App() {
 
   async function run(fn: () => Promise<void>) {
     setBusy(true);
-    setError('');
+    setError(null);
     try {
       await fn();
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      setError(bannerError(e));
     } finally {
       setBusy(false);
     }
@@ -102,25 +116,37 @@ export default function App() {
     await refresh(r.address);
   }
 
-  function validateAmount(c: Campaign, raw: string): string {
-    const code = contributionError(raw ?? '', c.config.goal, c.raised);
+  function amountErrorText(code: ContributionError, c: Campaign): string {
     if (code === 'required') return m.card.amountRequired;
     if (code === 'invalid') return m.card.amountInvalid;
-    if (code === 'exceeds') return m.card.amountExceeds(formatAmount(String(BigInt(c.config.goal) - BigInt(c.raised)), locale));
-    return '';
+    return m.card.amountExceeds(formatAmount(String(BigInt(c.config.goal) - BigInt(c.raised)), locale));
+  }
+
+  function prepareErrorText(code: string): string {
+    // Known failures localize from their stable code; unknown ones get the
+    // generic message and keep their detail in the console, never parsed or
+    // partially translated server text.
+    const known: Record<string, string> = {
+      SIM_TRUSTLINE_MISSING: m.errors.prepareTrustlineMissing,
+      SIM_ACCOUNT_MISSING: m.errors.prepareAccountMissing,
+      SIM_INSUFFICIENT_BALANCE: m.errors.prepareInsufficientBalance,
+      SIM_REJECTED: m.errors.prepareFailed,
+      API_UNAVAILABLE: m.errors.apiUnavailable,
+    };
+    return known[code] ?? m.errors.prepareFailed;
   }
 
   async function prepare(c: Campaign, action: 'contribute' | 'refund' | 'withdraw') {
     if (!actor) throw new Error(m.errors.connectFirst);
     if (action === 'contribute') {
-      const msg = validateAmount(c, amounts[c.id] ?? '');
-      setAmountErrors({ ...amountErrors, [c.id]: msg });
-      if (msg) return;
+      const code = contributionError(amounts[c.id] ?? '', c.config.goal, c.raised) ?? '';
+      setAmountErrorCodes({ ...amountErrorCodes, [c.id]: code });
+      if (code) return;
     }
     if (intent && !isTerminal(intent.status)) {
       throw new Error(m.errors.resolveSaved);
     }
-    setPrepareErrors((prev) => ({ ...prev, [c.id]: '' }));
+    setPrepareErrorCodes((prev) => ({ ...prev, [c.id]: '' }));
     let result;
     try {
       result = await api(`/api/campaigns/${c.id}/soroban/build`, {
@@ -131,19 +157,11 @@ export default function App() {
     } catch (e) {
       // Build failures surface at the card, next to the button that failed,
       // not only in the page-top banner a scrolled-down user never sees.
-      // Known failures are localized from their stable code; unknown ones get
-      // the generic message and keep their detail in the console, never
-      // parsed or partially translated server text.
-      const code = (e as { code?: string }).code;
-      const known: Record<string, string> = {
-        SIM_TRUSTLINE_MISSING: m.errors.prepareTrustlineMissing,
-        SIM_ACCOUNT_MISSING: m.errors.prepareAccountMissing,
-        SIM_INSUFFICIENT_BALANCE: m.errors.prepareInsufficientBalance,
-        SIM_REJECTED: m.errors.prepareFailed,
-      };
-      const msg = (code && known[code]) || m.errors.prepareFailed;
-      if (!(code && known[code])) console.warn('prepare failed', e);
-      setPrepareErrors((prev) => ({ ...prev, [c.id]: msg }));
+      // The stored code is resolved against the active dictionary at render.
+      const code = (e as { code?: string }).code ?? 'UNKNOWN';
+      const KNOWN = ['SIM_TRUSTLINE_MISSING', 'SIM_ACCOUNT_MISSING', 'SIM_INSUFFICIENT_BALANCE', 'SIM_REJECTED', 'API_UNAVAILABLE'];
+      if (!KNOWN.includes(code)) console.warn('prepare failed', e);
+      setPrepareErrorCodes((prev) => ({ ...prev, [c.id]: code }));
       return;
     }
     retain({ ...result, campaign: c.id, actor, status: 'BUILT' });
@@ -185,6 +203,16 @@ export default function App() {
   }
 
   const base = fixtureMode ? FIXTURE_CAMPAIGNS : campaigns;
+  const amountErrors: Record<string, string> = {};
+  for (const [id, code] of Object.entries(amountErrorCodes)) {
+    if (!code) continue;
+    const c = base.find((x) => x.id === id);
+    if (c) amountErrors[id] = amountErrorText(code, c);
+  }
+  const prepareErrors: Record<string, string> = {};
+  for (const [id, code] of Object.entries(prepareErrorCodes)) {
+    if (code) prepareErrors[id] = prepareErrorText(code);
+  }
   const market: Market = {
     campaigns: base,
     loaded,
@@ -198,7 +226,7 @@ export default function App() {
       setAmounts({ ...amounts, [id]: v });
       const c = campaigns.find((x) => x.id === id);
       if (!c) return;
-      setAmountErrors({ ...amountErrors, [id]: v.trim() === '' ? '' : validateAmount(c, v) });
+      setAmountErrorCodes({ ...amountErrorCodes, [id]: v.trim() === '' ? '' : (contributionError(v, c.config.goal, c.raised) ?? '') });
     },
     onPrepare: (c, action) => run(() => prepare(c, action)),
     onRefresh: () => run(() => refresh()),
@@ -220,7 +248,7 @@ export default function App() {
       <main className="page" id="main">
         {error && (
           <p role="alert" className="error-banner">
-            {error}
+            {(error.code === 'API_UNAVAILABLE' && m.errors.apiUnavailable) || error.text}
           </p>
         )}
 
@@ -250,6 +278,7 @@ export default function App() {
         {route.name === 'faq' && <Faq />}
         {route.name === 'about' && <About />}
         {route.name === 'financing' && <Financing market={market} />}
+        {route.name === 'campaign-builder' && <CampaignBuilderDraft />}
         {route.name === 'account' && <Account market={market} />}
         {route.name === 'terms-of-service' && <TermsOfService />}
         {route.name === 'privacy-policy' && <PrivacyPolicy />}

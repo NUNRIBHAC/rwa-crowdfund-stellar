@@ -435,6 +435,8 @@ export const pt: Messages = {
     intro:
       'Angarie capital junto da multidão através de um contrato Soroban com financiamento tudo-ou-nada. As carteiras com sessão iniciada podem submeter uma candidatura de emissor abaixo; as candidaturas são guardadas para análise pelo operador. Submeter não constitui adesão, listagem ou aprovação, e não é oferecido qualquer financiamento.',
     journeyAria: 'Resumo do percurso do emitente',
+    builderDraftLead: 'Pré-visualização em rascunho:',
+    builderDraftLink: 'Veja como uma campanha seria configurada para lançamento - desativado nesta demonstração',
     journeyTitle: 'O percurso previsto',
     steps: [
       {
@@ -579,6 +581,7 @@ export const pt: Messages = {
     walletMismatch: 'Ligue a carteira que preparou esta transação.',
     walletNoSign: 'A carteira não assinou',
     apiFailed: 'O pedido à API falhou',
+    apiUnavailable: 'O serviço está temporariamente indisponível. Tente novamente dentro de momentos.',
     prepareTrustlineMissing:
       'Esta carteira ainda não está configurada para USDC de teste (falta a trustline). Adicione uma trustline de USDC e tente novamente.',
     prepareAccountMissing: 'Esta conta de carteira ainda não existe na rede de teste. Financie-a primeiro e tente novamente.',
@@ -1388,6 +1391,35 @@ export const pt: Messages = {
     jobsAboutTitle: 'Como este projeto é construído',
     jobsAboutBody:
       'A Blockallisto é atualmente construída como um pequeno projeto-protótipo. Se alguma vez abrir uma vaga real, será publicada nesta página com os requisitos e a forma de candidatura.',
+  },
+  builder: {
+    title: 'Criador de campanha',
+    badge: 'Rascunho',
+    intro:
+      'Pré-visualização de rascunho de como uma campanha seria configurada para implementação. Nada aqui implementa um contrato nem cria uma campanha: a submissão está desativada nesta demonstração. Os campos seguem as mesmas regras que o contrato e o registo de campanhas aplicam.',
+    connectNote:
+      'Ligue uma carteira em A minha conta para pré-visualizar o endereço do criador. Só a carteira do criador pode autorizar uma implementação, e só pode levantar os fundos depois do prazo e apenas se o objetivo tiver sido atingido.',
+    nameLabel: 'Nome do projeto',
+    nameErrorTooLong: 'Máximo de 120 caracteres (regra do registo).',
+    slugLabel: 'Identificador da campanha (slug de URL)',
+    slugPlaceholder: 'o-meu-projeto',
+    slugErrorInvalid: 'Apenas letras, dígitos, - e _, até 48 caracteres (regra do registo).',
+    industryLabel: 'Setor',
+    goalLabel: 'Objetivo de financiamento (USDC de testnet)',
+    goalPlaceholder: '10000',
+    goalErrorInvalid: 'O objetivo tem de ser um valor positivo com no máximo 7 casas decimais (regra do token).',
+    goalErrorRange: 'O objetivo excede o valor máximo que o contrato consegue guardar (regra do contrato).',
+    deadlineLabel: 'Prazo',
+    deadlineNote: 'O prazo é às 00:00 UTC da data escolhida, pelo que o dia de hoje já é demasiado tarde.',
+    deadlineErrorPast: 'O prazo tem de ser no futuro (regra do contrato).',
+    creatorLabel: 'Carteira do criador',
+    creatorPlaceholder: 'Ligue primeiro uma carteira',
+    tokenLabel: 'Token',
+    previewAria: 'Pré-visualização de implementação',
+    previewTitle: 'O que uma implementação usaria',
+    previewConstructor: 'Argumentos do construtor do contrato (o criador tem de assinar a implementação):',
+    previewRegistry: 'Entrada no registo de campanhas:',
+    deployDisabled: 'A implementação não está ativada nesta demonstração',
   },
   tour: {
     tourTitle: 'Visita guiada da campanha',
