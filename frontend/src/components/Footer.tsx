@@ -1,17 +1,16 @@
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
-import { lockupFor, useTheme } from '../theme';
+import { FOOTER_LOCKUP } from '../theme';
 
 export default function Footer() {
   const { m } = useI18n();
-  const theme = useTheme();
   return (
     <footer className="site-footer">
       <div className="footer-brand">
         <div className="footer-brand-inner">
           <div className="footer-brand-word">
             <div className="footer-brand-lockup">
-              <img className="footer-brand-lockup-img" src={lockupFor(theme)} alt="Blockallisto" />
+              <img className="footer-brand-lockup-img" src={FOOTER_LOCKUP} alt="Blockallisto" />
             </div>
             <p className="footer-tagline">{m.footer.tagline}</p>
             {/* Social icons: visual presence only until the real profile URLs exist (tracked);

@@ -2111,9 +2111,6 @@ a:visited {
 .site-footer a:visited {
   color: #c7c8f9;
 }
-[data-theme='light'] .site-footer a:visited {
-  color: #3b3fd0;
-}
 
 /* Legal pages: persistent demo-template notice */
 .legal-demo-notice {
@@ -2389,43 +2386,6 @@ input[type='checkbox'] {
   border-color: var(--ink);
   color: var(--ink);
 }
-/* Footer follows the theme (user correction 2026-10-31: "quando carrego na
-   luz ... devia tambem ser o footer"): the band, text, links, social icons,
-   lockup (via lockupFor in Footer.tsx) and tile strokes/fills flip. */
-[data-theme='light'] .footer-brand {
-  background: #e8eafc;
-}
-[data-theme='light'] .footer-brand-inner .footer-grid {
-  color: var(--ink-soft);
-}
-[data-theme='light'] .footer-heading {
-  color: rgba(31, 34, 84, 0.55);
-}
-[data-theme='light'] .footer-tagline {
-  color: #3b3fd0;
-}
-[data-theme='light'] .site-footer a {
-  color: #3b3fd0;
-}
-[data-theme='light'] .site-footer a:hover {
-  color: #22246a;
-}
-[data-theme='light'] .footer-legal {
-  color: var(--ink-soft);
-  border-top-color: rgba(31, 34, 84, 0.15);
-}
-[data-theme='light'] .footer-social img {
-  filter: brightness(0) invert(0.25);
-  opacity: 0.85;
-}
-[data-theme='light'] .ft-2 rect,
-[data-theme='light'] .ft-7 rect {
-  stroke: #4b4fe2;
-}
-[data-theme='light'] .ft-4 rect {
-  fill: #6367e8;
-}
-
 /* Community: sign-in, comments, news, documents, tickets, issuer applications */
 .community-section {
   margin: 28px 0 0;
