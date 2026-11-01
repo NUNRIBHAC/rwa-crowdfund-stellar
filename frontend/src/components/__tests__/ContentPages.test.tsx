@@ -35,6 +35,7 @@ describe('PodcastPage', () => {
     expect(screen.getByText('Issuer interviews')).toBeTruthy();
     expect(screen.getByText('Investor education')).toBeTruthy();
     expect(screen.getByText('Platform updates')).toBeTruthy();
+    expect(screen.getByText(/no episodes have been recorded/)).toBeTruthy();
     expect(screen.getByText(/Nothing on this page is an offer or investment advice\./)).toBeTruthy();
   });
 
@@ -60,8 +61,11 @@ describe('PodcastPage', () => {
     renderPage();
     expect(await screen.findByText('QA episode one')).toBeTruthy();
     expect(screen.getByText('Synthetic QA episode, not real content.')).toBeTruthy();
-    // Honest empty state is gone once real (platform-published) episodes exist.
+    // Honest empty state is gone once real (platform-published) episodes exist,
+    // and the intro no longer claims that nothing was recorded.
     expect(screen.queryByText('No episodes published yet.')).toBeNull();
+    expect(screen.queryByText(/no episodes have been recorded/)).toBeNull();
+    expect(screen.getByText(/Published episodes appear above and are labeled as platform demo content\./)).toBeTruthy();
     // Native audio player, no autoplay: preload="none" and the external URL.
     const audio = document.querySelector('audio');
     expect(audio).toBeTruthy();
