@@ -1,3 +1,6 @@
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { LegalBlock } from './types';
 
 export const blocks: LegalBlock[] = [
@@ -100,7 +103,6 @@ export const blocks: LegalBlock[] = [
       ['サンプルの投資キャンペーンを閲覧・絞り込み、構造化された条件を読むこと。'],
       ['学習ハブ、用語集、FAQ を使って投資商品を理解すること。'],
       [
-        '',
         {
           b: ['Freighter'],
         },

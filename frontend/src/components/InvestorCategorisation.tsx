@@ -1,3 +1,4 @@
+import { tpl } from '../format';
 // Investor categorisation (CONDA blueprint section 7 step 3 / T&Cs §5):
 // entry knowledge test + loss-bearing-capacity simulation before unrestricted
 // use. Explicitly a NON-BINDING PROTOTYPE: results persist only in this
@@ -67,7 +68,8 @@ export default function InvestorCategorisation() {
       ) : (
         <>
           <p className={score === questions.length ? 'community-note' : 'community-error'} role="status">
-            {t.catScoreLabel(score, questions.length)} - {score === questions.length ? t.catResultPass : t.catResultReview(questions.length - score)}
+            {tpl(t.catScoreLabel, { correct: score, total: questions.length })} -{' '}
+            {score === questions.length ? t.catResultPass : tpl(t.catResultReview, { n: questions.length - score })}
           </p>
           <button
             className="btn"
@@ -100,7 +102,7 @@ export default function InvestorCategorisation() {
       </form>
       {simResult && (
         <p role="status" className="community-note">
-          {t.catSimResult({ pct: simResult })}
+          {tpl(t.catSimResult, { pct: simResult })}
         </p>
       )}
       <p className="community-note">{t.catSimNote}</p>

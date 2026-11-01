@@ -1,3 +1,4 @@
+import { pluralText } from '../format';
 import { useEffect, useMemo, useState } from 'react';
 import type { Market } from '../market';
 import CampaignCard, { campaignStatus, type CampaignStatus } from '../components/CampaignCard';
@@ -157,7 +158,7 @@ export default function Investments({ market }: { market: Market }) {
 
       {campaigns.length > 0 && (
         <p className={shown.length === 0 ? 'no-matches' : 'sr-only'} role="status">
-          {shown.length === 0 ? m.invest.noMatches : m.invest.resultCount(shown.length)}
+          {shown.length === 0 ? m.invest.noMatches : pluralText(m.invest.resultCount, shown.length)}
         </p>
       )}
 

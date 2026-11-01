@@ -1,6 +1,8 @@
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { Messages } from './en';
 
-// Simplified Chinese (zh-CN).
 export const zhCN: Messages = {
   meta: {
     title: 'Blockallisto - 真实资产，共享可能。',
@@ -57,7 +59,10 @@ export const zhCN: Messages = {
         title: '连接',
         text: '在 Stellar 测试网连接 Freighter 钱包。社区登录为可选，无需电子邮件或密码。',
       },
-      { title: '发现', text: '浏览项目，阅读每个项目页面上的结构化条款。' },
+      {
+        title: '发现',
+        text: '浏览项目，阅读每个项目页面上的结构化条款。',
+      },
       {
         title: '出资',
         text: '签署一笔交易。合约托管您的出资并以原子方式执行融资上限。',
@@ -97,7 +102,9 @@ export const zhCN: Messages = {
     funded: '已融资',
     underfunded: '未达标',
     filterIndustryAria: '按行业筛选',
-    industryLabels: { 'energy-utilities': '能源与公用事业' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': '能源与公用事业',
+    } as Record<string, string>,
     allIndustries: '全部行业',
     sortAria: '排序项目',
     sortDeadline: '截止最近',
@@ -107,7 +114,10 @@ export const zhCN: Messages = {
     grid: '网格',
     list: '列表',
     noMatches: '没有符合当前搜索和筛选条件的项目。',
-    resultCount: (n: number) => `显示 ${n} 个众筹项目`,
+    resultCount: {
+      one: '显示 {n} 个众筹项目',
+      other: '显示 {n} 个众筹项目',
+    },
     activeAria: '进行中的投资',
     activeTitle: '进行中的投资',
     completedAria: '已完成的投资',
@@ -119,9 +129,9 @@ export const zhCN: Messages = {
     statusEnded: '未达标',
     statusOpen: '开放中',
     withdrawn: '已提取',
-    fundedPct: (percent: number) => `已融资 ${percent}%`,
+    fundedPct: '已融资 {percent}%',
     progressUnavailable: '进度不可用 - 链上数据未加载',
-    progressAria: (pct: number) => `融资进度：目标的 ${pct}%`,
+    progressAria: '融资进度：目标的 {pct}%',
     interest: '利率',
     term: '期限',
     minimum: '最低额',
@@ -147,7 +157,7 @@ export const zhCN: Messages = {
     amountLabel: '出资金额（测试网 USDC）',
     amountRequired: '请输入出资金额。',
     amountInvalid: '请输入有效金额:仅限数字,最多 7 位小数,且大于零。',
-    amountExceeds: (remaining: string) => `金额超过剩余目标 ${remaining} USDC(测试网)。`,
+    amountExceeds: '金额超过剩余目标 {remaining} USDC(测试网)。',
     usdcTestnet: 'USDC（测试网）',
     contribute: '出资',
     refundMe: '申请退款',
@@ -155,9 +165,9 @@ export const zhCN: Messages = {
     rules: '在截止期限前出资，上限为目标的剩余额度。截止期限后，只有完全融资时创建者才能提款；否则每位出资者自行签署退款。合约以原子方式执行这些规则。',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `融资进度：${count} 个方块中已填 ${filled} 个，达目标的 ${percent}%`,
+    ariaReady: '融资进度：{count} 个方块中已填 {filled} 个，达目标的 {percent}%',
     ariaUnavailable: '融资进度不可用：链上数据未加载',
-    fundedTail: (filled: number, count: number) => `已融资 - ${count} 个方块中的 ${filled} 个`,
+    fundedTail: '已融资 - {count} 个方块中的 {filled} 个',
     captionUnavailable: '进度不可用 - 链上数据未加载',
   },
   intent: {
@@ -298,7 +308,10 @@ export const zhCN: Messages = {
         title: '申请和审核',
         text: '发行方提交申请，通过资格和文件审核，并签署平台条款。',
       },
-      { title: '项目构建', text: '配置并审核工具条款、门槛、文件和营销内容。' },
+      {
+        title: '项目构建',
+        text: '配置并审核工具条款、门槛、文件和营销内容。',
+      },
       {
         title: '上线项目',
         text: '演示展示了带有链上实时融资状态的公开项目页面。',
@@ -352,7 +365,10 @@ export const zhCN: Messages = {
         h: '分散投资',
         p: '将此类资产的投资分散到不同发行方。',
       },
-      { h: '无保障机制', p: '众筹投资不受存款保障或投资者赔偿机制覆盖。' },
+      {
+        h: '无保障机制',
+        p: '众筹投资不受存款保障或投资者赔偿机制覆盖。',
+      },
       {
         h: '不构成建议',
         p: '本网站的任何内容均不构成投资、法律或税务建议。本网站是测试网络上的软件原型，不列出任何真实发行。',
@@ -405,9 +421,18 @@ export const zhCN: Messages = {
     builderDraftLink: '查看活动将如何进行部署配置 - 本演示中已禁用',
     journeyTitle: '设计中的流程',
     steps: [
-      { h: '申请', p: '向我们介绍您的公司、所需金额和您考虑的金融工具。' },
-      { h: '审核', p: '资格和文件审核，然后给出结构化的融资方案。' },
-      { h: '构建', p: '共同准备项目页面、工具条款、文件和营销内容。' },
+      {
+        h: '申请',
+        p: '向我们介绍您的公司、所需金额和您考虑的金融工具。',
+      },
+      {
+        h: '审核',
+        p: '资格和文件审核，然后给出结构化的融资方案。',
+      },
+      {
+        h: '构建',
+        p: '共同准备项目页面、工具条款、文件和营销内容。',
+      },
       {
         h: '募资',
         p: '全有或全无的项目融资。只有在截止期限前达到目标，资金才会结算。',
@@ -523,9 +548,18 @@ export const zhCN: Messages = {
   time: {
     ended: '已结束',
     underMinute: '剩余不到一分钟',
-    minutesLeft: (n: number) => `剩余 ${n} 分钟`,
-    hoursLeft: (n: number) => `剩余 ${n} 小时`,
-    daysLeft: (n: number) => `剩余 ${n} 天`,
+    minutesLeft: {
+      one: '剩余 {n} 分钟',
+      other: '剩余 {n} 分钟',
+    },
+    hoursLeft: {
+      one: '剩余 {n} 小时',
+      other: '剩余 {n} 小时',
+    },
+    daysLeft: {
+      one: '剩余 {n} 天',
+      other: '剩余 {n} 天',
+    },
   },
   errors: {
     freighterMissing: '未检测到 Freighter 钱包扩展。请安装 Freighter，然后重试连接。',
@@ -566,7 +600,7 @@ export const zhCN: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '一种分享利润并要求偿还名义价值的权利（通常以参与凭证的形式证券化），但不享有股东的完整治理权。',
         opportunities: ['无需购买完整股权即可分享利润', '通常将基础偿还请求权与利润参与相结合'],
         risks: ['利润分享完全取决于发行方业绩', '受偿顺序可能落后于普通债权人', '到期前通常缺乏流动性'],
@@ -578,7 +612,7 @@ export const zhCN: Messages = {
         subtypeOf: '参与权 / 参与凭证的子类型',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '一种与发行方资产基础（"substance"）而非仅年度利润挂钩的参与权。其结构和合格发行方因司法辖区和公司章程而异。',
         opportunities: ['参与发行方的资产价值', '在章程允许的情况下可为较小型发行方设计'],
         risks: ['法律形式和投资者保护因司法辖区差异很大', '投资者与发行方之间可能涉及受托人或载体', '通常缺乏流动性'],
@@ -590,7 +624,7 @@ export const zhCN: Messages = {
         subtypeOf: '',
         note: '增资是创造新股份的公司行为，不是独立的金融工具。',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '对发行公司的直接股权：股息分配权和公司价值参与，权利由公司章程规定。新股份通过增资到达投资者手中。',
         opportunities: ['完整参与公司成长', '视股份类别享有投票权或信息权'],
         risks: ['无固定偿还请求权；股息无保障', '可能全部损失', '众筹股份通常无法在交易所交易'],
@@ -602,7 +636,7 @@ export const zhCN: Messages = {
         subtypeOf: '',
         note: '一种持有结构，而非独立工具：投资者通过载体或受托人间接持有基础参与权益，经济收益由基础权益决定。',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '投资者间接参与中小企业投资——例如通过载体或受托人——手续更为简化。',
         opportunities: ['可以接触难以直接持有的项目', '通过中间结构简化管理'],
         risks: ['投资者与发行方之间多出一层结构', '回报取决于发行方业绩', '载体的条款决定分配和退出'],
@@ -614,7 +648,7 @@ export const zhCN: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '作为有限合伙人持有合伙企业的份额：按合伙协议参与盈亏，责任以出资额为限。',
         opportunities: ['直接穿透享有合伙企业经营成果', '责任以出资额为上限'],
         risks: ['亏损参与可能减损或清零份额', '退出通常受合伙协议限制', '税务和申报义务可能更复杂'],
@@ -679,7 +713,7 @@ export const zhCN: Messages = {
     chipSenior: '优先',
     chipSubordinated: '次级',
     chipUnspecifiedSuffix: '（未指定优先级）',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join('')}${base}` : base),
+    chipCompose: 'concat',
   },
   glossary: [
     {
@@ -726,7 +760,10 @@ export const zhCN: Messages = {
       term: '托管',
       definition: '由中立的机制保管资金直至条件满足。在本原型中，由项目合约本身在 Stellar 测试网上托管出资。',
     },
-    { term: 'Soroban', definition: '本原型使用的 Stellar 网络智能合约平台。' },
+    {
+      term: 'Soroban',
+      definition: '本原型使用的 Stellar 网络智能合约平台。',
+    },
     {
       term: '测试网',
       definition: '一种公共测试网络，其中的资产没有价值，可在不动用真实资金的情况下试用软件。',
@@ -735,7 +772,10 @@ export const zhCN: Messages = {
       term: '名义价值',
       definition: '金融工具一个单位的面值，利息和偿还均以其为基准计算。',
     },
-    { term: '到期一次还本', definition: '在到期时一次性偿还全部名义金额。' },
+    {
+      term: '到期一次还本',
+      definition: '在到期时一次性偿还全部名义金额。',
+    },
     {
       term: 'act/act、30E/360',
       definition: '计息惯例，用于定义利息在付息日之间如何累积。',
@@ -757,7 +797,10 @@ export const zhCN: Messages = {
       definition:
         '一种合同形式的次级：当发行方将陷入过度负债时，利息（有时包括本金）停止支付。仅有"qualified"之类的平台用语并不足以证明；条款本身必须写明次级。',
     },
-    { term: 'Mini Bond', definition: '平台对小额面值债券的称呼。' },
+    {
+      term: 'Mini Bond',
+      definition: '平台对小额面值债券的称呼。',
+    },
     {
       term: '了解你的客户（KYC）',
       definition: '受监管平台在投资者可以投资之前必须完成的身份验证。本原型不执行任何 KYC。',
@@ -995,7 +1038,7 @@ export const zhCN: Messages = {
         teaser: '里斯本一栋滨河公寓楼的翻新项目，通过固定利率优先债券融资。本页面上的所有条款均为示例数据。',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '6.5% 年利率（示例）',
         term: '至 2030-12-31（示例）',
         minInvestment: '250 USDC 测试网（示例）',
@@ -1004,31 +1047,64 @@ export const zhCN: Messages = {
             label: '投资产品',
             value: '优先债券（非次级、无担保）。示例数据 - 非真实发行',
           },
-          { label: 'ISIN / WKN', value: '未发行 - 本原型不发行证券标识符' },
-          { label: '每单位名义金额', value: '250 USDC 测试网（示例）' },
-          { label: '最低认购', value: '1 个单位（示例）' },
+          {
+            label: 'ISIN / WKN',
+            value: '未发行 - 本原型不发行证券标识符',
+          },
+          {
+            label: '每单位名义金额',
+            value: '250 USDC 测试网（示例）',
+          },
+          {
+            label: '最低认购',
+            value: '1 个单位（示例）',
+          },
           {
             label: '融资门槛',
             value: '等于项目目标；在实际模式下由合约执行全有或全无',
           },
-          { label: '发行规模', value: '250,000 USDC 测试网目标（示例数据）' },
-          { label: '计息方式', value: '30E/360（示例）' },
+          {
+            label: '发行规模',
+            value: '250,000 USDC 测试网目标（示例数据）',
+          },
+          {
+            label: '计息方式',
+            value: '30E/360（示例）',
+          },
           {
             label: '付息日期',
             value: '每年 12 月 31 日，首次付息 2027 年（示例）',
           },
-          { label: '偿还', value: '到期偿还（示例）' },
-          { label: '发行地区', value: '无发行国家 - 仅为示例数据' },
-          { label: '中介机构', value: '无。本原型不是众筹服务提供商' },
+          {
+            label: '偿还',
+            value: '到期偿还（示例）',
+          },
+          {
+            label: '发行地区',
+            value: '无发行国家 - 仅为示例数据',
+          },
+          {
+            label: '中介机构',
+            value: '无。本原型不是众筹服务提供商',
+          },
         ],
         overview: [
           '本面板演示发行方提供的营销内容如何通过上方的分隔线与平台事实区分开。',
           '示例数据 - 非真实发行。真实平台上展示的发行方介绍、团队、商业模式和财务数据将由发行方提供并明确标注来源。',
         ],
         documents: [
-          { label: '关键投资信息表（示例条目）', note: '本原型未托管任何文件' },
-          { label: '债券条款（示例条目）', note: '本原型未托管任何文件' },
-          { label: '融资演示文稿（示例条目）', note: '本原型未托管任何文件' },
+          {
+            label: '关键投资信息表（示例条目）',
+            note: '本原型未托管任何文件',
+          },
+          {
+            label: '债券条款（示例条目）',
+            note: '本原型未托管任何文件',
+          },
+          {
+            label: '融资演示文稿（示例条目）',
+            note: '本原型未托管任何文件',
+          },
         ],
         news: [
           {
@@ -1045,14 +1121,23 @@ export const zhCN: Messages = {
         teaser: '阿连特茹的社区太阳能项目，通过带现金利息变体的次级债券融资。本页面上的所有条款均为示例数据。',
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '7.0% 年利率现金（示例）',
         term: '至 2032-06-30（示例）',
         minInvestment: '250 USDC 测试网（示例）',
         additionalInfo: [
-          { label: '投资产品', value: '次级债券。示例数据 - 非真实发行' },
-          { label: 'ISIN / WKN', value: '未发行 - 本原型不发行证券标识符' },
-          { label: '每单位名义金额', value: '250 USDC 测试网（示例）' },
+          {
+            label: '投资产品',
+            value: '次级债券。示例数据 - 非真实发行',
+          },
+          {
+            label: 'ISIN / WKN',
+            value: '未发行 - 本原型不发行证券标识符',
+          },
+          {
+            label: '每单位名义金额',
+            value: '250 USDC 测试网（示例）',
+          },
           {
             label: '融资门槛',
             value: '900,000 USDC 测试网目标（示例数据）；实际模式下全有或全无',
@@ -1061,21 +1146,39 @@ export const zhCN: Messages = {
             label: '次级属性',
             value: '破产清算时受偿顺序落后于优先债权人（示例条款）',
           },
-          { label: '计息方式', value: 'act/act（示例）' },
+          {
+            label: '计息方式',
+            value: 'act/act（示例）',
+          },
           {
             label: '付息日期',
             value: '每年 6 月 30 日，首次付息 2028 年（示例）',
           },
-          { label: '偿还', value: '到期偿还（示例）' },
-          { label: '发行地区', value: '无发行国家 - 仅为示例数据' },
-          { label: '中介机构', value: '无。本原型不是众筹服务提供商' },
+          {
+            label: '偿还',
+            value: '到期偿还（示例）',
+          },
+          {
+            label: '发行地区',
+            value: '无发行国家 - 仅为示例数据',
+          },
+          {
+            label: '中介机构',
+            value: '无。本原型不是众筹服务提供商',
+          },
         ],
         overview: ['示例数据 - 非真实发行。真实的项目页面会包含发行方自己对合作社、场地和电力消纳的介绍。'],
         documents: [
-          { label: '关键投资信息表（示例条目）', note: '本原型未托管任何文件' },
-          { label: '发行条件（示例条目）', note: '本原型未托管任何文件' },
+          {
+            label: '关键投资信息表（示例条目）',
+            note: '本原型未托管任何文件',
+          },
+          {
+            label: '发行条件（示例条目）',
+            note: '本原型未托管任何文件',
+          },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1094,21 +1197,50 @@ export const zhCN: Messages = {
             label: '投资产品',
             value: '带转换特性的债券（可转换）；示例条款中未指定优先级。示例数据 - 非真实发行',
           },
-          { label: 'ISIN / WKN', value: '未发行 - 本原型不发行证券标识符' },
-          { label: '每单位名义金额', value: '500 USDC 测试网（示例）' },
-          { label: '融资门槛', value: '500,000 USDC 测试网目标（示例数据）' },
+          {
+            label: 'ISIN / WKN',
+            value: '未发行 - 本原型不发行证券标识符',
+          },
+          {
+            label: '每单位名义金额',
+            value: '500 USDC 测试网（示例）',
+          },
+          {
+            label: '融资门槛',
+            value: '500,000 USDC 测试网目标（示例数据）',
+          },
           {
             label: '转换触发条件',
             value: '按发行配置；示例：发行方宣布的合格融资事件',
           },
-          { label: '转换窗口', value: '按发行配置；示例：触发公告后 30 天' },
-          { label: '利息停止', value: '利息累计至转换日（示例）' },
-          { label: '未转换时的偿还', value: '到期偿还（示例）' },
-          { label: '发行地区', value: '无发行国家 - 仅为示例数据' },
-          { label: '中介机构', value: '无。本原型不是众筹服务提供商' },
+          {
+            label: '转换窗口',
+            value: '按发行配置；示例：触发公告后 30 天',
+          },
+          {
+            label: '利息停止',
+            value: '利息累计至转换日（示例）',
+          },
+          {
+            label: '未转换时的偿还',
+            value: '到期偿还（示例）',
+          },
+          {
+            label: '发行地区',
+            value: '无发行国家 - 仅为示例数据',
+          },
+          {
+            label: '中介机构',
+            value: '无。本原型不是众筹服务提供商',
+          },
         ],
         overview: ['示例数据 - 非真实发行。已完成的项目会连同其最终融资状态保持可见，如本项目所示。'],
-        documents: [{ label: '可转换债券条款（示例条目）', note: '本原型未托管任何文件' }],
+        documents: [
+          {
+            label: '可转换债券条款（示例条目）',
+            note: '本原型未托管任何文件',
+          },
+        ],
         news: [
           {
             date: '示例',
@@ -1221,7 +1353,7 @@ export const zhCN: Messages = {
   },
   tour: {
     tourTitle: '活动导览',
-    tourStepOf: (current: number, total: number) => `第 ${current} 步,共 ${total} 步`,
+    tourStepOf: '第 {current} 步,共 {total} 步',
     tourNext: '下一步',
     tourBack: '上一步',
     tourDone: '完成',
@@ -1244,15 +1376,15 @@ export const zhCN: Messages = {
     catSubmit: '检查答案',
     catRetake: '重新测试',
     catResultPass: '全部回答正确。',
-    catResultReview: (n: number) => `有 ${n} 道题需要复核 - 请阅读解析后重试。`,
-    catScoreLabel: (correct: number, total: number) => `${total} 题中答对 ${correct} 题`,
+    catResultReview: '有 {n} 道题需要复核 - 请阅读解析后重试。',
+    catScoreLabel: '{total} 题中答对 {correct} 题',
     catSimTitle: '亏损承受能力模拟',
     catSimIntro: '将计划投资金额与您的可自由支配资金进行比较。',
     catAssetsLabel: '可自由支配资金 (EUR)',
     catIncomeLabel: '月净收入 (EUR)',
     catPlannedLabel: '计划投资金额 (EUR)',
     catSimRun: '运行模拟',
-    catSimResult: ({ pct }: { pct: string }) => `计划投资金额相当于您输入的可自由支配资金的${pct}%。`,
+    catSimResult: '计划投资金额相当于您输入的可自由支配资金的{pct}%。',
     catSimNote: '仅对您输入的金额进行简单算术计算。这不是关于损失承受能力、适当性或资格的监管评估,也不适用任何阈值。',
     catSavedNote: '结果仅保存在此浏览器本地。',
     catQuestions: [
@@ -1314,7 +1446,7 @@ export const zhCN: Messages = {
     commentsEmpty: '暂无评论。',
     commentLabel: '您的评论',
     commentSubmit: '发表评论',
-    commentPostingAs: (name: string) => `以 ${name} 身份发表。评论为公开。`,
+    commentPostingAs: '以 {name} 身份发表。评论为公开。',
     commentsSignInHint: '在下方使用您的钱包登录以参与讨论。',
     signInTitle: '社区登录',
     signInExplainer: '使用您的 Freighter 钱包签署一次性挑战,以证明您控制该地址。不会创建任何交易,也不会移动资金。登录后可使用评论、支持工单和发行人申请。',
@@ -1358,7 +1490,11 @@ export const zhCN: Messages = {
     newsFeedEmpty: '暂无项目动态。',
     myApplicationsTitle: '我的发行方申请',
     myApplicationsEmpty: '暂无申请。',
-    applicationStatus: { received: '已收到', under_review: '审核中', closed: '已关闭' },
+    applicationStatus: {
+      received: '已收到',
+      under_review: '审核中',
+      closed: '已关闭',
+    },
     myTicketsTitle: '我的支持与反馈工单',
     myCommentsTitle: '我的评论',
     commentHidden: '已被审核隐藏',
@@ -1381,7 +1517,11 @@ export const zhCN: Messages = {
       submit: '提交申请',
       submitting: '提交中...',
       submitted: '申请已收到。上方列表显示为待审核。',
-      status: { pending: '待审核', approved: '已批准', rejected: '已拒绝' },
+      status: {
+        pending: '待审核',
+        approved: '已批准',
+        rejected: '已拒绝',
+      },
     },
     security: {
       title: '安全',
@@ -1393,7 +1533,10 @@ export const zhCN: Messages = {
       expiresLabel: '过期时间',
       revoke: '结束会话',
       revokeOthers: '退出所有其他会话',
-      revokedOthers: ({ count }: { count: number }) => `已退出其他 ${count} 个会话。`,
+      revokedOthers: {
+        one: '已退出其他 {count} 个会话。',
+        other: '已退出其他 {count} 个会话。',
+      },
       empty: '没有活跃会话。',
     },
     notifications: {
@@ -1410,16 +1553,13 @@ export const zhCN: Messages = {
         companyStatus: '公司账户申请更新',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `您为 "${projectName}" 提交的发行方申请已收到。运营方将人工审核申请；提交不构成批准、上架或要约。`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `您为 "${projectName}" 提交的发行方申请现已更新为 "${statusLabel}"。`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `您在活动 "${campaignId}" 下的评论已被审核员隐藏。`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `原因：${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `您的${kindLabel}工单 "${subject}" 已关闭。`,
-        companyReceived: ({ companyName }: { companyName: string }) => `您为"${companyName}"提交的公司账户申请已收到。审核为人工进行;提交不等于批准。`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `您为"${companyName}"提交的公司账户申请现在为"${statusLabel}"。`,
+        applicationReceived: '您为 "{projectName}" 提交的发行方申请已收到。运营方将人工审核申请；提交不构成批准、上架或要约。',
+        applicationStatus: '您为 "{projectName}" 提交的发行方申请现已更新为 "{statusLabel}"。',
+        commentModerated: '您在活动 "{campaignId}" 下的评论已被审核员隐藏。',
+        commentModeratedReason: '原因：{reason}',
+        ticketClosed: '您的{kindLabel}工单 "{subject}" 已关闭。',
+        companyReceived: '您为"{companyName}"提交的公司账户申请已收到。审核为人工进行;提交不等于批准。',
+        companyStatus: '您为"{companyName}"提交的公司账户申请现在为"{statusLabel}"。',
       },
     },
     operator: {
@@ -1427,7 +1567,14 @@ export const zhCN: Messages = {
       demoNote: '测试环境的运营工具。新闻始终标注为平台演示内容；没有经过验证的发行方身份。请勿发布有关批准、上架或收益的声明。',
       loadError: '无法加载运营数据。',
       retry: '重试',
-      tabs: { applications: '申请', comments: '评论', tickets: '工单', news: '新闻', reconciliation: '对账', audit: '操作日志' },
+      tabs: {
+        applications: '申请',
+        comments: '评论',
+        tickets: '工单',
+        news: '新闻',
+        reconciliation: '对账',
+        audit: '操作日志',
+      },
       applicationsEmpty: '暂无发行方申请。',
       commentsEmpty: '暂无评论。',
       ticketsEmpty: '暂无工单。',
@@ -1448,7 +1595,7 @@ export const zhCN: Messages = {
       colAction: '操作',
       colTargetRef: '目标',
       colDetail: '详情',
-      reconQuarantined: (n: number) => `${n} 条被隔离的账本行需要运营者复核。`,
+      reconQuarantined: '{n} 条被隔离的账本行需要运营者复核。',
       colProject: '项目',
       colCountry: '国家',
       colInstrument: '工具类型',

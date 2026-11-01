@@ -1,3 +1,4 @@
+import { tpl } from '../format';
 // Guided campaign-page tour (CONDA S-022 pattern: tour + "Repeat tour" link).
 // v3: step target scrolls into view and stays BRIGHT above the dim (the dim
 // now comes from the target's own 9999px box-shadow, not a page-wide overlay
@@ -153,7 +154,7 @@ export default function CampaignTour() {
         <div className="tour-card" role="dialog" aria-modal="true" aria-label={t.tourTitle} ref={cardRef}>
           <h3>{step.title}</h3>
           <p className="community-note">{step.body}</p>
-          <p className="community-note">{t.tourStepOf(index + 1, available.length)}</p>
+          <p className="community-note">{tpl(t.tourStepOf, { current: index + 1, total: available.length })}</p>
           <div className="chip-row">
             {index > 0 && (
               <button className="btn" onClick={() => setIndex(index - 1)}>

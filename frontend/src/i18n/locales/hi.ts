@@ -1,4 +1,6 @@
-// Hindi (hi).
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { Messages } from './en';
 
 export const hi: Messages = {
@@ -104,7 +106,9 @@ export const hi: Messages = {
     funded: 'फंडेड',
     underfunded: 'अल्पवित्तित',
     filterIndustryAria: 'उद्योग से फ़िल्टर करें',
-    industryLabels: { 'energy-utilities': 'ऊर्जा और उपयोगिताएं' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': 'ऊर्जा और उपयोगिताएं',
+    } as Record<string, string>,
     allIndustries: 'सभी उद्योग',
     sortAria: 'कैंपेन क्रमबद्ध करें',
     sortDeadline: 'समय सीमा निकटतम',
@@ -114,7 +118,10 @@ export const hi: Messages = {
     grid: 'ग्रिड',
     list: 'सूची',
     noMatches: 'वर्तमान खोज और फ़िल्टर से कोई कैंपेन मेल नहीं खाता।',
-    resultCount: (n: number) => `${n} अभियान दिखाए गए`,
+    resultCount: {
+      one: '{n} अभियान दिखाए गए',
+      other: '{n} अभियान दिखाए गए',
+    },
     activeAria: 'सक्रिय निवेश',
     activeTitle: 'सक्रिय निवेश',
     completedAria: 'पूर्ण निवेश',
@@ -126,9 +133,9 @@ export const hi: Messages = {
     statusEnded: 'अल्पवित्तित',
     statusOpen: 'खुला',
     withdrawn: 'निकाला गया',
-    fundedPct: (percent: number) => `${percent}% फंडेड`,
+    fundedPct: '{percent}% फंडेड',
     progressUnavailable: 'प्रगति उपलब्ध नहीं - ऑन-चेन डेटा लोड नहीं हुआ',
-    progressAria: (pct: number) => `फंडिंग प्रगति: लक्ष्य का ${pct}%`,
+    progressAria: 'फंडिंग प्रगति: लक्ष्य का {pct}%',
     interest: 'ब्याज',
     term: 'अवधि',
     minimum: 'न्यूनतम',
@@ -154,7 +161,7 @@ export const hi: Messages = {
     amountLabel: 'योगदान राशि (टेस्टनेट USDC)',
     amountRequired: 'योगदान राशि दर्ज करें।',
     amountInvalid: 'मान्य राशि दर्ज करें: केवल अंक, अधिकतम 7 दशमलव स्थान, शून्य से अधिक।',
-    amountExceeds: (remaining: string) => `राशि शेष लक्ष्य ${remaining} USDC (टेस्टनेट) से अधिक है।`,
+    amountExceeds: 'राशि शेष लक्ष्य {remaining} USDC (टेस्टनेट) से अधिक है।',
     usdcTestnet: 'USDC (टेस्टनेट)',
     contribute: 'योगदान करें',
     refundMe: 'मेरा रिफंड करें',
@@ -163,9 +170,9 @@ export const hi: Messages = {
       'समय सीमा से पहले, शेष लक्ष्य तक योगदान करें। समय सीमा के बाद निर्माता केवल पूर्ण फंडिंग पर निकालता है; अन्यथा प्रत्येक योगदानकर्ता अपना रिफंड खुद साइन करता है। कॉन्ट्रैक्ट इन नियमों को एटॉमिक रूप से लागू करता है।',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `फंडिंग प्रगति: ${count} में से ${filled} ब्लॉक भरे, लक्ष्य का ${percent}%`,
+    ariaReady: 'फंडिंग प्रगति: {count} में से {filled} ब्लॉक भरे, लक्ष्य का {percent}%',
     ariaUnavailable: 'फंडिंग प्रगति उपलब्ध नहीं: ऑन-चेन डेटा लोड नहीं हुआ',
-    fundedTail: (filled: number, count: number) => `फंडेड - ${count} में से ${filled} ब्लॉक`,
+    fundedTail: 'फंडेड - {count} में से {filled} ब्लॉक',
     captionUnavailable: 'प्रगति उपलब्ध नहीं - ऑन-चेन डेटा लोड नहीं हुआ',
   },
   intent: {
@@ -562,9 +569,18 @@ export const hi: Messages = {
   time: {
     ended: 'समाप्त',
     underMinute: 'एक मिनट से कम शेष',
-    minutesLeft: (n: number) => `${n} मिनट शेष`,
-    hoursLeft: (n: number) => `${n} घंटे शेष`,
-    daysLeft: (n: number) => `${n} दिन शेष`,
+    minutesLeft: {
+      one: '{n} मिनट शेष',
+      other: '{n} मिनट शेष',
+    },
+    hoursLeft: {
+      one: '{n} घंटे शेष',
+      other: '{n} घंटे शेष',
+    },
+    daysLeft: {
+      one: '{n} दिन शेष',
+      other: '{n} दिन शेष',
+    },
   },
   errors: {
     freighterMissing: 'Freighter वॉलेट एक्सटेंशन नहीं मिला। Freighter इंस्टॉल करें, फिर कनेक्ट पुनः प्रयास करें।',
@@ -607,7 +623,7 @@ export const hi: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'लाभ हिस्से और नाममात्र मूल्य की पुनर्प्राप्ति का अधिकार (प्रायः पार्टिसिपेशन सर्टिफिकेट के रूप में प्रतिभूतिकृत), शेयरधारक के पूर्ण गवर्नेंस अधिकारों के बिना।',
         opportunities: ['पूर्ण इक्विटी खरीदे बिना लाभ में हिस्सा', 'प्रायः आधार पुनर्प्राप्ति दावे को लाभ भागीदारी से जोड़ता है'],
@@ -620,7 +636,7 @@ export const hi: Messages = {
         subtypeOf: 'पार्टिसिपेशन राइट / सर्टिफिकेट का उप-प्रकार',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'केवल वार्षिक लाभ से नहीं, जारीकर्ता के परिसंपत्ति आधार ("substance") से जुड़ा पार्टिसिपेशन राइट। संरचना और पात्र जारीकर्ता क्षेत्राधिकार और अंगरजीते (statute) के अनुसार भिन्न होते हैं।',
         opportunities: ['जारीकर्ता की परिसंपत्ति मूल्य में भागीदारी', 'अंगरजीते की अनुमति होने पर छोटे जारीकर्ताओं के लिए संरचित हो सकता है'],
@@ -637,7 +653,7 @@ export const hi: Messages = {
         subtypeOf: '',
         note: 'पूंजी वृद्धि (capital increase) वह कॉर्पोरेट कार्रवाई है जो नए शेयर बनाती है; यह अलग इंस्ट्रूमेंट नहीं है।',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'जारी कंपनी में प्रत्यक्ष इक्विटी: लाभांश अधिकार और कंपनी मूल्य में भागीदारी, अधिकार अंगरजीते द्वारा निर्धारित। नए शेयर पूंजी वृद्धि से निवेशकों तक पहुंचते हैं।',
         opportunities: ['कंपनी की वृद्धि में पूर्ण भागीदारी', 'शेयर वर्ग के अनुसार मतदान या सूचना अधिकार'],
@@ -650,7 +666,7 @@ export const hi: Messages = {
         subtypeOf: '',
         note: 'स्वामित्व संरचना, अलग इंस्ट्रूमेंट नहीं: निवेशक अंतर्निहित भागीदारी को वाहन या ट्रस्टी के माध्यम से धारण करता है, और अंतर्निहित हित ही अर्थशास्त्र तय करता है।',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'निवेशक SME निवेश में अप्रत्यक्ष रूप से - उदाहरण के लिए वाहन या ट्रस्टी के माध्यम से - सरलीकृत प्रक्रिया के साथ भाग लेते हैं।',
         opportunities: ['ऐसे सौदों तक पहुंच जिन्हें सीधे धारण करना कठिन होगा', 'मध्यवर्ती संरचना से सरलीकृत प्रशासन'],
         risks: ['निवेशक और जारीकर्ता के बीच अतिरिक्त परत', 'रिटर्न जारीकर्ता के प्रदर्शन पर निर्भर', 'वाहन की शर्तें भुगतान और निकास तय करती हैं'],
@@ -662,7 +678,7 @@ export const hi: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'पार्टनरशिप में लिमिटेड पार्टनर के रूप में हित: पार्टनरशिप अनुबंध के अनुसार लाभ-हानि भागीदारी, देयता योगदान तक सीमित।',
         opportunities: ['पार्टनरशिप परिणामों का प्रत्यक्ष पास-थ्रू', 'देयता योगदान तक सीमित'],
         risks: ['हानि भागीदारी हित को घटा या मिटा सकती है', 'निकास प्रायः पार्टनरशिप अनुबंध से प्रतिबंधित', 'कर और रिपोर्टिंग दायित्व अधिक जटिल हो सकते हैं'],
@@ -736,7 +752,7 @@ export const hi: Messages = {
     chipSenior: 'सीनियर',
     chipSubordinated: 'सबऑर्डिनेट',
     chipUnspecifiedSuffix: '(सीनियॉरिटी अनिर्दिष्ट)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base}` : base),
+    chipCompose: 'space',
   },
   glossary: [
     {
@@ -1068,7 +1084,7 @@ export const hi: Messages = {
         teaser: 'लिस्बन में एक नदी-किनारे अपार्टमेंट ब्लॉक का नवीनीकरण, फिक्स्ड-रेट सीनियर बॉन्ड के माध्यम से वित्तपोषित। इस पेज की सभी शर्तें नमूना डेटा हैं।',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '6.5% वार्षिक (नमूना)',
         term: '2030-12-31 तक (नमूना)',
         minInvestment: '250 USDC टेस्टनेट (नमूना)',
@@ -1085,7 +1101,10 @@ export const hi: Messages = {
             label: 'प्रति इकाई नाममात्र राशि',
             value: '250 USDC टेस्टनेट (नमूना)',
           },
-          { label: 'न्यूनतम सदस्यता', value: '1 इकाई (नमूना)' },
+          {
+            label: 'न्यूनतम सदस्यता',
+            value: '1 इकाई (नमूना)',
+          },
           {
             label: 'फंडिंग थ्रेशोल्ड',
             value: 'कैंपेन लक्ष्य के बराबर; लाइव मोड में कॉन्ट्रैक्ट द्वारा ऑल-ऑर-नथिंग लागू',
@@ -1094,12 +1113,18 @@ export const hi: Messages = {
             label: 'इश्यू वॉल्यूम',
             value: '250,000 USDC टेस्टनेट लक्ष्य (नमूना फिक्स्चर)',
           },
-          { label: 'ब्याज गणना', value: '30E/360 (नमूना)' },
+          {
+            label: 'ब्याज गणना',
+            value: '30E/360 (नमूना)',
+          },
           {
             label: 'ब्याज भुगतान तिथियां',
             value: 'प्रत्येक वर्ष 31 दिसंबर को, पहला भुगतान 2027 (नमूना)',
           },
-          { label: 'पुनर्भुगतान', value: 'परिपक्वता पर (नमूना)' },
+          {
+            label: 'पुनर्भुगतान',
+            value: 'परिपक्वता पर (नमूना)',
+          },
           {
             label: 'कहां ऑफर किया गया',
             value: 'कोई ऑफरिंग देश नहीं - केवल नमूना डेटा',
@@ -1142,7 +1167,7 @@ export const hi: Messages = {
         teaser: 'Alentejo में सामुदायिक सौर परियोजना, नकद-ब्याज विकल्प वाले सबऑर्डिनेट बॉन्ड के माध्यम से वित्तपोषित। इस पेज की सभी शर्तें नमूना डेटा हैं।',
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '7.0% वार्षिक नकद (नमूना)',
         term: '2032-06-30 तक (नमूना)',
         minInvestment: '250 USDC टेस्टनेट (नमूना)',
@@ -1167,12 +1192,18 @@ export const hi: Messages = {
             label: 'सबऑर्डिनेशन',
             value: 'दिवालियापन में दावे सीनियर लेनदारों के बाद रैंक करते हैं (नमूना शर्तें)',
           },
-          { label: 'ब्याज गणना', value: 'act/act (नमूना)' },
+          {
+            label: 'ब्याज गणना',
+            value: 'act/act (नमूना)',
+          },
           {
             label: 'ब्याज भुगतान तिथियां',
             value: 'प्रत्येक वर्ष 30 जून को, पहला भुगतान 2028 (नमूना)',
           },
-          { label: 'पुनर्भुगतान', value: 'परिपक्वता पर (नमूना)' },
+          {
+            label: 'पुनर्भुगतान',
+            value: 'परिपक्वता पर (नमूना)',
+          },
           {
             label: 'कहां ऑफर किया गया',
             value: 'कोई ऑफरिंग देश नहीं - केवल नमूना डेटा',
@@ -1193,7 +1224,7 @@ export const hi: Messages = {
             note: 'इस प्रोटोटाइप में कोई फ़ाइल होस्ट नहीं',
           },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1373,7 +1404,7 @@ export const hi: Messages = {
   },
   tour: {
     tourTitle: 'अभियान दौरा',
-    tourStepOf: (current: number, total: number) => `चरण ${current} / ${total}`,
+    tourStepOf: 'चरण {current} / {total}',
     tourNext: 'अगला',
     tourBack: 'पिछला',
     tourDone: 'पूर्ण',
@@ -1396,15 +1427,15 @@ export const hi: Messages = {
     catSubmit: 'उत्तर जाँचें',
     catRetake: 'परीक्षण दोहराएँ',
     catResultPass: 'सभी उत्तर सही।',
-    catResultReview: (n: number) => `${n} उत्तर समीक्षा के लिए - व्याख्या पढ़ें और फिर प्रयास करें।`,
-    catScoreLabel: (correct: number, total: number) => `${total} में से ${correct} सही`,
+    catResultReview: '{n} उत्तर समीक्षा के लिए - व्याख्या पढ़ें और फिर प्रयास करें।',
+    catScoreLabel: '{total} में से {correct} सही',
     catSimTitle: 'घाटा सहने की क्षमता का सिमुलेशन',
     catSimIntro: 'योजनित निवेश की तुलना अपनी स्वतंत्र रूप से उपलब्ध राशि से करें।',
     catAssetsLabel: 'स्वतंत्र रूप से उपलब्ध राशि (EUR)',
     catIncomeLabel: 'मासिक शुद्ध आय (EUR)',
     catPlannedLabel: 'योजनित निवेश (EUR)',
     catSimRun: 'सिमुलेशन चलाएँ',
-    catSimResult: ({ pct }: { pct: string }) => `नियोजित निवेश आपके द्वारा दर्ज निःशुल्क उपलब्ध धनराशि का ${pct}% है।`,
+    catSimResult: 'नियोजित निवेश आपके द्वारा दर्ज निःशुल्क उपलब्ध धनराशि का {pct}% है।',
     catSimNote:
       'आपके द्वारा दर्ज राशियों का साधारण अंकगणित। यह नुकसान सहन क्षमता, उपयुक्तता या पात्रता का कोई नियामकीय मूल्यांकन नहीं है, और कोई सीमा लागू नहीं की जाती।',
     catSavedNote: 'परिणाम केवल इसी ब्राउज़र में स्थानीय रूप से सहेजा गया।',
@@ -1468,7 +1499,7 @@ export const hi: Messages = {
     commentsEmpty: 'अभी कोई टिप्पणी नहीं।',
     commentLabel: 'आपकी टिप्पणी',
     commentSubmit: 'टिप्पणी पोस्ट करें',
-    commentPostingAs: (name: string) => `${name} के रूप में पोस्ट कर रहे हैं। टिप्पणियाँ सार्वजनिक हैं।`,
+    commentPostingAs: '{name} के रूप में पोस्ट कर रहे हैं। टिप्पणियाँ सार्वजनिक हैं।',
     commentsSignInHint: 'चर्चा में शामिल होने के लिए नीचे अपने वॉलेट से साइन इन करें।',
     signInTitle: 'कम्युनिटी साइन-इन',
     signInExplainer:
@@ -1516,7 +1547,11 @@ export const hi: Messages = {
     newsFeedEmpty: 'अभी अभियान का कोई समाचार नहीं है।',
     myApplicationsTitle: 'मेरे जारीकर्ता आवेदन',
     myApplicationsEmpty: 'अभी कोई आवेदन नहीं।',
-    applicationStatus: { received: 'प्राप्त', under_review: 'समीक्षा में', closed: 'बंद' },
+    applicationStatus: {
+      received: 'प्राप्त',
+      under_review: 'समीक्षा में',
+      closed: 'बंद',
+    },
     myTicketsTitle: 'मेरे सहायता और प्रतिक्रिया टिकट',
     myCommentsTitle: 'मेरी टिप्पणियाँ',
     commentHidden: 'मॉडरेशन द्वारा छिपाया गया',
@@ -1539,7 +1574,11 @@ export const hi: Messages = {
       submit: 'आवेदन भेजें',
       submitting: 'भेजा जा रहा है...',
       submitted: 'आवेदन प्राप्त हुआ। यह ऊपर समीक्षा लंबित के रूप में दिखता है।',
-      status: { pending: 'समीक्षा लंबित', approved: 'स्वीकृत', rejected: 'अस्वीकृत' },
+      status: {
+        pending: 'समीक्षा लंबित',
+        approved: 'स्वीकृत',
+        rejected: 'अस्वीकृत',
+      },
     },
     security: {
       title: 'सुरक्षा',
@@ -1552,7 +1591,10 @@ export const hi: Messages = {
       expiresLabel: 'समाप्ति',
       revoke: 'सत्र समाप्त करें',
       revokeOthers: 'अन्य सभी सत्रों से साइन आउट करें',
-      revokedOthers: ({ count }: { count: number }) => `${count} ${count === 1 ? 'अन्य सत्र समाप्त किया गया' : 'अन्य सत्र समाप्त किए गए'}.`,
+      revokedOthers: {
+        one: '{count} अन्य सत्र समाप्त किया गया.',
+        other: '{count} अन्य सत्र समाप्त किए गए.',
+      },
       empty: 'कोई सक्रिय सत्र नहीं।',
     },
     notifications: {
@@ -1569,17 +1611,14 @@ export const hi: Messages = {
         companyStatus: 'कंपनी खाता आवेदन अपडेट',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `"${projectName}" के लिए आपका जारीकर्ता आवेदन प्राप्त हो गया है। ऑपरेटर आवेदनों की मैन्युअल रूप से समीक्षा करता है; सबमिशन कोई स्वीकृति, लिस्टिंग या ऑफ़र नहीं है।`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `"${projectName}" के लिए आपका जारीकर्ता आवेदन अब "${statusLabel}" है।`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `अभियान "${campaignId}" पर आपकी टिप्पणी मॉडरेटर द्वारा छिपा दी गई है।`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `कारण: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `आपका टिकट (${kindLabel}) "${subject}" बंद कर दिया गया है।`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `"${companyName}" के लिए आपका कंपनी खाता आवेदन प्राप्त हुआ। समीक्षा मैन्युअल है; सबमिट करना स्वीकृति नहीं है।`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `"${companyName}" के लिए आपका कंपनी खाता आवेदन अब "${statusLabel}" है।`,
+        applicationReceived:
+          '"{projectName}" के लिए आपका जारीकर्ता आवेदन प्राप्त हो गया है। ऑपरेटर आवेदनों की मैन्युअल रूप से समीक्षा करता है; सबमिशन कोई स्वीकृति, लिस्टिंग या ऑफ़र नहीं है।',
+        applicationStatus: '"{projectName}" के लिए आपका जारीकर्ता आवेदन अब "{statusLabel}" है।',
+        commentModerated: 'अभियान "{campaignId}" पर आपकी टिप्पणी मॉडरेटर द्वारा छिपा दी गई है।',
+        commentModeratedReason: 'कारण: {reason}',
+        ticketClosed: 'आपका टिकट ({kindLabel}) "{subject}" बंद कर दिया गया है।',
+        companyReceived: '"{companyName}" के लिए आपका कंपनी खाता आवेदन प्राप्त हुआ। समीक्षा मैन्युअल है; सबमिट करना स्वीकृति नहीं है।',
+        companyStatus: '"{companyName}" के लिए आपका कंपनी खाता आवेदन अब "{statusLabel}" है।',
       },
     },
     operator: {
@@ -1588,7 +1627,14 @@ export const hi: Messages = {
         'परीक्षण वातावरण के ऑपरेटर टूल। समाचार हमेशा प्लेटफ़ॉर्म डेमो सामग्री के रूप में चिह्नित होते हैं; कोई सत्यापित जारीकर्ता पहचान नहीं है। अनुमोदन, लिस्टिंग या रिटर्न का कोई दावा पोस्ट न करें।',
       loadError: 'ऑपरेटर डेटा लोड नहीं हो सका।',
       retry: 'पुनः प्रयास करें',
-      tabs: { applications: 'आवेदन', comments: 'टिप्पणियां', tickets: 'टिकट', news: 'समाचार', reconciliation: 'तुलना', audit: 'कार्रवाई लॉग' },
+      tabs: {
+        applications: 'आवेदन',
+        comments: 'टिप्पणियां',
+        tickets: 'टिकट',
+        news: 'समाचार',
+        reconciliation: 'तुलना',
+        audit: 'कार्रवाई लॉग',
+      },
       applicationsEmpty: 'अभी कोई जारीकर्ता आवेदन नहीं।',
       commentsEmpty: 'अभी कोई टिप्पणी नहीं।',
       ticketsEmpty: 'अभी कोई टिकट नहीं।',
@@ -1610,7 +1656,7 @@ export const hi: Messages = {
       colAction: 'कार्रवाई',
       colTargetRef: 'लक्ष्य',
       colDetail: 'विवरण',
-      reconQuarantined: (n: number) => `${n} क्वारंटाइन की गई जर्नल पंक्ति(याँ) ऑपरेटर समीक्षा मांगती हैं।`,
+      reconQuarantined: '{n} क्वारंटाइन की गई जर्नल पंक्ति(याँ) ऑपरेटर समीक्षा मांगती हैं।',
       colProject: 'परियोजना',
       colCountry: 'देश',
       colInstrument: 'इंस्ट्रूमेंट',

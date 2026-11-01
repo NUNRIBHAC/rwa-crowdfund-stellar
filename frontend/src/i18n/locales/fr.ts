@@ -1,5 +1,6 @@
-// French (fr-FR). Structure is compiler-checked against ./en;
-// array lengths and ids are checked by i18n/parity.test.ts.
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { Messages } from './en';
 
 export const fr: Messages = {
@@ -106,7 +107,9 @@ export const fr: Messages = {
     funded: 'Financées',
     underfunded: 'Non financées',
     filterIndustryAria: 'Filtrer par secteur',
-    industryLabels: { 'energy-utilities': 'Énergie et services publics' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': 'Énergie et services publics',
+    } as Record<string, string>,
     allIndustries: 'Tous les secteurs',
     sortAria: 'Trier les campagnes',
     sortDeadline: 'Échéance la plus proche',
@@ -116,7 +119,10 @@ export const fr: Messages = {
     grid: 'Grille',
     list: 'Liste',
     noMatches: 'Aucune campagne ne correspond à la recherche et aux filtres actuels.',
-    resultCount: (n: number) => (n === 1 ? '1 campagne affichée' : `${n} campagnes affichées`),
+    resultCount: {
+      one: '{n} campagne affichée',
+      other: '{n} campagnes affichées',
+    },
     activeAria: 'Investissements actifs',
     activeTitle: 'Investissements actifs',
     completedAria: 'Investissements terminés',
@@ -128,9 +134,9 @@ export const fr: Messages = {
     statusEnded: 'Non financée',
     statusOpen: 'Ouverte',
     withdrawn: 'Retiré',
-    fundedPct: (percent: number) => `${percent}% financé`,
+    fundedPct: '{percent}% financé',
     progressUnavailable: 'Progression indisponible - données on-chain non chargées',
-    progressAria: (pct: number) => `Progression du financement : ${pct}% de l'objectif`,
+    progressAria: "Progression du financement : {pct}% de l'objectif",
     interest: 'Intérêt',
     term: 'Durée',
     minimum: 'Minimum',
@@ -156,7 +162,7 @@ export const fr: Messages = {
     amountLabel: 'Montant de la contribution (USDC de testnet)',
     amountRequired: 'Saisissez un montant de contribution.',
     amountInvalid: "Saisissez un montant valide : chiffres uniquement, jusqu'à 7 décimales, supérieur à zéro.",
-    amountExceeds: (remaining: string) => `Le montant dépasse l'objectif restant de ${remaining} USDC (testnet).`,
+    amountExceeds: "Le montant dépasse l'objectif restant de {remaining} USDC (testnet).",
     usdcTestnet: 'USDC (testnet)',
     contribute: 'Contribuer',
     refundMe: 'Me rembourser',
@@ -165,10 +171,9 @@ export const fr: Messages = {
       "Contribuez avant la date limite, jusqu'au montant restant de l'objectif. Passé le délai, le créateur ne lève les fonds que si l'objectif est entièrement atteint ; sinon, chaque contributeur signe son propre remboursement. Le contrat applique ces règles de façon atomique.",
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) =>
-      `Progression du financement : ${filled} sur ${count} blocs remplis, ${percent}% de l'objectif`,
+    ariaReady: "Progression du financement : {filled} sur {count} blocs remplis, {percent}% de l'objectif",
     ariaUnavailable: 'Progression du financement indisponible : données on-chain non chargées',
-    fundedTail: (filled: number, count: number) => `financé - ${filled} sur ${count} blocs`,
+    fundedTail: 'financé - {filled} sur {count} blocs',
     captionUnavailable: 'Progression indisponible - données on-chain non chargées',
   },
   intent: {
@@ -572,9 +577,18 @@ export const fr: Messages = {
   time: {
     ended: 'Terminée',
     underMinute: "Moins d'une minute restante",
-    minutesLeft: (n: number) => (n === 1 ? `${n} minute restante` : `${n} minutes restantes`),
-    hoursLeft: (n: number) => (n === 1 ? `${n} heure restante` : `${n} heures restantes`),
-    daysLeft: (n: number) => (n === 1 ? `${n} jour restant` : `${n} jours restants`),
+    minutesLeft: {
+      one: '{n} minute restante',
+      other: '{n} minutes restantes',
+    },
+    hoursLeft: {
+      one: '{n} heure restante',
+      other: '{n} heures restantes',
+    },
+    daysLeft: {
+      one: '{n} jour restant',
+      other: '{n} jours restants',
+    },
   },
   errors: {
     freighterMissing: 'Extension de portefeuille Freighter non détectée. Installez Freighter, puis réessayez Connecter.',
@@ -618,7 +632,7 @@ export const fr: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           "Un droit (souvent titrisé comme certificat participatif) à une part des bénéfices et au remboursement de la valeur nominale, sans les droits de gouvernance complets d'un actionnaire.",
         opportunities: [
@@ -630,7 +644,7 @@ export const fr: Messages = {
           'Peut passer après les créanciers ordinaires',
           "Généralement illiquide jusqu'à l'échéance",
         ],
-        suitableFor: 'Investisseurs qui veulent une exposition aux résultats de l\u2019entreprise et acceptent un risque proche des capitaux propres.',
+        suitableFor: 'Investisseurs qui veulent une exposition aux résultats de l’entreprise et acceptent un risque proche des capitaux propres.',
       },
       {
         id: 'substanzgenussrecht',
@@ -638,7 +652,7 @@ export const fr: Messages = {
         subtypeOf: 'Sous-type de droit / certificat participatif',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           "Un droit participatif lié à la base d'actifs (la « substance ») de l'émetteur plutôt qu'à son seul bénéfice annuel. La structuration et les émetteurs éligibles varient selon la juridiction et les statuts.",
         opportunities: [
@@ -658,7 +672,7 @@ export const fr: Messages = {
         subtypeOf: '',
         note: "Une augmentation de capital est l'opération sociétaire qui crée de nouvelles actions ; ce n'est pas un instrument séparé.",
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           "Capitaux propres directs de la société émettrice : droit aux dividendes et participation à la valeur de l'entreprise, avec des droits fixés par les statuts. Les nouvelles actions parviennent aux investisseurs via une augmentation de capital.",
         opportunities: ["Participation pleine à la croissance de l'entreprise", "Droits de vote ou d'information selon la classe d'actions"],
@@ -675,7 +689,7 @@ export const fr: Messages = {
         subtypeOf: '',
         note: "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie.",
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Les investisseurs participent indirectement à un investissement dans une PME - par exemple via un véhicule ou un fiduciaire - avec un traitement simplifié.',
         opportunities: ['Accès à des opérations difficiles à détenir directement', 'Administration simplifiée via la structure intermédiaire'],
@@ -692,7 +706,7 @@ export const fr: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           "Une part de commanditaire dans une société de personnes : participation aux bénéfices et aux pertes selon le contrat de société, responsabilité limitée à l'apport.",
         opportunities: ['Transmission directe des résultats de la société', "Responsabilité plafonnée à l'apport"],
@@ -782,7 +796,7 @@ export const fr: Messages = {
     chipSenior: 'Senior',
     chipSubordinated: 'Subordonnée',
     chipUnspecifiedSuffix: '(seniorité non spécifiée)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base.toLowerCase()}` : base),
+    chipCompose: 'space-lower',
   },
   glossary: [
     {
@@ -796,7 +810,7 @@ export const fr: Messages = {
     },
     {
       term: 'Investissement minimum',
-      definition: 'Le plus petit montant qu\u2019un investisseur peut souscrire, généralement une unité.',
+      definition: 'Le plus petit montant qu’un investisseur peut souscrire, généralement une unité.',
     },
     {
       term: 'Subordination',
@@ -1048,7 +1062,7 @@ export const fr: Messages = {
         title: 'Compte et données',
         entries: [
           {
-            q: 'Ai-je besoin d\u2019un compte ?',
+            q: 'Ai-je besoin d’un compte ?',
             a: "Pas d'inscription par email et pas de mot de passe. Une connexion communautaire optionnelle prouve le contrôle de votre portefeuille Freighter en signant un défi unique. Le portefeuille est la seule identité, et le connecter ou signer ne partage jamais vos clés avec le site.",
             state: 'live',
           },
@@ -1120,7 +1134,7 @@ export const fr: Messages = {
           "Réhabilitation d'un immeuble d'appartements au bord du fleuve à Lisbonne, financée par une obligation senior à taux fixe. Toutes les conditions de cette page sont des données d'exemple.",
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '6,5% par an (exemple)',
         term: "Jusqu'au 2030-12-31 (exemple)",
         minInvestment: '250 USDC de testnet (exemple)',
@@ -1137,7 +1151,10 @@ export const fr: Messages = {
             label: 'Montant nominal par unité',
             value: '250 USDC de testnet (exemple)',
           },
-          { label: 'Souscription minimale', value: '1 unité (exemple)' },
+          {
+            label: 'Souscription minimale',
+            value: '1 unité (exemple)',
+          },
           {
             label: 'Seuil de financement',
             value: "Égal à l'objectif de la campagne ; tout-ou-rien appliqué par le contrat en mode réel",
@@ -1146,12 +1163,18 @@ export const fr: Messages = {
             label: "Volume de l'émission",
             value: 'Objectif de 250 000 USDC de testnet (exemple)',
           },
-          { label: 'Calcul des intérêts', value: '30E/360 (exemple)' },
+          {
+            label: 'Calcul des intérêts',
+            value: '30E/360 (exemple)',
+          },
           {
             label: 'Dates de paiement des intérêts',
             value: 'Annuellement le 31 décembre, premier paiement en 2027 (exemple)',
           },
-          { label: 'Remboursement', value: "À l'échéance (exemple)" },
+          {
+            label: 'Remboursement',
+            value: "À l'échéance (exemple)",
+          },
           {
             label: 'Offert en',
             value: "Aucun pays d'offre - données d'exemple uniquement",
@@ -1195,7 +1218,7 @@ export const fr: Messages = {
           "Installation solaire communautaire dans l'Alentejo, financée par une obligation subordonnée avec variante d'intérêts en numéraire. Toutes les conditions de cette page sont des données d'exemple.",
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '7,0% par an en numéraire (exemple)',
         term: "Jusqu'au 2032-06-30 (exemple)",
         minInvestment: '250 USDC de testnet (exemple)',
@@ -1220,12 +1243,18 @@ export const fr: Messages = {
             label: 'Subordination',
             value: "Les créances passent après les créanciers seniors en cas d'insolvabilité (conditions d'exemple)",
           },
-          { label: 'Calcul des intérêts', value: 'act/act (exemple)' },
+          {
+            label: 'Calcul des intérêts',
+            value: 'act/act (exemple)',
+          },
           {
             label: 'Dates de paiement des intérêts',
             value: 'Annuellement le 30 juin, premier paiement en 2028 (exemple)',
           },
-          { label: 'Remboursement', value: "À l'échéance (exemple)" },
+          {
+            label: 'Remboursement',
+            value: "À l'échéance (exemple)",
+          },
           {
             label: 'Offert en',
             value: "Aucun pays d'offre - données d'exemple uniquement",
@@ -1248,7 +1277,7 @@ export const fr: Messages = {
             note: 'Aucun fichier hébergé dans ce prototype',
           },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1431,7 +1460,7 @@ export const fr: Messages = {
   },
   tour: {
     tourTitle: 'Visite guidée de la campagne',
-    tourStepOf: (current: number, total: number) => `Étape ${current} sur ${total}`,
+    tourStepOf: 'Étape {current} sur {total}',
     tourNext: 'Suivant',
     tourBack: 'Retour',
     tourDone: 'Terminer',
@@ -1454,15 +1483,15 @@ export const fr: Messages = {
     catSubmit: 'Vérifier les réponses',
     catRetake: 'Refaire le test',
     catResultPass: 'Toutes les réponses sont correctes.',
-    catResultReview: (n: number) => `${n} réponse(s) à revoir - lisez les explications et réessayez.`,
-    catScoreLabel: (correct: number, total: number) => `${correct} sur ${total} correctes`,
+    catResultReview: '{n} réponse(s) à revoir - lisez les explications et réessayez.',
+    catScoreLabel: '{correct} sur {total} correctes',
     catSimTitle: 'Simulation de capacité à supporter une perte',
     catSimIntro: 'Comparez un investissement envisagé à vos fonds librement disponibles.',
     catAssetsLabel: 'Fonds librement disponibles (EUR)',
     catIncomeLabel: 'Revenu net mensuel (EUR)',
     catPlannedLabel: 'Investissement envisagé (EUR)',
     catSimRun: 'Lancer la simulation',
-    catSimResult: ({ pct }: { pct: string }) => `Le montant prévu correspond à ${pct} % des fonds librement disponibles saisis.`,
+    catSimResult: 'Le montant prévu correspond à {pct} % des fonds librement disponibles saisis.',
     catSimNote:
       "Simple calcul arithmétique sur les montants saisis. Il ne s'agit pas d'une évaluation réglementaire de la capacité à supporter des pertes, d'adéquation ou d'éligibilité, et aucun seuil n'est appliqué.",
     catSavedNote: 'Résultat enregistré uniquement localement dans ce navigateur.',
@@ -1527,7 +1556,7 @@ export const fr: Messages = {
     commentsEmpty: 'Aucun commentaire pour le moment.',
     commentLabel: 'Votre commentaire',
     commentSubmit: 'Publier le commentaire',
-    commentPostingAs: (name: string) => `Publication en tant que ${name}. Les commentaires sont publics.`,
+    commentPostingAs: 'Publication en tant que {name}. Les commentaires sont publics.',
     commentsSignInHint: 'Connectez-vous avec votre portefeuille ci-dessous pour participer à la discussion.',
     signInTitle: 'Connexion à la communauté',
     signInExplainer:
@@ -1575,7 +1604,11 @@ export const fr: Messages = {
     newsFeedEmpty: "Pas encore d'actualités sur la campagne.",
     myApplicationsTitle: "Mes candidatures d'émetteur",
     myApplicationsEmpty: 'Aucune candidature pour le moment.',
-    applicationStatus: { received: 'Reçue', under_review: "À l'étude", closed: 'Clôturée' },
+    applicationStatus: {
+      received: 'Reçue',
+      under_review: "À l'étude",
+      closed: 'Clôturée',
+    },
     myTicketsTitle: 'Mes tickets de support et feedback',
     myCommentsTitle: 'Mes commentaires',
     commentHidden: 'Masqué par la modération',
@@ -1598,7 +1631,11 @@ export const fr: Messages = {
       submit: 'Envoyer la demande',
       submitting: 'Envoi en cours...',
       submitted: "Demande reçue. Elle apparaît ci-dessus comme en attente d'examen.",
-      status: { pending: "En attente d'examen", approved: 'Approuvée', rejected: 'Rejetée' },
+      status: {
+        pending: "En attente d'examen",
+        approved: 'Approuvée',
+        rejected: 'Rejetée',
+      },
     },
     security: {
       title: 'Sécurité',
@@ -1611,7 +1648,10 @@ export const fr: Messages = {
       expiresLabel: 'Expire',
       revoke: 'Terminer la session',
       revokeOthers: 'Déconnecter toutes les autres sessions',
-      revokedOthers: ({ count }: { count: number }) => `${count} ${count === 1 ? 'autre session terminée' : 'autres sessions terminées'}.`,
+      revokedOthers: {
+        one: '{count} autre session terminée.',
+        other: '{count} autres sessions terminées.',
+      },
       empty: 'Aucune session active.',
     },
     notifications: {
@@ -1628,17 +1668,14 @@ export const fr: Messages = {
         companyStatus: "Mise à jour de la demande de compte d'entreprise",
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `Votre candidature d'émetteur pour "${projectName}" a été reçue. L'opérateur examine les candidatures manuellement ; la soumission n'est ni une approbation, ni une cotation, ni une offre.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `Votre candidature d'émetteur pour "${projectName}" est maintenant "${statusLabel}".`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `Votre commentaire sur la campagne "${campaignId}" a été masqué par le modérateur.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `Motif : ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Votre ticket (${kindLabel}) "${subject}" a été clôturé.`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `Votre demande de compte d'entreprise pour « ${companyName} » a bien été reçue. L'examen est manuel ; l'envoi ne vaut pas approbation.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `Votre demande de compte d'entreprise pour « ${companyName} » est désormais « ${statusLabel} ».`,
+        applicationReceived:
+          "Votre candidature d'émetteur pour \"{projectName}\" a été reçue. L'opérateur examine les candidatures manuellement ; la soumission n'est ni une approbation, ni une cotation, ni une offre.",
+        applicationStatus: 'Votre candidature d\'émetteur pour "{projectName}" est maintenant "{statusLabel}".',
+        commentModerated: 'Votre commentaire sur la campagne "{campaignId}" a été masqué par le modérateur.',
+        commentModeratedReason: 'Motif : {reason}',
+        ticketClosed: 'Votre ticket ({kindLabel}) "{subject}" a été clôturé.',
+        companyReceived: "Votre demande de compte d'entreprise pour « {companyName} » a bien été reçue. L'examen est manuel ; l'envoi ne vaut pas approbation.",
+        companyStatus: "Votre demande de compte d'entreprise pour « {companyName} » est désormais « {statusLabel} ».",
       },
     },
     operator: {
@@ -1676,7 +1713,7 @@ export const fr: Messages = {
       colAction: 'Action',
       colTargetRef: 'Cible',
       colDetail: 'Détail',
-      reconQuarantined: (n: number) => `${n} ligne(s) du journal en quarantaine nécessitent une revue par l'opérateur.`,
+      reconQuarantined: "{n} ligne(s) du journal en quarantaine nécessitent une revue par l'opérateur.",
       colProject: 'Projet',
       colCountry: 'Pays',
       colInstrument: 'Instrument',
