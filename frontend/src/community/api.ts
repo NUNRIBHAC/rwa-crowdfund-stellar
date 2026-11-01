@@ -190,6 +190,36 @@ export const fetchNews = (campaignId: string) => call<{ news: NewsPost[] }>(`/ap
 // --- Site-wide news feed (public) ---
 export const fetchNewsFeed = () => call<{ news: NewsPost[] }>('/api/news');
 
+// --- ECSPR Art. 21 appropriateness test + loss simulation (RTS 2022/2114) ---
+// Data scopes are distinct by design: the knowledge test sends answers for
+// server-side scoring (only the outcome is stored); the loss simulation
+// computes CLIENT-SIDE and transmits ONLY the result figures (net worth +
+// 10% capacity) - the income/asset/commitment inputs never leave the
+// browser (RTS Art. 5(5) provider non-access rule). Quiz success never
+// labels an investor sophisticated.
+export type AppropriatenessRecord = {
+  publicKey: string;
+  version: 1;
+  experienceLevel: 'none' | 'some' | 'experienced';
+  objective: 'capital_preservation' | 'income' | 'growth' | 'other';
+  knowledgeScore: number;
+  knowledgeTotal: number;
+  outcome: 'appropriate' | 'warning_issued';
+  warningAcknowledgedAt: number | null;
+  simulation: { netWorthEur: number; capacityEur: number; transmittedAt: number } | null;
+  completedAt: number;
+  reviewAssessmentDueAt: number;
+  reviewSimulationDueAt: number | null;
+};
+
+export const fetchAppropriateness = (token: string) => call<{ assessment: AppropriatenessRecord | null }>('/api/auth/appropriateness', { token });
+export const submitKnowledgeAssessment = (token: string, input: { experienceLevel: string; objective: string; answers: number[] }) =>
+  call<{ assessment: AppropriatenessRecord }>('/api/auth/appropriateness/knowledge', { method: 'POST', body: input, token });
+export const transmitSimulationResult = (token: string, input: { netWorthEur: number; capacityEur: number }) =>
+  call<{ assessment: AppropriatenessRecord }>('/api/auth/appropriateness/simulation-result', { method: 'POST', body: input, token });
+export const acknowledgeWarning = (token: string) =>
+  call<{ assessment: AppropriatenessRecord }>('/api/auth/appropriateness/acknowledge-warning', { method: 'POST', body: {}, token });
+
 // --- Podcast episodes (public; external https audio only) ---
 export const fetchEpisodes = () => call<{ episodes: PodcastEpisode[] }>('/api/podcast/episodes');
 export const fetchCampaignEpisodes = (campaignId: string) => call<{ episodes: PodcastEpisode[] }>(`/api/campaigns/${encodeURIComponent(campaignId)}/podcast`);

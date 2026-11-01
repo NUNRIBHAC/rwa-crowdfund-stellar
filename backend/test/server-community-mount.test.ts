@@ -125,6 +125,11 @@ test('GET /api/auth/sessions passes the community path gate (401 without token, 
   assert.equal(res.status, 401);
 });
 
+test('GET /api/auth/appropriateness passes the community path gate (401 without token, not 404)', async () => {
+  const res = await fetch(`${base}/api/auth/appropriateness`);
+  assert.equal(res.status, 401);
+});
+
 test('GET /api/operator/companies passes the community path gate (401 without token, not 404)', async () => {
   const res = await fetch(`${base}/api/operator/companies`);
   assert.equal(res.status, 401);

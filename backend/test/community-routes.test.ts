@@ -229,6 +229,37 @@ test('owner-scoped lists: applications and comments mine', async () => {
   assert.equal((await api('GET', '/api/comments/mine')).status, 401);
 });
 
+test('appropriateness endpoints require auth and run the full flow', async () => {
+  assert.equal((await api('GET', '/api/auth/appropriateness')).status, 401);
+  assert.equal((await api('POST', '/api/auth/appropriateness/knowledge', { body: {} })).status, 401);
+  assert.equal((await api('POST', '/api/auth/appropriateness/simulation-result', { body: {} })).status, 401);
+  assert.equal((await api('POST', '/api/auth/appropriateness/acknowledge-warning', { body: {} })).status, 401);
+
+  const kp = Keypair.random();
+  const token = await login(kp);
+  const empty = await api('GET', '/api/auth/appropriateness', { token });
+  assert.equal(empty.status, 200);
+  assert.equal(empty.json.assessment, null);
+
+  const fail = await api('POST', '/api/auth/appropriateness/knowledge', {
+    token,
+    body: { experienceLevel: 'none', objective: 'growth', answers: [1, 1, 1, 1, 1] },
+  });
+  assert.equal(fail.status, 200);
+  assert.equal(fail.json.assessment.outcome, 'warning_issued');
+
+  const sim = await api('POST', '/api/auth/appropriateness/simulation-result', {
+    token,
+    body: { netWorthEur: 80000, capacityEur: 8000 },
+  });
+  assert.equal(sim.status, 200);
+  assert.equal(sim.json.assessment.simulation.capacityEur, 8000);
+
+  const ack = await api('POST', '/api/auth/appropriateness/acknowledge-warning', { token, body: {} });
+  assert.equal(ack.status, 200);
+  assert.ok(ack.json.assessment.warningAcknowledgedAt);
+});
+
 test('site-wide news feed aggregates campaigns newest first and is public', async () => {
   await api('POST', '/api/campaigns/demo-solar/news', { admin: true, body: { title: 'Feed item one', body: 'Body one' } });
   const res = await api('GET', '/api/news');

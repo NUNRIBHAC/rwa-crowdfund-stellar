@@ -142,6 +142,47 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }
   });
 
+  // --- ECSPR Art. 21 appropriateness test + loss simulation (RTS 2022/2114) ---
+  // Demo infrastructure: synthetic QA scope, no live sensitive-data
+  // collection. The simulation's financial INPUTS never reach these
+  // endpoints (client-side computation; RTS Art. 5(5) non-access rule);
+  // only the transmitted RESULT is stored. Paths sit under the gated
+  // /api/auth prefix, so no COMMUNITY_PATH change is needed.
+  router.get('/api/auth/appropriateness', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      res.json({ assessment: await service.getAppropriateness(account) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/appropriateness/knowledge', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      service.checkRate(`appr-knowledge:${account.publicKey}`, 10, 60 * 60 * 1000);
+      res.json({ assessment: await service.submitKnowledgeAssessment(account, req.body) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/appropriateness/simulation-result', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      service.checkRate(`appr-sim:${account.publicKey}`, 20, 60 * 60 * 1000);
+      res.json({ assessment: await service.transmitSimulationResult(account, req.body) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/appropriateness/acknowledge-warning', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      res.json({ assessment: await service.acknowledgeWarning(account) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   router.get('/api/auth/sessions', async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));

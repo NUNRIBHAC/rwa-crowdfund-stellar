@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { Keypair } from '@stellar/stellar-sdk';
 import { FileCommunityStore } from '../src/community-store.js';
-import { CommunityService } from '../src/community.js';
+import { CommunityService, KNOWLEDGE_QUESTIONS } from '../src/community.js';
 import { createChallenge, verifyChallenge, authenticate, logout, setDisplayName, AuthError } from '../src/accounts.js';
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'community-test-'));
@@ -200,6 +200,75 @@ test('news: admin posts are labeled platform-demo and listed publicly', async ()
   const listed = await service.listNews('demo-solar');
   assert.equal(listed.length, 1);
   assert.equal(listed[0].authorLabel, 'platform-demo');
+});
+
+test('appropriateness: knowledge test, warning path, simulation result, review cycles', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const kp = Keypair.random();
+  const { account } = await login(store, kp);
+
+  // Nothing on record initially; simulation before assessment is refused.
+  assert.equal(await service.getAppropriateness(account), null);
+  await assert.rejects(
+    () => service.transmitSimulationResult(account, { netWorthEur: 50000, capacityEur: 5000 }),
+    (e: any) => e.status === 409,
+  );
+
+  // Passing knowledge test (all correct) -> 'appropriate', 2-year review.
+  const allRight = KNOWLEDGE_QUESTIONS.map((q) => q.correct);
+  const rec1 = await service.submitKnowledgeAssessment(account, {
+    experienceLevel: 'some',
+    objective: 'growth',
+    answers: allRight,
+  });
+  assert.equal(rec1.knowledgeScore, KNOWLEDGE_QUESTIONS.length);
+  assert.equal(rec1.outcome, 'appropriate');
+  assert.ok(rec1.reviewAssessmentDueAt > Date.now() + 700 * 24 * 60 * 60 * 1000);
+  // Acknowledging a warning on the appropriate path is a no-op error.
+  await assert.rejects(
+    () => service.acknowledgeWarning(account),
+    (e: any) => e.status === 409,
+  );
+
+  // Transmitted result: ONLY the two result figures; 10% rule enforced.
+  await assert.rejects(
+    () => service.transmitSimulationResult(account, { netWorthEur: 50000, capacityEur: 6000 }),
+    (e: any) => e.status === 400,
+  );
+  const rec2 = await service.transmitSimulationResult(account, { netWorthEur: 50000, capacityEur: 5000 });
+  assert.equal(rec2.simulation?.netWorthEur, 50000);
+  assert.equal(rec2.simulation?.capacityEur, 5000);
+  assert.ok(rec2.reviewSimulationDueAt && rec2.reviewSimulationDueAt < rec2.reviewAssessmentDueAt);
+
+  // Failing knowledge test (2 wrong) -> warning path; ack required, single-use.
+  const twoWrong = KNOWLEDGE_QUESTIONS.map((q, i) => (i < 2 ? (q.correct + 1) % 3 : q.correct));
+  const rec3 = await service.submitKnowledgeAssessment(account, {
+    experienceLevel: 'none',
+    objective: 'income',
+    answers: twoWrong,
+  });
+  assert.equal(rec3.outcome, 'warning_issued');
+  assert.equal(rec3.warningAcknowledgedAt, null);
+  // Retake preserves the transmitted simulation and its review date.
+  assert.equal(rec3.simulation?.netWorthEur, 50000);
+  assert.equal(rec3.reviewSimulationDueAt, rec2.reviewSimulationDueAt);
+
+  const rec4 = await service.acknowledgeWarning(account);
+  assert.ok(rec4.warningAcknowledgedAt);
+  await assert.rejects(
+    () => service.acknowledgeWarning(account),
+    (e: any) => e.status === 409,
+  );
+
+  // A retake resets the acknowledgment (new warning cycle).
+  const rec5 = await service.submitKnowledgeAssessment(account, {
+    experienceLevel: 'none',
+    objective: 'income',
+    answers: twoWrong,
+  });
+  assert.equal(rec5.outcome, 'warning_issued');
+  assert.equal(rec5.warningAcknowledgedAt, null);
 });
 
 test('podcast: episodes are labeled platform-demo, listed publicly, and require https audio', async () => {
