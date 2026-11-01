@@ -1451,7 +1451,7 @@
     "statusTitle": "Sus resultados",
     "statusOutcome": "Comprobación inicial de conocimientos",
     "completedAt": "Completada el {date}.",
-    "reviewAssessmentDue": "Revisión de la evaluación antes del {date}.",
+    "reviewAssessmentDue": "Revisión de la prueba de conocimientos antes del {date}.",
     "reviewSimulationDue": "Revisión de la simulación antes del {date}.",
     "accuracyNotice": "Responda con la mayor precisión posible: la plataforma depende de que la información que facilite sea exacta y esté actualizada.",
     "infoTitle": "Su experiencia inversora",
@@ -1535,7 +1535,7 @@
     "infoStatusProvided": "Información sobre experiencia inversora registrada.",
     "infoStatusMissing": "Aún no hay información sobre experiencia inversora: repita la prueba para facilitarla.",
     "categorisationTitle": "Categorización del inversor",
-    "categorisationNote": "Según el ECSPR, todo inversor es no sofisticado salvo que cumpla los requisitos y sea aprobado como inversor sofisticado (artículo 2, apartado 1, letras j) y k), y anexo II). Esta demo solo registra su solicitud: en este despliegue no se ejecuta ningún proceso de aprobación, por lo que seguirá siendo no sofisticado solicite lo que solicite.",
+    "categorisationNote": "Según el ECSPR, todo inversor es no sofisticado salvo que sea cliente profesional con arreglo a MiFID II o que el proveedor lo apruebe como inversor sofisticado conforme al procedimiento del anexo II (artículo 2, apartado 1, letras j) y k), y anexo II). Esta demo solo registra su solicitud: en este despliegue no se ejecuta ningún proceso de aprobación, por lo que seguirá siendo no sofisticado solicite lo que solicite.",
     "categorisationStatusLabel": "Categorización",
     "categorisationStatusLabels": {
       "non_sophisticated": "Inversor no sofisticado",

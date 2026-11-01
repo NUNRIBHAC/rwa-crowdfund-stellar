@@ -1429,7 +1429,7 @@ export const zhTW: Messages = {
     statusTitle: '您的結果',
     statusOutcome: '入門知識檢查',
     completedAt: '完成於 {date}。',
-    reviewAssessmentDue: '評估複核截止日期為 {date}。',
+    reviewAssessmentDue: '知識檢查複核截止日期為 {date}。',
     reviewSimulationDue: '模擬複核截止日期為 {date}。',
     accuracyNotice: '請盡可能準確地回答：平台仰賴您提供的資訊正確且為最新。',
     infoTitle: '您的投資背景',
@@ -1515,7 +1515,7 @@ export const zhTW: Messages = {
     infoStatusMissing: '尚無投資背景資訊 - 重新參加測驗即可提供。',
     categorisationTitle: '投資者分類',
     categorisationNote:
-      '根據 ECSPR，除非符合條件並獲准為專業成熟投資者，否則所有投資者均為非成熟投資者（第2條第1項(j)(k)款及附件二）。本演示僅記錄您的請求：此部署不執行任何核准流程，因此無論您請求什麼，您仍為非成熟投資者。',
+      '根據 ECSPR，除非您是 MiFID II 下的專業客戶，或提供者按照附件二程序核准您為成熟投資者，否則所有投資者均為非成熟投資者（第2條第1項(j)(k)款及附件二）。本演示僅記錄您的請求：此部署不執行任何核准流程，因此無論您請求什麼，您仍為非成熟投資者。',
     categorisationStatusLabel: '分類',
     categorisationStatusLabels: {
       non_sophisticated: '非成熟投資者',

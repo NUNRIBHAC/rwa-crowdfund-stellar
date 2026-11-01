@@ -1526,7 +1526,7 @@ export const de: Messages = {
     statusTitle: 'Ihre Ergebnisse',
     statusOutcome: 'Einstiegs-Kenntnisprüfung',
     completedAt: 'Abgeschlossen am {date}.',
-    reviewAssessmentDue: 'Überprüfung der Prüfung fällig bis {date}.',
+    reviewAssessmentDue: 'Überprüfung des Kenntnistests fällig bis {date}.',
     reviewSimulationDue: 'Überprüfung der Simulation fällig bis {date}.',
     accuracyNotice: 'Antworten Sie so genau wie möglich: Die Plattform verlässt sich darauf, dass Ihre Angaben zutreffend und aktuell sind.',
     infoTitle: 'Ihr Anlagehintergrund',
@@ -1612,7 +1612,7 @@ export const de: Messages = {
     infoStatusMissing: 'Noch keine Angaben zum Anlagehintergrund - wiederholen Sie den Test, um sie bereitzustellen.',
     categorisationTitle: 'Anlegerkategorisierung',
     categorisationNote:
-      'Nach dem ECSPR ist jeder Anleger ein nicht erfahrener Anleger, sofern er nicht als erfahrener Anleger qualifiziert und anerkannt ist (Artikel 2 Absatz 1 Buchstaben j und k sowie Anhang II). Diese Demo zeichnet Ihren Antrag nur auf: Auf dieser Bereitstellung läuft kein Anerkennungsverfahren, sodass Sie unabhängig vom Antrag nicht erfahren bleiben.',
+      'Nach dem ECSPR ist jeder Anleger ein nicht erfahrener Anleger, sofern er nicht professioneller Kunde nach MiFID II ist oder vom Anbieter nach dem Verfahren des Anhangs II als erfahrener Anleger anerkannt wird (Artikel 2 Absatz 1 Buchstaben j und k sowie Anhang II). Diese Demo zeichnet Ihren Antrag nur auf: Auf dieser Bereitstellung läuft kein Anerkennungsverfahren, sodass Sie unabhängig vom Antrag nicht erfahren bleiben.',
     categorisationStatusLabel: 'Kategorisierung',
     categorisationStatusLabels: {
       non_sophisticated: 'Nicht erfahrener Anleger',

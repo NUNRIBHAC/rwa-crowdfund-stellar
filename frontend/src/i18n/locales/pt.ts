@@ -1534,7 +1534,7 @@ export const pt: Messages = {
     statusTitle: 'Os seus resultados',
     statusOutcome: 'Verificação inicial de conhecimentos',
     completedAt: 'Concluída em {date}.',
-    reviewAssessmentDue: 'Revisão da avaliação até {date}.',
+    reviewAssessmentDue: 'Revisão do teste de conhecimentos até {date}.',
     reviewSimulationDue: 'Revisão da simulação até {date}.',
     accuracyNotice: 'Responda com a maior exatidão possível: a plataforma depende de que as informações que fornece sejam exatas e estejam atualizadas.',
     infoTitle: 'A sua experiência de investimento',
@@ -1620,7 +1620,7 @@ export const pt: Messages = {
     infoStatusMissing: 'Ainda sem informação sobre experiência de investimento - repita o teste para a fornecer.',
     categorisationTitle: 'Categorização do investidor',
     categorisationNote:
-      'Segundo o ECSPR, todo o investidor é não sofisticado salvo se preencher os requisitos e for aprovado como investidor sofisticado (artigo 2.º, n.º 1, alíneas j) e k), e anexo II). Esta demo apenas regista o seu pedido: nesta instalação não decorre qualquer processo de aprovação, pelo que permanece não sofisticado peça o que pedir.',
+      'Segundo o ECSPR, todo o investidor é não sofisticado salvo se for cliente profissional nos termos da MiFID II ou se o prestador o aprovar como investidor sofisticado ao abrigo do procedimento do anexo II (artigo 2.º, n.º 1, alíneas j) e k), e anexo II). Esta demo apenas regista o seu pedido: nesta instalação não decorre qualquer processo de aprovação, pelo que permanece não sofisticado peça o que pedir.',
     categorisationStatusLabel: 'Categorização',
     categorisationStatusLabels: {
       non_sophisticated: 'Investidor não sofisticado',
