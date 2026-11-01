@@ -1,4 +1,5 @@
 import type { Intent } from './journal.js';
+import { amountUnits } from './soroban.js';
 
 // Operator reconciliation aid (read-only). Compares what THIS deployment's
 // intent journal records against each campaign's on-chain cumulative
@@ -19,7 +20,8 @@ import type { Intent } from './journal.js';
 // operator debugging aid.
 export const RECONCILIATION_SEMANTICS =
   'total_raised is the contract cumulative contribution counter (not reduced by refunds or withdraw). ' +
-  'journalCovered sums SUCCESS contribute intents recorded by THIS app only. ' +
+  'journalCovered sums the INTENDED amounts of SUCCESS contribute intents recorded by THIS app only, converted to base units (7 decimals) to match the contract counter. ' +
+  'An intended amount is not a confirmed transferred amount: per-hash network confirmation is the only source of transferred truth. ' +
   'notJournalCovered is on-chain volume from outside this app journal (CLI tests, other tooling, pre-journal history), not missing funds.';
 
 export type ReconciliationCampaignInput = { id: string; raised: string | null };
@@ -71,9 +73,13 @@ export function reconcileCampaigns(
           missingAmount += 1;
         } else {
           try {
-            covered += BigInt(i.amount);
+            // Journal amounts are human-USDC decimal strings (journal.ts
+            // validation); the contract counter is 7-decimal base units.
+            // Convert BEFORE summing, or the covered sum and the difference
+            // against raised are unit-inconsistent.
+            covered += amountUnits(i.amount);
           } catch {
-            notes.push(`intent ${i.hash} has an unparseable amount and is excluded from the covered sum`);
+            notes.push(`intent ${i.hash} has a malformed or out-of-range amount and is excluded from the covered sum`);
           }
         }
       } else if (i.action === 'refund') {
