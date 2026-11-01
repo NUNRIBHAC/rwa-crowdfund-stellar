@@ -1393,7 +1393,7 @@ export const fr: Messages = {
     podcastIntro:
       "Formats audio prévus sur le financement participatif, les émetteurs et la plateforme. Cet environnement de démonstration présente les formats prévus ; aucun épisode n'a été enregistré.",
     podcastIntroWithEpisodes:
-      'Formats audio prévus sur le financement participatif, les émetteurs et la plateforme. Les épisodes publiés apparaissent ci-dessus et sont étiquetés comme contenu de démonstration de la plateforme.',
+      'Formats audio prévus sur le financement participatif, les émetteurs et la plateforme. Les épisodes publiés sont étiquetés comme contenu de démonstration de la plateforme.',
     podcastEmpty: 'Aucun épisode publié pour le moment.',
     podcastFormatsTitle: 'Formats prévus',
     podcastFormatInterviews: "Interviews d'émetteurs",

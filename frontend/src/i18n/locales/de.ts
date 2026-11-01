@@ -1376,7 +1376,7 @@ export const de: Messages = {
     podcastIntro:
       'Geplante Audioformate zu Crowdinvesting, Emittenten und der Plattform. Diese Demo-Umgebung zeigt die geplanten Formate; es wurden keine Episoden aufgezeichnet.',
     podcastIntroWithEpisodes:
-      'Geplante Audioformate zu Crowdinvesting, Emittenten und der Plattform. Veröffentlichte Episoden erscheinen oben und sind als Demo-Inhalte der Plattform gekennzeichnet.',
+      'Geplante Audioformate zu Crowdinvesting, Emittenten und der Plattform. Veröffentlichte Episoden sind als Demo-Inhalte der Plattform gekennzeichnet.',
     podcastEmpty: 'Noch keine Episoden veröffentlicht.',
     podcastFormatsTitle: 'Geplante Formate',
     podcastFormatInterviews: 'Emittenten-Interviews',

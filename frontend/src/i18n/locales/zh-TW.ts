@@ -1289,7 +1289,7 @@ export const zhTW: Messages = {
     jobsDemoNote: '示範頁面:發布的職缺將顯示在這裡。目前沒有真實職缺。',
     podcastTitle: '播客',
     podcastIntro: '關於群眾募資投資、發行方與平台的音訊節目規劃形式。此示範環境展示規劃形式；尚未錄製任何集數。',
-    podcastIntroWithEpisodes: '關於群眾募資投資、發行方與平台的音訊節目規劃形式。已發佈的集數顯示在上方，並標註為平台示範內容。',
+    podcastIntroWithEpisodes: '關於群眾募資投資、發行方與平台的音訊節目規劃形式。已發佈的集數標註為平台示範內容。',
     podcastEmpty: '尚未發佈任何集數。',
     podcastFormatsTitle: '規劃形式',
     podcastFormatInterviews: '發行方訪談',

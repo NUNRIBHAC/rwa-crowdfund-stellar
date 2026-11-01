@@ -1337,8 +1337,7 @@ export const en = {
     podcastTitle: 'Podcast',
     podcastIntro:
       'Planned audio formats on crowd investing, issuers and the platform. This demo environment presents the planned formats; no episodes have been recorded.',
-    podcastIntroWithEpisodes:
-      'Planned audio formats on crowd investing, issuers and the platform. Published episodes appear above and are labeled as platform demo content.',
+    podcastIntroWithEpisodes: 'Planned audio formats on crowd investing, issuers and the platform. Published episodes are labeled as platform demo content.',
     podcastEmpty: 'No episodes published yet.',
     podcastFormatsTitle: 'Planned formats',
     podcastFormatInterviews: 'Issuer interviews',

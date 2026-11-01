@@ -1385,7 +1385,7 @@ export const pt: Messages = {
     podcastIntro:
       'Formatos de áudio planeados sobre investimento colaborativo, emitentes e a plataforma. Este ambiente de demonstração apresenta os formatos planeados; não foram gravados episódios.',
     podcastIntroWithEpisodes:
-      'Formatos de áudio planeados sobre investimento colaborativo, emitentes e a plataforma. Os episódios publicados aparecem acima e estão identificados como conteúdo de demonstração da plataforma.',
+      'Formatos de áudio planeados sobre investimento colaborativo, emitentes e a plataforma. Os episódios publicados estão identificados como conteúdo de demonstração da plataforma.',
     podcastEmpty: 'Ainda não foram publicados episódios.',
     podcastFormatsTitle: 'Formatos planeados',
     podcastFormatInterviews: 'Entrevistas a emitentes',
