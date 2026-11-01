@@ -116,7 +116,7 @@ export const fr: Messages = {
     grid: 'Grille',
     list: 'Liste',
     noMatches: 'Aucune campagne ne correspond à la recherche et aux filtres actuels.',
-    resultCount: (n: number) => (n === 1 ? '1 campagne affichée' : `${n} campagnes affichées`),
+    resultCount: { one: '{n} campagne affichée', other: '{n} campagnes affichées' },
     activeAria: 'Investissements actifs',
     activeTitle: 'Investissements actifs',
     completedAria: 'Investissements terminés',
@@ -128,9 +128,9 @@ export const fr: Messages = {
     statusEnded: 'Non financée',
     statusOpen: 'Ouverte',
     withdrawn: 'Retiré',
-    fundedPct: (percent: number) => `${percent}% financé`,
+    fundedPct: '{percent}% financé',
     progressUnavailable: 'Progression indisponible - données on-chain non chargées',
-    progressAria: (pct: number) => `Progression du financement : ${pct}% de l'objectif`,
+    progressAria: "Progression du financement : {pct}% de l'objectif",
     interest: 'Intérêt',
     term: 'Durée',
     minimum: 'Minimum',
@@ -156,7 +156,7 @@ export const fr: Messages = {
     amountLabel: 'Montant de la contribution (USDC de testnet)',
     amountRequired: 'Saisissez un montant de contribution.',
     amountInvalid: "Saisissez un montant valide : chiffres uniquement, jusqu'à 7 décimales, supérieur à zéro.",
-    amountExceeds: (remaining: string) => `Le montant dépasse l'objectif restant de ${remaining} USDC (testnet).`,
+    amountExceeds: "Le montant dépasse l'objectif restant de {remaining} USDC (testnet).",
     usdcTestnet: 'USDC (testnet)',
     contribute: 'Contribuer',
     refundMe: 'Me rembourser',
@@ -165,10 +165,9 @@ export const fr: Messages = {
       "Contribuez avant la date limite, jusqu'au montant restant de l'objectif. Passé le délai, le créateur ne lève les fonds que si l'objectif est entièrement atteint ; sinon, chaque contributeur signe son propre remboursement. Le contrat applique ces règles de façon atomique.",
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) =>
-      `Progression du financement : ${filled} sur ${count} blocs remplis, ${percent}% de l'objectif`,
+    ariaReady: "Progression du financement : {filled} sur {count} blocs remplis, {percent}% de l'objectif",
     ariaUnavailable: 'Progression du financement indisponible : données on-chain non chargées',
-    fundedTail: (filled: number, count: number) => `financé - ${filled} sur ${count} blocs`,
+    fundedTail: 'financé - {filled} sur {count} blocs',
     captionUnavailable: 'Progression indisponible - données on-chain non chargées',
   },
   intent: {
@@ -572,9 +571,9 @@ export const fr: Messages = {
   time: {
     ended: 'Terminée',
     underMinute: "Moins d'une minute restante",
-    minutesLeft: (n: number) => (n === 1 ? `${n} minute restante` : `${n} minutes restantes`),
-    hoursLeft: (n: number) => (n === 1 ? `${n} heure restante` : `${n} heures restantes`),
-    daysLeft: (n: number) => (n === 1 ? `${n} jour restant` : `${n} jours restants`),
+    minutesLeft: { one: '{n} minute restante', other: '{n} minutes restantes' },
+    hoursLeft: { one: '{n} heure restante', other: '{n} heures restantes' },
+    daysLeft: { one: '{n} jour restant', other: '{n} jours restants' },
   },
   errors: {
     freighterMissing: 'Extension de portefeuille Freighter non détectée. Installez Freighter, puis réessayez Connecter.',
@@ -782,7 +781,7 @@ export const fr: Messages = {
     chipSenior: 'Senior',
     chipSubordinated: 'Subordonnée',
     chipUnspecifiedSuffix: '(seniorité non spécifiée)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base.toLowerCase()}` : base),
+    chipCompose: 'space-lower',
   },
   glossary: [
     {
@@ -1431,7 +1430,7 @@ export const fr: Messages = {
   },
   tour: {
     tourTitle: 'Visite guidée de la campagne',
-    tourStepOf: (current: number, total: number) => `Étape ${current} sur ${total}`,
+    tourStepOf: 'Étape {current} sur {total}',
     tourNext: 'Suivant',
     tourBack: 'Retour',
     tourDone: 'Terminer',
@@ -1454,15 +1453,15 @@ export const fr: Messages = {
     catSubmit: 'Vérifier les réponses',
     catRetake: 'Refaire le test',
     catResultPass: 'Toutes les réponses sont correctes.',
-    catResultReview: (n: number) => `${n} réponse(s) à revoir - lisez les explications et réessayez.`,
-    catScoreLabel: (correct: number, total: number) => `${correct} sur ${total} correctes`,
+    catResultReview: '{n} réponse(s) à revoir - lisez les explications et réessayez.',
+    catScoreLabel: '{correct} sur {total} correctes',
     catSimTitle: 'Simulation de capacité à supporter une perte',
     catSimIntro: 'Comparez un investissement envisagé à vos fonds librement disponibles.',
     catAssetsLabel: 'Fonds librement disponibles (EUR)',
     catIncomeLabel: 'Revenu net mensuel (EUR)',
     catPlannedLabel: 'Investissement envisagé (EUR)',
     catSimRun: 'Lancer la simulation',
-    catSimResult: ({ pct }: { pct: string }) => `Le montant prévu correspond à ${pct} % des fonds librement disponibles saisis.`,
+    catSimResult: 'Le montant prévu correspond à {pct} % des fonds librement disponibles saisis.',
     catSimNote:
       "Simple calcul arithmétique sur les montants saisis. Il ne s'agit pas d'une évaluation réglementaire de la capacité à supporter des pertes, d'adéquation ou d'éligibilité, et aucun seuil n'est appliqué.",
     catSavedNote: 'Résultat enregistré uniquement localement dans ce navigateur.',
@@ -1527,7 +1526,7 @@ export const fr: Messages = {
     commentsEmpty: 'Aucun commentaire pour le moment.',
     commentLabel: 'Votre commentaire',
     commentSubmit: 'Publier le commentaire',
-    commentPostingAs: (name: string) => `Publication en tant que ${name}. Les commentaires sont publics.`,
+    commentPostingAs: 'Publication en tant que {name}. Les commentaires sont publics.',
     commentsSignInHint: 'Connectez-vous avec votre portefeuille ci-dessous pour participer à la discussion.',
     signInTitle: 'Connexion à la communauté',
     signInExplainer:
@@ -1611,7 +1610,7 @@ export const fr: Messages = {
       expiresLabel: 'Expire',
       revoke: 'Terminer la session',
       revokeOthers: 'Déconnecter toutes les autres sessions',
-      revokedOthers: ({ count }: { count: number }) => `${count} ${count === 1 ? 'autre session terminée' : 'autres sessions terminées'}.`,
+      revokedOthers: { one: '{count} autre session terminée.', other: '{count} autres sessions terminées.' },
       empty: 'Aucune session active.',
     },
     notifications: {
@@ -1628,17 +1627,14 @@ export const fr: Messages = {
         companyStatus: "Mise à jour de la demande de compte d'entreprise",
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `Votre candidature d'émetteur pour "${projectName}" a été reçue. L'opérateur examine les candidatures manuellement ; la soumission n'est ni une approbation, ni une cotation, ni une offre.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `Votre candidature d'émetteur pour "${projectName}" est maintenant "${statusLabel}".`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `Votre commentaire sur la campagne "${campaignId}" a été masqué par le modérateur.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `Motif : ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Votre ticket (${kindLabel}) "${subject}" a été clôturé.`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `Votre demande de compte d'entreprise pour « ${companyName} » a bien été reçue. L'examen est manuel ; l'envoi ne vaut pas approbation.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `Votre demande de compte d'entreprise pour « ${companyName} » est désormais « ${statusLabel} ».`,
+        applicationReceived:
+          "Votre candidature d'émetteur pour \"{projectName}\" a été reçue. L'opérateur examine les candidatures manuellement ; la soumission n'est ni une approbation, ni une cotation, ni une offre.",
+        applicationStatus: 'Votre candidature d\'émetteur pour "{projectName}" est maintenant "{statusLabel}".',
+        commentModerated: 'Votre commentaire sur la campagne "{campaignId}" a été masqué par le modérateur.',
+        commentModeratedReason: 'Motif : {reason}',
+        ticketClosed: 'Votre ticket ({kindLabel}) "{subject}" a été clôturé.',
+        companyReceived: "Votre demande de compte d'entreprise pour « {companyName} » a bien été reçue. L'examen est manuel ; l'envoi ne vaut pas approbation.",
+        companyStatus: "Votre demande de compte d'entreprise pour « {companyName} » est désormais « {statusLabel} ».",
       },
     },
     operator: {
@@ -1676,7 +1672,7 @@ export const fr: Messages = {
       colAction: 'Action',
       colTargetRef: 'Cible',
       colDetail: 'Détail',
-      reconQuarantined: (n: number) => `${n} ligne(s) du journal en quarantaine nécessitent une revue par l'opérateur.`,
+      reconQuarantined: "{n} ligne(s) du journal en quarantaine nécessitent une revue par l'opérateur.",
       colProject: 'Projet',
       colCountry: 'Pays',
       colInstrument: 'Instrument',

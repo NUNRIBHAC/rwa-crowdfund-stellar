@@ -116,7 +116,7 @@ export const es: Messages = {
     grid: 'Cuadrícula',
     list: 'Lista',
     noMatches: 'Ninguna campaña coincide con la búsqueda y los filtros actuales.',
-    resultCount: (n: number) => (n === 1 ? '1 campaña visible' : `${n} campañas visibles`),
+    resultCount: { one: '{n} campaña visible', other: '{n} campañas visibles' },
     activeAria: 'Inversiones activas',
     activeTitle: 'Inversiones activas',
     completedAria: 'Inversiones completadas',
@@ -128,9 +128,9 @@ export const es: Messages = {
     statusEnded: 'No financiada',
     statusOpen: 'Abierta',
     withdrawn: 'Retirado',
-    fundedPct: (percent: number) => `${percent}% financiado`,
+    fundedPct: '{percent}% financiado',
     progressUnavailable: 'Progreso no disponible - datos on-chain no cargados',
-    progressAria: (pct: number) => `Progreso de financiación: ${pct}% del objetivo`,
+    progressAria: 'Progreso de financiación: {pct}% del objetivo',
     interest: 'Interés',
     term: 'Plazo',
     minimum: 'Mínimo',
@@ -156,7 +156,7 @@ export const es: Messages = {
     amountLabel: 'Importe de la contribución (USDC de testnet)',
     amountRequired: 'Introduzca un importe de contribución.',
     amountInvalid: 'Introduzca un importe válido: solo números, hasta 7 decimales, mayor que cero.',
-    amountExceeds: (remaining: string) => `El importe supera el objetivo restante de ${remaining} USDC (testnet).`,
+    amountExceeds: 'El importe supera el objetivo restante de {remaining} USDC (testnet).',
     usdcTestnet: 'USDC (testnet)',
     contribute: 'Contribuir',
     refundMe: 'Reembolsarme',
@@ -165,10 +165,9 @@ export const es: Messages = {
       'Contribuye antes de la fecha límite, hasta el importe restante del objetivo. Tras el plazo, el creador solo retira los fondos si el objetivo se alcanzó por completo; en caso contrario, cada contribuyente firma su propio reembolso. El contrato aplica estas reglas de forma atómica.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) =>
-      `Progreso de financiación: ${filled} de ${count} bloques completados, ${percent}% del objetivo`,
+    ariaReady: 'Progreso de financiación: {filled} de {count} bloques completados, {percent}% del objetivo',
     ariaUnavailable: 'Progreso de financiación no disponible: datos on-chain no cargados',
-    fundedTail: (filled: number, count: number) => `financiado - ${filled} de ${count} bloques`,
+    fundedTail: 'financiado - {filled} de {count} bloques',
     captionUnavailable: 'Progreso no disponible - datos on-chain no cargados',
   },
   intent: {
@@ -570,9 +569,9 @@ export const es: Messages = {
   time: {
     ended: 'Terminó',
     underMinute: 'Queda menos de un minuto',
-    minutesLeft: (n: number) => (n === 1 ? `Queda ${n} minuto` : `Quedan ${n} minutos`),
-    hoursLeft: (n: number) => (n === 1 ? `Queda ${n} hora` : `Quedan ${n} horas`),
-    daysLeft: (n: number) => (n === 1 ? `Queda ${n} día` : `Quedan ${n} días`),
+    minutesLeft: { one: 'Queda {n} minuto', other: 'Quedan {n} minutos' },
+    hoursLeft: { one: 'Queda {n} hora', other: 'Quedan {n} horas' },
+    daysLeft: { one: 'Queda {n} día', other: 'Quedan {n} días' },
   },
   errors: {
     freighterMissing: 'Extensión de cartera Freighter no detectada. Instala Freighter y vuelve a intentar Conectar.',
@@ -779,7 +778,7 @@ export const es: Messages = {
     chipSenior: 'Sénior',
     chipSubordinated: 'Subordinada',
     chipUnspecifiedSuffix: '(senioridad no especificada)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base.toLowerCase()}` : base),
+    chipCompose: 'space-lower',
   },
   glossary: [
     {
@@ -1427,7 +1426,7 @@ export const es: Messages = {
   },
   tour: {
     tourTitle: 'Visita guiada de la campaña',
-    tourStepOf: (current: number, total: number) => `Paso ${current} de ${total}`,
+    tourStepOf: 'Paso {current} de {total}',
     tourNext: 'Siguiente',
     tourBack: 'Atrás',
     tourDone: 'Finalizar',
@@ -1450,15 +1449,15 @@ export const es: Messages = {
     catSubmit: 'Comprobar respuestas',
     catRetake: 'Repetir la prueba',
     catResultPass: 'Todas las respuestas son correctas.',
-    catResultReview: (n: number) => `${n} respuesta(s) por revisar - lee las explicaciones e inténtalo de nuevo.`,
-    catScoreLabel: (correct: number, total: number) => `${correct} de ${total} correctas`,
+    catResultReview: '{n} respuesta(s) por revisar - lee las explicaciones e inténtalo de nuevo.',
+    catScoreLabel: '{correct} de {total} correctas',
     catSimTitle: 'Simulación de capacidad de asumir pérdidas',
     catSimIntro: 'Compara una inversión prevista con tus fondos libremente disponibles.',
     catAssetsLabel: 'Fondos libremente disponibles (EUR)',
     catIncomeLabel: 'Ingresos netos mensuales (EUR)',
     catPlannedLabel: 'Inversión prevista (EUR)',
     catSimRun: 'Ejecutar simulación',
-    catSimResult: ({ pct }: { pct: string }) => `La inversión prevista equivale al ${pct} % de los fondos disponibles introducidos.`,
+    catSimResult: 'La inversión prevista equivale al {pct} % de los fondos disponibles introducidos.',
     catSimNote:
       'Aritmética simple sobre los importes introducidos. No es una evaluación regulatoria de la capacidad de asumir pérdidas, idoneidad o elegibilidad, y no se aplica ningún umbral.',
     catSavedNote: 'Resultado guardado solo localmente en este navegador.',
@@ -1523,7 +1522,7 @@ export const es: Messages = {
     commentsEmpty: 'Aún no hay comentarios.',
     commentLabel: 'Tu comentario',
     commentSubmit: 'Publicar comentario',
-    commentPostingAs: (name: string) => `Publicando como ${name}. Los comentarios son públicos.`,
+    commentPostingAs: 'Publicando como {name}. Los comentarios son públicos.',
     commentsSignInHint: 'Inicia sesión con tu monedero abajo para unirte a la conversación.',
     signInTitle: 'Inicio de sesión de la comunidad',
     signInExplainer:
@@ -1607,7 +1606,7 @@ export const es: Messages = {
       expiresLabel: 'Expira',
       revoke: 'Cerrar sesión',
       revokeOthers: 'Cerrar todas las demás sesiones',
-      revokedOthers: ({ count }: { count: number }) => `${count} ${count === 1 ? 'sesión adicional cerrada' : 'sesiones adicionales cerradas'}.`,
+      revokedOthers: { one: '{count} sesión adicional cerrada.', other: '{count} sesiones adicionales cerradas.' },
       empty: 'No hay sesiones activas.',
     },
     notifications: {
@@ -1624,17 +1623,14 @@ export const es: Messages = {
         companyStatus: 'Actualización de la solicitud de cuenta de empresa',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `Su solicitud de emisor para "${projectName}" ha sido recibida. El operador revisa las solicitudes manualmente; el envío no es una aprobación, un listado ni una oferta.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `Su solicitud de emisor para "${projectName}" ahora está "${statusLabel}".`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `Su comentario en la campaña "${campaignId}" ha sido ocultado por el moderador.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `Motivo: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Su ticket (${kindLabel}) "${subject}" ha sido cerrado.`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `Su solicitud de cuenta de empresa para "${companyName}" ha sido recibida. La revisión es manual; el envío no es una aprobación.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `Su solicitud de cuenta de empresa para "${companyName}" ahora está "${statusLabel}".`,
+        applicationReceived:
+          'Su solicitud de emisor para "{projectName}" ha sido recibida. El operador revisa las solicitudes manualmente; el envío no es una aprobación, un listado ni una oferta.',
+        applicationStatus: 'Su solicitud de emisor para "{projectName}" ahora está "{statusLabel}".',
+        commentModerated: 'Su comentario en la campaña "{campaignId}" ha sido ocultado por el moderador.',
+        commentModeratedReason: 'Motivo: {reason}',
+        ticketClosed: 'Su ticket ({kindLabel}) "{subject}" ha sido cerrado.',
+        companyReceived: 'Su solicitud de cuenta de empresa para "{companyName}" ha sido recibida. La revisión es manual; el envío no es una aprobación.',
+        companyStatus: 'Su solicitud de cuenta de empresa para "{companyName}" ahora está "{statusLabel}".',
       },
     },
     operator: {
@@ -1672,7 +1668,7 @@ export const es: Messages = {
       colAction: 'Acción',
       colTargetRef: 'Destino',
       colDetail: 'Detalle',
-      reconQuarantined: (n: number) => `${n} fila(s) del diario en cuarentena requieren revisión del operador.`,
+      reconQuarantined: '{n} fila(s) del diario en cuarentena requieren revisión del operador.',
       colProject: 'Proyecto',
       colCountry: 'País',
       colInstrument: 'Instrumento',

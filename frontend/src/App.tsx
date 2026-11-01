@@ -3,7 +3,7 @@ import { isConnected, requestAccess, signTransaction } from '@stellar/freighter-
 import type { Campaign, Intent } from './types';
 import { isTerminal } from './types';
 import { api } from './api';
-import { contributionError, formatAmount } from './format';
+import { contributionError, formatAmount, tpl } from './format';
 import type { ContributionError } from './format';
 import { FIXTURE_CAMPAIGNS } from './fixtures';
 import type { Market } from './market';
@@ -119,7 +119,7 @@ export default function App() {
   function amountErrorText(code: ContributionError, c: Campaign): string {
     if (code === 'required') return m.card.amountRequired;
     if (code === 'invalid') return m.card.amountInvalid;
-    return m.card.amountExceeds(formatAmount(String(BigInt(c.config.goal) - BigInt(c.raised)), locale));
+    return tpl(m.card.amountExceeds, { remaining: formatAmount(String(BigInt(c.config.goal) - BigInt(c.raised)), locale) });
   }
 
   function prepareErrorText(code: string): string {

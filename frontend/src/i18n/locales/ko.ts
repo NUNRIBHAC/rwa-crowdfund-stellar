@@ -113,7 +113,7 @@ export const ko: Messages = {
     grid: '그리드',
     list: '리스트',
     noMatches: '현재 검색 및 필터와 일치하는 캠페인이 없습니다.',
-    resultCount: (n: number) => `캠페인 ${n}개 표시됨`,
+    resultCount: { one: '캠페인 {n}개 표시됨', other: '캠페인 {n}개 표시됨' },
     activeAria: '진행 중인 투자',
     activeTitle: '진행 중인 투자',
     completedAria: '종료된 투자',
@@ -125,9 +125,9 @@ export const ko: Messages = {
     statusEnded: '미달',
     statusOpen: '모집 중',
     withdrawn: '인출됨',
-    fundedPct: (percent: number) => `${percent}% 달성`,
+    fundedPct: '{percent}% 달성',
     progressUnavailable: '진행률을 사용할 수 없음 - 온체인 데이터가 로드되지 않음',
-    progressAria: (pct: number) => `자금 조달 진행률: 목표의 ${pct}%`,
+    progressAria: '자금 조달 진행률: 목표의 {pct}%',
     interest: '이자',
     term: '기간',
     minimum: '최소',
@@ -153,7 +153,7 @@ export const ko: Messages = {
     amountLabel: '출자 금액(테스트넷 USDC)',
     amountRequired: '출자 금액을 입력하세요.',
     amountInvalid: '유효한 금액을 입력하세요: 숫자만, 소수점 이하 7자리까지, 0보다 커야 합니다.',
-    amountExceeds: (remaining: string) => `금액이 남은 목표액 ${remaining} USDC(테스트넷)을 초과합니다.`,
+    amountExceeds: '금액이 남은 목표액 {remaining} USDC(테스트넷)을 초과합니다.',
     usdcTestnet: 'USDC(테스트넷)',
     contribute: '출자하기',
     refundMe: '환불받기',
@@ -162,9 +162,9 @@ export const ko: Messages = {
       '마감 전까지 남은 목표 범위 내에서 출자하세요. 마감 후에는 완전히 모집된 경우에만 생성자가 인출하고, 그렇지 않으면 각 출자자가 직접 환불에 서명합니다. 컨트랙트가 이 규칙을 아토믹하게 강제합니다.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `자금 조달 진행률: ${count}개 블록 중 ${filled}개 채워짐, 목표의 ${percent}%`,
+    ariaReady: '자금 조달 진행률: {count}개 블록 중 {filled}개 채워짐, 목표의 {percent}%',
     ariaUnavailable: '자금 조달 진행률을 사용할 수 없음: 온체인 데이터가 로드되지 않음',
-    fundedTail: (filled: number, count: number) => `달성 - ${count}개 블록 중 ${filled}개`,
+    fundedTail: '달성 - {count}개 블록 중 {filled}개',
     captionUnavailable: '진행률을 사용할 수 없음 - 온체인 데이터가 로드되지 않음',
   },
   intent: {
@@ -547,9 +547,9 @@ export const ko: Messages = {
   time: {
     ended: '종료됨',
     underMinute: '1분 미만 남음',
-    minutesLeft: (n: number) => `${n}분 남음`,
-    hoursLeft: (n: number) => `${n}시간 남음`,
-    daysLeft: (n: number) => `${n}일 남음`,
+    minutesLeft: { one: '{n}분 남음', other: '{n}분 남음' },
+    hoursLeft: { one: '{n}시간 남음', other: '{n}시간 남음' },
+    daysLeft: { one: '{n}일 남음', other: '{n}일 남음' },
   },
   errors: {
     freighterMissing: 'Freighter 지갑 확장 프로그램이 감지되지 않았습니다. Freighter를 설치한 후 연결을 다시 시도하세요.',
@@ -708,7 +708,7 @@ export const ko: Messages = {
     chipSenior: '우선',
     chipSubordinated: '후순위',
     chipUnspecifiedSuffix: '(우선순위 미지정)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base}` : base),
+    chipCompose: 'space',
   },
   glossary: [
     {
@@ -1315,7 +1315,7 @@ export const ko: Messages = {
   },
   tour: {
     tourTitle: '캠페인 둘러보기',
-    tourStepOf: (current: number, total: number) => `${total}단계 중 ${current}단계`,
+    tourStepOf: '{total}단계 중 {current}단계',
     tourNext: '다음',
     tourBack: '이전',
     tourDone: '완료',
@@ -1338,15 +1338,15 @@ export const ko: Messages = {
     catSubmit: '답변 확인',
     catRetake: '테스트 다시 하기',
     catResultPass: '모든 답변이 정답입니다.',
-    catResultReview: (n: number) => `검토할 답변 ${n}개 - 설명을 읽고 다시 시도하세요.`,
-    catScoreLabel: (correct: number, total: number) => `${total}개 중 ${correct}개 정답`,
+    catResultReview: '검토할 답변 {n}개 - 설명을 읽고 다시 시도하세요.',
+    catScoreLabel: '{total}개 중 {correct}개 정답',
     catSimTitle: '손실 감내 능력 시뮬레이션',
     catSimIntro: '투자 예정 금액을 자유롭게 사용 가능한 자금과 비교하세요.',
     catAssetsLabel: '자유롭게 사용 가능한 자금 (EUR)',
     catIncomeLabel: '월 순소득 (EUR)',
     catPlannedLabel: '투자 예정 금액 (EUR)',
     catSimRun: '시뮬레이션 실행',
-    catSimResult: ({ pct }: { pct: string }) => `계획 투자 금액은 입력한 자유 사용 가능 자금의 ${pct}%입니다.`,
+    catSimResult: '계획 투자 금액은 입력한 자유 사용 가능 자금의 {pct}%입니다.',
     catSimNote: '입력한 금액에 대한 단순 산술 계산입니다. 손실 감내 능력, 적합성 또는 적격성에 대한 규제 평가가 아니며 어떤 임계값도 적용되지 않습니다.',
     catSavedNote: '결과는 이 브라우저에만 로컬로 저장됩니다.',
     catQuestions: [
@@ -1408,7 +1408,7 @@ export const ko: Messages = {
     commentsEmpty: '아직 댓글이 없습니다.',
     commentLabel: '내 댓글',
     commentSubmit: '댓글 게시',
-    commentPostingAs: (name: string) => `${name}(으)로 게시합니다. 댓글은 공개됩니다.`,
+    commentPostingAs: '{name}(으)로 게시합니다. 댓글은 공개됩니다.',
     commentsSignInHint: '아래에서 지갑으로 로그인하여 토론에 참여하세요.',
     signInTitle: '커뮤니티 로그인',
     signInExplainer:
@@ -1490,7 +1490,7 @@ export const ko: Messages = {
       expiresLabel: '만료',
       revoke: '세션 종료',
       revokeOthers: '다른 모든 세션 로그아웃',
-      revokedOthers: ({ count }: { count: number }) => `다른 세션 ${count}개를 종료했습니다.`,
+      revokedOthers: { one: '다른 세션 {count}개를 종료했습니다.', other: '다른 세션 {count}개를 종료했습니다.' },
       empty: '활성 세션이 없습니다.',
     },
     notifications: {
@@ -1507,17 +1507,13 @@ export const ko: Messages = {
         companyStatus: '법인 계정 신청 업데이트',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `"${projectName}"에 대한 발행자 신청이 접수되었습니다. 운영자가 신청을 수동으로 검토하며, 제출은 승인, 상장 또는 청약이 아닙니다.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `"${projectName}"에 대한 발행자 신청이 "${statusLabel}" 상태가 되었습니다.`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `캠페인 "${campaignId}"에 작성한 댓글이 모더레이터에 의해 숨겨졌습니다.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `사유: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `${kindLabel} 티켓 "${subject}"이 종료되었습니다.`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `"${companyName}"에 대한 법인 계정 신청이 접수되었습니다. 심사는 수동이며 제출이 승인은 아닙니다.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `"${companyName}"에 대한 법인 계정 신청이 이제 "${statusLabel}"입니다.`,
+        applicationReceived: '"{projectName}"에 대한 발행자 신청이 접수되었습니다. 운영자가 신청을 수동으로 검토하며, 제출은 승인, 상장 또는 청약이 아닙니다.',
+        applicationStatus: '"{projectName}"에 대한 발행자 신청이 "{statusLabel}" 상태가 되었습니다.',
+        commentModerated: '캠페인 "{campaignId}"에 작성한 댓글이 모더레이터에 의해 숨겨졌습니다.',
+        commentModeratedReason: '사유: {reason}',
+        ticketClosed: '{kindLabel} 티켓 "{subject}"이 종료되었습니다.',
+        companyReceived: '"{companyName}"에 대한 법인 계정 신청이 접수되었습니다. 심사는 수동이며 제출이 승인은 아닙니다.',
+        companyStatus: '"{companyName}"에 대한 법인 계정 신청이 이제 "{statusLabel}"입니다.',
       },
     },
     operator: {
@@ -1547,7 +1543,7 @@ export const ko: Messages = {
       colAction: '작업',
       colTargetRef: '대상',
       colDetail: '세부 정보',
-      reconQuarantined: (n: number) => `격리된 저널 행 ${n}건은 운영자 검토가 필요합니다.`,
+      reconQuarantined: '격리된 저널 행 {n}건은 운영자 검토가 필요합니다.',
       colProject: '프로젝트',
       colCountry: '국가',
       colInstrument: '상품',

@@ -114,7 +114,7 @@ export const ar: Messages = {
     grid: 'شبكة',
     list: 'قائمة',
     noMatches: 'لا حملات تطابق البحث والمرشحات الحالية.',
-    resultCount: (n: number) => `عدد الحملات المعروضة: ${n}`,
+    resultCount: { one: 'عدد الحملات المعروضة: {n}', other: 'عدد الحملات المعروضة: {n}' },
     activeAria: 'استثمارات نشطة',
     activeTitle: 'استثمارات نشطة',
     completedAria: 'استثمارات مكتملة',
@@ -126,9 +126,9 @@ export const ar: Messages = {
     statusEnded: 'دون الهدف',
     statusOpen: 'مفتوحة',
     withdrawn: 'مسحوبة',
-    fundedPct: (percent: number) => `${percent}٪ ممول`,
+    fundedPct: '{percent}٪ ممول',
     progressUnavailable: 'التقدم غير متاح - بيانات السلسلة لم تُحمَّل',
-    progressAria: (pct: number) => `تقدم التمويل: ${pct}٪ من الهدف`,
+    progressAria: 'تقدم التمويل: {pct}٪ من الهدف',
     interest: 'الفائدة',
     term: 'المدة',
     minimum: 'الحد الأدنى',
@@ -154,7 +154,7 @@ export const ar: Messages = {
     amountLabel: 'مبلغ المساهمة (USDC تجريبي)',
     amountRequired: 'أدخل مبلغ المساهمة.',
     amountInvalid: 'أدخل مبلغًا صالحًا: أرقام فقط، حتى 7 خانات عشرية، أكبر من صفر.',
-    amountExceeds: (remaining: string) => `المبلغ يتجاوز الهدف المتبقي البالغ ${remaining} USDC (شبكة اختبار).`,
+    amountExceeds: 'المبلغ يتجاوز الهدف المتبقي البالغ {remaining} USDC (شبكة اختبار).',
     usdcTestnet: 'USDC (تجريبي)',
     contribute: 'ساهم',
     refundMe: 'استرد أموالي',
@@ -163,9 +163,9 @@ export const ar: Messages = {
       'ساهم قبل الموعد النهائي، بحد أقصى هو المتبقي من الهدف. بعد الموعد النهائي يسحب المنشئ فقط إذا اكتمل التمويل؛ وإلا يوقّع كل مساهم على استرداده بنفسه. يفرض العقد هذه القواعد ذريًّا.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `تقدم التمويل: ${filled} من ${count} كتلة ممتلئة، ${percent}٪ من الهدف`,
+    ariaReady: 'تقدم التمويل: {filled} من {count} كتلة ممتلئة، {percent}٪ من الهدف',
     ariaUnavailable: 'تقدم التمويل غير متاح: بيانات السلسلة لم تُحمَّل',
-    fundedTail: (filled: number, count: number) => `ممول - ${filled} من ${count} كتلة`,
+    fundedTail: 'ممول - {filled} من {count} كتلة',
     captionUnavailable: 'التقدم غير متاح - بيانات السلسلة لم تُحمَّل',
   },
   intent: {
@@ -553,9 +553,9 @@ export const ar: Messages = {
   time: {
     ended: 'انتهت',
     underMinute: 'أقل من دقيقة متبقية',
-    minutesLeft: (n: number) => `متبقٍ ${n} دقيقة`,
-    hoursLeft: (n: number) => `متبقٍ ${n} ساعة`,
-    daysLeft: (n: number) => `متبقٍ ${n} يوم`,
+    minutesLeft: { one: 'متبقٍ {n} دقيقة', other: 'متبقٍ {n} دقيقة' },
+    hoursLeft: { one: 'متبقٍ {n} ساعة', other: 'متبقٍ {n} ساعة' },
+    daysLeft: { one: 'متبقٍ {n} يوم', other: 'متبقٍ {n} يوم' },
   },
   errors: {
     freighterMissing: 'امتداد محفظة Freighter غير مكتشف. ثبّت Freighter ثم أعد محاولة الربط.',
@@ -715,7 +715,7 @@ export const ar: Messages = {
     chipSenior: 'بأولوية',
     chipSubordinated: 'ثانوي',
     chipUnspecifiedSuffix: '(الأولوية غير محددة)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base}` : base),
+    chipCompose: 'space',
   },
   glossary: [
     {
@@ -1323,7 +1323,7 @@ export const ar: Messages = {
   },
   tour: {
     tourTitle: 'جولة الحملة',
-    tourStepOf: (current: number, total: number) => `الخطوة ${current} من ${total}`,
+    tourStepOf: 'الخطوة {current} من {total}',
     tourNext: 'التالي',
     tourBack: 'السابق',
     tourDone: 'إنهاء',
@@ -1346,15 +1346,15 @@ export const ar: Messages = {
     catSubmit: 'تحقق من الإجابات',
     catRetake: 'إعادة الاختبار',
     catResultPass: 'جميع الإجابات صحيحة.',
-    catResultReview: (n: number) => `${n} إجابة/إجابات للمراجعة - اقرأ الشروحات وحاول مجددًا.`,
-    catScoreLabel: (correct: number, total: number) => `${correct} من ${total} صحيحة`,
+    catResultReview: '{n} إجابة/إجابات للمراجعة - اقرأ الشروحات وحاول مجددًا.',
+    catScoreLabel: '{correct} من {total} صحيحة',
     catSimTitle: 'محاكاة القدرة على تحمل الخسارة',
     catSimIntro: 'قارن استثمارًا مخططًا له بأموالك المتاحة بحرية.',
     catAssetsLabel: 'الأموال المتاحة بحرية (يورو)',
     catIncomeLabel: 'صافي الدخل الشهري (يورو)',
     catPlannedLabel: 'الاستثمار المخطط (يورو)',
     catSimRun: 'تشغيل المحاكاة',
-    catSimResult: ({ pct }: { pct: string }) => `المبلغ المخطط يعادل ${pct}% من الأموال المتاحة التي أدخلتها.`,
+    catSimResult: 'المبلغ المخطط يعادل {pct}% من الأموال المتاحة التي أدخلتها.',
     catSimNote: 'عملية حسابية بسيطة على المبالغ التي أدخلتها. ليست تقييمًا تنظيميًا للقدرة على تحمل الخسارة أو الملاءمة أو الأهلية، ولا يتم تطبيق أي حد.',
     catSavedNote: 'تُحفظ النتيجة محليًا في هذا المتصفح فقط.',
     catQuestions: [
@@ -1416,7 +1416,7 @@ export const ar: Messages = {
     commentsEmpty: 'لا توجد تعليقات بعد.',
     commentLabel: 'تعليقك',
     commentSubmit: 'نشر التعليق',
-    commentPostingAs: (name: string) => `النشر باسم ${name}. التعليقات علنية.`,
+    commentPostingAs: 'النشر باسم {name}. التعليقات علنية.',
     commentsSignInHint: 'سجّل الدخول بمحفظتك أدناه للمشاركة في النقاش.',
     signInTitle: 'تسجيل الدخول إلى المجتمع',
     signInExplainer:
@@ -1498,7 +1498,7 @@ export const ar: Messages = {
       expiresLabel: 'تنتهي',
       revoke: 'إنهاء الجلسة',
       revokeOthers: 'تسجيل الخروج من جميع الجلسات الأخرى',
-      revokedOthers: ({ count }: { count: number }) => `تم إنهاء ${count} ${count === 1 ? 'جلسة أخرى' : 'جلسات أخرى'}.`,
+      revokedOthers: { one: 'تم إنهاء {count} جلسة أخرى.', other: 'تم إنهاء {count} جلسات أخرى.' },
       empty: 'لا توجد جلسات نشطة.',
     },
     notifications: {
@@ -1515,17 +1515,13 @@ export const ar: Messages = {
         companyStatus: 'تحديث طلب حساب الشركة',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `تم استلام طلب الإصدار الخاص بك لـ "${projectName}". يراجع المشغّل الطلبات يدوياً؛ التقديم ليس موافقة أو إدراجاً أو عرضاً.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `طلب الإصدار الخاص بك لـ "${projectName}" أصبح الآن "${statusLabel}".`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `تم إخفاء تعليقك على الحملة "${campaignId}" بواسطة المشرف.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `السبب: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `تم إغلاق تذكرتك (${kindLabel}) "${subject}".`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `تم استلام طلب حساب الشركة الخاص بك لـ "${companyName}". المراجعة يدوية؛ الإرسال ليس موافقة.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `أصبح طلب حساب الشركة الخاص بك لـ "${companyName}" الآن "${statusLabel}".`,
+        applicationReceived: 'تم استلام طلب الإصدار الخاص بك لـ "{projectName}". يراجع المشغّل الطلبات يدوياً؛ التقديم ليس موافقة أو إدراجاً أو عرضاً.',
+        applicationStatus: 'طلب الإصدار الخاص بك لـ "{projectName}" أصبح الآن "{statusLabel}".',
+        commentModerated: 'تم إخفاء تعليقك على الحملة "{campaignId}" بواسطة المشرف.',
+        commentModeratedReason: 'السبب: {reason}',
+        ticketClosed: 'تم إغلاق تذكرتك ({kindLabel}) "{subject}".',
+        companyReceived: 'تم استلام طلب حساب الشركة الخاص بك لـ "{companyName}". المراجعة يدوية؛ الإرسال ليس موافقة.',
+        companyStatus: 'أصبح طلب حساب الشركة الخاص بك لـ "{companyName}" الآن "{statusLabel}".',
       },
     },
     operator: {
@@ -1555,7 +1551,7 @@ export const ar: Messages = {
       colAction: 'الإجراء',
       colTargetRef: 'الهدف',
       colDetail: 'التفاصيل',
-      reconQuarantined: (n: number) => `${n} صف(صفوف) من الدفتر قيد الحجر يتطلب مراجعة المشغّل.`,
+      reconQuarantined: '{n} صف(صفوف) من الدفتر قيد الحجر يتطلب مراجعة المشغّل.',
       colProject: 'المشروع',
       colCountry: 'البلد',
       colInstrument: 'الأداة',

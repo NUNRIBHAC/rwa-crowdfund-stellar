@@ -114,7 +114,7 @@ export const hi: Messages = {
     grid: 'ग्रिड',
     list: 'सूची',
     noMatches: 'वर्तमान खोज और फ़िल्टर से कोई कैंपेन मेल नहीं खाता।',
-    resultCount: (n: number) => `${n} अभियान दिखाए गए`,
+    resultCount: { one: '{n} अभियान दिखाए गए', other: '{n} अभियान दिखाए गए' },
     activeAria: 'सक्रिय निवेश',
     activeTitle: 'सक्रिय निवेश',
     completedAria: 'पूर्ण निवेश',
@@ -126,9 +126,9 @@ export const hi: Messages = {
     statusEnded: 'अल्पवित्तित',
     statusOpen: 'खुला',
     withdrawn: 'निकाला गया',
-    fundedPct: (percent: number) => `${percent}% फंडेड`,
+    fundedPct: '{percent}% फंडेड',
     progressUnavailable: 'प्रगति उपलब्ध नहीं - ऑन-चेन डेटा लोड नहीं हुआ',
-    progressAria: (pct: number) => `फंडिंग प्रगति: लक्ष्य का ${pct}%`,
+    progressAria: 'फंडिंग प्रगति: लक्ष्य का {pct}%',
     interest: 'ब्याज',
     term: 'अवधि',
     minimum: 'न्यूनतम',
@@ -154,7 +154,7 @@ export const hi: Messages = {
     amountLabel: 'योगदान राशि (टेस्टनेट USDC)',
     amountRequired: 'योगदान राशि दर्ज करें।',
     amountInvalid: 'मान्य राशि दर्ज करें: केवल अंक, अधिकतम 7 दशमलव स्थान, शून्य से अधिक।',
-    amountExceeds: (remaining: string) => `राशि शेष लक्ष्य ${remaining} USDC (टेस्टनेट) से अधिक है।`,
+    amountExceeds: 'राशि शेष लक्ष्य {remaining} USDC (टेस्टनेट) से अधिक है।',
     usdcTestnet: 'USDC (टेस्टनेट)',
     contribute: 'योगदान करें',
     refundMe: 'मेरा रिफंड करें',
@@ -163,9 +163,9 @@ export const hi: Messages = {
       'समय सीमा से पहले, शेष लक्ष्य तक योगदान करें। समय सीमा के बाद निर्माता केवल पूर्ण फंडिंग पर निकालता है; अन्यथा प्रत्येक योगदानकर्ता अपना रिफंड खुद साइन करता है। कॉन्ट्रैक्ट इन नियमों को एटॉमिक रूप से लागू करता है।',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `फंडिंग प्रगति: ${count} में से ${filled} ब्लॉक भरे, लक्ष्य का ${percent}%`,
+    ariaReady: 'फंडिंग प्रगति: {count} में से {filled} ब्लॉक भरे, लक्ष्य का {percent}%',
     ariaUnavailable: 'फंडिंग प्रगति उपलब्ध नहीं: ऑन-चेन डेटा लोड नहीं हुआ',
-    fundedTail: (filled: number, count: number) => `फंडेड - ${count} में से ${filled} ब्लॉक`,
+    fundedTail: 'फंडेड - {count} में से {filled} ब्लॉक',
     captionUnavailable: 'प्रगति उपलब्ध नहीं - ऑन-चेन डेटा लोड नहीं हुआ',
   },
   intent: {
@@ -562,9 +562,9 @@ export const hi: Messages = {
   time: {
     ended: 'समाप्त',
     underMinute: 'एक मिनट से कम शेष',
-    minutesLeft: (n: number) => `${n} मिनट शेष`,
-    hoursLeft: (n: number) => `${n} घंटे शेष`,
-    daysLeft: (n: number) => `${n} दिन शेष`,
+    minutesLeft: { one: '{n} मिनट शेष', other: '{n} मिनट शेष' },
+    hoursLeft: { one: '{n} घंटे शेष', other: '{n} घंटे शेष' },
+    daysLeft: { one: '{n} दिन शेष', other: '{n} दिन शेष' },
   },
   errors: {
     freighterMissing: 'Freighter वॉलेट एक्सटेंशन नहीं मिला। Freighter इंस्टॉल करें, फिर कनेक्ट पुनः प्रयास करें।',
@@ -736,7 +736,7 @@ export const hi: Messages = {
     chipSenior: 'सीनियर',
     chipSubordinated: 'सबऑर्डिनेट',
     chipUnspecifiedSuffix: '(सीनियॉरिटी अनिर्दिष्ट)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base}` : base),
+    chipCompose: 'space',
   },
   glossary: [
     {
@@ -1373,7 +1373,7 @@ export const hi: Messages = {
   },
   tour: {
     tourTitle: 'अभियान दौरा',
-    tourStepOf: (current: number, total: number) => `चरण ${current} / ${total}`,
+    tourStepOf: 'चरण {current} / {total}',
     tourNext: 'अगला',
     tourBack: 'पिछला',
     tourDone: 'पूर्ण',
@@ -1396,15 +1396,15 @@ export const hi: Messages = {
     catSubmit: 'उत्तर जाँचें',
     catRetake: 'परीक्षण दोहराएँ',
     catResultPass: 'सभी उत्तर सही।',
-    catResultReview: (n: number) => `${n} उत्तर समीक्षा के लिए - व्याख्या पढ़ें और फिर प्रयास करें।`,
-    catScoreLabel: (correct: number, total: number) => `${total} में से ${correct} सही`,
+    catResultReview: '{n} उत्तर समीक्षा के लिए - व्याख्या पढ़ें और फिर प्रयास करें।',
+    catScoreLabel: '{total} में से {correct} सही',
     catSimTitle: 'घाटा सहने की क्षमता का सिमुलेशन',
     catSimIntro: 'योजनित निवेश की तुलना अपनी स्वतंत्र रूप से उपलब्ध राशि से करें।',
     catAssetsLabel: 'स्वतंत्र रूप से उपलब्ध राशि (EUR)',
     catIncomeLabel: 'मासिक शुद्ध आय (EUR)',
     catPlannedLabel: 'योजनित निवेश (EUR)',
     catSimRun: 'सिमुलेशन चलाएँ',
-    catSimResult: ({ pct }: { pct: string }) => `नियोजित निवेश आपके द्वारा दर्ज निःशुल्क उपलब्ध धनराशि का ${pct}% है।`,
+    catSimResult: 'नियोजित निवेश आपके द्वारा दर्ज निःशुल्क उपलब्ध धनराशि का {pct}% है।',
     catSimNote:
       'आपके द्वारा दर्ज राशियों का साधारण अंकगणित। यह नुकसान सहन क्षमता, उपयुक्तता या पात्रता का कोई नियामकीय मूल्यांकन नहीं है, और कोई सीमा लागू नहीं की जाती।',
     catSavedNote: 'परिणाम केवल इसी ब्राउज़र में स्थानीय रूप से सहेजा गया।',
@@ -1468,7 +1468,7 @@ export const hi: Messages = {
     commentsEmpty: 'अभी कोई टिप्पणी नहीं।',
     commentLabel: 'आपकी टिप्पणी',
     commentSubmit: 'टिप्पणी पोस्ट करें',
-    commentPostingAs: (name: string) => `${name} के रूप में पोस्ट कर रहे हैं। टिप्पणियाँ सार्वजनिक हैं।`,
+    commentPostingAs: '{name} के रूप में पोस्ट कर रहे हैं। टिप्पणियाँ सार्वजनिक हैं।',
     commentsSignInHint: 'चर्चा में शामिल होने के लिए नीचे अपने वॉलेट से साइन इन करें।',
     signInTitle: 'कम्युनिटी साइन-इन',
     signInExplainer:
@@ -1552,7 +1552,7 @@ export const hi: Messages = {
       expiresLabel: 'समाप्ति',
       revoke: 'सत्र समाप्त करें',
       revokeOthers: 'अन्य सभी सत्रों से साइन आउट करें',
-      revokedOthers: ({ count }: { count: number }) => `${count} ${count === 1 ? 'अन्य सत्र समाप्त किया गया' : 'अन्य सत्र समाप्त किए गए'}.`,
+      revokedOthers: { one: '{count} अन्य सत्र समाप्त किया गया.', other: '{count} अन्य सत्र समाप्त किए गए.' },
       empty: 'कोई सक्रिय सत्र नहीं।',
     },
     notifications: {
@@ -1569,17 +1569,14 @@ export const hi: Messages = {
         companyStatus: 'कंपनी खाता आवेदन अपडेट',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `"${projectName}" के लिए आपका जारीकर्ता आवेदन प्राप्त हो गया है। ऑपरेटर आवेदनों की मैन्युअल रूप से समीक्षा करता है; सबमिशन कोई स्वीकृति, लिस्टिंग या ऑफ़र नहीं है।`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `"${projectName}" के लिए आपका जारीकर्ता आवेदन अब "${statusLabel}" है।`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `अभियान "${campaignId}" पर आपकी टिप्पणी मॉडरेटर द्वारा छिपा दी गई है।`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `कारण: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `आपका टिकट (${kindLabel}) "${subject}" बंद कर दिया गया है।`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `"${companyName}" के लिए आपका कंपनी खाता आवेदन प्राप्त हुआ। समीक्षा मैन्युअल है; सबमिट करना स्वीकृति नहीं है।`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `"${companyName}" के लिए आपका कंपनी खाता आवेदन अब "${statusLabel}" है।`,
+        applicationReceived:
+          '"{projectName}" के लिए आपका जारीकर्ता आवेदन प्राप्त हो गया है। ऑपरेटर आवेदनों की मैन्युअल रूप से समीक्षा करता है; सबमिशन कोई स्वीकृति, लिस्टिंग या ऑफ़र नहीं है।',
+        applicationStatus: '"{projectName}" के लिए आपका जारीकर्ता आवेदन अब "{statusLabel}" है।',
+        commentModerated: 'अभियान "{campaignId}" पर आपकी टिप्पणी मॉडरेटर द्वारा छिपा दी गई है।',
+        commentModeratedReason: 'कारण: {reason}',
+        ticketClosed: 'आपका टिकट ({kindLabel}) "{subject}" बंद कर दिया गया है।',
+        companyReceived: '"{companyName}" के लिए आपका कंपनी खाता आवेदन प्राप्त हुआ। समीक्षा मैन्युअल है; सबमिट करना स्वीकृति नहीं है।',
+        companyStatus: '"{companyName}" के लिए आपका कंपनी खाता आवेदन अब "{statusLabel}" है।',
       },
     },
     operator: {
@@ -1610,7 +1607,7 @@ export const hi: Messages = {
       colAction: 'कार्रवाई',
       colTargetRef: 'लक्ष्य',
       colDetail: 'विवरण',
-      reconQuarantined: (n: number) => `${n} क्वारंटाइन की गई जर्नल पंक्ति(याँ) ऑपरेटर समीक्षा मांगती हैं।`,
+      reconQuarantined: '{n} क्वारंटाइन की गई जर्नल पंक्ति(याँ) ऑपरेटर समीक्षा मांगती हैं।',
       colProject: 'परियोजना',
       colCountry: 'देश',
       colInstrument: 'इंस्ट्रूमेंट',

@@ -116,7 +116,7 @@ export const de: Messages = {
     grid: 'Raster',
     list: 'Liste',
     noMatches: 'Keine Kampagne entspricht der aktuellen Suche und den Filtern.',
-    resultCount: (n: number) => (n === 1 ? '1 Kampagne angezeigt' : `${n} Kampagnen angezeigt`),
+    resultCount: { one: '{n} Kampagne angezeigt', other: '{n} Kampagnen angezeigt' },
     activeAria: 'Aktive Investitionen',
     activeTitle: 'Aktive Investitionen',
     completedAria: 'Abgeschlossene Investitionen',
@@ -128,9 +128,9 @@ export const de: Messages = {
     statusEnded: 'Nicht finanziert',
     statusOpen: 'Offen',
     withdrawn: 'Abgehoben',
-    fundedPct: (percent: number) => `${percent}% finanziert`,
+    fundedPct: '{percent}% finanziert',
     progressUnavailable: 'Fortschritt nicht verfügbar - On-Chain-Daten nicht geladen',
-    progressAria: (pct: number) => `Finanzierungsfortschritt: ${pct}% des Ziels`,
+    progressAria: 'Finanzierungsfortschritt: {pct}% des Ziels',
     interest: 'Zinsen',
     term: 'Laufzeit',
     minimum: 'Minimum',
@@ -156,7 +156,7 @@ export const de: Messages = {
     amountLabel: 'Beitragsbetrag (Testnet-USDC)',
     amountRequired: 'Geben Sie einen Beitragsbetrag ein.',
     amountInvalid: 'Geben Sie einen gültigen Betrag ein: nur Ziffern, bis zu 7 Dezimalstellen, größer als null.',
-    amountExceeds: (remaining: string) => `Der Betrag übersteigt das verbleibende Ziel von ${remaining} USDC (Testnet).`,
+    amountExceeds: 'Der Betrag übersteigt das verbleibende Ziel von {remaining} USDC (Testnet).',
     usdcTestnet: 'USDC (Testnet)',
     contribute: 'Beitragen',
     refundMe: 'Rückerstattung an mich',
@@ -165,9 +165,9 @@ export const de: Messages = {
       'Tragen Sie vor der Frist bis zum verbleibenden Zielbetrag bei. Nach der Frist kann der Ersteller die Mittel nur abheben, wenn das Ziel vollständig erreicht wurde; andernfalls signiert jeder Beitragende seine eigene Rückerstattung. Der Vertrag setzt diese Regeln atomar durch.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `Finanzierungsfortschritt: ${filled} von ${count} Blöcken gefüllt, ${percent}% des Ziels`,
+    ariaReady: 'Finanzierungsfortschritt: {filled} von {count} Blöcken gefüllt, {percent}% des Ziels',
     ariaUnavailable: 'Finanzierungsfortschritt nicht verfügbar: On-Chain-Daten nicht geladen',
-    fundedTail: (filled: number, count: number) => `finanziert - ${filled} von ${count} Blöcken`,
+    fundedTail: 'finanziert - {filled} von {count} Blöcken',
     captionUnavailable: 'Fortschritt nicht verfügbar - On-Chain-Daten nicht geladen',
   },
   intent: {
@@ -569,9 +569,9 @@ export const de: Messages = {
   time: {
     ended: 'Beendet',
     underMinute: 'Weniger als eine Minute übrig',
-    minutesLeft: (n: number) => (n === 1 ? `${n} Minute übrig` : `${n} Minuten übrig`),
-    hoursLeft: (n: number) => (n === 1 ? `${n} Stunde übrig` : `${n} Stunden übrig`),
-    daysLeft: (n: number) => (n === 1 ? `${n} Tag übrig` : `${n} Tage übrig`),
+    minutesLeft: { one: '{n} Minute übrig', other: '{n} Minuten übrig' },
+    hoursLeft: { one: '{n} Stunde übrig', other: '{n} Stunden übrig' },
+    daysLeft: { one: '{n} Tag übrig', other: '{n} Tage übrig' },
   },
   errors: {
     freighterMissing: 'Freighter-Wallet-Erweiterung nicht erkannt. Installieren Sie Freighter und versuchen Sie Verbinden erneut.',
@@ -766,7 +766,7 @@ export const de: Messages = {
     chipSenior: 'Senior',
     chipSubordinated: 'Nachrangig',
     chipUnspecifiedSuffix: '(Rangfolge nicht angegeben)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base.toLowerCase()}` : base),
+    chipCompose: 'space-lower',
   },
   glossary: [
     {
@@ -1413,7 +1413,7 @@ export const de: Messages = {
   },
   tour: {
     tourTitle: 'Kampagnen-Tour',
-    tourStepOf: (current: number, total: number) => `Schritt ${current} von ${total}`,
+    tourStepOf: 'Schritt {current} von {total}',
     tourNext: 'Weiter',
     tourBack: 'Zurück',
     tourDone: 'Fertig',
@@ -1436,15 +1436,15 @@ export const de: Messages = {
     catSubmit: 'Antworten prüfen',
     catRetake: 'Test wiederholen',
     catResultPass: 'Alle Antworten richtig.',
-    catResultReview: (n: number) => `${n} Antwort(en) zum Überprüfen - lies die Erklärungen und versuche es erneut.`,
-    catScoreLabel: (correct: number, total: number) => `${correct} von ${total} richtig`,
+    catResultReview: '{n} Antwort(en) zum Überprüfen - lies die Erklärungen und versuche es erneut.',
+    catScoreLabel: '{correct} von {total} richtig',
     catSimTitle: 'Simulation der Verlusttragfähigkeit',
     catSimIntro: 'Vergleiche eine geplante Investition mit deinen frei verfügbaren Mitteln.',
     catAssetsLabel: 'Frei verfügbare Mittel (EUR)',
     catIncomeLabel: 'Monatliches Nettoeinkommen (EUR)',
     catPlannedLabel: 'Geplante Investition (EUR)',
     catSimRun: 'Simulation starten',
-    catSimResult: ({ pct }: { pct: string }) => `Die geplante Anlage entspricht ${pct} % der eingegebenen frei verfügbaren Mittel.`,
+    catSimResult: 'Die geplante Anlage entspricht {pct} % der eingegebenen frei verfügbaren Mittel.',
     catSimNote:
       'Reine Rechenoperation mit den eingegebenen Beträgen. Dies ist keine regulatorische Prüfung der Verlusttragfähigkeit, Geeignetheit oder Berechtigung; es wird kein Schwellenwert angewendet.',
     catSavedNote: 'Ergebnis nur lokal in diesem Browser gespeichert.',
@@ -1509,7 +1509,7 @@ export const de: Messages = {
     commentsEmpty: 'Noch keine Kommentare.',
     commentLabel: 'Ihr Kommentar',
     commentSubmit: 'Kommentar veröffentlichen',
-    commentPostingAs: (name: string) => `Veröffentlichen als ${name}. Kommentare sind öffentlich.`,
+    commentPostingAs: 'Veröffentlichen als {name}. Kommentare sind öffentlich.',
     commentsSignInHint: 'Melden Sie sich unten mit Ihrer Wallet an, um an der Diskussion teilzunehmen.',
     signInTitle: 'Community-Anmeldung',
     signInExplainer:
@@ -1593,7 +1593,7 @@ export const de: Messages = {
       expiresLabel: 'Läuft ab',
       revoke: 'Sitzung beenden',
       revokeOthers: 'Alle anderen Sitzungen abmelden',
-      revokedOthers: ({ count }: { count: number }) => `${count} ${count === 1 ? 'weitere Sitzung' : 'weitere Sitzungen'} beendet.`,
+      revokedOthers: { one: '{count} weitere Sitzung beendet.', other: '{count} weitere Sitzungen beendet.' },
       empty: 'Keine aktiven Sitzungen.',
     },
     notifications: {
@@ -1610,17 +1610,14 @@ export const de: Messages = {
         companyStatus: 'Update zum Firmenkontoantrag',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `Ihr Emittentenantrag für "${projectName}" ist eingegangen. Der Betreiber prüft Anträge manuell; die Einreichung ist keine Genehmigung, kein Listing und kein Angebot.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `Ihr Emittentenantrag für "${projectName}" hat jetzt den Status "${statusLabel}".`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `Ihr Kommentar zur Kampagne "${campaignId}" wurde vom Moderator ausgeblendet.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `Grund: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Ihr Ticket (${kindLabel}) "${subject}" wurde geschlossen.`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `Ihr Firmenkontoantrag für "${companyName}" ist eingegangen. Die Prüfung erfolgt manuell; die Einreichung ist keine Genehmigung.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `Ihr Firmenkontoantrag für "${companyName}" ist jetzt "${statusLabel}".`,
+        applicationReceived:
+          'Ihr Emittentenantrag für "{projectName}" ist eingegangen. Der Betreiber prüft Anträge manuell; die Einreichung ist keine Genehmigung, kein Listing und kein Angebot.',
+        applicationStatus: 'Ihr Emittentenantrag für "{projectName}" hat jetzt den Status "{statusLabel}".',
+        commentModerated: 'Ihr Kommentar zur Kampagne "{campaignId}" wurde vom Moderator ausgeblendet.',
+        commentModeratedReason: 'Grund: {reason}',
+        ticketClosed: 'Ihr Ticket ({kindLabel}) "{subject}" wurde geschlossen.',
+        companyReceived: 'Ihr Firmenkontoantrag für "{companyName}" ist eingegangen. Die Prüfung erfolgt manuell; die Einreichung ist keine Genehmigung.',
+        companyStatus: 'Ihr Firmenkontoantrag für "{companyName}" ist jetzt "{statusLabel}".',
       },
     },
     operator: {
@@ -1651,7 +1648,7 @@ export const de: Messages = {
       colAction: 'Aktion',
       colTargetRef: 'Ziel',
       colDetail: 'Detail',
-      reconQuarantined: (n: number) => `${n} unter Quarantäne gestellte Journal-Zeile(n) erfordern eine Operator-Prüfung.`,
+      reconQuarantined: '{n} unter Quarantäne gestellte Journal-Zeile(n) erfordern eine Operator-Prüfung.',
       colProject: 'Projekt',
       colCountry: 'Land',
       colInstrument: 'Instrument',

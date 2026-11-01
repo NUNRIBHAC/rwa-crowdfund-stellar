@@ -113,7 +113,7 @@ export const en = {
     grid: 'Grid',
     list: 'List',
     noMatches: 'No campaigns match the current search and filters.',
-    resultCount: (n: number) => (n === 1 ? '1 campaign shown' : `${n} campaigns shown`),
+    resultCount: { one: '{n} campaign shown', other: '{n} campaigns shown' },
     activeAria: 'Active investments',
     activeTitle: 'Active investments',
     completedAria: 'Completed investments',
@@ -125,9 +125,9 @@ export const en = {
     statusEnded: 'Underfunded',
     statusOpen: 'Open',
     withdrawn: 'Withdrawn',
-    fundedPct: (percent: number) => `${percent}% funded`,
+    fundedPct: '{percent}% funded',
     progressUnavailable: 'Progress unavailable - on-chain data not loaded',
-    progressAria: (pct: number) => `Funding progress: ${pct}% of goal`,
+    progressAria: 'Funding progress: {pct}% of goal',
     interest: 'Interest',
     term: 'Term',
     minimum: 'Minimum',
@@ -153,7 +153,7 @@ export const en = {
     amountLabel: 'Contribution amount (testnet USDC)',
     amountRequired: 'Enter a contribution amount.',
     amountInvalid: 'Enter a valid amount: numbers only, up to 7 decimal places, greater than zero.',
-    amountExceeds: (remaining: string) => `Amount exceeds the remaining goal of ${remaining} USDC (testnet).`,
+    amountExceeds: 'Amount exceeds the remaining goal of {remaining} USDC (testnet).',
     usdcTestnet: 'USDC (testnet)',
     contribute: 'Contribute',
     refundMe: 'Refund me',
@@ -162,9 +162,9 @@ export const en = {
       'Contribute before the deadline, up to the remaining goal. After the deadline the creator withdraws only if fully funded; otherwise each contributor signs their own refund. The contract enforces these rules atomically.',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `Funding progress: ${filled} of ${count} blocks filled, ${percent}% of the goal`,
+    ariaReady: 'Funding progress: {filled} of {count} blocks filled, {percent}% of the goal',
     ariaUnavailable: 'Funding progress unavailable: on-chain data not loaded',
-    fundedTail: (filled: number, count: number) => `funded - ${filled} of ${count} blocks`,
+    fundedTail: 'funded - {filled} of {count} blocks',
     captionUnavailable: 'Progress unavailable - on-chain data not loaded',
   },
   intent: {
@@ -560,9 +560,9 @@ export const en = {
   time: {
     ended: 'Ended',
     underMinute: 'Under a minute left',
-    minutesLeft: (n: number) => `${n} minute${n === 1 ? '' : 's'} left`,
-    hoursLeft: (n: number) => `${n} hour${n === 1 ? '' : 's'} left`,
-    daysLeft: (n: number) => `${n} day${n === 1 ? '' : 's'} left`,
+    minutesLeft: { one: '{n} minute left', other: '{n} minutes left' },
+    hoursLeft: { one: '{n} hour left', other: '{n} hours left' },
+    daysLeft: { one: '{n} day left', other: '{n} days left' },
   },
   errors: {
     freighterMissing: 'Freighter wallet extension not detected. Install Freighter, then retry Connect.',
@@ -735,7 +735,7 @@ export const en = {
     chipSenior: 'Senior',
     chipSubordinated: 'Subordinated',
     chipUnspecifiedSuffix: '(seniority unspecified)',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join(' ')} ${base.toLowerCase()}` : base),
+    chipCompose: 'space-lower',
   },
   glossary: [
     {
@@ -1375,7 +1375,7 @@ export const en = {
   },
   tour: {
     tourTitle: 'Campaign tour',
-    tourStepOf: (current: number, total: number) => `Step ${current} of ${total}`,
+    tourStepOf: 'Step {current} of {total}',
     tourNext: 'Next',
     tourBack: 'Back',
     tourDone: 'Done',
@@ -1398,15 +1398,15 @@ export const en = {
     catSubmit: 'Check answers',
     catRetake: 'Retake test',
     catResultPass: 'All answers correct.',
-    catResultReview: (n: number) => `${n} answer(s) to review - read the explanations and try again.`,
-    catScoreLabel: (correct: number, total: number) => `${correct} of ${total} correct`,
+    catResultReview: '{n} answer(s) to review - read the explanations and try again.',
+    catScoreLabel: '{correct} of {total} correct',
     catSimTitle: 'Loss-bearing capacity simulation',
     catSimIntro: 'Compare a planned investment with your freely available funds.',
     catAssetsLabel: 'Freely available funds (EUR)',
     catIncomeLabel: 'Monthly net income (EUR)',
     catPlannedLabel: 'Planned investment (EUR)',
     catSimRun: 'Run simulation',
-    catSimResult: ({ pct }: { pct: string }) => `The planned investment equals ${pct}% of the freely available funds you entered.`,
+    catSimResult: 'The planned investment equals {pct}% of the freely available funds you entered.',
     catSimNote:
       'Plain arithmetic on the amounts you entered. This is not a regulatory assessment of your ability to bear losses, suitability or eligibility, and no threshold is applied.',
     catSavedNote: 'Result saved locally in this browser only.',
@@ -1473,7 +1473,7 @@ export const en = {
     commentsEmpty: 'No comments yet.',
     commentLabel: 'Your comment',
     commentSubmit: 'Post comment',
-    commentPostingAs: (name: string) => `Posting as ${name}. Comments are public.`,
+    commentPostingAs: 'Posting as {name}. Comments are public.',
     commentsSignInHint: 'Sign in with your wallet below to join the discussion.',
     // Community sign-in
     signInTitle: 'Community sign-in',
@@ -1560,7 +1560,7 @@ export const en = {
       expiresLabel: 'Expires',
       revoke: 'End session',
       revokeOthers: 'Sign out all other sessions',
-      revokedOthers: ({ count }: { count: number }) => `Ended ${count} other ${count === 1 ? 'session' : 'sessions'}.`,
+      revokedOthers: { one: 'Ended {count} other session.', other: 'Ended {count} other sessions.' },
       empty: 'No active sessions.',
     },
     notifications: {
@@ -1577,17 +1577,14 @@ export const en = {
         companyStatus: 'Company account application update',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `Your issuer application for "${projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `Your issuer application for "${projectName}" is now "${statusLabel}".`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `Your comment on campaign "${campaignId}" was hidden by the moderator.`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `Reason: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `Your ${kindLabel} ticket "${subject}" was closed.`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `Your company account application for "${companyName}" was received. Review is manual; submission is not an approval.`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `Your company account application for "${companyName}" is now "${statusLabel}".`,
+        applicationReceived:
+          'Your issuer application for "{projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.',
+        applicationStatus: 'Your issuer application for "{projectName}" is now "{statusLabel}".',
+        commentModerated: 'Your comment on campaign "{campaignId}" was hidden by the moderator.',
+        commentModeratedReason: 'Reason: {reason}',
+        ticketClosed: 'Your {kindLabel} ticket "{subject}" was closed.',
+        companyReceived: 'Your company account application for "{companyName}" was received. Review is manual; submission is not an approval.',
+        companyStatus: 'Your company account application for "{companyName}" is now "{statusLabel}".',
       },
     },
     operator: {
@@ -1618,7 +1615,7 @@ export const en = {
       colAction: 'Action',
       colTargetRef: 'Target',
       colDetail: 'Detail',
-      reconQuarantined: (n: number) => `${n} quarantined journal row(s) require operator review.`,
+      reconQuarantined: '{n} quarantined journal row(s) require operator review.',
       colProject: 'Project',
       colCountry: 'Country',
       colInstrument: 'Instrument',

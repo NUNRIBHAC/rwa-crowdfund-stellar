@@ -1,3 +1,4 @@
+import { tpl } from '../format';
 // Account security: honest wallet-auth posture (no password or 2FA app in
 // this prototype; the wallet signature is the credential) plus real session
 // management - list the account's active sessions, end any of them, or end
@@ -59,7 +60,7 @@ export default function SecuritySection() {
     run(async () => {
       const { removed } = await logoutOtherSessions(token);
       setSessions((prev) => (prev ?? []).filter((s) => s.current));
-      setNotice(labels.revokedOthers({ count: removed }));
+      setNotice(tpl(removed === 1 ? labels.revokedOthers.one : labels.revokedOthers.other, { count: removed }));
     });
 
   return (

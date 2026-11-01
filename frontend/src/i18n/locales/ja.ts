@@ -114,7 +114,7 @@ export const ja: Messages = {
     grid: 'グリッド',
     list: 'リスト',
     noMatches: '現在の検索とフィルターに一致するキャンペーンはありません。',
-    resultCount: (n: number) => `${n} 件のキャンペーンを表示中`,
+    resultCount: { one: '{n} 件のキャンペーンを表示中', other: '{n} 件のキャンペーンを表示中' },
     activeAria: '進行中の投資',
     activeTitle: '進行中の投資',
     completedAria: '終了した投資',
@@ -126,9 +126,9 @@ export const ja: Messages = {
     statusEnded: '未達',
     statusOpen: '募集中',
     withdrawn: '引き出し済み',
-    fundedPct: (percent: number) => `${percent}% 達成`,
+    fundedPct: '{percent}% 達成',
     progressUnavailable: '進捗を取得できません - オンチェーンデータが未読み込み',
-    progressAria: (pct: number) => `資金調達の進捗：目標の ${pct}%`,
+    progressAria: '資金調達の進捗：目標の {pct}%',
     interest: '利子',
     term: '期間',
     minimum: '最低額',
@@ -154,7 +154,7 @@ export const ja: Messages = {
     amountLabel: '出資額（テストネット USDC）',
     amountRequired: '出資額を入力してください。',
     amountInvalid: '有効な金額を入力してください:数字のみ、小数点以下 7 桁まで、0 より大きい値。',
-    amountExceeds: (remaining: string) => `金額が残りの目標額 ${remaining} USDC(テストネット)を超えています。`,
+    amountExceeds: '金額が残りの目標額 {remaining} USDC(テストネット)を超えています。',
     usdcTestnet: 'USDC（テストネット）',
     contribute: '出資する',
     refundMe: '返金を受ける',
@@ -163,9 +163,9 @@ export const ja: Messages = {
       '期限前に、残りの目標額まで出資できます。期限後、目標達成時のみ作成者が引き出せます。それ以外では各出資者が自身の返金に署名します。コントラクトがこれらのルールをアトミックに強制します。',
   },
   grid: {
-    ariaReady: (filled: number, count: number, percent: number) => `資金調達の進捗：${count} ブロック中 ${filled} ブロック、目標の ${percent}%`,
+    ariaReady: '資金調達の進捗：{count} ブロック中 {filled} ブロック、目標の {percent}%',
     ariaUnavailable: '資金調達の進捗を取得できません：オンチェーンデータが未読み込み',
-    fundedTail: (filled: number, count: number) => `達成 - ${count} ブロック中 ${filled} ブロック`,
+    fundedTail: '達成 - {count} ブロック中 {filled} ブロック',
     captionUnavailable: '進捗を取得できません - オンチェーンデータが未読み込み',
   },
   intent: {
@@ -555,9 +555,9 @@ export const ja: Messages = {
   time: {
     ended: '終了',
     underMinute: '残り1分未満',
-    minutesLeft: (n: number) => `残り ${n} 分`,
-    hoursLeft: (n: number) => `残り ${n} 時間`,
-    daysLeft: (n: number) => `残り ${n} 日`,
+    minutesLeft: { one: '残り {n} 分', other: '残り {n} 分' },
+    hoursLeft: { one: '残り {n} 時間', other: '残り {n} 時間' },
+    daysLeft: { one: '残り {n} 日', other: '残り {n} 日' },
   },
   errors: {
     freighterMissing: 'Freighter ウォレット拡張機能が検出されませんでした。Freighter をインストールしてから接続を再試行してください。',
@@ -717,7 +717,7 @@ export const ja: Messages = {
     chipSenior: '優先',
     chipSubordinated: '劣後',
     chipUnspecifiedSuffix: '（優先順位未指定）',
-    composeChip: (parts: string[], base: string) => (parts.length > 0 ? `${parts.join('')}${base}` : base),
+    chipCompose: 'concat',
   },
   glossary: [
     {
@@ -1340,7 +1340,7 @@ export const ja: Messages = {
   },
   tour: {
     tourTitle: 'キャンペーンツアー',
-    tourStepOf: (current: number, total: number) => `ステップ ${current} / ${total}`,
+    tourStepOf: 'ステップ {current} / {total}',
     tourNext: '次へ',
     tourBack: '戻る',
     tourDone: '完了',
@@ -1363,15 +1363,15 @@ export const ja: Messages = {
     catSubmit: '回答を確認',
     catRetake: 'テストをやり直す',
     catResultPass: 'すべて正解です。',
-    catResultReview: (n: number) => `見直しが必要な回答が ${n} 問あります - 解説を読んで再挑戦してください。`,
-    catScoreLabel: (correct: number, total: number) => `${total} 問中 ${correct} 問正解`,
+    catResultReview: '見直しが必要な回答が {n} 問あります - 解説を読んで再挑戦してください。',
+    catScoreLabel: '{total} 問中 {correct} 問正解',
     catSimTitle: '損失許容シミュレーション',
     catSimIntro: '投資予定額を自由に使える資金と比較します。',
     catAssetsLabel: '自由に使える資金 (EUR)',
     catIncomeLabel: '月額手取り収入 (EUR)',
     catPlannedLabel: '投資予定額 (EUR)',
     catSimRun: 'シミュレーションを実行',
-    catSimResult: ({ pct }: { pct: string }) => `予定投資額は入力した自由に使える資金の${pct}%に相当します。`,
+    catSimResult: '予定投資額は入力した自由に使える資金の{pct}%に相当します。',
     catSimNote: '入力した金額の単純な算術計算です。損失許容度・適合性・適格性の規制上の評価ではなく、しきい値は適用されません。',
     catSavedNote: '結果はこのブラウザにのみローカル保存されます。',
     catQuestions: [
@@ -1435,7 +1435,7 @@ export const ja: Messages = {
     commentsEmpty: 'まだコメントはありません。',
     commentLabel: 'あなたのコメント',
     commentSubmit: 'コメントを投稿',
-    commentPostingAs: (name: string) => `${name} として投稿します。コメントは公開されます。`,
+    commentPostingAs: '{name} として投稿します。コメントは公開されます。',
     commentsSignInHint: '下でウォレットでサインインしてディスカッションに参加してください。',
     signInTitle: 'コミュニティサインイン',
     signInExplainer:
@@ -1519,7 +1519,7 @@ export const ja: Messages = {
       expiresLabel: '有効期限',
       revoke: 'セッションを終了',
       revokeOthers: '他のセッションをすべてログアウト',
-      revokedOthers: ({ count }: { count: number }) => `他の${count}件のセッションを終了しました。`,
+      revokedOthers: { one: '他の{count}件のセッションを終了しました。', other: '他の{count}件のセッションを終了しました。' },
       empty: 'アクティブなセッションはありません。',
     },
     notifications: {
@@ -1536,17 +1536,13 @@ export const ja: Messages = {
         companyStatus: '法人アカウント申請の更新',
       },
       bodies: {
-        applicationReceived: ({ projectName }: { projectName: string }) =>
-          `"${projectName}" の発行者申請を受け付けました。運営者は申請を手動で審査します。提出は承認、掲載、または募集ではありません。`,
-        applicationStatus: ({ projectName, statusLabel }: { projectName: string; statusLabel: string }) =>
-          `"${projectName}" の発行者申請のステータスが "${statusLabel}" になりました。`,
-        commentModerated: ({ campaignId }: { campaignId: string }) => `キャンペーン "${campaignId}" へのコメントはモデレーターによって非表示にされました。`,
-        commentModeratedReason: ({ reason }: { reason: string }) => `理由: ${reason}`,
-        ticketClosed: ({ kindLabel, subject }: { kindLabel: string; subject: string }) => `${kindLabel}のチケット "${subject}" がクローズされました。`,
-        companyReceived: ({ companyName }: { companyName: string }) =>
-          `「${companyName}」の法人アカウント申請を受け付けました。審査は手動です。送信は承認ではありません。`,
-        companyStatus: ({ companyName, statusLabel }: { companyName: string; statusLabel: string }) =>
-          `「${companyName}」の法人アカウント申請が「${statusLabel}」になりました。`,
+        applicationReceived: '"{projectName}" の発行者申請を受け付けました。運営者は申請を手動で審査します。提出は承認、掲載、または募集ではありません。',
+        applicationStatus: '"{projectName}" の発行者申請のステータスが "{statusLabel}" になりました。',
+        commentModerated: 'キャンペーン "{campaignId}" へのコメントはモデレーターによって非表示にされました。',
+        commentModeratedReason: '理由: {reason}',
+        ticketClosed: '{kindLabel}のチケット "{subject}" がクローズされました。',
+        companyReceived: '「{companyName}」の法人アカウント申請を受け付けました。審査は手動です。送信は承認ではありません。',
+        companyStatus: '「{companyName}」の法人アカウント申請が「{statusLabel}」になりました。',
       },
     },
     operator: {
@@ -1577,7 +1573,7 @@ export const ja: Messages = {
       colAction: '操作',
       colTargetRef: '対象',
       colDetail: '詳細',
-      reconQuarantined: (n: number) => `隔離されたジャーナル行 ${n} 件はオペレーターの確認が必要です。`,
+      reconQuarantined: '隔離されたジャーナル行 {n} 件はオペレーターの確認が必要です。',
       colProject: 'プロジェクト',
       colCountry: '国',
       colInstrument: '商品',

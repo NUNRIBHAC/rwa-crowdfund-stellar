@@ -19,9 +19,17 @@ export function seniorityLabel(m: Messages, state: SeniorityState): string {
   return m.instruments.seniorityLabels[state];
 }
 
+// Chip composition is per-locale word-order policy stored as a data token
+// (dictionaries are JSON-exportable, so they cannot hold functions).
+const CHIP_COMPOSE: Record<string, (parts: string[], base: string) => string> = {
+  'space-lower': (parts, base) => (parts.length > 0 ? `${parts.join(' ')} ${base.toLowerCase()}` : base),
+  space: (parts, base) => (parts.length > 0 ? `${parts.join(' ')} ${base}` : base),
+  concat: (parts, base) => (parts.length > 0 ? `${parts.join('')}${base}` : base),
+};
+
 // Short display label for chips and fact grids, e.g. "Senior bond" or
 // "Convertible bond (seniority unspecified)". Word order follows the active
-// locale's composeChip function.
+// locale's chipCompose policy.
 export function composeInstrumentLabel(m: Messages, classId: string, seniority?: SeniorityState | string, overlays: string[] = []): string {
   const base = instrumentLabel(m, classId);
   const parts: string[] = [];
@@ -29,6 +37,6 @@ export function composeInstrumentLabel(m: Messages, classId: string, seniority?:
   if (overlays.includes('convertible')) parts.push(m.instruments.chipConvertible);
   if (seniority === 'senior') parts.push(m.instruments.chipSenior);
   if (seniority === 'subordinated') parts.push(m.instruments.chipSubordinated);
-  const label = m.instruments.composeChip(parts, base);
+  const label = (CHIP_COMPOSE[m.instruments.chipCompose] ?? CHIP_COMPOSE.space)(parts, base);
   return seniority === 'unspecified' ? `${label} ${m.instruments.chipUnspecifiedSuffix}` : label;
 }

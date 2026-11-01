@@ -1,3 +1,4 @@
+import { tpl } from '../format';
 // Operator dashboard (demo admin surface): issuer application triage, comment
 // moderation, ticket closure and campaign news posting for wallets on the
 // server-side OPERATOR_WALLETS allow-list. The allow-list is enforced on every
@@ -366,7 +367,9 @@ export default function OperatorSection({ campaigns }: Props) {
                   ))}
                 </tbody>
               </table>
-              {reconciliation.quarantinedIntents > 0 && <p className="community-error">{labels.reconQuarantined(reconciliation.quarantinedIntents)}</p>}
+              {reconciliation.quarantinedIntents > 0 && (
+                <p className="community-error">{tpl(labels.reconQuarantined, { n: reconciliation.quarantinedIntents })}</p>
+              )}
               <p className="community-note">
                 {labels.colGenerated}: {new Date(reconciliation.generatedAt).toLocaleString(locale)} ({reconciliation.network})
               </p>
