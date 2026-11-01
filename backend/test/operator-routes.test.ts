@@ -156,3 +156,119 @@ test('empty-string OPERATOR_WALLETS also fails closed', async () => {
   const res = await call('/api/operator/tickets', { headers: { authorization: `Bearer ${token}` } });
   assert.equal(res.status, 503);
 });
+
+// --- Post-funding report publish gate (on-chain verified post-close only) ---
+
+const pastDeadline = () => ({ id: 'demo-solar', goal: '100', raised: '100', deadlineSeconds: Math.floor(Date.now() / 1000) - 3600, withdrawn: false });
+const futureDeadline = () => ({ id: 'demo-solar', goal: '100', raised: '100', deadlineSeconds: Math.floor(Date.now() / 1000) + 86400, withdrawn: false });
+
+async function withReportsApp(
+  fundingState: ((id: string) => Promise<any>) | undefined,
+  run: (callApp: (path: string, init?: RequestInit) => Promise<Response>, tokenForApp: (kp: Keypair) => Promise<string>) => Promise<void>,
+) {
+  const dir2 = fs.mkdtempSync(path.join(os.tmpdir(), 'reports-test-'));
+  const store2 = new FileCommunityStore(path.join(dir2, 'store.json'));
+  const service2 = new CommunityService(store2, { retentionDays: 90 });
+  // Tokens are store-scoped: mint against THIS app's store, not the outer one.
+  const tokenForApp = async (kp: Keypair): Promise<string> => {
+    const { message } = await createChallenge(store2, kp.publicKey());
+    const sig = Buffer.from(kp.signMessage(message)).toString('base64');
+    return (await verifyChallenge(store2, kp.publicKey(), sig)).token;
+  };
+  const app2 = express();
+  app2.use(express.json());
+  app2.use(createCommunityRouter({ service: service2, requireAdmin: (_req, _res, next) => next(), fundingState }));
+  const srv2 = await new Promise<ReturnType<express.Express['listen']>>((resolve) => {
+    const s = app2.listen(0, '127.0.0.1', () => resolve(s));
+  });
+  const addr = srv2.address();
+  const base2 = `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;
+  try {
+    await run((p, init) => fetch(`${base2}${p}`, init), tokenForApp);
+  } finally {
+    await new Promise((resolve) => srv2.close(resolve));
+    fs.rmSync(dir2, { recursive: true, force: true });
+  }
+}
+
+test('reports: publish refuses when no on-chain verifier is wired (fail closed)', async () => {
+  process.env.OPERATOR_WALLETS = operatorKp.publicKey();
+  const op = await tokenFor(operatorKp);
+  // The default app in before() has no fundingState dep.
+  const res = await call('/api/operator/campaigns/demo-solar/reports', json(op, 'POST', { kind: 'funding_outcome', title: 't', body: 'b' }));
+  assert.equal(res.status, 503);
+  assert.match((await res.json()).error ?? '', /verification is not configured/);
+});
+
+test('reports: publish gate enforces verified post-close state', async () => {
+  process.env.OPERATOR_WALLETS = operatorKp.publicKey();
+
+  // Unknown campaign -> 404.
+  await withReportsApp(
+    async () => null,
+    async (callApp, tokenForApp) => {
+      const res = await callApp(
+        '/api/operator/campaigns/demo-solar/reports',
+        json(await tokenForApp(operatorKp), 'POST', { kind: 'funding_outcome', title: 't', body: 'b' }),
+      );
+      assert.equal(res.status, 404);
+    },
+  );
+
+  // On-chain read failure -> 503, never a guess.
+  await withReportsApp(
+    async () => {
+      throw new Error('rpc down');
+    },
+    async (callApp, tokenForApp) => {
+      const res = await callApp(
+        '/api/operator/campaigns/demo-solar/reports',
+        json(await tokenForApp(operatorKp), 'POST', { kind: 'funding_outcome', title: 't', body: 'b' }),
+      );
+      assert.equal(res.status, 503);
+      assert.match((await res.json()).error ?? '', /could not verify on-chain campaign state/);
+    },
+  );
+
+  // Funding period still open -> 409.
+  await withReportsApp(
+    async () => futureDeadline(),
+    async (callApp, tokenForApp) => {
+      const res = await callApp(
+        '/api/operator/campaigns/demo-solar/reports',
+        json(await tokenForApp(operatorKp), 'POST', { kind: 'funding_outcome', title: 't', body: 'b' }),
+      );
+      assert.equal(res.status, 409);
+      assert.match((await res.json()).error ?? '', /funding period has not ended/);
+    },
+  );
+
+  // Deadline passed -> publish succeeds, report is labeled and publicly listed.
+  await withReportsApp(
+    async () => pastDeadline(),
+    async (callApp, tokenForApp) => {
+      const op2 = await tokenForApp(operatorKp);
+      const res = await callApp(
+        '/api/operator/campaigns/demo-solar/reports',
+        json(op2, 'POST', {
+          kind: 'funding_outcome',
+          title: 'Funding outcome',
+          body: 'Fictional outcome report for the demo campaign.',
+        }),
+      );
+      assert.equal(res.status, 201);
+      const { report } = await res.json();
+      assert.equal(report.authorLabel, 'platform-demo');
+      assert.equal(report.kind, 'funding_outcome');
+      const list = await callApp('/api/campaigns/demo-solar/reports');
+      assert.equal(list.status, 200);
+      const { reports } = await list.json();
+      assert.equal(reports.length, 1);
+      assert.equal(reports[0].id, report.id);
+      // Non-operators cannot publish even when the gate would pass.
+      const user2 = await tokenForApp(userKp);
+      const denied = await callApp('/api/operator/campaigns/demo-solar/reports', json(user2, 'POST', { kind: 'milestone', title: 't', body: 'b' }));
+      assert.equal(denied.status, 403);
+    },
+  );
+});

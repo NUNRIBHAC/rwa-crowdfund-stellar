@@ -89,6 +89,12 @@ test('GET /api/podcast/episodes passes the community path gate (public 200, not 
   assert.deepEqual((await res.json()).episodes, []);
 });
 
+test('GET /api/campaigns/:id/reports passes the community path gate (public 200, not 404)', async () => {
+  const res = await fetch(`${base}/api/campaigns/demo-solar/reports`);
+  assert.equal(res.status, 200);
+  assert.deepEqual((await res.json()).reports, []);
+});
+
 test('GET /api/campaigns/:id/podcast passes the community path gate (public 200, not 404)', async () => {
   const res = await fetch(`${base}/api/campaigns/demo-solar/podcast`);
   assert.equal(res.status, 200);

@@ -31,6 +31,11 @@ export type CommunityRouterDeps = {
   // from the campaign registry + intent journal). Optional so route tests
   // without chain access stay hermetic; absent means 503, never a guess.
   reconciliation?: () => Promise<unknown>;
+  // Post-funding report gate: on-chain funding state for one campaign id
+  // (wired in server.ts from the Soroban registry views). Optional so route
+  // tests without chain access stay hermetic; absent means the publish route
+  // answers 503, never an operator-declared lifecycle guess.
+  fundingState?: (campaignId: string) => Promise<{ id: string; goal: string; raised: string; deadlineSeconds: number; withdrawn: boolean } | null>;
 };
 
 function clientIp(req: express.Request): string | undefined {
@@ -59,7 +64,7 @@ function sendError(res: express.Response, err: unknown): void {
 }
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
-  const { service, requireAdmin, reconciliation } = deps;
+  const { service, requireAdmin, reconciliation, fundingState } = deps;
   const store = service.store;
   const router = express.Router();
 
@@ -339,6 +344,20 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       sendError(res, err);
     }
   });
+
+  // --- Post-funding reports ---
+  // Public reads, same visibility as news; only publishing is gated
+  // (operator + verified post-close on-chain state). Distinct from the news
+  // feed and from per-account notifications.
+  router.get('/api/campaigns/:id/reports', async (req, res) => {
+    try {
+      res.json({
+        reports: await service.listReports(requireCampaignId(req.params.id)),
+      });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.post('/api/campaigns/:id/news', requireAdmin, async (req, res) => {
     try {
       res.status(201).json({
@@ -532,6 +551,45 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     operator(async (req, res, account) => {
       res.status(201).json({
         post: await service.addNews(requireCampaignId(req.params.id), req.body, `operator:${account.publicKey}`),
+      });
+    }),
+  );
+
+  // Post-funding reports: publishable only after the campaign's funding
+  // period has ended, verified against the on-chain state at publish time.
+  // The gate fails closed: unreadable chain state or an unwired verifier
+  // refuse the publish rather than trust an operator-declared lifecycle.
+  // Reports are never generated; the service stores exactly what the
+  // operator submits under the fixed 'platform-demo' stand-in label.
+  router.post(
+    '/api/operator/campaigns/:id/reports',
+    operator(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      if (!fundingState) {
+        res.status(503).json({ error: 'on-chain funding state verification is not configured; report publishing disabled' });
+        return;
+      }
+      let state: Awaited<ReturnType<NonNullable<typeof fundingState>>>;
+      try {
+        state = await fundingState(campaignId);
+      } catch (err) {
+        res.status(503).json({
+          error: `could not verify on-chain campaign state; refusing to publish: ${err instanceof Error ? err.message : String(err)}`,
+        });
+        return;
+      }
+      if (!state) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      if (Math.floor(Date.now() / 1000) < state.deadlineSeconds) {
+        res.status(409).json({
+          error: 'campaign funding period has not ended; post-funding reports publish after the on-chain deadline passes',
+        });
+        return;
+      }
+      res.status(201).json({
+        report: await service.addReport(campaignId, req.body, `operator:${account.publicKey}`),
       });
     }),
   );
