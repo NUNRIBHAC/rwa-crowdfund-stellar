@@ -78,6 +78,26 @@ test('first run clamps to the observed retention floor, flags the unknown window
   assert.equal(last.floorObservedAt, 1111111);
 });
 
+test('retention-floor rejection as a plain { code, message } object (live Soroban RPC throw shape) still clamps to the floor', async () => {
+  const client = new FakeClient(2000, 1000, [contributed(1500, G1)]);
+  // The live RPC rejects with a plain object, not an Error instance.
+  const plainRpcError = { code: -32600, message: 'startLedger must be within the ledger range: 1000 - 2001' };
+  const original = client.getEvents.bind(client);
+  client.getEvents = (async (params: any) => {
+    if (params.startLedger < 1000) throw plainRpcError;
+    return original(params);
+  }) as FakeClient['getEvents'];
+  const { run, recorded, checkpoints } = harness(client);
+  const r = await run();
+  assert.deepEqual(recorded, [G1]);
+  assert.equal(r.gap, 'start-before-floor');
+  assert.equal(r.recorded, 1);
+  const last = checkpoints.at(-1);
+  assert.equal(last.gap, 'start-before-floor');
+  assert.equal(last.floorLedger, 1000);
+  assert.equal(last.floorObservedAt, 1111111);
+});
+
 test('first run with full-depth RPC (floor 1) reports no gap', async () => {
   const client = new FakeClient(2000, 1, [contributed(50, G2)]);
   const { run, recorded, checkpoints } = harness(client);
