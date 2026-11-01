@@ -36,6 +36,12 @@ export type CommunityRouterDeps = {
   // tests without chain access stay hermetic; absent means the publish route
   // answers 503, never an operator-declared lifecycle guess.
   fundingState?: (campaignId: string) => Promise<{ id: string; goal: string; raised: string; deadlineSeconds: number; withdrawn: boolean } | null>;
+  // Report READ entitlement: on-chain contribution balance for the signed-in
+  // wallet (wired in server.ts from the Soroban registry). Optional so route
+  // tests without chain access stay hermetic; absent means report reads
+  // answer 503 - reports are investor-scoped, never public, so a missing or
+  // failed entitlement check fails closed instead of opening access.
+  investorEntitlement?: (campaignId: string, publicKey: string) => Promise<{ registered: boolean; balanceUnits: bigint }>;
 };
 
 function clientIp(req: express.Request): string | undefined {
@@ -64,7 +70,7 @@ function sendError(res: express.Response, err: unknown): void {
 }
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
-  const { service, requireAdmin, reconciliation, fundingState } = deps;
+  const { service, requireAdmin, reconciliation, fundingState, investorEntitlement } = deps;
   const store = service.store;
   const router = express.Router();
 
@@ -346,18 +352,43 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
 
   // --- Post-funding reports ---
-  // Public reads, same visibility as news; only publishing is gated
-  // (operator + verified post-close on-chain state). Distinct from the news
-  // feed and from per-account notifications.
-  router.get('/api/campaigns/:id/reports', async (req, res) => {
-    try {
-      res.json({
-        reports: await service.listReports(requireCampaignId(req.params.id)),
-      });
-    } catch (err) {
-      sendError(res, err);
-    }
-  });
+  // Investor-scoped reads: report content (titles included) goes only to
+  // wallets with an on-chain contribution balance in that campaign, plus
+  // designated operators for moderation/ops. Unauthenticated or
+  // non-investor requests never receive report content; when the on-chain
+  // entitlement cannot be established the read fails closed (503), it never
+  // falls back to public access. Distinct from the news feed (public) and
+  // from per-account notifications.
+  router.get(
+    '/api/campaigns/:id/reports',
+    authed(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      if (!investorEntitlement) {
+        res.status(503).json({ error: 'investor entitlement verification is not configured; report access disabled' });
+        return;
+      }
+      let entitlement: { registered: boolean; balanceUnits: bigint };
+      try {
+        entitlement = await investorEntitlement(campaignId, account.publicKey);
+      } catch (err) {
+        res.status(503).json({
+          error: `could not verify on-chain investor entitlement; refusing report access: ${err instanceof Error ? err.message : String(err)}`,
+        });
+        return;
+      }
+      if (!entitlement.registered) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      const wallets = operatorWallets();
+      const isOperator = wallets.length > 0 && wallets.includes(account.publicKey);
+      if (!isOperator && entitlement.balanceUnits <= 0n) {
+        res.status(403).json({ error: 'post-funding reports are available to investors in this campaign' });
+        return;
+      }
+      res.json({ reports: await service.listReports(campaignId) });
+    }),
+  );
   router.post('/api/campaigns/:id/news', requireAdmin, async (req, res) => {
     try {
       res.status(201).json({
@@ -585,6 +616,16 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (Math.floor(Date.now() / 1000) < state.deadlineSeconds) {
         res.status(409).json({
           error: 'campaign funding period has not ended; post-funding reports publish after the on-chain deadline passes',
+        });
+        return;
+      }
+      // A use_of_proceeds report states how raised funds were paid out and
+      // used; it may only be published once the on-chain state shows the
+      // issuer actually withdrew, so it never implies a payout that did not
+      // happen.
+      if (req.body?.kind === 'use_of_proceeds' && !state.withdrawn) {
+        res.status(409).json({
+          error: 'campaign funds are not recorded as withdrawn on-chain; a use-of-proceeds report would imply a payout that is not verified',
         });
         return;
       }

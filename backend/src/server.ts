@@ -4,7 +4,16 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
 import { registerDiscoveryEndpoints } from './sitemap.js';
-import { sorobanCampaigns, sorobanCampaignFundingState, buildSoroban, submitSoroban, statusSoroban, recoverSoroban, accountActivity } from './soroban.js';
+import {
+  sorobanCampaigns,
+  sorobanCampaignFundingState,
+  sorobanInvestorEntitlement,
+  buildSoroban,
+  submitSoroban,
+  statusSoroban,
+  recoverSoroban,
+  accountActivity,
+} from './soroban.js';
 import { journalBackend } from './journal.js';
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
@@ -88,7 +97,15 @@ registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCam
 // down the campaign API: the placeholder answers 503 for community paths and
 // everything else is unaffected.
 const communityRouterReady = communityServiceFromEnv()
-  .then((service) => createCommunityRouter({ service, requireAdmin, reconciliation: reconciliationPayload, fundingState: sorobanCampaignFundingState }))
+  .then((service) =>
+    createCommunityRouter({
+      service,
+      requireAdmin,
+      reconciliation: reconciliationPayload,
+      fundingState: sorobanCampaignFundingState,
+      investorEntitlement: sorobanInvestorEntitlement,
+    }),
+  )
   .catch((err) => {
     console.error('community API disabled:', err instanceof Error ? err.message : err);
     return null;

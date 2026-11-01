@@ -223,6 +223,23 @@ export async function sorobanCampaignFundingState(
   return { id, goal: String(config.goal), raised: String(raised), deadlineSeconds, withdrawn: Boolean(withdrawn) };
 }
 
+// Investor entitlement for post-funding report reads: whether the wallet
+// holds a contribution balance in the campaign contract. Same code-hash and
+// asset verification as the campaign listing. registered=false means the
+// campaign id is not in the registry; throws on RPC/verification failure so
+// readers fail closed rather than fall back to public access.
+export async function sorobanInvestorEntitlement(id: string, actor: string): Promise<{ registered: boolean; balanceUnits: bigint }> {
+  actorAddress(actor);
+  const e = entries().find((x) => x.id === id);
+  if (!e) return { registered: false, balanceUnits: 0n };
+  const client = sorobanDeps.client();
+  await verifyCode(client, e);
+  const config = await view(client, e, 'get_config');
+  if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+  const balance = await view(client, e, 'balance_of', [actorAddress(actor).toScVal()], actor);
+  return { registered: true, balanceUnits: BigInt(balance ?? 0) };
+}
+
 export async function buildSoroban(id: string, input: { actor: string; action: string; amount?: string }): Promise<any> {
   const e = entry(id),
     actor = actorAddress(input.actor);
