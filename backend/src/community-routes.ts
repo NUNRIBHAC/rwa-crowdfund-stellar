@@ -31,6 +31,20 @@ export type CommunityRouterDeps = {
   // from the campaign registry + intent journal). Optional so route tests
   // without chain access stay hermetic; absent means 503, never a guess.
   reconciliation?: () => Promise<unknown>;
+  // Post-funding report gate: on-chain funding state for one campaign id
+  // (wired in server.ts from the Soroban registry views). Optional so route
+  // tests without chain access stay hermetic; absent means the publish route
+  // answers 503, never an operator-declared lifecycle guess.
+  fundingState?: (campaignId: string) => Promise<{ id: string; goal: string; raised: string; deadlineSeconds: number; withdrawn: boolean } | null>;
+  // Report READ entitlement: on-chain contribution balance for the signed-in
+  // wallet (wired in server.ts from the Soroban registry). Optional so route
+  // tests without chain access stay hermetic; absent means report reads
+  // answer 503 - reports are investor-scoped, never public, so a missing or
+  // failed entitlement check fails closed instead of opening access.
+  // contributedBefore grounds access for REFUNDED investors: the contract
+  // removes the balance entry on refund, so current balance alone would
+  // silently revoke access from people who did invest.
+  investorEntitlement?: (campaignId: string, publicKey: string) => Promise<{ registered: boolean; balanceUnits: bigint; contributedBefore: boolean }>;
 };
 
 function clientIp(req: express.Request): string | undefined {
@@ -59,7 +73,7 @@ function sendError(res: express.Response, err: unknown): void {
 }
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
-  const { service, requireAdmin, reconciliation } = deps;
+  const { service, requireAdmin, reconciliation, fundingState, investorEntitlement } = deps;
   const store = service.store;
   const router = express.Router();
 
@@ -339,6 +353,45 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       sendError(res, err);
     }
   });
+
+  // --- Post-funding reports ---
+  // Investor-scoped reads: report content (titles included) goes only to
+  // wallets with an on-chain contribution balance in that campaign, plus
+  // designated operators for moderation/ops. Unauthenticated or
+  // non-investor requests never receive report content; when the on-chain
+  // entitlement cannot be established the read fails closed (503), it never
+  // falls back to public access. Distinct from the news feed (public) and
+  // from per-account notifications.
+  router.get(
+    '/api/campaigns/:id/reports',
+    authed(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      if (!investorEntitlement) {
+        res.status(503).json({ error: 'investor entitlement verification is not configured; report access disabled' });
+        return;
+      }
+      let entitlement: { registered: boolean; balanceUnits: bigint; contributedBefore: boolean };
+      try {
+        entitlement = await investorEntitlement(campaignId, account.publicKey);
+      } catch (err) {
+        res.status(503).json({
+          error: `could not verify on-chain investor entitlement; refusing report access: ${err instanceof Error ? err.message : String(err)}`,
+        });
+        return;
+      }
+      if (!entitlement.registered) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      const wallets = operatorWallets();
+      const isOperator = wallets.length > 0 && wallets.includes(account.publicKey);
+      if (!isOperator && entitlement.balanceUnits <= 0n && !entitlement.contributedBefore) {
+        res.status(403).json({ error: 'post-funding reports are available to investors in this campaign' });
+        return;
+      }
+      res.json({ reports: await service.listReports(campaignId) });
+    }),
+  );
   router.post('/api/campaigns/:id/news', requireAdmin, async (req, res) => {
     try {
       res.status(201).json({
@@ -532,6 +585,55 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     operator(async (req, res, account) => {
       res.status(201).json({
         post: await service.addNews(requireCampaignId(req.params.id), req.body, `operator:${account.publicKey}`),
+      });
+    }),
+  );
+
+  // Post-funding reports: publishable only after the campaign's funding
+  // period has ended, verified against the on-chain state at publish time.
+  // The gate fails closed: unreadable chain state or an unwired verifier
+  // refuse the publish rather than trust an operator-declared lifecycle.
+  // Reports are never generated; the service stores exactly what the
+  // operator submits under the fixed 'platform-demo' stand-in label.
+  router.post(
+    '/api/operator/campaigns/:id/reports',
+    operator(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      if (!fundingState) {
+        res.status(503).json({ error: 'on-chain funding state verification is not configured; report publishing disabled' });
+        return;
+      }
+      let state: Awaited<ReturnType<NonNullable<typeof fundingState>>>;
+      try {
+        state = await fundingState(campaignId);
+      } catch (err) {
+        res.status(503).json({
+          error: `could not verify on-chain campaign state; refusing to publish: ${err instanceof Error ? err.message : String(err)}`,
+        });
+        return;
+      }
+      if (!state) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      if (Math.floor(Date.now() / 1000) < state.deadlineSeconds) {
+        res.status(409).json({
+          error: 'campaign funding period has not ended; post-funding reports publish after the on-chain deadline passes',
+        });
+        return;
+      }
+      // A use_of_proceeds report states how raised funds were paid out and
+      // used; it may only be published once the on-chain state shows the
+      // issuer actually withdrew, so it never implies a payout that did not
+      // happen.
+      if (req.body?.kind === 'use_of_proceeds' && !state.withdrawn) {
+        res.status(409).json({
+          error: 'campaign funds are not recorded as withdrawn on-chain; a use-of-proceeds report would imply a payout that is not verified',
+        });
+        return;
+      }
+      res.status(201).json({
+        report: await service.addReport(campaignId, req.body, `operator:${account.publicKey}`),
       });
     }),
   );

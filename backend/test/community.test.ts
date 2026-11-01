@@ -202,6 +202,74 @@ test('news: admin posts are labeled platform-demo and listed publicly', async ()
   assert.equal(listed[0].authorLabel, 'platform-demo');
 });
 
+test('reports: operator-submitted reports are labeled platform-demo, listed per campaign, schema-enforced', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  // The post-close on-chain gate lives at the router; the service stores
+  // exactly what it is given and never generates content.
+  const report = await service.addReport(
+    'demo-solar',
+    {
+      kind: 'funding_outcome',
+      title: 'Funding outcome report',
+      body: 'Fictional post-funding outcome for the demo campaign.',
+    },
+    'operator:test',
+  );
+  assert.equal(report.authorLabel, 'platform-demo');
+  assert.equal(report.kind, 'funding_outcome');
+  await service.addReport('other-campaign', {
+    kind: 'milestone',
+    title: 'Other campaign report',
+    body: 'Belongs to another campaign.',
+  });
+  const listed = await service.listReports('demo-solar');
+  assert.equal(listed.length, 1);
+  assert.equal(listed[0].id, report.id);
+  assert.equal(listed[0].authorLabel, 'platform-demo');
+  // Unknown kind and empty body are rejected by the schema.
+  await assert.rejects(() => service.addReport('demo-solar', { kind: 'audit', title: 'x', body: 'y' }));
+  await assert.rejects(() => service.addReport('demo-solar', { kind: 'milestone', title: 'x', body: ' ' }));
+  // Invalid campaign ids are rejected.
+  await assert.rejects(() => service.listReports('Bad Id'));
+  // Publish was audit-logged.
+  const audit = (await store.read()).audit;
+  assert.ok(audit.some((e) => e.action === 'report.publish' && e.actor === 'operator:test'));
+});
+
+test('contributors: durable registry records confirmed contributors idempotently', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const kp = Keypair.random();
+  assert.equal(await service.hasContributed('demo-solar', kp.publicKey()), false);
+  await service.recordContributor('demo-solar', kp.publicKey());
+  const first = (await store.read()).contributors[`demo-solar:${kp.publicKey()}`].firstConfirmedAt;
+  // Idempotent: a repeat confirmation keeps the original timestamp and does
+  // not duplicate the audit entry.
+  await service.recordContributor('demo-solar', kp.publicKey());
+  const state = await store.read();
+  assert.equal(state.contributors[`demo-solar:${kp.publicKey()}`].firstConfirmedAt, first);
+  assert.equal(state.audit.filter((e) => e.action === 'contributor.record').length, 1);
+  assert.equal(await service.hasContributed('demo-solar', kp.publicKey()), true);
+  assert.equal(await service.hasContributed('other-campaign', kp.publicKey()), false);
+  await assert.rejects(() => service.recordContributor('demo-solar', 'not-a-key'));
+});
+
+test('reports: stored state written before reports existed gains the collection on read', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  await service.addNews('demo-solar', { title: 't', body: 'b' });
+  // Simulate a legacy document by removing the reports collection, then read
+  // through a fresh store: the forward-compatible default must apply.
+  const legacyPath = path.join(dir, `store-legacy-${counter++}.json`);
+  const doc = (await store.read()) as unknown as Record<string, unknown>;
+  delete doc.reports;
+  delete doc.contributors;
+  fs.writeFileSync(legacyPath, JSON.stringify(doc));
+  const legacyService = new CommunityService(new FileCommunityStore(legacyPath));
+  assert.deepEqual(await legacyService.listReports('demo-solar'), []);
+});
+
 test('appropriateness: knowledge test, warning path, simulation result, review cycles', async () => {
   const store = newStore();
   const service = new CommunityService(store);
