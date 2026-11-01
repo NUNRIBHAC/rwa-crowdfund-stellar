@@ -790,24 +790,6 @@ code {
   align-items: center;
   gap: 8px;
 }
-@media (min-width: 1680px) {
-  /* Wide desktop: the side controls (badge + Connect + language select) sit
-     inline instead of stacked, so the header height is driven by the 48px
-     logo lockup (48 + 2x12 padding = 72px) instead of the 77px stacked side
-     column. Measured fit (staging, 2026-11): the widest locale composition
-     (fr: brand 170 + nav 801 + inline side ~575 + 2x24 gaps + 2x24 padding)
-     needs ~1642px; 1680 leaves ~38px slack for font variance. Below this
-     breakpoint the stacked/wrapped layout above stays in charge. */
-  .header-inner {
-    padding: 12px 24px;
-  }
-  .header-side {
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-  }
-}
-
 @media (max-width: 1119px) {
   /* Below ~1120px the middle column cannot hold the 8-item nav between the
      brand and the side controls: let it span the full second row instead.
