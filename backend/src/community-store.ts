@@ -105,26 +105,83 @@ export type PodcastEpisode = {
 // or result computation (our implementation computes client-side, which is
 // our chosen way to meet that rule, not the only possible one). Quiz success
 // never labels an investor sophisticated: classification follows only
-// ECSPR Art. 2(1)(j) + Annex II, which is not implemented, so every account
-// is treated as non-sophisticated.
+// ECSPR Art. 2(1)(j)/(k) + Annex II (the sophistication approval procedure;
+// ECSPR Art. 22 is the pre-contractual reflection period, a separate rule).
+// Here only the Annex II Section II request TEMPLATE is captured; no
+// approval path exists on this deployment, so every account remains
+// non-sophisticated regardless of what it requests.
+
+// Full self-declared information set of ECSPR Art. 21(2) / RTS 2022/2114
+// Art. 2. Bands and enums are an implementation choice (demo-chosen), not a
+// legally validated assessment; every field offers an explicit 'none' style
+// answer so no investor is forced into an inaccurate declaration.
+export type AppropriatenessInformation = {
+  // RTS Art. 2(1)(a): types of investment services and financial
+  // investments the investor is familiar with. 'none' stands alone.
+  familiarInvestmentTypes: (
+    'deposits' | 'listed_shares' | 'bonds' | 'investment_funds_etfs' | 'crypto_assets' | 'crowdfunding_p2p' | 'real_estate' | 'other' | 'none'
+  )[];
+  // RTS Art. 2(1)(b): nature, volume, frequency and period of past
+  // transactions. 'none' nature stands alone; bands are demo-chosen.
+  pastTransactions: {
+    natures: ('transferable_securities' | 'admitted_instruments' | 'loans' | 'early_expansion_stage_businesses' | 'none')[];
+    annualFrequencyBand: '0' | '1_5' | '6_20' | 'over_20';
+    totalVolumeBandEur: '0' | 'under_10k' | '10k_50k' | '50k_100k' | 'over_100k';
+    periodYearsBand: 'none' | 'under_1' | '1_3' | '3_10' | 'over_10';
+  };
+  // RTS Art. 2(1)(c): education and profession/former profession, plus
+  // professional experience in relation to crowdfunding investments.
+  educationLevel: 'none_relevant' | 'secondary' | 'vocational' | 'bachelor' | 'master_plus' | 'other';
+  professionOrFormer: string | null; // optional free text, max 200 chars
+  crowdfundingProfessionalExperience: boolean;
+  // RTS Art. 2(2)(a)-(b): expected holding period, risk profile,
+  // sustainability preferences. (2)(c) aims = the record's objective field.
+  holdingPeriod: 'under_1y' | '1_3y' | '3_5y' | 'over_5y' | 'indefinite';
+  riskProfile: 'conservative' | 'balanced' | 'risk_tolerant' | 'speculative';
+  sustainabilityPreference: 'none' | 'esg_important' | 'impact_first';
+};
+
+// ECSPR Annex II Section II request template (capture-only; no approval
+// path exists here, so a request never changes the investor's treatment).
+// Natural and legal persons attest DIFFERENT Section I criteria (2 of 3 vs
+// 1 of 3); the MiFID II professional-client route (Section III) attests no
+// criteria and instead references its proof of professional status.
+export type SophisticationRequest = {
+  route: 'annex_ii_attestation' | 'mifid_professional_client';
+  personType: 'natural' | 'legal' | null; // null on the MiFID route
+  attestedCriteria: string[]; // Annex II Section I criterion ids; empty on the MiFID route
+  professionalClientProof: string | null; // MiFID route only, max 500 chars
+  // Annex II Section II items (2) and (3): both must be expressly accepted.
+  awarenessStatementAccepted: true;
+  liabilityStatementAccepted: true;
+  requestedAt: number;
+};
+
 export type AppropriatenessRecord = {
   publicKey: string;
-  version: 1;
+  // v1: knowledge test + experience/objective only. v2 adds the full
+  // Art. 21(2)/RTS Art. 2 information set and the categorisation block.
+  version: 1 | 2;
   // Self-declared experience/objectives (ECSPR Art. 21(2), RTS Art. 2).
   experienceLevel: 'none' | 'some' | 'experienced';
   objective: 'capital_preservation' | 'income' | 'growth' | 'other';
+  // v2: the full Art. 21(2) information set; null on v1 records (legacy
+  // state is preserved transparently, never silently promoted).
+  information?: AppropriatenessInformation | null;
+  // v2: investor categorisation. Every account is non-sophisticated; a
+  // captured Annex II request is stored as 'sophistication_requested' with
+  // no approval/status-upgrade path on this deployment.
+  categorisation?: { status: 'non_sophisticated' | 'sophistication_requested'; request: SophisticationRequest | null };
   // Knowledge-test outcome; raw answers are not stored (data minimization).
   knowledgeScore: number;
   knowledgeTotal: number;
   // 'knowledge_check_passed': the entry knowledge quiz scored above the demo
   // pass mark. This is NOT an ECSPR Art. 21(1) appropriateness determination:
-  // the full information request under Art. 21(2) / RTS Art. 2 (types of
-  // familiar investments, nature/volume/frequency/period of past transactions,
-  // education and profession, holding period, risk profile, sustainability
-  // preferences) is NOT implemented, so no service is ever determined to be
-  // appropriate for anyone here. 'warning_issued': Art. 21(4) path -
-  // information missing or knowledge insufficient; the mandated risk warning
-  // was shown and must be expressly acknowledged.
+  // even with the v2 Art. 21(2)/RTS Art. 2 information set captured, this
+  // deployment runs no RTS Art. 1 assessment methodology, so no service is
+  // ever determined to be appropriate for anyone here. 'warning_issued':
+  // Art. 21(4) path - information missing or knowledge insufficient; the
+  // mandated risk warning was shown and must be expressly acknowledged.
   outcome: 'knowledge_check_passed' | 'warning_issued';
   warningAcknowledgedAt: number | null;
   // Transmitted simulation result (RTS Art. 12): the only financial figures

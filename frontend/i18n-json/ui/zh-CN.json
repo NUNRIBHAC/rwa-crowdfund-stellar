@@ -1380,7 +1380,7 @@
     "scoreLabel": "{total} 题中答对 {score} 题",
     "outcomeLabel": "结果",
     "noSophisticatedNote": "此结果不会将您归类为资深或专业投资者。",
-    "notFullAssessmentNote": "此知识检查并非 ECSPR 第21条第1款所要求的适当性评估。完整评估（涵盖您了解的投资、交易历史、教育与职业、持有期限、风险状况和可持续性偏好）未在此部署中实现。",
+    "notFullAssessmentNote": "此知识检查并非 ECSPR 第21条第1款所要求的适当性评估：此部署收集第21条第2款的背景信息，但不对其运行任何评估方法，因此绝不会判定任何服务适合您。",
     "reviewExplanations": "您刚回答的问题的解析：",
     "warningTitle": "风险警告",
     "warningText": "投资于众筹项目包含损失全部投资资金的风险。",
@@ -1406,6 +1406,124 @@
     "completedAt": "完成于 {date}。",
     "reviewAssessmentDue": "评估复核截止日期为 {date}。",
     "reviewSimulationDue": "模拟复核截止日期为 {date}。",
+    "accuracyNotice": "请尽可能准确地回答：平台依赖于您提供的信息准确且为最新。",
+    "infoTitle": "您的投资背景",
+    "infoIntro": "此信息请求遵循 ECSPR 第21条第2款和监管技术标准 RTS 2022/2114 第2条。区间和类别是演示用的设定，并非法律标准。每个问题在相关时都提供明确的\"无\"选项，您无需选择不准确的答案。",
+    "infoFamiliarLabel": "您熟悉的投资类型",
+    "infoFamiliarOptions": {
+      "deposits": "储蓄和存款",
+      "listed_shares": "上市股票",
+      "bonds": "债券",
+      "investment_funds_etfs": "投资基金或 ETF",
+      "crypto_assets": "加密资产",
+      "crowdfunding_p2p": "众筹或 P2P 借贷",
+      "real_estate": "房地产",
+      "other": "其他",
+      "none": "以上皆无"
+    },
+    "infoNatureLabel": "您过去的交易涉及哪些内容？",
+    "infoNatureOptions": {
+      "transferable_securities": "可转让证券（如上市股票或债券）",
+      "admitted_instruments": "众筹目的的认可工具",
+      "loans": "贷款（含 P2P）",
+      "early_expansion_stage_businesses": "早期或扩张阶段企业",
+      "none": "无过往交易"
+    },
+    "infoFrequencyLabel": "每年进行多少此类交易？",
+    "infoFrequencyOptions": {
+      "0": "无",
+      "1_5": "1 至 5 笔",
+      "6_20": "6 至 20 笔",
+      "over_20": "超过 20 笔"
+    },
+    "infoVolumeLabel": "这些交易的总规模",
+    "infoVolumeOptions": {
+      "0": "无",
+      "under_10k": "低于 10,000 欧元",
+      "10k_50k": "10,000 至 50,000 欧元",
+      "50k_100k": "50,000 至 100,000 欧元",
+      "over_100k": "超过 100,000 欧元"
+    },
+    "infoPeriodLabel": "交易持续了多长时间？",
+    "infoPeriodOptions": {
+      "none": "不适用",
+      "under_1": "不到 1 年",
+      "1_3": "1 至 3 年",
+      "3_10": "3 至 10 年",
+      "over_10": "超过 10 年"
+    },
+    "infoEducationLabel": "与投资相关的教育程度",
+    "infoEducationOptions": {
+      "none_relevant": "无相关教育背景",
+      "secondary": "中等教育",
+      "vocational": "职业培训",
+      "bachelor": "学士学位",
+      "master_plus": "硕士或以上",
+      "other": "其他"
+    },
+    "infoProfessionLabel": "当前或以往职业（可选）",
+    "infoProfessionPlaceholder": "例如：会计师",
+    "infoCrowdfundExpLabel": "是否具有与众筹投资相关的职业经验？",
+    "infoHoldingLabel": "投资的预期持有期限",
+    "infoHoldingOptions": {
+      "under_1y": "不到 1 年",
+      "1_3y": "1 至 3 年",
+      "3_5y": "3 至 5 年",
+      "over_5y": "超过 5 年",
+      "indefinite": "无固定期限"
+    },
+    "infoRiskLabel": "您的风险状况",
+    "infoRiskOptions": {
+      "conservative": "保守型 - 保本最为重要",
+      "balanced": "平衡型 - 以中等风险换取中等回报",
+      "risk_tolerant": "风险承受型 - 以更高风险换取更高潜在回报",
+      "speculative": "投机型 - 接受亏损的可能性"
+    },
+    "infoSustainabilityLabel": "可持续性偏好",
+    "infoSustainabilityOptions": {
+      "none": "无偏好",
+      "esg_important": "重视环境或社会标准",
+      "impact_first": "影响力优先"
+    },
+    "infoStatusProvided": "投资背景信息已存档。",
+    "infoStatusMissing": "尚无投资背景信息 - 重新参加测试即可提供。",
+    "categorisationTitle": "投资者分类",
+    "categorisationNote": "根据 ECSPR，除非符合条件并获批为专业成熟投资者，否则所有投资者均为非成熟投资者（第2条第1款(j)(k)项及附件二）。本演示仅记录您的请求：此部署不运行任何审批流程，因此无论您请求什么，您仍为非成熟投资者。",
+    "categorisationStatusLabel": "分类",
+    "categorisationStatusLabels": {
+      "non_sophisticated": "非成熟投资者",
+      "sophistication_requested": "已请求按成熟投资者对待（仅记录 - 此部署不予批准）"
+    },
+    "sophRouteLabel": "请求途径",
+    "sophRouteAnnex": "附件二声明（标准如下）",
+    "sophRouteMifid": "MiFID II 专业客户（身份凭证）",
+    "sophPersonTypeLabel": "以何种身份申请",
+    "sophPersonNatural": "自然人（个人）",
+    "sophPersonLegal": "法人（实体）",
+    "sophCriteriaLabel": "您符合的标准（ECSPR 附件二第I节）",
+    "sophCriteriaNatural": {
+      "np_income_60k_or_portfolio_over_100k": "每个财年个人总收入至少 60,000 欧元，或金融工具组合（现金存款和金融资产）超过 100,000 欧元",
+      "np_financial_sector_1y_or_exec_12m": "曾在金融行业担任需要了解拟议交易或服务的专业职位至少一年，或曾在合格法人担任高管职位至少 12 个月",
+      "np_10_significant_transactions_per_quarter_4q": "在过去四个季度中，以平均每季度 10 笔的频率在资本市场进行了重大规模的交易"
+    },
+    "sophCriteriaNaturalRule": "自然人必须满足三项标准中的至少两项。",
+    "sophCriteriaLegal": {
+      "lp_own_funds_100k": "自有资金至少 100,000 欧元",
+      "lp_net_turnover_2m": "净营业额至少 2,000,000 欧元",
+      "lp_balance_sheet_1m": "资产负债表至少 1,000,000 欧元"
+    },
+    "sophCriteriaLegalRule": "法人必须满足三项标准中的至少一项。",
+    "sophProofLabel": "您的专业客户身份凭证的引用",
+    "sophProofPlaceholder": "例如：注册或证书编号",
+    "sophWarning": "警告：成熟投资者将失去非成熟投资者所享有的保护，包括入门知识测试、损失承受能力模拟保障和合同前冷静期。",
+    "sophAwareness": "我了解失去非成熟投资者身份所附带投资者保护的后果。",
+    "sophLiability": "我对本请求中所提供信息的真实性继续承担责任。",
+    "sophSubmit": "提交分类请求",
+    "sophRequestedAt": "请求已于 {date} 记录（仅记录）。",
+    "sophRouteUsed": {
+      "annex_ii_attestation": "附件二声明",
+      "mifid_professional_client": "MiFID II 专业客户"
+    },
     "experienceOptions": {
       "none": "暂无经验",
       "some": "有一些经验",

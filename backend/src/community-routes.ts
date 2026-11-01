@@ -220,6 +220,20 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }
   });
 
+  // ECSPR Annex II Section II request template (CAPTURE-ONLY: no approval
+  // path on this deployment; a captured request never upgrades treatment).
+  router.post('/api/auth/appropriateness/sophistication-request', appropriatenessHeld, async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      const denied = appropriatenessGate(account);
+      if (denied) throw denied;
+      service.checkRate(`appr-soph:${account.publicKey}`, 10, 60 * 60 * 1000);
+      res.json({ record: await service.requestSophistication(account, req.body) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   router.get('/api/auth/sessions', async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
