@@ -240,21 +240,16 @@ export async function sorobanInvestorEntitlement(id: string, actor: string): Pro
   return { registered: true, balanceUnits: BigInt(balance ?? 0) };
 }
 
-// Derive a durable contributor-registry record from NETWORK-confirmed facts
-// only: the RPC-confirmed transaction envelope itself must carry exactly one
-// invokeContract call to the registered campaign contract, function
-// 'contribute', whose contributor argument is the envelope source account,
-// and the contract's code hash and configured asset must verify. Journal
-// row fields (which originate from the build request) are never trusted for
-// the write; the journal only supplies candidate hashes. Throws when nothing
-// can be confirmed right now (RPC outage, missing envelope, archived state)
-// so the caller preserves the record and retries before journal retention
-// expiry; returns null when the hash is definitively not a confirmed
-// contribution to a registered campaign.
-export async function confirmedContribution(hash: string): Promise<{ campaignId: string; contributor: string } | null> {
-  const store = await readStore();
-  const intent = store.intents.find((i) => i.hash === hash);
-  if (!intent || intent.status !== 'SUCCESS' || intent.action !== 'contribute') return null;
+// Network-only derivation of a confirmed contribution: the RPC-confirmed
+// transaction envelope itself must carry exactly one invokeContract call to
+// a REGISTERED campaign contract, function 'contribute', whose contributor
+// argument is the envelope source account, and the contract's code hash and
+// configured asset must verify. No journal fields are consulted, so this
+// works even after the journal prunes the row. Throws when nothing can be
+// confirmed right now (RPC outage, missing envelope, archived state) so the
+// caller preserves the proof and retries; returns null when the hash is
+// definitively not a confirmed contribution to a registered campaign.
+export async function deriveContributionFromNetwork(hash: string): Promise<{ campaignId: string; contributor: string } | null> {
   const client = sorobanDeps.client();
   const result = await client.getTransaction(hash);
   if (result.txHash !== hash) throw new Error('RPC returned mismatched hash');
@@ -284,12 +279,22 @@ export async function confirmedContribution(hash: string): Promise<{ campaignId:
   } catch {
     return null;
   }
-  const e = entries().find((x) => x.id === intent.campaign);
-  if (!e || e.contractId !== contractId || fnName !== 'contribute' || contributor !== tx.source) return null;
+  const e = entries().find((x) => x.contractId === contractId);
+  if (!e || fnName !== 'contribute' || contributor !== tx.source) return null;
   await verifyCode(client, e);
   const config = await view(client, e, 'get_config');
   if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
   return { campaignId: e.id, contributor };
+}
+
+// Journal-candidate path: the journal supplies candidate hashes (its row
+// fields originate from the build request and are never trusted), then the
+// network derivation above is authoritative for the registry write.
+export async function confirmedContribution(hash: string): Promise<{ campaignId: string; contributor: string } | null> {
+  const store = await readStore();
+  const intent = store.intents.find((i) => i.hash === hash);
+  if (!intent || intent.status !== 'SUCCESS' || intent.action !== 'contribute') return null;
+  return deriveContributionFromNetwork(hash);
 }
 
 export async function buildSoroban(id: string, input: { actor: string; action: string; amount?: string }): Promise<any> {
