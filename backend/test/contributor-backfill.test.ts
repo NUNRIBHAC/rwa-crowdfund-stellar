@@ -24,8 +24,10 @@ class FakeClient {
   async getLatestLedger() {
     return { sequence: this.latest };
   }
+  callsRaw: any[] = [];
   async getEvents(params: any) {
     this.calls.push({ startLedger: params.startLedger, limit: params.limit });
+    this.callsRaw.push(params);
     if (this.failOnCall === this.calls.length) throw new Error('rpc connection reset');
     if (params.startLedger < this.floor) {
       throw new Error(`startLedger must be within the ledger range: ${this.floor} - ${this.latest + 1}`);
@@ -200,6 +202,18 @@ test('an unparseable range error is a generic failure: nothing moves', async () 
   await assert.rejects(run, /unexpected format/);
   assert.equal(recorded.length, 0);
   assert.equal(checkpoints.length, 0);
+});
+
+test('the RPC topic filter is sent as base64 XDR (plain strings are rejected as invalid parameters)', async () => {
+  const { xdr } = await import('@stellar/stellar-sdk');
+  const client = new FakeClient(2000, 1, []);
+  const { run } = harness(client);
+  await run();
+  const expected = xdr.ScVal.scvSymbol('contributed').toXDR('base64');
+  assert.ok(client.callsRaw.length > 0);
+  for (const call of client.callsRaw) {
+    assert.deepEqual(call.filters[0].topics, [[expected, '*']]);
+  }
 });
 
 test('invalid contract id fails before any network traffic', async () => {

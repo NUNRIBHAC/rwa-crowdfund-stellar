@@ -11,7 +11,7 @@
 // per-campaign gap on the operator reconciliation surface, never filled by
 // inference. The durable checkpoint advances only after a ledger window is
 // fully processed, so a failure mid-scan never skips unprocessed history.
-import { Address } from '@stellar/stellar-sdk';
+import { Address, xdr } from '@stellar/stellar-sdk';
 
 export type BackfillGap = 'start-before-floor' | 'cursor-behind-floor';
 
@@ -39,6 +39,10 @@ export type BackfillClient = {
   getLatestLedger(): Promise<{ sequence: number }>;
   getEvents(params: Record<string, unknown>): Promise<{ events?: unknown[] }>;
 };
+
+// The JSON-RPC API expects topic segments as base64 XDR ScVals; a plain
+// 'contributed' string is rejected with invalid parameters.
+const CONTRIBUTED_TOPIC = xdr.ScVal.scvSymbol('contributed').toXDR('base64');
 
 const RANGE_ERROR = /ledger range:\s*(\d+)\s*-\s*(\d+)/;
 const CONTRIBUTOR_KEY = /^G[A-Z2-7]{55}$/;
@@ -88,7 +92,7 @@ export async function backfillCampaignContributors(opts: {
     start = 1;
   }
 
-  const filters = [{ type: 'contract', contractIds: [opts.contractId], topics: [['contributed', '*']] }];
+  const filters = [{ type: 'contract', contractIds: [opts.contractId], topics: [[CONTRIBUTED_TOPIC, '*']] }];
 
   const probe = await client.getEvents({ startLedger: start, filters, limit: 1 }).catch((err: unknown) => {
     const m = RANGE_ERROR.exec(err instanceof Error ? err.message : String(err));
