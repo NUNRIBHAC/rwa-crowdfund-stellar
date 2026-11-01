@@ -148,8 +148,12 @@ export function PodcastPage() {
     };
   }, []);
 
+  // Honest intro: the "no episodes have been recorded" wording only holds
+  // while the page is empty; a populated page must not claim it.
+  const intro = episodes !== null && episodes.length > 0 ? t.podcastIntroWithEpisodes : t.podcastIntro;
+
   return (
-    <PageShell title={t.podcastTitle} intro={t.podcastIntro} demoNote={t.podcastDemoNote}>
+    <PageShell title={t.podcastTitle} intro={intro} demoNote={t.podcastDemoNote}>
       {error && <p className="community-error">{error}</p>}
       {!error && episodes === null && <p className="community-loading">{m.community.loading}</p>}
       {!error && episodes !== null && episodes.length === 0 && <p className="community-note">{t.podcastEmpty}</p>}
