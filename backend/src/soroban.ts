@@ -125,6 +125,14 @@ function entries(): Entry[] {
   }
   return values;
 }
+// Registered campaigns for the contributor backfill job: id + contractId
+// only, from the same validated registry the build/submit paths use.
+// Throws (testnet guard, invalid registry) like every other reader; the
+// caller treats that as "backfill unavailable" and moves nothing.
+export function sorobanRegisteredCampaigns(): { id: string; contractId: string }[] {
+  return entries().map((e) => ({ id: e.id, contractId: e.contractId }));
+}
+
 const entry = (id: string) => {
   const e = entries().find((e) => e.id === id);
   if (!e) throw new Error('campaign not registered; deployment and registration are separate operator steps');

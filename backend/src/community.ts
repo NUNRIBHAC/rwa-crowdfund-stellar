@@ -396,7 +396,9 @@ export class CommunityService {
   // Durable contributor registry. Written only by the backend's own
   // submit/status confirmation path (and its startup backfill from the
   // journal), keyed idempotently; never written from client-supplied data.
-  async recordContributor(campaignId: string, publicKey: string): Promise<void> {
+  // actor names the writer for audit provenance: 'backend-journal' for the
+  // app submit/confirm path, 'backend-backfill' for chain-event recovery.
+  async recordContributor(campaignId: string, publicKey: string, actor = 'backend-journal'): Promise<void> {
     requireCampaignId(campaignId);
     if (!/^G[A-Z2-7]{55}$/.test(publicKey)) throw new Error('invalid contributor public key');
     const key = `${campaignId}:${publicKey}`;
@@ -407,7 +409,28 @@ export class CommunityService {
         inserted = true;
       }
     });
-    if (inserted) await this.recordAudit('backend-journal', 'contributor.record', key, `campaign=${campaignId}`);
+    if (inserted) await this.recordAudit(actor, 'contributor.record', key, `campaign=${campaignId}`);
+  }
+
+  async getContributorBackfillCheckpoint(campaignId: string) {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return state.backfillCheckpoints[campaignId];
+  }
+
+  async setContributorBackfillCheckpoint(campaignId: string, cp: import('./community-store.js').ContributorBackfillCheckpoint): Promise<void> {
+    requireCampaignId(campaignId);
+    if (!Number.isSafeInteger(cp.processedThroughLedger) || cp.processedThroughLedger <= 0) {
+      throw new Error('invalid backfill checkpoint');
+    }
+    await this.store.change((state) => {
+      state.backfillCheckpoints[campaignId] = cp;
+    });
+  }
+
+  async listContributorBackfillCheckpoints() {
+    const state = await this.store.read();
+    return { ...state.backfillCheckpoints };
   }
 
   async hasContributed(campaignId: string, publicKey: string): Promise<boolean> {

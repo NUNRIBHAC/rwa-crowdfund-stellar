@@ -126,6 +126,14 @@ export type ContributorRecord = {
   publicKey: string;
   firstConfirmedAt: number;
 };
+export type ContributorBackfillCheckpoint = {
+  processedThroughLedger: number;
+  gap?: 'start-before-floor' | 'cursor-behind-floor';
+  floorLedger?: number;
+  floorObservedAt?: number;
+  latestLedger?: number;
+  updatedAt: number;
+};
 
 // ECSPR Art. 21 entry knowledge test + loss-simulation record (RTS
 // 2022/2114). Data scopes are deliberately distinct: knowledge-test OUTCOME
@@ -310,6 +318,9 @@ export type CommunityState = {
   reports: Record<string, PostFundingReport>;
   // Keyed `${campaignId}:${publicKey}`.
   contributors: Record<string, ContributorRecord>;
+  // Chain-history backfill progress per campaign (contributor-backfill.ts):
+  // durable cursor plus any honestly-flagged unverifiable history window.
+  backfillCheckpoints: Record<string, ContributorBackfillCheckpoint>;
   episodes: Record<string, PodcastEpisode>;
   tickets: Record<string, Ticket>;
   applications: Record<string, IssuerApplication>;
@@ -330,6 +341,7 @@ export function emptyCommunityState(): CommunityState {
     news: {},
     reports: {},
     contributors: {},
+    backfillCheckpoints: {},
     episodes: {},
     tickets: {},
     applications: {},
@@ -355,6 +367,8 @@ function validate(state: any): CommunityState {
   if (state && state.version === 1 && !state.reports) state.reports = {};
   // Same forward-compatible default for docs written before contributor records.
   if (state && state.version === 1 && !state.contributors) state.contributors = {};
+  // Same forward-compatible default for docs written before backfill checkpoints.
+  if (state && state.version === 1 && !state.backfillCheckpoints) state.backfillCheckpoints = {};
   // Same forward-compatible default for docs written before appropriateness records.
   if (state && state.version === 1 && !state.appropriateness) state.appropriateness = {};
   if (
@@ -367,6 +381,7 @@ function validate(state: any): CommunityState {
     !state.news ||
     !state.reports ||
     !state.contributors ||
+    !state.backfillCheckpoints ||
     !state.episodes ||
     !state.tickets ||
     !state.applications ||
