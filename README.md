@@ -37,16 +37,21 @@ Community and accounts (docs/community-api.md):
 - Campaign metadata: industry tags, document entries and campaign tabs
   (Overview/Details/Documents/News) per campaign.
 - Admin operations exist at the API level behind `x-admin-key` and fail
-  closed when the secret is unset. There is no admin UI.
+  closed when the secret is unset. A limited operator panel (ticket,
+  application, news and comment moderation flows) renders for the
+  configured platform operator account after community sign-in; it is not
+  a full admin dashboard, and no operator account is configured on the
+  public demo.
 
 Frontend:
 
 - Eleven UI locales: English, Portuguese (PT-PT), Spanish, French,
   German, Simplified Chinese, Traditional Chinese, Japanese, Korean,
   Arabic and Hindi. Arabic keeps the
-  shared page geometry with right-to-left text; legal document bodies are
-  currently English-only in every locale (translation is tracked follow-up
-  work).
+  shared page geometry with right-to-left text. Legal document bodies now
+  have translated drafts in all eleven locales (machine-assisted, private
+  Weblate pipeline); a human or legal review of those drafts is not
+  confirmed.
 - Light and dark themes, responsive layout, animated footer illustration.
 - Account area: summary, my investments, recent activity, wallet and
   onboarding checklist against the signed-in session.
