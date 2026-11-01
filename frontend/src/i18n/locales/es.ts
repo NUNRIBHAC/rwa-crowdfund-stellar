@@ -478,6 +478,10 @@ export const es: Messages = {
     fixtureNote: 'Las campañas de ejemplo están en pantalla; los datos de ejemplo no tienen posiciones por cartera.',
     investmentsAria: 'Mis inversiones',
     myInvestments: 'Mis inversiones',
+    newsFeedAria: 'Noticias de campañas',
+    newsFeedTitle: 'Noticias de campañas',
+    newsFeedEmpty: 'Aún no hay noticias de las campañas en las que has invertido.',
+    newsFeedNoInvestments: 'Las noticias de las campañas en las que inviertas aparecerán aquí.',
     newInvestments: 'Nuevas inversiones',
     filterAria: 'Filtrar cartera por estado',
     tabs: {

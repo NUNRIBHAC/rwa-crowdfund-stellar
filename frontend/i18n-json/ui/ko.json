@@ -444,6 +444,10 @@
     "fixtureNote": "샘플 캠페인이 표시되어 있습니다. 샘플 데이터에는 지갑별 포지션이 없습니다.",
     "investmentsAria": "내 투자",
     "myInvestments": "내 투자",
+    "newsFeedAria": "캠페인 뉴스",
+    "newsFeedTitle": "캠페인 뉴스",
+    "newsFeedEmpty": "투자한 캠페인의 뉴스가 아직 없습니다.",
+    "newsFeedNoInvestments": "투자한 캠페인의 뉴스가 여기에 표시됩니다.",
     "newInvestments": "새로운 투자",
     "filterAria": "상태로 포트폴리오 필터",
     "tabs": {

@@ -5,6 +5,7 @@ import type { Campaign } from '../types';
 import { formatAmount, shorten } from '../format';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
+import AccountNewsSection from '../components/AccountNewsSection';
 import SignInPanel from '../components/SignInPanel';
 import MyCommunityActivity from '../components/MyCommunityActivity';
 import CompanyAccountsSection from '../components/CompanyAccountsSection';
@@ -169,6 +170,8 @@ export default function Account({ market }: { market: Market }) {
           </ul>
         )}
       </section>
+
+      {hasPositions && <AccountNewsSection campaigns={rows.map((r) => ({ id: r.id, name: r.name }))} />}
 
       <section aria-label={m.account.activityAria}>
         <h2 className="section-title">{m.account.recentActivity}</h2>
