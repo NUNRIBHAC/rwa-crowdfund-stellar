@@ -1389,7 +1389,7 @@ export const de: Messages = {
       'Demo-Seite: Episoden und Audio-Player erscheinen hier, sobald die Plattform tatsächlich einen Podcast veröffentlicht. Nichts auf dieser Seite ist ein Angebot oder eine Anlageberatung.',
     eventsHowTitle: 'Wie Veranstaltungen funktionieren werden',
     eventsHowBody:
-      'Wenn die Plattform eine echte Veranstaltung plant, erscheint sie unter Demnächst mit Datum, Format und Anmeldung. Abgeschlossene Veranstaltungen wandern zu Vergangen. Bis dahin bleiben beide Listen ehrlich leer.',
+      'Wenn die Plattform eine echte Veranstaltung plant, erscheint sie unter Bevorstehend mit Datum, Format und Anmeldung. Abgeschlossene Veranstaltungen wandern zu Vergangen. Bis dahin bleiben beide Listen ehrlich leer.',
     blogPosts: [
       {
         date: '2026-10-31',
