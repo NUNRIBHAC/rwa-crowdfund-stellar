@@ -1458,7 +1458,7 @@ export const ko: Messages = {
     statusTitle: '결과',
     statusOutcome: '입문 지식 확인',
     completedAt: '{date}에 완료.',
-    reviewAssessmentDue: '평가 검토 기한: {date}.',
+    reviewAssessmentDue: '지식 확인 검토 기한: {date}.',
     reviewSimulationDue: '시뮬레이션 검토 기한: {date}.',
     accuracyNotice: '최대한 정확하게 답변해 주세요. 플랫폼은 귀하가 제공하는 정보가 정확하고 최신임을 전제로 합니다.',
     infoTitle: '투자 경험 정보',
@@ -1544,7 +1544,7 @@ export const ko: Messages = {
     infoStatusMissing: '아직 투자 경험 정보가 없습니다. 제공하려면 테스트를 다시 진행하세요.',
     categorisationTitle: '투자자 분류',
     categorisationNote:
-      'ECSPR에 따르면 자격을 갖추고 숙련 투자자로 승인되지 않는 한 모든 투자자는 비숙련 투자자입니다(제2조 제1항 (j)(k)호 및 부속서 II). 이 데모는 요청을 기록만 합니다. 이 배포에서는 승인 절차가 실행되지 않으므로 무엇을 요청하든 비숙련 투자자로 남습니다.',
+      'ECSPR에 따르면 MiFID II상 전문 고객이거나 제공자가 부속서 II 절차에 따라 숙련 투자자로 승인하지 않는 한 모든 투자자는 비숙련 투자자입니다(제2조 제1항 (j)(k)호 및 부속서 II). 이 데모는 요청을 기록만 합니다. 이 배포에서는 승인 절차가 실행되지 않으므로 무엇을 요청하든 비숙련 투자자로 남습니다.',
     categorisationStatusLabel: '분류',
     categorisationStatusLabels: {
       non_sophisticated: '비숙련 투자자',

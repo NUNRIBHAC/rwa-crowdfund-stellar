@@ -1487,7 +1487,7 @@ export const en = {
     statusTitle: 'Your results',
     statusOutcome: 'Entry knowledge check',
     completedAt: 'Completed on {date}.',
-    reviewAssessmentDue: 'Assessment review due by {date}.',
+    reviewAssessmentDue: 'Knowledge check review due by {date}.',
     reviewSimulationDue: 'Simulation review due by {date}.',
     accuracyNotice: 'Answer as accurately as you can: the platform relies on the information you provide being accurate and up to date.',
     infoTitle: 'Your investing background',
@@ -1573,7 +1573,7 @@ export const en = {
     infoStatusMissing: 'No investing background information on file yet - retake the test to provide it.',
     categorisationTitle: 'Investor categorisation',
     categorisationNote:
-      'Under ECSPR every investor is non-sophisticated unless they qualify and are approved as a sophisticated investor (Article 2(1)(j)/(k) and Annex II). This demo only records your request: no approval process runs on this deployment, so you remain non-sophisticated whatever you request.',
+      'Under ECSPR every investor is non-sophisticated unless they are a professional client under MiFID II or the provider approves them as a sophisticated investor under the Annex II procedure (Article 2(1)(j)/(k) and Annex II). This demo only records your request: no approval process runs on this deployment, so you remain non-sophisticated whatever you request.',
     categorisationStatusLabel: 'Categorisation',
     categorisationStatusLabels: {
       non_sophisticated: 'Non-sophisticated investor',
