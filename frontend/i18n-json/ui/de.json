@@ -1399,50 +1399,84 @@
     "tourStepNewsTitle": "News und Fragen",
     "tourStepNewsBody": "Kampagnen-Updates und öffentliche Kommentare. Demo-News sind immer als platform-demo gekennzeichnet."
   },
-  "categorisation": {
-    "catTitle": "Anlegerkategorisierung",
-    "catPrototypeNote": "Unverbindlicher Prototyp: Diese Prüfung gewährt oder beschränkt keinen Zugang und wird nur in diesem Browser gespeichert.",
-    "catKnowledgeTitle": "Wissenstest",
-    "catKnowledgeIntro": "Fünf kurze Fragen zu den Risiken von Crowdinvesting.",
-    "catSubmit": "Antworten prüfen",
-    "catRetake": "Test wiederholen",
-    "catResultPass": "Alle Antworten richtig.",
-    "catResultReview": "{n} Antwort(en) zum Überprüfen - lies die Erklärungen und versuche es erneut.",
-    "catScoreLabel": "{correct} von {total} richtig",
-    "catSimTitle": "Simulation der Verlusttragfähigkeit",
-    "catSimIntro": "Vergleiche eine geplante Investition mit deinen frei verfügbaren Mitteln.",
-    "catAssetsLabel": "Frei verfügbare Mittel (EUR)",
-    "catIncomeLabel": "Monatliches Nettoeinkommen (EUR)",
-    "catPlannedLabel": "Geplante Investition (EUR)",
-    "catSimRun": "Simulation starten",
-    "catSimResult": "Die geplante Anlage entspricht {pct} % der eingegebenen frei verfügbaren Mittel.",
-    "catSimNote": "Reine Rechenoperation mit den eingegebenen Beträgen. Dies ist keine regulatorische Prüfung der Verlusttragfähigkeit, Geeignetheit oder Berechtigung; es wird kein Schwellenwert angewendet.",
-    "catSavedNote": "Ergebnis nur lokal in diesem Browser gespeichert.",
-    "catQuestions": [
+  "appropriateness": {
+    "title": "Geeignetheitsprüfung für Anleger",
+    "intro": "Einstiegs-Kenntnistest und Simulation der Verlusttragfähigkeit nach der europäischen Crowdfunding-Verordnung (ECSPR, Artikel 21).",
+    "signInNote": "Melden Sie sich mit Ihrer Wallet an, um die Prüfung durchzuführen.",
+    "heldNote": "Die Geeignetheitsprüfung erfasst auf dieser Bereitstellung keine Antworten.",
+    "limitedNote": "Auf dieser Bereitstellung ist die Prüfung auf festgelegte Testkonten beschränkt.",
+    "knowledgeTitle": "Einstiegs-Kenntnistest",
+    "knowledgeIntro": "Fünf kurze Ja/Nein-Fragen zu den Risiken von Crowdfunding-Investitionen. Ihre Antworten werden bewertet und dann verworfen - nur das Ergebnis wird gespeichert.",
+    "experienceLabel": "Anlageerfahrung",
+    "objectiveLabel": "Anlageziel",
+    "selectPlaceholder": "Auswählen...",
+    "yes": "Ja",
+    "no": "Nein",
+    "submitKnowledge": "Antworten absenden",
+    "retake": "Test wiederholen",
+    "scoreLabel": "{score} von {total} richtig",
+    "outcomeLabel": "Ergebnis",
+    "noSophisticatedNote": "Dieses Ergebnis stuft Sie nicht als professionellen oder besonders erfahrenen Anleger ein.",
+    "reviewExplanations": "Erläuterungen zu den Fragen, die Sie gerade beantwortet haben:",
+    "warningTitle": "Risikowarnung",
+    "warningText": "Eine Investition in ein Crowdfunding-Projekt beinhaltet das Risiko, das gesamte investierte Geld zu verlieren.",
+    "warningNote": "Der Kenntnistest hat Lücken in Ihrem Verständnis der Risiken festgestellt. Lesen Sie diese Warnung sorgfältig; sie bleibt sichtbar, bis Sie sie bestätigen.",
+    "warningAck": "Ich habe diese Risikowarnung gelesen und erkenne sie an",
+    "warningAcknowledgedAt": "Warnung bestätigt am {date}.",
+    "simTitle": "Simulation der Verlusttragfähigkeit",
+    "simIntro": "Schätzen Sie Ihr Nettovermögen: Ihr jährliches Nettoeinkommen plus Ihrer gesamten liquiden Mittel, abzüglich Ihrer jährlichen finanziellen Verpflichtungen. Die Simulation beträgt 10 % dieses Vermögens - der Betrag, den Sie investieren und verlieren könnten, ohne dass Ihre finanzielle Lage wesentlich beeinträchtigt würde.",
+    "simIncomeLabel": "Jährliches Nettoeinkommen (EUR)",
+    "simAssetsLabel": "Gesamte liquide Mittel (EUR)",
+    "simCommitmentsLabel": "Jährliche finanziellen Verpflichtungen (EUR)",
+    "simExclusionsNote": "Liquide Mittel umfassen keine Immobilien, Rentenansprüche oder nicht rückzahlbare Anteile, einschließlich früherer Crowdfunding-Investitionen. Verwenden Sie Werte zum 31. Dezember des letzten Jahres oder eine aktuellere Bewertung.",
+    "simPrivacyNote": "Die eingegebenen Beträge werden nur für diese Berechnung in Ihrem Browser verwendet. Sie werden nie an die Plattform gesendet oder protokolliert. Nur die beiden resultierenden Summen werden übermittelt, und nur wenn Sie sich dafür entscheiden.",
+    "simRun": "Berechnen",
+    "simNetWorth": "Geschätztes Nettovermögen: {amount}",
+    "simCapacity": "Verlusttragfähigkeit von 10 %: {amount}",
+    "simTransmit": "Ergebnis übermitteln",
+    "simTransmitted": "Letztes Ergebnis übermittelt am {date}.",
+    "simInvalid": "Geben Sie Beträge von null oder mehr ein, um die Simulation auszuführen.",
+    "simRecalculate": "Neu berechnen",
+    "statusTitle": "Ihre Prüfung",
+    "statusOutcome": "Ergebnis des Kenntnistests",
+    "completedAt": "Abgeschlossen am {date}.",
+    "reviewAssessmentDue": "Überprüfung der Prüfung fällig bis {date}.",
+    "reviewSimulationDue": "Überprüfung der Simulation fällig bis {date}.",
+    "experienceOptions": {
+      "none": "Noch keine Erfahrung",
+      "some": "Etwas Erfahrung",
+      "experienced": "Erfahrener Anleger"
+    },
+    "objectiveOptions": {
+      "capital_preservation": "Kapitalerhalt",
+      "income": "Regelmäßige Einkünfte",
+      "growth": "Wachstum",
+      "other": "Sonstiges"
+    },
+    "outcomeLabels": {
+      "appropriate": "Geeignet",
+      "warning_issued": "Warnung ausgegeben"
+    },
+    "questions": [
       {
-        "q": "Was ist das Maximum, das du bei einer Crowdfunding-Investition verlieren kannst?",
-        "options": ["Nur die Gebühren", "Die gesamte Investition", "Die Hälfte der Investition"],
-        "why": "Crowdfunding-Investitionen können ihren gesamten Wert verlieren (Totalverlust)."
+        "q": "Können Sie das gesamte Geld verlieren, das Sie in ein Crowdfunding-Projekt investieren?",
+        "why": "Crowdfunding-Investitionen können ihren gesamten Wert verlieren - ein Totalverlust ist möglich."
       },
       {
-        "q": "Wie leicht kannst du eine Crowdfunding-Investition normalerweise verkaufen?",
-        "options": ["Jederzeit an der Börse", "Meist gar nicht - sie ist illiquide", "Nur am Jahresende"],
-        "why": "Es gibt in der Regel keinen Sekundärmarkt; plane, bis zum Ende der Laufzeit zu halten."
+        "q": "Sind Crowdfunding-Investitionen durch Einlagensicherungssysteme abgedeckt?",
+        "why": "Einlagensicherungssysteme decken Crowdfunding-Investitionen nicht ab; der Anleger trägt den Verlust."
       },
       {
-        "q": "Wer trägt den Verlust, wenn das emittierende Unternehmen scheitert?",
-        "options": ["Die Plattform", "Der Zahlungsdienstleister", "Der Anleger"],
-        "why": "Die Investition ist ein Vertrag mit dem Emittenten; die Plattform deckt keine Verluste."
+        "q": "Können Sie eine Crowdfunding-Investition in der Regel jederzeit problemlos weiterverkaufen?",
+        "why": "Es gibt im Allgemeinen keinen Sekundärmarkt; planen Sie, die Investition bis zum Ende der Laufzeit zu halten."
       },
       {
-        "q": "Was bedeutet Diversifikation?",
-        "options": ["Geld auf mehrere Investitionen verteilen", "Alles in eine Kampagne investieren", "Alles in bar halten"],
-        "why": "Gestreute Investitionen verringern die Wirkung eines einzelnen Totalverlusts."
+        "q": "Sind Kredite an junge Unternehmen im Allgemeinen riskanter als börsennotierte Anleihen?",
+        "why": "Junge Unternehmen scheitern häufiger, daher haben ihre Kredite ein höheres Ausfallrisiko."
       },
       {
-        "q": "Sind Renditen bei Crowdfunding-Investitionen garantiert?",
-        "options": ["Ja, per Gesetz", "Ja, durch die Plattform", "Nein"],
-        "why": "Zinsen und Rückzahlung hängen vom Emittenten ab; keine Rendite ist garantiert."
+        "q": "Verringert die Streuung des Geldes auf mehrere Investitionen die Auswirkung eines einzelnen Totalverlusts?",
+        "why": "Diversifizierung verringert die Auswirkung eines einzelnen Ausfalls, beseitigt aber nicht das Verlustrisiko."
       }
     ]
   },

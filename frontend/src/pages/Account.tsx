@@ -13,7 +13,7 @@ import NotificationsSection from '../components/NotificationsSection';
 import SecuritySection from '../components/SecuritySection';
 import OperatorSection from '../components/OperatorSection';
 import SupportCenter from '../components/SupportCenter';
-import InvestorCategorisation from '../components/InvestorCategorisation';
+import AppropriatenessSection from '../components/AppropriatenessSection';
 import IssuerApplicationForm from '../components/IssuerApplicationForm';
 
 const INTENT_KEY = 'rwa-soroban-intent';
@@ -234,7 +234,7 @@ export default function Account({ market }: { market: Market }) {
 
       <CompanyAccountsSection />
 
-      <InvestorCategorisation />
+      <AppropriatenessSection />
 
       <OperatorSection campaigns={campaigns.map((c) => ({ id: c.id, name: c.name }))} />
 
