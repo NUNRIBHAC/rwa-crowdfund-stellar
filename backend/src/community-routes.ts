@@ -10,6 +10,11 @@ import {
   setDisplayName,
   verifyChallenge,
   AuthError,
+  publicAccount,
+  enrollTotp,
+  enableTotp,
+  disableTotp,
+  completeTotpLogin,
 } from './accounts.js';
 import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaignId } from './community.js';
 import { metadataFor } from './campaign-metadata.js';
@@ -90,11 +95,53 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`verify-ip:${ip}`, 60, 60 * 60 * 1000)) throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
       const v = await verifyChallenge(store, String(req.body?.publicKey ?? ''), String(req.body?.signature ?? ''));
-      res.json({ ...v, isOperator: operatorWallets().includes(v.account.publicKey) });
+      if ('requiresTotp' in v) {
+        res.json({ requiresTotp: true, ticket: v.ticket, expiresAt: v.expiresAt });
+        return;
+      }
+      res.json({ token: v.token, expiresAt: v.expiresAt, account: publicAccount(v.account), isOperator: operatorWallets().includes(v.account.publicKey) });
     } catch (err) {
       sendError(res, err);
     }
   });
+  // --- Second factor (TOTP). Enrollment/disable need a session; the login
+  // completion endpoint takes the one-purpose ticket from /api/auth/verify.
+  // The enrollment secret is returned to the account owner exactly once
+  // (standard authenticator onboarding); it is never logged or re-served.
+  router.post(
+    '/api/auth/totp/enroll',
+    authed(async (_req, res, account) => {
+      const ip = clientIp(_req);
+      if (ip && !service.limiter.allow(`totp-enroll-ip:${ip}`, 10, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+      res.json(await enrollTotp(store, account.publicKey));
+    }),
+  );
+  router.post(
+    '/api/auth/totp/enable',
+    authed(async (req, res, account) => {
+      res.json(await enableTotp(store, account.publicKey, String(req.body?.code ?? '')));
+    }),
+  );
+  router.post(
+    '/api/auth/totp/disable',
+    authed(async (req, res, account) => {
+      await disableTotp(store, account.publicKey, String(req.body?.code ?? ''));
+      res.json({ ok: true });
+    }),
+  );
+  router.post('/api/auth/totp/complete', async (req, res) => {
+    try {
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`totp-complete-ip:${ip}`, 30, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+      const v = await completeTotpLogin(store, String(req.body?.ticket ?? ''), String(req.body?.code ?? ''));
+      res.json({ token: v.token, expiresAt: v.expiresAt, account: publicAccount(v.account), isOperator: operatorWallets().includes(v.account.publicKey) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   router.get('/api/auth/sessions', async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));
@@ -150,14 +197,14 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       // isOperator lets the signed-in UI reveal the operator dashboard; it is
       // a display hint only - every /api/operator/* route re-checks the
       // allow-list server-side per request.
-      res.json({ account, isOperator: operatorWallets().includes(account.publicKey) });
+      res.json({ account: publicAccount(account), isOperator: operatorWallets().includes(account.publicKey) });
     }),
   );
   router.put(
     '/api/auth/me',
     authed(async (req, res, account) => {
       res.json({
-        account: await setDisplayName(store, account.publicKey, req.body?.displayName),
+        account: publicAccount(await setDisplayName(store, account.publicKey, req.body?.displayName)),
       });
     }),
   );

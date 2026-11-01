@@ -6,7 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react';
 import { isConnected, signMessage } from '@stellar/freighter-api';
 import type { CommunityAccount } from './api';
-import { fetchMe, loadCommunityToken, logout, requestChallenge, saveCommunityToken, updateDisplayName, verifyChallenge } from './api';
+import { completeTotpLogin, fetchMe, loadCommunityToken, logout, requestChallenge, saveCommunityToken, updateDisplayName, verifyChallenge } from './api';
 
 export type CommunityAuthState = {
   /** null = signed out. */
@@ -21,6 +21,11 @@ export type CommunityAuthState = {
   restored: boolean;
   /** Sign in with the given wallet address via challenge-response. */
   signIn: (address: string) => Promise<void>;
+  /** Set when the wallet signature passed but the account has a second
+      factor: the session is not issued until completeTotp succeeds. */
+  totpPending: { ticket: string } | null;
+  /** Second step of a gated sign-in: TOTP or a single-use recovery code. */
+  completeTotp: (code: string) => Promise<void>;
   signOut: () => Promise<void>;
   setDisplayName: (name: string) => Promise<void>;
   clearError: () => void;
@@ -40,6 +45,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [restored, setRestored] = useState(false);
+  const [totpPending, setTotpPending] = useState<{ ticket: string } | null>(null);
 
   // Restore a stored session once on mount; drop it if the server rejects it.
   useEffect(() => {
@@ -74,6 +80,12 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         const raw = signed.signedMessage;
         const signature = typeof raw === 'string' ? raw : btoa(String.fromCharCode(...Array.from(raw as unknown as Uint8Array)));
         const v = await verifyChallenge(address, signature);
+        if ('requiresTotp' in v) {
+          // Wallet signature accepted, second factor still owed: no session
+          // yet, keep only the one-purpose ticket.
+          setTotpPending({ ticket: v.ticket });
+          return;
+        }
         saveCommunityToken(v.token);
         setToken(v.token);
         setAccount(v.account);
@@ -87,6 +99,27 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     [messages],
   );
 
+  const completeTotp = useCallback(
+    async (code: string) => {
+      if (!totpPending) return;
+      setBusy(true);
+      setError('');
+      try {
+        const v = await completeTotpLogin(totpPending.ticket, code);
+        saveCommunityToken(v.token);
+        setToken(v.token);
+        setAccount(v.account);
+        setIsOperator(v.isOperator === true);
+        setTotpPending(null);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        setBusy(false);
+      }
+    },
+    [totpPending],
+  );
+
   const signOut = useCallback(async () => {
     setBusy(true);
     setError('');
@@ -97,6 +130,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setToken('');
       setAccount(null);
       setIsOperator(false);
+      setTotpPending(null);
       setBusy(false);
     }
   }, [token]);
@@ -128,10 +162,12 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       restored,
       signIn,
       signOut,
+      totpPending,
+      completeTotp,
       setDisplayName: setName,
       clearError: () => setError(''),
     }),
-    [account, token, isOperator, busy, error, restored, signIn, signOut, setName],
+    [account, token, isOperator, busy, error, restored, signIn, signOut, setName, totpPending, completeTotp],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

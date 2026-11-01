@@ -8,6 +8,7 @@ export type CommunityAccount = {
   publicKey: string;
   displayName: string | null;
   createdAt: number;
+  totpEnabled: boolean;
 };
 
 // Wire shape is backend PublicComment (community.ts): the server already
@@ -129,8 +130,22 @@ export const requestChallenge = (publicKey: string) =>
     body: { publicKey },
   });
 
-export const verifyChallenge = (publicKey: string, signature: string) =>
-  call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/verify', { body: { publicKey, signature } });
+export type VerifyChallengeResult =
+  { token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean } | { requiresTotp: true; ticket: string; expiresAt: number };
+
+export const verifyChallenge = (publicKey: string, signature: string) => call<VerifyChallengeResult>('/api/auth/verify', { body: { publicKey, signature } });
+
+// Second factor: completes a gated login, or manages enrollment from the
+// account security section. The enrollment secret is returned once, to the
+// session owner only.
+export const completeTotpLogin = (ticket: string, code: string) =>
+  call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/totp/complete', { body: { ticket, code } });
+
+export const enrollTotp = (token: string) => call<{ otpauthUrl: string; manualKey: string }>('/api/auth/totp/enroll', { token, body: {} });
+
+export const enableTotp = (token: string, code: string) => call<{ recoveryCodes: string[] }>('/api/auth/totp/enable', { token, body: { code } });
+
+export const disableTotp = (token: string, code: string) => call<{ ok: boolean }>('/api/auth/totp/disable', { token, body: { code } });
 
 export const logout = (token: string) => call<{ ok: true }>('/api/auth/logout', { method: 'POST', body: {}, token });
 
