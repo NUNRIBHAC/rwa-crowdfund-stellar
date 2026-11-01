@@ -1394,6 +1394,7 @@ code {
 
 .portfolio-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   background: var(--card);
@@ -1403,7 +1404,9 @@ code {
 }
 
 .portfolio-row a {
-  flex: 1;
+  flex: 1 1 220px;
+  min-width: 0;
+  overflow-wrap: break-word;
   font-weight: 600;
 }
 
@@ -2394,12 +2397,15 @@ input[type='checkbox'] {
    lockup (via lockupFor in Footer.tsx) and tile strokes/fills flip. */
 [data-theme='light'] .footer-brand {
   background: #e8eafc;
+  /* Coherent band: the full-bleed shadow matches the light band color
+     instead of painting navy edges around the pale panel. */
+  box-shadow: 0 0 0 100vmax #e8eafc;
 }
 [data-theme='light'] .footer-brand-inner .footer-grid {
   color: var(--ink-soft);
 }
 [data-theme='light'] .footer-heading {
-  color: rgba(31, 34, 84, 0.55);
+  color: #1f2254;
 }
 [data-theme='light'] .footer-tagline {
   color: #3b3fd0;
