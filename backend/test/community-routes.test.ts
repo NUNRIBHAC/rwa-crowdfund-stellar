@@ -238,6 +238,39 @@ test('site-wide news feed aggregates campaigns newest first and is public', asyn
   assert.equal(res.json.news[0].authorLabel, 'platform-demo');
 });
 
+test('podcast endpoints: public list, per-campaign list, admin-gated publish', async () => {
+  // Public reads start empty.
+  const empty = await api('GET', '/api/podcast/episodes');
+  assert.equal(empty.status, 200);
+  assert.equal(empty.json.episodes.length, 0);
+  const emptyCampaign = await api('GET', '/api/campaigns/demo-solar/podcast');
+  assert.equal(emptyCampaign.status, 200);
+  assert.equal(emptyCampaign.json.episodes.length, 0);
+
+  // Publish is admin-gated: no key and bad input are refused.
+  assert.equal((await api('POST', '/api/podcast/episodes', { body: { title: 'X', description: 'Y', audioUrl: 'https://a.example.com/x.mp3' } })).status, 401);
+  assert.equal(
+    (await api('POST', '/api/podcast/episodes', { admin: true, body: { title: 'X', description: 'Y', audioUrl: 'http://a.example.com/x.mp3' } })).status,
+    400,
+  );
+
+  // Admin publish works and is labeled platform-demo.
+  const created = await api('POST', '/api/podcast/episodes', {
+    admin: true,
+    body: { title: 'QA route episode', description: 'Synthetic QA episode.', audioUrl: 'https://a.example.com/ep.mp3', campaignId: 'demo-solar' },
+  });
+  assert.equal(created.status, 201);
+  assert.equal(created.json.episode.authorLabel, 'platform-demo');
+
+  const list = await api('GET', '/api/podcast/episodes');
+  assert.equal(list.json.episodes.length, 1);
+  assert.equal(list.json.episodes[0].title, 'QA route episode');
+  const perCampaign = await api('GET', '/api/campaigns/demo-solar/podcast');
+  assert.equal(perCampaign.json.episodes.length, 1);
+  const otherCampaign = await api('GET', '/api/campaigns/staging-load/podcast');
+  assert.equal(otherCampaign.json.episodes.length, 0);
+});
+
 test('campaign metadata endpoint serves industry and documents', async () => {
   const res = await api('GET', '/api/campaigns/demo-solar/metadata');
   assert.equal(res.status, 200);

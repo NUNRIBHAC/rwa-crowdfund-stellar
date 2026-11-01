@@ -33,6 +33,20 @@ export type NewsPost = {
   createdAt: number;
 };
 
+export type PodcastEpisode = {
+  id: string;
+  // Null for platform-wide episodes; set when tied to one campaign.
+  campaignId: string | null;
+  title: string;
+  description: string;
+  // External https audio URL only; the platform never hosts audio files.
+  audioUrl: string;
+  // Server honesty rule, same as news: episodes are published through the
+  // admin/operator key as platform stand-in. Always show this label.
+  authorLabel: 'platform-demo';
+  createdAt: number;
+};
+
 export type Ticket = {
   id: string;
   kind: 'support' | 'feedback';
@@ -176,6 +190,10 @@ export const fetchNews = (campaignId: string) => call<{ news: NewsPost[] }>(`/ap
 // --- Site-wide news feed (public) ---
 export const fetchNewsFeed = () => call<{ news: NewsPost[] }>('/api/news');
 
+// --- Podcast episodes (public; external https audio only) ---
+export const fetchEpisodes = () => call<{ episodes: PodcastEpisode[] }>('/api/podcast/episodes');
+export const fetchCampaignEpisodes = (campaignId: string) => call<{ episodes: PodcastEpisode[] }>(`/api/campaigns/${encodeURIComponent(campaignId)}/podcast`);
+
 // --- Owner-scoped notifications ---
 // Server-generated from real events on the owner's own content only; kinds
 // are stable so the UI renders localized titles while the body stays the
@@ -260,6 +278,8 @@ export const closeOperatorTicket = (token: string, id: string) =>
   call<{ ok: true }>(`/api/operator/tickets/${encodeURIComponent(id)}/close`, { method: 'POST', body: {}, token });
 export const postOperatorNews = (token: string, campaignId: string, title: string, body: string) =>
   call<{ post: NewsPost }>(`/api/operator/campaigns/${encodeURIComponent(campaignId)}/news`, { method: 'POST', body: { title, body }, token });
+export const postOperatorEpisode = (token: string, input: { title: string; description: string; audioUrl: string; campaignId?: string | null }) =>
+  call<{ episode: PodcastEpisode }>('/api/operator/podcast/episodes', { method: 'POST', body: input, token });
 
 // --- Support and feedback tickets ---
 export const createTicket = (token: string, input: { kind: 'support' | 'feedback'; subject: string; body: string }) =>

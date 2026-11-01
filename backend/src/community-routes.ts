@@ -266,6 +266,34 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }
   });
 
+  // --- Podcast episodes (public reads; admin-key publish, same gate as news) ---
+  // Audio is external https only; the platform never hosts audio files.
+  router.get('/api/podcast/episodes', async (_req, res) => {
+    try {
+      res.json({ episodes: await service.listEpisodes() });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.get('/api/campaigns/:id/podcast', async (req, res) => {
+    try {
+      res.json({
+        episodes: await service.listCampaignEpisodes(requireCampaignId(req.params.id)),
+      });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/podcast/episodes', requireAdmin, async (req, res) => {
+    try {
+      res.status(201).json({
+        episode: await service.addEpisode(req.body, 'admin-key'),
+      });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   // --- Support and feedback tickets ---
   router.post(
     '/api/support/tickets',
@@ -412,6 +440,14 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     operator(async (req, res, account) => {
       res.status(201).json({
         post: await service.addNews(requireCampaignId(req.params.id), req.body, `operator:${account.publicKey}`),
+      });
+    }),
+  );
+  router.post(
+    '/api/operator/podcast/episodes',
+    operator(async (req, res, account) => {
+      res.status(201).json({
+        episode: await service.addEpisode(req.body, `operator:${account.publicKey}`),
       });
     }),
   );
