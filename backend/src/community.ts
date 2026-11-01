@@ -8,6 +8,7 @@ import type {
   IssuerApplication,
   NewsPost,
   PodcastEpisode,
+  AppropriatenessRecord,
   Notification,
   NotificationKind,
   Ticket,
@@ -99,6 +100,40 @@ const episodeInput = z.object({
     .refine((u) => u.startsWith('https://'), { message: 'audioUrl must use https' }),
   campaignId: z.string().trim().regex(LIMITS.campaignId).nullish(),
 });
+
+// ECSPR Art. 21 / RTS 2022/2114 appropriateness flow inputs. Knowledge-test
+// answers are scored and then discarded (only the outcome is stored);
+// simulation transmits ONLY the result (net worth + 10% capacity), never the
+// income/asset/commitment breakdown (RTS Art. 5(5) provider non-access).
+const knowledgeInput = z
+  .object({
+    experienceLevel: z.enum(['none', 'some', 'experienced']),
+    objective: z.enum(['capital_preservation', 'income', 'growth', 'other']),
+    answers: z.array(z.number().int().min(0)).min(1).max(50),
+  })
+  .strict();
+// .strict(): any financial input field (income, assets, commitments
+// breakdown) sent by a client is REJECTED, not silently stripped - the
+// server structurally cannot receive the simulation inputs (RTS Art. 5(5)).
+const simulationResultInput = z
+  .object({
+    netWorthEur: z.number().finite().min(0).max(1_000_000_000),
+    capacityEur: z.number().finite().min(0).max(100_000_000),
+  })
+  .strict();
+
+// Demo knowledge test (synthetic content, marked demo in the UI). Scope
+// follows RTS 2022/2114 Art. 1: risks of investing in general plus risks of
+// crowdfunding services specifically. The server scores; raw answers are
+// never stored.
+export const KNOWLEDGE_QUESTIONS: { id: string; correct: number }[] = [
+  { id: 'lose-all', correct: 0 }, // "Can you lose the entirety of the money invested?" -> yes
+  { id: 'deposit-guarantee', correct: 1 }, // covered by deposit guarantee schemes? -> no
+  { id: 'liquidity', correct: 1 }, // easily resold at any time? -> no
+  { id: 'default-risk', correct: 0 }, // early-stage loans riskier than listed bonds? -> yes
+  { id: 'diversification', correct: 0 }, // spreading investments reduces risk? -> yes
+];
+const KNOWLEDGE_PASS = 4; // of 5; below this ECSPR Art. 21(4) warning path applies
 
 function newId(prefix: string): string {
   return `${prefix}_${randomBytes(12).toString('hex')}`;
@@ -243,6 +278,102 @@ export class CommunityService {
     return Object.values(state.episodes)
       .filter((e) => e.campaignId === campaignId)
       .sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  // --- ECSPR Art. 21 appropriateness test + loss simulation (RTS 2022/2114) ---
+  // Synthetic QA scope: the flow is fully implemented, but it is demo
+  // infrastructure; no live sensitive-data collection and no real-money
+  // gating until activation is separately approved. Every account is treated
+  // as non-sophisticated: quiz success never labels sophistication (that
+  // requires ECSPR Art. 2(1)(j) + Annex II, not implemented).
+
+  async getAppropriateness(account: Account): Promise<AppropriatenessRecord | null> {
+    const state = await this.store.read();
+    return state.appropriateness[account.publicKey] ?? null;
+  }
+
+  // Knowledge test + self-declared experience/objectives (Art. 21(1)-(2)).
+  // Scored server-side; answers are used for scoring and then dropped.
+  async submitKnowledgeAssessment(account: Account, input: unknown): Promise<AppropriatenessRecord> {
+    const { experienceLevel, objective, answers } = knowledgeInput.parse(input ?? {});
+    if (answers.length !== KNOWLEDGE_QUESTIONS.length) throw new CommunityError(400, `expected ${KNOWLEDGE_QUESTIONS.length} answers`);
+    let score = 0;
+    answers.forEach((a, i) => {
+      if (a === KNOWLEDGE_QUESTIONS[i].correct) score += 1;
+    });
+    const outcome: AppropriatenessRecord['outcome'] = score >= KNOWLEDGE_PASS ? 'appropriate' : 'warning_issued';
+    const now = this.now();
+    const record: AppropriatenessRecord = {
+      publicKey: account.publicKey,
+      version: 1,
+      experienceLevel,
+      objective,
+      knowledgeScore: score,
+      knowledgeTotal: KNOWLEDGE_QUESTIONS.length,
+      outcome,
+      // A retake starts a new warning cycle: any prior acknowledgment is
+      // reset so the Art. 21(4) warning must be expressly acknowledged again.
+      warningAcknowledgedAt: null,
+      simulation: null,
+      completedAt: now,
+      reviewAssessmentDueAt: now + 2 * 365 * 24 * 60 * 60 * 1000,
+      reviewSimulationDueAt: null,
+    };
+    await this.store.change((state) => {
+      // Preserve a previously transmitted simulation across a retake; its
+      // yearly review date stands on its own cycle (Art. 21(6)).
+      const prev = state.appropriateness[account.publicKey];
+      if (prev?.simulation) {
+        record.simulation = prev.simulation;
+        record.reviewSimulationDueAt = prev.reviewSimulationDueAt;
+      }
+      state.appropriateness[account.publicKey] = record;
+    });
+    await this.recordAudit(
+      `account:${account.publicKey}`,
+      'appropriateness.assess',
+      account.publicKey,
+      `score=${score}/${KNOWLEDGE_QUESTIONS.length} outcome=${outcome}`,
+    );
+    return record;
+  }
+
+  // Transmitted simulation result (RTS Art. 12). Only the two result
+  // figures arrive here; the input breakdown never leaves the investor's
+  // browser (RTS Art. 5(5): the provider must not access or record the
+  // inputs or interfere with the result - our implementation computes
+  // client-side as the chosen way to meet that rule).
+  async transmitSimulationResult(account: Account, input: unknown): Promise<AppropriatenessRecord> {
+    const { netWorthEur, capacityEur } = simulationResultInput.parse(input ?? {});
+    // Capacity is 10% of net worth (Art. 21(5)); tolerate 1 cent rounding.
+    if (Math.abs(capacityEur - netWorthEur * 0.1) > 0.01)
+      throw new CommunityError(400, 'capacityEur must equal 10% of netWorthEur (rounding to cents tolerated)');
+    const now = this.now();
+    const record = await this.store.change((state) => {
+      const rec = state.appropriateness[account.publicKey];
+      if (!rec) throw new CommunityError(409, 'complete the knowledge assessment before transmitting a simulation result');
+      rec.simulation = { netWorthEur, capacityEur, transmittedAt: now };
+      rec.reviewSimulationDueAt = now + 365 * 24 * 60 * 60 * 1000;
+      return rec;
+    });
+    await this.recordAudit(`account:${account.publicKey}`, 'appropriateness.simulation', account.publicKey, `capacity=${capacityEur}`);
+    return record;
+  }
+
+  // Art. 21(4): the risk warning must be expressly acknowledged. Only
+  // meaningful on the warning path; acknowledging an 'appropriate' outcome
+  // is a no-op error so the UI state machine stays honest.
+  async acknowledgeWarning(account: Account): Promise<AppropriatenessRecord> {
+    const record = await this.store.change((state) => {
+      const rec = state.appropriateness[account.publicKey];
+      if (!rec) throw new CommunityError(409, 'no assessment on record');
+      if (rec.outcome !== 'warning_issued') throw new CommunityError(409, 'no risk warning is pending acknowledgment');
+      if (rec.warningAcknowledgedAt) throw new CommunityError(409, 'risk warning already acknowledged');
+      rec.warningAcknowledgedAt = this.now();
+      return rec;
+    });
+    await this.recordAudit(`account:${account.publicKey}`, 'appropriateness.warning_ack', account.publicKey, 'art21(4) warning acknowledged');
+    return record;
   }
 
   async createTicket(account: Account, input: unknown): Promise<Ticket> {

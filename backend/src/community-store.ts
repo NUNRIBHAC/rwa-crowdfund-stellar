@@ -95,6 +95,41 @@ export type PodcastEpisode = {
   createdAt: number;
 };
 
+// ECSPR Art. 21 entry knowledge test + loss-simulation record (RTS
+// 2022/2114). Data scopes are deliberately distinct: knowledge-test OUTCOME
+// and self-declared experience/objectives are provider assessment evidence;
+// the transmitted simulation RESULT (net worth + 10% capacity) is stored,
+// but the financial INPUTS (income/assets/commitments breakdown) are never
+// sent to or stored by the server - the RTS Art. 5(5) rule is that the
+// provider must not access, record or interfere with the simulation inputs
+// or result computation (our implementation computes client-side, which is
+// our chosen way to meet that rule, not the only possible one). Quiz success
+// never labels an investor sophisticated: classification follows only
+// ECSPR Art. 2(1)(j) + Annex II, which is not implemented, so every account
+// is treated as non-sophisticated.
+export type AppropriatenessRecord = {
+  publicKey: string;
+  version: 1;
+  // Self-declared experience/objectives (ECSPR Art. 21(2), RTS Art. 2).
+  experienceLevel: 'none' | 'some' | 'experienced';
+  objective: 'capital_preservation' | 'income' | 'growth' | 'other';
+  // Knowledge-test outcome; raw answers are not stored (data minimization).
+  knowledgeScore: number;
+  knowledgeTotal: number;
+  // 'appropriate': services may be appropriate. 'warning_issued': Art. 21(4)
+  // path - information missing or knowledge insufficient; the mandated risk
+  // warning was shown and must be expressly acknowledged.
+  outcome: 'appropriate' | 'warning_issued';
+  warningAcknowledgedAt: number | null;
+  // Transmitted simulation result (RTS Art. 12): the only financial figures
+  // the server ever sees. Never the input breakdown.
+  simulation: { netWorthEur: number; capacityEur: number; transmittedAt: number } | null;
+  completedAt: number;
+  // ECSPR Art. 21(3)/(6): assessment review every 2 years, simulation every 1 year.
+  reviewAssessmentDueAt: number;
+  reviewSimulationDueAt: number | null;
+};
+
 export type Ticket = {
   id: string;
   kind: 'support' | 'feedback';
@@ -180,6 +215,7 @@ export type CommunityState = {
   episodes: Record<string, PodcastEpisode>;
   tickets: Record<string, Ticket>;
   applications: Record<string, IssuerApplication>;
+  appropriateness: Record<string, AppropriatenessRecord>;
   companies: Record<string, CompanyApplication>;
   notifications: Record<string, Notification>;
   audit: AuditEntry[];
@@ -197,6 +233,7 @@ export function emptyCommunityState(): CommunityState {
     episodes: {},
     tickets: {},
     applications: {},
+    appropriateness: {},
     companies: {},
     notifications: {},
     audit: [],
@@ -214,6 +251,8 @@ function validate(state: any): CommunityState {
   if (state && state.version === 1 && !state.totpTickets) state.totpTickets = {};
   // Same forward-compatible default for docs written before podcast episodes.
   if (state && state.version === 1 && !state.episodes) state.episodes = {};
+  // Same forward-compatible default for docs written before appropriateness records.
+  if (state && state.version === 1 && !state.appropriateness) state.appropriateness = {};
   if (
     !state ||
     state.version !== 1 ||
@@ -225,6 +264,7 @@ function validate(state: any): CommunityState {
     !state.episodes ||
     !state.tickets ||
     !state.applications ||
+    !state.appropriateness ||
     !state.companies ||
     !state.notifications
   ) {
