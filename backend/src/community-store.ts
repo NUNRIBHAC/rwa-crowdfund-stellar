@@ -19,6 +19,25 @@ export type Account = {
   publicKey: string;
   displayName: string | null;
   createdAt: number;
+  // Optional second factor (accounts.ts + totp.ts). Never serialized to
+  // clients: encSeed is AES-256-GCM ciphertext, recoveryHashes are SHA-256.
+  totp?: TotpEnrollment;
+};
+
+export type TotpEnrollment = {
+  status: 'pending' | 'enabled';
+  encSeed: string; // totp.ts encryptSeed payload; never plaintext
+  lastUsedStep: number; // replay protection: steps <= this are rejected
+  recoveryHashes: string[]; // sha256 hex of each unused recovery code
+  enabledAt: number | null;
+  failedAttempts: number;
+  lockUntil: number | null; // ms epoch; set after repeated failures
+};
+
+export type TotpTicket = {
+  id: string;
+  publicKey: string;
+  expiresAt: number;
 };
 
 export type Challenge = {
@@ -136,6 +155,7 @@ export type CommunityState = {
   version: 1;
   accounts: Record<string, Account>;
   challenges: Record<string, Challenge>;
+  totpTickets: Record<string, TotpTicket>;
   sessions: Record<string, Session>;
   comments: Record<string, Comment>;
   news: Record<string, NewsPost>;
@@ -151,6 +171,7 @@ export function emptyCommunityState(): CommunityState {
     version: 1,
     accounts: {},
     challenges: {},
+    totpTickets: {},
     sessions: {},
     comments: {},
     news: {},
@@ -169,6 +190,8 @@ function validate(state: any): CommunityState {
   // Same forward-compatible default for docs written before the audit log.
   if (state && state.version === 1 && !state.audit) state.audit = [];
   if (state && state.version === 1 && !state.companies) state.companies = {};
+  // Same forward-compatible default for docs written before TOTP tickets.
+  if (state && state.version === 1 && !state.totpTickets) state.totpTickets = {};
   if (
     !state ||
     state.version !== 1 ||
