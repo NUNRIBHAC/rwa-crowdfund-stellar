@@ -215,7 +215,8 @@ test('appropriateness: knowledge test, warning path, simulation result, review c
     (e: any) => e.status === 409,
   );
 
-  // Passing knowledge test (all correct) -> 'appropriate', 2-year review.
+  // Passing knowledge test (all correct) -> 'knowledge_check_passed' (never
+  // an Art. 21(1) determination), review on the calendar 2-year anniversary.
   const allRight = KNOWLEDGE_QUESTIONS.map((q) => q.correct);
   const rec1 = await service.submitKnowledgeAssessment(account, {
     experienceLevel: 'some',
@@ -223,8 +224,12 @@ test('appropriateness: knowledge test, warning path, simulation result, review c
     answers: allRight,
   });
   assert.equal(rec1.knowledgeScore, KNOWLEDGE_QUESTIONS.length);
-  assert.equal(rec1.outcome, 'appropriate');
+  assert.equal(rec1.outcome, 'knowledge_check_passed');
   assert.ok(rec1.reviewAssessmentDueAt > Date.now() + 700 * 24 * 60 * 60 * 1000);
+  // Calendar anniversary, not a fixed 730-day span (leap years must not
+  // shift the review date off the legal anniversary).
+  assert.equal(new Date(rec1.reviewAssessmentDueAt).getFullYear(), new Date(rec1.completedAt).getFullYear() + 2);
+  assert.equal(new Date(rec1.reviewAssessmentDueAt).getMonth(), new Date(rec1.completedAt).getMonth());
   // Acknowledging a warning on the appropriate path is a no-op error.
   await assert.rejects(
     () => service.acknowledgeWarning(account),
@@ -260,6 +265,14 @@ test('appropriateness: knowledge test, warning path, simulation result, review c
     () => service.acknowledgeWarning(account),
     (e: any) => e.status === 409,
   );
+
+  // Legacy records written with outcome 'appropriate' (pre-rename) are
+  // normalized on read: the wire never presents quiz completion as an
+  // appropriateness determination.
+  await store.change((state) => {
+    (state.appropriateness[account.publicKey]!.outcome as string) = 'appropriate';
+  });
+  assert.equal((await service.getAppropriateness(account))!.outcome, 'knowledge_check_passed');
 
   // A retake resets the acknowledgment (new warning cycle).
   const rec5 = await service.submitKnowledgeAssessment(account, {

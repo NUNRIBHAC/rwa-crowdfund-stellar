@@ -1490,9 +1490,8 @@ export const es: Messages = {
     tourStepNewsBody: 'Actualizaciones de la campaña y comentarios públicos. Las noticias de demostración siempre se etiquetan como platform-demo.',
   },
   appropriateness: {
-    title: 'Evaluación de idoneidad del inversor',
-    intro:
-      'Prueba de conocimientos de entrada y simulación de capacidad de asumir pérdidas exigidas por el reglamento europeo de financiación participativa (ECSPR, artículo 21).',
+    title: 'Prueba inicial de conocimientos y simulación de pérdidas',
+    intro: 'Implementación de demostración de partes de la evaluación de idoneidad exigida por el reglamento europeo de crowdfunding (ECSPR, artículo 21).',
     signInNote: 'Inicia sesión con tu monedero para realizar la evaluación.',
     heldNote: 'La evaluación de idoneidad no está recogiendo respuestas en esta instalación.',
     limitedNote: 'En esta instalación, la evaluación está limitada a cuentas de prueba designadas.',
@@ -1509,6 +1508,8 @@ export const es: Messages = {
     scoreLabel: '{score} de {total} correctas',
     outcomeLabel: 'Resultado',
     noSophisticatedNote: 'Este resultado no te clasifica como inversor sofisticado o profesional.',
+    notFullAssessmentNote:
+      'Esta comprobación de conocimientos no es la evaluación de idoneidad exigida por el artículo 21, apartado 1, del ECSPR. La evaluación completa - que abarca las inversiones que conoce, su historial de transacciones, educación y profesión, horizonte de mantenimiento, perfil de riesgo y preferencias de sostenibilidad - no está implementada en este despliegue.',
     reviewExplanations: 'Explicaciones de las preguntas que acabas de responder:',
     warningTitle: 'Advertencia de riesgo',
     warningText: 'Una inversión en un proyecto de financiación participativa incluye el riesgo de perder la totalidad del dinero invertido.',
@@ -1533,8 +1534,8 @@ export const es: Messages = {
     simTransmitted: 'Último resultado transmitido el {date}.',
     simInvalid: 'Introduce cantidades iguales o superiores a cero para ejecutar la simulación.',
     simRecalculate: 'Recalcular',
-    statusTitle: 'Tu evaluación',
-    statusOutcome: 'Resultado de la prueba de conocimientos',
+    statusTitle: 'Sus resultados',
+    statusOutcome: 'Comprobación inicial de conocimientos',
     completedAt: 'Completada el {date}.',
     reviewAssessmentDue: 'Revisión de la evaluación antes del {date}.',
     reviewSimulationDue: 'Revisión de la simulación antes del {date}.',
@@ -1550,7 +1551,7 @@ export const es: Messages = {
       other: 'Otro',
     },
     outcomeLabels: {
-      appropriate: 'Adecuado',
+      knowledge_check_passed: 'Superado',
       warning_issued: 'Advertencia emitida',
     },
     questions: [

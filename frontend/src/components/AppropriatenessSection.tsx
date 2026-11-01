@@ -1,6 +1,8 @@
-// ECSPR Art. 21 appropriateness assessment (RTS 2022/2114): entry knowledge
-// test + loss-bearing capacity simulation, backed by the community server
-// (PR #29). Data scopes stay distinct by design:
+// ECSPR Art. 21 entry knowledge test + loss-bearing capacity simulation
+// (RTS 2022/2114): a partial demo implementation backed by the community
+// server (PR #29). The full Art. 21(1) appropriateness assessment is NOT
+// implemented, and the quiz result is labelled accordingly. Data scopes stay
+// distinct by design:
 //  - the knowledge test sends answers for server-side scoring; only the
 //    outcome is stored;
 //  - the loss simulation computes CLIENT-SIDE and transmits ONLY the two
@@ -8,7 +10,8 @@
 //    inputs never leave the browser: they are held in local state, used for
 //    one calculation, and are never sent, logged or persisted anywhere
 //    (RTS Art. 5(5) provider non-access/non-recording);
-//  - a passed quiz never labels the investor sophisticated or professional.
+//  - a passed quiz never labels the investor sophisticated or professional,
+//    nor counts as the Art. 21(1) appropriateness assessment.
 // The mandated risk warning (RTS Art. 4(2), verbatim English sentence plus a
 // localized rendering) stays visible until acknowledged and never encourages
 // proceeding. Collection is fail-closed server-side: deployments without
@@ -68,7 +71,7 @@ export default function AppropriatenessSection() {
     setError('');
     fetchAppropriateness(token)
       .then((v) => {
-        setAssessment(v.assessment);
+        setAssessment(v.record);
         setState('ready');
       })
       .catch((e) => {
@@ -103,7 +106,7 @@ export default function AppropriatenessSection() {
       answers: t.questions.map((_, i) => answers[i] ?? -1),
     })
       .then((v) => {
-        setAssessment(v.assessment);
+        setAssessment(v.record);
         setRetaking(false);
         setJustSubmitted(true);
       })
@@ -115,7 +118,7 @@ export default function AppropriatenessSection() {
     setBusy(true);
     setError('');
     acknowledgeWarning(token)
-      .then((v) => setAssessment(v.assessment))
+      .then((v) => setAssessment(v.record))
       .catch(fail)
       .finally(() => setBusy(false));
   };
@@ -141,7 +144,7 @@ export default function AppropriatenessSection() {
     setError('');
     transmitSimulationResult(token, { netWorthEur: sim.netWorth, capacityEur: sim.capacity })
       .then((v) => {
-        setAssessment(v.assessment);
+        setAssessment(v.record);
         setSimEditing(false);
       })
       .catch(fail)
@@ -150,7 +153,7 @@ export default function AppropriatenessSection() {
 
   const showForm = state === 'ready' && (!assessment || retaking);
   const warningPending = !!assessment && assessment.outcome === 'warning_issued' && !assessment.warningAcknowledgedAt;
-  const simEligible = !!assessment && (assessment.outcome === 'appropriate' || !!assessment.warningAcknowledgedAt);
+  const simEligible = !!assessment && (assessment.outcome === 'knowledge_check_passed' || !!assessment.warningAcknowledgedAt);
   const allAnswered = t.questions.every((_, i) => answers[i] !== undefined);
 
   return (
@@ -235,6 +238,7 @@ export default function AppropriatenessSection() {
             <p className="community-note">{tpl(t.warningAcknowledgedAt, { date: fmtDate(assessment.warningAcknowledgedAt) })}</p>
           )}
           <p className="community-note">{t.noSophisticatedNote}</p>
+          <p className="community-note">{t.notFullAssessmentNote}</p>
           {justSubmitted && (
             <div>
               <p className="community-note">{t.reviewExplanations}</p>

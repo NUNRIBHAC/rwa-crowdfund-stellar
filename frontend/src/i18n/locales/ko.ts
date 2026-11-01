@@ -1412,8 +1412,8 @@ export const ko: Messages = {
     tourStepNewsBody: '캠페인 업데이트와 공개 댓글. 데모 소식에는 항상 platform-demo 라벨이 붙습니다.',
   },
   appropriateness: {
-    title: '투자자 적합성 평가',
-    intro: '유럽 크라우드펀딩 규정(ECSPR 제21조)에 따른 입문 지식 테스트와 손실 감내 능력 시뮬레이션입니다.',
+    title: '입문 지식 테스트 및 손실 시뮬레이션',
+    intro: '유럽 크라우드펀딩 규정(ECSPR 제21조)이 요구하는 적합성 평가의 일부를 데모로 구현한 것입니다.',
     signInNote: '지갑으로 로그인하여 평가를 진행하세요.',
     heldNote: '이 배포에서는 적합성 평가 응답을 수집하지 않습니다.',
     limitedNote: '이 배포에서는 평가가 지정된 테스트 계정으로 제한됩니다.',
@@ -1429,6 +1429,8 @@ export const ko: Messages = {
     scoreLabel: '{total}문항 중 {score}문항 정답',
     outcomeLabel: '결과',
     noSophisticatedNote: '이 결과는 귀하를 숙련된 또는 전문 투자자로 분류하지 않습니다.',
+    notFullAssessmentNote:
+      '이 지식 확인은 ECSPR 제21조 제1항이 요구하는 적합성 평가가 아닙니다. 알고 있는 투자, 거래 이력, 학력 및 직업, 보유 기간, 위험 프로필, 지속가능성 선호도를 포함한 전체 평가는 이 배포에 구현되어 있지 않습니다.',
     reviewExplanations: '방금 답변한 질문에 대한 해설:',
     warningTitle: '위험 경고',
     warningText: '크라우드펀딩 프로젝트에 대한 투자에는 투자한 전액을 잃을 위험이 포함됩니다.',
@@ -1452,8 +1454,8 @@ export const ko: Messages = {
     simTransmitted: '마지막 결과 전송일: {date}.',
     simInvalid: '시뮬레이션을 실행하려면 0 이상의 금액을 입력하세요.',
     simRecalculate: '다시 계산',
-    statusTitle: '내 평가',
-    statusOutcome: '지식 테스트 결과',
+    statusTitle: '결과',
+    statusOutcome: '입문 지식 확인',
     completedAt: '{date}에 완료.',
     reviewAssessmentDue: '평가 검토 기한: {date}.',
     reviewSimulationDue: '시뮬레이션 검토 기한: {date}.',
@@ -1469,7 +1471,7 @@ export const ko: Messages = {
       other: '기타',
     },
     outcomeLabels: {
-      appropriate: '적합',
+      knowledge_check_passed: '통과',
       warning_issued: '경고 발행됨',
     },
     questions: [

@@ -1438,8 +1438,8 @@ export const en = {
     tourStepNewsBody: 'Campaign updates and public comments. Demo news is always labeled platform-demo.',
   },
   appropriateness: {
-    title: 'Investor appropriateness assessment',
-    intro: 'Entry knowledge test and loss-bearing capacity simulation required by the European crowdfunding regulation (ECSPR Article 21).',
+    title: 'Entry knowledge test and loss simulation',
+    intro: 'Demo implementation of parts of the appropriateness assessment required by the European crowdfunding regulation (ECSPR Article 21).',
     signInNote: 'Sign in with your wallet to take the assessment.',
     heldNote: 'The appropriateness assessment is not collecting responses on this deployment.',
     limitedNote: 'On this deployment the assessment is limited to designated test accounts.',
@@ -1456,6 +1456,8 @@ export const en = {
     scoreLabel: '{score} of {total} correct',
     outcomeLabel: 'Result',
     noSophisticatedNote: 'This result does not classify you as a sophisticated or professional investor.',
+    notFullAssessmentNote:
+      'This knowledge check is not the appropriateness assessment required by ECSPR Article 21(1). The full assessment - covering the investments you know, your transaction history, education and profession, holding period, risk profile and sustainability preferences - is not implemented on this deployment.',
     reviewExplanations: 'Explanations for the questions you just answered:',
     warningTitle: 'Risk warning',
     warningText: 'An investment in a crowdfunding project includes the risk of losing the entirety of the money invested.',
@@ -1480,8 +1482,8 @@ export const en = {
     simTransmitted: 'Last result transmitted on {date}.',
     simInvalid: 'Enter amounts of zero or more to run the simulation.',
     simRecalculate: 'Recalculate',
-    statusTitle: 'Your assessment',
-    statusOutcome: 'Knowledge test result',
+    statusTitle: 'Your results',
+    statusOutcome: 'Entry knowledge check',
     completedAt: 'Completed on {date}.',
     reviewAssessmentDue: 'Assessment review due by {date}.',
     reviewSimulationDue: 'Simulation review due by {date}.',
@@ -1497,7 +1499,7 @@ export const en = {
       other: 'Other',
     },
     outcomeLabels: {
-      appropriate: 'Appropriate',
+      knowledge_check_passed: 'Passed',
       warning_issued: 'Warning issued',
     },
     questions: [
