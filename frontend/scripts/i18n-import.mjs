@@ -13,6 +13,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
+import { blocksToJson, jsonToBlocks, validateLegalAgainstBase } from './i18n-legal-codec.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const LOCALES = ['en', 'pt', 'es', 'fr', 'de', 'zh-TW', 'zh-CN', 'ja', 'ko', 'ar', 'hi'];
@@ -151,14 +152,29 @@ for (const locale of LOCALES) {
       const uiBase = JSON.parse(readFileSync(join(ROOT, 'i18n-json/ui/en.json'), 'utf8'));
       validateAgainstBase(uiBase, uiJson, `ui.${locale}`, diffs);
       const legalBase = JSON.parse(readFileSync(join(ROOT, 'i18n-json/legal/en.json'), 'utf8'));
-      validateAgainstBase(legalBase, legalJson, `legal.${locale}`, diffs);
+      validateLegalAgainstBase(legalBase, legalJson, `legal.${locale}`, diffs);
     }
     for (const doc of LEGAL_DOCS) {
       if (!(doc in legalJson)) {
         diffs.push(`legal.${locale}.${doc}: missing from JSON`);
         continue;
       }
-      deepEqual(await loadTsModule(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`)), legalJson[doc], `legal.${locale}.${doc}`, diffs);
+      let projected;
+      try {
+        projected = blocksToJson(await loadTsModule(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`)), `legal.${locale}.${doc}`);
+      } catch (e) {
+        diffs.push(`legal.${locale}.${doc}: TS projection failed: ${e.message}`);
+        continue;
+      }
+      deepEqual(projected, legalJson[doc], `legal.${locale}.${doc}`, diffs);
+    }
+    for (const doc of LEGAL_DOCS) {
+      if (!(doc in legalJson)) continue;
+      try {
+        jsonToBlocks(legalJson[doc], `legal.${locale}.${doc}`);
+      } catch (e) {
+        diffs.push(`legal.${locale}.${doc}: JSON does not decode: ${e.message}`);
+      }
     }
     const extra = Object.keys(legalJson).filter((d) => !LEGAL_DOCS.includes(d));
     for (const d of extra) diffs.push(`legal.${locale}.${d}: unknown doc in JSON`);
@@ -170,7 +186,7 @@ for (const locale of LOCALES) {
   written.push(`locales/${locale}.ts`);
   for (const doc of LEGAL_DOCS) {
     if (!(doc in legalJson)) throw new Error(`legal.${locale}.${doc}: missing from JSON`);
-    writeFileSync(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`), renderLegal(legalJson[doc]));
+    writeFileSync(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`), renderLegal(jsonToBlocks(legalJson[doc], `legal.${locale}.${doc}`)));
   }
   written.push(`legal/*.${locale}.ts`);
 }

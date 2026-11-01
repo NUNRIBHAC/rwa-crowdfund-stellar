@@ -1,7 +1,11 @@
 // Export the i18n sources to Weblate-consumable nested monolingual JSON.
 //
 //   frontend/i18n-json/ui/<locale>.json    - the full UI message tree
-//   frontend/i18n-json/legal/<locale>.json - the 7 legal documents, nested by doc id
+//   frontend/i18n-json/legal/<locale>.json - the 7 legal documents, nested by doc id,
+//     blocks encoded via scripts/i18n-legal-codec.mjs: one string unit per
+//     translatable sentence (inline <b>/<i> markup and {v:name} constants
+//     preserved in the text), block structure carried in the key path only -
+//     no type discriminators or split fragments as translator units.
 //
 // 11 locales: en pt es fr de zh-TW zh-CN ja ko ar hi. English is the base.
 // The dictionaries are plain data (placeholders as {var} substrings, plurals
@@ -12,6 +16,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { format, resolveConfig } from 'prettier';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { blocksToJson } from './i18n-legal-codec.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'i18n-json');
@@ -80,7 +85,7 @@ for (const locale of LOCALES) {
 
   const legal = {};
   for (const doc of LEGAL_DOCS) {
-    legal[doc] = await loadTsModule(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`));
+    legal[doc] = blocksToJson(await loadTsModule(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`)), `legal.${locale}.${doc}`);
   }
   assertJsonSafe(legal, `legal.${locale}`);
   await emit(join('legal', `${locale}.json`), render(legal));

@@ -1,1183 +1,503 @@
 {
-  "termsOfService": [
-    {
-      "t": "notice",
-      "text": [
-        "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
-      ]
+  "termsOfService": {
+    "b00": {
+      "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Última actualización:"]
-        },
-        " ",
-        {
-          "v": "lastUpdated"
-        }
-      ]
+    "b01": {
+      "p": "<b>Última actualización:</b> {v:lastUpdated}"
     },
-    {
-      "t": "p",
-      "text": [
-        "Estos Términos de Servicio (los \"Términos\") rigen el uso del sitio web y la aplicación de demostración de Blockallisto (el \"Servicio\"), un proyecto prototipo operado por Blockallisto (\"nosotros\"). Los datos societarios mostrados para Blockallisto en estos Términos son datos ficticios de demostración: forma jurídica \"Lda.\" [DEMO], domicilio social \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], número de registro \"000 000 000\" [DEMO]. La denominación social, la forma, el domicilio y el estatus registral de Blockallisto no han sido verificados, y no se afirma ningún registro. Contacto: ",
-        {
-          "v": "contactEmail"
-        },
-        "."
-      ]
+    "b02": {
+      "p": "Estos Términos de Servicio (los \"Términos\") rigen el uso del sitio web y la aplicación de demostración de Blockallisto (el \"Servicio\"), un proyecto prototipo operado por Blockallisto (\"nosotros\"). Los datos societarios mostrados para Blockallisto en estos Términos son datos ficticios de demostración: forma jurídica \"Lda.\" [DEMO], domicilio social \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], número de registro \"000 000 000\" [DEMO]. La denominación social, la forma, el domicilio y el estatus registral de Blockallisto no han sido verificados, y no se afirma ningún registro. Contacto: {v:contactEmail}."
     },
-    {
-      "t": "p",
-      "text": ["Al utilizar el Servicio, acepta estos Términos. Si no está de acuerdo, no utilice el Servicio."]
+    "b03": {
+      "p": "Al utilizar el Servicio, acepta estos Términos. Si no está de acuerdo, no utilice el Servicio."
     },
-    {
-      "t": "h2",
-      "text": ["1. Qué es Blockallisto hoy"]
+    "b04": {
+      "h2": "1. Qué es Blockallisto hoy"
     },
-    {
-      "t": "p",
-      "text": [
-        "Blockallisto es una ",
-        {
-          "b": ["demostración de prototipo"]
-        },
-        " de un concepto de crowdfunding de activos del mundo real tokenizados, que funciona íntegramente en la ",
-        {
-          "b": ["red de pruebas de Stellar (testnet)"]
-        },
-        "."
-      ]
+    "b05": {
+      "p": "Blockallisto es una <b>demostración de prototipo</b> de un concepto de crowdfunding de activos del mundo real tokenizados, que funciona íntegramente en la <b>red de pruebas de Stellar (testnet)</b>."
     },
-    {
-      "t": "p",
-      "text": ["Esto significa, en claro:"]
+    "b06": {
+      "p": "Esto significa, en claro:"
     },
-    {
-      "t": "ul",
-      "items": [
-        [
-          "El Servicio ",
-          {
-            "b": ["no"]
-          },
-          " es una plataforma de crowdfunding en el sentido jurídico. Nosotros ",
-          {
-            "b": ["no"]
-          },
-          " somos un prestador de servicios de crowdfunding autorizado en virtud del Reglamento (UE) 2020/1503 (ECSPR) ni de ningún otro régimen, y no hacemos ",
-          {
-            "b": ["ninguna oferta real"]
-          },
-          " de inversión."
-        ],
-        [
-          "Nada en el Servicio constituye una oferta, una solicitud, una recomendación ni asesoramiento de inversión, jurídico, fiscal o financiero, en ninguna jurisdicción."
-        ],
-        [
-          "No interviene dinero real. Las contribuciones en la demostración usan ",
-          {
-            "b": ["tokens de la testnet de Stellar (USDC de prueba) que no tienen valor monetario"]
-          },
-          " y no pueden canjearse por fondos reales."
-        ],
-        [
-          "Las campañas de ejemplo son ilustraciones ficticias. Las identidades de los emisores, las valoraciones, las cifras y los resultados mostrados en la demostración son ",
-          {
-            "b": ["datos ficticios"]
-          },
-          ", no oportunidades reales."
-        ]
-      ]
+    "b07": {
+      "ul": {
+        "i00": "El Servicio <b>no</b> es una plataforma de crowdfunding en el sentido jurídico. Nosotros <b>no</b> somos un prestador de servicios de crowdfunding autorizado en virtud del Reglamento (UE) 2020/1503 (ECSPR) ni de ningún otro régimen, y no hacemos <b>ninguna oferta real</b> de inversión.",
+        "i01": "Nada en el Servicio constituye una oferta, una solicitud, una recomendación ni asesoramiento de inversión, jurídico, fiscal o financiero, en ninguna jurisdicción.",
+        "i02": "No interviene dinero real. Las contribuciones en la demostración usan <b>tokens de la testnet de Stellar (USDC de prueba) que no tienen valor monetario</b> y no pueden canjearse por fondos reales.",
+        "i03": "Las campañas de ejemplo son ilustraciones ficticias. Las identidades de los emisores, las valoraciones, las cifras y los resultados mostrados en la demostración son <b>datos ficticios</b>, no oportunidades reales."
+      }
     },
-    {
-      "t": "h2",
-      "text": ["2. Qué le permite hacer el Servicio"]
+    "b08": {
+      "h2": "2. Qué le permite hacer el Servicio"
     },
-    {
-      "t": "ul",
-      "items": [
-        ["Explorar y filtrar campañas de inversión de ejemplo y leer sus condiciones estructuradas."],
-        ["Usar el centro de aprendizaje, el glosario y las preguntas frecuentes para entender los instrumentos de inversión."],
-        [
-          "Conectar una cartera ",
-          {
-            "b": ["Freighter"]
-          },
-          " (una extensión del navegador) y hacer ",
-          {
-            "b": ["contribuciones de prueba"]
-          },
-          " a la campaña de demostración en la testnet de Stellar."
-        ]
-      ]
+    "b09": {
+      "ul": {
+        "i00": "Explorar y filtrar campañas de inversión de ejemplo y leer sus condiciones estructuradas.",
+        "i01": "Usar el centro de aprendizaje, el glosario y las preguntas frecuentes para entender los instrumentos de inversión.",
+        "i02": "Conectar una cartera <b>Freighter</b> (una extensión del navegador) y hacer <b>contribuciones de prueba</b> a la campaña de demostración en la testnet de Stellar."
+      }
     },
-    {
-      "t": "p",
-      "text": [
-        "Las contribuciones de prueba son gestionadas por un contrato inteligente de Soroban con el siguiente comportamiento: financiación de todo o nada, pago a la campaña solo tras su fecha límite, contribuciones limitadas al objetivo de la campaña y saldos registrados en el contrato. No se emite ningún token transferible."
-      ]
+    "b10": {
+      "p": "Las contribuciones de prueba son gestionadas por un contrato inteligente de Soroban con el siguiente comportamiento: financiación de todo o nada, pago a la campaña solo tras su fecha límite, contribuciones limitadas al objetivo de la campaña y saldos registrados en el contrato. No se emite ningún token transferible."
     },
-    {
-      "t": "h2",
-      "text": ["3. Funciones previstas (aún no activas)"]
+    "b11": {
+      "h2": "3. Funciones previstas (aún no activas)"
     },
-    {
-      "t": "p",
-      "text": [
-        "Blockallisto se está diseñando tomando como referencia las superficies de cumplimiento de plataformas de crowdfunding europeas consolidadas. Las versiones futuras ",
-        {
-          "b": ["podrían"]
-        },
-        " incluir: cuentas de usuario completas con registro por correo electrónico (más allá del acceso comunitario opcional); verificación de identidad (KYC/AML), incluidas comprobaciones de titular real y de origen de los fondos para inversores empresariales; categorización de inversores con una prueba inicial de conocimientos y una simulación de la capacidad de soportar pérdidas; un período de reflexión precontractual para inversores no sofisticados; fichas de información fundamental sobre la inversión por campaña; pagos procesados por prestadores de servicios de pago autorizados (nunca por nosotros reteniendo fondos de clientes); gestión de reclamaciones y políticas de conflictos de interés; y restricciones de venta por jurisdicción."
-      ]
+    "b12": {
+      "p": "Blockallisto se está diseñando tomando como referencia las superficies de cumplimiento de plataformas de crowdfunding europeas consolidadas. Las versiones futuras <b>podrían</b> incluir: cuentas de usuario completas con registro por correo electrónico (más allá del acceso comunitario opcional); verificación de identidad (KYC/AML), incluidas comprobaciones de titular real y de origen de los fondos para inversores empresariales; categorización de inversores con una prueba inicial de conocimientos y una simulación de la capacidad de soportar pérdidas; un período de reflexión precontractual para inversores no sofisticados; fichas de información fundamental sobre la inversión por campaña; pagos procesados por prestadores de servicios de pago autorizados (nunca por nosotros reteniendo fondos de clientes); gestión de reclamaciones y políticas de conflictos de interés; y restricciones de venta por jurisdicción."
     },
-    {
-      "t": "p",
-      "text": [
-        "Nada de esto existe hoy. La lista anterior es una orientación de diseño indicativa extraída de nuestro corpus de investigación, no una especificación: los detalles, los umbrales y funciones enteras pueden cambiar con el trabajo de diseño y el asesoramiento jurídico. Estas funciones solo se lanzarán con términos actualizados y revisados jurídicamente, y solo con las autorizaciones regulatorias que requieran. Nada en esta sección constituye un compromiso de fecha de lanzamiento ni de licencia."
-      ]
+    "b13": {
+      "p": "Nada de esto existe hoy. La lista anterior es una orientación de diseño indicativa extraída de nuestro corpus de investigación, no una especificación: los detalles, los umbrales y funciones enteras pueden cambiar con el trabajo de diseño y el asesoramiento jurídico. Estas funciones solo se lanzarán con términos actualizados y revisados jurídicamente, y solo con las autorizaciones regulatorias que requieran. Nada en esta sección constituye un compromiso de fecha de lanzamiento ni de licencia."
     },
-    {
-      "t": "h2",
-      "text": ["4. Elegibilidad y uso aceptable"]
+    "b14": {
+      "h2": "4. Elegibilidad y uso aceptable"
     },
-    {
-      "t": "p",
-      "text": [
-        "El Servicio está destinado a adultos (18+). No está dirigido a ninguna persona en una jurisdicción donde la visualización de contenido de inversión en crowdfunding de este tipo esté restringida, y no debe presentarse a personas estadounidenses como una oportunidad de inversión."
-      ]
+    "b15": {
+      "p": "El Servicio está destinado a adultos (18+). No está dirigido a ninguna persona en una jurisdicción donde la visualización de contenido de inversión en crowdfunding de este tipo esté restringida, y no debe presentarse a personas estadounidenses como una oportunidad de inversión."
     },
-    {
-      "t": "p",
-      "text": [
-        "Usted se compromete a no: atacar, sondear o interrumpir el Servicio o su infraestructura; abusar, extraer datos a ritmos abusivos o interferir con otros usuarios; tergiversar la demostración como un servicio de inversión real; ni usar el Servicio para nada ilícito."
-      ]
+    "b16": {
+      "p": "Usted se compromete a no: atacar, sondear o interrumpir el Servicio o su infraestructura; abusar, extraer datos a ritmos abusivos o interferir con otros usuarios; tergiversar la demostración como un servicio de inversión real; ni usar el Servicio para nada ilícito."
     },
-    {
-      "t": "h2",
-      "text": ["5. Su cartera y sus claves"]
+    "b17": {
+      "h2": "5. Su cartera y sus claves"
     },
-    {
-      "t": "ul",
-      "items": [
-        [
-          "Su cartera es ",
-          {
-            "b": ["no custodiada"]
-          },
-          ": su clave secreta y su frase de recuperación permanecen dentro de su propia extensión Freighter. Nunca las vemos, almacenamos ni pedimos."
-        ],
-        [
-          {
-            "b": ["Nunca"]
-          },
-          " introduzca su clave secreta ni su frase de recuperación en ningún sitio web, incluido este. Cualquiera que se la pida está intentando robarle."
-        ],
-        [
-          "Cada transacción está firmada por usted en su cartera. Las transacciones en la testnet de Stellar se registran públicamente y pueden consultarse en exploradores públicos de la testnet."
-        ]
-      ]
+    "b18": {
+      "ul": {
+        "i00": "Su cartera es <b>no custodiada</b>: su clave secreta y su frase de recuperación permanecen dentro de su propia extensión Freighter. Nunca las vemos, almacenamos ni pedimos.",
+        "i01": "<b>Nunca</b> introduzca su clave secreta ni su frase de recuperación en ningún sitio web, incluido este. Cualquiera que se la pida está intentando robarle.",
+        "i02": "Cada transacción está firmada por usted en su cartera. Las transacciones en la testnet de Stellar se registran públicamente y pueden consultarse en exploradores públicos de la testnet."
+      }
     },
-    {
-      "t": "h2",
-      "text": ["6. Propiedad intelectual"]
+    "b19": {
+      "h2": "6. Propiedad intelectual"
     },
-    {
-      "t": "p",
-      "text": [
-        "El Servicio, su contenido y su código son Copyright (c) 2026 Nuno Ribeiro, todos los derechos reservados. No se concede ninguna licencia de código abierto ni patente. Puede ver y usar la demostración para evaluarla; no puede copiarla, republicarla ni revenderla."
-      ]
+    "b20": {
+      "p": "El Servicio, su contenido y su código son Copyright (c) 2026 Nuno Ribeiro, todos los derechos reservados. No se concede ninguna licencia de código abierto ni patente. Puede ver y usar la demostración para evaluarla; no puede copiarla, republicarla ni revenderla."
     },
-    {
-      "t": "h2",
-      "text": ["7. Disponibilidad y cambios"]
+    "b21": {
+      "h2": "7. Disponibilidad y cambios"
     },
-    {
-      "t": "p",
-      "text": [
-        "El Servicio funciona en alojamiento de nivel gratuito y puede tardar en arrancar, no estar disponible, cambiar o retirarse en cualquier momento sin previo aviso. Las funciones etiquetadas como \"no construidas\" (cuentas, KYC, pagos fiduciarios, panel del inversor) aún no existen."
-      ]
+    "b22": {
+      "p": "El Servicio funciona en alojamiento de nivel gratuito y puede tardar en arrancar, no estar disponible, cambiar o retirarse en cualquier momento sin previo aviso. Las funciones etiquetadas como \"no construidas\" (cuentas, KYC, pagos fiduciarios, panel del inversor) aún no existen."
     },
-    {
-      "t": "h2",
-      "text": ["8. Exenciones de responsabilidad y limitación de responsabilidad"]
+    "b23": {
+      "h2": "8. Exenciones de responsabilidad y limitación de responsabilidad"
     },
-    {
-      "t": "p",
-      "text": [
-        "El Servicio se proporciona ",
-        {
-          "b": ["\"tal cual\" y \"según disponibilidad\""]
-        },
-        ", sin garantías de ningún tipo, expresas o implícitas, incluidas la exactitud, la idoneidad para un fin particular o la no infracción. En la medida máxima permitida por la ley, no somos responsables de daños indirectos, incidentales o consecuentes, ni de ninguna pérdida derivada del uso que haga del Servicio, de su cartera o de la red Stellar. Nada en estos Términos excluye la responsabilidad que no pueda excluirse por ley."
-      ]
+    "b24": {
+      "p": "El Servicio se proporciona <b>\"tal cual\" y \"según disponibilidad\"</b>, sin garantías de ningún tipo, expresas o implícitas, incluidas la exactitud, la idoneidad para un fin particular o la no infracción. En la medida máxima permitida por la ley, no somos responsables de daños indirectos, incidentales o consecuentes, ni de ninguna pérdida derivada del uso que haga del Servicio, de su cartera o de la red Stellar. Nada en estos Términos excluye la responsabilidad que no pueda excluirse por ley."
     },
-    {
-      "t": "h2",
-      "text": ["9. Ley aplicable"]
+    "b25": {
+      "h2": "9. Ley aplicable"
     },
-    {
-      "t": "p",
-      "text": [
-        "Estos Términos se rigen por las leyes de ",
-        {
-          "b": ["Portugal"]
-        },
-        " y el derecho de la Unión Europea aplicable, sin perjuicio de las normas imperativas de protección del consumidor de su país de residencia."
-      ]
+    "b26": {
+      "p": "Estos Términos se rigen por las leyes de <b>Portugal</b> y el derecho de la Unión Europea aplicable, sin perjuicio de las normas imperativas de protección del consumidor de su país de residencia."
     },
-    {
-      "t": "h2",
-      "text": ["10. Cambios en estos Términos"]
+    "b27": {
+      "h2": "10. Cambios en estos Términos"
     },
-    {
-      "t": "p",
-      "text": [
-        "Podemos actualizar estos Términos en cualquier momento. La fecha de \"Última actualización\" muestra la versión vigente. El uso continuado tras un cambio significa que acepta los nuevos Términos."
-      ]
+    "b28": {
+      "p": "Podemos actualizar estos Términos en cualquier momento. La fecha de \"Última actualización\" muestra la versión vigente. El uso continuado tras un cambio significa que acepta los nuevos Términos."
     },
-    {
-      "t": "h2",
-      "text": ["11. Contacto"]
+    "b29": {
+      "h2": "11. Contacto"
     },
-    {
-      "t": "p",
-      "text": [
-        "Preguntas sobre estos Términos: ",
-        {
-          "v": "contactEmail"
-        },
-        "."
-      ]
+    "b30": {
+      "p": "Preguntas sobre estos Términos: {v:contactEmail}."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Divulgaciones del operador no resueltas:"]
-        },
-        " los datos del operador marcados como DEMO en estos Términos son ilustrativos y no satisfacen ninguna obligación imperativa de identificación del operador (como un aviso legal bajo las normas portuguesas o europeas de comercio electrónico, medios o consumo). No se ha determinado si tal obligación se aplica a este servicio prototipo; cualquier divulgación exigida se añadirá aquí o en una página enlazada antes de cualquier lanzamiento real."
-      ]
+    "b31": {
+      "p": "<b>Divulgaciones del operador no resueltas:</b> los datos del operador marcados como DEMO en estos Términos son ilustrativos y no satisfacen ninguna obligación imperativa de identificación del operador (como un aviso legal bajo las normas portuguesas o europeas de comercio electrónico, medios o consumo). No se ha determinado si tal obligación se aplica a este servicio prototipo; cualquier divulgación exigida se añadirá aquí o en una página enlazada antes de cualquier lanzamiento real."
     }
-  ],
-  "privacyPolicy": [
-    {
-      "t": "notice",
-      "text": [
-        "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
-      ]
+  },
+  "privacyPolicy": {
+    "b00": {
+      "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Última actualización:"]
-        },
-        " ",
-        {
-          "v": "lastUpdated"
-        }
-      ]
+    "b01": {
+      "p": "<b>Última actualización:</b> {v:lastUpdated}"
     },
-    {
-      "t": "p",
-      "text": [
-        "Esta Política de Privacidad explica qué datos personales trata el prototipo de Blockallisto (el \"Servicio\"), por qué, y qué derechos tiene usted. El Servicio es un proyecto prototipo operado bajo el nombre Blockallisto. Los datos societarios mostrados para Blockallisto en estos documentos son datos ficticios de demostración (forma jurídica [DEMO] \"Lda.\", domicilio social [DEMO] \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\", número de registro [DEMO] \"000 000 000\"); la identidad jurídica registrada tras el nombre Blockallisto no ha sido verificada, y nombrar el proyecto no identifica por sí mismo al responsable del tratamiento. [El responsable del tratamiento - la persona o entidad efectivamente responsable de este tratamiento - se confirmará antes de la publicación.] Las solicitudes de privacidad se atienden en ",
-        {
-          "v": "contactEmail"
-        },
-        "."
-      ]
+    "b02": {
+      "p": "Esta Política de Privacidad explica qué datos personales trata el prototipo de Blockallisto (el \"Servicio\"), por qué, y qué derechos tiene usted. El Servicio es un proyecto prototipo operado bajo el nombre Blockallisto. Los datos societarios mostrados para Blockallisto en estos documentos son datos ficticios de demostración (forma jurídica [DEMO] \"Lda.\", domicilio social [DEMO] \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\", número de registro [DEMO] \"000 000 000\"); la identidad jurídica registrada tras el nombre Blockallisto no ha sido verificada, y nombrar el proyecto no identifica por sí mismo al responsable del tratamiento. [El responsable del tratamiento - la persona o entidad efectivamente responsable de este tratamiento - se confirmará antes de la publicación.] Las solicitudes de privacidad se atienden en {v:contactEmail}."
     },
-    {
-      "t": "h2",
-      "text": ["1. Alcance: lo que la demostración no recopila"]
+    "b03": {
+      "h2": "1. Alcance: lo que la demostración no recopila"
     },
-    {
-      "t": "p",
-      "text": [
-        "El prototipo actual no tiene ",
-        {
-          "b": ["ni KYC, ni boletines ni pagos"]
-        },
-        ". El acceso a la comunidad se basa en la cartera: usa una firma de cartera de Stellar, no una contraseña ni un correo electrónico. No pedimos su nombre completo, número de teléfono, documentos de identidad ni tarjeta de pago. Las funciones de la comunidad sí recopilan los datos descritos en la sección 2b: una clave pública, un nombre visible opcional, contenido de texto libre que usted decida enviar y un correo electrónico de contacto opcional en las solicitudes de emisores. No usamos analítica ni rastreadores publicitarios, y las fuentes y recursos del sitio están autoalojados."
-      ]
+    "b04": {
+      "p": "El prototipo actual no tiene <b>ni KYC, ni boletines ni pagos</b>. El acceso a la comunidad se basa en la cartera: usa una firma de cartera de Stellar, no una contraseña ni un correo electrónico. No pedimos su nombre completo, número de teléfono, documentos de identidad ni tarjeta de pago. Las funciones de la comunidad sí recopilan los datos descritos en la sección 2b: una clave pública, un nombre visible opcional, contenido de texto libre que usted decida enviar y un correo electrónico de contacto opcional en las solicitudes de emisores. No usamos analítica ni rastreadores publicitarios, y las fuentes y recursos del sitio están autoalojados."
     },
-    {
-      "t": "h2",
-      "text": ["2. Datos que tratamos"]
+    "b05": {
+      "h2": "2. Datos que tratamos"
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["a) Datos de cartera y de contribuciones."]
-        },
-        " Si conecta una cartera Freighter y hace una contribución de prueba, el backend registra, en una base de datos Postgres (alojada por Neon), un diario de seguridad que contiene: su ",
-        {
-          "b": ["clave pública"]
-        },
-        " de Stellar (nunca su clave secreta), el identificador de la campaña, la acción, el importe de la contribución, los sobres de transacción, el hash y el estado de la transacción, y marcas de tiempo. Una clave pública de Stellar es un dato seudónimo; no la vinculamos a su identidad."
-      ]
+    "b06": {
+      "p": "<b>a) Datos de cartera y de contribuciones.</b> Si conecta una cartera Freighter y hace una contribución de prueba, el backend registra, en una base de datos Postgres (alojada por Neon), un diario de seguridad que contiene: su <b>clave pública</b> de Stellar (nunca su clave secreta), el identificador de la campaña, la acción, el importe de la contribución, los sobres de transacción, el hash y el estado de la transacción, y marcas de tiempo. Una clave pública de Stellar es un dato seudónimo; no la vinculamos a su identidad."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "i": ["Conservación:"]
-        },
-        " las transacciones preparadas no firmadas caducan a las 24 horas; las transacciones completadas o fallidas se eliminan a los 30 días; una transacción firmada cuyo resultado no esté resuelto se conserva hasta que se resuelva, porque eliminarla podría hacer perder el rastro de una transacción difundida. Los sobres firmados se depuran una vez que la transacción alcanza un estado final. Estas son las reglas de limpieza configuradas en el propio código de la aplicación: describen lo que la aplicación elimina. Los registros de servidor y las copias de seguridad propios de nuestros proveedores de alojamiento pueden conservar datos durante períodos distintos según sus propias políticas de privacidad, y no están cubiertos por estas reglas."
-      ]
+    "b07": {
+      "p": "<i>Conservación:</i> las transacciones preparadas no firmadas caducan a las 24 horas; las transacciones completadas o fallidas se eliminan a los 30 días; una transacción firmada cuyo resultado no esté resuelto se conserva hasta que se resuelva, porque eliminarla podría hacer perder el rastro de una transacción difundida. Los sobres firmados se depuran una vez que la transacción alcanza un estado final. Estas son las reglas de limpieza configuradas en el propio código de la aplicación: describen lo que la aplicación elimina. Los registros de servidor y las copias de seguridad propios de nuestros proveedores de alojamiento pueden conservar datos durante períodos distintos según sus propias políticas de privacidad, y no están cubiertos por estas reglas."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["b) Cuenta de la comunidad y contenido de la comunidad."]
-        },
-        " Si accede a las funciones de la comunidad, el backend almacena, en la misma base de datos Postgres de Neon: su ",
-        {
-          "b": ["clave pública"]
-        },
-        ", una marca de tiempo de creación de la cuenta y un ",
-        {
-          "b": ["nombre visible"]
-        },
-        " opcional (hasta 40 caracteres). El acceso funciona firmando un desafío único del servidor con su cartera (validez de 5 minutos, un solo uso); no se requiere contraseña ni correo electrónico y su clave secreta nunca sale de la cartera. El servidor solo conserva un hash SHA-256 del token de sesión; el token en bruto vive en el almacenamiento local de su navegador. Las sesiones duran 30 días, cerrar sesión elimina la sesión, y los desafíos y sesiones caducados se depuran cada hora."
-      ]
+    "b08": {
+      "p": "<b>b) Cuenta de la comunidad y contenido de la comunidad.</b> Si accede a las funciones de la comunidad, el backend almacena, en la misma base de datos Postgres de Neon: su <b>clave pública</b>, una marca de tiempo de creación de la cuenta y un <b>nombre visible</b> opcional (hasta 40 caracteres). El acceso funciona firmando un desafío único del servidor con su cartera (validez de 5 minutos, un solo uso); no se requiere contraseña ni correo electrónico y su clave secreta nunca sale de la cartera. El servidor solo conserva un hash SHA-256 del token de sesión; el token en bruto vive en el almacenamiento local de su navegador. Las sesiones duran 30 días, cerrar sesión elimina la sesión, y los desafíos y sesiones caducados se depuran cada hora."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Los comentarios"]
-        },
-        " son públicos: cada comentario almacena su clave pública, su nombre visible si lo ha definido, el cuerpo (hasta 1000 caracteres), la campaña y una marca de tiempo, y los últimos 100 comentarios por campaña se muestran a cada visitante. Un comentario ocultado por el operador sale de la lista pública de inmediato y se elimina definitivamente 30 días después de ocultarse. ",
-        {
-          "b": ["Los tickets de soporte/comentarios"]
-        },
-        " (tipo, asunto de hasta 120 caracteres, cuerpo de hasta 4000 caracteres, estado, marcas de tiempo) y las ",
-        {
-          "b": ["solicitudes de emisores"]
-        },
-        " (nombre del proyecto, país, tipo de instrumento, importe objetivo, descripción y un correo electrónico de contacto opcional) son visibles solo para su cuenta de cartera y para el administrador del operador; ambos se eliminan definitivamente a los 90 días (ventana de conservación configurable en el código de la aplicación). Las ",
-        {
-          "b": ["noticias"]
-        },
-        " de las campañas las escribe el operador y se etiquetan como contenido de demostración de la plataforma. Su dirección IP se usa en memoria para limitar la frecuencia de solicitudes y se barre en 24 horas; la aplicación no la conserva (los registros de alojamiento se tratan en el punto e)."
-      ]
+    "b09": {
+      "p": "<b>Los comentarios</b> son públicos: cada comentario almacena su clave pública, su nombre visible si lo ha definido, el cuerpo (hasta 1000 caracteres), la campaña y una marca de tiempo, y los últimos 100 comentarios por campaña se muestran a cada visitante. Un comentario ocultado por el operador sale de la lista pública de inmediato y se elimina definitivamente 30 días después de ocultarse. <b>Los tickets de soporte/comentarios</b> (tipo, asunto de hasta 120 caracteres, cuerpo de hasta 4000 caracteres, estado, marcas de tiempo) y las <b>solicitudes de emisores</b> (nombre del proyecto, país, tipo de instrumento, importe objetivo, descripción y un correo electrónico de contacto opcional) son visibles solo para su cuenta de cartera y para el administrador del operador; ambos se eliminan definitivamente a los 90 días (ventana de conservación configurable en el código de la aplicación). Las <b>noticias</b> de las campañas las escribe el operador y se etiquetan como contenido de demostración de la plataforma. Su dirección IP se usa en memoria para limitar la frecuencia de solicitudes y se barre en 24 horas; la aplicación no la conserva (los registros de alojamiento se tratan en el punto e)."
     },
-    {
-      "t": "p",
-      "text": [
-        "Una advertencia: las claves públicas, los nombres visibles y el contenido de texto libre pueden identificarle aunque nunca pidamos su nombre. No envíe información personal sensible en los campos de la comunidad."
-      ]
+    "b10": {
+      "p": "Una advertencia: las claves públicas, los nombres visibles y el contenido de texto libre pueden identificarle aunque nunca pidamos su nombre. No envíe información personal sensible en los campos de la comunidad."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["c) Datos públicos de la blockchain."]
-        },
-        " Las contribuciones de prueba se registran públicamente en la ",
-        {
-          "b": ["testnet"]
-        },
-        " de Stellar y son visibles en exploradores públicos. Los registros de la blockchain no pueden ser alterados ni eliminados por nosotros."
-      ]
+    "b11": {
+      "p": "<b>c) Datos públicos de la blockchain.</b> Las contribuciones de prueba se registran públicamente en la <b>testnet</b> de Stellar y son visibles en exploradores públicos. Los registros de la blockchain no pueden ser alterados ni eliminados por nosotros."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["d) Preferencias del dispositivo."]
-        },
-        " Sus elecciones de tema (claro/oscuro) e idioma se almacenan en el almacenamiento local de su navegador. Estos datos permanecen en su dispositivo y no se nos envían."
-      ]
+    "b12": {
+      "p": "<b>d) Preferencias del dispositivo.</b> Sus elecciones de tema (claro/oscuro) e idioma se almacenan en el almacenamiento local de su navegador. Estos datos permanecen en su dispositivo y no se nos envían."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["e) Registros técnicos."]
-        },
-        " Nuestro proveedor de alojamiento (Render, región de Fráncfort) procesa registros de servidor estándar (como la dirección IP y los metadatos de las solicitudes) para prestar y proteger el Servicio."
-      ]
+    "b13": {
+      "p": "<b>e) Registros técnicos.</b> Nuestro proveedor de alojamiento (Render, región de Fráncfort) procesa registros de servidor estándar (como la dirección IP y los metadatos de las solicitudes) para prestar y proteger el Servicio."
     },
-    {
-      "t": "h2",
-      "text": ["3. Datos que planeamos tratar en versiones futuras (no recopilados hoy)"]
+    "b14": {
+      "h2": "3. Datos que planeamos tratar en versiones futuras (no recopilados hoy)"
     },
-    {
-      "t": "p",
-      "text": [
-        "El diseño indicativo de las versiones futuras de Blockallisto -siguiendo las superficies de cumplimiento de plataformas de crowdfunding europeas consolidadas- es tratar categorías adicionales de datos personales ",
-        {
-          "b": ["cuando y si"]
-        },
-        " se lancen esas funciones. Las categorías exactas, los proveedores y los umbrales pueden cambiar con el trabajo de diseño y el asesoramiento jurídico:"
-      ]
+    "b15": {
+      "p": "El diseño indicativo de las versiones futuras de Blockallisto -siguiendo las superficies de cumplimiento de plataformas de crowdfunding europeas consolidadas- es tratar categorías adicionales de datos personales <b>cuando y si</b> se lancen esas funciones. Las categorías exactas, los proveedores y los umbrales pueden cambiar con el trabajo de diseño y el asesoramiento jurídico:"
     },
-    {
-      "t": "ul",
-      "items": [
-        [
-          {
-            "b": ["Datos de registro:"]
-          },
-          " nombre completo (exactamente como figura en su documento de identidad), dirección de correo electrónico, país de residencia y residencia fiscal."
-        ],
-        [
-          {
-            "b": ["Verificación de identidad (KYC/AML):"]
-          },
-          " imágenes del documento de identidad, un selfie, número de móvil y resultados de la verificación, tratados con proveedores especializados de verificación externos; para inversores empresariales, titulares reales (normalmente quien posea más del 25%) y origen de los fondos; declaraciones de persona políticamente expuesta (PEP)."
-        ],
-        [
-          {
-            "b": ["Datos de pago y de reembolso:"]
-          },
-          " datos bancarios (como el IBAN) gestionados por prestadores de servicios de pago autorizados, no por nosotros reteniendo fondos de clientes."
-        ]
-      ]
+    "b16": {
+      "ul": {
+        "i00": "<b>Datos de registro:</b> nombre completo (exactamente como figura en su documento de identidad), dirección de correo electrónico, país de residencia y residencia fiscal.",
+        "i01": "<b>Verificación de identidad (KYC/AML):</b> imágenes del documento de identidad, un selfie, número de móvil y resultados de la verificación, tratados con proveedores especializados de verificación externos; para inversores empresariales, titulares reales (normalmente quien posea más del 25%) y origen de los fondos; declaraciones de persona políticamente expuesta (PEP).",
+        "i02": "<b>Datos de pago y de reembolso:</b> datos bancarios (como el IBAN) gestionados por prestadores de servicios de pago autorizados, no por nosotros reteniendo fondos de clientes."
+      }
     },
-    {
-      "t": "p",
-      "text": [
-        "Con la excepción del correo electrónico de contacto opcional del emisor descrito en la sección 2b, ninguno de estos datos es recopilado por la demostración actual. Si estas funciones se lanzan, esta Política se actualizará primero, con los proveedores, fines, bases jurídicas y períodos de conservación de cada categoría."
-      ]
+    "b17": {
+      "p": "Con la excepción del correo electrónico de contacto opcional del emisor descrito en la sección 2b, ninguno de estos datos es recopilado por la demostración actual. Si estas funciones se lanzan, esta Política se actualizará primero, con los proveedores, fines, bases jurídicas y períodos de conservación de cada categoría."
     },
-    {
-      "t": "h2",
-      "text": ["4. Fines y bases jurídicas (RGPD)"]
+    "b18": {
+      "h2": "4. Fines y bases jurídicas (RGPD)"
     },
-    {
-      "t": "p",
-      "text": [
-        "Tratamos los datos de la sección 2 para operar, proteger y demostrar el prototipo: preparar y seguir transacciones de prueba, prevenir dobles gastos y resolver transacciones ambiguas, mantener el Servicio fiable y operar las funciones de la comunidad (publicar y moderar comentarios, responder a tickets de soporte y comentarios, y revisar solicitudes de emisores). La base jurídica es nuestro interés legítimo (art. 6.1.f del RGPD) en ejecutar una demostración técnica segura. No usamos sus datos para marketing, elaboración de perfiles ni venta."
-      ]
+    "b19": {
+      "p": "Tratamos los datos de la sección 2 para operar, proteger y demostrar el prototipo: preparar y seguir transacciones de prueba, prevenir dobles gastos y resolver transacciones ambiguas, mantener el Servicio fiable y operar las funciones de la comunidad (publicar y moderar comentarios, responder a tickets de soporte y comentarios, y revisar solicitudes de emisores). La base jurídica es nuestro interés legítimo (art. 6.1.f del RGPD) en ejecutar una demostración técnica segura. No usamos sus datos para marketing, elaboración de perfiles ni venta."
     },
-    {
-      "t": "h2",
-      "text": ["5. Quién trata los datos"]
+    "b20": {
+      "h2": "5. Quién trata los datos"
     },
-    {
-      "t": "ul",
-      "items": [
-        [
-          {
-            "b": ["Render"]
-          },
-          " (alojamiento, Fráncfort, UE) - ejecuta la aplicación."
-        ],
-        [
-          {
-            "b": ["Neon"]
-          },
-          " (Postgres gestionado; región AWS Europa (Fráncfort), UE - verificado en la consola de Neon el ",
-          {
-            "v": "lastUpdated"
-          },
-          ") - almacena el diario de contribuciones y el almacén de datos de la comunidad."
-        ],
-        [
-          {
-            "b": ["Testnet de Stellar"]
-          },
-          " (red pública operada por la Stellar Development Foundation, global) - registra las transacciones públicas de prueba."
-        ],
-        [
-          {
-            "b": ["GitHub"]
-          },
-          " - aloja el código fuente (sin datos de usuarios)."
-        ]
-      ]
+    "b21": {
+      "ul": {
+        "i00": "<b>Render</b> (alojamiento, Fráncfort, UE) - ejecuta la aplicación.",
+        "i01": "<b>Neon</b> (Postgres gestionado; región AWS Europa (Fráncfort), UE - verificado en la consola de Neon el {v:lastUpdated}) - almacena el diario de contribuciones y el almacén de datos de la comunidad.",
+        "i02": "<b>Testnet de Stellar</b> (red pública operada por la Stellar Development Foundation, global) - registra las transacciones públicas de prueba.",
+        "i03": "<b>GitHub</b> - aloja el código fuente (sin datos de usuarios)."
+      }
     },
-    {
-      "t": "p",
-      "text": [
-        "Cuando el tratamiento se produce fuera de la UE/EEE (por ejemplo, la red global de Stellar), implica únicamente datos seudónimos de la testnet."
-      ]
+    "b22": {
+      "p": "Cuando el tratamiento se produce fuera de la UE/EEE (por ejemplo, la red global de Stellar), implica únicamente datos seudónimos de la testnet."
     },
-    {
-      "t": "h2",
-      "text": ["6. Sus derechos bajo el RGPD"]
+    "b23": {
+      "h2": "6. Sus derechos bajo el RGPD"
     },
-    {
-      "t": "p",
-      "text": [
-        "Usted tiene derecho a acceder, rectificar, suprimir, limitar u oponerse al tratamiento de sus datos personales, y a la portabilidad de los datos, en virtud del Reglamento (UE) 2016/679 (RGPD). También tiene derecho a presentar una reclamación ante la autoridad de control portuguesa, la ",
-        {
-          "b": ["CNPD"]
-        },
-        " (Comissao Nacional de Protecao de Dados)."
-      ]
+    "b24": {
+      "p": "Usted tiene derecho a acceder, rectificar, suprimir, limitar u oponerse al tratamiento de sus datos personales, y a la portabilidad de los datos, en virtud del Reglamento (UE) 2016/679 (RGPD). También tiene derecho a presentar una reclamación ante la autoridad de control portuguesa, la <b>CNPD</b> (Comissao Nacional de Protecao de Dados)."
     },
-    {
-      "t": "p",
-      "text": [
-        "Solo podemos localizar los datos vinculados a usted a través de su clave pública de Stellar (y cualquier nombre visible o contenido de texto libre que haya decidido enviar). Los datos ya escritos en una blockchain pública no pueden borrarse; podemos corregir o borrar los registros fuera de la cadena (el diario de contribuciones, su cuenta de la comunidad, comentarios, tickets y solicitudes) a petición, con sujeción a las reglas de conservación de la sección 2."
-      ]
+    "b25": {
+      "p": "Solo podemos localizar los datos vinculados a usted a través de su clave pública de Stellar (y cualquier nombre visible o contenido de texto libre que haya decidido enviar). Los datos ya escritos en una blockchain pública no pueden borrarse; podemos corregir o borrar los registros fuera de la cadena (el diario de contribuciones, su cuenta de la comunidad, comentarios, tickets y solicitudes) a petición, con sujeción a las reglas de conservación de la sección 2."
     },
-    {
-      "t": "h2",
-      "text": ["7. Brasil (LGPD)"]
+    "b26": {
+      "h2": "7. Brasil (LGPD)"
     },
-    {
-      "t": "p",
-      "text": [
-        "La demostración se opera desde Portugal. La Lei Geral de Protecao de Dados de Brasil (Lei no 13.709/2018 - LGPD) puede aplicarse a tratamientos dirigidos a personas en Brasil o que las involucren; si se aplica a este prototipo es una cuestión jurídica por confirmar con asesoramiento. Si y en la medida en que la LGPD se aplique, le otorga derechos sobre sus datos personales similares a los anteriores, y puede contactar con la ANPD (Autoridade Nacional de Protecao de Dados). Use el mismo contacto indicado arriba para cualquier solicitud."
-      ]
+    "b27": {
+      "p": "La demostración se opera desde Portugal. La Lei Geral de Protecao de Dados de Brasil (Lei no 13.709/2018 - LGPD) puede aplicarse a tratamientos dirigidos a personas en Brasil o que las involucren; si se aplica a este prototipo es una cuestión jurídica por confirmar con asesoramiento. Si y en la medida en que la LGPD se aplique, le otorga derechos sobre sus datos personales similares a los anteriores, y puede contactar con la ANPD (Autoridade Nacional de Protecao de Dados). Use el mismo contacto indicado arriba para cualquier solicitud."
     },
-    {
-      "t": "h2",
-      "text": ["8. Seguridad"]
+    "b28": {
+      "h2": "8. Seguridad"
     },
-    {
-      "t": "p",
-      "text": [
-        "Las claves de su cartera nunca salen de su extensión Freighter; el Servicio está diseñado para no poder acceder a ellas. La aplicación se sirve por TLS y los endpoints administrativos están desactivados por defecto (fallo cerrado). Ningún método es absoluto, pero el diseño del prototipo minimiza los datos que existen para ser atacados."
-      ]
+    "b29": {
+      "p": "Las claves de su cartera nunca salen de su extensión Freighter; el Servicio está diseñado para no poder acceder a ellas. La aplicación se sirve por TLS y los endpoints administrativos están desactivados por defecto (fallo cerrado). Ningún método es absoluto, pero el diseño del prototipo minimiza los datos que existen para ser atacados."
     },
-    {
-      "t": "h2",
-      "text": ["9. Menores"]
+    "b30": {
+      "h2": "9. Menores"
     },
-    {
-      "t": "p",
-      "text": ["El Servicio es una demostración técnica y no está dirigido a menores."]
+    "b31": {
+      "p": "El Servicio es una demostración técnica y no está dirigido a menores."
     },
-    {
-      "t": "h2",
-      "text": ["10. Cambios"]
+    "b32": {
+      "h2": "10. Cambios"
     },
-    {
-      "t": "p",
-      "text": [
-        "Podemos actualizar esta Política a medida que evolucione el prototipo. La fecha de \"Última actualización\" muestra la versión vigente. Los cambios sustanciales se reflejarán aquí antes de surtir efecto."
-      ]
+    "b33": {
+      "p": "Podemos actualizar esta Política a medida que evolucione el prototipo. La fecha de \"Última actualización\" muestra la versión vigente. Los cambios sustanciales se reflejarán aquí antes de surtir efecto."
     },
-    {
-      "t": "h2",
-      "text": ["11. Contacto"]
+    "b34": {
+      "h2": "11. Contacto"
     },
-    {
-      "t": "p",
-      "text": [
-        "Preguntas y solicitudes de privacidad: ",
-        {
-          "v": "contactEmail"
-        },
-        "."
-      ]
+    "b35": {
+      "p": "Preguntas y solicitudes de privacidad: {v:contactEmail}."
     }
-  ],
-  "riskDisclosure": [
-    {
-      "t": "notice",
-      "text": [
-        "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
-      ]
+  },
+  "riskDisclosure": {
+    "b00": {
+      "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Última actualización:"]
-        },
-        " ",
-        {
-          "v": "lastUpdated"
-        }
-      ]
+    "b01": {
+      "p": "<b>Última actualización:</b> {v:lastUpdated}"
     },
-    {
-      "t": "h2",
-      "text": ["Lea esto primero: la demostración de hoy no implica dinero real"]
+    "b02": {
+      "h2": "Lea esto primero: la demostración de hoy no implica dinero real"
     },
-    {
-      "t": "p",
-      "text": [
-        "Blockallisto es actualmente un ",
-        {
-          "b": ["prototipo en la testnet de Stellar"]
-        },
-        ". Todas las contribuciones usan tokens de prueba ",
-        {
-          "b": ["sin valor monetario"]
-        },
-        ". No puede perder dinero real en esta demostración, y nada en ella constituye una oportunidad real de inversión."
-      ]
+    "b03": {
+      "p": "Blockallisto es actualmente un <b>prototipo en la testnet de Stellar</b>. Todas las contribuciones usan tokens de prueba <b>sin valor monetario</b>. No puede perder dinero real en esta demostración, y nada en ella constituye una oportunidad real de inversión."
     },
-    {
-      "t": "p",
-      "text": [
-        "Las advertencias siguientes explican los riesgos que ",
-        {
-          "b": ["se aplicarían"]
-        },
-        " al tipo de inversión que Blockallisto demuestra: crowdfunding en activos del mundo real a través de infraestructura de criptoactivos. Se publican ahora para que la conversación sobre el riesgo forme parte del producto desde el primer día."
-      ]
+    "b04": {
+      "p": "Las advertencias siguientes explican los riesgos que <b>se aplicarían</b> al tipo de inversión que Blockallisto demuestra: crowdfunding en activos del mundo real a través de infraestructura de criptoactivos. Se publican ahora para que la conversación sobre el riesgo forme parte del producto desde el primer día."
     },
-    {
-      "t": "h2",
-      "text": ["Advertencia general"]
+    "b05": {
+      "h2": "Advertencia general"
     },
-    {
-      "t": "p",
-      "text": [
-        "Invertir en proyectos de crowdfunding -ya sea en activos del mundo real como inmuebles o empresas, o a través de criptoactivos y tokens- es de ",
-        {
-          "b": ["alto riesgo"]
-        },
-        ". Podría perder ",
-        {
-          "b": ["todo el dinero que invierta"]
-        },
-        ". Estas inversiones no suelen estar ",
-        {
-          "b": ["cubiertas"]
-        },
-        " por sistemas de garantía de depósitos ni de indemnización de inversores."
-      ]
+    "b06": {
+      "p": "Invertir en proyectos de crowdfunding -ya sea en activos del mundo real como inmuebles o empresas, o a través de criptoactivos y tokens- es de <b>alto riesgo</b>. Podría perder <b>todo el dinero que invierta</b>. Estas inversiones no suelen estar <b>cubiertas</b> por sistemas de garantía de depósitos ni de indemnización de inversores."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Nunca invierta dinero que no pueda permitirse perder."]
-        },
-        " Para hacerse una idea de la escala, las plataformas de referencia de nuestro corpus de investigación incluyen orientaciones concretas de diversificación: la página de advertencias de riesgo de CONDA aconseja no invertir más de aproximadamente el 10% de sus fondos libremente disponibles en esta clase de activos, y la ficha estándar austriaca del inversor en crowdfunding (régimen AltFG, observada en dagobertinvest) advierte contra invertir más del 10% del patrimonio neto. Esta es la práctica observada de comunicación de riesgos de plataformas consolidadas, citada como punto de referencia: no es una norma legal aplicable a esta demostración, ni una garantía de que ningún porcentaje sea seguro para su situación. Repartir un importe menor entre varios proyectos reduce, pero nunca elimina, el riesgo de pérdida total."
-      ]
+    "b07": {
+      "p": "<b>Nunca invierta dinero que no pueda permitirse perder.</b> Para hacerse una idea de la escala, las plataformas de referencia de nuestro corpus de investigación incluyen orientaciones concretas de diversificación: la página de advertencias de riesgo de CONDA aconseja no invertir más de aproximadamente el 10% de sus fondos libremente disponibles en esta clase de activos, y la ficha estándar austriaca del inversor en crowdfunding (régimen AltFG, observada en dagobertinvest) advierte contra invertir más del 10% del patrimonio neto. Esta es la práctica observada de comunicación de riesgos de plataformas consolidadas, citada como punto de referencia: no es una norma legal aplicable a esta demostración, ni una garantía de que ningún porcentaje sea seguro para su situación. Repartir un importe menor entre varios proyectos reduce, pero nunca elimina, el riesgo de pérdida total."
     },
-    {
-      "t": "h2",
-      "text": ["Riesgos específicos"]
+    "b08": {
+      "h2": "Riesgos específicos"
     },
-    {
-      "t": "ul",
-      "items": [
-        [
-          {
-            "b": ["Pérdida de capital."]
-          },
-          " El proyecto que apoye puede fracasar, rendir por debajo de lo esperado o perder todo su valor. Los emisores pueden llegar a ser insolventes, y de hecho lo hacen, tras rondas de financiación exitosas. Los rendimientos nunca están garantizados."
-        ],
-        [
-          {
-            "b": ["Iliquidez."]
-          },
-          " Las posiciones de crowdfunding y tokenizadas pueden ser difíciles o imposibles de vender. Puede no existir mercado secundario, las transmisiones pueden requerir el consentimiento del emisor o de la plataforma y un destinatario verificado, y puede tener que mantener la posición hasta que el proyecto termine, o más. (En el prototipo actual ni siquiera existe un token transferible.)"
-        ],
-        [
-          {
-            "b": ["Subordinación."]
-          },
-          " Los instrumentos subordinados o \"junior\" van por detrás de otros acreedores; con subordinación cualificada puede no recibir nada mientras el emisor esté sobreendeudado, y los créditos de intereses o de reembolso pueden suspenderse por completo."
-        ],
-        [
-          {
-            "b": ["Riesgo de plazo y de prórroga."]
-          },
-          " Los préstamos y bonos pueden prorrogarse más allá de su plazo indicado en virtud de sus contratos, retrasando el reembolso."
-        ],
-        [
-          {
-            "b": ["Riesgo de valoración."]
-          },
-          " Los activos del mundo real son difíciles de valorar; las valoraciones indicadas pueden ser erróneas o estar desactualizadas. (En esta demostración, todas las valoraciones e identidades de emisores son datos ficticios.)"
-        ],
-        [
-          {
-            "b": ["Riesgo de contrato inteligente."]
-          },
-          " El código puede contener errores o ser explotado, y las transacciones en una blockchain son generalmente irreversibles."
-        ],
-        [
-          {
-            "b": ["Riesgo de red."]
-          },
-          " Las redes blockchain pueden sufrir congestión, interrupciones, forks o cambios de protocolo fuera del control de cualquiera."
-        ],
-        [
-          {
-            "b": ["Riesgo de claves y de cartera."]
-          },
-          " Si pierde la clave secreta o la frase de recuperación de su cartera, o alguien se las roba, sus fondos desaparecen y nadie puede recuperarlos."
-        ],
-        [
-          {
-            "b": ["Riesgo regulatorio."]
-          },
-          " Las normas sobre crowdfunding (ECSPR en la UE) y criptoactivos (MiCA) están evolucionando. Una estructura posible hoy puede cambiar, y las ofertas pueden estar restringidas donde usted vive."
-        ],
-        [
-          {
-            "b": ["Riesgo de volatilidad y cambiario."]
-          },
-          " Los precios de los criptoactivos pueden moverse bruscamente; las stablecoins pueden perder la paridad; los tipos de cambio se mueven."
-        ],
-        [
-          {
-            "b": ["Riesgo de contraparte y de fraude."]
-          },
-          " Los emisores pueden gestionar mal los fondos o tergiversar sus proyectos. Las verificaciones de la plataforma reducen, pero no pueden eliminar, este riesgo."
-        ]
-      ]
+    "b09": {
+      "ul": {
+        "i00": "<b>Pérdida de capital.</b> El proyecto que apoye puede fracasar, rendir por debajo de lo esperado o perder todo su valor. Los emisores pueden llegar a ser insolventes, y de hecho lo hacen, tras rondas de financiación exitosas. Los rendimientos nunca están garantizados.",
+        "i01": "<b>Iliquidez.</b> Las posiciones de crowdfunding y tokenizadas pueden ser difíciles o imposibles de vender. Puede no existir mercado secundario, las transmisiones pueden requerir el consentimiento del emisor o de la plataforma y un destinatario verificado, y puede tener que mantener la posición hasta que el proyecto termine, o más. (En el prototipo actual ni siquiera existe un token transferible.)",
+        "i02": "<b>Subordinación.</b> Los instrumentos subordinados o \"junior\" van por detrás de otros acreedores; con subordinación cualificada puede no recibir nada mientras el emisor esté sobreendeudado, y los créditos de intereses o de reembolso pueden suspenderse por completo.",
+        "i03": "<b>Riesgo de plazo y de prórroga.</b> Los préstamos y bonos pueden prorrogarse más allá de su plazo indicado en virtud de sus contratos, retrasando el reembolso.",
+        "i04": "<b>Riesgo de valoración.</b> Los activos del mundo real son difíciles de valorar; las valoraciones indicadas pueden ser erróneas o estar desactualizadas. (En esta demostración, todas las valoraciones e identidades de emisores son datos ficticios.)",
+        "i05": "<b>Riesgo de contrato inteligente.</b> El código puede contener errores o ser explotado, y las transacciones en una blockchain son generalmente irreversibles.",
+        "i06": "<b>Riesgo de red.</b> Las redes blockchain pueden sufrir congestión, interrupciones, forks o cambios de protocolo fuera del control de cualquiera.",
+        "i07": "<b>Riesgo de claves y de cartera.</b> Si pierde la clave secreta o la frase de recuperación de su cartera, o alguien se las roba, sus fondos desaparecen y nadie puede recuperarlos.",
+        "i08": "<b>Riesgo regulatorio.</b> Las normas sobre crowdfunding (ECSPR en la UE) y criptoactivos (MiCA) están evolucionando. Una estructura posible hoy puede cambiar, y las ofertas pueden estar restringidas donde usted vive.",
+        "i09": "<b>Riesgo de volatilidad y cambiario.</b> Los precios de los criptoactivos pueden moverse bruscamente; las stablecoins pueden perder la paridad; los tipos de cambio se mueven.",
+        "i10": "<b>Riesgo de contraparte y de fraude.</b> Los emisores pueden gestionar mal los fondos o tergiversar sus proyectos. Las verificaciones de la plataforma reducen, pero no pueden eliminar, este riesgo."
+      }
     },
-    {
-      "t": "h2",
-      "text": ["Sobre las futuras protecciones del inversor"]
+    "b10": {
+      "h2": "Sobre las futuras protecciones del inversor"
     },
-    {
-      "t": "p",
-      "text": [
-        "El reglamento europeo de crowdfunding (el ECSPR, Reglamento (UE) 2020/1503) exige que las plataformas autorizadas ofrezcan categorización de inversores, una prueba inicial de conocimientos, una simulación de la capacidad de soportar pérdidas y un período de reflexión precontractual de cuatro días naturales para inversores no sofisticados antes de que una oferta sea vinculante; las plataformas de referencia de nuestro corpus de investigación los implementan bajo sus propias autorizaciones. La demostración de Blockallisto no tiene ninguno de estos mecanismos, porque ninguna inversión real es posible. Si alguna vez se lanza una versión regulada, esas protecciones -y sus límites- se describirán en sus propios documentos revisados jurídicamente. Protecciones como los períodos de reflexión le permiten retirar una oferta; no reducen el riesgo de inversión subyacente."
-      ]
+    "b11": {
+      "p": "El reglamento europeo de crowdfunding (el ECSPR, Reglamento (UE) 2020/1503) exige que las plataformas autorizadas ofrezcan categorización de inversores, una prueba inicial de conocimientos, una simulación de la capacidad de soportar pérdidas y un período de reflexión precontractual de cuatro días naturales para inversores no sofisticados antes de que una oferta sea vinculante; las plataformas de referencia de nuestro corpus de investigación los implementan bajo sus propias autorizaciones. La demostración de Blockallisto no tiene ninguno de estos mecanismos, porque ninguna inversión real es posible. Si alguna vez se lanza una versión regulada, esas protecciones -y sus límites- se describirán en sus propios documentos revisados jurídicamente. Protecciones como los períodos de reflexión le permiten retirar una oferta; no reducen el riesgo de inversión subyacente."
     },
-    {
-      "t": "h2",
-      "text": ["Sin asesoramiento"]
+    "b12": {
+      "h2": "Sin asesoramiento"
     },
-    {
-      "t": "p",
-      "text": [
-        "Nada en este Servicio constituye asesoramiento de inversión, jurídico o fiscal, ni una recomendación de comprar o vender nada. Los resultados pasados -reales o simulados- no predicen resultados futuros. Considere asesoramiento profesional independiente y diversifique: no concentre sus ahorros en un único proyecto o tipo de activo."
-      ]
+    "b13": {
+      "p": "Nada en este Servicio constituye asesoramiento de inversión, jurídico o fiscal, ni una recomendación de comprar o vender nada. Los resultados pasados -reales o simulados- no predicen resultados futuros. Considere asesoramiento profesional independiente y diversifique: no concentre sus ahorros en un único proyecto o tipo de activo."
     },
-    {
-      "t": "h2",
-      "text": ["Reconocimiento"]
+    "b14": {
+      "h2": "Reconocimiento"
     },
-    {
-      "t": "p",
-      "text": [
-        "Al usar esta demostración, reconoce que ha leído y entendido esta Divulgación de Riesgos. Antes de cualquier lanzamiento real futuro, se aplicará una declaración de riesgos más completa y revisada jurídicamente."
-      ]
+    "b15": {
+      "p": "Al usar esta demostración, reconoce que ha leído y entendido esta Divulgación de Riesgos. Antes de cualquier lanzamiento real futuro, se aplicará una declaración de riesgos más completa y revisada jurídicamente."
     }
-  ],
-  "legalNotice": [
-    {
-      "t": "notice",
-      "text": [
-        "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
-      ]
+  },
+  "legalNotice": {
+    "b00": {
+      "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Última actualización:"]
+    "b01": {
+      "p": "<b>Última actualización:</b> {v:lastUpdated}"
+    },
+    "b02": {
+      "p": "Este Aviso Legal identifica al operador del sitio web y la aplicación de demostración de Blockallisto (el \"Servicio\"). Los datos societarios mostrados a continuación son datos ficticios de demostración: forma jurídica \"Lda.\" [DEMO], domicilio social \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], número de registro \"000 000 000\" [DEMO], capital social \"EUR 0\" [DEMO], administrador \"Nome Demonstracao\" [DEMO]. La denominación social, la forma jurídica, el domicilio y el estatus registral de Blockallisto no han sido verificados, y no se afirma ningún registro. Contacto: {v:contactEmail}."
+    },
+    "b03": {
+      "h2": "1. Operador"
+    },
+    "b04": {
+      "table": {
+        "head": {
+          "r00": {
+            "c00": "Campo",
+            "c01": "Valor"
+          }
         },
-        " ",
-        {
-          "v": "lastUpdated"
+        "rows": {
+          "r00": {
+            "c00": "Nombre comercial",
+            "c01": "Blockallisto"
+          },
+          "r01": {
+            "c00": "Forma jurídica",
+            "c01": "\"Lda.\" [DEMO]"
+          },
+          "r02": {
+            "c00": "Domicilio social",
+            "c01": "\"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO]"
+          },
+          "r03": {
+            "c00": "Registro mercantil",
+            "c01": "\"Registo Comercial de [Lisboa], número 000 000 000\" [DEMO]"
+          },
+          "r04": {
+            "c00": "NIF",
+            "c01": "\"PT 000 000 000\" [DEMO]"
+          },
+          "r05": {
+            "c00": "Administrador",
+            "c01": "\"Nome Demonstracao\" [DEMO]"
+          },
+          "r06": {
+            "c00": "Contacto",
+            "c01": "{v:contactEmail}"
+          }
         }
-      ]
+      }
     },
-    {
-      "t": "p",
-      "text": [
-        "Este Aviso Legal identifica al operador del sitio web y la aplicación de demostración de Blockallisto (el \"Servicio\"). Los datos societarios mostrados a continuación son datos ficticios de demostración: forma jurídica \"Lda.\" [DEMO], domicilio social \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], número de registro \"000 000 000\" [DEMO], capital social \"EUR 0\" [DEMO], administrador \"Nome Demonstracao\" [DEMO]. La denominación social, la forma jurídica, el domicilio y el estatus registral de Blockallisto no han sido verificados, y no se afirma ningún registro. Contacto: ",
-        {
-          "v": "contactEmail"
-        },
-        "."
-      ]
+    "b05": {
+      "p": "Sustituya cada valor [DEMO] por los datos registrales reales del operador antes de cualquier publicación más allá del prototipo."
     },
-    {
-      "t": "h2",
-      "text": ["1. Operador"]
+    "b06": {
+      "h2": "2. Estatus regulatorio"
     },
-    {
-      "t": "table",
-      "head": [[["Campo"], ["Valor"]]],
-      "rows": [
-        [["Nombre comercial"], ["Blockallisto"]],
-        [["Forma jurídica"], ["\"Lda.\" [DEMO]"]],
-        [["Domicilio social"], ["\"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO]"]],
-        [["Registro mercantil"], ["\"Registo Comercial de [Lisboa], número 000 000 000\" [DEMO]"]],
-        [["NIF"], ["\"PT 000 000 000\" [DEMO]"]],
-        [["Administrador"], ["\"Nome Demonstracao\" [DEMO]"]],
-        [
-          ["Contacto"],
-          [
-            {
-              "v": "contactEmail"
-            }
-          ]
-        ]
-      ]
+    "b07": {
+      "p": "Blockallisto es hoy una <b>demostración de prototipo</b> que funciona íntegramente en la red de pruebas de Stellar (testnet). El operador <b>no</b> está autorizado como prestador de servicios de crowdfunding en virtud del Reglamento (UE) 2020/1503 (ECSPR), <b>no</b> está supervisado por la CMVM ni por ninguna otra autoridad competente en esa calidad, y no hace <b>ninguna oferta</b> de inversión. Nada en el Servicio constituye una oferta, solicitud, recomendación o asesoramiento de inversión, jurídico, fiscal o financiero. No interviene dinero real; los tokens de la testnet no tienen valor monetario."
     },
-    {
-      "t": "p",
-      "text": ["Sustituya cada valor [DEMO] por los datos registrales reales del operador antes de cualquier publicación más allá del prototipo."]
+    "b08": {
+      "p": "Si y cuando se prepare un lanzamiento real, este aviso se actualizará con el estatus de autorización del operador, su autoridad de supervisión competente y cualquier divulgación exigida en el mercado único antes de cualquier oferta real."
     },
-    {
-      "t": "h2",
-      "text": ["2. Estatus regulatorio"]
+    "b09": {
+      "h2": "3. Contenido y responsabilidad"
     },
-    {
-      "t": "p",
-      "text": [
-        "Blockallisto es hoy una ",
-        {
-          "b": ["demostración de prototipo"]
-        },
-        " que funciona íntegramente en la red de pruebas de Stellar (testnet). El operador ",
-        {
-          "b": ["no"]
-        },
-        " está autorizado como prestador de servicios de crowdfunding en virtud del Reglamento (UE) 2020/1503 (ECSPR), ",
-        {
-          "b": ["no"]
-        },
-        " está supervisado por la CMVM ni por ninguna otra autoridad competente en esa calidad, y no hace ",
-        {
-          "b": ["ninguna oferta"]
-        },
-        " de inversión. Nada en el Servicio constituye una oferta, solicitud, recomendación o asesoramiento de inversión, jurídico, fiscal o financiero. No interviene dinero real; los tokens de la testnet no tienen valor monetario."
-      ]
+    "b10": {
+      "p": "El contenido del Servicio se proporciona tal cual para la evaluación de un prototipo. Las campañas, los emisores, las cifras y los resultados de ejemplo son ilustraciones ficticias. El operador no acepta responsabilidad por decisiones tomadas sobre la base de contenido de la demostración. Los enlaces externos, cuando existen, llevan a contenido de terceros que el operador no controla."
     },
-    {
-      "t": "p",
-      "text": [
-        "Si y cuando se prepare un lanzamiento real, este aviso se actualizará con el estatus de autorización del operador, su autoridad de supervisión competente y cualquier divulgación exigida en el mercado único antes de cualquier oferta real."
-      ]
+    "b11": {
+      "h2": "4. Propiedad intelectual"
     },
-    {
-      "t": "h2",
-      "text": ["3. Contenido y responsabilidad"]
+    "b12": {
+      "p": "El Servicio, su contenido y su código son Copyright (c) 2026 Nuno Ribeiro, todos los derechos reservados. No se concede ninguna licencia de código abierto ni patente. Puede ver y usar la demostración para evaluarla; no puede copiarla, republicarla ni revenderla."
     },
-    {
-      "t": "p",
-      "text": [
-        "El contenido del Servicio se proporciona tal cual para la evaluación de un prototipo. Las campañas, los emisores, las cifras y los resultados de ejemplo son ilustraciones ficticias. El operador no acepta responsabilidad por decisiones tomadas sobre la base de contenido de la demostración. Los enlaces externos, cuando existen, llevan a contenido de terceros que el operador no controla."
-      ]
+    "b13": {
+      "h2": "5. Marco aplicable [por revisar]"
     },
-    {
-      "t": "h2",
-      "text": ["4. Propiedad intelectual"]
-    },
-    {
-      "t": "p",
-      "text": [
-        "El Servicio, su contenido y su código son Copyright (c) 2026 Nuno Ribeiro, todos los derechos reservados. No se concede ninguna licencia de código abierto ni patente. Puede ver y usar la demostración para evaluarla; no puede copiarla, republicarla ni revenderla."
-      ]
-    },
-    {
-      "t": "h2",
-      "text": ["5. Marco aplicable [por revisar]"]
-    },
-    {
-      "t": "p",
-      "text": [
-        "Las cláusulas de ley aplicable y jurisdicción para un lanzamiento real requieren asesoramiento jurídico y dependen del registro final del operador. Esta plantilla deliberadamente no afirma ninguna ley aplicable para el prototipo."
-      ]
+    "b14": {
+      "p": "Las cláusulas de ley aplicable y jurisdicción para un lanzamiento real requieren asesoramiento jurídico y dependen del registro final del operador. Esta plantilla deliberadamente no afirma ninguna ley aplicable para el prototipo."
     }
-  ],
-  "conflictsOfInterest": [
-    {
-      "t": "notice",
-      "text": [
-        "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
-      ]
+  },
+  "conflictsOfInterest": {
+    "b00": {
+      "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Última actualización:"]
-        },
-        " ",
-        {
-          "v": "lastUpdated"
-        }
-      ]
+    "b01": {
+      "p": "<b>Última actualización:</b> {v:lastUpdated}"
     },
-    {
-      "t": "p",
-      "text": [
-        "Esta plantilla de política describe cómo Blockallisto pretende identificar, prevenir, gestionar y divulgar conflictos de interés. Blockallisto es hoy una demostración de prototipo en la testnet de Stellar: no existen inversores, emisores, fondos ni ofertas reales, por lo que ningún conflicto efectivo puede surgir hoy. Este documento es un artefacto de diseño preparado tomando como referencia las superficies de cumplimiento de plataformas de crowdfunding europeas consolidadas y ",
-        {
-          "b": ["no"]
-        },
-        " es una descripción de un programa de cumplimiento en funcionamiento."
-      ]
+    "b02": {
+      "p": "Esta plantilla de política describe cómo Blockallisto pretende identificar, prevenir, gestionar y divulgar conflictos de interés. Blockallisto es hoy una demostración de prototipo en la testnet de Stellar: no existen inversores, emisores, fondos ni ofertas reales, por lo que ningún conflicto efectivo puede surgir hoy. Este documento es un artefacto de diseño preparado tomando como referencia las superficies de cumplimiento de plataformas de crowdfunding europeas consolidadas y <b>no</b> es una descripción de un programa de cumplimiento en funcionamiento."
     },
-    {
-      "t": "h2",
-      "text": ["1. Por qué existe esta política"]
+    "b03": {
+      "h2": "1. Por qué existe esta política"
     },
-    {
-      "t": "p",
-      "text": [
-        "Las plataformas de crowdfunding se sitúan entre emisores que buscan fondos e inversores que los aportan. El Reglamento (UE) 2020/1503 espera que las plataformas autorizadas eviten los conflictos de interés y, cuando no puedan evitarse, los gestionen y divulguen. Esta plantilla anticipa esa expectativa."
-      ]
+    "b04": {
+      "p": "Las plataformas de crowdfunding se sitúan entre emisores que buscan fondos e inversores que los aportan. El Reglamento (UE) 2020/1503 espera que las plataformas autorizadas eviten los conflictos de interés y, cuando no puedan evitarse, los gestionen y divulguen. Esta plantilla anticipa esa expectativa."
     },
-    {
-      "t": "h2",
-      "text": ["2. Conflictos potenciales considerados"]
+    "b05": {
+      "h2": "2. Conflictos potenciales considerados"
     },
-    {
-      "t": "ul",
-      "items": [
-        [
-          {
-            "b": ["Plataforma frente a inversor:"]
-          },
-          " la plataforma, al ganar comisiones de las rondas completadas, podría verse tentada a admitir campañas débiles. Mitigación prevista: criterios de admisión publicados, pasos documentados de diligencia debida por campaña y comisiones que no dependen de las alegaciones de marketing de las campañas."
-        ],
-        [
-          {
-            "b": ["Partes relacionadas:"]
-          },
-          " el operador, sus administradores o sus allegados actuando como emisores o inversores. Regla prevista: [las partes relacionadas no pueden actuar como emisores en la plataforma - por confirmar con asesoramiento jurídico]; cualquier inversión de partes relacionadas, si alguna vez se permite, se divulgaría en la página de la campaña."
-        ],
-        [
-          {
-            "b": ["Inversión por cuenta propia:"]
-          },
-          " regla prevista: la plataforma ",
-          {
-            "b": ["no"]
-          },
-          " invierte en sus propias campañas y no retiene fondos aportados en ningún momento; la liquidación fluye a través de [prestadores de servicios de pago autorizados - planeado, no activo]."
-        ],
-        [
-          {
-            "b": ["Incentivos del personal:"]
-          },
-          " regla prevista: ninguna remuneración vinculada al éxito de financiación de campañas concretas."
-        ],
-        [
-          {
-            "b": ["Asimetría de información:"]
-          },
-          " el contenido suministrado por el emisor podría inducir a error. Mitigación prevista: fichas de información fundamental sobre la inversión por campaña, una estructura de datos de campaña normalizada y una separación clara entre datos verificados por la plataforma y contenido suministrado por el emisor."
-        ]
-      ]
+    "b06": {
+      "ul": {
+        "i00": "<b>Plataforma frente a inversor:</b> la plataforma, al ganar comisiones de las rondas completadas, podría verse tentada a admitir campañas débiles. Mitigación prevista: criterios de admisión publicados, pasos documentados de diligencia debida por campaña y comisiones que no dependen de las alegaciones de marketing de las campañas.",
+        "i01": "<b>Partes relacionadas:</b> el operador, sus administradores o sus allegados actuando como emisores o inversores. Regla prevista: [las partes relacionadas no pueden actuar como emisores en la plataforma - por confirmar con asesoramiento jurídico]; cualquier inversión de partes relacionadas, si alguna vez se permite, se divulgaría en la página de la campaña.",
+        "i02": "<b>Inversión por cuenta propia:</b> regla prevista: la plataforma <b>no</b> invierte en sus propias campañas y no retiene fondos aportados en ningún momento; la liquidación fluye a través de [prestadores de servicios de pago autorizados - planeado, no activo].",
+        "i03": "<b>Incentivos del personal:</b> regla prevista: ninguna remuneración vinculada al éxito de financiación de campañas concretas.",
+        "i04": "<b>Asimetría de información:</b> el contenido suministrado por el emisor podría inducir a error. Mitigación prevista: fichas de información fundamental sobre la inversión por campaña, una estructura de datos de campaña normalizada y una separación clara entre datos verificados por la plataforma y contenido suministrado por el emisor."
+      }
     },
-    {
-      "t": "h2",
-      "text": ["3. Identificación, gestión, divulgación"]
+    "b07": {
+      "h2": "3. Identificación, gestión, divulgación"
     },
-    {
-      "t": "p",
-      "text": [
-        "Proceso previsto: (1) registro de conflictos mantenido por [el contacto de cumplimiento del operador - por nombrar]; (2) evaluación antes de cualquier admisión de campaña y ante cualquier cambio sustancial; (3) cuando un conflicto no pueda evitarse, divulgación a los usuarios afectados en términos claros antes de que se comprometan; (4) negativa a operar el negocio en conflicto cuando la evitación y la divulgación sean insuficientes."
-      ]
+    "b08": {
+      "p": "Proceso previsto: (1) registro de conflictos mantenido por [el contacto de cumplimiento del operador - por nombrar]; (2) evaluación antes de cualquier admisión de campaña y ante cualquier cambio sustancial; (3) cuando un conflicto no pueda evitarse, divulgación a los usuarios afectados en términos claros antes de que se comprometan; (4) negativa a operar el negocio en conflicto cuando la evitación y la divulgación sean insuficientes."
     },
-    {
-      "t": "h2",
-      "text": ["4. Estado actual"]
+    "b09": {
+      "h2": "4. Estado actual"
     },
-    {
-      "t": "p",
-      "text": [
-        "Nada de lo anterior está operativo hoy. El prototipo no acepta fondos reales, no lista emisores reales y no paga comisiones. Esta página existe para que la superficie de cumplimiento prevista sea visible y revisable antes de cualquier lanzamiento real."
-      ]
+    "b10": {
+      "p": "Nada de lo anterior está operativo hoy. El prototipo no acepta fondos reales, no lista emisores reales y no paga comisiones. Esta página existe para que la superficie de cumplimiento prevista sea visible y revisable antes de cualquier lanzamiento real."
     }
-  ],
-  "complaintsManagement": [
-    {
-      "t": "notice",
-      "text": [
-        "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
-      ]
+  },
+  "complaintsManagement": {
+    "b00": {
+      "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Última actualización:"]
-        },
-        " ",
-        {
-          "v": "lastUpdated"
-        }
-      ]
+    "b01": {
+      "p": "<b>Última actualización:</b> {v:lastUpdated}"
     },
-    {
-      "t": "p",
-      "text": [
-        "Esta página explica cómo reclamar sobre el prototipo de Blockallisto y cómo se tramitan las reclamaciones. Blockallisto es hoy una demostración en la testnet de Stellar sin fondos reales involucrados; el proceso de tramitación descrito abajo es real para la demostración, mientras que el marco regulatorio formal que refleja se aplica solo a una plataforma autorizada."
-      ]
+    "b02": {
+      "p": "Esta página explica cómo reclamar sobre el prototipo de Blockallisto y cómo se tramitan las reclamaciones. Blockallisto es hoy una demostración en la testnet de Stellar sin fondos reales involucrados; el proceso de tramitación descrito abajo es real para la demostración, mientras que el marco regulatorio formal que refleja se aplica solo a una plataforma autorizada."
     },
-    {
-      "t": "h2",
-      "text": ["1. Cómo reclamar"]
+    "b03": {
+      "h2": "1. Cómo reclamar"
     },
-    {
-      "t": "p",
-      "text": [
-        "Envíe un correo electrónico a ",
-        {
-          "v": "contactEmail"
-        },
-        " con el asunto \"Complaint\". Incluya: qué ocurrió, cuándo, la página o función involucrada y el resultado que pide. Las reclamaciones son gratuitas."
-      ]
+    "b04": {
+      "p": "Envíe un correo electrónico a {v:contactEmail} con el asunto \"Complaint\". Incluya: qué ocurrió, cuándo, la página o función involucrada y el resultado que pide. Las reclamaciones son gratuitas."
     },
-    {
-      "t": "p",
-      "text": [
-        "Para el prototipo existe también un formulario de ticket de soporte en el sitio; las reclamaciones enviadas por ahí se tramitan de la misma manera."
-      ]
+    "b05": {
+      "p": "Para el prototipo existe también un formulario de ticket de soporte en el sitio; las reclamaciones enviadas por ahí se tramitan de la misma manera."
     },
-    {
-      "t": "h2",
-      "text": ["2. Qué ocurre después"]
+    "b06": {
+      "h2": "2. Qué ocurre después"
     },
-    {
-      "t": "ul",
-      "items": [
-        [
-          {
-            "b": ["Acuse de recibo:"]
-          },
-          " confirmamos la recepción en un plazo de [10 días hábiles - valor de plantilla]."
-        ],
-        [
-          {
-            "b": ["Investigación:"]
-          },
-          " el operador examina la reclamación contra los registros (contenido de la página, eventos del contrato, historial de soporte). Es posible que se le pida una aclaración."
-        ],
-        [
-          {
-            "b": ["Respuesta:"]
-          },
-          " una respuesta razonada en un plazo de [20 días hábiles - valor de plantilla] desde el acuse de recibo. Si se necesita más tiempo, lo decimos y explicamos por qué."
-        ],
-        [
-          {
-            "b": ["Registro:"]
-          },
-          " las reclamaciones y sus resultados se anotan en un libro de reclamaciones conservado durante [5 años - valor de plantilla], que contiene la reclamación, la investigación y la resolución."
-        ]
-      ]
+    "b07": {
+      "ul": {
+        "i00": "<b>Acuse de recibo:</b> confirmamos la recepción en un plazo de [10 días hábiles - valor de plantilla].",
+        "i01": "<b>Investigación:</b> el operador examina la reclamación contra los registros (contenido de la página, eventos del contrato, historial de soporte). Es posible que se le pida una aclaración.",
+        "i02": "<b>Respuesta:</b> una respuesta razonada en un plazo de [20 días hábiles - valor de plantilla] desde el acuse de recibo. Si se necesita más tiempo, lo decimos y explicamos por qué.",
+        "i03": "<b>Registro:</b> las reclamaciones y sus resultados se anotan en un libro de reclamaciones conservado durante [5 años - valor de plantilla], que contiene la reclamación, la investigación y la resolución."
+      }
     },
-    {
-      "t": "p",
-      "text": [
-        "Los plazos de la plantilla son valores indicativos extraídos de la práctica común de las plataformas europeas, no compromisos jurídicos; los valores finales requieren asesoramiento jurídico."
-      ]
+    "b08": {
+      "p": "Los plazos de la plantilla son valores indicativos extraídos de la práctica común de las plataformas europeas, no compromisos jurídicos; los valores finales requieren asesoramiento jurídico."
     },
-    {
-      "t": "h2",
-      "text": ["3. Si no queda satisfecho"]
+    "b09": {
+      "h2": "3. Si no queda satisfecho"
     },
-    {
-      "t": "p",
-      "text": [
-        "Para el prototipo no existe vía de escalado a una autoridad de supervisión, porque el operador no es un prestador de servicios de crowdfunding autorizado y no existe ningún servicio de inversión real. Para una futura plataforma autorizada, esta sección nombrará el canal de reclamación de la autoridad competente (en Portugal, la CMVM) y cualquier organismo aplicable de resolución extrajudicial de litigios antes de cualquier oferta real."
-      ]
+    "b10": {
+      "p": "Para el prototipo no existe vía de escalado a una autoridad de supervisión, porque el operador no es un prestador de servicios de crowdfunding autorizado y no existe ningún servicio de inversión real. Para una futura plataforma autorizada, esta sección nombrará el canal de reclamación de la autoridad competente (en Portugal, la CMVM) y cualquier organismo aplicable de resolución extrajudicial de litigios antes de cualquier oferta real."
     },
-    {
-      "t": "h2",
-      "text": ["4. Usar las reclamaciones para mejorar"]
+    "b11": {
+      "h2": "4. Usar las reclamaciones para mejorar"
     },
-    {
-      "t": "p",
-      "text": [
-        "Los temas recurrentes de las reclamaciones se revisan y alimentan correcciones de producto y de contenido. La propia hoja de ruta del prototipo trata los datos de reclamaciones como una entrada para cambios de diseño, no solo para la resolución caso por caso."
-      ]
+    "b12": {
+      "p": "Los temas recurrentes de las reclamaciones se revisan y alimentan correcciones de producto y de contenido. La propia hoja de ruta del prototipo trata los datos de reclamaciones como una entrada para cambios de diseño, no solo para la resolución caso por caso."
     }
-  ],
-  "businessContinuity": [
-    {
-      "t": "notice",
-      "text": [
-        "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
-      ]
+  },
+  "businessContinuity": {
+    "b00": {
+      "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
-    {
-      "t": "p",
-      "text": [
-        {
-          "b": ["Última actualización:"]
-        },
-        " ",
-        {
-          "v": "lastUpdated"
-        }
-      ]
+    "b01": {
+      "p": "<b>Última actualización:</b> {v:lastUpdated}"
     },
-    {
-      "t": "p",
-      "text": [
-        "Esta página describe qué mantiene el prototipo de Blockallisto disponible y recuperable, y qué planificación de continuidad se pretende para una futura plataforma autorizada. La primera sección es factual sobre la demostración en ejecución; la segunda es intención de diseño, no práctica actual."
-      ]
+    "b02": {
+      "p": "Esta página describe qué mantiene el prototipo de Blockallisto disponible y recuperable, y qué planificación de continuidad se pretende para una futura plataforma autorizada. La primera sección es factual sobre la demostración en ejecución; la segunda es intención de diseño, no práctica actual."
     },
-    {
-      "t": "h2",
-      "text": ["1. Postura de continuidad del prototipo (actual)"]
+    "b03": {
+      "h2": "1. Postura de continuidad del prototipo (actual)"
     },
-    {
-      "t": "ul",
-      "items": [
-        [
-          {
-            "b": ["Sin activos de clientes en riesgo:"]
-          },
-          " la demostración no retiene dinero, fondos de clientes ni custodia. Las contribuciones son tokens de la testnet sin valor monetario, liquidadas por un contrato inteligente de Soroban en la testnet pública de Stellar. El estado del contrato vive en el ledger de la testnet, independientemente de este sitio web."
-        ],
-        [
-          {
-            "b": ["Alojamiento:"]
-          },
-          " el sitio y la API funcionan en el nivel gratuito de Render; los datos operativos (diario de transacciones, datos de la comunidad) viven en una base de datos Postgres de Neon en su nivel gratuito. Ambos son servicios de terceros con sus propias propiedades de disponibilidad; no se garantiza ningún tiempo de actividad para la demostración."
-        ],
-        [
-          {
-            "b": ["Copias de seguridad:"]
-          },
-          " [programación y retención de copias de seguridad por definir - los niveles gratuitos no ofrecen copias gestionadas; el estado del contrato en la testnet es recuperable desde el ledger público]."
-        ],
-        [
-          {
-            "b": ["Separación de entornos:"]
-          },
-          " la demostración de cara al usuario, un entorno de staging separado y copias desechables de la base de datos se mantienen aparte para que las pruebas no puedan corromper la demostración."
-        ],
-        [
-          {
-            "b": ["Si la demostración no está disponible:"]
-          },
-          " ningún usuario pierde nada de valor. El estado de la campaña sigue siendo legible en exploradores públicos de la testnet de Stellar, y las contribuciones siguen rigiéndose por el contrato, no por este sitio."
-        ]
-      ]
+    "b04": {
+      "ul": {
+        "i00": "<b>Sin activos de clientes en riesgo:</b> la demostración no retiene dinero, fondos de clientes ni custodia. Las contribuciones son tokens de la testnet sin valor monetario, liquidadas por un contrato inteligente de Soroban en la testnet pública de Stellar. El estado del contrato vive en el ledger de la testnet, independientemente de este sitio web.",
+        "i01": "<b>Alojamiento:</b> el sitio y la API funcionan en el nivel gratuito de Render; los datos operativos (diario de transacciones, datos de la comunidad) viven en una base de datos Postgres de Neon en su nivel gratuito. Ambos son servicios de terceros con sus propias propiedades de disponibilidad; no se garantiza ningún tiempo de actividad para la demostración.",
+        "i02": "<b>Copias de seguridad:</b> [programación y retención de copias de seguridad por definir - los niveles gratuitos no ofrecen copias gestionadas; el estado del contrato en la testnet es recuperable desde el ledger público].",
+        "i03": "<b>Separación de entornos:</b> la demostración de cara al usuario, un entorno de staging separado y copias desechables de la base de datos se mantienen aparte para que las pruebas no puedan corromper la demostración.",
+        "i04": "<b>Si la demostración no está disponible:</b> ningún usuario pierde nada de valor. El estado de la campaña sigue siendo legible en exploradores públicos de la testnet de Stellar, y las contribuciones siguen rigiéndose por el contrato, no por este sitio."
+      }
     },
-    {
-      "t": "h2",
-      "text": ["2. Plan de continuidad previsto para una plataforma autorizada (no activo)"]
+    "b05": {
+      "h2": "2. Plan de continuidad previsto para una plataforma autorizada (no activo)"
     },
-    {
-      "t": "p",
-      "text": [
-        "Una plataforma real que gestione ofertas reguladas necesitaría, antes del lanzamiento: objetivos documentados de tiempo y punto de recuperación [valores RTO/RPO por definir con asesoramiento jurídico y de infraestructura]; copias de seguridad gestionadas con procedimientos de restauración probados; un acuerdo de servicios de pago en el que los fondos de los clientes nunca sean retenidos por la plataforma, de modo que un fallo de la plataforma no pueda dejar bloqueado el dinero de los inversores; un plan ordenado de cese de actividad que asegure que las campañas en curso puedan completarse o reembolsarse si la plataforma deja de operar; y procedimientos de comunicación para incidentes que afecten a los usuarios."
-      ]
+    "b06": {
+      "p": "Una plataforma real que gestione ofertas reguladas necesitaría, antes del lanzamiento: objetivos documentados de tiempo y punto de recuperación [valores RTO/RPO por definir con asesoramiento jurídico y de infraestructura]; copias de seguridad gestionadas con procedimientos de restauración probados; un acuerdo de servicios de pago en el que los fondos de los clientes nunca sean retenidos por la plataforma, de modo que un fallo de la plataforma no pueda dejar bloqueado el dinero de los inversores; un plan ordenado de cese de actividad que asegure que las campañas en curso puedan completarse o reembolsarse si la plataforma deja de operar; y procedimientos de comunicación para incidentes que afecten a los usuarios."
     },
-    {
-      "t": "p",
-      "text": ["Nada de esto está operativo hoy. Publicarlo como plantilla mantiene la superficie de cumplimiento prevista visible y revisable."]
+    "b07": {
+      "p": "Nada de esto está operativo hoy. Publicarlo como plantilla mantiene la superficie de cumplimiento prevista visible y revisable."
     },
-    {
-      "t": "h2",
-      "text": ["3. Contacto para incidentes"]
+    "b08": {
+      "h2": "3. Contacto para incidentes"
     },
-    {
-      "t": "p",
-      "text": [
-        "Para notificar un incidente de seguridad o disponibilidad que afecte al prototipo: ",
-        {
-          "v": "contactEmail"
-        },
-        ", asunto \"Incident\"."
-      ]
+    "b09": {
+      "p": "Para notificar un incidente de seguridad o disponibilidad que afecte al prototipo: {v:contactEmail}, asunto \"Incident\"."
     }
-  ]
+  }
 }
