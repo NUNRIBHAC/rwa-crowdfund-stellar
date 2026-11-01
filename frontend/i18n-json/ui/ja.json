@@ -586,8 +586,6 @@
       {
         "id": "participation-certificate",
         "label": "参加権 / 受益証書",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "利益配分と名目価値の返済を受ける権利（多くの場合受益証書として証券化）で、株主の完全なガバナンス権はありません。",
@@ -599,7 +597,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "参加権 / 受益証書のサブタイプ",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "年間利益だけでなく発行者の資産基盤（\"substance\"）に連動する参加権。設計と対象発行者は法域と定款によって異なります。",
@@ -610,7 +607,6 @@
       {
         "id": "share",
         "label": "株式",
-        "subtypeOf": "",
         "note": "増資は新しい株式を生み出す会社行為であり、独立した金融商品ではありません。",
         "group": "participation",
         "seniorityStates": [],
@@ -622,7 +618,6 @@
       {
         "id": "indirect-participation",
         "label": "間接参加",
-        "subtypeOf": "",
         "note": "独立した金融商品ではなく所有形態：投資家はビークルや受託者を通じて基礎となる参加権益を保有し、経済的結果は基礎権益が決定します。",
         "group": "participation",
         "seniorityStates": [],
@@ -634,8 +629,6 @@
       {
         "id": "limited-partnership",
         "label": "リミテッド・パートナーシップ持分",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "パートナーシップの有限責任社員としての持分：パートナーシップ契約に基づく損益参加、責任は出資額まで。",
@@ -650,8 +643,6 @@
       {
         "id": "loan",
         "label": "ローン",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "定められた金利と返済計画を持つ発行者への直接ローン。同じローンの親クラスは、優先、劣後（利益参加型の変形を含む）、または優先順位未指定のいずれかになります。",
@@ -662,8 +653,6 @@
       {
         "id": "bond",
         "label": "社債",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "定められたクーポンと期間を持つ証券化された債務商品。優先（非劣後）、劣後（明示的に劣後する適格社債や劣後 Mini Bond を含む）、または優先順位未指定で発行されます。",
@@ -1385,31 +1374,26 @@
       {
         "q": "クラウドファンディング投資で失う可能性のある最大額は?",
         "options": ["手数料のみ", "投資額の全額", "投資額の半分"],
-        "correct": 1,
         "why": "クラウドファンディング投資は全額を失う可能性があります (全損)。"
       },
       {
         "q": "クラウドファンディング投資は通常どのくらい簡単に売却できますか?",
         "options": ["証券取引所でいつでも", "通常はできません - 流動性がありません", "年末のみ"],
-        "correct": 1,
         "why": "一般的にセカンダリー市場はありません。満期まで保有する前提で計画してください。"
       },
       {
         "q": "発行企業が倒産した場合、損失を負うのは誰ですか?",
         "options": ["プラットフォーム", "決済事業者", "投資家"],
-        "correct": 2,
         "why": "投資は発行者との契約です。プラットフォームは損失を補償しません。"
       },
       {
         "q": "分散投資とは何ですか?",
         "options": ["複数の投資に資金を分けること", "1つのキャンペーンに全額投資すること", "すべて現金で保有すること"],
-        "correct": 0,
         "why": "投資を分散すると、1件の全損の影響を抑えられます。"
       },
       {
         "q": "クラウドファンディング投資のリターンは保証されていますか?",
         "options": ["はい、法律で", "はい、プラットフォームが", "いいえ"],
-        "correct": 2,
         "why": "利息と元本の返済は発行者次第です。保証されたリターンはありません。"
       }
     ]

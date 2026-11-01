@@ -591,8 +591,6 @@
       {
         "id": "participation-certificate",
         "label": "Droit / certificat participatif",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Un droit (souvent titrisé comme certificat participatif) à une part des bénéfices et au remboursement de la valeur nominale, sans les droits de gouvernance complets d'un actionnaire.",
@@ -611,7 +609,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "Sous-type de droit / certificat participatif",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Un droit participatif lié à la base d'actifs (la « substance ») de l'émetteur plutôt qu'à son seul bénéfice annuel. La structuration et les émetteurs éligibles varient selon la juridiction et les statuts.",
@@ -629,7 +626,6 @@
       {
         "id": "share",
         "label": "Action",
-        "subtypeOf": "",
         "note": "Une augmentation de capital est l'opération sociétaire qui crée de nouvelles actions ; ce n'est pas un instrument séparé.",
         "group": "participation",
         "seniorityStates": [],
@@ -645,7 +641,6 @@
       {
         "id": "indirect-participation",
         "label": "Participation indirecte",
-        "subtypeOf": "",
         "note": "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie.",
         "group": "participation",
         "seniorityStates": [],
@@ -661,8 +656,6 @@
       {
         "id": "limited-partnership",
         "label": "Part de société en commandite",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Une part de commanditaire dans une société de personnes : participation aux bénéfices et aux pertes selon le contrat de société, responsabilité limitée à l'apport.",
@@ -677,8 +670,6 @@
       {
         "id": "loan",
         "label": "Prêt",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Un prêt direct à l'émetteur avec un taux d'intérêt et un calendrier de remboursement définis. La même catégorie mère de prêt peut être senior, subordonnée (y compris des variantes participatives aux bénéfices) ou laisser la seniorité non spécifiée.",
@@ -696,8 +687,6 @@
       {
         "id": "bond",
         "label": "Obligation",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Un instrument de dette titrisé avec coupon et durée définis. Émise en senior (non subordonnée), subordonnée (y compris obligations qualifiées explicitement subordonnées et Mini Bonds subordonnés) ou avec seniorité non spécifiée.",
@@ -1428,31 +1417,26 @@
       {
         "q": "Quel est le maximum que vous pouvez perdre avec un investissement participatif?",
         "options": ["Seulement les frais", "La totalité de l'investissement", "La moitié de l'investissement"],
-        "correct": 1,
         "why": "Les investissements participatifs peuvent perdre toute leur valeur (perte totale)."
       },
       {
         "q": "Avec quelle facilité pouvez-vous généralement revendre un investissement participatif?",
         "options": ["À tout moment en bourse", "En général pas du tout - il est illiquide", "Seulement en fin d'année"],
-        "correct": 1,
         "why": "Il n'existe généralement pas de marché secondaire; prévoyez de conserver jusqu'à la fin du terme."
       },
       {
         "q": "Qui supporte la perte si l'entreprise émettrice fait faillite?",
         "options": ["La plateforme", "Le prestataire de paiement", "L'investisseur"],
-        "correct": 2,
         "why": "L'investissement est un contrat avec l'émetteur; la plateforme ne couvre pas les pertes."
       },
       {
         "q": "Que signifie la diversification?",
         "options": ["Répartir son argent sur plusieurs investissements", "Tout investir dans une seule campagne", "Garder tout son argent en liquide"],
-        "correct": 0,
         "why": "Répartir les investissements réduit l'impact d'une seule perte totale."
       },
       {
         "q": "Les rendements des investissements participatifs sont-ils garantis?",
         "options": ["Oui, par la loi", "Oui, par la plateforme", "Non"],
-        "correct": 2,
         "why": "Les intérêts et le remboursement dépendent de l'émetteur; aucun rendement n'est garanti."
       }
     ]

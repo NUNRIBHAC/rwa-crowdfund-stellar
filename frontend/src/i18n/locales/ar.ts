@@ -1,6 +1,8 @@
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { Messages } from './en';
 
-// Arabic (ar) - right-to-left locale; index.tsx sets dir="rtl" for it.
 export const ar: Messages = {
   meta: {
     title: 'Blockallisto - أصول حقيقية. إمكانات مشتركة.',
@@ -104,7 +106,9 @@ export const ar: Messages = {
     funded: 'ممولة',
     underfunded: 'دون الهدف',
     filterIndustryAria: 'تصفية حسب القطاع',
-    industryLabels: { 'energy-utilities': 'الطاقة والمرافق' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': 'الطاقة والمرافق',
+    } as Record<string, string>,
     allIndustries: 'كل القطاعات',
     sortAria: 'فرز الحملات',
     sortDeadline: 'الموعد الأقرب',
@@ -114,7 +118,10 @@ export const ar: Messages = {
     grid: 'شبكة',
     list: 'قائمة',
     noMatches: 'لا حملات تطابق البحث والمرشحات الحالية.',
-    resultCount: { one: 'عدد الحملات المعروضة: {n}', other: 'عدد الحملات المعروضة: {n}' },
+    resultCount: {
+      one: 'عدد الحملات المعروضة: {n}',
+      other: 'عدد الحملات المعروضة: {n}',
+    },
     activeAria: 'استثمارات نشطة',
     activeTitle: 'استثمارات نشطة',
     completedAria: 'استثمارات مكتملة',
@@ -430,8 +437,14 @@ export const ar: Messages = {
     builderDraftLink: 'اطّلع على كيفية تكوين حملة للنشر - معطّل في هذا العرض التجريبي',
     journeyTitle: 'الرحلة المقصودة',
     steps: [
-      { h: 'تقدَّم', p: 'أخبرنا عن شركتك والمبلغ والأداة التي تفكر فيها.' },
-      { h: 'المراجعة', p: 'مراجعة الأهلية والمستندات، ثم عرض تمويل منظم.' },
+      {
+        h: 'تقدَّم',
+        p: 'أخبرنا عن شركتك والمبلغ والأداة التي تفكر فيها.',
+      },
+      {
+        h: 'المراجعة',
+        p: 'مراجعة الأهلية والمستندات، ثم عرض تمويل منظم.',
+      },
       {
         h: 'البناء',
         p: 'صفحة الحملة وشروط الأداة والمستندات والمحتوى التسويقي تُعدّ معًا.',
@@ -553,9 +566,18 @@ export const ar: Messages = {
   time: {
     ended: 'انتهت',
     underMinute: 'أقل من دقيقة متبقية',
-    minutesLeft: { one: 'متبقٍ {n} دقيقة', other: 'متبقٍ {n} دقيقة' },
-    hoursLeft: { one: 'متبقٍ {n} ساعة', other: 'متبقٍ {n} ساعة' },
-    daysLeft: { one: 'متبقٍ {n} يوم', other: 'متبقٍ {n} يوم' },
+    minutesLeft: {
+      one: 'متبقٍ {n} دقيقة',
+      other: 'متبقٍ {n} دقيقة',
+    },
+    hoursLeft: {
+      one: 'متبقٍ {n} ساعة',
+      other: 'متبقٍ {n} ساعة',
+    },
+    daysLeft: {
+      one: 'متبقٍ {n} يوم',
+      other: 'متبقٍ {n} يوم',
+    },
   },
   errors: {
     freighterMissing: 'امتداد محفظة Freighter غير مكتشف. ثبّت Freighter ثم أعد محاولة الربط.',
@@ -597,7 +619,7 @@ export const ar: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'حق (يُورَّق غالبًا كشهادة مشاركة) في حصة من الأرباح وفي سداد القيمة الاسمية، دون حقوق الحوكمة الكاملة للمساهم.',
         opportunities: ['حصة في الأرباح دون شراء أسهم كاملة', 'يجمع غالبًا بين مطالبة سداد أساسية ومشاركة في الأرباح'],
         risks: ['حصة الأرباح تعتمد كليًّا على أداء المصدر', 'قد تتأخر في الرتبة عن الدائنين العاديين', 'غير سائلة عادة حتى الاستحقاق'],
@@ -609,7 +631,7 @@ export const ar: Messages = {
         subtypeOf: 'نوع فرعي من حق / شهادة المشاركة',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'حق مشاركة مرتبط بقاعدة أصول المصدر ("الجوهر") وليس بربحه السنوي فقط. تختلف الهيكلة والمصدرون المؤهلون حسب الولاية القضائية والنظام الأساسي.',
         opportunities: ['مشاركة في قيمة أصول المصدر', 'يمكن هيكلتها لمصدرين أصغر حيث تسمح الأنظمة'],
         risks: ['الشكل القانوني وحماية المستثمر يختلفان بشدة حسب الولاية القضائية', 'قد تتضمن أمينًا أو كيانًا وسيطًا بين المستثمر والمصدر', 'غير سائلة عادة'],
@@ -621,7 +643,7 @@ export const ar: Messages = {
         subtypeOf: '',
         note: 'زيادة رأس المال هي الإجراء المؤسسي الذي ينشئ أسهمًا جديدة؛ وليست أداة منفصلة.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'ملكية مباشرة في الشركة المصدرة: حق في توزيعات الأرباح ومشاركة في قيمة الشركة، بحقوق يحددها النظام الأساسي. تصل الأسهم الجديدة إلى المستثمرين عبر زيادة رأس المال.',
         opportunities: ['مشاركة كاملة في نمو الشركة', 'حقوق تصويت أو اطلاع حسب فئة السهم'],
@@ -634,7 +656,7 @@ export const ar: Messages = {
         subtypeOf: '',
         note: 'هيكل ملكية، وليس أداة متميزة: يحمل المستثمر المشاركة الأساسية عبر كيان وسيط أو أمين، والحصة الأساسية هي من يحدد الاقتصاديات.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'يشارك المستثمرون في استثمار في شركة صغيرة أو متوسطة بشكل غير مباشر - مثلًا عبر كيان وسيط أو أمين - بمعالجة مبسطة.',
         opportunities: ['وصول إلى صفقات يصعب حيازتها مباشرة', 'إدارة مبسطة عبر الهيكل الوسيط'],
         risks: ['طبقة إضافية بين المستثمر والمصدر', 'العائد يعتمد على أداء المصدر', 'شروط الكيان الوسيط تحكم المدفوعات والخروج'],
@@ -646,7 +668,7 @@ export const ar: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'حصة كشريك محدود في شركة تضامن: مشاركة في الربح والخسارة بموجب عقد الشراكة، والمسؤولية محدودة بمقدار الحصة.',
         opportunities: ['تمرير مباشر لنتائج الشراكة', 'المسؤولية محدودة بمقدار الحصة'],
         risks: ['مشاركة الخسارة قد تقلص الحصة أو تلغيها', 'الخروج مقيد غالبًا بعقد الشراكة', 'الواجبات الضريبية والإبلاغية قد تكون أعقد'],
@@ -801,7 +823,10 @@ export const ar: Messages = {
       definition:
         'شكل تعاقدي من الترتيب الثانوي تتوقف بموجبه مدفوعات الفائدة وأحيانًا الأصل عندما يصبح المصدر مفرط المديونية. صياغة مثل "qualified" وحدها لا تثبته؛ يجب أن تنص الشروط على الثانوية.',
     },
-    { term: 'Mini Bond', definition: 'تسمية منصة لسند بفئة صغيرة.' },
+    {
+      term: 'Mini Bond',
+      definition: 'تسمية منصة لسند بفئة صغيرة.',
+    },
     {
       term: 'اعرف عميلك (KYC)',
       definition: 'تحقق من الهوية يجب أن تكمله المنصات المنظمة قبل أن يستثمر المستثمر. هذا النموذج الأولي لا يجري أي KYC.',
@@ -1040,7 +1065,7 @@ export const ar: Messages = {
         teaser: 'ترميم مبنى شقق على ضفة النهر في لشبونة، بتمويل من سند ذي أولوية بفائدة ثابتة. كل الشروط في هذه الصفحة بيانات تجريبية.',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '6.5٪ سنويًا (تجريبي)',
         term: 'حتى 2030-12-31 (تجريبي)',
         minInvestment: '250 USDC تجريبي (تجريبي)',
@@ -1053,8 +1078,14 @@ export const ar: Messages = {
             label: 'ISIN / WKN',
             value: 'غير مصدر - هذا النموذج الأولي لا يصدر معرفات أوراق مالية',
           },
-          { label: 'المبلغ الاسمي للوحدة', value: '250 USDC تجريبي (تجريبي)' },
-          { label: 'الحد الأدنى للاكتتاب', value: 'وحدة واحدة (تجريبي)' },
+          {
+            label: 'المبلغ الاسمي للوحدة',
+            value: '250 USDC تجريبي (تجريبي)',
+          },
+          {
+            label: 'الحد الأدنى للاكتتاب',
+            value: 'وحدة واحدة (تجريبي)',
+          },
           {
             label: 'عتبة التمويل',
             value: 'تساوي هدف الحملة؛ "الكل أو لا شيء" يفرضه العقد في الوضع الحي',
@@ -1063,13 +1094,22 @@ export const ar: Messages = {
             label: 'حجم الإصدار',
             value: 'هدف 250,000 USDC تجريبي (بيانات تجريبية)',
           },
-          { label: 'حساب الفائدة', value: '30E/360 (تجريبي)' },
+          {
+            label: 'حساب الفائدة',
+            value: '30E/360 (تجريبي)',
+          },
           {
             label: 'تواريخ دفع الفائدة',
             value: 'سنويًا في 31 ديسمبر، أول دفعة 2027 (تجريبي)',
           },
-          { label: 'السداد', value: 'عند الاستحقاق (تجريبي)' },
-          { label: 'معروض في', value: 'لا بلدان عرض - بيانات تجريبية فقط' },
+          {
+            label: 'السداد',
+            value: 'عند الاستحقاق (تجريبي)',
+          },
+          {
+            label: 'معروض في',
+            value: 'لا بلدان عرض - بيانات تجريبية فقط',
+          },
           {
             label: 'الوسيط',
             value: 'لا يوجد. هذا النموذج الأولي ليس مزود خدمة تمويل جماعي',
@@ -1108,7 +1148,7 @@ export const ar: Messages = {
         teaser: 'تركيب طاقة شمسية مجتمعي في ألنتيجو، بتمويل من سند ثانوي بمتغير فائدة نقدية. كل الشروط في هذه الصفحة بيانات تجريبية.',
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '7.0٪ سنويًا نقدًا (تجريبي)',
         term: 'حتى 2032-06-30 (تجريبي)',
         minInvestment: '250 USDC تجريبي (تجريبي)',
@@ -1121,7 +1161,10 @@ export const ar: Messages = {
             label: 'ISIN / WKN',
             value: 'غير مصدر - هذا النموذج الأولي لا يصدر معرفات أوراق مالية',
           },
-          { label: 'المبلغ الاسمي للوحدة', value: '250 USDC تجريبي (تجريبي)' },
+          {
+            label: 'المبلغ الاسمي للوحدة',
+            value: '250 USDC تجريبي (تجريبي)',
+          },
           {
             label: 'عتبة التمويل',
             value: 'هدف 900,000 USDC تجريبي (بيانات تجريبية)؛ "الكل أو لا شيء" في الوضع الحي',
@@ -1130,13 +1173,22 @@ export const ar: Messages = {
             label: 'الترتيب الثانوي',
             value: 'المطالبات تتأخر عن الدائنين ذوي الأولوية عند الإعسار (شروط تجريبية)',
           },
-          { label: 'حساب الفائدة', value: 'act/act (تجريبي)' },
+          {
+            label: 'حساب الفائدة',
+            value: 'act/act (تجريبي)',
+          },
           {
             label: 'تواريخ دفع الفائدة',
             value: 'سنويًا في 30 يونيو، أول دفعة 2028 (تجريبي)',
           },
-          { label: 'السداد', value: 'عند الاستحقاق (تجريبي)' },
-          { label: 'معروض في', value: 'لا بلدان عرض - بيانات تجريبية فقط' },
+          {
+            label: 'السداد',
+            value: 'عند الاستحقاق (تجريبي)',
+          },
+          {
+            label: 'معروض في',
+            value: 'لا بلدان عرض - بيانات تجريبية فقط',
+          },
           {
             label: 'الوسيط',
             value: 'لا يوجد. هذا النموذج الأولي ليس مزود خدمة تمويل جماعي',
@@ -1153,7 +1205,7 @@ export const ar: Messages = {
             note: 'لا ملف مستضاف في هذا النموذج الأولي',
           },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1176,7 +1228,10 @@ export const ar: Messages = {
             label: 'ISIN / WKN',
             value: 'غير مصدر - هذا النموذج الأولي لا يصدر معرفات أوراق مالية',
           },
-          { label: 'المبلغ الاسمي للوحدة', value: '500 USDC تجريبي (تجريبي)' },
+          {
+            label: 'المبلغ الاسمي للوحدة',
+            value: '500 USDC تجريبي (تجريبي)',
+          },
           {
             label: 'عتبة التمويل',
             value: 'هدف 500,000 USDC تجريبي (بيانات تجريبية)',
@@ -1193,8 +1248,14 @@ export const ar: Messages = {
             label: 'وقف الفائدة',
             value: 'تستحق الفائدة حتى يوم التحويل (تجريبي)',
           },
-          { label: 'السداد عند عدم التحويل', value: 'عند الاستحقاق (تجريبي)' },
-          { label: 'معروض في', value: 'لا بلدان عرض - بيانات تجريبية فقط' },
+          {
+            label: 'السداد عند عدم التحويل',
+            value: 'عند الاستحقاق (تجريبي)',
+          },
+          {
+            label: 'معروض في',
+            value: 'لا بلدان عرض - بيانات تجريبية فقط',
+          },
           {
             label: 'الوسيط',
             value: 'لا يوجد. هذا النموذج الأولي ليس مزود خدمة تمويل جماعي',
@@ -1462,7 +1523,11 @@ export const ar: Messages = {
     newsFeedEmpty: 'لا توجد أخبار عن الحملة بعد.',
     myApplicationsTitle: 'طلبات الإصدار الخاصة بي',
     myApplicationsEmpty: 'لا توجد طلبات بعد.',
-    applicationStatus: { received: 'تم الاستلام', under_review: 'قيد المراجعة', closed: 'مغلقة' },
+    applicationStatus: {
+      received: 'تم الاستلام',
+      under_review: 'قيد المراجعة',
+      closed: 'مغلقة',
+    },
     myTicketsTitle: 'تذاكر الدعم والملاحظات الخاصة بي',
     myCommentsTitle: 'تعليقاتي',
     commentHidden: 'مخفي بواسطة الإشراف',
@@ -1485,7 +1550,11 @@ export const ar: Messages = {
       submit: 'إرسال الطلب',
       submitting: 'جارٍ الإرسال...',
       submitted: 'تم استلام الطلب. يظهر أعلاه بصفته قيد المراجعة.',
-      status: { pending: 'قيد المراجعة', approved: 'مقبول', rejected: 'مرفوض' },
+      status: {
+        pending: 'قيد المراجعة',
+        approved: 'مقبول',
+        rejected: 'مرفوض',
+      },
     },
     security: {
       title: 'الأمان',
@@ -1498,7 +1567,10 @@ export const ar: Messages = {
       expiresLabel: 'تنتهي',
       revoke: 'إنهاء الجلسة',
       revokeOthers: 'تسجيل الخروج من جميع الجلسات الأخرى',
-      revokedOthers: { one: 'تم إنهاء {count} جلسة أخرى.', other: 'تم إنهاء {count} جلسات أخرى.' },
+      revokedOthers: {
+        one: 'تم إنهاء {count} جلسة أخرى.',
+        other: 'تم إنهاء {count} جلسات أخرى.',
+      },
       empty: 'لا توجد جلسات نشطة.',
     },
     notifications: {
@@ -1530,7 +1602,14 @@ export const ar: Messages = {
         'أدوات المشغّل في بيئة الاختبار. تُوسم الأخبار دائماً كمحتوى تجريبي من المنصة؛ لا توجد هوية مُصدر موثّقة. لا تنشر ادعاءات بشأن الموافقة أو الإدراج أو العوائد.',
       loadError: 'تعذّر تحميل بيانات المشغّل.',
       retry: 'إعادة المحاولة',
-      tabs: { applications: 'الطلبات', comments: 'التعليقات', tickets: 'التذاكر', news: 'الأخبار', reconciliation: 'التسوية', audit: 'سجل الإجراءات' },
+      tabs: {
+        applications: 'الطلبات',
+        comments: 'التعليقات',
+        tickets: 'التذاكر',
+        news: 'الأخبار',
+        reconciliation: 'التسوية',
+        audit: 'سجل الإجراءات',
+      },
       applicationsEmpty: 'لا توجد طلبات إصدار بعد.',
       commentsEmpty: 'لا توجد تعليقات بعد.',
       ticketsEmpty: 'لا توجد تذاكر بعد.',

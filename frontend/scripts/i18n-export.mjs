@@ -9,7 +9,12 @@
 //
 // 11 locales: en pt es fr de zh-TW zh-CN ja ko ar hi. English is the base.
 // The dictionaries are plain data (placeholders as {var} substrings, plurals
-// as { one, other } leaves), so the JSON is a lossless projection.
+// as { one, other } leaves), so the JSON is a lossless projection - with one
+// deliberate exception: NON-TRANSLATABLE leaves are omitted from the UI JSON
+// and re-injected from the English TS tree on import. That covers empty
+// optional fields (e.g. instruments.classes[].subtypeOf/note, "" in the
+// source) and numeric answer indices (categorisation.catQuestions[].correct),
+// which must never become translator-editable units.
 //
 // --check: verify the committed JSON matches the TS sources, exit 1 on drift.
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
@@ -61,6 +66,22 @@ function render(tree) {
   return JSON.stringify(tree, null, 2) + '\n';
 }
 
+// Drop leaves a translator must never see: empty/whitespace-only strings
+// (optional empty fields) and non-string scalars (numeric answer indices).
+// Import re-injects them from the English TS tree, so the projection stays
+// roundtrip-lossless without exposing them as Weblate units.
+function stripNonTranslatable(value) {
+  if (typeof value === 'string') return value.trim() === '' ? undefined : value;
+  if (value === null || typeof value !== 'object') return undefined;
+  if (Array.isArray(value)) return value.map(stripNonTranslatable);
+  const out = {};
+  for (const [k, v] of Object.entries(value)) {
+    const stripped = stripNonTranslatable(v);
+    if (stripped !== undefined) out[k] = stripped;
+  }
+  return out;
+}
+
 const check = process.argv.includes('--check');
 const drift = [];
 
@@ -81,7 +102,7 @@ async function emit(relPath, raw) {
 for (const locale of LOCALES) {
   const ui = await loadTsModule(join(ROOT, 'src/i18n/locales', `${locale}.ts`));
   assertJsonSafe(ui, `ui.${locale}`);
-  await emit(join('ui', `${locale}.json`), render(ui));
+  await emit(join('ui', `${locale}.json`), render(stripNonTranslatable(ui)));
 
   const legal = {};
   for (const doc of LEGAL_DOCS) {

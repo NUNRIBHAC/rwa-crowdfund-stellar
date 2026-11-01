@@ -586,8 +586,6 @@
       {
         "id": "participation-certificate",
         "label": "参与权 / 参与凭证",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "一种分享利润并要求偿还名义价值的权利（通常以参与凭证的形式证券化），但不享有股东的完整治理权。",
@@ -599,7 +597,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "参与权 / 参与凭证的子类型",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "一种与发行方资产基础（\"substance\"）而非仅年度利润挂钩的参与权。其结构和合格发行方因司法辖区和公司章程而异。",
@@ -610,7 +607,6 @@
       {
         "id": "share",
         "label": "股份",
-        "subtypeOf": "",
         "note": "增资是创造新股份的公司行为，不是独立的金融工具。",
         "group": "participation",
         "seniorityStates": [],
@@ -622,7 +618,6 @@
       {
         "id": "indirect-participation",
         "label": "间接参与",
-        "subtypeOf": "",
         "note": "一种持有结构，而非独立工具：投资者通过载体或受托人间接持有基础参与权益，经济收益由基础权益决定。",
         "group": "participation",
         "seniorityStates": [],
@@ -634,8 +629,6 @@
       {
         "id": "limited-partnership",
         "label": "有限合伙份额",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "作为有限合伙人持有合伙企业的份额：按合伙协议参与盈亏，责任以出资额为限。",
@@ -646,8 +639,6 @@
       {
         "id": "loan",
         "label": "贷款",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "对发行方的直接贷款，具有确定的利率和还款计划。同一贷款母类可以是优先、次级（包括利润参与型变体），或不指定优先级。",
@@ -658,8 +649,6 @@
       {
         "id": "bond",
         "label": "债券",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "具有确定票息和期限的证券化债务工具。可以优先（非次级）、次级（包括明确次级的合格债券和次级 Mini Bond）或未指定优先级发行。",
@@ -1379,31 +1368,26 @@
       {
         "q": "众筹投资最多可能损失多少?",
         "options": ["仅手续费", "全部投资额", "一半投资额"],
-        "correct": 1,
         "why": "众筹投资可能损失全部价值(全额亏损)。"
       },
       {
         "q": "通常出售众筹投资有多容易?",
         "options": ["随时可在交易所出售", "通常无法出售 - 缺乏流动性", "仅年底可以"],
-        "correct": 1,
         "why": "一般没有二级市场;请按持有至到期来规划。"
       },
       {
         "q": "如果发行公司倒闭,谁承担损失?",
         "options": ["平台", "支付服务商", "投资者"],
-        "correct": 2,
         "why": "投资是与发行方签订的合同;平台不承担损失。"
       },
       {
         "q": "分散投资是什么意思?",
         "options": ["将资金分散到多项投资", "全部投入一个活动", "全部持有现金"],
-        "correct": 0,
         "why": "分散投资可以降低单笔全额亏损的影响。"
       },
       {
         "q": "众筹投资的收益有保障吗?",
         "options": ["有,法律保障", "有,平台保障", "没有"],
-        "correct": 2,
         "why": "利息和本金偿还取决于发行方;没有任何收益是有保障的。"
       }
     ]

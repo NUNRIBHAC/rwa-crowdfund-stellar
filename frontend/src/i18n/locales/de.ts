@@ -1,5 +1,6 @@
-// German (de-DE). Structure is compiler-checked against ./en;
-// array lengths and ids are checked by i18n/parity.test.ts.
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { Messages } from './en';
 
 export const de: Messages = {
@@ -106,7 +107,9 @@ export const de: Messages = {
     funded: 'Finanziert',
     underfunded: 'Nicht finanziert',
     filterIndustryAria: 'Nach Branche filtern',
-    industryLabels: { 'energy-utilities': 'Energie und Versorgung' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': 'Energie und Versorgung',
+    } as Record<string, string>,
     allIndustries: 'Alle Branchen',
     sortAria: 'Kampagnen sortieren',
     sortDeadline: 'Nächste Frist',
@@ -116,7 +119,10 @@ export const de: Messages = {
     grid: 'Raster',
     list: 'Liste',
     noMatches: 'Keine Kampagne entspricht der aktuellen Suche und den Filtern.',
-    resultCount: { one: '{n} Kampagne angezeigt', other: '{n} Kampagnen angezeigt' },
+    resultCount: {
+      one: '{n} Kampagne angezeigt',
+      other: '{n} Kampagnen angezeigt',
+    },
     activeAria: 'Aktive Investitionen',
     activeTitle: 'Aktive Investitionen',
     completedAria: 'Abgeschlossene Investitionen',
@@ -569,9 +575,18 @@ export const de: Messages = {
   time: {
     ended: 'Beendet',
     underMinute: 'Weniger als eine Minute übrig',
-    minutesLeft: { one: '{n} Minute übrig', other: '{n} Minuten übrig' },
-    hoursLeft: { one: '{n} Stunde übrig', other: '{n} Stunden übrig' },
-    daysLeft: { one: '{n} Tag übrig', other: '{n} Tage übrig' },
+    minutesLeft: {
+      one: '{n} Minute übrig',
+      other: '{n} Minuten übrig',
+    },
+    hoursLeft: {
+      one: '{n} Stunde übrig',
+      other: '{n} Stunden übrig',
+    },
+    daysLeft: {
+      one: '{n} Tag übrig',
+      other: '{n} Tage übrig',
+    },
   },
   errors: {
     freighterMissing: 'Freighter-Wallet-Erweiterung nicht erkannt. Installieren Sie Freighter und versuchen Sie Verbinden erneut.',
@@ -615,7 +630,7 @@ export const de: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs.',
         opportunities: ['Gewinnbeteiligung ohne vollständigen Eigenkapitalerwerb', 'Kombiniert oft einen Basis-Rückzahlungsanspruch mit Gewinnbeteiligung'],
@@ -632,7 +647,7 @@ export const de: Messages = {
         subtypeOf: 'Untertyp von Beteiligungsrecht / -zertifikat',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung.',
         opportunities: ['Beteiligung am Substanzwert des Emittenten', 'Kann für kleinere Emittenten strukturiert werden, wenn die Satzung es erlaubt'],
@@ -649,7 +664,7 @@ export const de: Messages = {
         subtypeOf: '',
         note: 'Eine Kapitalerhöhung ist der gesellschaftsrechtliche Vorgang, der neue Aktien schafft; sie ist kein eigenes Instrument.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Direktes Eigenkapital an der emittierenden Gesellschaft: Dividendenanspruch und Beteiligung am Unternehmenswert, mit Rechten nach der Satzung. Neue Aktien erreichen Anleger über eine Kapitalerhöhung.',
         opportunities: ['Volle Teilhabe am Unternehmenswachstum', 'Stimm- oder Informationsrechte je nach Aktiengattung'],
@@ -666,7 +681,7 @@ export const de: Messages = {
         subtypeOf: '',
         note: 'Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.',
         opportunities: ['Zugang zu Geschäften, die direkt schwer zu halten wären', 'Vereinfachte Verwaltung über die Zwischenstruktur'],
         risks: [
@@ -682,7 +697,7 @@ export const de: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage.',
         opportunities: ['Direkte Durchleitung der Gesellschaftsergebnisse', 'Haftung auf die Einlage begrenzt'],
@@ -1103,7 +1118,7 @@ export const de: Messages = {
           'Sanierung eines Flussufer-Apartmentgebäudes in Lissabon, finanziert über eine Senioranleihe mit festem Zinssatz. Alle Bedingungen auf dieser Seite sind Beispieldaten.',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '6,5% p.a. (Beispiel)',
         term: 'Bis 2030-12-31 (Beispiel)',
         minInvestment: '250 Testnet-USDC (Beispiel)',
@@ -1120,7 +1135,10 @@ export const de: Messages = {
             label: 'Nennbetrag pro Einheit',
             value: '250 Testnet-USDC (Beispiel)',
           },
-          { label: 'Mindestzeichnung', value: '1 Einheit (Beispiel)' },
+          {
+            label: 'Mindestzeichnung',
+            value: '1 Einheit (Beispiel)',
+          },
           {
             label: 'Finanzierungsschwelle',
             value: 'Gleich dem Kampagnenziel; Alles-oder-nichts wird im Live-Modus vom Vertrag durchgesetzt',
@@ -1129,12 +1147,18 @@ export const de: Messages = {
             label: 'Emissionsvolumen',
             value: 'Ziel 250.000 Testnet-USDC (Beispiel-Fixture)',
           },
-          { label: 'Zinsberechnung', value: '30E/360 (Beispiel)' },
+          {
+            label: 'Zinsberechnung',
+            value: '30E/360 (Beispiel)',
+          },
           {
             label: 'Zinszahlungstermine',
             value: 'Jährlich am 31. Dezember, erste Zahlung 2027 (Beispiel)',
           },
-          { label: 'Tilgung', value: 'Bei Fälligkeit (Beispiel)' },
+          {
+            label: 'Tilgung',
+            value: 'Bei Fälligkeit (Beispiel)',
+          },
           {
             label: 'Angeboten in',
             value: 'Keine Angebotsländer - nur Beispieldaten',
@@ -1178,7 +1202,7 @@ export const de: Messages = {
           'Gemeinschafts-Solaranlage im Alentejo, finanziert über eine nachrangige Anleihe mit Barzins-Variante. Alle Bedingungen auf dieser Seite sind Beispieldaten.',
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '7,0% p.a. in bar (Beispiel)',
         term: 'Bis 2032-06-30 (Beispiel)',
         minInvestment: '250 Testnet-USDC (Beispiel)',
@@ -1203,12 +1227,18 @@ export const de: Messages = {
             label: 'Nachrangigkeit',
             value: 'Forderungen stehen im Insolvenzfall hinter vorrangigen Gläubigern (Beispielbedingungen)',
           },
-          { label: 'Zinsberechnung', value: 'act/act (Beispiel)' },
+          {
+            label: 'Zinsberechnung',
+            value: 'act/act (Beispiel)',
+          },
           {
             label: 'Zinszahlungstermine',
             value: 'Jährlich am 30. Juni, erste Zahlung 2028 (Beispiel)',
           },
-          { label: 'Tilgung', value: 'Bei Fälligkeit (Beispiel)' },
+          {
+            label: 'Tilgung',
+            value: 'Bei Fälligkeit (Beispiel)',
+          },
           {
             label: 'Angeboten in',
             value: 'Keine Angebotsländer - nur Beispieldaten',
@@ -1231,7 +1261,7 @@ export const de: Messages = {
             note: 'Keine Datei in diesem Prototyp gehostet',
           },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1557,7 +1587,11 @@ export const de: Messages = {
     newsFeedEmpty: 'Noch keine Kampagnen-Neuigkeiten.',
     myApplicationsTitle: 'Meine Emittentenanträge',
     myApplicationsEmpty: 'Noch keine Anträge.',
-    applicationStatus: { received: 'Eingegangen', under_review: 'In Prüfung', closed: 'Geschlossen' },
+    applicationStatus: {
+      received: 'Eingegangen',
+      under_review: 'In Prüfung',
+      closed: 'Geschlossen',
+    },
     myTicketsTitle: 'Meine Support- und Feedback-Tickets',
     myCommentsTitle: 'Meine Kommentare',
     commentHidden: 'Durch Moderation ausgeblendet',
@@ -1580,7 +1614,11 @@ export const de: Messages = {
       submit: 'Antrag absenden',
       submitting: 'Wird gesendet...',
       submitted: 'Antrag erhalten. Er erscheint oben als ausstehende Prüfung.',
-      status: { pending: 'Prüfung ausstehend', approved: 'Genehmigt', rejected: 'Abgelehnt' },
+      status: {
+        pending: 'Prüfung ausstehend',
+        approved: 'Genehmigt',
+        rejected: 'Abgelehnt',
+      },
     },
     security: {
       title: 'Sicherheit',
@@ -1593,7 +1631,10 @@ export const de: Messages = {
       expiresLabel: 'Läuft ab',
       revoke: 'Sitzung beenden',
       revokeOthers: 'Alle anderen Sitzungen abmelden',
-      revokedOthers: { one: '{count} weitere Sitzung beendet.', other: '{count} weitere Sitzungen beendet.' },
+      revokedOthers: {
+        one: '{count} weitere Sitzung beendet.',
+        other: '{count} weitere Sitzungen beendet.',
+      },
       empty: 'Keine aktiven Sitzungen.',
     },
     notifications: {
@@ -1626,7 +1667,14 @@ export const de: Messages = {
         'Operator-Werkzeuge der Testumgebung. News-Beiträge werden immer als Plattform-Demo-Inhalt gekennzeichnet; es gibt keine verifizierte Emittentenidentität. Veröffentlichen Sie keine Aussagen über Genehmigungen, Listings oder Renditen.',
       loadError: 'Operator-Daten konnten nicht geladen werden.',
       retry: 'Erneut versuchen',
-      tabs: { applications: 'Anträge', comments: 'Kommentare', tickets: 'Tickets', news: 'News', reconciliation: 'Abgleich', audit: 'Aktionsprotokoll' },
+      tabs: {
+        applications: 'Anträge',
+        comments: 'Kommentare',
+        tickets: 'Tickets',
+        news: 'News',
+        reconciliation: 'Abgleich',
+        audit: 'Aktionsprotokoll',
+      },
       applicationsEmpty: 'Noch keine Emittentenanträge.',
       commentsEmpty: 'Noch keine Kommentare.',
       ticketsEmpty: 'Noch keine Tickets.',

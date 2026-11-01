@@ -1,5 +1,6 @@
-// European Portuguese (pt-PT). Structure is compiler-checked against ./en;
-// array lengths and ids are checked by i18n/parity.test.ts.
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { Messages } from './en';
 
 export const pt: Messages = {
@@ -106,7 +107,9 @@ export const pt: Messages = {
     funded: 'Financiadas',
     underfunded: 'Não financiadas',
     filterIndustryAria: 'Filtrar por setor',
-    industryLabels: { 'energy-utilities': 'Energia e utilities' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': 'Energia e utilities',
+    } as Record<string, string>,
     allIndustries: 'Todos os setores',
     sortAria: 'Ordenar campanhas',
     sortDeadline: 'Prazo mais próximo',
@@ -116,7 +119,10 @@ export const pt: Messages = {
     grid: 'Grelha',
     list: 'Lista',
     noMatches: 'Nenhuma campanha corresponde à pesquisa e aos filtros atuais.',
-    resultCount: { one: '{n} campanha visível', other: '{n} campanhas visíveis' },
+    resultCount: {
+      one: '{n} campanha visível',
+      other: '{n} campanhas visíveis',
+    },
     activeAria: 'Investimentos ativos',
     activeTitle: 'Investimentos ativos',
     completedAria: 'Investimentos concluídos',
@@ -568,9 +574,18 @@ export const pt: Messages = {
   time: {
     ended: 'Terminou',
     underMinute: 'Menos de um minuto restante',
-    minutesLeft: { one: '{n} minuto restante', other: '{n} minutos restantes' },
-    hoursLeft: { one: '{n} hora restante', other: '{n} horas restantes' },
-    daysLeft: { one: '{n} dia restante', other: '{n} dias restantes' },
+    minutesLeft: {
+      one: '{n} minuto restante',
+      other: '{n} minutos restantes',
+    },
+    hoursLeft: {
+      one: '{n} hora restante',
+      other: '{n} horas restantes',
+    },
+    daysLeft: {
+      one: '{n} dia restante',
+      other: '{n} dias restantes',
+    },
   },
   errors: {
     freighterMissing: 'Extensão de carteira Freighter não detetada. Instale a Freighter e tente novamente Ligar.',
@@ -614,7 +629,7 @@ export const pt: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Um direito (frequentemente titularizado como certificado participativo) a uma parcela dos lucros e ao reembolso do valor nominal, sem os direitos de governo plenos de um acionista.',
         opportunities: [
@@ -634,7 +649,7 @@ export const pt: Messages = {
         subtypeOf: 'Subtipo de direito / certificado participativo',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Um direito participativo ligado à base de ativos ("substância") do emitente e não apenas ao seu lucro anual. A estruturação e os emitentes elegíveis variam consoante a jurisdição e os estatutos.',
         opportunities: ['Participação no valor dos ativos do emitente', 'Pode ser estruturado para emitentes mais pequenos quando os estatutos o permitem'],
@@ -651,7 +666,7 @@ export const pt: Messages = {
         subtypeOf: '',
         note: 'Um aumento de capital é a operação societária que cria novas ações; não é um instrumento separado.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Capital próprio direto da empresa emitente: direito a dividendos e participação no valor da empresa, com direitos definidos pelos estatutos. As novas ações chegam aos investidores através de um aumento de capital.',
         opportunities: ['Participação plena no crescimento da empresa', 'Direitos de voto ou de informação consoante a classe de ações'],
@@ -668,7 +683,7 @@ export const pt: Messages = {
         subtypeOf: '',
         note: 'Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia.',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado.',
         opportunities: ['Acesso a operações difíceis de deter diretamente', 'Administração simplificada através da estrutura intermediária'],
@@ -685,7 +700,7 @@ export const pt: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary:
           'Uma participação como sócio comanditário numa sociedade: participação nos lucros e perdas segundo o contrato de sociedade, com responsabilidade limitada à entrada.',
         opportunities: ['Transmissão direta dos resultados da sociedade', 'Responsabilidade limitada à entrada'],
@@ -1111,7 +1126,7 @@ export const pt: Messages = {
           'Reabilitação de um prédio de apartamentos ribeirinho em Lisboa, financiada através de uma obrigação sénior de taxa fixa. Todas as condições nesta página são dados de exemplo.',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '6,5% a.a. (exemplo)',
         term: 'Até 2030-12-31 (exemplo)',
         minInvestment: '250 USDC de testnet (exemplo)',
@@ -1128,7 +1143,10 @@ export const pt: Messages = {
             label: 'Montante nominal por unidade',
             value: '250 USDC de testnet (exemplo)',
           },
-          { label: 'Subscrição mínima', value: '1 unidade (exemplo)' },
+          {
+            label: 'Subscrição mínima',
+            value: '1 unidade (exemplo)',
+          },
           {
             label: 'Limiar de financiamento',
             value: 'Igual ao objetivo da campanha; tudo-ou-nada aplicado pelo contrato em modo real',
@@ -1137,12 +1155,18 @@ export const pt: Messages = {
             label: 'Volume da emissão',
             value: 'Objetivo de 250.000 USDC de testnet (exemplo)',
           },
-          { label: 'Cálculo de juros', value: '30E/360 (exemplo)' },
+          {
+            label: 'Cálculo de juros',
+            value: '30E/360 (exemplo)',
+          },
           {
             label: 'Datas de pagamento de juros',
             value: 'Anualmente a 31 de dezembro, primeiro pagamento em 2027 (exemplo)',
           },
-          { label: 'Reembolso', value: 'No vencimento (exemplo)' },
+          {
+            label: 'Reembolso',
+            value: 'No vencimento (exemplo)',
+          },
           {
             label: 'Oferecido em',
             value: 'Sem países de oferta - apenas dados de exemplo',
@@ -1186,7 +1210,7 @@ export const pt: Messages = {
           'Instalação solar comunitária no Alentejo, financiada através de uma obrigação subordinada com variante de juros em numerário. Todas as condições nesta página são dados de exemplo.',
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '7,0% a.a. em numerário (exemplo)',
         term: 'Até 2032-06-30 (exemplo)',
         minInvestment: '250 USDC de testnet (exemplo)',
@@ -1211,12 +1235,18 @@ export const pt: Messages = {
             label: 'Subordinação',
             value: 'Os créditos ficam atrás dos credores seniores em caso de insolvência (condições de exemplo)',
           },
-          { label: 'Cálculo de juros', value: 'act/act (exemplo)' },
+          {
+            label: 'Cálculo de juros',
+            value: 'act/act (exemplo)',
+          },
           {
             label: 'Datas de pagamento de juros',
             value: 'Anualmente a 30 de junho, primeiro pagamento em 2028 (exemplo)',
           },
-          { label: 'Reembolso', value: 'No vencimento (exemplo)' },
+          {
+            label: 'Reembolso',
+            value: 'No vencimento (exemplo)',
+          },
           {
             label: 'Oferecido em',
             value: 'Sem países de oferta - apenas dados de exemplo',
@@ -1239,7 +1269,7 @@ export const pt: Messages = {
             note: 'Nenhum ficheiro alojado neste protótipo',
           },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1566,7 +1596,11 @@ export const pt: Messages = {
     newsFeedEmpty: 'Ainda não há notícias da campanha.',
     myApplicationsTitle: 'As minhas candidaturas de emitente',
     myApplicationsEmpty: 'Ainda não há candidaturas.',
-    applicationStatus: { received: 'Recebida', under_review: 'Em análise', closed: 'Fechada' },
+    applicationStatus: {
+      received: 'Recebida',
+      under_review: 'Em análise',
+      closed: 'Fechada',
+    },
     myTicketsTitle: 'Os meus pedidos de suporte e feedback',
     myCommentsTitle: 'Os meus comentários',
     commentHidden: 'Ocultado pela moderação',
@@ -1589,7 +1623,11 @@ export const pt: Messages = {
       submit: 'Submeter candidatura',
       submitting: 'A submeter...',
       submitted: 'Candidatura recebida. Aparece acima como pendente de revisão.',
-      status: { pending: 'Pendente de revisão', approved: 'Aprovada', rejected: 'Rejeitada' },
+      status: {
+        pending: 'Pendente de revisão',
+        approved: 'Aprovada',
+        rejected: 'Rejeitada',
+      },
     },
     security: {
       title: 'Segurança',
@@ -1602,7 +1640,10 @@ export const pt: Messages = {
       expiresLabel: 'Expira',
       revoke: 'Terminar sessão',
       revokeOthers: 'Terminar todas as outras sessões',
-      revokedOthers: { one: 'Terminada {count} sessão adicional.', other: 'Terminadas {count} sessões adicionais.' },
+      revokedOthers: {
+        one: 'Terminada {count} sessão adicional.',
+        other: 'Terminadas {count} sessões adicionais.',
+      },
       empty: 'Sem sessões ativas.',
     },
     notifications: {

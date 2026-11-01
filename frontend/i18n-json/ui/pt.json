@@ -591,8 +591,6 @@
       {
         "id": "participation-certificate",
         "label": "Direito / certificado participativo",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Um direito (frequentemente titularizado como certificado participativo) a uma parcela dos lucros e ao reembolso do valor nominal, sem os direitos de governo plenos de um acionista.",
@@ -611,7 +609,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "Subtipo de direito / certificado participativo",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Um direito participativo ligado à base de ativos (\"substância\") do emitente e não apenas ao seu lucro anual. A estruturação e os emitentes elegíveis variam consoante a jurisdição e os estatutos.",
@@ -626,7 +623,6 @@
       {
         "id": "share",
         "label": "Ação",
-        "subtypeOf": "",
         "note": "Um aumento de capital é a operação societária que cria novas ações; não é um instrumento separado.",
         "group": "participation",
         "seniorityStates": [],
@@ -642,7 +638,6 @@
       {
         "id": "indirect-participation",
         "label": "Participação indireta",
-        "subtypeOf": "",
         "note": "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia.",
         "group": "participation",
         "seniorityStates": [],
@@ -658,8 +653,6 @@
       {
         "id": "limited-partnership",
         "label": "Participação em sociedade em comandita",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Uma participação como sócio comanditário numa sociedade: participação nos lucros e perdas segundo o contrato de sociedade, com responsabilidade limitada à entrada.",
@@ -674,8 +667,6 @@
       {
         "id": "loan",
         "label": "Empréstimo",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
@@ -693,8 +684,6 @@
       {
         "id": "bond",
         "label": "Obrigação",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada.",
@@ -1425,31 +1414,26 @@
       {
         "q": "Qual é o máximo que pode perder num investimento colaborativo?",
         "options": ["Apenas as comissões", "A totalidade do investimento", "Metade do investimento"],
-        "correct": 1,
         "why": "Os investimentos colaborativos podem perder a totalidade do valor (perda total)."
       },
       {
         "q": "Com que facilidade pode normalmente vender um investimento colaborativo?",
         "options": ["A qualquer momento em bolsa", "Normalmente não pode - é ilíquido", "Apenas no fim do ano"],
-        "correct": 1,
         "why": "Regra geral não existe mercado secundário; planeie manter o investimento até ao fim do prazo."
       },
       {
         "q": "Quem suporta a perda se a empresa emitente falir?",
         "options": ["A plataforma", "O prestador de pagamentos", "O investidor"],
-        "correct": 2,
         "why": "O investimento é um contrato com o emitente; a plataforma não cobre perdas."
       },
       {
         "q": "O que significa diversificação?",
         "options": ["Distribuir o dinheiro por vários investimentos", "Investir tudo numa campanha", "Manter todo o dinheiro em numerário"],
-        "correct": 0,
         "why": "Distribuir os investimentos reduz o impacto de uma única perda total."
       },
       {
         "q": "Os rendimentos dos investimentos colaborativos são garantidos?",
         "options": ["Sim, por lei", "Sim, pela plataforma", "Não"],
-        "correct": 2,
         "why": "Os juros e o reembolso dependem do emitente; nenhum rendimento é garantido."
       }
     ]

@@ -591,8 +591,6 @@
       {
         "id": "participation-certificate",
         "label": "Derecho / certificado participativo",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Un derecho (a menudo titulizado como certificado participativo) a una parte de los beneficios y al reembolso del valor nominal, sin los derechos de gobierno plenos de un accionista.",
@@ -611,7 +609,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "Subtipo de derecho / certificado participativo",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Un derecho participativo ligado a la base de activos (\"sustancia\") del emisor y no solo a su beneficio anual. La estructuración y los emisores elegibles varían según la jurisdicción y los estatutos.",
@@ -629,7 +626,6 @@
       {
         "id": "share",
         "label": "Acción",
-        "subtypeOf": "",
         "note": "Una ampliación de capital es la operación societaria que crea nuevas acciones; no es un instrumento separado.",
         "group": "participation",
         "seniorityStates": [],
@@ -645,7 +641,6 @@
       {
         "id": "indirect-participation",
         "label": "Participación indirecta",
-        "subtypeOf": "",
         "note": "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía.",
         "group": "participation",
         "seniorityStates": [],
@@ -661,8 +656,6 @@
       {
         "id": "limited-partnership",
         "label": "Participación en sociedad comanditaria",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Una participación como socio comanditario en una sociedad: participación en beneficios y pérdidas según el contrato social, con responsabilidad limitada a la aportación.",
@@ -677,8 +670,6 @@
       {
         "id": "loan",
         "label": "Préstamo",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Un préstamo directo al emisor con tipo de interés y calendario de reembolso definidos. La misma categoría madre de préstamo puede ser sénior, subordinada (incluidas variantes participativas en beneficios) o dejar la senioridad sin especificar.",
@@ -696,8 +687,6 @@
       {
         "id": "bond",
         "label": "Bono",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Un instrumento de deuda titulizado con cupón y plazo definidos. Emitido como sénior (no subordinado), subordinado (incluidos bonos cualificados explícitamente subordinados y Mini Bonds subordinados) o con senioridad no especificada.",
@@ -1426,31 +1415,26 @@
       {
         "q": "¿Cuál es el máximo que puedes perder con una inversión colectiva?",
         "options": ["Solo las comisiones", "La totalidad de la inversión", "La mitad de la inversión"],
-        "correct": 1,
         "why": "Las inversiones colectivas pueden perder la totalidad de su valor (pérdida total)."
       },
       {
         "q": "¿Con qué facilidad puedes vender normalmente una inversión colectiva?",
         "options": ["En cualquier momento en bolsa", "Normalmente no - es ilíquida", "Solo a final de año"],
-        "correct": 1,
         "why": "Por lo general no existe un mercado secundario; planea mantener la inversión hasta el final del plazo."
       },
       {
         "q": "¿Quién asume la pérdida si la empresa emisora quiebra?",
         "options": ["La plataforma", "El proveedor de pagos", "El inversor"],
-        "correct": 2,
         "why": "La inversión es un contrato con el emisor; la plataforma no cubre las pérdidas."
       },
       {
         "q": "¿Qué significa diversificación?",
         "options": ["Repartir el dinero entre varias inversiones", "Invertirlo todo en una campaña", "Mantener todo el dinero en efectivo"],
-        "correct": 0,
         "why": "Repartir las inversiones reduce el impacto de una única pérdida total."
       },
       {
         "q": "¿Están garantizados los rendimientos de las inversiones colectivas?",
         "options": ["Sí, por ley", "Sí, por la plataforma", "No"],
-        "correct": 2,
         "why": "Los intereses y el reembolso dependen del emisor; ningún rendimiento está garantizado."
       }
     ]

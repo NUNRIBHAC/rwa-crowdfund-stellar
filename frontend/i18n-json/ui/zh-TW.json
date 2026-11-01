@@ -586,8 +586,6 @@
       {
         "id": "participation-certificate",
         "label": "參與權 / 參與憑證",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "一種分享利潤並要求償還名義價值的權利（通常以參與憑證的形式證券化），但不享有股東的完整治理權。",
@@ -599,7 +597,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "參與權 / 參與憑證的子類型",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "一種與發行方資產基礎（\"substance\"）而非僅年度利潤掛鉤的參與權。其結構和合格發行方因司法轄區和公司章程而異。",
@@ -610,7 +607,6 @@
       {
         "id": "share",
         "label": "股份",
-        "subtypeOf": "",
         "note": "增資是創造新股份的公司行為，不是獨立的金融工具。",
         "group": "participation",
         "seniorityStates": [],
@@ -622,7 +618,6 @@
       {
         "id": "indirect-participation",
         "label": "間接參與",
-        "subtypeOf": "",
         "note": "一種持有結構，而非獨立工具：投資者通過載體或受託人間接持有基礎參與權益，經濟收益由基礎權益決定。",
         "group": "participation",
         "seniorityStates": [],
@@ -634,8 +629,6 @@
       {
         "id": "limited-partnership",
         "label": "有限合夥份額",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "作為有限合夥人持有合夥企業的份額：按合夥協議參與盈虧，責任以出資額為限。",
@@ -646,8 +639,6 @@
       {
         "id": "loan",
         "label": "貸款",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "對發行方的直接貸款，具有確定的利率和還款計劃。同一貸款母類可以是優先、次級（包括利潤參與型變體），或不指定優先級。",
@@ -658,8 +649,6 @@
       {
         "id": "bond",
         "label": "債券",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "具有確定票息和期限的證券化債務工具。可以優先（非次級）、次級（包括明確次級的合格債券和次級 Mini Bond）或未指定優先級發行。",
@@ -1379,31 +1368,26 @@
       {
         "q": "群眾募資投資最多可能損失多少?",
         "options": ["僅手續費", "全部投資額", "一半投資額"],
-        "correct": 1,
         "why": "群眾募資投資可能損失全部價值(全額虧損)。"
       },
       {
         "q": "通常出售群眾募資投資有多容易?",
         "options": ["隨時可在交易所出售", "通常無法出售 - 缺乏流動性", "僅年底可以"],
-        "correct": 1,
         "why": "一般沒有次級市場;請以持有至到期來規劃。"
       },
       {
         "q": "如果發行公司倒閉,誰承擔損失?",
         "options": ["平台", "支付服務商", "投資者"],
-        "correct": 2,
         "why": "投資是與發行方簽訂的合約;平台不承擔損失。"
       },
       {
         "q": "分散投資是什麼意思?",
         "options": ["將資金分散到多項投資", "全部投入一個活動", "全部持有現金"],
-        "correct": 0,
         "why": "分散投資可以降低單筆全額虧損的影響。"
       },
       {
         "q": "群眾募資投資的收益有保證嗎?",
         "options": ["有,法律保證", "有,平台保證", "沒有"],
-        "correct": 2,
         "why": "利息和本金償還取決於發行方;沒有任何收益是有保證的。"
       }
     ]

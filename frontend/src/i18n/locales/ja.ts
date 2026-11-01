@@ -1,4 +1,6 @@
-// Japanese (ja).
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { Messages } from './en';
 
 export const ja: Messages = {
@@ -104,7 +106,9 @@ export const ja: Messages = {
     funded: '達成',
     underfunded: '未達',
     filterIndustryAria: '業種で絞り込む',
-    industryLabels: { 'energy-utilities': 'エネルギー・公益' } as Record<string, string>,
+    industryLabels: {
+      'energy-utilities': 'エネルギー・公益',
+    } as Record<string, string>,
     allIndustries: 'すべての業種',
     sortAria: 'キャンペーンの並べ替え',
     sortDeadline: '期限が近い順',
@@ -114,7 +118,10 @@ export const ja: Messages = {
     grid: 'グリッド',
     list: 'リスト',
     noMatches: '現在の検索とフィルターに一致するキャンペーンはありません。',
-    resultCount: { one: '{n} 件のキャンペーンを表示中', other: '{n} 件のキャンペーンを表示中' },
+    resultCount: {
+      one: '{n} 件のキャンペーンを表示中',
+      other: '{n} 件のキャンペーンを表示中',
+    },
     activeAria: '進行中の投資',
     activeTitle: '進行中の投資',
     completedAria: '終了した投資',
@@ -555,9 +562,18 @@ export const ja: Messages = {
   time: {
     ended: '終了',
     underMinute: '残り1分未満',
-    minutesLeft: { one: '残り {n} 分', other: '残り {n} 分' },
-    hoursLeft: { one: '残り {n} 時間', other: '残り {n} 時間' },
-    daysLeft: { one: '残り {n} 日', other: '残り {n} 日' },
+    minutesLeft: {
+      one: '残り {n} 分',
+      other: '残り {n} 分',
+    },
+    hoursLeft: {
+      one: '残り {n} 時間',
+      other: '残り {n} 時間',
+    },
+    daysLeft: {
+      one: '残り {n} 日',
+      other: '残り {n} 日',
+    },
   },
   errors: {
     freighterMissing: 'Freighter ウォレット拡張機能が検出されませんでした。Freighter をインストールしてから接続を再試行してください。',
@@ -600,7 +616,7 @@ export const ja: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '利益配分と名目価値の返済を受ける権利（多くの場合受益証書として証券化）で、株主の完全なガバナンス権はありません。',
         opportunities: ['完全な株式を取得せずに利益に参加できる', '基本の返済請求権と利益参加を組み合わせることが多い'],
         risks: ['利益配分は完全に発行者の業績次第', '一般債権者より後順位になる可能性がある', '満期まで流動性がないのが通常'],
@@ -612,7 +628,7 @@ export const ja: Messages = {
         subtypeOf: '参加権 / 受益証書のサブタイプ',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '年間利益だけでなく発行者の資産基盤（"substance"）に連動する参加権。設計と対象発行者は法域と定款によって異なります。',
         opportunities: ['発行者の資産価値への参加', '定款が認める場合、小規模発行者向けに設計できる'],
         risks: ['法的形態と投資家保護は法域によって大きく異なる', '投資家と発行者の間に受託者やビークルが介在する場合がある', '通常、流動性がない'],
@@ -624,7 +640,7 @@ export const ja: Messages = {
         subtypeOf: '',
         note: '増資は新しい株式を生み出す会社行為であり、独立した金融商品ではありません。',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '発行会社への直接の出資：配当請求権と企業価値への参加。権利は定款で定められます。新株は増資を通じて投資家に届きます。',
         opportunities: ['企業成長への完全な参加', '株式クラスに応じた議決権または情報権'],
         risks: ['固定の返済請求権なし、配当は保証されない', '全損の可能性', 'クラウドファンディングの株式は通常取引所で売買できない'],
@@ -636,7 +652,7 @@ export const ja: Messages = {
         subtypeOf: '',
         note: '独立した金融商品ではなく所有形態：投資家はビークルや受託者を通じて基礎となる参加権益を保有し、経済的結果は基礎権益が決定します。',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: '投資家は、例えばビークルや受託者を通じて、簡素化された手続きで中小企業投資に間接的に参加します。',
         opportunities: ['直接保有が難しい案件へのアクセス', '仲介構造による管理の簡素化'],
         risks: ['投資家と発行者の間にもう1層の構造がある', 'リターンは発行者の業績次第', 'ビークルの条件が分配と退出を規定'],
@@ -648,7 +664,7 @@ export const ja: Messages = {
         subtypeOf: '',
         note: '',
         group: 'participation',
-        seniorityStates: [] as string[],
+        seniorityStates: [],
         summary: 'パートナーシップの有限責任社員としての持分：パートナーシップ契約に基づく損益参加、責任は出資額まで。',
         opportunities: ['パートナーシップの成果を直接パススルー', '責任は出資額に限定'],
         risks: ['損失参加により持分が減少または消滅する可能性', '退出はパートナーシップ契約で制限されることが多い', '税務・報告義務がより複雑になる場合がある'],
@@ -1048,7 +1064,7 @@ export const ja: Messages = {
         teaser: 'リスボンの川沿いのアパート棟の改装。固定金利の優先社債で資金調達。このページのすべての条件はサンプルデータです。',
         instrumentClass: 'bond',
         instrumentSeniority: 'senior',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '年利 6.5%（サンプル）',
         term: '2030-12-31 まで（サンプル）',
         minInvestment: '250 USDC テストネット（サンプル）',
@@ -1065,7 +1081,10 @@ export const ja: Messages = {
             label: '1口あたりの名目金額',
             value: '250 USDC テストネット（サンプル）',
           },
-          { label: '最低引受単位', value: '1口（サンプル）' },
+          {
+            label: '最低引受単位',
+            value: '1口（サンプル）',
+          },
           {
             label: '資金調達閾値',
             value: 'キャンペーン目標と同額。ライブモードではコントラクトがオール・オア・ナッシングを強制',
@@ -1074,13 +1093,22 @@ export const ja: Messages = {
             label: '発行総額',
             value: '250,000 USDC テストネット目標（サンプルフィクスチャ）',
           },
-          { label: '利子計算', value: '30E/360（サンプル）' },
+          {
+            label: '利子計算',
+            value: '30E/360（サンプル）',
+          },
           {
             label: '利払日',
             value: '毎年12月31日、初回支払い 2027年（サンプル）',
           },
-          { label: '償還', value: '満期時（サンプル）' },
-          { label: '募集地域', value: '募集国なし - サンプルデータのみ' },
+          {
+            label: '償還',
+            value: '満期時（サンプル）',
+          },
+          {
+            label: '募集地域',
+            value: '募集国なし - サンプルデータのみ',
+          },
           {
             label: '仲介者',
             value: 'なし。このプロトタイプはクラウドファンディングサービスプロバイダーではありません',
@@ -1119,7 +1147,7 @@ export const ja: Messages = {
         teaser: 'アレンテージョのコミュニティソーラー設備。現金利息の変形を持つ劣後社債で資金調達。このページのすべての条件はサンプルデータです。',
         instrumentClass: 'bond',
         instrumentSeniority: 'subordinated',
-        instrumentOverlays: [] as string[],
+        instrumentOverlays: [],
         interestRate: '年利 7.0% 現金（サンプル）',
         term: '2032-06-30 まで（サンプル）',
         minInvestment: '250 USDC テストネット（サンプル）',
@@ -1144,13 +1172,22 @@ export const ja: Messages = {
             label: '劣後性',
             value: '破産時に優先債権者の後に弁済（サンプル条件）',
           },
-          { label: '利子計算', value: 'act/act（サンプル）' },
+          {
+            label: '利子計算',
+            value: 'act/act（サンプル）',
+          },
           {
             label: '利払日',
             value: '毎年6月30日、初回支払い 2028年（サンプル）',
           },
-          { label: '償還', value: '満期時（サンプル）' },
-          { label: '募集地域', value: '募集国なし - サンプルデータのみ' },
+          {
+            label: '償還',
+            value: '満期時（サンプル）',
+          },
+          {
+            label: '募集地域',
+            value: '募集国なし - サンプルデータのみ',
+          },
           {
             label: '仲介者',
             value: 'なし。このプロトタイプはクラウドファンディングサービスプロバイダーではありません',
@@ -1169,7 +1206,7 @@ export const ja: Messages = {
             note: 'このプロトタイプではファイルはホスティングされていません',
           },
         ],
-        news: [] as { date: string; text: string }[],
+        news: [],
       },
       {
         campaignId: 'fixture-porto-logistics',
@@ -1209,9 +1246,18 @@ export const ja: Messages = {
             label: '転換期間',
             value: '発行ごとに設定可能。サンプル：トリガー発表後30日間',
           },
-          { label: '利息停止', value: '利息は転換日まで発生（サンプル）' },
-          { label: '転換されない場合の償還', value: '満期時（サンプル）' },
-          { label: '募集地域', value: '募集国なし - サンプルデータのみ' },
+          {
+            label: '利息停止',
+            value: '利息は転換日まで発生（サンプル）',
+          },
+          {
+            label: '転換されない場合の償還',
+            value: '満期時（サンプル）',
+          },
+          {
+            label: '募集地域',
+            value: '募集国なし - サンプルデータのみ',
+          },
           {
             label: '仲介者',
             value: 'なし。このプロトタイプはクラウドファンディングサービスプロバイダーではありません',
@@ -1483,7 +1529,11 @@ export const ja: Messages = {
     newsFeedEmpty: 'キャンペーンのニュースはまだありません。',
     myApplicationsTitle: '自分の発行者申請',
     myApplicationsEmpty: '申請はまだありません。',
-    applicationStatus: { received: '受付済み', under_review: '審査中', closed: '完了' },
+    applicationStatus: {
+      received: '受付済み',
+      under_review: '審査中',
+      closed: '完了',
+    },
     myTicketsTitle: '自分のサポート・フィードバックチケット',
     myCommentsTitle: '自分のコメント',
     commentHidden: 'モデレーションにより非表示',
@@ -1506,7 +1556,11 @@ export const ja: Messages = {
       submit: '申請を送信',
       submitting: '送信中...',
       submitted: '申請を受け付けました。上の一覧に審査中と表示されます。',
-      status: { pending: '審査中', approved: '承認済み', rejected: '却下' },
+      status: {
+        pending: '審査中',
+        approved: '承認済み',
+        rejected: '却下',
+      },
     },
     security: {
       title: 'セキュリティ',
@@ -1519,7 +1573,10 @@ export const ja: Messages = {
       expiresLabel: '有効期限',
       revoke: 'セッションを終了',
       revokeOthers: '他のセッションをすべてログアウト',
-      revokedOthers: { one: '他の{count}件のセッションを終了しました。', other: '他の{count}件のセッションを終了しました。' },
+      revokedOthers: {
+        one: '他の{count}件のセッションを終了しました。',
+        other: '他の{count}件のセッションを終了しました。',
+      },
       empty: 'アクティブなセッションはありません。',
     },
     notifications: {
@@ -1551,7 +1608,14 @@ export const ja: Messages = {
         'テスト環境のオペレーターツールです。ニュースは常にプラットフォームのデモコンテンツとして表示され、発行者の身元は確認されていません。承認・掲載・リターンに関する主張は投稿しないでください。',
       loadError: 'オペレーターデータを読み込めませんでした。',
       retry: '再試行',
-      tabs: { applications: '申請', comments: 'コメント', tickets: 'チケット', news: 'ニュース', reconciliation: '照合', audit: '操作ログ' },
+      tabs: {
+        applications: '申請',
+        comments: 'コメント',
+        tickets: 'チケット',
+        news: 'ニュース',
+        reconciliation: '照合',
+        audit: '操作ログ',
+      },
       applicationsEmpty: '発行者申請はまだありません。',
       commentsEmpty: 'コメントはまだありません。',
       ticketsEmpty: 'チケットはまだありません。',

@@ -591,8 +591,6 @@
       {
         "id": "participation-certificate",
         "label": "Beteiligungsrecht / -zertifikat",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs.",
@@ -608,7 +606,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "Untertyp von Beteiligungsrecht / -zertifikat",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung.",
@@ -623,7 +620,6 @@
       {
         "id": "share",
         "label": "Aktie",
-        "subtypeOf": "",
         "note": "Eine Kapitalerhöhung ist der gesellschaftsrechtliche Vorgang, der neue Aktien schafft; sie ist kein eigenes Instrument.",
         "group": "participation",
         "seniorityStates": [],
@@ -639,7 +635,6 @@
       {
         "id": "indirect-participation",
         "label": "Indirekte Beteiligung",
-        "subtypeOf": "",
         "note": "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie.",
         "group": "participation",
         "seniorityStates": [],
@@ -655,8 +650,6 @@
       {
         "id": "limited-partnership",
         "label": "Kommanditbeteiligung",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage.",
@@ -671,8 +664,6 @@
       {
         "id": "loan",
         "label": "Darlehen",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
@@ -690,8 +681,6 @@
       {
         "id": "bond",
         "label": "Anleihe",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
@@ -1417,31 +1406,26 @@
       {
         "q": "Was ist das Maximum, das du bei einer Crowdfunding-Investition verlieren kannst?",
         "options": ["Nur die Gebühren", "Die gesamte Investition", "Die Hälfte der Investition"],
-        "correct": 1,
         "why": "Crowdfunding-Investitionen können ihren gesamten Wert verlieren (Totalverlust)."
       },
       {
         "q": "Wie leicht kannst du eine Crowdfunding-Investition normalerweise verkaufen?",
         "options": ["Jederzeit an der Börse", "Meist gar nicht - sie ist illiquide", "Nur am Jahresende"],
-        "correct": 1,
         "why": "Es gibt in der Regel keinen Sekundärmarkt; plane, bis zum Ende der Laufzeit zu halten."
       },
       {
         "q": "Wer trägt den Verlust, wenn das emittierende Unternehmen scheitert?",
         "options": ["Die Plattform", "Der Zahlungsdienstleister", "Der Anleger"],
-        "correct": 2,
         "why": "Die Investition ist ein Vertrag mit dem Emittenten; die Plattform deckt keine Verluste."
       },
       {
         "q": "Was bedeutet Diversifikation?",
         "options": ["Geld auf mehrere Investitionen verteilen", "Alles in eine Kampagne investieren", "Alles in bar halten"],
-        "correct": 0,
         "why": "Gestreute Investitionen verringern die Wirkung eines einzelnen Totalverlusts."
       },
       {
         "q": "Sind Renditen bei Crowdfunding-Investitionen garantiert?",
         "options": ["Ja, per Gesetz", "Ja, durch die Plattform", "Nein"],
-        "correct": 2,
         "why": "Zinsen und Rückzahlung hängen vom Emittenten ab; keine Rendite ist garantiert."
       }
     ]

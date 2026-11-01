@@ -586,8 +586,6 @@
       {
         "id": "participation-certificate",
         "label": "참여권 / 수익증서",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "이익 배분과 명목가치 상환에 대한 권리(종종 수익증서로 증권화)로, 주주의 완전한 거버넌스 권한은 없습니다.",
@@ -599,7 +597,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "참여권 / 수익증서의 하위 유형",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "연간 이익뿐 아니라 발행자의 자산 기반(\"substance\")에 연동된 참여권. 구조화와 적격 발행자는 관할권과 정관에 따라 다릅니다.",
@@ -610,7 +607,6 @@
       {
         "id": "share",
         "label": "주식",
-        "subtypeOf": "",
         "note": "증자는 새 주식을 만드는 회사 행위이며 별도의 금융상품이 아닙니다.",
         "group": "participation",
         "seniorityStates": [],
@@ -622,7 +618,6 @@
       {
         "id": "indirect-participation",
         "label": "간접 참여",
-        "subtypeOf": "",
         "note": "별도의 상품이 아니라 소유 구조: 투자자는 비히클이나 수탁자를 통해 기초 참여 지분을 보유하며, 경제적 결과는 기초 지분이 결정합니다.",
         "group": "participation",
         "seniorityStates": [],
@@ -634,8 +629,6 @@
       {
         "id": "limited-partnership",
         "label": "유한책임 파트너십 지분",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "파트너십의 유한책임사원으로서의 지분: 파트너십 계약에 따른 손익 참여, 책임은 출자액으로 제한.",
@@ -646,8 +639,6 @@
       {
         "id": "loan",
         "label": "대출",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "정해진 이자율과 상환 일정이 있는 발행자에 대한 직접 대출. 동일한 대출 상위 클래스는 우선, 후순위(이익 참여형 변형 포함), 또는 우선순위 미지정이 될 수 있습니다.",
@@ -658,8 +649,6 @@
       {
         "id": "bond",
         "label": "채권",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "정해진 쿠폰과 기간이 있는 증권화된 채무 상품. 우선(비후순위), 후순위(명시적 후순위 적격 채권 및 후순위 Mini Bond 포함), 또는 우선순위 미지정으로 발행됩니다.",
@@ -1379,31 +1368,26 @@
       {
         "q": "크라우드펀딩 투자로 잃을 수 있는 최대 금액은?",
         "options": ["수수료만", "투자금 전액", "투자금의 절반"],
-        "correct": 1,
         "why": "크라우드펀딩 투자는 전액을 잃을 수 있습니다(전액 손실)."
       },
       {
         "q": "크라우드펀딩 투자는 보통 얼마나 쉽게 팔 수 있나요?",
         "options": ["거래소에서 언제든지", "보통 팔 수 없음 - 유동성이 없음", "연말에만"],
-        "correct": 1,
         "why": "일반적으로 유통 시장이 없습니다. 만기까지 보유할 계획으로 임하세요."
       },
       {
         "q": "발행 기업이 실패하면 누가 손실을 부담하나요?",
         "options": ["플랫폼", "결제 사업자", "투자자"],
-        "correct": 2,
         "why": "투자는 발행사와의 계약입니다. 플랫폼은 손실을 보전하지 않습니다."
       },
       {
         "q": "분산 투자란 무엇인가요?",
         "options": ["여러 투자에 자금을 나누는 것", "한 캠페인에 전부 투자하는 것", "모두 현금으로 보유하는 것"],
-        "correct": 0,
         "why": "투자를 분산하면 한 건의 전액 손실 영향을 줄일 수 있습니다."
       },
       {
         "q": "크라우드펀딩 투자의 수익은 보장되나요?",
         "options": ["네, 법으로", "네, 플랫폼이", "아니요"],
-        "correct": 2,
         "why": "이자와 상환은 발행사에 달려 있습니다. 보장되는 수익은 없습니다."
       }
     ]

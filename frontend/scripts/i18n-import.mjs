@@ -6,6 +6,12 @@
 // not survive a sync, so documentation belongs in the header or the schema
 // types, not inline.
 //
+// Non-translatable leaves (empty optional fields, numeric answer indices)
+// are absent from the JSON by design (see i18n-export.mjs); they are
+// re-injected from the English TS tree so the regenerated TS stays whole.
+// A locale may not add content where the English base is blank or numeric,
+// and may not drop any translatable base key.
+//
 // --check: verify the TS sources' DATA matches the JSON (semantic compare,
 // not byte compare), exit 1 on drift. Complements i18n-export --check so both
 // directions of the projection are proven lossless in CI.
@@ -44,8 +50,33 @@ function varName(locale) {
   return VAR_NAMES[locale] ?? locale;
 }
 
+// Components index these maps with runtime strings, so the committed sources
+// widen them with `as Record<string, string>`. JSON cannot carry the cast, so
+// regeneration re-applies it at the same three keys (loadTsModule strips it
+// again for the projection - the roundtrip stays stable).
+const RECORD_CAST_KEYS = ['industryLabels', 'statusLabels', 'actionLabels'];
+const RECORD_CAST_RE = new RegExp(`^(\\s*)"(${RECORD_CAST_KEYS.join('|')})": \\{$`);
+function applyRecordCasts(ts) {
+  const lines = ts.split('\n');
+  const pending = [];
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(RECORD_CAST_RE);
+    if (m) {
+      pending.push(m[1]);
+      continue;
+    }
+    // The cast target can be the last property of its object, so the closing
+    // brace may carry no trailing comma.
+    if (pending.length > 0 && (lines[i] === `${pending[pending.length - 1]}},` || lines[i] === `${pending[pending.length - 1]}}`)) {
+      const indent = pending.pop();
+      lines[i] = lines[i].endsWith(',') ? `${indent}} as Record<string, string>,` : `${indent}} as Record<string, string>`;
+    }
+  }
+  return ts === applyRecordCasts.__last ? ts : lines.join('\n');
+}
+
 function renderLocale(locale, tree) {
-  const body = JSON.stringify(tree, null, 2);
+  const body = applyRecordCasts(JSON.stringify(tree, null, 2));
   if (locale === 'en') {
     return `${HEADER}\nexport const en = ${body};\n\nexport type Messages = typeof en;\n`;
   }
@@ -88,11 +119,37 @@ function deepEqual(a, b, path, diffs) {
   for (const k of ka) deepEqual(a[k], b[k], `${path}.${k}`, diffs);
 }
 
-// Every string leaf's {placeholder} set and every { one, other } leaf's shape
-// must match the English base exactly: translators edit values, never the
-// variable contract or the plural structure. Arrays keep the base's length
+// Overlay the projected JSON onto the English base tree: JSON leaves win,
+// leaves the projection deliberately omits (blank strings, non-string
+// scalars) come back from the base. Validated before merging, so a type
+// mismatch can never cross the overlay.
+function mergeOverBase(base, value) {
+  if (typeof base === 'string' || base === null || typeof base !== 'object') {
+    return value === undefined ? base : value;
+  }
+  if (Array.isArray(base)) {
+    return base.map((b, i) => mergeOverBase(b, Array.isArray(value) ? value[i] : undefined));
+  }
+  const out = {};
+  for (const k of Object.keys(base)) out[k] = mergeOverBase(base[k], value?.[k]);
+  return out;
+}
+
+// Every translatable string leaf's {placeholder} set and every { one, other }
+// leaf's shape must match the English base exactly: translators edit values,
+// never the variable contract or the plural structure. Leaves the projection
+// omits (base value is a blank string or a non-string scalar) must stay
+// absent; adding content there is rejected. Arrays keep the base's length
 // (per-locale arrays are parallel structures, e.g. legal blocks).
 function validateAgainstBase(base, value, path, diffs) {
+  if (typeof base === 'string' && base.trim() === '') {
+    if (value !== undefined) diffs.push(`${path}: blank base field must stay out of the projection`);
+    return;
+  }
+  if (base === null || (typeof base !== 'object' && typeof base !== 'string')) {
+    if (value !== undefined) diffs.push(`${path}: non-translatable ${typeof base} leaf must stay out of the projection`);
+    return;
+  }
   if (typeof base === 'string' && typeof value === 'string') {
     const ph = (t) => [...t.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
     const a = ph(base),
@@ -124,8 +181,15 @@ function validateAgainstBase(base, value, path, diffs) {
   }
   const kb = Object.keys(base),
     kv = Object.keys(value);
-  if (kb.some((k) => !(k in value))) {
-    diffs.push(`${path}: missing keys ${kb.filter((k) => !(k in value))}`);
+  // Keys whose base value the projection omits (blank strings, non-string
+  // scalars) are not required in the JSON; everything else is.
+  const required = kb.filter((k) => {
+    const b = base[k];
+    if (typeof b === 'string') return b.trim() !== '';
+    return b !== null && typeof b === 'object';
+  });
+  if (required.some((k) => !(k in value))) {
+    diffs.push(`${path}: missing keys ${required.filter((k) => !(k in value))}`);
     return;
   }
   for (const k of kv) {
@@ -141,16 +205,17 @@ const check = process.argv.includes('--check');
 const drift = [];
 const written = [];
 
+const enTree = await loadTsModule(join(ROOT, 'src/i18n/locales/en.ts'));
+
 for (const locale of LOCALES) {
   const uiJson = JSON.parse(readFileSync(join(ROOT, 'i18n-json/ui', `${locale}.json`), 'utf8'));
   const legalJson = JSON.parse(readFileSync(join(ROOT, 'i18n-json/legal', `${locale}.json`), 'utf8'));
 
   if (check) {
     const diffs = [];
-    deepEqual(await loadTsModule(join(ROOT, 'src/i18n/locales', `${locale}.ts`)), uiJson, `ui.${locale}`, diffs);
+    validateAgainstBase(enTree, uiJson, `ui.${locale}`, diffs);
+    deepEqual(await loadTsModule(join(ROOT, 'src/i18n/locales', `${locale}.ts`)), mergeOverBase(enTree, uiJson), `ui.${locale}`, diffs);
     if (locale !== 'en') {
-      const uiBase = JSON.parse(readFileSync(join(ROOT, 'i18n-json/ui/en.json'), 'utf8'));
-      validateAgainstBase(uiBase, uiJson, `ui.${locale}`, diffs);
       const legalBase = JSON.parse(readFileSync(join(ROOT, 'i18n-json/legal/en.json'), 'utf8'));
       validateLegalAgainstBase(legalBase, legalJson, `legal.${locale}`, diffs);
     }
@@ -182,7 +247,10 @@ for (const locale of LOCALES) {
     continue;
   }
 
-  writeFileSync(join(ROOT, 'src/i18n/locales', `${locale}.ts`), renderLocale(locale, uiJson));
+  const uiDiffs = [];
+  validateAgainstBase(enTree, uiJson, `ui.${locale}`, uiDiffs);
+  if (uiDiffs.length > 0) throw new Error(`ui.${locale}: projection rejected:\n  ${uiDiffs.join('\n  ')}`);
+  writeFileSync(join(ROOT, 'src/i18n/locales', `${locale}.ts`), renderLocale(locale, mergeOverBase(enTree, uiJson)));
   written.push(`locales/${locale}.ts`);
   for (const doc of LEGAL_DOCS) {
     if (!(doc in legalJson)) throw new Error(`legal.${locale}.${doc}: missing from JSON`);

@@ -591,8 +591,6 @@
       {
         "id": "participation-certificate",
         "label": "Participation right / certificate",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "A right (often securitised as a participation certificate) to a profit share and to repayment of the nominal value, without the full governance rights of a shareholder.",
@@ -604,7 +602,6 @@
         "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "Subtype of participation right / certificate",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "A participation right linked to the issuer's asset base (\"substance\") rather than only its annual profit. Structuring and eligible issuers vary by jurisdiction and statute.",
@@ -619,7 +616,6 @@
       {
         "id": "share",
         "label": "Share",
-        "subtypeOf": "",
         "note": "A capital increase is the corporate action that creates new shares; it is not a separate instrument.",
         "group": "participation",
         "seniorityStates": [],
@@ -635,7 +631,6 @@
       {
         "id": "indirect-participation",
         "label": "Indirect participation",
-        "subtypeOf": "",
         "note": "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics.",
         "group": "participation",
         "seniorityStates": [],
@@ -647,8 +642,6 @@
       {
         "id": "limited-partnership",
         "label": "Limited partnership interest",
-        "subtypeOf": "",
-        "note": "",
         "group": "participation",
         "seniorityStates": [],
         "summary": "An interest as limited partner in a partnership: profit and loss participation per the partnership agreement, liability limited to the contribution.",
@@ -663,8 +656,6 @@
       {
         "id": "loan",
         "label": "Loan",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
@@ -675,8 +666,6 @@
       {
         "id": "bond",
         "label": "Bond",
-        "subtypeOf": "",
-        "note": "",
         "group": "debt",
         "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
@@ -1398,31 +1387,26 @@
       {
         "q": "What is the most you can lose with a crowdfunding investment?",
         "options": ["Only the fees", "The entire investment", "Half of the investment"],
-        "correct": 1,
         "why": "Crowdfunding investments can lose their entire value (total loss)."
       },
       {
         "q": "How easily can you usually sell a crowdfunding investment?",
         "options": ["Any time on a stock exchange", "Usually not - it is illiquid", "Only at the end of the year"],
-        "correct": 1,
         "why": "There is generally no secondary market; plan to hold until the end of the term."
       },
       {
         "q": "Who bears the loss if the issuing company fails?",
         "options": ["The platform", "The payment provider", "The investor"],
-        "correct": 2,
         "why": "The investment is a contract with the issuer; the platform does not cover losses."
       },
       {
         "q": "What does diversification mean?",
         "options": ["Spreading money across several investments", "Investing everything in one campaign", "Keeping all money in cash"],
-        "correct": 0,
         "why": "Spreading investments reduces the impact of a single total loss."
       },
       {
         "q": "Are returns on crowdfunding investments guaranteed?",
         "options": ["Yes, by law", "Yes, by the platform", "No"],
-        "correct": 2,
         "why": "Interest and repayment depend on the issuer; no return is guaranteed."
       }
     ]
