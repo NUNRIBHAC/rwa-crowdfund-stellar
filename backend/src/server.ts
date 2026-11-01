@@ -8,6 +8,7 @@ import {
   sorobanCampaigns,
   sorobanCampaignFundingState,
   sorobanInvestorEntitlement,
+  confirmedContribution,
   buildSoroban,
   submitSoroban,
   statusSoroban,
@@ -96,42 +97,53 @@ registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCam
 // community paths wait for the store to boot. Boot failures must not take
 // down the campaign API: the placeholder answers 503 for community paths and
 // everything else is unaffected.
-// Durable contributor registry writes, driven only by the backend's own
-// submit/status confirmation path. The intent journal prunes terminal rows
-// (~30 days) and the contract REMOVES a contributor's balance entry on
-// refund, so neither is a durable historical ground on its own; this
-// registry (community store, never pruned) is. Best-effort alongside the
-// on-chain primary: a failure here must not break the transaction response.
+// Durable contributor registry, written only from network-confirmed,
+// envelope-derived contribution facts (confirmedContribution): the journal
+// row alone is never trusted because its fields originate from the build
+// request. Two write paths:
+//  - immediate: the submit/status routes attempt the record when a hash
+//    confirms; a failure DEFERS to reconciliation (transaction responses
+//    stay truthful - success is reported even if this secondary write fails)
+//  - reconciliation: startup + every 30 minutes, every unrecorded SUCCESS
+//    contribute intent is retried, so a record lost to an RPC/storage outage
+//    is recovered well within the journal's ~30-day terminal retention.
+// The journal row itself is the durable unresolved record until then.
 const recordConfirmedContributor = async (hash: string | undefined): Promise<void> => {
   if (!hash) return;
   try {
-    const journal = await (await journalBackend()).read();
-    const intent = journal.intents.find((i) => i.hash === hash);
-    if (intent && intent.status === 'SUCCESS' && intent.action === 'contribute') {
+    const confirmed = await confirmedContribution(hash);
+    if (confirmed) {
       const service = await communityServiceFromEnv();
-      await service.recordContributor(intent.campaign, intent.actor);
+      await service.recordContributor(confirmed.campaignId, confirmed.contributor);
     }
   } catch (err) {
-    console.error('contributor registry write failed:', err instanceof Error ? err.message : err);
+    console.error('contributor registry write deferred to reconciliation:', hash, err instanceof Error ? err.message : err);
   }
 };
 
-// One-time startup backfill: seed the durable registry from the journal's
-// surviving SUCCESS contribute intents (covers at least the retention
-// window; earlier history predates the registry and is not recoverable from
-// the journal).
-const backfillContributorRegistry = async (): Promise<void> => {
+const reconcileContributorRegistry = async (): Promise<void> => {
   try {
     const service = await communityServiceFromEnv();
     const journal = await (await journalBackend()).read();
     for (const i of journal.intents) {
-      if (i.status === 'SUCCESS' && i.action === 'contribute') await service.recordContributor(i.campaign, i.actor);
+      if (i.status !== 'SUCCESS' || i.action !== 'contribute') continue;
+      if (await service.hasContributed(i.campaign, i.actor)) continue;
+      try {
+        const confirmed = await confirmedContribution(i.hash);
+        if (confirmed) await service.recordContributor(confirmed.campaignId, confirmed.contributor);
+      } catch (err) {
+        // Unresolvable right now (e.g. RPC outage): the journal row remains
+        // the durable record and the next pass retries within retention.
+        console.error('contributor reconciliation deferred:', i.hash, err instanceof Error ? err.message : err);
+      }
     }
   } catch (err) {
-    console.error('contributor registry backfill failed:', err instanceof Error ? err.message : err);
+    console.error('contributor reconciliation failed:', err instanceof Error ? err.message : err);
   }
 };
-void backfillContributorRegistry();
+void reconcileContributorRegistry();
+const contributorReconcileTimer = setInterval(() => void reconcileContributorRegistry(), 30 * 60 * 1000);
+contributorReconcileTimer.unref();
 
 const communityRouterReady = communityServiceFromEnv()
   .then((service) =>

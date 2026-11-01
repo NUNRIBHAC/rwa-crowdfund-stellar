@@ -240,6 +240,58 @@ export async function sorobanInvestorEntitlement(id: string, actor: string): Pro
   return { registered: true, balanceUnits: BigInt(balance ?? 0) };
 }
 
+// Derive a durable contributor-registry record from NETWORK-confirmed facts
+// only: the RPC-confirmed transaction envelope itself must carry exactly one
+// invokeContract call to the registered campaign contract, function
+// 'contribute', whose contributor argument is the envelope source account,
+// and the contract's code hash and configured asset must verify. Journal
+// row fields (which originate from the build request) are never trusted for
+// the write; the journal only supplies candidate hashes. Throws when nothing
+// can be confirmed right now (RPC outage, missing envelope, archived state)
+// so the caller preserves the record and retries before journal retention
+// expiry; returns null when the hash is definitively not a confirmed
+// contribution to a registered campaign.
+export async function confirmedContribution(hash: string): Promise<{ campaignId: string; contributor: string } | null> {
+  const store = await readStore();
+  const intent = store.intents.find((i) => i.hash === hash);
+  if (!intent || intent.status !== 'SUCCESS' || intent.action !== 'contribute') return null;
+  const client = sorobanDeps.client();
+  const result = await client.getTransaction(hash);
+  if (result.txHash !== hash) throw new Error('RPC returned mismatched hash');
+  if (result.status !== 'SUCCESS') throw new Error(`network confirmation unavailable for ${hash} (status ${result.status})`);
+  const envXdr: any = (result as any).envelopeXdr;
+  if (!envXdr) throw new Error('RPC response carries no transaction envelope; cannot derive contribution facts');
+  let tx: Transaction;
+  try {
+    const parsed = TransactionBuilder.fromXDR(typeof envXdr === 'string' ? envXdr : envXdr.toXDR('base64'), passphrase);
+    if (!(parsed instanceof Transaction)) return null;
+    tx = parsed;
+  } catch {
+    throw new Error('could not parse the network-confirmed envelope');
+  }
+  if (Buffer.from(tx.hash()).toString('hex') !== hash) throw new Error('network envelope hash mismatch');
+  if (tx.operations.length !== 1) return null;
+  let contractId = '';
+  let fnName = '';
+  let contributor = '';
+  try {
+    const ic = (tx.operations[0] as any).func.invokeContract;
+    if (ic?.contractAddress?.type === 'scAddressTypeContract' && ic.contractAddress.contractId?.value) {
+      contractId = StrKey.encodeContract(Buffer.from(ic.contractAddress.contractId.value));
+    }
+    fnName = ic?.functionName?.toString?.() ?? '';
+    contributor = String(scValToNative(ic?.args?.[0]) ?? '');
+  } catch {
+    return null;
+  }
+  const e = entries().find((x) => x.id === intent.campaign);
+  if (!e || e.contractId !== contractId || fnName !== 'contribute' || contributor !== tx.source) return null;
+  await verifyCode(client, e);
+  const config = await view(client, e, 'get_config');
+  if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+  return { campaignId: e.id, contributor };
+}
+
 export async function buildSoroban(id: string, input: { actor: string; action: string; amount?: string }): Promise<any> {
   const e = entry(id),
     actor = actorAddress(input.actor);
