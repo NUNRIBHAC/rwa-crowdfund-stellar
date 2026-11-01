@@ -236,6 +236,7 @@ test('appropriateness endpoints require auth and run the full flow', async () =>
   assert.equal((await api('POST', '/api/auth/appropriateness/knowledge', { body: {} })).status, 503);
   assert.equal((await api('POST', '/api/auth/appropriateness/simulation-result', { body: {} })).status, 503);
   assert.equal((await api('POST', '/api/auth/appropriateness/acknowledge-warning', { body: {} })).status, 503);
+  assert.equal((await api('POST', '/api/auth/appropriateness/sophistication-request', { body: {} })).status, 503);
 
   process.env.APPROPRIATENESS_COLLECT = '1';
   try {
@@ -243,6 +244,7 @@ test('appropriateness endpoints require auth and run the full flow', async () =>
     assert.equal((await api('POST', '/api/auth/appropriateness/knowledge', { body: {} })).status, 401);
     assert.equal((await api('POST', '/api/auth/appropriateness/simulation-result', { body: {} })).status, 401);
     assert.equal((await api('POST', '/api/auth/appropriateness/acknowledge-warning', { body: {} })).status, 401);
+    assert.equal((await api('POST', '/api/auth/appropriateness/sophistication-request', { body: {} })).status, 401);
 
     const kp = Keypair.random();
     process.env.APPROPRIATENESS_ALLOWLIST = kp.publicKey();
@@ -268,6 +270,60 @@ test('appropriateness endpoints require auth and run the full flow', async () =>
     const ack = await api('POST', '/api/auth/appropriateness/acknowledge-warning', { token, body: {} });
     assert.equal(ack.status, 200);
     assert.ok(ack.json.record.warningAcknowledgedAt);
+
+    // v2: full Art. 21(2) information set is accepted and returned; an
+    // unexpected raw financial field inside it is REJECTED (strict schema).
+    const info = {
+      familiarInvestmentTypes: ['deposits'],
+      pastTransactions: { natures: ['none'], annualFrequencyBand: '0', totalVolumeBandEur: '0', periodYearsBand: 'none' },
+      educationLevel: 'none_relevant',
+      professionOrFormer: null,
+      crowdfundingProfessionalExperience: false,
+      holdingPeriod: 'under_1y',
+      riskProfile: 'conservative',
+      sustainabilityPreference: 'none',
+    };
+    const v2 = await api('POST', '/api/auth/appropriateness/knowledge', {
+      token,
+      body: { experienceLevel: 'some', objective: 'income', answers: [1, 1, 1, 1, 1], information: info },
+    });
+    assert.equal(v2.status, 200);
+    assert.equal(v2.json.record.version, 2);
+    assert.deepEqual(v2.json.record.information, info);
+    assert.deepEqual(v2.json.record.categorisation, { status: 'non_sophisticated', request: null });
+    const badInfo = await api('POST', '/api/auth/appropriateness/knowledge', {
+      token,
+      body: { experienceLevel: 'some', objective: 'income', answers: [1, 1, 1, 1, 1], information: { ...info, annualIncomeEur: 45000 } },
+    });
+    assert.equal(badInfo.status, 400);
+
+    // Annex II sophistication request (capture-only): stored, status never
+    // upgrades; invalid shapes are 400.
+    const soph = await api('POST', '/api/auth/appropriateness/sophistication-request', {
+      token,
+      body: {
+        route: 'annex_ii_attestation',
+        personType: 'natural',
+        attestedCriteria: ['np_income_60k_or_portfolio_over_100k', 'np_financial_sector_1y_or_exec_12m'],
+        professionalClientProof: null,
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      },
+    });
+    assert.equal(soph.status, 200);
+    assert.equal(soph.json.record.categorisation.status, 'sophistication_requested');
+    const badSoph = await api('POST', '/api/auth/appropriateness/sophistication-request', {
+      token,
+      body: {
+        route: 'annex_ii_attestation',
+        personType: 'natural',
+        attestedCriteria: ['np_income_60k_or_portfolio_over_100k'],
+        professionalClientProof: null,
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      },
+    });
+    assert.equal(badSoph.status, 400);
 
     // Financial inputs can never be smuggled into the result transmission:
     // .strict() rejects any extra field (income/assets/commitments breakdown).

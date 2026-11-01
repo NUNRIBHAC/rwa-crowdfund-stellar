@@ -284,6 +284,249 @@ test('appropriateness: knowledge test, warning path, simulation result, review c
   assert.equal(rec5.warningAcknowledgedAt, null);
 });
 
+test('appropriateness v2: full Art. 21(2) information capture + Annex II categorisation request (capture-only)', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const kp = Keypair.random();
+  const { account } = await login(store, kp);
+  const allRight = KNOWLEDGE_QUESTIONS.map((q) => q.correct);
+
+  const info = {
+    familiarInvestmentTypes: ['deposits', 'listed_shares'],
+    pastTransactions: {
+      natures: ['transferable_securities', 'early_expansion_stage_businesses'],
+      annualFrequencyBand: '1_5',
+      totalVolumeBandEur: '10k_50k',
+      periodYearsBand: '1_3',
+    },
+    educationLevel: 'bachelor',
+    professionOrFormer: 'Accountant',
+    crowdfundingProfessionalExperience: false,
+    holdingPeriod: '3_5y',
+    riskProfile: 'balanced',
+    sustainabilityPreference: 'esg_important',
+  };
+
+  // v1-shaped submission still works: version 1, information null, default
+  // categorisation (legacy state preserved, never silently promoted).
+  const rec1 = await service.submitKnowledgeAssessment(account, {
+    experienceLevel: 'some',
+    objective: 'growth',
+    answers: allRight,
+  });
+  assert.equal(rec1.version, 1);
+  assert.equal(rec1.information, null);
+  assert.deepEqual(rec1.categorisation, { status: 'non_sophisticated', request: null });
+
+  // v2 submission stores the full information set verbatim.
+  const rec2 = await service.submitKnowledgeAssessment(account, {
+    experienceLevel: 'experienced',
+    objective: 'income',
+    answers: allRight,
+    information: info,
+  });
+  assert.equal(rec2.version, 2);
+  assert.deepEqual(rec2.information, info);
+
+  // 'none' answers are valid standalone but cannot be mixed with real types.
+  const recNone = await service.submitKnowledgeAssessment(account, {
+    experienceLevel: 'none',
+    objective: 'other',
+    answers: allRight,
+    information: {
+      ...info,
+      familiarInvestmentTypes: ['none'],
+      pastTransactions: { natures: ['none'], annualFrequencyBand: '0', totalVolumeBandEur: '0', periodYearsBand: 'none' },
+      educationLevel: 'none_relevant',
+      professionOrFormer: null,
+    },
+  });
+  assert.deepEqual(recNone.information?.familiarInvestmentTypes, ['none']);
+  await assert.rejects(
+    () =>
+      service.submitKnowledgeAssessment(account, {
+        experienceLevel: 'some',
+        objective: 'growth',
+        answers: allRight,
+        information: { ...info, familiarInvestmentTypes: ['none', 'deposits'] },
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+  await assert.rejects(
+    () =>
+      service.submitKnowledgeAssessment(account, {
+        experienceLevel: 'some',
+        objective: 'growth',
+        answers: allRight,
+        information: { ...info, pastTransactions: { ...info.pastTransactions, natures: ['none', 'loans'] } },
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+
+  // Strict schema: unexpected raw financial inputs (e.g. an income figure)
+  // are REJECTED, never silently stripped and stored.
+  await assert.rejects(
+    () =>
+      service.submitKnowledgeAssessment(account, {
+        experienceLevel: 'some',
+        objective: 'growth',
+        answers: allRight,
+        information: { ...info, annualIncomeEur: 45000 },
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+
+  // Sophistication request requires an assessment record first.
+  const kp2 = Keypair.random();
+  const { account: account2 } = await login(store, kp2);
+  await assert.rejects(
+    () =>
+      service.requestSophistication(account2, {
+        route: 'annex_ii_attestation',
+        personType: 'natural',
+        attestedCriteria: ['np_income_60k_or_portfolio_over_100k', 'np_10_significant_transactions_per_quarter_4q'],
+        professionalClientProof: null,
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      }),
+    (e: any) => e.status === 409,
+  );
+
+  // Natural persons must attest at least TWO of the three Section I(2)
+  // criteria; legal-person criteria are refused on a natural-person request.
+  await assert.rejects(
+    () =>
+      service.requestSophistication(account, {
+        route: 'annex_ii_attestation',
+        personType: 'natural',
+        attestedCriteria: ['np_income_60k_or_portfolio_over_100k'],
+        professionalClientProof: null,
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+  await assert.rejects(
+    () =>
+      service.requestSophistication(account, {
+        route: 'annex_ii_attestation',
+        personType: 'natural',
+        attestedCriteria: ['np_income_60k_or_portfolio_over_100k', 'lp_own_funds_100k'],
+        professionalClientProof: null,
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+  const soph = await service.requestSophistication(account, {
+    route: 'annex_ii_attestation',
+    personType: 'natural',
+    attestedCriteria: ['np_income_60k_or_portfolio_over_100k', 'np_financial_sector_1y_or_exec_12m'],
+    professionalClientProof: null,
+    awarenessStatementAccepted: true,
+    liabilityStatementAccepted: true,
+  });
+  assert.equal(soph.categorisation?.status, 'sophistication_requested');
+  assert.equal(soph.categorisation?.request?.personType, 'natural');
+  assert.equal(soph.categorisation?.request?.attestedCriteria.length, 2);
+
+  // Legal persons need at least ONE Section I(1) criterion.
+  await assert.rejects(
+    () =>
+      service.requestSophistication(account, {
+        route: 'annex_ii_attestation',
+        personType: 'legal',
+        attestedCriteria: [],
+        professionalClientProof: null,
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+
+  // Both mandated Annex II statements must be expressly accepted.
+  await assert.rejects(
+    () =>
+      service.requestSophistication(account, {
+        route: 'annex_ii_attestation',
+        personType: 'legal',
+        attestedCriteria: ['lp_net_turnover_2m'],
+        professionalClientProof: null,
+        awarenessStatementAccepted: false,
+        liabilityStatementAccepted: true,
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+
+  // MiFID professional-client route (Annex II Section III): no criteria, no
+  // person type, but a reference to the proof of professional status.
+  await assert.rejects(
+    () =>
+      service.requestSophistication(account, {
+        route: 'mifid_professional_client',
+        personType: null,
+        attestedCriteria: ['lp_own_funds_100k'],
+        professionalClientProof: 'LEI 1234',
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+  await assert.rejects(
+    () =>
+      service.requestSophistication(account, {
+        route: 'mifid_professional_client',
+        personType: null,
+        attestedCriteria: [],
+        professionalClientProof: null,
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      }),
+    (e: any) => e?.name === 'ZodError' || e?.status === 400,
+  );
+  const mifid = await service.requestSophistication(account, {
+    route: 'mifid_professional_client',
+    personType: null,
+    attestedCriteria: [],
+    professionalClientProof: 'Proof of MiFID II Annex II Section I status (synthetic QA reference)',
+    awarenessStatementAccepted: true,
+    liabilityStatementAccepted: true,
+  });
+  assert.equal(mifid.categorisation?.request?.route, 'mifid_professional_client');
+
+  // A knowledge retake never erases or upgrades a captured request.
+  const recAfter = await service.submitKnowledgeAssessment(account, {
+    experienceLevel: 'some',
+    objective: 'growth',
+    answers: allRight,
+  });
+  assert.equal(recAfter.categorisation?.status, 'sophistication_requested');
+  assert.equal(recAfter.categorisation?.request?.route, 'mifid_professional_client');
+
+  // Legacy v1 record read: defaults filled transparently on read.
+  const kp3 = Keypair.random();
+  const { account: account3 } = await login(store, kp3);
+  await store.change((state) => {
+    state.appropriateness[account3.publicKey] = {
+      publicKey: account3.publicKey,
+      version: 1,
+      experienceLevel: 'some',
+      objective: 'growth',
+      knowledgeScore: 5,
+      knowledgeTotal: 5,
+      outcome: 'knowledge_check_passed',
+      warningAcknowledgedAt: null,
+      simulation: null,
+      completedAt: Date.now(),
+      reviewAssessmentDueAt: Date.now() + 63072000000,
+      reviewSimulationDueAt: null,
+    } as any;
+  });
+  const legacy = await service.getAppropriateness(account3);
+  assert.equal(legacy?.information, null);
+  assert.deepEqual(legacy?.categorisation, { status: 'non_sophisticated', request: null });
+});
+
 test('podcast: episodes are labeled platform-demo, listed publicly, and require https audio', async () => {
   const store = newStore();
   const service = new CommunityService(store);

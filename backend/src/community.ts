@@ -8,7 +8,9 @@ import type {
   IssuerApplication,
   NewsPost,
   PodcastEpisode,
+  AppropriatenessInformation,
   AppropriatenessRecord,
+  SophisticationRequest,
   Notification,
   NotificationKind,
   Ticket,
@@ -112,6 +114,96 @@ const knowledgeInput = z
     answers: z.array(z.number().int().min(0)).min(1).max(50),
   })
   .strict();
+
+// Full ECSPR Art. 21(2) / RTS 2022/2114 Art. 2 information set (v2). All
+// fields are banded/enumerated self-declarations - implementation choices,
+// not a legally validated assessment - with explicit 'none' options so no
+// investor is forced into an inaccurate declaration (RTS Art. 3(2)(c):
+// questions must collect information reflecting the investor's situation).
+const FAMILIAR_TYPES = [
+  'deposits',
+  'listed_shares',
+  'bonds',
+  'investment_funds_etfs',
+  'crypto_assets',
+  'crowdfunding_p2p',
+  'real_estate',
+  'other',
+  'none',
+] as const;
+const TRANSACTION_NATURES = ['transferable_securities', 'admitted_instruments', 'loans', 'early_expansion_stage_businesses', 'none'] as const;
+const appropriatenessInformationInput = z
+  .object({
+    familiarInvestmentTypes: z.array(z.enum(FAMILIAR_TYPES)).min(1).max(FAMILIAR_TYPES.length),
+    pastTransactions: z
+      .object({
+        natures: z.array(z.enum(TRANSACTION_NATURES)).min(1).max(TRANSACTION_NATURES.length),
+        annualFrequencyBand: z.enum(['0', '1_5', '6_20', 'over_20']),
+        totalVolumeBandEur: z.enum(['0', 'under_10k', '10k_50k', '50k_100k', 'over_100k']),
+        periodYearsBand: z.enum(['none', 'under_1', '1_3', '3_10', 'over_10']),
+      })
+      .strict(),
+    educationLevel: z.enum(['none_relevant', 'secondary', 'vocational', 'bachelor', 'master_plus', 'other']),
+    professionOrFormer: z.string().trim().min(1).max(200).nullable(),
+    crowdfundingProfessionalExperience: z.boolean(),
+    holdingPeriod: z.enum(['under_1y', '1_3y', '3_5y', 'over_5y', 'indefinite']),
+    riskProfile: z.enum(['conservative', 'balanced', 'risk_tolerant', 'speculative']),
+    sustainabilityPreference: z.enum(['none', 'esg_important', 'impact_first']),
+  })
+  .strict()
+  .superRefine((info, ctx) => {
+    // 'none' answers stand alone; mixing them with actual types would be an
+    // inaccurate declaration.
+    if (info.familiarInvestmentTypes.length > 1 && info.familiarInvestmentTypes.includes('none'))
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "'none' cannot be combined with other familiar investment types" });
+    if (info.pastTransactions.natures.length > 1 && info.pastTransactions.natures.includes('none'))
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "'none' cannot be combined with other past-transaction natures" });
+  });
+
+// v2 submission: the v1 knowledge payload plus the optional full Art. 21(2)
+// information set. A v1-shaped submission still passes (information null).
+const knowledgeV2Input = knowledgeInput.and(z.object({ information: appropriatenessInformationInput.optional() }).strict());
+
+// ECSPR Annex II Section II request template (capture-only). Natural and
+// legal persons attest DIFFERENT Section I criteria (at least 2 of 3 vs at
+// least 1 of 3); the MiFID II professional-client route (Annex II Section
+// III) attests no criteria and references its proof of status instead.
+const NATURAL_CRITERIA = [
+  'np_income_60k_or_portfolio_over_100k',
+  'np_financial_sector_1y_or_exec_12m',
+  'np_10_significant_transactions_per_quarter_4q',
+] as const;
+const LEGAL_CRITERIA = ['lp_own_funds_100k', 'lp_net_turnover_2m', 'lp_balance_sheet_1m'] as const;
+const sophisticationRequestInput = z
+  .object({
+    route: z.enum(['annex_ii_attestation', 'mifid_professional_client']),
+    personType: z.enum(['natural', 'legal']).nullable(),
+    attestedCriteria: z.array(z.string()).max(8),
+    professionalClientProof: z.string().trim().min(1).max(500).nullable(),
+    awarenessStatementAccepted: z.literal(true),
+    liabilityStatementAccepted: z.literal(true),
+  })
+  .strict()
+  .superRefine((req, ctx) => {
+    const bad = (m: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message: m });
+    if (req.route === 'mifid_professional_client') {
+      if (req.personType !== null || req.attestedCriteria.length > 0) bad('the MiFID professional-client route attests no Annex II Section I criteria');
+      if (!req.professionalClientProof) bad('the MiFID professional-client route requires a reference to the proof of professional status');
+      return;
+    }
+    if (req.professionalClientProof !== null) bad('professional-client proof only applies to the MiFID route');
+    const ids = new Set(req.attestedCriteria);
+    if (ids.size !== req.attestedCriteria.length) bad('duplicate attested criteria');
+    if (req.personType === 'natural') {
+      if (req.attestedCriteria.some((c) => !(NATURAL_CRITERIA as readonly string[]).includes(c)))
+        bad('natural persons attest only Annex II Section I(2) natural-person criteria');
+      if (ids.size < 2) bad('natural persons must meet at least two of the three Annex II Section I(2) criteria');
+    } else if (req.personType === 'legal') {
+      if (req.attestedCriteria.some((c) => !(LEGAL_CRITERIA as readonly string[]).includes(c)))
+        bad('legal persons attest only Annex II Section I(1) legal-person criteria');
+      if (ids.size < 1) bad('legal persons must meet at least one of the three Annex II Section I(1) criteria');
+    } else bad('the Annex II attestation route requires a person type');
+  });
 // .strict(): any financial input field (income, assets, commitments
 // breakdown) sent by a client is REJECTED, not silently stripped - the
 // server structurally cannot receive the simulation inputs (RTS Art. 5(5)).
@@ -150,6 +242,19 @@ function addCalendarYears(ts: number, years: number): number {
 // appropriateness determination.
 function normalizeOutcome(rec: AppropriatenessRecord): AppropriatenessRecord {
   if ((rec.outcome as string) === 'appropriate') rec.outcome = 'knowledge_check_passed';
+  return rec;
+}
+
+// v1 records predate the categorisation block; reads fill the honest
+// default without rewriting stored legacy state.
+function normalizeCategorisation(rec: AppropriatenessRecord): NonNullable<AppropriatenessRecord['categorisation']> {
+  return rec.categorisation ?? { status: 'non_sophisticated', request: null };
+}
+
+function normalizeRecord(rec: AppropriatenessRecord): AppropriatenessRecord {
+  normalizeOutcome(rec);
+  rec.categorisation = normalizeCategorisation(rec);
+  if (rec.information === undefined) rec.information = null;
   return rec;
 }
 
@@ -302,19 +407,21 @@ export class CommunityService {
   // Synthetic QA scope: the flow is fully implemented, but it is demo
   // infrastructure; no live sensitive-data collection and no real-money
   // gating until activation is separately approved. Every account is treated
-  // as non-sophisticated: quiz success never labels sophistication (that
-  // requires ECSPR Art. 2(1)(j) + Annex II, not implemented).
+  // as non-sophisticated: quiz success never labels sophistication.
+  // Categorisation follows ECSPR Art. 2(1)(j)/(k) + Annex II; only the
+  // Annex II request TEMPLATE is captured here - there is no approval path,
+  // so a captured request never changes an account's treatment.
 
   async getAppropriateness(account: Account): Promise<AppropriatenessRecord | null> {
     const state = await this.store.read();
     const rec = state.appropriateness[account.publicKey];
-    return rec ? normalizeOutcome(rec) : null;
+    return rec ? normalizeRecord(rec) : null;
   }
 
   // Knowledge test + self-declared experience/objectives (Art. 21(1)-(2)).
   // Scored server-side; answers are used for scoring and then dropped.
   async submitKnowledgeAssessment(account: Account, input: unknown): Promise<AppropriatenessRecord> {
-    const { experienceLevel, objective, answers } = knowledgeInput.parse(input ?? {});
+    const { experienceLevel, objective, answers, information } = knowledgeV2Input.parse(input ?? {});
     if (answers.length !== KNOWLEDGE_QUESTIONS.length) throw new CommunityError(400, `expected ${KNOWLEDGE_QUESTIONS.length} answers`);
     let score = 0;
     answers.forEach((a, i) => {
@@ -324,9 +431,11 @@ export class CommunityService {
     const now = this.now();
     const record: AppropriatenessRecord = {
       publicKey: account.publicKey,
-      version: 1,
+      version: information ? 2 : 1,
       experienceLevel,
       objective,
+      information: information ?? null,
+      categorisation: { status: 'non_sophisticated', request: null },
       knowledgeScore: score,
       knowledgeTotal: KNOWLEDGE_QUESTIONS.length,
       outcome,
@@ -346,6 +455,9 @@ export class CommunityService {
         record.simulation = prev.simulation;
         record.reviewSimulationDueAt = prev.reviewSimulationDueAt;
       }
+      // A captured Annex II request also stands on its own; a knowledge
+      // retake never erases or upgrades it (capture-only, no approval path).
+      if (prev?.categorisation?.request) record.categorisation = normalizeCategorisation(prev);
       state.appropriateness[account.publicKey] = record;
     });
     await this.recordAudit(
@@ -373,7 +485,7 @@ export class CommunityService {
       if (!rec) throw new CommunityError(409, 'complete the knowledge assessment before transmitting a simulation result');
       rec.simulation = { netWorthEur, capacityEur, transmittedAt: now };
       rec.reviewSimulationDueAt = addCalendarYears(now, 1);
-      return normalizeOutcome(rec);
+      return normalizeRecord(rec);
     });
     await this.recordAudit(`account:${account.publicKey}`, 'appropriateness.simulation', account.publicKey, `capacity=${capacityEur}`);
     return record;
@@ -389,9 +501,46 @@ export class CommunityService {
       if (rec.outcome !== 'warning_issued') throw new CommunityError(409, 'no risk warning is pending acknowledgment');
       if (rec.warningAcknowledgedAt) throw new CommunityError(409, 'risk warning already acknowledged');
       rec.warningAcknowledgedAt = this.now();
-      return normalizeOutcome(rec);
+      return normalizeRecord(rec);
     });
     await this.recordAudit(`account:${account.publicKey}`, 'appropriateness.warning_ack', account.publicKey, 'art21(4) warning acknowledged');
+    return record;
+  }
+
+  // ECSPR Annex II Section II: capture the request template for treatment
+  // as a sophisticated investor. CAPTURE-ONLY: this deployment has no
+  // approval path (approval requires the provider's written internal
+  // policies and reasonable-steps verification - operator scope, not
+  // implemented), so the stored status is 'sophistication_requested' and
+  // every account continues to be treated as non-sophisticated. Natural and
+  // legal persons attest different Section I criteria (validated in the
+  // input schema); the MiFID II professional-client route (Section III)
+  // references its proof of status instead. Resubmission replaces the prior
+  // request; it never erases the audit trail.
+  async requestSophistication(account: Account, input: unknown): Promise<AppropriatenessRecord> {
+    const parsed = sophisticationRequestInput.parse(input ?? {});
+    const now = this.now();
+    const request: SophisticationRequest = {
+      route: parsed.route,
+      personType: parsed.personType,
+      attestedCriteria: parsed.attestedCriteria,
+      professionalClientProof: parsed.professionalClientProof,
+      awarenessStatementAccepted: parsed.awarenessStatementAccepted,
+      liabilityStatementAccepted: parsed.liabilityStatementAccepted,
+      requestedAt: now,
+    };
+    const record = await this.store.change((state) => {
+      const rec = state.appropriateness[account.publicKey];
+      if (!rec) throw new CommunityError(409, 'complete the knowledge assessment before requesting sophisticated-investor treatment');
+      rec.categorisation = { status: 'sophistication_requested', request };
+      return normalizeRecord(rec);
+    });
+    await this.recordAudit(
+      `account:${account.publicKey}`,
+      'categorisation.sophistication_request',
+      account.publicKey,
+      `route=${request.route} personType=${request.personType ?? 'n/a'} criteria=${request.attestedCriteria.length} (capture-only; no approval path)`,
+    );
     return record;
   }
 

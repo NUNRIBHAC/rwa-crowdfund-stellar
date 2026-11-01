@@ -198,11 +198,44 @@ export const fetchNewsFeed = () => call<{ news: NewsPost[] }>('/api/news');
 // browser (RTS Art. 5(5) provider non-access rule). Quiz success never
 // labels an investor sophisticated and is never presented as the Art.
 // 21(1) appropriateness assessment.
+// Full ECSPR Art. 21(2) / RTS 2022/2114 Art. 2 information set (v2).
+// Banded/enumerated self-declarations with explicit 'none' options; an
+// implementation choice, not a legally validated assessment.
+export type AppropriatenessInformation = {
+  familiarInvestmentTypes: string[];
+  pastTransactions: {
+    natures: string[];
+    annualFrequencyBand: string;
+    totalVolumeBandEur: string;
+    periodYearsBand: string;
+  };
+  educationLevel: string;
+  professionOrFormer: string | null;
+  crowdfundingProfessionalExperience: boolean;
+  holdingPeriod: string;
+  riskProfile: string;
+  sustainabilityPreference: string;
+};
+
+// ECSPR Annex II Section II request template (capture-only; no approval
+// path exists, so a request never upgrades how the account is treated).
+export type SophisticationRequest = {
+  route: 'annex_ii_attestation' | 'mifid_professional_client';
+  personType: 'natural' | 'legal' | null;
+  attestedCriteria: string[];
+  professionalClientProof: string | null;
+  awarenessStatementAccepted: true;
+  liabilityStatementAccepted: true;
+  requestedAt: number;
+};
+
 export type AppropriatenessRecord = {
   publicKey: string;
-  version: 1;
+  version: 1 | 2;
   experienceLevel: 'none' | 'some' | 'experienced';
   objective: 'capital_preservation' | 'income' | 'growth' | 'other';
+  information: AppropriatenessInformation | null;
+  categorisation: { status: 'non_sophisticated' | 'sophistication_requested'; request: SophisticationRequest | null };
   knowledgeScore: number;
   knowledgeTotal: number;
   outcome: 'knowledge_check_passed' | 'warning_issued';
@@ -214,8 +247,12 @@ export type AppropriatenessRecord = {
 };
 
 export const fetchAppropriateness = (token: string) => call<{ record: AppropriatenessRecord | null }>('/api/auth/appropriateness', { token });
-export const submitKnowledgeAssessment = (token: string, input: { experienceLevel: string; objective: string; answers: number[] }) =>
-  call<{ record: AppropriatenessRecord }>('/api/auth/appropriateness/knowledge', { method: 'POST', body: input, token });
+export const submitKnowledgeAssessment = (
+  token: string,
+  input: { experienceLevel: string; objective: string; answers: number[]; information?: AppropriatenessInformation },
+) => call<{ record: AppropriatenessRecord }>('/api/auth/appropriateness/knowledge', { method: 'POST', body: input, token });
+export const requestSophistication = (token: string, input: Omit<SophisticationRequest, 'requestedAt'>) =>
+  call<{ record: AppropriatenessRecord }>('/api/auth/appropriateness/sophistication-request', { method: 'POST', body: input, token });
 export const transmitSimulationResult = (token: string, input: { netWorthEur: number; capacityEur: number }) =>
   call<{ record: AppropriatenessRecord }>('/api/auth/appropriateness/simulation-result', { method: 'POST', body: input, token });
 export const acknowledgeWarning = (token: string) =>
