@@ -107,3 +107,12 @@ test('intents from other campaigns do not leak into a campaign row', () => {
   assert.equal(r.campaigns[0].journalCovered, '1000000000');
   assert.equal(r.campaigns[1].journalCovered, '5000000000');
 });
+
+test('pending contributor-proof backlog is surfaced in the payload', () => {
+  // Durable-queue observation: the count is carried verbatim so an
+  // undrained backlog is operator-visible, not only logged.
+  const r0 = reconcileCampaigns([{ id: 'c1', raised: '100' }], [intent({ amount: '100' })], 0);
+  assert.equal(r0.pendingContributorProofs, 0);
+  const r3 = reconcileCampaigns([{ id: 'c1', raised: '100' }], [intent({ amount: '100' })], 0, 3);
+  assert.equal(r3.pendingContributorProofs, 3);
+});

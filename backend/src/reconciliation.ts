@@ -45,7 +45,8 @@ export function reconcileCampaigns(
   campaigns: ReconciliationCampaignInput[],
   intents: Intent[],
   quarantinedCount: number,
-): { campaigns: CampaignReconciliation[]; quarantinedIntents: number } {
+  pendingContributorProofs = 0,
+): { campaigns: CampaignReconciliation[]; quarantinedIntents: number; pendingContributorProofs: number } {
   const rows = campaigns.map((c) => {
     const mine = intents.filter((i) => i.campaign === c.id);
     const notes: string[] = [];
@@ -118,5 +119,5 @@ export function reconcileCampaigns(
       notes,
     };
   });
-  return { campaigns: rows, quarantinedIntents: quarantinedCount };
+  return { campaigns: rows, quarantinedIntents: quarantinedCount, pendingContributorProofs };
 }

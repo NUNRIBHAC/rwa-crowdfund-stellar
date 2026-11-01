@@ -17,7 +17,7 @@ import {
   accountActivity,
 } from './soroban.js';
 import { journalBackend } from './journal.js';
-import { drainPendingContributors, pendContribution } from './pending-contributors.js';
+import { drainPendingContributors, pendContribution, readPending } from './pending-contributors.js';
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
 
@@ -227,6 +227,9 @@ const reconciliationPayload = async () => {
     campaigns.map((c: { id: string; raised?: string | null }) => ({ id: c.id, raised: c.raised ?? null })),
     store.intents,
     (store.quarantined ?? []).length,
+    // Durable-queue observation: an undrained backlog of confirmed-
+    // contribution proofs is operator-visible here, not only in logs.
+    readPending().length,
   );
   return { generatedAt: new Date().toISOString(), network: NETWORK, semantics: RECONCILIATION_SEMANTICS, ...result };
 };
