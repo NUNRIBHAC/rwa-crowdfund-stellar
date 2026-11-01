@@ -190,6 +190,48 @@ export const fetchNews = (campaignId: string) => call<{ news: NewsPost[] }>(`/ap
 // --- Site-wide news feed (public) ---
 export const fetchNewsFeed = () => call<{ news: NewsPost[] }>('/api/news');
 
+// --- Post-funding reports (investor-scoped) ---
+// Reports are published by operators only AFTER the campaign's on-chain
+// deadline passes, and are readable only by wallets with a verified
+// contribution history in that campaign (plus operators). The backend fails
+// closed when entitlement cannot be verified, so 'unavailable' here means
+// "temporarily cannot verify" - never "you are not an investor".
+export type PostFundingReport = {
+  id: string;
+  campaignId: string;
+  kind: 'funding_outcome' | 'use_of_proceeds' | 'milestone' | 'other';
+  title: string;
+  body: string;
+  authorLabel: 'platform-demo';
+  createdAt: number;
+};
+
+export type ReportsResult =
+  { ok: true; reports: PostFundingReport[] } | { ok: false; reason: 'unauthenticated' | 'not-investor' | 'unknown-campaign' | 'unavailable'; message?: string };
+
+export async function fetchReports(campaignId: string, token: string): Promise<ReportsResult> {
+  if (!token) return { ok: false, reason: 'unauthenticated' };
+  try {
+    const r = await fetch(`/api/campaigns/${encodeURIComponent(campaignId)}/reports`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const v = (await r.json().catch(() => ({}))) as { reports?: PostFundingReport[]; error?: string };
+    if (r.ok) return { ok: true, reports: v.reports ?? [] };
+    if (r.status === 401) return { ok: false, reason: 'unauthenticated', message: v.error };
+    if (r.status === 403) return { ok: false, reason: 'not-investor', message: v.error };
+    if (r.status === 404) return { ok: false, reason: 'unknown-campaign', message: v.error };
+    return { ok: false, reason: 'unavailable', message: v.error ?? `Request failed (${r.status})` };
+  } catch (e) {
+    return { ok: false, reason: 'unavailable', message: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export const postOperatorReport = (token: string, campaignId: string, kind: PostFundingReport['kind'], title: string, body: string) =>
+  call<{ report: PostFundingReport }>(`/api/operator/campaigns/${encodeURIComponent(campaignId)}/reports`, {
+    body: { kind, title, body },
+    token,
+  });
+
 // --- ECSPR Art. 21 appropriateness test + loss simulation (RTS 2022/2114) ---
 // Data scopes are distinct by design: the knowledge test sends answers for
 // server-side scoring (only the outcome is stored); the loss simulation
