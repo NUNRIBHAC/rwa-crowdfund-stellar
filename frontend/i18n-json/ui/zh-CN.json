@@ -1404,7 +1404,7 @@
     "statusTitle": "您的结果",
     "statusOutcome": "入门知识检查",
     "completedAt": "完成于 {date}。",
-    "reviewAssessmentDue": "评估复核截止日期为 {date}。",
+    "reviewAssessmentDue": "知识检查复核截止日期为 {date}。",
     "reviewSimulationDue": "模拟复核截止日期为 {date}。",
     "accuracyNotice": "请尽可能准确地回答：平台依赖于您提供的信息准确且为最新。",
     "infoTitle": "您的投资背景",
@@ -1488,7 +1488,7 @@
     "infoStatusProvided": "投资背景信息已存档。",
     "infoStatusMissing": "尚无投资背景信息 - 重新参加测试即可提供。",
     "categorisationTitle": "投资者分类",
-    "categorisationNote": "根据 ECSPR，除非符合条件并获批为专业成熟投资者，否则所有投资者均为非成熟投资者（第2条第1款(j)(k)项及附件二）。本演示仅记录您的请求：此部署不运行任何审批流程，因此无论您请求什么，您仍为非成熟投资者。",
+    "categorisationNote": "根据 ECSPR，除非您是 MiFID II 下的专业客户，或提供者按照附件二程序批准您为成熟投资者，否则所有投资者均为非成熟投资者（第2条第1款(j)(k)项及附件二）。本演示仅记录您的请求：此部署不运行任何审批流程，因此无论您请求什么，您仍为非成熟投资者。",
     "categorisationStatusLabel": "分类",
     "categorisationStatusLabels": {
       "non_sophisticated": "非成熟投资者",

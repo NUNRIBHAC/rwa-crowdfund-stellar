@@ -1410,7 +1410,7 @@
     "statusTitle": "結果",
     "statusOutcome": "入門知識チェック",
     "completedAt": "{date} に完了。",
-    "reviewAssessmentDue": "評価の見直し期限：{date}。",
+    "reviewAssessmentDue": "知識チェックの見直し期限：{date}。",
     "reviewSimulationDue": "シミュレーションの見直し期限：{date}。",
     "accuracyNotice": "できるだけ正確にお答えください。プラットフォームは、提供された情報が正確かつ最新であることを前提としています。",
     "infoTitle": "投資経験について",
@@ -1494,7 +1494,7 @@
     "infoStatusProvided": "投資経験の情報が登録されています。",
     "infoStatusMissing": "投資経験の情報はまだありません。提供するにはテストを再度受けてください。",
     "categorisationTitle": "投資家カテゴリー",
-    "categorisationNote": "ECSPRでは、適格性を満たし熟練投資家として承認されない限り、すべての投資家は非熟練投資家です（第2条1項(j)(k)および附属書II）。このデモはリクエストを記録するだけで、このデプロイメントでは承認プロセスは実行されないため、何をリクエストしても非熟練投資家のままです。",
+    "categorisationNote": "ECSPRでは、MiFID II上のプロフェッショナル顧客であるか、プロバイダーが附属書IIの手続きに基づき熟練投資家として承認しない限り、すべての投資家は非熟練投資家です（第2条1項(j)(k)および附属書II）。このデモはリクエストを記録するだけで、このデプロイメントでは承認プロセスは実行されないため、何をリクエストしても非熟練投資家のままです。",
     "categorisationStatusLabel": "カテゴリー",
     "categorisationStatusLabels": {
       "non_sophisticated": "非熟練投資家",

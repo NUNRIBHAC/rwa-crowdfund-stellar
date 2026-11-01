@@ -1544,7 +1544,7 @@ export const fr: Messages = {
     statusTitle: 'Vos résultats',
     statusOutcome: 'Vérification initiale des connaissances',
     completedAt: 'Terminée le {date}.',
-    reviewAssessmentDue: "Révision de l'évaluation avant le {date}.",
+    reviewAssessmentDue: 'Révision du test de connaissances avant le {date}.',
     reviewSimulationDue: 'Révision de la simulation avant le {date}.',
     accuracyNotice: "Répondez aussi exactement que possible : la plateforme s'appuie sur des informations exactes et à jour de votre part.",
     infoTitle: 'Votre expérience en matière de placement',
@@ -1630,7 +1630,7 @@ export const fr: Messages = {
     infoStatusMissing: "Aucune information sur votre expérience pour l'instant - repassez le test pour la fournir.",
     categorisationTitle: "Catégorisation de l'investisseur",
     categorisationNote:
-      "Selon l'ECSPR, tout investisseur est non sophistiqué sauf s'il remplit les conditions et est agréé comme investisseur sophistiqué (article 2, paragraphe 1, points j) et k), et annexe II). Cette démo se contente d'enregistrer votre demande : aucune procédure d'agrément ne s'exécute sur ce déploiement, vous restez donc non sophistiqué quoi que vous demandiez.",
+      "Selon l'ECSPR, tout investisseur est non sophistiqué sauf s'il est client professionnel au sens de MiFID II ou si le prestataire l'agrée comme investisseur sophistiqué selon la procédure de l'annexe II (article 2, paragraphe 1, points j) et k), et annexe II). Cette démo se contente d'enregistrer votre demande : aucune procédure d'agrément ne s'exécute sur ce déploiement, vous restez donc non sophistiqué quoi que vous demandiez.",
     categorisationStatusLabel: 'Catégorisation',
     categorisationStatusLabels: {
       non_sophisticated: 'Investisseur non sophistiqué',
