@@ -2771,23 +2771,24 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   outline-offset: 0;
 }
 
-/* Responsive: on narrow viewports the operator tables keep a readable column
-   width and the surrounding section scrolls horizontally, instead of the
-   table squeezing cells into mid-word-breaking columns. A global
-   overflow-wrap:anywhere (styles.css top) otherwise shatters plain words like
-   country names. */
-@media (max-width: 720px) {
-  .community-section:has(.operator-table) {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .operator-table {
-    min-width: 560px;
-  }
-  .operator-table th,
-  .operator-table td {
-    overflow-wrap: normal;
-  }
+/* Operator tables never squeeze cells into mid-word breaks: columns keep a
+   readable, word-boundary minimum width and the surrounding section scrolls
+   horizontally whenever the table's minimum content width exceeds the
+   available space - at any viewport, not only on phones. A global
+   overflow-wrap:anywhere (styles.css top) would otherwise shatter plain
+   words like country names, and the lang=de hyphenation rule would split
+   action labels like "Wiederoffnen"; both are reset inside these tables. */
+.community-section:has(.operator-table) {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.operator-table th,
+.operator-table td {
+  overflow-wrap: normal;
+  hyphens: manual;
+}
+.operator-table td .btn {
+  white-space: nowrap;
 }
 
 /* Legal document tables (e.g. operator particulars in the legal notice): on
