@@ -5,6 +5,9 @@
 // actually publishes it. Routes (backend wires them): /events, /blog,
 // /press, /jobs, /podcast.
 // Footer: Communication column links to these five pages.
+import { useEffect, useState } from 'react';
+import { fetchEpisodes } from '../community/api';
+import type { PodcastEpisode } from '../community/api';
 import { useI18n } from '../i18n';
 
 function PageShell({ title, intro, children, demoNote }: { title: string; intro: string; children?: React.ReactNode; demoNote: string }) {
@@ -130,11 +133,40 @@ export function JobsPage() {
 }
 
 export function PodcastPage() {
-  const { m } = useI18n();
+  const { m, locale } = useI18n();
   const t = m.contentPages;
+  const [episodes, setEpisodes] = useState<PodcastEpisode[] | null>(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    let live = true;
+    fetchEpisodes()
+      .then(({ episodes }) => live && setEpisodes(episodes))
+      .catch((e) => live && setError(e instanceof Error ? e.message : String(e)));
+    return () => {
+      live = false;
+    };
+  }, []);
+
   return (
     <PageShell title={t.podcastTitle} intro={t.podcastIntro} demoNote={t.podcastDemoNote}>
-      <p className="community-note">{t.podcastEmpty}</p>
+      {error && <p className="community-error">{error}</p>}
+      {!error && episodes === null && <p className="community-loading">{m.community.loading}</p>}
+      {!error && episodes !== null && episodes.length === 0 && <p className="community-note">{t.podcastEmpty}</p>}
+      {!error && episodes !== null && episodes.length > 0 && (
+        <ul className="portfolio-list" aria-label={t.podcastTitle}>
+          {episodes.map((ep) => (
+            <li key={ep.id} className="portfolio-row podcast-episode">
+              <strong>{ep.title}</strong>
+              <p className="news-meta">
+                {new Date(ep.createdAt).toLocaleDateString(locale)} - {m.community.newsAuthorDemo}
+              </p>
+              <p className="community-note">{ep.description}</p>
+              <audio controls preload="none" src={ep.audioUrl} aria-label={ep.title} />
+            </li>
+          ))}
+        </ul>
+      )}
       <h3>{t.podcastFormatsTitle}</h3>
       <ul className="portfolio-list">
         <li className="portfolio-row">

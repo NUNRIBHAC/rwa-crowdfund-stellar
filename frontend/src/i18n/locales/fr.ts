@@ -240,7 +240,7 @@ export const fr: Messages = {
     interestIsinDocsNote: "Non disponible - ce prototype n'enregistre que des contributions et n'émet aucun titre",
     marketingDivider: "Contenu fourni par l'émetteur ci-dessous - non vérifié par la plateforme",
     marketingDividerAria: 'Contenu marketing ci-dessous',
-    tabs: ["Vue d'ensemble", 'Détails', 'Documents', 'Actualités'],
+    tabs: ["Vue d'ensemble", 'Détails', 'Documents', 'Actualités', 'Podcast'],
     tabsAria: 'Sections de la campagne',
     overviewMissing:
       "Le contenu marketing de l'émetteur n'est pas disponible dans ce prototype. Sur une plateforme en production, cette zone afficherait la description, l'équipe et le modèle économique de l'émetteur lui-même, clairement séparés des faits de la plateforme par le séparateur ci-dessus.",
@@ -250,6 +250,7 @@ export const fr: Messages = {
     documentsMissing:
       "L'hébergement de documents n'est pas disponible dans ce prototype. Une plateforme en production hébergerait ici la fiche d'information fondamentale et les conditions de l'émission.",
     newsEmpty: 'Aucune actualité. Les nouvelles de la campagne apparaîtraient ici.',
+    podcastEmpty: 'Aucun épisode. Les épisodes du podcast de la campagne apparaîtraient ici.',
     statusFunded: 'Financée avec succès',
     statusEnded: 'Sans succès',
     widgetContribute: 'Contribuer',

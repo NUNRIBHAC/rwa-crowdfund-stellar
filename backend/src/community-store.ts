@@ -77,6 +77,24 @@ export type NewsPost = {
   createdAt: number;
 };
 
+export type PodcastEpisode = {
+  id: string;
+  // Null for platform-wide episodes; set when an episode belongs to one
+  // campaign (campaign page podcast tab).
+  campaignId: string | null;
+  title: string;
+  description: string;
+  // External audio URL only (https): the platform does not host audio files.
+  // Publishing real episodes needs a hosting decision; metadata-only entries
+  // are refused by the service so no fake episodes can appear.
+  audioUrl: string;
+  // Demo honesty, same rule as news: episodes are published through the
+  // admin/operator key as platform stand-in; there is no verified issuer
+  // identity. Readers must see that label.
+  authorLabel: 'platform-demo';
+  createdAt: number;
+};
+
 export type Ticket = {
   id: string;
   kind: 'support' | 'feedback';
@@ -159,6 +177,7 @@ export type CommunityState = {
   sessions: Record<string, Session>;
   comments: Record<string, Comment>;
   news: Record<string, NewsPost>;
+  episodes: Record<string, PodcastEpisode>;
   tickets: Record<string, Ticket>;
   applications: Record<string, IssuerApplication>;
   companies: Record<string, CompanyApplication>;
@@ -175,6 +194,7 @@ export function emptyCommunityState(): CommunityState {
     sessions: {},
     comments: {},
     news: {},
+    episodes: {},
     tickets: {},
     applications: {},
     companies: {},
@@ -192,6 +212,8 @@ function validate(state: any): CommunityState {
   if (state && state.version === 1 && !state.companies) state.companies = {};
   // Same forward-compatible default for docs written before TOTP tickets.
   if (state && state.version === 1 && !state.totpTickets) state.totpTickets = {};
+  // Same forward-compatible default for docs written before podcast episodes.
+  if (state && state.version === 1 && !state.episodes) state.episodes = {};
   if (
     !state ||
     state.version !== 1 ||
@@ -200,6 +222,7 @@ function validate(state: any): CommunityState {
     !state.sessions ||
     !state.comments ||
     !state.news ||
+    !state.episodes ||
     !state.tickets ||
     !state.applications ||
     !state.companies ||

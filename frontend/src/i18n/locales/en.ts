@@ -235,7 +235,7 @@ export const en = {
     interestIsinDocsNote: 'Not available - this prototype records contributions only and issues no securities',
     marketingDivider: 'Issuer-provided content below - not verified by the platform',
     marketingDividerAria: 'Marketing content below',
-    tabs: ['Overview', 'Details', 'Documents', 'News'],
+    tabs: ['Overview', 'Details', 'Documents', 'News', 'Podcast'],
     tabsAria: 'Campaign sections',
     overviewMissing:
       "Issuer marketing content is not available in this prototype. On a production platform this area would carry the issuer's own description, team and business model, clearly separated from platform facts by the divider above.",
@@ -244,6 +244,7 @@ export const en = {
     detailsMissing: 'Not available in this prototype.',
     documentsMissing: 'Document hosting is not available in this prototype. A production platform would host the key information sheet and issue terms here.',
     newsEmpty: 'No updates. Campaign news would appear here.',
+    podcastEmpty: 'No episodes. Campaign podcast episodes would appear here.',
     statusFunded: 'Successfully financed',
     statusEnded: 'Unsuccessful',
     widgetContribute: 'Contribute',
