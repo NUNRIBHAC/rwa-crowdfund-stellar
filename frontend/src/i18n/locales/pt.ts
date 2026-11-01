@@ -477,6 +477,10 @@ export const pt: Messages = {
     fixtureNote: 'As campanhas de exemplo estão no ecrã; os dados de exemplo não têm posições por carteira.',
     investmentsAria: 'Os meus investimentos',
     myInvestments: 'Os meus investimentos',
+    newsFeedAria: 'Notícias das campanhas',
+    newsFeedTitle: 'Notícias das campanhas',
+    newsFeedEmpty: 'Ainda não há notícias das campanhas em que investiu.',
+    newsFeedNoInvestments: 'As notícias das campanhas em que investir aparecerão aqui.',
     newInvestments: 'Novos investimentos',
     filterAria: 'Filtrar carteira por estado',
     tabs: {

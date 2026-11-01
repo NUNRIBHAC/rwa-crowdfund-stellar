@@ -444,6 +444,10 @@
     "fixtureNote": "頁面顯示的是示例項目；示例數據不包含任何錢包持倉。",
     "investmentsAria": "我的投資",
     "myInvestments": "我的投資",
+    "newsFeedAria": "活動新聞",
+    "newsFeedTitle": "活動新聞",
+    "newsFeedEmpty": "您投資的活動暫無新聞。",
+    "newsFeedNoInvestments": "您投資的活動新聞將顯示於此。",
     "newInvestments": "新的投資",
     "filterAria": "按狀態篩選投資組合",
     "tabs": {

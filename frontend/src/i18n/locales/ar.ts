@@ -470,6 +470,10 @@ export const ar: Messages = {
     fixtureNote: 'حملات تجريبية على الشاشة؛ البيانات التجريبية لا تحمل مراكز لكل محفظة.',
     investmentsAria: 'استثماراتي',
     myInvestments: 'استثماراتي',
+    newsFeedAria: 'أخبار الحملات',
+    newsFeedTitle: 'أخبار الحملات',
+    newsFeedEmpty: 'لا أخبار بعد عن الحملات التي استثمرت فيها.',
+    newsFeedNoInvestments: 'ستظهر هنا أخبار الحملات التي تستثمر فيها.',
     newInvestments: 'استثمارات جديدة',
     filterAria: 'تصفية المحفظة حسب الحالة',
     tabs: {

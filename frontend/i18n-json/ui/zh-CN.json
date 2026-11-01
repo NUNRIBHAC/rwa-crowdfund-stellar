@@ -444,6 +444,10 @@
     "fixtureNote": "页面显示的是示例项目；示例数据不包含任何钱包持仓。",
     "investmentsAria": "我的投资",
     "myInvestments": "我的投资",
+    "newsFeedAria": "活动新闻",
+    "newsFeedTitle": "活动新闻",
+    "newsFeedEmpty": "您投资的活动暂无新闻。",
+    "newsFeedNoInvestments": "您投资的活动新闻将显示在这里。",
     "newInvestments": "新的投资",
     "filterAria": "按状态筛选投资组合",
     "tabs": {

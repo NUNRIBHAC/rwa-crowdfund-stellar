@@ -465,6 +465,10 @@ export const ja: Messages = {
     fixtureNote: 'サンプルキャンペーンが表示されています。サンプルデータにウォレットごとのポジションは含まれません。',
     investmentsAria: '私の投資',
     myInvestments: '私の投資',
+    newsFeedAria: 'キャンペーンニュース',
+    newsFeedTitle: 'キャンペーンニュース',
+    newsFeedEmpty: '投資したキャンペーンのニュースはまだありません。',
+    newsFeedNoInvestments: '投資したキャンペーンのニュースがここに表示されます。',
     newInvestments: '新しい投資',
     filterAria: 'ステータスでポートフォリオを絞り込む',
     tabs: {

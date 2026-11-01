@@ -468,6 +468,10 @@ export const en = {
     fixtureNote: 'Sample campaigns are on screen; sample data carries no per-wallet positions.',
     investmentsAria: 'My investments',
     myInvestments: 'My investments',
+    newsFeedAria: 'Campaign news',
+    newsFeedTitle: 'Campaign news',
+    newsFeedEmpty: 'No news yet for the campaigns you invested in.',
+    newsFeedNoInvestments: 'News from campaigns you invest in will appear here.',
     newInvestments: 'New investments',
     filterAria: 'Filter portfolio by status',
     tabs: {

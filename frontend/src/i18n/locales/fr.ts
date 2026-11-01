@@ -480,6 +480,10 @@ export const fr: Messages = {
     fixtureNote: "Les campagnes exemples sont à l'écran ; les données d'exemple n'ont pas de positions par portefeuille.",
     investmentsAria: 'Mes investissements',
     myInvestments: 'Mes investissements',
+    newsFeedAria: 'Actualités des campagnes',
+    newsFeedTitle: 'Actualités des campagnes',
+    newsFeedEmpty: "Pas encore d'actualités pour les campagnes dans lesquelles vous avez investi.",
+    newsFeedNoInvestments: 'Les actualités des campagnes dans lesquelles vous investissez apparaîtront ici.',
     newInvestments: 'Nouveaux investissements',
     filterAria: 'Filtrer le portefeuille par statut',
     tabs: {
