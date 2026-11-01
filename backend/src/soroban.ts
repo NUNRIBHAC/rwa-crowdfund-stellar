@@ -388,8 +388,11 @@ export async function statusSoroban(hash: string): Promise<any> {
   // Phase 1 (no lock): read the journal and poll the network.
   const store = await readStore(),
     intent = store.intents.find((i) => i.hash === hash);
+  // A terminal intent's signed envelope is scrubbed by the journal's retention
+  // policy (purgeTerminalEnvelopes); the terminal status is the durable proof
+  // and must remain readable. Check it BEFORE requiring a signed envelope.
+  if (intent && TERMINAL.includes(intent.status)) return { hash, status: intent.status, confirmed: intent.status === 'SUCCESS' };
   if (!intent || !intent.signedXdr) throw new Error(quarantinedHash(store, hash) ?? 'signed intent not found');
-  if (TERMINAL.includes(intent.status)) return { hash, status: intent.status, confirmed: intent.status === 'SUCCESS' };
   const result = await sorobanDeps.client().getTransaction(hash);
   if (result.txHash !== hash) throw new Error('RPC returned mismatched hash');
   // NOT_FOUND is not failure. RPC has bounded history. No new intent,
