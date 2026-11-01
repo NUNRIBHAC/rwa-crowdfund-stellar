@@ -87,6 +87,55 @@ function deepEqual(a, b, path, diffs) {
   for (const k of ka) deepEqual(a[k], b[k], `${path}.${k}`, diffs);
 }
 
+// Every string leaf's {placeholder} set and every { one, other } leaf's shape
+// must match the English base exactly: translators edit values, never the
+// variable contract or the plural structure. Arrays keep the base's length
+// (per-locale arrays are parallel structures, e.g. legal blocks).
+function validateAgainstBase(base, value, path, diffs) {
+  if (typeof base === 'string' && typeof value === 'string') {
+    const ph = (t) => [...t.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
+    const a = ph(base),
+      b = ph(value);
+    if (a.join(',') !== b.join(',')) diffs.push(`${path}: placeholders {${a}} vs {${b}}`);
+    return;
+  }
+  if (typeof base !== typeof value) {
+    diffs.push(`${path}: type ${typeof base} vs ${typeof value}`);
+    return;
+  }
+  if (base === null || typeof base !== 'object') {
+    if (typeof base !== typeof value) diffs.push(`${path}: primitive type differs`);
+    return;
+  }
+  const bArr = Array.isArray(base),
+    vArr = Array.isArray(value);
+  if (bArr !== vArr) {
+    diffs.push(`${path}: array vs object`);
+    return;
+  }
+  if (bArr) {
+    if (base.length !== value.length) {
+      diffs.push(`${path}: array length ${value.length} vs base ${base.length}`);
+      return;
+    }
+    base.forEach((v, i) => validateAgainstBase(v, value[i], `${path}[${i}]`, diffs));
+    return;
+  }
+  const kb = Object.keys(base),
+    kv = Object.keys(value);
+  if (kb.some((k) => !(k in value))) {
+    diffs.push(`${path}: missing keys ${kb.filter((k) => !(k in value))}`);
+    return;
+  }
+  for (const k of kv) {
+    if (!(k in base)) {
+      diffs.push(`${path}: unexpected key ${k}`);
+      continue;
+    }
+    validateAgainstBase(base[k], value[k], `${path}.${k}`, diffs);
+  }
+}
+
 const check = process.argv.includes('--check');
 const drift = [];
 const written = [];
@@ -98,6 +147,12 @@ for (const locale of LOCALES) {
   if (check) {
     const diffs = [];
     deepEqual(await loadTsModule(join(ROOT, 'src/i18n/locales', `${locale}.ts`)), uiJson, `ui.${locale}`, diffs);
+    if (locale !== 'en') {
+      const uiBase = JSON.parse(readFileSync(join(ROOT, 'i18n-json/ui/en.json'), 'utf8'));
+      validateAgainstBase(uiBase, uiJson, `ui.${locale}`, diffs);
+      const legalBase = JSON.parse(readFileSync(join(ROOT, 'i18n-json/legal/en.json'), 'utf8'));
+      validateAgainstBase(legalBase, legalJson, `legal.${locale}`, diffs);
+    }
     for (const doc of LEGAL_DOCS) {
       if (!(doc in legalJson)) {
         diffs.push(`legal.${locale}.${doc}: missing from JSON`);
