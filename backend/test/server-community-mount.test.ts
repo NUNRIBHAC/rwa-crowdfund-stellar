@@ -83,6 +83,28 @@ test('GET /api/news passes the community path gate (public 200, not 404)', async
   assert.equal(res.status, 200);
 });
 
+test('GET /api/podcast/episodes passes the community path gate (public 200, not 404)', async () => {
+  const res = await fetch(`${base}/api/podcast/episodes`);
+  assert.equal(res.status, 200);
+  assert.deepEqual((await res.json()).episodes, []);
+});
+
+test('GET /api/campaigns/:id/podcast passes the community path gate (public 200, not 404)', async () => {
+  const res = await fetch(`${base}/api/campaigns/demo-solar/podcast`);
+  assert.equal(res.status, 200);
+  assert.deepEqual((await res.json()).episodes, []);
+});
+
+test('POST /api/podcast/episodes passes the community path gate (503 fail-closed without ADMIN_SECRET, not 404/410)', async () => {
+  const res = await fetch(`${base}/api/podcast/episodes`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ title: 'x', description: 'y', audioUrl: 'https://a.example.com/x.mp3' }),
+  });
+  // ADMIN_SECRET is unset in this test env: the admin gate answers 503.
+  assert.equal(res.status, 503);
+});
+
 test('GET /api/operator/tickets passes the community path gate (401 without token, not 404)', async () => {
   const res = await fetch(`${base}/api/operator/tickets`);
   assert.equal(res.status, 401);
