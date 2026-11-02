@@ -1829,6 +1829,11 @@ export const de: Messages = {
     errorTotpLoginInvalid:
       'Der Code war falsch oder die Anmeldung ist abgelaufen. Melden Sie sich erneut an und geben Sie den aktuellen Code aus Ihrer Authenticator-App ein.',
     errorTotpNotEnabled: 'Die Zwei-Faktor-Authentifizierung ist für dieses Konto nicht aktiviert.',
+    errorSocialProviderDenied: 'Die Anmeldung wurde beim Anbieter abgebrochen. Es wurde keine Sitzung eröffnet.',
+    errorSocialFlowExpired: 'Die Anmeldung ist abgelaufen. Bitte erneut starten.',
+    errorSocialExchangeFailed: 'Der Anmeldeanbieter hat den Austausch abgelehnt. Bitte erneut starten.',
+    errorSocialRegistrationRestricted: 'Die Anmeldung mit diesem Anbieter ist auf dieser Website noch nicht für neue Konten geöffnet.',
+    socialSignInGoogle: 'Mit Google fortfahren',
     signedInTitle: 'Community-Konto',
     signedInAs: 'Angemeldet als',
     displayNameLabel: 'Anzeigename (wird bei Ihren Kommentaren gezeigt)',

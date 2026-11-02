@@ -58,6 +58,12 @@ export type CommunityAuthState = {
   totpPending: { ticket: string } | null;
   /** Second step of a gated sign-in: TOTP or a single-use recovery code. */
   completeTotp: (code: string) => Promise<void>;
+  /** Social (OAuth) providers configured on this deployment (abuse-config);
+      the sign-in panel renders a button per listed provider. */
+  socialProviders: string[];
+  /** Begin a social sign-in: bot check, then a top-level navigation to the
+      provider through the backend /start route. */
+  startSocialSignIn: (provider: string) => Promise<void>;
   signOut: () => Promise<void>;
   setDisplayName: (name: string) => Promise<void>;
   clearError: () => void;
@@ -96,7 +102,24 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
   totp_code_invalid: 'errorTotpCodeInvalid',
   totp_login_invalid: 'errorTotpLoginInvalid',
   totp_not_enabled: 'errorTotpNotEnabled',
+  social_provider_denied: 'errorSocialProviderDenied',
+  social_flow_expired: 'errorSocialFlowExpired',
+  social_exchange_failed: 'errorSocialExchangeFailed',
+  social_registration_restricted: 'errorSocialRegistrationRestricted',
 };
+
+// Social sign-in outcomes arrive from the backend callback as a redirect to
+// /account#social-<kind>=<payload> (never in the query string: fragments do
+// not reach access logs). Returns the cleaned hash-less outcome or null.
+function readSocialFragment(): { kind: 'token' | 'totp' | 'error'; value: string } | null {
+  if (typeof window === 'undefined') return null;
+  const m = window.location.hash.match(/^#social-(token|totp|error)=([A-Za-z0-9_\-]+)$/);
+  if (!m) return null;
+  // Strip the fragment immediately so a session token never lingers in the
+  // URL (history, shoulder-surfing, screenshots).
+  window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  return { kind: m[1] as 'token' | 'totp' | 'error', value: m[2] };
+}
 
 // Localize known API failures; pass through anything unknown verbatim.
 // Exported so account-page sections (e.g. SecuritySection) render the same
@@ -121,22 +144,48 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
   const [error, setError] = useState('');
   const [restored, setRestored] = useState(false);
   const [totpPending, setTotpPending] = useState<{ ticket: string } | null>(null);
+  const [socialProviders, setSocialProviders] = useState<string[]>([]);
 
-  // Restore a stored session once on mount; drop it if the server rejects it.
+  // A social sign-in returns here with its outcome in the URL fragment;
+  // consume it before the stored-session restore so a fresh sign-in wins.
   useEffect(() => {
+    const social = readSocialFragment();
+    Promise.resolve()
+      .then(() => fetch('/api/auth/abuse-config'))
+      .then((r) => (r && r.ok ? r.json() : null))
+      .then((j) => setSocialProviders(Array.isArray(j?.socialProviders) ? j.socialProviders.filter((p: unknown) => typeof p === 'string') : []))
+      .catch(() => undefined);
+    const restore = (stored: string) =>
+      fetchMe(stored)
+        .then(({ account, isOperator }) => {
+          setToken(stored);
+          setAccount(account);
+          setIsOperator(isOperator === true);
+          saveCommunityToken(stored);
+        })
+        .catch(() => saveCommunityToken(''))
+        .finally(() => setRestored(true));
+    if (social?.kind === 'token') {
+      restore(social.value);
+      return;
+    }
+    if (social?.kind === 'totp') {
+      // Provider accepted the identity; the account's second factor is still
+      // owed. Keep only the one-purpose ticket (same gate as email/wallet).
+      setTotpPending({ ticket: social.value });
+      setRestored(true);
+      return;
+    }
+    if (social?.kind === 'error') {
+      setError(describeError(new ApiError(social.value, social.value), messages.community));
+    }
+    // Restore a stored session once on mount; drop it if the server rejects it.
     const stored = loadCommunityToken();
     if (!stored) {
       setRestored(true);
       return;
     }
-    fetchMe(stored)
-      .then(({ account, isOperator }) => {
-        setToken(stored);
-        setAccount(account);
-        setIsOperator(isOperator === true);
-      })
-      .catch(() => saveCommunityToken(''))
-      .finally(() => setRestored(true));
+    restore(stored);
   }, [messages]);
 
   const signIn = useCallback(
@@ -305,6 +354,25 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     [totpPending, messages],
   );
 
+  const startSocialSignIn = useCallback(
+    async (provider: string) => {
+      setBusy(true);
+      setError('');
+      try {
+        const t = await turnstileToken();
+        const q = t ? `?turnstileToken=${encodeURIComponent(t)}` : '';
+        // Top-level navigation: the backend validates the bot check, starts
+        // the OIDC flow and 302s to the provider. busy stays set - the page
+        // is leaving.
+        window.location.assign(`/api/auth/social/${encodeURIComponent(provider)}/start${q}`);
+      } catch (e) {
+        setError(describeError(e, messages.community));
+        setBusy(false);
+      }
+    },
+    [messages],
+  );
+
   const signOut = useCallback(async () => {
     setBusy(true);
     setError('');
@@ -355,6 +423,8 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       signOut,
       totpPending,
       completeTotp,
+      socialProviders,
+      startSocialSignIn,
       setDisplayName: setName,
       clearError: () => setError(''),
     }),
@@ -376,6 +446,8 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setName,
       totpPending,
       completeTotp,
+      socialProviders,
+      startSocialSignIn,
     ],
   );
 

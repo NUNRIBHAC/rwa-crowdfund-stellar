@@ -1844,6 +1844,11 @@ export const fr: Messages = {
     errorTotpLoginInvalid:
       "Le code était incorrect ou la connexion a expiré. Reconnectez-vous et saisissez le code actuel de votre application d'authentification.",
     errorTotpNotEnabled: "L'authentification à deux facteurs n'est pas activée sur ce compte.",
+    errorSocialProviderDenied: "La connexion a été annulée chez le fournisseur. Aucune session n'a été ouverte.",
+    errorSocialFlowExpired: 'La connexion a expiré. Recommencez.',
+    errorSocialExchangeFailed: 'Le fournisseur de connexion a rejeté l’échange. Recommencez.',
+    errorSocialRegistrationRestricted: 'La connexion avec ce fournisseur n’est pas encore ouverte aux nouveaux comptes sur ce site.',
+    socialSignInGoogle: 'Continuer avec Google',
     signedInTitle: 'Compte de la communauté',
     signedInAs: 'Connecté en tant que',
     displayNameLabel: "Nom d'affichage (visible sur vos commentaires)",

@@ -2979,3 +2979,6 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
+.social-signin-btn {
+  margin-bottom: 0.75rem;
+}

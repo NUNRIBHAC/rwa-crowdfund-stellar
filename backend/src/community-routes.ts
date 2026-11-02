@@ -37,7 +37,7 @@ import {
   sendBudgetedMail,
 } from './email-auth.js';
 import { MAIL_LOCALES, resetEmail, verificationEmail } from './email-templates.js';
-import { completeSocialFlow, isSocialProvider, socialConfigFromEnv, startSocialFlow } from './social-auth.js';
+import { completeSocialFlow, isSocialProvider, SOCIAL_PROVIDERS, socialConfigFromEnv, startSocialFlow } from './social-auth.js';
 import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
@@ -221,7 +221,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // Public abuse-defense config for the frontend: the Turnstile SITE key is a
   // public value by design; the secret never leaves the backend.
   router.get('/api/auth/abuse-config', (_req, res) => {
-    res.json({ turnstileSiteKey: process.env.TURNSTILE_SITE_KEY?.trim() || null });
+    res.json({
+      turnstileSiteKey: process.env.TURNSTILE_SITE_KEY?.trim() || null,
+      // Providers with full per-env credentials; the frontend renders a
+      // sign-in button only for these. IDs/secrets never leave this object.
+      socialProviders: SOCIAL_PROVIDERS.filter((p) => socialConfigFromEnv(process.env, p) !== null),
+    });
   });
 
   // Social (OAuth/OIDC) sign-in: /start behind the same abuseGate as the

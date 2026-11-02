@@ -1834,6 +1834,11 @@ export const pt: Messages = {
     errorTotpLoginInvalid:
       'O código estava errado ou o início de sessão expirou. Inicie sessão novamente e introduza o código atual da sua aplicação de autenticação.',
     errorTotpNotEnabled: 'A autenticação de dois fatores não está ativa nesta conta.',
+    errorSocialProviderDenied: 'O início de sessão foi cancelado no fornecedor. Nenhuma sessão foi iniciada.',
+    errorSocialFlowExpired: 'O início de sessão expirou. Tente de novo.',
+    errorSocialExchangeFailed: 'O fornecedor de início de sessão rejeitou a troca. Tente de novo.',
+    errorSocialRegistrationRestricted: 'O início de sessão com este fornecedor ainda não está aberto a novas contas neste site.',
+    socialSignInGoogle: 'Continuar com o Google',
     signedInTitle: 'Conta da comunidade',
     signedInAs: 'Sessão iniciada como',
     displayNameLabel: 'Nome de apresentação (mostrado nos seus comentários)',

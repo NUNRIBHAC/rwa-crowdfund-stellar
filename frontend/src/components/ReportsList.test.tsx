@@ -57,7 +57,10 @@ describe('ReportsList status states', () => {
     vi.stubGlobal('fetch', f);
     renderList();
     expect(await screen.findByText(EN.signIn)).toBeTruthy();
-    expect(f).not.toHaveBeenCalled();
+    // No session or data request may fire while signed out. The public
+    // abuse-config read (bot-check key + configured social providers) is not
+    // session data and is allowed.
+    expect(f.mock.calls.filter((c: unknown[]) => !String(c[0]).includes('/api/auth/abuse-config'))).toHaveLength(0);
     expect(screen.queryByText(EN.empty)).toBeNull();
   });
 
