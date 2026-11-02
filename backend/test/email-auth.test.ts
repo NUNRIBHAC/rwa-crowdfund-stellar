@@ -85,11 +85,35 @@ test('registration fails closed (503) without a configured mailer and stores not
   });
   assert.equal(res.status, 503);
   assert.match(res.json.error, /email provider not configured/);
+  // Stable machine-readable code for client-side localization.
+  assert.equal(res.json.code, 'email_provider_unconfigured');
   // Nothing half-created: login cannot succeed afterwards.
   const login = await api(url, 'POST', '/api/auth/email/login', {
     body: { email: 'a@example.com', password: 'long-enough-password' },
   });
   assert.equal(login.status, 401);
+  assert.equal(login.json.code, 'credentials_invalid');
+});
+
+test('known failures carry stable localization codes', async () => {
+  const mailer = new FakeMailer();
+  const url = await startApp(mailer);
+  const bad = await api(url, 'POST', '/api/auth/email/register', {
+    body: { email: 'not-an-email', password: 'long-enough-password' },
+  });
+  assert.equal(bad.status, 400);
+  assert.equal(bad.json.code, 'email_invalid');
+  const weak = await api(url, 'POST', '/api/auth/email/register', {
+    body: { email: 'codes@example.com', password: 'short' },
+  });
+  assert.equal(weak.status, 400);
+  assert.equal(weak.json.code, 'password_short');
+  // Unknown errors stay codeless (raw honest fallback on the client).
+  const unverified = await api(url, 'POST', '/api/auth/email/verify', {
+    body: { email: 'codes@example.com', token: 'blv_' + '0'.repeat(48) },
+  });
+  assert.equal(unverified.status, 401);
+  assert.equal(unverified.json.code, 'token_expired');
 });
 
 test('full flow: register -> verification email -> verify -> session; token is single-use', async () => {

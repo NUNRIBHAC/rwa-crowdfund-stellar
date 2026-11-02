@@ -28,6 +28,10 @@ export class AuthError extends Error {
   constructor(
     public readonly status: number,
     message: string,
+    // Stable machine-readable code so clients can localize known failures
+    // without matching English message text. Unknown/absent code = show the
+    // raw message (honest fallback, never masked).
+    public readonly code?: string,
   ) {
     super(message);
   }

@@ -129,6 +129,18 @@ export function saveCommunityToken(token: string) {
   }
 }
 
+// API error with the backend's stable machine-readable code (when it sent
+// one) so the UI can localize known failures instead of showing raw English
+// server text. Unknown/absent code: the raw message is shown as-is.
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly code?: string,
+  ) {
+    super(message);
+  }
+}
+
 async function call<T>(url: string, opts: { method?: string; body?: unknown; token?: string } = {}): Promise<T> {
   const headers: Record<string, string> = {};
   if (opts.body !== undefined) headers['Content-Type'] = 'application/json';
@@ -138,8 +150,8 @@ async function call<T>(url: string, opts: { method?: string; body?: unknown; tok
     headers,
     body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
   });
-  const v = (await r.json().catch(() => ({}))) as { error?: string };
-  if (!r.ok) throw new Error(v.error ?? `Request failed (${r.status})`);
+  const v = (await r.json().catch(() => ({}))) as { error?: string; code?: string };
+  if (!r.ok) throw new ApiError(v.error ?? `Request failed (${r.status})`, v.code);
   return v as T;
 }
 

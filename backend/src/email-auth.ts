@@ -42,23 +42,23 @@ const SCRYPT_P = 1;
 const SCRYPT_KEYLEN = 64;
 
 export function normalizeEmail(email: unknown): string {
-  if (typeof email !== 'string') throw new AuthError(400, 'email must be a string');
+  if (typeof email !== 'string') throw new AuthError(400, 'email must be a string', 'invalid_input');
   const normalized = email.trim().toLowerCase();
   // Deliberately simple: one @, non-empty labels, a dot in the domain. The
   // verification round-trip, not regex cleverness, proves the address.
   if (!/^[^\s@]{1,64}@[^\s@]{1,253}\.[^\s@]{2,}$/.test(normalized)) {
-    throw new AuthError(400, 'invalid email address');
+    throw new AuthError(400, 'invalid email address', 'email_invalid');
   }
   return normalized;
 }
 
 export function validatePassword(password: unknown): string {
-  if (typeof password !== 'string') throw new AuthError(400, 'password must be a string');
+  if (typeof password !== 'string') throw new AuthError(400, 'password must be a string', 'invalid_input');
   if (password.length < PASSWORD_MIN_LENGTH) {
-    throw new AuthError(400, `password must be at least ${PASSWORD_MIN_LENGTH} characters`);
+    throw new AuthError(400, `password must be at least ${PASSWORD_MIN_LENGTH} characters`, 'password_short');
   }
   if (password.length > PASSWORD_MAX_LENGTH) {
-    throw new AuthError(400, `password must be at most ${PASSWORD_MAX_LENGTH} characters`);
+    throw new AuthError(400, `password must be at most ${PASSWORD_MAX_LENGTH} characters`, 'password_long');
   }
   return password;
 }
@@ -189,7 +189,7 @@ export async function verifyEmailToken(
 ): Promise<{ token: string; expiresAt: number; account: Account }> {
   const email = normalizeEmail(input.email);
   if (typeof input.token !== 'string' || !/^blv_[0-9a-f]{48}$/.test(input.token)) {
-    throw new AuthError(400, 'invalid verification token');
+    throw new AuthError(400, 'invalid verification token', 'token_invalid');
   }
   const tokenHash = createHash('sha256').update(input.token).digest('hex');
   const result = await store.change((state) => {
@@ -220,7 +220,7 @@ export async function verifyEmailToken(
     state.sessions[session.tokenHash] = session;
     return { token, expiresAt: session.expiresAt, account: { ...account } };
   });
-  if (!result) throw new AuthError(401, 'invalid or expired verification token; request a new one');
+  if (!result) throw new AuthError(401, 'invalid or expired verification token; request a new one', 'token_expired');
   return result;
 }
 
@@ -235,7 +235,7 @@ export async function loginEmail(
     const credential = state.emailCredentials[email];
     if (!credential) return null;
     if (credential.lockUntil && credential.lockUntil > now) {
-      throw new AuthError(429, 'too many failed attempts; retry in a few minutes');
+      throw new AuthError(429, 'too many failed attempts; retry in a few minutes', 'login_throttled');
     }
     if (!verifyPassword(input.password as string, credential.passwordRecord)) {
       credential.failedAttempts += 1;
@@ -269,9 +269,9 @@ export async function loginEmail(
     state.sessions[session.tokenHash] = session;
     return { token, expiresAt: session.expiresAt, account: { ...account } };
   });
-  if (!result) throw new AuthError(401, 'invalid email or password');
+  if (!result) throw new AuthError(401, 'invalid email or password', 'credentials_invalid');
   if ('unverified' in result) {
-    throw new AuthError(403, 'email not verified yet; check your inbox or request a new verification token');
+    throw new AuthError(403, 'email not verified yet; check your inbox or request a new verification token', 'email_unverified');
   }
   return result;
 }
