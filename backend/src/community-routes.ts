@@ -21,6 +21,8 @@ import { metadataFor } from './campaign-metadata.js';
 import type { Account } from './community-store.js';
 import { shareRegisterCsv, type ShareRegisterPayload } from './share-register.js';
 import { buildShareRegisterPdf } from './share-register-pdf.js';
+import { turnstileConfigFromEnv, verifyTurnstileToken } from './turnstile.js';
+import { ipReputationFromEnv, type IpReputation } from './ip-reputation.js';
 import {
   DEFAULT_MAIL_BUDGET_PER_DAY,
   DEFAULT_MAIL_BUDGET_PER_HOUR,
@@ -40,6 +42,8 @@ import { MailerError } from './mailer.js';
 
 export type CommunityRouterDeps = {
   service: CommunityService;
+  // Abuse-defense overrides for tests; production wires both from env.
+  ipReputation?: IpReputation;
   requireAdmin: express.RequestHandler;
   // Read-only operator reconciliation payload provider (wired in server.ts
   // from the campaign registry + intent journal). Optional so route tests
@@ -90,13 +94,33 @@ export type CommunityRouterDeps = {
 };
 
 function clientIp(req: express.Request): string | undefined {
-  // Behind Render's proxy the leftmost XFF entry is the client. Only trust it
-  // when TRUST_PROXY=1 is set for the hosting environment; otherwise use the
-  // socket address. Used for rate limiting only, never persisted.
-  if (process.env.TRUST_PROXY === '1') {
-    const fwd = req.header('x-forwarded-for');
-    if (fwd) return fwd.split(',')[0].trim();
+  // TRUST_PROXY_DEPTH=N: the N rightmost XFF entries are trusted proxy
+  // appends, so the client is chain[length - N]. The depth must come from a
+  // MEASURED chain on the deployed environment (XFF_DEBUG=1 window), never
+  // from assumption - the legacy TRUST_PROXY=1 mode below trusts the leftmost
+  // entry, which a client can spoof. When the received chain is shorter than
+  // the assumed depth the topology guess is wrong: fall back to the socket
+  // address (coarse but unspoofable) rather than to a spoofable entry.
+  // Used for rate limiting and abuse-defense checks, never persisted.
+  const fwd = req.header('x-forwarded-for');
+  const depthRaw = process.env.TRUST_PROXY_DEPTH ?? '';
+  const depth = Number(depthRaw);
+  if (depthRaw !== '' && Number.isInteger(depth) && depth >= 1) {
+    if (!fwd) return req.socket.remoteAddress ?? undefined;
+    const chain = fwd
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (process.env.XFF_DEBUG === '1') {
+      // Short-lived measurement windows only: logs the full received chain.
+      console.info('[xff-debug]', JSON.stringify({ chain, socket: req.socket.remoteAddress }));
+    }
+    if (chain.length >= depth) return chain[chain.length - depth];
+    return req.socket.remoteAddress ?? undefined;
   }
+  // Legacy mode, kept for unchanged deployments: leftmost XFF is trusted
+  // when TRUST_PROXY=1. Known-spoofable; migrate to TRUST_PROXY_DEPTH.
+  if (process.env.TRUST_PROXY === '1' && fwd) return fwd.split(',')[0].trim();
   return req.socket.remoteAddress ?? undefined;
 }
 
@@ -151,11 +175,36 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     if (!mailer) throw new CommunityError(503, 'email provider not configured on this deployment', 'email_provider_unconfigured');
     return mailer;
   };
+
+  // Abuse defense for the mail-triggering routes. Turnstile (when
+  // configured) fails CLOSED; IP reputation is shadow-mode by default and
+  // only denies on recent-abuse evidence when IPREP_ENFORCE=1. Turnstile
+  // runs before the reputation lookup so token-less bots never consume the
+  // reputation provider's daily quota.
+  const turnstile = turnstileConfigFromEnv();
+  const reputation = deps.ipReputation ?? ipReputationFromEnv(process.env, (message, code) => new CommunityError(403, message, code));
+  const abuseGate = async (req: express.Request): Promise<void> => {
+    if (turnstile) {
+      const result = await verifyTurnstileToken(turnstile, req.body?.turnstileToken, clientIp(req));
+      if (!result.ok) {
+        if (result.reason === 'verify-unavailable') throw new CommunityError(503, 'bot-check service unavailable; retry later', 'turnstile_unavailable');
+        throw new CommunityError(403, 'bot check failed; reload the page and retry', 'turnstile_failed');
+      }
+    }
+    const ip = clientIp(req);
+    if (ip) await reputation.check(ip);
+  };
+  // Public abuse-defense config for the frontend: the Turnstile SITE key is a
+  // public value by design; the secret never leaves the backend.
+  router.get('/api/auth/abuse-config', (_req, res) => {
+    res.json({ turnstileSiteKey: process.env.TURNSTILE_SITE_KEY?.trim() || null });
+  });
   router.post('/api/auth/email/register', async (req, res) => {
     try {
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-register-ip:${ip}`, 10, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      await abuseGate(req);
       res.json(
         await registerEmail(
           store,
@@ -175,6 +224,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-resend-ip:${ip}`, 10, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      await abuseGate(req);
       res.json(
         await resendVerification(
           store,
@@ -194,6 +244,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-reset-request-ip:${ip}`, 10, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      await abuseGate(req);
       res.json(
         await requestPasswordReset(
           store,
