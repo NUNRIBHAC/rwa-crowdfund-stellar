@@ -32,3 +32,8 @@ contracts/crowdfund/contracts/crowdfund/test_snapshots/
 
 # Private local copy of unverified skills (never commit)
 docs/skills-reference/private/
+
+# Docs portal (Docusaurus)
+portal/build-public/
+portal/build-internal/
+portal/.docusaurus/
