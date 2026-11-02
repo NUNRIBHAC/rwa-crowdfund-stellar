@@ -39,9 +39,16 @@ wallet; linking a wallet to an email account is a deliberate follow-up.
 
 Outbound email is fail-closed: with no `COMMUNITY_EMAIL_PROVIDER`
 configured the register/resend routes answer 503 and nothing is created
-half-way. `COMMUNITY_EMAIL_PROVIDER=log` is an explicit demo-only opt-in
-that writes the full message (including the verification token) to the
-server log - usable on demo/staging, never a real provider.
+half-way. Providers:
+
+- `log` - explicit demo-only opt-in: writes the full message (including
+  the verification token) to the server log. Usable on demo/staging,
+  never a real provider.
+- `brevo` - Brevo transactional API v3 (`BREVO_API_KEY`,
+  `COMMUNITY_EMAIL_FROM` = a sender verified in the Brevo account).
+  Free tier: 300 emails/day, no credit card, no domain purchase needed
+  (individual sender-address verification). Missing key or sender fails
+  closed.
 
 1. `POST /api/auth/email/register` `{email, password}` →
    `{status: "verification-sent"}`. Identical response for new, unverified
