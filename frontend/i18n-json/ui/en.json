@@ -1686,6 +1686,8 @@
     "emailResetBack": "Back to sign in",
     "emailResetDone": "Password updated. Sign in with the new password.",
     "errorEmailProviderUnavailable": "Email registration and sign-in are not available on this deployment because no email provider is configured. You can still sign in with your wallet.",
+    "errorEmailBudgetExceeded": "Email sending is temporarily paused on this deployment because too many messages went out in the last hour. Try again later.",
+    "errorEmailProviderThrottled": "The email provider is rate-limiting this deployment right now. Wait a few minutes and try again.",
     "errorRateLimited": "Too many attempts from this network. Please wait a while and try again.",
     "errorEmailInvalid": "That email address does not look valid.",
     "errorPasswordShort": "Password is too short: use at least 10 characters.",

@@ -1714,6 +1714,8 @@
     "emailResetBack": "Volver a iniciar sesión",
     "emailResetDone": "Contraseña actualizada. Inicia sesión con la nueva contraseña.",
     "errorEmailProviderUnavailable": "El registro y el inicio de sesión por email no están disponibles en este entorno porque no hay ningún proveedor de email configurado. Puedes seguir iniciando sesión con tu cartera.",
+    "errorEmailBudgetExceeded": "El envío de emails está pausado temporalmente en esta implementación porque se enviaron demasiados mensajes en la última hora. Inténtalo más tarde.",
+    "errorEmailProviderThrottled": "El proveedor de email está limitando este despliegue ahora mismo. Espera unos minutos e inténtalo de nuevo.",
     "errorRateLimited": "Demasiados intentos desde esta red. Espera un momento y vuelve a intentarlo.",
     "errorEmailInvalid": "Esa dirección de email no parece válida.",
     "errorPasswordShort": "Contraseña demasiado corta: usa al menos 10 caracteres.",

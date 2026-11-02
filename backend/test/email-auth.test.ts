@@ -535,3 +535,156 @@ test('cooldown timing (direct calls with injected clock): resend and reset send 
     return true;
   });
 });
+
+test('global mail budget: cap, refund on provider failure, window pruning, persistence, concurrency', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-budget-'));
+  const file = path.join(dir, 'store.json');
+  const store = new FileCommunityStore(file);
+  const mailer = new FakeMailer();
+  const t0 = 1_800_000_000_000;
+  const pw = { password: 'correct horse battery' };
+
+  // Budget 2/hour: two sends pass, the third is refused before any provider call.
+  await registerEmail(store, mailer, { email: 'one@example.com', ...pw }, t0, 2);
+  await registerEmail(store, mailer, { email: 'two@example.com', ...pw }, t0, 2);
+  assert.equal(mailer.sent.length, 2);
+  await assert.rejects(registerEmail(store, mailer, { email: 'three@example.com', ...pw }, t0, 2), (err: unknown) => {
+    assert.equal((err as { code?: string }).code, 'email_budget_exceeded');
+    assert.equal((err as { status?: number }).status, 503);
+    return true;
+  });
+  assert.equal(mailer.sent.length, 2);
+
+  // Persistence: a fresh store instance over the same file still sees the spent budget.
+  const reopened = new FileCommunityStore(file);
+  await assert.rejects(registerEmail(reopened, mailer, { email: 'four@example.com', ...pw }, t0 + 60 * 1000, 2));
+  assert.equal(mailer.sent.length, 2);
+
+  // Window pruning: after the rolling hour, sending resumes.
+  await registerEmail(reopened, mailer, { email: 'later@example.com', ...pw }, t0 + 61 * 60 * 1000, 2);
+  assert.equal(mailer.sent.length, 3);
+
+  // Refund: a provider failure frees the reserved slot for an immediate retry.
+  const failing: Mailer = { send: () => Promise.reject(new Error('provider down')) };
+  await assert.rejects(registerEmail(reopened, failing, { email: 'retry@example.com', ...pw }, t0 + 62 * 60 * 1000, 2));
+  await registerEmail(reopened, mailer, { email: 'retry@example.com', ...pw }, t0 + 62 * 60 * 1000, 2);
+  assert.equal(mailer.sent.length, 4);
+
+  // Concurrency: budget 1, two simultaneous registrations - exactly one sends.
+  const dir2 = fs.mkdtempSync(path.join(os.tmpdir(), 'email-budget-race-'));
+  const raceStore = new FileCommunityStore(path.join(dir2, 'store.json'));
+  const raceMailer = new FakeMailer();
+  const results = await Promise.allSettled([
+    registerEmail(raceStore, raceMailer, { email: 'r1@example.com', ...pw }, t0, 1),
+    registerEmail(raceStore, raceMailer, { email: 'r2@example.com', ...pw }, t0, 1),
+  ]);
+  assert.equal(results.filter((r) => r.status === 'fulfilled').length, 1);
+  assert.equal(results.filter((r) => r.status === 'rejected').length, 1);
+  assert.equal(raceMailer.sent.length, 1);
+});
+
+test('daily mail budget: day cap bites before the provider daily quota, hour cap still applies', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-day-budget-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const mailer = new FakeMailer();
+  const t0 = 1_800_000_000_000;
+  const pw = { password: 'correct horse battery' };
+
+  // maxPerHour 50 (high), maxPerDay 3: three sends pass (spaced past the
+  // per-email cooldown), the fourth fails on the DAY budget.
+  await registerEmail(store, mailer, { email: 'd1@example.com', ...pw }, t0, 50, 3);
+  await registerEmail(store, mailer, { email: 'd2@example.com', ...pw }, t0 + 11 * 60 * 1000, 50, 3);
+  await registerEmail(store, mailer, { email: 'd3@example.com', ...pw }, t0 + 22 * 60 * 1000, 50, 3);
+  assert.equal(mailer.sent.length, 3);
+  await assert.rejects(registerEmail(store, mailer, { email: 'd4@example.com', ...pw }, t0 + 33 * 60 * 1000, 50, 3), (err: unknown) => {
+    assert.equal((err as { code?: string }).code, 'email_budget_exceeded');
+    return true;
+  });
+  assert.equal(mailer.sent.length, 3);
+
+  // Next rolling day: sending resumes.
+  await registerEmail(store, mailer, { email: 'd5@example.com', ...pw }, t0 + 25 * 60 * 60 * 1000, 50, 3);
+  assert.equal(mailer.sent.length, 4);
+});
+
+test('provider 429: global backoff mutes all sends briefly, then recovers', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-throttle-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const { MailerError } = await import('../src/mailer.js');
+  const throttled: Mailer = { send: () => Promise.reject(new MailerError(503, 'rate-limited', 'email_provider_throttled')) };
+  const mailer = new FakeMailer();
+  const t0 = 1_800_000_000_000;
+  const pw = { password: 'correct horse battery' };
+
+  // Provider throttles: the send fails AND mutes every later attempt.
+  await assert.rejects(registerEmail(store, throttled, { email: 't1@example.com', ...pw }, t0), (err: unknown) => {
+    assert.equal((err as { code?: string }).code, 'email_provider_throttled');
+    return true;
+  });
+  // Muted: a different recipient is refused BEFORE any provider call.
+  await assert.rejects(registerEmail(store, mailer, { email: 't2@example.com', ...pw }, t0 + 60 * 1000), (err: unknown) => {
+    assert.equal((err as { code?: string }).code, 'email_provider_throttled');
+    return true;
+  });
+  assert.equal(mailer.sent.length, 0);
+  // After the mute window: sends recover (throttled slot was refunded).
+  await registerEmail(store, mailer, { email: 't3@example.com', ...pw }, t0 + 6 * 60 * 1000);
+  assert.equal(mailer.sent.length, 1);
+});
+
+test('harassment upper bound across ALL send paths (register+resend+reset), injected clock', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-bound-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const mailer = new FakeMailer();
+  const t0 = 1_800_000_000_000;
+  const MIN = 60 * 1000;
+  const pw = { password: 'correct horse battery' };
+
+  // Case 1: UNVERIFIED victim. Attacker hammers register+resend+reset every
+  // minute for 3 simulated hours. Reset is ineligible (account unverified);
+  // register/resend share one cooldown.
+  const victim1 = 'victim1@example.com';
+  await registerEmail(store, mailer, { email: victim1, ...pw }, t0);
+  for (let m = 1; m <= 180; m++) {
+    const now = t0 + m * MIN;
+    await registerEmail(store, mailer, { email: victim1, ...pw }, now).catch(() => undefined);
+    await resendVerification(store, mailer, { email: victim1 }, now).catch(() => undefined);
+    await requestPasswordReset(store, mailer, { email: victim1 }, now).catch(() => undefined);
+  }
+  const toVictim1 = mailer.sent.filter((x) => x.to === victim1);
+  assert.equal(toVictim1.filter((x) => /reset your password/.test(x.subject)).length, 0); // reset never eligible
+  // Sends land at t0, t0+10, ..., t0+180min -> 19 total; any sliding 60-min
+  // window (start exclusive) contains at most 6.
+  assert.equal(toVictim1.length, 19);
+  // Sliding-window bound, from the known schedule: sends at t0 + k*10min
+  // (k=0..18). For any start s, sends in (s, s+60min] <= 6 by the spacing.
+  const times = Array.from({ length: 19 }, (_, k) => t0 + k * 10 * MIN);
+  for (let w = 0; w <= 120; w++) {
+    const s = t0 + w * MIN;
+    const c = times.filter((t) => t > s && t <= s + 60 * MIN).length;
+    assert.ok(c <= 6, `window at +${w}min has ${c} sends`);
+  }
+
+  // Case 2: VERIFIED victim. Register/resend go silent; only reset mails,
+  // same 10-min cadence.
+  const victim2 = 'victim2@example.com';
+  await registerEmail(store, mailer, { email: victim2, ...pw }, t0);
+  const vtoken = extractToken(mailer.sent.at(-1)!.text);
+  await verifyEmailToken(store, { email: victim2, token: vtoken }, t0 + MIN);
+  const base = mailer.sent.length;
+  for (let m = 2; m <= 182; m++) {
+    const now = t0 + m * MIN;
+    await registerEmail(store, mailer, { email: victim2, ...pw }, now).catch(() => undefined);
+    await resendVerification(store, mailer, { email: victim2 }, now).catch(() => undefined);
+    await requestPasswordReset(store, mailer, { email: victim2 }, now).catch(() => undefined);
+  }
+  const toVictim2 = mailer.sent.slice(base).filter((x) => x.to === victim2);
+  assert.ok(toVictim2.every((x) => /reset your password/.test(x.subject))); // reset only
+  assert.equal(toVictim2.length, 19); // t0+2, +12, ..., +182 (first reset at +2, then 10-min cadence)
+  for (let w = 0; w <= 122; w++) {
+    const s = t0 + w * MIN;
+    const times2 = Array.from({ length: 19 }, (_, k) => t0 + (2 + k * 10) * MIN);
+    const c = times2.filter((t) => t > s && t <= s + 60 * MIN).length;
+    assert.ok(c <= 6, `verified window at +${w}min has ${c} sends`);
+  }
+});

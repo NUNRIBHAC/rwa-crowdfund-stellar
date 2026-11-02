@@ -95,6 +95,11 @@ export class BrevoMailer implements Mailer {
         textContent: message.text,
       }),
     });
+    if (res.status === 429) {
+      // Provider-side rate/quota limit: surface a stable code so callers can
+      // back off globally instead of hammering a throttled provider.
+      throw new MailerError(503, 'email provider rate-limited; retry later', 'email_provider_throttled');
+    }
     if (!res.ok) {
       const body = (await res.text().catch(() => '')).slice(0, 200);
       throw new Error(`email provider rejected the send (${res.status}): ${body}`);

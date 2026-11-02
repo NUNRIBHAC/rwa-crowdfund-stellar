@@ -1705,6 +1705,8 @@
     "emailResetBack": "Zurück zur Anmeldung",
     "emailResetDone": "Passwort aktualisiert. Melden Sie sich mit dem neuen Passwort an.",
     "errorEmailProviderUnavailable": "E-Mail-Registrierung und -Anmeldung sind auf dieser Bereitstellung nicht verfügbar, da kein E-Mail-Anbieter konfiguriert ist. Sie können sich weiterhin mit Ihrer Wallet anmelden.",
+    "errorEmailBudgetExceeded": "Der E-Mail-Versand ist auf dieser Bereitstellung vorübergehend pausiert, weil in der letzten Stunde zu viele Nachrichten gesendet wurden. Versuchen Sie es später erneut.",
+    "errorEmailProviderThrottled": "Der E-Mail-Anbieter begrenzt diese Bereitstellung gerade. Warten Sie einige Minuten und versuchen Sie es erneut.",
     "errorRateLimited": "Zu viele Versuche aus diesem Netzwerk. Bitte warten Sie kurz und versuchen Sie es erneut.",
     "errorEmailInvalid": "Diese E-Mail-Adresse scheint nicht gültig zu sein.",
     "errorPasswordShort": "Passwort zu kurz: mindestens 10 Zeichen verwenden.",

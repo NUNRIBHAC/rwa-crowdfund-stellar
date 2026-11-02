@@ -1742,6 +1742,9 @@ export const ja: Messages = {
     emailResetDone: 'パスワードを更新しました。新しいパスワードでサインインしてください。',
     errorEmailProviderUnavailable:
       'このデプロイではメールプロバイダが設定されていないため、メールでの登録・ログインは利用できません。ウォレットでのログインは引き続き利用できます。',
+    errorEmailBudgetExceeded:
+      'このデプロイでは、過去1時間に送信されたメッセージが多すぎるため、メール送信が一時停止しています。しばらくしてから再度お試しください。',
+    errorEmailProviderThrottled: 'メールプロバイダーがこのデプロイを現在レート制限しています。数分待ってから再度お試しください。',
     errorRateLimited: 'このネットワークからの試行回数が多すぎます。しばらく待ってから再試行してください。',
     errorEmailInvalid: 'そのメールアドレスは無効のようです。',
     errorPasswordShort: 'パスワードが短すぎます。10文字以上にしてください。',

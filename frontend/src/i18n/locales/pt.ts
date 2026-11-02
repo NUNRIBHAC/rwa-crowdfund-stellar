@@ -1813,6 +1813,9 @@ export const pt: Messages = {
     emailResetDone: 'Palavra-passe atualizada. Inicie sessão com a nova palavra-passe.',
     errorEmailProviderUnavailable:
       'O registo e o início de sessão por email não estão disponíveis neste ambiente porque não está configurado nenhum fornecedor de email. Pode continuar a iniciar sessão com a carteira.',
+    errorEmailBudgetExceeded:
+      'O envio de emails está temporariamente pausado nesta instalação porque foram enviadas demasiadas mensagens na última hora. Tente novamente mais tarde.',
+    errorEmailProviderThrottled: 'O fornecedor de email está a limitar este envio neste momento. Aguarde alguns minutos e tente novamente.',
     errorRateLimited: 'Demasiadas tentativas a partir desta rede. Aguarde um pouco e tente novamente.',
     errorEmailInvalid: 'Este endereço de email não parece válido.',
     errorPasswordShort: 'Palavra-passe demasiado curta: use pelo menos 10 caracteres.',
