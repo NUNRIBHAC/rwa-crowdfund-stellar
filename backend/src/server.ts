@@ -23,6 +23,7 @@ import { drainPendingContributors, pendContribution, readPending } from './pendi
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { backfillCampaignContributors } from './contributor-backfill.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
+import { buildShareRegister, type ShareRegisterPayload } from './share-register.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -204,6 +205,7 @@ const communityRouterReady = communityServiceFromEnv()
       service,
       requireAdmin,
       reconciliation: reconciliationPayload,
+      shareRegister: shareRegisterPayload,
       fundingState: sorobanCampaignFundingState,
       investorEntitlement: async (campaignId: string, publicKey: string) => {
         // On-chain failure propagates so the route fails closed (503).
@@ -224,7 +226,7 @@ const communityRouterReady = communityServiceFromEnv()
     return null;
   });
 const COMMUNITY_PATH =
-  /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast|reports)(\/|$)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log)(\/|$)|^\/api\/operator(\/|$)/;
+  /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast|reports|share-register\.(json|csv))(\/|$|\?)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log)(\/|$)|^\/api\/operator(\/|$)/;
 app.use((req, res, next) => {
   if (!COMMUNITY_PATH.test(req.path)) return next();
   communityRouterReady.then((router) => {
@@ -287,6 +289,20 @@ const reconciliationPayload = async () => {
     ...result,
     ...(contributorBackfill !== undefined ? { contributorBackfill } : {}),
   };
+};
+
+// Read-only operator export: per-campaign share register derived from the
+// durable contributor registry + this app's intent journal. Wallet addresses
+// are investor data - admin-gated in the router. Unknown campaign id answers
+// null so the route can 404 instead of exporting an empty register that
+// looks authoritative. See SHARE_REGISTER_SEMANTICS; intended amounts are
+// not per-hash verified transfers.
+const shareRegisterPayload = async (campaignId: string): Promise<ShareRegisterPayload | null> => {
+  const campaigns = await sorobanCampaigns();
+  if (!campaigns.some((c: { id: string }) => c.id === campaignId)) return null;
+  const store = await (await journalBackend()).read();
+  const service = await communityServiceFromEnv();
+  return buildShareRegister(campaignId, store.intents, await service.listContributors(campaignId), NETWORK);
 };
 
 app.get('/api/admin/reconciliation', requireAdmin, async (_req, res) => {

@@ -439,6 +439,15 @@ export class CommunityService {
     return Boolean(state.contributors[`${campaignId}:${publicKey}`]);
   }
 
+  // Read-side listing for operator exports (share register). Same registry
+  // write discipline applies: rows originate only from network-derived
+  // contribution facts, never client-supplied data.
+  async listContributors(campaignId: string): Promise<ContributorRecord[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.contributors).filter((c) => c.campaignId === campaignId);
+  }
+
   async listReports(campaignId: string): Promise<PostFundingReport[]> {
     requireCampaignId(campaignId);
     const state = await this.store.read();

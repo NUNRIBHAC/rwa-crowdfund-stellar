@@ -1,0 +1,166 @@
+import { test, after } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import express from 'express';
+import { Keypair } from '@stellar/stellar-sdk';
+import { buildShareRegister, formatUnits, shareRegisterCsv, SHARE_REGISTER_SEMANTICS } from '../src/share-register.js';
+import type { Intent } from '../src/journal.js';
+import { FileCommunityStore } from '../src/community-store.js';
+import { CommunityService } from '../src/community.js';
+import { createCommunityRouter } from '../src/community-routes.js';
+
+const kpA = Keypair.random().publicKey();
+const kpB = Keypair.random().publicKey();
+const hash = (n: number) => n.toString(16).padStart(64, '0');
+const intent = (over: Partial<Intent>): Intent => ({
+  hash: hash(1),
+  campaign: 'qa-demo',
+  actor: kpA,
+  action: 'contribute',
+  xdr: 'x',
+  status: 'SUCCESS',
+  ...over,
+});
+
+test('formatUnits round-trips and trims', () => {
+  assert.equal(formatUnits(12345678n), '1.2345678');
+  assert.equal(formatUnits(10000000n), '1');
+  assert.equal(formatUnits(0n), '0');
+  assert.equal(formatUnits(-25000000n), '-2.5');
+});
+
+test('registry-only contributor exports with zero journal amounts', () => {
+  const p = buildShareRegister('qa-demo', [], [{ campaignId: 'qa-demo', publicKey: kpA, firstConfirmedAt: 1730000000000 }], 'testnet');
+  assert.equal(p.contributors.length, 1);
+  const row = p.contributors[0];
+  assert.equal(row.registered, true);
+  assert.equal(row.firstConfirmedAt, new Date(1730000000000).toISOString());
+  assert.equal(row.contributedIntended, '0');
+  assert.equal(row.netIntended, '0');
+  assert.equal(p.totals.contributors, 1);
+  assert.equal(p.demo, true);
+  assert.equal(p.semantics, SHARE_REGISTER_SEMANTICS);
+});
+
+test('journal SUCCESS contributes/refunds sum to intended amounts; other statuses and campaigns ignored', () => {
+  const intents: Intent[] = [
+    intent({ hash: hash(2), amount: '10' }),
+    intent({ hash: hash(3), amount: '2.5' }),
+    intent({ hash: hash(4), action: 'refund', amount: '5' }),
+    intent({ hash: hash(5), status: 'FAILED', amount: '99' }),
+    intent({ hash: hash(6), status: 'PENDING', amount: '99' }),
+    intent({ hash: hash(7), campaign: 'other', amount: '99' }),
+    intent({ hash: hash(8), actor: kpB, amount: '3' }),
+  ];
+  const p = buildShareRegister('qa-demo', intents, [{ campaignId: 'qa-demo', publicKey: kpA, firstConfirmedAt: 1730000000000 }], 'testnet');
+  const a = p.contributors.find((r) => r.publicKey === kpA)!;
+  assert.equal(a.contributedIntended, '12.5');
+  assert.equal(a.refundedIntended, '5');
+  assert.equal(a.netIntended, '7.5');
+  assert.equal(a.contributeCount, 2);
+  assert.equal(a.refundCount, 1);
+  assert.deepEqual(a.intentHashes, [hash(2), hash(3), hash(4)]);
+  const b = p.contributors.find((r) => r.publicKey === kpB)!;
+  assert.equal(b.registered, false);
+  assert.equal(b.firstConfirmedAt, null);
+  assert.equal(b.contributedIntended, '3');
+  assert.equal(p.totals.contributedIntended, '15.5');
+  assert.ok(p.notes.some((n) => n.includes('not in the durable contributor registry')));
+});
+
+test('missing amounts are counted and disclosed, not summed', () => {
+  const p = buildShareRegister('qa-demo', [intent({ hash: hash(9) }), intent({ hash: hash(10), amount: 'bogus' })], [], 'testnet');
+  assert.equal(p.contributors[0].contributedIntended, '0');
+  assert.equal(p.contributors[0].missingAmountIntents, 2);
+  assert.equal(p.totals.missingAmountIntents, 2);
+  assert.ok(p.notes.some((n) => n.includes('no parseable amount')));
+});
+
+test('refund exceeding journal contributions yields negative net and a note', () => {
+  const p = buildShareRegister('qa-demo', [intent({ hash: hash(11), action: 'refund', amount: '4' })], [], 'testnet');
+  assert.equal(p.contributors[0].netIntended, '-4');
+  assert.ok(p.notes.some((n) => n.includes('refund intents exceeding')));
+});
+
+test('csv escapes quotes and commas and joins hashes', () => {
+  const p = buildShareRegister('qa-demo', [intent({ hash: hash(12), amount: '1' }), intent({ hash: hash(13), amount: '1' })], [], 'testnet');
+  const csv = shareRegisterCsv(p);
+  const lines = csv.trim().split('\n');
+  assert.equal(lines.length, 2);
+  assert.match(lines[0], /"public_key"/);
+  assert.ok(lines[1].includes(`"${hash(12)} ${hash(13)}"`));
+  const tricky = { ...p, contributors: [{ ...p.contributors[0], publicKey: 'G"X,Y' }] };
+  assert.ok(shareRegisterCsv(tricky).includes('"G""X,Y"'));
+});
+
+// --- Route wiring (hermetic; provider injected like reconciliation) ---
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'share-register-test-'));
+let counter = 0;
+const servers: Array<ReturnType<express.Express['listen']>> = [];
+after(() => {
+  for (const s of servers) s.close();
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+async function makeServer(opts: { provider?: 'absent' | 'null' | 'payload'; denyAdmin?: boolean }) {
+  const store = new FileCommunityStore(path.join(dir, `store-${counter++}.json`));
+  const service = new CommunityService(store, { retentionDays: 90 });
+  const app = express();
+  app.use(express.json());
+  app.use(
+    createCommunityRouter({
+      service,
+      requireAdmin: (_req, res, next) => {
+        if (opts.denyAdmin) {
+          res.status(401).json({ error: 'missing or invalid admin key (x-admin-key header)' });
+          return;
+        }
+        next();
+      },
+      ...(opts.provider === 'payload'
+        ? { shareRegister: async () => buildShareRegister('qa-demo', [], [], 'testnet') }
+        : opts.provider === 'null'
+          ? { shareRegister: async () => null }
+          : {}),
+    }),
+  );
+  const srv = await new Promise<ReturnType<express.Express['listen']>>((resolve) => {
+    const s = app.listen(0, '127.0.0.1', () => resolve(s));
+  });
+  servers.push(srv);
+  const addr = srv.address();
+  return `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;
+}
+
+test('route answers 503 when the provider is not configured', async () => {
+  const base = await makeServer({ provider: 'absent' });
+  const res = await fetch(`${base}/api/campaigns/qa-demo/share-register.json`);
+  assert.equal(res.status, 503);
+});
+
+test('route answers 404 for an unknown campaign', async () => {
+  const base = await makeServer({ provider: 'null' });
+  const res = await fetch(`${base}/api/campaigns/nope/share-register.json`);
+  assert.equal(res.status, 404);
+});
+
+test('json route returns the payload; csv route returns text/csv with the header', async () => {
+  const base = await makeServer({ provider: 'payload' });
+  const json = await fetch(`${base}/api/campaigns/qa-demo/share-register.json`);
+  assert.equal(json.status, 200);
+  const body = (await json.json()) as { campaignId: string; demo: boolean };
+  assert.equal(body.campaignId, 'qa-demo');
+  assert.equal(body.demo, true);
+  const csv = await fetch(`${base}/api/campaigns/qa-demo/share-register.csv`);
+  assert.equal(csv.status, 200);
+  assert.match(csv.headers.get('content-type') ?? '', /text\/csv/);
+  assert.match(await csv.text(), /^"public_key"/);
+});
+
+test('admin gate applies to the export routes', async () => {
+  const base = await makeServer({ provider: 'payload', denyAdmin: true });
+  assert.equal((await fetch(`${base}/api/campaigns/qa-demo/share-register.json`)).status, 401);
+  assert.equal((await fetch(`${base}/api/campaigns/qa-demo/share-register.csv`)).status, 401);
+});
