@@ -23,6 +23,7 @@ import { drainPendingContributors, pendContribution, readPending } from './pendi
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { backfillCampaignContributors } from './contributor-backfill.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
+import { mailerFromEnv } from './mailer.js';
 import { buildShareRegister, type ShareRegisterPayload } from './share-register.js';
 import { archiveCampaignEvents, eventArchiveBackend, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
 
@@ -232,6 +233,7 @@ const communityRouterReady = communityServiceFromEnv()
     createCommunityRouter({
       service,
       requireAdmin,
+      mailer: mailerFromEnv(),
       reconciliation: reconciliationPayload,
       shareRegister: shareRegisterPayload,
       fundingState: sorobanCampaignFundingState,

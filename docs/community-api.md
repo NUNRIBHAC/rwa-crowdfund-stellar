@@ -4,10 +4,14 @@
 support/feedback tickets, issuer applications and campaign metadata to the
 Soroban demo backend. Testnet demo code; no real funds, no real identity.
 
-## Authentication (wallet challenge)
+## Authentication
+
+Two sign-in methods sit side by side.
+
+### Wallet challenge
 
 Registration and login are the same flow. The wallet is the identity, as in
-the contribution flow. No passwords, no email, no personal data beyond the
+the contribution flow. No password; no personal data beyond the
 Stellar public key and an optional display name.
 
 1. `POST /api/auth/challenge` `{publicKey}` → `{message, expiresAt}`.
@@ -23,6 +27,39 @@ Stellar public key and an optional display name.
 
 This proves key ownership only. It is not KYC and must never gate
 investment limits, cash-outs or compliance decisions (IMPLEMENTATION.md).
+
+### Email + password
+
+For visitors without a wallet. Registration stores an scrypt password
+record (params+salt embedded) and creates the account with a server-side
+THROWAWAY Stellar keypair whose secret is discarded: the account gets a
+normal public key (sessions, comments, invested news feed all key on it)
+that nobody can sign for. On-chain actions still require connecting a real
+wallet; linking a wallet to an email account is a deliberate follow-up.
+
+Outbound email is fail-closed: with no `COMMUNITY_EMAIL_PROVIDER`
+configured the register/resend routes answer 503 and nothing is created
+half-way. `COMMUNITY_EMAIL_PROVIDER=log` is an explicit demo-only opt-in
+that writes the full message (including the verification token) to the
+server log - usable on demo/staging, never a real provider.
+
+1. `POST /api/auth/email/register` `{email, password}` →
+   `{status: "verification-sent"}`. Identical response for new, unverified
+   (fresh token sent) and already-verified addresses (nothing sent) -
+   no account enumeration. Password: 10-200 chars.
+2. `POST /api/auth/email/verify` `{email, token}` →
+   `{token, expiresAt, account}`. The `blv_<hex>` verification token is
+   24h, single-use, stored sha256-hashed; verifying logs the user in
+   directly.
+3. `POST /api/auth/email/login` `{email, password}` →
+   `{token, expiresAt, account}`. 401 on bad credentials (5 failures lock
+   the account for 5 minutes), 403 while unverified.
+4. `POST /api/auth/email/resend` `{email}` → same anti-enumeration
+   response as register.
+
+Verification emails carry no links to external domains; the token is
+entered in the app. Rate limits: register/resend 10/h per IP, verify/login
+30/h per IP.
 
 ## Endpoints
 

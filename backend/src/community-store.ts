@@ -19,6 +19,11 @@ export type Account = {
   publicKey: string;
   displayName: string | null;
   createdAt: number;
+  // 'email' accounts log in with email+password (email-auth.ts) and hold a
+  // throwaway public key nobody can sign for; undefined means the classic
+  // wallet-challenge account. Never shown to other users.
+  authMethod?: 'email';
+  email?: string;
   // Optional second factor (accounts.ts + totp.ts). Never serialized to
   // clients: encSeed is AES-256-GCM ciphertext, recoveryHashes are SHA-256.
   totp?: TotpEnrollment;
@@ -53,6 +58,18 @@ export type Session = {
   publicKey: string;
   createdAt: number;
   expiresAt: number;
+};
+
+export type EmailCredential = {
+  email: string; // normalized lowercase; the record key
+  passwordRecord: string; // s2$N$r$p$salt_b64$hash_b64 scrypt, params embedded
+  publicKey: string; // throwaway identity keypair; secret discarded at creation
+  verified: boolean;
+  verifyTokenHash: string | null; // sha256 hex of the single-use blv_ token
+  verifyExpiresAt: number | null;
+  createdAt: number;
+  failedAttempts: number;
+  lockUntil: number | null; // ms epoch; set after repeated login failures
 };
 
 export type Comment = {
@@ -310,6 +327,7 @@ export type AuditEntry = {
 export type CommunityState = {
   version: 1;
   accounts: Record<string, Account>;
+  emailCredentials: Record<string, EmailCredential>;
   challenges: Record<string, Challenge>;
   totpTickets: Record<string, TotpTicket>;
   sessions: Record<string, Session>;
@@ -334,6 +352,7 @@ export function emptyCommunityState(): CommunityState {
   return {
     version: 1,
     accounts: {},
+    emailCredentials: {},
     challenges: {},
     totpTickets: {},
     sessions: {},
@@ -371,10 +390,13 @@ function validate(state: any): CommunityState {
   if (state && state.version === 1 && !state.backfillCheckpoints) state.backfillCheckpoints = {};
   // Same forward-compatible default for docs written before appropriateness records.
   if (state && state.version === 1 && !state.appropriateness) state.appropriateness = {};
+  // Same forward-compatible default for docs written before email credentials.
+  if (state && state.version === 1 && !state.emailCredentials) state.emailCredentials = {};
   if (
     !state ||
     state.version !== 1 ||
     !state.accounts ||
+    !state.emailCredentials ||
     !state.challenges ||
     !state.sessions ||
     !state.comments ||

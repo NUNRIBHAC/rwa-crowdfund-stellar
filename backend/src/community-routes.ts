@@ -20,6 +20,8 @@ import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaig
 import { metadataFor } from './campaign-metadata.js';
 import type { Account } from './community-store.js';
 import { shareRegisterCsv, type ShareRegisterPayload } from './share-register.js';
+import { loginEmail, registerEmail, resendVerification, verifyEmailToken } from './email-auth.js';
+import type { Mailer } from './mailer.js';
 
 // Express wiring for accounts, community, support and metadata APIs.
 // The admin gate is injected from server.ts so there is exactly one admin
@@ -51,6 +53,9 @@ export type CommunityRouterDeps = {
   // route tests without chain access stay hermetic; absent means 503, never
   // a guess. null means the campaign id is unknown (404).
   shareRegister?: (campaignId: string) => Promise<ShareRegisterPayload | null>;
+  // Outbound email for account verification (mailer.ts). Absent means the
+  // email registration routes answer 503 - fail closed, never pretend-sent.
+  mailer?: Mailer | null;
 };
 
 function clientIp(req: express.Request): string | undefined {
@@ -79,7 +84,7 @@ function sendError(res: express.Response, err: unknown): void {
 }
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
-  const { service, requireAdmin, reconciliation, fundingState, investorEntitlement } = deps;
+  const { service, requireAdmin, reconciliation, fundingState, investorEntitlement, mailer } = deps;
   const store = service.store;
   const router = express.Router();
 
@@ -100,6 +105,55 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     };
 
   // --- Auth ---
+  // Email + password registration (email-auth.ts), alongside the wallet
+  // challenge flow. Every route fails closed when no mailer is configured.
+  const requireMailer = (): Mailer => {
+    if (!mailer) throw new CommunityError(503, 'email provider not configured on this deployment');
+    return mailer;
+  };
+  router.post('/api/auth/email/register', async (req, res) => {
+    try {
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`email-register-ip:${ip}`, 10, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+      res.json(await registerEmail(store, requireMailer(), { email: req.body?.email, password: req.body?.password }));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/email/resend', async (req, res) => {
+    try {
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`email-resend-ip:${ip}`, 10, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+      res.json(await resendVerification(store, requireMailer(), { email: req.body?.email }));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/email/verify', async (req, res) => {
+    try {
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`email-verify-ip:${ip}`, 30, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+      const result = await verifyEmailToken(store, { email: req.body?.email, token: req.body?.token });
+      res.json({ token: result.token, expiresAt: result.expiresAt, account: publicAccount(result.account) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/email/login', async (req, res) => {
+    try {
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`email-login-ip:${ip}`, 30, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+      const result = await loginEmail(store, { email: req.body?.email, password: req.body?.password });
+      res.json({ token: result.token, expiresAt: result.expiresAt, account: publicAccount(result.account) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   router.post('/api/auth/challenge', async (req, res) => {
     try {
       const ip = clientIp(req);
