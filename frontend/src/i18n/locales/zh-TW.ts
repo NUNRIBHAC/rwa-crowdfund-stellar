@@ -459,6 +459,13 @@ export const zhTW: Messages = {
     newsFeedTitle: '活動新聞',
     newsFeedEmpty: '您投資的活動暫無新聞。',
     newsFeedNoInvestments: '您投資的活動新聞將顯示於此。',
+    payoutsAria: '付款紀錄',
+    payoutsTitle: '付款紀錄',
+    payoutsNote: '本平台記錄的已完成測試網退款和提領。此原型不存在任何收益分配。',
+    payoutsEmpty: '尚無付款紀錄。已完成的退款或提領將顯示在這裡。',
+    documentsAria: '投資文件',
+    documentsTitle: '投資文件',
+    documentsEmpty: '此活動尚未發佈任何文件。',
     newInvestments: '新的投資',
     filterAria: '按狀態篩選投資組合',
     tabs: {

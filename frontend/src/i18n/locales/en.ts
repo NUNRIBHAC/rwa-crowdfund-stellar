@@ -473,6 +473,13 @@ export const en = {
     newsFeedTitle: 'Campaign news',
     newsFeedEmpty: 'No news yet for the campaigns you invested in.',
     newsFeedNoInvestments: 'News from campaigns you invest in will appear here.',
+    payoutsAria: 'Payout history',
+    payoutsTitle: 'Payout history',
+    payoutsNote: 'Completed testnet refunds and withdrawals recorded by this platform. No return distributions exist in this prototype.',
+    payoutsEmpty: 'No payouts recorded yet. Completed refunds or withdrawals will appear here.',
+    documentsAria: 'Investment documents',
+    documentsTitle: 'Investment documents',
+    documentsEmpty: 'No documents published for this campaign.',
     newInvestments: 'New investments',
     filterAria: 'Filter portfolio by status',
     tabs: {

@@ -15,6 +15,7 @@ import {
   statusSoroban,
   recoverSoroban,
   accountActivity,
+  accountPayouts,
   sorobanRegisteredCampaigns,
   sorobanDeps,
 } from './soroban.js';
@@ -276,6 +277,18 @@ app.get('/api/campaigns', async (req, res) => {
     res.json({ campaigns: await sorobanCampaigns(typeof req.query.actor === 'string' ? req.query.actor : undefined), mode: 'soroban' });
   } catch (err) {
     res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
+app.get('/api/account/payouts', async (req, res) => {
+  try {
+    const actor = typeof req.query.actor === 'string' ? req.query.actor : '';
+    if (!actor) return res.status(400).json({ error: 'actor query param required' });
+    // Public read of on-chain-equivalent journal fields only; no signed material.
+    // Completed refunds/withdrawals ONLY - no return distributions exist in
+    // this prototype and none are fabricated.
+    res.json({ payouts: await accountPayouts(actor), network: NETWORK, productionEligible: false });
+  } catch (err) {
+    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
   }
 });
 app.get('/api/account/activity', async (req, res) => {

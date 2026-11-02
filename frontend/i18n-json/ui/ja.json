@@ -449,6 +449,13 @@
     "newsFeedTitle": "キャンペーンニュース",
     "newsFeedEmpty": "投資したキャンペーンのニュースはまだありません。",
     "newsFeedNoInvestments": "投資したキャンペーンのニュースがここに表示されます。",
+    "payoutsAria": "支払い履歴",
+    "payoutsTitle": "支払い履歴",
+    "payoutsNote": "このプラットフォームが記録した完了済みのテストネット返金と出金です。このプロトタイプにリターン分配は存在しません。",
+    "payoutsEmpty": "記録された支払いはまだありません。完了した返金や出金がここに表示されます。",
+    "documentsAria": "投資ドキュメント",
+    "documentsTitle": "投資ドキュメント",
+    "documentsEmpty": "このキャンペーンに公開されたドキュメントはありません。",
     "newInvestments": "新しい投資",
     "filterAria": "ステータスでポートフォリオを絞り込む",
     "tabs": {

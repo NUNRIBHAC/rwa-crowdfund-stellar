@@ -6,6 +6,8 @@ import { formatAmount, shorten } from '../format';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import AccountNewsSection from '../components/AccountNewsSection';
+import DocumentsList from '../components/DocumentsList';
+import AccountPayoutsSection from '../components/AccountPayoutsSection';
 import SignInPanel from '../components/SignInPanel';
 import MyCommunityActivity from '../components/MyCommunityActivity';
 import CompanyAccountsSection from '../components/CompanyAccountsSection';
@@ -36,6 +38,7 @@ type ActivityRow = {
   amount: string | null;
   status: string;
   createdAt: string | null;
+  updatedAt?: string | null;
 };
 
 // Prototype mapping from the contract lifecycle to the portfolio tabs. The
@@ -172,6 +175,20 @@ export default function Account({ market }: { market: Market }) {
       </section>
 
       {hasPositions && <AccountNewsSection campaigns={rows.map((r) => ({ id: r.id, name: r.name }))} />}
+
+      {actor && <AccountPayoutsSection actor={actor} />}
+
+      {hasPositions && rows.length > 0 && (
+        <section aria-label={m.account.documentsAria}>
+          <h2 className="section-title">{m.account.documentsTitle}</h2>
+          {rows.map((r) => (
+            <div key={r.id}>
+              <h3>{r.name}</h3>
+              <DocumentsList campaignId={r.id} fallback={<p className="empty-state">{m.account.documentsEmpty}</p>} />
+            </div>
+          ))}
+        </section>
+      )}
 
       <section aria-label={m.account.activityAria}>
         <h2 className="section-title">{m.account.recentActivity}</h2>

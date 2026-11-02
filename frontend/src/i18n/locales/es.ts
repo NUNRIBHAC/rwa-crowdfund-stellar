@@ -483,6 +483,13 @@ export const es: Messages = {
     newsFeedTitle: 'Noticias de campañas',
     newsFeedEmpty: 'Aún no hay noticias de las campañas en las que has invertido.',
     newsFeedNoInvestments: 'Las noticias de las campañas en las que inviertas aparecerán aquí.',
+    payoutsAria: 'Historial de pagos',
+    payoutsTitle: 'Historial de pagos',
+    payoutsNote: 'Reembolsos y retiros de testnet completados registrados por esta plataforma. No existen distribuciones de retorno en este prototipo.',
+    payoutsEmpty: 'Aún no hay pagos registrados. Los reembolsos o retiros completados aparecerán aquí.',
+    documentsAria: 'Documentos de inversión',
+    documentsTitle: 'Documentos de inversión',
+    documentsEmpty: 'No hay documentos publicados para esta campaña.',
     newInvestments: 'Nuevas inversiones',
     filterAria: 'Filtrar cartera por estado',
     tabs: {

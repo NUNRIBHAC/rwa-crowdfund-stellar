@@ -449,6 +449,13 @@
     "newsFeedTitle": "活动新闻",
     "newsFeedEmpty": "您投资的活动暂无新闻。",
     "newsFeedNoInvestments": "您投资的活动新闻将显示在这里。",
+    "payoutsAria": "付款记录",
+    "payoutsTitle": "付款记录",
+    "payoutsNote": "本平台记录的已完成测试网退款和提现。此原型不存在任何收益分配。",
+    "payoutsEmpty": "暂无付款记录。已完成的退款或提现将显示在这里。",
+    "documentsAria": "投资文件",
+    "documentsTitle": "投资文件",
+    "documentsEmpty": "该活动尚未发布任何文件。",
     "newInvestments": "新的投资",
     "filterAria": "按状态筛选投资组合",
     "tabs": {
