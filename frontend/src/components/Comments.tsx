@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import type { CommunityComment } from '../community/api';
 import { COMMUNITY_LIMITS, fetchComments, postComment } from '../community/api';
+import { notifyCommunityActivityChanged } from '../community/events';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 import { shorten, tpl } from '../format';
@@ -34,6 +35,7 @@ export default function Comments({ campaignId }: { campaignId: string }) {
     setError('');
     try {
       const { comment } = await postComment(token, campaignId, body.trim());
+      notifyCommunityActivityChanged();
       setComments((prev) => [...(prev ?? []), comment]);
       setBody('');
     } catch (e) {

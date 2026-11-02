@@ -22,6 +22,7 @@ vi.mock('../../community/api', async (importOriginal) => {
 });
 
 import { useCommunityAuth } from '../../community/CommunityAuth';
+import { COMMUNITY_ACTIVITY_CHANGED } from '../../community/events';
 import MyCommunityActivity from '../MyCommunityActivity';
 import { I18nProvider } from '../../i18n';
 
@@ -53,4 +54,29 @@ test('renders own-record sections and no site-wide news feed', async () => {
   expect(mocks.fetchNewsFeed).not.toHaveBeenCalled();
   expect(screen.queryByText('Latest campaign news')).toBeNull();
   expect(screen.queryByText('Campaign news')).toBeNull();
+});
+
+test('refetches own records when a submit form announces a write', async () => {
+  auth.mockReturnValue({
+    account: 'G'.repeat(56),
+    token: 'tok',
+    signIn: vi.fn(),
+    busy: false,
+    error: '',
+    restored: true,
+    signOut: vi.fn(),
+    setDisplayName: vi.fn(),
+  } as unknown as ReturnType<typeof useCommunityAuth>);
+
+  render(
+    <I18nProvider>
+      <MyCommunityActivity />
+    </I18nProvider>,
+  );
+
+  await waitFor(() => expect(mocks.fetchMyTickets).toHaveBeenCalledTimes(1));
+  window.dispatchEvent(new CustomEvent(COMMUNITY_ACTIVITY_CHANGED));
+  await waitFor(() => expect(mocks.fetchMyTickets).toHaveBeenCalledTimes(2));
+  expect(mocks.fetchMyApplications).toHaveBeenCalledTimes(2);
+  expect(mocks.fetchMyComments).toHaveBeenCalledTimes(2);
 });

@@ -6,6 +6,7 @@
 // Mount once at app root (below the header so the theme/nav z-order is kept).
 import { useState } from 'react';
 import { createTicket } from '../community/api';
+import { notifyCommunityActivityChanged } from '../community/events';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 
@@ -37,6 +38,7 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
     setError('');
     createTicket(token, { kind: 'feedback', subject: subject.trim(), body: body.trim() })
       .then(() => {
+        notifyCommunityActivityChanged();
         setDone(true);
         setSubject('');
         setBody('');

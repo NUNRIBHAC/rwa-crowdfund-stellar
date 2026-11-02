@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import type { Ticket } from '../community/api';
 import { COMMUNITY_LIMITS, createTicket, fetchMyTickets } from '../community/api';
+import { notifyCommunityActivityChanged } from '../community/events';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 
@@ -35,6 +36,7 @@ export default function SupportCenter() {
     setError('');
     try {
       const { ticket } = await createTicket(token, { kind, subject: subject.trim(), body: body.trim() });
+      notifyCommunityActivityChanged();
       setTickets((prev) => [ticket, ...(prev ?? [])]);
       setSubject('');
       setBody('');

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { fetchMyApplications, fetchMyComments, fetchMyTickets } from '../community/api';
 import type { IssuerApplication, OwnComment, Ticket } from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
+import { COMMUNITY_ACTIVITY_CHANGED } from '../community/events';
 import { useI18n } from '../i18n';
 import { routeHash } from '../router';
 
@@ -27,21 +28,27 @@ export default function MyCommunityActivity() {
     let stale = false;
     setError('');
     // Independent fetches: one failing endpoint must not blank the others.
-    const guard = <T,>(p: Promise<T>, apply: (v: T) => void) =>
-      p
-        .then((v) => {
-          if (!stale) apply(v);
-        })
-        .catch((e) => {
-          if (!stale) setError(e instanceof Error ? e.message : String(e));
-        });
-    void Promise.all([
-      guard(fetchMyApplications(token), (v) => setApplications(v.applications)),
-      guard(fetchMyTickets(token), (v) => setTickets(v.tickets)),
-      guard(fetchMyComments(token), (v) => setComments(v.comments)),
-    ]);
+    const load = () => {
+      const guard = <T,>(p: Promise<T>, apply: (v: T) => void) =>
+        p
+          .then((v) => {
+            if (!stale) apply(v);
+          })
+          .catch((e) => {
+            if (!stale) setError(e instanceof Error ? e.message : String(e));
+          });
+      void Promise.all([
+        guard(fetchMyApplications(token), (v) => setApplications(v.applications)),
+        guard(fetchMyTickets(token), (v) => setTickets(v.tickets)),
+        guard(fetchMyComments(token), (v) => setComments(v.comments)),
+      ]);
+    };
+    load();
+    // Submit forms announce successful writes so these lists refresh live.
+    window.addEventListener(COMMUNITY_ACTIVITY_CHANGED, load);
     return () => {
       stale = true;
+      window.removeEventListener(COMMUNITY_ACTIVITY_CHANGED, load);
     };
   }, [account, token]);
 
