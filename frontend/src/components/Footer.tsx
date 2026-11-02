@@ -22,7 +22,9 @@ export default function Footer() {
               Bug (InBug-Black, padded to a square transparent canvas) from LinkedIn's brand
               download: https://brand.linkedin.com/downloads -> in-logo.zip (content.linkedin.com). */}
             <div className="footer-social" aria-label="Blockallisto social media profiles">
-              <img src="/social/x.svg" alt="" />
+              <a href="https://x.com/blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on X">
+                <img src="/social/x.svg" alt="" />
+              </a>
               <a href="https://www.instagram.com/blockallisto/" target="_blank" rel="noopener" aria-label="Blockallisto on Instagram">
                 <img src="/social/instagram.svg" alt="" />
               </a>
