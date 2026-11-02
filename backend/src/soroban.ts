@@ -1,4 +1,5 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import {
   Account,
   Address,
@@ -10,11 +11,14 @@ import {
   Transaction,
   TransactionBuilder,
   nativeToScVal,
+  Operation,
   scValToNative,
   rpc,
 } from '@stellar/stellar-sdk';
 
-// No deployment path, platform signer, local capacity counter or receipt token.
+// No platform signer, local capacity counter or receipt token. Campaign
+// deployment is operator-prepared below (buildCampaignDeploy) and signed by
+// the operator wallet, never by a server-held key.
 export const sorobanDeps = {
   client: () => new rpc.Server(process.env.RPC_URL ?? 'https://soroban-testnet.stellar.org', { timeout: 15000 }),
 };
@@ -532,4 +536,218 @@ export async function statusSoroban(hash: string): Promise<any> {
   // Phase 2 (journal lock): persist a terminal outcome.
   if (result.status === 'SUCCESS' || result.status === 'FAILED') await recordStatus(hash, result.status);
   return { hash, status: result.status, confirmed: result.status === 'SUCCESS', held: result.status === 'NOT_FOUND' };
+}
+
+// --- Campaign deployment (operator-prepared, wallet-signed) ---
+// buildCampaignDeploy prepares the unsigned deployment transactions for the
+// reviewed crowdfund contract. Two steps, each one single-operation Soroban
+// transaction (the SDK assembles single-host-function transactions only):
+//   1. 'upload'  - upload the reviewed crowdfund Wasm, skipped automatically
+//      once the exact reviewed Wasm hash already exists on the ledger;
+//   2. 'create'  - create a campaign instance whose constructor args mirror
+//      the campaign-builder preview (creator, token, goal, deadline).
+// The operator's OWN wallet is source account, pays the testnet fees and
+// authorises the constructor; no server-held key ever signs.
+// submitCampaignDeploy broadcasts the signed envelope and polls to a
+// terminal status. For 'create' it extracts the created contract id from the
+// transaction meta, verifies the deployed code hash against the reviewed
+// Wasm pin, and returns a registry entry for the operator to add to
+// SOROBAN_CAMPAIGNS_JSON. The server never edits the registry itself:
+// listing a new campaign stays an explicit operator configuration step.
+const REVIEWED_WASM_URL = new URL('../wasm/reviewed-crowdfund.wasm', import.meta.url);
+let reviewedWasmCache: Buffer | null = null;
+function loadReviewedWasm(): Buffer {
+  if (reviewedWasmCache) return reviewedWasmCache;
+  let wasm: Buffer;
+  try {
+    wasm = readFileSync(REVIEWED_WASM_URL);
+  } catch {
+    throw new Error('reviewed crowdfund Wasm is not packaged on this deployment');
+  }
+  if (createHash('sha256').update(wasm).digest('hex') !== WASM_HASH)
+    throw new Error('packaged crowdfund Wasm does not match the reviewed hash; refusing to prepare deployment');
+  reviewedWasmCache = wasm;
+  return wasm;
+}
+// True when the exact reviewed Wasm hash already exists on the ledger, so
+// the upload step can be skipped. RPC failure fails closed to 'not
+// uploaded': a redundant upload is harmless, a skipped upload is not.
+async function reviewedWasmOnLedger(client: rpc.Server, wasmHash: Buffer): Promise<boolean> {
+  try {
+    const wasm = await client.getContractWasmByHash(wasmHash);
+    return createHash('sha256').update(wasm).digest('hex') === WASM_HASH;
+  } catch {
+    return false;
+  }
+}
+export async function buildCampaignDeploy(input: { actor: string; id: string; name: string; goal: string; deadline: number }): Promise<any> {
+  guard();
+  const actor = actorAddress(input.actor);
+  if (process.env.SOROBAN_RECOVERY_MODE === 'true')
+    throw new Error(
+      'recovery mode: journal was restored from backup and is not yet reconciled; new transactions are disabled until an operator completes reconciliation and disables SOROBAN_RECOVERY_MODE',
+    );
+  if (!/^[a-zA-Z0-9_-]{1,48}$/.test(input.id)) throw new Error('invalid campaign id');
+  if (typeof input.name !== 'string' || input.name.length === 0 || input.name.length > 120) throw new Error('invalid campaign name');
+  if (entries().some((e) => e.id === input.id)) throw new Error('campaign id is already registered');
+  const goalUnits = amountUnits(input.goal);
+  const deadline = Math.floor(input.deadline);
+  if (!Number.isSafeInteger(deadline) || deadline <= Math.floor(Date.now() / 1000)) throw new Error('deadline must be in the future');
+  await rateLimit('build', input.actor);
+  const wasm = loadReviewedWasm();
+  const wasmHash = createHash('sha256').update(wasm).digest();
+  const client = sorobanDeps.client();
+  const step = (await reviewedWasmOnLedger(client, wasmHash)) ? 'create' : 'upload';
+  const account = await client.getAccount(input.actor).catch((e: unknown) => {
+    if (/account not found/i.test(e instanceof Error ? e.message : String(e))) {
+      const err = new Error('Transaction preparation failed: wallet account does not exist on testnet.');
+      (err as Error & { code?: string }).code = 'SIM_ACCOUNT_MISSING';
+      throw err;
+    }
+    throw e;
+  });
+  const operation =
+    step === 'upload'
+      ? Operation.uploadContractWasm({ wasm })
+      : Operation.createCustomContract({
+          address: actor,
+          wasmHash,
+          salt: randomBytes(32),
+          constructorArgs: [
+            actor.toScVal(),
+            Address.fromString(expectedToken()).toScVal(),
+            nativeToScVal(goalUnits, { type: 'i128' }),
+            nativeToScVal(deadline, { type: 'u64' }),
+          ],
+        });
+  const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase: passphrase }).addOperation(operation).setTimeout(900).build();
+  const simulation = await client.simulateTransaction(tx);
+  if (rpc.Api.isSimulationError(simulation)) {
+    console.warn('soroban deploy simulation failed:', simulation.error ?? '');
+    const err = new Error('Transaction preparation failed: the network rejected the transaction simulation.');
+    (err as Error & { code?: string }).code = 'SIM_REJECTED';
+    throw err;
+  }
+  if (rpc.Api.isSimulationRestore(simulation)) throw new Error('state restoration required; operator must restore before signing');
+  if (simulation.result?.auth.some((a) => a.credentials.type !== 'sorobanCredentialsSourceAccount'))
+    throw new Error('separate address authorization is unsupported');
+  const prepared = rpc.assembleTransaction(tx, simulation).build();
+  const op = prepared.operations[0] as any;
+  if (op.auth?.some((a: any) => a.credentials.type !== 'sorobanCredentialsSourceAccount')) throw new Error('separate address authorization is unsupported');
+  const hash = Buffer.from(prepared.hash()).toString('hex');
+  await guarded(async () => {
+    const store = await readStore();
+    quarantineHold(store);
+    const unresolved = store.intents.find((i) => i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
+    if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
+    const open = openIntents(store, input.actor);
+    if (open.length >= openIntentCap()) throw new Error(`too many open intents (${open.length}); resolve signed intents or let unsigned ones expire`);
+    store.intents.push({ hash, campaign: input.id, actor: input.actor, action: `deploy-${step}`, xdr: prepared.toXDR(), status: 'BUILT' });
+    await save(store);
+  });
+  return {
+    hash,
+    xdr: prepared.toXDR(),
+    networkPassphrase: passphrase,
+    action: 'deploy',
+    step,
+    id: input.id,
+    name: input.name,
+    feeStroops: prepared.fee,
+    testOnly: true,
+  };
+}
+// Poll the RPC for a terminal status, then extract the created contract id
+// from the transaction meta and verify the deployed code against the
+// reviewed Wasm pin before a registry entry is returned. Bounded polling:
+// a still-pending deployment is reported, never guessed.
+async function awaitDeployResult(hash: string): Promise<{ status: string; contractId: string | null }> {
+  const client = sorobanDeps.client();
+  for (let attempt = 0; attempt < 30; attempt++) {
+    const result = await client.getTransaction(hash);
+    if (result.txHash !== hash) throw new Error('RPC returned mismatched transaction hash');
+    if (result.status === 'SUCCESS' || result.status === 'FAILED') {
+      if (!Number.isSafeInteger(result.ledger) || result.ledger <= 0) throw new Error('RPC result missing conclusive ledger');
+      if (result.status === 'FAILED') return { status: 'FAILED', contractId: null };
+      const rv = result.returnValue;
+      if (!rv) return { status: 'SUCCESS', contractId: null };
+      let contractId: string;
+      try {
+        contractId = Address.fromScVal(rv).toString();
+      } catch {
+        return { status: 'SUCCESS', contractId: null };
+      }
+      return { status: 'SUCCESS', contractId: contractId.startsWith('C') ? contractId : null };
+    }
+    await new Promise((r) => setTimeout(r, Number(process.env.SOROBAN_DEPLOY_POLL_MS ?? '1000')));
+  }
+  return { status: 'PENDING', contractId: null };
+}
+export async function submitCampaignDeploy(input: { actor: string; xdr: string; name?: string }): Promise<any> {
+  guard();
+  actorAddress(input.actor);
+  const displayName = typeof input.name === 'string' && input.name.length > 0 && input.name.length <= 120 ? input.name : null;
+  if (input.name !== undefined && displayName === null) throw new Error('invalid campaign name');
+  const tx = verifySignedTx(input.actor, input.xdr);
+  const hash = Buffer.from(tx.hash()).toString('hex');
+  const phase = await guarded(async () => {
+    const store = await readStore();
+    const intent = store.intents.find((i) => i.hash === hash && i.actor === input.actor && (i.action === 'deploy-upload' || i.action === 'deploy-create'));
+    if (!intent) throw new Error(quarantinedHash(store, hash) ?? 'transaction was not prepared by this API');
+    if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
+    const other = store.intents.find((i) => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
+    if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
+    if (!intent.signedXdr) {
+      intent.signedXdr = input.xdr;
+      intent.status = 'SIGNED';
+      await save(store);
+    }
+    return { terminal: false };
+  });
+  if (!phase.terminal) {
+    const store = await readStore();
+    const intent = store.intents.find((i) => i.hash === hash)!;
+    const sendTx = TransactionBuilder.fromXDR(intent.signedXdr!, passphrase) as Transaction;
+    try {
+      const result = await sorobanDeps.client().sendTransaction(sendTx);
+      if (result.hash !== hash) throw new Error('RPC returned mismatched transaction hash');
+      const status = result.status === 'ERROR' ? 'UNKNOWN' : result.status;
+      await recordStatus(hash, status);
+    } catch (err) {
+      await recordStatus(hash, 'UNKNOWN');
+      throw err;
+    }
+  }
+  const outcome = await awaitDeployResult(hash);
+  await recordStatus(hash, outcome.status);
+  if (outcome.status === 'FAILED') throw new Error(`deployment transaction failed on-chain (hash ${hash}); no campaign was created`);
+  const intent = (await readStore()).intents.find((i) => i.hash === hash)!;
+  const step = intent.action === 'deploy-upload' ? 'upload' : 'create';
+  if (!outcome.contractId) {
+    if (step === 'upload' && outcome.status === 'SUCCESS')
+      return {
+        hash,
+        status: 'SUCCESS',
+        confirmed: true,
+        step,
+        message: 'Reviewed contract code uploaded; build again to create the campaign instance.',
+        testOnly: true,
+      };
+    return { hash, status: outcome.status, confirmed: false, step, message: 'Submission is not confirmation. Check the hash before another action.' };
+  }
+  // Fail closed on the created instance itself: the registry entry is only
+  // returned when the deployed code IS the reviewed crowdfund contract.
+  const deployedWasm = await sorobanDeps.client().getContractWasmByContractId(outcome.contractId);
+  if (createHash('sha256').update(deployedWasm).digest('hex') !== WASM_HASH)
+    throw new Error('deployed contract code does not match the reviewed crowdfund Wasm; refusing to produce a registry entry');
+  return {
+    hash,
+    status: 'SUCCESS',
+    confirmed: true,
+    step,
+    contractId: outcome.contractId,
+    registryEntry: { id: intent.campaign, name: displayName ?? intent.campaign, contractId: outcome.contractId },
+    note: 'Add registryEntry to SOROBAN_CAMPAIGNS_JSON to list the campaign; the server never edits the registry itself.',
+    testOnly: true,
+  };
 }

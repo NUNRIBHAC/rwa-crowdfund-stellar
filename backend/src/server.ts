@@ -18,6 +18,8 @@ import {
   accountPayouts,
   sorobanRegisteredCampaigns,
   sorobanDeps,
+  buildCampaignDeploy,
+  submitCampaignDeploy,
 } from './soroban.js';
 import { journalBackend } from './journal.js';
 import { drainPendingContributors, pendContribution, readPending } from './pending-contributors.js';
@@ -238,6 +240,7 @@ const communityRouterReady = communityServiceFromEnv()
       reconciliation: reconciliationPayload,
       shareRegister: shareRegisterPayload,
       fundingState: sorobanCampaignFundingState,
+      campaignDeploy: { build: buildCampaignDeploy, submit: submitCampaignDeploy },
       investorEntitlement: async (campaignId: string, publicKey: string) => {
         // On-chain failure propagates so the route fails closed (503).
         const chain = await sorobanInvestorEntitlement(campaignId, publicKey);
