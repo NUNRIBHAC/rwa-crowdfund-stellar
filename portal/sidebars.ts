@@ -13,6 +13,7 @@ const sidebars: SidebarsConfig = {
       label: 'Technical',
       items: ['smart-contract', 'testing', 'deployment'],
     },
+    'faq',
     'contributing',
   ],
 };
