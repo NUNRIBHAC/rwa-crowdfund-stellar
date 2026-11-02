@@ -1703,7 +1703,6 @@ export const es: Messages = {
       },
     ],
   },
-
   community: {
     loading: 'Cargando...',
     demoBadge: 'DEMO',

@@ -1698,7 +1698,6 @@ export const pt: Messages = {
       },
     ],
   },
-
   community: {
     loading: 'A carregar...',
     demoBadge: 'DEMO',

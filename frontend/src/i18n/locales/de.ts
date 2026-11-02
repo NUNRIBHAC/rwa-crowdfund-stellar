@@ -1690,7 +1690,6 @@ export const de: Messages = {
       },
     ],
   },
-
   community: {
     loading: 'Wird geladen...',
     demoBadge: 'DEMO',

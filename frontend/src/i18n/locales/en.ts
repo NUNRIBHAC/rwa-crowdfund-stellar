@@ -1650,7 +1650,6 @@ export const en = {
       },
     ],
   },
-
   community: {
     loading: 'Loading...',
     demoBadge: 'DEMO',
