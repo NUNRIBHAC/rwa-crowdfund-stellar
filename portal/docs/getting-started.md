@@ -5,9 +5,10 @@ assets with no monetary value.
 
 ## 1. Install Freighter
 
-[Freighter](https://www.freighter.app) is a browser-extension wallet for
-Stellar. Install it, create or import an account, and switch the wallet
-network to **Testnet**.
+[Varial](https://varialwallet.com/) (formerly Freighter) is a
+browser-extension wallet for Stellar. Install it, create or import an account, and switch the wallet
+network to **Testnet**. The Blockallisto app may still call the wallet
+"Freighter" - it is the same wallet under its new name.
 
 ## 2. Connect your wallet
 

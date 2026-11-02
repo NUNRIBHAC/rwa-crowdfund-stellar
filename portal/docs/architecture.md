@@ -23,7 +23,8 @@ timing. See [Smart contract](./smart-contract).
 
 ## Wallet
 
-[Freighter](https://www.freighter.app) connects the browser to Stellar. The
+[Varial](https://varialwallet.com/) (formerly Freighter) connects the
+browser to Stellar. The
 frontend uses it in two ways: to sign investment transactions, and to sign a
 one-time challenge that logs the user into the account area (optionally
 protected by an authenticator-app second factor). Private keys never leave
