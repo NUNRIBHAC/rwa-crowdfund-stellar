@@ -5,11 +5,12 @@ import { generateSecret, encryptSeed, decryptSeed, verifyTotp, generateRecoveryC
 
 // Wallet-challenge authentication for the demo platform.
 //
-// Registration and login are the same flow: prove ownership of a Stellar
-// public key by signing a single-use, short-lived, domain-separated message
-// (the same message Freighter's signMessage produces a signature over). No
-// passwords, no email, no third-party provider - the wallet is the identity,
-// matching the contribution flow that already uses Freighter.
+// Wallet-challenge registration and login are the same flow: prove ownership
+// of a Stellar public key by signing a single-use, short-lived,
+// domain-separated message (the same message Freighter's signMessage
+// produces a signature over). The wallet is the identity, matching the
+// contribution flow that already uses Freighter. Email+password accounts
+// (email-auth.ts) sit next to this flow for visitors without a wallet.
 //
 // This is real proof-of-key ownership. It is NOT KYC: it says nothing about
 // who the person is, and it must never be wired to unlock investment limits,
@@ -146,12 +147,19 @@ export function publicAccount(account: Account): {
   displayName: string | null;
   createdAt: number;
   totpEnabled: boolean;
+  authMethod: 'wallet' | 'email';
+  email: string | null;
 } {
+  // Only ever serialized to the account owner (auth responses and /me), so
+  // their own email is safe to include; it is never exposed on other
+  // users' content (comments carry a display name snapshot only).
   return {
     publicKey: account.publicKey,
     displayName: account.displayName,
     createdAt: account.createdAt,
     totpEnabled: account.totp?.status === 'enabled',
+    authMethod: account.authMethod === 'email' ? 'email' : 'wallet',
+    email: account.email ?? null,
   };
 }
 
