@@ -485,8 +485,10 @@ export const es: Messages = {
     newsFeedNoInvestments: 'Las noticias de las campañas en las que inviertas aparecerán aquí.',
     payoutsAria: 'Historial de pagos',
     payoutsTitle: 'Historial de pagos',
-    payoutsNote: 'Reembolsos y retiros de testnet completados registrados por esta plataforma. No existen distribuciones de retorno en este prototipo.',
+    payoutsNote:
+      'Reembolsos y retiros de testnet completados registrados por esta plataforma; los eventos fuera de estos registros no se muestran. No existen distribuciones de retorno en este prototipo.',
     payoutsEmpty: 'Aún no hay pagos registrados. Los reembolsos o retiros completados aparecerán aquí.',
+    payoutsUnavailable: 'No se pudo cargar el historial de pagos. Esto no significa que no haya pagos; inténtalo de nuevo más tarde.',
     documentsAria: 'Documentos de inversión',
     documentsTitle: 'Documentos de inversión',
     documentsEmpty: 'No hay documentos publicados para esta campaña.',

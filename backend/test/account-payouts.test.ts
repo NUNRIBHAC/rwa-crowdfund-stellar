@@ -63,6 +63,18 @@ const fakeJournal = {
         amount: '40000000',
         createdAt: '2026-11-01T09:00:00Z',
       },
+      // broadcast-ambiguous refund: NOT a payout until terminal SUCCESS
+      {
+        hash: 'r4',
+        campaign: 'demo',
+        actor: alice,
+        action: 'refund',
+        xdr: 'UNSIGNED',
+        signedXdr: 'SIGNED',
+        status: 'UNKNOWN',
+        amount: '70000000',
+        createdAt: '2026-11-01T12:00:00Z',
+      },
       // failed withdrawal: not a payout
       {
         hash: 'w2',

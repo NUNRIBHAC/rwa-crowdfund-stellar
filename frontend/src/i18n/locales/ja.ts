@@ -472,8 +472,10 @@ export const ja: Messages = {
     newsFeedNoInvestments: '投資したキャンペーンのニュースがここに表示されます。',
     payoutsAria: '支払い履歴',
     payoutsTitle: '支払い履歴',
-    payoutsNote: 'このプラットフォームが記録した完了済みのテストネット返金と出金です。このプロトタイプにリターン分配は存在しません。',
+    payoutsNote:
+      'このプラットフォームが記録した完了済みのテストネット返金と出金です。これらの記録以外のイベントは表示されません。このプロトタイプにリターン分配は存在しません。',
     payoutsEmpty: '記録された支払いはまだありません。完了した返金や出金がここに表示されます。',
+    payoutsUnavailable: '支払い履歴を読み込めませんでした。支払いがないという意味ではありません。後でもう一度お試しください。',
     documentsAria: '投資ドキュメント',
     documentsTitle: '投資ドキュメント',
     documentsEmpty: 'このキャンペーンに公開されたドキュメントはありません。',

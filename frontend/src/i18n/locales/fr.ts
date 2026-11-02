@@ -487,8 +487,10 @@ export const fr: Messages = {
     newsFeedNoInvestments: 'Les actualités des campagnes dans lesquelles vous investissez apparaîtront ici.',
     payoutsAria: 'Historique des paiements',
     payoutsTitle: 'Historique des paiements',
-    payoutsNote: 'Remboursements et retraits testnet terminés enregistrés par cette plateforme. Aucune distribution de rendement n’existe dans ce prototype.',
+    payoutsNote:
+      'Remboursements et retraits testnet terminés enregistrés par cette plateforme ; les événements hors de ces registres ne sont pas listés. Aucune distribution de rendement n’existe dans ce prototype.',
     payoutsEmpty: 'Aucun paiement enregistré pour l’instant. Les remboursements ou retraits terminés apparaîtront ici.',
+    payoutsUnavailable: 'L’historique des paiements n’a pas pu être chargé. Cela ne signifie pas qu’il n’y a aucun paiement - réessayez plus tard.',
     documentsAria: 'Documents d’investissement',
     documentsTitle: 'Documents d’investissement',
     documentsEmpty: 'Aucun document publié pour cette campagne.',

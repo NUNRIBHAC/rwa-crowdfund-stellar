@@ -475,8 +475,10 @@ export const en = {
     newsFeedNoInvestments: 'News from campaigns you invest in will appear here.',
     payoutsAria: 'Payout history',
     payoutsTitle: 'Payout history',
-    payoutsNote: 'Completed testnet refunds and withdrawals recorded by this platform. No return distributions exist in this prototype.',
+    payoutsNote:
+      'Completed testnet refunds and withdrawals recorded by this platform; events outside these records are not listed. No return distributions exist in this prototype.',
     payoutsEmpty: 'No payouts recorded yet. Completed refunds or withdrawals will appear here.',
+    payoutsUnavailable: 'Payout history could not be loaded. That does not mean there are no payouts - try again later.',
     documentsAria: 'Investment documents',
     documentsTitle: 'Investment documents',
     documentsEmpty: 'No documents published for this campaign.',

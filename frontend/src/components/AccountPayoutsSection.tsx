@@ -39,7 +39,11 @@ export default function AccountPayoutsSection({ actor }: { actor: string }) {
     <section aria-label={m.account.payoutsAria}>
       <h2 className="section-title">{m.account.payoutsTitle}</h2>
       <p className="account-note">{m.account.payoutsNote}</p>
-      {payouts && payouts.length > 0 ? (
+      {payouts === null ? (
+        <p className="community-error" role="status">
+          {m.account.payoutsUnavailable}
+        </p>
+      ) : payouts.length > 0 ? (
         <ul className="activity-list">
           {payouts.map((a) => (
             <li key={a.hash}>

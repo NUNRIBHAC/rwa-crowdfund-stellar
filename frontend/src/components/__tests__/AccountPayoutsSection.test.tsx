@@ -60,9 +60,10 @@ describe('AccountPayoutsSection', () => {
     expect(await screen.findByText('No payouts recorded yet. Completed refunds or withdrawals will appear here.')).toBeTruthy();
   });
 
-  it('falls back to the empty state when the feed fails (never fabricated rows)', async () => {
+  it('load failure shows an unavailable message, NOT a false empty state', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network down')));
     renderSection();
-    expect(await screen.findByText('No payouts recorded yet. Completed refunds or withdrawals will appear here.')).toBeTruthy();
+    expect(await screen.findByText('Payout history could not be loaded. That does not mean there are no payouts - try again later.')).toBeTruthy();
+    expect(screen.queryByText('No payouts recorded yet. Completed refunds or withdrawals will appear here.')).toBeNull();
   });
 });
