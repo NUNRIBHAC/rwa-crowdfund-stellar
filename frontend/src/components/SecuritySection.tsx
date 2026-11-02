@@ -7,7 +7,7 @@ import { tpl } from '../format';
 import { useCallback, useEffect, useState } from 'react';
 import { disableTotp, enableTotp, enrollTotp, fetchSessions, logoutOtherSessions, revokeSession } from '../community/api';
 import type { SessionInfo } from '../community/api';
-import { useCommunityAuth } from '../community/CommunityAuth';
+import { describeError, useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 
 export default function SecuritySection() {
@@ -30,7 +30,7 @@ export default function SecuritySection() {
     if (!account) return;
     fetchSessions(token)
       .then((v) => setSessions(v.sessions))
-      .catch((e) => setError(e instanceof Error ? e.message : String(e)));
+      .catch((e) => setError(describeError(e, m.community)));
   }, [account, token]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function SecuritySection() {
     setError('');
     setNotice('');
     op()
-      .catch((e) => setError(e instanceof Error ? e.message : String(e)))
+      .catch((e) => setError(describeError(e, m.community)))
       .finally(() => setBusy(false));
   };
 
@@ -91,7 +91,7 @@ export default function SecuritySection() {
                 setTotpEnroll(v);
                 setTotpPhase('enroll');
               })
-              .catch((e) => setError(e instanceof Error ? e.message : String(e)))
+              .catch((e) => setError(describeError(e, m.community)))
               .finally(() => setBusy(false));
           }}
         >
@@ -120,7 +120,7 @@ export default function SecuritySection() {
                   setTotpEnabled(true);
                   setTotpCode('');
                 })
-                .catch((err) => setError(err instanceof Error ? err.message : String(err)))
+                .catch((err) => setError(describeError(err, m.community)))
                 .finally(() => setBusy(false));
             }}
           >
@@ -191,7 +191,7 @@ export default function SecuritySection() {
                   setTotpCode('');
                   setNotice(labels.totpDisabledMsg);
                 })
-                .catch((err) => setError(err instanceof Error ? err.message : String(err)))
+                .catch((err) => setError(describeError(err, m.community)))
                 .finally(() => setBusy(false));
             }}
           >

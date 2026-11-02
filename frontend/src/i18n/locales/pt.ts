@@ -1792,6 +1792,13 @@ export const pt: Messages = {
     errorLoginThrottled: 'Demasiadas tentativas falhadas. Aguarde alguns minutos e tente novamente.',
     errorInvalidInput: 'O pedido foi rejeitado como inválido. Verifique os campos e tente novamente.',
     errorEmailRecipientRestricted: 'O envio de email está limitado a destinatários de teste aprovados neste ambiente.',
+    errorTotpUnconfigured: 'A autenticação de dois fatores não está configurada neste ambiente.',
+    errorTotpAlreadyEnabled: 'A autenticação de dois fatores já está ativa nesta conta.',
+    errorTotpNoEnrollment: 'Não há nenhuma configuração de dois fatores em curso. Inicie a configuração novamente.',
+    errorTotpCodeInvalid: 'Esse código não corresponde. Confirme o código na sua aplicação de autenticação e tente novamente.',
+    errorTotpLoginInvalid:
+      'O código estava errado ou o início de sessão expirou. Inicie sessão novamente e introduza o código atual da sua aplicação de autenticação.',
+    errorTotpNotEnabled: 'A autenticação de dois fatores não está ativa nesta conta.',
     signedInTitle: 'Conta da comunidade',
     signedInAs: 'Sessão iniciada como',
     displayNameLabel: 'Nome de apresentação (mostrado nos seus comentários)',

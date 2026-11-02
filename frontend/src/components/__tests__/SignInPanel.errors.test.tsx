@@ -55,3 +55,58 @@ describe('SignInPanel API error mapping', () => {
     });
   });
 });
+
+async function renderAndSubmitTotpCode(completeBody: unknown, completeStatus: number) {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockImplementation((url: string) => {
+      const u = String(url);
+      if (u.includes('/api/auth/email/login'))
+        return Promise.resolve(
+          new Response(JSON.stringify({ requiresTotp: true, ticket: 't1', expiresAt: Date.now() + 60000 }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        );
+      if (u.includes('/api/auth/totp/complete')) return Promise.resolve(fail(completeStatus, completeBody));
+      return Promise.resolve(fail(404, { error: 'not found' }));
+    }),
+  );
+  render(
+    <I18nProvider>
+      <CommunityAuthProvider messages={{ freighterMissing: pt.errors.freighterMissing, walletNoSign: pt.errors.walletNoSign, community: pt.community }}>
+        <SignInPanel actor="investor" />
+      </CommunityAuthProvider>
+    </I18nProvider>,
+  );
+  fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+  fireEvent.click(screen.getByRole('button', { name: 'I already have an account' }));
+  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'qa@example.com' } });
+  fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'long-enough-password' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Sign in with email' }));
+  fireEvent.change(await screen.findByLabelText('Authenticator code'), { target: { value: '123456' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Verify and sign in' }));
+}
+
+describe('SignInPanel TOTP error mapping', () => {
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+    localStorage.clear();
+  });
+
+  it('maps the wrong-code/expired-ticket code to the active catalog language', async () => {
+    await renderAndSubmitTotpCode({ error: 'invalid or expired ticket or wrong code; sign in again', code: 'totp_login_invalid' }, 401);
+    await waitFor(() => {
+      expect(screen.getByRole('alert').textContent).toContain('O código estava errado ou o início de sessão expirou');
+    });
+    expect(screen.getByRole('alert').textContent).not.toContain('invalid or expired ticket');
+  });
+
+  it('code-less TOTP failures pass through verbatim (honest fallback)', async () => {
+    await renderAndSubmitTotpCode({ error: 'unexpected totp backend state 3' }, 500);
+    await waitFor(() => {
+      expect(screen.getByRole('alert').textContent).toContain('unexpected totp backend state 3');
+    });
+  });
+});

@@ -1797,6 +1797,13 @@ export const es: Messages = {
     errorLoginThrottled: 'Demasiados intentos fallidos. Espera unos minutos y vuelve a intentarlo.',
     errorInvalidInput: 'La solicitud se rechazó como no válida. Revisa los campos e inténtalo de nuevo.',
     errorEmailRecipientRestricted: 'El envío de email está limitado a destinatarios de prueba aprobados en este entorno.',
+    errorTotpUnconfigured: 'La autenticación de dos factores no está configurada en este entorno.',
+    errorTotpAlreadyEnabled: 'La autenticación de dos factores ya está activada en esta cuenta.',
+    errorTotpNoEnrollment: 'No hay ninguna configuración de dos factores en curso. Vuelve a empezar la configuración.',
+    errorTotpCodeInvalid: 'Ese código no coincide. Comprueba el código en tu aplicación de autenticación e inténtalo de nuevo.',
+    errorTotpLoginInvalid:
+      'El código era incorrecto o el inicio de sesión caducó. Inicia sesión de nuevo e introduce el código actual de tu aplicación de autenticación.',
+    errorTotpNotEnabled: 'La autenticación de dos factores no está activada en esta cuenta.',
     signedInTitle: 'Cuenta de la comunidad',
     signedInAs: 'Sesión iniciada como',
     displayNameLabel: 'Nombre visible (se muestra en tus comentarios)',
