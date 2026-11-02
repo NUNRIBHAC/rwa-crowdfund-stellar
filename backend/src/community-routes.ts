@@ -258,10 +258,14 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       depthRaw !== '' && Number.isInteger(Number(depthRaw)) && Number(depthRaw) >= 1 ? 'depth' : process.env.TRUST_PROXY === '1' ? 'legacy' : 'none';
     const resolved = clientIp(req);
     // Transient equality proof without raw-IP disclosure: the caller passes
-    // ?expect=<sha256-hex of a candidate address> and learns only WHICH
-    // positions (if any) hold that address - never any address itself. Used
-    // to bind the measured chain to an independently known controlled egress.
-    const expect = typeof req.query.expect === 'string' && /^[0-9a-f]{64}$/.test(req.query.expect) ? req.query.expect : null;
+    // x-xff-expect-sha256: <sha256-hex of a candidate address> (a HEADER, not
+    // a query parameter, so the pseudonymous hash is not retained in URL
+    // access logs) and learns only WHICH positions (if any) hold that
+    // address - never any address itself. Used to bind the measured chain to
+    // an independently known controlled egress. Probe endpoints are removed
+    // once the verification window closes.
+    const expectHeader = req.header('x-xff-expect-sha256');
+    const expect = expectHeader && /^[0-9a-f]{64}$/.test(expectHeader) ? expectHeader : null;
     const matches = (ip: string) => expect !== null && createHash('sha256').update(ip).digest('hex') === expect;
     res.json({
       chainLength: chain.length,
