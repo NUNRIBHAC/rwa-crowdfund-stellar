@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import type { AddressInfo } from 'node:net';
-import { BrevoMailer, mailerFromEnv } from '../src/mailer.js';
+import { AllowlistMailer, BrevoMailer, MailerError, allowedRecipientsFromEnv, mailerFromEnv, type Mailer } from '../src/mailer.js';
 
 test('mailerFromEnv: unset/unknown/log and half-configured brevo fail closed', () => {
   assert.equal(mailerFromEnv({} as NodeJS.ProcessEnv), null);
@@ -52,4 +52,38 @@ test('BrevoMailer posts the documented v3 payload and surfaces failures', async 
   } finally {
     server.close();
   }
+});
+
+test('allowlist guard: non-listed recipients never reach the provider, listed ones do', async () => {
+  const sent: string[] = [];
+  const inner: Mailer = {
+    async send(m) {
+      sent.push(m.to);
+    },
+  };
+  const mailer = new AllowlistMailer(inner, new Set(['nunrib@sapo.pt']));
+  await assert.rejects(
+    () => mailer.send({ to: 'visitor@example.com', subject: 'x', text: 'y' }),
+    (e: unknown) => {
+      assert.ok(e instanceof MailerError);
+      assert.equal(e.status, 503);
+      assert.equal(e.code, 'email_recipient_restricted');
+      return true;
+    },
+  );
+  assert.deepEqual(sent, []); // provider never called for a blocked recipient
+  await mailer.send({ to: ' Nunrib@SAPO.pt ', subject: 'x', text: 'y' }); // normalized
+  assert.equal(sent.length, 1);
+});
+
+test('mailerFromEnv wraps any configured provider with the allowlist when set', () => {
+  const base = { COMMUNITY_EMAIL_PROVIDER: 'log' };
+  const unrestricted = mailerFromEnv({ ...base });
+  assert.ok(unrestricted);
+  assert.ok(!(unrestricted instanceof AllowlistMailer));
+  const guarded = mailerFromEnv({ ...base, COMMUNITY_EMAIL_ALLOWED_RECIPIENTS: 'nunrib@sapo.pt' });
+  assert.ok(guarded instanceof AllowlistMailer);
+  assert.equal(allowedRecipientsFromEnv({}), null);
+  assert.equal(allowedRecipientsFromEnv({ COMMUNITY_EMAIL_ALLOWED_RECIPIENTS: ' , ' }), null);
+  assert.deepEqual([...allowedRecipientsFromEnv({ COMMUNITY_EMAIL_ALLOWED_RECIPIENTS: 'A@b.c, D@e.f' })!], ['a@b.c', 'd@e.f']);
 });

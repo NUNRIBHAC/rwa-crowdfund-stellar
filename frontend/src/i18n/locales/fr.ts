@@ -1801,6 +1801,7 @@ export const fr: Messages = {
     errorEmailUnverified: "Cette adresse email n'est pas encore vérifiée. Consultez votre boîte de réception ou demandez un nouveau code de vérification.",
     errorLoginThrottled: 'Trop de tentatives échouées. Patientez quelques minutes puis réessayez.',
     errorInvalidInput: 'La requête a été rejetée comme invalide. Vérifiez les champs et réessayez.',
+    errorEmailRecipientRestricted: "L'envoi d'emails est limité aux destinataires de test approuvés sur ce déploiement.",
     signedInTitle: 'Compte de la communauté',
     signedInAs: 'Connecté en tant que',
     displayNameLabel: "Nom d'affichage (visible sur vos commentaires)",

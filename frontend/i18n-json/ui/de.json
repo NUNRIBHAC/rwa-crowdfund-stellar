@@ -1685,6 +1685,7 @@
     "errorEmailUnverified": "Diese E-Mail-Adresse ist noch nicht bestätigt. Prüfen Sie Ihren Posteingang oder fordern Sie einen neuen Bestätigungscode an.",
     "errorLoginThrottled": "Zu viele fehlgeschlagene Versuche. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
     "errorInvalidInput": "Die Anfrage wurde als ungültig abgelehnt. Prüfen Sie die Felder und versuchen Sie es erneut.",
+    "errorEmailRecipientRestricted": "Der E-Mail-Versand ist auf dieser Bereitstellung auf freigegebene Testempfänger beschränkt.",
     "signedInTitle": "Community-Konto",
     "signedInAs": "Angemeldet als",
     "displayNameLabel": "Anzeigename (wird bei Ihren Kommentaren gezeigt)",

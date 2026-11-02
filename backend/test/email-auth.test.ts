@@ -95,6 +95,23 @@ test('registration fails closed (503) without a configured mailer and stores not
   assert.equal(login.json.code, 'credentials_invalid');
 });
 
+test('recipient allowlist guard at the route: blocked address gets an honest 503 and no account', async () => {
+  const mailer = new FakeMailer();
+  const { AllowlistMailer } = await import('../src/mailer.js');
+  const url = await startApp(new AllowlistMailer(mailer, new Set(['nunrib@sapo.pt'])));
+  const blocked = await api(url, 'POST', '/api/auth/email/register', {
+    body: { email: 'visitor@example.com', password: 'long-enough-password' },
+  });
+  assert.equal(blocked.status, 503);
+  assert.equal(blocked.json.code, 'email_recipient_restricted');
+  assert.equal(mailer.sent.length, 0); // nothing left the platform
+  const allowed = await api(url, 'POST', '/api/auth/email/register', {
+    body: { email: 'nunrib@sapo.pt', password: 'long-enough-password' },
+  });
+  assert.equal(allowed.status, 200);
+  assert.equal(mailer.sent.length, 1);
+});
+
 test('known failures carry stable localization codes', async () => {
   const mailer = new FakeMailer();
   const url = await startApp(mailer);

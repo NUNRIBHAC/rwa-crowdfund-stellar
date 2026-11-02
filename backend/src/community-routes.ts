@@ -22,6 +22,7 @@ import type { Account } from './community-store.js';
 import { shareRegisterCsv, type ShareRegisterPayload } from './share-register.js';
 import { loginEmail, registerEmail, resendVerification, verifyEmailToken } from './email-auth.js';
 import type { Mailer } from './mailer.js';
+import { MailerError } from './mailer.js';
 
 // Express wiring for accounts, community, support and metadata APIs.
 // The admin gate is injected from server.ts so there is exactly one admin
@@ -70,7 +71,7 @@ function clientIp(req: express.Request): string | undefined {
 }
 
 function sendError(res: express.Response, err: unknown): void {
-  if (err instanceof AuthError || err instanceof CommunityError) {
+  if (err instanceof AuthError || err instanceof CommunityError || err instanceof MailerError) {
     res.status(err.status).json(err.code ? { error: err.message, code: err.code } : { error: err.message });
     return;
   }

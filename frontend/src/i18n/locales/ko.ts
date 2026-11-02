@@ -1709,6 +1709,7 @@ export const ko: Messages = {
     errorEmailUnverified: '이 이메일 주소는 아직 인증되지 않았습니다. 받은편지함을 확인하거나 새 인증 코드를 요청하세요.',
     errorLoginThrottled: '실패한 시도가 너무 많습니다. 몇 분 후 다시 시도하세요.',
     errorInvalidInput: '요청이 유효하지 않아 거부되었습니다. 입력란을 확인하고 다시 시도하세요.',
+    errorEmailRecipientRestricted: '이 배포에서는 이메일 발송이 승인된 테스트 수신자로 제한됩니다.',
     signedInTitle: '커뮤니티 계정',
     signedInAs: '로그인:',
     displayNameLabel: '표시 이름(댓글에 표시됨)',

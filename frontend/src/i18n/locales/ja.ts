@@ -1720,6 +1720,7 @@ export const ja: Messages = {
     errorEmailUnverified: 'このメールアドレスはまだ認証されていません。受信トレイを確認するか、新しい認証コードをリクエストしてください。',
     errorLoginThrottled: '失敗回数が多すぎます。数分待ってから再試行してください。',
     errorInvalidInput: 'リクエストは無効として拒否されました。入力欄を確認して再試行してください。',
+    errorEmailRecipientRestricted: 'このデプロイではメール送信は承認されたテスト受信者に限定されています。',
     signedInTitle: 'コミュニティアカウント',
     signedInAs: 'サインイン中:',
     displayNameLabel: '表示名(コメントに表示されます)',
