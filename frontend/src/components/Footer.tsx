@@ -17,7 +17,9 @@ export default function Footer() {
             {/* Social icons. Verified profiles are linked (YouTube, Instagram, Threads, email);
               the remaining platforms stay as visual presence only until their real profile
               URLs exist - no placeholder links. Discord links the user-created server
-              (never-expiring, unlimited-use invite confirmed by the owner on 2026-11-02). aria-labels are hardcoded English until the
+              (never-expiring, unlimited-use invite confirmed by the owner on 2026-11-02);
+              Telegram links the authorized public brand channel (public page and
+              t.me/s preview verified on 2026-11-02). aria-labels are hardcoded English until the
               locale batch adds footer keys. All platform glyphs are the user-provided set
               (brand/icons/social, Simple Icons geometry); linkedin.png is the official [in]
               Bug (InBug-Black, padded to a square transparent canvas) from LinkedIn's brand
@@ -36,7 +38,9 @@ export default function Footer() {
               <a href="https://www.youtube.com/@blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on YouTube">
                 <img src="/social/youtube.svg" alt="" />
               </a>
-              <img src="/social/telegram.svg" alt="" />
+              <a href="https://t.me/blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on Telegram">
+                <img src="/social/telegram.svg" alt="" />
+              </a>
               <a href="https://discord.gg/BdXATtWNXJ" target="_blank" rel="noopener" aria-label="Blockallisto on Discord">
                 <img src="/social/discord.svg" alt="" />
               </a>
