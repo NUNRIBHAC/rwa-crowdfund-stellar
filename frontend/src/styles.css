@@ -59,6 +59,15 @@ html[lang='de'] body {
   hyphens: auto;
 }
 
+/* German legal compounds ("Nutzungsbedingungen", "Beschwerdemanagement")
+   are wider than the default 200px footer column: they shattered mid-word
+   (or hyphenated into stubs) at desktop widths. Give German columns enough
+   room for the longest terms on one line; hyphenation stays the fallback
+   for anything longer. Scoped to lang=de so other locales are unchanged. */
+html[lang='de'] .footer-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
 code {
   font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   font-size: 0.85em;
