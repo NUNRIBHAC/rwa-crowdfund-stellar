@@ -69,9 +69,13 @@ const config: Config = {
       ]
     : [],
 
-  markdown: { mermaid: true },
+  // Mermaid only exists in internal docs; the theme bundles the whole
+  // mermaid library, so keep it out of the public build (weight and the
+  // Render free build's memory). A public doc that ever needs a diagram must
+  // move this flag back out of the conditional.
+  ...(isInternal ? { markdown: { mermaid: true } } : {}),
   themes: [
-    require.resolve('@docusaurus/theme-mermaid'),
+    ...(isInternal ? [require.resolve('@docusaurus/theme-mermaid')] : []),
     [
       require.resolve('@easyops-cn/docusaurus-search-local'),
       {
