@@ -1449,7 +1449,7 @@ export const de: Messages = {
     title: 'Kampagnen-Builder',
     badge: 'Entwurf',
     intro:
-      'Entwurfsvorschau, wie eine Kampagne für die Bereitstellung konfiguriert würde. Nichts hier stellt einen Vertrag bereit oder erstellt eine Kampagne: Das Absenden ist in dieser Demo deaktiviert. Die Felder folgen denselben Regeln, die der Vertrag und das Kampagnenregister durchsetzen.',
+      'Vorschau, wie eine Kampagne für die Bereitstellung konfiguriert würde. Die Felder folgen denselben Regeln wie der Vertrag und das Kampagnenregister. Die Bereitstellung ist nur im Testnet und auf Operator-Wallets beschränkt.',
     connectNote:
       'Verbinden Sie ein Wallet unter Mein Konto, um die Erstelleradresse in der Vorschau zu sehen. Nur das Ersteller-Wallet kann eine Bereitstellung autorisieren, und es kann erst nach Ablauf der Frist und nur dann auszahlen, wenn das Ziel erreicht wurde.',
     nameLabel: 'Projektname',
@@ -1473,6 +1473,14 @@ export const de: Messages = {
     previewConstructor: 'Konstruktorargumente des Vertrags (der Ersteller muss die Bereitstellung signieren):',
     previewRegistry: 'Eintrag im Kampagnenregister:',
     deployDisabled: 'Die Bereitstellung ist in dieser Demo nicht aktiviert',
+    operatorNote: 'Sie sind als Operator angemeldet: Die Bereitstellungsschaltfläche bereitet echte Testnet-Transaktionen vor, die Ihr Wallet signiert.',
+    deploy: 'Im Testnet bereitstellen',
+    deployBusy: 'Wird bereitgestellt…',
+    deployError: 'Bereitstellung fehlgeschlagen:',
+    deploySuccess: 'Kampagneninstanz im Testnet erstellt',
+    deployRegistryNote: 'Zum Auflisten fügen Sie diesen Eintrag dem Kampagnenregister hinzu (Operator-Konfiguration):',
+    deployResultAria: 'Bereitstellungsergebnis',
+    walletNoSign: 'Das Wallet hat die Transaktion nicht signiert.',
   },
   tour: {
     tourTitle: 'Kampagnen-Tour',

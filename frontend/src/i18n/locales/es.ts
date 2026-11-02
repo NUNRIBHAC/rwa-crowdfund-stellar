@@ -1461,7 +1461,7 @@ export const es: Messages = {
     title: 'Creador de campañas',
     badge: 'Borrador',
     intro:
-      'Vista previa en borrador de cómo se configuraría una campaña para su despliegue. Nada aquí despliega un contrato ni crea una campaña: el envío está desactivado en esta demostración. Los campos siguen las mismas reglas que aplican el contrato y el registro de campañas.',
+      'Vista previa de cómo se configuraría una campaña para su despliegue. Los campos siguen las mismas reglas del contrato y del registro de campañas. El despliegue es solo en testnet y está restringido a carteras de operador.',
     connectNote:
       'Conecta un monedero en Mi cuenta para previsualizar la dirección del creador. Solo el monedero del creador puede autorizar un despliegue, y solo puede retirar los fondos después de la fecha límite y únicamente si se alcanzó el objetivo.',
     nameLabel: 'Nombre del proyecto',
@@ -1485,6 +1485,14 @@ export const es: Messages = {
     previewConstructor: 'Argumentos del constructor del contrato (el creador debe firmar el despliegue):',
     previewRegistry: 'Entrada del registro de campañas:',
     deployDisabled: 'El despliegue no está habilitado en esta demostración',
+    operatorNote: 'Ha iniciado sesión como operador: el botón de despliegue prepara transacciones reales en testnet que firma su cartera.',
+    deploy: 'Desplegar en testnet',
+    deployBusy: 'Desplegando…',
+    deployError: 'El despliegue falló:',
+    deploySuccess: 'Instancia de campaña creada en testnet',
+    deployRegistryNote: 'Para listarla, añada esta entrada al registro de campañas (configuración de operador):',
+    deployResultAria: 'Resultado del despliegue',
+    walletNoSign: 'La cartera no firmó la transacción.',
   },
   tour: {
     tourTitle: 'Visita guiada de la campaña',

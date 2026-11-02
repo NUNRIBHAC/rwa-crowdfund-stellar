@@ -84,3 +84,44 @@ export function builderPreview(
     registryEntry: { id: input.slug, name: input.name, contractId: '<assigned at deployment>' },
   };
 }
+
+// --- Deployment orchestration ---
+// Two-step, wallet-signed deployment against the operator API: step 1
+// uploads the reviewed contract code (skipped by the server once the code
+// hash exists on the ledger), step 2 creates the campaign instance. The
+// signer callback is the ONLY place a wallet is asked to sign; the flow
+// never holds or sees a secret key. Dependencies are injected so the
+// sequence is testable without network or wallet.
+export type DeployBuildResult = { xdr: string; networkPassphrase: string; step: 'upload' | 'create' };
+export type DeploySubmitResult = {
+  step: 'upload' | 'create';
+  status: string;
+  confirmed: boolean;
+  contractId?: string;
+  registryEntry?: { id: string; name: string; contractId: string };
+  note?: string;
+  message?: string;
+};
+export async function runBuilderDeploy(
+  input: { name: string; slug: string; goal: string; deadline: number },
+  deps: {
+    build: (input: { id: string; name: string; goal: string; deadline: number }) => Promise<DeployBuildResult>;
+    sign: (xdr: string, networkPassphrase: string) => Promise<string>;
+    submit: (input: { xdr: string; name: string }) => Promise<DeploySubmitResult>;
+  },
+  onStep?: (step: 'uploaded') => void,
+): Promise<DeploySubmitResult> {
+  const buildInput = () => ({ id: input.slug, name: input.name, goal: input.goal, deadline: input.deadline });
+  let built = await deps.build(buildInput());
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const signedXdr = await deps.sign(built.xdr, built.networkPassphrase);
+    const result = await deps.submit({ xdr: signedXdr, name: input.name });
+    if (result.step === 'upload' && result.status === 'SUCCESS' && !result.registryEntry) {
+      onStep?.('uploaded');
+      built = await deps.build(buildInput());
+      continue;
+    }
+    return result;
+  }
+  throw new Error('deployment did not reach the create step after the code upload');
+}

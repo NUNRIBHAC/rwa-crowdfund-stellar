@@ -1408,7 +1408,7 @@ export const en = {
     title: 'Campaign builder',
     badge: 'DRAFT',
     intro:
-      'Draft preview of how a campaign would be configured for deployment. Nothing here deploys a contract or creates a campaign: submission is disabled in this demo. Fields follow the same rules the contract and the campaign registry enforce.',
+      'Preview how a campaign would be configured for deployment. Fields follow the same rules the contract and the campaign registry enforce. Deployment is testnet-only and restricted to operator wallets.',
     connectNote:
       'Connect a wallet under My account to preview the creator address. Only the creator wallet can authorise a deployment, and it can withdraw only after the deadline and only if the goal was reached.',
     nameLabel: 'Project name',
@@ -1432,6 +1432,14 @@ export const en = {
     previewConstructor: 'Contract constructor arguments (creator must sign the deployment):',
     previewRegistry: 'Campaign registry entry:',
     deployDisabled: 'Deployment is not enabled in this demo',
+    operatorNote: 'You are signed in as an operator: the deploy button prepares real testnet transactions that your wallet signs.',
+    deploy: 'Deploy to testnet',
+    deployBusy: 'Deploying…',
+    deployError: 'Deployment failed:',
+    deploySuccess: 'Campaign instance created on testnet',
+    deployRegistryNote: 'To list it, add this entry to the campaign registry (operator configuration):',
+    deployResultAria: 'Deployment result',
+    walletNoSign: 'The wallet did not sign the transaction.',
   },
   tour: {
     tourTitle: 'Campaign tour',

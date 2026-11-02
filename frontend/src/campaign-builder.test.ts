@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { builderComplete, builderPreview, deadlineToTimestamp, GOAL_UNITS_MAX, goalToUnits, validateBuilder } from './campaign-builder';
+import { builderComplete, builderPreview, deadlineToTimestamp, GOAL_UNITS_MAX, goalToUnits, runBuilderDeploy, validateBuilder } from './campaign-builder';
 
 // Fixed reference instant: 2026-11-15T12:00:00Z.
 const NOW = Math.floor(Date.parse('2026-11-15T12:00:00Z') / 1000);
@@ -85,5 +85,90 @@ describe('builderComplete and builderPreview', () => {
       deadline: Date.parse('2026-12-31T00:00:00Z') / 1000,
     });
     expect(p.registryEntry).toEqual({ id: 'solar-park', name: 'Solar park', contractId: '<assigned at deployment>' });
+  });
+});
+
+describe('runBuilderDeploy', () => {
+  const input = { name: 'Solar Nine', slug: 'solar-nine', goal: '250', deadline: 2000000000 };
+  const buildResult = (step: 'upload' | 'create') => ({ xdr: `xdr-${step}`, networkPassphrase: 'Test SDF Network ; September 2015', step });
+  it('runs upload then create, signing each envelope once', async () => {
+    const signed: string[] = [];
+    const steps: string[] = [];
+    const result = await runBuilderDeploy(
+      input,
+      {
+        build: async () => buildResult(signed.length === 0 ? 'upload' : 'create'),
+        sign: async (xdr) => {
+          signed.push(xdr);
+          return `signed-${xdr}`;
+        },
+        submit: async ({ xdr }) =>
+          xdr === 'signed-xdr-upload'
+            ? { step: 'upload', status: 'SUCCESS', confirmed: true, message: 'uploaded' }
+            : {
+                step: 'create',
+                status: 'SUCCESS',
+                confirmed: true,
+                contractId: 'CABC',
+                registryEntry: { id: 'solar-nine', name: 'Solar Nine', contractId: 'CABC' },
+              },
+      },
+      (s) => steps.push(s),
+    );
+    expect(result.contractId).toBe('CABC');
+    expect(signed).toEqual(['xdr-upload', 'xdr-create']);
+    expect(steps).toEqual(['uploaded']);
+  });
+  it('returns immediately when the first build is already the create step', async () => {
+    let builds = 0;
+    const result = await runBuilderDeploy(input, {
+      build: async () => {
+        builds++;
+        return buildResult('create');
+      },
+      sign: async (xdr) => `signed-${xdr}`,
+      submit: async () => ({
+        step: 'create',
+        status: 'SUCCESS',
+        confirmed: true,
+        contractId: 'CABC',
+        registryEntry: { id: 'solar-nine', name: 'Solar Nine', contractId: 'CABC' },
+      }),
+    });
+    expect(builds).toBe(1);
+    expect(result.registryEntry?.contractId).toBe('CABC');
+  });
+  it('refuses to loop forever when every submit looks like an upload', async () => {
+    let submits = 0;
+    await expect(
+      runBuilderDeploy(input, {
+        build: async () => buildResult('upload'),
+        sign: async (xdr) => `signed-${xdr}`,
+        submit: async () => {
+          submits++;
+          return { step: 'upload', status: 'SUCCESS', confirmed: true };
+        },
+      }),
+    ).rejects.toThrow(/did not reach the create step/);
+    expect(submits).toBe(2);
+  });
+  it('returns an unconfirmed result instead of guessing success', async () => {
+    const result = await runBuilderDeploy(input, {
+      build: async () => buildResult('create'),
+      sign: async (xdr) => `signed-${xdr}`,
+      submit: async () => ({ step: 'create', status: 'PENDING', confirmed: false, message: 'check the hash' }),
+    });
+    expect(result.confirmed).toBe(false);
+  });
+  it('propagates wallet refusal to sign', async () => {
+    await expect(
+      runBuilderDeploy(input, {
+        build: async () => buildResult('create'),
+        sign: async () => {
+          throw new Error('user declined');
+        },
+        submit: async () => ({ step: 'create', status: 'SUCCESS', confirmed: true }),
+      }),
+    ).rejects.toThrow(/user declined/);
   });
 });
