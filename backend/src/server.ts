@@ -24,6 +24,7 @@ import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.j
 import { backfillCampaignContributors } from './contributor-backfill.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
 import { buildShareRegister, type ShareRegisterPayload } from './share-register.js';
+import { archiveCampaignEvents, eventArchiveBackend, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -193,6 +194,18 @@ const backfillContributorRegistry = async (): Promise<void> => {
     } catch (err) {
       console.error('contributor backfill failed:', c.id, err instanceof Error ? err.message : err);
     }
+    // Verbatim chain-event archive (prospective, never pruned). Runs on the
+    // same cadence as the contributor backfill; its own store and checkpoint
+    // so a contributor-registry issue can never block archiving and vice
+    // versa. Gaps (RPC floor passed the cursor) are logged loudly and kept
+    // on the checkpoint for the reconciliation view.
+    try {
+      const store = await eventArchiveBackend();
+      const a = await archiveCampaignEvents({ client: sorobanDeps.client(), campaignId: c.id, contractId: c.contractId, store });
+      if (a.gap) console.error('event archive gap:', c.id, a.gap);
+    } catch (err) {
+      console.error('event archive failed:', c.id, err instanceof Error ? err.message : err);
+    }
   }
 };
 void backfillContributorRegistry();
@@ -282,12 +295,28 @@ const reconciliationPayload = async () => {
   } catch (err) {
     console.error('contributor backfill coverage read failed:', err instanceof Error ? err.message : err);
   }
+  // Event-archive coverage per campaign: durable verbatim copy size plus the
+  // archive checkpoint (gap/floor fields travel verbatim). A missing entry
+  // means no archive pass has completed for that campaign. Store failure
+  // omits the field rather than blocking reconciliation.
+  let eventArchive: Record<string, unknown> | undefined;
+  try {
+    const store = await eventArchiveBackend();
+    eventArchive = {};
+    for (const c of campaigns) {
+      eventArchive[c.id] = { events: await store.count(c.id), checkpoint: (await store.readCheckpoint(c.id)) ?? null };
+    }
+  } catch (err) {
+    console.error('event archive coverage read failed:', err instanceof Error ? err.message : err);
+    eventArchive = undefined;
+  }
   return {
     generatedAt: new Date().toISOString(),
     network: NETWORK,
     semantics: RECONCILIATION_SEMANTICS,
     ...result,
     ...(contributorBackfill !== undefined ? { contributorBackfill } : {}),
+    ...(eventArchive !== undefined ? { eventArchive } : {}),
   };
 };
 
@@ -308,6 +337,32 @@ const shareRegisterPayload = async (campaignId: string): Promise<ShareRegisterPa
 app.get('/api/admin/reconciliation', requireAdmin, async (_req, res) => {
   try {
     res.json(await reconciliationPayload());
+  } catch (err) {
+    res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
+
+// Independent-backup endpoints for the chain-event archive. The snapshot is
+// the off-database copy (an operator cron fetches and stores it outside the
+// database host); posting a snapshot back verifies a restored (or current)
+// store row-by-row. Admin-gated; never public.
+app.get('/api/admin/event-archive/snapshot', requireAdmin, async (_req, res) => {
+  try {
+    const store = await eventArchiveBackend();
+    res.type('application/x-ndjson').send(archiveSnapshotJsonl(await store.list()));
+  } catch (err) {
+    res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
+
+app.post('/api/admin/event-archive/snapshot/verify', requireAdmin, express.text({ limit: '25mb', type: () => true }), async (req, res) => {
+  try {
+    if (typeof req.body !== 'string' || req.body.length === 0) {
+      res.status(400).json({ error: 'snapshot body required (JSONL text)' });
+      return;
+    }
+    const store = await eventArchiveBackend();
+    res.json(verifyArchiveSnapshot(req.body, await store.list()));
   } catch (err) {
     res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
   }
