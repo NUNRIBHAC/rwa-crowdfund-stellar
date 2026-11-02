@@ -20,6 +20,7 @@ import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaig
 import { metadataFor } from './campaign-metadata.js';
 import type { Account } from './community-store.js';
 import { shareRegisterCsv, type ShareRegisterPayload } from './share-register.js';
+import { buildShareRegisterPdf } from './share-register-pdf.js';
 import {
   DEFAULT_MAIL_BUDGET_PER_DAY,
   DEFAULT_MAIL_BUDGET_PER_HOUR,
@@ -540,6 +541,23 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         return;
       }
       res.type('text/csv').send(shareRegisterCsv(payload));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.get('/api/campaigns/:id/share-register.pdf', requireAdmin, async (req, res) => {
+    if (!deps.shareRegister) {
+      res.status(503).json({ error: 'share register unavailable: provider not configured' });
+      return;
+    }
+    try {
+      const payload = await deps.shareRegister(requireCampaignId(req.params.id));
+      if (!payload) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      const pdf = await buildShareRegisterPdf(payload);
+      res.type('application/pdf').send(pdf);
     } catch (err) {
       sendError(res, err);
     }
