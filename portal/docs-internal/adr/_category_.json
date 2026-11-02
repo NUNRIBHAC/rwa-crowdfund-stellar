@@ -1,0 +1,5 @@
+{
+  "label": "Architecture decisions",
+  "position": 2,
+  "link": { "type": "generated-index", "description": "Architecture Decision Records - why the prototype is built the way it is, with source anchors." }
+}

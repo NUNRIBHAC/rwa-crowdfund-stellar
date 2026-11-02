@@ -69,7 +69,9 @@ const config: Config = {
       ]
     : [],
 
+  markdown: { mermaid: true },
   themes: [
+    require.resolve('@docusaurus/theme-mermaid'),
     [
       require.resolve('@easyops-cn/docusaurus-search-local'),
       {
