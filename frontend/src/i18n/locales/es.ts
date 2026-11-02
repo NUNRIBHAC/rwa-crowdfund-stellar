@@ -285,7 +285,7 @@ export const es: Messages = {
     investorSteps: [
       {
         title: 'Registro e inicio de sesión',
-        text: 'Una plataforma en producción exige una cuenta con confirmación de correo y credenciales. Este prototipo tiene en su lugar un inicio de sesión comunitario opcional: demuestras el control de tu cartera Freighter firmando un reto único - sin registro por correo, sin contraseña. La cartera es la única identidad.',
+        text: 'Una plataforma en producción exige una cuenta con confirmación de correo y credenciales. Este prototipo ofrece exactamente eso como identidad comunitaria opcional: registro por correo con token de confirmación y contraseña, o inicio de sesión demostrando el control de tu cartera Freighter con un reto único. La incorporación de producción obligatoria (identidad verificada, inversión restringida) no está implementada.',
       },
       {
         title: 'Verificación de identidad (KYC)',
@@ -491,7 +491,7 @@ export const es: Messages = {
     payoutsUnavailable: 'No se pudo cargar el historial de pagos. Esto no significa que no haya pagos; inténtalo de nuevo más tarde.',
     documentsAria: 'Documentos de inversión',
     documentsTitle: 'Documentos de inversión',
-    documentsEmpty: 'No hay documentos publicados para esta campaña.',
+    documentsEmpty: 'No hay documentos públicos publicados para esta campaña.',
     investorDocsEmpty: 'Aún no hay documentos de inversión disponibles para esta campaña.',
     investorDocsUnavailable: 'No se pudieron cargar los documentos de inversión. Esto no significa que no existan; inténtalo de nuevo más tarde.',
     investorDocsDownload: 'Descargar',
@@ -541,7 +541,7 @@ export const es: Messages = {
       },
       {
         label: 'Cualificación del inversor',
-        note: 'La prueba de conocimientos y la comprobación de capacidad de pérdidas son pasos de cumplimiento planeados; no implementados aquí.',
+        note: 'La prueba de conocimientos y la simulación de capacidad de pérdidas existen como demostración en esta página; la recogida de datos reales permanece cerrada en este prototipo.',
       },
       {
         label: 'Verificación (KYC)',
@@ -945,7 +945,7 @@ export const es: Messages = {
           },
           {
             q: '¿Necesito mi propia cartera?',
-            a: 'Sí. Este diseño mantiene las claves con el usuario: la cartera Freighter es la única identidad y firma cada transacción. La plataforma no guarda claves ni saldos propios. Algunas plataformas en producción custodian activos a través de socios especializados; este prototipo deliberadamente no lo hace.',
+            a: 'Sí, para invertir. Este diseño mantiene las claves con el usuario: la cartera Freighter firma cada transacción y la plataforma no guarda claves ni saldos propios. El inicio de sesión puede ser por cartera o por registro opcional con correo; ninguno comparte tus claves con el sitio. Algunas plataformas en producción custodian activos a través de socios especializados; este prototipo deliberadamente no lo hace.',
             state: 'live',
           },
           {
@@ -1076,7 +1076,7 @@ export const es: Messages = {
         entries: [
           {
             q: '¿Necesito una cuenta?',
-            a: 'Sin registro por correo y sin contraseña. Un inicio de sesión comunitario opcional demuestra el control de tu cartera Freighter firmando un reto único. La cartera es la única identidad, y conectar o firmar nunca comparte tus claves con el sitio.',
+            a: 'Opcional. Puedes registrarte con correo y contraseña (confirmado con un token de un solo uso), o iniciar sesión demostrando el control de tu cartera Freighter con un reto único. Conectar o firmar nunca comparte tus claves con el sitio.',
             state: 'live',
           },
           {
@@ -1852,7 +1852,7 @@ export const es: Messages = {
     },
     company: {
       title: 'Cuentas de empresa',
-      note: 'Solicite una cuenta de empresa vinculada a su monedero. La revisión es manual, igual que las solicitudes de emisor. Transparencia de la demo: los datos de registro que introduce son declarados por el solicitante; en este prototipo no se sube ni se verifica ninguna certificación registral ni documentos de identidad de los titulares. Invertir desde un contexto de empresa está planeado y no está activo aquí.',
+      note: 'Solicite una cuenta de empresa vinculada a su cuenta comunitaria. La revisión es manual, igual que las solicitudes de emisor. Transparencia de la demo: los datos de registro que introduce son declarados por el solicitante; en este prototipo no se sube ni se verifica ninguna certificación registral ni documentos de identidad de los titulares. Invertir desde un contexto de empresa está planeado y no está activo aquí.',
       listTitle: 'Mis solicitudes de empresa',
       empty: 'Aún no hay solicitudes de empresa.',
       formTitle: 'Solicitar una cuenta de empresa',
@@ -1873,6 +1873,7 @@ export const es: Messages = {
     },
     totpTitle: 'Autenticación de dos factores',
     totpExplainer: 'Tu firma de monedero fue aceptada. Esta cuenta también requiere un código de tu aplicación de autenticación.',
+    totpExplainerEmail: 'Tu contraseña fue aceptada. Esta cuenta también requiere un código de tu aplicación de autenticación.',
     totpCodeLabel: 'Código de autenticación',
     totpSubmit: 'Verificar e iniciar sesión',
     totpRecoveryHint: '¿Perdiste el acceso a tu autenticador? Introduce uno de tus códigos de recuperación.',
@@ -1880,7 +1881,9 @@ export const es: Messages = {
       totpTitle: 'Autenticación de dos factores',
       totpOffNote:
         'Añade una aplicación de autenticación como segundo paso tras tu firma de monedero. Opcional; tu monedero sigue siendo la credencial principal.',
+      totpOffNoteEmail: 'Añade una aplicación de autenticación como segundo paso tras tu contraseña. Opcional; tu contraseña sigue siendo la credencial principal.',
       totpOnNote: 'La autenticación de dos factores está activada: tras tu firma de monedero, el inicio de sesión también pide un código de autenticación.',
+      totpOnNoteEmail: 'La autenticación de dos factores está activada: tras tu contraseña, el inicio de sesión también pide un código de autenticación.',
       totpEnable: 'Activar dos factores',
       totpDisable: 'Desactivar dos factores',
       totpScanNote:
@@ -1899,6 +1902,8 @@ export const es: Messages = {
       title: 'Seguridad',
       authMethodNote:
         'Inicias sesión firmando un mensaje con tu monedero Stellar: el monedero es la credencial. Este prototipo no tiene contraseña; abajo puedes añadir un autenticador de dos factores opcional.',
+      authMethodNoteEmail:
+        'Inicias sesión con tu correo y contraseña: la contraseña es la credencial. Puedes añadir abajo un autenticador de dos factores opcional.',
       sessionsTitle: 'Sesiones activas',
       sessionLabel: 'Sesión',
       currentBadge: 'Esta sesión',

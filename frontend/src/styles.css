@@ -81,6 +81,20 @@ code {
   column-gap: 24px;
   row-gap: 6px;
 }
+
+/* Keep anchored sections clear of the sticky header on hash jumps */
+h1[id],
+h2[id],
+section[id] {
+  scroll-margin-top: 96px;
+}
+@media (max-width: 640px) {
+  h1[id],
+  h2[id],
+  section[id] {
+    scroll-margin-top: 132px;
+  }
+}
 .brand {
   display: flex;
   align-items: center;

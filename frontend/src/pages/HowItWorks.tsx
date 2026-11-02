@@ -4,7 +4,7 @@ import { useI18n } from '../i18n';
 // prototype, or planned and not implemented. Nothing planned is made to look live.
 export default function HowItWorks() {
   const { m } = useI18n();
-  const investorStates = ['planned', 'planned', 'planned', 'live', 'live', 'planned', 'live', 'planned', 'planned'];
+  const investorStates = ['live', 'planned', 'planned', 'live', 'live', 'planned', 'live', 'planned', 'planned'];
   const issuerStates = ['planned', 'planned', 'live', 'live', 'planned'];
 
   const StepList = ({ title, steps, states }: { title: string; steps: { title: string; text: string }[]; states: string[] }) => (
