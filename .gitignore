@@ -37,3 +37,8 @@ docs/skills-reference/private/
 portal/build-public/
 portal/build-internal/
 portal/.docusaurus/
+
+# Playwright / Argos artifacts
+frontend/test-results/
+frontend/playwright-report/
+frontend/screenshots/
