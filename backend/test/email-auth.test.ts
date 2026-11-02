@@ -535,3 +535,50 @@ test('cooldown timing (direct calls with injected clock): resend and reset send 
     return true;
   });
 });
+
+test('global mail budget: cap, refund on provider failure, window pruning, persistence, concurrency', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-budget-'));
+  const file = path.join(dir, 'store.json');
+  const store = new FileCommunityStore(file);
+  const mailer = new FakeMailer();
+  const t0 = 1_800_000_000_000;
+  const pw = { password: 'correct horse battery' };
+
+  // Budget 2/hour: two sends pass, the third is refused before any provider call.
+  await registerEmail(store, mailer, { email: 'one@example.com', ...pw }, t0, 2);
+  await registerEmail(store, mailer, { email: 'two@example.com', ...pw }, t0, 2);
+  assert.equal(mailer.sent.length, 2);
+  await assert.rejects(registerEmail(store, mailer, { email: 'three@example.com', ...pw }, t0, 2), (err: unknown) => {
+    assert.equal((err as { code?: string }).code, 'email_budget_exceeded');
+    assert.equal((err as { status?: number }).status, 503);
+    return true;
+  });
+  assert.equal(mailer.sent.length, 2);
+
+  // Persistence: a fresh store instance over the same file still sees the spent budget.
+  const reopened = new FileCommunityStore(file);
+  await assert.rejects(registerEmail(reopened, mailer, { email: 'four@example.com', ...pw }, t0 + 60 * 1000, 2));
+  assert.equal(mailer.sent.length, 2);
+
+  // Window pruning: after the rolling hour, sending resumes.
+  await registerEmail(reopened, mailer, { email: 'later@example.com', ...pw }, t0 + 61 * 60 * 1000, 2);
+  assert.equal(mailer.sent.length, 3);
+
+  // Refund: a provider failure frees the reserved slot for an immediate retry.
+  const failing: Mailer = { send: () => Promise.reject(new Error('provider down')) };
+  await assert.rejects(registerEmail(reopened, failing, { email: 'retry@example.com', ...pw }, t0 + 62 * 60 * 1000, 2));
+  await registerEmail(reopened, mailer, { email: 'retry@example.com', ...pw }, t0 + 62 * 60 * 1000, 2);
+  assert.equal(mailer.sent.length, 4);
+
+  // Concurrency: budget 1, two simultaneous registrations - exactly one sends.
+  const dir2 = fs.mkdtempSync(path.join(os.tmpdir(), 'email-budget-race-'));
+  const raceStore = new FileCommunityStore(path.join(dir2, 'store.json'));
+  const raceMailer = new FakeMailer();
+  const results = await Promise.allSettled([
+    registerEmail(raceStore, raceMailer, { email: 'r1@example.com', ...pw }, t0, 1),
+    registerEmail(raceStore, raceMailer, { email: 'r2@example.com', ...pw }, t0, 1),
+  ]);
+  assert.equal(results.filter((r) => r.status === 'fulfilled').length, 1);
+  assert.equal(results.filter((r) => r.status === 'rejected').length, 1);
+  assert.equal(raceMailer.sent.length, 1);
+});

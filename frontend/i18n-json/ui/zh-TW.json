@@ -1658,6 +1658,7 @@
     "emailResendDone": "如果該地址已註冊，新權杖正在發送中。",
     "emailDemoNote": "示範環境：送達取決於已設定的郵件服務商。如未收到，請聯絡網站營運方。",
     "errorEmailProviderUnavailable": "此部署未設定電子郵件服務商，因此無法使用電子郵件註冊與登入。您仍可使用錢包登入。",
+    "errorEmailBudgetExceeded": "由於過去一小時內發送的郵件過多，此部署已暫時暫停郵件發送。請稍後重試。",
     "errorRateLimited": "來自此網路的嘗試次數過多。請稍候再試。",
     "errorEmailInvalid": "此電子郵件地址似乎無效。",
     "errorPasswordShort": "密碼太短：請至少使用 10 個字元。",

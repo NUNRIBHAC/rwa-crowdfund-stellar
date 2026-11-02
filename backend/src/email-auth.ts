@@ -31,6 +31,33 @@ import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './acco
 import type { Mailer } from './mailer.js';
 
 export const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+export const DEFAULT_MAIL_BUDGET_PER_HOUR = 50;
+const MAIL_BUDGET_WINDOW_MS = 60 * 60 * 1000;
+
+// Global outbound-mail budget: one rolling hour of send timestamps, reserved
+// INSIDE the atomic store change so concurrent requests cannot both pass a
+// full budget, and persisted so a restart/redeploy cannot reset it. This caps
+// what rotating recipient+IP combinations can drain from the provider, which
+// the per-email and per-IP limits alone cannot. On a provider failure the
+// caller refunds the slot (best-effort: a lost refund only tightens the cap).
+function reserveMailSlot(state: { mailSendLog: number[] }, now: number, maxPerHour: number): void {
+  const log = state.mailSendLog.filter((t) => now - t < MAIL_BUDGET_WINDOW_MS);
+  if (log.length >= maxPerHour) {
+    throw new AuthError(503, 'email sending budget exhausted; retry later', 'email_budget_exceeded');
+  }
+  log.push(now);
+  state.mailSendLog = log;
+}
+
+async function refundMailSlot(store: CommunityStore, at: number): Promise<void> {
+  await store
+    .change((state) => {
+      const log = state.mailSendLog;
+      const i = log.lastIndexOf(at);
+      if (i >= 0) log.splice(i, 1);
+    })
+    .catch(() => undefined);
+}
 export const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 export const EMAIL_RESEND_COOLDOWN_MS = 10 * 60 * 1000;
 export const EMAIL_MAX_FAILURES = 5;
@@ -117,22 +144,28 @@ function resetEmailText(email: string, token: string): string {
   ].join('\n');
 }
 
-async function issueVerification(store: CommunityStore, mailer: Mailer, credential: EmailCredential, now: number): Promise<void> {
+async function issueVerification(store: CommunityStore, mailer: Mailer, credential: EmailCredential, now: number, maxPerHour: number): Promise<void> {
   const token = `blv_${randomBytes(24).toString('hex')}`;
   await store.change((state) => {
     const current = state.emailCredentials[credential.email];
     if (!current) throw new AuthError(404, 'account not found');
+    reserveMailSlot(state, now, maxPerHour);
     current.verifyTokenHash = createHash('sha256').update(token).digest('hex');
     current.verifyExpiresAt = now + VERIFY_TOKEN_TTL_MS;
   });
   // Send AFTER the hash is durably stored: a delivered token must always be
   // redeemable. If the send throws, the caller reports failure and the user
   // can request a fresh token via resend.
-  await mailer.send({
-    to: credential.email,
-    subject: 'Blockallisto demo - verify your email',
-    text: verificationEmailText(credential.email, token),
-  });
+  try {
+    await mailer.send({
+      to: credential.email,
+      subject: 'Blockallisto demo - verify your email',
+      text: verificationEmailText(credential.email, token),
+    });
+  } catch (err) {
+    await refundMailSlot(store, now);
+    throw err;
+  }
 }
 
 // Register a new email account. Anti-enumeration: the response is identical
@@ -143,6 +176,7 @@ export async function registerEmail(
   mailer: Mailer,
   input: { email: unknown; password: unknown },
   now = Date.now(),
+  maxPerHour = DEFAULT_MAIL_BUDGET_PER_HOUR,
 ): Promise<{ status: 'verification-sent' }> {
   const email = normalizeEmail(input.email);
   const password = validatePassword(input.password);
@@ -185,7 +219,7 @@ export async function registerEmail(
     return credential;
   });
   if (!created) return { status: 'verification-sent' };
-  await issueVerification(store, mailer, created, now);
+  await issueVerification(store, mailer, created, now, maxPerHour);
   // Cooldown marker only after a successful send: a provider failure (503)
   // must not lock the user out of an immediate retry.
   await store.change((state) => {
@@ -200,6 +234,7 @@ export async function resendVerification(
   mailer: Mailer,
   input: { email: unknown },
   now = Date.now(),
+  maxPerHour = DEFAULT_MAIL_BUDGET_PER_HOUR,
 ): Promise<{ status: 'verification-sent' }> {
   const email = normalizeEmail(input.email);
   const credential = await store.change((state) => {
@@ -211,7 +246,7 @@ export async function resendVerification(
     return existing;
   });
   if (!credential) return { status: 'verification-sent' }; // same anti-enumeration shape
-  await issueVerification(store, mailer, credential, now);
+  await issueVerification(store, mailer, credential, now, maxPerHour);
   // Mark the cooldown only after a successful send: a provider failure (503)
   // must not lock the user out of an immediate retry.
   await store.change((state) => {
@@ -230,6 +265,7 @@ export async function requestPasswordReset(
   mailer: Mailer,
   input: { email: unknown },
   now = Date.now(),
+  maxPerHour = DEFAULT_MAIL_BUDGET_PER_HOUR,
 ): Promise<{ status: 'reset-sent' }> {
   const email = normalizeEmail(input.email);
   const prepared = await store.change((state) => {
@@ -237,16 +273,22 @@ export async function requestPasswordReset(
     if (!credential || !credential.verified) return null;
     if (credential.resetSentAt && now - credential.resetSentAt < EMAIL_RESEND_COOLDOWN_MS) return null;
     const token = `blr_${randomBytes(24).toString('hex')}`;
+    reserveMailSlot(state, now, maxPerHour);
     credential.resetTokenHash = createHash('sha256').update(token).digest('hex');
     credential.resetExpiresAt = now + RESET_TOKEN_TTL_MS;
     return { token };
   });
   if (!prepared) return { status: 'reset-sent' };
-  await mailer.send({
-    to: email,
-    subject: 'Blockallisto demo - reset your password',
-    text: resetEmailText(email, prepared.token),
-  });
+  try {
+    await mailer.send({
+      to: email,
+      subject: 'Blockallisto demo - reset your password',
+      text: resetEmailText(email, prepared.token),
+    });
+  } catch (err) {
+    await refundMailSlot(store, now);
+    throw err;
+  }
   // Cooldown marker only after a successful send (provider 503 -> free retry).
   await store.change((state) => {
     const current = state.emailCredentials[email];

@@ -80,6 +80,7 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
   login_throttled: 'errorLoginThrottled',
   invalid_input: 'errorInvalidInput',
   email_recipient_restricted: 'errorEmailRecipientRestricted',
+  email_budget_exceeded: 'errorEmailBudgetExceeded',
   totp_unconfigured: 'errorTotpUnconfigured',
   totp_already_enabled: 'errorTotpAlreadyEnabled',
   totp_no_enrollment: 'errorTotpNoEnrollment',

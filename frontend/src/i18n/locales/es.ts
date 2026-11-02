@@ -1807,6 +1807,8 @@ export const es: Messages = {
     emailDemoNote: 'Entorno de demostración: la entrega depende del proveedor de email configurado. Si no llega nada, pregunta al operador del sitio.',
     errorEmailProviderUnavailable:
       'El registro y el inicio de sesión por email no están disponibles en este entorno porque no hay ningún proveedor de email configurado. Puedes seguir iniciando sesión con tu cartera.',
+    errorEmailBudgetExceeded:
+      'El envío de emails está pausado temporalmente en esta implementación porque se enviaron demasiados mensajes en la última hora. Inténtalo más tarde.',
     errorRateLimited: 'Demasiados intentos desde esta red. Espera un momento y vuelve a intentarlo.',
     errorEmailInvalid: 'Esa dirección de email no parece válida.',
     errorPasswordShort: 'Contraseña demasiado corta: usa al menos 10 caracteres.',

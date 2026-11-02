@@ -1752,6 +1752,7 @@ export const en = {
     emailDemoNote: 'Demo environment: delivery depends on the configured email provider. If nothing arrives, ask the site operator.',
     errorEmailProviderUnavailable:
       'Email registration and sign-in are not available on this deployment because no email provider is configured. You can still sign in with your wallet.',
+    errorEmailBudgetExceeded: 'Email sending is temporarily paused on this deployment because too many messages went out in the last hour. Try again later.',
     errorRateLimited: 'Too many attempts from this network. Please wait a while and try again.',
     errorEmailInvalid: 'That email address does not look valid.',
     errorPasswordShort: 'Password is too short: use at least 10 characters.',

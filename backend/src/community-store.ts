@@ -374,6 +374,9 @@ export type CommunityState = {
   companies: Record<string, CompanyApplication>;
   notifications: Record<string, Notification>;
   audit: AuditEntry[];
+  // Rolling 1h outbound-mail timestamps (global provider budget). Persisted
+  // so a restart/redeploy cannot reset the budget.
+  mailSendLog: number[];
 };
 
 export function emptyCommunityState(): CommunityState {
@@ -397,6 +400,7 @@ export function emptyCommunityState(): CommunityState {
     companies: {},
     notifications: {},
     audit: [],
+    mailSendLog: [],
   };
 }
 
@@ -423,6 +427,8 @@ function validate(state: any): CommunityState {
   if (state && state.version === 1 && !state.emailCredentials) state.emailCredentials = {};
   // Same forward-compatible default for docs written before investment documents.
   if (state && state.version === 1 && !state.investmentDocuments) state.investmentDocuments = {};
+  // Same forward-compatible default for docs written before the mail budget.
+  if (state && state.version === 1 && !state.mailSendLog) state.mailSendLog = [];
   if (
     !state ||
     state.version !== 1 ||

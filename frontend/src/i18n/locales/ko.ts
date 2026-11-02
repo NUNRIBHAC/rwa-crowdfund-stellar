@@ -1719,6 +1719,7 @@ export const ko: Messages = {
     emailDemoNote: '데모 환경: 전달은 설정된 이메일 제공업체에 따라 달라집니다. 도착하지 않으면 사이트 운영자에게 문의하세요.',
     errorEmailProviderUnavailable:
       '이 배포에는 이메일 제공업체가 설정되어 있지 않아 이메일 가입 및 로그인을 사용할 수 없습니다. 지갑으로는 계속 로그인할 수 있습니다.',
+    errorEmailBudgetExceeded: '지난 1시간 동안 너무 많은 메시지가 발송되어 이 배포에서 이메일 발송이 일시 중지되었습니다. 나중에 다시 시도하세요.',
     errorRateLimited: '이 네트워크에서 시도가 너무 많습니다. 잠시 후 다시 시도하세요.',
     errorEmailInvalid: '유효하지 않은 이메일 주소로 보입니다.',
     errorPasswordShort: '비밀번호가 너무 짧습니다. 10자 이상 사용하세요.',
