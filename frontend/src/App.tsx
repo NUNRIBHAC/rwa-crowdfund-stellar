@@ -60,18 +60,38 @@ export default function App() {
     if (!id) return;
     let cancelled = false;
     let attempts = 0;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const headerH = () => {
+      const v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sticky-header-h'));
+      return Number.isFinite(v) ? v : 0;
+    };
     const tryScroll = () => {
       if (cancelled) return;
       const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView?.();
+      if (!el) {
+        if (++attempts < 20) timers.push(setTimeout(tryScroll, 150));
         return;
       }
-      if (++attempts < 20) setTimeout(tryScroll, 150);
+      el.scrollIntoView?.();
+      // The sticky header can still grow after the first scroll (locale
+      // fonts settle, nav wraps to a second row), and scroll-margin-top uses
+      // the height at scroll time - re-apply the scroll once the header has
+      // settled, but only while the target is actually clipped behind it,
+      // so a user scroll in between is never undone.
+      for (const ms of [400, 1200]) {
+        timers.push(
+          setTimeout(() => {
+            if (cancelled) return;
+            const top = el.getBoundingClientRect().top;
+            if (top >= 0 && top < headerH()) el.scrollIntoView?.();
+          }, ms),
+        );
+      }
     };
     tryScroll();
     return () => {
       cancelled = true;
+      for (const t of timers) clearTimeout(t);
     };
   }, [route]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
