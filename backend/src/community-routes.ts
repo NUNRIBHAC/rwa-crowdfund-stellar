@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import express from 'express';
 import { ZodError } from 'zod';
 import {
@@ -256,6 +257,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     const trustMode =
       depthRaw !== '' && Number.isInteger(Number(depthRaw)) && Number(depthRaw) >= 1 ? 'depth' : process.env.TRUST_PROXY === '1' ? 'legacy' : 'none';
     const resolved = clientIp(req);
+    // Transient equality proof without raw-IP disclosure: the caller passes
+    // ?expect=<sha256-hex of a candidate address> and learns only WHICH
+    // positions (if any) hold that address - never any address itself. Used
+    // to bind the measured chain to an independently known controlled egress.
+    const expect = typeof req.query.expect === 'string' && /^[0-9a-f]{64}$/.test(req.query.expect) ? req.query.expect : null;
+    const matches = (ip: string) => expect !== null && createHash('sha256').update(ip).digest('hex') === expect;
     res.json({
       chainLength: chain.length,
       chainClasses: chain.map(ipClass),
@@ -265,6 +272,13 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       // True when the resolved client IP is steerable by the leftmost XFF
       // entry (spoofable) under the CURRENT trust settings.
       leftmostSteersClient: trustMode === 'legacy' && chain.length > 0 && resolved === chain[0],
+      ...(expect !== null
+        ? {
+            matchedPositions: chain.flatMap((entry, i) => (matches(entry) ? [i] : [])),
+            socketMatch: req.socket.remoteAddress ? matches(req.socket.remoteAddress) : false,
+            resolvedMatch: resolved ? matches(resolved) : false,
+          }
+        : {}),
     });
   });
   router.post('/api/auth/email/register', async (req, res) => {
