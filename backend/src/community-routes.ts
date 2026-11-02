@@ -159,7 +159,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         await registerEmail(
           store,
           requireMailer(),
-          { email: req.body?.email, password: req.body?.password },
+          { email: req.body?.email, password: req.body?.password, locale: req.body?.locale },
           Date.now(),
           mailBudgetPerHour(),
           mailBudgetPerDay(),
@@ -174,7 +174,16 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-resend-ip:${ip}`, 10, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
-      res.json(await resendVerification(store, requireMailer(), { email: req.body?.email }, Date.now(), mailBudgetPerHour(), mailBudgetPerDay()));
+      res.json(
+        await resendVerification(
+          store,
+          requireMailer(),
+          { email: req.body?.email, locale: req.body?.locale },
+          Date.now(),
+          mailBudgetPerHour(),
+          mailBudgetPerDay(),
+        ),
+      );
     } catch (err) {
       sendError(res, err);
     }
@@ -184,7 +193,16 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-reset-request-ip:${ip}`, 10, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
-      res.json(await requestPasswordReset(store, requireMailer(), { email: req.body?.email }, Date.now(), mailBudgetPerHour(), mailBudgetPerDay()));
+      res.json(
+        await requestPasswordReset(
+          store,
+          requireMailer(),
+          { email: req.body?.email, locale: req.body?.locale },
+          Date.now(),
+          mailBudgetPerHour(),
+          mailBudgetPerDay(),
+        ),
+      );
     } catch (err) {
       sendError(res, err);
     }

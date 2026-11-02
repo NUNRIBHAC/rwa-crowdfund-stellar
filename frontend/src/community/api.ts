@@ -169,10 +169,14 @@ export const verifyChallenge = (publicKey: string, signature: string) => call<Ve
 // Email + password registration/login (backend email-auth.ts). Register and
 // resend intentionally return the same anti-enumeration shape whether the
 // address is new, unverified or already registered.
-export const emailRegister = (email: string, password: string) =>
-  call<{ status: 'verification-sent' }>('/api/auth/email/register', { body: { email, password } });
+// The UI locale travels with mail-triggering calls so the backend can send
+// the verification/reset email in the same language as the interface.
+const uiLocale = (): string | undefined => (typeof localStorage !== 'undefined' && localStorage.getItem('blockallisto-locale')) || undefined;
 
-export const emailResend = (email: string) => call<{ status: 'verification-sent' }>('/api/auth/email/resend', { body: { email } });
+export const emailRegister = (email: string, password: string) =>
+  call<{ status: 'verification-sent' }>('/api/auth/email/register', { body: { email, password, locale: uiLocale() } });
+
+export const emailResend = (email: string) => call<{ status: 'verification-sent' }>('/api/auth/email/resend', { body: { email, locale: uiLocale() } });
 
 export const emailVerify = (email: string, verificationToken: string) =>
   call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/email/verify', {
@@ -187,7 +191,7 @@ export const emailLogin = (email: string, password: string) =>
 // Password reset (backend email-auth.ts): same anti-enumeration response for
 // unknown, unverified and verified addresses. A successful confirm revokes
 // every existing session for the account.
-export const emailResetRequest = (email: string) => call<{ status: 'reset-sent' }>('/api/auth/email/reset-request', { body: { email } });
+export const emailResetRequest = (email: string) => call<{ status: 'reset-sent' }>('/api/auth/email/reset-request', { body: { email, locale: uiLocale() } });
 
 export const emailResetConfirm = (email: string, resetToken: string, password: string) =>
   call<{ status: 'password-reset' }>('/api/auth/email/reset-confirm', { body: { email, token: resetToken, password } });

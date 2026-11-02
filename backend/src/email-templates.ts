@@ -1,0 +1,194 @@
+// Localized transactional mail templates for the community email auth flow.
+// Every locale keeps the honest demo/testnet wording: these mails must never
+// read like a production launch. English is the fallback for unknown or
+// missing locales. {email} is interpolated at send time; the token is placed
+// on its own line.
+
+export const MAIL_LOCALES = ['en', 'pt', 'es', 'fr', 'de', 'ja', 'ko', 'zh-CN', 'zh-TW', 'ar', 'hi'] as const;
+export type MailLocale = (typeof MAIL_LOCALES)[number];
+
+// Accepts the UI locale string (e.g. "pt", "pt-PT", "zh-cn") and returns a
+// supported mail locale, falling back to English.
+export function normalizeMailLocale(input: unknown): MailLocale {
+  if (typeof input !== 'string') return 'en';
+  const trimmed = input.trim();
+  if (!trimmed) return 'en';
+  const exact = MAIL_LOCALES.find((l) => l.toLowerCase() === trimmed.toLowerCase());
+  if (exact) return exact;
+  const base = trimmed.split(/[-_]/)[0].toLowerCase();
+  return MAIL_LOCALES.find((l) => l.toLowerCase() === base) ?? 'en';
+}
+
+interface MailCopy {
+  verifySubject: string;
+  verifyWelcome: string;
+  verifyConfirm: string; // {email}
+  verifyIgnore: string;
+  resetSubject: string;
+  resetTitle: string;
+  resetRequested: string; // {email}
+  resetIgnore: string;
+  resetSignout: string;
+  demoLine: string;
+}
+
+const COPY: Record<MailLocale, MailCopy> = {
+  en: {
+    verifySubject: 'Blockallisto demo - verify your email',
+    verifyWelcome: 'Welcome to the Blockallisto demo.',
+    verifyConfirm: 'Confirm this email address for account {email} with this single-use verification token (valid 24 hours):',
+    verifyIgnore: 'If you did not register, ignore this message - the account stays unverified and cannot log in.',
+    resetSubject: 'Blockallisto demo - reset your password',
+    resetTitle: 'Blockallisto demo - password reset.',
+    resetRequested: 'A password reset was requested for account {email}. Use this single-use reset token (valid 1 hour):',
+    resetIgnore: 'If you did not request this, ignore this message - the current password stays valid.',
+    resetSignout: 'Resetting the password signs out every existing session; two-factor authentication, when enabled, still applies at the next login.',
+    demoLine: 'This is a demo deployment on Stellar testnet. No real funds are involved.',
+  },
+  pt: {
+    verifySubject: 'Demonstração Blockallisto - confirme o seu email',
+    verifyWelcome: 'Bem-vindo à demonstração Blockallisto.',
+    verifyConfirm: 'Confirme este endereço de email para a conta {email} com este token de verificação de utilização única (válido por 24 horas):',
+    verifyIgnore: 'Se não se registou, ignore esta mensagem - a conta permanece por verificar e não permite iniciar sessão.',
+    resetSubject: 'Demonstração Blockallisto - reponha a sua palavra-passe',
+    resetTitle: 'Demonstração Blockallisto - reposição de palavra-passe.',
+    resetRequested: 'Foi pedida uma reposição de palavra-passe para a conta {email}. Use este token de reposição de utilização única (válido por 1 hora):',
+    resetIgnore: 'Se não fez este pedido, ignore esta mensagem - a palavra-passe atual mantém-se válida.',
+    resetSignout:
+      'Ao repor a palavra-passe, todas as sessões existentes são terminadas; a autenticação de dois fatores, quando ativa, continua a ser exigida no próximo início de sessão.',
+    demoLine: 'Isto é uma demonstração na testnet Stellar. Não estão envolvidos fundos reais.',
+  },
+  es: {
+    verifySubject: 'Demo de Blockallisto - verifica tu email',
+    verifyWelcome: 'Bienvenido a la demo de Blockallisto.',
+    verifyConfirm: 'Confirma esta dirección de email para la cuenta {email} con este token de verificación de un solo uso (válido durante 24 horas):',
+    verifyIgnore: 'Si no te registraste, ignora este mensaje: la cuenta permanece sin verificar y no puede iniciar sesión.',
+    resetSubject: 'Demo de Blockallisto - restablece tu contraseña',
+    resetTitle: 'Demo de Blockallisto - restablecimiento de contraseña.',
+    resetRequested:
+      'Se solicitó un restablecimiento de contraseña para la cuenta {email}. Usa este token de restablecimiento de un solo uso (válido durante 1 hora):',
+    resetIgnore: 'Si no lo solicitaste tú, ignora este mensaje: la contraseña actual sigue siendo válida.',
+    resetSignout:
+      'Al restablecer la contraseña se cierran todas las sesiones existentes; la autenticación de dos factores, cuando está activada, se seguirá aplicando en el próximo inicio de sesión.',
+    demoLine: 'Esto es un despliegue de demostración en la testnet de Stellar. No hay fondos reales involucrados.',
+  },
+  fr: {
+    verifySubject: 'Démo Blockallisto - vérifiez votre email',
+    verifyWelcome: 'Bienvenue dans la démo Blockallisto.',
+    verifyConfirm: 'Confirmez cette adresse email pour le compte {email} avec ce jeton de vérification à usage unique (valable 24 heures) :',
+    verifyIgnore: 'Si vous ne vous êtes pas inscrit, ignorez ce message : le compte reste non vérifié et ne permet pas de se connecter.',
+    resetSubject: 'Démo Blockallisto - réinitialisez votre mot de passe',
+    resetTitle: 'Démo Blockallisto - réinitialisation du mot de passe.',
+    resetRequested:
+      'Une réinitialisation du mot de passe a été demandée pour le compte {email}. Utilisez ce jeton de réinitialisation à usage unique (valable 1 heure) :',
+    resetIgnore: "Si vous n'êtes pas à l'origine de cette demande, ignorez ce message : le mot de passe actuel reste valide.",
+    resetSignout:
+      "La réinitialisation du mot de passe ferme toutes les sessions existantes ; l'authentification à deux facteurs, lorsqu'elle est activée, s'applique toujours à la prochaine connexion.",
+    demoLine: "Ceci est un déploiement de démonstration sur le testnet Stellar. Aucun fonds réel n'est en jeu.",
+  },
+  de: {
+    verifySubject: 'Blockallisto-Demo - bestätigen Sie Ihre E-Mail',
+    verifyWelcome: 'Willkommen bei der Blockallisto-Demo.',
+    verifyConfirm: 'Bestätigen Sie diese E-Mail-Adresse für das Konto {email} mit diesem Einmal-Bestätigungstoken (24 Stunden gültig):',
+    verifyIgnore: 'Falls Sie sich nicht registriert haben, ignorieren Sie diese Nachricht - das Konto bleibt unbestätigt und eine Anmeldung ist nicht möglich.',
+    resetSubject: 'Blockallisto-Demo - setzen Sie Ihr Passwort zurück',
+    resetTitle: 'Blockallisto-Demo - Passwort zurücksetzen.',
+    resetRequested: 'Für das Konto {email} wurde eine Passwort-Zurücksetzung angefordert. Verwenden Sie dieses Einmal-Token (1 Stunde gültig):',
+    resetIgnore: 'Falls Sie dies nicht angefordert haben, ignorieren Sie diese Nachricht - das aktuelle Passwort bleibt gültig.',
+    resetSignout:
+      'Durch das Zurücksetzen des Passworts werden alle bestehenden Sitzungen abgemeldet; die Zwei-Faktor-Authentifizierung gilt, sofern aktiviert, weiterhin bei der nächsten Anmeldung.',
+    demoLine: 'Dies ist eine Demo-Bereitstellung im Stellar-Testnet. Es sind keine echten Gelder involviert.',
+  },
+  ja: {
+    verifySubject: 'Blockallisto デモ - メールアドレスの確認',
+    verifyWelcome: 'Blockallisto デモへようこそ。',
+    verifyConfirm: 'このメールアドレスをアカウント {email} のものとして確認するには、この使い捨て確認トークン（24時間有効）を使用してください:',
+    verifyIgnore: '登録していない場合はこのメッセージを無視してください - アカウントは未確認のままでログインできません。',
+    resetSubject: 'Blockallisto デモ - パスワードのリセット',
+    resetTitle: 'Blockallisto デモ - パスワードリセット。',
+    resetRequested: 'アカウント {email} のパスワードリセットが要求されました。この使い捨てリセットトークン（1時間有効）を使用してください:',
+    resetIgnore: 'お心当たりがない場合はこのメッセージを無視してください - 現在のパスワードは引き続き有効です。',
+    resetSignout: 'パスワードをリセットすると既存のセッションはすべてログアウトされます。二要素認証を有効にしている場合、次回ログイン時にも適用されます。',
+    demoLine: 'これは Stellar テストネット上のデモデプロイです。実際の資金は一切関係しません。',
+  },
+  ko: {
+    verifySubject: 'Blockallisto 데모 - 이메일 인증',
+    verifyWelcome: 'Blockallisto 데모에 오신 것을 환영합니다.',
+    verifyConfirm: '계정 {email}의 이 이메일 주소를 확인하려면 이 일회용 인증 토큰(24시간 유효)을 사용하세요:',
+    verifyIgnore: '가입하지 않으셨다면 이 메시지를 무시하세요. 계정은 인증되지 않은 상태로 유지되며 로그인할 수 없습니다.',
+    resetSubject: 'Blockallisto 데모 - 비밀번호 재설정',
+    resetTitle: 'Blockallisto 데모 - 비밀번호 재설정.',
+    resetRequested: '계정 {email}에 대한 비밀번호 재설정이 요청되었습니다. 이 일회용 재설정 토큰(1시간 유효)을 사용하세요:',
+    resetIgnore: '요청하지 않으셨다면 이 메시지를 무시하세요. 현재 비밀번호는 계속 유효합니다.',
+    resetSignout: '비밀번호를 재설정하면 기존 세션이 모두 로그아웃되며, 2단계 인증이 활성화된 경우 다음 로그인 시에도 계속 적용됩니다.',
+    demoLine: '이것은 Stellar 테스트넷의 데모 배포입니다. 실제 자금은 전혀 사용되지 않습니다.',
+  },
+  'zh-CN': {
+    verifySubject: 'Blockallisto 演示 - 验证您的邮箱',
+    verifyWelcome: '欢迎使用 Blockallisto 演示。',
+    verifyConfirm: '请使用此一次性验证令牌（24小时内有效）确认账户 {email} 的此邮箱地址:',
+    verifyIgnore: '如果您没有注册，请忽略此邮件 - 账户将保持未验证状态，无法登录。',
+    resetSubject: 'Blockallisto 演示 - 重置您的密码',
+    resetTitle: 'Blockallisto 演示 - 密码重置。',
+    resetRequested: '有人请求重置账户 {email} 的密码。请使用此一次性重置令牌（1小时内有效）:',
+    resetIgnore: '如果这不是您的操作，请忽略此邮件 - 当前密码仍然有效。',
+    resetSignout: '重置密码将退出所有现有会话；如果启用了双重身份验证，下次登录时仍需验证。',
+    demoLine: '这是 Stellar 测试网上的演示部署。不涉及任何真实资金。',
+  },
+  'zh-TW': {
+    verifySubject: 'Blockallisto 示範 - 驗證您的電子郵件',
+    verifyWelcome: '歡迎使用 Blockallisto 示範。',
+    verifyConfirm: '請使用此一次性驗證令牌（24小時內有效）確認帳戶 {email} 的此電子郵件地址:',
+    verifyIgnore: '如果您沒有註冊，請忽略此郵件 - 帳戶將保持未驗證狀態，無法登入。',
+    resetSubject: 'Blockallisto 示範 - 重設您的密碼',
+    resetTitle: 'Blockallisto 示範 - 密碼重設。',
+    resetRequested: '有人請求重設帳戶 {email} 的密碼。請使用此一次性重設令牌（1小時內有效）:',
+    resetIgnore: '如果這不是您的操作，請忽略此郵件 - 目前密碼仍然有效。',
+    resetSignout: '重設密碼將登出所有現有工作階段；如果啟用了兩步驟驗證，下次登入時仍需驗證。',
+    demoLine: '這是 Stellar 測試網上的示範部署。不涉及任何真實資金。',
+  },
+  ar: {
+    verifySubject: 'عرض Blockallisto التجريبي - تحقق من بريدك الإلكتروني',
+    verifyWelcome: 'مرحبًا بك في العرض التجريبي لـ Blockallisto.',
+    verifyConfirm: 'أكّد عنوان البريد الإلكتروني هذا للحساب {email} باستخدام رمز التحقق هذا المخصص لاستخدام واحد (صالح لمدة 24 ساعة):',
+    verifyIgnore: 'إذا لم تقم بالتسجيل، تجاهل هذه الرسالة - يبقى الحساب غير مُتحقق منه ولا يمكنه تسجيل الدخول.',
+    resetSubject: 'عرض Blockallisto التجريبي - إعادة تعيين كلمة المرور',
+    resetTitle: 'عرض Blockallisto التجريبي - إعادة تعيين كلمة المرور.',
+    resetRequested: 'تم طلب إعادة تعيين كلمة المرور للحساب {email}. استخدم رمز إعادة التعيين هذا المخصص لاستخدام واحد (صالح لمدة ساعة واحدة):',
+    resetIgnore: 'إذا لم تطلب ذلك، تجاهل هذه الرسالة - تبقى كلمة المرور الحالية صالحة.',
+    resetSignout: 'عند إعادة تعيين كلمة المرور يتم تسجيل الخروج من جميع الجلسات الحالية؛ ويظل التحقق بخطوتين مطلوبًا عند تسجيل الدخول التالي إذا كان مفعّلًا.',
+    demoLine: 'هذا نشر تجريبي على شبكة Stellar التجريبية. لا توجد أموال حقيقية متضمنة.',
+  },
+  hi: {
+    verifySubject: 'Blockallisto डेमो - अपना ईमेल सत्यापित करें',
+    verifyWelcome: 'Blockallisto डेमो में आपका स्वागत है।',
+    verifyConfirm: 'इस एक-बार उपयोग वाले सत्यापन टोकन (24 घंटे मान्य) से खाता {email} के लिए यह ईमेल पता सत्यापित करें:',
+    verifyIgnore: 'यदि आपने पंजीकरण नहीं किया, तो इस संदेश को अनदेखा करें - खाता असत्यापित रहता है और लॉग इन नहीं कर सकता।',
+    resetSubject: 'Blockallisto डेमो - अपना पासवर्ड रीसेट करें',
+    resetTitle: 'Blockallisto डेमो - पासवर्ड रीसेट।',
+    resetRequested: 'खाता {email} के लिए पासवर्ड रीसेट का अनुरोध किया गया था। इस एक-बार उपयोग वाले रीसेट टोकन (1 घंटा मान्य) का उपयोग करें:',
+    resetIgnore: 'यदि आपने यह अनुरोध नहीं किया, तो इस संदेश को अनदेखा करें - वर्तमान पासवर्ड मान्य रहता है।',
+    resetSignout: 'पासवर्ड रीसेट करने से सभी मौजूदा सत्र समाप्त हो जाते हैं; दो-कारक प्रमाणीकरण सक्षम होने पर अगले लॉगिन पर भी लागू रहता है।',
+    demoLine: 'यह Stellar टेस्टनेट पर एक डेमो परिनियोजन है। इसमें कोई वास्तविक धन शामिल नहीं है।',
+  },
+};
+
+function fill(template: string, email: string): string {
+  return template.split('{email}').join(email);
+}
+
+export function verificationEmail(locale: MailLocale, email: string, token: string): { subject: string; text: string } {
+  const c = COPY[locale];
+  return {
+    subject: c.verifySubject,
+    text: [c.verifyWelcome, '', fill(c.verifyConfirm, email), '', token, '', c.verifyIgnore, c.demoLine].join('\n'),
+  };
+}
+
+export function resetEmail(locale: MailLocale, email: string, token: string): { subject: string; text: string } {
+  const c = COPY[locale];
+  return {
+    subject: c.resetSubject,
+    text: [c.resetTitle, '', fill(c.resetRequested, email), '', token, '', c.resetIgnore, c.resetSignout, c.demoLine].join('\n'),
+  };
+}
