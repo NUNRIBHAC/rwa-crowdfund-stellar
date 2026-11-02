@@ -22,6 +22,9 @@ import {
   submitCampaignDeploy,
   buildCampaignDeployV2,
   submitCampaignDeployV2,
+  sorobanRegistryEntry,
+  isV2Entry,
+  readV2SharePositions,
 } from './soroban.js';
 import { journalBackend } from './journal.js';
 import { drainPendingContributors, pendContribution, readPending } from './pending-contributors.js';
@@ -362,11 +365,29 @@ const reconciliationPayload = async () => {
 // looks authoritative. See SHARE_REGISTER_SEMANTICS; intended amounts are
 // not per-hash verified transfers.
 const shareRegisterPayload = async (campaignId: string): Promise<ShareRegisterPayload | null> => {
-  const campaigns = await sorobanCampaigns();
-  if (!campaigns.some((c: { id: string }) => c.id === campaignId)) return null;
+  // Existence comes from the validated operator registry (no RPC): the v1
+  // register is app-data derived, and v2 entries would never survive the v1
+  // listing's crowdfund code-pin read.
+  const entry = sorobanRegistryEntry(campaignId);
+  if (!entry) return null;
   const store = await (await journalBackend()).read();
   const service = await communityServiceFromEnv();
-  return buildShareRegister(campaignId, store.intents, await service.listContributors(campaignId), NETWORK);
+  const contributors = await service.listContributors(campaignId);
+  if (!isV2Entry(entry)) return buildShareRegister(campaignId, store.intents, contributors, NETWORK);
+  // v2 contract set: query on-chain positions for every app-known address
+  // (contributor registry + SUCCESS contribution/refund journal actors).
+  // The token contract cannot enumerate holders, so this set is disclosed
+  // as the query universe in the payload semantics. A read failure throws:
+  // the route answers 503 rather than exporting a v2 register without its
+  // on-chain positions.
+  const holders = new Set<string>(contributors.filter((c) => c.campaignId === campaignId).map((c) => c.publicKey));
+  for (const i of store.intents) {
+    if (i.campaign !== campaignId || i.status !== 'SUCCESS') continue;
+    if (i.action !== 'contribute' && i.action !== 'refund') continue;
+    holders.add(i.actor);
+  }
+  const v2OnChain = await readV2SharePositions(campaignId, [...holders]);
+  return buildShareRegister(campaignId, store.intents, contributors, NETWORK, v2OnChain);
 };
 
 app.get('/api/admin/reconciliation', requireAdmin, async (_req, res) => {

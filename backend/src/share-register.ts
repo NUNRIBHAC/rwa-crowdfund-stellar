@@ -19,6 +19,32 @@ export const SHARE_REGISTER_SEMANTICS =
   'registered=false rows come from the journal but not (yet) the durable registry - check the pending-proof queue before treating them as gaps. ' +
   'Operator export aid over testnet demo data; no accounting, custody, audit-opinion or legal share-register claim is made or implied.';
 
+// v2 contract-set campaigns: on-chain positions read from the pinned
+// share-token/offering contracts at export time (code hash verified before
+// every read; see readV2SharePositions). The share-token contract does not
+// enumerate holders, so balances are queried for app-known addresses only
+// (durable contributor registry + SUCCESS journal actors): a holder unknown
+// to this app is ABSENT here, not zero. onChainBalance is the contract's
+// transferred truth for that address and can legitimately differ from the
+// journal-derived intended amounts above (transfers, burns, out-of-band
+// movements). Same honesty bar as the v1 register: demo-grade testnet
+// scaffolds without external security review; no accounting, custody,
+// audit-opinion or legal share-register claim is made or implied.
+export const V2_ONCHAIN_SEMANTICS =
+  'On-chain v2 share-token positions read at export time from the pinned, code-hash-verified contracts. ' +
+  'onChainBalance is transferred truth per the contract; intended amounts remain journal-derived. ' +
+  'Only app-known addresses (contributor registry + journal actors) were queried: the token contract does not enumerate holders, so an unknown holder is absent, not zero. ' +
+  'Demo-grade testnet scaffolds without external security review; no accounting, custody or legal register claim is made or implied.';
+
+export type V2OnChainData = {
+  tokenContractId: string;
+  offeringContractId: string;
+  token: { name: string; symbol: string; decimals: number; totalSupply: string };
+  offering: { token: string; issuer: string; minPerInvestor: string; maxPerInvestor: string; goal: string; deadline: string };
+  holders: { publicKey: string; balance: string }[];
+  holdersTruncated: boolean;
+};
+
 export type ShareRegisterRow = {
   publicKey: string;
   firstConfirmedAt: string | null;
@@ -30,6 +56,9 @@ export type ShareRegisterRow = {
   netIntended: string;
   missingAmountIntents: number;
   intentHashes: string[];
+  // Present only for v2 contract-set campaigns when the address was in the
+  // queried holder set (7-decimal base units as a decimal string).
+  onChainBalance?: string;
 };
 
 export type ShareRegisterPayload = {
@@ -49,6 +78,8 @@ export type ShareRegisterPayload = {
   };
   notes: string[];
   contributors: ShareRegisterRow[];
+  // Present only for v2 contract-set campaigns.
+  v2OnChain?: (V2OnChainData & { semantics: string }) | null;
 };
 
 // Inverse of amountUnits: 7-decimal base units back to a trimmed decimal
@@ -73,7 +104,13 @@ type Accum = {
   hashes: string[];
 };
 
-export function buildShareRegister(campaignId: string, intents: Intent[], contributors: ContributorRecord[], network: string): ShareRegisterPayload {
+export function buildShareRegister(
+  campaignId: string,
+  intents: Intent[],
+  contributors: ContributorRecord[],
+  network: string,
+  v2OnChain?: V2OnChainData | null,
+): ShareRegisterPayload {
   const rows = new Map<string, Accum>();
   const ensure = (publicKey: string): Accum => {
     let acc = rows.get(publicKey);
@@ -122,6 +159,7 @@ export function buildShareRegister(campaignId: string, intents: Intent[], contri
   let refundedTotal = 0n;
   let contributeCountTotal = 0;
   let refundCountTotal = 0;
+  const balanceByHolder = new Map<string, string>((v2OnChain?.holders ?? []).map((h) => [h.publicKey, h.balance]));
   const outRows: ShareRegisterRow[] = sorted.map((acc) => {
     missingTotal += acc.missing;
     contributeCountTotal += acc.contributeCount;
@@ -141,6 +179,7 @@ export function buildShareRegister(campaignId: string, intents: Intent[], contri
       netIntended: formatUnits(acc.contributed - acc.refunded),
       missingAmountIntents: acc.missing,
       intentHashes: acc.hashes,
+      ...(balanceByHolder.has(acc.publicKey) ? { onChainBalance: balanceByHolder.get(acc.publicKey)! } : {}),
     };
   });
   if (missingTotal > 0)
@@ -153,6 +192,7 @@ export function buildShareRegister(campaignId: string, intents: Intent[], contri
     );
   if (unregistered > 0)
     notes.push(`${unregistered} journal actor(s) are not in the durable contributor registry: check the pending-proof queue before treating them as gaps`);
+  if (v2OnChain?.holdersTruncated) notes.push('the app-known holder list exceeded the read cap: positions beyond the cap are absent, not zero');
   return {
     generatedAt: new Date().toISOString(),
     network,
@@ -170,6 +210,7 @@ export function buildShareRegister(campaignId: string, intents: Intent[], contri
     },
     notes,
     contributors: outRows,
+    ...(v2OnChain ? { v2OnChain: { ...v2OnChain, semantics: V2_ONCHAIN_SEMANTICS } } : {}),
   };
 }
 
@@ -189,13 +230,17 @@ const CSV_FIELDS: Array<[keyof ShareRegisterRow, string]> = [
 const csvCell = (value: string): string => `"${value.replace(/"/g, '""')}"`;
 
 export function shareRegisterCsv(payload: ShareRegisterPayload): string {
-  const header = CSV_FIELDS.map(([, label]) => csvCell(label)).join(',');
+  const v2 = Boolean(payload.v2OnChain);
+  const fields: Array<[keyof ShareRegisterRow, string]> = v2 ? [...CSV_FIELDS, ['onChainBalance', 'onchain_balance']] : CSV_FIELDS;
+  const header = fields.map(([, label]) => csvCell(label)).join(',');
   const lines = payload.contributors.map((row) =>
-    CSV_FIELDS.map(([key]) => {
-      const value = row[key];
-      if (Array.isArray(value)) return csvCell(value.join(' '));
-      return csvCell(value === null ? '' : String(value));
-    }).join(','),
+    fields
+      .map(([key]) => {
+        const value = row[key];
+        if (Array.isArray(value)) return csvCell(value.join(' '));
+        return csvCell(value === null || value === undefined ? '' : String(value));
+      })
+      .join(','),
   );
   return [header, ...lines].join('\n') + '\n';
 }

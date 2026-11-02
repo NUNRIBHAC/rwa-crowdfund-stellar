@@ -164,3 +164,71 @@ test('admin gate applies to the export routes', async () => {
   assert.equal((await fetch(`${base}/api/campaigns/qa-demo/share-register.json`)).status, 401);
   assert.equal((await fetch(`${base}/api/campaigns/qa-demo/share-register.csv`)).status, 401);
 });
+
+test('v2 on-chain positions annotate rows and payload without touching journal sums', async () => {
+  const { V2_ONCHAIN_SEMANTICS } = await import('../src/share-register.js');
+  const v2 = {
+    tokenContractId: 'CTOKEN',
+    offeringContractId: 'COFFER',
+    token: { name: 'QA Shares', symbol: 'QSH', decimals: 7, totalSupply: '100000000' },
+    offering: { token: 'CTOKEN', issuer: kpB, minPerInvestor: '10000000', maxPerInvestor: '100000000', goal: '1000000000', deadline: '2000000000' },
+    holders: [{ publicKey: kpA, balance: '42000000' }],
+    holdersTruncated: false,
+  };
+  const p = buildShareRegister(
+    'qa-demo',
+    [intent({ hash: hash(2), amount: '10' })],
+    [{ campaignId: 'qa-demo', publicKey: kpA, firstConfirmedAt: 1730000000000 }],
+    'testnet',
+    v2,
+  );
+  assert.equal(p.contributors[0].onChainBalance, '42000000');
+  assert.equal(p.totals.contributedIntended, '10', 'journal sums untouched by on-chain data');
+  assert.equal(p.v2OnChain?.semantics, V2_ONCHAIN_SEMANTICS);
+  assert.equal(p.v2OnChain?.token.totalSupply, '100000000');
+});
+
+test('v2 holder truncation is disclosed and unqueried rows carry no onChainBalance', () => {
+  const v2 = {
+    tokenContractId: 'CTOKEN',
+    offeringContractId: 'COFFER',
+    token: { name: 'QA Shares', symbol: 'QSH', decimals: 7, totalSupply: '100000000' },
+    offering: { token: 'CTOKEN', issuer: kpB, minPerInvestor: '1', maxPerInvestor: '10', goal: '100', deadline: '2000000000' },
+    holders: [{ publicKey: kpA, balance: '42000000' }],
+    holdersTruncated: true,
+  };
+  const p = buildShareRegister(
+    'qa-demo',
+    [intent({ hash: hash(3), actor: kpB, amount: '5' })],
+    [
+      { campaignId: 'qa-demo', publicKey: kpA, firstConfirmedAt: 1730000000000 },
+      { campaignId: 'qa-demo', publicKey: kpB, firstConfirmedAt: 1730000001000 },
+    ],
+    'testnet',
+    v2,
+  );
+  const rowA = p.contributors.find((r) => r.publicKey === kpA)!;
+  const rowB = p.contributors.find((r) => r.publicKey === kpB)!;
+  assert.equal(rowA.onChainBalance, '42000000');
+  assert.equal('onChainBalance' in rowB, false, 'unqueried holder is absent, not zero');
+  assert.ok(
+    p.notes.some((n) => n.includes('exceeded the read cap')),
+    'truncation disclosed in notes',
+  );
+});
+
+test('csv gains the onchain_balance column only for v2 payloads', () => {
+  const v1 = buildShareRegister('qa-demo', [], [{ campaignId: 'qa-demo', publicKey: kpA, firstConfirmedAt: 1730000000000 }], 'testnet');
+  assert.ok(!shareRegisterCsv(v1).includes('onchain_balance'));
+  const v2 = buildShareRegister('qa-demo', [], [{ campaignId: 'qa-demo', publicKey: kpA, firstConfirmedAt: 1730000000000 }], 'testnet', {
+    tokenContractId: 'CTOKEN',
+    offeringContractId: 'COFFER',
+    token: { name: 'QA Shares', symbol: 'QSH', decimals: 7, totalSupply: '100000000' },
+    offering: { token: 'CTOKEN', issuer: kpB, minPerInvestor: '1', maxPerInvestor: '10', goal: '100', deadline: '2000000000' },
+    holders: [{ publicKey: kpA, balance: '42000000' }],
+    holdersTruncated: false,
+  });
+  const csv = shareRegisterCsv(v2);
+  assert.ok(csv.split('\n')[0].includes('"onchain_balance"'));
+  assert.ok(csv.includes('"42000000"'));
+});
