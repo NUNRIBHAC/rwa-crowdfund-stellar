@@ -278,7 +278,7 @@ export const en = {
     investorSteps: [
       {
         title: 'Registration and login',
-        text: 'A production platform requires an account with email confirmation and credentials. This prototype has an optional community sign-in instead: you prove control of your Freighter wallet by signing a one-time challenge - no email registration, no password. The wallet is the only identity.',
+        text: 'A production platform requires an account with email confirmation and credentials. This prototype offers exactly that as an optional community identity: email registration with a confirmation token and password, or sign-in by proving control of your Freighter wallet with a one-time challenge. Mandatory production onboarding (verified identity, gated investing) is not implemented.',
       },
       {
         title: 'Identity verification (KYC)',
@@ -481,7 +481,7 @@ export const en = {
     payoutsUnavailable: 'Payout history could not be loaded. That does not mean there are no payouts - try again later.',
     documentsAria: 'Investment documents',
     documentsTitle: 'Investment documents',
-    documentsEmpty: 'No documents published for this campaign.',
+    documentsEmpty: 'No public documents published for this campaign.',
     investorDocsEmpty: 'No investment documents are available for this campaign yet.',
     investorDocsUnavailable: 'Investment documents could not be loaded. That does not mean there are none - try again later.',
     investorDocsDownload: 'Download',
@@ -531,7 +531,7 @@ export const en = {
       },
       {
         label: 'Investor qualification',
-        note: 'Knowledge test and loss-capacity check are planned compliance steps; not implemented here.',
+        note: 'Knowledge test and loss-capacity simulation exist as a demo on this page; live data collection stays held closed in this prototype.',
       },
       {
         label: 'Verification (KYC)',
@@ -897,7 +897,7 @@ export const en = {
           },
           {
             q: 'Do I need my own wallet?',
-            a: 'Yes. This design keeps keys with the user: the Freighter wallet is the only identity and signs every transaction. The platform holds no keys and no balances of its own. Some production platforms instead custody assets through specialised partners; this prototype deliberately does not.',
+            a: 'Yes, for investing. This design keeps keys with the user: the Freighter wallet signs every transaction, and the platform holds no keys and no balances of its own. Sign-in can be by wallet or by optional email registration; neither shares your keys with the site. Some production platforms instead custody assets through specialised partners; this prototype deliberately does not.',
             state: 'live',
           },
           {
@@ -1028,7 +1028,7 @@ export const en = {
         entries: [
           {
             q: 'Do I need an account?',
-            a: 'No email registration and no password. An optional community sign-in proves control of your Freighter wallet by signing a one-time challenge. The wallet is the only identity, and connecting or signing never shares your keys with the site.',
+            a: 'Optional. You can register with an email address and password (confirmed with a single-use token), or sign in by proving control of your Freighter wallet with a one-time challenge. Connecting or signing never shares your keys with the site.',
             state: 'live',
           },
           {
@@ -1797,7 +1797,7 @@ export const en = {
     },
     company: {
       title: 'Company accounts',
-      note: 'Apply for a company account linked to your wallet. Review is manual, like issuer applications. Demo honesty: the registry details you enter are applicant-provided; no company register extract or owner IDs are uploaded or verified in this prototype. Investing from a company context is planned and not active here.',
+      note: 'Apply for a company account linked to your community account. Review is manual, like issuer applications. Demo honesty: the registry details you enter are applicant-provided; no company register extract or owner IDs are uploaded or verified in this prototype. Investing from a company context is planned and not active here.',
       listTitle: 'My company applications',
       empty: 'No company applications yet.',
       formTitle: 'Apply for a company account',
@@ -1818,13 +1818,16 @@ export const en = {
     },
     totpTitle: 'Two-factor authentication',
     totpExplainer: 'Your wallet signature was accepted. This account also requires a code from your authenticator app.',
+    totpExplainerEmail: 'Your password was accepted. This account also requires a code from your authenticator app.',
     totpCodeLabel: 'Authenticator code',
     totpSubmit: 'Verify and sign in',
     totpRecoveryHint: 'Lost access to your authenticator? Enter one of your recovery codes instead.',
     security: {
       totpTitle: 'Two-factor authentication',
       totpOffNote: 'Add an authenticator app as a second step after your wallet signature. Optional; your wallet stays the main credential.',
+      totpOffNoteEmail: 'Add an authenticator app as a second step after your password. Optional; your password stays the main credential.',
       totpOnNote: 'Two-factor authentication is enabled: after your wallet signature, sign-in also asks for an authenticator code.',
+      totpOnNoteEmail: 'Two-factor authentication is enabled: after your password, sign-in also asks for an authenticator code.',
       totpEnable: 'Enable two-factor',
       totpDisable: 'Disable two-factor',
       totpScanNote: 'Add this to your authenticator app (URI or manual key), then enter the code it shows to finish enabling. The key is shown only now.',
@@ -1841,7 +1844,9 @@ export const en = {
       totpDone: 'Done',
       title: 'Security',
       authMethodNote:
-        'You sign in by signing a message with your Stellar wallet: the wallet is the credential. This prototype has no password; an optional two-factor authenticator can be added below.',
+        'You sign in by signing a message with your Stellar wallet: the wallet is the credential. An optional two-factor authenticator can be added below.',
+      authMethodNoteEmail:
+        'You sign in with your email address and password: the password is the credential. An optional two-factor authenticator can be added below.',
       sessionsTitle: 'Active sessions',
       sessionLabel: 'Session',
       currentBadge: 'This session',

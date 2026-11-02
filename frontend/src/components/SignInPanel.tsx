@@ -41,7 +41,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
       return (
         <section className="community-section" aria-labelledby="community-totp">
           <h2 id="community-totp">{m.community.totpTitle}</h2>
-          <p className="community-note">{m.community.totpExplainer}</p>
+          <p className="community-note">{method === 'email' ? m.community.totpExplainerEmail : m.community.totpExplainer}</p>
           {error && (
             <p role="alert" className="community-error">
               {error}

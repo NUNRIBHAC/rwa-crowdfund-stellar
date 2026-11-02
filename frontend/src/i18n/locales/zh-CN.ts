@@ -269,7 +269,7 @@ export const zhCN: Messages = {
     investorSteps: [
       {
         title: '注册和登录',
-        text: '正式平台需要以电子邮件确认与凭证创建账户。本原型改为可选的社区登录:您通过签署一次性挑战来证明对 Freighter 钱包的控制 - 无需电子邮件注册、无密码。钱包是唯一身份。',
+        text: '正式平台需要以电子邮件确认与凭证创建账户。本原型以可选社区身份的形式提供完全相同的能力:您可以通过验证令牌和密码进行电子邮件注册,或签署一次性挑战来证明对 Freighter 钱包的控制以登录。强制性的生产入驻流程(身份验证、投资受门禁限制)尚未实现。',
       },
       {
         title: '身份验证（KYC）',
@@ -466,7 +466,7 @@ export const zhCN: Messages = {
     payoutsUnavailable: '无法加载付款记录。这并不意味着没有付款 - 请稍后重试。',
     documentsAria: '投资文件',
     documentsTitle: '投资文件',
-    documentsEmpty: '该活动尚未发布任何文件。',
+    documentsEmpty: '该活动尚未发布任何公开文件。',
     investorDocsEmpty: '该活动暂无可用的投资文件。',
     investorDocsUnavailable: '无法加载投资文件。这并不意味着没有文件 - 请稍后重试。',
     investorDocsDownload: '下载',
@@ -514,7 +514,7 @@ export const zhCN: Messages = {
       },
       {
         label: '投资者资格',
-        note: '知识测试和损失承受能力检查是规划中的合规步骤；此处未实现。',
+        note: '知识测试和损失承受能力模拟作为演示存在于本页;真实数据的收集在本原型中保持关闭。',
       },
       {
         label: '身份验证（KYC）',
@@ -853,7 +853,7 @@ export const zhCN: Messages = {
           },
           {
             q: '我需要自己的钱包吗？',
-            a: '需要。本设计将密钥留在用户手中：Freighter 钱包是唯一的身份，并签署每一笔交易。平台不持有任何密钥，也不保有自己的余额。一些生产平台会通过专业合作伙伴托管资产；本原型刻意不这样做。',
+            a: '需要，用于投资。本设计将密钥留在用户手中：Freighter 钱包签署每一笔交易，平台不持有任何密钥，也不保有自己的余额。登录可以使用钱包或可选的电子邮件注册，两者都不会与网站分享您的密钥。一些生产平台会通过专业合作伙伴托管资产；本原型刻意不这样做。',
             state: 'live',
           },
           {
@@ -984,7 +984,7 @@ export const zhCN: Messages = {
         entries: [
           {
             q: '我需要注册账户吗？',
-            a: '无需电子邮件注册,也无需密码。可选的社区登录通过签署一次性挑战来证明您对 Freighter 钱包的控制。钱包是唯一身份,连接或签署绝不会与网站分享您的密钥。',
+            a: '可选。您可以使用电子邮件地址和密码注册(通过一次性令牌验证),或签署一次性挑战来证明您对 Freighter 钱包的控制以登录。连接或签署绝不会与网站分享您的密钥。',
             state: 'live',
           },
           {
@@ -1727,7 +1727,7 @@ export const zhCN: Messages = {
     },
     company: {
       title: '公司账户',
-      note: '申请与您的钱包关联的公司账户。审核为人工进行,与发行人申请相同。演示说明:您填写的注册信息为申请人自行申报;本原型不会上传或核验公司注册摘录或所有者身份证件。从公司身份进行投资属于计划功能,此处未启用。',
+      note: '申请与您的社区账户关联的公司账户。审核为人工进行,与发行人申请相同。演示说明:您填写的注册信息为申请人自行申报;本原型不会上传或核验公司注册摘录或所有者身份证件。从公司身份进行投资属于计划功能,此处未启用。',
       listTitle: '我的公司申请',
       empty: '暂无公司申请。',
       formTitle: '申请公司账户',
@@ -1748,13 +1748,16 @@ export const zhCN: Messages = {
     },
     totpTitle: '双重身份验证',
     totpExplainer: '您的钱包签名已被接受。此账户还需要您身份验证器应用中的验证码。',
+    totpExplainerEmail: '你的密码已通过验证。此账户还要求输入你的身份验证器应用中的验证码。',
     totpCodeLabel: '身份验证码',
     totpSubmit: '验证并登录',
     totpRecoveryHint: '无法使用身份验证器？请输入您的恢复代码之一。',
     security: {
       totpTitle: '双重身份验证',
       totpOffNote: '在钱包签名之后添加身份验证器应用作为第二步。可选；您的钱包仍是主要凭证。',
+      totpOffNoteEmail: '在密码之后添加身份验证器应用作为第二步。可选；你的密码仍是主要凭据。',
       totpOnNote: '双重身份验证已启用：钱包签名后，登录还会要求输入身份验证码。',
+      totpOnNoteEmail: '双重身份验证已启用：输入密码后，登录还会要求输入身份验证码。',
       totpEnable: '启用双重验证',
       totpDisable: '停用双重验证',
       totpScanNote: '将此添加到您的身份验证器应用（URI 或手动密钥），然后输入显示的代码以完成启用。密钥仅此一次显示。',
@@ -1771,6 +1774,7 @@ export const zhCN: Messages = {
       totpDone: '完成',
       title: '安全',
       authMethodNote: '您通过使用 Stellar 钱包签署消息来登录：钱包即凭证。本原型没有密码；可在下方添加可选的双重身份验证器。',
+      authMethodNoteEmail: '你使用邮箱地址和密码登录：密码即凭据。可在下方添加可选的双重身份验证器。',
       sessionsTitle: '活跃会话',
       sessionLabel: '会话',
       currentBadge: '当前会话',

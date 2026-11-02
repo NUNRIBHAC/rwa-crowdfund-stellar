@@ -286,7 +286,7 @@ export const de: Messages = {
     investorSteps: [
       {
         title: 'Registrierung und Anmeldung',
-        text: 'Eine Produktionsplattform verlangt ein Konto mit E-Mail-Bestätigung und Zugangsdaten. Dieser Prototyp hat stattdessen eine optionale Community-Anmeldung: Sie beweisen die Kontrolle über Ihre Freighter-Wallet durch Signieren einer einmaligen Challenge - ohne E-Mail-Registrierung, ohne Passwort. Die Wallet ist die einzige Identität.',
+        text: 'Eine Produktionsplattform verlangt ein Konto mit E-Mail-Bestätigung und Zugangsdaten. Dieser Prototyp bietet genau das als optionale Community-Identität: E-Mail-Registrierung mit Bestätigungs-Token und Passwort, oder Anmeldung durch Nachweis der Kontrolle über Ihre Freighter-Wallet mit einer einmaligen Challenge. Das verpflichtende Produktions-Onboarding (verifizierte Identität, beschränktes Investieren) ist nicht implementiert.',
       },
       {
         title: 'Identitätsprüfung (KYC)',
@@ -492,7 +492,7 @@ export const de: Messages = {
       'Der Auszahlungsverlauf konnte nicht geladen werden. Das bedeutet nicht, dass es keine Auszahlungen gibt - bitte später erneut versuchen.',
     documentsAria: 'Investitionsdokumente',
     documentsTitle: 'Investitionsdokumente',
-    documentsEmpty: 'Keine Dokumente für diese Kampagne veröffentlicht.',
+    documentsEmpty: 'Keine öffentlichen Dokumente für diese Kampagne veröffentlicht.',
     investorDocsEmpty: 'Für diese Kampagne sind noch keine Investitionsdokumente verfügbar.',
     investorDocsUnavailable: 'Die Investitionsdokumente konnten nicht geladen werden. Das bedeutet nicht, dass es keine gibt - bitte später erneut versuchen.',
     investorDocsDownload: 'Herunterladen',
@@ -542,7 +542,7 @@ export const de: Messages = {
       },
       {
         label: 'Anlegerqualifizierung',
-        note: 'Kenntnistest und Verlusttragfähigkeitsprüfung sind geplante Compliance-Schritte; hier nicht implementiert.',
+        note: 'Kenntnistest und Verlusttragfähigkeitssimulation existieren als Demo auf dieser Seite; die Erfassung echter Daten bleibt in diesem Prototyp geschlossen.',
       },
       {
         label: 'Verifizierung (KYC)',
@@ -934,7 +934,7 @@ export const de: Messages = {
           },
           {
             q: 'Brauche ich eine eigene Wallet?',
-            a: 'Ja. Dieses Design belässt die Schlüssel beim Nutzer: Die Freighter-Wallet ist die einzige Identität und signiert jede Transaktion. Die Plattform hält weder Schlüssel noch eigene Guthaben. Manche Produktionsplattformen verwahren Vermögenswerte über spezialisierte Partner; dieser Prototyp tut das bewusst nicht.',
+            a: 'Ja, zum Investieren. Dieses Design belässt die Schlüssel beim Nutzer: Die Freighter-Wallet signiert jede Transaktion, und die Plattform hält weder Schlüssel noch eigene Guthaben. Die Anmeldung kann per Wallet oder per optionaler E-Mail-Registrierung erfolgen; beide teilen Ihre Schlüssel nie mit der Website. Manche Produktionsplattformen verwahren Vermögenswerte über spezialisierte Partner; dieser Prototyp tut das bewusst nicht.',
             state: 'live',
           },
           {
@@ -1065,7 +1065,7 @@ export const de: Messages = {
         entries: [
           {
             q: 'Brauche ich ein Konto?',
-            a: 'Keine E-Mail-Registrierung und kein Passwort. Eine optionale Community-Anmeldung beweist die Kontrolle über Ihre Freighter-Wallet durch Signieren einer einmaligen Challenge. Die Wallet ist die einzige Identität, und Verbinden oder Signieren teilt Ihre Schlüssel nie mit der Website.',
+            a: 'Optional. Sie können sich mit E-Mail-Adresse und Passwort registrieren (bestätigt mit einem Einmal-Token), oder sich anmelden, indem Sie die Kontrolle über Ihre Freighter-Wallet mit einer einmaligen Challenge beweisen. Verbinden oder Signieren teilt Ihre Schlüssel nie mit der Website.',
             state: 'live',
           },
           {
@@ -1842,7 +1842,7 @@ export const de: Messages = {
     },
     company: {
       title: 'Firmenkonten',
-      note: 'Beantragen Sie ein Firmenkonto, das mit Ihrer Wallet verknüpft ist. Die Prüfung erfolgt manuell, wie bei Emittentenanträgen. Hinweis zur Demo: Die Registerdaten sind Angaben des Antragstellers; in diesem Prototyp werden weder Handelsregisterauszüge noch Ausweise der Eigentümer hochgeladen oder geprüft. Investieren aus einem Firmenkontext ist geplant und hier nicht aktiv.',
+      note: 'Beantragen Sie ein Firmenkonto, das mit Ihrem Community-Konto verknüpft ist. Die Prüfung erfolgt manuell, wie bei Emittentenanträgen. Hinweis zur Demo: Die Registerdaten sind Angaben des Antragstellers; in diesem Prototyp werden weder Handelsregisterauszüge noch Ausweise der Eigentümer hochgeladen oder geprüft. Investieren aus einem Firmenkontext ist geplant und hier nicht aktiv.',
       listTitle: 'Meine Firmenanträge',
       empty: 'Noch keine Firmenanträge.',
       formTitle: 'Firmenkonto beantragen',
@@ -1863,13 +1863,16 @@ export const de: Messages = {
     },
     totpTitle: 'Zwei-Faktor-Authentifizierung',
     totpExplainer: 'Ihre Wallet-Signatur wurde akzeptiert. Dieses Konto erfordert zusätzlich einen Code aus Ihrer Authenticator-App.',
+    totpExplainerEmail: 'Ihr Passwort wurde akzeptiert. Dieses Konto erfordert zusätzlich einen Code aus Ihrer Authenticator-App.',
     totpCodeLabel: 'Authenticator-Code',
     totpSubmit: 'Bestätigen und anmelden',
     totpRecoveryHint: 'Kein Zugriff mehr auf Ihren Authenticator? Geben Sie stattdessen einen Ihrer Wiederherstellungscodes ein.',
     security: {
       totpTitle: 'Zwei-Faktor-Authentifizierung',
       totpOffNote: 'Fügen Sie eine Authenticator-App als zweiten Schritt nach Ihrer Wallet-Signatur hinzu. Optional; Ihre Wallet bleibt die Hauptberechtigung.',
+      totpOffNoteEmail: 'Fügen Sie eine Authenticator-App als zweiten Schritt nach Ihrem Passwort hinzu. Optional; Ihr Passwort bleibt die Hauptberechtigung.',
       totpOnNote: 'Die Zwei-Faktor-Authentifizierung ist aktiviert: Nach Ihrer Wallet-Signatur wird bei der Anmeldung auch ein Authenticator-Code verlangt.',
+      totpOnNoteEmail: 'Die Zwei-Faktor-Authentifizierung ist aktiviert: Nach Ihrem Passwort wird bei der Anmeldung auch ein Authenticator-Code verlangt.',
       totpEnable: 'Zwei-Faktor aktivieren',
       totpDisable: 'Zwei-Faktor deaktivieren',
       totpScanNote:
@@ -1889,6 +1892,8 @@ export const de: Messages = {
       title: 'Sicherheit',
       authMethodNote:
         'Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Berechtigung. Dieser Prototyp hat kein Passwort; unten kann optional ein Zwei-Faktor-Authenticator hinzugefügt werden.',
+      authMethodNoteEmail:
+        'Sie melden sich mit Ihrer E-Mail-Adresse und Ihrem Passwort an: Das Passwort ist die Berechtigung. Ein optionaler Zwei-Faktor-Authenticator kann unten hinzugefügt werden.',
       sessionsTitle: 'Aktive Sitzungen',
       sessionLabel: 'Sitzung',
       currentBadge: 'Diese Sitzung',

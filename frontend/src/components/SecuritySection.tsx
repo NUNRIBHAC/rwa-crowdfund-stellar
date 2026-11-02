@@ -19,6 +19,7 @@ export default function SecuritySection() {
   const [busy, setBusy] = useState(false);
 
   const labels = m.community.security;
+  const isEmail = account?.authMethod === 'email';
   const [totpPhase, setTotpPhase] = useState<'idle' | 'enroll' | 'recovery' | 'disable'>('idle');
   const [totpEnroll, setTotpEnroll] = useState<{ otpauthUrl: string; manualKey: string } | null>(null);
   const [totpCode, setTotpCode] = useState('');
@@ -73,9 +74,11 @@ export default function SecuritySection() {
       <h2 id="security-title" className="section-title">
         {labels.title}
       </h2>
-      <p>{labels.authMethodNote}</p>
+      <p>{isEmail ? labels.authMethodNoteEmail : labels.authMethodNote}</p>
       <h3>{labels.totpTitle}</h3>
-      <p className="community-note">{totpEnabled ? labels.totpOnNote : labels.totpOffNote}</p>
+      <p className="community-note">
+        {totpEnabled ? (isEmail ? labels.totpOnNoteEmail : labels.totpOnNote) : isEmail ? labels.totpOffNoteEmail : labels.totpOffNote}
+      </p>
       {totpPhase === 'idle' && !totpEnabled && (
         <button
           className="btn"
