@@ -827,10 +827,10 @@ section[id] {
      in the two-row arrangement (52px measured). On wide desktops everything
      fits one row once the locale select is bounded: its intrinsic 340-357px
      (dual-language option labels) is what squeezed Connect into a 4-line
-     character wrap in the PR44 attempt. Cap the select, pin the logo at
-     36px (~40% of the bar, 07:09/07:45 anchor), keep Connect at natural
-     width, and let the nav take the flexible middle. Narrow widths keep the
-     two-row grid untouched. */
+     character wrap in the PR44 attempt. Cap the select, keep Connect at
+     natural width, and let the nav take the flexible middle. The logo size
+     follows the 2026-11-02 user reference (~50px), which replaces the
+     earlier 36px pin. Narrow widths keep the two-row grid untouched. */
   .header-inner {
     display: flex;
     align-items: center;
@@ -845,7 +845,11 @@ section[id] {
     flex: none;
   }
   .brand-lockup {
-    height: 36px;
+    /* User anchor 2026-11-02 23:22 (WhatsApp): the navbar crop was sent only
+       to show the desired logo SIZE - the reference lockup measures ~50px
+       tall at 1600px wide. Supersedes the 36px pin from the 07:09/07:45
+       anchors. */
+    height: 50px;
   }
   /* The testnet badge (~124px) is what priced the single row out of reach at
      exactly 1440px: brand 128 + badge 124 + Connect ~172 + select 200 + gaps
@@ -869,8 +873,8 @@ section[id] {
      deficit instead. */
   .site-nav a {
     white-space: nowrap;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 7px;
+    padding-right: 7px;
   }
   /* .header-actions is an unconstrained block div: the chip and Disconnect
      wrap to two lines inside it (QA connected DE at 1440px: navbar 98px).
@@ -897,7 +901,7 @@ section[id] {
     padding: 8px 12px;
   }
   .lang-select {
-    max-width: 200px;
+    max-width: 190px;
   }
 }
 
@@ -2770,13 +2774,16 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   direction: ltr;
 }
 
-@media (min-width: 1151px) and (max-width: 1440px) {
+@media (min-width: 1151px) and (max-width: 1439px) {
   /* 1151-1440px: the brand block plus four 200px-min link columns exceed the
      tile-free zone - measured on staging at 1280px the footer context text
      reached x1051 (AR) and x972 (EN) while the decorative tiles start at
      x933, so tiles touched the last context line in both locales. The upper
-     bound is 1440px because the animated tiles roam the tile zone: at 1401px
+     bound is 1439px because the animated tiles roam the tile zone: at 1401px
      the side-by-side row left only 3px to the zone edge, too thin a margin.
+     From 1440px up, the 2026-11-02 user reference band in
+     footer-layout-fix.css takes over (full-bleed, larger lockup, wide
+     context column beside the links, tiles at the viewport edge).
      Wrapping the grid below the brand row gives it the full padded width and lets the
      context column span it, keeping text clear of the tiles. */
   .footer-brand-inner {
