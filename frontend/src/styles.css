@@ -841,6 +841,12 @@ code {
     padding-left: 8px;
     padding-right: 8px;
   }
+  /* .header-actions is an unconstrained block div: the chip and Disconnect
+     wrap to two lines inside it (QA connected DE at 1440px: navbar 98px).
+     Flatten it so chip and button join the single row as direct flex items. */
+  .header-actions {
+    display: contents;
+  }
   .header-actions .btn {
     flex: none;
   }
