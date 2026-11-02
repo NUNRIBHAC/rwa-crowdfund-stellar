@@ -1881,7 +1881,8 @@ export const es: Messages = {
       totpTitle: 'Autenticación de dos factores',
       totpOffNote:
         'Añade una aplicación de autenticación como segundo paso tras tu firma de monedero. Opcional; tu monedero sigue siendo la credencial principal.',
-      totpOffNoteEmail: 'Añade una aplicación de autenticación como segundo paso tras tu contraseña. Opcional; tu contraseña sigue siendo la credencial principal.',
+      totpOffNoteEmail:
+        'Añade una aplicación de autenticación como segundo paso tras tu contraseña. Opcional; tu contraseña sigue siendo la credencial principal.',
       totpOnNote: 'La autenticación de dos factores está activada: tras tu firma de monedero, el inicio de sesión también pide un código de autenticación.',
       totpOnNoteEmail: 'La autenticación de dos factores está activada: tras tu contraseña, el inicio de sesión también pide un código de autenticación.',
       totpEnable: 'Activar dos factores',

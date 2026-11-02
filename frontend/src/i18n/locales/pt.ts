@@ -1876,7 +1876,8 @@ export const pt: Messages = {
       totpTitle: 'Autenticação de dois fatores',
       totpOffNote:
         'Adicione uma aplicação de autenticação como segundo passo após a assinatura da carteira. Opcional; a carteira continua a ser a credencial principal.',
-      totpOffNoteEmail: 'Adicione uma aplicação de autenticação como segundo passo após a palavra-passe. Opcional; a palavra-passe continua a ser a credencial principal.',
+      totpOffNoteEmail:
+        'Adicione uma aplicação de autenticação como segundo passo após a palavra-passe. Opcional; a palavra-passe continua a ser a credencial principal.',
       totpOnNote: 'A autenticação de dois fatores está ativa: após a assinatura da carteira, o início de sessão também pede um código de autenticação.',
       totpOnNoteEmail: 'A autenticação de dois fatores está ativa: após a palavra-passe, o início de sessão também pede um código de autenticação.',
       totpEnable: 'Ativar dois fatores',

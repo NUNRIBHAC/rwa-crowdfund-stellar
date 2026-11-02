@@ -1774,8 +1774,7 @@ export const zhTW: Messages = {
       totpDone: '完成',
       title: '安全性',
       authMethodNote: '您透過使用 Stellar 錢包簽署訊息來登入：錢包即憑證。此原型沒有密碼；可在下方新增選用的兩步驟驗證器。',
-      authMethodNoteEmail:
-        '你使用電子郵件地址與密碼登入：密碼即憑證。可在下方新增選用的兩步驟驗證器。',
+      authMethodNoteEmail: '你使用電子郵件地址與密碼登入：密碼即憑證。可在下方新增選用的兩步驟驗證器。',
       sessionsTitle: '使用中的工作階段',
       sessionLabel: '工作階段',
       currentBadge: '目前的工作階段',

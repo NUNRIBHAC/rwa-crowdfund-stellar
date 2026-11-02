@@ -1080,7 +1080,7 @@ export const fr: Messages = {
         entries: [
           {
             q: 'Ai-je besoin d’un compte ?',
-            a: "Optionnel. Vous pouvez vous inscrire avec un email et un mot de passe (confirmés par un jeton à usage unique), ou vous connecter en prouvant le contrôle de votre portefeuille Freighter avec un défi unique. Connecter ou signer ne partage jamais vos clés avec le site.",
+            a: 'Optionnel. Vous pouvez vous inscrire avec un email et un mot de passe (confirmés par un jeton à usage unique), ou vous connecter en prouvant le contrôle de votre portefeuille Freighter avec un défi unique. Connecter ou signer ne partage jamais vos clés avec le site.',
             state: 'live',
           },
           {
@@ -1886,7 +1886,8 @@ export const fr: Messages = {
       totpTitle: 'Authentification à deux facteurs',
       totpOffNote:
         "Ajoutez une application d'authentification comme deuxième étape après votre signature de portefeuille. Optionnel ; votre portefeuille reste la clé principale.",
-      totpOffNoteEmail: "Ajoutez une application d'authentification comme deuxième étape après votre mot de passe. Optionnel ; votre mot de passe reste la clé principale.",
+      totpOffNoteEmail:
+        "Ajoutez une application d'authentification comme deuxième étape après votre mot de passe. Optionnel ; votre mot de passe reste la clé principale.",
       totpOnNote:
         "L'authentification à deux facteurs est activée : après votre signature de portefeuille, la connexion demande aussi un code d'authentification.",
       totpOnNoteEmail: "L'authentification à deux facteurs est activée : après votre mot de passe, la connexion demande aussi un code d'authentification.",
@@ -1910,7 +1911,7 @@ export const fr: Messages = {
       authMethodNote:
         "Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille est la clé. Ce prototype n'a pas de mot de passe ; un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.",
       authMethodNoteEmail:
-        "Vous vous connectez avec votre email et votre mot de passe : le mot de passe est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.",
+        'Vous vous connectez avec votre email et votre mot de passe : le mot de passe est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.',
       sessionsTitle: 'Sessions actives',
       sessionLabel: 'Session',
       currentBadge: 'Cette session',

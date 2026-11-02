@@ -1774,8 +1774,7 @@ export const zhCN: Messages = {
       totpDone: '完成',
       title: '安全',
       authMethodNote: '您通过使用 Stellar 钱包签署消息来登录：钱包即凭证。本原型没有密码；可在下方添加可选的双重身份验证器。',
-      authMethodNoteEmail:
-        '你使用邮箱地址和密码登录：密码即凭据。可在下方添加可选的双重身份验证器。',
+      authMethodNoteEmail: '你使用邮箱地址和密码登录：密码即凭据。可在下方添加可选的双重身份验证器。',
       sessionsTitle: '活跃会话',
       sessionLabel: '会话',
       currentBadge: '当前会话',

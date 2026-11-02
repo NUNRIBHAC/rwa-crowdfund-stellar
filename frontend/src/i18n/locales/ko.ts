@@ -1812,8 +1812,7 @@ export const ko: Messages = {
       title: '보안',
       authMethodNote:
         'Stellar 지갑으로 메시지에 서명하여 로그인합니다: 지갑이 자격 증명입니다. 이 프로토타입에는 비밀번호가 없으며, 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
-      authMethodNoteEmail:
-        '이메일 주소와 비밀번호로 로그인합니다. 비밀번호가 자격 증명입니다. 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
+      authMethodNoteEmail: '이메일 주소와 비밀번호로 로그인합니다. 비밀번호가 자격 증명입니다. 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
       sessionsTitle: '활성 세션',
       sessionLabel: '세션',
       currentBadge: '현재 세션',

@@ -1824,8 +1824,7 @@ export const ja: Messages = {
       title: 'セキュリティ',
       authMethodNote:
         'Stellarウォレットでメッセージに署名してサインインします: ウォレットが認証情報です。このプロトタイプにパスワードはありません。下で任意の二要素認証を追加できます。',
-      authMethodNoteEmail:
-        'メールアドレスとパスワードでサインインします。パスワードが認証情報です。下で任意の二要素認証を追加できます。',
+      authMethodNoteEmail: 'メールアドレスとパスワードでサインインします。パスワードが認証情報です。下で任意の二要素認証を追加できます。',
       sessionsTitle: 'アクティブなセッション',
       sessionLabel: 'セッション',
       currentBadge: 'このセッション',
