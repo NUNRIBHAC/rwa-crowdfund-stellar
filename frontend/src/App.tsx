@@ -41,6 +41,39 @@ const INTENT_KEY = 'rwa-soroban-intent';
 export default function App() {
   const { m, locale } = useI18n();
   const route = useRoute();
+  // Fresh-fragment navigation: the browser's native anchor scroll runs before
+  // React renders the target (and sections may mount later behind async
+  // data), so /path#section must be scrolled by the app once the element
+  // exists. Same-document hash changes are already handled natively; this
+  // effect runs on route change/mount only. The sticky-header offset is the
+  // CSS scroll-margin-top on the target (#72), so a plain scrollIntoView is
+  // enough. jsdom has no scrollIntoView - the optional call is deliberate.
+  useEffect(() => {
+    const raw = window.location.hash;
+    if (!raw || raw.startsWith('#/')) return;
+    let id: string;
+    try {
+      id = decodeURIComponent(raw.slice(1));
+    } catch {
+      return;
+    }
+    if (!id) return;
+    let cancelled = false;
+    let attempts = 0;
+    const tryScroll = () => {
+      if (cancelled) return;
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView?.();
+        return;
+      }
+      if (++attempts < 20) setTimeout(tryScroll, 150);
+    };
+    tryScroll();
+    return () => {
+      cancelled = true;
+    };
+  }, [route]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [actor, setActor] = useState('');
   const [error, setError] = useState<{ code?: string; text: string } | null>(null);
