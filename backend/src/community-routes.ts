@@ -35,7 +35,7 @@ import {
   mailBudgetStatus,
   sendBudgetedMail,
 } from './email-auth.js';
-import { MAIL_LOCALES, normalizeMailLocale, resetEmail, verificationEmail } from './email-templates.js';
+import { MAIL_LOCALES, resetEmail, verificationEmail } from './email-templates.js';
 import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
