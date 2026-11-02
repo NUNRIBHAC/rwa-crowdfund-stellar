@@ -481,6 +481,43 @@ test('verification resend: per-email cooldown caps repeat mail, response stays u
   assert.equal(mailer.sent.length, 1);
 });
 
+test('resend after cooldown refreshes stored locale; omitted locale preserves it; unknown falls back to en', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-auth-locale-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const mailer = new FakeMailer();
+  const email = 'locale-refresh@example.com';
+  const t0 = 1_800_000_000_000;
+  const MIN = 60 * 1000;
+  const storedLocale = async () => (await store.read()).emailCredentials[email]?.preferredLocale;
+
+  await registerEmail(store, mailer, { email, password: 'correct horse battery', locale: 'pt' }, t0);
+  assert.equal(mailer.sent[0].subject, 'Demonstração Blockallisto - confirme o seu email');
+  assert.equal(await storedLocale(), 'pt');
+
+  // Inside the cooldown a resend sends nothing and must NOT touch the locale.
+  await resendVerification(store, mailer, { email, locale: 'de' }, t0 + 5 * MIN);
+  assert.equal(mailer.sent.length, 1);
+  assert.equal(await storedLocale(), 'pt');
+
+  // Past the cooldown the resend refreshes the stored locale and mails in it.
+  await resendVerification(store, mailer, { email, locale: 'de' }, t0 + 11 * MIN);
+  assert.equal(mailer.sent.length, 2);
+  assert.equal(mailer.sent[1].subject, 'Blockallisto-Demo - bestätigen Sie Ihre E-Mail');
+  assert.equal(await storedLocale(), 'de');
+
+  // An omitted locale preserves the stored one.
+  await resendVerification(store, mailer, { email }, t0 + 22 * MIN);
+  assert.equal(mailer.sent.length, 3);
+  assert.equal(mailer.sent[2].subject, 'Blockallisto-Demo - bestätigen Sie Ihre E-Mail');
+  assert.equal(await storedLocale(), 'de');
+
+  // An unknown locale normalizes to English.
+  await resendVerification(store, mailer, { email, locale: 'xx' }, t0 + 33 * MIN);
+  assert.equal(mailer.sent.length, 4);
+  assert.equal(mailer.sent[3].subject, 'Blockallisto demo - verify your email');
+  assert.equal(await storedLocale(), 'en');
+});
+
 test('cooldown timing (direct calls with injected clock): resend and reset send again after the window', async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-auth-clock-'));
   const store = new FileCommunityStore(path.join(dir, 'store.json'));
