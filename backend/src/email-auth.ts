@@ -27,6 +27,7 @@
 import { createHash, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore, EmailCredential } from './community-store.js';
+import { normalizeMailLocale, resetEmail, verificationEmail } from './email-templates.js';
 import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './accounts.js';
 import type { Mailer } from './mailer.js';
 
@@ -140,33 +141,6 @@ export function verifyPassword(password: string, record: string): boolean {
   return derived.length === expected.length && timingSafeEqual(derived, expected);
 }
 
-function verificationEmailText(email: string, token: string): string {
-  return [
-    'Welcome to the Blockallisto demo.',
-    '',
-    `Confirm this email address for account ${email} with this single-use verification token (valid 24 hours):`,
-    '',
-    token,
-    '',
-    'If you did not register, ignore this message - the account stays unverified and cannot log in.',
-    'This is a demo deployment on Stellar testnet. No real funds are involved.',
-  ].join('\n');
-}
-
-function resetEmailText(email: string, token: string): string {
-  return [
-    'Blockallisto demo - password reset.',
-    '',
-    `A password reset was requested for account ${email}. Use this single-use reset token (valid 1 hour):`,
-    '',
-    token,
-    '',
-    'If you did not request this, ignore this message - the current password stays valid.',
-    'Resetting the password signs out every existing session; two-factor authentication, when enabled, still applies at the next login.',
-    'This is a demo deployment on Stellar testnet. No real funds are involved.',
-  ].join('\n');
-}
-
 async function issueVerification(
   store: CommunityStore,
   mailer: Mailer,
@@ -186,12 +160,9 @@ async function issueVerification(
   // Send AFTER the hash is durably stored: a delivered token must always be
   // redeemable. If the send throws, the caller reports failure and the user
   // can request a fresh token via resend.
+  const mail = verificationEmail(normalizeMailLocale(credential.preferredLocale), credential.email, token);
   try {
-    await mailer.send({
-      to: credential.email,
-      subject: 'Blockallisto demo - verify your email',
-      text: verificationEmailText(credential.email, token),
-    });
+    await mailer.send({ to: credential.email, subject: mail.subject, text: mail.text });
   } catch (err) {
     if (isProviderThrottle(err)) await noteProviderThrottle(store, now);
     await refundMailSlot(store, now);
@@ -205,13 +176,14 @@ async function issueVerification(
 export async function registerEmail(
   store: CommunityStore,
   mailer: Mailer,
-  input: { email: unknown; password: unknown },
+  input: { email: unknown; password: unknown; locale?: unknown },
   now = Date.now(),
   maxPerHour = DEFAULT_MAIL_BUDGET_PER_HOUR,
   maxPerDay = DEFAULT_MAIL_BUDGET_PER_DAY,
 ): Promise<{ status: 'verification-sent' }> {
   const email = normalizeEmail(input.email);
   const password = validatePassword(input.password);
+  const locale = normalizeMailLocale(input.locale);
   const created = await store.change((state) => {
     const existing = state.emailCredentials[email];
     if (existing?.verified) return null; // verified duplicate: stay silent
@@ -219,6 +191,7 @@ export async function registerEmail(
     // out moments ago (per-email cooldown; the response stays uniform).
     if (existing) {
       if (existing.resendSentAt && now - existing.resendSentAt < EMAIL_RESEND_COOLDOWN_MS) return null;
+      existing.preferredLocale = locale;
       return existing;
     }
     // Throwaway identity keypair: gives the account a normal public key
@@ -239,6 +212,7 @@ export async function registerEmail(
       resetExpiresAt: null,
       resetSentAt: null,
       resendSentAt: null,
+      preferredLocale: locale,
     };
     state.emailCredentials[email] = credential;
     state.accounts[publicKey] = {
@@ -264,7 +238,7 @@ export async function registerEmail(
 export async function resendVerification(
   store: CommunityStore,
   mailer: Mailer,
-  input: { email: unknown },
+  input: { email: unknown; locale?: unknown },
   now = Date.now(),
   maxPerHour = DEFAULT_MAIL_BUDGET_PER_HOUR,
   maxPerDay = DEFAULT_MAIL_BUDGET_PER_DAY,
@@ -276,6 +250,7 @@ export async function resendVerification(
     // Per-email cooldown on top of the route's per-IP limit: repeated resend
     // requests must not turn into unsolicited mail to the address owner.
     if (existing.resendSentAt && now - existing.resendSentAt < EMAIL_RESEND_COOLDOWN_MS) return null;
+    if (input.locale !== undefined) existing.preferredLocale = normalizeMailLocale(input.locale);
     return existing;
   });
   if (!credential) return { status: 'verification-sent' }; // same anti-enumeration shape
@@ -296,7 +271,7 @@ export async function resendVerification(
 export async function requestPasswordReset(
   store: CommunityStore,
   mailer: Mailer,
-  input: { email: unknown },
+  input: { email: unknown; locale?: unknown },
   now = Date.now(),
   maxPerHour = DEFAULT_MAIL_BUDGET_PER_HOUR,
   maxPerDay = DEFAULT_MAIL_BUDGET_PER_DAY,
@@ -306,18 +281,20 @@ export async function requestPasswordReset(
     const credential = state.emailCredentials[email];
     if (!credential || !credential.verified) return null;
     if (credential.resetSentAt && now - credential.resetSentAt < EMAIL_RESEND_COOLDOWN_MS) return null;
+    if (input.locale !== undefined) credential.preferredLocale = normalizeMailLocale(input.locale);
     const token = `blr_${randomBytes(24).toString('hex')}`;
     reserveMailSlot(state, now, maxPerHour, maxPerDay);
     credential.resetTokenHash = createHash('sha256').update(token).digest('hex');
     credential.resetExpiresAt = now + RESET_TOKEN_TTL_MS;
-    return { token };
+    return { token, locale: credential.preferredLocale };
   });
   if (!prepared) return { status: 'reset-sent' };
+  const mail = resetEmail(normalizeMailLocale(prepared.locale), email, prepared.token);
   try {
     await mailer.send({
       to: email,
-      subject: 'Blockallisto demo - reset your password',
-      text: resetEmailText(email, prepared.token),
+      subject: mail.subject,
+      text: mail.text,
     });
   } catch (err) {
     if (isProviderThrottle(err)) await noteProviderThrottle(store, now);

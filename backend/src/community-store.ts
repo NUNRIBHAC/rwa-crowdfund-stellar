@@ -74,6 +74,7 @@ export type EmailCredential = {
   resetExpiresAt?: number | null;
   resetSentAt?: number | null; // per-email reset-mail cooldown marker
   resendSentAt?: number | null; // per-email verification-resend cooldown marker
+  preferredLocale?: string; // UI locale at last register/resend/reset-request; drives mail template language
 };
 
 export type Comment = {
