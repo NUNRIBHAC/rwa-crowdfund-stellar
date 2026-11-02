@@ -131,6 +131,29 @@ export type PostFundingReport = {
   createdAt: number;
 };
 
+// Investor investment documents: issuer/operator-published files deliverable
+// ONLY to entitled investors of that campaign (same entitlement rule as
+// post-funding reports), after an explicit approval step. Content is stored
+// server-side and served by an authorized download endpoint - never a public
+// URL. Demo honesty: in this prototype every record is demo:true synthetic
+// content; no real approved investment document exists yet, and production
+// content approval policy is unset (the approve step here is a demo-grade
+// operator designation, not legal review).
+export type InvestmentDocument = {
+  id: string;
+  campaignId: string;
+  title: string;
+  kind: 'kiis' | 'terms' | 'project' | 'other';
+  // Synthetic text content served on authorized download. Not a real offer.
+  content: string;
+  status: 'pending' | 'approved';
+  demo: true;
+  createdBy: string;
+  createdAt: number;
+  approvedBy: string | null;
+  approvedAt: number | null;
+};
+
 // Durable record that a wallet's contribution to a campaign was confirmed
 // on-chain (SUCCESS in the intent journal, written by the backend's own
 // submit/status paths - never client-asserted). Exists because the
@@ -334,6 +357,7 @@ export type CommunityState = {
   comments: Record<string, Comment>;
   news: Record<string, NewsPost>;
   reports: Record<string, PostFundingReport>;
+  investmentDocuments: Record<string, InvestmentDocument>;
   // Keyed `${campaignId}:${publicKey}`.
   contributors: Record<string, ContributorRecord>;
   // Chain-history backfill progress per campaign (contributor-backfill.ts):
@@ -359,6 +383,7 @@ export function emptyCommunityState(): CommunityState {
     comments: {},
     news: {},
     reports: {},
+    investmentDocuments: {},
     contributors: {},
     backfillCheckpoints: {},
     episodes: {},

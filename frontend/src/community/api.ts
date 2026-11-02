@@ -195,6 +195,38 @@ export const updateDisplayName = (token: string, displayName: string) =>
     token,
   });
 
+// --- Investment documents (investor-entitled, approved-only) ---
+export type InvestmentDocumentMeta = {
+  id: string;
+  campaignId: string;
+  title: string;
+  kind: 'kiis' | 'terms' | 'project' | 'other';
+  status: 'pending' | 'approved';
+  demo: true;
+  createdAt: number;
+  approvedAt: number | null;
+};
+
+export const fetchInvestmentDocuments = (token: string, campaignId: string) =>
+  call<{ documents: InvestmentDocumentMeta[]; demo: true }>(`/api/campaigns/${encodeURIComponent(campaignId)}/investment-documents`, {
+    token,
+  });
+
+// Authorized download: fetches the file with the session bearer and hands a
+// blob to the caller (no token in any URL).
+export async function downloadInvestmentDocument(token: string, docId: string): Promise<{ blob: Blob; filename: string }> {
+  const r = await fetch(`/api/investment-documents/${encodeURIComponent(docId)}/download`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!r.ok) {
+    const v = (await r.json().catch(() => ({}))) as { error?: string };
+    throw new Error(v.error ?? `Request failed (${r.status})`);
+  }
+  const dispo = r.headers.get('content-disposition') ?? '';
+  const m = /filename="([^"]+)"/.exec(dispo);
+  return { blob: await r.blob(), filename: m?.[1] ?? `${docId}.txt` };
+}
+
 // --- Campaign metadata / documents ---
 export const fetchCampaignMetadata = (campaignId: string) =>
   call<{ metadata: CampaignMetadata | null }>(`/api/campaigns/${encodeURIComponent(campaignId)}/metadata`);

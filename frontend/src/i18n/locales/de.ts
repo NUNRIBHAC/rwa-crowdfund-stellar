@@ -493,6 +493,9 @@ export const de: Messages = {
     documentsAria: 'Investitionsdokumente',
     documentsTitle: 'Investitionsdokumente',
     documentsEmpty: 'Keine Dokumente für diese Kampagne veröffentlicht.',
+    investorDocsEmpty: 'Für diese Kampagne sind noch keine Investitionsdokumente verfügbar.',
+    investorDocsUnavailable: 'Die Investitionsdokumente konnten nicht geladen werden. Das bedeutet nicht, dass es keine gibt - bitte später erneut versuchen.',
+    investorDocsDownload: 'Herunterladen',
     newInvestments: 'Neue Investitionen',
     filterAria: 'Portfolio nach Status filtern',
     tabs: {

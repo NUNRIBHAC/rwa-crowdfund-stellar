@@ -462,6 +462,9 @@
     "documentsAria": "Investment documents",
     "documentsTitle": "Investment documents",
     "documentsEmpty": "No documents published for this campaign.",
+    "investorDocsEmpty": "No investment documents are available for this campaign yet.",
+    "investorDocsUnavailable": "Investment documents could not be loaded. That does not mean there are none - try again later.",
+    "investorDocsDownload": "Download",
     "newInvestments": "New investments",
     "filterAria": "Filter portfolio by status",
     "tabs": {

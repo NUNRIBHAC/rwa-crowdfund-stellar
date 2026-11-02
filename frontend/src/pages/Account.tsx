@@ -8,6 +8,7 @@ import { useI18n } from '../i18n';
 import AccountNewsSection from '../components/AccountNewsSection';
 import DocumentsList from '../components/DocumentsList';
 import AccountPayoutsSection from '../components/AccountPayoutsSection';
+import AccountInvestmentDocuments from '../components/AccountInvestmentDocuments';
 import SignInPanel from '../components/SignInPanel';
 import MyCommunityActivity from '../components/MyCommunityActivity';
 import CompanyAccountsSection from '../components/CompanyAccountsSection';
@@ -185,6 +186,7 @@ export default function Account({ market }: { market: Market }) {
             <div key={r.id}>
               <h3>{r.name}</h3>
               <DocumentsList campaignId={r.id} fallback={<p className="empty-state">{m.account.documentsEmpty}</p>} />
+              <AccountInvestmentDocuments campaignId={r.id} />
             </div>
           ))}
         </section>
