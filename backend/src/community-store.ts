@@ -377,6 +377,8 @@ export type CommunityState = {
   // Rolling 1h outbound-mail timestamps (global provider budget). Persisted
   // so a restart/redeploy cannot reset the budget.
   mailSendLog: number[];
+  // Set when the provider answers 429: all sends pause until this time.
+  mailProviderMutedUntil?: number | null;
 };
 
 export function emptyCommunityState(): CommunityState {

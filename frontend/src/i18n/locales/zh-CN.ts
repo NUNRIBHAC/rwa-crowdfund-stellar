@@ -1686,6 +1686,7 @@ export const zhCN: Messages = {
     emailDemoNote: '演示环境：送达取决于已配置的邮件服务商。如未收到，请联系网站运营方。',
     errorEmailProviderUnavailable: '此部署未配置电子邮件服务商，因此无法使用电子邮件注册与登录。您仍可使用钱包登录。',
     errorEmailBudgetExceeded: '由于过去一小时内发送的邮件过多，此部署已暂时暂停邮件发送。请稍后重试。',
+    errorEmailProviderThrottled: '邮件服务商目前正在限制此部署。请等待几分钟后重试。',
     errorRateLimited: '来自此网络的尝试次数过多。请稍后再试。',
     errorEmailInvalid: '该电子邮件地址似乎无效。',
     errorPasswordShort: '密码太短：请至少使用 10 个字符。',

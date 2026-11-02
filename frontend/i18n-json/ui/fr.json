@@ -1708,6 +1708,7 @@
     "emailDemoNote": "Environnement de démonstration : la livraison dépend du fournisseur d'email configuré. Si rien n'arrive, contactez l'opérateur du site.",
     "errorEmailProviderUnavailable": "L'inscription et la connexion par email ne sont pas disponibles sur ce déploiement car aucun fournisseur d'email n'est configuré. Vous pouvez toujours vous connecter avec votre portefeuille.",
     "errorEmailBudgetExceeded": "L'envoi d'emails est temporairement suspendu sur ce déploiement car trop de messages ont été envoyés au cours de la dernière heure. Réessayez plus tard.",
+    "errorEmailProviderThrottled": "Le fournisseur d'email limite ce déploiement en ce moment. Patientez quelques minutes puis réessayez.",
     "errorRateLimited": "Trop de tentatives depuis ce réseau. Patientez un moment puis réessayez.",
     "errorEmailInvalid": "Cette adresse email ne semble pas valide.",
     "errorPasswordShort": "Mot de passe trop court : utilisez au moins 10 caractères.",
