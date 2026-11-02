@@ -17,4 +17,3 @@ State as of 2026-11-02; verify before relying.
 - Not covered yet: the docs portals, the demo/staging apps on a
   notification-enabled channel, and the archive sync gap detection (planned
   with the durable archive work).
-

@@ -25,4 +25,3 @@ publicly without that gate.
 
 Source basis: repo snapshot 2026-11-02 (branch `feature/community-platform`
 @ `f8b6829`, main @ `ad9bb30` (PR59)) plus direct reads of `main`.
-

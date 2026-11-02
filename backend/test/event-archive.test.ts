@@ -250,7 +250,10 @@ test('verify rejects a snapshot whose first line is an event, not a header', asy
 
 test('file store serializes concurrent mutations without losing events', async () => {
   const store = newStore();
-  const c = client(Array.from({ length: 40 }, (_, i) => ev(`e${i}`, 5 + i)), 100);
+  const c = client(
+    Array.from({ length: 40 }, (_, i) => ev(`e${i}`, 5 + i)),
+    100,
+  );
   await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
   const live = await store.list();
   const target = newStore();

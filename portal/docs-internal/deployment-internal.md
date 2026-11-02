@@ -56,4 +56,3 @@ assets. Status: PASSED 2026-11-02 - without credentials, `/`, `/internal/`,
 `/docs/intro/`, `/search-index.json`, `/img/logo.png` and
 `/assets/js/main.js` all returned 401; with credentials, `/`, `/internal/`
 and `/search-index.json` returned 200. Re-run after every hosting change.
-

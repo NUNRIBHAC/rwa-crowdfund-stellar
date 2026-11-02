@@ -7,10 +7,7 @@ export default defineConfig({
   testDir: './e2e-visual',
   timeout: 30000,
   retries: 0,
-  reporter: [
-    ['list'],
-    ['@argos-ci/playwright/reporter', { uploadToArgos: !!process.env.ARGOS_TOKEN }],
-  ],
+  reporter: [['list'], ['@argos-ci/playwright/reporter', { uploadToArgos: !!process.env.ARGOS_TOKEN }]],
   use: {
     baseURL: 'http://localhost:4173',
     launchOptions: {

@@ -20,4 +20,3 @@ State as of 2026-11-02; verify schedules on the VM before relying.
   archived events matched by hash.
 - NOT yet done: a full restore of the nightly dump into a NEW database.
   Until that test runs, the dump is catalog-complete but not restore-proven.
-
