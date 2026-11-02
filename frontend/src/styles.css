@@ -844,6 +844,21 @@ code {
   .header-actions .btn {
     flex: none;
   }
+  /* Connected state adds the wallet chip + Disconnect (~+130px over Connect):
+     keep the wide single row inside budget by showing just the shortened key
+     (full address stays on the chip's title) and trimming Disconnect. */
+  .wallet-chip-prefix {
+    display: none;
+  }
+  .wallet-chip {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .header-actions .btn-disconnect {
+    padding: 8px 12px;
+  }
   .lang-select {
     max-width: 200px;
   }
