@@ -8,6 +8,7 @@ import {
   FileEventArchiveStore,
   archiveCampaignEvents,
   archiveSnapshotJsonl,
+  restoreArchiveSnapshot,
   verifyArchiveSnapshot,
   archiveEventHash,
   ARCHIVE_VERSION,
@@ -153,4 +154,68 @@ test('archiveEventHash is stable and content-sensitive', () => {
   assert.equal(archiveEventHash(a), archiveEventHash({ ...a }));
   assert.notEqual(archiveEventHash(a), archiveEventHash(b));
   assert.equal(archiveEventHash({ ...a, archivedAt: 'different' }), archiveEventHash(a)); // archive time is not content
+});
+
+test('isolated restore reconstructs a fresh store from the snapshot and passes verification', async () => {
+  const source = newStore();
+  const c = client([ev('e1', 5), ev('e2', 6), ev('e3', 7, 'refunded')], 10);
+  await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store: source });
+  const snapshot = archiveSnapshotJsonl(await source.list());
+
+  const restored = newStore();
+  const r = await restoreArchiveSnapshot(snapshot, restored);
+  assert.equal(r.restored, 3);
+  assert.equal(r.refused, 0);
+  const proof = verifyArchiveSnapshot(snapshot, await restored.list());
+  assert.equal(proof.ok, true, JSON.stringify(proof));
+
+  // Corrupt one row: refused, the rest still restore, verification shows
+  // exactly the missing row.
+  const corrupted = snapshot.replace('xdr-e2', 'xdr-HACKED');
+  const partial = newStore();
+  const r2 = await restoreArchiveSnapshot(corrupted, partial);
+  assert.equal(r2.restored, 2);
+  assert.equal(r2.refused, 1);
+  assert.equal(r2.errors.length, 1);
+  const proof2 = verifyArchiveSnapshot(snapshot, await partial.list());
+  assert.equal(proof2.ok, false);
+  assert.ok(proof2.mismatches.some((m) => m.includes('e2')));
+});
+
+test('truncated snapshot is detected by the header count check', () => {
+  const events = [
+    {
+      eventId: 'e1',
+      campaignId: 'qa',
+      contractId: CONTRACT,
+      ledger: 5,
+      ledgerClosedAt: 't',
+      pagingToken: null,
+      topics: ['t'],
+      value: 'v1',
+      parsedKind: 'contributed',
+      parsedContributor: null,
+      archivedAt: 'x',
+      archiveVersion: 1,
+    },
+    {
+      eventId: 'e2',
+      campaignId: 'qa',
+      contractId: CONTRACT,
+      ledger: 6,
+      ledgerClosedAt: 't',
+      pagingToken: null,
+      topics: ['t'],
+      value: 'v2',
+      parsedKind: 'contributed',
+      parsedContributor: null,
+      archivedAt: 'x',
+      archiveVersion: 1,
+    },
+  ];
+  const full = archiveSnapshotJsonl(events);
+  const truncated = full.split('\n').slice(0, 2).join('\n') + '\n';
+  const v = verifyArchiveSnapshot(truncated, events);
+  assert.equal(v.ok, false);
+  assert.ok(v.errors.some((e) => e.includes('header claims')));
 });

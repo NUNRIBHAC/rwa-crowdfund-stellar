@@ -359,6 +359,40 @@ export function archiveSnapshotJsonl(events: ArchivedChainEvent[]): string {
   return [header, ...lines].join('\n') + '\n';
 }
 
+// Isolated restore: rebuild a store from a saved snapshot. Every row's
+// hash is validated BEFORE writing; corrupt rows are refused and listed,
+// valid rows still restore (partial restore with full visibility beats an
+// all-or-nothing failure that leaves the operator with nothing). Restores
+// events only - checkpoints are operator state tied to the RPC window, not
+// archive content. Targets a fresh/isolated store (never overwrite a live
+// one); afterwards run verifyArchiveSnapshot(snapshot, store.list()) as the
+// restore proof.
+export async function restoreArchiveSnapshot(
+  snapshotJsonl: string,
+  store: EventArchiveStore,
+): Promise<{ restored: number; refused: number; errors: string[] }> {
+  const lines = snapshotJsonl.trim().split('\n');
+  const errors: string[] = [];
+  const batch: ArchivedChainEvent[] = [];
+  let refused = 0;
+  for (const [n, line] of lines.slice(1).entries()) {
+    try {
+      const parsed = JSON.parse(line) as ArchiveSnapshotLine;
+      if (parsed.sha256 !== archiveEventHash(parsed.event)) {
+        refused += 1;
+        errors.push(`line ${n + 2}: row hash does not match its content; refused`);
+        continue;
+      }
+      batch.push(parsed.event);
+    } catch {
+      refused += 1;
+      errors.push(`line ${n + 2}: not parseable JSON; refused`);
+    }
+  }
+  const restored = batch.length > 0 ? await store.put(batch) : 0;
+  return { restored, refused, errors };
+}
+
 export type SnapshotVerification = { ok: boolean; events: number; mismatches: string[]; errors: string[] };
 
 export function verifyArchiveSnapshot(snapshotJsonl: string, live: ArchivedChainEvent[]): SnapshotVerification {
