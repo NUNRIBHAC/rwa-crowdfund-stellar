@@ -37,6 +37,7 @@ import {
   sendBudgetedMail,
 } from './email-auth.js';
 import { MAIL_LOCALES, resetEmail, verificationEmail } from './email-templates.js';
+import { completeSocialFlow, isSocialProvider, socialConfigFromEnv, startSocialFlow } from './social-auth.js';
 import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
@@ -48,6 +49,8 @@ export type CommunityRouterDeps = {
   service: CommunityService;
   // Abuse-defense overrides for tests; production wires both from env.
   ipReputation?: IpReputation;
+  // OAuth provider HTTP override for tests; production uses global fetch.
+  socialFetch?: typeof fetch;
   requireAdmin: express.RequestHandler;
   // Read-only operator reconciliation payload provider (wired in server.ts
   // from the campaign registry + intent journal). Optional so route tests
@@ -206,7 +209,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   const reputation = deps.ipReputation ?? ipReputationFromEnv(process.env, (message, code) => new CommunityError(403, message, code));
   const abuseGate = async (req: express.Request): Promise<void> => {
     if (turnstile) {
-      const result = await verifyTurnstileToken(turnstile, req.body?.turnstileToken, clientIp(req));
+      const result = await verifyTurnstileToken(turnstile, req.body?.turnstileToken ?? req.query?.turnstileToken, clientIp(req));
       if (!result.ok) {
         if (result.reason === 'verify-unavailable') throw new CommunityError(503, 'bot-check service unavailable; retry later', 'turnstile_unavailable');
         throw new CommunityError(403, 'bot check failed; reload the page and retry', 'turnstile_failed');
@@ -219,6 +222,54 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // public value by design; the secret never leaves the backend.
   router.get('/api/auth/abuse-config', (_req, res) => {
     res.json({ turnstileSiteKey: process.env.TURNSTILE_SITE_KEY?.trim() || null });
+  });
+
+  // Social (OAuth/OIDC) sign-in: /start behind the same abuseGate as the
+  // email routes (top-level navigation, so the Turnstile token arrives as a
+  // query param the frontend attaches after running the widget), /callback
+  // unauthenticated by nature - state+nonce+PKCE, validated by
+  // openid-client, are the flow's protection (social-auth.ts header).
+  // Results 302 back to the SPA with the outcome in the FRAGMENT so tokens
+  // and error codes never touch URL access logs.
+  const socialRedirectUri = (req: express.Request, provider: string): string =>
+    (process.env[`SOCIAL_${provider.toUpperCase()}_REDIRECT_URI`] ?? '').trim() || `https://${req.get('host')}/api/auth/social/${provider}/callback`;
+  router.get('/api/auth/social/:provider/start', async (req, res) => {
+    try {
+      const provider = req.params.provider;
+      if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
+      const cfg = socialConfigFromEnv(process.env, provider);
+      if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
+      await abuseGate(req);
+      const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch);
+      res.redirect(302, url);
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.get('/api/auth/social/:provider/callback', async (req, res) => {
+    const fail = (code: string) => res.redirect(302, `/account#social-error=${code}`);
+    try {
+      const provider = req.params.provider;
+      if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
+      const cfg = socialConfigFromEnv(process.env, provider);
+      if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`social-callback-ip:${ip}`, 30, 60 * 60 * 1000)) {
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      }
+      if (typeof req.query.error === 'string') return fail('social_provider_denied');
+      const currentUrl = `https://${req.get('host')}${req.originalUrl}`;
+      const result = await completeSocialFlow(store, process.env, provider, cfg, currentUrl, req.query.state, Date.now(), deps.socialFetch);
+      if (result.kind === 'totp') return res.redirect(302, `/account#social-totp=${result.ticket}`);
+      return res.redirect(302, `/account#social-token=${result.token}`);
+    } catch (err) {
+      const code = (err as { code?: string } | null)?.code;
+      const status = (err as { status?: number } | null)?.status;
+      // Flow outcomes redirect to the SPA fragment; a disabled/unknown
+      // provider stays a plain 404 (fail-closed, no SPA signal).
+      if (code && status !== 404 && (err instanceof AuthError || err instanceof CommunityError)) return fail(code);
+      sendError(res, err);
+    }
   });
   // Admin-gated abuse-defense observability for the controlled verification
   // window. Aggregate counters only - no IPs, tokens or emails leave these

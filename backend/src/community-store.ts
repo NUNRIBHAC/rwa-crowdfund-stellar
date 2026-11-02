@@ -19,14 +19,37 @@ export type Account = {
   publicKey: string;
   displayName: string | null;
   createdAt: number;
-  // 'email' accounts log in with email+password (email-auth.ts) and hold a
-  // throwaway public key nobody can sign for; undefined means the classic
-  // wallet-challenge account. Never shown to other users.
-  authMethod?: 'email';
+  // 'email' accounts log in with email+password (email-auth.ts), 'social'
+  // accounts sign in via an OAuth provider identity (social-auth.ts); both
+  // hold a throwaway public key nobody can sign for. undefined means the
+  // classic wallet-challenge account. Never shown to other users.
+  authMethod?: 'email' | 'social';
   email?: string;
   // Optional second factor (accounts.ts + totp.ts). Never serialized to
   // clients: encSeed is AES-256-GCM ciphertext, recoveryHashes are SHA-256.
   totp?: TotpEnrollment;
+};
+
+// A linked OAuth provider identity (social-auth.ts). Keyed
+// `${provider}:${subject}` - the provider's stable opaque subject is the
+// ONLY join key; the email is reference data, never a lookup key.
+export type SocialIdentity = {
+  provider: string;
+  subject: string;
+  publicKey: string;
+  email: string | null;
+  createdAt: number;
+  lastLoginAt: number;
+};
+
+// A short-lived single-use OAuth flow (state/nonce/PKCE), keyed by
+// sha256(state). The raw state never persists.
+export type SocialFlow = {
+  provider: string;
+  nonce: string;
+  codeVerifier: string;
+  createdAt: number;
+  expiresAt: number;
 };
 
 export type TotpEnrollment = {
@@ -356,6 +379,8 @@ export type CommunityState = {
   version: 1;
   accounts: Record<string, Account>;
   emailCredentials: Record<string, EmailCredential>;
+  socialIdentities: Record<string, SocialIdentity>;
+  socialFlows: Record<string, SocialFlow>;
   challenges: Record<string, Challenge>;
   totpTickets: Record<string, TotpTicket>;
   sessions: Record<string, Session>;
@@ -387,6 +412,8 @@ export function emptyCommunityState(): CommunityState {
     version: 1,
     accounts: {},
     emailCredentials: {},
+    socialIdentities: {},
+    socialFlows: {},
     challenges: {},
     totpTickets: {},
     sessions: {},
@@ -411,6 +438,9 @@ function validate(state: any): CommunityState {
   // Forward-compatible default: docs written before notifications existed
   // gain the collection on first read instead of failing validation.
   if (state && state.version === 1 && !state.notifications) state.notifications = {};
+  // Same forward-compatible default for docs written before social sign-in.
+  if (state && state.version === 1 && !state.socialIdentities) state.socialIdentities = {};
+  if (state && state.version === 1 && !state.socialFlows) state.socialFlows = {};
   // Same forward-compatible default for docs written before the audit log.
   if (state && state.version === 1 && !state.audit) state.audit = [];
   if (state && state.version === 1 && !state.companies) state.companies = {};
