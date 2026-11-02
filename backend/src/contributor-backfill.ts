@@ -71,7 +71,7 @@ const DEFAULT_EVENT_LIMIT = 1000;
 // Live RPC wrappers box their natives: ScValAddress.value and ScValSymbol.value
 // arrive as String OBJECTS (typeof 'object', correct toString), not string
 // primitives — typeof === 'string' checks alone silently skip every event.
-const asString = (v: any): string | undefined => {
+export const asString = (v: any): string | undefined => {
   if (typeof v === 'string') return v;
   if (v instanceof String) return v.toString();
   // Deeper boxing: ScValAddress.address/.value arrive as ScAddressAccount
@@ -83,11 +83,11 @@ const asString = (v: any): string | undefined => {
   }
   return undefined;
 };
-const topicSymbol = (t: any): string | undefined => {
+export const topicSymbol = (t: any): string | undefined => {
   if (!t) return undefined;
   return asString(t.symbol) ?? asString(t.value) ?? asString(t.sym);
 };
-const topicAddress = (t: any): string | undefined => {
+export const topicAddress = (t: any): string | undefined => {
   if (!t) return undefined;
   return asString(t.address) ?? asString(t.value);
 };

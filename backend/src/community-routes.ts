@@ -19,6 +19,7 @@ import {
 import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaignId } from './community.js';
 import { metadataFor } from './campaign-metadata.js';
 import type { Account } from './community-store.js';
+import { shareRegisterCsv, type ShareRegisterPayload } from './share-register.js';
 
 // Express wiring for accounts, community, support and metadata APIs.
 // The admin gate is injected from server.ts so there is exactly one admin
@@ -45,6 +46,11 @@ export type CommunityRouterDeps = {
   // removes the balance entry on refund, so current balance alone would
   // silently revoke access from people who did invest.
   investorEntitlement?: (campaignId: string, publicKey: string) => Promise<{ registered: boolean; balanceUnits: bigint; contributedBefore: boolean }>;
+  // Share-register export provider (wired in server.ts from the campaign
+  // registry + intent journal + durable contributor registry). Optional so
+  // route tests without chain access stay hermetic; absent means 503, never
+  // a guess. null means the campaign id is unknown (404).
+  shareRegister?: (campaignId: string) => Promise<ShareRegisterPayload | null>;
 };
 
 function clientIp(req: express.Request): string | undefined {
@@ -349,6 +355,45 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.json({
         news: await service.listNews(requireCampaignId(req.params.id)),
       });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
+  // --- Share-register export (operator) ---
+  // Admin-gated read-only export derived from the durable contributor
+  // registry + intent journal. Wallet addresses are investor data, so the
+  // register is never public. Absent provider (hermetic tests, unconfigured
+  // chain) answers 503, never a guess; unknown campaign answers 404.
+  // Semantics and limits are carried in the payload itself.
+  router.get('/api/campaigns/:id/share-register.json', requireAdmin, async (req, res) => {
+    if (!deps.shareRegister) {
+      res.status(503).json({ error: 'share register unavailable: provider not configured' });
+      return;
+    }
+    try {
+      const payload = await deps.shareRegister(requireCampaignId(req.params.id));
+      if (!payload) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      res.json(payload);
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.get('/api/campaigns/:id/share-register.csv', requireAdmin, async (req, res) => {
+    if (!deps.shareRegister) {
+      res.status(503).json({ error: 'share register unavailable: provider not configured' });
+      return;
+    }
+    try {
+      const payload = await deps.shareRegister(requireCampaignId(req.params.id));
+      if (!payload) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      res.type('text/csv').send(shareRegisterCsv(payload));
     } catch (err) {
       sendError(res, err);
     }

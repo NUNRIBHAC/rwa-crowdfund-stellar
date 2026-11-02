@@ -1,28 +1,35 @@
 # Deploying the two portals
 
-Approved design (2026-11-02). Nothing deployed yet - creating the hosted
-services is a separate owner-approved step.
+Both portals are live as of 2026-11-02. Details below describe the
+verified running services.
 
 ## Public portal
 
+- Live at [blockallisto-docs.onrender.com](https://blockallisto-docs.onrender.com) (custom
+  domain later,
+  after the domain purchase). Verified 2026-11-02: all routes 200, search
+  functional, leak grep clean (see below).
 - Render static site on the existing account, auto-deploy from `main`.
 - Build command: `cd portal && npm ci && npm run build:public`
 - Publish directory: `portal/build-public`
-- Hostname: `blockallisto-docs.onrender.com` (custom domain later, after
-  the domain purchase).
 
 ## Private portal (this build)
 
-- Plan: serve `build-internal/` from the existing Oracle Cloud VM behind **nginx
-  basic auth** - server-side enforcement, no client-side gates. Status:
-  planned, not deployed. Verified externally 2026-11-02: the VM already runs
-  nginx with per-hostname Let's Encrypt certs, and `docs.92-5-187-71.sslip.io`
-  resolves to the VM (sslip.io wildcard) - no DNS change needed.
-- Same pattern as the existing Weblate and Uptime Kuma services on that VM;
-  TLS via Let's Encrypt.
-- Deploy flow: pull the repo on the VM (or rsync the build output), run
-  `npm ci && npm run build:internal`, point the authenticated nginx vhost
-  at `portal/build-internal/`.
+- Live at [docs.92-5-187-71.sslip.io](https://docs.92-5-187-71.sslip.io) behind
+  **server-side basic
+  auth** - no client-side gates. Deployed and verified 2026-11-02; the
+  sslip.io wildcard resolves the hostname to the VM, no DNS change needed.
+- Actual implementation: the internal build is rsynced to
+  `/home/opc/private-docs/html` on the Oracle VM and served by an
+  `nginx:alpine` container (`private-docs`) on the `weblate_default` Docker
+  network. The htpasswd file lives outside the webroot. TLS is terminated by
+  the existing `https-portal` container (Let's Encrypt cert issued
+  2026-11-02); the host nginx stays inactive.
+- Deploy flow: run `npm ci && npm run build:internal` off-VM, rsync
+  `portal/build-internal/` to `/home/opc/private-docs/html`. No container
+  restart needed for content updates.
+- Existing VM services were re-checked after the ~10s https-portal
+  recreation during setup and kept their expected responses.
 - The basic-auth credentials live in the vault, never in the repo or docs.
 
 ## Rejected options
@@ -45,4 +52,7 @@ internal page slugs and vendor names are absent from `build-public/`
 Access gate test (mandatory before the private portal is considered live):
 every private route and asset must return 401/403 without credentials -
 test `/`, `/internal/`, direct page URLs, search index files and static
-assets. Status: NOT YET TESTED - no private hostname is live yet.
+assets. Status: PASSED 2026-11-02 - without credentials, `/`, `/internal/`,
+`/docs/intro/`, `/search-index.json`, `/img/logo.png` and
+`/assets/js/main.js` all returned 401; with credentials, `/`, `/internal/`
+and `/search-index.json` returned 200. Re-run after every hosting change.
