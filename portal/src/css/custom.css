@@ -21,5 +21,3 @@
   --ifm-color-primary-light: #bbbcf4;
   --ifm-background-color: #14163a; /* bl-surface-dark */
 }
-/* TODO(writer): load Montserrat/Inter webfonts if the brand guide requires
-   exact type; currently falls back to system-ui per the token stacks. */

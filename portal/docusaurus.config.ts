@@ -31,6 +31,15 @@ const config: Config = {
     locales: ['en'],
   },
 
+  // Brand type: same Google Fonts (OFL) loading as the main site.
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap',
+  ],
+  headTags: [
+    { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
+    { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' } },
+  ],
+
   presets: [
     [
       'classic',

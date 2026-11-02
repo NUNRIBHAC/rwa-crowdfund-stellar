@@ -13,8 +13,11 @@ services is a separate owner-approved step.
 
 ## Private portal (this build)
 
-- Serve `build-internal/` from the existing Oracle Cloud VM behind **nginx
-  basic auth** - server-side enforcement, no client-side gates.
+- Plan: serve `build-internal/` from the existing Oracle Cloud VM behind **nginx
+  basic auth** - server-side enforcement, no client-side gates. Status:
+  planned, not deployed. Verified externally 2026-11-02: the VM already runs
+  nginx with per-hostname Let's Encrypt certs, and `docs.92-5-187-71.sslip.io`
+  resolves to the VM (sslip.io wildcard) - no DNS change needed.
 - Same pattern as the existing Weblate and Uptime Kuma services on that VM;
   TLS via Let's Encrypt.
 - Deploy flow: pull the repo on the VM (or rsync the build output), run
@@ -38,3 +41,8 @@ The public build must not contain internal markers. Verified 2026-11-02:
 `OPERATOR_WALLETS`, `x-admin-key`, `BACKFILL_VERSION`, the staging hostname,
 internal page slugs and vendor names are absent from `build-public/`
 (including the search index). Repeat the grep in CI or before deploy.
+
+Access gate test (mandatory before the private portal is considered live):
+every private route and asset must return 401/403 without credentials -
+test `/`, `/internal/`, direct page URLs, search index files and static
+assets. Status: NOT YET TESTED - no private hostname is live yet.
