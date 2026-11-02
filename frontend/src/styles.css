@@ -1911,6 +1911,12 @@ textarea:focus-visible,
   flex-wrap: wrap;
   gap: 10px;
 }
+.footer-social a {
+  display: inline-flex;
+}
+.footer-social a:hover img {
+  opacity: 1;
+}
 .footer-social img {
   width: 18px;
   height: 18px;

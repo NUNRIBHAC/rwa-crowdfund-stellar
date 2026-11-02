@@ -14,21 +14,34 @@ export default function Footer() {
               <img className="footer-brand-lockup-img" src={lockupFor(theme)} alt="Blockallisto" />
             </div>
             <p className="footer-tagline">{m.footer.tagline}</p>
-            {/* Social icons: visual presence only until the real profile URLs exist (tracked);
-              aria-label is hardcoded English until the locale batch adds footer keys.
-              linkedin.png is the official [in] Bug (InBug-Black, padded to a square
-              transparent canvas) from LinkedIn's brand download:
-              https://brand.linkedin.com/downloads -> in-logo.zip (content.linkedin.com). */}
-            <div className="footer-social" aria-label="Social media profiles (links not yet published)">
-              <img src="/social/x.svg" alt="" />
-              <img src="/social/instagram.svg" alt="" />
+            {/* Social icons. Verified profiles are linked (YouTube, Instagram, Threads, email);
+              the remaining platforms stay as visual presence only until their real profile
+              URLs exist - no placeholder links. aria-labels are hardcoded English until the
+              locale batch adds footer keys. All platform glyphs are the user-provided set
+              (brand/icons/social, Simple Icons geometry); linkedin.png is the official [in]
+              Bug (InBug-Black, padded to a square transparent canvas) from LinkedIn's brand
+              download: https://brand.linkedin.com/downloads -> in-logo.zip (content.linkedin.com). */}
+            <div className="footer-social" aria-label="Blockallisto social media profiles">
+              <a href="https://x.com/blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on X">
+                <img src="/social/x.svg" alt="" />
+              </a>
+              <a href="https://www.instagram.com/blockallisto/" target="_blank" rel="noopener" aria-label="Blockallisto on Instagram">
+                <img src="/social/instagram.svg" alt="" />
+              </a>
               <img src="/social/facebook.svg" alt="" />
-              <img src="/social/threads.svg" alt="" />
-              <img src="/social/youtube.svg" alt="" />
+              <a href="https://www.threads.com/@blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on Threads">
+                <img src="/social/threads.svg" alt="" />
+              </a>
+              <a href="https://www.youtube.com/@blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on YouTube">
+                <img src="/social/youtube.svg" alt="" />
+              </a>
               <img src="/social/telegram.svg" alt="" />
               <img src="/social/discord.svg" alt="" />
               <img src="/social/farcaster.svg" alt="" />
               <img src="/social/linkedin.png" alt="LinkedIn" />
+              <a href="mailto:blockallisto@gmail.com" aria-label="Email Blockallisto">
+                <img src="/social/email.svg" alt="" />
+              </a>
             </div>
           </div>
           <div className="footer-grid">
