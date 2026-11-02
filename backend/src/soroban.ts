@@ -751,3 +751,353 @@ export async function submitCampaignDeploy(input: { actor: string; xdr: string; 
     testOnly: true,
   };
 }
+
+// --- v2 contract-set deployment (share-token + offering, wired) ---
+// The campaign builder's v2 path deploys the two v2 scaffolds merged in
+// PRs #76/#77 as a wired set, in up to five single-operation steps (SDK v17
+// assembles single-host-function transactions only):
+//   1. deploy-v2-upload-token     upload the share-token Wasm (skipped when
+//                                 the exact pinned hash is on the ledger)
+//   2. deploy-v2-upload-offering  upload the offering Wasm (same skip rule)
+//   3. deploy-v2-create-token     create the share-token instance
+//                                 (admin = operator wallet)
+//   4. deploy-v2-create-offering  create the offering instance configured
+//                                 with the created token address
+//   5. deploy-v2-set-minter       designate the offering as the token's
+//                                 minter, completing the wiring
+// Progress is derived from the journaled intents themselves (SUCCESS rows
+// carry the created contract ids); no separate session collection exists.
+// The pins below are build-integrity pins of the merged scaffolds built with
+// the repo toolchain - they pin exactly what was built and reviewed in-repo.
+// They are NOT an external security review: the v2 contracts are demo-grade
+// testnet scaffolds and the registry entry below says so.
+const V2_SHARE_TOKEN_WASM_HASH = '3fc3d4b74f69fcfb2e0b86878b5b0f3d89a73050e6a049da4dd789dd7a27eaa1';
+const V2_OFFERING_WASM_HASH = '84d254abbc46f5aaf8305734510d66123b4cc9d800992cd11c23da88eb1be622';
+const V2_WASMS: Record<string, { url: URL; hash: string; cache: Buffer | null }> = {
+  token: {
+    url: new URL('../wasm/v2-share-token.wasm', import.meta.url),
+    hash: V2_SHARE_TOKEN_WASM_HASH,
+    cache: null,
+  },
+  offering: {
+    url: new URL('../wasm/v2-offering.wasm', import.meta.url),
+    hash: V2_OFFERING_WASM_HASH,
+    cache: null,
+  },
+};
+function loadV2Wasm(kind: 'token' | 'offering'): Buffer {
+  const entry = V2_WASMS[kind];
+  if (entry.cache) return entry.cache;
+  let wasm: Buffer;
+  try {
+    wasm = readFileSync(entry.url);
+  } catch {
+    throw new Error(`v2 ${kind} Wasm is not packaged on this deployment`);
+  }
+  if (createHash('sha256').update(wasm).digest('hex') !== entry.hash)
+    throw new Error(`packaged v2 ${kind} Wasm does not match its pin; refusing to prepare deployment`);
+  entry.cache = wasm;
+  return wasm;
+}
+async function v2WasmOnLedger(client: rpc.Server, kind: 'token' | 'offering'): Promise<boolean> {
+  const entry = V2_WASMS[kind];
+  try {
+    const wasm = await client.getContractWasmByHash(Buffer.from(entry.hash, 'hex'));
+    return createHash('sha256').update(wasm).digest('hex') === entry.hash;
+  } catch {
+    return false;
+  }
+}
+export type V2DeployParams = { symbol: string; decimals: number; minPerInvestor: string; maxPerInvestor: string };
+function validateV2Params(p: V2DeployParams): void {
+  if (!/^[A-Za-z0-9]{1,12}$/.test(p.symbol)) throw new Error('invalid share-token symbol');
+  if (!Number.isSafeInteger(p.decimals) || p.decimals < 0 || p.decimals > 18) throw new Error('invalid share-token decimals');
+  // amountUnits already enforces a positive decimal string in i128 range.
+  const min = amountUnits(p.minPerInvestor);
+  const max = amountUnits(p.maxPerInvestor);
+  if (max < min) throw new Error('max per investor must be at least the min');
+}
+// Next pending v2 step for a campaign, derived from its journaled intents.
+// A FAILED step is retried by building the same step again; a SIGNED/
+// broadcast step blocks via the unresolved-intent guard below, exactly like
+// the v1 path.
+function v2NextStep(
+  campaignIntents: { action: string; status: string; contractId?: string }[],
+  tokenOnLedger: boolean,
+  offeringOnLedger: boolean,
+): { action: string; tokenContractId?: string; offeringContractId?: string } {
+  const ok = (action: string) => campaignIntents.some((i) => i.action === action && i.status === 'SUCCESS');
+  const cid = (action: string) => campaignIntents.find((i) => i.action === action && i.status === 'SUCCESS')?.contractId;
+  if (!ok('deploy-v2-upload-token') && !tokenOnLedger) return { action: 'deploy-v2-upload-token' };
+  if (!ok('deploy-v2-upload-offering') && !offeringOnLedger) return { action: 'deploy-v2-upload-offering' };
+  const tokenContractId = cid('deploy-v2-create-token');
+  if (!tokenContractId) return { action: 'deploy-v2-create-token' };
+  const offeringContractId = cid('deploy-v2-create-offering');
+  if (!offeringContractId) return { action: 'deploy-v2-create-offering', tokenContractId };
+  if (!ok('deploy-v2-set-minter')) return { action: 'deploy-v2-set-minter', tokenContractId, offeringContractId };
+  return { action: 'complete', tokenContractId, offeringContractId };
+}
+export async function buildCampaignDeployV2(input: {
+  actor: string;
+  id: string;
+  name: string;
+  goal: string;
+  deadline: number;
+  v2: V2DeployParams;
+}): Promise<any> {
+  guard();
+  const actor = actorAddress(input.actor);
+  if (process.env.SOROBAN_RECOVERY_MODE === 'true')
+    throw new Error(
+      'recovery mode: journal was restored from backup and is not yet reconciled; new transactions are disabled until an operator completes reconciliation and disables SOROBAN_RECOVERY_MODE',
+    );
+  if (!/^[a-zA-Z0-9_-]{1,48}$/.test(input.id)) throw new Error('invalid campaign id');
+  if (typeof input.name !== 'string' || input.name.length === 0 || input.name.length > 120) throw new Error('invalid campaign name');
+  if (entries().some((e) => e.id === input.id)) throw new Error('campaign id is already registered');
+  const goalUnits = amountUnits(input.goal);
+  const deadline = Math.floor(input.deadline);
+  if (!Number.isSafeInteger(deadline) || deadline <= Math.floor(Date.now() / 1000)) throw new Error('deadline must be in the future');
+  validateV2Params(input.v2);
+  await rateLimit('build', input.actor);
+  const client = sorobanDeps.client();
+  const [tokenOnLedger, offeringOnLedger] = await Promise.all([v2WasmOnLedger(client, 'token'), v2WasmOnLedger(client, 'offering')]);
+  const store0 = await readStore();
+  const mine = store0.intents.filter((i) => i.campaign === input.id && i.actor === input.actor && i.action.startsWith('deploy-v2-'));
+  const next = v2NextStep(mine, tokenOnLedger, offeringOnLedger);
+  if (next.action === 'complete')
+    return {
+      complete: true,
+      contractSet: 'v2',
+      id: input.id,
+      name: input.name,
+      tokenContractId: next.tokenContractId,
+      offeringContractId: next.offeringContractId,
+      testOnly: true,
+    };
+  const account = await client.getAccount(input.actor).catch((e: unknown) => {
+    if (/account not found/i.test(e instanceof Error ? e.message : String(e))) {
+      const err = new Error('Transaction preparation failed: wallet account does not exist on testnet.');
+      (err as Error & { code?: string }).code = 'SIM_ACCOUNT_MISSING';
+      throw err;
+    }
+    throw e;
+  });
+  let operation:
+    ReturnType<typeof Operation.uploadContractWasm> | ReturnType<typeof Operation.createCustomContract> | ReturnType<typeof Operation.invokeContractFunction>;
+  switch (next.action) {
+    case 'deploy-v2-upload-token':
+      operation = Operation.uploadContractWasm({ wasm: loadV2Wasm('token') });
+      break;
+    case 'deploy-v2-upload-offering':
+      operation = Operation.uploadContractWasm({ wasm: loadV2Wasm('offering') });
+      break;
+    case 'deploy-v2-create-token':
+      operation = Operation.createCustomContract({
+        address: actor,
+        wasmHash: Buffer.from(V2_SHARE_TOKEN_WASM_HASH, 'hex'),
+        salt: randomBytes(32),
+        constructorArgs: [
+          actor.toScVal(),
+          nativeToScVal(input.name, { type: 'string' }),
+          nativeToScVal(input.v2.symbol, { type: 'string' }),
+          nativeToScVal(input.v2.decimals, { type: 'u32' }),
+        ],
+      });
+      break;
+    case 'deploy-v2-create-offering':
+      // token/issuer: token is the created share-token instance; the
+      // operator wallet is the issuer in this demo-grade configuration.
+      operation = Operation.createCustomContract({
+        address: actor,
+        wasmHash: Buffer.from(V2_OFFERING_WASM_HASH, 'hex'),
+        salt: randomBytes(32),
+        constructorArgs: [
+          actor.toScVal(),
+          Address.fromString(next.tokenContractId!).toScVal(),
+          actor.toScVal(),
+          nativeToScVal(amountUnits(input.v2.minPerInvestor), { type: 'i128' }),
+          nativeToScVal(amountUnits(input.v2.maxPerInvestor), { type: 'i128' }),
+          nativeToScVal(goalUnits, { type: 'i128' }),
+          nativeToScVal(deadline, { type: 'u64' }),
+        ],
+      });
+      break;
+    case 'deploy-v2-set-minter':
+      operation = Operation.invokeContractFunction({
+        contract: next.tokenContractId!,
+        function: 'set_minter',
+        args: [Address.fromString(next.offeringContractId!).toScVal()],
+      });
+      break;
+    default:
+      throw new Error(`unknown v2 deploy step ${next.action}`);
+  }
+  const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase: passphrase }).addOperation(operation).setTimeout(900).build();
+  const simulation = await client.simulateTransaction(tx);
+  if (rpc.Api.isSimulationError(simulation)) {
+    console.warn('soroban v2 deploy simulation failed:', simulation.error ?? '');
+    const err = new Error('Transaction preparation failed: the network rejected the transaction simulation.');
+    (err as Error & { code?: string }).code = 'SIM_REJECTED';
+    throw err;
+  }
+  if (rpc.Api.isSimulationRestore(simulation)) throw new Error('state restoration required; operator must restore before signing');
+  if (simulation.result?.auth.some((a) => a.credentials.type !== 'sorobanCredentialsSourceAccount'))
+    throw new Error('separate address authorization is unsupported');
+  const prepared = rpc.assembleTransaction(tx, simulation).build();
+  const op = prepared.operations[0] as any;
+  if (op.auth?.some((a: any) => a.credentials.type !== 'sorobanCredentialsSourceAccount')) throw new Error('separate address authorization is unsupported');
+  const hash = Buffer.from(prepared.hash()).toString('hex');
+  await guarded(async () => {
+    const store = await readStore();
+    quarantineHold(store);
+    const unresolved = store.intents.find((i) => i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
+    if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
+    const open = openIntents(store, input.actor);
+    if (open.length >= openIntentCap()) throw new Error(`too many open intents (${open.length}); resolve signed intents or let unsigned ones expire`);
+    store.intents.push({ hash, campaign: input.id, actor: input.actor, action: next.action, xdr: prepared.toXDR(), status: 'BUILT' });
+    await save(store);
+  });
+  return {
+    hash,
+    xdr: prepared.toXDR(),
+    networkPassphrase: passphrase,
+    action: 'deploy',
+    contractSet: 'v2',
+    step: next.action.replace(/^deploy-v2-/, ''),
+    id: input.id,
+    name: input.name,
+    feeStroops: prepared.fee,
+    testOnly: true,
+  };
+}
+export async function submitCampaignDeployV2(input: { actor: string; xdr: string; name?: string }): Promise<any> {
+  guard();
+  actorAddress(input.actor);
+  const displayName = typeof input.name === 'string' && input.name.length > 0 && input.name.length <= 120 ? input.name : null;
+  if (input.name !== undefined && displayName === null) throw new Error('invalid campaign name');
+  const tx = verifySignedTx(input.actor, input.xdr);
+  const hash = Buffer.from(tx.hash()).toString('hex');
+  const V2_ACTIONS = ['deploy-v2-upload-token', 'deploy-v2-upload-offering', 'deploy-v2-create-token', 'deploy-v2-create-offering', 'deploy-v2-set-minter'];
+  const phase = await guarded(async () => {
+    const store = await readStore();
+    const intent = store.intents.find((i) => i.hash === hash && i.actor === input.actor && V2_ACTIONS.includes(i.action));
+    if (!intent) throw new Error(quarantinedHash(store, hash) ?? 'transaction was not prepared by this API');
+    if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
+    const other = store.intents.find((i) => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
+    if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
+    if (!intent.signedXdr) {
+      intent.signedXdr = input.xdr;
+      intent.status = 'SIGNED';
+      await save(store);
+    }
+    return { terminal: false };
+  });
+  if (!phase.terminal) {
+    const store = await readStore();
+    const intent = store.intents.find((i) => i.hash === hash)!;
+    const sendTx = TransactionBuilder.fromXDR(intent.signedXdr!, passphrase) as Transaction;
+    try {
+      const result = await sorobanDeps.client().sendTransaction(sendTx);
+      if (result.hash !== hash) throw new Error('RPC returned mismatched transaction hash');
+      const status = result.status === 'ERROR' ? 'UNKNOWN' : result.status;
+      await recordStatus(hash, status);
+    } catch (err) {
+      await recordStatus(hash, 'UNKNOWN');
+      throw err;
+    }
+  }
+  const outcome = await awaitDeployResult(hash);
+  await recordStatus(hash, outcome.status);
+  if (outcome.status === 'FAILED') throw new Error(`deployment transaction failed on-chain (hash ${hash}); no contract was created`);
+  const intent = (await readStore()).intents.find((i) => i.hash === hash)!;
+  const step = intent.action.replace(/^deploy-v2-/, '');
+  if (step.startsWith('upload') && outcome.status === 'SUCCESS')
+    return {
+      hash,
+      status: 'SUCCESS',
+      confirmed: true,
+      contractSet: 'v2',
+      step,
+      message: 'v2 contract code uploaded; build again for the next step.',
+      testOnly: true,
+    };
+  if (step.startsWith('create')) {
+    // Fail closed on the created instance: its deployed code must match the
+    // pinned scaffold Wasm before the contract id is journaled.
+    if (!outcome.contractId)
+      return {
+        hash,
+        status: outcome.status,
+        confirmed: false,
+        contractSet: 'v2',
+        step,
+        message: 'Submission is not confirmation. Check the hash before another action.',
+      };
+    const pin = step === 'create-token' ? V2_SHARE_TOKEN_WASM_HASH : V2_OFFERING_WASM_HASH;
+    const deployedWasm = await sorobanDeps.client().getContractWasmByContractId(outcome.contractId);
+    if (createHash('sha256').update(deployedWasm).digest('hex') !== pin)
+      throw new Error(`deployed v2 ${step} code does not match its pin; refusing to journal the contract id`);
+    await guarded(async () => {
+      const store = await readStore();
+      const row = store.intents.find((i) => i.hash === hash);
+      if (row && !row.contractId) {
+        row.contractId = outcome.contractId!;
+        await save(store);
+      }
+    });
+    return {
+      hash,
+      status: 'SUCCESS',
+      confirmed: true,
+      contractSet: 'v2',
+      step,
+      contractId: outcome.contractId,
+      message: `v2 ${step} confirmed; build again for the next step.`,
+      testOnly: true,
+    };
+  }
+  if (step === 'set-minter') {
+    if (outcome.status !== 'SUCCESS')
+      return {
+        hash,
+        status: outcome.status,
+        confirmed: false,
+        contractSet: 'v2',
+        step,
+        message: 'Submission is not confirmation. Check the hash before another action.',
+      };
+    const store = await readStore();
+    const mine = store.intents.filter((i) => i.campaign === intent.campaign && i.actor === input.actor && i.action.startsWith('deploy-v2-'));
+    const tokenContractId = mine.find((i) => i.action === 'deploy-v2-create-token' && i.status === 'SUCCESS')?.contractId;
+    const offeringContractId = mine.find((i) => i.action === 'deploy-v2-create-offering' && i.status === 'SUCCESS')?.contractId;
+    if (!tokenContractId || !offeringContractId)
+      throw new Error('set-minter confirmed but the journaled contract ids are incomplete; reconcile before building again');
+    return {
+      hash,
+      status: 'SUCCESS',
+      confirmed: true,
+      contractSet: 'v2',
+      step,
+      complete: true,
+      tokenContractId,
+      offeringContractId,
+      registryEntry: {
+        id: intent.campaign,
+        name: displayName ?? intent.campaign,
+        contractSet: 'v2',
+        tokenContractId,
+        offeringContractId,
+      },
+      note: 'Add registryEntry to SOROBAN_CAMPAIGNS_JSON to list the campaign; the server never edits the registry itself. v2 registry entries are demo-grade testnet scaffolds without external security review.',
+      testOnly: true,
+    };
+  }
+  return {
+    hash,
+    status: outcome.status,
+    confirmed: false,
+    contractSet: 'v2',
+    step,
+    message: 'Submission is not confirmation. Check the hash before another action.',
+  };
+}

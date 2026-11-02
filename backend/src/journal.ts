@@ -19,6 +19,10 @@ export type Intent = {
   amount?: string;
   createdAt?: string;
   updatedAt?: string;
+  // Created contract id, recorded by the server only after a SUCCESSFUL
+  // deploy-create transaction whose deployed code matched its pinned Wasm
+  // hash (soroban.ts v2 deployment chain). Never operator-supplied.
+  contractId?: string;
 };
 // A row that failed validation: excluded from every lookup and update, logged
 // and preserved verbatim in the backend (never silently deleted), and surfaced
@@ -61,6 +65,7 @@ export function validateIntentSemantics(i: Intent): string | null {
     }
   }
   if (i.amount != null && !/^\d+(\.\d{1,7})?$/.test(i.amount)) return 'amount is not a decimal string with at most 7 places';
+  if (i.contractId != null && !StrKey.isValidContract(i.contractId)) return 'contractId is not a valid contract address';
   for (const ts of [i.createdAt, i.updatedAt]) if (ts != null && Number.isNaN(Date.parse(ts))) return 'timestamp does not parse';
   return null;
 }

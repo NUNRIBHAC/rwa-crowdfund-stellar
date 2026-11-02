@@ -48,6 +48,17 @@ export type CommunityRouterDeps = {
   campaignDeploy?: {
     build: (input: { actor: string; id: string; name: string; goal: string; deadline: number }) => Promise<unknown>;
     submit: (input: { actor: string; xdr: string; name?: string }) => Promise<unknown>;
+    // v2 contract set (share-token + offering, wired); absent answers 503 on
+    // contractSet:'v2' - an unwired v2 path can never fake a deployment.
+    buildV2?: (input: {
+      actor: string;
+      id: string;
+      name: string;
+      goal: string;
+      deadline: number;
+      v2: { symbol: string; decimals: number; minPerInvestor: string; maxPerInvestor: string };
+    }) => Promise<unknown>;
+    submitV2?: (input: { actor: string; xdr: string; name?: string }) => Promise<unknown>;
   };
   // Report READ entitlement: on-chain contribution balance for the signed-in
   // wallet (wired in server.ts from the Soroban registry). Optional so route
@@ -766,14 +777,37 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         res.status(503).json({ error: 'campaign deployment is not wired on this deployment' });
         return;
       }
+      const contractSet = req.body?.contractSet === undefined ? 'v1' : String(req.body.contractSet);
+      if (contractSet === 'v2' && !campaignDeploy.buildV2) {
+        res.status(503).json({ error: 'v2 campaign deployment is not wired on this deployment' });
+        return;
+      }
       res.json(
-        await campaignDeploy.build({
-          actor: account.publicKey,
-          id: String(req.body?.id ?? ''),
-          name: String(req.body?.name ?? ''),
-          goal: String(req.body?.goal ?? ''),
-          deadline: Number(req.body?.deadline),
-        }),
+        contractSet === 'v2'
+          ? await campaignDeploy.buildV2!({
+              actor: account.publicKey,
+              id: String(req.body?.id ?? ''),
+              name: String(req.body?.name ?? ''),
+              goal: String(req.body?.goal ?? ''),
+              deadline: Number(req.body?.deadline),
+              v2: {
+                symbol: String(req.body?.v2?.symbol ?? ''),
+                decimals: Number(req.body?.v2?.decimals),
+                minPerInvestor: String(req.body?.v2?.minPerInvestor ?? ''),
+                maxPerInvestor: String(req.body?.v2?.maxPerInvestor ?? ''),
+              },
+            })
+          : contractSet === 'v1'
+            ? await campaignDeploy.build({
+                actor: account.publicKey,
+                id: String(req.body?.id ?? ''),
+                name: String(req.body?.name ?? ''),
+                goal: String(req.body?.goal ?? ''),
+                deadline: Number(req.body?.deadline),
+              })
+            : (() => {
+                throw new Error('invalid contractSet');
+              })(),
       );
     }),
   );
@@ -784,8 +818,13 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         res.status(503).json({ error: 'campaign deployment is not wired on this deployment' });
         return;
       }
+      const submitSet = req.body?.contractSet === undefined ? 'v1' : String(req.body.contractSet);
+      if (submitSet === 'v2' && !campaignDeploy.submitV2) {
+        res.status(503).json({ error: 'v2 campaign deployment is not wired on this deployment' });
+        return;
+      }
       res.json(
-        await campaignDeploy.submit({
+        await (submitSet === 'v2' ? campaignDeploy.submitV2! : campaignDeploy.submit)({
           actor: account.publicKey,
           xdr: String(req.body?.xdr ?? ''),
           name: typeof req.body?.name === 'string' ? req.body.name : undefined,
