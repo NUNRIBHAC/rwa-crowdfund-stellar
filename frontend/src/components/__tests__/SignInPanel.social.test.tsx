@@ -56,4 +56,26 @@ describe('SignInPanel social sign-in button', () => {
     );
     expect(screen.queryByRole('button', { name: 'Continue with Google' })).toBeNull();
   });
+
+  it('a social account without a display name is labeled by its email, not the raw identity key', async () => {
+    globalThis.__authMock = auth({
+      account: {
+        id: 'a2',
+        publicKey: 'GAPRF4EXAMPLEPUBLICKEYM4V5',
+        displayName: null,
+        createdAt: 1,
+        totpEnabled: false,
+        authMethod: 'social',
+        email: 'nuno@example.com',
+      },
+      token: 'bls_tok',
+    });
+    render(
+      <I18nProvider>
+        <SignInPanel actor="investor" />
+      </I18nProvider>,
+    );
+    const strong = await screen.findByText((_, el) => el?.tagName === 'STRONG' && (el.textContent ?? '').includes('nuno@example.com'));
+    expect(strong.textContent).toBe('nuno@example.com (GAPRF4...M4V5)');
+  });
 });

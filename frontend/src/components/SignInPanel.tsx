@@ -303,7 +303,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
       <p>
         {m.community.signedInAs}{' '}
         <strong>
-          {account.displayName ?? shorten(account.publicKey, 6, 4)} ({shorten(account.publicKey, 6, 4)})
+          {account.displayName ?? account.email ?? shorten(account.publicKey, 6, 4)} ({shorten(account.publicKey, 6, 4)})
         </strong>
       </p>
       {error && (

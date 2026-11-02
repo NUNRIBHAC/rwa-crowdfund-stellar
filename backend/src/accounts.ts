@@ -151,7 +151,7 @@ export function publicAccount(account: Account): {
   displayName: string | null;
   createdAt: number;
   totpEnabled: boolean;
-  authMethod: 'wallet' | 'email';
+  authMethod: 'wallet' | 'email' | 'social';
   email: string | null;
 } {
   // Only ever serialized to the account owner (auth responses and /me), so
@@ -162,7 +162,7 @@ export function publicAccount(account: Account): {
     displayName: account.displayName,
     createdAt: account.createdAt,
     totpEnabled: account.totp?.status === 'enabled',
-    authMethod: account.authMethod === 'email' ? 'email' : 'wallet',
+    authMethod: account.authMethod ?? 'wallet',
     email: account.email ?? null,
   };
 }
