@@ -8,7 +8,9 @@ assets with no monetary value.
 [Varial](https://varialwallet.com/) (formerly Freighter) is a
 browser-extension wallet for Stellar. Install it, create or import an account, and switch the wallet
 network to **Testnet**. The Blockallisto app may still call the wallet
-"Freighter" - it is the same wallet under its new name.
+"Freighter" - it is the same wallet under its new name
+([announcement](https://stellar.org/blog/foundation-news/freighter-is-now-varial),
+[changelog](https://varialwallet.com/changelog)).
 
 ## 2. Connect your wallet
 
