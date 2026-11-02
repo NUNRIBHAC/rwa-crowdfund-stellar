@@ -1,0 +1,25 @@
+/* Blockallisto docs portal theme - Fraction identity, brand tokens v1.4
+   (mirrors brand/brand-tokens.css in the repo). */
+:root {
+  --ifm-color-primary: #4b4fe2; /* bl-indigo */
+  --ifm-color-primary-dark: #383ba7; /* bl-indigo-700 */
+  --ifm-color-primary-darker: #32358f;
+  --ifm-color-primary-darkest: #2a2c78;
+  --ifm-color-primary-light: #7376e8; /* bl-indigo-500 */
+  --ifm-color-primary-lighter: #8b8ef0; /* bl-indigo-400 */
+  --ifm-color-primary-lightest: #bbbcf4; /* bl-indigo-300 */
+  --ifm-background-color: #f6f6fe; /* bl-paper */
+  --ifm-font-color-base: #14163a; /* bl-ink */
+  --ifm-font-family-base: 'Inter', system-ui, sans-serif;
+  --ifm-heading-font-family: 'Montserrat', system-ui, sans-serif;
+  --ifm-code-font-size: 95%;
+  --ifm-border-radius: 8px; /* bl-radius-md */
+}
+[data-theme='dark'] {
+  --ifm-color-primary: #8b8ef0; /* bl-indigo-400 on dark */
+  --ifm-color-primary-dark: #7376e8;
+  --ifm-color-primary-light: #bbbcf4;
+  --ifm-background-color: #14163a; /* bl-surface-dark */
+}
+/* TODO(writer): load Montserrat/Inter webfonts if the brand guide requires
+   exact type; currently falls back to system-ui per the token stacks. */
