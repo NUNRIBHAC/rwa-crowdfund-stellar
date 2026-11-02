@@ -21,7 +21,7 @@ export type BackfillGap = 'start-before-floor' | 'cursor-behind-floor';
 // (recording is idempotent). v2: tolerate the SDK's ScVal wrapper classes in
 // event topics (v1 only matched plain {symbol}/{address} JSON and silently
 // recorded nothing live, 2026-11-01 proof chain).
-const BACKFILL_VERSION = 2;
+const BACKFILL_VERSION = 3;
 
 export type BackfillCheckpoint = {
   // Checkpoint format version that wrote this record.
@@ -68,18 +68,21 @@ const DEFAULT_EVENT_LIMIT = 1000;
 // classes (ScValSymbol/ScValAddress), where the native value lives on the
 // .value getter and .address is a nested ScAddress object, NOT the strkey.
 // Reading only the plain shape silently records nothing from the live RPC.
+// Live RPC wrappers box their natives: ScValAddress.value and ScValSymbol.value
+// arrive as String OBJECTS (typeof 'object', correct toString), not string
+// primitives — typeof === 'string' checks alone silently skip every event.
+const asString = (v: any): string | undefined => {
+  if (typeof v === 'string') return v;
+  if (v instanceof String) return v.toString();
+  return undefined;
+};
 const topicSymbol = (t: any): string | undefined => {
   if (!t) return undefined;
-  if (typeof t.symbol === 'string') return t.symbol;
-  if (typeof t.value === 'string') return t.value;
-  if (typeof t.sym === 'string') return t.sym;
-  return undefined;
+  return asString(t.symbol) ?? asString(t.value) ?? asString(t.sym);
 };
 const topicAddress = (t: any): string | undefined => {
   if (!t) return undefined;
-  if (typeof t.address === 'string') return t.address;
-  if (typeof t.value === 'string') return t.value;
-  return undefined;
+  return asString(t.address) ?? asString(t.value);
 };
 
 export async function backfillCampaignContributors(opts: {

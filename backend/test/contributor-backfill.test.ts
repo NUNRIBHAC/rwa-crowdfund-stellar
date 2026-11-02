@@ -109,7 +109,7 @@ test('first run with full-depth RPC (floor 1) reports no gap', async () => {
 
 test('cursor within retention resumes from cursor+1 and keeps no gap', async () => {
   const client = new FakeClient(2000, 1000, [contributed(1800, G1)]);
-  const { run, recorded } = harness(client, { version: 2, processedThroughLedger: 1200, updatedAt: 1 });
+  const { run, recorded } = harness(client, { version: 3, processedThroughLedger: 1200, updatedAt: 1 });
   const r = await run();
   assert.equal(client.calls[0].startLedger, 1201);
   assert.deepEqual(recorded, [G1]);
@@ -118,7 +118,7 @@ test('cursor within retention resumes from cursor+1 and keeps no gap', async () 
 
 test('cursor behind the retention floor after downtime flags cursor-behind-floor and resumes at the floor', async () => {
   const client = new FakeClient(2000, 1000, [contributed(1100, G2)]);
-  const { run, recorded, checkpoints } = harness(client, { version: 2, processedThroughLedger: 500, updatedAt: 1 });
+  const { run, recorded, checkpoints } = harness(client, { version: 3, processedThroughLedger: 500, updatedAt: 1 });
   const r = await run();
   assert.equal(r.gap, 'cursor-behind-floor');
   assert.deepEqual(recorded, [G2]);
@@ -207,7 +207,7 @@ test('re-run is idempotent and advances the cursor to latest', async () => {
 
 test('up-to-date cursor does no network work', async () => {
   const client = new FakeClient(2000, 1, []);
-  const { run } = harness(client, { version: 2, processedThroughLedger: 2000, updatedAt: 1 });
+  const { run } = harness(client, { version: 3, processedThroughLedger: 2000, updatedAt: 1 });
   const r = await run();
   assert.equal(r.scanned, 0);
   assert.equal(client.calls.length, 0);
@@ -253,7 +253,7 @@ test('invalid contract id fails before any network traffic', async () => {
 });
 
 test('prior floor observation survives later checkpoints', async () => {
-  const prior = { version: 2, processedThroughLedger: 1500, gap: 'start-before-floor', floorLedger: 1000, floorObservedAt: 42, updatedAt: 1 };
+  const prior = { version: 3, processedThroughLedger: 1500, gap: 'start-before-floor', floorLedger: 1000, floorObservedAt: 42, updatedAt: 1 };
   const client = new FakeClient(2000, 1000, []);
   const { run, checkpoints } = harness(client, prior);
   await run();
@@ -318,6 +318,20 @@ test('live RPC topic shape: SDK ScVal wrapper classes (value getter, no plain sy
   assert.equal(r.recorded, 1);
 });
 
+test('live RPC boxed natives: String-object .value wrappers (typeof object) still record', async () => {
+  // Deeper live shape: the SDK wrappers box their natives - .value arrives as
+  // a String OBJECT (typeof 'object', correct toString), so typeof-string
+  // checks alone silently skip every event (staging rescan after v2:
+  // scanned 1, skipped 1, recorded 0).
+  const boxed = { ledger: 1500, topic: [{ value: Object('contributed') }, { value: Object(G1) }] };
+  const boxedAddr = { ledger: 1501, topic: [{ value: Object('contributed') }, { address: Object(G2) }] };
+  const client = new FakeClient(2000, 1, [boxed, boxedAddr]);
+  const { run, recorded } = harness(client);
+  const r = await run();
+  assert.deepEqual(recorded, [G1, G2]);
+  assert.equal(r.recorded, 2);
+});
+
 test('a checkpoint from an older parser version is discarded and history is re-scanned', async () => {
   // v1 checkpoint claims ledgers through 2000 are processed, but the event at
   // 1500 was never recorded under the old parser. The version mismatch must
@@ -328,13 +342,13 @@ test('a checkpoint from an older parser version is discarded and history is re-s
   assert.deepEqual(recorded, [G1]);
   assert.equal(r.gap, 'start-before-floor'); // re-derived honestly: version discard restarts at 1
   const last = checkpoints.at(-1);
-  assert.equal(last.version, 2);
+  assert.equal(last.version, 3);
   assert.equal(last.processedThroughLedger, 2000);
 });
 
 test('same-version checkpoints resume without re-scanning', async () => {
   const client = new FakeClient(2000, 1, []);
-  const { run } = harness(client, { version: 2, processedThroughLedger: 2000, updatedAt: 1 });
+  const { run } = harness(client, { version: 3, processedThroughLedger: 2000, updatedAt: 1 });
   const r = await run();
   assert.equal(r.scanned, 0);
   assert.equal(client.calls.length, 0); // nothing to do: start 2001 > latest 2000
