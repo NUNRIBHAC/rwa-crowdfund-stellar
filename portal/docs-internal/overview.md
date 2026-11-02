@@ -9,11 +9,10 @@ Internal technical and operational documentation for the Blockallisto
 project. This build contains everything on the public portal plus the
 internal pages under **Internal** in the navbar.
 
-**Audience:** project owner and invited operators only. Access control is
-**planned but not yet live**: this build must only be served behind the
-server-side gate described in `deployment-internal.md`, and only after the
-unauthenticated-access test there passes. Until then it must not be served
-publicly at all.
+**Audience:** project owner and invited operators only. This build is live
+behind the server-side gate described in `deployment-internal.md`; the
+unauthenticated-access test passed 2026-11-02. It must never be served
+publicly without that gate.
 
 **Rules:**
 
@@ -25,4 +24,5 @@ publicly at all.
   repo before relying on details.
 
 Source basis: repo snapshot 2026-11-02 (branch `feature/community-platform`
-@ `0447287`, main @ PR53+) plus direct reads of `main`.
+@ `f8b6829`, main @ `ad9bb30` (PR59)) plus direct reads of `main`.
+
