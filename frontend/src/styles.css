@@ -82,17 +82,21 @@ code {
   row-gap: 6px;
 }
 
-/* Keep anchored sections clear of the sticky header on hash jumps */
+/* Keep anchored sections clear of the sticky header on hash jumps. The
+   header height is measured at runtime (--sticky-header-h, set by Header):
+   it varies with viewport, locale string lengths and nav wrapping, so no
+   fixed value can be right across breakpoints and languages. The fallback
+   only applies before the first measurement. */
 h1[id],
 h2[id],
 section[id] {
-  scroll-margin-top: 96px;
+  scroll-margin-top: var(--sticky-header-h, 96px);
 }
 @media (max-width: 640px) {
   h1[id],
   h2[id],
   section[id] {
-    scroll-margin-top: 132px;
+    scroll-margin-top: var(--sticky-header-h, 132px);
   }
 }
 .brand {
@@ -1302,7 +1306,7 @@ section[id] {
   flex-direction: column;
   gap: 14px;
   position: sticky;
-  top: 90px;
+  top: var(--sticky-header-h, 90px);
 }
 .widget-title {
   margin: 0;

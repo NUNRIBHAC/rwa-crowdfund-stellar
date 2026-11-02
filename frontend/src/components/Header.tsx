@@ -3,6 +3,7 @@ import { routeHash, type RouteName } from '../router';
 import { LOCALES, useI18n, type Locale } from '../i18n';
 import { lockupFor, useTheme } from '../theme';
 import { useCommunityAuth } from '../community/CommunityAuth';
+import { useEffect, useRef } from 'react';
 
 type Props = {
   actor: string;
@@ -18,6 +19,25 @@ type Props = {
 // The theme toggle lives in the risk banner above, not here.
 export default function Header({ actor, busy, onConnect, onDisconnect, current }: Props) {
   const theme = useTheme();
+  const headerRef = useRef<HTMLElement>(null);
+  // Publish the real sticky-header height so anchored sections clear it on
+  // hash jumps. The height varies with viewport, locale string lengths and
+  // nav wrapping, so it is measured, never hardcoded.
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const publish = () => {
+      document.documentElement.style.setProperty('--sticky-header-h', `${Math.ceil(el.getBoundingClientRect().height)}px`);
+    };
+    publish();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', publish);
+      return () => window.removeEventListener('resize', publish);
+    }
+    const ro = new ResizeObserver(publish);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const { signOut } = useCommunityAuth();
   const { locale, setLocale, m } = useI18n();
   const NAV: { route: RouteName; label: string }[] = [
@@ -31,7 +51,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
     { route: 'account', label: m.nav.account },
   ];
   return (
-    <header className="site-header">
+    <header className="site-header" ref={headerRef}>
       <div className="header-inner">
         <div className="header-main">
           <a className="brand" href={routeHash({ name: 'home' })}>
