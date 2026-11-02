@@ -1,4 +1,4 @@
-import { test, before, after } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -48,9 +48,6 @@ function extractToken(text: string): string {
   assert.ok(token, 'email carries a verification token');
   return token;
 }
-
-let base = '';
-let server: ReturnType<express.Express['listen']>;
 
 async function startApp(mailer: Mailer | null): Promise<string> {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-auth-'));
