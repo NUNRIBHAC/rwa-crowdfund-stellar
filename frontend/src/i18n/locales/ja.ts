@@ -1606,7 +1606,10 @@ export const ja: Messages = {
       warning_issued: '警告が発行されました',
     },
     questions: [
-      { q: 'クラウドファンディングプロジェクトに投資した資金を全額失う可能性はありますか？', why: 'クラウドファンディング投資は全額を失う可能性があります。' },
+      {
+        q: 'クラウドファンディングプロジェクトに投資した資金を全額失う可能性はありますか？',
+        why: 'クラウドファンディング投資は全額を失う可能性があります。',
+      },
       {
         q: 'クラウドファンディング投資は預金保証制度の対象ですか？',
         why: '預金保証制度はクラウドファンディング投資を対象としません。損失は投資家が負います。',
@@ -1625,7 +1628,6 @@ export const ja: Messages = {
       },
     ],
   },
-
   community: {
     loading: '読み込み中...',
     demoBadge: 'DEMO',
@@ -1669,12 +1671,31 @@ export const ja: Messages = {
     commentLabel: 'あなたのコメント',
     commentSubmit: 'コメントを投稿',
     commentPostingAs: '{name} として投稿します。コメントは公開されます。',
-    commentsSignInHint: '下でウォレットでサインインしてディスカッションに参加してください。',
+    commentsSignInHint: 'ウォレットでサインインしてディスカッションに参加してください。',
     signInTitle: 'コミュニティサインイン',
     signInExplainer:
       'Freighter ウォレットで一度きりのチャレンジに署名し、そのアドレスを管理していることを証明します。トランザクションは作成されず、資金も動きません。セッションによりコメント、サポートチケット、発行者申請が解放されます。',
     signInButton: 'ウォレットでサインイン',
     signInConnectFirst: 'まず Freighter ウォレットを接続してください(ページ上部)。',
+    signInMethodLabel: 'ログイン方法',
+    signInMethodWallet: 'ウォレット',
+    signInMethodEmail: 'メール',
+    emailExplainer:
+      'メールアドレスとパスワードでアカウントを作成するか、既存のアカウントでログインします。出資などのオンチェーン操作には引き続きFreighterウォレットが必要です。',
+    emailLabel: 'メールアドレス',
+    passwordLabel: 'パスワード',
+    emailPasswordHint: '10文字以上。',
+    emailRegisterButton: 'アカウント作成',
+    emailLoginButton: 'メールでログイン',
+    emailModeLogin: 'すでにアカウントをお持ちの方',
+    emailModeRegister: '新規アカウント作成',
+    emailVerifyTitle: '受信トレイを確認してください',
+    emailVerifyExplainer: '確認トークンを {email} に送信しました。ここに貼り付けて登録を完了してください。24時間有効です。',
+    emailVerifyTokenLabel: '確認トークン',
+    emailVerifySubmit: '確認してログイン',
+    emailResendButton: 'トークンを再送',
+    emailResendDone: 'そのアドレスが登録されていれば、新しいトークンが送信されます。',
+    emailDemoNote: 'デモ環境：配信は設定されたメールプロバイダに依存します。届かない場合はサイト運営者にお問い合わせください。',
     signedInTitle: 'コミュニティアカウント',
     signedInAs: 'サインイン中:',
     displayNameLabel: '表示名(コメントに表示されます)',

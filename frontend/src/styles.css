@@ -2928,3 +2928,10 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
+/* Sign-in method toggle (wallet / email) */
+.signin-method-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}

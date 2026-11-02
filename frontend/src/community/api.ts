@@ -9,6 +9,11 @@ export type CommunityAccount = {
   displayName: string | null;
   createdAt: number;
   totpEnabled: boolean;
+  // 'email' accounts registered with email+password (throwaway identity
+  // keypair server-side); 'wallet' is the classic challenge-response account.
+  authMethod?: 'wallet' | 'email';
+  // The owner's own address, only ever returned to the session owner.
+  email?: string | null;
 };
 
 // Wire shape is backend PublicComment (community.ts): the server already
@@ -148,6 +153,24 @@ export type VerifyChallengeResult =
   { token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean } | { requiresTotp: true; ticket: string; expiresAt: number };
 
 export const verifyChallenge = (publicKey: string, signature: string) => call<VerifyChallengeResult>('/api/auth/verify', { body: { publicKey, signature } });
+
+// Email + password registration/login (backend email-auth.ts). Register and
+// resend intentionally return the same anti-enumeration shape whether the
+// address is new, unverified or already registered.
+export const emailRegister = (email: string, password: string) =>
+  call<{ status: 'verification-sent' }>('/api/auth/email/register', { body: { email, password } });
+
+export const emailResend = (email: string) => call<{ status: 'verification-sent' }>('/api/auth/email/resend', { body: { email } });
+
+export const emailVerify = (email: string, verificationToken: string) =>
+  call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/email/verify', {
+    body: { email, token: verificationToken },
+  });
+
+export const emailLogin = (email: string, password: string) =>
+  call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/email/login', {
+    body: { email, password },
+  });
 
 // Second factor: completes a gated login, or manages enrollment from the
 // account security section. The enrollment secret is returned once, to the

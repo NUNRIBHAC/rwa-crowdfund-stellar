@@ -6,7 +6,20 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react';
 import { isConnected, signMessage } from '@stellar/freighter-api';
 import type { CommunityAccount } from './api';
-import { completeTotpLogin, fetchMe, loadCommunityToken, logout, requestChallenge, saveCommunityToken, updateDisplayName, verifyChallenge } from './api';
+import {
+  completeTotpLogin,
+  emailLogin,
+  emailRegister,
+  emailResend,
+  emailVerify,
+  fetchMe,
+  loadCommunityToken,
+  logout,
+  requestChallenge,
+  saveCommunityToken,
+  updateDisplayName,
+  verifyChallenge,
+} from './api';
 
 export type CommunityAuthState = {
   /** null = signed out. */
@@ -21,6 +34,15 @@ export type CommunityAuthState = {
   restored: boolean;
   /** Sign in with the given wallet address via challenge-response. */
   signIn: (address: string) => Promise<void>;
+  /** Register a new email account; on success a verification token is on
+      its way (same response for existing addresses - anti-enumeration). */
+  emailSignUp: (email: string, password: string) => Promise<void>;
+  /** Sign in with email + password (verified accounts only). */
+  emailSignIn: (email: string, password: string) => Promise<void>;
+  /** Redeem a verification token; also signs the new account in. */
+  emailCompleteVerification: (email: string, verificationToken: string) => Promise<void>;
+  /** Ask for a fresh verification token (anti-enumeration response). */
+  emailResendToken: (email: string) => Promise<void>;
   /** Set when the wallet signature passed but the account has a second
       factor: the session is not issued until completeTotp succeeds. */
   totpPending: { ticket: string } | null;
@@ -99,6 +121,66 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     [messages],
   );
 
+  const emailSignUp = useCallback(async (email: string, password: string) => {
+    setBusy(true);
+    setError('');
+    try {
+      await emailRegister(email, password);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      throw e;
+    } finally {
+      setBusy(false);
+    }
+  }, []);
+
+  const emailSignIn = useCallback(async (email: string, password: string) => {
+    setBusy(true);
+    setError('');
+    try {
+      const v = await emailLogin(email, password);
+      saveCommunityToken(v.token);
+      setToken(v.token);
+      setAccount(v.account);
+      setIsOperator(v.isOperator === true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      throw e;
+    } finally {
+      setBusy(false);
+    }
+  }, []);
+
+  const emailCompleteVerification = useCallback(async (email: string, verificationToken: string) => {
+    setBusy(true);
+    setError('');
+    try {
+      const v = await emailVerify(email, verificationToken);
+      saveCommunityToken(v.token);
+      setToken(v.token);
+      setAccount(v.account);
+      setIsOperator(v.isOperator === true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      throw e;
+    } finally {
+      setBusy(false);
+    }
+  }, []);
+
+  const emailResendToken = useCallback(async (email: string) => {
+    setBusy(true);
+    setError('');
+    try {
+      await emailResend(email);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      throw e;
+    } finally {
+      setBusy(false);
+    }
+  }, []);
+
   const completeTotp = useCallback(
     async (code: string) => {
       if (!totpPending) return;
@@ -161,13 +243,33 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       error,
       restored,
       signIn,
+      emailSignUp,
+      emailSignIn,
+      emailCompleteVerification,
+      emailResendToken,
       signOut,
       totpPending,
       completeTotp,
       setDisplayName: setName,
       clearError: () => setError(''),
     }),
-    [account, token, isOperator, busy, error, restored, signIn, signOut, setName, totpPending, completeTotp],
+    [
+      account,
+      token,
+      isOperator,
+      busy,
+      error,
+      restored,
+      signIn,
+      emailSignUp,
+      emailSignIn,
+      emailCompleteVerification,
+      emailResendToken,
+      signOut,
+      setName,
+      totpPending,
+      completeTotp,
+    ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

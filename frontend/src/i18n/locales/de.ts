@@ -1690,7 +1690,6 @@ export const de: Messages = {
       },
     ],
   },
-
   community: {
     loading: 'Wird geladen...',
     demoBadge: 'DEMO',
@@ -1736,12 +1735,32 @@ export const de: Messages = {
     commentLabel: 'Ihr Kommentar',
     commentSubmit: 'Kommentar veröffentlichen',
     commentPostingAs: 'Veröffentlichen als {name}. Kommentare sind öffentlich.',
-    commentsSignInHint: 'Melden Sie sich unten mit Ihrer Wallet an, um an der Diskussion teilzunehmen.',
+    commentsSignInHint: 'Melden Sie sich mit Ihrer Wallet an, um an der Diskussion teilzunehmen.',
     signInTitle: 'Community-Anmeldung',
     signInExplainer:
       'Signieren Sie eine einmalige Challenge mit Ihrer Freighter-Wallet, um zu beweisen, dass Sie die Adresse kontrollieren. Es wird keine Transaktion erstellt und es bewegen sich keine Gelder. Die Sitzung schaltet Kommentare, Support-Tickets und Emittentenbewerbungen frei.',
     signInButton: 'Mit Wallet anmelden',
     signInConnectFirst: 'Verbinden Sie zuerst Ihre Freighter-Wallet (oben auf der Seite).',
+    signInMethodLabel: 'Anmeldemethode',
+    signInMethodWallet: 'Wallet',
+    signInMethodEmail: 'E-Mail',
+    emailExplainer:
+      'Erstellen Sie ein Konto mit E-Mail und Passwort oder melden Sie sich mit einem bestehenden an. On-Chain-Aktionen wie Beitragen erfordern weiterhin die Freighter-Wallet.',
+    emailLabel: 'E-Mail',
+    passwordLabel: 'Passwort',
+    emailPasswordHint: 'Mindestens 10 Zeichen.',
+    emailRegisterButton: 'Konto erstellen',
+    emailLoginButton: 'Mit E-Mail anmelden',
+    emailModeLogin: 'Ich habe bereits ein Konto',
+    emailModeRegister: 'Neues Konto erstellen',
+    emailVerifyTitle: 'Prüfen Sie Ihren Posteingang',
+    emailVerifyExplainer:
+      'Ein Verifizierungstoken wurde an {email} gesendet. Fügen Sie es hier ein, um die Registrierung abzuschließen. Es ist 24 Stunden gültig.',
+    emailVerifyTokenLabel: 'Verifizierungstoken',
+    emailVerifySubmit: 'Verifizieren und anmelden',
+    emailResendButton: 'Token erneut senden',
+    emailResendDone: 'Falls diese Adresse registriert ist, ist ein neues Token unterwegs.',
+    emailDemoNote: 'Demo-Umgebung: Die Zustellung hängt vom konfigurierten E-Mail-Anbieter ab. Falls nichts ankommt, fragen Sie den Seitenbetreiber.',
     signedInTitle: 'Community-Konto',
     signedInAs: 'Angemeldet als',
     displayNameLabel: 'Anzeigename (wird bei Ihren Kommentaren gezeigt)',
@@ -1768,7 +1787,7 @@ export const de: Messages = {
       'Beschreiben Sie dem Betreiber das Projekt, das Sie listen möchten. Das Absenden dieses Formulars ist kein Angebot, kein Listing und keine Genehmigung - es eröffnet ein Gespräch. Demo-Umgebung: Übermitteln Sie keine echten Geschäftsgeheimnisse.',
     applicationPreviewTitle: 'Antrag (Vorschau)',
     applicationPreviewNote:
-      'Vorschau des Emittentenantrags. Nichts, was Sie hier eingeben, wird gesendet oder gespeichert - melden Sie sich unten mit Ihrer Wallet an, um einen echten Antrag zur Prüfung durch den Betreiber einzureichen.',
+      'Vorschau des Emittentenantrags. Nichts, was Sie hier eingeben, wird gesendet oder gespeichert - melden Sie sich mit Ihrer Wallet an, um einen echten Antrag zur Prüfung durch den Betreiber einzureichen.',
     applicationPreviewPlaceholder: 'Nur Vorschau - zum Bewerben anmelden',
     applicationPreviewSubmit: 'Antrag einreichen (zuerst anmelden)',
     applicationFields: {
