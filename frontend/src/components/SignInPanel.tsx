@@ -5,7 +5,7 @@ import { useCommunityAuth } from '../community/CommunityAuth';
 import { COMMUNITY_LIMITS } from '../community/api';
 import { useI18n } from '../i18n';
 import { shorten } from '../format';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function SignInPanel({ actor }: { actor: string }) {
   const { m } = useI18n();
@@ -33,6 +33,18 @@ export default function SignInPanel({ actor }: { actor: string }) {
   const [pendingVerifyEmail, setPendingVerifyEmail] = useState('');
   const [verifyToken, setVerifyToken] = useState('');
   const [resent, setResent] = useState(false);
+
+  // Sign-out must not leave the previous session's credentials or tokens in
+  // the form: clear every sensitive field whenever the account goes away.
+  useEffect(() => {
+    if (account) return;
+    setEmail('');
+    setPassword('');
+    setVerifyToken('');
+    setTotpCode('');
+    setPendingVerifyEmail('');
+    setResent(false);
+  }, [account]);
 
   if (!restored) return <p className="community-loading">{m.community.loading}</p>;
 
