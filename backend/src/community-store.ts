@@ -417,6 +417,8 @@ function validate(state: any): CommunityState {
   if (state && state.version === 1 && !state.appropriateness) state.appropriateness = {};
   // Same forward-compatible default for docs written before email credentials.
   if (state && state.version === 1 && !state.emailCredentials) state.emailCredentials = {};
+  // Same forward-compatible default for docs written before investment documents.
+  if (state && state.version === 1 && !state.investmentDocuments) state.investmentDocuments = {};
   if (
     !state ||
     state.version !== 1 ||

@@ -200,3 +200,43 @@ test('operator listing shows pending + approved; publication validates input', a
   });
   assert.equal(badKind.status, 500);
 });
+
+test('pre-investment-documents stored documents: entitled investor gets 200 [], not a 500', async () => {
+  // Regression: staging's persisted community document predates the
+  // investmentDocuments collection; validate() must default it on read,
+  // otherwise Object.values(undefined) threw and entitled investors got an
+  // unhandled 500.
+  const { emptyCommunityState, FileCommunityStore: FCS } = await import('../src/community-store.js');
+  const legacy: any = emptyCommunityState();
+  delete legacy.investmentDocuments;
+  const legacyDir = fs.mkdtempSync(path.join(os.tmpdir(), 'idoc-legacy-'));
+  fs.writeFileSync(path.join(legacyDir, 'store.json'), JSON.stringify(legacy), { mode: 0o600 });
+  const app2 = express();
+  app2.use(express.json({ limit: '64kb' }));
+  const service2 = new CommunityService(new FCS(path.join(legacyDir, 'store.json')));
+  app2.use(createCommunityRouter({ service: service2, requireAdmin, investorEntitlement } as any));
+  const server2 = await new Promise<ReturnType<express.Express['listen']>>((resolve) => {
+    const srv = app2.listen(0, '127.0.0.1', () => resolve(srv));
+  });
+  try {
+    const port = (server2.address() as AddressInfo).port;
+    const base2 = 'http://127.0.0.1:' + port;
+    const ch = await fetch(base2 + '/api/auth/challenge', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ publicKey: investorKp.publicKey() }),
+    }).then((r) => r.json());
+    const sig = Buffer.from(investorKp.signMessage(ch.message)).toString('base64');
+    const v = await fetch(base2 + '/api/auth/verify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ publicKey: investorKp.publicKey(), signature: sig }),
+    }).then((r) => r.json());
+    const res = await fetch(base2 + '/api/campaigns/demo-campaign/investment-documents', { headers: { authorization: 'Bearer ' + v.token } });
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.deepEqual(body.documents, []);
+  } finally {
+    server2.close();
+  }
+});
