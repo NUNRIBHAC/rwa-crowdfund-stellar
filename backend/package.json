@@ -10,7 +10,7 @@
     "setup": "tsx src/setup.ts",
     "demo": "tsx src/demo.ts",
     "reset": "node scripts/reset.mjs",
-    "test": "NODE_ENV=test tsx --test test/*.test.ts",
+    "test": "NODE_ENV=test node --import tsx --test --experimental-test-coverage --test-coverage-lines=91 --test-coverage-branches=80 --test-coverage-functions=86 test/*.test.ts",
     "infra:dev": "tsx src/infrastructure/server.ts",
     "infra:demo": "tsx scripts/demo-infrastructure.ts",
     "infra:test": "NODE_ENV=test tsx --test test/infrastructure.test.ts"
