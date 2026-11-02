@@ -1787,6 +1787,13 @@ export const de: Messages = {
     errorLoginThrottled: 'Zu viele fehlgeschlagene Versuche. Bitte warten Sie einige Minuten und versuchen Sie es erneut.',
     errorInvalidInput: 'Die Anfrage wurde als ungültig abgelehnt. Prüfen Sie die Felder und versuchen Sie es erneut.',
     errorEmailRecipientRestricted: 'Der E-Mail-Versand ist auf dieser Bereitstellung auf freigegebene Testempfänger beschränkt.',
+    errorTotpUnconfigured: 'Die Zwei-Faktor-Authentifizierung ist auf dieser Bereitstellung nicht konfiguriert.',
+    errorTotpAlreadyEnabled: 'Die Zwei-Faktor-Authentifizierung ist für dieses Konto bereits aktiviert.',
+    errorTotpNoEnrollment: 'Es läuft keine Zwei-Faktor-Einrichtung. Starten Sie die Einrichtung erneut.',
+    errorTotpCodeInvalid: 'Dieser Code stimmt nicht überein. Prüfen Sie den Code in Ihrer Authenticator-App und versuchen Sie es erneut.',
+    errorTotpLoginInvalid:
+      'Der Code war falsch oder die Anmeldung ist abgelaufen. Melden Sie sich erneut an und geben Sie den aktuellen Code aus Ihrer Authenticator-App ein.',
+    errorTotpNotEnabled: 'Die Zwei-Faktor-Authentifizierung ist für dieses Konto nicht aktiviert.',
     signedInTitle: 'Community-Konto',
     signedInAs: 'Angemeldet als',
     displayNameLabel: 'Anzeigename (wird bei Ihren Kommentaren gezeigt)',

@@ -176,7 +176,7 @@ export const TOTP_LOCK_MS = 5 * 60 * 1000;
 // (fail closed, no plaintext fallback).
 function totpServerSecret(): string {
   const secret = process.env.COMMUNITY_TOTP_KEY ?? process.env.PLATFORM_SECRET;
-  if (!secret) throw new AuthError(503, 'second factor is not configured on this deployment');
+  if (!secret) throw new AuthError(503, 'second factor is not configured on this deployment', 'totp_unconfigured');
   return secret;
 }
 
@@ -187,7 +187,7 @@ export async function enrollTotp(store: CommunityStore, publicKey: string): Prom
   const result = await store.change((state) => {
     const account = state.accounts[publicKey];
     if (!account) throw new AuthError(404, 'account not found');
-    if (account.totp?.status === 'enabled') throw new AuthError(409, 'second factor already enabled; disable it first');
+    if (account.totp?.status === 'enabled') throw new AuthError(409, 'second factor already enabled; disable it first', 'totp_already_enabled');
     account.totp = {
       status: 'pending',
       encSeed,
@@ -213,8 +213,8 @@ export async function enableTotp(store: CommunityStore, publicKey: string, code:
   const outcome = await store.change((state) => {
     const account = state.accounts[publicKey];
     const enrollment = account?.totp;
-    if (!account || !enrollment) throw new AuthError(400, 'no pending second-factor enrollment');
-    if (enrollment.status === 'enabled') throw new AuthError(409, 'second factor already enabled');
+    if (!account || !enrollment) throw new AuthError(400, 'no pending second-factor enrollment', 'totp_no_enrollment');
+    if (enrollment.status === 'enabled') throw new AuthError(409, 'second factor already enabled', 'totp_already_enabled');
     const seed = decryptSeed(serverSecret, enrollment.encSeed);
     const step = verifyTotp(seed, code, Math.floor(now / 1000), enrollment.lastUsedStep);
     if (step === null) return null;
@@ -230,7 +230,7 @@ export async function enableTotp(store: CommunityStore, publicKey: string, code:
     enrollment.lockUntil = null;
     return recoveryCodes;
   });
-  if (!outcome) throw new AuthError(401, 'code did not match; check your authenticator and retry');
+  if (!outcome) throw new AuthError(401, 'code did not match; check your authenticator and retry', 'totp_code_invalid');
   return { recoveryCodes: outcome };
 }
 
@@ -286,7 +286,7 @@ export async function completeTotpLogin(
     state.sessions[session.tokenHash] = session;
     return { token, expiresAt: session.expiresAt, account: { ...account } };
   });
-  if (!found) throw new AuthError(401, 'invalid or expired ticket or wrong code; sign in again');
+  if (!found) throw new AuthError(401, 'invalid or expired ticket or wrong code; sign in again', 'totp_login_invalid');
   return found;
 }
 
@@ -295,7 +295,7 @@ export async function disableTotp(store: CommunityStore, publicKey: string, code
   const ok = await store.change((state) => {
     const account = state.accounts[publicKey];
     const enrollment = account?.totp;
-    if (!account || !enrollment || enrollment.status !== 'enabled') throw new AuthError(400, 'second factor is not enabled');
+    if (!account || !enrollment || enrollment.status !== 'enabled') throw new AuthError(400, 'second factor is not enabled', 'totp_not_enabled');
     const seed = decryptSeed(serverSecret, enrollment.encSeed);
     const step = verifyTotp(seed, code, Math.floor(now / 1000), enrollment.lastUsedStep);
     if (step !== null) {
@@ -308,7 +308,7 @@ export async function disableTotp(store: CommunityStore, publicKey: string, code
     delete account.totp;
     return true;
   });
-  if (!ok) throw new AuthError(401, 'code did not match; second factor not disabled');
+  if (!ok) throw new AuthError(401, 'code did not match; second factor not disabled', 'totp_code_invalid');
 }
 
 function verifySignature(publicKey: string, message: string, signature: Buffer): boolean {

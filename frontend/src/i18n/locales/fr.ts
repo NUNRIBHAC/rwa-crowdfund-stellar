@@ -1802,6 +1802,13 @@ export const fr: Messages = {
     errorLoginThrottled: 'Trop de tentatives échouées. Patientez quelques minutes puis réessayez.',
     errorInvalidInput: 'La requête a été rejetée comme invalide. Vérifiez les champs et réessayez.',
     errorEmailRecipientRestricted: "L'envoi d'emails est limité aux destinataires de test approuvés sur ce déploiement.",
+    errorTotpUnconfigured: "L'authentification à deux facteurs n'est pas configurée sur ce déploiement.",
+    errorTotpAlreadyEnabled: "L'authentification à deux facteurs est déjà activée sur ce compte.",
+    errorTotpNoEnrollment: "Aucune configuration à deux facteurs n'est en cours. Recommencez la configuration.",
+    errorTotpCodeInvalid: "Ce code ne correspond pas. Vérifiez le code dans votre application d'authentification et réessayez.",
+    errorTotpLoginInvalid:
+      "Le code était incorrect ou la connexion a expiré. Reconnectez-vous et saisissez le code actuel de votre application d'authentification.",
+    errorTotpNotEnabled: "L'authentification à deux facteurs n'est pas activée sur ce compte.",
     signedInTitle: 'Compte de la communauté',
     signedInAs: 'Connecté en tant que',
     displayNameLabel: "Nom d'affichage (visible sur vos commentaires)",

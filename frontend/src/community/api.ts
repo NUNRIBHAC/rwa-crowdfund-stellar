@@ -180,7 +180,7 @@ export const emailVerify = (email: string, verificationToken: string) =>
   });
 
 export const emailLogin = (email: string, password: string) =>
-  call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/email/login', {
+  call<VerifyChallengeResult>('/api/auth/email/login', {
     body: { email, password },
   });
 

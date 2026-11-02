@@ -80,12 +80,20 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
   login_throttled: 'errorLoginThrottled',
   invalid_input: 'errorInvalidInput',
   email_recipient_restricted: 'errorEmailRecipientRestricted',
+  totp_unconfigured: 'errorTotpUnconfigured',
+  totp_already_enabled: 'errorTotpAlreadyEnabled',
+  totp_no_enrollment: 'errorTotpNoEnrollment',
+  totp_code_invalid: 'errorTotpCodeInvalid',
+  totp_login_invalid: 'errorTotpLoginInvalid',
+  totp_not_enabled: 'errorTotpNotEnabled',
 };
 
 // Localize known API failures; pass through anything unknown verbatim.
-function describeError(e: unknown, messages: Messages): string {
+// Exported so account-page sections (e.g. SecuritySection) render the same
+// localized errors as the sign-in flow.
+export function describeError(e: unknown, community: CatalogMessages['community'] | undefined): string {
   const key = e instanceof ApiError && e.code ? API_ERROR_MESSAGE_KEYS[e.code] : undefined;
-  const localized = key ? messages.community?.[key] : undefined;
+  const localized = key ? community?.[key] : undefined;
   if (typeof localized === 'string') return localized;
   return e instanceof Error ? e.message : String(e);
 }
@@ -143,7 +151,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         setAccount(v.account);
         setIsOperator(v.isOperator === true);
       } catch (e) {
-        setError(describeError(e, messages));
+        setError(describeError(e, messages.community));
       } finally {
         setBusy(false);
       }
@@ -158,7 +166,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       try {
         await emailRegister(email, password);
       } catch (e) {
-        setError(describeError(e, messages));
+        setError(describeError(e, messages.community));
         throw e;
       } finally {
         setBusy(false);
@@ -173,12 +181,18 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setError('');
       try {
         const v = await emailLogin(email, password);
+        if ('requiresTotp' in v) {
+          // Password accepted, second factor still owed: no session yet,
+          // keep only the one-purpose ticket (same gate as wallet sign-in).
+          setTotpPending({ ticket: v.ticket });
+          return;
+        }
         saveCommunityToken(v.token);
         setToken(v.token);
         setAccount(v.account);
         setIsOperator(v.isOperator === true);
       } catch (e) {
-        setError(describeError(e, messages));
+        setError(describeError(e, messages.community));
         throw e;
       } finally {
         setBusy(false);
@@ -198,7 +212,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         setAccount(v.account);
         setIsOperator(v.isOperator === true);
       } catch (e) {
-        setError(describeError(e, messages));
+        setError(describeError(e, messages.community));
         throw e;
       } finally {
         setBusy(false);
@@ -214,7 +228,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       try {
         await emailResend(email);
       } catch (e) {
-        setError(describeError(e, messages));
+        setError(describeError(e, messages.community));
         throw e;
       } finally {
         setBusy(false);
@@ -236,7 +250,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         setIsOperator(v.isOperator === true);
         setTotpPending(null);
       } catch (e) {
-        setError(describeError(e, messages));
+        setError(describeError(e, messages.community));
       } finally {
         setBusy(false);
       }
@@ -268,7 +282,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         const { account } = await updateDisplayName(token, name);
         setAccount(account);
       } catch (e) {
-        setError(describeError(e, messages));
+        setError(describeError(e, messages.community));
       } finally {
         setBusy(false);
       }
