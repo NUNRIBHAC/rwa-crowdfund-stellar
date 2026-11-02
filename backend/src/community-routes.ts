@@ -40,6 +40,15 @@ export type CommunityRouterDeps = {
   // tests without chain access stay hermetic; absent means the publish route
   // answers 503, never an operator-declared lifecycle guess.
   fundingState?: (campaignId: string) => Promise<{ id: string; goal: string; raised: string; deadlineSeconds: number; withdrawn: boolean } | null>;
+  // Campaign deployment preparation (wired in server.ts from soroban.ts):
+  // builds/submits the unsigned-then-wallet-signed deployment transaction
+  // for the reviewed crowdfund contract. Optional so route tests without
+  // chain access stay hermetic; absent means the routes answer 503 - a
+  // deployment can never be faked by an unwired provider.
+  campaignDeploy?: {
+    build: (input: { actor: string; id: string; name: string; goal: string; deadline: number }) => Promise<unknown>;
+    submit: (input: { actor: string; xdr: string; name?: string }) => Promise<unknown>;
+  };
   // Report READ entitlement: on-chain contribution balance for the signed-in
   // wallet (wired in server.ts from the Soroban registry). Optional so route
   // tests without chain access stay hermetic; absent means report reads
@@ -85,7 +94,7 @@ function sendError(res: express.Response, err: unknown): void {
 }
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
-  const { service, requireAdmin, reconciliation, fundingState, investorEntitlement, mailer } = deps;
+  const { service, requireAdmin, reconciliation, fundingState, investorEntitlement, mailer, campaignDeploy } = deps;
   const store = service.store;
   const router = express.Router();
 
@@ -747,6 +756,44 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.json({ ok: true });
     }),
   );
+  // Campaign deployment: operator-only, wallet-signed. Build returns an
+  // unsigned envelope for Freighter; submit broadcasts the signed envelope
+  // and returns a registry entry for manual SOROBAN_CAMPAIGNS_JSON addition.
+  router.post(
+    '/api/operator/campaign-deploy/build',
+    operator(async (req, res, account) => {
+      if (!campaignDeploy) {
+        res.status(503).json({ error: 'campaign deployment is not wired on this deployment' });
+        return;
+      }
+      res.json(
+        await campaignDeploy.build({
+          actor: account.publicKey,
+          id: String(req.body?.id ?? ''),
+          name: String(req.body?.name ?? ''),
+          goal: String(req.body?.goal ?? ''),
+          deadline: Number(req.body?.deadline),
+        }),
+      );
+    }),
+  );
+  router.post(
+    '/api/operator/campaign-deploy/submit',
+    operator(async (req, res, account) => {
+      if (!campaignDeploy) {
+        res.status(503).json({ error: 'campaign deployment is not wired on this deployment' });
+        return;
+      }
+      res.json(
+        await campaignDeploy.submit({
+          actor: account.publicKey,
+          xdr: String(req.body?.xdr ?? ''),
+          name: typeof req.body?.name === 'string' ? req.body.name : undefined,
+        }),
+      );
+    }),
+  );
+
   router.get(
     '/api/operator/issuer-applications',
     operator(async (_req, res) => {
