@@ -263,7 +263,7 @@
     "investorSteps": [
       {
         "title": "Inscription et connexion",
-        "text": "Une plateforme en production exige un compte avec confirmation d'email et identifiants. Ce prototype propose à la place une connexion communautaire optionnelle : vous prouvez le contrôle de votre portefeuille Freighter en signant un défi unique - sans inscription par email, sans mot de passe. Le portefeuille est la seule identité."
+        "text": "Une plateforme en production exige un compte avec confirmation d'email et identifiants. Ce prototype offre exactement cela comme identité communautaire optionnelle : inscription par email avec jeton de confirmation et mot de passe, ou connexion en prouvant le contrôle de votre portefeuille Freighter avec un défi unique. L'intégration de production obligatoire (identité vérifiée, investissement restreint) n'est pas implémentée."
       },
       {
         "title": "Vérification d'identité (KYC)",
@@ -461,7 +461,7 @@
     "payoutsUnavailable": "L’historique des paiements n’a pas pu être chargé. Cela ne signifie pas qu’il n’y a aucun paiement - réessayez plus tard.",
     "documentsAria": "Documents d’investissement",
     "documentsTitle": "Documents d’investissement",
-    "documentsEmpty": "Aucun document publié pour cette campagne.",
+    "documentsEmpty": "Aucun document public publié pour cette campagne.",
     "investorDocsEmpty": "Aucun document d’investissement n’est encore disponible pour cette campagne.",
     "investorDocsUnavailable": "Les documents d’investissement n’ont pas pu être chargés. Cela ne signifie pas qu’il n’y en a aucun - réessayez plus tard.",
     "investorDocsDownload": "Télécharger",
@@ -508,7 +508,7 @@
       },
       {
         "label": "Qualification de l'investisseur",
-        "note": "Le test de connaissances et la vérification de capacité de pertes sont des étapes de conformité planifiées ; non implémentés ici."
+        "note": "Le test de connaissances et la simulation de capacité de pertes existent en démonstration sur cette page ; la collecte de données réelles reste fermée dans ce prototype."
       },
       {
         "label": "Vérification (KYC)",
@@ -875,7 +875,7 @@
           },
           {
             "q": "Ai-je besoin de mon propre portefeuille ?",
-            "a": "Oui. Cette conception garde les clés chez l'utilisateur : le portefeuille Freighter est la seule identité et signe chaque transaction. La plateforme ne détient ni clés ni soldes propres. Certaines plateformes en production conservent les actifs via des partenaires spécialisés ; ce prototype ne le fait délibérément pas.",
+            "a": "Oui, pour investir. Cette conception garde les clés chez l'utilisateur : le portefeuille Freighter signe chaque transaction et la plateforme ne détient ni clés ni soldes propres. La connexion peut se faire par portefeuille ou par inscription optionnelle avec email ; aucune ne partage vos clés avec le site. Certaines plateformes en production conservent les actifs via des partenaires spécialisés ; ce prototype ne le fait délibérément pas.",
             "state": "live"
           },
           {
@@ -1006,7 +1006,7 @@
         "entries": [
           {
             "q": "Ai-je besoin d’un compte ?",
-            "a": "Pas d'inscription par email et pas de mot de passe. Une connexion communautaire optionnelle prouve le contrôle de votre portefeuille Freighter en signant un défi unique. Le portefeuille est la seule identité, et le connecter ou signer ne partage jamais vos clés avec le site.",
+            "a": "Optionnel. Vous pouvez vous inscrire avec un email et un mot de passe (confirmés par un jeton à usage unique), ou vous connecter en prouvant le contrôle de votre portefeuille Freighter avec un défi unique. Connecter ou signer ne partage jamais vos clés avec le site.",
             "state": "live"
           },
           {
@@ -1749,7 +1749,7 @@
     },
     "company": {
       "title": "Comptes d'entreprise",
-      "note": "Demandez un compte d'entreprise lié à votre portefeuille. L'examen est manuel, comme pour les candidatures d'émetteur. Transparence de la démo : les informations de registre saisies sont déclaratives ; aucun extrait de registre ni pièce d'identité des propriétaires n'est téléversé ou vérifié dans ce prototype. Investir depuis un contexte d'entreprise est prévu et n'est pas actif ici.",
+      "note": "Demandez un compte d'entreprise lié à votre compte communautaire. L'examen est manuel, comme pour les candidatures d'émetteur. Transparence de la démo : les informations de registre saisies sont déclaratives ; aucun extrait de registre ni pièce d'identité des propriétaires n'est téléversé ou vérifié dans ce prototype. Investir depuis un contexte d'entreprise est prévu et n'est pas actif ici.",
       "listTitle": "Mes demandes d'entreprise",
       "empty": "Aucune demande d'entreprise pour le moment.",
       "formTitle": "Demander un compte d'entreprise",
@@ -1770,13 +1770,16 @@
     },
     "totpTitle": "Authentification à deux facteurs",
     "totpExplainer": "Votre signature de portefeuille a été acceptée. Ce compte exige aussi un code de votre application d'authentification.",
+    "totpExplainerEmail": "Votre mot de passe a été accepté. Ce compte exige aussi un code de votre application d'authentification.",
     "totpCodeLabel": "Code d'authentification",
     "totpSubmit": "Vérifier et se connecter",
     "totpRecoveryHint": "Vous n'avez plus accès à votre application ? Saisissez l'un de vos codes de récupération.",
     "security": {
       "totpTitle": "Authentification à deux facteurs",
       "totpOffNote": "Ajoutez une application d'authentification comme deuxième étape après votre signature de portefeuille. Optionnel ; votre portefeuille reste la clé principale.",
+      "totpOffNoteEmail": "Ajoutez une application d'authentification comme deuxième étape après votre mot de passe. Optionnel ; votre mot de passe reste la clé principale.",
       "totpOnNote": "L'authentification à deux facteurs est activée : après votre signature de portefeuille, la connexion demande aussi un code d'authentification.",
+      "totpOnNoteEmail": "L'authentification à deux facteurs est activée : après votre mot de passe, la connexion demande aussi un code d'authentification.",
       "totpEnable": "Activer la double authentification",
       "totpDisable": "Désactiver la double authentification",
       "totpScanNote": "Ajoutez ceci à votre application d'authentification (URI ou clé manuelle), puis saisissez le code affiché pour terminer l'activation. La clé n'est affichée que maintenant.",
@@ -1793,6 +1796,7 @@
       "totpDone": "Terminé",
       "title": "Sécurité",
       "authMethodNote": "Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille est la clé. Ce prototype n'a pas de mot de passe ; un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.",
+      "authMethodNoteEmail": "Vous vous connectez avec votre email et votre mot de passe : le mot de passe est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.",
       "sessionsTitle": "Sessions actives",
       "sessionLabel": "Session",
       "currentBadge": "Cette session",

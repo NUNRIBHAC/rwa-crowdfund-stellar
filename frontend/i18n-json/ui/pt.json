@@ -263,7 +263,7 @@
     "investorSteps": [
       {
         "title": "Registo e início de sessão",
-        "text": "Uma plataforma em produção exige uma conta com confirmação de email e credenciais. Este protótipo tem antes um início de sessão comunitário opcional: prova o controlo da sua carteira Freighter assinando um desafio único - sem registo por email, sem palavra-passe. A carteira é a única identidade."
+        "text": "Uma plataforma em produção exige uma conta com confirmação de email e credenciais. Este protótipo oferece exatamente isso como identidade comunitária opcional: registo por email com token de confirmação e palavra-passe, ou início de sessão provando o controlo da sua carteira Freighter com um desafio único. O onboarding de produção obrigatório (identidade verificada, investimento com acesso condicionado) não está implementado."
       },
       {
         "title": "Verificação de identidade (KYC)",
@@ -461,7 +461,7 @@
     "payoutsUnavailable": "Não foi possível carregar o histórico de pagamentos. Isto não significa que não existam pagamentos - tente novamente mais tarde.",
     "documentsAria": "Documentos de investimento",
     "documentsTitle": "Documentos de investimento",
-    "documentsEmpty": "Nenhum documento publicado para esta campanha.",
+    "documentsEmpty": "Nenhum documento público publicado para esta campanha.",
     "investorDocsEmpty": "Ainda não há documentos de investimento disponíveis para esta campanha.",
     "investorDocsUnavailable": "Não foi possível carregar os documentos de investimento. Isto não significa que não existam - tente novamente mais tarde.",
     "investorDocsDownload": "Descarregar",
@@ -508,7 +508,7 @@
       },
       {
         "label": "Qualificação do investidor",
-        "note": "O teste de conhecimentos e a verificação de capacidade de suportar perdas são passos de conformidade planeados; não implementados aqui."
+        "note": "O teste de conhecimentos e a simulação de capacidade de suportar perdas existem como demonstração nesta página; a recolha de dados reais permanece fechada neste protótipo."
       },
       {
         "label": "Verificação (KYC)",
@@ -872,7 +872,7 @@
           },
           {
             "q": "Preciso da minha própria carteira?",
-            "a": "Sim. Este desenho mantém as chaves com o utilizador: a carteira Freighter é a única identidade e assina todas as transações. A plataforma não detém chaves nem saldos próprios. Algumas plataformas em produção optam por custodiar ativos através de parceiros especializados; este protótipo deliberadamente não o faz.",
+            "a": "Sim, para investir. Este desenho mantém as chaves com o utilizador: a carteira Freighter assina todas as transações e a plataforma não detém chaves nem saldos próprios. O início de sessão pode ser por carteira ou por registo opcional com email; nenhum partilha as suas chaves com o site. Algumas plataformas em produção optam por custodiar ativos através de parceiros especializados; este protótipo deliberadamente não o faz.",
             "state": "live"
           },
           {
@@ -1003,7 +1003,7 @@
         "entries": [
           {
             "q": "Preciso de uma conta?",
-            "a": "Sem registo por email e sem palavra-passe. Um início de sessão comunitário opcional prova o controlo da sua carteira Freighter assinando um desafio único. A carteira é a única identidade, e ligar ou assinar nunca partilha as suas chaves com o site.",
+            "a": "Opcional. Pode registar-se com email e palavra-passe (confirmado com um token de utilização única), ou iniciar sessão provando o controlo da sua carteira Freighter assinando um desafio único. Ligar ou assinar nunca partilha as suas chaves com o site.",
             "state": "live"
           },
           {
@@ -1746,7 +1746,7 @@
     },
     "company": {
       "title": "Contas de empresa",
-      "note": "Candidate-se a uma conta de empresa associada à sua carteira. A revisão é manual, tal como nas candidaturas de emitente. Transparência da demonstração: os dados de registo que introduz são fornecidos pelo candidato; neste protótipo não é carregada nem verificada qualquer certidão do registo comercial nem identificações dos titulares. Investir a partir de um contexto de empresa está planeado e não está ativo aqui.",
+      "note": "Candidate-se a uma conta de empresa associada à sua conta comunitária. A revisão é manual, tal como nas candidaturas de emitente. Transparência da demonstração: os dados de registo que introduz são fornecidos pelo candidato; neste protótipo não é carregada nem verificada qualquer certidão do registo comercial nem identificações dos titulares. Investir a partir de um contexto de empresa está planeado e não está ativo aqui.",
       "listTitle": "As minhas candidaturas de empresa",
       "empty": "Ainda não tem candidaturas de empresa.",
       "formTitle": "Candidatar-se a uma conta de empresa",
@@ -1767,13 +1767,16 @@
     },
     "totpTitle": "Autenticação de dois fatores",
     "totpExplainer": "A assinatura da sua carteira foi aceite. Esta conta também requer um código da sua aplicação de autenticação.",
+    "totpExplainerEmail": "A sua palavra-passe foi aceite. Esta conta também requer um código da sua aplicação de autenticação.",
     "totpCodeLabel": "Código de autenticação",
     "totpSubmit": "Verificar e entrar",
     "totpRecoveryHint": "Perdeu o acesso à sua aplicação de autenticação? Introduza antes um dos seus códigos de recuperação.",
     "security": {
       "totpTitle": "Autenticação de dois fatores",
       "totpOffNote": "Adicione uma aplicação de autenticação como segundo passo após a assinatura da carteira. Opcional; a carteira continua a ser a credencial principal.",
+      "totpOffNoteEmail": "Adicione uma aplicação de autenticação como segundo passo após a palavra-passe. Opcional; a palavra-passe continua a ser a credencial principal.",
       "totpOnNote": "A autenticação de dois fatores está ativa: após a assinatura da carteira, o início de sessão também pede um código de autenticação.",
+      "totpOnNoteEmail": "A autenticação de dois fatores está ativa: após a palavra-passe, o início de sessão também pede um código de autenticação.",
       "totpEnable": "Ativar dois fatores",
       "totpDisable": "Desativar dois fatores",
       "totpScanNote": "Adicione isto à sua aplicação de autenticação (URI ou chave manual) e depois introduza o código apresentado para concluir a ativação. A chave só é mostrada agora.",
@@ -1790,6 +1793,7 @@
       "totpDone": "Concluído",
       "title": "Segurança",
       "authMethodNote": "Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Este protótipo não tem palavra-passe; pode adicionar abaixo um autenticador de dois fatores opcional.",
+      "authMethodNoteEmail": "Inicia sessão com o seu email e palavra-passe: a palavra-passe é a credencial. Pode adicionar abaixo um autenticador de dois fatores opcional.",
       "sessionsTitle": "Sessões ativas",
       "sessionLabel": "Sessão",
       "currentBadge": "Esta sessão",
