@@ -10,6 +10,10 @@
   --accent-dark: #383ba7;
   --amber: #b54708;
   --red: #d32f2f;
+  /* Stronger red for text on tinted chip backgrounds: #d32f2f on #fee4e2 is
+     4.1:1 (below the 4.5 body threshold); #b71c1c reaches 5.45:1. Same red
+     family, same ended/error semantics. */
+  --red-strong: #b71c1c;
   /* Error input border follows the brand guide (#FF5252); --red stays for
      error text where the lighter border color would fail contrast. */
   --error-border: #ff5252;
@@ -215,7 +219,7 @@ section[id] {
 }
 .status-ended {
   background: #fee4e2;
-  color: var(--red);
+  color: var(--red-strong);
 }
 .status-pending {
   background: #fef0c7;
