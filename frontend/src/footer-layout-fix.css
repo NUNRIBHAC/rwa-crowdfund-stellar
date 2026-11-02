@@ -97,6 +97,70 @@
   }
 }
 
+/* ==========================================================================
+   2026-11-02 23:23 user reference footer (WhatsApp, 1600x271): the footer is
+   a FULL-WIDTH navy band - content starts ~14px from the viewport edge, the
+   official lockup is larger (~58px icon), the four link columns sit beside
+   the brand block with one-line links, the market-context + Status column is
+   wide (~515px in EN) and the decorative shapes roam the far-right ~200px
+   clear of text. The user's current-state screenshot (23:23) showed the page
+   column squeezing everything into the center (content starting ~x237 at
+   1600px, "COMUNICACAO" splitting mid-word, context ~200px, shapes over
+   text). Supersedes the in-page-column decision recorded on .footer-brand in
+   styles.css at this width; the 1151-1439px range keeps that compact layout.
+
+   Full-bleed mechanics: margin-inline pulls the box out of the 1120px .page
+   column to the viewport edges; html/body already have overflow-x: clip, so
+   the negative margins cannot create a horizontal scrollbar. The lockup
+   keeps height-only sizing (width: auto), so the asset is never distorted;
+   columns are minmax(min-content, max-content) so a locale whose words do
+   not fit wraps its longest links onto two lines instead of overflowing the
+   tile reserve. Verified-link set (8 anchors + email icon) and legal text
+   are untouched - this block changes geometry only.
+   ========================================================================== */
+@media (min-width: 1440px) {
+  .site-footer {
+    /* Viewport-centered full bleed: margin-left:50% resolves against the
+       .page content box, which is viewport-centered via margin:auto, and
+       translateX(-50%) of the 100vw box centers it exactly. (Applying this
+       one level down on .footer-brand drifted ~30px because .site-footer is
+       not centered inside .page.) html/body overflow-x:clip absorbs any
+       classic-scrollbar sub-pixel spill. */
+    width: 100vw;
+    /* +16px: .page carries an asymmetric padding-right (56px vs 24px left,
+       FeedbackTab reserve), which shifts its content-box center 16px left of
+       the viewport center; measured constant at 1440/1600/1920. */
+    margin-left: calc(50% + 16px);
+    transform: translateX(-50%);
+  }
+
+  .footer-brand-inner {
+    gap: 32px;
+    padding: 24px 244px 24px 16px;
+  }
+
+  /* Reference lockup: ~58px icon at 1600px (current 45px). */
+  .footer-brand-lockup-img {
+    height: 58px;
+  }
+
+  /* Reference columns: one-line links (max-content where space allows),
+     wide flexible context column, reference-tight 24px gaps. */
+  .footer-brand-inner .footer-grid {
+    grid-template-columns: repeat(4, minmax(min-content, max-content)) minmax(240px, 1fr);
+    column-gap: 24px;
+  }
+
+  /* The German-only auto-fit/minmax(250px,1fr) rule in styles.css (scoped
+     html[lang='de'] .footer-grid) outranks the rule above on specificity and
+     would stretch the tracks evenly; pin German to the same reference
+     geometry - max-content columns keep "Nutzungsbedingungen" and friends on
+     one line without it. */
+  html[lang='de'] .footer-brand-inner .footer-grid {
+    grid-template-columns: repeat(4, minmax(min-content, max-content)) minmax(240px, 1fr);
+  }
+}
+
 /* Narrow viewports keep today's wrapped behavior: two-column grid, context+Status full width. */
 @media (max-width: 1150px) {
   .footer-brand-inner .footer-context {
