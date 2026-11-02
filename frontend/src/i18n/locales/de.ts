@@ -1755,7 +1755,8 @@ export const de: Messages = {
     emailModeLogin: 'Ich habe bereits ein Konto',
     emailModeRegister: 'Neues Konto erstellen',
     emailVerifyTitle: 'Prüfen Sie Ihren Posteingang',
-    emailVerifyExplainer: 'Ein Verifizierungstoken wurde an {email} gesendet. Fügen Sie es hier ein, um die Registrierung abzuschließen. Es ist 24 Stunden gültig.',
+    emailVerifyExplainer:
+      'Ein Verifizierungstoken wurde an {email} gesendet. Fügen Sie es hier ein, um die Registrierung abzuschließen. Es ist 24 Stunden gültig.',
     emailVerifyTokenLabel: 'Verifizierungstoken',
     emailVerifySubmit: 'Verifizieren und anmelden',
     emailResendButton: 'Token erneut senden',

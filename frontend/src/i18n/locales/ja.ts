@@ -1678,7 +1678,8 @@ export const ja: Messages = {
     signInMethodLabel: 'ログイン方法',
     signInMethodWallet: 'ウォレット',
     signInMethodEmail: 'メール',
-    emailExplainer: 'メールアドレスとパスワードでアカウントを作成するか、既存のアカウントでログインします。出資などのオンチェーン操作には引き続きFreighterウォレットが必要です。',
+    emailExplainer:
+      'メールアドレスとパスワードでアカウントを作成するか、既存のアカウントでログインします。出資などのオンチェーン操作には引き続きFreighterウォレットが必要です。',
     emailLabel: 'メールアドレス',
     passwordLabel: 'パスワード',
     emailPasswordHint: '10文字以上。',

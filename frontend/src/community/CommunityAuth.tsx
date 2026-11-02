@@ -6,7 +6,20 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react';
 import { isConnected, signMessage } from '@stellar/freighter-api';
 import type { CommunityAccount } from './api';
-import { completeTotpLogin, emailLogin, emailRegister, emailResend, emailVerify, fetchMe, loadCommunityToken, logout, requestChallenge, saveCommunityToken, updateDisplayName, verifyChallenge } from './api';
+import {
+  completeTotpLogin,
+  emailLogin,
+  emailRegister,
+  emailResend,
+  emailVerify,
+  fetchMe,
+  loadCommunityToken,
+  logout,
+  requestChallenge,
+  saveCommunityToken,
+  updateDisplayName,
+  verifyChallenge,
+} from './api';
 
 export type CommunityAuthState = {
   /** null = signed out. */
@@ -240,7 +253,23 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setDisplayName: setName,
       clearError: () => setError(''),
     }),
-    [account, token, isOperator, busy, error, restored, signIn, emailSignUp, emailSignIn, emailCompleteVerification, emailResendToken, signOut, setName, totpPending, completeTotp],
+    [
+      account,
+      token,
+      isOperator,
+      busy,
+      error,
+      restored,
+      signIn,
+      emailSignUp,
+      emailSignIn,
+      emailCompleteVerification,
+      emailResendToken,
+      signOut,
+      setName,
+      totpPending,
+      completeTotp,
+    ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

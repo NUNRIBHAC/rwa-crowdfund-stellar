@@ -9,8 +9,21 @@ import { useState } from 'react';
 
 export default function SignInPanel({ actor }: { actor: string }) {
   const { m } = useI18n();
-  const { account, busy, error, restored, signIn, emailSignUp, emailSignIn, emailCompleteVerification, emailResendToken, signOut, setDisplayName, totpPending, completeTotp } =
-    useCommunityAuth();
+  const {
+    account,
+    busy,
+    error,
+    restored,
+    signIn,
+    emailSignUp,
+    emailSignIn,
+    emailCompleteVerification,
+    emailResendToken,
+    signOut,
+    setDisplayName,
+    totpPending,
+    completeTotp,
+  } = useCommunityAuth();
   const [name, setName] = useState('');
   const [totpCode, setTotpCode] = useState('');
   const [method, setMethod] = useState<'wallet' | 'email'>('wallet');
@@ -98,7 +111,12 @@ export default function SignInPanel({ actor }: { actor: string }) {
       <section className="community-section" aria-labelledby="community-signin">
         <h2 id="community-signin">{m.community.signInTitle}</h2>
         <div className="signin-method-toggle" role="tablist" aria-label={m.community.signInMethodLabel}>
-          <button role="tab" aria-selected={method === 'wallet'} className={method === 'wallet' ? 'btn btn-primary' : 'btn'} onClick={() => setMethod('wallet')}>
+          <button
+            role="tab"
+            aria-selected={method === 'wallet'}
+            className={method === 'wallet' ? 'btn btn-primary' : 'btn'}
+            onClick={() => setMethod('wallet')}
+          >
             {m.community.signInMethodWallet}
           </button>
           <button role="tab" aria-selected={method === 'email'} className={method === 'email' ? 'btn btn-primary' : 'btn'} onClick={() => setMethod('email')}>

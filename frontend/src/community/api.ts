@@ -160,8 +160,7 @@ export const verifyChallenge = (publicKey: string, signature: string) => call<Ve
 export const emailRegister = (email: string, password: string) =>
   call<{ status: 'verification-sent' }>('/api/auth/email/register', { body: { email, password } });
 
-export const emailResend = (email: string) =>
-  call<{ status: 'verification-sent' }>('/api/auth/email/resend', { body: { email } });
+export const emailResend = (email: string) => call<{ status: 'verification-sent' }>('/api/auth/email/resend', { body: { email } });
 
 export const emailVerify = (email: string, verificationToken: string) =>
   call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/email/verify', {
