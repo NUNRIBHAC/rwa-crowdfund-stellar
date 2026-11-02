@@ -1457,7 +1457,7 @@ export const pt: Messages = {
     title: 'Criador de campanha',
     badge: 'Rascunho',
     intro:
-      'Pré-visualização de rascunho de como uma campanha seria configurada para implementação. Nada aqui implementa um contrato nem cria uma campanha: a submissão está desativada nesta demonstração. Os campos seguem as mesmas regras que o contrato e o registo de campanhas aplicam.',
+      'Veja como uma campanha seria configurada para implantação. Os campos seguem as mesmas regras do contrato e do registo de campanhas. A implantação é apenas na testnet e restrita a carteiras de operador.',
     connectNote:
       'Ligue uma carteira em A minha conta para pré-visualizar o endereço do criador. Só a carteira do criador pode autorizar uma implementação, e só pode levantar os fundos depois do prazo e apenas se o objetivo tiver sido atingido.',
     nameLabel: 'Nome do projeto',
@@ -1481,6 +1481,14 @@ export const pt: Messages = {
     previewConstructor: 'Argumentos do construtor do contrato (o criador tem de assinar a implementação):',
     previewRegistry: 'Entrada no registo de campanhas:',
     deployDisabled: 'A implementação não está ativada nesta demonstração',
+    operatorNote: 'Tem sessão iniciada como operador: o botão de implantação prepara transações reais na testnet que a sua carteira assina.',
+    deploy: 'Implantar na testnet',
+    deployBusy: 'A implantar…',
+    deployError: 'A implantação falhou:',
+    deploySuccess: 'Instância da campanha criada na testnet',
+    deployRegistryNote: 'Para a listar, adicione esta entrada ao registo de campanhas (configuração de operador):',
+    deployResultAria: 'Resultado da implantação',
+    walletNoSign: 'A carteira não assinou a transação.',
   },
   tour: {
     tourTitle: 'Visita guiada da campanha',

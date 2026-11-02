@@ -1381,7 +1381,7 @@
   "builder": {
     "title": "Créateur de campagne",
     "badge": "Brouillon",
-    "intro": "Aperçu provisoire de la configuration d'une campagne avant déploiement. Rien ici ne déploie de contrat ni ne crée de campagne : l'envoi est désactivé dans cette démo. Les champs suivent les mêmes règles que celles appliquées par le contrat et le registre des campagnes.",
+    "intro": "Aperçu de la configuration d'une campagne pour le déploiement. Les champs suivent les mêmes règles que le contrat et le registre des campagnes. Le déploiement est limité au testnet et réservé aux portefeuilles opérateur.",
     "connectNote": "Connectez un portefeuille sous Mon compte pour prévisualiser l'adresse du créateur. Seul le portefeuille du créateur peut autoriser un déploiement, et il ne peut retirer les fonds qu'après la date limite et uniquement si l'objectif a été atteint.",
     "nameLabel": "Nom du projet",
     "nameErrorTooLong": "120 caractères maximum (règle du registre).",
@@ -1403,7 +1403,15 @@
     "previewTitle": "Ce qu'utiliserait un déploiement",
     "previewConstructor": "Arguments du constructeur du contrat (le créateur doit signer le déploiement) :",
     "previewRegistry": "Entrée du registre des campagnes :",
-    "deployDisabled": "Le déploiement n'est pas activé dans cette démo"
+    "deployDisabled": "Le déploiement n'est pas activé dans cette démo",
+    "operatorNote": "Vous êtes connecté en tant qu'opérateur : le bouton de déploiement prépare de vraies transactions testnet que votre portefeuille signe.",
+    "deploy": "Déployer sur le testnet",
+    "deployBusy": "Déploiement…",
+    "deployError": "Le déploiement a échoué :",
+    "deploySuccess": "Instance de campagne créée sur le testnet",
+    "deployRegistryNote": "Pour la répertorier, ajoutez cette entrée au registre des campagnes (configuration opérateur) :",
+    "deployResultAria": "Résultat du déploiement",
+    "walletNoSign": "Le portefeuille n'a pas signé la transaction."
   },
   "tour": {
     "tourTitle": "Visite guidée de la campagne",

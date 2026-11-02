@@ -516,3 +516,35 @@ export const submitIssuerApplication = (
     body: input,
     token,
   });
+
+// --- Operator campaign deployment (testnet; wallet-signed two-step flow) ---
+// Build returns an unsigned single-operation envelope (reviewed Wasm upload,
+// then instance creation); the wallet signs; submit broadcasts and, for the
+// create step, returns a registry entry the operator adds to
+// SOROBAN_CAMPAIGNS_JSON by hand. The server never edits the registry.
+export type CampaignDeployBuild = {
+  hash: string;
+  xdr: string;
+  networkPassphrase: string;
+  action: 'deploy';
+  step: 'upload' | 'create';
+  id: string;
+  name: string;
+  feeStroops: string;
+  testOnly: boolean;
+};
+export type CampaignDeploySubmit = {
+  hash: string;
+  status: string;
+  confirmed: boolean;
+  step: 'upload' | 'create';
+  contractId?: string;
+  registryEntry?: { id: string; name: string; contractId: string };
+  note?: string;
+  message?: string;
+  testOnly?: boolean;
+};
+export const buildCampaignDeploy = (token: string, input: { id: string; name: string; goal: string; deadline: number }) =>
+  call<CampaignDeployBuild>('/api/operator/campaign-deploy/build', { method: 'POST', body: input, token });
+export const submitCampaignDeploy = (token: string, input: { xdr: string; name?: string }) =>
+  call<CampaignDeploySubmit>('/api/operator/campaign-deploy/submit', { method: 'POST', body: input, token });

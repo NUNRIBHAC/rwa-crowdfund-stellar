@@ -1355,7 +1355,7 @@ export const zhTW: Messages = {
   builder: {
     title: '活動建立器',
     badge: '草稿',
-    intro: '這是活動部署設定的草稿預覽。此處不會部署任何合約或建立任何活動:本示範中提交功能已停用。各欄位遵循合約和活動註冊表所執行的相同規則。',
+    intro: '預覽活動部署的設定方式。各欄位遵循合約與活動註冊表的相同規則。部署僅限測試網，且僅對營運者錢包開放。',
     connectNote: '請在「我的帳戶」下連接錢包以預覽建立者地址。只有建立者錢包可以授權部署,並且只有在截止後且達到目標時才能提款。',
     nameLabel: '專案名稱',
     nameErrorTooLong: '最多 120 個字元(註冊表規則)。',
@@ -1378,6 +1378,14 @@ export const zhTW: Messages = {
     previewConstructor: '合約建構函式參數(建立者必須簽署部署):',
     previewRegistry: '活動註冊表條目:',
     deployDisabled: '本示範未啟用部署',
+    operatorNote: '您已以營運者身分登入：部署按鈕會準備由您的錢包簽署的真實測試網交易。',
+    deploy: '部署到測試網',
+    deployBusy: '正在部署…',
+    deployError: '部署失敗：',
+    deploySuccess: '已在測試網上建立活動實例',
+    deployRegistryNote: '若要列出，請將此項目新增至活動註冊表（營運者設定）：',
+    deployResultAria: '部署結果',
+    walletNoSign: '錢包未簽署交易。',
   },
   tour: {
     tourTitle: '活動導覽',
