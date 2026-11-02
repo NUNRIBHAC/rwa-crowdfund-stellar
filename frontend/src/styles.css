@@ -2194,13 +2194,22 @@ textarea:focus-visible,
   }
 }
 
+/* Brand link color: Indigo is the brand primary for links (brand/README
+   "Indigo #4B4FE2 - buttons, links, highlights"). Unstyled body links fell
+   back to the UA default rgb(0,0,238), which QA flagged on /investments
+   campaign titles and View details. Scopes with their own link colors
+   (nav, buttons, footer) keep them via specificity. */
+a {
+  color: var(--accent);
+}
+
 /* Visited links keep their normal color ("não deve mudar para roxo ao
    clicar"): :visited is pinned to the same color as :link for every public
    link scope; hover/focus/active states are untouched. The global value
    matches the previous UA unvisited blue, so only the visited appearance
    changes. */
 a:visited {
-  color: #0000ee;
+  color: var(--accent);
 }
 .brand:visited {
   color: inherit;
