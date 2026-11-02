@@ -12,6 +12,7 @@
 import { useState } from 'react';
 import type { FormEvent, InvalidEvent } from 'react';
 import { COMMUNITY_LIMITS, submitIssuerApplication } from '../community/api';
+import { notifyCommunityActivityChanged } from '../community/events';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 
@@ -88,6 +89,7 @@ export default function IssuerApplicationForm() {
         contactEmail: contactEmail.trim(),
       });
       setFieldErrors({});
+      notifyCommunityActivityChanged();
       setDone(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
