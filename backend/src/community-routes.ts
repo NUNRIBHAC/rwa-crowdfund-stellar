@@ -71,7 +71,7 @@ function clientIp(req: express.Request): string | undefined {
 
 function sendError(res: express.Response, err: unknown): void {
   if (err instanceof AuthError || err instanceof CommunityError) {
-    res.status(err.status).json({ error: err.message });
+    res.status(err.status).json(err.code ? { error: err.message, code: err.code } : { error: err.message });
     return;
   }
   if (err instanceof ZodError) {
@@ -108,14 +108,14 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // Email + password registration (email-auth.ts), alongside the wallet
   // challenge flow. Every route fails closed when no mailer is configured.
   const requireMailer = (): Mailer => {
-    if (!mailer) throw new CommunityError(503, 'email provider not configured on this deployment');
+    if (!mailer) throw new CommunityError(503, 'email provider not configured on this deployment', 'email_provider_unconfigured');
     return mailer;
   };
   router.post('/api/auth/email/register', async (req, res) => {
     try {
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-register-ip:${ip}`, 10, 60 * 60 * 1000))
-        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       res.json(await registerEmail(store, requireMailer(), { email: req.body?.email, password: req.body?.password }));
     } catch (err) {
       sendError(res, err);
@@ -125,7 +125,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     try {
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-resend-ip:${ip}`, 10, 60 * 60 * 1000))
-        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       res.json(await resendVerification(store, requireMailer(), { email: req.body?.email }));
     } catch (err) {
       sendError(res, err);
@@ -135,7 +135,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     try {
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-verify-ip:${ip}`, 30, 60 * 60 * 1000))
-        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       const result = await verifyEmailToken(store, { email: req.body?.email, token: req.body?.token });
       res.json({ token: result.token, expiresAt: result.expiresAt, account: publicAccount(result.account) });
     } catch (err) {
@@ -146,7 +146,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     try {
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-login-ip:${ip}`, 30, 60 * 60 * 1000))
-        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       const result = await loginEmail(store, { email: req.body?.email, password: req.body?.password });
       if ('requiresTotp' in result) {
         // Second factor owed: one-purpose ticket, no session (same shape as

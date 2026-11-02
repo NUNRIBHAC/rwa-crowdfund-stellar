@@ -45,6 +45,9 @@ export class CommunityError extends Error {
   constructor(
     public readonly status: number,
     message: string,
+    // Stable machine-readable code for client-side localization (see
+    // AuthError.code).
+    public readonly code?: string,
   ) {
     super(message);
   }

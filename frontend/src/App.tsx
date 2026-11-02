@@ -238,6 +238,7 @@ export default function App() {
       messages={{
         freighterMissing: m.errors.freighterMissing,
         walletNoSign: m.errors.walletNoSign,
+        community: m.community,
       }}
     >
       <a className="skip-link" href="#main">

@@ -6,7 +6,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react';
 import { isConnected, signMessage } from '@stellar/freighter-api';
 import type { CommunityAccount } from './api';
+import type { Messages as CatalogMessages } from '../i18n/locales/en';
 import {
+  ApiError,
   completeTotpLogin,
   emailLogin,
   emailRegister,
@@ -58,7 +60,34 @@ const Ctx = createContext<CommunityAuthState | null>(null);
 type Messages = {
   freighterMissing: string;
   walletNoSign: string;
+  community?: CatalogMessages['community'];
 };
+
+// Backend error codes (AuthError/CommunityError code field) mapped to
+// localized catalog keys. Codes not listed here - and any error without a
+// code - fall back to the raw server message: known failures read in the
+// user's language, unknown failures are shown honestly, never masked.
+const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']> = {
+  email_provider_unconfigured: 'errorEmailProviderUnavailable',
+  rate_limited: 'errorRateLimited',
+  email_invalid: 'errorEmailInvalid',
+  password_short: 'errorPasswordShort',
+  password_long: 'errorPasswordLong',
+  token_invalid: 'errorTokenInvalid',
+  token_expired: 'errorTokenExpired',
+  credentials_invalid: 'errorCredentialsInvalid',
+  email_unverified: 'errorEmailUnverified',
+  login_throttled: 'errorLoginThrottled',
+  invalid_input: 'errorInvalidInput',
+};
+
+// Localize known API failures; pass through anything unknown verbatim.
+function describeError(e: unknown, messages: Messages): string {
+  const key = e instanceof ApiError && e.code ? API_ERROR_MESSAGE_KEYS[e.code] : undefined;
+  const localized = key ? messages.community?.[key] : undefined;
+  if (typeof localized === 'string') return localized;
+  return e instanceof Error ? e.message : String(e);
+}
 
 export function CommunityAuthProvider({ children, messages }: { children: ReactNode; messages: Messages }) {
   const [account, setAccount] = useState<CommunityAccount | null>(null);
@@ -84,7 +113,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       })
       .catch(() => saveCommunityToken(''))
       .finally(() => setRestored(true));
-  }, []);
+  }, [messages]);
 
   const signIn = useCallback(
     async (address: string) => {
@@ -113,7 +142,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         setAccount(v.account);
         setIsOperator(v.isOperator === true);
       } catch (e) {
-        setError(e instanceof Error ? e.message : String(e));
+        setError(describeError(e, messages));
       } finally {
         setBusy(false);
       }
@@ -121,65 +150,77 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     [messages],
   );
 
-  const emailSignUp = useCallback(async (email: string, password: string) => {
-    setBusy(true);
-    setError('');
-    try {
-      await emailRegister(email, password);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
-      throw e;
-    } finally {
-      setBusy(false);
-    }
-  }, []);
+  const emailSignUp = useCallback(
+    async (email: string, password: string) => {
+      setBusy(true);
+      setError('');
+      try {
+        await emailRegister(email, password);
+      } catch (e) {
+        setError(describeError(e, messages));
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [messages],
+  );
 
-  const emailSignIn = useCallback(async (email: string, password: string) => {
-    setBusy(true);
-    setError('');
-    try {
-      const v = await emailLogin(email, password);
-      saveCommunityToken(v.token);
-      setToken(v.token);
-      setAccount(v.account);
-      setIsOperator(v.isOperator === true);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
-      throw e;
-    } finally {
-      setBusy(false);
-    }
-  }, []);
+  const emailSignIn = useCallback(
+    async (email: string, password: string) => {
+      setBusy(true);
+      setError('');
+      try {
+        const v = await emailLogin(email, password);
+        saveCommunityToken(v.token);
+        setToken(v.token);
+        setAccount(v.account);
+        setIsOperator(v.isOperator === true);
+      } catch (e) {
+        setError(describeError(e, messages));
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [messages],
+  );
 
-  const emailCompleteVerification = useCallback(async (email: string, verificationToken: string) => {
-    setBusy(true);
-    setError('');
-    try {
-      const v = await emailVerify(email, verificationToken);
-      saveCommunityToken(v.token);
-      setToken(v.token);
-      setAccount(v.account);
-      setIsOperator(v.isOperator === true);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
-      throw e;
-    } finally {
-      setBusy(false);
-    }
-  }, []);
+  const emailCompleteVerification = useCallback(
+    async (email: string, verificationToken: string) => {
+      setBusy(true);
+      setError('');
+      try {
+        const v = await emailVerify(email, verificationToken);
+        saveCommunityToken(v.token);
+        setToken(v.token);
+        setAccount(v.account);
+        setIsOperator(v.isOperator === true);
+      } catch (e) {
+        setError(describeError(e, messages));
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [messages],
+  );
 
-  const emailResendToken = useCallback(async (email: string) => {
-    setBusy(true);
-    setError('');
-    try {
-      await emailResend(email);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
-      throw e;
-    } finally {
-      setBusy(false);
-    }
-  }, []);
+  const emailResendToken = useCallback(
+    async (email: string) => {
+      setBusy(true);
+      setError('');
+      try {
+        await emailResend(email);
+      } catch (e) {
+        setError(describeError(e, messages));
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [messages],
+  );
 
   const completeTotp = useCallback(
     async (code: string) => {
@@ -194,12 +235,12 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         setIsOperator(v.isOperator === true);
         setTotpPending(null);
       } catch (e) {
-        setError(e instanceof Error ? e.message : String(e));
+        setError(describeError(e, messages));
       } finally {
         setBusy(false);
       }
     },
-    [totpPending],
+    [totpPending, messages],
   );
 
   const signOut = useCallback(async () => {
@@ -226,12 +267,12 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
         const { account } = await updateDisplayName(token, name);
         setAccount(account);
       } catch (e) {
-        setError(e instanceof Error ? e.message : String(e));
+        setError(describeError(e, messages));
       } finally {
         setBusy(false);
       }
     },
-    [token],
+    [token, messages],
   );
 
   const value = useMemo<CommunityAuthState>(
