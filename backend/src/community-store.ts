@@ -70,6 +70,10 @@ export type EmailCredential = {
   createdAt: number;
   failedAttempts: number;
   lockUntil: number | null; // ms epoch; set after repeated login failures
+  resetTokenHash?: string | null; // sha256 hex of the single-use blr_ reset token
+  resetExpiresAt?: number | null;
+  resetSentAt?: number | null; // per-email reset-mail cooldown marker
+  resendSentAt?: number | null; // per-email verification-resend cooldown marker
 };
 
 export type Comment = {

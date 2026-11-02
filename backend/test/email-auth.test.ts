@@ -9,6 +9,7 @@ import type { AddressInfo } from 'node:net';
 import { FileCommunityStore } from '../src/community-store.js';
 import { CommunityService } from '../src/community.js';
 import { createCommunityRouter } from '../src/community-routes.js';
+import { confirmPasswordReset, registerEmail, requestPasswordReset, resendVerification, verifyEmailToken } from '../src/email-auth.js';
 import type { Mailer } from '../src/mailer.js';
 
 // Route-level tests for email+password registration (email-auth.ts). A
@@ -249,28 +250,23 @@ test('anti-enumeration: duplicate and unknown addresses get the identical respon
   assert.equal(mailer.sent.length, 1);
 });
 
-test('unverified duplicate registration re-issues a fresh token', async () => {
+test('unverified duplicate registration inside the cooldown window is silent; the first token stays valid', async () => {
   const mailer = new FakeMailer();
   const url = await startApp(mailer);
   await api(url, 'POST', '/api/auth/email/register', {
     body: { email: 'twice@example.com', password: 'original password' },
   });
   const first = mailer.lastToken();
+  // Immediate duplicate: per-email cooldown keeps the response uniform but
+  // sends nothing; the original token is NOT superseded.
   await api(url, 'POST', '/api/auth/email/register', {
     body: { email: 'twice@example.com', password: 'original password' },
   });
-  assert.equal(mailer.sent.length, 2);
-  const second = mailer.lastToken();
-  assert.notEqual(first, second);
-  // The first token was superseded.
-  const stale = await api(url, 'POST', '/api/auth/email/verify', {
+  assert.equal(mailer.sent.length, 1);
+  const stillValid = await api(url, 'POST', '/api/auth/email/verify', {
     body: { email: 'twice@example.com', token: first },
   });
-  assert.equal(stale.status, 401);
-  const fresh = await api(url, 'POST', '/api/auth/email/verify', {
-    body: { email: 'twice@example.com', token: second },
-  });
-  assert.equal(fresh.status, 200);
+  assert.equal(stillValid.status, 200);
 });
 
 test('TOTP parity: password alone never yields a session when 2FA is enabled', async () => {
@@ -334,4 +330,208 @@ test('input validation: malformed email, short password, wrong types', async () 
   });
   assert.equal(badTokenShape.status, 400);
   assert.equal(mailer.sent.length, 0);
+});
+
+function extractResetToken(text: string): string {
+  const token = text.match(/blr_[0-9a-f]{48}/)?.[0];
+  assert.ok(token, 'email carries a reset token');
+  return token;
+}
+
+async function verifiedAccount(url: string, mailer: FakeMailer, email: string, password: string): Promise<string> {
+  await api(url, 'POST', '/api/auth/email/register', { body: { email, password } });
+  const token = extractToken(mailer.sent.at(-1)!.text);
+  const verified = await api(url, 'POST', '/api/auth/email/verify', { body: { email, token } });
+  assert.equal(verified.status, 200);
+  return verified.json.token as string;
+}
+
+test('password reset: uniform silence for unknown and unverified addresses', async () => {
+  const mailer = new FakeMailer();
+  const url = await startApp(mailer);
+
+  const unknown = await api(url, 'POST', '/api/auth/email/reset-request', {
+    body: { email: 'ghost@example.com' },
+  });
+  assert.deepEqual(unknown.json, { status: 'reset-sent' });
+  assert.equal(mailer.sent.length, 0);
+
+  await api(url, 'POST', '/api/auth/email/register', {
+    body: { email: 'pending@example.com', password: 'correct horse battery' },
+  });
+  assert.equal(mailer.sent.length, 1); // the verification mail
+  const unverified = await api(url, 'POST', '/api/auth/email/reset-request', {
+    body: { email: 'pending@example.com' },
+  });
+  assert.deepEqual(unverified.json, { status: 'reset-sent' });
+  assert.equal(mailer.sent.length, 1); // no reset mail for an unverified account
+});
+
+test('password reset: full flow revokes sessions, keeps TOTP rule, token single-use', async () => {
+  const mailer = new FakeMailer();
+  const url = await startApp(mailer);
+  const email = 'resettable@example.com';
+  const session = await verifiedAccount(url, mailer, email, 'old password one');
+
+  const req = await api(url, 'POST', '/api/auth/email/reset-request', { body: { email } });
+  assert.deepEqual(req.json, { status: 'reset-sent' });
+  assert.equal(mailer.sent.length, 2);
+  assert.match(mailer.sent[1].subject, /reset/i);
+  assert.match(mailer.sent[1].text, /demo deployment on Stellar testnet/);
+  const resetToken = extractResetToken(mailer.sent[1].text);
+
+  // Per-email cooldown: an immediate second request sends nothing new.
+  const again = await api(url, 'POST', '/api/auth/email/reset-request', { body: { email } });
+  assert.deepEqual(again.json, { status: 'reset-sent' });
+  assert.equal(mailer.sent.length, 2);
+
+  // Wrong token rejected with the stable localization code.
+  const wrong = await api(url, 'POST', '/api/auth/email/reset-confirm', {
+    body: { email, token: `blr_${'0'.repeat(48)}`, password: 'new password two' },
+  });
+  assert.equal(wrong.status, 401);
+  assert.equal(wrong.json.code, 'token_expired');
+
+  // Right token resets.
+  const done = await api(url, 'POST', '/api/auth/email/reset-confirm', {
+    body: { email, token: resetToken, password: 'new password two' },
+  });
+  assert.equal(done.status, 200);
+  assert.deepEqual(done.json, { status: 'password-reset' });
+
+  // Every pre-reset session is revoked.
+  const me = await api(url, 'GET', '/api/auth/me', { token: session });
+  assert.equal(me.status, 401);
+
+  // Old password fails, new password logs in.
+  const oldLogin = await api(url, 'POST', '/api/auth/email/login', {
+    body: { email, password: 'old password one' },
+  });
+  assert.equal(oldLogin.status, 401);
+  const newLogin = await api(url, 'POST', '/api/auth/email/login', {
+    body: { email, password: 'new password two' },
+  });
+  assert.equal(newLogin.status, 200);
+  assert.match(newLogin.json.token, /^bls_/);
+
+  // Single-use: replaying the reset token fails.
+  const replay = await api(url, 'POST', '/api/auth/email/reset-confirm', {
+    body: { email, token: resetToken, password: 'third password three' },
+  });
+  assert.equal(replay.status, 401);
+});
+
+test('password reset: confirm validates password policy and clears lockout', async () => {
+  const mailer = new FakeMailer();
+  const url = await startApp(mailer);
+  const email = 'locked@example.com';
+  await verifiedAccount(url, mailer, email, 'first password ok');
+
+  // Lock the account out with 5 bad logins.
+  for (let i = 0; i < 5; i++) {
+    await api(url, 'POST', '/api/auth/email/login', { body: { email, password: 'wrong wrong wrong' } });
+  }
+  const locked = await api(url, 'POST', '/api/auth/email/login', { body: { email, password: 'first password ok' } });
+  assert.equal(locked.status, 429);
+
+  await api(url, 'POST', '/api/auth/email/reset-request', { body: { email } });
+  const resetToken = extractResetToken(mailer.sent.at(-1)!.text);
+
+  // Short password rejected even with a valid token; token stays redeemable.
+  const short = await api(url, 'POST', '/api/auth/email/reset-confirm', {
+    body: { email, token: resetToken, password: 'short' },
+  });
+  assert.equal(short.status, 400);
+  assert.equal(short.json.code, 'password_short');
+
+  const done = await api(url, 'POST', '/api/auth/email/reset-confirm', {
+    body: { email, token: resetToken, password: 'second password ok' },
+  });
+  assert.equal(done.status, 200);
+
+  // Lockout cleared: immediate login with the new password works.
+  const login = await api(url, 'POST', '/api/auth/email/login', { body: { email, password: 'second password ok' } });
+  assert.equal(login.status, 200);
+});
+
+test('verification resend: per-email cooldown caps repeat mail, response stays uniform', async () => {
+  const mailer = new FakeMailer();
+  const url = await startApp(mailer);
+  const email = 'cooldown@example.com';
+  await api(url, 'POST', '/api/auth/email/register', { body: { email, password: 'correct horse battery' } });
+  assert.equal(mailer.sent.length, 1);
+
+  // Registration's own send starts the cooldown: an immediate duplicate
+  // registration and an immediate explicit resend both stay silent (and the
+  // anti-enumeration response shape never changes).
+  const dup = await api(url, 'POST', '/api/auth/email/register', { body: { email, password: 'correct horse battery' } });
+  assert.deepEqual(dup.json, { status: 'verification-sent' });
+  const capped = await api(url, 'POST', '/api/auth/email/resend', { body: { email } });
+  assert.deepEqual(capped.json, { status: 'verification-sent' });
+  assert.equal(mailer.sent.length, 1);
+
+  // The original token still verifies.
+  const token = extractToken(mailer.sent[0].text);
+  const verified = await api(url, 'POST', '/api/auth/email/verify', { body: { email, token } });
+  assert.equal(verified.status, 200);
+
+  // Verified account: resend stays silent.
+  const afterVerify = await api(url, 'POST', '/api/auth/email/resend', { body: { email } });
+  assert.deepEqual(afterVerify.json, { status: 'verification-sent' });
+  assert.equal(mailer.sent.length, 1);
+});
+
+test('cooldown timing (direct calls with injected clock): resend and reset send again after the window', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-auth-clock-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const mailer = new FakeMailer();
+  const email = 'clock@example.com';
+  const t0 = 1_800_000_000_000;
+
+  await registerEmail(store, mailer, { email, password: 'correct horse battery' }, t0);
+  assert.equal(mailer.sent.length, 1);
+
+  // Inside the window: silent. Past it: a fresh token goes out.
+  await resendVerification(store, mailer, { email }, t0 + 5 * 60 * 1000);
+  assert.equal(mailer.sent.length, 1);
+  await resendVerification(store, mailer, { email }, t0 + 11 * 60 * 1000);
+  assert.equal(mailer.sent.length, 2);
+
+  // Duplicate registration after the window re-issues and supersedes.
+  const superseded = mailer.sent[1].text.match(/blv_[0-9a-f]{48}/)![0];
+  await registerEmail(store, mailer, { email, password: 'correct horse battery' }, t0 + 22 * 60 * 1000);
+  assert.equal(mailer.sent.length, 3);
+  const token = extractToken(mailer.sent[2].text);
+  assert.notEqual(token, superseded);
+  await assert.rejects(verifyEmailToken(store, { email, token: superseded }, t0 + 23 * 60 * 1000));
+  mailer.sent.length = 0; // keep later indexes simple
+  await verifyEmailToken(store, { email, token }, t0 + 23 * 60 * 1000);
+
+  // Reset cooldown follows the same rule.
+  await requestPasswordReset(store, mailer, { email }, t0 + 30 * 60 * 1000);
+  assert.equal(mailer.sent.length, 1);
+  await requestPasswordReset(store, mailer, { email }, t0 + 35 * 60 * 1000);
+  assert.equal(mailer.sent.length, 1);
+  await requestPasswordReset(store, mailer, { email }, t0 + 41 * 60 * 1000);
+  assert.equal(mailer.sent.length, 2);
+
+  // The reset token from the last mail still confirms.
+  const resetToken = extractResetToken(mailer.sent[1].text);
+  const done = await confirmPasswordReset(store, { email, token: resetToken, password: 'fresh password ok' }, t0 + 32 * 60 * 1000);
+  assert.deepEqual(done, { status: 'password-reset' });
+
+  // Expired reset token rejected: a token issued at t0+31min is stale 2h later.
+  const dir2 = fs.mkdtempSync(path.join(os.tmpdir(), 'email-auth-clock2-'));
+  const store2 = new FileCommunityStore(path.join(dir2, 'store.json'));
+  const mailer2 = new FakeMailer();
+  await registerEmail(store2, mailer2, { email, password: 'correct horse battery' }, t0);
+  const vtoken = extractToken(mailer2.sent[0].text);
+  await verifyEmailToken(store2, { email, token: vtoken }, t0 + 60 * 1000);
+  await requestPasswordReset(store2, mailer2, { email }, t0 + 2 * 60 * 1000);
+  const stale = extractResetToken(mailer2.sent[1].text);
+  await assert.rejects(confirmPasswordReset(store2, { email, token: stale, password: 'fresh password ok' }, t0 + 3 * 60 * 60 * 1000), (err: unknown) => {
+    assert.ok(err instanceof Error);
+    assert.equal((err as { code?: string }).code, 'token_expired');
+    return true;
+  });
 });

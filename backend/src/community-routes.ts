@@ -20,7 +20,7 @@ import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaig
 import { metadataFor } from './campaign-metadata.js';
 import type { Account } from './community-store.js';
 import { shareRegisterCsv, type ShareRegisterPayload } from './share-register.js';
-import { loginEmail, registerEmail, resendVerification, verifyEmailToken } from './email-auth.js';
+import { loginEmail, registerEmail, resendVerification, verifyEmailToken, requestPasswordReset, confirmPasswordReset } from './email-auth.js';
 import type { Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
@@ -148,6 +148,26 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (ip && !service.limiter.allow(`email-resend-ip:${ip}`, 10, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       res.json(await resendVerification(store, requireMailer(), { email: req.body?.email }));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/email/reset-request', async (req, res) => {
+    try {
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`email-reset-request-ip:${ip}`, 10, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      res.json(await requestPasswordReset(store, requireMailer(), { email: req.body?.email }));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/email/reset-confirm', async (req, res) => {
+    try {
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`email-reset-confirm-ip:${ip}`, 30, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      res.json(await confirmPasswordReset(store, { email: req.body?.email, token: req.body?.token, password: req.body?.password }));
     } catch (err) {
       sendError(res, err);
     }

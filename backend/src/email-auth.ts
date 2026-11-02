@@ -31,6 +31,8 @@ import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './acco
 import type { Mailer } from './mailer.js';
 
 export const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+export const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
+export const EMAIL_RESEND_COOLDOWN_MS = 10 * 60 * 1000;
 export const EMAIL_MAX_FAILURES = 5;
 export const EMAIL_LOCK_MS = 5 * 60 * 1000;
 export const PASSWORD_MIN_LENGTH = 10;
@@ -101,6 +103,20 @@ function verificationEmailText(email: string, token: string): string {
   ].join('\n');
 }
 
+function resetEmailText(email: string, token: string): string {
+  return [
+    'Blockallisto demo - password reset.',
+    '',
+    `A password reset was requested for account ${email}. Use this single-use reset token (valid 1 hour):`,
+    '',
+    token,
+    '',
+    'If you did not request this, ignore this message - the current password stays valid.',
+    'Resetting the password signs out every existing session; two-factor authentication, when enabled, still applies at the next login.',
+    'This is a demo deployment on Stellar testnet. No real funds are involved.',
+  ].join('\n');
+}
+
 async function issueVerification(store: CommunityStore, mailer: Mailer, credential: EmailCredential, now: number): Promise<void> {
   const token = `blv_${randomBytes(24).toString('hex')}`;
   await store.change((state) => {
@@ -133,7 +149,12 @@ export async function registerEmail(
   const created = await store.change((state) => {
     const existing = state.emailCredentials[email];
     if (existing?.verified) return null; // verified duplicate: stay silent
-    if (existing) return existing; // unverified: re-issue token below
+    // Unverified duplicate: re-issue below, unless a verification mail went
+    // out moments ago (per-email cooldown; the response stays uniform).
+    if (existing) {
+      if (existing.resendSentAt && now - existing.resendSentAt < EMAIL_RESEND_COOLDOWN_MS) return null;
+      return existing;
+    }
     // Throwaway identity keypair: gives the account a normal public key
     // while proving nothing and controlling nothing. The secret is NEVER
     // stored - see the module header.
@@ -148,6 +169,10 @@ export async function registerEmail(
       createdAt: now,
       failedAttempts: 0,
       lockUntil: null,
+      resetTokenHash: null,
+      resetExpiresAt: null,
+      resetSentAt: null,
+      resendSentAt: null,
     };
     state.emailCredentials[email] = credential;
     state.accounts[publicKey] = {
@@ -161,6 +186,12 @@ export async function registerEmail(
   });
   if (!created) return { status: 'verification-sent' };
   await issueVerification(store, mailer, created, now);
+  // Cooldown marker only after a successful send: a provider failure (503)
+  // must not lock the user out of an immediate retry.
+  await store.change((state) => {
+    const current = state.emailCredentials[email];
+    if (current) current.resendSentAt = now;
+  });
   return { status: 'verification-sent' };
 }
 
@@ -173,11 +204,101 @@ export async function resendVerification(
   const email = normalizeEmail(input.email);
   const credential = await store.change((state) => {
     const existing = state.emailCredentials[email];
-    return existing && !existing.verified ? existing : null;
+    if (!existing || existing.verified) return null;
+    // Per-email cooldown on top of the route's per-IP limit: repeated resend
+    // requests must not turn into unsolicited mail to the address owner.
+    if (existing.resendSentAt && now - existing.resendSentAt < EMAIL_RESEND_COOLDOWN_MS) return null;
+    return existing;
   });
   if (!credential) return { status: 'verification-sent' }; // same anti-enumeration shape
   await issueVerification(store, mailer, credential, now);
+  // Mark the cooldown only after a successful send: a provider failure (503)
+  // must not lock the user out of an immediate retry.
+  await store.change((state) => {
+    const current = state.emailCredentials[email];
+    if (current) current.resendSentAt = now;
+  });
   return { status: 'verification-sent' };
+}
+
+// Request a password reset. Anti-enumeration: the response is identical for
+// unknown, unverified and verified addresses; only a verified address with no
+// mail inside the cooldown window actually receives a token. The route
+// rate-limits per IP on top of the per-email cooldown.
+export async function requestPasswordReset(
+  store: CommunityStore,
+  mailer: Mailer,
+  input: { email: unknown },
+  now = Date.now(),
+): Promise<{ status: 'reset-sent' }> {
+  const email = normalizeEmail(input.email);
+  const prepared = await store.change((state) => {
+    const credential = state.emailCredentials[email];
+    if (!credential || !credential.verified) return null;
+    if (credential.resetSentAt && now - credential.resetSentAt < EMAIL_RESEND_COOLDOWN_MS) return null;
+    const token = `blr_${randomBytes(24).toString('hex')}`;
+    credential.resetTokenHash = createHash('sha256').update(token).digest('hex');
+    credential.resetExpiresAt = now + RESET_TOKEN_TTL_MS;
+    return { token };
+  });
+  if (!prepared) return { status: 'reset-sent' };
+  await mailer.send({
+    to: email,
+    subject: 'Blockallisto demo - reset your password',
+    text: resetEmailText(email, prepared.token),
+  });
+  // Cooldown marker only after a successful send (provider 503 -> free retry).
+  await store.change((state) => {
+    const current = state.emailCredentials[email];
+    if (current) current.resetSentAt = now;
+  });
+  return { status: 'reset-sent' };
+}
+
+// Confirm a password reset. The token is single-use; on success every
+// existing session for the account is revoked (inbox access is not session
+// possession) and TOTP, when enabled, stays on - a reset never strips the
+// second factor.
+export async function confirmPasswordReset(
+  store: CommunityStore,
+  input: { email: unknown; token: unknown; password: unknown },
+  now = Date.now(),
+): Promise<{ status: 'password-reset' }> {
+  const email = normalizeEmail(input.email);
+  if (typeof input.token !== 'string' || !/^blr_[0-9a-f]{48}$/.test(input.token)) {
+    throw new AuthError(401, 'invalid or expired reset token; request a new one', 'token_expired');
+  }
+  const password = validatePassword(input.password);
+  const tokenHash = createHash('sha256').update(input.token).digest('hex');
+  const ok = await store.change((state) => {
+    const credential = state.emailCredentials[email];
+    if (
+      !credential ||
+      !credential.resetTokenHash ||
+      !credential.resetExpiresAt ||
+      credential.resetExpiresAt <= now ||
+      credential.resetTokenHash.length !== tokenHash.length ||
+      !timingSafeEqual(Buffer.from(credential.resetTokenHash), Buffer.from(tokenHash))
+    ) {
+      return null;
+    }
+    const account = state.accounts[credential.publicKey];
+    if (!account) throw new AuthError(500, 'account record missing');
+    credential.passwordRecord = hashPassword(password);
+    credential.resetTokenHash = null; // single-use
+    credential.resetExpiresAt = null;
+    credential.failedAttempts = 0;
+    credential.lockUntil = null;
+    for (const [id, session] of Object.entries(state.sessions)) {
+      if (session.publicKey === credential.publicKey) delete state.sessions[id];
+    }
+    for (const [id, ticket] of Object.entries(state.totpTickets ?? {})) {
+      if (ticket.publicKey === credential.publicKey) delete state.totpTickets[id];
+    }
+    return true;
+  });
+  if (!ok) throw new AuthError(401, 'invalid or expired reset token; request a new one', 'token_expired');
+  return { status: 'password-reset' };
 }
 
 // Verify the token and log the user in immediately: they just proved the
