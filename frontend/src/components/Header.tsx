@@ -60,7 +60,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
               {actor ? (
                 <>
                   <span className="wallet-chip" title={actor}>
-                    {m.header.connectedPrefix}: {shorten(actor)}
+                    <span className="wallet-chip-prefix">{m.header.connectedPrefix}:</span> {shorten(actor)}
                   </span>
                   <button
                     className="btn btn-disconnect"

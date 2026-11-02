@@ -790,6 +790,86 @@ code {
   align-items: center;
   gap: 8px;
 }
+@media (min-width: 1440px) {
+  /* 2026-10-31 06:59 anchor: the navbar ALONE should be 72-80px tall, risk
+     banner excluded; the logo and nav were suffocating against the bar edges
+     in the two-row arrangement (52px measured). On wide desktops everything
+     fits one row once the locale select is bounded: its intrinsic 340-357px
+     (dual-language option labels) is what squeezed Connect into a 4-line
+     character wrap in the PR44 attempt. Cap the select, pin the logo at
+     36px (~40% of the bar, 07:09/07:45 anchor), keep Connect at natural
+     width, and let the nav take the flexible middle. Narrow widths keep the
+     two-row grid untouched. */
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+  }
+  .header-side,
+  .header-side-top {
+    display: contents;
+  }
+  .brand {
+    flex: none;
+  }
+  .brand-lockup {
+    height: 36px;
+  }
+  /* The testnet badge (~124px) is what priced the single row out of reach at
+     exactly 1440px: brand 128 + badge 124 + Connect ~172 + select 200 + gaps
+     and padding left the nav ~645px for ~680px of links, so flex-shrink
+     char-wrapped every label. The persistent risk banner above the navbar
+     already discloses "Stellar testnet prototype: no live offers, no real
+     funds" on every page, so the badge yields only on the wide single-row
+     arrangement; it stays visible below 1440px where the two-row grid has
+     vertical room for it. */
+  .badge-testnet {
+    display: none;
+  }
+  .site-nav {
+    flex: 1 1 auto;
+    justify-content: center;
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+  /* Never let a squeezed link wrap its label character by character: keep
+     labels on one line and let the nav's min-width: 0 absorb any leftover
+     deficit instead. */
+  .site-nav a {
+    white-space: nowrap;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  /* .header-actions is an unconstrained block div: the chip and Disconnect
+     wrap to two lines inside it (QA connected DE at 1440px: navbar 98px).
+     Flatten it so chip and button join the single row as direct flex items. */
+  .header-actions {
+    display: contents;
+  }
+  .header-actions .btn {
+    flex: none;
+  }
+  /* Connected state adds the wallet chip + Disconnect (~+130px over Connect):
+     keep the wide single row inside budget by showing just the shortened key
+     (full address stays on the chip's title) and trimming Disconnect. */
+  .wallet-chip-prefix {
+    display: none;
+  }
+  .wallet-chip {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .header-actions .btn-disconnect {
+    padding: 8px 12px;
+  }
+  .lang-select {
+    max-width: 200px;
+  }
+}
+
 @media (max-width: 1119px) {
   /* Below ~1120px the middle column cannot hold the 8-item nav between the
      brand and the side controls: let it span the full second row instead.
@@ -1795,7 +1875,7 @@ textarea:focus-visible,
 }
 .footer-brand-lockup-img {
   display: block;
-  height: 60px;
+  height: 45px;
   width: auto;
   flex: none;
 }
