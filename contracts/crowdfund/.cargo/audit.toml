@@ -1,0 +1,9 @@
+[advisories]
+# RUSTSEC-2026-0387 (crypto-bigint 0.5.5 timing variability): transitive
+# DEV-only dependency - soroban-sdk testutils -> soroban-ledger-snapshot ->
+# soroban-env-host -> k256/p256 -> elliptic-curve -> crypto-bigint. It is not
+# part of the deployed contract Wasm (host-side test harness only). The fix
+# (>=0.7.6) requires soroban-env-host on elliptic-curve 0.14, i.e. an SDK
+# upgrade, which also changes the pinned Wasm fixture - tracked separately.
+# Re-check on the next SDK bump.
+ignore = ["RUSTSEC-2026-0387"]
