@@ -171,7 +171,7 @@ contributorReconcileTimer.unref();
 // reconciliation endpoint, never filled by inference. Per-campaign failures
 // move nothing: the durable checkpoint only advances past fully processed
 // ledger windows.
-const backfillContributorRegistry = async (): Promise<void> => {
+const runContributorBackfill = async (): Promise<void> => {
   let campaigns: { id: string; contractId: string }[];
   try {
     campaigns = sorobanRegisteredCampaigns();
@@ -206,6 +206,21 @@ const backfillContributorRegistry = async (): Promise<void> => {
     } catch (err) {
       console.error('event archive failed:', c.id, err instanceof Error ? err.message : err);
     }
+  }
+};
+
+// Serialized entry point: a scan slower than the timer interval must never
+// overlap the next tick - concurrent runs race the archive store's
+// read-modify-write cycle and can lose events or advance a checkpoint past
+// rows the other run lost.
+let contributorBackfillInFlight = false;
+const backfillContributorRegistry = async (): Promise<void> => {
+  if (contributorBackfillInFlight) return;
+  contributorBackfillInFlight = true;
+  try {
+    await runContributorBackfill();
+  } finally {
+    contributorBackfillInFlight = false;
   }
 };
 void backfillContributorRegistry();

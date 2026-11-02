@@ -6,6 +6,7 @@ import path from 'node:path';
 import { Keypair } from '@stellar/stellar-sdk';
 import {
   FileEventArchiveStore,
+  PostgresEventArchiveStore,
   archiveCampaignEvents,
   archiveSnapshotJsonl,
   restoreArchiveSnapshot,
@@ -218,4 +219,66 @@ test('truncated snapshot is detected by the header count check', () => {
   const v = verifyArchiveSnapshot(truncated, events);
   assert.equal(v.ok, false);
   assert.ok(v.errors.some((e) => e.includes('header claims')));
+});
+
+test('restore refuses a snapshot without a valid integrity header', async () => {
+  const store = newStore();
+  const c = client([ev('e1', 5), ev('e2', 6)], 10);
+  await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
+  const live = await store.list();
+  const headerless = archiveSnapshotJsonl(live).split('\n').slice(1).join('\n');
+
+  const target = newStore();
+  const r = await restoreArchiveSnapshot(headerless, target);
+  assert.equal(r.restored, 0);
+  assert.ok(r.errors.some((e) => e.includes('header')));
+  assert.equal(await target.count(), 0);
+});
+
+test('verify rejects a snapshot whose first line is an event, not a header', async () => {
+  const store = newStore();
+  const c = client([ev('e1', 5), ev('e2', 6)], 10);
+  await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
+  const live = await store.list();
+  const headerless = archiveSnapshotJsonl(live).split('\n').slice(1).join('\n');
+  // Restoring the headerless file would lose the first event; verification
+  // against the remainder would pass. The header check fails closed first.
+  const v = verifyArchiveSnapshot(headerless, live.slice(1));
+  assert.equal(v.ok, false);
+  assert.ok(v.errors.some((e) => e.includes('header')));
+});
+
+test('file store serializes concurrent mutations without losing events', async () => {
+  const store = newStore();
+  const c = client(Array.from({ length: 40 }, (_, i) => ev(`e${i}`, 5 + i)), 100);
+  await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
+  const live = await store.list();
+  const target = newStore();
+  // Eight concurrent single-event puts plus interleaved checkpoint writes:
+  // without serialization each put reads the same base doc and the last
+  // rename wins, silently dropping the others.
+  await Promise.all(
+    live.map((e, i) =>
+      i % 5 === 4
+        ? Promise.all([target.put([e]), target.writeCheckpoint('qa', { version: ARCHIVE_VERSION, processedThroughLedger: e.ledger })]).then(() => undefined)
+        : target.put([e]),
+    ),
+  );
+  assert.equal(await target.count(), 40);
+  assert.ok(await target.readCheckpoint('qa'));
+});
+
+test('postgres store retries a failed init instead of caching the rejection', async () => {
+  let fail = true;
+  const pool = {
+    async query() {
+      if (fail) throw new Error('db unreachable');
+      return { rows: [{ n: 0 }], rowCount: 0 };
+    },
+  };
+  const store = new PostgresEventArchiveStore(pool as never);
+  await assert.rejects(() => store.count(), /db unreachable/);
+  fail = false;
+  // Second call must retry the init, not reuse the rejected promise.
+  assert.equal(await store.count(), 0);
 });
