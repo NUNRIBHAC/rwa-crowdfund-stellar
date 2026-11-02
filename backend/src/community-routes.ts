@@ -33,7 +33,8 @@ import {
   requestPasswordReset,
   confirmPasswordReset,
 } from './email-auth.js';
-import type { Mailer } from './mailer.js';
+import { MAIL_LOCALES, normalizeMailLocale, resetEmail, verificationEmail } from './email-templates.js';
+import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
 // Express wiring for accounts, community, support and metadata APIs.
@@ -244,6 +245,45 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // socket peer class, the active trust mode, and which class clientIp
   // resolved to. Used with controlled forged-XFF requests to derive the
   // deployed ingress structure before any TRUST_PROXY* setting exists.
+  // Controlled multilingual delivery proof: renders the REAL localized
+  // verification/reset templates and sends them through the REAL configured
+  // mailer chain (allowlist -> provider) with dead synthetic tokens. The
+  // recipient must itself be allowlisted, so this can only mail approved
+  // test inboxes. No account, credential, cooldown, budget or token state
+  // is touched: this exercises renderer + sender chain, NOT account
+  // routing. Per-item results distinguish provider acceptance from failure.
+  router.post('/api/admin/abuse-diagnostics/mail-template-check', requireAdmin, async (req, res) => {
+    try {
+      const m = requireMailer();
+      const allowed = allowedRecipientsFromEnv(process.env);
+      const to = typeof req.body?.to === 'string' ? req.body.to.trim().toLowerCase() : '';
+      if (!to || !allowed || !allowed.has(to)) {
+        throw new CommunityError(403, "recipient must be on this deployment's allowed-recipients list", 'email_recipient_restricted');
+      }
+      const kinds = Array.isArray(req.body?.kinds) ? req.body.kinds.filter((k: unknown) => k === 'verify' || k === 'reset') : ['verify', 'reset'];
+      const locales = (Array.isArray(req.body?.locales) ? req.body.locales.map((l: unknown) => normalizeMailLocale(l)) : [...MAIL_LOCALES]).filter(
+        (l: string, i: number, arr: string[]) => arr.indexOf(l) === i,
+      );
+      if (kinds.length === 0 || locales.length === 0) throw new CommunityError(400, 'kinds and locales must be non-empty');
+      if (kinds.length * locales.length > 25) throw new CommunityError(400, 'batch too large (max 25)');
+      const results: { locale: string; kind: string; ok: boolean; error?: string }[] = [];
+      for (const locale of locales) {
+        for (const kind of kinds) {
+          const token = `blr_SELFTEST_${kind}_${locale}_dead`;
+          const mail = kind === 'verify' ? verificationEmail(locale, to, token) : resetEmail(locale, to, token);
+          try {
+            await m.send({ to, subject: `[${kind}:${locale}] ` + mail.subject, text: mail.text });
+            results.push({ locale, kind, ok: true });
+          } catch (err) {
+            results.push({ locale, kind, ok: false, error: err instanceof Error ? `${err.message}` : 'unknown' });
+          }
+        }
+      }
+      res.json({ sent: results.filter((r) => r.ok).length, failed: results.filter((r) => !r.ok).length, results });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.get('/api/admin/abuse-diagnostics/xff-probe', requireAdmin, (req, res) => {
     const fwd = req.header('x-forwarded-for');
     const chain = fwd

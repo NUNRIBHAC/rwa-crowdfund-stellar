@@ -305,3 +305,30 @@ test('xff-probe: legacy TRUST_PROXY=1 marks leftmost as steering', async () => {
   assert.equal(body.leftmostSteersClient, true);
   assert.equal(body.clientIpClass, 'reserved-docs');
 });
+
+test('mail-template-check: allowlisted recipient only, real renderers, per-item results, no account state', async () => {
+  const mailer = new FakeMailer();
+  const base = await startApp({ COMMUNITY_EMAIL_ALLOWED_RECIPIENTS: 'nunrib@sapo.pt' }, { mailer } as never);
+  // Non-allowlisted recipient refused before any send.
+  const refused = await fetch(base + '/api/admin/abuse-diagnostics/mail-template-check', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ to: 'someone@example.invalid' }),
+  });
+  assert.equal(refused.status, 403);
+  assert.equal(mailer.sent.length, 0);
+  // Allowlisted: one kind x two locales renders localized subjects and sends.
+  const ok = await fetch(base + '/api/admin/abuse-diagnostics/mail-template-check', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ to: 'nunrib@sapo.pt', kinds: ['verify'], locales: ['pt', 'ja'] }),
+  });
+  assert.equal(ok.status, 200);
+  const body = (await ok.json()) as any;
+  assert.equal(body.sent, 2);
+  assert.equal(body.failed, 0);
+  assert.equal(mailer.sent.length, 2);
+  assert.ok(mailer.sent[0].subject.startsWith('[verify:pt] '));
+  assert.ok(mailer.sent[0].subject !== mailer.sent[1].subject, 'localized subjects differ');
+  assert.ok(mailer.sent.every((m2) => m2.text.includes('blr_SELFTEST_verify_') && m2.to === 'nunrib@sapo.pt'));
+});
