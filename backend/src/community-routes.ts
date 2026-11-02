@@ -124,6 +124,23 @@ function clientIp(req: express.Request): string | undefined {
   return req.socket.remoteAddress ?? undefined;
 }
 
+// Coarse address CLASS for the redacted xff-probe diagnostic - never returns
+// the address itself. v4 only in practice behind Render; anything else is
+// 'other'.
+function ipClass(ip: string): string {
+  const v4 = ip.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (!v4) return ip === '::1' || ip.startsWith('fc') || ip.startsWith('fd') ? 'private' : 'other';
+  const a = Number(v4[1]);
+  const b = Number(v4[2]);
+  if (a === 127 || a === 0) return 'loopback';
+  if (a === 10 || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168)) return 'private';
+  if (a === 169 && b === 254) return 'link-local';
+  if ((a === 192 && b === 0 && Number(v4[3]) === 2) || (a === 198 && b === 51 && Number(v4[3]) === 100) || (a === 203 && b === 0 && Number(v4[3]) === 113))
+    return 'reserved-docs';
+  if ((a === 100 && b >= 64 && b <= 127) || (a === 198 && (b === 18 || b === 19)) || a >= 224) return 'reserved';
+  return 'public';
+}
+
 function sendError(res: express.Response, err: unknown): void {
   if (err instanceof AuthError || err instanceof CommunityError || err instanceof MailerError) {
     res.status(err.status).json(err.code ? { error: err.message, code: err.code } : { error: err.message });
@@ -198,6 +215,57 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // public value by design; the secret never leaves the backend.
   router.get('/api/auth/abuse-config', (_req, res) => {
     res.json({ turnstileSiteKey: process.env.TURNSTILE_SITE_KEY?.trim() || null });
+  });
+  // Admin-gated abuse-defense observability for the controlled verification
+  // window. Aggregate counters only - no IPs, tokens or emails leave these
+  // endpoints. The self-check exercises the DEPLOYED reputation client and
+  // counter path against a fixed RFC 5737 TEST-NET-3 address (reserved for
+  // documentation, never a visitor or caller-supplied address, one cached
+  // lookup). It proves provider WIRING only: the verdict on a reserved
+  // address is not calibration data for enforcement thresholds.
+  const SELF_CHECK_IP = '203.0.113.1';
+  router.get('/api/admin/abuse-diagnostics', requireAdmin, (_req, res) => {
+    res.json({
+      turnstile: turnstile ? 'configured' : 'disabled',
+      ipReputation: { enforce: process.env.IPREP_ENFORCE === '1', ...reputation.stats() },
+    });
+  });
+  router.post('/api/admin/abuse-diagnostics/reputation-self-check', requireAdmin, async (_req, res) => {
+    try {
+      const probeVerdict = await reputation.check(SELF_CHECK_IP);
+      res.json({ probeVerdict, stats: reputation.stats() });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  // Measured client-IP chain observation WITHOUT changing trust behavior and
+  // WITHOUT retaining raw addresses: returns only the chain length and the
+  // address CLASS of each entry (loopback/private/reserved/public), the
+  // socket peer class, the active trust mode, and which class clientIp
+  // resolved to. Used with controlled forged-XFF requests to derive the
+  // deployed ingress structure before any TRUST_PROXY* setting exists.
+  router.get('/api/admin/abuse-diagnostics/xff-probe', requireAdmin, (req, res) => {
+    const fwd = req.header('x-forwarded-for');
+    const chain = fwd
+      ? fwd
+          .split(',')
+          .map((s2) => s2.trim())
+          .filter(Boolean)
+      : [];
+    const depthRaw = process.env.TRUST_PROXY_DEPTH ?? '';
+    const trustMode =
+      depthRaw !== '' && Number.isInteger(Number(depthRaw)) && Number(depthRaw) >= 1 ? 'depth' : process.env.TRUST_PROXY === '1' ? 'legacy' : 'none';
+    const resolved = clientIp(req);
+    res.json({
+      chainLength: chain.length,
+      chainClasses: chain.map(ipClass),
+      socketPeerClass: req.socket.remoteAddress ? ipClass(req.socket.remoteAddress) : null,
+      trustMode,
+      clientIpClass: resolved ? ipClass(resolved) : null,
+      // True when the resolved client IP is steerable by the leftmost XFF
+      // entry (spoofable) under the CURRENT trust settings.
+      leftmostSteersClient: trustMode === 'legacy' && chain.length > 0 && resolved === chain[0],
+    });
   });
   router.post('/api/auth/email/register', async (req, res) => {
     try {
