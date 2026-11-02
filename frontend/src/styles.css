@@ -803,7 +803,7 @@ code {
   .header-inner {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
     padding: 20px 24px;
   }
   .header-side,
@@ -816,16 +816,36 @@ code {
   .brand-lockup {
     height: 36px;
   }
+  /* The testnet badge (~124px) is what priced the single row out of reach at
+     exactly 1440px: brand 128 + badge 124 + Connect ~172 + select 200 + gaps
+     and padding left the nav ~645px for ~680px of links, so flex-shrink
+     char-wrapped every label. The persistent risk banner above the navbar
+     already discloses "Stellar testnet prototype: no live offers, no real
+     funds" on every page, so the badge yields only on the wide single-row
+     arrangement; it stays visible below 1440px where the two-row grid has
+     vertical room for it. */
+  .badge-testnet {
+    display: none;
+  }
   .site-nav {
     flex: 1 1 auto;
     justify-content: center;
     flex-wrap: nowrap;
+    min-width: 0;
+  }
+  /* Never let a squeezed link wrap its label character by character: keep
+     labels on one line and let the nav's min-width: 0 absorb any leftover
+     deficit instead. */
+  .site-nav a {
+    white-space: nowrap;
+    padding-left: 8px;
+    padding-right: 8px;
   }
   .header-actions .btn {
     flex: none;
   }
   .lang-select {
-    max-width: 220px;
+    max-width: 200px;
   }
 }
 
@@ -1834,7 +1854,7 @@ textarea:focus-visible,
 }
 .footer-brand-lockup-img {
   display: block;
-  height: 75px;
+  height: 45px;
   width: auto;
   flex: none;
 }
