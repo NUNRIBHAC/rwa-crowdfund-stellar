@@ -1743,7 +1743,7 @@ export const pt: Messages = {
     commentLabel: 'O seu comentário',
     commentSubmit: 'Publicar comentário',
     commentPostingAs: 'A publicar como {name}. Os comentários são públicos.',
-    commentsSignInHint: 'Inicie sessão com a sua carteira abaixo para participar na discussão.',
+    commentsSignInHint: 'Inicie sessão com a sua carteira para participar na discussão.',
     signInTitle: 'Início de sessão na comunidade',
     signInExplainer:
       'Assine um desafio único com a sua carteira Freighter para provar que controla o endereço. Não é criada nenhuma transação e não se movem fundos. A sessão desbloqueia comentários, pedidos de suporte e candidaturas de emitente.',
@@ -1794,7 +1794,7 @@ export const pt: Messages = {
       'Apresente à operadora o projeto que gostaria de listar. Enviar este formulário não é uma oferta, uma listagem ou uma aprovação - inicia uma conversa. Ambiente de demonstração: não submeta segredos comerciais reais.',
     applicationPreviewTitle: 'Candidatura (pré-visualização)',
     applicationPreviewNote:
-      'Pré-visualização da candidatura de emitente. Nada do que escrever aqui é enviado ou guardado - inicie sessão com a sua carteira abaixo para submeter uma candidatura real para revisão pelo operador.',
+      'Pré-visualização da candidatura de emitente. Nada do que escrever aqui é enviado ou guardado - inicie sessão com a sua carteira para submeter uma candidatura real para revisão pelo operador.',
     applicationPreviewPlaceholder: 'Apenas pré-visualização - inicie sessão para se candidatar',
     applicationPreviewSubmit: 'Submeter candidatura (inicie sessão primeiro)',
     applicationFields: {

@@ -1693,7 +1693,7 @@ export const en = {
     commentLabel: 'Your comment',
     commentSubmit: 'Post comment',
     commentPostingAs: 'Posting as {name}. Comments are public.',
-    commentsSignInHint: 'Sign in with your wallet below to join the discussion.',
+    commentsSignInHint: 'Sign in with your wallet to join the discussion.',
     signInTitle: 'Community sign-in',
     signInExplainer:
       'Sign a one-time challenge with your Freighter wallet to prove you control the address. No transaction is created and no funds move. The session unlocks comments, support tickets and issuer applications.',
@@ -1744,7 +1744,7 @@ export const en = {
       'Tell the operator about the project you would like to list. Submitting this form is not an offer, a listing or an approval - it starts a conversation. Demo environment: do not submit real business secrets.',
     applicationPreviewTitle: 'Application (preview)',
     applicationPreviewNote:
-      'Preview of the issuer application. Nothing entered here is sent or stored - sign in with your wallet below to submit a real application for operator review.',
+      'Preview of the issuer application. Nothing entered here is sent or stored - sign in with your wallet to submit a real application for operator review.',
     applicationPreviewPlaceholder: 'Preview only - sign in to apply',
     applicationPreviewSubmit: 'Submit application (sign in first)',
     applicationFields: {

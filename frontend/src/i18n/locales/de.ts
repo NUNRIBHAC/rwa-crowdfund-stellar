@@ -1736,7 +1736,7 @@ export const de: Messages = {
     commentLabel: 'Ihr Kommentar',
     commentSubmit: 'Kommentar veröffentlichen',
     commentPostingAs: 'Veröffentlichen als {name}. Kommentare sind öffentlich.',
-    commentsSignInHint: 'Melden Sie sich unten mit Ihrer Wallet an, um an der Diskussion teilzunehmen.',
+    commentsSignInHint: 'Melden Sie sich mit Ihrer Wallet an, um an der Diskussion teilzunehmen.',
     signInTitle: 'Community-Anmeldung',
     signInExplainer:
       'Signieren Sie eine einmalige Challenge mit Ihrer Freighter-Wallet, um zu beweisen, dass Sie die Adresse kontrollieren. Es wird keine Transaktion erstellt und es bewegen sich keine Gelder. Die Sitzung schaltet Kommentare, Support-Tickets und Emittentenbewerbungen frei.',
@@ -1787,7 +1787,7 @@ export const de: Messages = {
       'Beschreiben Sie dem Betreiber das Projekt, das Sie listen möchten. Das Absenden dieses Formulars ist kein Angebot, kein Listing und keine Genehmigung - es eröffnet ein Gespräch. Demo-Umgebung: Übermitteln Sie keine echten Geschäftsgeheimnisse.',
     applicationPreviewTitle: 'Antrag (Vorschau)',
     applicationPreviewNote:
-      'Vorschau des Emittentenantrags. Nichts, was Sie hier eingeben, wird gesendet oder gespeichert - melden Sie sich unten mit Ihrer Wallet an, um einen echten Antrag zur Prüfung durch den Betreiber einzureichen.',
+      'Vorschau des Emittentenantrags. Nichts, was Sie hier eingeben, wird gesendet oder gespeichert - melden Sie sich mit Ihrer Wallet an, um einen echten Antrag zur Prüfung durch den Betreiber einzureichen.',
     applicationPreviewPlaceholder: 'Nur Vorschau - zum Bewerben anmelden',
     applicationPreviewSubmit: 'Antrag einreichen (zuerst anmelden)',
     applicationFields: {

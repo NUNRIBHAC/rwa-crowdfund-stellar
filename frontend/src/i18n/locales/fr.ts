@@ -1753,7 +1753,7 @@ export const fr: Messages = {
     commentLabel: 'Votre commentaire',
     commentSubmit: 'Publier le commentaire',
     commentPostingAs: 'Publication en tant que {name}. Les commentaires sont publics.',
-    commentsSignInHint: 'Connectez-vous avec votre portefeuille ci-dessous pour participer à la discussion.',
+    commentsSignInHint: 'Connectez-vous avec votre portefeuille pour participer à la discussion.',
     signInTitle: 'Connexion à la communauté',
     signInExplainer:
       "Signez un défi unique avec votre portefeuille Freighter pour prouver que vous contrôlez l'adresse. Aucune transaction n'est créée et aucun fonds ne bouge. La session débloque les commentaires, les tickets de support et les candidatures d'émetteur.",
@@ -1804,7 +1804,7 @@ export const fr: Messages = {
       "Présentez à l'opérateur le projet que vous souhaitez lister. Envoyer ce formulaire n'est ni une offre, ni un listage, ni une approbation - cela ouvre une conversation. Environnement de démonstration : ne soumettez pas de vrais secrets commerciaux.",
     applicationPreviewTitle: 'Candidature (aperçu)',
     applicationPreviewNote:
-      "Aperçu de la candidature d'émetteur. Rien de ce que vous saisissez ici n'est envoyé ni conservé - connectez-vous avec votre portefeuille ci-dessous pour soumettre une vraie candidature pour examen par l'opérateur.",
+      "Aperçu de la candidature d'émetteur. Rien de ce que vous saisissez ici n'est envoyé ni conservé - connectez-vous avec votre portefeuille pour soumettre une vraie candidature pour examen par l'opérateur.",
     applicationPreviewPlaceholder: 'Aperçu uniquement - connectez-vous pour postuler',
     applicationPreviewSubmit: "Soumettre la candidature (connectez-vous d'abord)",
     applicationFields: {

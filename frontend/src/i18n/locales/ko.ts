@@ -1647,7 +1647,7 @@ export const ko: Messages = {
     commentLabel: '내 댓글',
     commentSubmit: '댓글 게시',
     commentPostingAs: '{name}(으)로 게시합니다. 댓글은 공개됩니다.',
-    commentsSignInHint: '아래에서 지갑으로 로그인하여 토론에 참여하세요.',
+    commentsSignInHint: '지갑으로 로그인하여 토론에 참여하세요.',
     signInTitle: '커뮤니티 로그인',
     signInExplainer:
       'Freighter 지갑으로 일회성 챌린지에 서명하여 해당 주소를 관리함을 증명하세요. 트랜잭션이 생성되지 않으며 자금도 이동하지 않습니다. 세션을 통해 댓글, 지원 티켓, 발행인 신청이 활성화됩니다.',

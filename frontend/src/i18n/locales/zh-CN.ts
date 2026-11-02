@@ -1615,7 +1615,7 @@ export const zhCN: Messages = {
     commentLabel: '您的评论',
     commentSubmit: '发表评论',
     commentPostingAs: '以 {name} 身份发表。评论为公开。',
-    commentsSignInHint: '在下方使用您的钱包登录以参与讨论。',
+    commentsSignInHint: '使用您的钱包登录以参与讨论。',
     signInTitle: '社区登录',
     signInExplainer: '使用您的 Freighter 钱包签署一次性挑战,以证明您控制该地址。不会创建任何交易,也不会移动资金。登录后可使用评论、支持工单和发行人申请。',
     signInButton: '使用钱包登录',
@@ -1661,7 +1661,7 @@ export const zhCN: Messages = {
     applicationTitle: '申请成为发行人',
     applicationNote: '向运营方介绍您想上架的项目。提交此表单并非要约、上架或批准 - 而是开启对话。演示环境:请勿提交真实商业机密。',
     applicationPreviewTitle: '申请（预览）',
-    applicationPreviewNote: '发行人申请预览。此处输入的任何内容都不会被发送或保存 - 请在下方使用钱包登录，提交真实申请以供运营方审核。',
+    applicationPreviewNote: '发行人申请预览。此处输入的任何内容都不会被发送或保存 - 请使用钱包登录，提交真实申请以供运营方审核。',
     applicationPreviewPlaceholder: '仅预览 - 登录后申请',
     applicationPreviewSubmit: '提交申请（请先登录）',
     applicationFields: {

@@ -1669,7 +1669,7 @@ export const ja: Messages = {
     commentLabel: 'あなたのコメント',
     commentSubmit: 'コメントを投稿',
     commentPostingAs: '{name} として投稿します。コメントは公開されます。',
-    commentsSignInHint: '下でウォレットでサインインしてディスカッションに参加してください。',
+    commentsSignInHint: 'ウォレットでサインインしてディスカッションに参加してください。',
     signInTitle: 'コミュニティサインイン',
     signInExplainer:
       'Freighter ウォレットで一度きりのチャレンジに署名し、そのアドレスを管理していることを証明します。トランザクションは作成されず、資金も動きません。セッションによりコメント、サポートチケット、発行者申請が解放されます。',

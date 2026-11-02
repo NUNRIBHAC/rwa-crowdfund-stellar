@@ -1748,7 +1748,7 @@ export const es: Messages = {
     commentLabel: 'Tu comentario',
     commentSubmit: 'Publicar comentario',
     commentPostingAs: 'Publicando como {name}. Los comentarios son públicos.',
-    commentsSignInHint: 'Inicia sesión con tu monedero abajo para unirte a la conversación.',
+    commentsSignInHint: 'Inicia sesión con tu monedero para unirte a la conversación.',
     signInTitle: 'Inicio de sesión de la comunidad',
     signInExplainer:
       'Firma un reto único con tu monedero Freighter para demostrar que controlas la dirección. No se crea ninguna transacción ni se mueven fondos. La sesión desbloquea comentarios, tickets de soporte y solicitudes de emisor.',
@@ -1799,7 +1799,7 @@ export const es: Messages = {
       'Cuéntale al operador el proyecto que te gustaría listar. Enviar este formulario no es una oferta, un listado ni una aprobación: inicia una conversación. Entorno de demostración: no envíes secretos comerciales reales.',
     applicationPreviewTitle: 'Solicitud (vista previa)',
     applicationPreviewNote:
-      'Vista previa de la solicitud de emisor. Nada de lo que escriba aquí se envía ni se guarda - inicie sesión con su monedero abajo para enviar una solicitud real para revisión por el operador.',
+      'Vista previa de la solicitud de emisor. Nada de lo que escriba aquí se envía ni se guarda - inicie sesión con su monedero para enviar una solicitud real para revisión por el operador.',
     applicationPreviewPlaceholder: 'Solo vista previa - inicie sesión para solicitar',
     applicationPreviewSubmit: 'Enviar solicitud (inicie sesión primero)',
     applicationFields: {
