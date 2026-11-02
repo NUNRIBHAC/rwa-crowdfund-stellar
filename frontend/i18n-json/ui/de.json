@@ -88,7 +88,7 @@
     "noteFixture": "Die Beispielkampagnen demonstrieren das Layout. Sie sind keine bereitgestellten Verträge und können keine Beiträge annehmen.",
     "noteLive": "Die echten Kampagnen sind Soroban-Verträge im Stellar-Testnet. Testnet-Vermögenswerte sind wertlos.",
     "refresh": "Vertragsstatus aktualisieren",
-    "searchPlaceholder": "Kampagnen nach Name oder Vertrag suchen",
+    "searchPlaceholder": "Kampagnen suchen",
     "searchAria": "Kampagnen suchen",
     "filterStatusAria": "Nach Status filtern",
     "all": "Alle",

@@ -99,7 +99,7 @@ export const fr: Messages = {
     noteFixture: 'Les campagnes exemples montrent la mise en page. Ce ne sont pas des contrats déployés et elles ne peuvent pas accepter de contributions.',
     noteLive: 'Les vraies campagnes sont des contrats Soroban sur le testnet Stellar. Les actifs de testnet sont sans valeur.',
     refresh: "Actualiser l'état du contrat",
-    searchPlaceholder: 'Rechercher des campagnes par nom ou contrat',
+    searchPlaceholder: 'Rechercher des campagnes',
     searchAria: 'Rechercher des campagnes',
     filterStatusAria: 'Filtrer par statut',
     all: 'Toutes',

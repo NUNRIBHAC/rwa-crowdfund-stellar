@@ -88,7 +88,7 @@
     "noteFixture": "Las campañas de ejemplo demuestran el diseño. No son contratos desplegados y no pueden aceptar contribuciones.",
     "noteLive": "Las campañas reales son contratos Soroban en la testnet de Stellar. Los activos de testnet no tienen valor.",
     "refresh": "Actualizar estado del contrato",
-    "searchPlaceholder": "Buscar campañas por nombre o contrato",
+    "searchPlaceholder": "Buscar campañas",
     "searchAria": "Buscar campañas",
     "filterStatusAria": "Filtrar por estado",
     "all": "Todas",
