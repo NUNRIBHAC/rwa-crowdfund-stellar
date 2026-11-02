@@ -101,12 +101,7 @@ function verificationEmailText(email: string, token: string): string {
   ].join('\n');
 }
 
-async function issueVerification(
-  store: CommunityStore,
-  mailer: Mailer,
-  credential: EmailCredential,
-  now: number,
-): Promise<void> {
+async function issueVerification(store: CommunityStore, mailer: Mailer, credential: EmailCredential, now: number): Promise<void> {
   const token = `blv_${randomBytes(24).toString('hex')}`;
   await store.change((state) => {
     const current = state.emailCredentials[credential.email];

@@ -66,12 +66,7 @@ async function startApp(mailer: Mailer | null): Promise<string> {
 const servers: ReturnType<express.Express['listen']>[] = [];
 after(() => servers.forEach((s) => s.close()));
 
-async function api(
-  baseUrl: string,
-  method: string,
-  p: string,
-  opts: { token?: string; body?: unknown } = {},
-) {
+async function api(baseUrl: string, method: string, p: string, opts: { token?: string; body?: unknown } = {}) {
   const res = await fetch(baseUrl + p, {
     method,
     headers: {
