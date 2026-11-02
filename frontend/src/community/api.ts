@@ -184,6 +184,14 @@ export const emailLogin = (email: string, password: string) =>
     body: { email, password },
   });
 
+// Password reset (backend email-auth.ts): same anti-enumeration response for
+// unknown, unverified and verified addresses. A successful confirm revokes
+// every existing session for the account.
+export const emailResetRequest = (email: string) => call<{ status: 'reset-sent' }>('/api/auth/email/reset-request', { body: { email } });
+
+export const emailResetConfirm = (email: string, resetToken: string, password: string) =>
+  call<{ status: 'password-reset' }>('/api/auth/email/reset-confirm', { body: { email, token: resetToken, password } });
+
 // Second factor: completes a gated login, or manages enrollment from the
 // account security section. The enrollment secret is returned once, to the
 // session owner only.
