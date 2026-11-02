@@ -192,6 +192,11 @@ test('allowlisted verified registration creates a social account and a working s
   // The session authenticates against the normal authed endpoints.
   const sessions = await fetch(`${base}/api/auth/sessions`, { headers: { authorization: `Bearer bls_${token}` } });
   assert.equal(sessions.status, 200);
+  // /me serializes the real auth method (never 'wallet' for a social
+  // account) and the owner's own provider-verified email.
+  const me = await (await fetch(`${base}/api/auth/me`, { headers: { authorization: `Bearer bls_${token}` } })).json();
+  assert.equal(me.account.authMethod, 'social');
+  assert.equal(me.account.email, 'nuno@example.com');
   // Account + identity keyed on (provider, subject); email is reference only.
   const data = await store.read();
   const identity = data.socialIdentities['google:google-sub-123'];

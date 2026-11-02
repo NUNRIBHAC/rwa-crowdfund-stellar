@@ -9,9 +9,10 @@ export type CommunityAccount = {
   displayName: string | null;
   createdAt: number;
   totpEnabled: boolean;
-  // 'email' accounts registered with email+password (throwaway identity
-  // keypair server-side); 'wallet' is the classic challenge-response account.
-  authMethod?: 'wallet' | 'email';
+  // 'email' accounts registered with email+password, 'social' via an OAuth
+  // provider (both get a throwaway identity keypair server-side); 'wallet'
+  // is the classic challenge-response account.
+  authMethod?: 'wallet' | 'email' | 'social';
   // The owner's own address, only ever returned to the session owner.
   email?: string | null;
 };
