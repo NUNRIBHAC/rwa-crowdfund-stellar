@@ -27,7 +27,7 @@
 import { createHash, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore, EmailCredential } from './community-store.js';
-import { AuthError, hashToken, SESSION_TTL_MS } from './accounts.js';
+import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './accounts.js';
 import type { Mailer } from './mailer.js';
 
 export const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
@@ -233,7 +233,7 @@ export async function loginEmail(
   store: CommunityStore,
   input: { email: unknown; password: unknown },
   now = Date.now(),
-): Promise<{ token: string; expiresAt: number; account: Account }> {
+): Promise<{ token: string; expiresAt: number; account: Account } | { requiresTotp: true; ticket: string; expiresAt: number; account: Account }> {
   const email = normalizeEmail(input.email);
   if (typeof input.password !== 'string') throw new AuthError(400, 'password must be a string');
   const result = await store.change((state) => {
@@ -255,6 +255,15 @@ export async function loginEmail(
     if (!credential.verified) return { unverified: true as const };
     const account = state.accounts[credential.publicKey];
     if (!account) throw new AuthError(500, 'account record missing');
+    // Second-factor parity with the wallet flow: a correct password alone is
+    // never enough when TOTP is enabled - issue a one-purpose ticket instead
+    // of a session (completeTotpLogin then applies replay/lockout rules).
+    if (account.totp?.status === 'enabled') {
+      const ticket = `blt_${randomBytes(24).toString('hex')}`;
+      const expiresAt = now + TOTP_TICKET_TTL_MS;
+      state.totpTickets[ticket] = { id: ticket, publicKey: account.publicKey, expiresAt };
+      return { requiresTotp: true as const, ticket, expiresAt, account: { ...account } };
+    }
     const token = `bls_${randomBytes(24).toString('hex')}`;
     const session = {
       tokenHash: hashToken(token),

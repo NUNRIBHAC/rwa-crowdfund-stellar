@@ -237,6 +237,49 @@ test('unverified duplicate registration re-issues a fresh token', async () => {
   assert.equal(fresh.status, 200);
 });
 
+test('TOTP parity: password alone never yields a session when 2FA is enabled', async () => {
+  const mailer = new FakeMailer();
+  const url = await startApp(mailer);
+  process.env.COMMUNITY_TOTP_KEY = 'test-totp-key';
+  try {
+    await api(url, 'POST', '/api/auth/email/register', {
+      body: { email: 'totp@example.com', password: 'the right password' },
+    });
+    const verified = await api(url, 'POST', '/api/auth/email/verify', {
+      body: { email: 'totp@example.com', token: mailer.lastToken() },
+    });
+    const session = verified.json.token as string;
+
+    // Enroll + enable TOTP on the email account through the existing routes.
+    const enroll = await api(url, 'POST', '/api/auth/totp/enroll', { token: session });
+    assert.equal(enroll.status, 200);
+    const manualKey = enroll.json.manualKey as string;
+    const { totpAt } = await import('../src/totp.js');
+    const code = totpAt(manualKey, Math.floor(Date.now() / 1000));
+    const enable = await api(url, 'POST', '/api/auth/totp/enable', { token: session, body: { code } });
+    assert.equal(enable.status, 200);
+
+    // Password login must now return a ticket, NOT a session.
+    const login = await api(url, 'POST', '/api/auth/email/login', {
+      body: { email: 'totp@example.com', password: 'the right password' },
+    });
+    assert.equal(login.status, 200);
+    assert.equal(login.json.requiresTotp, true);
+    assert.match(login.json.ticket, /^blt_/);
+    assert.equal(login.json.token, undefined);
+
+    // The ticket completes through the same second-factor endpoint.
+    const code2 = totpAt(manualKey, Math.floor(Date.now() / 1000));
+    const done = await api(url, 'POST', '/api/auth/totp/complete', {
+      body: { ticket: login.json.ticket, code: code2 },
+    });
+    assert.equal(done.status, 200);
+    assert.match(done.json.token, /^bls_/);
+  } finally {
+    delete process.env.COMMUNITY_TOTP_KEY;
+  }
+});
+
 test('input validation: malformed email, short password, wrong types', async () => {
   const mailer = new FakeMailer();
   const url = await startApp(mailer);

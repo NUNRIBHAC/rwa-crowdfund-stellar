@@ -148,6 +148,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (ip && !service.limiter.allow(`email-login-ip:${ip}`, 30, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
       const result = await loginEmail(store, { email: req.body?.email, password: req.body?.password });
+      if ('requiresTotp' in result) {
+        // Second factor owed: one-purpose ticket, no session (same shape as
+        // the wallet flow's gated sign-in).
+        res.json({ requiresTotp: true, ticket: result.ticket, expiresAt: result.expiresAt, account: publicAccount(result.account) });
+        return;
+      }
       res.json({ token: result.token, expiresAt: result.expiresAt, account: publicAccount(result.account) });
     } catch (err) {
       sendError(res, err);
