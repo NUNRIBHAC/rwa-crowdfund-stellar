@@ -462,6 +462,9 @@
     "documentsAria": "Documents d’investissement",
     "documentsTitle": "Documents d’investissement",
     "documentsEmpty": "Aucun document publié pour cette campagne.",
+    "investorDocsEmpty": "Aucun document d’investissement n’est encore disponible pour cette campagne.",
+    "investorDocsUnavailable": "Les documents d’investissement n’ont pas pu être chargés. Cela ne signifie pas qu’il n’y en a aucun - réessayez plus tard.",
+    "investorDocsDownload": "Télécharger",
     "newInvestments": "Nouveaux investissements",
     "filterAria": "Filtrer le portefeuille par statut",
     "tabs": {

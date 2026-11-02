@@ -486,6 +486,9 @@ export const hi: Messages = {
     documentsAria: 'निवेश दस्तावेज़',
     documentsTitle: 'निवेश दस्तावेज़',
     documentsEmpty: 'इस अभियान के लिए कोई दस्तावेज़ प्रकाशित नहीं।',
+    investorDocsEmpty: 'इस अभियान के लिए अभी कोई निवेश दस्तावेज़ उपलब्ध नहीं है।',
+    investorDocsUnavailable: 'निवेश दस्तावेज़ लोड नहीं हो सके। इसका मतलब यह नहीं कि कोई नहीं हैं - बाद में फिर प्रयास करें।',
+    investorDocsDownload: 'डाउनलोड',
     newInvestments: 'नए निवेश',
     filterAria: 'स्थिति से पोर्टफ़ोलियो फ़िल्टर करें',
     tabs: {

@@ -497,6 +497,71 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.json({ reports: await service.listReports(campaignId) });
     }),
   );
+  // --- Investment documents (investor-entitled delivery) ---
+  // Read gating mirrors post-funding reports exactly: authenticated wallet,
+  // on-chain/registry entitlement (fail closed 503 when unverifiable),
+  // investors and designated operators only. Unapproved (pending) documents
+  // are invisible to investors and never downloadable - only after an
+  // explicit demo-grade operator approval.
+  const investmentDocEntitlement = async (req: express.Request, res: express.Response, account: Account, campaignId: string): Promise<boolean> => {
+    if (!investorEntitlement) {
+      res.status(503).json({ error: 'investor entitlement verification is not configured; investment documents disabled' });
+      return false;
+    }
+    let entitlement: { registered: boolean; balanceUnits: bigint; contributedBefore: boolean };
+    try {
+      entitlement = await investorEntitlement(campaignId, account.publicKey);
+    } catch (err) {
+      res.status(503).json({
+        error: `could not verify on-chain investor entitlement; refusing investment document access: ${err instanceof Error ? err.message : String(err)}`,
+      });
+      return false;
+    }
+    if (!entitlement.registered) {
+      res.status(404).json({ error: 'unknown campaign' });
+      return false;
+    }
+    const wallets = operatorWallets();
+    const isOperator = wallets.length > 0 && wallets.includes(account.publicKey);
+    if (!isOperator && entitlement.balanceUnits <= 0n && !entitlement.contributedBefore) {
+      res.status(403).json({ error: 'investment documents are available to investors in this campaign' });
+      return false;
+    }
+    return true;
+  };
+
+  router.get(
+    '/api/campaigns/:id/investment-documents',
+    authed(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      if (!(await investmentDocEntitlement(req, res, account, campaignId))) return;
+      res.json({ documents: await service.listInvestmentDocuments(campaignId), demo: true });
+    }),
+  );
+
+  router.get(
+    '/api/investment-documents/:docId/download',
+    authed(async (req, res, account) => {
+      const doc = await service.getInvestmentDocument(String(req.params.docId));
+      if (!doc) {
+        res.status(404).json({ error: 'investment document not found' });
+        return;
+      }
+      // Entitlement BEFORE the approval check: non-investors are refused
+      // without learning whether the document is pending or approved.
+      if (!(await investmentDocEntitlement(req, res, account, doc.campaignId))) return;
+      const wallets = operatorWallets();
+      const isOperator = wallets.length > 0 && wallets.includes(account.publicKey);
+      if (doc.status !== 'approved' && !isOperator) {
+        res.status(404).json({ error: 'investment document not found' });
+        return;
+      }
+      res.setHeader('content-type', 'text/plain; charset=utf-8');
+      res.setHeader('content-disposition', `attachment; filename="${doc.id}.txt"`);
+      res.send(`[SYNTHETIC DEMO DOCUMENT - not an offer, not advice, no approved content]\n\n${doc.title}\n\n${doc.content}`);
+    }),
+  );
+
   router.post('/api/campaigns/:id/news', requireAdmin, async (req, res) => {
     try {
       res.status(201).json({
@@ -625,6 +690,28 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       }
       await handler(req, res, account);
     });
+
+  router.post(
+    '/api/operator/campaigns/:id/investment-documents',
+    operator(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      const doc = await service.publishInvestmentDocument(`operator:${account.publicKey}`, {
+        campaignId,
+        title: String(req.body?.title ?? ''),
+        kind: req.body?.kind,
+        content: String(req.body?.content ?? ''),
+      });
+      res.status(201).json({ document: { ...doc, content: undefined } });
+    }),
+  );
+
+  router.post(
+    '/api/operator/investment-documents/:docId/approve',
+    operator(async (req, res, account) => {
+      const doc = await service.approveInvestmentDocument(String(req.params.docId), `operator:${account.publicKey}`);
+      res.json({ document: { ...doc, content: undefined } });
+    }),
+  );
 
   router.get(
     '/api/operator/comments',

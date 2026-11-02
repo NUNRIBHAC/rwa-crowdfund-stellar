@@ -484,6 +484,9 @@ export const ar: Messages = {
     documentsAria: 'وثائق الاستثمار',
     documentsTitle: 'وثائق الاستثمار',
     documentsEmpty: 'لا توجد وثائق منشورة لهذه الحملة.',
+    investorDocsEmpty: 'لا تتوفر وثائق استثمار لهذه الحملة بعد.',
+    investorDocsUnavailable: 'تعذر تحميل وثائق الاستثمار. هذا لا يعني عدم وجودها - حاول مرة أخرى لاحقاً.',
+    investorDocsDownload: 'تنزيل',
     newInvestments: 'استثمارات جديدة',
     filterAria: 'تصفية المحفظة حسب الحالة',
     tabs: {

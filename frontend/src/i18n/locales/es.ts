@@ -492,6 +492,9 @@ export const es: Messages = {
     documentsAria: 'Documentos de inversión',
     documentsTitle: 'Documentos de inversión',
     documentsEmpty: 'No hay documentos publicados para esta campaña.',
+    investorDocsEmpty: 'Aún no hay documentos de inversión disponibles para esta campaña.',
+    investorDocsUnavailable: 'No se pudieron cargar los documentos de inversión. Esto no significa que no existan; inténtalo de nuevo más tarde.',
+    investorDocsDownload: 'Descargar',
     newInvestments: 'Nuevas inversiones',
     filterAria: 'Filtrar cartera por estado',
     tabs: {

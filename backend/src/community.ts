@@ -8,6 +8,7 @@ import type {
   IssuerApplication,
   NewsPost,
   PostFundingReport,
+  InvestmentDocument,
   ContributorRecord,
   PodcastEpisode,
   AppropriatenessRecord,
@@ -445,6 +446,83 @@ export class CommunityService {
     requireCampaignId(campaignId);
     const state = await this.store.read();
     return Object.values(state.contributors).filter((c) => c.campaignId === campaignId);
+  }
+
+  // --- Investment documents (investor-entitled delivery) ---
+  // Publication and approval are operator-gated at the router. All content
+  // in this prototype is demo:true synthetic; approval is a demo-grade
+  // operator designation, NOT legal/content review (production policy unset).
+  async publishInvestmentDocument(
+    actor: string,
+    input: { campaignId: string; title: string; kind: InvestmentDocument['kind']; content: string },
+  ): Promise<InvestmentDocument> {
+    requireCampaignId(input.campaignId);
+    const title = String(input.title ?? '').trim();
+    if (!title || title.length > 200) throw new Error('invalid document title');
+    if (!['kiis', 'terms', 'project', 'other'].includes(input.kind)) throw new Error('invalid document kind');
+    const content = String(input.content ?? '');
+    if (!content.trim() || content.length > 64 * 1024) throw new Error('invalid document content');
+    const doc: InvestmentDocument = {
+      id: newId('idoc'),
+      campaignId: input.campaignId,
+      title,
+      kind: input.kind,
+      content,
+      status: 'pending',
+      demo: true,
+      createdBy: actor,
+      createdAt: this.now(),
+      approvedBy: null,
+      approvedAt: null,
+    };
+    await this.store.change((state) => {
+      state.investmentDocuments[doc.id] = doc;
+    });
+    await this.recordAudit(actor, 'investment-document.publish', doc.id, `campaign=${input.campaignId} title=${title}`);
+    return doc;
+  }
+
+  async approveInvestmentDocument(id: string, actor: string): Promise<InvestmentDocument> {
+    let doc: InvestmentDocument | undefined;
+    await this.store.change((state) => {
+      doc = state.investmentDocuments[id];
+      if (!doc) throw new Error('investment document not found');
+      if (doc.status !== 'approved') {
+        doc.status = 'approved';
+        doc.approvedBy = actor;
+        doc.approvedAt = this.now();
+      }
+    });
+    await this.recordAudit(actor, 'investment-document.approve', id, `campaign=${doc!.campaignId}`);
+    return doc!;
+  }
+
+  // Investor-facing listing: approved documents only. Pending documents are
+  // never listed to investors (unapproved content is undeliverable).
+  async listInvestmentDocuments(campaignId: string): Promise<Omit<InvestmentDocument, 'content'>[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.investmentDocuments)
+      .filter((d) => d.campaignId === campaignId && d.status === 'approved')
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map(({ content, ...meta }) => meta);
+  }
+
+  // Operator-facing listing: all statuses, metadata only.
+  async listAllInvestmentDocuments(campaignId: string): Promise<Omit<InvestmentDocument, 'content'>[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.investmentDocuments)
+      .filter((d) => d.campaignId === campaignId)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map(({ content, ...meta }) => meta);
+  }
+
+  // Download path: full record including content. Entitlement + approval
+  // checks happen at the router BEFORE this is called.
+  async getInvestmentDocument(id: string): Promise<InvestmentDocument | undefined> {
+    const state = await this.store.read();
+    return state.investmentDocuments[id];
   }
 
   async listReports(campaignId: string): Promise<PostFundingReport[]> {

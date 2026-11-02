@@ -467,6 +467,9 @@ export const zhTW: Messages = {
     documentsAria: '投資文件',
     documentsTitle: '投資文件',
     documentsEmpty: '此活動尚未發佈任何文件。',
+    investorDocsEmpty: '此活動暫無可用的投資文件。',
+    investorDocsUnavailable: '無法載入投資文件。這並不代表沒有文件 - 請稍後再試。',
+    investorDocsDownload: '下載',
     newInvestments: '新的投資',
     filterAria: '按狀態篩選投資組合',
     tabs: {

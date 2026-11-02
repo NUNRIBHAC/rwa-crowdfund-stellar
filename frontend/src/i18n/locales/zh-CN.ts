@@ -467,6 +467,9 @@ export const zhCN: Messages = {
     documentsAria: '投资文件',
     documentsTitle: '投资文件',
     documentsEmpty: '该活动尚未发布任何文件。',
+    investorDocsEmpty: '该活动暂无可用的投资文件。',
+    investorDocsUnavailable: '无法加载投资文件。这并不意味着没有文件 - 请稍后重试。',
+    investorDocsDownload: '下载',
     newInvestments: '新的投资',
     filterAria: '按状态筛选投资组合',
     tabs: {

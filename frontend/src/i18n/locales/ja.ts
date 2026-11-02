@@ -479,6 +479,9 @@ export const ja: Messages = {
     documentsAria: '投資ドキュメント',
     documentsTitle: '投資ドキュメント',
     documentsEmpty: 'このキャンペーンに公開されたドキュメントはありません。',
+    investorDocsEmpty: 'このキャンペーンで利用可能な投資ドキュメントはまだありません。',
+    investorDocsUnavailable: '投資ドキュメントを読み込めませんでした。存在しないという意味ではありません。後でもう一度お試しください。',
+    investorDocsDownload: 'ダウンロード',
     newInvestments: '新しい投資',
     filterAria: 'ステータスでポートフォリオを絞り込む',
     tabs: {

@@ -457,6 +457,9 @@
     "documentsAria": "투자 문서",
     "documentsTitle": "투자 문서",
     "documentsEmpty": "이 캠페인에 게시된 문서가 없습니다.",
+    "investorDocsEmpty": "이 캠페인에서 사용 가능한 투자 문서가 아직 없습니다.",
+    "investorDocsUnavailable": "투자 문서를 불러오지 못했습니다. 문서가 없다는 의미는 아니니 나중에 다시 시도하세요.",
+    "investorDocsDownload": "다운로드",
     "newInvestments": "새로운 투자",
     "filterAria": "상태로 포트폴리오 필터",
     "tabs": {
