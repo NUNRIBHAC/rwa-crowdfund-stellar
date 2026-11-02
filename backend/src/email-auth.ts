@@ -82,49 +82,6 @@ async function refundMailSlot(store: CommunityStore, at: number): Promise<void> 
     })
     .catch(() => undefined);
 }
-// Pre-flight view of the persisted global mail budget (admin verification
-// tooling): slots remaining in the rolling hour/day windows plus any active
-// provider-mute, so a test batch can be checked against reality before it
-// starts instead of assuming capacity from the configured caps.
-export function mailBudgetStatus(
-  state: { mailSendLog: number[]; mailProviderMutedUntil?: number | null },
-  now: number,
-  maxPerHour: number,
-  maxPerDay: number,
-): { hourRemaining: number; dayRemaining: number; providerMutedUntil: number | null } {
-  const log = state.mailSendLog.filter((t) => now - t < MAIL_BUDGET_DAY_MS);
-  return {
-    hourRemaining: Math.max(0, maxPerHour - log.filter((t) => now - t < MAIL_BUDGET_WINDOW_MS).length),
-    dayRemaining: Math.max(0, maxPerDay - log.length),
-    providerMutedUntil: state.mailProviderMutedUntil && state.mailProviderMutedUntil > now ? state.mailProviderMutedUntil : null,
-  };
-}
-
-// One outbound mail that CONSUMES the persisted global budget exactly like
-// the auth routes do: the slot is reserved inside the atomic store change,
-// a provider 429 mutes all sends, and a failed send refunds its slot.
-// Admin verification tooling must go through this so test sends can never
-// bypass the cap real user mail shares.
-export async function sendBudgetedMail(
-  store: CommunityStore,
-  mailer: Mailer,
-  mail: { to: string; subject: string; text: string },
-  now: number,
-  maxPerHour: number,
-  maxPerDay: number,
-): Promise<void> {
-  await store.change((state) => {
-    reserveMailSlot(state, now, maxPerHour, maxPerDay);
-  });
-  try {
-    await mailer.send(mail);
-  } catch (err) {
-    if (isProviderThrottle(err)) await noteProviderThrottle(store, now);
-    await refundMailSlot(store, now);
-    throw err;
-  }
-}
-
 export const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 export const EMAIL_RESEND_COOLDOWN_MS = 10 * 60 * 1000;
 export const EMAIL_MAX_FAILURES = 5;

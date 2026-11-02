@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import express from 'express';
 import { ZodError } from 'zod';
 import {
@@ -33,11 +32,8 @@ import {
   verifyEmailToken,
   requestPasswordReset,
   confirmPasswordReset,
-  mailBudgetStatus,
-  sendBudgetedMail,
 } from './email-auth.js';
-import { MAIL_LOCALES, resetEmail, verificationEmail } from './email-templates.js';
-import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
+import { type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
 // Express wiring for accounts, community, support and metadata APIs.
@@ -126,23 +122,6 @@ function clientIp(req: express.Request): string | undefined {
   // when TRUST_PROXY=1. Known-spoofable; migrate to TRUST_PROXY_DEPTH.
   if (process.env.TRUST_PROXY === '1' && fwd) return fwd.split(',')[0].trim();
   return req.socket.remoteAddress ?? undefined;
-}
-
-// Coarse address CLASS for the redacted xff-probe diagnostic - never returns
-// the address itself. v4 only in practice behind Render; anything else is
-// 'other'.
-function ipClass(ip: string): string {
-  const v4 = ip.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (!v4) return ip === '::1' || ip.startsWith('fc') || ip.startsWith('fd') ? 'private' : 'other';
-  const a = Number(v4[1]);
-  const b = Number(v4[2]);
-  if (a === 127 || a === 0) return 'loopback';
-  if (a === 10 || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168)) return 'private';
-  if (a === 169 && b === 254) return 'link-local';
-  if ((a === 192 && b === 0 && Number(v4[3]) === 2) || (a === 198 && b === 51 && Number(v4[3]) === 100) || (a === 203 && b === 0 && Number(v4[3]) === 113))
-    return 'reserved-docs';
-  if ((a === 100 && b >= 64 && b <= 127) || (a === 198 && (b === 18 || b === 19)) || a >= 224) return 'reserved';
-  return 'public';
 }
 
 function sendError(res: express.Response, err: unknown): void {
@@ -241,118 +220,6 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     } catch (err) {
       sendError(res, err);
     }
-  });
-  // Measured client-IP chain observation WITHOUT changing trust behavior and
-  // WITHOUT retaining raw addresses: returns only the chain length and the
-  // address CLASS of each entry (loopback/private/reserved/public), the
-  // socket peer class, the active trust mode, and which class clientIp
-  // resolved to. Used with controlled forged-XFF requests to derive the
-  // deployed ingress structure before any TRUST_PROXY* setting exists.
-  // Controlled multilingual delivery proof. TEST-ONLY tooling, OFF by
-  // default: requires MAIL_TEMPLATE_CHECK_ENABLE=1, set only for an approved
-  // verification window and removed after (a follow-up removes this endpoint
-  // once the window closes). The batch is FIXED, not caller-shaped: every
-  // MAIL_LOCALES locale x both template kinds (22 mails max) to the
-  // deployment's sole allowlisted recipient, rendered by the REAL localized
-  // templates and sent through the REAL configured mailer chain (allowlist
-  // -> provider) with dead synthetic tokens. Sends CONSUME the same
-  // persisted global mail budget/backoff as user-facing auth mail
-  // (sendBudgetedMail): remaining budget is checked up front and the batch
-  // stops at the first provider throttle or budget refusal with a partial
-  // report - never a blind retry. No account, credential, cooldown or token
-  // state is touched: this exercises renderer + sender chain, NOT account
-  // routing. Per-item results distinguish provider acceptance from failure.
-  router.post('/api/admin/abuse-diagnostics/mail-template-check', requireAdmin, async (_req, res) => {
-    try {
-      if (process.env.MAIL_TEMPLATE_CHECK_ENABLE !== '1') throw new CommunityError(404, 'not found', 'not_found');
-      const m = requireMailer();
-      const allowed = allowedRecipientsFromEnv(process.env);
-      if (!allowed || allowed.size !== 1) {
-        throw new CommunityError(400, 'requires exactly one allowed recipient on this deployment', 'email_recipient_restricted');
-      }
-      const to = [...allowed][0];
-      const batch: { locale: (typeof MAIL_LOCALES)[number]; kind: 'verify' | 'reset' }[] = [];
-      for (const locale of MAIL_LOCALES) for (const kind of ['verify', 'reset'] as const) batch.push({ locale, kind });
-      const budgetAt = async () => mailBudgetStatus(await store.read(), Date.now(), mailBudgetPerHour(), mailBudgetPerDay());
-      const before = await budgetAt();
-      if (before.providerMutedUntil || Math.min(before.hourRemaining, before.dayRemaining) < batch.length) {
-        res.json({ sent: 0, failed: 0, refused: true, reason: 'insufficient remaining mail budget or provider muted', budget: { before }, results: [] });
-        return;
-      }
-      const results: { locale: string; kind: string; ok: boolean; error?: string }[] = [];
-      let stopped: string | null = null;
-      for (const { locale, kind } of batch) {
-        const token = `blr_SELFTEST_${kind}_${locale}_dead`;
-        const mail = kind === 'verify' ? verificationEmail(locale, to, token) : resetEmail(locale, to, token);
-        try {
-          await sendBudgetedMail(
-            store,
-            m,
-            { to, subject: `[${kind}:${locale}] ` + mail.subject, text: mail.text },
-            Date.now(),
-            mailBudgetPerHour(),
-            mailBudgetPerDay(),
-          );
-          results.push({ locale, kind, ok: true });
-        } catch (err) {
-          const code = (err as { code?: string } | null)?.code;
-          results.push({ locale, kind, ok: false, error: err instanceof Error ? err.message : 'unknown' });
-          if (code === 'email_provider_throttled' || code === 'email_budget_exceeded') {
-            stopped = code;
-            break;
-          }
-        }
-      }
-      res.json({
-        sent: results.filter((r) => r.ok).length,
-        failed: results.filter((r) => !r.ok).length,
-        stopped,
-        budget: { before, after: await budgetAt() },
-        results,
-      });
-    } catch (err) {
-      sendError(res, err);
-    }
-  });
-  router.get('/api/admin/abuse-diagnostics/xff-probe', requireAdmin, (req, res) => {
-    const fwd = req.header('x-forwarded-for');
-    const chain = fwd
-      ? fwd
-          .split(',')
-          .map((s2) => s2.trim())
-          .filter(Boolean)
-      : [];
-    const depthRaw = process.env.TRUST_PROXY_DEPTH ?? '';
-    const trustMode =
-      depthRaw !== '' && Number.isInteger(Number(depthRaw)) && Number(depthRaw) >= 1 ? 'depth' : process.env.TRUST_PROXY === '1' ? 'legacy' : 'none';
-    const resolved = clientIp(req);
-    // Transient equality proof without raw-IP disclosure: the caller passes
-    // x-xff-expect-sha256: <sha256-hex of a candidate address> (a HEADER, not
-    // a query parameter, so the pseudonymous hash is not retained in URL
-    // access logs) and learns only WHICH positions (if any) hold that
-    // address - never any address itself. Used to bind the measured chain to
-    // an independently known controlled egress. Probe endpoints are removed
-    // once the verification window closes.
-    const expectHeader = req.header('x-xff-expect-sha256');
-    const expect = expectHeader && /^[0-9a-f]{64}$/.test(expectHeader) ? expectHeader : null;
-    const matches = (ip: string) => expect !== null && createHash('sha256').update(ip).digest('hex') === expect;
-    res.json({
-      chainLength: chain.length,
-      chainClasses: chain.map(ipClass),
-      socketPeerClass: req.socket.remoteAddress ? ipClass(req.socket.remoteAddress) : null,
-      trustMode,
-      clientIpClass: resolved ? ipClass(resolved) : null,
-      // True when the resolved client IP is steerable by the leftmost XFF
-      // entry (spoofable) under the CURRENT trust settings.
-      leftmostSteersClient: trustMode === 'legacy' && chain.length > 0 && resolved === chain[0],
-      ...(expect !== null
-        ? {
-            matchedPositions: chain.flatMap((entry, i) => (matches(entry) ? [i] : [])),
-            socketMatch: req.socket.remoteAddress ? matches(req.socket.remoteAddress) : false,
-            resolvedMatch: resolved ? matches(resolved) : false,
-          }
-        : {}),
-    });
   });
   router.post('/api/auth/email/register', async (req, res) => {
     try {
