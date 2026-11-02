@@ -25,6 +25,8 @@ export default function SignInPanel({ actor }: { actor: string }) {
     setDisplayName,
     totpPending,
     completeTotp,
+    socialProviders,
+    startSocialSignIn,
   } = useCommunityAuth();
   const [name, setName] = useState('');
   const [totpCode, setTotpCode] = useState('');
@@ -143,6 +145,11 @@ export default function SignInPanel({ actor }: { actor: string }) {
             {m.community.signInMethodEmail}
           </button>
         </div>
+        {(socialProviders ?? []).includes('google') && (
+          <button className="btn social-signin-btn" disabled={busy} onClick={() => startSocialSignIn('google').catch(() => undefined)}>
+            {m.community.socialSignInGoogle}
+          </button>
+        )}
         {error && (
           <p role="alert" className="community-error">
             {error}

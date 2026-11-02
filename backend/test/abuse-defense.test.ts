@@ -52,6 +52,8 @@ async function startApp(env: Record<string, string>, deps: Parameters<typeof cre
     'MAIL_TEMPLATE_CHECK_ENABLE',
     'COMMUNITY_EMAIL_MAX_SENDS_PER_HOUR',
     'COMMUNITY_EMAIL_MAX_SENDS_PER_DAY',
+    'SOCIAL_GOOGLE_CLIENT_ID',
+    'SOCIAL_GOOGLE_CLIENT_SECRET',
   ])
     delete process.env[k];
   Object.assign(process.env, env);
@@ -225,6 +227,20 @@ test('routes: abuse-config exposes the site key only, never the secret', async (
   const base2 = await startApp({ TURNSTILE_SITE_KEY: '' });
   const json2 = (await (await fetch(base2 + '/api/auth/abuse-config')).json()) as { turnstileSiteKey: string | null };
   assert.equal(json2.turnstileSiteKey, null);
+});
+
+test('routes: abuse-config lists only fully configured social providers, never credentials', async () => {
+  const base = await startApp({});
+  const empty = (await (await fetch(base + '/api/auth/abuse-config')).json()) as { socialProviders?: string[] };
+  assert.deepEqual(empty.socialProviders, []);
+  const base2 = await startApp({ SOCIAL_GOOGLE_CLIENT_ID: 'id-only-no-secret' });
+  const partial = (await (await fetch(base2 + '/api/auth/abuse-config')).json()) as { socialProviders?: string[] };
+  assert.deepEqual(partial.socialProviders, [], 'half-configured provider stays hidden');
+  const base3 = await startApp({ SOCIAL_GOOGLE_CLIENT_ID: 'the-client-id', SOCIAL_GOOGLE_CLIENT_SECRET: 'the-client-secret' });
+  const full = (await (await fetch(base3 + '/api/auth/abuse-config')).json()) as { socialProviders?: string[] };
+  assert.deepEqual(full.socialProviders, ['google']);
+  assert.ok(!JSON.stringify(full).includes('the-client-secret'), 'no secret material in the response');
+  assert.ok(!JSON.stringify(full).includes('the-client-id'), 'no client id in the response');
 });
 
 // --- clientIp chain derivation (via register rate-limit keying) ---
