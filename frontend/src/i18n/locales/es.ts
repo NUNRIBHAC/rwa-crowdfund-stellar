@@ -1805,6 +1805,17 @@ export const es: Messages = {
     emailResendButton: 'Reenviar token',
     emailResendDone: 'Si esa dirección está registrada, un nuevo token está en camino.',
     emailDemoNote: 'Entorno de demostración: la entrega depende del proveedor de email configurado. Si no llega nada, pregunta al operador del sitio.',
+    emailForgotButton: '¿Olvidaste la contraseña?',
+    emailResetRequestExplainer:
+      'Introduce el email de la cuenta. Si la dirección está registrada y verificada, se le envía un token de restablecimiento de un solo uso (válido 1 hora).',
+    emailResetRequestSubmit: 'Enviar token de restablecimiento',
+    emailResetConfirmExplainer:
+      'Pega el token de restablecimiento del email enviado a {email} y elige una nueva contraseña. Todas las sesiones existentes se cierran.',
+    emailResetTokenLabel: 'Token de restablecimiento',
+    emailResetNewPasswordLabel: 'Nueva contraseña',
+    emailResetConfirmSubmit: 'Establecer nueva contraseña',
+    emailResetBack: 'Volver a iniciar sesión',
+    emailResetDone: 'Contraseña actualizada. Inicia sesión con la nueva contraseña.',
     errorEmailProviderUnavailable:
       'El registro y el inicio de sesión por email no están disponibles en este entorno porque no hay ningún proveedor de email configurado. Puedes seguir iniciando sesión con tu cartera.',
     errorRateLimited: 'Demasiados intentos desde esta red. Espera un momento y vuelve a intentarlo.',

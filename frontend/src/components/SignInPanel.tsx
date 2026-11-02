@@ -19,6 +19,8 @@ export default function SignInPanel({ actor }: { actor: string }) {
     emailSignIn,
     emailCompleteVerification,
     emailResendToken,
+    emailRequestReset,
+    emailConfirmReset,
     signOut,
     setDisplayName,
     totpPending,
@@ -33,6 +35,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
   const [pendingVerifyEmail, setPendingVerifyEmail] = useState('');
   const [verifyToken, setVerifyToken] = useState('');
   const [resent, setResent] = useState(false);
+  const [resetStage, setResetStage] = useState<null | 'request' | 'confirm'>(null);
+  const [resetToken, setResetToken] = useState('');
+  const [resetDone, setResetDone] = useState(false);
 
   // Sign-out must not leave the previous session's credentials or tokens in
   // the form: clear every sensitive field whenever the account goes away.
@@ -44,6 +49,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
     setTotpCode('');
     setPendingVerifyEmail('');
     setResent(false);
+    setResetStage(null);
+    setResetToken('');
+    setResetDone(false);
   }, [account]);
 
   if (!restored) return <p className="community-loading">{m.community.loading}</p>;
@@ -140,7 +148,66 @@ export default function SignInPanel({ actor }: { actor: string }) {
             {error}
           </p>
         )}
-        {method === 'wallet' ? (
+        {method === 'email' && resetStage === 'request' ? (
+          <>
+            <p className="community-note">{m.community.emailResetRequestExplainer}</p>
+            <form
+              className="display-name-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                emailRequestReset(email.trim())
+                  .then(() => setResetStage('confirm'))
+                  .catch(() => undefined);
+              }}
+            >
+              <label>
+                {m.community.emailLabel}
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+              </label>
+              <button className="btn btn-primary" disabled={busy || !email.trim()}>
+                {m.community.emailResetRequestSubmit}
+              </button>
+            </form>
+            <button className="btn" disabled={busy} onClick={() => setResetStage(null)}>
+              {m.community.emailResetBack}
+            </button>
+          </>
+        ) : method === 'email' && resetStage === 'confirm' ? (
+          <>
+            <p className="community-note">{m.community.emailResetConfirmExplainer.replace('{email}', email.trim().toLowerCase())}</p>
+            <form
+              className="display-name-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                emailConfirmReset(email.trim(), resetToken.trim(), password)
+                  .then(() => {
+                    setResetStage(null);
+                    setResetToken('');
+                    setPassword('');
+                    setResetDone(true);
+                    setEmailMode('login');
+                  })
+                  .catch(() => undefined);
+              }}
+            >
+              <label>
+                {m.community.emailResetTokenLabel}
+                <input value={resetToken} onChange={(e) => setResetToken(e.target.value)} autoComplete="one-time-code" placeholder="blr_..." />
+              </label>
+              <label>
+                {m.community.emailResetNewPasswordLabel}
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required />
+              </label>
+              <p className="community-note">{m.community.emailPasswordHint}</p>
+              <button className="btn btn-primary" disabled={busy || !resetToken.trim() || !password}>
+                {m.community.emailResetConfirmSubmit}
+              </button>
+            </form>
+            <button className="btn" disabled={busy} onClick={() => setResetStage(null)}>
+              {m.community.emailResetBack}
+            </button>
+          </>
+        ) : method === 'wallet' ? (
           <>
             <p className="community-note">{m.community.signInExplainer}</p>
             <button className="btn btn-primary" disabled={busy || !actor} onClick={() => signIn(actor)}>
@@ -204,6 +271,19 @@ export default function SignInPanel({ actor }: { actor: string }) {
               </button>
             )}
             {resent && <p className="community-note">{m.community.emailResendDone}</p>}
+            {emailMode === 'login' && (
+              <button
+                className="btn"
+                disabled={busy}
+                onClick={() => {
+                  setResetDone(false);
+                  setResetStage('request');
+                }}
+              >
+                {m.community.emailForgotButton}
+              </button>
+            )}
+            {resetDone && <p className="community-note">{m.community.emailResetDone}</p>}
           </>
         )}
       </section>

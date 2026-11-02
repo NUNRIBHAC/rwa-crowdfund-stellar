@@ -1729,6 +1729,17 @@ export const ja: Messages = {
     emailResendButton: 'トークンを再送',
     emailResendDone: 'そのアドレスが登録されていれば、新しいトークンが送信されます。',
     emailDemoNote: 'デモ環境：配信は設定されたメールプロバイダに依存します。届かない場合はサイト運営者にお問い合わせください。',
+    emailForgotButton: 'パスワードをお忘れですか？',
+    emailResetRequestExplainer:
+      'アカウントのメールアドレスを入力してください。登録済みで確認済みの場合、使い捨てのリセットトークン（1時間有効）が送信されます。',
+    emailResetRequestSubmit: 'リセットトークンを送信',
+    emailResetConfirmExplainer:
+      '{email} に送信されたメールのリセットトークンを貼り付け、新しいパスワードを選んでください。既存のセッションはすべてログアウトされます。',
+    emailResetTokenLabel: 'リセットトークン',
+    emailResetNewPasswordLabel: '新しいパスワード',
+    emailResetConfirmSubmit: '新しいパスワードを設定',
+    emailResetBack: 'サインインに戻る',
+    emailResetDone: 'パスワードを更新しました。新しいパスワードでサインインしてください。',
     errorEmailProviderUnavailable:
       'このデプロイではメールプロバイダが設定されていないため、メールでの登録・ログインは利用できません。ウォレットでのログインは引き続き利用できます。',
     errorRateLimited: 'このネットワークからの試行回数が多すぎます。しばらく待ってから再試行してください。',

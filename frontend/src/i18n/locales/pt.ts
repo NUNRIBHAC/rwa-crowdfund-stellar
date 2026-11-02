@@ -1800,6 +1800,17 @@ export const pt: Messages = {
     emailResendButton: 'Reenviar token',
     emailResendDone: 'Se esse endereço estiver registado, um novo token está a caminho.',
     emailDemoNote: 'Ambiente de demonstração: a entrega depende do fornecedor de email configurado. Se nada chegar, fale com o operador do site.',
+    emailForgotButton: 'Esqueceu a palavra-passe?',
+    emailResetRequestExplainer:
+      'Introduza o email da conta. Se o endereço estiver registado e verificado, é-lhe enviado um token de reposição de utilização única (válido por 1 hora).',
+    emailResetRequestSubmit: 'Enviar token de reposição',
+    emailResetConfirmExplainer:
+      'Cole o token de reposição do email enviado para {email} e escolha uma nova palavra-passe. Todas as sessões existentes são terminadas.',
+    emailResetTokenLabel: 'Token de reposição',
+    emailResetNewPasswordLabel: 'Nova palavra-passe',
+    emailResetConfirmSubmit: 'Definir nova palavra-passe',
+    emailResetBack: 'Voltar ao início de sessão',
+    emailResetDone: 'Palavra-passe atualizada. Inicie sessão com a nova palavra-passe.',
     errorEmailProviderUnavailable:
       'O registo e o início de sessão por email não estão disponíveis neste ambiente porque não está configurado nenhum fornecedor de email. Pode continuar a iniciar sessão com a carteira.',
     errorRateLimited: 'Demasiadas tentativas a partir desta rede. Aguarde um pouco e tente novamente.',

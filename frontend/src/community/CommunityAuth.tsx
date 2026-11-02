@@ -21,6 +21,8 @@ import {
   saveCommunityToken,
   updateDisplayName,
   verifyChallenge,
+  emailResetRequest,
+  emailResetConfirm,
 } from './api';
 
 export type CommunityAuthState = {
@@ -45,6 +47,11 @@ export type CommunityAuthState = {
   emailCompleteVerification: (email: string, verificationToken: string) => Promise<void>;
   /** Ask for a fresh verification token (anti-enumeration response). */
   emailResendToken: (email: string) => Promise<void>;
+  /** Ask for a password-reset token (anti-enumeration response). */
+  emailRequestReset: (email: string) => Promise<void>;
+  /** Redeem a reset token with a new password; the server revokes every
+      existing session for the account. */
+  emailConfirmReset: (email: string, resetToken: string, password: string) => Promise<void>;
   /** Set when the wallet signature passed but the account has a second
       factor: the session is not issued until completeTotp succeeds. */
   totpPending: { ticket: string } | null;
@@ -237,6 +244,38 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     [messages],
   );
 
+  const emailRequestReset = useCallback(
+    async (email: string) => {
+      setBusy(true);
+      setError('');
+      try {
+        await emailResetRequest(email);
+      } catch (e) {
+        setError(describeError(e, messages.community));
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [messages],
+  );
+
+  const emailConfirmReset = useCallback(
+    async (email: string, resetToken: string, password: string) => {
+      setBusy(true);
+      setError('');
+      try {
+        await emailResetConfirm(email, resetToken, password);
+      } catch (e) {
+        setError(describeError(e, messages.community));
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [messages],
+  );
+
   const completeTotp = useCallback(
     async (code: string) => {
       if (!totpPending) return;
@@ -303,6 +342,8 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       emailSignIn,
       emailCompleteVerification,
       emailResendToken,
+      emailRequestReset,
+      emailConfirmReset,
       signOut,
       totpPending,
       completeTotp,
@@ -321,6 +362,8 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       emailSignIn,
       emailCompleteVerification,
       emailResendToken,
+      emailRequestReset,
+      emailConfirmReset,
       signOut,
       setName,
       totpPending,
