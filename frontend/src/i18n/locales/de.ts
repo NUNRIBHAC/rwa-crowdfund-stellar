@@ -483,6 +483,16 @@ export const de: Messages = {
     newsFeedTitle: 'Kampagnen-News',
     newsFeedEmpty: 'Noch keine News zu den Kampagnen, in die Sie investiert haben.',
     newsFeedNoInvestments: 'News zu Kampagnen, in die Sie investieren, erscheinen hier.',
+    payoutsAria: 'Auszahlungsverlauf',
+    payoutsTitle: 'Auszahlungsverlauf',
+    payoutsNote:
+      'Abgeschlossene Testnet-Rückerstattungen und -Abhebungen, aufgezeichnet von dieser Plattform; Ereignisse außerhalb dieser Aufzeichnungen werden nicht aufgelistet. In diesem Prototyp gibt es keine Renditeausschüttungen.',
+    payoutsEmpty: 'Noch keine Auszahlungen erfasst. Abgeschlossene Rückerstattungen oder Abhebungen erscheinen hier.',
+    payoutsUnavailable:
+      'Der Auszahlungsverlauf konnte nicht geladen werden. Das bedeutet nicht, dass es keine Auszahlungen gibt - bitte später erneut versuchen.',
+    documentsAria: 'Investitionsdokumente',
+    documentsTitle: 'Investitionsdokumente',
+    documentsEmpty: 'Keine Dokumente für diese Kampagne veröffentlicht.',
     newInvestments: 'Neue Investitionen',
     filterAria: 'Portfolio nach Status filtern',
     tabs: {

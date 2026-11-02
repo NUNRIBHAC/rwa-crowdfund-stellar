@@ -487,6 +487,31 @@ export async function accountActivity(actor: string): Promise<any[]> {
     }));
 }
 
+// Account payout history: the wallet's COMPLETED money-back events only
+// (refunds to the contributor, withdrawals by the campaign creator), from
+// the platform journal. Contribution records are positions, not payouts;
+// return distributions do not exist in this prototype, so they are never
+// fabricated here. Only terminal-SUCCESS intents are listed: a prepared or
+// failed refund is not a payout.
+export async function accountPayouts(actor: string): Promise<any[]> {
+  guard();
+  actorAddress(actor);
+  const store = await readStore();
+  return store.intents
+    .filter((i) => i.actor === actor && (i.action === 'refund' || i.action === 'withdraw') && i.status === 'SUCCESS')
+    .sort((a, b) => (Date.parse(b.updatedAt ?? b.createdAt ?? '') || 0) - (Date.parse(a.updatedAt ?? a.createdAt ?? '') || 0))
+    .slice(0, 50)
+    .map((i) => ({
+      hash: i.hash,
+      campaign: i.campaign,
+      action: i.action,
+      amount: i.amount ?? null,
+      status: i.status,
+      createdAt: i.createdAt ?? null,
+      updatedAt: i.updatedAt ?? null,
+    }));
+}
+
 export async function statusSoroban(hash: string): Promise<any> {
   guard();
   if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error('invalid hash');

@@ -482,6 +482,15 @@ export const pt: Messages = {
     newsFeedTitle: 'Notícias das campanhas',
     newsFeedEmpty: 'Ainda não há notícias das campanhas em que investiu.',
     newsFeedNoInvestments: 'As notícias das campanhas em que investir aparecerão aqui.',
+    payoutsAria: 'Histórico de pagamentos',
+    payoutsTitle: 'Histórico de pagamentos',
+    payoutsNote:
+      'Reembolsos e levantamentos de testnet concluídos, registados por esta plataforma; eventos fora destes registos não são listados. Não existem distribuições de retorno neste protótipo.',
+    payoutsEmpty: 'Ainda não há pagamentos registados. Os reembolsos ou levantamentos concluídos aparecerão aqui.',
+    payoutsUnavailable: 'Não foi possível carregar o histórico de pagamentos. Isto não significa que não existam pagamentos - tente novamente mais tarde.',
+    documentsAria: 'Documentos de investimento',
+    documentsTitle: 'Documentos de investimento',
+    documentsEmpty: 'Nenhum documento publicado para esta campanha.',
     newInvestments: 'Novos investimentos',
     filterAria: 'Filtrar carteira por estado',
     tabs: {

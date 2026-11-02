@@ -469,6 +469,15 @@ export const ko: Messages = {
     newsFeedTitle: '캠페인 뉴스',
     newsFeedEmpty: '투자한 캠페인의 뉴스가 아직 없습니다.',
     newsFeedNoInvestments: '투자한 캠페인의 뉴스가 여기에 표시됩니다.',
+    payoutsAria: '지급 내역',
+    payoutsTitle: '지급 내역',
+    payoutsNote:
+      '이 플랫폼에 기록된 완료된 테스트넷 환불 및 출금입니다. 이 기록 외의 이벤트는 표시되지 않습니다. 이 프로토타입에는 수익 분배가 존재하지 않습니다.',
+    payoutsEmpty: '아직 기록된 지급이 없습니다. 완료된 환불이나 출금이 여기에 표시됩니다.',
+    payoutsUnavailable: '지급 내역을 불러오지 못했습니다. 지급이 없다는 의미는 아니니 나중에 다시 시도하세요.',
+    documentsAria: '투자 문서',
+    documentsTitle: '투자 문서',
+    documentsEmpty: '이 캠페인에 게시된 문서가 없습니다.',
     newInvestments: '새로운 투자',
     filterAria: '상태로 포트폴리오 필터',
     tabs: {
