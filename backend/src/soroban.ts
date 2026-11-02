@@ -27,7 +27,15 @@ const expectedToken = () => new Asset('USDC', process.env.USDC_ISSUER ?? '').con
 const WASM_HASH = '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564';
 import { journalBackend } from './journal.js';
 import type { Intent, IntentStore } from './journal.js';
-type Entry = { id: string; name: string; contractId: string };
+// Registry entries come in two shapes. v1 entries point at one reviewed
+// crowdfund contract; v2 entries point at the share-token + offering pair
+// deployed through the v2 builder chain. The server never edits the
+// registry: operators add entries to SOROBAN_CAMPAIGNS_JSON by hand.
+export type V1Entry = { id: string; name: string; contractId: string; contractSet?: 'v1' };
+export type V2Entry = { id: string; name: string; contractSet: 'v2'; tokenContractId: string; offeringContractId: string };
+export type RegistryEntry = V1Entry | V2Entry;
+type Entry = RegistryEntry;
+export const isV2Entry = (e: RegistryEntry): e is V2Entry => (e as V2Entry).contractSet === 'v2';
 let queue: Promise<unknown> = Promise.resolve();
 const lock = <T>(fn: () => Promise<T>): Promise<T> => {
   const next = queue.then(fn, fn);
@@ -114,18 +122,28 @@ function entries(): Entry[] {
   if (!Array.isArray(values)) throw new Error('invalid campaign registry');
   const ids = new Set(),
     contracts = new Set();
+  const contractAddress = (v: unknown): boolean => {
+    try {
+      return typeof v === 'string' && Address.fromString(v).toString().startsWith('C');
+    } catch {
+      return false;
+    }
+  };
   for (const e of values) {
-    if (
-      !e ||
-      !/^[a-zA-Z0-9_-]{1,48}$/.test(e.id) ||
-      typeof e.name !== 'string' ||
-      e.name.length > 120 ||
-      !Address.fromString(e.contractId).toString().startsWith('C')
-    )
-      throw new Error('invalid campaign registry entry');
-    if (ids.has(e.id) || contracts.has(e.contractId)) throw new Error('duplicate campaign registry entry');
+    if (!e || !/^[a-zA-Z0-9_-]{1,48}$/.test(e.id) || typeof e.name !== 'string' || e.name.length > 120) throw new Error('invalid campaign registry entry');
+    if (e.contractSet === 'v2') {
+      if (!contractAddress(e.tokenContractId) || !contractAddress(e.offeringContractId)) throw new Error('invalid campaign registry entry');
+      if (e.tokenContractId === e.offeringContractId) throw new Error('invalid campaign registry entry');
+      if (contracts.has(e.tokenContractId) || contracts.has(e.offeringContractId)) throw new Error('duplicate campaign registry entry');
+      contracts.add(e.tokenContractId);
+      contracts.add(e.offeringContractId);
+    } else {
+      if (!contractAddress(e.contractId)) throw new Error('invalid campaign registry entry');
+      if (contracts.has(e.contractId)) throw new Error('duplicate campaign registry entry');
+      contracts.add(e.contractId);
+    }
+    if (ids.has(e.id)) throw new Error('duplicate campaign registry entry');
     ids.add(e.id);
-    contracts.add(e.contractId);
   }
   return values;
 }
@@ -134,12 +152,26 @@ function entries(): Entry[] {
 // Throws (testnet guard, invalid registry) like every other reader; the
 // caller treats that as "backfill unavailable" and moves nothing.
 export function sorobanRegisteredCampaigns(): { id: string; contractId: string }[] {
-  return entries().map((e) => ({ id: e.id, contractId: e.contractId }));
+  // v1 only: the contributor backfill job reads v1 crowdfund contribution
+  // events; v2 offering events have no backfill consumer yet.
+  return v1Entries().map((e) => ({ id: e.id, contractId: e.contractId }));
+}
+// Validated registry read without any RPC call. Returns null for unknown
+// ids; throws on the same registry validation as every other reader.
+export function sorobanRegistryEntry(id: string): RegistryEntry | null {
+  return entries().find((e) => e.id === id) ?? null;
+}
+// v1 crowdfund entries only. v1 readers (listing, backfill, lifecycle,
+// build/submit) must never silently treat a v2 pair as a crowdfund
+// contract, so they all read through this filter.
+function v1Entries(): V1Entry[] {
+  return entries().filter((e): e is V1Entry => !isV2Entry(e));
 }
 
-const entry = (id: string) => {
+const entry = (id: string): V1Entry => {
   const e = entries().find((e) => e.id === id);
   if (!e) throw new Error('campaign not registered; deployment and registration are separate operator steps');
+  if (isV2Entry(e)) throw new Error('campaign uses the v2 contract set; this v1 crowdfund path does not apply');
   return e;
 };
 function actorAddress(actor: string): Address {
@@ -157,15 +189,15 @@ export function amountUnits(amount: string): bigint {
 function jsonValue(value: any): any {
   return JSON.parse(JSON.stringify(value, (_k, v) => (typeof v === 'bigint' ? v.toString() : v)));
 }
-async function verifyCode(client: rpc.Server, e: Entry): Promise<void> {
+async function verifyCode(client: rpc.Server, e: V1Entry): Promise<void> {
   const wasm = await client.getContractWasmByContractId(e.contractId);
   if (createHash('sha256').update(wasm).digest('hex') !== WASM_HASH) throw new Error('contract code does not match reviewed crowdfund Wasm; refusing');
 }
-async function view(client: rpc.Server, e: Entry, method: string, args: any[] = [], actor?: string): Promise<any> {
+async function viewContract(client: rpc.Server, contractId: string, method: string, args: any[] = [], actor?: string): Promise<any> {
   // Simulation only: this dummy account is never submitted or funded.
   const source = actor ?? Keypair.fromRawEd25519Seed(Buffer.alloc(32, 1)).publicKey();
   const tx = new TransactionBuilder(new Account(source, '0'), { fee: '100', networkPassphrase: passphrase })
-    .addOperation(new Contract(e.contractId).call(method, ...args))
+    .addOperation(new Contract(contractId).call(method, ...args))
     .setTimeout(900)
     .build();
   const result = await client.simulateTransaction(tx);
@@ -174,11 +206,16 @@ async function view(client: rpc.Server, e: Entry, method: string, args: any[] = 
   if (!result.result) throw new Error('contract read missing result');
   return scValToNative(result.result.retval);
 }
+async function view(client: rpc.Server, e: V1Entry, method: string, args: any[] = [], actor?: string): Promise<any> {
+  return viewContract(client, e.contractId, method, args, actor);
+}
+// v1 listing only: v2 contract-set campaigns are excluded until a v2
+// listing view exists; a v2 entry must never be read as a v1 crowdfund.
 export async function sorobanCampaigns(actor?: string): Promise<any[]> {
   if (actor) actorAddress(actor);
   const client = sorobanDeps.client();
   return Promise.all(
-    entries().map(async (e) => {
+    v1Entries().map(async (e) => {
       await verifyCode(client, e);
       const config = await view(client, e, 'get_config');
       if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
@@ -223,6 +260,7 @@ export async function sorobanCampaignFundingState(
 ): Promise<{ id: string; goal: string; raised: string; deadlineSeconds: number; withdrawn: boolean } | null> {
   const e = entries().find((x) => x.id === id);
   if (!e) return null;
+  if (isV2Entry(e)) throw new Error('v2 contract-set campaigns have no v1 funding-state view');
   const client = sorobanDeps.client();
   await verifyCode(client, e);
   const config = await view(client, e, 'get_config');
@@ -243,7 +281,7 @@ export async function sorobanCampaignFundingState(
 export async function sorobanInvestorEntitlement(id: string, actor: string): Promise<{ registered: boolean; balanceUnits: bigint }> {
   actorAddress(actor);
   const e = entries().find((x) => x.id === id);
-  if (!e) return { registered: false, balanceUnits: 0n };
+  if (!e || isV2Entry(e)) return { registered: false, balanceUnits: 0n };
   const client = sorobanDeps.client();
   await verifyCode(client, e);
   const config = await view(client, e, 'get_config');
@@ -291,7 +329,7 @@ export async function deriveContributionFromNetwork(hash: string): Promise<{ cam
   } catch {
     return null;
   }
-  const e = entries().find((x) => x.contractId === contractId);
+  const e = v1Entries().find((x) => x.contractId === contractId);
   if (!e || fnName !== 'contribute' || contributor !== tx.source) return null;
   await verifyCode(client, e);
   const config = await view(client, e, 'get_config');
@@ -448,7 +486,7 @@ export async function recoverSoroban(input: { actor: string; xdr: string }): Pro
   } catch {
     contractId = '';
   }
-  const campaign = entries().find((e) => e.contractId === contractId)?.id ?? null;
+  const campaign = v1Entries().find((e) => e.contractId === contractId)?.id ?? null;
   const result = await sorobanDeps.client().getTransaction(hash);
   if (result.txHash !== hash) throw new Error('RPC returned mismatched hash');
   const terminal = result.status === 'SUCCESS' || result.status === 'FAILED';
@@ -808,6 +846,76 @@ async function v2WasmOnLedger(client: rpc.Server, kind: 'token' | 'offering'): P
     return false;
   }
 }
+
+// --- v2 on-chain position reads (share-register consumption) ---
+// Holders are never enumerable on the share-token contract, so positions
+// are read for app-known addresses only (contributor registry + journal
+// actors, supplied by the caller). A hard cap bounds the simulation reads
+// one export may issue; truncation is disclosed, never silent.
+export const V2_HOLDER_READ_CAP = 500;
+export type V2SharePositions = {
+  campaignId: string;
+  tokenContractId: string;
+  offeringContractId: string;
+  token: { name: string; symbol: string; decimals: number; totalSupply: string };
+  offering: { token: string; issuer: string; minPerInvestor: string; maxPerInvestor: string; goal: string; deadline: string };
+  holders: { publicKey: string; balance: string }[];
+  holdersTruncated: boolean;
+};
+async function verifyV2Code(client: rpc.Server, e: V2Entry): Promise<void> {
+  const [tokenWasm, offeringWasm] = await Promise.all([
+    client.getContractWasmByContractId(e.tokenContractId),
+    client.getContractWasmByContractId(e.offeringContractId),
+  ]);
+  if (createHash('sha256').update(tokenWasm).digest('hex') !== V2_SHARE_TOKEN_WASM_HASH)
+    throw new Error('share-token contract code does not match the pinned v2 Wasm; refusing to read positions');
+  if (createHash('sha256').update(offeringWasm).digest('hex') !== V2_OFFERING_WASM_HASH)
+    throw new Error('offering contract code does not match the pinned v2 Wasm; refusing to read positions');
+}
+export async function readV2SharePositions(campaignId: string, holders: string[]): Promise<V2SharePositions> {
+  const e = sorobanRegistryEntry(campaignId);
+  if (!e) throw new Error('campaign not registered');
+  if (!isV2Entry(e)) throw new Error('campaign is not a v2 contract-set entry');
+  const valid = [...new Set(holders)].filter((h) => {
+    try {
+      return Address.fromString(h).toString().startsWith('G');
+    } catch {
+      return false;
+    }
+  });
+  const queried = valid.slice(0, V2_HOLDER_READ_CAP);
+  const client = sorobanDeps.client();
+  await verifyV2Code(client, e);
+  const [name, symbol, decimals, totalSupply, config] = await Promise.all([
+    viewContract(client, e.tokenContractId, 'name'),
+    viewContract(client, e.tokenContractId, 'symbol'),
+    viewContract(client, e.tokenContractId, 'decimals'),
+    viewContract(client, e.tokenContractId, 'total_supply'),
+    viewContract(client, e.offeringContractId, 'get_config'),
+  ]);
+  const balances: { publicKey: string; balance: string }[] = [];
+  for (const h of queried) {
+    const bal = await viewContract(client, e.tokenContractId, 'balance', [Address.fromString(h).toScVal()]);
+    balances.push({ publicKey: h, balance: String(bal) });
+  }
+  return jsonValue({
+    campaignId,
+    tokenContractId: e.tokenContractId,
+    offeringContractId: e.offeringContractId,
+    token: { name: String(name), symbol: String(symbol), decimals: Number(decimals), totalSupply: String(totalSupply) },
+    offering: {
+      token: String(config.token),
+      issuer: String(config.issuer),
+      minPerInvestor: String(config.min_per_investor),
+      maxPerInvestor: String(config.max_per_investor),
+      goal: String(config.goal),
+      deadline: String(config.deadline),
+    },
+    holders: balances,
+    holdersTruncated: valid.length > queried.length,
+  });
+}
+
 export type V2DeployParams = { symbol: string; decimals: number; minPerInvestor: string; maxPerInvestor: string };
 function validateV2Params(p: V2DeployParams): void {
   if (!/^[A-Za-z0-9]{1,12}$/.test(p.symbol)) throw new Error('invalid share-token symbol');
