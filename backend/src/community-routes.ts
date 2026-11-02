@@ -32,6 +32,8 @@ import {
   verifyEmailToken,
   requestPasswordReset,
   confirmPasswordReset,
+  mailBudgetStatus,
+  sendBudgetedMail,
 } from './email-auth.js';
 import { MAIL_LOCALES, normalizeMailLocale, resetEmail, verificationEmail } from './email-templates.js';
 import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
@@ -245,41 +247,68 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // socket peer class, the active trust mode, and which class clientIp
   // resolved to. Used with controlled forged-XFF requests to derive the
   // deployed ingress structure before any TRUST_PROXY* setting exists.
-  // Controlled multilingual delivery proof: renders the REAL localized
-  // verification/reset templates and sends them through the REAL configured
-  // mailer chain (allowlist -> provider) with dead synthetic tokens. The
-  // recipient must itself be allowlisted, so this can only mail approved
-  // test inboxes. No account, credential, cooldown, budget or token state
-  // is touched: this exercises renderer + sender chain, NOT account
+  // Controlled multilingual delivery proof. TEST-ONLY tooling, OFF by
+  // default: requires MAIL_TEMPLATE_CHECK_ENABLE=1, set only for an approved
+  // verification window and removed after (a follow-up removes this endpoint
+  // once the window closes). The batch is FIXED, not caller-shaped: every
+  // MAIL_LOCALES locale x both template kinds (22 mails max) to the
+  // deployment's sole allowlisted recipient, rendered by the REAL localized
+  // templates and sent through the REAL configured mailer chain (allowlist
+  // -> provider) with dead synthetic tokens. Sends CONSUME the same
+  // persisted global mail budget/backoff as user-facing auth mail
+  // (sendBudgetedMail): remaining budget is checked up front and the batch
+  // stops at the first provider throttle or budget refusal with a partial
+  // report - never a blind retry. No account, credential, cooldown or token
+  // state is touched: this exercises renderer + sender chain, NOT account
   // routing. Per-item results distinguish provider acceptance from failure.
-  router.post('/api/admin/abuse-diagnostics/mail-template-check', requireAdmin, async (req, res) => {
+  router.post('/api/admin/abuse-diagnostics/mail-template-check', requireAdmin, async (_req, res) => {
     try {
+      if (process.env.MAIL_TEMPLATE_CHECK_ENABLE !== '1') throw new CommunityError(404, 'not found', 'not_found');
       const m = requireMailer();
       const allowed = allowedRecipientsFromEnv(process.env);
-      const to = typeof req.body?.to === 'string' ? req.body.to.trim().toLowerCase() : '';
-      if (!to || !allowed || !allowed.has(to)) {
-        throw new CommunityError(403, "recipient must be on this deployment's allowed-recipients list", 'email_recipient_restricted');
+      if (!allowed || allowed.size !== 1) {
+        throw new CommunityError(400, 'requires exactly one allowed recipient on this deployment', 'email_recipient_restricted');
       }
-      const kinds = Array.isArray(req.body?.kinds) ? req.body.kinds.filter((k: unknown) => k === 'verify' || k === 'reset') : ['verify', 'reset'];
-      const locales = (Array.isArray(req.body?.locales) ? req.body.locales.map((l: unknown) => normalizeMailLocale(l)) : [...MAIL_LOCALES]).filter(
-        (l: string, i: number, arr: string[]) => arr.indexOf(l) === i,
-      );
-      if (kinds.length === 0 || locales.length === 0) throw new CommunityError(400, 'kinds and locales must be non-empty');
-      if (kinds.length * locales.length > 25) throw new CommunityError(400, 'batch too large (max 25)');
+      const to = [...allowed][0];
+      const batch: { locale: (typeof MAIL_LOCALES)[number]; kind: 'verify' | 'reset' }[] = [];
+      for (const locale of MAIL_LOCALES) for (const kind of ['verify', 'reset'] as const) batch.push({ locale, kind });
+      const budgetAt = async () => mailBudgetStatus(await store.read(), Date.now(), mailBudgetPerHour(), mailBudgetPerDay());
+      const before = await budgetAt();
+      if (before.providerMutedUntil || Math.min(before.hourRemaining, before.dayRemaining) < batch.length) {
+        res.json({ sent: 0, failed: 0, refused: true, reason: 'insufficient remaining mail budget or provider muted', budget: { before }, results: [] });
+        return;
+      }
       const results: { locale: string; kind: string; ok: boolean; error?: string }[] = [];
-      for (const locale of locales) {
-        for (const kind of kinds) {
-          const token = `blr_SELFTEST_${kind}_${locale}_dead`;
-          const mail = kind === 'verify' ? verificationEmail(locale, to, token) : resetEmail(locale, to, token);
-          try {
-            await m.send({ to, subject: `[${kind}:${locale}] ` + mail.subject, text: mail.text });
-            results.push({ locale, kind, ok: true });
-          } catch (err) {
-            results.push({ locale, kind, ok: false, error: err instanceof Error ? `${err.message}` : 'unknown' });
+      let stopped: string | null = null;
+      for (const { locale, kind } of batch) {
+        const token = `blr_SELFTEST_${kind}_${locale}_dead`;
+        const mail = kind === 'verify' ? verificationEmail(locale, to, token) : resetEmail(locale, to, token);
+        try {
+          await sendBudgetedMail(
+            store,
+            m,
+            { to, subject: `[${kind}:${locale}] ` + mail.subject, text: mail.text },
+            Date.now(),
+            mailBudgetPerHour(),
+            mailBudgetPerDay(),
+          );
+          results.push({ locale, kind, ok: true });
+        } catch (err) {
+          const code = (err as { code?: string } | null)?.code;
+          results.push({ locale, kind, ok: false, error: err instanceof Error ? err.message : 'unknown' });
+          if (code === 'email_provider_throttled' || code === 'email_budget_exceeded') {
+            stopped = code;
+            break;
           }
         }
       }
-      res.json({ sent: results.filter((r) => r.ok).length, failed: results.filter((r) => !r.ok).length, results });
+      res.json({
+        sent: results.filter((r) => r.ok).length,
+        failed: results.filter((r) => !r.ok).length,
+        stopped,
+        budget: { before, after: await budgetAt() },
+        results,
+      });
     } catch (err) {
       sendError(res, err);
     }
