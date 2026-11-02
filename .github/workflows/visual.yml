@@ -5,8 +5,10 @@ name: visual
 # Budget guardrail: 5 captures per run, single viewport. This is NOT full UI
 # coverage - it is a smoke matrix for layout regressions on key pages.
 on:
+  # One run per change: pushes to main fire `push`; while a PR is open its
+  # branch pushes fire `pull_request` (synchronize) instead - no double runs.
   push:
-    branches: [main, feature/community-platform]
+    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
