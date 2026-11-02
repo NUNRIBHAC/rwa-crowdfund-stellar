@@ -6,3 +6,5 @@
 ec0eb4e6e469e79401b00dd014c02f946e3aa436:frontend/src/pages/__tests__/Investments.selectAnchor.test.tsx:generic-api-key:24
 ee3307f74b349e8de402de8b53974e3218168233:docs/soroban-flow.md:generic-api-key:32
 # History stays untouched per the user's no-rewrite decision; re-verify on rule updates.
+# Public Wasm integrity pin constant name contains "TOKEN"; value is the SHA-256 of an open build artifact, no credential:
+873a55a8f5e6867b8f04f39097501dcb90987827:backend/src/soroban.ts:generic-api-key:774
