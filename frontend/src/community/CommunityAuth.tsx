@@ -6,6 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react';
 import { isConnected, signMessage } from '@stellar/freighter-api';
 import type { CommunityAccount } from './api';
+import { getTurnstileToken } from './turnstile';
 import type { Messages as CatalogMessages } from '../i18n/locales/en';
 import {
   ApiError,
@@ -107,6 +108,11 @@ export function describeError(e: unknown, community: CatalogMessages['community'
   return e instanceof Error ? e.message : String(e);
 }
 
+// Bot-check token for the mail-triggering flows; undefined when the
+// deployment has no Turnstile key (widget never loads in that case).
+const turnstileToken = (): Promise<string | undefined> =>
+  getTurnstileToken((typeof localStorage !== 'undefined' && localStorage.getItem('blockallisto-locale')) || undefined);
+
 export function CommunityAuthProvider({ children, messages }: { children: ReactNode; messages: Messages }) {
   const [account, setAccount] = useState<CommunityAccount | null>(null);
   const [token, setToken] = useState('');
@@ -173,7 +179,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setBusy(true);
       setError('');
       try {
-        await emailRegister(email, password);
+        await emailRegister(email, password, await turnstileToken());
       } catch (e) {
         setError(describeError(e, messages.community));
         throw e;
@@ -235,7 +241,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setBusy(true);
       setError('');
       try {
-        await emailResend(email);
+        await emailResend(email, await turnstileToken());
       } catch (e) {
         setError(describeError(e, messages.community));
         throw e;
@@ -251,7 +257,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setBusy(true);
       setError('');
       try {
-        await emailResetRequest(email);
+        await emailResetRequest(email, await turnstileToken());
       } catch (e) {
         setError(describeError(e, messages.community));
         throw e;
