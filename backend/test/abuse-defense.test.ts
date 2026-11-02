@@ -278,12 +278,14 @@ test('abuse-diagnostics: reflects configured Turnstile and enforce flag', async 
 
 test('xff-probe: redacted chain classes under unchanged trust; forged leftmost does not steer', async () => {
   const base = await startApp({});
-  const plain = await (await fetch(base + '/api/admin/abuse-diagnostics/xff-probe')).json() as any;
+  const plain = (await (await fetch(base + '/api/admin/abuse-diagnostics/xff-probe')).json()) as any;
   assert.equal(plain.chainLength, 0);
   assert.equal(plain.trustMode, 'none');
-  const forged = await (await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
-    headers: { 'x-forwarded-for': '203.0.113.77, 198.51.100.77' },
-  })).json() as any;
+  const forged = (await (
+    await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
+      headers: { 'x-forwarded-for': '203.0.113.77, 198.51.100.77' },
+    })
+  ).json()) as any;
   assert.equal(forged.chainLength, 2);
   assert.deepEqual(forged.chainClasses, ['reserved-docs', 'reserved-docs']);
   assert.equal(forged.leftmostSteersClient, false);
@@ -294,9 +296,11 @@ test('xff-probe: redacted chain classes under unchanged trust; forged leftmost d
 
 test('xff-probe: legacy TRUST_PROXY=1 marks leftmost as steering', async () => {
   const base = await startApp({ TRUST_PROXY: '1' });
-  const body = await (await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
-    headers: { 'x-forwarded-for': '203.0.113.77' },
-  })).json() as any;
+  const body = (await (
+    await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
+      headers: { 'x-forwarded-for': '203.0.113.77' },
+    })
+  ).json()) as any;
   assert.equal(body.trustMode, 'legacy');
   assert.equal(body.leftmostSteersClient, true);
   assert.equal(body.clientIpClass, 'reserved-docs');
