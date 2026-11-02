@@ -527,7 +527,10 @@ export type CampaignDeployBuild = {
   xdr: string;
   networkPassphrase: string;
   action: 'deploy';
-  step: 'upload' | 'create';
+  contractSet?: 'v1' | 'v2';
+  // v1: 'upload' | 'create'. v2: 'upload-token' | 'upload-offering' |
+  // 'create-token' | 'create-offering' | 'set-minter'.
+  step: string;
   id: string;
   name: string;
   feeStroops: string;
@@ -537,14 +540,21 @@ export type CampaignDeploySubmit = {
   hash: string;
   status: string;
   confirmed: boolean;
-  step: 'upload' | 'create';
+  contractSet?: 'v1' | 'v2';
+  step: string;
   contractId?: string;
-  registryEntry?: { id: string; name: string; contractId: string };
+  complete?: boolean;
+  tokenContractId?: string;
+  offeringContractId?: string;
+  registryEntry?: { id: string; name: string; contractId?: string; contractSet?: string; tokenContractId?: string; offeringContractId?: string };
   note?: string;
   message?: string;
   testOnly?: boolean;
 };
-export const buildCampaignDeploy = (token: string, input: { id: string; name: string; goal: string; deadline: number }) =>
-  call<CampaignDeployBuild>('/api/operator/campaign-deploy/build', { method: 'POST', body: input, token });
-export const submitCampaignDeploy = (token: string, input: { xdr: string; name?: string }) =>
+export type CampaignDeployV2Params = { symbol: string; decimals: number; minPerInvestor: string; maxPerInvestor: string };
+export const buildCampaignDeploy = (
+  token: string,
+  input: { id: string; name: string; goal: string; deadline: number; contractSet?: 'v1' | 'v2'; v2?: CampaignDeployV2Params },
+) => call<CampaignDeployBuild>('/api/operator/campaign-deploy/build', { method: 'POST', body: input, token });
+export const submitCampaignDeploy = (token: string, input: { xdr: string; name?: string; contractSet?: 'v1' | 'v2' }) =>
   call<CampaignDeploySubmit>('/api/operator/campaign-deploy/submit', { method: 'POST', body: input, token });
