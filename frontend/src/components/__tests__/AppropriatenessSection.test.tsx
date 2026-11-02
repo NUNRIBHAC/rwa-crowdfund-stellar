@@ -212,7 +212,7 @@ describe('AppropriatenessSection', () => {
 
   it('captures an Annex II sophistication request (natural person, 2 of 3 criteria)', async () => {
     globalThis.__authMock = auth();
-    const spy = vi.fn().mockImplementation((url: unknown, init?: RequestInit) => {
+    const spy = vi.fn().mockImplementation((url: unknown, _init?: RequestInit) => {
       const u = String(url);
       if (u.endsWith('/sophistication-request'))
         return Promise.resolve(

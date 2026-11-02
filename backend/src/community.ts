@@ -10,7 +10,6 @@ import type {
   PostFundingReport,
   ContributorRecord,
   PodcastEpisode,
-  AppropriatenessInformation,
   AppropriatenessRecord,
   SophisticationRequest,
   Notification,
