@@ -1674,6 +1674,7 @@ export const zhTW: Messages = {
     errorEmailUnverified: '此電子郵件地址尚未驗證。請查看收件匣或重新索取驗證碼。',
     errorLoginThrottled: '失敗次數過多。請稍等幾分鐘後再試。',
     errorInvalidInput: '請求被拒絕：內容無效。請檢查欄位後重試。',
+    errorEmailRecipientRestricted: '此部署的電子郵件寄送僅限核准的測試收件人。',
     signedInTitle: '社群帳戶',
     signedInAs: '已登入為',
     displayNameLabel: '顯示名稱(顯示於您的留言)',

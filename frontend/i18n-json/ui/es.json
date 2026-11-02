@@ -1694,6 +1694,7 @@
     "errorEmailUnverified": "Esta dirección de email aún no está verificada. Revisa tu bandeja de entrada o solicita un nuevo código de verificación.",
     "errorLoginThrottled": "Demasiados intentos fallidos. Espera unos minutos y vuelve a intentarlo.",
     "errorInvalidInput": "La solicitud se rechazó como no válida. Revisa los campos e inténtalo de nuevo.",
+    "errorEmailRecipientRestricted": "El envío de email está limitado a destinatarios de prueba aprobados en este entorno.",
     "signedInTitle": "Cuenta de la comunidad",
     "signedInAs": "Sesión iniciada como",
     "displayNameLabel": "Nombre visible (se muestra en tus comentarios)",

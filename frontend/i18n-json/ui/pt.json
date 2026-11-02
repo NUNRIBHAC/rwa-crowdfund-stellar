@@ -1693,6 +1693,7 @@
     "errorEmailUnverified": "Este endereço de email ainda não está verificado. Veja a sua caixa de entrada ou peça um novo código de verificação.",
     "errorLoginThrottled": "Demasiadas tentativas falhadas. Aguarde alguns minutos e tente novamente.",
     "errorInvalidInput": "O pedido foi rejeitado como inválido. Verifique os campos e tente novamente.",
+    "errorEmailRecipientRestricted": "O envio de email está limitado a destinatários de teste aprovados neste ambiente.",
     "signedInTitle": "Conta da comunidade",
     "signedInAs": "Sessão iniciada como",
     "displayNameLabel": "Nome de apresentação (mostrado nos seus comentários)",

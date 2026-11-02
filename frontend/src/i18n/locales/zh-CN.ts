@@ -1674,6 +1674,7 @@ export const zhCN: Messages = {
     errorEmailUnverified: '该电子邮件地址尚未验证。请查看收件箱或重新获取验证码。',
     errorLoginThrottled: '失败次数过多。请稍等几分钟后再试。',
     errorInvalidInput: '请求被拒绝：内容无效。请检查字段后重试。',
+    errorEmailRecipientRestricted: '此部署的电子邮件发送仅限批准的测试收件人。',
     signedInTitle: '社区账户',
     signedInAs: '已登录为',
     displayNameLabel: '显示名称(显示在您的评论中)',

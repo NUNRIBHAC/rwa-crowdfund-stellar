@@ -1666,6 +1666,7 @@
     "errorEmailUnverified": "This email address is not verified yet. Check your inbox or request a new verification code.",
     "errorLoginThrottled": "Too many failed attempts. Please wait a few minutes and try again.",
     "errorInvalidInput": "The request was rejected as invalid. Check the fields and try again.",
+    "errorEmailRecipientRestricted": "Email delivery is limited to approved test recipients on this deployment.",
     "signedInTitle": "Community account",
     "signedInAs": "Signed in as",
     "displayNameLabel": "Display name (shown on your comments)",

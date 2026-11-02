@@ -19,6 +19,49 @@ export interface Mailer {
   send(message: { to: string; subject: string; text: string }): Promise<void>;
 }
 
+// Guard failure: carries the HTTP status + stable localization code like
+// AuthError/CommunityError (sendError maps all three the same way).
+export class MailerError extends Error {
+  constructor(
+    public readonly status: number,
+    message: string,
+    public readonly code?: string,
+  ) {
+    super(message);
+  }
+}
+
+// Controlled-test guard: COMMUNITY_EMAIL_ALLOWED_RECIPIENTS is a
+// comma-separated allowlist of recipient addresses. While it is set, a send
+// to any other address fails BEFORE the provider is called - no real email
+// can leave the platform to an unapproved recipient, and the caller gets an
+// honest 503 instead of a pretend send. Unset means unrestricted (a
+// deliberate operator decision, not the default during controlled tests).
+export class AllowlistMailer implements Mailer {
+  constructor(
+    private readonly inner: Mailer,
+    private readonly allowed: ReadonlySet<string>,
+  ) {}
+
+  async send(message: { to: string; subject: string; text: string }): Promise<void> {
+    const to = message.to.trim().toLowerCase();
+    if (!this.allowed.has(to)) {
+      throw new MailerError(503, 'email delivery to this recipient is not allowed on this deployment', 'email_recipient_restricted');
+    }
+    return this.inner.send(message);
+  }
+}
+
+export function allowedRecipientsFromEnv(env: NodeJS.ProcessEnv = process.env): Set<string> | null {
+  const raw = (env.COMMUNITY_EMAIL_ALLOWED_RECIPIENTS ?? '').trim();
+  if (!raw) return null;
+  const list = raw
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter((e) => e.length > 0);
+  return list.length > 0 ? new Set(list) : null;
+}
+
 export class LogMailer implements Mailer {
   async send(message: { to: string; subject: string; text: string }): Promise<void> {
     // Full body on purpose: this provider exists so a demo operator can pull
@@ -62,7 +105,9 @@ export class BrevoMailer implements Mailer {
 export function mailerFromEnv(env: NodeJS.ProcessEnv = process.env): Mailer | null {
   const provider = (env.COMMUNITY_EMAIL_PROVIDER ?? '').trim().toLowerCase();
   if (!provider) return null;
-  if (provider === 'log') return new LogMailer();
+  const allowed = allowedRecipientsFromEnv(env);
+  const wrap = (m: Mailer): Mailer => (allowed ? new AllowlistMailer(m, allowed) : m);
+  if (provider === 'log') return wrap(new LogMailer());
   if (provider === 'brevo') {
     const apiKey = (env.BREVO_API_KEY ?? '').trim();
     const from = (env.COMMUNITY_EMAIL_FROM ?? '').trim();
@@ -72,7 +117,7 @@ export function mailerFromEnv(env: NodeJS.ProcessEnv = process.env): Mailer | nu
       console.warn('[mailer] COMMUNITY_EMAIL_PROVIDER=brevo but BREVO_API_KEY or COMMUNITY_EMAIL_FROM is missing; outbound email disabled');
       return null;
     }
-    return new BrevoMailer(apiKey, from);
+    return wrap(new BrevoMailer(apiKey, from));
   }
   // Unknown provider name: fail closed, loudly.
   console.warn(`[mailer] unknown COMMUNITY_EMAIL_PROVIDER=${JSON.stringify(provider)}; outbound email disabled`);

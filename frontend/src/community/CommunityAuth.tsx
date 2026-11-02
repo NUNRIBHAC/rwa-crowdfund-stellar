@@ -79,6 +79,7 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
   email_unverified: 'errorEmailUnverified',
   login_throttled: 'errorLoginThrottled',
   invalid_input: 'errorInvalidInput',
+  email_recipient_restricted: 'errorEmailRecipientRestricted',
 };
 
 // Localize known API failures; pass through anything unknown verbatim.
