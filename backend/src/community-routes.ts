@@ -199,6 +199,27 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.get('/api/auth/abuse-config', (_req, res) => {
     res.json({ turnstileSiteKey: process.env.TURNSTILE_SITE_KEY?.trim() || null });
   });
+  // Admin-gated abuse-defense observability for the controlled verification
+  // window. Aggregate counters only - no IPs, tokens or emails leave these
+  // endpoints. The self-check exercises the DEPLOYED reputation client and
+  // counter path against a fixed documentation IP (never a visitor or
+  // caller-supplied address, one cached lookup) so shadow mode is verifiable
+  // live without mail side effects or attacker-selected lookups.
+  const SELF_CHECK_IP = '1.1.1.1';
+  router.get('/api/admin/abuse-diagnostics', requireAdmin, (_req, res) => {
+    res.json({
+      turnstile: turnstile ? 'configured' : 'disabled',
+      ipReputation: { enforce: process.env.IPREP_ENFORCE === '1', ...reputation.stats() },
+    });
+  });
+  router.post('/api/admin/abuse-diagnostics/reputation-self-check', requireAdmin, async (_req, res) => {
+    try {
+      const probeVerdict = await reputation.check(SELF_CHECK_IP);
+      res.json({ probeVerdict, stats: reputation.stats() });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.post('/api/auth/email/register', async (req, res) => {
     try {
       const ip = clientIp(req);

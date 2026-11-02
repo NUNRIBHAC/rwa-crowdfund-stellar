@@ -238,3 +238,40 @@ test('clientIp: TRUST_PROXY_DEPTH keys the limiter on chain[length-depth], prove
   const c = await post(base0, '/api/auth/email/register', registerBody, { 'x-forwarded-for': '203.0.113.99, 198.51.100.99' });
   assert.equal(c.status, 200);
 });
+
+test('abuse-diagnostics: admin-gated aggregate view and fixed-IP self-check exercise the counter path', async () => {
+  const base = await startApp({ IPREP_API_KEY: 'test-key' }, {
+    ipReputation: createIpReputation({
+      apiKey: 'test-key',
+      enforce: false,
+      fetchImpl: async () => new Response(JSON.stringify({ is_abuser: false, abuser_score: '0.01 (Low)' }), { status: 200 }),
+    }),
+  } as never);
+  const diag = await fetch(base + '/api/admin/abuse-diagnostics');
+  assert.equal(diag.status, 200);
+  const before = (await diag.json()) as any;
+  assert.equal(before.turnstile, 'disabled');
+  assert.equal(before.ipReputation.enforce, false);
+  assert.equal(before.ipReputation.lookups, 0);
+
+  const self = await fetch(base + '/api/admin/abuse-diagnostics/reputation-self-check', { method: 'POST' });
+  assert.equal(self.status, 200);
+  const after1 = (await self.json()) as any;
+  assert.equal(after1.probeVerdict, 'clean');
+  assert.equal(after1.stats.lookups, 1);
+  assert.equal(after1.stats.verdicts.clean, 1);
+
+  // Second self-check hits the cache: counter path stable, no extra lookup.
+  const self2 = await fetch(base + '/api/admin/abuse-diagnostics/reputation-self-check', { method: 'POST' });
+  const after2 = (await self2.json()) as any;
+  assert.equal(after2.stats.lookups, 1);
+  assert.equal(after2.stats.cacheHits, 1);
+});
+
+test('abuse-diagnostics: reflects configured Turnstile and enforce flag', async () => {
+  const base = await startApp({ TURNSTILE_SECRET_KEY: 'x', IPREP_ENFORCE: '1' });
+  const diag = await fetch(base + '/api/admin/abuse-diagnostics');
+  const body = (await diag.json()) as any;
+  assert.equal(body.turnstile, 'configured');
+  assert.equal(body.ipReputation.enforce, true);
+});
