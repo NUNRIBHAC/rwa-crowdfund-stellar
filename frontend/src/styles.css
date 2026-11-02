@@ -2491,6 +2491,13 @@ input[type='checkbox'] {
   background: #fdecea;
   color: #8c1d18;
 }
+/* Testnet badge in light theme: #fbbf24 text on the 15%-amber tint over
+   white measures ~1.5:1. Reuse the light amber text token (same pattern as
+   .status-pending) at 4.83:1 on the tinted chip; dark theme keeps #fbbf24. */
+[data-theme='light'] .badge-testnet {
+  color: var(--amber);
+  border-color: rgba(181, 71, 8, 0.5);
+}
 [data-theme='light'] .site-header {
   background: var(--card);
   color: var(--ink);
