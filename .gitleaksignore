@@ -1,0 +1,8 @@
+# Verified false positives (2026-11-02, gitleaks 8.30.1), one fingerprint per line.
+# Test fixture: testnet contract address, no credential (2 commits):
+30595fcad9deadbe9368ce60f4c5805bb53b8ad5:frontend/src/pages/__tests__/Investments.selectAnchor.test.tsx:generic-api-key:24
+39cc1a99791122e4228ba815b85af0f76fa6dcc8:docs/soroban-flow.md:generic-api-key:32
+# docs/soroban-flow.md prose, no credential (2 commits):
+ec0eb4e6e469e79401b00dd014c02f946e3aa436:frontend/src/pages/__tests__/Investments.selectAnchor.test.tsx:generic-api-key:24
+ee3307f74b349e8de402de8b53974e3218168233:docs/soroban-flow.md:generic-api-key:32
+# History stays untouched per the user's no-rewrite decision; re-verify on rule updates.
