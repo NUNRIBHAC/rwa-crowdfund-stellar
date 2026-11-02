@@ -15,7 +15,17 @@ import { Address, xdr } from '@stellar/stellar-sdk';
 
 export type BackfillGap = 'start-before-floor' | 'cursor-behind-floor';
 
+// Checkpoint format version. Bump when event parsing changes in a way that
+// can have missed real events in already-processed windows: a stored
+// checkpoint from an older version is discarded and history is re-scanned
+// (recording is idempotent). v2: tolerate the SDK's ScVal wrapper classes in
+// event topics (v1 only matched plain {symbol}/{address} JSON and silently
+// recorded nothing live, 2026-11-01 proof chain).
+const BACKFILL_VERSION = 2;
+
 export type BackfillCheckpoint = {
+  // Checkpoint format version that wrote this record.
+  version?: number;
   // Last ledger fully processed. The next run resumes at +1.
   processedThroughLedger: number;
   // Set when a window of history could not be verified from this RPC:
@@ -53,8 +63,24 @@ const CONTRIBUTOR_KEY = /^G[A-Z2-7]{55}$/;
 const DEFAULT_WINDOW_LEDGERS = 5000;
 const DEFAULT_EVENT_LIMIT = 1000;
 
-const topicSymbol = (t: any): string | undefined => (t && typeof t.symbol === 'string' ? t.symbol : undefined);
-const topicAddress = (t: any): string | undefined => (t && typeof t.address === 'string' ? t.address : undefined);
+// Topic values arrive in two shapes: plain JSON ({symbol}/{address} strings,
+// e.g. unit fakes and some RPC responses) and the stellar-sdk's ScVal wrapper
+// classes (ScValSymbol/ScValAddress), where the native value lives on the
+// .value getter and .address is a nested ScAddress object, NOT the strkey.
+// Reading only the plain shape silently records nothing from the live RPC.
+const topicSymbol = (t: any): string | undefined => {
+  if (!t) return undefined;
+  if (typeof t.symbol === 'string') return t.symbol;
+  if (typeof t.value === 'string') return t.value;
+  if (typeof t.sym === 'string') return t.sym;
+  return undefined;
+};
+const topicAddress = (t: any): string | undefined => {
+  if (!t) return undefined;
+  if (typeof t.address === 'string') return t.address;
+  if (typeof t.value === 'string') return t.value;
+  return undefined;
+};
 
 export async function backfillCampaignContributors(opts: {
   client: BackfillClient;
@@ -76,7 +102,11 @@ export async function backfillCampaignContributors(opts: {
   if (!Address.fromString(opts.contractId).toString().startsWith('C')) throw new Error('invalid contract id');
 
   const { sequence: latest } = await client.getLatestLedger();
-  const prior = await opts.readCheckpoint(campaignId);
+  const stored = await opts.readCheckpoint(campaignId);
+  // A checkpoint written by an older parser version cannot be trusted to have
+  // seen every event: discard it and re-scan from the start (floor-clamped,
+  // idempotent recording, gap re-derived honestly).
+  const prior = stored && stored.version === BACKFILL_VERSION ? stored : undefined;
 
   let gap: BackfillGap | undefined = prior?.gap;
   let floorLedger: number | undefined;
@@ -149,6 +179,7 @@ export async function backfillCampaignContributors(opts: {
     }
     // Durable checkpoint only after the window is fully processed.
     await opts.checkpoint(campaignId, {
+      version: BACKFILL_VERSION,
       processedThroughLedger: windowEnd,
       ...(gap ? { gap } : {}),
       ...(floorLedger !== undefined
