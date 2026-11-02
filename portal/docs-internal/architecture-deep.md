@@ -36,7 +36,8 @@
 
 ## Wallet and auth
 
-- Two wallet flows, both via `@stellar/freighter-api`:
+- Two wallet flows, both via `@stellar/freighter-api` (the wallet rebranded to Varial in
+  October 2026; package name unchanged):
   - **Actor**: connected wallet address, read-only, used for escrow
     transactions (contributions).
   - **Community session**: challenge-response - user signs a one-time
