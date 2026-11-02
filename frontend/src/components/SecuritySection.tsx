@@ -36,9 +36,13 @@ export default function SecuritySection() {
   useEffect(() => {
     if (!account) {
       setSessions(null);
+      setTotpEnabled(false);
       return;
     }
     setError('');
+    // Re-sync with the signed-in account: account changes after login/logout,
+    // so the 2FA block must reflect THIS account's actual TOTP state.
+    setTotpEnabled(account.totpEnabled === true);
     load();
   }, [account, load]);
 

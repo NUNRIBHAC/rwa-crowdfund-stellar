@@ -140,3 +140,39 @@ describe('SignInPanel TOTP step', () => {
     expect(screen.queryByLabelText('Authenticator code')).toBeNull();
   });
 });
+
+describe('SecuritySection TOTP account re-sync', () => {
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+  });
+
+  it('reflects the signed-in account TOTP state after login (was stuck on mount state)', async () => {
+    vi.stubGlobal('fetch', fetchRouter({ '/api/auth/sessions': () => ok({ sessions: [] }) }));
+    // Mounted logged out (account null), then the account arrives with 2FA on.
+    globalThis.__authMock = auth({ account: null });
+    const { rerender } = render(
+      <I18nProvider>
+        <SecuritySection />
+      </I18nProvider>,
+    );
+    globalThis.__authMock = auth({ account: { ...ACCOUNT, totpEnabled: true } });
+    rerender(
+      <I18nProvider>
+        <SecuritySection />
+      </I18nProvider>,
+    );
+    expect(await screen.findByRole('button', { name: 'Disable two-factor' })).toBeTruthy();
+    expect(screen.getByText('Two-factor authentication is enabled: after your wallet signature, sign-in also asks for an authenticator code.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Enable two-factor' })).toBeNull();
+
+    // And back to logged out: no stale enabled state survives the transition.
+    globalThis.__authMock = auth({ account: null });
+    rerender(
+      <I18nProvider>
+        <SecuritySection />
+      </I18nProvider>,
+    );
+    await waitFor(() => expect(screen.queryByRole('button', { name: 'Disable two-factor' })).toBeNull());
+  });
+});
