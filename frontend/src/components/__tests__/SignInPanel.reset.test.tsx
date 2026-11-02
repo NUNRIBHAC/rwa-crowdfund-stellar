@@ -33,7 +33,6 @@ function auth(over: Record<string, unknown>) {
 }
 
 declare global {
-   
   var __authMock: unknown;
 }
 
