@@ -50,11 +50,29 @@ export function loadTurnstileSiteKey(): Promise<string | null> {
 function loadScript(): Promise<void> {
   if (!scriptPromise) {
     scriptPromise = new Promise((resolve, reject) => {
+      // Already loaded (hot reload, duplicate caller, cached page).
+      if (window.turnstile) return resolve();
       const s = document.createElement('script');
       s.src = SCRIPT_SRC;
       s.async = true;
       s.onload = () => resolve();
-      s.onerror = () => reject(new Error('turnstile script failed to load'));
+      s.onerror = () => {
+        // Observed on staging: some environments fire error on the element
+        // even though the API still arrives (cache/race). Fail only when the
+        // API truly never appears; allow a brief grace window first.
+        const started = Date.now();
+        const poll = setInterval(() => {
+          if (window.turnstile) {
+            clearInterval(poll);
+            resolve();
+          } else if (Date.now() - started > 2000) {
+            clearInterval(poll);
+            // Let the next attempt retry instead of caching a rejection.
+            scriptPromise = null;
+            reject(new Error('turnstile script failed to load'));
+          }
+        }, 100);
+      };
       document.head.appendChild(s);
     });
   }
