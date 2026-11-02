@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { Account, Address, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, SorobanDataBuilder, xdr } from '@stellar/stellar-sdk';
-import { sorobanDeps, buildCampaignDeploy, submitCampaignDeploy } from '../src/soroban.js';
+import { sorobanDeps, buildCampaignDeploy, submitCampaignDeploy, buildCampaignDeployV2, submitCampaignDeployV2 } from '../src/soroban.js';
 
 // Campaign deployment adapter tests: the fake RPC below is adapter evidence
 // only, not evidence of a real deployment. Build/submit reuse the journaled
@@ -31,12 +31,33 @@ let addressAuth = false,
   wasmOnLedger = false,
   lastSentWasCreate = false,
   txStatus = 'SUCCESS';
+// v2 harness: the fake RPC serves the real packaged v2 Wasms under their pin
+// hashes and hands out a distinct contract id per created instance kind.
+const v2TokenWasm = fs.readFileSync(new URL('../../backend/wasm/v2-share-token.wasm', import.meta.url));
+const v2OfferingWasm = fs.readFileSync(new URL('../../backend/wasm/v2-offering.wasm', import.meta.url));
+const v2TokenHash = createHash('sha256').update(v2TokenWasm).digest('hex');
+const v2OfferingHash = createHash('sha256').update(v2OfferingWasm).digest('hex');
+const v2TokenContractId = StrKey.encodeContract(Buffer.alloc(32, 7));
+const v2OfferingContractId = StrKey.encodeContract(Buffer.alloc(32, 8));
+let v2TokenOnLedger = false,
+  v2OfferingOnLedger = false,
+  v2LastCreateWasToken = false,
+  lastCreateWasV2 = false;
 const client: any = {
   getAccount: async (pub: string) => {
     if (missingAccount) throw new Error('Account not found');
     return new Account(pub, '1');
   },
-  getContractWasmByHash: async (_hash: Buffer) => {
+  getContractWasmByHash: async (hash: Buffer) => {
+    const hex = Buffer.from(hash).toString('hex');
+    if (hex === v2TokenHash) {
+      if (!v2TokenOnLedger) throw new Error('not found');
+      return v2TokenWasm;
+    }
+    if (hex === v2OfferingHash) {
+      if (!v2OfferingOnLedger) throw new Error('not found');
+      return v2OfferingWasm;
+    }
     if (!wasmOnLedger) throw new Error('not found');
     return wasm;
   },
@@ -68,7 +89,15 @@ const client: any = {
   },
   sendTransaction: async (tx: Transaction) => {
     if (throwsOnSend) throw new Error('response lost');
-    lastSentWasCreate = (tx.operations[0] as any).func.type === 'hostFunctionTypeCreateContractV2';
+    const func = (tx.operations[0] as any).func;
+    lastSentWasCreate = func.type === 'hostFunctionTypeCreateContractV2';
+    if (lastSentWasCreate) {
+      const wr = func.value.executable.wasmHash;
+      const wv = typeof wr === 'function' ? wr() : wr;
+      const wh = Buffer.from(Buffer.isBuffer(wv) || wv instanceof Uint8Array ? wv : wv.toXDR()).toString('hex');
+      lastCreateWasV2 = wh === v2TokenHash || wh === v2OfferingHash;
+      v2LastCreateWasToken = wh === v2TokenHash;
+    }
     return { hash: Buffer.from(tx.hash()).toString('hex'), status: 'PENDING' };
   },
   getTransaction: async (hash: string) => ({
@@ -77,9 +106,18 @@ const client: any = {
     ledger: 100,
     // Upload returns the Wasm hash (bytes), create returns the contract address.
     returnValue:
-      txStatus === 'SUCCESS' ? (lastSentWasCreate ? new Address(newContractId).toScVal() : nativeToScVal(wasmHashBytes(), { type: 'bytes' })) : undefined,
+      txStatus === 'SUCCESS'
+        ? lastSentWasCreate
+          ? new Address(lastCreateWasV2 ? (v2LastCreateWasToken ? v2TokenContractId : v2OfferingContractId) : newContractId).toScVal()
+          : nativeToScVal(wasmHashBytes(), { type: 'bytes' })
+        : undefined,
   }),
-  getContractWasmByContractId: async (_id: string) => (badDeployedWasm ? Buffer.from('wrong') : wasm),
+  getContractWasmByContractId: async (id: string) => {
+    if (badDeployedWasm) return Buffer.from('wrong');
+    if (id === v2TokenContractId) return v2TokenWasm;
+    if (id === v2OfferingContractId) return v2OfferingWasm;
+    return wasm;
+  },
 };
 sorobanDeps.client = () => client;
 const wasmHashBytes = () => createHash('sha256').update(wasm).digest();
@@ -96,6 +134,8 @@ function reset() {
   badDeployedWasm = false;
   wasmOnLedger = false;
   txStatus = 'SUCCESS';
+  v2TokenOnLedger = false;
+  v2OfferingOnLedger = false;
 }
 const input = () => ({ actor: operator.publicKey(), id: 'solar-nine', name: 'Solar Nine', goal: '250', deadline: Math.floor(Date.now() / 1000) + 86400 });
 const signed = (builtXdr: string) => {
@@ -213,4 +253,78 @@ test('deploy submit reports broadcast loss as UNKNOWN without guessing', async (
   await assert.rejects(submitCampaignDeploy({ actor: operator.publicKey(), xdr: signed(built.xdr) }), /response lost/);
   const store = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8'));
   assert.equal(store.intents.find((i: any) => i.hash === built.hash).status, 'UNKNOWN');
+});
+
+// --- v2 contract set (share-token + offering, wired) ---
+const v2Input = () => ({
+  ...input(),
+  id: 'solar-v2',
+  v2: { symbol: 'SLRNINE', decimals: 7, minPerInvestor: '10', maxPerInvestor: '1000' },
+});
+
+test('v2 build validates the contract-set parameters', async () => {
+  reset();
+  await assert.rejects(buildCampaignDeployV2({ ...v2Input(), v2: { ...v2Input().v2, symbol: 'bad symbol!' } }), /invalid share-token symbol/);
+  await assert.rejects(buildCampaignDeployV2({ ...v2Input(), v2: { ...v2Input().v2, decimals: 19 } }), /invalid share-token decimals/);
+  await assert.rejects(buildCampaignDeployV2({ ...v2Input(), v2: { ...v2Input().v2, minPerInvestor: '0' } }), /positive i128 range/);
+  await assert.rejects(buildCampaignDeployV2({ ...v2Input(), v2: { ...v2Input().v2, minPerInvestor: '100', maxPerInvestor: '10' } }), /at least the min/);
+  await assert.rejects(buildCampaignDeployV2({ ...v2Input(), id: 'taken' }), /already registered/);
+});
+
+test('v2 deploy walks the full five-step chain and returns a wired registry entry', async () => {
+  reset();
+  const run = async () => {
+    const built = await buildCampaignDeployV2(v2Input());
+    if (built.complete) return built;
+    const done = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' });
+    return { built, done };
+  };
+  let r: any = await run();
+  assert.equal(r.built.step, 'upload-token');
+  assert.equal(r.done.step, 'upload-token');
+  v2TokenOnLedger = true; // the uploaded code is now on the ledger
+  r = await run();
+  assert.equal(r.built.step, 'upload-offering');
+  v2OfferingOnLedger = true;
+  r = await run();
+  assert.equal(r.built.step, 'create-token');
+  assert.equal(r.done.contractId, v2TokenContractId);
+  r = await run();
+  assert.equal(r.built.step, 'create-offering');
+  assert.equal(r.done.contractId, v2OfferingContractId);
+  r = await run();
+  assert.equal(r.built.step, 'set-minter');
+  assert.equal(r.done.complete, true);
+  assert.deepEqual(r.done.registryEntry, {
+    id: 'solar-v2',
+    name: 'Solar V2',
+    contractSet: 'v2',
+    tokenContractId: v2TokenContractId,
+    offeringContractId: v2OfferingContractId,
+  });
+  assert.match(r.done.note, /never edits the registry/);
+  // A completed campaign reports completion without building another tx.
+  const after = await buildCampaignDeployV2(v2Input());
+  assert.equal(after.complete, true);
+  assert.equal(after.tokenContractId, v2TokenContractId);
+  assert.equal(after.offeringContractId, v2OfferingContractId);
+});
+
+test('v2 deploy skips both uploads when the pinned Wasms are already on the ledger', async () => {
+  reset();
+  v2TokenOnLedger = true;
+  v2OfferingOnLedger = true;
+  const built = await buildCampaignDeployV2(v2Input());
+  assert.equal(built.step, 'create-token');
+  const tx = TransactionBuilder.fromXDR(built.xdr, Networks.TESTNET);
+  assert.equal(tx.operations.length, 1);
+});
+
+test('v2 create refuses to journal a contract id whose code mismatches the pin', async () => {
+  reset();
+  v2TokenOnLedger = true;
+  v2OfferingOnLedger = true;
+  badDeployedWasm = true;
+  const built = await buildCampaignDeployV2(v2Input());
+  await assert.rejects(submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr) }), /does not match its pin/);
 });
