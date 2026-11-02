@@ -373,3 +373,32 @@ test('mail-template-check: provider throttle stops the batch with a partial repo
   assert.equal(againBody.refused, true);
   assert.equal(mailer.calls, 3);
 });
+
+test('xff-probe expect: sha256 equality reveals positions without raw IPs', async () => {
+  const base = await startApp({});
+  const { createHash: hash } = await import('node:crypto');
+  const h = (v: string) => hash('sha256').update(v).digest('hex');
+  const res = await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
+    headers: { 'x-xff-expect-sha256': h('203.0.113.77'), 'x-forwarded-for': '203.0.113.77, 198.51.100.77' },
+  });
+  assert.equal(res.status, 200);
+  const body = (await res.json()) as any;
+  assert.deepEqual(body.matchedPositions, [0]);
+  assert.equal(body.resolvedMatch, false); // trust none -> resolved is the socket peer
+  assert.equal(body.socketMatch, false);
+  const sock = await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', { headers: { 'x-xff-expect-sha256': h('127.0.0.1') } });
+  const sockBody = (await sock.json()) as any;
+  assert.equal(sockBody.socketMatch, true);
+  assert.equal(sockBody.resolvedMatch, true);
+  // Malformed entries survive as classes; no crash, no raw echo.
+  const malformed = (await (
+    await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
+      headers: { 'x-forwarded-for': 'abc,,,,' },
+    })
+  ).json()) as any;
+  assert.equal(malformed.chainLength, 1);
+  assert.deepEqual(malformed.chainClasses, ['other']);
+  // Invalid expect is ignored (no equality fields).
+  const bad = (await (await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', { headers: { 'x-xff-expect-sha256': 'xyz' } })).json()) as any;
+  assert.equal('matchedPositions' in bad, false);
+});
