@@ -57,6 +57,39 @@ export function validateBuilder(
   return errors;
 }
 
+// --- v2 contract set (share token + offering) ---
+// Mirrors validateV2Params in backend/src/soroban.ts; the server re-checks
+// every rule before building anything.
+export const V2_SYMBOL_RE = /^[A-Za-z0-9]{1,12}$/;
+export const V2_DECIMALS_MAX = 18;
+export type V2BuilderInput = { symbol: string; decimals: string; minPerInvestor: string; maxPerInvestor: string };
+export type V2BuilderField = 'symbol' | 'decimals' | 'minPerInvestor' | 'maxPerInvestor';
+export type V2BuilderError = 'symbolInvalid' | 'decimalsInvalid' | 'amountInvalid' | 'maxBelowMin';
+
+export function validateV2Builder(input: V2BuilderInput): Partial<Record<V2BuilderField, V2BuilderError>> {
+  const errors: Partial<Record<V2BuilderField, V2BuilderError>> = {};
+  if (input.symbol !== '' && !V2_SYMBOL_RE.test(input.symbol)) errors.symbol = 'symbolInvalid';
+  if (input.decimals !== '' && !/^(0|[1-9]\d{0,1})$/.test(input.decimals)) errors.decimals = 'decimalsInvalid';
+  else if (input.decimals !== '' && Number(input.decimals) > V2_DECIMALS_MAX) errors.decimals = 'decimalsInvalid';
+  const min = input.minPerInvestor.trim() === '' ? null : goalToUnits(input.minPerInvestor);
+  const max = input.maxPerInvestor.trim() === '' ? null : goalToUnits(input.maxPerInvestor);
+  if (input.minPerInvestor.trim() !== '' && min === null) errors.minPerInvestor = 'amountInvalid';
+  if (input.maxPerInvestor.trim() !== '' && max === null) errors.maxPerInvestor = 'amountInvalid';
+  if (min !== null && max !== null && max < min) errors.maxPerInvestor = 'maxBelowMin';
+  return errors;
+}
+
+export function v2BuilderComplete(input: V2BuilderInput): boolean {
+  return (
+    V2_SYMBOL_RE.test(input.symbol) &&
+    /^(0|([1-9]\d{0,1}))$/.test(input.decimals) &&
+    Number(input.decimals) <= V2_DECIMALS_MAX &&
+    goalToUnits(input.minPerInvestor) !== null &&
+    goalToUnits(input.maxPerInvestor) !== null &&
+    goalToUnits(input.maxPerInvestor)! >= goalToUnits(input.minPerInvestor)!
+  );
+}
+
 export function builderComplete(input: { name: string; slug: string; goal: string; deadline: string }, nowSeconds: number, creator: string | null): boolean {
   return (
     input.name.length > 0 &&
@@ -92,16 +125,24 @@ export function builderPreview(
 // signer callback is the ONLY place a wallet is asked to sign; the flow
 // never holds or sees a secret key. Dependencies are injected so the
 // sequence is testable without network or wallet.
-export type DeployBuildResult = { xdr: string; networkPassphrase: string; step: 'upload' | 'create' };
+export type DeployBuildResult = { xdr: string; networkPassphrase: string; step: string };
 export type DeploySubmitResult = {
-  step: 'upload' | 'create';
+  step: string;
   status: string;
   confirmed: boolean;
   contractId?: string;
-  registryEntry?: { id: string; name: string; contractId: string };
+  complete?: boolean;
+  tokenContractId?: string;
+  offeringContractId?: string;
+  registryEntry?: { id: string; name: string; contractId?: string; contractSet?: string; tokenContractId?: string; offeringContractId?: string };
   note?: string;
   message?: string;
 };
+// The loop is result-driven: any SUCCESS+confirmed submit that carries no
+// final registryEntry means "build again for the next step" (the server
+// derives progress from its journal). v1 needs at most 2 builds (upload,
+// create); the v2 chain needs at most 5 (two uploads, two creates,
+// set-minter) plus one spare for a same-step retry after a FAILED step.
 export async function runBuilderDeploy(
   input: { name: string; slug: string; goal: string; deadline: number },
   deps: {
@@ -109,19 +150,22 @@ export async function runBuilderDeploy(
     sign: (xdr: string, networkPassphrase: string) => Promise<string>;
     submit: (input: { xdr: string; name: string }) => Promise<DeploySubmitResult>;
   },
-  onStep?: (step: 'uploaded') => void,
+  onStep?: (step: string) => void,
+  maxBuilds = 2,
 ): Promise<DeploySubmitResult> {
   const buildInput = () => ({ id: input.slug, name: input.name, goal: input.goal, deadline: input.deadline });
   let built = await deps.build(buildInput());
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < maxBuilds; attempt++) {
     const signedXdr = await deps.sign(built.xdr, built.networkPassphrase);
     const result = await deps.submit({ xdr: signedXdr, name: input.name });
-    if (result.step === 'upload' && result.status === 'SUCCESS' && !result.registryEntry) {
-      onStep?.('uploaded');
+    if (result.status === 'SUCCESS' && result.confirmed && !result.registryEntry && !result.complete) {
+      onStep?.(result.step === 'upload' ? 'uploaded' : result.step);
       built = await deps.build(buildInput());
       continue;
     }
     return result;
   }
-  throw new Error('deployment did not reach the create step after the code upload');
+  throw new Error(
+    maxBuilds <= 2 ? 'deployment did not reach the create step after the code upload' : 'deployment did not complete within the expected number of steps',
+  );
 }

@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { builderComplete, builderPreview, deadlineToTimestamp, GOAL_UNITS_MAX, goalToUnits, runBuilderDeploy, validateBuilder } from './campaign-builder';
+import {
+  builderComplete,
+  builderPreview,
+  deadlineToTimestamp,
+  GOAL_UNITS_MAX,
+  goalToUnits,
+  runBuilderDeploy,
+  validateBuilder,
+  validateV2Builder,
+  v2BuilderComplete,
+} from './campaign-builder';
 
 // Fixed reference instant: 2026-11-15T12:00:00Z.
 const NOW = Math.floor(Date.parse('2026-11-15T12:00:00Z') / 1000);
@@ -170,5 +180,120 @@ describe('runBuilderDeploy', () => {
         submit: async () => ({ step: 'create', status: 'SUCCESS', confirmed: true }),
       }),
     ).rejects.toThrow(/user declined/);
+  });
+});
+
+describe('validateV2Builder', () => {
+  const good = { symbol: 'SOLAR9', decimals: '7', minPerInvestor: '10', maxPerInvestor: '1000' };
+  it('accepts a complete, valid v2 parameter set', () => {
+    expect(validateV2Builder(good)).toEqual({});
+    expect(v2BuilderComplete(good)).toBe(true);
+  });
+  it('rejects malformed symbols and decimals (mirrors backend validateV2Params)', () => {
+    expect(validateV2Builder({ ...good, symbol: 'has space' }).symbol).toBe('symbolInvalid');
+    expect(validateV2Builder({ ...good, symbol: 'TOOLONGSYMBOL1' }).symbol).toBe('symbolInvalid');
+    expect(validateV2Builder({ ...good, decimals: '19' }).decimals).toBe('decimalsInvalid');
+    expect(validateV2Builder({ ...good, decimals: '7.5' }).decimals).toBe('decimalsInvalid');
+    expect(v2BuilderComplete({ ...good, decimals: '19' })).toBe(false);
+  });
+  it('rejects invalid amounts and max below min', () => {
+    expect(validateV2Builder({ ...good, minPerInvestor: 'abc' }).minPerInvestor).toBe('amountInvalid');
+    expect(validateV2Builder({ ...good, maxPerInvestor: '0' }).maxPerInvestor).toBe('amountInvalid');
+    expect(validateV2Builder({ ...good, minPerInvestor: '100', maxPerInvestor: '50' }).maxPerInvestor).toBe('maxBelowMin');
+    expect(v2BuilderComplete({ ...good, minPerInvestor: '100', maxPerInvestor: '50' })).toBe(false);
+  });
+});
+
+describe('runBuilderDeploy v2 chain', () => {
+  const input = { name: 'Solar Nine', slug: 'solar-nine', goal: '250', deadline: 2000000000 };
+  const V2_STEPS = ['upload-token', 'upload-offering', 'create-token', 'create-offering', 'set-minter'];
+  const v2Deps = (opts: { skipUploads?: boolean } = {}) => {
+    const signed: string[] = [];
+    const confirmed: string[] = [];
+    let buildCount = 0;
+    const queue = opts.skipUploads ? V2_STEPS.slice(2) : V2_STEPS;
+    return {
+      signed,
+      confirmed,
+      get buildCount() {
+        return buildCount;
+      },
+      deps: {
+        build: async () => {
+          const step = queue[Math.min(buildCount, queue.length - 1)];
+          buildCount++;
+          return { xdr: `xdr-${step}`, networkPassphrase: 'Test SDF Network ; September 2015', step };
+        },
+        sign: async (xdr: string) => {
+          signed.push(xdr);
+          return `signed-${xdr}`;
+        },
+        submit: async ({ xdr }: { xdr: string }) => {
+          const step = xdr.replace('signed-xdr-', '');
+          confirmed.push(step);
+          if (step === 'set-minter')
+            return {
+              step,
+              status: 'SUCCESS',
+              confirmed: true,
+              complete: true,
+              registryEntry: { id: 'solar-nine', name: 'Solar Nine', contractSet: 'v2', tokenContractId: 'CTOK', offeringContractId: 'COFF' },
+            };
+          return { step, status: 'SUCCESS', confirmed: true, contractId: step.startsWith('create') ? 'CID' : undefined };
+        },
+      },
+    };
+  };
+  it('walks the five-step chain, signing each envelope once, and returns the wired registry entry', async () => {
+    const steps: string[] = [];
+    const h = v2Deps();
+    const result = await runBuilderDeploy(input, h.deps, (s) => steps.push(s), 6);
+    expect(h.signed).toEqual(V2_STEPS.map((s) => `xdr-${s}`));
+    expect(h.confirmed).toEqual(V2_STEPS);
+    expect(steps).toEqual(V2_STEPS.slice(0, 4));
+    expect(result.registryEntry).toMatchObject({ contractSet: 'v2', tokenContractId: 'CTOK', offeringContractId: 'COFF' });
+  });
+  it('goes straight to create-token when both Wasms are already on the ledger', async () => {
+    const h = v2Deps({ skipUploads: true });
+    const result = await runBuilderDeploy(input, h.deps, undefined, 6);
+    expect(h.signed).toEqual(['xdr-create-token', 'xdr-create-offering', 'xdr-set-minter']);
+    expect(result.complete).toBe(true);
+  });
+  it('refuses to loop forever when no step ever finishes the chain', async () => {
+    let submits = 0;
+    await expect(
+      runBuilderDeploy(
+        input,
+        {
+          build: async () => ({ xdr: 'xdr-upload-token', networkPassphrase: 'Test SDF Network ; September 2015', step: 'upload-token' }),
+          sign: async (xdr: string) => `signed-${xdr}`,
+          submit: async () => {
+            submits++;
+            return { step: 'upload-token', status: 'SUCCESS', confirmed: true };
+          },
+        },
+        undefined,
+        6,
+      ),
+    ).rejects.toThrow(/did not complete within the expected number of steps/);
+    expect(submits).toBe(6);
+  });
+  it('stops at an unconfirmed mid-chain submit instead of guessing success', async () => {
+    let builds = 0;
+    const result = await runBuilderDeploy(
+      input,
+      {
+        build: async () => {
+          builds++;
+          return { xdr: 'xdr-create-token', networkPassphrase: 'Test SDF Network ; September 2015', step: 'create-token' };
+        },
+        sign: async (xdr: string) => `signed-${xdr}`,
+        submit: async () => ({ step: 'create-token', status: 'PENDING', confirmed: false, message: 'check the hash' }),
+      },
+      undefined,
+      6,
+    );
+    expect(result.confirmed).toBe(false);
+    expect(builds).toBe(1);
   });
 });
