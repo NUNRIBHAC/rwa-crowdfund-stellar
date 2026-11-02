@@ -21,7 +21,7 @@ export type BackfillGap = 'start-before-floor' | 'cursor-behind-floor';
 // (recording is idempotent). v2: tolerate the SDK's ScVal wrapper classes in
 // event topics (v1 only matched plain {symbol}/{address} JSON and silently
 // recorded nothing live, 2026-11-01 proof chain).
-const BACKFILL_VERSION = 3;
+const BACKFILL_VERSION = 4;
 
 export type BackfillCheckpoint = {
   // Checkpoint format version that wrote this record.
@@ -74,6 +74,13 @@ const DEFAULT_EVENT_LIMIT = 1000;
 const asString = (v: any): string | undefined => {
   if (typeof v === 'string') return v;
   if (v instanceof String) return v.toString();
+  // Deeper boxing: ScValAddress.address/.value arrive as ScAddressAccount
+  // objects whose toJSON() IS the strkey (String() returns raw-key base64
+  // instead - never use it). XdrString.toJSON() likewise yields the string.
+  if (v && typeof (v as { toJSON?: unknown }).toJSON === 'function') {
+    const j = (v as { toJSON: () => unknown }).toJSON();
+    if (typeof j === 'string') return j;
+  }
   return undefined;
 };
 const topicSymbol = (t: any): string | undefined => {
