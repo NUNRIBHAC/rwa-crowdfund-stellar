@@ -17,6 +17,13 @@
 // The subject comes from the validated id_token claims; access tokens are
 // discarded immediately (access_type=online: no refresh token is issued).
 //
+// Linking: an authenticated account can attach additional provider
+// identities through /api/auth/social/<provider>/link/start. The callback
+// is the SAME registered callback URL (no provider console change); the
+// stored flow's linkTo marker turns the outcome into a binding instead of
+// a session. An identity already bound to a different account is refused
+// (409 social_identity_taken).
+//
 // Registration is FAIL-CLOSED: creating a NEW account from a social
 // identity requires (a) the provider asserting email_verified=true and
 // (b) that address listed in the per-env SOCIAL_REGISTRATION_ALLOWED_EMAILS
@@ -35,22 +42,37 @@ import { createHash, randomBytes } from 'node:crypto';
 import * as client from 'openid-client';
 import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore } from './community-store.js';
-import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './accounts.js';
+import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS, verifySignature } from './accounts.js';
+import { verifyPassword } from './email-auth.js';
 
 // Providers with an implementation-verified OIDC discovery document.
 // google:    https://accounts.google.com/.well-known/openid-configuration
 // linkedin:  https://www.linkedin.com/oauth/.well-known/openid-configuration
 //            (issuer is https://www.linkedin.com/oauth, NOT the bare origin)
 // telegram:  https://oauth.telegram.org/.well-known/openid-configuration
-// GitHub/Discord/Facebook have no OIDC discovery + id_token and need a
-// separate OAuth2 userinfo flow before they can join this list; Farcaster
-// is AuthKit/SIWF, a different flow entirely.
-export const SOCIAL_PROVIDERS = ['google', 'linkedin', 'telegram'] as const;
+// github uses the OAuth2 userinfo flow below (no OIDC discovery/id_token).
+// Discord/Facebook have no OIDC discovery + id_token and need the same
+// OAuth2 userinfo treatment before they can join this list; Farcaster is
+// AuthKit/SIWF, a different flow entirely.
+export const SOCIAL_PROVIDERS = ['google', 'linkedin', 'telegram', 'github'] as const;
 export type SocialProvider = (typeof SOCIAL_PROVIDERS)[number];
 
 const SOCIAL_FLOW_TTL_MS = 10 * 60 * 1000;
 
-const PROVIDER_ISSUER: Record<SocialProvider, string> = {
+// Two provider kinds: OIDC (identity from the validated id_token) and plain
+// OAuth2 + userinfo (GitHub issues no id_token; identity comes from the
+// api.github.com/user id and the verified primary email from
+// /user/emails). The fail-closed registration gate below is identical for
+// both kinds - only the evidence source differs.
+type ProviderKind = 'oidc' | 'oauth2';
+const PROVIDER_KIND: Record<SocialProvider, ProviderKind> = {
+  google: 'oidc',
+  linkedin: 'oidc',
+  telegram: 'oidc',
+  github: 'oauth2',
+};
+
+const PROVIDER_ISSUER: Partial<Record<SocialProvider, string>> = {
   google: 'https://accounts.google.com',
   linkedin: 'https://www.linkedin.com/oauth',
   telegram: 'https://oauth.telegram.org',
@@ -61,13 +83,25 @@ const PROVIDER_ISSUER: Record<SocialProvider, string> = {
 // NO email and NO email_verified - requesting an email scope it does not
 // support would fail the authorization, and the missing email_verified means
 // Telegram identities can NEVER create accounts under the fail-closed
-// registration gate (they can only sign in once linked by a deliberate
-// authenticated linking flow, which is not implemented yet). That is a
+// registration gate (they can only sign in once LINKED to an existing
+// account through the authenticated step-up link flow). That is a
 // product/policy boundary, not a bug to code around silently.
-const PROVIDER_SCOPE: Record<SocialProvider, string> = {
+const PROVIDER_SCOPE: Partial<Record<SocialProvider, string>> = {
   google: 'openid email profile',
   linkedin: 'openid email profile',
   telegram: 'openid profile',
+};
+
+// Static OAuth2 endpoints for non-OIDC providers (GitHub publishes no
+// discovery document).
+const OAUTH2_ENDPOINTS: Partial<Record<SocialProvider, { authorize: string; token: string; user: string; emails: string; scope: string }>> = {
+  github: {
+    authorize: 'https://github.com/login/oauth/authorize',
+    token: 'https://github.com/login/oauth/access_token',
+    user: 'https://api.github.com/user',
+    emails: 'https://api.github.com/user/emails',
+    scope: 'read:user user:email',
+  },
 };
 
 export function isSocialProvider(value: unknown): value is SocialProvider {
@@ -100,8 +134,10 @@ export function socialRegistrationAllowedEmails(env: NodeJS.ProcessEnv): Set<str
 type FetchLike = typeof fetch;
 
 async function getClient(cfg: SocialClientConfig, provider: SocialProvider, fetchImpl?: FetchLike): Promise<client.Configuration> {
+  const issuer = PROVIDER_ISSUER[provider];
+  if (PROVIDER_KIND[provider] !== 'oidc' || !issuer) throw new AuthError(500, `provider ${provider} is not an OIDC provider`);
   return client.discovery(
-    new URL(PROVIDER_ISSUER[provider]),
+    new URL(issuer),
     cfg.clientId,
     undefined,
     client.ClientSecretPost(cfg.clientSecret),
@@ -122,6 +158,7 @@ export async function startSocialFlow(
   redirectUri: string,
   now = Date.now(),
   fetchImpl?: FetchLike,
+  linkTo?: string,
 ): Promise<{ url: string }> {
   const state = client.randomState();
   const nonce = client.randomNonce();
@@ -129,12 +166,25 @@ export async function startSocialFlow(
   const codeChallenge = await client.calculatePKCECodeChallenge(codeVerifier);
   await store.change((s) => {
     for (const [k, f] of Object.entries(s.socialFlows)) if (f.expiresAt <= now) delete s.socialFlows[k];
-    s.socialFlows[flowKey(state)] = { provider, nonce, codeVerifier, createdAt: now, expiresAt: now + SOCIAL_FLOW_TTL_MS };
+    s.socialFlows[flowKey(state)] = { provider, nonce, codeVerifier, createdAt: now, expiresAt: now + SOCIAL_FLOW_TTL_MS, ...(linkTo ? { linkTo } : {}) };
   });
+  if (PROVIDER_KIND[provider] === 'oauth2') {
+    const ep = OAUTH2_ENDPOINTS[provider];
+    if (!ep) throw new AuthError(500, `provider ${provider} has no OAuth2 endpoints configured`);
+    const params = new URLSearchParams({
+      client_id: cfg.clientId,
+      redirect_uri: redirectUri,
+      scope: ep.scope,
+      state,
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256',
+    });
+    return { url: `${ep.authorize}?${params.toString()}` };
+  }
   const conf = await getClient(cfg, provider, fetchImpl);
   const url = client.buildAuthorizationUrl(conf, {
     redirect_uri: redirectUri,
-    scope: PROVIDER_SCOPE[provider],
+    scope: PROVIDER_SCOPE[provider] ?? 'openid',
     state,
     nonce,
     code_challenge: codeChallenge,
@@ -144,7 +194,9 @@ export async function startSocialFlow(
 }
 
 export type SocialLoginResult =
-  { kind: 'session'; token: string; expiresAt: number; account: Account } | { kind: 'totp'; ticket: string; expiresAt: number; account: Account };
+  | { kind: 'session'; token: string; expiresAt: number; account: Account }
+  | { kind: 'totp'; ticket: string; expiresAt: number; account: Account }
+  | { kind: 'linked'; account: Account };
 
 // Complete a flow from the callback. currentUrl is the full callback URL
 // (openid-client validates state/iss against it). Errors:
@@ -172,24 +224,55 @@ export async function completeSocialFlow(
   });
   if (!flow) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
 
-  const conf = await getClient(cfg, provider, fetchImpl);
-  let claims: client.IDToken | undefined;
-  try {
-    const tokens = await client.authorizationCodeGrant(conf, new URL(currentUrl), {
-      pkceCodeVerifier: flow.codeVerifier,
-      expectedState: stateParam,
-      expectedNonce: flow.nonce,
-      idTokenExpected: true,
-    });
-    claims = tokens.claims();
-  } catch {
-    throw new AuthError(502, 'the sign-in provider rejected the exchange; start again', 'social_exchange_failed');
+  let subject: string | null;
+  let email: string | null;
+  let emailVerified: boolean;
+  if (PROVIDER_KIND[provider] === 'oauth2') {
+    ({ subject, email, emailVerified } = await exchangeOAuth2Userinfo(provider, cfg, currentUrl, stateParam, flow.codeVerifier, fetchImpl));
+  } else {
+    const conf = await getClient(cfg, provider, fetchImpl);
+    let claims: client.IDToken | undefined;
+    try {
+      const tokens = await client.authorizationCodeGrant(conf, new URL(currentUrl), {
+        pkceCodeVerifier: flow.codeVerifier,
+        expectedState: stateParam,
+        expectedNonce: flow.nonce,
+        idTokenExpected: true,
+      });
+      claims = tokens.claims();
+    } catch {
+      throw new AuthError(502, 'the sign-in provider rejected the exchange; start again', 'social_exchange_failed');
+    }
+    subject = claims?.sub ?? null;
+    email = typeof claims?.email === 'string' ? (claims.email as string).trim().toLowerCase() : null;
+    emailVerified = claims?.email_verified === true;
   }
-  const subject = claims?.sub;
   if (!subject) throw new AuthError(502, 'the sign-in provider returned no identity', 'social_exchange_failed');
-  const email = typeof claims?.email === 'string' ? (claims.email as string).trim().toLowerCase() : null;
-  const emailVerified = claims?.email_verified === true;
   const identityKey = `${provider}:${subject}`;
+
+  if (flow.linkTo) {
+    // LINK flow (started by an authenticated account): bind the provider
+    // identity to that account. No session is issued here, no account is
+    // created, and the registration allowlist/email gate does not apply -
+    // the account already exists and proved control with its session when
+    // it started the flow. This is the only path a provider without email
+    // evidence (e.g. Telegram OIDC carries no email claims) can ever take:
+    // it can never register, only attach to an existing account.
+    return store.change((s) => {
+      const account = s.accounts[flow.linkTo as string];
+      if (!account) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
+      const existing = s.socialIdentities[identityKey];
+      if (existing && existing.publicKey !== account.publicKey) {
+        throw new AuthError(409, 'this provider identity is already linked to a different account', 'social_identity_taken');
+      }
+      if (!existing) {
+        s.socialIdentities[identityKey] = { provider, subject, publicKey: account.publicKey, email, createdAt: now, lastLoginAt: now };
+      } else {
+        existing.lastLoginAt = now;
+      }
+      return { kind: 'linked' as const, account: { ...account } };
+    });
+  }
 
   return store.change((s) => {
     const existing = s.socialIdentities[identityKey];
@@ -228,4 +311,136 @@ export async function completeSocialFlow(
     s.sessions[session.tokenHash] = session;
     return { kind: 'session' as const, token, expiresAt: session.expiresAt, account: { ...account } };
   });
+}
+
+// Plain OAuth2 (no OIDC): redeem the code for a short-lived access token,
+// read the stable numeric user id from /user and the verified primary email
+// from /user/emails. The access token is used for exactly these two reads
+// and then dropped - nothing is stored. GitHub's documented expiry for a
+// primary-email record is that verified stays true while the address stays
+// on the account; we re-read it on every sign-in rather than caching.
+async function exchangeOAuth2Userinfo(
+  provider: SocialProvider,
+  cfg: SocialClientConfig,
+  currentUrl: string,
+  stateParam: string,
+  codeVerifier: string,
+  fetchImpl?: FetchLike,
+): Promise<{ subject: string | null; email: string | null; emailVerified: boolean }> {
+  const ep = OAUTH2_ENDPOINTS[provider];
+  if (!ep) throw new AuthError(500, `provider ${provider} has no OAuth2 endpoints configured`);
+  const doFetch = fetchImpl ?? fetch;
+  const fail = () => new AuthError(502, 'the sign-in provider rejected the exchange; start again', 'social_exchange_failed');
+  const params = new URL(currentUrl).searchParams;
+  // openid-client performs this check for OIDC providers; for plain OAuth2
+  // we own it: the returned state must be the one we looked up.
+  if (params.get('state') !== stateParam) throw fail();
+  const code = params.get('code');
+  if (!code) throw fail();
+  let tokenJson: any;
+  try {
+    const tokenRes = await doFetch(ep.token, {
+      method: 'POST',
+      headers: { accept: 'application/json', 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: cfg.clientId,
+        client_secret: cfg.clientSecret,
+        code,
+        redirect_uri: `${new URL(currentUrl).origin}${new URL(currentUrl).pathname}`,
+        code_verifier: codeVerifier,
+        grant_type: 'authorization_code',
+      }).toString(),
+    });
+    tokenJson = await tokenRes.json();
+  } catch {
+    throw fail();
+  }
+  const accessToken = typeof tokenJson?.access_token === 'string' ? tokenJson.access_token : null;
+  if (!accessToken) throw fail();
+  const headers = { accept: 'application/vnd.github+json', authorization: `Bearer ${accessToken}` };
+  let user: any;
+  let emails: any;
+  try {
+    const userRes = await doFetch(ep.user, { headers });
+    user = await userRes.json();
+    const emailsRes = await doFetch(ep.emails, { headers });
+    emails = await emailsRes.json();
+  } catch {
+    throw fail();
+  }
+  const id = user?.id;
+  const subject = typeof id === 'number' && Number.isFinite(id) ? String(id) : null;
+  const list: { email?: unknown; verified?: unknown; primary?: unknown }[] = Array.isArray(emails) ? emails : [];
+  const primary = list.find((e) => e && e.primary === true) ?? null;
+  const chosen = primary ?? list[0] ?? null;
+  const email = typeof chosen?.email === 'string' ? chosen.email.trim().toLowerCase() : null;
+  const emailVerified = chosen?.verified === true;
+  return { subject, email, emailVerified };
+}
+
+// --- Link step-up ------------------------------------------------------------
+// Linking a provider identity adds a persistent new sign-in path to the
+// account: a stolen or merely old session must not be enough to create one.
+// link/start therefore requires a recent re-authentication appropriate to
+// the account's own credential, and linking is only offered to accounts
+// with a verified email on record (email accounts: credential.verified;
+// social accounts: the provider-verified email that registration required).
+// Wallet-only accounts have no verified email and cannot link.
+export const SOCIAL_LINK_STEPUP_FRESH_MS = 10 * 60 * 1000;
+
+export type LinkStepUpProof = { password?: unknown; signature?: unknown };
+
+export async function requireSocialLinkStepUp(
+  store: CommunityStore,
+  account: Account,
+  sessionCreatedAt: number,
+  proof: LinkStepUpProof,
+  now = Date.now(),
+): Promise<void> {
+  const fail = (code: string, msg: string) => new AuthError(403, msg, code);
+  if (!account.authMethod && !account.email) {
+    // Classic wallet account: no email record exists; the fresh-signature
+    // step-up below is the whole ceremony for this method.
+  } else if (!account.email) {
+    throw fail('social_link_requires_verified_email', 'linking a sign-in provider requires an account with a verified email');
+  }
+  if (account.authMethod === 'email') {
+    const ok = await store.change((s) => {
+      const cred = account.email ? s.emailCredentials[account.email] : undefined;
+      if (!cred || cred.publicKey !== account.publicKey || cred.verified !== true) return false;
+      return typeof proof.password === 'string' && verifyPassword(proof.password, cred.passwordRecord);
+    });
+    if (!ok) throw fail('social_stepup_failed', 're-authentication failed; enter your current password to link a provider');
+    return;
+  }
+  if (account.authMethod === 'social') {
+    // A social account's re-authentication IS a fresh provider sign-in: the
+    // session must be recent (sudo-style window). The stored email was
+    // provider-verified at registration.
+    if (now - sessionCreatedAt > SOCIAL_LINK_STEPUP_FRESH_MS) {
+      throw fail('social_stepup_required', 'sign in again to link a provider; your session is too old');
+    }
+    return;
+  }
+  // Wallet account: fresh signature over an unused login challenge for this
+  // exact account, consumed single-use here (no session issued).
+  if (typeof proof.signature !== 'string' || !proof.signature) {
+    throw fail('social_stepup_required', 'sign a fresh wallet challenge to link a provider');
+  }
+  let signature: Buffer;
+  try {
+    signature = Buffer.from(proof.signature, 'base64');
+    if (signature.length !== 64) throw new Error('bad length');
+  } catch {
+    throw fail('social_stepup_failed', 'signature must be base64-encoded 64-byte Ed25519');
+  }
+  const ok = await store.change((s) => {
+    const challenge = Object.values(s.challenges).find(
+      (c) => c.publicKey === account.publicKey && !c.used && c.expiresAt > now && verifySignature(account.publicKey, c.message, signature),
+    );
+    if (!challenge) return false;
+    challenge.used = true;
+    return true;
+  });
+  if (!ok) throw fail('social_stepup_failed', 'wallet challenge signature did not verify; request a fresh challenge');
 }
