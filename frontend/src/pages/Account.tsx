@@ -8,6 +8,7 @@ import { useI18n } from '../i18n';
 import AccountNewsSection from '../components/AccountNewsSection';
 import DocumentsList from '../components/DocumentsList';
 import AccountPayoutsSection from '../components/AccountPayoutsSection';
+import AccountHoldingsSection from '../components/AccountHoldingsSection';
 import AccountInvestmentDocuments from '../components/AccountInvestmentDocuments';
 import SignInPanel from '../components/SignInPanel';
 import MyCommunityActivity from '../components/MyCommunityActivity';
@@ -178,6 +179,8 @@ export default function Account({ market }: { market: Market }) {
       {hasPositions && <AccountNewsSection campaigns={rows.map((r) => ({ id: r.id, name: r.name }))} />}
 
       {actor && <AccountPayoutsSection actor={actor} />}
+
+      {actor && <AccountHoldingsSection actor={actor} />}
 
       {hasPositions && rows.length > 0 && (
         <section aria-label={m.account.documentsAria}>
