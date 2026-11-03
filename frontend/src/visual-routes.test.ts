@@ -1,11 +1,10 @@
-import { readFileSync } from 'node:fs';
+import source from './router.tsx?raw';
 import { expect, test } from 'vitest';
 import { PUBLIC_PAGES, VISUAL_LOCALES, VISUAL_WIDTHS } from '../e2e-visual/inventory';
 import { routeFromPath, type RouteName } from './router';
 import { LOCALES } from './i18n';
 
 test('every current or future route must have a visual capture entry', () => {
-  const source = readFileSync('src/router.tsx', 'utf8');
   const declaration = source.split('export type RouteName =')[1].split(';')[0];
   const names = [...declaration.matchAll(/'([^']+)'/g)].map((match) => match[1]);
   const captured = PUBLIC_PAGES.map(({ path }) => routeFromPath(path).name);
