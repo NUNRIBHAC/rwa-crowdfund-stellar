@@ -56,6 +56,7 @@ test('ended underfunded campaign offers the refund action and says so', () => {
   const refund = screen.getByRole('button', { name: /refund/i }) as HTMLButtonElement;
   expect(refund.disabled).toBe(false);
   expect(screen.queryByRole('button', { name: /contribute/i })).toBeNull();
+  expect(screen.queryByRole('link', { name: /view contribution form/i })).toBeNull();
 });
 
 test('ended underfunded campaign with nothing to refund disables the refund button', () => {
@@ -83,11 +84,13 @@ test('funded campaign still before its deadline is fully subscribed with no cont
   setup(campaignWith({ raised: '2500000000000', config: { ...FIXTURE_CAMPAIGNS[0].config, creator, deadline: future } }));
   expect(screen.getByText(/fully subscribed/i)).toBeTruthy();
   expect(screen.queryByRole('button', { name: /contribute/i })).toBeNull();
+  expect(screen.queryByRole('link', { name: /view contribution form/i })).toBeNull();
 });
 
 test('open unfunded campaign shows contribute only (no guaranteed-failure refund/withdraw)', () => {
   setup(campaignWith({ config: { ...FIXTURE_CAMPAIGNS[0].config, creator, deadline: future } }));
   expect(screen.getByRole('button', { name: /contribute/i })).toBeTruthy();
+  expect(screen.getByRole('link', { name: /view contribution form/i }).getAttribute('href')).toBe('#campaign-funding');
   expect(screen.queryByRole('button', { name: /refund/i })).toBeNull();
   expect(screen.queryByRole('button', { name: /withdraw/i })).toBeNull();
 });
