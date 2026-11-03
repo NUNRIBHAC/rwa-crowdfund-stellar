@@ -1856,6 +1856,8 @@ export const en = {
     applicationStatus: {
       received: 'Received',
       under_review: 'Under review',
+      approved: 'Approved',
+      rejected: 'Rejected',
       closed: 'Closed',
     },
     myTicketsTitle: 'My support and feedback tickets',
@@ -1958,6 +1960,8 @@ export const en = {
         applicationReceived:
           'Your issuer application for "{projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.',
         applicationStatus: 'Your issuer application for "{projectName}" is now "{statusLabel}".',
+        applicationStatusReviewOnly: 'This is a prototype review outcome only - not a legal approval, identity verification, listing or offer.',
+        applicationStatusNote: 'Operator note: {note}',
         commentModerated: 'Your comment on campaign "{campaignId}" was hidden by the moderator.',
         commentModeratedReason: 'Reason: {reason}',
         ticketClosed: 'Your {kindLabel} ticket "{subject}" was closed.',
@@ -2022,6 +2026,9 @@ export const en = {
       stateVisible: 'Visible',
       stateHidden: 'Hidden',
       markUnderReview: 'Mark under review',
+      approveApplication: 'Approve',
+      rejectApplication: 'Reject',
+      rejectNotePrompt: 'Rejection note for the applicant (required):',
       closeApplication: 'Close',
       reopenApplication: 'Reopen',
       statusUpdated: 'Status updated.',

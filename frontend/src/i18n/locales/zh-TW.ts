@@ -1785,6 +1785,8 @@ export const zhTW: Messages = {
     applicationStatus: {
       received: '已收到',
       under_review: '審核中',
+      approved: '已核准',
+      rejected: '已拒絕',
       closed: '已關閉',
     },
     myTicketsTitle: '我的支援與意見回饋工單',
@@ -1882,6 +1884,8 @@ export const zhTW: Messages = {
       bodies: {
         applicationReceived: '您為 "{projectName}" 提交的發行方申請已收到。營運方將人工審核申請；提交不構成批准、上架或要約。',
         applicationStatus: '您為 "{projectName}" 提交的發行方申請現已更新為 "{statusLabel}"。',
+        applicationStatusReviewOnly: '這只是原型審查結果,不是法律核准、身分驗證、上市或要約。',
+        applicationStatusNote: '營運者備註:{note}',
         commentModerated: '您在活動 "{campaignId}" 下的留言已被審核員隱藏。',
         commentModeratedReason: '原因：{reason}',
         ticketClosed: '您的{kindLabel}工單 "{subject}" 已關閉。',
@@ -1944,6 +1948,9 @@ export const zhTW: Messages = {
       stateVisible: '可見',
       stateHidden: '已隱藏',
       markUnderReview: '標記為審核中',
+      approveApplication: '核准',
+      rejectApplication: '拒絕',
+      rejectNotePrompt: '給申請人的拒絕說明（必填）:',
       closeApplication: '關閉',
       reopenApplication: '重新開啟',
       statusUpdated: '狀態已更新。',

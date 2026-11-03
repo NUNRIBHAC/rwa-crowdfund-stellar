@@ -392,3 +392,43 @@ test('reports: publish gate enforces verified post-close state', async () => {
     async () => ({ registered: true, balanceUnits: 0n, contributedBefore: false }),
   );
 });
+
+test('issuer application review: operator-only, rejection needs a note, no self-review', async () => {
+  process.env.OPERATOR_WALLETS = operatorKp.publicKey();
+  const userToken = await tokenFor(userKp);
+  const created = await (
+    await call(
+      '/api/issuer-applications',
+      json(userToken, 'POST', {
+        projectName: 'Boundary Test Project',
+        country: 'PT',
+        instrumentType: 'equity',
+        targetAmount: '100000 EUR',
+        description: 'Fictional demo application for boundary tests.',
+        contactEmail: 'boundary@example.org',
+      }),
+    )
+  ).json();
+  const id = created.application.id;
+
+  // Anonymous and the applicant themself cannot review.
+  const anon = await call(`/api/operator/issuer-applications/${id}/status`, json('', 'POST', { status: 'approved' }));
+  assert.equal(anon.status, 401);
+  const selfReview = await call(`/api/operator/issuer-applications/${id}/status`, json(userToken, 'POST', { status: 'approved' }));
+  assert.equal(selfReview.status, 403);
+
+  // Rejection without a note is refused; with a note it lands and the owner sees it.
+  const opToken = await tokenFor(operatorKp);
+  const noNote = await call(`/api/operator/issuer-applications/${id}/status`, json(opToken, 'POST', { status: 'rejected' }));
+  assert.equal(noNote.status, 400);
+  const withNote = await call(
+    `/api/operator/issuer-applications/${id}/status`,
+    json(opToken, 'POST', { status: 'rejected', note: 'Demo: boundary test rejection.' }),
+  );
+  assert.equal(withNote.status, 200);
+  const mine = await (await call('/api/issuer-applications', { headers: { authorization: `Bearer ${userToken}` } })).json();
+  const mineRejected = mine.applications.find((a: any) => a.id === id);
+  assert.equal(mineRejected.status, 'rejected');
+  assert.equal(mineRejected.reviewNote, 'Demo: boundary test rejection.');
+  assert.equal(mineRejected.reviewedBy, `operator:${operatorKp.publicKey()}`);
+});

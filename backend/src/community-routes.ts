@@ -1352,7 +1352,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.post(
     '/api/operator/issuer-applications/:id/status',
     operator(async (req, res, account) => {
-      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status, `operator:${account.publicKey}`);
+      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status, `operator:${account.publicKey}`, req.body?.note);
       res.json({ ok: true });
     }),
   );
@@ -1483,7 +1483,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.post('/api/admin/issuer-applications/:id/status', requireAdmin, async (req, res) => {
     try {
-      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status, 'admin-key');
+      await service.adminSetApplicationStatus(String(req.params.id), req.body?.status, 'admin-key', req.body?.note);
       res.json({ ok: true });
     } catch (err) {
       sendError(res, err);

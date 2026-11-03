@@ -1785,6 +1785,8 @@ export const zhCN: Messages = {
     applicationStatus: {
       received: '已收到',
       under_review: '审核中',
+      approved: '已批准',
+      rejected: '已拒绝',
       closed: '已关闭',
     },
     myTicketsTitle: '我的支持与反馈工单',
@@ -1882,6 +1884,8 @@ export const zhCN: Messages = {
       bodies: {
         applicationReceived: '您为 "{projectName}" 提交的发行方申请已收到。运营方将人工审核申请；提交不构成批准、上架或要约。',
         applicationStatus: '您为 "{projectName}" 提交的发行方申请现已更新为 "{statusLabel}"。',
+        applicationStatusReviewOnly: '这只是原型审查结果,不是法律批准、身份验证、上市或要约。',
+        applicationStatusNote: '运营者备注:{note}',
         commentModerated: '您在活动 "{campaignId}" 下的评论已被审核员隐藏。',
         commentModeratedReason: '原因：{reason}',
         ticketClosed: '您的{kindLabel}工单 "{subject}" 已关闭。',
@@ -1944,6 +1948,9 @@ export const zhCN: Messages = {
       stateVisible: '可见',
       stateHidden: '已隐藏',
       markUnderReview: '标记为审核中',
+      approveApplication: '批准',
+      rejectApplication: '拒绝',
+      rejectNotePrompt: '给申请人的拒绝说明（必填）:',
       closeApplication: '关闭',
       reopenApplication: '重新打开',
       statusUpdated: '状态已更新。',

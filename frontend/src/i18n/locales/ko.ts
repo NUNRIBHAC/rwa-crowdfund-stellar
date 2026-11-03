@@ -1821,6 +1821,8 @@ export const ko: Messages = {
     applicationStatus: {
       received: '접수됨',
       under_review: '검토 중',
+      approved: '승인됨',
+      rejected: '거절됨',
       closed: '닫힘',
     },
     myTicketsTitle: '내 지원 및 피드백 티켓',
@@ -1920,6 +1922,8 @@ export const ko: Messages = {
       bodies: {
         applicationReceived: '"{projectName}"에 대한 발행자 신청이 접수되었습니다. 운영자가 신청을 수동으로 검토하며, 제출은 승인, 상장 또는 청약이 아닙니다.',
         applicationStatus: '"{projectName}"에 대한 발행자 신청이 "{statusLabel}" 상태가 되었습니다.',
+        applicationStatusReviewOnly: '이는 프로토타입 검토 결과일 뿐이며 법적 승인, 신원 확인, 상장 또는 제안이 아닙니다.',
+        applicationStatusNote: '운영자 메모: {note}',
         commentModerated: '캠페인 "{campaignId}"에 작성한 댓글이 모더레이터에 의해 숨겨졌습니다.',
         commentModeratedReason: '사유: {reason}',
         ticketClosed: '{kindLabel} 티켓 "{subject}"이 종료되었습니다.',
@@ -1983,6 +1987,9 @@ export const ko: Messages = {
       stateVisible: '표시됨',
       stateHidden: '숨겨짐',
       markUnderReview: '검토 중으로 표시',
+      approveApplication: '승인',
+      rejectApplication: '거절',
+      rejectNotePrompt: '신청자에게 보내는 거절 메모(필수):',
       closeApplication: '닫기',
       reopenApplication: '다시 열기',
       statusUpdated: '상태가 업데이트되었습니다.',

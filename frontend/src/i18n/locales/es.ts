@@ -1916,6 +1916,8 @@ export const es: Messages = {
     applicationStatus: {
       received: 'Recibida',
       under_review: 'En revisión',
+      approved: 'Aprobada',
+      rejected: 'Rechazada',
       closed: 'Cerrada',
     },
     myTicketsTitle: 'Mis tickets de soporte y feedback',
@@ -2022,6 +2024,9 @@ export const es: Messages = {
         applicationReceived:
           'Su solicitud de emisor para "{projectName}" ha sido recibida. El operador revisa las solicitudes manualmente; el envío no es una aprobación, un listado ni una oferta.',
         applicationStatus: 'Su solicitud de emisor para "{projectName}" ahora está "{statusLabel}".',
+        applicationStatusReviewOnly:
+          'Es solo un resultado de revisión del prototipo: no es una aprobación legal, verificación de identidad, cotización ni oferta.',
+        applicationStatusNote: 'Nota del operador: {note}',
         commentModerated: 'Su comentario en la campaña "{campaignId}" ha sido ocultado por el moderador.',
         commentModeratedReason: 'Motivo: {reason}',
         ticketClosed: 'Su ticket ({kindLabel}) "{subject}" ha sido cerrado.',
@@ -2086,6 +2091,9 @@ export const es: Messages = {
       stateVisible: 'Visible',
       stateHidden: 'Oculto',
       markUnderReview: 'Marcar en revisión',
+      approveApplication: 'Aprobar',
+      rejectApplication: 'Rechazar',
+      rejectNotePrompt: 'Nota de rechazo para el solicitante (obligatoria):',
       closeApplication: 'Cerrar',
       reopenApplication: 'Reabrir',
       statusUpdated: 'Estado actualizado.',

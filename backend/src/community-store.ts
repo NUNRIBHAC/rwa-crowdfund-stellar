@@ -361,7 +361,10 @@ export type IssuerApplication = {
   targetAmount: string;
   description: string;
   contactEmail: string | null;
-  status: 'received' | 'under_review' | 'closed';
+  status: 'received' | 'under_review' | 'approved' | 'rejected' | 'closed';
+  reviewedBy: string | null;
+  reviewedAt: number | null;
+  reviewNote: string | null;
   createdAt: number;
 };
 

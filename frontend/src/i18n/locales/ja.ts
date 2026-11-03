@@ -1838,6 +1838,8 @@ export const ja: Messages = {
     applicationStatus: {
       received: '受付済み',
       under_review: '審査中',
+      approved: '承認済み',
+      rejected: '却下',
       closed: '完了',
     },
     myTicketsTitle: '自分のサポート・フィードバックチケット',
@@ -1938,6 +1940,8 @@ export const ja: Messages = {
       bodies: {
         applicationReceived: '"{projectName}" の発行者申請を受け付けました。運営者は申請を手動で審査します。提出は承認、掲載、または募集ではありません。',
         applicationStatus: '"{projectName}" の発行者申請のステータスが "{statusLabel}" になりました。',
+        applicationStatusReviewOnly: 'これはプロトタイプの審査結果にすぎません。法的承認、本人確認、上場または募集ではありません。',
+        applicationStatusNote: 'オペレーターメモ: {note}',
         commentModerated: 'キャンペーン "{campaignId}" へのコメントはモデレーターによって非表示にされました。',
         commentModeratedReason: '理由: {reason}',
         ticketClosed: '{kindLabel}のチケット "{subject}" がクローズされました。',
@@ -2002,6 +2006,9 @@ export const ja: Messages = {
       stateVisible: '表示中',
       stateHidden: '非表示',
       markUnderReview: '審査中にする',
+      approveApplication: '承認する',
+      rejectApplication: '却下する',
+      rejectNotePrompt: '申請者への却下メモ（必須）:',
       closeApplication: 'クローズ',
       reopenApplication: '再オープン',
       statusUpdated: 'ステータスを更新しました。',

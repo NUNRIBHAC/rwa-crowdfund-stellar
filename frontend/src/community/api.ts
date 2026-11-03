@@ -73,7 +73,10 @@ export type IssuerApplication = {
   targetAmount: string;
   description: string;
   contactEmail: string | null;
-  status: 'received' | 'under_review' | 'closed';
+  status: 'received' | 'under_review' | 'approved' | 'rejected' | 'closed';
+  reviewedBy: string | null;
+  reviewedAt: number | null;
+  reviewNote: string | null;
   createdAt: number;
 };
 
@@ -421,8 +424,12 @@ export const markAllNotificationsRead = (token: string) => call<{ marked: number
 // --- Operator surface (demo admin dashboard; OPERATOR_WALLETS allow-list,
 // wallet bearer auth, fail-closed server-side) ---
 export const fetchOperatorApplications = (token: string) => call<{ applications: IssuerApplication[] }>('/api/operator/issuer-applications', { token });
-export const setOperatorApplicationStatus = (token: string, id: string, status: string) =>
-  call<{ ok: true }>(`/api/operator/issuer-applications/${encodeURIComponent(id)}/status`, { method: 'POST', body: { status }, token });
+export const setOperatorApplicationStatus = (token: string, id: string, status: string, note?: string) =>
+  call<{ ok: true }>(`/api/operator/issuer-applications/${encodeURIComponent(id)}/status`, {
+    method: 'POST',
+    body: note ? { status, note } : { status },
+    token,
+  });
 // Operator comment rows carry the moderation fields (raw author key, hidden
 // state/reason), unlike the public CommunityComment author-label shape.
 export type OperatorComment = {

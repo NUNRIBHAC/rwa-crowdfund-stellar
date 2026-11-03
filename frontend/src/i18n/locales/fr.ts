@@ -1921,6 +1921,8 @@ export const fr: Messages = {
     applicationStatus: {
       received: 'Reçue',
       under_review: "À l'étude",
+      approved: 'Approuvée',
+      rejected: 'Rejetée',
       closed: 'Clôturée',
     },
     myTicketsTitle: 'Mes tickets de support et feedback',
@@ -2031,6 +2033,9 @@ export const fr: Messages = {
         applicationReceived:
           "Votre candidature d'émetteur pour \"{projectName}\" a été reçue. L'opérateur examine les candidatures manuellement ; la soumission n'est ni une approbation, ni une cotation, ni une offre.",
         applicationStatus: 'Votre candidature d\'émetteur pour "{projectName}" est maintenant "{statusLabel}".',
+        applicationStatusReviewOnly:
+          'Il s’agit uniquement d’un résultat d’examen du prototype - pas une approbation légale, une vérification d’identité, une cotation ou une offre.',
+        applicationStatusNote: 'Note de l’opérateur : {note}',
         commentModerated: 'Votre commentaire sur la campagne "{campaignId}" a été masqué par le modérateur.',
         commentModeratedReason: 'Motif : {reason}',
         ticketClosed: 'Votre ticket ({kindLabel}) "{subject}" a été clôturé.',
@@ -2095,6 +2100,9 @@ export const fr: Messages = {
       stateVisible: 'Visible',
       stateHidden: 'Masqué',
       markUnderReview: "Marquer en cours d'examen",
+      approveApplication: 'Approuver',
+      rejectApplication: 'Rejeter',
+      rejectNotePrompt: 'Note de rejet pour le candidat (obligatoire) :',
       closeApplication: 'Clôturer',
       reopenApplication: 'Rouvrir',
       statusUpdated: 'Statut mis à jour.',

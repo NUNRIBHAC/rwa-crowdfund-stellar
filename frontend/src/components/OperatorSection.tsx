@@ -102,7 +102,7 @@ export default function OperatorSection({ campaigns }: Props) {
       .finally(() => setBusy(false));
   };
 
-  const setStatus = (id: string, status: string) => run(setOperatorApplicationStatus(token, id, status), labels.statusUpdated);
+  const setStatus = (id: string, status: string, note?: string) => run(setOperatorApplicationStatus(token, id, status, note), labels.statusUpdated);
 
   const submitHide = (id: string) => {
     run(setOperatorCommentHidden(token, id, true, reason.trim() || undefined), labels.statusUpdated);
@@ -188,50 +188,73 @@ export default function OperatorSection({ campaigns }: Props) {
           ) : applications.length === 0 ? (
             <p className="community-note">{labels.applicationsEmpty}</p>
           ) : (
-            <table className="operator-table">
-              <thead>
-                <tr>
-                  <th>{labels.colProject}</th>
-                  <th>{labels.colCountry}</th>
-                  <th>{labels.colInstrument}</th>
-                  <th>{labels.colTarget}</th>
-                  <th>{labels.colSubmitted}</th>
-                  <th>{labels.colStatus}</th>
-                  <th>{labels.colActions}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {applications.map((a) => (
-                  <tr key={a.id}>
-                    <td>{a.projectName}</td>
-                    <td>{a.country}</td>
-                    <td>{a.instrumentType}</td>
-                    <td>{a.targetAmount}</td>
-                    <td className="cell-nowrap">{fmt(a.createdAt)}</td>
-                    <td>
-                      <span className={`status-chip status-${a.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.applicationStatus[a.status]}</span>
-                    </td>
-                    <td>
-                      {a.status === 'received' && (
-                        <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'under_review')}>
-                          {labels.markUnderReview}
-                        </button>
-                      )}
-                      {a.status !== 'closed' && (
-                        <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'closed')}>
-                          {labels.closeApplication}
-                        </button>
-                      )}
-                      {a.status === 'closed' && (
-                        <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'received')}>
-                          {labels.reopenApplication}
-                        </button>
-                      )}
-                    </td>
+            <div className="table-scroll">
+              <table className="operator-table">
+                <thead>
+                  <tr>
+                    <th>{labels.colProject}</th>
+                    <th>{labels.colCountry}</th>
+                    <th>{labels.colInstrument}</th>
+                    <th>{labels.colTarget}</th>
+                    <th>{labels.colSubmitted}</th>
+                    <th>{labels.colStatus}</th>
+                    <th>{labels.colActions}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {applications.map((a) => (
+                    <tr key={a.id}>
+                      <td>{a.projectName}</td>
+                      <td>{a.country}</td>
+                      <td>{a.instrumentType}</td>
+                      <td>{a.targetAmount}</td>
+                      <td className="cell-nowrap">{fmt(a.createdAt)}</td>
+                      <td>
+                        <span
+                          className={`status-chip status-${a.status === 'approved' ? 'paid' : a.status === 'closed' || a.status === 'rejected' ? 'ended' : 'pending'}`}
+                        >
+                          {m.community.applicationStatus[a.status]}
+                        </span>
+                      </td>
+                      <td>
+                        {a.status === 'received' && (
+                          <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'under_review')}>
+                            {labels.markUnderReview}
+                          </button>
+                        )}
+                        {(a.status === 'received' || a.status === 'under_review') && (
+                          <>
+                            <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'approved')}>
+                              {labels.approveApplication}
+                            </button>
+                            <button
+                              className="btn"
+                              disabled={busy}
+                              onClick={() => {
+                                const note = window.prompt(labels.rejectNotePrompt);
+                                if (note) setStatus(a.id, 'rejected', note);
+                              }}
+                            >
+                              {labels.rejectApplication}
+                            </button>
+                          </>
+                        )}
+                        {a.status !== 'closed' && (
+                          <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'closed')}>
+                            {labels.closeApplication}
+                          </button>
+                        )}
+                        {a.status === 'closed' && (
+                          <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'received')}>
+                            {labels.reopenApplication}
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </>
       )}
@@ -243,62 +266,64 @@ export default function OperatorSection({ campaigns }: Props) {
           ) : comments.length === 0 ? (
             <p className="community-note">{labels.commentsEmpty}</p>
           ) : (
-            <table className="operator-table">
-              <thead>
-                <tr>
-                  <th>{labels.colCampaign}</th>
-                  <th>{labels.colAuthor}</th>
-                  <th>{labels.colComment}</th>
-                  <th>{labels.colPosted}</th>
-                  <th>{labels.colState}</th>
-                  <th>{labels.colActions}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comments.map((c) => (
-                  <tr key={c.id}>
-                    <td>
-                      <a href={routeHash({ name: 'campaign', campaignId: c.campaignId })}>{c.campaignId}</a>
-                    </td>
-                    <td>{c.displayName ?? `${c.publicKey.slice(0, 6)}…${c.publicKey.slice(-4)}`}</td>
-                    <td>{c.body}</td>
-                    <td className="cell-nowrap">{fmt(c.createdAt)}</td>
-                    <td>{c.hiddenAt !== null ? labels.stateHidden : labels.stateVisible}</td>
-                    <td>
-                      {c.hiddenAt !== null ? (
-                        <button className="btn" disabled={busy} onClick={() => run(setOperatorCommentHidden(token, c.id, false), labels.statusUpdated)}>
-                          {labels.unhide}
-                        </button>
-                      ) : reasonFor === c.id ? (
-                        <span className="operator-reason">
-                          <label>
-                            {labels.hideReasonLabel}
-                            <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder={labels.hideReasonPlaceholder} maxLength={200} />
-                          </label>
-                          <button className="btn btn-primary" disabled={busy} onClick={() => submitHide(c.id)}>
-                            {labels.confirmHide}
-                          </button>
-                          <button
-                            className="btn"
-                            disabled={busy}
-                            onClick={() => {
-                              setReasonFor(null);
-                              setReason('');
-                            }}
-                          >
-                            {labels.cancel}
-                          </button>
-                        </span>
-                      ) : (
-                        <button className="btn" disabled={busy} onClick={() => setReasonFor(c.id)}>
-                          {labels.hide}
-                        </button>
-                      )}
-                    </td>
+            <div className="table-scroll">
+              <table className="operator-table">
+                <thead>
+                  <tr>
+                    <th>{labels.colCampaign}</th>
+                    <th>{labels.colAuthor}</th>
+                    <th>{labels.colComment}</th>
+                    <th>{labels.colPosted}</th>
+                    <th>{labels.colState}</th>
+                    <th>{labels.colActions}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {comments.map((c) => (
+                    <tr key={c.id}>
+                      <td>
+                        <a href={routeHash({ name: 'campaign', campaignId: c.campaignId })}>{c.campaignId}</a>
+                      </td>
+                      <td>{c.displayName ?? `${c.publicKey.slice(0, 6)}…${c.publicKey.slice(-4)}`}</td>
+                      <td>{c.body}</td>
+                      <td className="cell-nowrap">{fmt(c.createdAt)}</td>
+                      <td>{c.hiddenAt !== null ? labels.stateHidden : labels.stateVisible}</td>
+                      <td>
+                        {c.hiddenAt !== null ? (
+                          <button className="btn" disabled={busy} onClick={() => run(setOperatorCommentHidden(token, c.id, false), labels.statusUpdated)}>
+                            {labels.unhide}
+                          </button>
+                        ) : reasonFor === c.id ? (
+                          <span className="operator-reason">
+                            <label>
+                              {labels.hideReasonLabel}
+                              <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder={labels.hideReasonPlaceholder} maxLength={200} />
+                            </label>
+                            <button className="btn btn-primary" disabled={busy} onClick={() => submitHide(c.id)}>
+                              {labels.confirmHide}
+                            </button>
+                            <button
+                              className="btn"
+                              disabled={busy}
+                              onClick={() => {
+                                setReasonFor(null);
+                                setReason('');
+                              }}
+                            >
+                              {labels.cancel}
+                            </button>
+                          </span>
+                        ) : (
+                          <button className="btn" disabled={busy} onClick={() => setReasonFor(c.id)}>
+                            {labels.hide}
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </>
       )}
@@ -310,38 +335,40 @@ export default function OperatorSection({ campaigns }: Props) {
           ) : tickets.length === 0 ? (
             <p className="community-note">{labels.ticketsEmpty}</p>
           ) : (
-            <table className="operator-table">
-              <thead>
-                <tr>
-                  <th>{labels.colKind}</th>
-                  <th>{labels.colSubject}</th>
-                  <th>{labels.colMessage}</th>
-                  <th>{labels.colOpened}</th>
-                  <th>{labels.colStatus}</th>
-                  <th>{labels.colActions}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tickets.map((t) => (
-                  <tr key={t.id}>
-                    <td>{m.community.ticketKinds[t.kind]}</td>
-                    <td>{t.subject}</td>
-                    <td>{t.body}</td>
-                    <td className="cell-nowrap">{fmt(t.createdAt)}</td>
-                    <td>
-                      <span className={`status-chip status-${t.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.ticketStatus[t.status]}</span>
-                    </td>
-                    <td>
-                      {t.status === 'open' && (
-                        <button className="btn" disabled={busy} onClick={() => run(closeOperatorTicket(token, t.id), labels.statusUpdated)}>
-                          {labels.closeTicket}
-                        </button>
-                      )}
-                    </td>
+            <div className="table-scroll">
+              <table className="operator-table">
+                <thead>
+                  <tr>
+                    <th>{labels.colKind}</th>
+                    <th>{labels.colSubject}</th>
+                    <th>{labels.colMessage}</th>
+                    <th>{labels.colOpened}</th>
+                    <th>{labels.colStatus}</th>
+                    <th>{labels.colActions}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {tickets.map((t) => (
+                    <tr key={t.id}>
+                      <td>{m.community.ticketKinds[t.kind]}</td>
+                      <td>{t.subject}</td>
+                      <td>{t.body}</td>
+                      <td className="cell-nowrap">{fmt(t.createdAt)}</td>
+                      <td>
+                        <span className={`status-chip status-${t.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.ticketStatus[t.status]}</span>
+                      </td>
+                      <td>
+                        {t.status === 'open' && (
+                          <button className="btn" disabled={busy} onClick={() => run(closeOperatorTicket(token, t.id), labels.statusUpdated)}>
+                            {labels.closeTicket}
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
           <p className="community-note">{labels.closedNote}</p>
         </>
@@ -455,34 +482,36 @@ export default function OperatorSection({ campaigns }: Props) {
             <p className="community-note">{labels.reconEmpty}</p>
           ) : (
             <>
-              <table className="operator-table">
-                <thead>
-                  <tr>
-                    <th>{labels.colCampaign}</th>
-                    <th>{labels.colOnChain}</th>
-                    <th>{labels.colJournalCovered}</th>
-                    <th>{labels.colNotCovered}</th>
-                    <th>{labels.colSucceeded}</th>
-                    <th>{labels.colOpenIntents}</th>
-                    <th>{labels.colNotes}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {reconciliation.campaigns.map((c) => (
-                    <tr key={c.campaignId}>
-                      <td>{c.campaignId}</td>
-                      <td className="cell-nowrap">{formatTokenAmount(c.onChainRaised) ?? '\u2014'}</td>
-                      <td className="cell-nowrap">{formatTokenAmount(c.journalCovered) ?? '\u2014'}</td>
-                      <td className="cell-nowrap">{formatTokenAmount(c.notJournalCovered) ?? '\u2014'}</td>
-                      <td>
-                        {c.successContributes}/{c.successRefunds}/{c.successWithdraws}
-                      </td>
-                      <td>{c.openIntentHashes.length}</td>
-                      <td>{c.notes.join(' ')}</td>
+              <div className="table-scroll">
+                <table className="operator-table">
+                  <thead>
+                    <tr>
+                      <th>{labels.colCampaign}</th>
+                      <th>{labels.colOnChain}</th>
+                      <th>{labels.colJournalCovered}</th>
+                      <th>{labels.colNotCovered}</th>
+                      <th>{labels.colSucceeded}</th>
+                      <th>{labels.colOpenIntents}</th>
+                      <th>{labels.colNotes}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {reconciliation.campaigns.map((c) => (
+                      <tr key={c.campaignId}>
+                        <td>{c.campaignId}</td>
+                        <td className="cell-nowrap">{formatTokenAmount(c.onChainRaised) ?? '\u2014'}</td>
+                        <td className="cell-nowrap">{formatTokenAmount(c.journalCovered) ?? '\u2014'}</td>
+                        <td className="cell-nowrap">{formatTokenAmount(c.notJournalCovered) ?? '\u2014'}</td>
+                        <td>
+                          {c.successContributes}/{c.successRefunds}/{c.successWithdraws}
+                        </td>
+                        <td>{c.openIntentHashes.length}</td>
+                        <td>{c.notes.join(' ')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               {reconciliation.quarantinedIntents > 0 && (
                 <p className="community-error">{tpl(labels.reconQuarantined, { n: reconciliation.quarantinedIntents })}</p>
               )}
@@ -502,28 +531,30 @@ export default function OperatorSection({ campaigns }: Props) {
           ) : audit.length === 0 ? (
             <p className="community-note">{labels.auditEmpty}</p>
           ) : (
-            <table className="operator-table">
-              <thead>
-                <tr>
-                  <th>{labels.colTime}</th>
-                  <th>{labels.colGate}</th>
-                  <th>{labels.colAction}</th>
-                  <th>{labels.colTargetRef}</th>
-                  <th>{labels.colDetail}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {audit.map((e) => (
-                  <tr key={e.id}>
-                    <td className="cell-nowrap">{fmt(e.at)}</td>
-                    <td>{e.actor}</td>
-                    <td>{e.action}</td>
-                    <td>{e.target}</td>
-                    <td>{e.detail ?? ''}</td>
+            <div className="table-scroll">
+              <table className="operator-table">
+                <thead>
+                  <tr>
+                    <th>{labels.colTime}</th>
+                    <th>{labels.colGate}</th>
+                    <th>{labels.colAction}</th>
+                    <th>{labels.colTargetRef}</th>
+                    <th>{labels.colDetail}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {audit.map((e) => (
+                    <tr key={e.id}>
+                      <td className="cell-nowrap">{fmt(e.at)}</td>
+                      <td>{e.actor}</td>
+                      <td>{e.action}</td>
+                      <td>{e.target}</td>
+                      <td>{e.detail ?? ''}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </>
       )}

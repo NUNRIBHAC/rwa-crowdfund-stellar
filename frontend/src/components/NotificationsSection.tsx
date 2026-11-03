@@ -61,7 +61,11 @@ export default function NotificationsSection() {
       case 'application_status': {
         const status = v.status as keyof typeof m.community.applicationStatus | undefined;
         const statusLabel = status && m.community.applicationStatus[status] ? m.community.applicationStatus[status] : undefined;
-        return v.projectName && statusLabel ? tpl(labels.bodies.applicationStatus, { projectName: v.projectName, statusLabel }) : n.body;
+        if (!(v.projectName && statusLabel)) return n.body;
+        const base = tpl(labels.bodies.applicationStatus, { projectName: v.projectName, statusLabel });
+        const honesty = status === 'approved' || status === 'rejected' ? ` ${labels.bodies.applicationStatusReviewOnly}` : '';
+        const note = typeof v.note === 'string' && v.note ? ` ${tpl(labels.bodies.applicationStatusNote, { note: v.note })}` : '';
+        return `${base}${honesty}${note}`;
       }
       case 'comment_moderated': {
         if (!v.campaignId) return n.body;

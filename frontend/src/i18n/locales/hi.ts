@@ -1855,6 +1855,8 @@ export const hi: Messages = {
     applicationStatus: {
       received: 'प्राप्त',
       under_review: 'समीक्षा में',
+      approved: 'स्वीकृत',
+      rejected: 'अस्वीकृत',
       closed: 'बंद',
     },
     myTicketsTitle: 'मेरे सहायता और प्रतिक्रिया टिकट',
@@ -1958,6 +1960,8 @@ export const hi: Messages = {
         applicationReceived:
           '"{projectName}" के लिए आपका जारीकर्ता आवेदन प्राप्त हो गया है। ऑपरेटर आवेदनों की मैन्युअल रूप से समीक्षा करता है; सबमिशन कोई स्वीकृति, लिस्टिंग या ऑफ़र नहीं है।',
         applicationStatus: '"{projectName}" के लिए आपका जारीकर्ता आवेदन अब "{statusLabel}" है।',
+        applicationStatusReviewOnly: 'यह केवल प्रोटोटाइप समीक्षा परिणाम है - कानूनी स्वीकृति, पहचान सत्यापन, लिस्टिंग या प्रस्ताव नहीं।',
+        applicationStatusNote: 'ऑपरेटर टिप्पणी: {note}',
         commentModerated: 'अभियान "{campaignId}" पर आपकी टिप्पणी मॉडरेटर द्वारा छिपा दी गई है।',
         commentModeratedReason: 'कारण: {reason}',
         ticketClosed: 'आपका टिकट ({kindLabel}) "{subject}" बंद कर दिया गया है।',
@@ -2022,6 +2026,9 @@ export const hi: Messages = {
       stateVisible: 'दृश्यमान',
       stateHidden: 'छिपाया गया',
       markUnderReview: 'समीक्षाधीन चिह्नित करें',
+      approveApplication: 'स्वीकृत करें',
+      rejectApplication: 'अस्वीकृत करें',
+      rejectNotePrompt: 'आवेदक के लिए अस्वीकृति टिप्पणी (आवश्यक):',
       closeApplication: 'बंद करें',
       reopenApplication: 'फिर से खोलें',
       statusUpdated: 'स्थिति अपडेट हुई।',
