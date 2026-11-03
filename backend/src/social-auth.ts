@@ -135,7 +135,7 @@ export function socialRegistrationAllowedEmails(env: NodeJS.ProcessEnv): Set<str
 // Providers whose identity carries no email evidence at all. A NEW identity
 // from one of these cannot register directly: it gets a pending ticket and
 // must prove an allowlisted email by code (requestSocialEmail/confirm).
-export const IDENTITY_ONLY_PROVIDERS: ReadonlySet<string> = new Set(['telegram']);
+export const IDENTITY_ONLY_PROVIDERS: ReadonlySet<string> = new Set(['telegram', 'farcaster']);
 const PENDING_TTL_MS = 15 * 60 * 1000;
 const PENDING_CODE_TTL_MS = 10 * 60 * 1000;
 const PENDING_RESEND_MS = 60 * 1000;
@@ -281,6 +281,22 @@ export async function completeSocialFlow(
     emailVerified = claims?.email_verified === true;
   }
   if (!subject) throw new AuthError(502, 'the sign-in provider returned no identity', 'social_exchange_failed');
+  return finishSocialIdentity(store, env, provider, subject, email, emailVerified, flow, now);
+}
+
+// Shared tail of every provider flow: link to an existing account, sign an
+// existing identity in, or (identity-only providers) park a pending ticket.
+export type SocialFlowRecord = { linkTo?: string; bindHash?: string };
+export async function finishSocialIdentity(
+  store: CommunityStore,
+  env: NodeJS.ProcessEnv,
+  provider: string,
+  subject: string,
+  email: string | null,
+  emailVerified: boolean,
+  flow: SocialFlowRecord,
+  now: number,
+): Promise<SocialLoginResult> {
   const identityKey = `${provider}:${subject}`;
 
   if (flow.linkTo) {

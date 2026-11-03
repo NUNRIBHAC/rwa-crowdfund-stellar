@@ -49,6 +49,7 @@ import {
   socialConfigFromEnv,
   startSocialFlow,
 } from './social-auth.js';
+import { defaultFarcasterVerifier, farcasterDomain, issueFarcasterNonce, verifyFarcasterSignIn, type FarcasterVerifier } from './farcaster-auth.js';
 import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
@@ -109,6 +110,8 @@ export type CommunityRouterDeps = {
   // Outbound email for account verification (mailer.ts). Absent means the
   // email registration routes answer 503 - fail closed, never pretend-sent.
   mailer?: Mailer | null;
+  // Test seam: Farcaster SIWF verification (defaults to @farcaster/auth-client).
+  farcasterVerifier?: FarcasterVerifier;
 };
 
 function clientIp(req: express.Request): string | undefined {
@@ -236,7 +239,10 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       turnstileSiteKey: process.env.TURNSTILE_SITE_KEY?.trim() || null,
       // Providers with full per-env credentials; the frontend renders a
       // sign-in button only for these. IDs/secrets never leave this object.
-      socialProviders: SOCIAL_PROVIDERS.filter((p) => socialConfigFromEnv(process.env, p) !== null),
+      socialProviders: [
+        ...SOCIAL_PROVIDERS.filter((p) => socialConfigFromEnv(process.env, p) !== null),
+        ...(farcasterDomain(process.env) ? ['farcaster'] : []),
+      ],
     });
   });
 
@@ -270,6 +276,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       sendError(res, err);
     }
   });
+  let farcasterVerifierCache: FarcasterVerifier | undefined;
   const BIND_COOKIE = 'bl_sso';
   const readBind = (req: express.Request): string | undefined => /(?:^|;\s*)bl_sso=([0-9a-f]{48})(?:;|$)/.exec(req.headers.cookie ?? '')?.[1];
   router.get('/api/auth/social/:provider/start', async (req, res) => {
@@ -283,9 +290,49 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch, undefined, bind.hash);
       res.setHeader(
         'Set-Cookie',
-        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth/social; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
+        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
       );
       res.redirect(302, url);
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/farcaster/nonce', async (req, res) => {
+    try {
+      const domain = farcasterDomain(process.env);
+      if (!domain) throw new CommunityError(404, 'not found', 'not_found');
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`farcaster-nonce-ip:${ip}`, 30, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      await abuseGate(req);
+      const bind = newBindSecret();
+      const { nonce } = await issueFarcasterNonce(store, bind.hash);
+      res.setHeader(
+        'Set-Cookie',
+        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
+      );
+      res.json({ nonce, domain, siweUri: `https://${domain}/account` });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/farcaster/verify', async (req, res) => {
+    try {
+      if (!farcasterDomain(process.env)) throw new CommunityError(404, 'not found', 'not_found');
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`farcaster-verify-ip:${ip}`, 30, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      const verifier = deps.farcasterVerifier ?? (farcasterVerifierCache ??= defaultFarcasterVerifier(process.env));
+      const r = await verifyFarcasterSignIn(store, process.env, verifier, {
+        nonce: req.body?.nonce,
+        message: req.body?.message,
+        signature: req.body?.signature,
+        bind: readBind(req),
+      });
+      if (r.kind === 'session') res.json({ token: r.token, expiresAt: r.expiresAt, account: publicAccount(r.account) });
+      else if (r.kind === 'totp') res.json({ totpTicket: r.ticket, expiresAt: r.expiresAt });
+      else if (r.kind === 'email') res.json({ socialEmailTicket: r.ticket, expiresAt: r.expiresAt });
+      else res.json({ status: 'linked' });
     } catch (err) {
       sendError(res, err);
     }

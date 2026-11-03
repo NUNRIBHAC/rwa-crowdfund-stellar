@@ -118,6 +118,7 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_GITHUB_CLIENT_SECRET',
     'SOCIAL_GITHUB_REDIRECT_URI',
     'SOCIAL_REGISTRATION_ALLOWED_EMAILS',
+    'FARCASTER_AUTH_DOMAIN',
   ])
     delete process.env[k];
   Object.assign(process.env, env);
@@ -682,4 +683,71 @@ test('callback replayed from another browser (no cookie) is rejected and consume
   const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram', null);
   assert.ok(!cb.headers.get('location')!.includes('social-email=bsp_'));
   assert.equal(Object.keys((await store.read()).socialPending).length, 0);
+});
+
+test('farcaster: server nonce, browser-bound, fid from the verifier, pending-email then account; replay and cross-browser fail', async () => {
+  const sent: { to: string; text: string }[] = [];
+  const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
+  const seen: { domain?: string; nonce?: string }[] = [];
+  const farcasterVerifier = async (a: { nonce: string; domain: string; message: string; signature: string }) => {
+    seen.push({ domain: a.domain, nonce: a.nonce });
+    return a.signature === '0xbad' ? null : { fid: 3357330 };
+  };
+  const { base, store } = await startApp(
+    { FARCASTER_AUTH_DOMAIN: 'app.example.test', SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' },
+    { mailer, farcasterVerifier },
+  );
+  const post = (path: string, body: unknown, ck = '') =>
+    fetch(`${base}${path}`, { method: 'POST', headers: { 'content-type': 'application/json', ...(ck ? { cookie: ck } : {}) }, body: JSON.stringify(body) });
+  const cfg = (await (await fetch(`${base}/api/auth/abuse-config`)).json()) as { socialProviders: string[] };
+  assert.ok(cfg.socialProviders.includes('farcaster'));
+  const n1 = await post('/api/auth/farcaster/nonce', {});
+  const ck = n1.headers.get('set-cookie')!.split(';')[0];
+  const { nonce, domain } = (await n1.json()) as { nonce: string; domain: string };
+  assert.equal(domain, 'app.example.test');
+  const other = (await post('/api/auth/farcaster/nonce', {})).headers.get('set-cookie')!.split(';')[0];
+  // Another browser cannot spend this nonce (and it burns it).
+  let r = await post('/api/auth/farcaster/verify', { nonce, message: 'm', signature: '0xabcd' }, other);
+  assert.equal(r.status, 401);
+  r = await post('/api/auth/farcaster/verify', { nonce, message: 'm', signature: '0xabcd' }, ck);
+  assert.equal(r.status, 401, 'burned by the failed cross-browser attempt');
+  // Fresh nonce: bad signature fails and burns; good one yields a pending ticket.
+  const n2 = await post('/api/auth/farcaster/nonce', {});
+  const ck2 = n2.headers.get('set-cookie')!.split(';')[0];
+  const nonce2 = ((await n2.json()) as { nonce: string }).nonce;
+  r = await post('/api/auth/farcaster/verify', { nonce: nonce2, message: 'm', signature: '0xbad' }, ck2);
+  assert.equal(r.status, 401);
+  const n3 = await post('/api/auth/farcaster/nonce', {});
+  const ck3 = n3.headers.get('set-cookie')!.split(';')[0];
+  const nonce3 = ((await n3.json()) as { nonce: string }).nonce;
+  r = await post('/api/auth/farcaster/verify', { nonce: nonce3, message: 'm', signature: '0xabcd' }, ck3);
+  assert.equal(r.status, 200);
+  const { socialEmailTicket } = (await r.json()) as { socialEmailTicket: string };
+  assert.ok(socialEmailTicket.startsWith('bsp_'));
+  assert.equal(seen[seen.length - 1].domain, 'app.example.test');
+  assert.equal(Object.keys((await store.read()).accounts).length, 0);
+  r = await post('/api/auth/farcaster/verify', { nonce: nonce3, message: 'm', signature: '0xabcd' }, ck3);
+  assert.equal(r.status, 401, 'nonce is single use');
+  // Email proof with the SAME browser cookie.
+  await post('/api/auth/social/email/request', { ticket: socialEmailTicket, email: 'nuno@example.com' }, ck3);
+  assert.equal(sent.length, 1);
+  const code = sent[0].text.match(/\b(\d{6})\b/)![1];
+  r = await post('/api/auth/social/email/confirm', { ticket: socialEmailTicket, code }, ck);
+  assert.equal(r.status, 401, 'another browser cannot confirm');
+  r = await post('/api/auth/social/email/confirm', { ticket: socialEmailTicket, code }, ck3);
+  assert.equal(r.status, 200);
+  assert.ok((await store.read()).socialIdentities['farcaster:3357330']);
+  // Returning fid signs in directly.
+  const n4 = await post('/api/auth/farcaster/nonce', {});
+  const ck4 = n4.headers.get('set-cookie')!.split(';')[0];
+  r = await post('/api/auth/farcaster/verify', { nonce: ((await n4.json()) as { nonce: string }).nonce, message: 'm', signature: '0xabcd' }, ck4);
+  assert.ok(((await r.json()) as { token?: string }).token?.startsWith('bls_'));
+});
+
+test('farcaster routes do not exist without FARCASTER_AUTH_DOMAIN (fail-closed)', async () => {
+  const { base } = await startApp({}, {});
+  const r = await fetch(`${base}/api/auth/farcaster/nonce`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+  assert.equal(r.status, 404);
+  const cfg = (await (await fetch(`${base}/api/auth/abuse-config`)).json()) as { socialProviders: string[] };
+  assert.ok(!cfg.socialProviders.includes('farcaster'));
 });
