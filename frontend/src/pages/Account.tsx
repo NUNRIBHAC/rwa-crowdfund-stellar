@@ -17,6 +17,7 @@ import NotificationsSection from '../components/NotificationsSection';
 import SecuritySection from '../components/SecuritySection';
 import OperatorSection from '../components/OperatorSection';
 import SupportCenter from '../components/SupportCenter';
+import InvestorOnboarding from '../components/InvestorOnboarding';
 import AppropriatenessSection from '../components/AppropriatenessSection';
 import IssuerApplicationForm from '../components/IssuerApplicationForm';
 
@@ -233,22 +234,7 @@ export default function Account({ market }: { market: Market }) {
         )}
       </section>
 
-      <section aria-label={m.account.checklistAria}>
-        <h2 className="section-title">{m.account.checklistTitle}</h2>
-        <p>{m.account.checklistIntro}</p>
-        <ul className="account-checklist">
-          {m.account.checklist.map((item) => (
-            <li key={item.label} className="account-checklist-item">
-              <span className="account-checklist-marker" aria-hidden="true" />
-              <div>
-                <h3>{item.label}</h3>
-                <p>{item.note}</p>
-              </div>
-              <span className="status-chip status-ended">{m.account.notSetUp}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <InvestorOnboarding />
 
       <NotificationsSection />
 
@@ -256,7 +242,9 @@ export default function Account({ market }: { market: Market }) {
 
       <CompanyAccountsSection />
 
-      <AppropriatenessSection />
+      <div id="investor-assessment">
+        <AppropriatenessSection />
+      </div>
 
       <OperatorSection campaigns={campaigns.map((c) => ({ id: c.id, name: c.name }))} />
 

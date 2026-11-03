@@ -1,4 +1,27 @@
 {
+  "onboarding": {
+    "title": "投資者入門 - 模擬",
+    "note": "僅供示範。身分狀態是您選擇的情境，並非真實身分驗證。此處不收集身分證件或財務輸入。進度不會授權真實投資。",
+    "signIn": "登入以儲存示範進度。",
+    "identity": "模擬身分情境",
+    "identityStates": {
+      "not_started": "未開始",
+      "pending": "等待模擬審核",
+      "passed": "模擬驗證通過",
+      "rejected": "模擬驗證遭拒"
+    },
+    "states": {
+      "demo_incomplete": "示範未完成：請完成以下步驟。",
+      "demo_blocked": "所選身分情境阻止了示範。",
+      "demo_ready": "示範步驟已完成。真實投資仍無法使用。"
+    },
+    "assessmentSaved": "目前評估和模擬結果已儲存，警告步驟已完成。",
+    "assessmentNeeded": "評估、模擬或警告步驟缺少或需要複核。此環境可能限制收集。",
+    "assessmentLink": "開啟現有投資者評估",
+    "risks": "我理解這些是模擬步驟，並非身分驗證或投資批准。",
+    "saved": "儲存在目前帳戶。重新整理後可繼續。損失模擬的原始輸入不會儲存。",
+    "refresh": "更新已儲存進度"
+  },
   "meta": {
     "title": "Blockallisto - 真實資產，共享可能。",
     "skipLink": "跳至主要內容"

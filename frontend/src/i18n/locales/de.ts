@@ -4,6 +4,29 @@
 import type { Messages } from './en';
 
 export const de: Messages = {
+  onboarding: {
+    title: 'Anleger-Onboarding - Simulation',
+    note: 'Nur Demo. Der Identitätsstatus ist ein gewähltes Szenario, keine echte Prüfung. Hier werden keine Ausweisdokumente oder Finanzdaten erfasst. Der Fortschritt erlaubt niemals eine echte Anlage.',
+    signIn: 'Anmelden, um den Demo-Fortschritt zu speichern.',
+    identity: 'Simuliertes Identitätsszenario',
+    identityStates: {
+      not_started: 'Nicht begonnen',
+      pending: 'Simulierte Prüfung ausstehend',
+      passed: 'Simulierte Prüfung bestanden',
+      rejected: 'Simulierte Prüfung abgelehnt',
+    },
+    states: {
+      demo_incomplete: 'Demo unvollständig: Schritte abschließen.',
+      demo_blocked: 'Demo durch das gewählte Szenario gesperrt.',
+      demo_ready: 'Demo-Schritte abgeschlossen. Echte Anlagen bleiben nicht verfügbar.',
+    },
+    assessmentSaved: 'Aktuelle Prüfung und Simulation gespeichert; Warnung abgeschlossen.',
+    assessmentNeeded: 'Prüfung, Simulation oder Warnung fehlt oder ist zur Überprüfung fällig. Die Erfassung kann eingeschränkt sein.',
+    assessmentLink: 'Bestehende Anlegerprüfung öffnen',
+    risks: 'Ich verstehe, dass dies simulierte Schritte sind, keine Identitätsprüfung oder Anlagegenehmigung.',
+    saved: 'In diesem Konto gespeichert. Zum Fortsetzen neu laden. Eingaben zur Verlustsimulation werden nie gespeichert.',
+    refresh: 'Fortschritt aktualisieren',
+  },
   meta: {
     title: 'Blockallisto - Reale Vermögenswerte. Geteilte Möglichkeiten.',
     skipLink: 'Zum Hauptinhalt springen',

@@ -1,4 +1,27 @@
 {
+  "onboarding": {
+    "title": "Alta del inversor - simulación",
+    "note": "Solo demostración. El estado de identidad es un escenario elegido, no una verificación real. Aquí no se recogen documentos de identidad ni datos financieros. El progreso nunca autoriza una inversión real.",
+    "signIn": "Inicia sesión para guardar el progreso.",
+    "identity": "Escenario de identidad simulado",
+    "identityStates": {
+      "not_started": "Sin iniciar",
+      "pending": "Revisión simulada pendiente",
+      "passed": "Verificación simulada superada",
+      "rejected": "Verificación simulada rechazada"
+    },
+    "states": {
+      "demo_incomplete": "Demostración incompleta: completa los pasos.",
+      "demo_blocked": "Demostración bloqueada por el escenario elegido.",
+      "demo_ready": "Pasos completados. La inversión real sigue sin estar disponible."
+    },
+    "assessmentSaved": "Evaluación y simulación actuales guardadas; aviso completado.",
+    "assessmentNeeded": "Falta la evaluación, simulación o aviso, o requieren revisión. La recogida puede estar restringida.",
+    "assessmentLink": "Abrir la evaluación existente",
+    "risks": "Entiendo que estos pasos son simulados y no verifican la identidad ni autorizan inversiones.",
+    "saved": "Guardado en esta cuenta. Recarga para continuar. Los datos de entrada de pérdidas nunca se guardan.",
+    "refresh": "Actualizar progreso"
+  },
   "meta": {
     "title": "Blockallisto - Activos reales. Posibilidades compartidas.",
     "skipLink": "Saltar al contenido principal"

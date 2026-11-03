@@ -4,6 +4,24 @@
 import type { Messages } from './en';
 
 export const ko: Messages = {
+  onboarding: {
+    title: '투자자 온보딩 - 시뮬레이션',
+    note: '데모 전용입니다. 신원 상태는 선택한 시나리오이며 실제 신원 확인이 아닙니다. 신분증이나 재무 입력값은 여기서 수집하지 않습니다. 진행 상태는 실제 투자를 허용하지 않습니다.',
+    signIn: '로그인하여 데모 진행 상태를 저장하세요.',
+    identity: '모의 신원 시나리오',
+    identityStates: { not_started: '시작 전', pending: '모의 검토 대기', passed: '모의 확인 통과', rejected: '모의 확인 거절' },
+    states: {
+      demo_incomplete: '데모 미완료: 아래 단계를 완료하세요.',
+      demo_blocked: '선택한 시나리오로 데모가 차단되었습니다.',
+      demo_ready: '데모 단계 완료. 실제 투자는 여전히 불가능합니다.',
+    },
+    assessmentSaved: '현재 평가 및 시뮬레이션 결과 저장됨. 경고 단계 완료.',
+    assessmentNeeded: '평가, 시뮬레이션 또는 경고 단계가 없거나 검토가 필요합니다. 수집이 제한될 수 있습니다.',
+    assessmentLink: '기존 투자자 평가 열기',
+    risks: '이 단계는 시뮬레이션이며 신원 확인이나 투자 승인이 아님을 이해합니다.',
+    saved: '이 계정에 저장됩니다. 새로고침하여 계속하세요. 손실 계산 입력값은 저장하지 않습니다.',
+    refresh: '저장된 진행 상태 갱신',
+  },
   meta: {
     title: 'Blockallisto - 실제 자산, 함께 나누는 가능성.',
     skipLink: '본문으로 건너뛰기',

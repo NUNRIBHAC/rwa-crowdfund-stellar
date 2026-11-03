@@ -1,4 +1,27 @@
 {
+  "onboarding": {
+    "title": "Investor onboarding - simulation",
+    "note": "Demo only. Identity status is a scenario you choose, not a real identity check. No identity documents or financial inputs are collected here. Progress never authorizes a real investment.",
+    "signIn": "Sign in to save your demo progress.",
+    "identity": "Simulated identity scenario",
+    "identityStates": {
+      "not_started": "Not started",
+      "pending": "Pending simulated review",
+      "passed": "Simulated check passed",
+      "rejected": "Simulated check rejected"
+    },
+    "states": {
+      "demo_incomplete": "Demo incomplete: complete the steps below.",
+      "demo_blocked": "Demo blocked by the chosen identity scenario.",
+      "demo_ready": "Demo steps complete. Real investment remains unavailable."
+    },
+    "assessmentSaved": "Current assessment and simulation results saved; warning step complete.",
+    "assessmentNeeded": "Assessment, simulation or warning step missing or due for review. Collection may be restricted on this deployment.",
+    "assessmentLink": "Open existing investor assessment",
+    "risks": "I understand these are simulated steps, not identity verification or approval to invest.",
+    "saved": "Saved to this signed-in account. Reload to resume. Raw loss-simulation inputs are never saved.",
+    "refresh": "Refresh saved progress"
+  },
   "meta": {
     "title": "Blockallisto - Real assets. Shared possibilities.",
     "skipLink": "Skip to main content"

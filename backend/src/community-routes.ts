@@ -1,3 +1,4 @@
+import { readOnboarding, saveOnboarding } from './investor-onboarding.js';
 import { createHash } from 'node:crypto';
 import express from 'express';
 import { ZodError } from 'zod';
@@ -766,6 +767,23 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }
     next();
   };
+  router.get('/api/auth/demo-onboarding', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      res.json(await readOnboarding(store, account));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.put('/api/auth/demo-onboarding', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      service.checkRate(`demo-onboarding:${account.publicKey}`, 30, 60 * 1000);
+      res.json(await saveOnboarding(store, account, req.body));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.get('/api/auth/appropriateness', appropriatenessHeld, async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));

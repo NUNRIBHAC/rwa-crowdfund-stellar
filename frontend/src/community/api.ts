@@ -677,3 +677,17 @@ export const postOperatorDistributionPreview = (token: string, campaignId: strin
     token,
     body: { total },
   });
+
+export type DemoOnboardingResponse = {
+  progress: { identity: 'not_started' | 'pending' | 'passed' | 'rejected'; risksAcknowledged: boolean; updatedAt: number };
+  assessmentSaved: boolean;
+  assessmentCurrent: boolean;
+  warningReady: boolean;
+  eligibility: 'demo_incomplete' | 'demo_blocked' | 'demo_ready';
+  demo: true;
+  realInvestmentEligible: false;
+  realIdentityVerified: false;
+};
+export const fetchDemoOnboarding = (token: string) => call<DemoOnboardingResponse>('/api/auth/demo-onboarding', { token });
+export const saveDemoOnboarding = (token: string, body: Pick<DemoOnboardingResponse['progress'], 'identity' | 'risksAcknowledged'>) =>
+  call<DemoOnboardingResponse>('/api/auth/demo-onboarding', { token, method: 'PUT', body });

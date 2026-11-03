@@ -1,4 +1,27 @@
 {
+  "onboarding": {
+    "title": "Parcours investisseur - simulation",
+    "note": "Démonstration uniquement. Le statut d’identité est un scénario choisi, pas une vérification réelle. Aucun document d’identité ni donnée financière n’est recueilli ici. Le parcours n’autorise jamais un investissement réel.",
+    "signIn": "Connectez-vous pour enregistrer votre progression.",
+    "identity": "Scénario d’identité simulé",
+    "identityStates": {
+      "not_started": "Non commencé",
+      "pending": "Examen simulé en attente",
+      "passed": "Vérification simulée réussie",
+      "rejected": "Vérification simulée refusée"
+    },
+    "states": {
+      "demo_incomplete": "Démonstration incomplète : terminez les étapes.",
+      "demo_blocked": "Démonstration bloquée par le scénario choisi.",
+      "demo_ready": "Étapes terminées. L’investissement réel reste indisponible."
+    },
+    "assessmentSaved": "Évaluation et simulation actuelles enregistrées ; avertissement terminé.",
+    "assessmentNeeded": "Évaluation, simulation ou avertissement manquant ou à revoir. La collecte peut être restreinte.",
+    "assessmentLink": "Ouvrir l’évaluation existante",
+    "risks": "Je comprends que ces étapes sont simulées, sans vérification d’identité ni autorisation d’investir.",
+    "saved": "Enregistré dans ce compte. Rechargez pour reprendre. Les données de calcul des pertes ne sont jamais enregistrées.",
+    "refresh": "Actualiser la progression"
+  },
   "meta": {
     "title": "Blockallisto - Des actifs réels. Des possibilités partagées.",
     "skipLink": "Aller au contenu principal"

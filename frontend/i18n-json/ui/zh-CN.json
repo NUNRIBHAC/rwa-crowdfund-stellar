@@ -1,4 +1,27 @@
 {
+  "onboarding": {
+    "title": "投资者入门 - 模拟",
+    "note": "仅供演示。身份状态是您选择的场景，并非真实身份验证。这里不收集身份证件或财务输入。进度不会授权真实投资。",
+    "signIn": "登录以保存演示进度。",
+    "identity": "模拟身份场景",
+    "identityStates": {
+      "not_started": "未开始",
+      "pending": "等待模拟审核",
+      "passed": "模拟验证通过",
+      "rejected": "模拟验证被拒绝"
+    },
+    "states": {
+      "demo_incomplete": "演示未完成：请完成以下步骤。",
+      "demo_blocked": "所选身份场景阻止了演示。",
+      "demo_ready": "演示步骤已完成。真实投资仍不可用。"
+    },
+    "assessmentSaved": "当前评估和模拟结果已保存，警告步骤已完成。",
+    "assessmentNeeded": "评估、模拟或警告步骤缺失或需要复核。此环境可能限制收集。",
+    "assessmentLink": "打开现有投资者评估",
+    "risks": "我理解这些是模拟步骤，并非身份验证或投资批准。",
+    "saved": "保存在当前账户。刷新后可继续。损失模拟的原始输入不会保存。",
+    "refresh": "刷新已保存进度"
+  },
   "meta": {
     "title": "Blockallisto - 真实资产，共享可能。",
     "skipLink": "跳至主要内容"
