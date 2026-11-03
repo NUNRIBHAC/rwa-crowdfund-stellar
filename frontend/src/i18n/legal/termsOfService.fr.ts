@@ -130,7 +130,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Le prototype propose une connexion communautaire, des comptes email et mot de passe, une vue investisseur sur testnet et des écrans de démonstration du test de connaissances et de simulation des pertes. Leur accès peut être restreint ; ce ne sont pas des protections validées juridiquement.',
+      'Le prototype propose une connexion communautaire, des comptes email et mot de passe, une vue investisseur sur testnet et des écrans de démonstration du test de connaissances et de simulation des pertes. Leur accès peut être restreint ; ce ne sont pas des protections validées juridiquement.',
     ],
   },
   {
@@ -197,7 +197,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Le Service utilise un hébergement gratuit et peut être lent, indisponible, modifié ou arrêté. Les fonctions de test ne prouvent pas une aptitude à la production ; la vérification réelle d’identité et les paiements en monnaie fiduciaire restent inactifs.',
+      'Le Service utilise un hébergement gratuit et peut être lent, indisponible, modifié ou arrêté. Les fonctions de test ne prouvent pas une aptitude à la production ; la vérification réelle d’identité et les paiements en monnaie fiduciaire restent inactifs.',
     ],
   },
   {

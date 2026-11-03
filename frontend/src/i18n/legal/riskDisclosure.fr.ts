@@ -163,7 +163,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Le prototype comprend des démonstrations de catégorisation, de test de connaissances et de simulation des pertes ; la collecte de données réelles reste restreinte. Ces écrans ne sont pas des protections validées juridiquement. Aucun investissement réel ni délai de réflexion juridiquement effectif n’est actif. Un service réglementé nécessiterait une revue juridique et des autorisations propres. Ces mécanismes ne suppriment pas le risque d’investissement.',
+      'Le prototype comprend des démonstrations de catégorisation, de test de connaissances et de simulation des pertes ; la collecte de données réelles reste restreinte. Ces écrans ne sont pas des protections validées juridiquement. Aucun investissement réel ni délai de réflexion juridiquement effectif n’est actif. Un service réglementé nécessiterait une revue juridique et des autorisations propres. Ces mécanismes ne suppriment pas le risque d’investissement.',
     ],
   },
   {

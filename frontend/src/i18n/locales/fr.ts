@@ -63,7 +63,6 @@ export const fr: Messages = {
     missedOutcome: 'Après l’échéance, chaque contributeur signe son propre remboursement. Les remboursements ne sont pas automatiques.',
     blockScale: 'Chaque bloc représente 1 % de cet objectif illustratif.',
     technicalTitle: 'Fonctionnement du contrat',
-
     eyebrow: 'Des actifs du monde réel tokenisés, sur Stellar',
     titleA: 'Des actifs réels.',
     titleB: 'Des possibilités partagées.',
@@ -1419,7 +1418,7 @@ export const fr: Messages = {
   contentPages: {
     eventsTitle: 'Événements',
     eventsIntro:
-      "Soirées de pitch, rencontres d'investisseurs et webinaires. Cet environnement de démonstration présente les formats prévus ; il n'y a aucun événement réel à réserver.",
+      "Soirées de pitch, rencontres d'investisseurs et webinaires. Cet environnement de démonstration présente les formats prévus ; il n'y a aucun événement réel à réserver.",
     eventsLive: 'À venir',
     eventsPast: 'Passés',
     eventsEmptyLive: 'Aucun événement à venir dans cette démo.',
@@ -1443,7 +1442,7 @@ export const fr: Messages = {
     pressKitLabel: 'Dossier de presse',
     pressKitNote: 'Le logo et les éléments de la marque seront proposés ici en téléchargement.',
     pressEmpty: 'Aucun communiqué de presse pour le moment.',
-    pressDemoNote: "Page de démonstration : aucun communiqué n'a été publié ; rien ici ne peut être cité comme une déclaration réelle de l'entreprise.",
+    pressDemoNote: "Page de démonstration : aucun communiqué n'a été publié ; rien ici ne peut être cité comme une déclaration réelle de l'entreprise.",
     jobsTitle: 'Emplois',
     jobsIntro: 'Travailler sur la plateforme.',
     jobsEmpty: 'Aucun poste ouvert pour le moment.',
@@ -2054,7 +2053,7 @@ export const fr: Messages = {
       totpDone: 'Terminé',
       title: 'Sécurité',
       authMethodNote:
-        'Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.',
+        'Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.',
       linkTitle: 'Fournisseurs de connexion',
       linkNote:
         'Liez une autre méthode de connexion à ce compte. Vous prouverez d’abord qu’il s’agit bien de vous (mot de passe, nouvelle signature du portefeuille ou connexion récente), puis confirmerez auprès du fournisseur.',
@@ -2136,7 +2135,7 @@ export const fr: Messages = {
         colShare: 'Part',
         colAmount: 'Montant',
         unavailable:
-          "Répartition indisponible : certaines positions sont inconnues ou les bases sont mélangées. {n} détenteur(s) inconnu(s). Rien n'est déclaré ni exigible.",
+          "Répartition indisponible : certaines positions sont inconnues ou les bases sont mélangées. {n} détenteur(s) inconnu(s). Rien n'est déclaré ni exigible.",
         illustration: 'Illustration uniquement : ni répartition finale ni déclarable. Aucun fonds ne bouge.',
         excluded: '{n} détenteur(s) inconnu(s) exclu(s)',
         empty: 'Aucune campagne disponible.',
@@ -2169,7 +2168,7 @@ export const fr: Messages = {
         MISSING_AMOUNT: '{n} : Les anciennes contributions sans montant enregistré sont exclues du total.',
         CHAIN_UNAVAILABLE: 'La lecture on-chain est indisponible.',
         EXTERNAL_VOLUME: 'Le volume on-chain dépasse le journal de cette application. Il vient de contributions externes, pas de fonds manquants.',
-        HISTORY_MISMATCH: 'Le total du journal dépasse le compteur on-chain ; l’historique du déploiement ou du registre diffère.',
+        HISTORY_MISMATCH: 'Le total du journal dépasse le compteur on-chain ; l’historique du déploiement ou du registre diffère.',
         COUNTER_INVALID: 'Le compteur on-chain est illisible.',
       },
       reconEmpty: 'Aucune campagne dans le registre.',
