@@ -59,7 +59,7 @@ describe('AccountHoldingsSection', () => {
     renderSection();
     expect(await screen.findByText('Unknown')).toBeTruthy();
     expect(screen.queryByText('0')).toBeNull();
-    expect(screen.getByText('25.5000000')).toBeTruthy();
+    expect(screen.getByText('25.5')).toBeTruthy();
     expect(screen.getAllByText(/position could not be computed/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/recorded intended amount/).length).toBeGreaterThan(0);
     expect(screen.getByText(/12\.5%/)).toBeTruthy();
@@ -84,5 +84,35 @@ describe('AccountHoldingsSection', () => {
     renderSection();
     expect(await screen.findByText(/could not be loaded/)).toBeTruthy();
     expect(screen.queryByText('No holdings found for this wallet.')).toBeNull();
+  });
+  it('uses the active locale for exact decimal positions', async () => {
+    localStorage.setItem('blockallisto-language', 'pt');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        ok({
+          holdings: [
+            {
+              campaignId: 'fixture',
+              position: '25.5000000',
+              positionSource: 'journal-intended',
+              basisPoints: 1250,
+              registerComplete: true,
+              basisMixed: false,
+            },
+          ],
+          unavailable: [],
+        }),
+      ),
+    );
+    renderSection();
+    expect(await screen.findByText('25,5')).toBeTruthy();
+    localStorage.removeItem('blockallisto-language');
+  });
+  it('shows unavailable for malformed positions instead of crashing or inventing zero', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(ok({ holdings: [{ campaignId: 'fixture', position: 'NaN' }], unavailable: [] })));
+    renderSection();
+    expect(await screen.findByText(/could not be loaded/)).toBeTruthy();
+    expect(screen.queryByText('0')).toBeNull();
   });
 });

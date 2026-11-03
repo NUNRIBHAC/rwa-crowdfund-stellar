@@ -1,3 +1,4 @@
+import { publicFailure } from './public-errors.js';
 import express from 'express';
 import cors from 'cors';
 import { createHash, timingSafeEqual } from 'node:crypto';
@@ -309,7 +310,8 @@ app.get('/api/account/payouts', async (req, res) => {
     // this prototype and none are fabricated.
     res.json({ payouts: await accountPayouts(actor), network: NETWORK, productionEligible: false });
   } catch (err) {
-    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API request failed:', err);
+    res.status(400).json(publicFailure(err));
   }
 });
 // Own-position view: the wallet's row from the same cap table the operator
@@ -342,7 +344,8 @@ app.get('/api/account/holdings', async (req, res) => {
     }
     res.json({ holdings, unavailable, semantics: CORPORATE_ACTIONS_SEMANTICS, network: NETWORK, productionEligible: false });
   } catch (err) {
-    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API request failed:', err);
+    res.status(400).json(publicFailure(err));
   }
 });
 app.get('/api/account/activity', async (req, res) => {
@@ -352,7 +355,8 @@ app.get('/api/account/activity', async (req, res) => {
     // Public read of on-chain-equivalent fields only; no signed material.
     res.json({ activity: await accountActivity(actor), network: NETWORK, productionEligible: false });
   } catch (err) {
-    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API request failed:', err);
+    res.status(400).json(publicFailure(err));
   }
 });
 // Read-only operator aid: journal-recorded SUCCESS contributions vs the
@@ -440,7 +444,8 @@ app.get('/api/admin/reconciliation', requireAdmin, async (_req, res) => {
   try {
     res.json(await reconciliationPayload());
   } catch (err) {
-    res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API service unavailable:', err);
+    res.status(503).json(publicFailure(err));
   }
 });
 
@@ -453,7 +458,8 @@ app.get('/api/admin/event-archive/snapshot', requireAdmin, async (_req, res) => 
     const store = await eventArchiveBackend();
     res.type('application/x-ndjson').send(archiveSnapshotJsonl(await store.list()));
   } catch (err) {
-    res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API service unavailable:', err);
+    res.status(503).json(publicFailure(err));
   }
 });
 
@@ -466,7 +472,8 @@ app.post('/api/admin/event-archive/snapshot/verify', requireAdmin, express.text(
     const store = await eventArchiveBackend();
     res.json(verifyArchiveSnapshot(req.body, await store.list()));
   } catch (err) {
-    res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API service unavailable:', err);
+    res.status(503).json(publicFailure(err));
   }
 });
 
@@ -498,8 +505,8 @@ app.post('/api/campaigns/:id/soroban/build', async (req, res) => {
   try {
     res.json(await buildSoroban(String(req.params.id), req.body ?? {}));
   } catch (err) {
-    const code = (err as { code?: string }).code;
-    res.status(400).json({ error: err instanceof Error ? err.message : String(err), ...(code ? { code } : {}) });
+    console.error('Soroban preparation failed:', err);
+    res.status(400).json(publicFailure(err));
   }
 });
 app.post('/api/campaigns/:id/soroban/submit', async (req, res) => {
@@ -508,7 +515,8 @@ app.post('/api/campaigns/:id/soroban/submit', async (req, res) => {
     await recordConfirmedContributor((out as { hash?: string }).hash);
     res.json(out);
   } catch (err) {
-    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API request failed:', err);
+    res.status(400).json(publicFailure(err));
   }
 });
 app.post('/api/soroban/recover', async (req, res) => {
@@ -517,7 +525,8 @@ app.post('/api/soroban/recover', async (req, res) => {
   try {
     res.json(await recoverSoroban(req.body ?? {}));
   } catch (err) {
-    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API request failed:', err);
+    res.status(400).json(publicFailure(err));
   }
 });
 app.get('/api/soroban/transactions/:hash', async (req, res) => {
@@ -526,7 +535,8 @@ app.get('/api/soroban/transactions/:hash', async (req, res) => {
     await recordConfirmedContributor(String(req.params.hash));
     res.json(out);
   } catch (err) {
-    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+    console.error('API request failed:', err);
+    res.status(400).json(publicFailure(err));
   }
 });
 // All old money-moving and wallet submission routes are disabled. Existing
