@@ -1953,6 +1953,8 @@
       "loadError": "Les données de l'opérateur n'ont pas pu être chargées.",
       "retry": "Réessayer",
       "corp": {
+        "cashflow": "Flux confirmés : entrée / sortie / net",
+        "cashflowNote": "Transferts historiques seulement, pas de positions actuelles ni de droits. Exclus des répartitions.",
         "title": "Opérations sur titres (prototype)",
         "note": "Table de capitalisation et aperçu de distribution de prototype, à partir du registre des parts. Rien n'est enregistré, aucun fonds ne bouge et aucun dividende n'est déclaré. Les positions inconnues ne sont jamais affichées comme zéro.",
         "campaign": "Campagne",
