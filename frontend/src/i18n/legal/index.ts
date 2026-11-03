@@ -179,6 +179,9 @@ export const LEGAL_REGISTRY: Record<LegalDocId, PerLocale> = {
 };
 
 export function legalBlocks(doc: LegalDocId, locale: Locale): { blocks: LegalBlock[]; renderedLocale: Locale } {
+  // The older nine translations predate real email-account processing.
+  // Until updated, use truthful English content with its real language tag.
+  if (doc === 'privacyPolicy' && locale !== 'en' && locale !== 'pt') return { blocks: privacyPolicyEn, renderedLocale: 'en' };
   const per = LEGAL_REGISTRY[doc];
   const translated = per[locale];
   if (translated) return { blocks: translated, renderedLocale: locale };

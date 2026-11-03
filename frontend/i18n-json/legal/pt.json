@@ -112,121 +112,58 @@
   },
   "privacyPolicy": {
     "b00": {
-      "notice": "Modelo de demonstração: esta página é um documento ilustrativo do protótipo Blockallisto, não é aconselhamento jurídico. Não foi revisto por um advogado e não é prova de qualquer registo societário ou autorização regulamentar. Os dados societários marcados [DEMO] são dados fictícios de demonstração."
+      "notice": "Aviso de privacidade do protótipo de testnet, atualizado em 3 de novembro de 2026. Descreve o tratamento real dos dados de conta; não é aconselhamento jurídico nem prova de autorização regulatória. Não estão ativas operações com dinheiro real."
     },
     "b01": {
-      "p": "<b>Última atualização:</b> {v:lastUpdated}"
+      "h2": "1. Responsável e contacto"
     },
     "b02": {
-      "p": "Esta Política de Privacidade explica que dados pessoais o protótipo Blockallisto (o \"Serviço\") trata, porquê, e que direitos tem. O Serviço é um projeto-protótipo operado sob o nome Blockallisto. Os dados societários apresentados para a Blockallisto nestes documentos são dados fictícios de demonstração (forma jurídica \"Lda.\" [DEMO], sede \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], número de registo \"000 000 000\" [DEMO]); a identidade jurídica registada por detrás do nome Blockallisto não foi verificada, e nomear o projeto não identifica por si só o responsável pelo tratamento dos dados. [O responsável pelo tratamento - a pessoa ou entidade efetivamente responsável por este tratamento - será confirmado antes da publicação.] Os pedidos de privacidade são respondidos em {v:contactEmail}."
+      "p": "Nuno Ribeiro é o responsável pelo tratamento dos dados pessoais do protótipo Blockallisto na testnet. Contacto para pedidos de privacidade: blockallisto@gmail.com. Blockallisto é o nome do projeto, não uma afirmação de existência de empresa registada. Os dados fictícios de empresa noutros modelos legais DEMO não identificam o responsável pelos dados de conta."
     },
     "b03": {
-      "h2": "1. Âmbito: o que a demonstração não recolhe"
+      "h2": "2. Dados de conta e comunidade"
     },
     "b04": {
-      "p": "O protótipo atual não tem <b>KYC, newsletters nem pagamentos</b>. O acesso comunitário é baseado na carteira: usa uma assinatura de carteira Stellar, não uma palavra-passe nem um endereço de email. Não pedimos o seu nome completo, número de telefone, documentos de identidade ou cartão de pagamento. As funcionalidades comunitárias recolhem os dados descritos na secção 2b: uma chave pública, um nome de apresentação opcional, conteúdo de texto livre que decida submeter e um email de contacto opcional nas candidaturas de emissor. Não usamos analítica nem rastreadores de publicidade, e os tipos de letra e recursos do site são autoalojados."
+      "p": "O registo com email e palavra-passe guarda o email normalizado, um hash scrypt com salt da palavra-passe, identificador de conta, idioma preferido dos emails, estado de verificação, datas e registos de tentativas falhadas/bloqueio na base de dados comunitária. Não guardamos a palavra-passe em texto simples. Os tokens de verificação e recuperação são guardados como hashes e são de utilização única: os de verificação expiram em 24 horas e os de recuperação numa hora. A conta de email recebe um identificador interno de chave pública; a chave privada gerada é descartada. Isto não cria uma carteira capaz de assinar transações na blockchain."
     },
     "b05": {
-      "h2": "2. Dados que tratamos"
+      "p": "O acesso por carteira continua opcional e usa um desafio assinado de utilização única, válido por cinco minutos. Quando há acesso social configurado, guardamos o fornecedor, o identificador estável atribuído por ele, o email verificado se devolvido e as datas de acesso; não fundimos contas automaticamente pelo email. O registo social pode continuar restrito separadamente do registo por email. O seu email não é usado como nome público de autor de comentários."
     },
     "b06": {
-      "p": "<b>a) Dados da carteira e das contribuições.</b> Se ligar uma carteira Freighter e fizer uma contribuição de teste, o backend regista, numa base de dados Postgres (alojada pela Neon), um diário de segurança contendo: a sua <b>chave pública</b> Stellar (nunca a sua chave secreta), o identificador da campanha, a ação, o montante da contribuição, os envelopes da transação, o hash e o estado da transação, e carimbos temporais. Uma chave pública Stellar é um dado pseudonimizado; não a associamos à sua identidade."
+      "p": "Os tokens de sessão são guardados como hashes no servidor; o navegador guarda o token no armazenamento local. As sessões duram até 30 dias e podem ser revogadas. Se ativar um segundo fator por autenticador, a semente é cifrada no servidor e os códigos de recuperação são guardados como hashes. A recuperação da palavra-passe revoga sessões e pedidos pendentes de segundo fator, mas não remove um segundo fator já ativado."
     },
     "b07": {
-      "p": "<i>Retenção:</i> as transações preparadas não assinadas expiram após 24 horas; as transações concluídas ou falhadas são eliminadas após 30 dias; uma transação assinada cujo resultado esteja por resolver é conservada até se resolver, porque apagá-la poderia perder o rasto de uma transação difundida. Os envelopes assinados são limpos assim que a transação atinge um estado final. Estas são as regras de limpeza configuradas no próprio código da aplicação: descrevem o que a aplicação apaga. Os registos de servidor e as cópias de segurança dos nossos fornecedores de alojamento podem conservar dados por períodos diferentes ao abrigo das respetivas políticas de privacidade, e não são abrangidos por estas regras."
+      "p": "Os registos de conta, credenciais de email e dados opcionais de segundo fator não têm atualmente um prazo automático de eliminação da conta. Os tokens deixam de funcionar ao expirar, mas isso não garante a remoção imediata dos registos guardados. Ainda não existe eliminação autónoma de conta. Peça acesso, correção ou eliminação a blockallisto@gmail.com; os pedidos são avaliados tendo em conta obrigações de segurança e legais. Os registos e cópias de segurança dos fornecedores podem ter conservação própria."
     },
     "b08": {
-      "p": "<b>b) Conta comunitária e conteúdo comunitário.</b> Se iniciar sessão nas funcionalidades comunitárias, o backend guarda, na mesma base de dados Postgres da Neon: a sua <b>chave pública</b>, um carimbo temporal de criação da conta e um <b>nome de apresentação</b> opcional (até 40 caracteres). O início de sessão funciona assinando um desafio único do servidor com a sua carteira (validade de 5 minutos, utilização única); não é necessária palavra-passe nem email e a sua chave secreta nunca sai da carteira. O servidor guarda apenas um hash SHA-256 do token de sessão; o token em bruto fica no armazenamento local do seu navegador. As sessões duram 30 dias, o terminar de sessão apaga a sessão, e os desafios e sessões expirados são limpos de hora a hora."
+      "p": "Os comentários (identificador de chave pública, nome opcional, texto, campanha e data) são públicos. São apresentados os últimos 100 por campanha; comentários ocultados são eliminados após 30 dias. Pedidos de suporte/feedback, candidaturas de emissor e notificações são privados para a conta e funções autorizadas do operador e são eliminados após 90 dias pelas regras de limpeza da aplicação. Evite dados pessoais sensíveis em campos de texto livre."
     },
     "b09": {
-      "p": "<b>Os comentários</b> são públicos: cada comentário guarda a sua chave pública, o seu nome de apresentação se definido, o texto (até 1000 caracteres), a campanha e um carimbo temporal, e os 100 comentários mais recentes por campanha são mostrados a todos os visitantes. Um comentário ocultado pelo operador sai imediatamente da lista pública e é definitivamente apagado 30 dias após a ocultação. <b>Os pedidos de suporte/feedback</b> (tipo, assunto até 120 caracteres, texto até 4000 caracteres, estado, carimbos temporais) e as <b>candidaturas de emissor</b> (nome do projeto, país, tipo de instrumento, montante-alvo, descrição e um email de contacto opcional) são visíveis apenas para a sua conta de carteira e para o administrador do operador; ambos são definitivamente apagados após 90 dias (janela de retenção configurável no código da aplicação). Os itens de <b>notícias</b> da campanha são escritos pelo operador e assinalados como conteúdo de demonstração da plataforma. O seu endereço IP é usado em memória para limitação de ritmo e eliminado dentro de 24 horas; a aplicação não o persiste (os registos de alojamento são abrangidos no ponto e)."
+      "h2": "3. Transações de teste e dados do dispositivo"
     },
     "b10": {
-      "p": "Um aviso: chaves públicas, nomes de apresentação e conteúdo de texto livre podem identificá-lo mesmo sem nunca pedirmos o seu nome. Não submeta informação pessoal sensível nos campos comunitários."
+      "p": "Ao ligar uma carteira ou preparar contribuições de teste, o diário de segurança regista chaves públicas, identificadores de campanha, montantes, envelopes de transação, hashes, estados e datas. Preparações não assinadas expiram em 24 horas; transações finais são limpas após 30 dias. Transações assinadas por resolver ficam até resolução e os envelopes assinados são removidos após estado final. Não podemos apagar registos públicos da testnet Stellar. As chaves secretas ficam na sua carteira."
     },
     "b11": {
-      "p": "<b>c) Dados públicos da blockchain.</b> As contribuições de teste são registadas publicamente na <b>testnet</b> da Stellar e são visíveis em exploradores públicos. Os registos na blockchain não podem ser alterados nem apagados por nós."
+      "p": "As escolhas de tema, idioma e sessão usam armazenamento local do navegador. Os fornecedores de alojamento tratam IPs e metadados de pedidos. A limitação de pedidos e cache de reputação IP usam IPs em memória transitória; os diagnósticos da aplicação usam contadores agregados em vez de registos de IPs. Os registos de infraestrutura e cópias de segurança dos fornecedores têm conservação separada. Não usamos rastreadores de publicidade nem listas de newsletters."
     },
     "b12": {
-      "p": "<b>d) Preferências do dispositivo.</b> As suas escolhas de tema (claro/escuro) e de idioma são guardadas no armazenamento local do seu navegador. Estes dados ficam no seu dispositivo e não nos são enviados."
+      "h2": "4. Serviços de segurança e destinatários"
     },
     "b13": {
-      "p": "<b>e) Registos técnicos.</b> O nosso fornecedor de alojamento (Render, região de Frankfurt) trata registos de servidor padrão (como endereço IP e metadados de pedidos) para fornecer e proteger o Serviço."
+      "p": "A Render aloja a aplicação em Frankfurt e a Neon aloja os dados Postgres. A Brevo recebe emails de destinatários e o conteúdo das mensagens de verificação/recuperação e trata metadados de entrega. O Cloudflare Turnstile trata sinais do navegador/dispositivo e tokens para controlo de bots; a validação no servidor pode incluir o IP do cliente. Após um controlo de bots bem-sucedido, a ipapi.is recebe o IP para avaliação de abuso. A reputação é inicialmente apenas observação; usar VPN, proxy ou Tor, por si só, não provoca bloqueio. Falhas ou esgotamento do orçamento de consultas podem reduzir esta camada; CAPTCHA, limites de pedidos e orçamentos de email são proteções separadas."
     },
     "b14": {
-      "h2": "3. Dados que planeamos tratar em versões futuras (não recolhidos hoje)"
+      "p": "Quando existe acesso social, o fornecedor de identidade escolhido trata essa autenticação segundo os seus termos. A testnet Stellar é pública e global. O GitHub aloja código, não a base de dados de contas. Fornecedores de segurança e email podem tratar dados fora do EEE; não se deve presumir que todos são exclusivamente europeus. As políticas atuais e salvaguardas aplicáveis regem o seu tratamento: https://www.brevo.com/legal/privacypolicy/ ; https://www.cloudflare.com/privacypolicy/ ; https://ipapi.is/privacy.html ; https://ipapi.is/terms.html ."
     },
     "b15": {
-      "p": "O desenho indicativo para versões futuras da Blockallisto - seguindo as superfícies de conformidade de plataformas de crowdfunding europeias estabelecidas - é tratar categorias adicionais de dados pessoais <b>quando e se</b> essas funcionalidades forem lançadas. As categorias exatas, os fornecedores e os limites podem mudar com o trabalho de desenho e o aconselhamento jurídico:"
+      "h2": "5. Finalidades e direitos"
     },
     "b16": {
-      "ul": {
-        "i00": "<b>Dados de registo:</b> nome completo (exatamente como no seu documento de identidade), endereço de email, país de residência e residência fiscal.",
-        "i01": "<b>Verificação de identidade (KYC/AML):</b> imagens do documento de identidade, uma selfie, número de telemóvel e resultados da verificação, tratados com fornecedores terceiros especializados em verificação; para investidores empresariais, beneficiários efetivos (tipicamente quem detenha mais de 25%) e origem dos fundos; declarações de pessoa politicamente exposta (PEP).",
-        "i02": "<b>Dados de pagamento e de levantamento:</b> dados de conta bancária (como IBAN) tratados por prestadores de serviços de pagamento licenciados, não por nós detendo fundos de clientes."
-      }
+      "p": "Os dados são usados para disponibilizar a conta e funcionalidades comunitárias pedidas, verificar o acesso, responder a pedidos de suporte e proteger o serviço contra abuso. Estas finalidades operacionais e de segurança baseiam-se em interesses legítimos nos termos do artigo 6.º, n.º 1, alínea f), do RGPD, sujeitos aos seus direitos e à avaliação exigida por lei. Este aviso não certifica conformidade nem substitui revisão jurídica. Não vendemos dados de conta nem os usamos para publicidade."
     },
     "b17": {
-      "p": "Com exceção do email de contacto opcional do emissor descrito na secção 2b, nenhum destes dados é recolhido pela demonstração atual. Se estas funcionalidades forem lançadas, esta Política será atualizada primeiro, com os fornecedores, as finalidades, as bases jurídicas e os períodos de conservação de cada categoria."
-    },
-    "b18": {
-      "h2": "4. Finalidades e bases jurídicas (RGPD)"
-    },
-    "b19": {
-      "p": "Tratamos os dados da secção 2 para operar, proteger e demonstrar o protótipo: preparar e acompanhar transações de teste, prevenir gastos duplos e resolver transações ambíguas, manter o Serviço fiável e operar as funcionalidades comunitárias (publicar e moderar comentários, responder a pedidos de suporte e feedback e analisar candidaturas de emissor). A base jurídica é o nosso interesse legítimo (art. 6.º, n.º 1, alínea f), do RGPD) em executar uma demonstração técnica segura. Não usamos os seus dados para marketing, definição de perfis ou venda."
-    },
-    "b20": {
-      "h2": "5. Quem trata os dados"
-    },
-    "b21": {
-      "ul": {
-        "i00": "<b>Render</b> (alojamento, Frankfurt, UE) - executa a aplicação.",
-        "i01": "<b>Neon</b> (Postgres gerido; região AWS Europa (Frankfurt), UE - verificado na consola Neon em {v:lastUpdated}) - guarda o diário de contribuições e o armazenamento de dados da comunidade.",
-        "i02": "<b>Testnet da Stellar</b> (rede pública operada pela Stellar Development Foundation, global) - regista transações públicas de teste.",
-        "i03": "<b>GitHub</b> - aloja o código-fonte (sem dados de utilizadores)."
-      }
-    },
-    "b22": {
-      "p": "Quando o tratamento ocorre fora da UE/EEE (por exemplo na rede global da Stellar), envolve apenas dados pseudonimizados da testnet."
-    },
-    "b23": {
-      "h2": "6. Os seus direitos ao abrigo do RGPD"
-    },
-    "b24": {
-      "p": "Tem o direito de aceder, retificar, apagar, limitar ou opor-se ao tratamento dos seus dados pessoais, e à portabilidade dos dados, ao abrigo do Regulamento (UE) 2016/679 (RGPD). Tem também o direito de apresentar reclamação à autoridade de controlo portuguesa, a <b>CNPD</b> (Comissão Nacional de Proteção de Dados)."
-    },
-    "b25": {
-      "p": "Conseguimos localizar os dados associados a si apenas através da sua chave pública Stellar (e de qualquer nome de apresentação ou conteúdo de texto livre que tenha decidido submeter). Os dados já escritos numa blockchain pública não podem ser apagados; podemos corrigir ou apagar os registos fora da cadeia (o diário de contribuições, a sua conta comunitária, comentários, pedidos e candidaturas) a pedido, sujeito às regras de retenção da secção 2."
-    },
-    "b26": {
-      "h2": "7. Brasil (LGPD)"
-    },
-    "b27": {
-      "p": "A demonstração é operada a partir de Portugal. A Lei Geral de Proteção de Dados do Brasil (Lei n.º 13.709/2018 - LGPD) pode aplicar-se a tratamentos que visem ou envolvam pessoas no Brasil; se se aplica a este protótipo é uma questão jurídica a confirmar com advogados. Se e na medida em que a LGPD se aplicar, confere-lhe direitos sobre os seus dados pessoais semelhantes aos acima, e pode contactar a ANPD (Autoridade Nacional de Proteção de Dados). Use o mesmo contacto acima para qualquer pedido."
-    },
-    "b28": {
-      "h2": "8. Segurança"
-    },
-    "b29": {
-      "p": "As chaves da sua carteira nunca saem da sua extensão Freighter; o Serviço foi desenhado de forma a não lhes poder aceder. A aplicação é servida sobre TLS e os pontos de administração estão desativados por omissão (fail-closed). Nenhum método é absoluto, mas o desenho do protótipo minimiza os dados que existem para serem atacados."
-    },
-    "b30": {
-      "h2": "9. Crianças"
-    },
-    "b31": {
-      "p": "O Serviço é uma demonstração técnica e não se dirige a crianças."
-    },
-    "b32": {
-      "h2": "10. Alterações"
-    },
-    "b33": {
-      "p": "Podemos atualizar esta Política à medida que o protótipo evolui. A data de \"Última atualização\" indica a versão atual. As alterações materiais serão refletidas aqui antes de produzirem efeitos."
-    },
-    "b34": {
-      "h2": "11. Contacto"
-    },
-    "b35": {
-      "p": "Questões e pedidos de privacidade: {v:contactEmail}."
+      "p": "Pode pedir acesso, correção, eliminação, limitação, portabilidade ou opor-se ao tratamento escrevendo para blockallisto@gmail.com. Pode reclamar à CNPD ou à autoridade de controlo competente. O operador não pode eliminar registos públicos da blockchain. O protótipo não se destina a crianças. Não estão ativas recolha de documentos/KYC, ofertas de investimento reais, pagamentos em moeda fiduciária ou operações com dinheiro real. Qualquer alteração futura exige aviso atualizado antes desse tratamento."
     }
   },
   "riskDisclosure": {

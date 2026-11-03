@@ -86,7 +86,7 @@ describe('legal fallback honesty', () => {
       for (const locale of LOCALES) {
         const r = legalBlocks(doc, locale);
         expect(r.blocks.length).toBeGreaterThan(0);
-        expect(r.renderedLocale).toBe(LEGAL_REGISTRY[doc][locale] ? locale : 'en');
+        expect(r.renderedLocale).toBe(doc === 'privacyPolicy' && locale !== 'pt' ? 'en' : LEGAL_REGISTRY[doc][locale] ? locale : 'en');
       }
     }
   });
@@ -100,7 +100,7 @@ describe('legal structural parity', () => {
       const enMarkers = markerCounts(per.en);
       for (const locale of LOCALES) {
         const translated = per[locale];
-        if (!translated || locale === 'en') continue;
+        if (!translated || locale === 'en' || (doc === 'privacyPolicy' && locale !== 'pt')) continue;
         expect(blockSkeleton(translated), `${doc}.${locale} skeleton`).toBe(enSkeleton);
         expect(markerCounts(translated), `${doc}.${locale} [DEMO]/placeholder marker counts`).toEqual(enMarkers);
       }
