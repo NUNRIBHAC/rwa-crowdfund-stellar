@@ -44,6 +44,16 @@ export const zhTW: Messages = {
   },
   riskBanner: '眾籌投資存在全部損失的風險。這是 Stellar 測試網原型：無真實發行、無真實資金、無投資建議。',
   hero: {
+    introTitle: '共同為專案籌資。',
+    intro: '向共同目標出資。截止後，結果決定下一步。',
+    illustration: '互動示意 - 不進行交易',
+    goalReached: '目標達成',
+    goalMissed: '目標未達成',
+    reachedOutcome: '截止後，專案發起人可簽名提取一次資金。',
+    missedOutcome: '截止後，每位出資人簽署自己的退款。退款不是自動進行的。',
+    blockScale: '每個方塊代表此示意目標的1%。',
+    technicalTitle: '合約如何運作',
+
     eyebrow: 'Stellar 上的代幣化真實資產',
     titleA: '真實資產。',
     titleB: '共享可能。',

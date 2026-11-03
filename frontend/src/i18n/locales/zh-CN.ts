@@ -44,6 +44,16 @@ export const zhCN: Messages = {
   },
   riskBanner: '众筹投资存在全部损失的风险。这是 Stellar 测试网原型：无真实发行、无真实资金、无投资建议。',
   hero: {
+    introTitle: '共同为项目筹资。',
+    intro: '向共同目标出资。截止后，结果决定下一步。',
+    illustration: '交互示意 - 不进行交易',
+    goalReached: '目标达成',
+    goalMissed: '目标未达成',
+    reachedOutcome: '截止后，项目发起人可签名提取一次资金。',
+    missedOutcome: '截止后，每位出资人签署自己的退款。退款不是自动进行的。',
+    blockScale: '每个方块代表此示意目标的1%。',
+    technicalTitle: '合约如何运作',
+
     eyebrow: 'Stellar 上的代币化真实资产',
     titleA: '真实资产。',
     titleB: '共享可能。',

@@ -54,6 +54,16 @@ export const de: Messages = {
   riskBanner:
     'Crowdfunding-Investitionen bergen ein Totalverlustrisiko. Dies ist ein Prototyp im Stellar-Testnet: keine echten Angebote, keine echten Gelder, keine Anlageberatung.',
   hero: {
+    introTitle: 'Gemeinsam ein Projekt finanzieren.',
+    intro: 'Tragen Sie zu einem gemeinsamen Ziel bei. Nach Ablauf der Frist bestimmt das Ergebnis den nächsten Schritt.',
+    illustration: 'Interaktive Illustration - keine Transaktion',
+    goalReached: 'Ziel erreicht',
+    goalMissed: 'Ziel verfehlt',
+    reachedOutcome: 'Nach Ablauf der Frist kann der Projektträger eine einmalige Auszahlung signieren.',
+    missedOutcome: 'Nach Ablauf der Frist signiert jeder Beitragende seine eigene Erstattung. Erstattungen erfolgen nicht automatisch.',
+    blockScale: 'Jeder Block entspricht 1 % dieses beispielhaften Ziels.',
+    technicalTitle: 'So funktioniert der Vertrag',
+
     eyebrow: 'Tokenisierte reale Vermögenswerte, auf Stellar',
     titleA: 'Reale Vermögenswerte.',
     titleB: 'Geteilte Möglichkeiten.',

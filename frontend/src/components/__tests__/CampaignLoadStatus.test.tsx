@@ -27,9 +27,9 @@ test('campaign load failure offers retry without empty/not-found claim; retry se
       <App />
     </I18nProvider>,
   );
-  const retry = await screen.findByRole('button', { name: 'Retry', exact: true });
+  const retry = await screen.findByRole('button', { name: 'Retry' });
   await screen.findByText('The service is temporarily unavailable. Please try again in a moment.');
   fireEvent.click(retry);
-  await waitFor(() => expect(screen.queryByRole('button', { name: 'Retry', exact: true })).toBeNull());
+  await waitFor(() => expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull());
   expect(campaignCalls).toBeGreaterThan(1);
 });

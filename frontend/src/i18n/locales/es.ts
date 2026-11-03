@@ -54,6 +54,16 @@ export const es: Messages = {
   riskBanner:
     'Las inversiones en crowdfunding conllevan riesgo de pérdida total. Esto es un prototipo en la testnet de Stellar: sin ofertas reales, sin fondos reales, sin asesoramiento de inversión.',
   hero: {
+    introTitle: 'Financiar un proyecto juntos.',
+    intro: 'Contribuye a una meta compartida. Tras el plazo, el resultado determina el siguiente paso.',
+    illustration: 'Ilustración interactiva - sin transacción',
+    goalReached: 'Meta alcanzada',
+    goalMissed: 'Meta no alcanzada',
+    reachedOutcome: 'Tras el plazo, el promotor puede firmar un único retiro.',
+    missedOutcome: 'Tras el plazo, cada contribuyente firma su propio reembolso. Los reembolsos no son automáticos.',
+    blockScale: 'Cada bloque representa el 1% de esta meta ilustrativa.',
+    technicalTitle: 'Cómo funciona el contrato',
+
     eyebrow: 'Activos del mundo real tokenizados, en Stellar',
     titleA: 'Activos reales.',
     titleB: 'Posibilidades compartidas.',

@@ -1,6 +1,6 @@
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
-import FundingBlock from './FundingBlock';
+import FundingIllustration from './FundingIllustration';
 
 type Props = { mode: 'live' | 'sample' | 'unknown' };
 
@@ -11,10 +11,8 @@ export default function Hero({ mode }: Props) {
       <div className="hero-grid">
         <div className="hero-copy">
           <p className="hero-eyebrow">{m.hero.eyebrow}</p>
-          <h1>
-            {m.hero.titleA} <span className="hero-accent">{m.hero.titleB}</span>
-          </h1>
-          <p className="hero-sub">{m.hero.sub}</p>
+          <h1>{m.hero.introTitle}</h1>
+          <p className="hero-sub">{m.hero.intro}</p>
           <div className="hero-actions">
             <a className="btn btn-primary" href={routeHash({ name: 'investments' })}>
               {m.hero.ctaBrowse}
@@ -29,8 +27,15 @@ export default function Hero({ mode }: Props) {
             {mode === 'unknown' && m.hero.noteUnknown}
           </p>
         </div>
-        <FundingBlock />
+        <FundingIllustration />
       </div>
+      <section className="hero-technical">
+        <h2>{m.hero.technicalTitle}</h2>
+        <p>{m.hero.sub}</p>
+        <p>
+          {m.hero.titleA} {m.hero.titleB}
+        </p>
+      </section>
       <p className="hero-unavailable">{m.hero.unavailable}</p>
     </section>
   );
