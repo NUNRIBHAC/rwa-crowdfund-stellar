@@ -1896,6 +1896,8 @@ export const fr: Messages = {
     applicationStatus: {
       received: 'Reçue',
       under_review: "À l'étude",
+      approved: 'Approuvée',
+      rejected: 'Rejetée',
       closed: 'Clôturée',
     },
     myTicketsTitle: 'Mes tickets de support et feedback',
@@ -2056,6 +2058,9 @@ export const fr: Messages = {
       stateVisible: 'Visible',
       stateHidden: 'Masqué',
       markUnderReview: "Marquer en cours d'examen",
+      approveApplication: 'Approuver',
+      rejectApplication: 'Rejeter',
+      rejectNotePrompt: 'Note de rejet pour le candidat (obligatoire) :',
       closeApplication: 'Clôturer',
       reopenApplication: 'Rouvrir',
       statusUpdated: 'Statut mis à jour.',

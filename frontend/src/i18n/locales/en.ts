@@ -1832,6 +1832,8 @@ export const en = {
     applicationStatus: {
       received: 'Received',
       under_review: 'Under review',
+      approved: 'Approved',
+      rejected: 'Rejected',
       closed: 'Closed',
     },
     myTicketsTitle: 'My support and feedback tickets',
@@ -1987,6 +1989,9 @@ export const en = {
       stateVisible: 'Visible',
       stateHidden: 'Hidden',
       markUnderReview: 'Mark under review',
+      approveApplication: 'Approve',
+      rejectApplication: 'Reject',
+      rejectNotePrompt: 'Rejection note for the applicant (required):',
       closeApplication: 'Close',
       reopenApplication: 'Reopen',
       statusUpdated: 'Status updated.',

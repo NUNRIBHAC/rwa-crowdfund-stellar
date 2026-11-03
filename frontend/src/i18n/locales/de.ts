@@ -1881,6 +1881,8 @@ export const de: Messages = {
     applicationStatus: {
       received: 'Eingegangen',
       under_review: 'In Prüfung',
+      approved: 'Genehmigt',
+      rejected: 'Abgelehnt',
       closed: 'Geschlossen',
     },
     myTicketsTitle: 'Meine Support- und Feedback-Tickets',
@@ -2038,6 +2040,9 @@ export const de: Messages = {
       stateVisible: 'Sichtbar',
       stateHidden: 'Ausgeblendet',
       markUnderReview: 'In Prüfung markieren',
+      approveApplication: 'Genehmigen',
+      rejectApplication: 'Ablehnen',
+      rejectNotePrompt: 'Ablehnungsnotiz für den Bewerber (erforderlich):',
       closeApplication: 'Schließen',
       reopenApplication: 'Wieder öffnen',
       statusUpdated: 'Status aktualisiert.',

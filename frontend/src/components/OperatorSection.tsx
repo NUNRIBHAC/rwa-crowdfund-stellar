@@ -102,7 +102,7 @@ export default function OperatorSection({ campaigns }: Props) {
       .finally(() => setBusy(false));
   };
 
-  const setStatus = (id: string, status: string) => run(setOperatorApplicationStatus(token, id, status), labels.statusUpdated);
+  const setStatus = (id: string, status: string, note?: string) => run(setOperatorApplicationStatus(token, id, status, note), labels.statusUpdated);
 
   const submitHide = (id: string) => {
     run(setOperatorCommentHidden(token, id, true, reason.trim() || undefined), labels.statusUpdated);
@@ -209,13 +209,34 @@ export default function OperatorSection({ campaigns }: Props) {
                     <td>{a.targetAmount}</td>
                     <td className="cell-nowrap">{fmt(a.createdAt)}</td>
                     <td>
-                      <span className={`status-chip status-${a.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.applicationStatus[a.status]}</span>
+                      <span
+                        className={`status-chip status-${a.status === 'approved' ? 'paid' : a.status === 'closed' || a.status === 'rejected' ? 'ended' : 'pending'}`}
+                      >
+                        {m.community.applicationStatus[a.status]}
+                      </span>
                     </td>
                     <td>
                       {a.status === 'received' && (
                         <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'under_review')}>
                           {labels.markUnderReview}
                         </button>
+                      )}
+                      {(a.status === 'received' || a.status === 'under_review') && (
+                        <>
+                          <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'approved')}>
+                            {labels.approveApplication}
+                          </button>
+                          <button
+                            className="btn"
+                            disabled={busy}
+                            onClick={() => {
+                              const note = window.prompt(labels.rejectNotePrompt);
+                              if (note) setStatus(a.id, 'rejected', note);
+                            }}
+                          >
+                            {labels.rejectApplication}
+                          </button>
+                        </>
                       )}
                       {a.status !== 'closed' && (
                         <button className="btn" disabled={busy} onClick={() => setStatus(a.id, 'closed')}>

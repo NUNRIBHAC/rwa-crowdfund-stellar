@@ -175,7 +175,7 @@ test('issuer applications: validation, rate limit, admin status flow', async () 
     }),
   );
   await service.submitApplication(account, input);
-  await service.submitApplication(account, input);
+  const app2 = await service.submitApplication(account, { ...input, contactEmail: 'second@example.org' });
   await assert.rejects(
     () => service.submitApplication(account, input),
     (e: any) => e.status === 429,
@@ -187,6 +187,22 @@ test('issuer applications: validation, rate limit, admin status flow', async () 
   );
   const all = await service.adminListApplications();
   assert.equal(all.find((a) => a.id === app1.id)?.status, 'under_review');
+
+  // Review outcomes: approved/rejected are prototype review states, never a
+  // legal approval or listing; rejection requires an operator note.
+  await assert.rejects(
+    () => service.adminSetApplicationStatus(app1.id, 'rejected'),
+    (e: any) => e.status === 400,
+  );
+  await service.adminSetApplicationStatus(app1.id, 'approved', 'admin-test');
+  const approved = (await service.adminListApplications()).find((a) => a.id === app1.id);
+  assert.equal(approved?.status, 'approved');
+  assert.equal(approved?.reviewedBy, 'admin-test');
+  assert.ok(approved?.reviewedAt);
+  await service.adminSetApplicationStatus(app2.id, 'rejected', 'admin-test', 'Demo: incomplete instrument description.');
+  const rejected = (await service.adminListApplications()).find((a) => a.id === app2.id);
+  assert.equal(rejected?.status, 'rejected');
+  assert.equal(rejected?.reviewNote, 'Demo: incomplete instrument description.');
 });
 
 test('news: admin posts are labeled platform-demo and listed publicly', async () => {

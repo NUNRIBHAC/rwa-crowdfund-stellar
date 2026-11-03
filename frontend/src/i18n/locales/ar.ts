@@ -1802,6 +1802,8 @@ export const ar: Messages = {
     applicationStatus: {
       received: 'تم الاستلام',
       under_review: 'قيد المراجعة',
+      approved: 'معتمدة',
+      rejected: 'مرفوضة',
       closed: 'مغلقة',
     },
     myTicketsTitle: 'تذاكر الدعم والملاحظات الخاصة بي',
@@ -1954,6 +1956,9 @@ export const ar: Messages = {
       stateVisible: 'ظاهر',
       stateHidden: 'مخفي',
       markUnderReview: 'وضع قيد المراجعة',
+      approveApplication: 'اعتماد',
+      rejectApplication: 'رفض',
+      rejectNotePrompt: 'ملاحظة الرفض لمقدم الطلب (مطلوبة):',
       closeApplication: 'إغلاق',
       reopenApplication: 'إعادة فتح',
       statusUpdated: 'تم تحديث الحالة.',

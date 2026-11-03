@@ -1798,6 +1798,8 @@ export const ko: Messages = {
     applicationStatus: {
       received: '접수됨',
       under_review: '검토 중',
+      approved: '승인됨',
+      rejected: '거절됨',
       closed: '닫힘',
     },
     myTicketsTitle: '내 지원 및 피드백 티켓',
@@ -1950,6 +1952,9 @@ export const ko: Messages = {
       stateVisible: '표시됨',
       stateHidden: '숨겨짐',
       markUnderReview: '검토 중으로 표시',
+      approveApplication: '승인',
+      rejectApplication: '거절',
+      rejectNotePrompt: '신청자에게 보내는 거절 메모(필수):',
       closeApplication: '닫기',
       reopenApplication: '다시 열기',
       statusUpdated: '상태가 업데이트되었습니다.',

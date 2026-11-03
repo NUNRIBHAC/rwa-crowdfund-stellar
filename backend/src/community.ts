@@ -784,6 +784,9 @@ export class CommunityService {
       description: parsed.description,
       contactEmail: parsed.contactEmail ? parsed.contactEmail : null,
       status: 'received',
+      reviewedBy: null,
+      reviewedAt: null,
+      reviewNote: null,
       createdAt: this.now(),
     };
     await this.store.change((state) => {
@@ -1003,23 +1006,40 @@ export class CommunityService {
     const state = await this.store.read();
     return Object.values(state.applications).sort((a, b) => b.createdAt - a.createdAt);
   }
-  async adminSetApplicationStatus(id: string, status: unknown, actor = 'admin-area'): Promise<void> {
-    if (status !== 'received' && status !== 'under_review' && status !== 'closed') throw new CommunityError(400, 'invalid status');
+  // Review outcomes are prototype review states only: 'approved' here means
+  // the operator finished reviewing the demo submission. It is NOT a legal
+  // approval, identity verification, listing or offer - the notification
+  // copy says so every time, and nothing in the platform gates capability
+  // on it. A rejection requires an operator note so the applicant is not
+  // left guessing.
+  async adminSetApplicationStatus(id: string, status: unknown, actor = 'admin-area', note?: unknown): Promise<void> {
+    if (status !== 'received' && status !== 'under_review' && status !== 'approved' && status !== 'rejected' && status !== 'closed')
+      throw new CommunityError(400, 'invalid status');
+    const reviewNote = typeof note === 'string' && note.trim() ? note.trim().slice(0, 500) : null;
+    if (status === 'rejected' && !reviewNote) throw new CommunityError(400, 'rejection requires an operator note');
+    const terminal = status === 'approved' || status === 'rejected';
     let target: IssuerApplication | undefined;
     await this.store.change((state) => {
       const a = state.applications[id];
       if (!a) throw new CommunityError(404, 'application not found');
       a.status = status;
+      if (terminal || reviewNote) {
+        a.reviewedBy = actor;
+        a.reviewedAt = this.now();
+        a.reviewNote = reviewNote;
+      }
       target = a;
     });
-    await this.recordAudit(actor, 'application.status', id, String(status));
+    await this.recordAudit(actor, 'application.status', id, reviewNote ? `${status}: ${reviewNote}` : String(status));
     if (target) {
       const t: IssuerApplication = target;
+      const honesty = terminal ? ' This is a prototype review outcome only - not a legal approval, identity verification, listing or offer.' : '';
+      const noteText = reviewNote ? ` Operator note: ${reviewNote}` : '';
       await this.notify(
         t.publicKey,
         'application_status',
         'Issuer application update',
-        `Your issuer application for "${t.projectName}" is now "${status}".`,
+        `Your issuer application for "${t.projectName}" is now "${status}".${honesty}${noteText}`,
         t.id,
         { projectName: t.projectName, status },
       );

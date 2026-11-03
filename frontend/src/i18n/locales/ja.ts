@@ -1814,6 +1814,8 @@ export const ja: Messages = {
     applicationStatus: {
       received: '受付済み',
       under_review: '審査中',
+      approved: '承認済み',
+      rejected: '却下',
       closed: '完了',
     },
     myTicketsTitle: '自分のサポート・フィードバックチケット',
@@ -1967,6 +1969,9 @@ export const ja: Messages = {
       stateVisible: '表示中',
       stateHidden: '非表示',
       markUnderReview: '審査中にする',
+      approveApplication: '承認する',
+      rejectApplication: '却下する',
+      rejectNotePrompt: '申請者への却下メモ（必須）:',
       closeApplication: 'クローズ',
       reopenApplication: '再オープン',
       statusUpdated: 'ステータスを更新しました。',

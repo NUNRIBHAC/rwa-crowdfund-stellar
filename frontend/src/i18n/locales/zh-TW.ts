@@ -1762,6 +1762,8 @@ export const zhTW: Messages = {
     applicationStatus: {
       received: '已收到',
       under_review: '審核中',
+      approved: '已核准',
+      rejected: '已拒絕',
       closed: '已關閉',
     },
     myTicketsTitle: '我的支援與意見回饋工單',
@@ -1912,6 +1914,9 @@ export const zhTW: Messages = {
       stateVisible: '可見',
       stateHidden: '已隱藏',
       markUnderReview: '標記為審核中',
+      approveApplication: '核准',
+      rejectApplication: '拒絕',
+      rejectNotePrompt: '給申請人的拒絕說明（必填）:',
       closeApplication: '關閉',
       reopenApplication: '重新開啟',
       statusUpdated: '狀態已更新。',

@@ -1762,6 +1762,8 @@ export const zhCN: Messages = {
     applicationStatus: {
       received: '已收到',
       under_review: '审核中',
+      approved: '已批准',
+      rejected: '已拒绝',
       closed: '已关闭',
     },
     myTicketsTitle: '我的支持与反馈工单',
@@ -1912,6 +1914,9 @@ export const zhCN: Messages = {
       stateVisible: '可见',
       stateHidden: '已隐藏',
       markUnderReview: '标记为审核中',
+      approveApplication: '批准',
+      rejectApplication: '拒绝',
+      rejectNotePrompt: '给申请人的拒绝说明（必填）:',
       closeApplication: '关闭',
       reopenApplication: '重新打开',
       statusUpdated: '状态已更新。',

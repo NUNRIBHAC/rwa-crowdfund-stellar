@@ -1831,6 +1831,8 @@ export const hi: Messages = {
     applicationStatus: {
       received: 'प्राप्त',
       under_review: 'समीक्षा में',
+      approved: 'स्वीकृत',
+      rejected: 'अस्वीकृत',
       closed: 'बंद',
     },
     myTicketsTitle: 'मेरे सहायता और प्रतिक्रिया टिकट',
@@ -1987,6 +1989,9 @@ export const hi: Messages = {
       stateVisible: 'दृश्यमान',
       stateHidden: 'छिपाया गया',
       markUnderReview: 'समीक्षाधीन चिह्नित करें',
+      approveApplication: 'स्वीकृत करें',
+      rejectApplication: 'अस्वीकृत करें',
+      rejectNotePrompt: 'आवेदक के लिए अस्वीकृति टिप्पणी (आवश्यक):',
       closeApplication: 'बंद करें',
       reopenApplication: 'फिर से खोलें',
       statusUpdated: 'स्थिति अपडेट हुई।',
