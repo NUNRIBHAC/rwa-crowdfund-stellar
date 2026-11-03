@@ -197,3 +197,78 @@
     width: 180px;
   }
 }
+
+/* Actual original footer supplied again on 2026-11-03: retain the horizontal
+   starts (1600px: brand14, links249/389/559/685, context837), while keeping
+   the later 44px touch targets. Legal links may make the band taller. */
+@media (min-width: 1440px) {
+  .footer-brand-inner {
+    padding: 24px 228px 24px 14px;
+    gap: 24px;
+  }
+  .footer-brand-word {
+    width: 211px;
+    max-width: 211px;
+  }
+  .footer-tagline {
+    max-width: 200px;
+  }
+  .footer-social {
+    grid-template-columns: repeat(5, 44px);
+    gap: 0;
+  }
+  .footer-brand-inner .footer-grid,
+  html[lang='de'] .footer-brand-inner .footer-grid {
+    grid-template-columns: minmax(124px, max-content) minmax(154px, max-content) minmax(110px, max-content) minmax(136px, max-content) minmax(240px, 1fr);
+    column-gap: 16px;
+  }
+  .footer-tiles {
+    width: 200px;
+    height: 170px;
+    top: 20px;
+  }
+  /* Keep both motion endpoints clustered in the top-right reference area,
+     rather than stretching the design down with accessible link height. */
+  .ft-1 {
+    --sx: 22%;
+    --sy: 4%;
+    --gx: 24%;
+    --gy: 6%;
+  }
+  .ft-2 {
+    --sx: 74%;
+    --sy: 6%;
+    --gx: 70%;
+    --gy: 7%;
+  }
+  .ft-3 {
+    --sx: 47%;
+    --sy: 18%;
+    --gx: 48%;
+    --gy: 17%;
+  }
+  .ft-4 {
+    --sx: 26%;
+    --sy: 29%;
+    --gx: 28%;
+    --gy: 27%;
+  }
+  .ft-5 {
+    --sx: 1%;
+    --sy: 48%;
+    --gx: 5%;
+    --gy: 45%;
+  }
+  .ft-6 {
+    --sx: 43%;
+    --sy: 54%;
+    --gx: 42%;
+    --gy: 52%;
+  }
+  .ft-7 {
+    --sx: 62%;
+    --sy: 65%;
+    --gx: 60%;
+    --gy: 63%;
+  }
+}
