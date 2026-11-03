@@ -1,9 +1,9 @@
 name: visual
 
 # Synthetic visual regression via Argos. Captures run against a locally served
-# production build with the API stubbed offline (deterministic, no live data).
-# Budget guardrail: 5 captures per run, single viewport. This is NOT full UI
-# coverage - it is a smoke matrix for layout regressions on key pages.
+# production build with synthetic API data (no live/private data).
+# All 24 public routes x 11 locales x 3 widths = 792 screenshots per run.
+# Hobby has a hard free quota: uploads pause at its limit; never upgrade automatically.
 on:
   # One run per change: pushes to main fire `push`; while a PR is open its
   # branch pushes fire `pull_request` (synchronize) instead - no double runs.
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
           cache-dependency-path: package-lock.json
       - name: Install

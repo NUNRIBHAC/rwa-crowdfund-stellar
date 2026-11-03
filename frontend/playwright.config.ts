@@ -1,16 +1,19 @@
 import { defineConfig } from '@playwright/test';
 
 // Synthetic visual captures for Argos. Deterministic by design: the backend
-// API is stubbed offline, so captures cover static content pages and the
-// designed API-unavailable states - never live data, never all pages.
+// API uses explicit synthetic data. All 24 public routes x 11 locales x
+// three widths are captured. Protected account states remain separate.
 export default defineConfig({
   testDir: './e2e-visual',
   timeout: 30000,
   retries: 0,
+  workers: 2,
+  fullyParallel: true,
   reporter: [['list'], ['@argos-ci/playwright/reporter', { uploadToArgos: !!process.env.ARGOS_TOKEN }]],
   use: {
     baseURL: 'http://localhost:4173',
     launchOptions: {
+      ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}),
       args: ['--disable-lcd-text', '--font-render-hinting=none'],
     },
     viewport: { width: 1280, height: 800 },
