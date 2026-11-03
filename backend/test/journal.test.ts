@@ -124,8 +124,8 @@ function fakePool() {
       }
       if (/^INSERT INTO soroban_intents/.test(sql)) {
         assert.ok(inTx, 'upsert outside transaction');
-        const [hash, campaign, actor, action, amount, xdr, signed_xdr, status] = params as any[];
-        rows.set(hash, { seq: rows.get(hash)?.seq ?? ++seq, hash, campaign, actor, action, amount, xdr, signed_xdr, status });
+        const [hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id] = params as any[];
+        rows.set(hash, { seq: rows.get(hash)?.seq ?? ++seq, hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id: contract_id ?? rows.get(hash)?.contract_id ?? null });
         return { rows: [] };
       }
       if (/^SELECT .* FROM soroban_intents ORDER BY seq$/.test(sql)) {
@@ -157,6 +157,24 @@ test('postgres journal persists, updates and re-reads intents in order', async (
   assert.deepEqual(store.intents[0], pgSigned);
   assert.deepEqual(store.intents[1], second);
   assert.ok(pool.calls.includes('BEGIN') && pool.calls.includes('COMMIT'), 'transactional save');
+});
+
+test('postgres journal persists contractId and never erases it on a later save', async () => {
+  const pool = fakePool();
+  const j = new PostgresJournal(pool);
+  const confirmed: Intent = { ...pgSample, status: 'SUCCESS', contractId: 'CDHCVRCXKYAF4RO6RU3KI4VI2DNZMBI4TU5IVR43EVGBI756FQSOGXMM' };
+  await j.save({ intents: [confirmed] });
+  // A fresh read must return the journaled contract id: v2 deployment
+  // progress is derived from these rows (regression: the column was never
+  // selected or written, so every journaled id silently vanished).
+  const first = await j.read();
+  assert.equal(first.intents.length, 1);
+  assert.equal(first.intents[0].contractId, confirmed.contractId);
+  // A later save of the same hash without the id (e.g. a status re-record)
+  // must not erase it.
+  await j.save({ intents: [{ ...pgSample, status: 'SUCCESS' }] });
+  const second = await j.read();
+  assert.equal(second.intents[0].contractId, confirmed.contractId);
 });
 
 test('postgres journal rolls back when an upsert fails', async () => {
