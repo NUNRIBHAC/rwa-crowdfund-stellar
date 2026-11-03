@@ -89,7 +89,7 @@ const PROVIDER_ISSUER: Partial<Record<SocialProvider, string>> = {
 const PROVIDER_SCOPE: Partial<Record<SocialProvider, string>> = {
   google: 'openid email profile',
   linkedin: 'openid email profile',
-  telegram: 'openid profile',
+  telegram: 'openid profile phone',
 };
 
 // Static OAuth2 endpoints for non-OIDC providers (GitHub publishes no
@@ -129,6 +129,24 @@ export function socialRegistrationAllowedEmails(env: NodeJS.ProcessEnv): Set<str
       .map((e) => e.trim().toLowerCase())
       .filter(Boolean),
   );
+}
+
+// Telegram OIDC carries no email, but with the `phone` scope it returns the
+// Telegram-verified phone_number. New Telegram accounts therefore register
+// only for a phone listed in SOCIAL_REGISTRATION_ALLOWED_PHONES (comma-
+// separated, any formatting; compared as digits only). Unset = none.
+export function normalizePhone(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const digits = value.replace(/\D/g, '');
+  return digits.length >= 7 && digits.length <= 15 ? digits : null;
+}
+export function socialRegistrationAllowedPhones(env: NodeJS.ProcessEnv): Set<string> {
+  const out = new Set<string>();
+  for (const part of (env.SOCIAL_REGISTRATION_ALLOWED_PHONES ?? '').split(',')) {
+    const n = normalizePhone(part);
+    if (n) out.add(n);
+  }
+  return out;
 }
 
 type FetchLike = typeof fetch;
@@ -227,6 +245,7 @@ export async function completeSocialFlow(
   let subject: string | null;
   let email: string | null;
   let emailVerified: boolean;
+  let phone: string | null = null;
   if (PROVIDER_KIND[provider] === 'oauth2') {
     ({ subject, email, emailVerified } = await exchangeOAuth2Userinfo(provider, cfg, currentUrl, stateParam, flow.codeVerifier, fetchImpl));
   } else {
@@ -246,6 +265,7 @@ export async function completeSocialFlow(
     subject = claims?.sub ?? null;
     email = typeof claims?.email === 'string' ? (claims.email as string).trim().toLowerCase() : null;
     emailVerified = claims?.email_verified === true;
+    if (provider === 'telegram') phone = normalizePhone(claims?.phone_number);
   }
   if (!subject) throw new AuthError(502, 'the sign-in provider returned no identity', 'social_exchange_failed');
   const identityKey = `${provider}:${subject}`;
@@ -283,9 +303,17 @@ export async function completeSocialFlow(
       if (!account) throw new AuthError(500, 'account record missing');
     } else {
       // New social registration: fail-closed gate (module header).
-      const allowed = socialRegistrationAllowedEmails(env);
-      if (!email || !emailVerified || !allowed.has(email)) {
-        throw new AuthError(403, 'sign-in with this provider is not open for new accounts on this deployment', 'social_registration_restricted');
+      if (provider === 'telegram') {
+        // No email evidence exists for Telegram; the Telegram-verified phone
+        // is matched against its own allowlist. The phone is not stored.
+        if (!phone || !socialRegistrationAllowedPhones(env).has(phone)) {
+          throw new AuthError(403, 'sign-in with this provider is not open for new accounts on this deployment', 'social_registration_restricted');
+        }
+      } else {
+        const allowed = socialRegistrationAllowedEmails(env);
+        if (!email || !emailVerified || !allowed.has(email)) {
+          throw new AuthError(403, 'sign-in with this provider is not open for new accounts on this deployment', 'social_registration_restricted');
+        }
       }
       const publicKey = Keypair.random().publicKey();
       s.accounts[publicKey] = {
@@ -293,7 +321,7 @@ export async function completeSocialFlow(
         displayName: null,
         createdAt: now,
         authMethod: 'social',
-        email,
+        ...(email ? { email } : {}),
       } satisfies Account;
       s.socialIdentities[identityKey] = { provider, subject, publicKey, email, createdAt: now, lastLoginAt: now };
       account = s.accounts[publicKey];

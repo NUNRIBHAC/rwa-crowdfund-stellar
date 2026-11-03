@@ -31,19 +31,19 @@ const PROVIDER_ISSUERS: Record<string, string> = {
 const PROVIDER_SCOPES: Record<string, string> = {
   google: 'openid email profile',
   linkedin: 'openid email profile',
-  telegram: 'openid profile',
+  telegram: 'openid profile phone',
 };
 
 // A fake Google: discovery metadata, JWKS, token exchange (with a real
 // PKCE check against the challenge seen in the authorization URL) and a
 // signed id_token via jose. userinfo is never needed - the validated
 // id_token claims are the identity source.
-async function makeFakeProvider(provider: string, opts: { email?: string; emailVerified?: boolean; subject?: string }) {
+async function makeFakeProvider(provider: string, opts: { email?: string; emailVerified?: boolean; subject?: string; phone?: string }) {
   const ISSUER = PROVIDER_ISSUERS[provider];
   if (!ISSUER) throw new Error(`no fake for ${provider}`);
   // claims are mutable: tests update them between flows to simulate the
   // provider returning different profile data for the same subject.
-  const claims = { email: opts.email, emailVerified: opts.emailVerified };
+  const claims = { email: opts.email, emailVerified: opts.emailVerified, phone: opts.phone };
   const { publicKey, privateKey } = await jose.generateKeyPair('RS256');
   const publicJwk = await jose.exportJWK(publicKey);
   publicJwk.kid = 'test-key';
@@ -79,6 +79,7 @@ async function makeFakeProvider(provider: string, opts: { email?: string; emailV
         sub: subject,
         email: claims.email,
         email_verified: claims.emailVerified,
+        phone_number: claims.phone,
         nonce: body.get('nonce') ?? (globalThis as any).__testNonce,
       })
         .setProtectedHeader({ alg: 'RS256', kid: 'test-key' })
@@ -118,6 +119,7 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_GITHUB_CLIENT_SECRET',
     'SOCIAL_GITHUB_REDIRECT_URI',
     'SOCIAL_REGISTRATION_ALLOWED_EMAILS',
+    'SOCIAL_REGISTRATION_ALLOWED_PHONES',
   ])
     delete process.env[k];
   Object.assign(process.env, env);
@@ -568,22 +570,34 @@ test('linkedin completes a full allowlisted registration flow and issues a worki
   assert.ok(data.socialIdentities['linkedin:linkedin-sub-123'], 'identity stored under linkedin:subject');
 });
 
-test('telegram uses its email-less scope and can never register under the fail-closed email gate', async () => {
-  // Telegram's OIDC claims carry no email/email_verified; even an allowlist
-  // entry cannot satisfy the registration gate. Sign-in remains possible for
-  // identities linked through a deliberate authenticated flow (not yet
-  // implemented), so a fresh Telegram identity is refused today.
-  const fake = await makeFakeProvider('telegram', {});
-  const { base, store } = await startApp(
-    { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' },
-    { socialFetch: fake.fetchImpl },
-  );
-  const start = await fetch(`${base}/api/auth/social/telegram/start`, { redirect: 'manual' });
-  const authUrl = new URL(start.headers.get('location')!);
-  assert.equal(authUrl.searchParams.get('scope'), 'openid profile');
-  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+test('telegram registers only for an allowlisted Telegram-verified phone; email allowlist never applies', async () => {
+  const PHONE = '+351 910 000 111';
+  // Email allowlist alone (and no phone claim) cannot register a Telegram identity.
+  const noPhone = await makeFakeProvider('telegram', {});
+  const a1 = await startApp({ ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' }, { socialFetch: noPhone.fetchImpl });
+  const start = await fetch(`${a1.base}/api/auth/social/telegram/start`, { redirect: 'manual' });
+  assert.equal(new URL(start.headers.get('location')!).searchParams.get('scope'), 'openid profile phone');
+  let cb = await driveFlow(a1.base, noPhone.fetchImpl, noPhone.state, 'telegram');
   assert.equal(cb.headers.get('location'), '/account#social-error=social_registration_restricted');
-  const data = await store.read();
-  assert.equal(Object.keys(data.socialIdentities).length, 0);
-  assert.equal(Object.keys(data.accounts).length, 0);
+  assert.equal(Object.keys((await a1.store.read()).accounts).length, 0);
+
+  // A phone not on the allowlist is refused.
+  const other = await makeFakeProvider('telegram', { phone: '+351 910 999 999' });
+  const a2 = await startApp({ ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_PHONES: PHONE }, { socialFetch: other.fetchImpl });
+  cb = await driveFlow(a2.base, other.fetchImpl, other.state, 'telegram');
+  assert.equal(cb.headers.get('location'), '/account#social-error=social_registration_restricted');
+
+  // An allowlisted phone (any formatting) registers; identity keyed on sub, phone not stored.
+  const ok = await makeFakeProvider('telegram', { phone: '351910000111' });
+  const a3 = await startApp({ ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_PHONES: PHONE }, { socialFetch: ok.fetchImpl });
+  cb = await driveFlow(a3.base, ok.fetchImpl, ok.state, 'telegram');
+  assert.ok(cb.headers.get('location')!.startsWith('/account#social-token=bls_'), cb.headers.get('location')!);
+  const data = await a3.store.read();
+  assert.ok(data.socialIdentities['telegram:telegram-sub-123']);
+  assert.equal(Object.keys(data.accounts).length, 1);
+  assert.ok(!JSON.stringify(data).includes('910000111'), 'phone number is not persisted');
+  // Second sign-in reuses the account.
+  cb = await driveFlow(a3.base, ok.fetchImpl, ok.state, 'telegram');
+  assert.ok(cb.headers.get('location')!.startsWith('/account#social-token=bls_'));
+  assert.equal(Object.keys((await a3.store.read()).accounts).length, 1);
 });
