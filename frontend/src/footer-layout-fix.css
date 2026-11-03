@@ -167,3 +167,33 @@
     grid-column: 1 / -1;
   }
 }
+
+/* Keep the reference's wide brand/context allocation without undoing the
+   later 44px touch-target requirement. Ten social links fit in two rows;
+   long legal link lists still determine a minimum accessible footer height. */
+@media (min-width: 1440px) {
+  .footer-brand-inner {
+    gap: 24px;
+    padding: 24px 196px 24px 24px;
+  }
+  .footer-brand-word {
+    width: 240px;
+    max-width: 240px;
+  }
+  .footer-social {
+    display: grid;
+    grid-template-columns: repeat(5, 44px);
+    gap: 4px;
+  }
+  .footer-social a {
+    justify-content: center;
+  }
+  .footer-brand-inner .footer-grid,
+  html[lang='de'] .footer-brand-inner .footer-grid {
+    grid-template-columns: repeat(4, minmax(min-content, max-content)) minmax(240px, 1fr);
+    column-gap: 16px;
+  }
+  .footer-tiles {
+    width: 180px;
+  }
+}
