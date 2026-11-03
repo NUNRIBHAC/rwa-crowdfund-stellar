@@ -274,7 +274,7 @@ function newId(prefix: string): string {
 }
 
 export function requireCampaignId(id: unknown): string {
-  if (typeof id !== 'string' || !LIMITS.campaignId.test(id)) throw new CommunityError(400, 'invalid campaign id');
+  if (typeof id !== 'string' || !LIMITS.campaignId.test(id)) throw new CommunityError(400, 'invalid campaign id', 'invalid_campaign_id');
   return id;
 }
 
@@ -307,7 +307,7 @@ export class CommunityService {
   }
 
   checkRate(key: string, limit: number, windowMs: number): void {
-    if (!this.limiter.allow(key, limit, windowMs)) throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+    if (!this.limiter.allow(key, limit, windowMs)) throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
   }
 
   async listComments(campaignId: string): Promise<PublicComment[]> {
@@ -358,7 +358,7 @@ export class CommunityService {
     let target: NewsPost | undefined;
     await this.store.change((state) => {
       const n = state.news[id];
-      if (!n) throw new CommunityError(404, 'news post not found');
+      if (!n) throw new CommunityError(404, 'news post not found', 'not_found');
       target = n;
       delete state.news[id];
     });
@@ -583,7 +583,7 @@ export class CommunityService {
     let target: PodcastEpisode | undefined;
     await this.store.change((state) => {
       const e = state.episodes[id];
-      if (!e) throw new CommunityError(404, 'episode not found');
+      if (!e) throw new CommunityError(404, 'episode not found', 'not_found');
       target = e;
       delete state.episodes[id];
     });
@@ -628,7 +628,7 @@ export class CommunityService {
   // Scored server-side; answers are used for scoring and then dropped.
   async submitKnowledgeAssessment(account: Account, input: unknown): Promise<AppropriatenessRecord> {
     const { experienceLevel, objective, answers, information } = knowledgeV2Input.parse(input ?? {});
-    if (answers.length !== KNOWLEDGE_QUESTIONS.length) throw new CommunityError(400, `expected ${KNOWLEDGE_QUESTIONS.length} answers`);
+    if (answers.length !== KNOWLEDGE_QUESTIONS.length) throw new CommunityError(400, `expected ${KNOWLEDGE_QUESTIONS.length} answers`, 'answers_count');
     let score = 0;
     answers.forEach((a, i) => {
       if (a === KNOWLEDGE_QUESTIONS[i].correct) score += 1;
@@ -684,11 +684,11 @@ export class CommunityService {
     const { netWorthEur, capacityEur } = simulationResultInput.parse(input ?? {});
     // Capacity is 10% of net worth (Art. 21(5)); tolerate 1 cent rounding.
     if (Math.abs(capacityEur - netWorthEur * 0.1) > 0.01)
-      throw new CommunityError(400, 'capacityEur must equal 10% of netWorthEur (rounding to cents tolerated)');
+      throw new CommunityError(400, 'capacityEur must equal 10% of netWorthEur (rounding to cents tolerated)', 'capacity_mismatch');
     const now = this.now();
     const record = await this.store.change((state) => {
       const rec = state.appropriateness[account.publicKey];
-      if (!rec) throw new CommunityError(409, 'complete the knowledge assessment before transmitting a simulation result');
+      if (!rec) throw new CommunityError(409, 'complete the knowledge assessment before transmitting a simulation result', 'assessment_required');
       rec.simulation = { netWorthEur, capacityEur, transmittedAt: now };
       rec.reviewSimulationDueAt = addCalendarYears(now, 1);
       return normalizeRecord(rec);
@@ -703,9 +703,9 @@ export class CommunityService {
   async acknowledgeWarning(account: Account): Promise<AppropriatenessRecord> {
     const record = await this.store.change((state) => {
       const rec = state.appropriateness[account.publicKey];
-      if (!rec) throw new CommunityError(409, 'no assessment on record');
-      if (rec.outcome !== 'warning_issued') throw new CommunityError(409, 'no risk warning is pending acknowledgment');
-      if (rec.warningAcknowledgedAt) throw new CommunityError(409, 'risk warning already acknowledged');
+      if (!rec) throw new CommunityError(409, 'no assessment on record', 'assessment_missing');
+      if (rec.outcome !== 'warning_issued') throw new CommunityError(409, 'no risk warning is pending acknowledgment', 'warning_not_pending');
+      if (rec.warningAcknowledgedAt) throw new CommunityError(409, 'risk warning already acknowledged', 'warning_already_acknowledged');
       rec.warningAcknowledgedAt = this.now();
       return normalizeRecord(rec);
     });
@@ -737,7 +737,7 @@ export class CommunityService {
     };
     const record = await this.store.change((state) => {
       const rec = state.appropriateness[account.publicKey];
-      if (!rec) throw new CommunityError(409, 'complete the knowledge assessment before requesting sophisticated-investor treatment');
+      if (!rec) throw new CommunityError(409, 'complete the knowledge assessment before requesting sophisticated-investor treatment', 'assessment_required');
       rec.categorisation = { status: 'sophistication_requested', request };
       return normalizeRecord(rec);
     });
@@ -883,7 +883,7 @@ export class CommunityService {
     await this.store.change((state) => {
       const n = state.notifications[id];
       // Same 404 for missing and other-owned: no cross-account enumeration.
-      if (!n || n.publicKey !== account.publicKey) throw new CommunityError(404, 'notification not found');
+      if (!n || n.publicKey !== account.publicKey) throw new CommunityError(404, 'notification not found', 'not_found');
       if (n.readAt === null) n.readAt = now;
     });
   }
@@ -931,7 +931,7 @@ export class CommunityService {
     let target: Comment | undefined;
     await this.store.change((state) => {
       const c = state.comments[id];
-      if (!c) throw new CommunityError(404, 'comment not found');
+      if (!c) throw new CommunityError(404, 'comment not found', 'not_found');
       c.hiddenAt = hidden ? this.now() : null;
       c.hiddenReason = hidden ? (reason ?? null) : null;
       target = c;
@@ -957,7 +957,7 @@ export class CommunityService {
     let target: Ticket | undefined;
     await this.store.change((state) => {
       const t = state.tickets[id];
-      if (!t) throw new CommunityError(404, 'ticket not found');
+      if (!t) throw new CommunityError(404, 'ticket not found', 'not_found');
       t.status = 'closed';
       t.closedAt = this.now();
       target = t;
@@ -1012,7 +1012,7 @@ export class CommunityService {
   }
 
   async adminSetCompanyStatus(id: string, status: unknown, actor = 'admin-area'): Promise<void> {
-    if (status !== 'approved' && status !== 'rejected') throw new CommunityError(400, 'status must be approved or rejected');
+    if (status !== 'approved' && status !== 'rejected') throw new CommunityError(400, 'status must be approved or rejected', 'invalid_status');
     const company = await this.store.change((state) => {
       const c = state.companies[id];
       if (!c) return null;
@@ -1020,7 +1020,7 @@ export class CommunityService {
       c.decidedAt = this.now();
       return { ...c };
     });
-    if (!company) throw new CommunityError(404, 'company application not found');
+    if (!company) throw new CommunityError(404, 'company application not found', 'not_found');
     await this.recordAudit(actor, 'company.status', id, String(status));
     await this.notify(
       company.publicKey,
@@ -1044,14 +1044,14 @@ export class CommunityService {
   // left guessing.
   async adminSetApplicationStatus(id: string, status: unknown, actor = 'admin-area', note?: unknown): Promise<void> {
     if (status !== 'received' && status !== 'under_review' && status !== 'approved' && status !== 'rejected' && status !== 'closed')
-      throw new CommunityError(400, 'invalid status');
+      throw new CommunityError(400, 'invalid status', 'invalid_status');
     const reviewNote = typeof note === 'string' && note.trim() ? note.trim().slice(0, 500) : null;
-    if (status === 'rejected' && !reviewNote) throw new CommunityError(400, 'rejection requires an operator note');
+    if (status === 'rejected' && !reviewNote) throw new CommunityError(400, 'rejection requires an operator note', 'note_required');
     const terminal = status === 'approved' || status === 'rejected';
     let target: IssuerApplication | undefined;
     await this.store.change((state) => {
       const a = state.applications[id];
-      if (!a) throw new CommunityError(404, 'application not found');
+      if (!a) throw new CommunityError(404, 'application not found', 'not_found');
       a.status = status;
       if (terminal || reviewNote) {
         a.reviewedBy = actor;

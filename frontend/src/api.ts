@@ -1,3 +1,4 @@
+import { localizedApiError, requestFailedMessage } from './i18n';
 export async function api(url: string, body?: unknown) {
   // Network failures and non-JSON bodies (dev server HTML fallback, empty
   // bodies during a redeploy) must never leak raw SyntaxError/TypeError text
@@ -16,7 +17,7 @@ export async function api(url: string, body?: unknown) {
   }
   if (!r.ok) {
     // Stable machine codes let the UI localize known failures without parsing text.
-    throw Object.assign(new Error(v.error ?? 'API request failed'), { code: v.code as string | undefined });
+    throw Object.assign(new Error(localizedApiError(v.code) ?? v.error ?? requestFailedMessage(r.status)), { code: v.code as string | undefined });
   }
   return v;
 }

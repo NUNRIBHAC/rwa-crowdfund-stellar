@@ -55,3 +55,31 @@ describe('HTTP failure without server text is localized', () => {
     await expect(emailResend('a@b.c')).rejects.not.toThrow(/Request failed/);
   });
 });
+
+describe('backend error codes are localized at the API layer', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    localStorage.clear();
+  });
+  it('maps a known code to the stored language and keeps unknown server text', async () => {
+    localStorage.setItem('blockallisto-language', 'pt');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ error: 'unknown campaign', code: 'campaign_not_found' }), { status: 404 })),
+    );
+    await expect(emailResend('a@b.c')).rejects.toThrow('Campanha desconhecida.');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ error: 'some new server text', code: 'brand_new' }), { status: 400 })),
+    );
+    await expect(emailResend('a@b.c')).rejects.toThrow('some new server text');
+  });
+  it('keeps validation detail after the localized lead', async () => {
+    localStorage.setItem('blockallisto-language', 'de');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ error: 'invalid input: amount required', code: 'invalid_input' }), { status: 400 })),
+    );
+    await expect(emailResend('a@b.c')).rejects.toThrow('amount required');
+  });
+});

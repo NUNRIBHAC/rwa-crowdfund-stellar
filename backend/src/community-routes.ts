@@ -170,10 +170,11 @@ function sendError(res: express.Response, err: unknown): void {
   if (err instanceof ZodError) {
     res.status(400).json({
       error: 'invalid input: ' + err.issues.map((i) => i.message).join('; '),
+      code: 'invalid_input',
     });
     return;
   }
-  res.status(500).json({ error: 'internal error' });
+  res.status(500).json({ error: 'internal error', code: 'internal_error' });
 }
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
@@ -658,7 +659,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     try {
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`challenge-ip:${ip}`, 30, 60 * 60 * 1000))
-        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       res.json(await createChallenge(store, String(req.body?.publicKey ?? '')));
     } catch (err) {
       sendError(res, err);
@@ -667,7 +668,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.post('/api/auth/verify', async (req, res) => {
     try {
       const ip = clientIp(req);
-      if (ip && !service.limiter.allow(`verify-ip:${ip}`, 60, 60 * 60 * 1000)) throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+      if (ip && !service.limiter.allow(`verify-ip:${ip}`, 60, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       const v = await verifyChallenge(store, String(req.body?.publicKey ?? ''), String(req.body?.signature ?? ''));
       if ('requiresTotp' in v) {
         res.json({ requiresTotp: true, ticket: v.ticket, expiresAt: v.expiresAt });
@@ -687,7 +689,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     authed(async (_req, res, account) => {
       const ip = clientIp(_req);
       if (ip && !service.limiter.allow(`totp-enroll-ip:${ip}`, 10, 60 * 60 * 1000))
-        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       res.json(await enrollTotp(store, account.publicKey));
     }),
   );
@@ -708,7 +710,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     try {
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`totp-complete-ip:${ip}`, 30, 60 * 60 * 1000))
-        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later');
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       const v = await completeTotpLogin(store, String(req.body?.ticket ?? ''), String(req.body?.code ?? ''));
       res.json({ token: v.token, expiresAt: v.expiresAt, account: publicAccount(v.account), isOperator: operatorWallets().includes(v.account.publicKey) });
     } catch (err) {
@@ -736,17 +738,19 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   //     the flag is set; empty/absent allowlist collects from NOBODY (403),
   //     so enabling the flag can never open blanket collection.
   const appropriatenessGate = (account: Account): CommunityError | null => {
-    if (!process.env.APPROPRIATENESS_COLLECT) return new CommunityError(503, 'appropriateness collection is disabled on this deployment (held)');
+    if (!process.env.APPROPRIATENESS_COLLECT)
+      return new CommunityError(503, 'appropriateness collection is disabled on this deployment (held)', 'feature_unavailable');
     const allowed = (process.env.APPROPRIATENESS_ALLOWLIST ?? '')
       .split(',')
       .map((k) => k.trim())
       .filter(Boolean);
-    if (!allowed.includes(account.publicKey)) return new CommunityError(403, 'appropriateness collection is limited to designated QA accounts');
+    if (!allowed.includes(account.publicKey))
+      return new CommunityError(403, 'appropriateness collection is limited to designated QA accounts', 'feature_restricted');
     return null;
   };
   const appropriatenessHeld: express.RequestHandler = (req, res, next) => {
     if (!process.env.APPROPRIATENESS_COLLECT) {
-      res.status(503).json({ error: 'appropriateness collection is disabled on this deployment (held)' });
+      res.status(503).json({ error: 'appropriateness collection is disabled on this deployment (held)', code: 'feature_unavailable' });
       return;
     }
     next();
@@ -922,13 +926,13 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // Semantics and limits are carried in the payload itself.
   router.get('/api/campaigns/:id/share-register.json', requireAdmin, async (req, res) => {
     if (!deps.shareRegister) {
-      res.status(503).json({ error: 'share register unavailable: provider not configured' });
+      res.status(503).json({ error: 'share register unavailable: provider not configured', code: 'feature_unavailable' });
       return;
     }
     try {
       const payload = await deps.shareRegister(requireCampaignId(req.params.id));
       if (!payload) {
-        res.status(404).json({ error: 'unknown campaign' });
+        res.status(404).json({ error: 'unknown campaign', code: 'campaign_not_found' });
         return;
       }
       res.json(payload);
@@ -938,13 +942,13 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.get('/api/campaigns/:id/share-register.csv', requireAdmin, async (req, res) => {
     if (!deps.shareRegister) {
-      res.status(503).json({ error: 'share register unavailable: provider not configured' });
+      res.status(503).json({ error: 'share register unavailable: provider not configured', code: 'feature_unavailable' });
       return;
     }
     try {
       const payload = await deps.shareRegister(requireCampaignId(req.params.id));
       if (!payload) {
-        res.status(404).json({ error: 'unknown campaign' });
+        res.status(404).json({ error: 'unknown campaign', code: 'campaign_not_found' });
         return;
       }
       res.type('text/csv').send(shareRegisterCsv(payload));
@@ -954,13 +958,13 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.get('/api/campaigns/:id/share-register.pdf', requireAdmin, async (req, res) => {
     if (!deps.shareRegister) {
-      res.status(503).json({ error: 'share register unavailable: provider not configured' });
+      res.status(503).json({ error: 'share register unavailable: provider not configured', code: 'feature_unavailable' });
       return;
     }
     try {
       const payload = await deps.shareRegister(requireCampaignId(req.params.id));
       if (!payload) {
-        res.status(404).json({ error: 'unknown campaign' });
+        res.status(404).json({ error: 'unknown campaign', code: 'campaign_not_found' });
         return;
       }
       const pdf = await buildShareRegisterPdf(payload);
@@ -983,26 +987,28 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     authed(async (req, res, account) => {
       const campaignId = requireCampaignId(req.params.id);
       if (!investorEntitlement) {
-        res.status(503).json({ error: 'investor entitlement verification is not configured; report access disabled' });
+        res.status(503).json({ error: 'investor entitlement verification is not configured; report access disabled', code: 'feature_unavailable' });
         return;
       }
       let entitlement: { registered: boolean; balanceUnits: bigint; contributedBefore: boolean };
       try {
         entitlement = await investorEntitlement(campaignId, account.publicKey);
       } catch (err) {
+        console.error('on-chain verification failed', err instanceof Error ? err.message : String(err));
         res.status(503).json({
-          error: `could not verify on-chain investor entitlement; refusing report access: ${err instanceof Error ? err.message : String(err)}`,
+          error: 'could not verify on-chain investor entitlement; refusing report access',
+          code: 'verification_unavailable',
         });
         return;
       }
       if (!entitlement.registered) {
-        res.status(404).json({ error: 'unknown campaign' });
+        res.status(404).json({ error: 'unknown campaign', code: 'campaign_not_found' });
         return;
       }
       const wallets = operatorWallets();
       const isOperator = wallets.length > 0 && wallets.includes(account.publicKey);
       if (!isOperator && entitlement.balanceUnits <= 0n && !entitlement.contributedBefore) {
-        res.status(403).json({ error: 'post-funding reports are available to investors in this campaign' });
+        res.status(403).json({ error: 'post-funding reports are available to investors in this campaign', code: 'investor_only' });
         return;
       }
       res.json({ reports: await service.listReports(campaignId) });
@@ -1016,26 +1022,28 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // explicit demo-grade operator approval.
   const investmentDocEntitlement = async (req: express.Request, res: express.Response, account: Account, campaignId: string): Promise<boolean> => {
     if (!investorEntitlement) {
-      res.status(503).json({ error: 'investor entitlement verification is not configured; investment documents disabled' });
+      res.status(503).json({ error: 'investor entitlement verification is not configured; investment documents disabled', code: 'feature_unavailable' });
       return false;
     }
     let entitlement: { registered: boolean; balanceUnits: bigint; contributedBefore: boolean };
     try {
       entitlement = await investorEntitlement(campaignId, account.publicKey);
     } catch (err) {
+      console.error('on-chain verification failed', err instanceof Error ? err.message : String(err));
       res.status(503).json({
-        error: `could not verify on-chain investor entitlement; refusing investment document access: ${err instanceof Error ? err.message : String(err)}`,
+        error: 'could not verify on-chain investor entitlement; refusing investment document access',
+        code: 'verification_unavailable',
       });
       return false;
     }
     if (!entitlement.registered) {
-      res.status(404).json({ error: 'unknown campaign' });
+      res.status(404).json({ error: 'unknown campaign', code: 'campaign_not_found' });
       return false;
     }
     const wallets = operatorWallets();
     const isOperator = wallets.length > 0 && wallets.includes(account.publicKey);
     if (!isOperator && entitlement.balanceUnits <= 0n && !entitlement.contributedBefore) {
-      res.status(403).json({ error: 'investment documents are available to investors in this campaign' });
+      res.status(403).json({ error: 'investment documents are available to investors in this campaign', code: 'investor_only' });
       return false;
     }
     return true;
@@ -1055,7 +1063,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     authed(async (req, res, account) => {
       const doc = await service.getInvestmentDocument(String(req.params.docId));
       if (!doc) {
-        res.status(404).json({ error: 'investment document not found' });
+        res.status(404).json({ error: 'investment document not found', code: 'not_found' });
         return;
       }
       // Entitlement BEFORE the approval check: non-investors are refused
@@ -1064,7 +1072,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const wallets = operatorWallets();
       const isOperator = wallets.length > 0 && wallets.includes(account.publicKey);
       if (doc.status !== 'approved' && !isOperator) {
-        res.status(404).json({ error: 'investment document not found' });
+        res.status(404).json({ error: 'investment document not found', code: 'not_found' });
         return;
       }
       res.setHeader('content-type', 'text/plain; charset=utf-8');
@@ -1212,11 +1220,11 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     authed(async (req, res, account) => {
       const wallets = operatorWallets();
       if (wallets.length === 0) {
-        res.status(503).json({ error: 'OPERATOR_WALLETS not configured; operator endpoints disabled' });
+        res.status(503).json({ error: 'OPERATOR_WALLETS not configured; operator endpoints disabled', code: 'feature_unavailable' });
         return;
       }
       if (!wallets.includes(account.publicKey)) {
-        res.status(403).json({ error: 'this wallet is not a designated operator' });
+        res.status(403).json({ error: 'this wallet is not a designated operator', code: 'operator_required' });
         return;
       }
       await handler(req, res, account);
@@ -1284,12 +1292,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     '/api/operator/campaign-deploy/build',
     operator(async (req, res, account) => {
       if (!campaignDeploy) {
-        res.status(503).json({ error: 'campaign deployment is not wired on this deployment' });
+        res.status(503).json({ error: 'campaign deployment is not wired on this deployment', code: 'feature_unavailable' });
         return;
       }
       const contractSet = req.body?.contractSet === undefined ? 'v1' : String(req.body.contractSet);
       if (contractSet === 'v2' && !campaignDeploy.buildV2) {
-        res.status(503).json({ error: 'v2 campaign deployment is not wired on this deployment' });
+        res.status(503).json({ error: 'v2 campaign deployment is not wired on this deployment', code: 'feature_unavailable' });
         return;
       }
       res.json(
@@ -1325,12 +1333,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     '/api/operator/campaign-deploy/submit',
     operator(async (req, res, account) => {
       if (!campaignDeploy) {
-        res.status(503).json({ error: 'campaign deployment is not wired on this deployment' });
+        res.status(503).json({ error: 'campaign deployment is not wired on this deployment', code: 'feature_unavailable' });
         return;
       }
       const submitSet = req.body?.contractSet === undefined ? 'v1' : String(req.body.contractSet);
       if (submitSet === 'v2' && !campaignDeploy.submitV2) {
-        res.status(503).json({ error: 'v2 campaign deployment is not wired on this deployment' });
+        res.status(503).json({ error: 'v2 campaign deployment is not wired on this deployment', code: 'feature_unavailable' });
         return;
       }
       res.json(
@@ -1389,25 +1397,28 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     operator(async (req, res, account) => {
       const campaignId = requireCampaignId(req.params.id);
       if (!fundingState) {
-        res.status(503).json({ error: 'on-chain funding state verification is not configured; report publishing disabled' });
+        res.status(503).json({ error: 'on-chain funding state verification is not configured; report publishing disabled', code: 'feature_unavailable' });
         return;
       }
       let state: Awaited<ReturnType<NonNullable<typeof fundingState>>>;
       try {
         state = await fundingState(campaignId);
       } catch (err) {
+        console.error('on-chain verification failed', err instanceof Error ? err.message : String(err));
         res.status(503).json({
-          error: `could not verify on-chain campaign state; refusing to publish: ${err instanceof Error ? err.message : String(err)}`,
+          error: 'could not verify on-chain campaign state; refusing to publish',
+          code: 'verification_unavailable',
         });
         return;
       }
       if (!state) {
-        res.status(404).json({ error: 'unknown campaign' });
+        res.status(404).json({ error: 'unknown campaign', code: 'campaign_not_found' });
         return;
       }
       if (Math.floor(Date.now() / 1000) < state.deadlineSeconds) {
         res.status(409).json({
           error: 'campaign funding period has not ended; post-funding reports publish after the on-chain deadline passes',
+          code: 'report_not_publishable',
         });
         return;
       }
@@ -1418,6 +1429,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (req.body?.kind === 'use_of_proceeds' && !state.withdrawn) {
         res.status(409).json({
           error: 'campaign funds are not recorded as withdrawn on-chain; a use-of-proceeds report would imply a payout that is not verified',
+          code: 'report_not_publishable',
         });
         return;
       }
@@ -1510,7 +1522,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     '/api/operator/reconciliation',
     operator(async (_req, res) => {
       if (!reconciliation) {
-        res.status(503).json({ error: 'reconciliation is not wired on this deployment' });
+        res.status(503).json({ error: 'reconciliation is not wired on this deployment', code: 'feature_unavailable' });
         return;
       }
       try {

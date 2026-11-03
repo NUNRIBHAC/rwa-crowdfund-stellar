@@ -1,4 +1,4 @@
-import { requestFailedMessage, storedLocale } from '../i18n';
+import { localizedApiError, requestFailedMessage, storedLocale } from '../i18n';
 // Community API client: wallet-authenticated accounts, comments, news,
 // support/feedback tickets, issuer applications and campaign metadata.
 // Matches backend/src/community-routes.ts + accounts.ts on
@@ -156,7 +156,12 @@ async function call<T>(url: string, opts: { method?: string; body?: unknown; tok
     body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
   });
   const v = (await r.json().catch(() => ({}))) as { error?: string; code?: string };
-  if (!r.ok) throw new ApiError(v.error ?? requestFailedMessage(r.status), v.code);
+  if (!r.ok) {
+    const local = localizedApiError(v.code);
+    // Validation keeps its field detail (server text) after the localized lead.
+    const detail = v.code === 'invalid_input' && v.error ? ` (${v.error.replace(/^invalid input: /, '')})` : '';
+    throw new ApiError(local ? local + detail : (v.error ?? requestFailedMessage(r.status)), v.code);
+  }
   return v as T;
 }
 
@@ -256,8 +261,8 @@ export async function downloadInvestmentDocument(token: string, docId: string): 
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!r.ok) {
-    const v = (await r.json().catch(() => ({}))) as { error?: string };
-    throw new Error(v.error ?? requestFailedMessage(r.status));
+    const v = (await r.json().catch(() => ({}))) as { error?: string; code?: string };
+    throw new Error(localizedApiError(v.code) ?? v.error ?? requestFailedMessage(r.status));
   }
   const dispo = r.headers.get('content-disposition') ?? '';
   const m = /filename="([^"]+)"/.exec(dispo);
@@ -307,12 +312,13 @@ export async function fetchReports(campaignId: string, token: string): Promise<R
     const r = await fetch(`/api/campaigns/${encodeURIComponent(campaignId)}/reports`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    const v = (await r.json().catch(() => ({}))) as { reports?: PostFundingReport[]; error?: string };
+    const v = (await r.json().catch(() => ({}))) as { reports?: PostFundingReport[]; error?: string; code?: string };
     if (r.ok) return { ok: true, reports: v.reports ?? [] };
-    if (r.status === 401) return { ok: false, reason: 'unauthenticated', message: v.error };
-    if (r.status === 403) return { ok: false, reason: 'not-investor', message: v.error };
-    if (r.status === 404) return { ok: false, reason: 'unknown-campaign', message: v.error };
-    return { ok: false, reason: 'unavailable', message: v.error ?? requestFailedMessage(r.status) };
+    const text = localizedApiError(v.code) ?? v.error;
+    if (r.status === 401) return { ok: false, reason: 'unauthenticated', message: text };
+    if (r.status === 403) return { ok: false, reason: 'not-investor', message: text };
+    if (r.status === 404) return { ok: false, reason: 'unknown-campaign', message: text };
+    return { ok: false, reason: 'unavailable', message: text ?? requestFailedMessage(r.status) };
   } catch (e) {
     return { ok: false, reason: 'unavailable', message: e instanceof Error ? e.message : String(e) };
   }

@@ -98,6 +98,68 @@ export function storedLocale(): Locale | undefined {
   }
 }
 
+export const API_ERROR_MESSAGE_KEYS: Record<string, keyof Messages['community']> = {
+  email_provider_unconfigured: 'errorEmailProviderUnavailable',
+  rate_limited: 'errorRateLimited',
+  email_invalid: 'errorEmailInvalid',
+  password_short: 'errorPasswordShort',
+  password_long: 'errorPasswordLong',
+  token_invalid: 'errorTokenInvalid',
+  token_expired: 'errorTokenExpired',
+  credentials_invalid: 'errorCredentialsInvalid',
+  email_unverified: 'errorEmailUnverified',
+  login_throttled: 'errorLoginThrottled',
+  invalid_input: 'errorInvalidInput',
+  email_recipient_restricted: 'errorEmailRecipientRestricted',
+  email_budget_exceeded: 'errorEmailBudgetExceeded',
+  email_provider_throttled: 'errorEmailProviderThrottled',
+  totp_unconfigured: 'errorTotpUnconfigured',
+  totp_already_enabled: 'errorTotpAlreadyEnabled',
+  totp_no_enrollment: 'errorTotpNoEnrollment',
+  totp_code_invalid: 'errorTotpCodeInvalid',
+  totp_login_invalid: 'errorTotpLoginInvalid',
+  totp_not_enabled: 'errorTotpNotEnabled',
+  social_provider_denied: 'errorSocialProviderDenied',
+  social_flow_expired: 'errorSocialFlowExpired',
+  social_pending_expired: 'errorSocialPendingExpired',
+  social_code_invalid: 'errorSocialCodeInvalid',
+  social_email_in_use: 'errorSocialEmailInUse',
+  social_exchange_failed: 'errorSocialExchangeFailed',
+  social_registration_restricted: 'errorSocialRegistrationRestricted',
+  social_identity_taken: 'errorSocialIdentityTaken',
+  social_stepup_required: 'errorSocialStepupRequired',
+  social_stepup_failed: 'errorSocialStepupFailed',
+  social_link_requires_verified_email: 'errorSocialLinkRequiresVerifiedEmail',
+  turnstile_script_failed: 'errorTurnstileLoadFailed',
+  turnstile_unavailable: 'errorTurnstileUnavailable',
+  turnstile_failed: 'errorTurnstileFailed',
+  not_found: 'errorNotFound',
+  campaign_not_found: 'errorCampaignNotFound',
+  invalid_campaign_id: 'errorInvalidCampaignId',
+  internal_error: 'errorInternal',
+  feature_unavailable: 'errorFeatureUnavailable',
+  feature_restricted: 'errorFeatureRestricted',
+  operator_required: 'errorOperatorRequired',
+  investor_only: 'errorInvestorOnly',
+  verification_unavailable: 'errorVerificationUnavailable',
+  invalid_status: 'errorInvalidStatus',
+  note_required: 'errorNoteRequired',
+  assessment_required: 'errorAssessmentRequired',
+  assessment_missing: 'errorAssessmentMissing',
+  warning_not_pending: 'errorWarningNotPending',
+  warning_already_acknowledged: 'errorWarningAcknowledged',
+  capacity_mismatch: 'errorCapacityMismatch',
+  answers_count: 'errorAnswersCount',
+  report_not_publishable: 'errorReportNotPublishable',
+};
+
+/** Localized text for a backend error code; undefined for unknown codes (caller keeps the server text). */
+export function localizedApiError(code: string | undefined): string | undefined {
+  const key = code ? API_ERROR_MESSAGE_KEYS[code] : undefined;
+  const v = key ? MESSAGES[storedLocale() ?? detectLocale()].community[key] : undefined;
+  return typeof v === 'string' ? v : undefined;
+}
+
 /** Localized fallback for an HTTP failure that carried no server error text. */
 export function requestFailedMessage(status: number): string {
   return MESSAGES[storedLocale() ?? detectLocale()].community.requestFailed.replace('{status}', String(status));

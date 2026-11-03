@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 import { isConnected, signMessage } from '@stellar/freighter-api';
 import type { CommunityAccount } from './api';
 import { getTurnstileToken } from './turnstile';
-import { storedLocale } from '../i18n';
+import { API_ERROR_MESSAGE_KEYS, storedLocale } from '../i18n';
 import type { Messages as CatalogMessages } from '../i18n/locales/en';
 import { tpl } from '../format';
 import {
@@ -102,42 +102,6 @@ type Messages = {
 // localized catalog keys. Codes not listed here - and any error without a
 // code - fall back to the raw server message: known failures read in the
 // user's language, unknown failures are shown honestly, never masked.
-const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']> = {
-  email_provider_unconfigured: 'errorEmailProviderUnavailable',
-  rate_limited: 'errorRateLimited',
-  email_invalid: 'errorEmailInvalid',
-  password_short: 'errorPasswordShort',
-  password_long: 'errorPasswordLong',
-  token_invalid: 'errorTokenInvalid',
-  token_expired: 'errorTokenExpired',
-  credentials_invalid: 'errorCredentialsInvalid',
-  email_unverified: 'errorEmailUnverified',
-  login_throttled: 'errorLoginThrottled',
-  invalid_input: 'errorInvalidInput',
-  email_recipient_restricted: 'errorEmailRecipientRestricted',
-  email_budget_exceeded: 'errorEmailBudgetExceeded',
-  email_provider_throttled: 'errorEmailProviderThrottled',
-  totp_unconfigured: 'errorTotpUnconfigured',
-  totp_already_enabled: 'errorTotpAlreadyEnabled',
-  totp_no_enrollment: 'errorTotpNoEnrollment',
-  totp_code_invalid: 'errorTotpCodeInvalid',
-  totp_login_invalid: 'errorTotpLoginInvalid',
-  totp_not_enabled: 'errorTotpNotEnabled',
-  social_provider_denied: 'errorSocialProviderDenied',
-  social_flow_expired: 'errorSocialFlowExpired',
-  social_pending_expired: 'errorSocialPendingExpired',
-  social_code_invalid: 'errorSocialCodeInvalid',
-  social_email_in_use: 'errorSocialEmailInUse',
-  social_exchange_failed: 'errorSocialExchangeFailed',
-  social_registration_restricted: 'errorSocialRegistrationRestricted',
-  social_identity_taken: 'errorSocialIdentityTaken',
-  social_stepup_required: 'errorSocialStepupRequired',
-  social_stepup_failed: 'errorSocialStepupFailed',
-  social_link_requires_verified_email: 'errorSocialLinkRequiresVerifiedEmail',
-  turnstile_script_failed: 'errorTurnstileLoadFailed',
-  turnstile_unavailable: 'errorTurnstileUnavailable',
-  turnstile_failed: 'errorTurnstileFailed',
-};
 
 // Social sign-in outcomes arrive from the backend callback as a redirect to
 // /account#social-<kind>=<payload> (never in the query string: fragments do
