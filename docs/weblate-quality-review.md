@@ -63,7 +63,7 @@ rule for these languages. Placeholder/tag structure is checked mechanically;
 these warnings remain visible for language review rather than forcing English
 spacing. This is not native-speaker or legal approval.
 
-## Remaining coverage
+## Coverage at the initial review
 
 UI JSON includes the public, investor, issuer and operator locale trees; legal
 JSON includes the seven documents that have translated sources. Backend
@@ -71,3 +71,39 @@ transactional email copy is separate in `backend/src/email-templates.ts` and
 was not yet a Weblate component at this checkpoint. Runtime campaign/news/user
 content and raw server error codes are not automatically translated by these
 catalogs. New unreleased strings require a final post-release Weblate sync.
+
+## Release sync and email component follow-through (22:00 Lisbon)
+
+The tested `614ed35` release is now the upstream base. The Weblate repository's
+local translation history was backed up as a full Git bundle before sync.
+Rebase conflicted because the same reviewed changes had already been imported
+into the application repository. A key-by-key comparison found all semantic
+edits already present upstream. A local merge preserved history and eight
+remaining French whitespace variants; no reset or force-push was used. Those
+eight variants were imported into the application as `4bd82f4`, with required
+owner commit identity. They await their own release gate. Automatic push stays
+disabled. Future updates use merge rather than rebase; a repeated update against
+`614ed35` succeeded without conflicts.
+
+A pending service-generated review commit used the old admin profile identity.
+It remains local and must not be pushed upstream. The profile now uses the
+required author name and address for future edits. This does not rewrite or
+attribute the local historical commit to the owner.
+
+The `mail` component is initialized and linked to the UI repository, using
+`frontend/i18n-json/mail/*.json`, English base and nested JSON format. It holds
+10 strings in each of 11 languages (110 units). Authenticated browser inspection
+confirmed every language is loaded, with no unfinished strings or automated
+checks. The application adapter exports/imports `backend/src/email-copy.ts`.
+A passing catalog check is not proof of mail delivery or native-language review.
+
+Current overlapping check instances retained after contextual review:
+UI: same 688, reused 25, duplicate 10, capitalization 12, beginning-space 6,
+Hindi end-colon 2, multiple-failures 93. Legal: same 31, capitalization 1,
+end-stop 1, markup-boundary 57, multiple-failures 18. Mail: no check instances.
+These are not counts of confirmed defects. The 57 markup-boundary findings
+remain visible for language review; no blanket English spacing was imposed.
+
+Dynamic campaign/user content, server error identifiers, email transport,
+physical-device behavior and human/legal approval are outside a successful
+catalog sync and are not closed by these results.
