@@ -1,0 +1,12 @@
+{
+  "verifySubject": "Blockallisto-Demo - bestätigen Sie Ihre E-Mail",
+  "verifyWelcome": "Willkommen bei der Blockallisto-Demo.",
+  "verifyConfirm": "Bestätigen Sie diese E-Mail-Adresse für das Konto {email} mit diesem Einmal-Bestätigungstoken (24 Stunden gültig):",
+  "verifyIgnore": "Falls Sie sich nicht registriert haben, ignorieren Sie diese Nachricht - das Konto bleibt unbestätigt und eine Anmeldung ist nicht möglich.",
+  "resetSubject": "Blockallisto-Demo - setzen Sie Ihr Passwort zurück",
+  "resetTitle": "Blockallisto-Demo - Passwort zurücksetzen.",
+  "resetRequested": "Für das Konto {email} wurde eine Passwort-Zurücksetzung angefordert. Verwenden Sie dieses Einmal-Token (1 Stunde gültig):",
+  "resetIgnore": "Falls Sie dies nicht angefordert haben, ignorieren Sie diese Nachricht - das aktuelle Passwort bleibt gültig.",
+  "resetSignout": "Durch das Zurücksetzen des Passworts werden alle bestehenden Sitzungen abgemeldet; die Zwei-Faktor-Authentifizierung gilt, sofern aktiviert, weiterhin bei der nächsten Anmeldung.",
+  "demoLine": "Dies ist eine Demo-Bereitstellung im Stellar-Testnet. Es sind keine echten Gelder involviert."
+}

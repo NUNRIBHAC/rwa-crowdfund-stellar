@@ -1,0 +1,12 @@
+{
+  "verifySubject": "Blockallisto 示範 - 驗證您的電子郵件",
+  "verifyWelcome": "歡迎使用 Blockallisto 示範。",
+  "verifyConfirm": "請使用此一次性驗證令牌（24小時內有效）確認帳戶 {email} 的此電子郵件地址:",
+  "verifyIgnore": "如果您沒有註冊，請忽略此郵件 - 帳戶將保持未驗證狀態，無法登入。",
+  "resetSubject": "Blockallisto 示範 - 重設您的密碼",
+  "resetTitle": "Blockallisto 示範 - 密碼重設。",
+  "resetRequested": "有人請求重設帳戶 {email} 的密碼。請使用此一次性重設令牌（1小時內有效）:",
+  "resetIgnore": "如果這不是您的操作，請忽略此郵件 - 目前密碼仍然有效。",
+  "resetSignout": "重設密碼將登出所有現有工作階段；如果啟用了兩步驟驗證，下次登入時仍需驗證。",
+  "demoLine": "這是 Stellar 測試網上的示範部署。不涉及任何真實資金。"
+}

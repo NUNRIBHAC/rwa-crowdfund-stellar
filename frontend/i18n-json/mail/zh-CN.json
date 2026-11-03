@@ -1,0 +1,12 @@
+{
+  "verifySubject": "Blockallisto 演示 - 验证您的邮箱",
+  "verifyWelcome": "欢迎使用 Blockallisto 演示。",
+  "verifyConfirm": "请使用此一次性验证令牌（24小时内有效）确认账户 {email} 的此邮箱地址:",
+  "verifyIgnore": "如果您没有注册，请忽略此邮件 - 账户将保持未验证状态，无法登录。",
+  "resetSubject": "Blockallisto 演示 - 重置您的密码",
+  "resetTitle": "Blockallisto 演示 - 密码重置。",
+  "resetRequested": "有人请求重置账户 {email} 的密码。请使用此一次性重置令牌（1小时内有效）:",
+  "resetIgnore": "如果这不是您的操作，请忽略此邮件 - 当前密码仍然有效。",
+  "resetSignout": "重置密码将退出所有现有会话；如果启用了双重身份验证，下次登录时仍需验证。",
+  "demoLine": "这是 Stellar 测试网上的演示部署。不涉及任何真实资金。"
+}

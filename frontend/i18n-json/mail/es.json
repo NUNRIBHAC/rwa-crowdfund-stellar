@@ -1,0 +1,12 @@
+{
+  "verifySubject": "Demo de Blockallisto - verifica tu email",
+  "verifyWelcome": "Bienvenido a la demo de Blockallisto.",
+  "verifyConfirm": "Confirma esta dirección de email para la cuenta {email} con este token de verificación de un solo uso (válido durante 24 horas):",
+  "verifyIgnore": "Si no te registraste, ignora este mensaje: la cuenta permanece sin verificar y no puede iniciar sesión.",
+  "resetSubject": "Demo de Blockallisto - restablece tu contraseña",
+  "resetTitle": "Demo de Blockallisto - restablecimiento de contraseña.",
+  "resetRequested": "Se solicitó un restablecimiento de contraseña para la cuenta {email}. Usa este token de restablecimiento de un solo uso (válido durante 1 hora):",
+  "resetIgnore": "Si no lo solicitaste tú, ignora este mensaje: la contraseña actual sigue siendo válida.",
+  "resetSignout": "Al restablecer la contraseña se cierran todas las sesiones existentes; la autenticación de dos factores, cuando está activada, se seguirá aplicando en el próximo inicio de sesión.",
+  "demoLine": "Esto es un despliegue de demostración en la testnet de Stellar. No hay fondos reales involucrados."
+}

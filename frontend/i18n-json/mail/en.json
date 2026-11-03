@@ -1,0 +1,12 @@
+{
+  "verifySubject": "Blockallisto demo - verify your email",
+  "verifyWelcome": "Welcome to the Blockallisto demo.",
+  "verifyConfirm": "Confirm this email address for account {email} with this single-use verification token (valid 24 hours):",
+  "verifyIgnore": "If you did not register, ignore this message - the account stays unverified and cannot log in.",
+  "resetSubject": "Blockallisto demo - reset your password",
+  "resetTitle": "Blockallisto demo - password reset.",
+  "resetRequested": "A password reset was requested for account {email}. Use this single-use reset token (valid 1 hour):",
+  "resetIgnore": "If you did not request this, ignore this message - the current password stays valid.",
+  "resetSignout": "Resetting the password signs out every existing session; two-factor authentication, when enabled, still applies at the next login.",
+  "demoLine": "This is a demo deployment on Stellar testnet. No real funds are involved."
+}

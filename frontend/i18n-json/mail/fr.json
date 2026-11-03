@@ -1,0 +1,12 @@
+{
+  "verifySubject": "Démo Blockallisto - vérifiez votre email",
+  "verifyWelcome": "Bienvenue dans la démo Blockallisto.",
+  "verifyConfirm": "Confirmez cette adresse email pour le compte {email} avec ce jeton de vérification à usage unique (valable 24 heures) :",
+  "verifyIgnore": "Si vous ne vous êtes pas inscrit, ignorez ce message : le compte reste non vérifié et ne permet pas de se connecter.",
+  "resetSubject": "Démo Blockallisto - réinitialisez votre mot de passe",
+  "resetTitle": "Démo Blockallisto - réinitialisation du mot de passe.",
+  "resetRequested": "Une réinitialisation du mot de passe a été demandée pour le compte {email}. Utilisez ce jeton de réinitialisation à usage unique (valable 1 heure) :",
+  "resetIgnore": "Si vous n'êtes pas à l'origine de cette demande, ignorez ce message : le mot de passe actuel reste valide.",
+  "resetSignout": "La réinitialisation du mot de passe ferme toutes les sessions existantes ; l'authentification à deux facteurs, lorsqu'elle est activée, s'applique toujours à la prochaine connexion.",
+  "demoLine": "Ceci est un déploiement de démonstration sur le testnet Stellar. Aucun fonds réel n'est en jeu."
+}

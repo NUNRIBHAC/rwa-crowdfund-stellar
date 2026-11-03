@@ -1,0 +1,12 @@
+{
+  "verifySubject": "Demonstração Blockallisto - confirme o seu email",
+  "verifyWelcome": "Bem-vindo à demonstração Blockallisto.",
+  "verifyConfirm": "Confirme este endereço de email para a conta {email} com este token de verificação de utilização única (válido por 24 horas):",
+  "verifyIgnore": "Se não se registou, ignore esta mensagem - a conta permanece por verificar e não permite iniciar sessão.",
+  "resetSubject": "Demonstração Blockallisto - reponha a sua palavra-passe",
+  "resetTitle": "Demonstração Blockallisto - reposição de palavra-passe.",
+  "resetRequested": "Foi pedida uma reposição de palavra-passe para a conta {email}. Use este token de reposição de utilização única (válido por 1 hora):",
+  "resetIgnore": "Se não fez este pedido, ignore esta mensagem - a palavra-passe atual mantém-se válida.",
+  "resetSignout": "Ao repor a palavra-passe, todas as sessões existentes são terminadas; a autenticação de dois fatores, quando ativa, continua a ser exigida no próximo início de sessão.",
+  "demoLine": "Isto é uma demonstração na testnet Stellar. Não estão envolvidos fundos reais."
+}

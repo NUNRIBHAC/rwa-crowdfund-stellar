@@ -1,0 +1,12 @@
+{
+  "verifySubject": "Blockallisto 데모 - 이메일 인증",
+  "verifyWelcome": "Blockallisto 데모에 오신 것을 환영합니다.",
+  "verifyConfirm": "계정 {email}의 이 이메일 주소를 확인하려면 이 일회용 인증 토큰(24시간 유효)을 사용하세요:",
+  "verifyIgnore": "가입하지 않으셨다면 이 메시지를 무시하세요. 계정은 인증되지 않은 상태로 유지되며 로그인할 수 없습니다.",
+  "resetSubject": "Blockallisto 데모 - 비밀번호 재설정",
+  "resetTitle": "Blockallisto 데모 - 비밀번호 재설정.",
+  "resetRequested": "계정 {email}에 대한 비밀번호 재설정이 요청되었습니다. 이 일회용 재설정 토큰(1시간 유효)을 사용하세요:",
+  "resetIgnore": "요청하지 않으셨다면 이 메시지를 무시하세요. 현재 비밀번호는 계속 유효합니다.",
+  "resetSignout": "비밀번호를 재설정하면 기존 세션이 모두 로그아웃되며, 2단계 인증이 활성화된 경우 다음 로그인 시에도 계속 적용됩니다.",
+  "demoLine": "이것은 Stellar 테스트넷의 데모 배포입니다. 실제 자금은 전혀 사용되지 않습니다."
+}
