@@ -165,3 +165,27 @@
   font-weight: 700;
   font-size: 1.05em;
 }
+
+/* Small screens: put Feedback after the footer in normal flow. The tall
+   wrapped sticky nav and iOS horizontal button must never collide, and a
+   floating bottom pill would still obscure page text. Desktop keeps its
+   right-edge tab and reserve. */
+@media (max-width: 520px) {
+  .feedback-tab {
+    position: static;
+    display: block;
+    margin: 24px 0 0 auto;
+    transform: none;
+    writing-mode: horizontal-tb;
+    padding: 12px 18px;
+    border-radius: 8px;
+  }
+  .page {
+    padding-right: 14px;
+  }
+  /* The footer formerly ended the page and consumed its bottom padding.
+     It now has a following control, so do not pull that control under it. */
+  .footer-brand {
+    margin-bottom: 0;
+  }
+}
