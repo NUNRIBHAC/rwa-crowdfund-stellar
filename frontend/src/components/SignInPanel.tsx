@@ -58,6 +58,16 @@ export default function SignInPanel({ actor }: { actor: string }) {
 
   // Sign-out must not leave the previous session's credentials or tokens in
   // the form: clear every sensitive field whenever the account goes away.
+  // A pending email proof is the one thing the visitor must do next: bring
+  // its heading into view and focus it (screen readers announce it).
+  useEffect(() => {
+    if (!socialEmailPending) return;
+    const h = document.getElementById('community-social-email');
+    h?.setAttribute('tabindex', '-1');
+    h?.scrollIntoView?.({ block: 'start' });
+    h?.focus?.({ preventScroll: true });
+  }, [socialEmailPending]);
+
   useEffect(() => {
     if (account) return;
     setEmail('');
