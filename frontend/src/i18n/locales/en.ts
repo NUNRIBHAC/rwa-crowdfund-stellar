@@ -1909,6 +1909,10 @@ export const en = {
       linkWalletNoSign: 'The wallet did not sign the challenge; linking was not started.',
       authMethodNoteEmail:
         'You sign in with your email address and password: the password is the credential. An optional two-factor authenticator can be added below.',
+      authMethodNoteSocial:
+        'You sign in through a connected provider (Google, GitHub and so on): the provider is the credential. An optional two-factor authenticator can be added below and is then asked after the provider sign-in.',
+      totpOffNoteSocial: 'Add an authenticator app as a second step after your provider sign-in. Optional, and it applies to this account only.',
+      totpOnNoteSocial: 'Two-factor authentication is enabled: after your provider sign-in, sign-in also asks for an authenticator code.',
       sessionsTitle: 'Active sessions',
       sessionLabel: 'Session',
       currentBadge: 'This session',

@@ -24,6 +24,7 @@ export default function SecuritySection() {
 
   const labels = m.community.security;
   const isEmail = account?.authMethod === 'email';
+  const isSocial = account?.authMethod === 'social';
   const [totpPhase, setTotpPhase] = useState<'idle' | 'enroll' | 'recovery' | 'disable'>('idle');
   const [totpEnroll, setTotpEnroll] = useState<{ otpauthUrl: string; manualKey: string } | null>(null);
   const [totpCode, setTotpCode] = useState('');
@@ -110,7 +111,7 @@ export default function SecuritySection() {
       <h2 id="security-title" className="section-title">
         {labels.title}
       </h2>
-      <p>{isEmail ? labels.authMethodNoteEmail : labels.authMethodNote}</p>
+      <p>{isEmail ? labels.authMethodNoteEmail : isSocial ? labels.authMethodNoteSocial : labels.authMethodNote}</p>
       {socialNotice && <p className="community-note">{socialNotice}</p>}
       {(socialProviders ?? []).length > 0 && (
         <>
@@ -141,7 +142,17 @@ export default function SecuritySection() {
       )}
       <h3>{labels.totpTitle}</h3>
       <p className="community-note">
-        {totpEnabled ? (isEmail ? labels.totpOnNoteEmail : labels.totpOnNote) : isEmail ? labels.totpOffNoteEmail : labels.totpOffNote}
+        {totpEnabled
+          ? isEmail
+            ? labels.totpOnNoteEmail
+            : isSocial
+              ? labels.totpOnNoteSocial
+              : labels.totpOnNote
+          : isEmail
+            ? labels.totpOffNoteEmail
+            : isSocial
+              ? labels.totpOffNoteSocial
+              : labels.totpOffNote}
       </p>
       {totpPhase === 'idle' && !totpEnabled && (
         <button

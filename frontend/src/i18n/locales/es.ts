@@ -1972,6 +1972,10 @@ export const es: Messages = {
       linkWalletNoSign: 'La cartera no firmó el reto; la vinculación no se inició.',
       authMethodNoteEmail:
         'Inicias sesión con tu correo y contraseña: la contraseña es la credencial. Puedes añadir abajo un autenticador de dos factores opcional.',
+      authMethodNoteSocial:
+        'Inicias sesión con un proveedor vinculado (Google, GitHub, etc.): el proveedor es la credencial. Puedes añadir abajo un autenticador de dos factores opcional, que se pedirá tras iniciar sesión con el proveedor.',
+      totpOffNoteSocial: 'Añade una aplicación autenticadora como segundo paso tras iniciar sesión con el proveedor. Opcional y solo para esta cuenta.',
+      totpOnNoteSocial: 'La autenticación de dos factores está activada: tras iniciar sesión con el proveedor, también se pide un código del autenticador.',
       sessionsTitle: 'Sesiones activas',
       sessionLabel: 'Sesión',
       currentBadge: 'Esta sesión',

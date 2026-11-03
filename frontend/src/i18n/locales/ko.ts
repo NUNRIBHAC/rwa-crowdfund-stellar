@@ -1873,6 +1873,10 @@ export const ko: Messages = {
       authMethodNote:
         'Stellar 지갑으로 메시지에 서명하여 로그인합니다: 지갑이 자격 증명입니다. 이 프로토타입에는 비밀번호가 없으며, 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
       authMethodNoteEmail: '이메일 주소와 비밀번호로 로그인합니다. 비밀번호가 자격 증명입니다. 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
+      authMethodNoteSocial:
+        '연결된 제공업체(Google, GitHub 등)로 로그인합니다. 자격 증명은 제공업체입니다. 아래에서 선택적으로 2단계 인증 앱을 추가할 수 있으며, 제공업체 로그인 후에 요청됩니다.',
+      totpOffNoteSocial: '제공업체 로그인 후 두 번째 단계로 인증 앱을 추가하세요. 선택 사항이며 이 계정에만 적용됩니다.',
+      totpOnNoteSocial: '2단계 인증이 켜져 있습니다. 제공업체 로그인 후 인증 코드도 요청됩니다.',
       sessionsTitle: '활성 세션',
       sessionLabel: '세션',
       currentBadge: '현재 세션',
