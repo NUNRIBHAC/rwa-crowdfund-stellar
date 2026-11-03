@@ -86,7 +86,7 @@ describe('legal fallback honesty', () => {
       for (const locale of LOCALES) {
         const r = legalBlocks(doc, locale);
         expect(r.blocks.length).toBeGreaterThan(0);
-        expect(r.renderedLocale).toBe(doc === 'privacyPolicy' && locale !== 'pt' ? 'en' : LEGAL_REGISTRY[doc][locale] ? locale : 'en');
+        expect(r.renderedLocale).toBe(LEGAL_REGISTRY[doc][locale] ? locale : 'en');
       }
     }
   });
