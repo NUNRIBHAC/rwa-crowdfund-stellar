@@ -1,14 +1,14 @@
 import { useI18n } from '../i18n';
-import type { Market } from '../market';
-import SignInPanel from '../components/SignInPanel';
+import { useCommunityAuth } from '../community/CommunityAuth';
 import IssuerApplicationPreview from '../components/IssuerApplicationPreview';
 import IssuerApplicationForm from '../components/IssuerApplicationForm';
 
 // Issuer landing page. The application form is live: a signed-in wallet
 // submits an application that is stored for operator review (status stays
 // visible to the applicant). Submitting is not an offer, listing or approval.
-export default function Financing({ market }: { market: Market }) {
+export default function Financing() {
   const { m } = useI18n();
+  const { account } = useCommunityAuth();
   return (
     <>
       <h1 className="page-title">{m.financing.title}</h1>
@@ -34,7 +34,13 @@ export default function Financing({ market }: { market: Market }) {
       </p>
 
       <IssuerApplicationPreview />
-      <SignInPanel actor={market.actor} />
+      {!account && (
+        <p>
+          <a className="btn btn-primary" href="/account">
+            {m.nav.account}
+          </a>
+        </p>
+      )}
       <IssuerApplicationForm />
     </>
   );

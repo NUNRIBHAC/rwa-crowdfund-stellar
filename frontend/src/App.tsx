@@ -349,7 +349,7 @@ export default function App() {
         {route.name === 'risk-warnings' && <RiskWarnings />}
         {route.name === 'faq' && <Faq />}
         {route.name === 'about' && <About />}
-        {route.name === 'financing' && <Financing market={market} />}
+        {route.name === 'financing' && <Financing />}
         {route.name === 'campaign-builder' && <CampaignBuilderDraft />}
         {route.name === 'account' && <Account market={market} />}
         {route.name === 'terms-of-service' && <TermsOfService />}
