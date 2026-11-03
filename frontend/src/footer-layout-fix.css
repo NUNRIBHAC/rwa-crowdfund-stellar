@@ -272,3 +272,29 @@
     --gy: 63%;
   }
 }
+
+/* Fine-pointer desktop: the supplied reference uses compact 27px link
+   cadence and tightly grouped icons. Each target still contains a full
+   24px square (WCAG 2.2 AA 2.5.8). Touch/coarse pointers keep 44px targets. */
+@media (min-width: 1151px) and (hover: hover) and (pointer: fine) {
+  .footer-grid li > a {
+    min-height: 24px;
+    min-width: 24px;
+  }
+  .footer-grid li {
+    margin-block: 3px;
+  }
+  .footer-social {
+    display: grid;
+    grid-template-columns: repeat(7, 24px);
+    gap: 4px;
+  }
+  .footer-social a {
+    min-height: 24px;
+    min-width: 24px;
+    justify-content: center;
+  }
+  .footer-brand-word {
+    gap: 10px;
+  }
+}
