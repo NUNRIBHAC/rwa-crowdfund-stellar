@@ -21,6 +21,7 @@ function auth(over: Record<string, unknown>) {
     restored: true,
     signIn: vi.fn(),
     signOut: vi.fn(),
+    clearError: vi.fn(),
     setDisplayName: vi.fn(),
     totpPending: null,
     completeTotp: vi.fn(),
