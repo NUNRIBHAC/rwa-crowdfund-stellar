@@ -3,7 +3,7 @@ import { routeHash, type RouteName } from '../router';
 import { LOCALES, useI18n, type Locale } from '../i18n';
 import { lockupFor, useTheme } from '../theme';
 import { useCommunityAuth } from '../community/CommunityAuth';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   actor: string;
@@ -19,6 +19,8 @@ type Props = {
 // The theme toggle lives in the risk banner above, not here.
 export default function Header({ actor, busy, onConnect, onDisconnect, current }: Props) {
   const theme = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   // Publish the real sticky-header height so anchored sections clear it on
   // hash jumps. The height varies with viewport, locale string lengths and
@@ -51,13 +53,33 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
     { route: 'account', label: m.nav.account },
   ];
   return (
-    <header className="site-header" ref={headerRef}>
+    <header
+      className={`site-header${menuOpen ? ' mobile-menu-open' : ''}`}
+      ref={headerRef}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape' && menuOpen) {
+          setMenuOpen(false);
+          menuButtonRef.current?.focus();
+        }
+      }}
+    >
       <div className="header-inner">
         <div className="header-main">
-          <a className="brand" href={routeHash({ name: 'home' })}>
+          <a className="brand" href={routeHash({ name: 'home' })} onClick={() => setMenuOpen(false)}>
             <img className="brand-lockup" src={lockupFor(theme)} alt="Blockallisto" />
           </a>
-          <nav className="site-nav" aria-label={m.nav.ariaMain}>
+          <button
+            className="mobile-menu-toggle"
+            type="button"
+            aria-label={m.nav.ariaMain}
+            aria-expanded={menuOpen}
+            aria-controls="header-navigation header-controls"
+            onClick={() => setMenuOpen((open) => !open)}
+            ref={menuButtonRef}
+          >
+            <span aria-hidden="true">{menuOpen ? '×' : '☰'}</span>
+          </button>
+          <nav className="site-nav" id="header-navigation" aria-label={m.nav.ariaMain}>
             {NAV.map((item) => {
               const active = item.route === current || (item.route === 'investments' && current === 'campaign');
               return (
@@ -66,6 +88,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
                   className={`nav-link ${active ? 'nav-link-active' : ''}`}
                   aria-current={active ? 'page' : undefined}
                   href={routeHash({ name: item.route })}
+                  onClick={() => setMenuOpen(false)}
                 >
                   {item.label}
                 </a>
@@ -73,7 +96,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
             })}
           </nav>
         </div>
-        <div className="header-side">
+        <div className="header-side" id="header-controls">
           <div className="header-side-top">
             <span className="badge badge-testnet">{m.header.testnetBadge}</span>
             <div className="header-actions">
