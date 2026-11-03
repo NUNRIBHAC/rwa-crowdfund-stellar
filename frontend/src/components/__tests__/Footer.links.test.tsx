@@ -15,6 +15,7 @@ describe('Footer social links', () => {
       'Blockallisto on Discord': 'https://discord.gg/BdXATtWNXJ',
       'Blockallisto on Telegram': 'https://t.me/blockallisto',
       'Blockallisto on Farcaster': 'https://farcaster.xyz/blockallisto',
+      'Blockallisto on LinkedIn': 'https://www.linkedin.com/company/blockallisto/',
       'Email Blockallisto': 'mailto:blockallisto@gmail.com',
     };
     for (const [label, href] of Object.entries(expected)) {
@@ -24,6 +25,6 @@ describe('Footer social links', () => {
     // Unresolved platforms must not be links.
     const social = document.querySelector('.footer-social')!;
     const imgs = [...social.querySelectorAll(':scope > img')].map((i) => i.getAttribute('src'));
-    expect(imgs).toEqual(['/social/facebook.svg', '/social/linkedin.png']);
+    expect(imgs).toEqual(['/social/facebook.svg']);
   });
 });
