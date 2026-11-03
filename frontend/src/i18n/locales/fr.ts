@@ -610,7 +610,7 @@ export const fr: Messages = {
   errors: {
     freighterMissing: 'Extension de portefeuille Freighter non détectée. Installez Freighter, puis réessayez Connecter.',
     walletAccessFailed: "L'accès au portefeuille a échoué",
-    connectFirst: "Connectez d'abord Freighter.",
+    connectFirst: 'Connectez d’abord Freighter.',
     resolveSaved: "Réglez la transaction enregistrée avant d'en préparer une autre.",
     walletMismatch: 'Connectez le portefeuille qui a préparé cette transaction.',
     walletNoSign: "Le portefeuille n'a pas signé",
@@ -618,7 +618,7 @@ export const fr: Messages = {
     apiUnavailable: 'Le service est temporairement indisponible. Veuillez réessayer dans un instant.',
     prepareTrustlineMissing:
       "Ce portefeuille n'est pas encore configuré pour l'USDC de test (trustline manquante). Ajoutez une trustline USDC, puis réessayez.",
-    prepareAccountMissing: "Ce compte de portefeuille n'existe pas encore sur le réseau de test. Financez-le d'abord, puis réessayez.",
+    prepareAccountMissing: "Ce compte de portefeuille n'existe pas encore sur le réseau de test. Financez-le d’abord, puis réessayez.",
     prepareInsufficientBalance: "Ce portefeuille ne contient pas assez d'USDC de test pour ce montant.",
     prepareFailed: 'Impossible de préparer cette transaction. Veuillez réessayer.',
   },
@@ -681,7 +681,7 @@ export const fr: Messages = {
           "Peut impliquer un fiduciaire ou un véhicule entre l'investisseur et l'émetteur",
           'Généralement illiquide',
         ],
-        suitableFor: "Investisseurs à l'aise avec des structures sur mesure, qui lisent d'abord les conditions exactes du contrat.",
+        suitableFor: "Investisseurs à l'aise avec des structures sur mesure, qui lisent d’abord les conditions exactes du contrat.",
       },
       {
         id: 'share',
@@ -1069,7 +1069,7 @@ export const fr: Messages = {
           },
           {
             q: 'Les transferts seront-ils possibles plus tard ?',
-            a: "Les transferts entre utilisateurs vérifiés, et éventuellement un marché de type babillard, sont des étapes de conception planifiées. Ils nécessitent d'abord une vérification d'identité et des règles contractuelles par instrument, et rien de tout cela n'existe dans le code aujourd'hui.",
+            a: "Les transferts entre utilisateurs vérifiés, et éventuellement un marché de type babillard, sont des étapes de conception planifiées. Ils nécessitent d’abord une vérification d'identité et des règles contractuelles par instrument, et rien de tout cela n'existe dans le code aujourd'hui.",
             state: 'planned',
           },
         ],
@@ -1482,7 +1482,7 @@ export const fr: Messages = {
     deadlineNote: "La date limite est fixée à 00:00 UTC le jour choisi ; aujourd'hui est donc déjà trop tard.",
     deadlineErrorPast: 'La date limite doit être dans le futur (règle du contrat).',
     creatorLabel: 'Portefeuille du créateur',
-    creatorPlaceholder: "Connectez d'abord un portefeuille",
+    creatorPlaceholder: 'Connectez d’abord un portefeuille',
     tokenLabel: 'Jeton',
     previewAria: 'Aperçu de déploiement',
     previewTitle: "Ce qu'utiliserait un déploiement",
@@ -1657,7 +1657,7 @@ export const fr: Messages = {
     infoSustainabilityOptions: {
       none: 'Aucune préférence',
       esg_important: 'Les critères environnementaux ou sociaux comptent',
-      impact_first: "L'impact d'abord",
+      impact_first: "L'impact d’abord",
     },
     infoStatusProvided: 'Informations sur votre expérience enregistrées.',
     infoStatusMissing: "Aucune information sur votre expérience pour l'instant - repassez le test pour la fournir.",
@@ -1790,7 +1790,7 @@ export const fr: Messages = {
     signInExplainer:
       "Signez un défi unique avec votre portefeuille Freighter pour prouver que vous contrôlez l'adresse. Aucune transaction n'est créée et aucun fonds ne bouge. La session débloque les commentaires, les tickets de support et les candidatures d'émetteur.",
     signInButton: 'Se connecter avec le portefeuille',
-    signInConnectFirst: "Connectez d'abord votre portefeuille Freighter (en haut de la page).",
+    signInConnectFirst: 'Connectez d’abord votre portefeuille Freighter (en haut de la page).',
     signInMethodLabel: 'Méthode de connexion',
     signInMethodWallet: 'Portefeuille',
     signInMethodEmail: 'Email',
@@ -1851,7 +1851,16 @@ export const fr: Messages = {
     errorSocialFlowExpired: 'La connexion a expiré. Recommencez.',
     errorSocialExchangeFailed: 'Le fournisseur de connexion a rejeté l’échange. Recommencez.',
     errorSocialRegistrationRestricted: 'La connexion avec ce fournisseur n’est pas encore ouverte aux nouveaux comptes sur ce site.',
+    errorSocialIdentityTaken: 'Cette identité du fournisseur est déjà liée à un autre compte.',
+    errorSocialStepupRequired: 'Reconnectez-vous pour lier un fournisseur ; votre session est trop ancienne.',
+    errorSocialStepupFailed: 'La réauthentification a échoué. Vérifiez votre mot de passe ou signez un nouveau défi avec le portefeuille.',
+    errorSocialLinkRequiresVerifiedEmail: 'Lier un fournisseur de connexion nécessite un compte avec une adresse e-mail vérifiée.',
+    socialLinkedSuccess: 'La connexion avec {provider} est maintenant liée à votre compte.',
     socialSignInGoogle: 'Continuer avec Google',
+    socialSignInGithub: 'Continuer avec GitHub',
+    socialSignInLinkedin: 'Continuer avec LinkedIn',
+    socialSignInTelegram: 'Continuer avec Telegram',
+    socialSignInGeneric: 'Continuer avec {provider}',
     signedInTitle: 'Compte de la communauté',
     signedInAs: 'Connecté en tant que',
     displayNameLabel: "Nom d'affichage (visible sur vos commentaires)",
@@ -1880,7 +1889,7 @@ export const fr: Messages = {
     applicationPreviewNote:
       "Aperçu de la candidature d'émetteur. Rien de ce que vous saisissez ici n'est envoyé ni conservé - connectez-vous avec votre portefeuille pour soumettre une vraie candidature pour examen par l'opérateur.",
     applicationPreviewPlaceholder: 'Aperçu uniquement - connectez-vous pour postuler',
-    applicationPreviewSubmit: "Soumettre la candidature (connectez-vous d'abord)",
+    applicationPreviewSubmit: 'Soumettre la candidature (connectez-vous d’abord)',
     applicationFields: {
       projectName: 'Nom du projet',
       country: 'Pays',
@@ -1960,6 +1969,14 @@ export const fr: Messages = {
       title: 'Sécurité',
       authMethodNote:
         "Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille est la clé. Ce prototype n'a pas de mot de passe ; un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.",
+
+      linkTitle: 'Fournisseurs de connexion',
+      linkNote:
+        'Liez une autre méthode de connexion à ce compte. Vous prouverez d’abord qu’il s’agit bien de vous (mot de passe, nouvelle signature du portefeuille ou connexion récente), puis confirmerez auprès du fournisseur.',
+      linkAction: 'Lier {provider}',
+      linkPasswordLabel: 'Mot de passe actuel',
+      linkConfirm: 'Confirmer et continuer',
+      linkWalletNoSign: 'Le portefeuille n’a pas signé le défi ; la liaison n’a pas été lancée.',
       authMethodNoteEmail:
         'Vous vous connectez avec votre email et votre mot de passe : le mot de passe est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.',
       sessionsTitle: 'Sessions actives',

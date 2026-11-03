@@ -8,6 +8,7 @@ import { isConnected, signMessage } from '@stellar/freighter-api';
 import type { CommunityAccount } from './api';
 import { getTurnstileToken } from './turnstile';
 import type { Messages as CatalogMessages } from '../i18n/locales/en';
+import { tpl } from '../format';
 import {
   ApiError,
   completeTotpLogin,
@@ -64,6 +65,9 @@ export type CommunityAuthState = {
   /** Begin a social sign-in: bot check, then a top-level navigation to the
       provider through the backend /start route. */
   startSocialSignIn: (provider: string) => Promise<void>;
+  /** One-shot success notice from a social LINK callback
+      (/account#social-linked=<provider>); consumed on render. */
+  socialNotice: string;
   signOut: () => Promise<void>;
   setDisplayName: (name: string) => Promise<void>;
   clearError: () => void;
@@ -106,6 +110,10 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
   social_flow_expired: 'errorSocialFlowExpired',
   social_exchange_failed: 'errorSocialExchangeFailed',
   social_registration_restricted: 'errorSocialRegistrationRestricted',
+  social_identity_taken: 'errorSocialIdentityTaken',
+  social_stepup_required: 'errorSocialStepupRequired',
+  social_stepup_failed: 'errorSocialStepupFailed',
+  social_link_requires_verified_email: 'errorSocialLinkRequiresVerifiedEmail',
   turnstile_script_failed: 'errorTurnstileLoadFailed',
   turnstile_unavailable: 'errorTurnstileUnavailable',
   turnstile_failed: 'errorTurnstileFailed',
@@ -114,9 +122,9 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
 // Social sign-in outcomes arrive from the backend callback as a redirect to
 // /account#social-<kind>=<payload> (never in the query string: fragments do
 // not reach access logs). Returns the cleaned hash-less outcome or null.
-function readSocialFragment(): { kind: 'token' | 'totp' | 'error'; value: string } | null {
+function readSocialFragment(): { kind: 'token' | 'totp' | 'error' | 'linked'; value: string } | null {
   if (typeof window === 'undefined') return null;
-  const m = window.location.hash.match(/^#social-(token|totp|error)=([A-Za-z0-9_\-]+)$/);
+  const m = window.location.hash.match(/^#social-(token|totp|error|linked)=([A-Za-z0-9_\-]+)$/);
   if (!m) return null;
   // Strip the fragment immediately so a session token never lingers in the
   // URL (history, shoulder-surfing, screenshots).
@@ -148,6 +156,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
   const [restored, setRestored] = useState(false);
   const [totpPending, setTotpPending] = useState<{ ticket: string } | null>(null);
   const [socialProviders, setSocialProviders] = useState<string[]>([]);
+  const [socialNotice, setSocialNotice] = useState('');
 
   // A social sign-in returns here with its outcome in the URL fragment;
   // consume it before the stored-session restore so a fresh sign-in wins.
@@ -178,6 +187,9 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setTotpPending({ ticket: social.value });
       setRestored(true);
       return;
+    }
+    if (social?.kind === 'linked') {
+      setSocialNotice(tpl(messages.community?.socialLinkedSuccess ?? '', { provider: social.value }));
     }
     if (social?.kind === 'error') {
       setError(describeError(new ApiError(social.value, social.value), messages.community));
@@ -428,6 +440,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       completeTotp,
       socialProviders,
       startSocialSignIn,
+      socialNotice,
       setDisplayName: setName,
       clearError: () => setError(''),
     }),
@@ -451,6 +464,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       completeTotp,
       socialProviders,
       startSocialSignIn,
+      socialNotice,
     ],
   );
 

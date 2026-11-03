@@ -311,7 +311,7 @@ export async function disableTotp(store: CommunityStore, publicKey: string, code
   if (!ok) throw new AuthError(401, 'code did not match; second factor not disabled', 'totp_code_invalid');
 }
 
-function verifySignature(publicKey: string, message: string, signature: Buffer): boolean {
+export function verifySignature(publicKey: string, message: string, signature: Buffer): boolean {
   try {
     // Freighter (freighter-api v5+) signs per SEP-53: ed25519 over
     // SHA-256("Stellar Signed Message:\n" || message-utf8). verifyMessage
@@ -322,18 +322,24 @@ function verifySignature(publicKey: string, message: string, signature: Buffer):
   }
 }
 
-export async function authenticate(store: CommunityStore, authorizationHeader: string | undefined, now = Date.now()): Promise<Account> {
+export type AuthedSession = { account: Account; sessionCreatedAt: number };
+
+export async function authenticateWithSession(store: CommunityStore, authorizationHeader: string | undefined, now = Date.now()): Promise<AuthedSession> {
   const token = authorizationHeader?.match(/^Bearer (bls_[0-9a-f]{48})$/)?.[1];
   if (!token) throw new AuthError(401, 'missing or malformed bearer token');
   const tokenHash = hashToken(token);
-  const account = await store.change((state) => {
+  const found = await store.change((state) => {
     const session = state.sessions[tokenHash];
     if (!session || session.expiresAt <= now) return null;
     const account = state.accounts[session.publicKey];
-    return account ? { ...account } : null;
+    return account ? { account: { ...account }, sessionCreatedAt: session.createdAt } : null;
   });
-  if (!account) throw new AuthError(401, 'session expired or unknown; log in again');
-  return account;
+  if (!found) throw new AuthError(401, 'session expired or unknown; log in again');
+  return found;
+}
+
+export async function authenticate(store: CommunityStore, authorizationHeader: string | undefined, now = Date.now()): Promise<Account> {
+  return (await authenticateWithSession(store, authorizationHeader, now)).account;
 }
 
 export async function logout(store: CommunityStore, authorizationHeader: string | undefined): Promise<void> {

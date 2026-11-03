@@ -1846,7 +1846,16 @@ export const es: Messages = {
     errorSocialFlowExpired: 'El inicio de sesión caducó. Empieza de nuevo.',
     errorSocialExchangeFailed: 'El proveedor de inicio de sesión rechazó el intercambio. Empieza de nuevo.',
     errorSocialRegistrationRestricted: 'El inicio de sesión con este proveedor aún no está abierto a cuentas nuevas en este sitio.',
+    errorSocialIdentityTaken: 'Esa identidad del proveedor ya está vinculada a una cuenta diferente.',
+    errorSocialStepupRequired: 'Inicia sesión de nuevo para vincular un proveedor; tu sesión es demasiado antigua.',
+    errorSocialStepupFailed: 'La reautenticación falló. Comprueba tu contraseña o firma un nuevo reto con la cartera.',
+    errorSocialLinkRequiresVerifiedEmail: 'Vincular un proveedor de inicio de sesión requiere una cuenta con un correo verificado.',
+    socialLinkedSuccess: 'El inicio de sesión con {provider} ahora está vinculado a tu cuenta.',
     socialSignInGoogle: 'Continuar con Google',
+    socialSignInGithub: 'Continuar con GitHub',
+    socialSignInLinkedin: 'Continuar con LinkedIn',
+    socialSignInTelegram: 'Continuar con Telegram',
+    socialSignInGeneric: 'Continuar con {provider}',
     signedInTitle: 'Cuenta de la comunidad',
     signedInAs: 'Sesión iniciada como',
     displayNameLabel: 'Nombre visible (se muestra en tus comentarios)',
@@ -1953,6 +1962,14 @@ export const es: Messages = {
       title: 'Seguridad',
       authMethodNote:
         'Inicias sesión firmando un mensaje con tu monedero Stellar: el monedero es la credencial. Este prototipo no tiene contraseña; abajo puedes añadir un autenticador de dos factores opcional.',
+
+      linkTitle: 'Proveedores de inicio de sesión',
+      linkNote:
+        'Vincula otro método de inicio de sesión a esta cuenta. Primero demostrarás que eres tú (contraseña, firma nueva de la cartera o un inicio de sesión reciente) y luego lo confirmarás en el proveedor.',
+      linkAction: 'Vincular {provider}',
+      linkPasswordLabel: 'Contraseña actual',
+      linkConfirm: 'Confirmar y continuar',
+      linkWalletNoSign: 'La cartera no firmó el reto; la vinculación no se inició.',
       authMethodNoteEmail:
         'Inicias sesión con tu correo y contraseña: la contraseña es la credencial. Puedes añadir abajo un autenticador de dos factores opcional.',
       sessionsTitle: 'Sesiones activas',

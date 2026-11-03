@@ -351,6 +351,21 @@ export class CommunityService {
       .slice(0, LIMITS.commentsPage);
   }
 
+  // Admin-gated at the router. Hard removal for moderation cleanup (e.g.
+  // synthetic QA fixtures); the audit log keeps the evidence trail (id,
+  // campaign, title) once the content itself is gone.
+  async deleteNews(id: string, actor = 'admin-area'): Promise<void> {
+    let target: NewsPost | undefined;
+    await this.store.change((state) => {
+      const n = state.news[id];
+      if (!n) throw new CommunityError(404, 'news post not found');
+      target = n;
+      delete state.news[id];
+    });
+    const removed: NewsPost = target as NewsPost;
+    await this.recordAudit(actor, 'news.delete', id, `campaign=${removed.campaignId} title=${removed.title}`);
+  }
+
   // Admin-gated at the router. News are platform stand-in posts for the demo
   // campaign: the author label is fixed so readers are never misled into
   // thinking a verified issuer published them.
@@ -559,6 +574,21 @@ export class CommunityService {
     });
     await this.recordAudit(actor, 'podcast.publish', episode.id, `campaign=${episode.campaignId ?? 'platform'} title=${episode.title}`);
     return episode;
+  }
+
+  // Admin-gated at the router. Hard removal for moderation cleanup (e.g.
+  // synthetic QA fixtures); the audit log keeps the evidence trail (id,
+  // campaign, title) once the content itself is gone.
+  async deleteEpisode(id: string, actor = 'admin-area'): Promise<void> {
+    let target: PodcastEpisode | undefined;
+    await this.store.change((state) => {
+      const e = state.episodes[id];
+      if (!e) throw new CommunityError(404, 'episode not found');
+      target = e;
+      delete state.episodes[id];
+    });
+    const removed: PodcastEpisode = target as PodcastEpisode;
+    await this.recordAudit(actor, 'podcast.delete', id, `campaign=${removed.campaignId ?? 'platform'} title=${removed.title}`);
   }
 
   // Latest episodes across the platform, newest first. Episodes are public

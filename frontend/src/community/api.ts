@@ -167,6 +167,12 @@ export type VerifyChallengeResult =
 
 export const verifyChallenge = (publicKey: string, signature: string) => call<VerifyChallengeResult>('/api/auth/verify', { body: { publicKey, signature } });
 
+// Social account linking (backend social-auth.ts): POST with the
+// method-appropriate step-up proof; the response carries the provider URL
+// to navigate to. Completion returns to /account#social-linked=<provider>.
+export const startSocialLink = (token: string, provider: string, proof: { password?: string; signature?: string }) =>
+  call<{ url: string }>(`/api/auth/social/${encodeURIComponent(provider)}/link/start`, { token, body: proof });
+
 // Email + password registration/login (backend email-auth.ts). Register and
 // resend intentionally return the same anti-enumeration shape whether the
 // address is new, unverified or already registered.

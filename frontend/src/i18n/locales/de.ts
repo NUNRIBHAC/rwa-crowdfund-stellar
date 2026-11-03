@@ -1836,7 +1836,16 @@ export const de: Messages = {
     errorSocialFlowExpired: 'Die Anmeldung ist abgelaufen. Bitte erneut starten.',
     errorSocialExchangeFailed: 'Der Anmeldeanbieter hat den Austausch abgelehnt. Bitte erneut starten.',
     errorSocialRegistrationRestricted: 'Die Anmeldung mit diesem Anbieter ist auf dieser Website noch nicht für neue Konten geöffnet.',
+    errorSocialIdentityTaken: 'Diese Anbieter-Identität ist bereits mit einem anderen Konto verknüpft.',
+    errorSocialStepupRequired: 'Melden Sie sich erneut an, um einen Anbieter zu verknüpfen; Ihre Sitzung ist zu alt.',
+    errorSocialStepupFailed: 'Die erneute Authentifizierung ist fehlgeschlagen. Prüfen Sie Ihr Passwort oder signieren Sie eine neue Wallet-Challenge.',
+    errorSocialLinkRequiresVerifiedEmail: 'Das Verknüpfen eines Anmeldeanbieters erfordert ein Konto mit bestätigter E-Mail-Adresse.',
+    socialLinkedSuccess: 'Die Anmeldung mit {provider} ist jetzt mit Ihrem Konto verknüpft.',
     socialSignInGoogle: 'Mit Google fortfahren',
+    socialSignInGithub: 'Mit GitHub fortfahren',
+    socialSignInLinkedin: 'Mit LinkedIn fortfahren',
+    socialSignInTelegram: 'Mit Telegram fortfahren',
+    socialSignInGeneric: 'Mit {provider} fortfahren',
     signedInTitle: 'Community-Konto',
     signedInAs: 'Angemeldet als',
     displayNameLabel: 'Anzeigename (wird bei Ihren Kommentaren gezeigt)',
@@ -1942,6 +1951,14 @@ export const de: Messages = {
       title: 'Sicherheit',
       authMethodNote:
         'Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Berechtigung. Dieser Prototyp hat kein Passwort; unten kann optional ein Zwei-Faktor-Authenticator hinzugefügt werden.',
+
+      linkTitle: 'Anmeldeanbieter',
+      linkNote:
+        'Verknüpfen Sie eine weitere Anmeldemethode mit diesem Konto. Sie weisen zuerst nach, dass Sie es wirklich sind (Passwort, frische Wallet-Signatur oder eine kürzliche Anmeldung), und bestätigen dann beim Anbieter.',
+      linkAction: '{provider} verknüpfen',
+      linkPasswordLabel: 'Aktuelles Passwort',
+      linkConfirm: 'Bestätigen und fortfahren',
+      linkWalletNoSign: 'Die Wallet hat die Challenge nicht signiert; die Verknüpfung wurde nicht gestartet.',
       authMethodNoteEmail:
         'Sie melden sich mit Ihrer E-Mail-Adresse und Ihrem Passwort an: Das Passwort ist die Berechtigung. Ein optionaler Zwei-Faktor-Authenticator kann unten hinzugefügt werden.',
       sessionsTitle: 'Aktive Sitzungen',

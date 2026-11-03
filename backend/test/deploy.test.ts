@@ -409,8 +409,14 @@ function pgFakePool() {
       // contract id is never erased by an id-less save.
       const terminal = prior?.status === 'SUCCESS' || prior?.status === 'FAILED';
       rows.set(hash, {
-        seq: prior?.seq ?? ++seq, hash, campaign, actor, action, amount, xdr,
-        signed_xdr: status === 'SUCCESS' || status === 'FAILED' ? null : prior?.signed_xdr ?? signed_xdr ?? null,
+        seq: prior?.seq ?? ++seq,
+        hash,
+        campaign,
+        actor,
+        action,
+        amount,
+        xdr,
+        signed_xdr: status === 'SUCCESS' || status === 'FAILED' ? null : (prior?.signed_xdr ?? signed_xdr ?? null),
         status: terminal ? prior.status : status,
         contract_id: contract_id ?? prior?.contract_id ?? null,
       });
@@ -425,7 +431,9 @@ function pgFakePool() {
   };
   return {
     query,
-    async connect() { return { query, release() {} }; },
+    async connect() {
+      return { query, release() {} };
+    },
     async end() {},
   };
 }

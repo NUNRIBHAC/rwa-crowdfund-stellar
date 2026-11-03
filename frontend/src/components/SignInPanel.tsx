@@ -2,10 +2,18 @@
 // server challenge (no transaction, no funds move). The session unlocks
 // comment posting, support/feedback tickets and issuer applications.
 import { useCommunityAuth } from '../community/CommunityAuth';
+import { socialProviderDisplayName } from '../community/social';
 import { COMMUNITY_LIMITS } from '../community/api';
 import { useI18n } from '../i18n';
-import { shorten } from '../format';
+import { shorten, tpl } from '../format';
 import { useEffect, useState } from 'react';
+
+const SOCIAL_SIGNIN_LABELS: Record<string, 'socialSignInGoogle' | 'socialSignInGithub' | 'socialSignInLinkedin' | 'socialSignInTelegram'> = {
+  google: 'socialSignInGoogle',
+  github: 'socialSignInGithub',
+  linkedin: 'socialSignInLinkedin',
+  telegram: 'socialSignInTelegram',
+};
 
 export default function SignInPanel({ actor }: { actor: string }) {
   const { m } = useI18n();
@@ -159,11 +167,13 @@ export default function SignInPanel({ actor }: { actor: string }) {
             {m.community.signInMethodEmail}
           </button>
         </div>
-        {(socialProviders ?? []).includes('google') && (
-          <button className="btn social-signin-btn" disabled={busy} onClick={() => startSocialSignIn('google').catch(() => undefined)}>
-            {m.community.socialSignInGoogle}
+        {(socialProviders ?? []).map((p) => (
+          <button key={p} className="btn social-signin-btn" disabled={busy} onClick={() => startSocialSignIn(p).catch(() => undefined)}>
+            {SOCIAL_SIGNIN_LABELS[p]
+              ? m.community[SOCIAL_SIGNIN_LABELS[p]]
+              : tpl(m.community.socialSignInGeneric ?? '', { provider: socialProviderDisplayName(p) })}
           </button>
-        )}
+        ))}
         {error && (
           <p role="alert" className="community-error">
             {error}
