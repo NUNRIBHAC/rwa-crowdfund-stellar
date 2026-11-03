@@ -307,3 +307,25 @@ describe('AppropriatenessSection', () => {
     expect(await screen.findByText(/Sophisticated-investor treatment requested/)).toBeTruthy();
   });
 });
+
+it('localizes generic API_UNAVAILABLE failures in PT instead of showing a raw code', async () => {
+  localStorage.setItem('blockallisto-language', 'pt');
+  globalThis.__authMock = auth();
+  vi.stubGlobal(
+    'fetch',
+    vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ error: 'API_UNAVAILABLE', code: 'API_UNAVAILABLE' }), { status: 503, headers: { 'Content-Type': 'application/json' } }),
+      ),
+  );
+  render(
+    <I18nProvider>
+      <AppropriatenessSection />
+    </I18nProvider>,
+  );
+  expect(await screen.findByText('O serviço está temporariamente indisponível. Tente novamente dentro de momentos.')).toBeTruthy();
+  cleanup();
+  localStorage.clear();
+  vi.unstubAllGlobals();
+});

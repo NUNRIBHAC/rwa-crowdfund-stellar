@@ -155,6 +155,7 @@ export const API_ERROR_MESSAGE_KEYS: Record<string, keyof Messages['community']>
 
 /** Localized text for a backend error code; undefined for unknown codes (caller keeps the server text). */
 export function localizedApiError(code: string | undefined): string | undefined {
+  if (code === 'API_UNAVAILABLE') return MESSAGES[storedLocale() ?? detectLocale()].errors.apiUnavailable;
   const key = code ? API_ERROR_MESSAGE_KEYS[code] : undefined;
   const v = key ? MESSAGES[storedLocale() ?? detectLocale()].community[key] : undefined;
   return typeof v === 'string' ? v : undefined;
