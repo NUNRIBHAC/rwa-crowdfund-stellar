@@ -14,11 +14,16 @@
 // Disabled (404) unless FARCASTER_AUTH_DOMAIN is set: fail-closed.
 import { createHash, randomBytes } from 'node:crypto';
 import { createAppClient, viemConnector } from '@farcaster/auth-client';
+import { parseSiweMessage } from 'viem/siwe';
 import { AuthError } from './accounts.js';
 import type { CommunityStore } from './community-store.js';
 import { bindMatches, finishSocialIdentity, type SocialLoginResult } from './social-auth.js';
 
+type EthereumConnector = Parameters<typeof createAppClient>[0]['ethereum'];
 const NONCE_TTL_MS = 10 * 60 * 1000;
+// The signed message must have been issued recently (clock skew allowed).
+const MESSAGE_MAX_AGE_MS = NONCE_TTL_MS;
+const MESSAGE_MAX_FUTURE_MS = 60 * 1000;
 const FLOW_PROVIDER = 'farcaster';
 
 export type FarcasterVerifier = (args: { nonce: string; domain: string; message: string; signature: `0x${string}` }) => Promise<{ fid: number } | null>;
@@ -31,14 +36,13 @@ export function farcasterDomain(env: NodeJS.ProcessEnv): string | null {
 // Production verifier: @farcaster/auth-client verifySignInMessage, which checks
 // the signature on Optimism (Farcaster id registry / auth-address) through the
 // configured RPC (FARCASTER_RPC_URL, else the library default).
-export function defaultFarcasterVerifier(env: NodeJS.ProcessEnv): FarcasterVerifier {
+export function defaultFarcasterVerifier(env: NodeJS.ProcessEnv, connector?: EthereumConnector): FarcasterVerifier {
   const rpcUrl = (env.FARCASTER_RPC_URL ?? '').trim();
-  const client = createAppClient({ ethereum: viemConnector(rpcUrl ? { rpcUrl } : {}) });
+  const client = createAppClient({ ethereum: connector ?? viemConnector(rpcUrl ? { rpcUrl } : {}) });
   return async (args) => {
-    const res = await client.verifySignInMessage(args);
-    const data = res.data as { success?: boolean; fid?: number } | undefined;
-    if (res.isError || !data?.success || typeof data.fid !== 'number' || !Number.isSafeInteger(data.fid) || data.fid <= 0) return null;
-    return { fid: data.fid };
+    const res = (await client.verifySignInMessage(args)) as { success?: boolean; fid?: number; isError?: boolean };
+    if (res.isError || !res.success || typeof res.fid !== 'number' || !Number.isSafeInteger(res.fid) || res.fid <= 0) return null;
+    return { fid: res.fid };
   };
 }
 
@@ -70,15 +74,28 @@ export async function verifyFarcasterSignIn(
   if (typeof signature !== 'string' || !/^0x[0-9a-fA-F]{2,2048}$/.test(signature))
     throw new AuthError(400, 'invalid sign-in signature', 'social_exchange_failed');
   const key = nonceKey(nonce);
-  // Consume first: single use on ANY outcome (a failed verification burns it).
+  // The flow is consumed only after the browser binding validated: a request
+  // without this browser's cookie neither spends nor burns the nonce, so a
+  // third party cannot invalidate someone else's flow. After that it is
+  // single use on ANY outcome (a failed verification burns it).
   const flow = await store.change((s) => {
     const f = s.socialFlows[key];
     if (!f || f.provider !== FLOW_PROVIDER || f.expiresAt <= now) return null;
-    delete s.socialFlows[key];
     if (!f.bindHash || !bindMatches(f.bindHash, input.bind)) return null;
+    delete s.socialFlows[key];
     return f;
   });
   if (!flow) throw expired();
+  // Beyond the library's own checks (statement, chain id 10, fid resource,
+  // nonce, domain, signature, custody/auth-address): the message must name
+  // OUR uri and be fresh.
+  const parsed = parseSiweMessage(message);
+  const issuedAt = parsed.issuedAt?.getTime();
+  const bad = new AuthError(401, 'the Farcaster sign-in message is not valid for this site; start again', 'social_exchange_failed');
+  if (parsed.uri !== `https://${domain}/account`) throw bad;
+  if (issuedAt === undefined || issuedAt < now - MESSAGE_MAX_AGE_MS || issuedAt > now + MESSAGE_MAX_FUTURE_MS) throw bad;
+  if (parsed.expirationTime && parsed.expirationTime.getTime() <= now) throw bad;
+  if (parsed.notBefore && parsed.notBefore.getTime() > now + MESSAGE_MAX_FUTURE_MS) throw bad;
   let verified: { fid: number } | null = null;
   try {
     verified = await verifier({ nonce, domain, message, signature: signature as `0x${string}` });

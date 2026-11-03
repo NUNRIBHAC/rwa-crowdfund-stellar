@@ -685,63 +685,118 @@ test('callback replayed from another browser (no cookie) is rejected and consume
   assert.equal(Object.keys((await store.read()).socialPending).length, 0);
 });
 
-test('farcaster: server nonce, browser-bound, fid from the verifier, pending-email then account; replay and cross-browser fail', async () => {
+import { createSiweMessage } from 'viem/siwe';
+import { privateKeyToAccount, generatePrivateKey } from 'viem/accounts';
+import { createPublicClient, custom } from 'viem';
+import { optimism } from 'viem/chains';
+import { defaultFarcasterVerifier } from '../src/farcaster-auth.js';
+
+const FC_DOMAIN = 'app.example.test';
+const fcAccount = privateKeyToAccount(generatePrivateKey());
+async function siwe(nonce: string, over: Record<string, unknown> = {}) {
+  const message = createSiweMessage({
+    address: fcAccount.address,
+    chainId: 10,
+    domain: FC_DOMAIN,
+    nonce,
+    uri: `https://${FC_DOMAIN}/account`,
+    version: '1',
+    statement: 'Farcaster Auth',
+    resources: ['farcaster://fid/3357330'],
+    issuedAt: new Date(),
+    expirationTime: new Date(Date.now() + 5 * 60 * 1000),
+    ...over,
+  } as never);
+  return { message, signature: await fcAccount.signMessage({ message }) };
+}
+// REAL @farcaster/auth-client verification (statement, chain 10, fid resource,
+// nonce, domain, auth-address check). The Optimism RPC is stubbed: eth_call
+// answers "valid" for the signature validator (so signature forgery is NOT tested) and the fid
+// registry reads are replaced by an in-memory connector.
+function stubConnector(ownerFid: bigint) {
+  const publicClient = createPublicClient({
+    chain: optimism,
+    transport: custom({ request: async ({ method }: { method: string }) => (method === 'eth_call' ? '0x01' : method === 'eth_chainId' ? '0xa' : '0x') }),
+  });
+  return { publicClient, getFid: async () => ownerFid, isValidAuthAddress: async () => false } as never;
+}
+
+test('farcaster: real SIWF verification, server nonce, browser binding, pending-email then account', async () => {
   const sent: { to: string; text: string }[] = [];
   const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
-  const seen: { domain?: string; nonce?: string }[] = [];
-  const farcasterVerifier = async (a: { nonce: string; domain: string; message: string; signature: string }) => {
-    seen.push({ domain: a.domain, nonce: a.nonce });
-    return a.signature === '0xbad' ? null : { fid: 3357330 };
-  };
-  const { base, store } = await startApp(
-    { FARCASTER_AUTH_DOMAIN: 'app.example.test', SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' },
-    { mailer, farcasterVerifier },
-  );
+  const env = { FARCASTER_AUTH_DOMAIN: FC_DOMAIN, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
+  const farcasterVerifier = defaultFarcasterVerifier({}, stubConnector(3357330n));
+  const { base, store } = await startApp(env, { mailer, farcasterVerifier });
   const post = (path: string, body: unknown, ck = '') =>
     fetch(`${base}${path}`, { method: 'POST', headers: { 'content-type': 'application/json', ...(ck ? { cookie: ck } : {}) }, body: JSON.stringify(body) });
+  const getNonce = async () => {
+    const r = await post('/api/auth/farcaster/nonce', {});
+    return { ck: r.headers.get('set-cookie')!.split(';')[0], ...((await r.json()) as { nonce: string; domain: string; siweUri: string }) };
+  };
   const cfg = (await (await fetch(`${base}/api/auth/abuse-config`)).json()) as { socialProviders: string[] };
   assert.ok(cfg.socialProviders.includes('farcaster'));
-  const n1 = await post('/api/auth/farcaster/nonce', {});
-  const ck = n1.headers.get('set-cookie')!.split(';')[0];
-  const { nonce, domain } = (await n1.json()) as { nonce: string; domain: string };
-  assert.equal(domain, 'app.example.test');
-  const other = (await post('/api/auth/farcaster/nonce', {})).headers.get('set-cookie')!.split(';')[0];
-  // Another browser cannot spend this nonce (and it burns it).
-  let r = await post('/api/auth/farcaster/verify', { nonce, message: 'm', signature: '0xabcd' }, other);
+
+  // Wrong browser: rejected and does NOT burn the owner's nonce.
+  const a = await getNonce();
+  assert.equal(a.siweUri, `https://${FC_DOMAIN}/account`);
+  const other = (await getNonce()).ck;
+  let m = await siwe(a.nonce);
+  let r = await post('/api/auth/farcaster/verify', { nonce: a.nonce, ...m }, other);
   assert.equal(r.status, 401);
-  r = await post('/api/auth/farcaster/verify', { nonce, message: 'm', signature: '0xabcd' }, ck);
-  assert.equal(r.status, 401, 'burned by the failed cross-browser attempt');
-  // Fresh nonce: bad signature fails and burns; good one yields a pending ticket.
-  const n2 = await post('/api/auth/farcaster/nonce', {});
-  const ck2 = n2.headers.get('set-cookie')!.split(';')[0];
-  const nonce2 = ((await n2.json()) as { nonce: string }).nonce;
-  r = await post('/api/auth/farcaster/verify', { nonce: nonce2, message: 'm', signature: '0xbad' }, ck2);
-  assert.equal(r.status, 401);
-  const n3 = await post('/api/auth/farcaster/nonce', {});
-  const ck3 = n3.headers.get('set-cookie')!.split(';')[0];
-  const nonce3 = ((await n3.json()) as { nonce: string }).nonce;
-  r = await post('/api/auth/farcaster/verify', { nonce: nonce3, message: 'm', signature: '0xabcd' }, ck3);
-  assert.equal(r.status, 200);
+  r = await post('/api/auth/farcaster/verify', { nonce: a.nonce, ...m }, a.ck);
+  assert.equal(r.status, 200, 'owner browser still succeeds after a stranger attempt');
   const { socialEmailTicket } = (await r.json()) as { socialEmailTicket: string };
   assert.ok(socialEmailTicket.startsWith('bsp_'));
-  assert.equal(seen[seen.length - 1].domain, 'app.example.test');
   assert.equal(Object.keys((await store.read()).accounts).length, 0);
-  r = await post('/api/auth/farcaster/verify', { nonce: nonce3, message: 'm', signature: '0xabcd' }, ck3);
+  r = await post('/api/auth/farcaster/verify', { nonce: a.nonce, ...m }, a.ck);
   assert.equal(r.status, 401, 'nonce is single use');
-  // Email proof with the SAME browser cookie.
-  await post('/api/auth/social/email/request', { ticket: socialEmailTicket, email: 'nuno@example.com' }, ck3);
+
+  // Message-level rejections (each burns only its own nonce, after binding).
+  const rejects: Array<[string, (n: string) => Promise<{ message: string; signature: string }>]> = [
+    ['wrong domain', (n) => siwe(n, { domain: 'evil.example.test' })],
+    ['wrong uri', (n) => siwe(n, { uri: 'https://evil.example.test/account' })],
+    ['wrong chain', (n) => siwe(n, { chainId: 1 })],
+    ['wrong statement', (n) => siwe(n, { statement: 'Sign in to anything' })],
+    ['expired', (n) => siwe(n, { issuedAt: new Date(Date.now() - 3600_000), expirationTime: new Date(Date.now() - 1000) })],
+    ['stale issuedAt', (n) => siwe(n, { issuedAt: new Date(Date.now() - 3600_000), expirationTime: new Date(Date.now() + 3600_000) })],
+    ['no fid resource', (n) => siwe(n, { resources: [] })],
+    ['wrong nonce in message', () => siwe('b'.repeat(32))],
+  ];
+  for (const [label, build] of rejects) {
+    const n = await getNonce();
+    const bad = await build(n.nonce);
+    const res = await post('/api/auth/farcaster/verify', { nonce: n.nonce, ...bad }, n.ck);
+    assert.equal(res.status, 401, label);
+  }
+  // NOTE: signature validity itself is checked on-chain by the library through the
+  // Optimism RPC (stubbed here), so a forged-signature case is NOT proven by this test.
+  assert.equal(Object.keys((await store.read()).socialIdentities).length, 0);
+
+  // Email proof, same cookie only.
+  await post('/api/auth/social/email/request', { ticket: socialEmailTicket, email: 'nuno@example.com' }, a.ck);
   assert.equal(sent.length, 1);
   const code = sent[0].text.match(/\b(\d{6})\b/)![1];
-  r = await post('/api/auth/social/email/confirm', { ticket: socialEmailTicket, code }, ck);
-  assert.equal(r.status, 401, 'another browser cannot confirm');
-  r = await post('/api/auth/social/email/confirm', { ticket: socialEmailTicket, code }, ck3);
+  r = await post('/api/auth/social/email/confirm', { ticket: socialEmailTicket, code }, other);
+  assert.equal(r.status, 401);
+  r = await post('/api/auth/social/email/confirm', { ticket: socialEmailTicket, code }, a.ck);
   assert.equal(r.status, 200);
   assert.ok((await store.read()).socialIdentities['farcaster:3357330']);
+
   // Returning fid signs in directly.
-  const n4 = await post('/api/auth/farcaster/nonce', {});
-  const ck4 = n4.headers.get('set-cookie')!.split(';')[0];
-  r = await post('/api/auth/farcaster/verify', { nonce: ((await n4.json()) as { nonce: string }).nonce, message: 'm', signature: '0xabcd' }, ck4);
+  const n4 = await getNonce();
+  r = await post('/api/auth/farcaster/verify', { nonce: n4.nonce, ...(await siwe(n4.nonce)) }, n4.ck);
   assert.ok(((await r.json()) as { token?: string }).token?.startsWith('bls_'));
+
+  // A signer that does not own the claimed fid is refused.
+  const { base: base2 } = await startApp(env, { mailer, farcasterVerifier: defaultFarcasterVerifier({}, stubConnector(1n)) });
+  const rr = await fetch(`${base2}/api/auth/farcaster/nonce`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+  const n5 = (await rr.json()) as { nonce: string };
+  const res5 = await fetch(`${base2}/api/auth/farcaster/verify`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', cookie: rr.headers.get('set-cookie')!.split(';')[0] },
+    body: JSON.stringify({ nonce: n5.nonce, ...(await siwe(n5.nonce)) }),
+  });
+  assert.equal(res5.status, 401);
 });
 
 test('farcaster routes do not exist without FARCASTER_AUTH_DOMAIN (fail-closed)', async () => {
