@@ -27,6 +27,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
     completeTotp,
     socialProviders,
     startSocialSignIn,
+    clearError,
   } = useCommunityAuth();
   const [name, setName] = useState('');
   const [totpCode, setTotpCode] = useState('');
@@ -137,11 +138,24 @@ export default function SignInPanel({ actor }: { actor: string }) {
             role="tab"
             aria-selected={method === 'wallet'}
             className={method === 'wallet' ? 'btn btn-primary' : 'btn'}
-            onClick={() => setMethod('wallet')}
+            onClick={() => {
+              // A Turnstile/email failure must not linger over wallet sign-in:
+              // the wallet flow never uses the bot check.
+              clearError();
+              setMethod('wallet');
+            }}
           >
             {m.community.signInMethodWallet}
           </button>
-          <button role="tab" aria-selected={method === 'email'} className={method === 'email' ? 'btn btn-primary' : 'btn'} onClick={() => setMethod('email')}>
+          <button
+            role="tab"
+            aria-selected={method === 'email'}
+            className={method === 'email' ? 'btn btn-primary' : 'btn'}
+            onClick={() => {
+              clearError();
+              setMethod('email');
+            }}
+          >
             {m.community.signInMethodEmail}
           </button>
         </div>

@@ -33,6 +33,26 @@ async function renderAndSubmitEmail(body: unknown, status: number) {
   fireEvent.click(screen.getByRole('button', { name: 'Create account' }));
 }
 
+describe('SignInPanel error lifecycle', () => {
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+    localStorage.clear();
+  });
+
+  it('localizes Turnstile API codes and clears the error when switching method', async () => {
+    await renderAndSubmitEmail({ error: 'bot check failed; reload the page and retry', code: 'turnstile_failed' }, 403);
+    const alert = await screen.findByRole('alert');
+    // Localized PT catalog string, never the raw English server text.
+    expect(alert.textContent).toContain('verificação anti-bot');
+    expect(alert.textContent).not.toContain('bot check failed');
+    // The stale-error regression: switching to wallet must clear it - wallet
+    // sign-in never uses the bot check.
+    fireEvent.click(screen.getByRole('tab', { name: /Carteira|Wallet/ }));
+    await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
+  });
+});
+
 describe('SignInPanel API error mapping', () => {
   afterEach(() => {
     cleanup();

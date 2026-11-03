@@ -106,6 +106,9 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
   social_flow_expired: 'errorSocialFlowExpired',
   social_exchange_failed: 'errorSocialExchangeFailed',
   social_registration_restricted: 'errorSocialRegistrationRestricted',
+  turnstile_script_failed: 'errorTurnstileLoadFailed',
+  turnstile_unavailable: 'errorTurnstileUnavailable',
+  turnstile_failed: 'errorTurnstileFailed',
 };
 
 // Social sign-in outcomes arrive from the backend callback as a redirect to
