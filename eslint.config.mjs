@@ -25,6 +25,10 @@ export default tseslint.config(
     },
   },
   {
+    files: ['load/**/*.js'],
+    languageOptions: { sourceType: 'module', globals: { __ENV: 'readonly' } },
+  },
+  {
     files: ['frontend/**/*.ts', 'frontend/**/*.tsx'],
     plugins: { 'react-hooks': reactHooks },
     rules: { 'react-hooks/rules-of-hooks': 'error', 'react-hooks/exhaustive-deps': 'warn' },
