@@ -154,9 +154,9 @@ test('podcast tab publishes an episode through the operator route as platform de
   });
   expect(await screen.findByText('Episode published as platform demo content.')).toBeTruthy();
   await screen.findByText('Episode published as platform demo content.');
-  fireEvent.click(screen.getByRole('button', { name: 'Tickets', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Tickets' }));
   expect(screen.queryByText('Episode published as platform demo content.')).toBeNull();
-  fireEvent.click(screen.getByRole('button', { name: 'Podcast', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Podcast' }));
   expect(screen.queryByText('Episode published as platform demo content.')).toBeNull();
 });
 
