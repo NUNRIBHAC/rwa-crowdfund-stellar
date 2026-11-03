@@ -93,6 +93,12 @@ function widgetContainer(): HTMLElement {
 // Resolves a fresh single-use token, or undefined when Turnstile is not
 // configured on this deployment. Rejects when the user aborts/errors so the
 // caller surfaces the failure instead of submitting token-less.
+// Managed challenges normally settle in seconds. A widget that never calls
+// back (stalled network, hostile middlebox, a browser extension intercepting
+// the challenge) must not leave the submit disabled forever: after the
+// watchdog the form surfaces the localized failure and re-enables for retry.
+const RENDER_TIMEOUT_MS = 90_000;
+
 export async function getTurnstileToken(locale?: string): Promise<string | undefined> {
   const sitekey = await loadTurnstileSiteKey();
   if (!sitekey) return undefined;
@@ -100,19 +106,33 @@ export async function getTurnstileToken(locale?: string): Promise<string | undef
   const api = window.turnstile;
   if (!api) throw new ApiError('turnstile unavailable', 'turnstile_unavailable');
   return new Promise<string>((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      api.remove(id);
+      reject(new ApiError('turnstile error: timeout', 'turnstile_failed'));
+    }, RENDER_TIMEOUT_MS);
     const id = api.render(widgetContainer(), {
       sitekey,
       appearance: 'interaction-only',
       ...(locale ? { language: locale } : {}),
       callback: (token: string) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
         api.remove(id);
         resolve(token);
       },
       'error-callback': (code?: string) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
         api.remove(id);
         reject(new ApiError(`turnstile error${code ? `: ${code}` : ''}`, 'turnstile_failed'));
       },
       'expired-callback': () => {
+        if (settled) return;
         api.reset(id);
       },
     });
