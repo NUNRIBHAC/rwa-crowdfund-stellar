@@ -1932,6 +1932,8 @@ export const zhTW: Messages = {
       loadError: '無法載入營運資料。',
       retry: '重試',
       corp: {
+        cashflow: '已確認資金流：流入 / 流出 / 淨額',
+        cashflowNote: '僅為歷史轉帳，不代表目前持倉或權利，不計入分配。',
         title: '公司行動（原型）',
         note: '根據份額登記冊產生的原型股權表與分配預覽。不儲存任何內容，不轉移資金，也不宣布任何股息。未知持倉絕不會顯示為零。',
         campaign: '活動',

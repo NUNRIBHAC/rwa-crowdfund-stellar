@@ -2009,6 +2009,8 @@ export const en = {
       loadError: 'Operator data could not be loaded.',
       retry: 'Retry',
       corp: {
+        cashflow: 'Confirmed cashflow: in / out / net',
+        cashflowNote: 'Historical transfers only, not current holdings or rights. Excluded from allocations.',
         title: 'Corporate actions (prototype)',
         note: 'Prototype cap table and distribution preview from the share register. Nothing is saved, no funds move and no dividend is declared. Unknown positions are never shown as zero.',
         campaign: 'Campaign',

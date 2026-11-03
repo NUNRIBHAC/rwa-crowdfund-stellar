@@ -645,6 +645,7 @@ export const farcasterLinkNonce = (token: string, proof: { password?: string; si
 // Corporate actions (prototype): operator-session cap table and distribution
 // preview. Read-only; nothing is saved, no funds move, never declarable.
 export type CapTableRow = {
+  confirmedCashflow?: { contributed: string; refunded: string; net: string; missing: number };
   publicKey: string;
   position: string;
   positionSource: 'on-chain' | 'journal-intended' | 'unknown';

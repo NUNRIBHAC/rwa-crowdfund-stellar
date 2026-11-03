@@ -96,3 +96,11 @@ test('holding: own row only; UNKNOWN stays UNKNOWN; missing wallet is null', () 
   assert.equal(b?.basisPoints, null);
   assert.equal(holdingFromCapTable(t, 'Z'), null);
 });
+
+test('confirmed cashflow is separate from unknown positions and never unlocks allocations', () => {
+  const t = buildCapTable(reg([row('A', 'UNKNOWN', { contributedConfirmed: '1', refundedConfirmed: '1', netConfirmed: '0', missingConfirmedIntents: 0 })]));
+  assert.equal(t.rows[0].position, 'UNKNOWN');
+  assert.deepEqual(t.rows[0].confirmedCashflow, { contributed: '1', refunded: '1', net: '0', missing: 0 });
+  assert.equal(t.knownBase, '0');
+  assert.equal(buildDistributionPreview(t, '1').status, 'unavailable');
+});

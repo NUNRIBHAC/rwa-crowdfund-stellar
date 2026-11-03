@@ -48,7 +48,7 @@ test('unknown holder shows UNKNOWN, never zero, and the preview is unavailable w
     { status: 'unavailable', declarable: false, total: '10', excludedUnknownHolderCount: 1, rows: [], notice: '' },
   );
   setup();
-  await waitFor(() => expect(screen.getByText('UNKNOWN')).toBeTruthy());
+  await waitFor(() => expect(screen.getAllByText('UNKNOWN')[0]).toBeTruthy());
   fireEvent.change(screen.getByRole('textbox'), { target: { value: '10' } });
   fireEvent.click(screen.getByRole('button', { name: /preview distribution/i }));
   await waitFor(() => expect(screen.getByText(/Allocation unavailable/)).toBeTruthy());
@@ -142,4 +142,26 @@ test('synthetic preview refusal never shows a successful allocation', async () =
   fireEvent.click(screen.getByRole('button', { name: /preview distribution/i }));
   expect((await screen.findByRole('alert')).textContent).toContain('Synthetic preview refused');
   expect(screen.queryByRole('status')).toBeNull();
+});
+
+test('reconciled cashflow remains separate from an unknown holding', async () => {
+  stub(
+    table(
+      [
+        {
+          publicKey: U,
+          position: 'UNKNOWN',
+          positionSource: 'unknown',
+          basisPoints: null,
+          confirmedCashflow: { contributed: '1', refunded: '1', net: '0', missing: 0 },
+        },
+      ],
+      { onChain: 0, journalIntended: 0, unknown: 1, mixed: false },
+    ),
+    {},
+  );
+  setup();
+  expect(await screen.findByText('1 / 1 / 0')).toBeTruthy();
+  expect(screen.getByText('Historical transfers only, not current holdings or rights. Excluded from allocations.')).toBeTruthy();
+  expect(screen.getAllByText('UNKNOWN').length).toBeGreaterThan(0);
 });

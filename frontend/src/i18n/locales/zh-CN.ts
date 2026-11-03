@@ -1932,6 +1932,8 @@ export const zhCN: Messages = {
       loadError: '无法加载运营数据。',
       retry: '重试',
       corp: {
+        cashflow: '已确认资金流：流入 / 流出 / 净额',
+        cashflowNote: '仅为历史转账，不代表当前持仓或权利，不计入分配。',
         title: '公司行动（原型）',
         note: '根据份额登记册生成的原型股权表和分配预览。不保存任何内容，不转移资金，也不宣布任何股息。未知持仓绝不会显示为零。',
         campaign: '活动',

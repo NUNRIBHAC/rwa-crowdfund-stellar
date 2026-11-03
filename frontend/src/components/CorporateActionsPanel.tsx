@@ -77,6 +77,7 @@ export default function CorporateActionsPanel({ token, campaigns }: Props) {
                   <th>{l.colPosition}</th>
                   <th>{l.colSource}</th>
                   <th>{l.colShare}</th>
+                  <th>{l.cashflow}</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,6 +89,20 @@ export default function CorporateActionsPanel({ token, campaigns }: Props) {
                     <td dir="ltr">{r.position === 'UNKNOWN' ? l.unknown.toUpperCase() : r.position}</td>
                     <td>{sourceLabel(r.positionSource)}</td>
                     <td dir="ltr">{r.basisPoints === null ? '-' : `${(r.basisPoints / 100).toFixed(2)}%`}</td>
+                    <td>
+                      {r.confirmedCashflow ? (
+                        <>
+                          <span dir="ltr">
+                            {r.confirmedCashflow.contributed} / {r.confirmedCashflow.refunded} / {r.confirmedCashflow.net}
+                          </span>
+                          <small className="community-note" style={{ display: 'block' }}>
+                            {l.cashflowNote}
+                          </small>
+                        </>
+                      ) : (
+                        l.unknown.toUpperCase()
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -13,6 +13,7 @@ import { formatUnits } from './share-register.js';
 export const CORPORATE_ACTIONS_SEMANTICS =
   'Prototype cap table and distribution preview derived from the share register. ' +
   'Positions use the on-chain balance when the register has one (v2), otherwise the journal-derived net INTENDED amount; per-hash network confirmation remains the only source of transferred truth. ' +
+  'Confirmed cashflow fields are historical transfers only, not a current holding or legal right, and are excluded from the position and allocation base. ' +
   'A holder whose position cannot be computed (missing amounts, negative net) is UNKNOWN and excluded from the base; it is not zero. ' +
   'A preview moves no funds and declares no dividend: no payment, custody, tax, legal or holder-rights claim is made or implied.';
 
@@ -22,6 +23,7 @@ export type CapTableRow = {
   positionSource: 'on-chain' | 'journal-intended' | 'unknown';
   // Share of the KNOWN base in basis points (1/100 %), null when unknown.
   basisPoints: number | null;
+  confirmedCashflow?: { contributed: string; refunded: string; net: string; missing: number };
   note?: string;
 };
 
@@ -64,12 +66,25 @@ export function buildCapTable(register: ShareRegisterPayload): CapTable {
       : { publicKey: c.publicKey, units: null, source: 'unknown' as const, note: 'unparseable amount' };
   });
   const base = raw.reduce((s, r) => s + (r.units ?? 0n), 0n);
-  const rows: CapTableRow[] = raw.map((r) => ({
+  const rows: CapTableRow[] = raw.map((r, i) => ({
     publicKey: r.publicKey,
     position: r.units === null ? 'UNKNOWN' : formatUnits(r.units),
     positionSource: r.source,
     basisPoints: r.units === null || base === 0n ? null : Number((r.units * 10000n) / base),
     ...(r.note ? { note: r.note } : {}),
+    ...(register.contributors[i]?.netConfirmed !== undefined
+      ? {
+          confirmedCashflow: (() => {
+            const c = register.contributors[i];
+            return {
+              contributed: c.contributedConfirmed ?? 'UNKNOWN',
+              refunded: c.refundedConfirmed ?? 'UNKNOWN',
+              net: c.netConfirmed,
+              missing: c.missingConfirmedIntents,
+            };
+          })(),
+        }
+      : {}),
   }));
   const unknown = raw.filter((r) => r.units === null).length;
   return {

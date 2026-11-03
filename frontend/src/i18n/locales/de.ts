@@ -2062,6 +2062,8 @@ export const de: Messages = {
       loadError: 'Operator-Daten konnten nicht geladen werden.',
       retry: 'Erneut versuchen',
       corp: {
+        cashflow: 'Bestätigte Geldflüsse: Eingang / Ausgang / Netto',
+        cashflowNote: 'Nur historische Transfers, keine aktuellen Bestände oder Rechte. Nicht in Zuteilungen enthalten.',
         title: 'Kapitalmaßnahmen (Prototyp)',
         note: 'Prototyp-Kapitaltabelle und Ausschüttungsvorschau aus dem Anteilsregister. Es wird nichts gespeichert, es werden keine Mittel bewegt und keine Dividende erklärt. Unbekannte Positionen werden nie als null angezeigt.',
         campaign: 'Kampagne',

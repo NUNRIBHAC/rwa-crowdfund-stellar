@@ -2068,6 +2068,8 @@ export const pt: Messages = {
       loadError: 'Não foi possível carregar os dados do operador.',
       retry: 'Tentar novamente',
       corp: {
+        cashflow: 'Fluxos confirmados: entrada / saída / líquido',
+        cashflowNote: 'Só transferências históricas, não posições atuais nem direitos. Excluídos das distribuições.',
         title: 'Operações societárias (protótipo)',
         note: 'Tabela de capital e pré-visualização de distribuição de protótipo, a partir do registo de participações. Nada é guardado, nenhum fundo se move e nenhum dividendo é declarado. Posições desconhecidas nunca aparecem como zero.',
         campaign: 'Campanha',
