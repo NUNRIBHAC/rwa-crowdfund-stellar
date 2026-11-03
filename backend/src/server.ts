@@ -33,6 +33,7 @@ import { backfillCampaignContributors } from './contributor-backfill.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
 import { mailerFromEnv } from './mailer.js';
 import { buildShareRegister, type ShareRegisterPayload } from './share-register.js';
+import { buildCapTable, holdingFromCapTable, CORPORATE_ACTIONS_SEMANTICS } from './corporate-actions.js';
 import { archiveCampaignEvents, eventArchiveBackend, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
 
 const app = express();
@@ -303,6 +304,39 @@ app.get('/api/account/payouts', async (req, res) => {
     // Completed refunds/withdrawals ONLY - no return distributions exist in
     // this prototype and none are fabricated.
     res.json({ payouts: await accountPayouts(actor), network: NETWORK, productionEligible: false });
+  } catch (err) {
+    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
+// Own-position view: the wallet's row from the same cap table the operator
+// sees, for campaigns where this wallet has a SUCCESS contribute/refund in the
+// journal. Public read of journal-equivalent fields (like payouts/activity);
+// no signed material. INTENDED/on-chain basis and UNKNOWN are surfaced, never
+// coerced to 0. No holder right, dividend or obligation is implied.
+app.get('/api/account/holdings', async (req, res) => {
+  try {
+    const actor = typeof req.query.actor === 'string' ? req.query.actor : '';
+    if (!actor) return res.status(400).json({ error: 'actor query param required' });
+    const activity = await accountActivity(actor);
+    const ids = [
+      ...new Set(
+        activity
+          .filter((a: { status: string; action: string }) => a.status === 'SUCCESS' && (a.action === 'contribute' || a.action === 'refund'))
+          .map((a: { campaign: string }) => a.campaign),
+      ),
+    ].slice(0, 20);
+    const holdings = [];
+    const unavailable: string[] = [];
+    for (const id of ids) {
+      try {
+        const payload = await shareRegisterPayload(id);
+        const h = payload ? holdingFromCapTable(buildCapTable(payload), actor) : null;
+        if (h) holdings.push(h);
+      } catch {
+        unavailable.push(id);
+      }
+    }
+    res.json({ holdings, unavailable, semantics: CORPORATE_ACTIONS_SEMANTICS, network: NETWORK, productionEligible: false });
   } catch (err) {
     res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
   }
