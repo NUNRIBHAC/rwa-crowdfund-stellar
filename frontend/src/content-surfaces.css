@@ -190,7 +190,11 @@
 .mobile-menu-toggle {
   display: none;
 }
-@media (max-width: 720px) {
+/* Compact chrome below 961px: covers every phone (portrait and landscape,
+   largest is ~932px) and portrait tablets (768-834px), where the full
+   8-item nav + controls wrap the sticky header to ~190px tall. Desktop
+   windows (>=961px) keep the wide one-row layout unchanged. */
+@media (max-width: 960px) {
   .header-inner {
     display: flex;
     flex-wrap: wrap;

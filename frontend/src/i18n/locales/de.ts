@@ -32,8 +32,8 @@ export const de: Messages = {
     'Crowdfunding-Investitionen bergen ein Totalverlustrisiko. Dies ist ein Prototyp im Stellar-Testnet: keine echten Angebote, keine echten Gelder, keine Anlageberatung.',
   hero: {
     eyebrow: 'Tokenisierte reale Vermögenswerte, auf Stellar',
-    titleA: 'Reale Vermögenswerte.',
-    titleB: 'Geteilte Möglichkeiten.',
+    titleA: 'Reale Vermögens­werte.',
+    titleB: 'Geteilte Möglich­keiten.',
     sub: 'Blockallisto ist Alles-oder-nichts-Crowdfunding, durchgesetzt durch einen Soroban-Vertrag: Jeder Beitrag bleibt auf Stellar im Escrow und die Prüfung der Finanzierungsobergrenze erfolgt in derselben atomaren Transaktion. Der Ersteller kann die Mittel nur abheben, wenn das Ziel fristgerecht erreicht wird; andernfalls signiert jeder Beitragende seine eigene Rückerstattung. Von Portugal in die Welt.',
     ctaBrowse: 'Kampagnen ansehen',
     ctaHow: 'So funktioniert es',
