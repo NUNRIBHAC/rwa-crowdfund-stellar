@@ -1041,7 +1041,7 @@ export class CommunityService {
         'Issuer application update',
         `Your issuer application for "${t.projectName}" is now "${status}".${honesty}${noteText}`,
         t.id,
-        { projectName: t.projectName, status },
+        reviewNote ? { projectName: t.projectName, status, note: reviewNote } : { projectName: t.projectName, status },
       );
     }
   }

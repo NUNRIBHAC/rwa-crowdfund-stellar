@@ -1925,6 +1925,8 @@ export const en = {
         applicationReceived:
           'Your issuer application for "{projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.',
         applicationStatus: 'Your issuer application for "{projectName}" is now "{statusLabel}".',
+        applicationStatusReviewOnly: 'This is a prototype review outcome only - not a legal approval, identity verification, listing or offer.',
+        applicationStatusNote: 'Operator note: {note}',
         commentModerated: 'Your comment on campaign "{campaignId}" was hidden by the moderator.',
         commentModeratedReason: 'Reason: {reason}',
         ticketClosed: 'Your {kindLabel} ticket "{subject}" was closed.',

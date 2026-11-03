@@ -1905,6 +1905,8 @@ export const ja: Messages = {
       bodies: {
         applicationReceived: '"{projectName}" の発行者申請を受け付けました。運営者は申請を手動で審査します。提出は承認、掲載、または募集ではありません。',
         applicationStatus: '"{projectName}" の発行者申請のステータスが "{statusLabel}" になりました。',
+        applicationStatusReviewOnly: 'これはプロトタイプの審査結果にすぎません。法的承認、本人確認、上場または募集ではありません。',
+        applicationStatusNote: 'オペレーターメモ: {note}',
         commentModerated: 'キャンペーン "{campaignId}" へのコメントはモデレーターによって非表示にされました。',
         commentModeratedReason: '理由: {reason}',
         ticketClosed: '{kindLabel}のチケット "{subject}" がクローズされました。',

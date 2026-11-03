@@ -72,7 +72,11 @@ export default function MyCommunityActivity() {
               <li key={a.id} className="portfolio-row">
                 <span>{a.projectName}</span>
                 <span className="doc-note">{fmt(a.createdAt)}</span>
-                <span className={`status-chip status-${a.status === 'closed' ? 'ended' : 'pending'}`}>{m.community.applicationStatus[a.status]}</span>
+                <span
+                  className={`status-chip status-${a.status === 'approved' ? 'paid' : a.status === 'closed' || a.status === 'rejected' ? 'ended' : 'pending'}`}
+                >
+                  {m.community.applicationStatus[a.status]}
+                </span>
               </li>
             ))}
           </ul>

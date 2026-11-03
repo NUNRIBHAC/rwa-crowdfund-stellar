@@ -1852,6 +1852,8 @@ export const zhTW: Messages = {
       bodies: {
         applicationReceived: '您為 "{projectName}" 提交的發行方申請已收到。營運方將人工審核申請；提交不構成批准、上架或要約。',
         applicationStatus: '您為 "{projectName}" 提交的發行方申請現已更新為 "{statusLabel}"。',
+        applicationStatusReviewOnly: '這只是原型審查結果,不是法律核准、身分驗證、上市或要約。',
+        applicationStatusNote: '營運者備註:{note}',
         commentModerated: '您在活動 "{campaignId}" 下的留言已被審核員隱藏。',
         commentModeratedReason: '原因：{reason}',
         ticketClosed: '您的{kindLabel}工單 "{subject}" 已關閉。',

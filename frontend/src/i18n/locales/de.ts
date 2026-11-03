@@ -1976,6 +1976,8 @@ export const de: Messages = {
         applicationReceived:
           'Ihr Emittentenantrag für "{projectName}" ist eingegangen. Der Betreiber prüft Anträge manuell; die Einreichung ist keine Genehmigung, kein Listing und kein Angebot.',
         applicationStatus: 'Ihr Emittentenantrag für "{projectName}" hat jetzt den Status "{statusLabel}".',
+        applicationStatusReviewOnly: 'Dies ist nur ein Prüfungsergebnis des Prototyps - keine rechtliche Genehmigung, Identitätsprüfung, Listung oder Angebot.',
+        applicationStatusNote: 'Notiz des Betreibers: {note}',
         commentModerated: 'Ihr Kommentar zur Kampagne "{campaignId}" wurde vom Moderator ausgeblendet.',
         commentModeratedReason: 'Grund: {reason}',
         ticketClosed: 'Ihr Ticket ({kindLabel}) "{subject}" wurde geschlossen.',

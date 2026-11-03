@@ -1893,6 +1893,8 @@ export const ar: Messages = {
       bodies: {
         applicationReceived: 'تم استلام طلب الإصدار الخاص بك لـ "{projectName}". يراجع المشغّل الطلبات يدوياً؛ التقديم ليس موافقة أو إدراجاً أو عرضاً.',
         applicationStatus: 'طلب الإصدار الخاص بك لـ "{projectName}" أصبح الآن "{statusLabel}".',
+        applicationStatusReviewOnly: 'هذه نتيجة مراجعة للنموذج الأولي فقط - وليست موافقة قانونية أو تحققًا من الهوية أو إدراجًا أو عرضًا.',
+        applicationStatusNote: 'ملاحظة المشغل: {note}',
         commentModerated: 'تم إخفاء تعليقك على الحملة "{campaignId}" بواسطة المشرف.',
         commentModeratedReason: 'السبب: {reason}',
         ticketClosed: 'تم إغلاق تذكرتك ({kindLabel}) "{subject}".',

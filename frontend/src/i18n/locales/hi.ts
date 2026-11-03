@@ -1925,6 +1925,8 @@ export const hi: Messages = {
         applicationReceived:
           '"{projectName}" के लिए आपका जारीकर्ता आवेदन प्राप्त हो गया है। ऑपरेटर आवेदनों की मैन्युअल रूप से समीक्षा करता है; सबमिशन कोई स्वीकृति, लिस्टिंग या ऑफ़र नहीं है।',
         applicationStatus: '"{projectName}" के लिए आपका जारीकर्ता आवेदन अब "{statusLabel}" है।',
+        applicationStatusReviewOnly: 'यह केवल प्रोटोटाइप समीक्षा परिणाम है - कानूनी स्वीकृति, पहचान सत्यापन, लिस्टिंग या प्रस्ताव नहीं।',
+        applicationStatusNote: 'ऑपरेटर टिप्पणी: {note}',
         commentModerated: 'अभियान "{campaignId}" पर आपकी टिप्पणी मॉडरेटर द्वारा छिपा दी गई है।',
         commentModeratedReason: 'कारण: {reason}',
         ticketClosed: 'आपका टिकट ({kindLabel}) "{subject}" बंद कर दिया गया है।',

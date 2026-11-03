@@ -1994,6 +1994,9 @@ export const fr: Messages = {
         applicationReceived:
           "Votre candidature d'émetteur pour \"{projectName}\" a été reçue. L'opérateur examine les candidatures manuellement ; la soumission n'est ni une approbation, ni une cotation, ni une offre.",
         applicationStatus: 'Votre candidature d\'émetteur pour "{projectName}" est maintenant "{statusLabel}".',
+        applicationStatusReviewOnly:
+          'Il s’agit uniquement d’un résultat d’examen du prototype - pas une approbation légale, une vérification d’identité, une cotation ou une offre.',
+        applicationStatusNote: 'Note de l’opérateur : {note}',
         commentModerated: 'Votre commentaire sur la campagne "{campaignId}" a été masqué par le modérateur.',
         commentModeratedReason: 'Motif : {reason}',
         ticketClosed: 'Votre ticket ({kindLabel}) "{subject}" a été clôturé.',
