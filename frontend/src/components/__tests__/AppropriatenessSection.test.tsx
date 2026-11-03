@@ -91,6 +91,44 @@ describe('AppropriatenessSection', () => {
     expect(await screen.findByText('On this deployment the assessment is limited to designated test accounts.')).toBeTruthy();
   });
 
+  it('renders the limited note from the stable code when the message is localized (403 feature_restricted)', async () => {
+    globalThis.__authMock = auth();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ error: 'appropriateness collection is limited to designated QA accounts', code: 'feature_restricted' }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
+    );
+    render(
+      <I18nProvider>
+        <AppropriatenessSection />
+      </I18nProvider>,
+    );
+    expect(await screen.findByText('On this deployment the assessment is limited to designated test accounts.')).toBeTruthy();
+  });
+
+  it('renders the held note from the stable code (503 feature_unavailable)', async () => {
+    globalThis.__authMock = auth();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ error: 'something else', code: 'feature_unavailable' }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
+    );
+    render(
+      <I18nProvider>
+        <AppropriatenessSection />
+      </I18nProvider>,
+    );
+    expect(await screen.findByText('The appropriateness assessment is not collecting responses on this deployment.')).toBeTruthy();
+  });
+
   it('submits the knowledge test, shows the warning until acknowledged, then unlocks the simulation', async () => {
     globalThis.__authMock = auth();
     const spy = vi.fn().mockImplementation((url: string, init?: RequestInit) => {

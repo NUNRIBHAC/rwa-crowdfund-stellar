@@ -24,6 +24,7 @@
 // Replaces the old localStorage-only InvestorCategorisation prototype.
 import { useCallback, useEffect, useState } from 'react';
 import {
+  ApiError,
   acknowledgeWarning,
   fetchAppropriateness,
   requestSophistication,
@@ -109,8 +110,11 @@ export default function AppropriatenessSection() {
       })
       .catch((e) => {
         const msg = e instanceof Error ? e.message : String(e);
-        if (msg.includes('disabled on this deployment')) setState('held');
-        else if (msg.includes('limited to designated')) setState('limited');
+        // Branch on the stable server code (messages are localized); the
+        // English substrings stay as a fallback for uncoded legacy responses.
+        const code = e instanceof ApiError ? e.code : undefined;
+        if (code === 'feature_unavailable' || msg.includes('disabled on this deployment')) setState('held');
+        else if (code === 'feature_restricted' || msg.includes('limited to designated')) setState('limited');
         else {
           setError(msg);
           setState('error');
