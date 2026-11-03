@@ -4,12 +4,30 @@
 import type { Messages } from './en';
 
 export const ko: Messages = {
+  contributionPreview: {
+    title: '기여금 미리보기',
+    note: '미리보기만 제공됩니다. 서명, 거래, 소유권은 발생하지 않습니다.',
+    current: '현재 모금',
+    share: '목표 대비 비율',
+    projected: '예상 모금',
+    invalid: '소수점 7자리 이하의 양수 USDC 금액을 입력하세요.',
+    unavailable: '모금 데이터를 사용할 수 없습니다.',
+    overGoal: '금액이 캠페인의 남은 목표를 초과합니다.',
+    rounding: '필요하면 백분율을 소수점 2자리까지 내림합니다.',
+    fees: '기여금 전액이 목표에 반영됩니다. XLM 네트워크 수수료는 별도이며 서명 전에 표시됩니다.',
+    outcomes: '목표 달성 시 생성자는 마감 후 인출할 수 있습니다. 미달 시 각 기여자가 환불에 직접 서명합니다. 환불은 자동이 아닙니다.',
+  },
   onboarding: {
     title: '투자자 온보딩 - 시뮬레이션',
     note: '데모 전용입니다. 신원 상태는 선택한 시나리오이며 실제 신원 확인이 아닙니다. 신분증이나 재무 입력값은 여기서 수집하지 않습니다. 진행 상태는 실제 투자를 허용하지 않습니다.',
     signIn: '로그인하여 데모 진행 상태를 저장하세요.',
     identity: '모의 신원 시나리오',
-    identityStates: { not_started: '시작 전', pending: '모의 검토 대기', passed: '모의 확인 통과', rejected: '모의 확인 거절' },
+    identityStates: {
+      not_started: '시작 전',
+      pending: '모의 검토 대기',
+      passed: '모의 확인 통과',
+      rejected: '모의 확인 거절',
+    },
     states: {
       demo_incomplete: '데모 미완료: 아래 단계를 완료하세요.',
       demo_blocked: '선택한 시나리오로 데모가 차단되었습니다.',
@@ -57,7 +75,6 @@ export const ko: Messages = {
     missedOutcome: '마감 후 각 기여자가 자신의 환불에 서명합니다. 환불은 자동이 아닙니다.',
     blockScale: '각 블록은 이 예시 목표의 1%입니다.',
     technicalTitle: '계약 작동 방식',
-
     eyebrow: '토큰화된 실물 자산, Stellar 위에서',
     titleA: '실제 자산.',
     titleB: '함께 나누는 가능성.',

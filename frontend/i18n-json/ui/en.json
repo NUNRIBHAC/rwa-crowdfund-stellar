@@ -1,4 +1,17 @@
 {
+  "contributionPreview": {
+    "title": "Preview contribution",
+    "note": "Preview only: no signature, transaction or ownership.",
+    "current": "Current funding",
+    "share": "Share of target",
+    "projected": "Projected funding",
+    "invalid": "Enter a positive USDC amount with up to 7 decimal places.",
+    "unavailable": "Funding data unavailable.",
+    "overGoal": "The amount exceeds the remaining campaign target.",
+    "rounding": "Percentages rounded down to 2 decimal places when needed.",
+    "fees": "The full contribution counts toward the target. Network fees in XLM are separate and are shown before signing.",
+    "outcomes": "If the goal is met, the creator may withdraw after the deadline. If it is missed, each contributor signs their own refund. Refunds are not automatic."
+  },
   "onboarding": {
     "title": "Investor onboarding - simulation",
     "note": "Demo only. Identity status is a scenario you choose, not a real identity check. No identity documents or financial inputs are collected here. Progress never authorizes a real investment.",

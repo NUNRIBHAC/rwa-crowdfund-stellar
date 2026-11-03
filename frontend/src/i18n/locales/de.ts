@@ -4,6 +4,20 @@
 import type { Messages } from './en';
 
 export const de: Messages = {
+  contributionPreview: {
+    title: 'Beitrag vorschauen',
+    note: 'Nur Vorschau: keine Unterschrift, Transaktion oder Eigentumsrechte.',
+    current: 'Aktuelle Finanzierung',
+    share: 'Anteil am Ziel',
+    projected: 'Voraussichtliche Finanzierung',
+    invalid: 'Einen positiven USDC-Betrag mit bis zu 7 Nachkommastellen eingeben.',
+    unavailable: 'Finanzierungsdaten nicht verfügbar.',
+    overGoal: 'Der Betrag übersteigt das verbleibende Kampagnenziel.',
+    rounding: 'Prozentwerte werden bei Bedarf auf 2 Nachkommastellen abgerundet.',
+    fees: 'Der gesamte Beitrag zählt zum Ziel. Netzwerkgebühren in XLM sind separat und werden vor der Unterschrift angezeigt.',
+    outcomes:
+      'Bei erreichtem Ziel kann der Ersteller nach Fristende abheben. Andernfalls unterschreibt jeder Beitragszahler seine Rückerstattung. Erstattungen erfolgen nicht automatisch.',
+  },
   onboarding: {
     title: 'Anleger-Onboarding - Simulation',
     note: 'Nur Demo. Der Identitätsstatus ist ein gewähltes Szenario, keine echte Prüfung. Hier werden keine Ausweisdokumente oder Finanzdaten erfasst. Der Fortschritt erlaubt niemals eine echte Anlage.',
@@ -63,7 +77,6 @@ export const de: Messages = {
     missedOutcome: 'Nach Ablauf der Frist signiert jeder Beitragende seine eigene Erstattung. Erstattungen erfolgen nicht automatisch.',
     blockScale: 'Jeder Block entspricht 1 % dieses beispielhaften Ziels.',
     technicalTitle: 'So funktioniert der Vertrag',
-
     eyebrow: 'Tokenisierte reale Vermögenswerte, auf Stellar',
     titleA: 'Reale Vermögenswerte.',
     titleB: 'Geteilte Möglichkeiten.',

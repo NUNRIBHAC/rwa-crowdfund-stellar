@@ -4,13 +4,35 @@
 import type { Messages } from './en';
 
 export const zhTW: Messages = {
+  contributionPreview: {
+    title: '預覽出資',
+    note: '僅供預覽：不簽署、不交易，也不產生所有權。',
+    current: '目前募資',
+    share: '占目標比例',
+    projected: '預計募資',
+    invalid: '請輸入正數 USDC 金額，最多 7 位小數。',
+    unavailable: '無法取得募資資料。',
+    overGoal: '金額超過活動剩餘目標。',
+    rounding: '必要時，百分比向下取至小數點後 2 位。',
+    fees: '全額出資計入目標。XLM 網路費另計，簽署前會顯示。',
+    outcomes: '達標後，建立者可在截止後提領。未達標時，每位出資者自行簽署退款。退款不會自動執行。',
+  },
   onboarding: {
     title: '投資者入門 - 模擬',
     note: '僅供示範。身分狀態是您選擇的情境，並非真實身分驗證。此處不收集身分證件或財務輸入。進度不會授權真實投資。',
     signIn: '登入以儲存示範進度。',
     identity: '模擬身分情境',
-    identityStates: { not_started: '未開始', pending: '等待模擬審核', passed: '模擬驗證通過', rejected: '模擬驗證遭拒' },
-    states: { demo_incomplete: '示範未完成：請完成以下步驟。', demo_blocked: '所選身分情境阻止了示範。', demo_ready: '示範步驟已完成。真實投資仍無法使用。' },
+    identityStates: {
+      not_started: '未開始',
+      pending: '等待模擬審核',
+      passed: '模擬驗證通過',
+      rejected: '模擬驗證遭拒',
+    },
+    states: {
+      demo_incomplete: '示範未完成：請完成以下步驟。',
+      demo_blocked: '所選身分情境阻止了示範。',
+      demo_ready: '示範步驟已完成。真實投資仍無法使用。',
+    },
     assessmentSaved: '目前評估和模擬結果已儲存，警告步驟已完成。',
     assessmentNeeded: '評估、模擬或警告步驟缺少或需要複核。此環境可能限制收集。',
     assessmentLink: '開啟現有投資者評估',
@@ -53,7 +75,6 @@ export const zhTW: Messages = {
     missedOutcome: '截止後，每位出資人簽署自己的退款。退款不是自動進行的。',
     blockScale: '每個方塊代表此示意目標的1%。',
     technicalTitle: '合約如何運作',
-
     eyebrow: 'Stellar 上的代幣化真實資產',
     titleA: '真實資產。',
     titleB: '共享可能。',

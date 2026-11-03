@@ -4,13 +4,35 @@
 import type { Messages } from './en';
 
 export const zhCN: Messages = {
+  contributionPreview: {
+    title: '预览出资',
+    note: '仅供预览：不签署、不交易，也不产生所有权。',
+    current: '当前募资',
+    share: '占目标比例',
+    projected: '预计募资',
+    invalid: '请输入正数 USDC 金额，最多 7 位小数。',
+    unavailable: '无法获取募资数据。',
+    overGoal: '金额超过活动剩余目标。',
+    rounding: '必要时，百分比向下取至小数点后 2 位。',
+    fees: '全额出资计入目标。XLM 网络费另计，签署前会显示。',
+    outcomes: '达标后，创建者可在截止后提取。未达标时，每位出资者自行签署退款。退款不会自动执行。',
+  },
   onboarding: {
     title: '投资者入门 - 模拟',
     note: '仅供演示。身份状态是您选择的场景，并非真实身份验证。这里不收集身份证件或财务输入。进度不会授权真实投资。',
     signIn: '登录以保存演示进度。',
     identity: '模拟身份场景',
-    identityStates: { not_started: '未开始', pending: '等待模拟审核', passed: '模拟验证通过', rejected: '模拟验证被拒绝' },
-    states: { demo_incomplete: '演示未完成：请完成以下步骤。', demo_blocked: '所选身份场景阻止了演示。', demo_ready: '演示步骤已完成。真实投资仍不可用。' },
+    identityStates: {
+      not_started: '未开始',
+      pending: '等待模拟审核',
+      passed: '模拟验证通过',
+      rejected: '模拟验证被拒绝',
+    },
+    states: {
+      demo_incomplete: '演示未完成：请完成以下步骤。',
+      demo_blocked: '所选身份场景阻止了演示。',
+      demo_ready: '演示步骤已完成。真实投资仍不可用。',
+    },
     assessmentSaved: '当前评估和模拟结果已保存，警告步骤已完成。',
     assessmentNeeded: '评估、模拟或警告步骤缺失或需要复核。此环境可能限制收集。',
     assessmentLink: '打开现有投资者评估',
@@ -53,7 +75,6 @@ export const zhCN: Messages = {
     missedOutcome: '截止后，每位出资人签署自己的退款。退款不是自动进行的。',
     blockScale: '每个方块代表此示意目标的1%。',
     technicalTitle: '合约如何运作',
-
     eyebrow: 'Stellar 上的代币化真实资产',
     titleA: '真实资产。',
     titleB: '共享可能。',

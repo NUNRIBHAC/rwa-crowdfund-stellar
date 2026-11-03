@@ -16,6 +16,7 @@ import Comments from '../components/Comments';
 import type { Messages } from '../i18n/locales/en';
 import CampaignTour from '../components/CampaignTour';
 import CampaignPhoto from '../components/CampaignPhoto';
+import ContributionPreview from '../components/ContributionPreview';
 
 const TAB_IDS = ['overview', 'details', 'documents', 'news', 'podcast'] as const;
 
@@ -253,20 +254,19 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
             </div>
           </dl>
 
+          {status === 'open' && (
+            <ContributionPreview
+              raised={campaign.raised}
+              goal={campaign.config.goal}
+              amount={market.amounts[campaign.id] ?? ''}
+              onAmount={(value) => market.onAmount(campaign.id, value)}
+            />
+          )}
+
           {market.fixtureMode ? (
             <p className="widget-note">{m.campaign.widgetFixture}</p>
           ) : status === 'open' ? (
             <div className="card-actions">
-              <label className="amount-label">
-                {m.card.amountLabel}
-                <input
-                  value={market.amounts[campaign.id] ?? ''}
-                  onChange={(e) => market.onAmount(campaign.id, e.target.value)}
-                  placeholder="10.00"
-                  inputMode="decimal"
-                  aria-invalid={market.amountErrors[campaign.id] ? true : undefined}
-                />
-              </label>
               {market.amountErrors[campaign.id] ? <p className="field-error">{market.amountErrors[campaign.id]}</p> : null}
               {market.prepareErrors[campaign.id] ? (
                 <p className="field-error" role="alert">

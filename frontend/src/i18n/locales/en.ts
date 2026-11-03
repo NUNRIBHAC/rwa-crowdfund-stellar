@@ -2,12 +2,31 @@
 // Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
 
 export const en = {
+  contributionPreview: {
+    title: 'Preview contribution',
+    note: 'Preview only: no signature, transaction or ownership.',
+    current: 'Current funding',
+    share: 'Share of target',
+    projected: 'Projected funding',
+    invalid: 'Enter a positive USDC amount with up to 7 decimal places.',
+    unavailable: 'Funding data unavailable.',
+    overGoal: 'The amount exceeds the remaining campaign target.',
+    rounding: 'Percentages rounded down to 2 decimal places when needed.',
+    fees: 'The full contribution counts toward the target. Network fees in XLM are separate and are shown before signing.',
+    outcomes:
+      'If the goal is met, the creator may withdraw after the deadline. If it is missed, each contributor signs their own refund. Refunds are not automatic.',
+  },
   onboarding: {
     title: 'Investor onboarding - simulation',
     note: 'Demo only. Identity status is a scenario you choose, not a real identity check. No identity documents or financial inputs are collected here. Progress never authorizes a real investment.',
     signIn: 'Sign in to save your demo progress.',
     identity: 'Simulated identity scenario',
-    identityStates: { not_started: 'Not started', pending: 'Pending simulated review', passed: 'Simulated check passed', rejected: 'Simulated check rejected' },
+    identityStates: {
+      not_started: 'Not started',
+      pending: 'Pending simulated review',
+      passed: 'Simulated check passed',
+      rejected: 'Simulated check rejected',
+    },
     states: {
       demo_incomplete: 'Demo incomplete: complete the steps below.',
       demo_blocked: 'Demo blocked by the chosen identity scenario.',
@@ -55,7 +74,6 @@ export const en = {
     missedOutcome: 'After the deadline, each contributor signs their own refund. Refunds are not automatic.',
     blockScale: 'Each block is 1% of this illustrative goal.',
     technicalTitle: 'How the contract works',
-
     eyebrow: 'Tokenized real-world assets, on Stellar',
     titleA: 'Real assets.',
     titleB: 'Shared possibilities.',

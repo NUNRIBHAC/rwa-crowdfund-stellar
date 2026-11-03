@@ -4,12 +4,30 @@
 import type { Messages } from './en';
 
 export const ja: Messages = {
+  contributionPreview: {
+    title: '拠出額のプレビュー',
+    note: 'プレビューのみ。署名、取引、所有権は発生しません。',
+    current: '現在の資金調達',
+    share: '目標に対する割合',
+    projected: '予測資金調達',
+    invalid: '小数点以下7桁までの正のUSDC額を入力してください。',
+    unavailable: '資金調達データを取得できません。',
+    overGoal: '金額がキャンペーンの残り目標額を超えています。',
+    rounding: '必要に応じて割合を小数点以下2桁で切り捨てます。',
+    fees: '拠出額の全額が目標に算入されます。XLMのネットワーク手数料は別途で、署名前に表示されます。',
+    outcomes: '目標達成時は期限後に作成者が引き出せます。未達時は各拠出者が返金に署名します。返金は自動ではありません。',
+  },
   onboarding: {
     title: '投資家登録 - シミュレーション',
     note: 'デモのみ。本人確認状態は選択したシナリオであり、実際の本人確認ではありません。本人確認書類や財務入力情報はここでは収集しません。実際の投資を許可するものではありません。',
     signIn: 'ログインしてデモの進捗を保存してください。',
     identity: '本人確認の模擬シナリオ',
-    identityStates: { not_started: '未開始', pending: '模擬審査待ち', passed: '模擬確認に合格', rejected: '模擬確認で拒否' },
+    identityStates: {
+      not_started: '未開始',
+      pending: '模擬審査待ち',
+      passed: '模擬確認に合格',
+      rejected: '模擬確認で拒否',
+    },
     states: {
       demo_incomplete: 'デモ未完了：以下の手順を完了してください。',
       demo_blocked: '選択したシナリオによりデモが停止しています。',
@@ -57,7 +75,6 @@ export const ja: Messages = {
     missedOutcome: '期限後、各拠出者が自分の返金に署名します。返金は自動ではありません。',
     blockScale: '各ブロックは、この説明用の目標の1%です。',
     technicalTitle: 'コントラクトの仕組み',
-
     eyebrow: 'トークン化された現実資産、Stellar 上で',
     titleA: 'リアルアセット。',
     titleB: '共有される可能性。',

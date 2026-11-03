@@ -4,6 +4,20 @@
 import type { Messages } from './en';
 
 export const fr: Messages = {
+  contributionPreview: {
+    title: 'Aperçu de la contribution',
+    note: 'Aperçu uniquement : sans signature, transaction ni droit de propriété.',
+    current: 'Financement actuel',
+    share: 'Part de l’objectif',
+    projected: 'Financement projeté',
+    invalid: 'Saisissez un montant USDC positif avec 7 décimales maximum.',
+    unavailable: 'Données de financement indisponibles.',
+    overGoal: 'Le montant dépasse l’objectif restant de la campagne.',
+    rounding: 'Pourcentages arrondis vers le bas à 2 décimales si nécessaire.',
+    fees: 'La contribution entière compte pour l’objectif. Les frais réseau en XLM sont distincts et affichés avant signature.',
+    outcomes:
+      'Si l’objectif est atteint, le créateur peut retirer après l’échéance. Sinon, chaque contributeur signe son remboursement. Les remboursements ne sont pas automatiques.',
+  },
   onboarding: {
     title: 'Parcours investisseur - simulation',
     note: 'Démonstration uniquement. Le statut d’identité est un scénario choisi, pas une vérification réelle. Aucun document d’identité ni donnée financière n’est recueilli ici. Le parcours n’autorise jamais un investissement réel.',

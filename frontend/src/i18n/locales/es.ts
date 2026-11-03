@@ -4,6 +4,20 @@
 import type { Messages } from './en';
 
 export const es: Messages = {
+  contributionPreview: {
+    title: 'Vista previa de la aportación',
+    note: 'Solo vista previa: sin firma, transacción ni propiedad.',
+    current: 'Financiación actual',
+    share: 'Parte del objetivo',
+    projected: 'Financiación prevista',
+    invalid: 'Introduce un importe USDC positivo con hasta 7 decimales.',
+    unavailable: 'Datos de financiación no disponibles.',
+    overGoal: 'El importe supera el objetivo restante de la campaña.',
+    rounding: 'Porcentajes redondeados hacia abajo a 2 decimales cuando sea necesario.',
+    fees: 'La aportación completa cuenta para el objetivo. Las comisiones de red en XLM son independientes y se muestran antes de firmar.',
+    outcomes:
+      'Si se alcanza el objetivo, el creador puede retirar después del plazo. Si no, cada participante firma su reembolso. Los reembolsos no son automáticos.',
+  },
   onboarding: {
     title: 'Alta del inversor - simulación',
     note: 'Solo demostración. El estado de identidad es un escenario elegido, no una verificación real. Aquí no se recogen documentos de identidad ni datos financieros. El progreso nunca autoriza una inversión real.',
@@ -63,7 +77,6 @@ export const es: Messages = {
     missedOutcome: 'Tras el plazo, cada contribuyente firma su propio reembolso. Los reembolsos no son automáticos.',
     blockScale: 'Cada bloque representa el 1% de esta meta ilustrativa.',
     technicalTitle: 'Cómo funciona el contrato',
-
     eyebrow: 'Activos del mundo real tokenizados, en Stellar',
     titleA: 'Activos reales.',
     titleB: 'Posibilidades compartidas.',

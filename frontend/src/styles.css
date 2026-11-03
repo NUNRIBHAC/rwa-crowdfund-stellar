@@ -3165,3 +3165,54 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     max-width: 280px;
   }
 }
+
+.contribution-preview {
+  border-block: 1px solid var(--line);
+  padding-block: 16px;
+  margin-block: 16px;
+}
+.contribution-preview h3 {
+  margin-block: 0 8px;
+}
+.contribution-preview p {
+  font-size: 14px;
+}
+.preview-facts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.preview-facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.preview-facts dd {
+  margin: 0;
+  font-family: var(--font-figures);
+  font-variant-numeric: tabular-nums;
+}
+.preview-scale {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 3px;
+  max-width: 240px;
+  margin-block: 16px;
+}
+.preview-scale span {
+  position: relative;
+  aspect-ratio: 1;
+  border: 1px solid var(--ink-soft);
+  border-radius: 2px;
+}
+.preview-scale .preview-addition {
+  outline: 2px dashed var(--ink);
+  outline-offset: 1px;
+}
+
+.preview-scale i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(135deg, transparent 0 3px, #4b4fe2 3px 5px);
+}
