@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { Account, Address, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, SorobanDataBuilder, xdr } from '@stellar/stellar-sdk';
 import { sorobanDeps, buildCampaignDeploy, submitCampaignDeploy, buildCampaignDeployV2, submitCampaignDeployV2 } from '../src/soroban.js';
-import { PostgresJournal, injectJournalBackendForTests, resetJournalBackendForTests } from '../src/journal.js';
+import { PostgresJournal, injectJournalBackendForTests, resetJournalBackendForTests, journalBackend, type IntentStore } from '../src/journal.js';
 
 // Campaign deployment adapter tests: the fake RPC below is adapter evidence
 // only, not evidence of a real deployment. Build/submit reuse the journaled
@@ -455,6 +455,33 @@ test('v2 create progression persists the contract id through the Postgres journa
     assert.equal(sendCount, sends);
     assert.equal(again.confirmed, true);
     assert.equal(again.contractId, v2TokenContractId);
+  } finally {
+    resetJournalBackendForTests();
+  }
+});
+
+test('v2 create fails closed when the journal does not retain the contract id', async () => {
+  reset();
+  v2TokenOnLedger = true;
+  v2OfferingOnLedger = true;
+  createMetaOnly = true;
+  // Emulates the production drop: a backend whose save loses contractId.
+  const inner = await journalBackend();
+  injectJournalBackendForTests({
+    read: () => inner.read(),
+    save: (store: IntentStore) => inner.save({ ...store, intents: store.intents.map((i) => ({ ...i, contractId: undefined })) }),
+  });
+  try {
+    const built = await buildCampaignDeployV2(v2Input());
+    const sends = sendCount;
+    await assert.rejects(
+      submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' }),
+      /journal did not retain the contract id/,
+    );
+    // It must never report confirmed or advance silently in this state.
+    assert.equal(sendCount, sends + 1, 'only the original submission was sent');
+    const next = await buildCampaignDeployV2(v2Input());
+    assert.equal(next.step, 'create-token');
   } finally {
     resetJournalBackendForTests();
   }

@@ -1202,6 +1202,12 @@ export async function submitCampaignDeployV2(input: { actor: string; xdr: string
         await save(store);
       }
     });
+    // Fail closed on journal persistence: confirming a create whose id was
+    // not retained would make the next build repeat the create step (the
+    // Postgres journal dropped the column before contract_id was added).
+    const persisted = (await readStore()).intents.find((i) => i.hash === hash)?.contractId;
+    if (persisted !== outcome.contractId)
+      throw new Error(`journal did not retain the contract id for ${hash}; refusing to confirm - reconcile the exact hash manually before any retry`);
     return {
       hash,
       status: 'SUCCESS',
