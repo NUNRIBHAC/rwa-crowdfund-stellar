@@ -135,7 +135,7 @@ export default function SecuritySection() {
             </p>
           )}
           {(socialProviders ?? []).map((p) => (
-            <div key={p}>
+            <div key={p} className="social-link-row">
               <button className="btn" disabled={busy} onClick={() => onLink(p)}>
                 {tpl(labels.linkAction, { provider: socialProviderDisplayName(p) })}
               </button>
