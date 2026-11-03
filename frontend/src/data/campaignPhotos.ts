@@ -6,3 +6,10 @@ export const CAMPAIGN_PHOTOS: Record<string, string> = {
   'demo-solar': '/demo-solar-farm.jpg',
   'staging-load': '/demo-solar-farm.jpg',
 };
+
+// Unknown/new testnet campaigns must not silently lose their photo. This
+// shared CC0 illustration is explicitly NOT a photograph of that campaign.
+// Real issuer media needs its own source/rights record before replacing it.
+export function campaignPhoto(campaignId: string): string {
+  return CAMPAIGN_PHOTOS[campaignId] ?? '/demo-solar-farm.jpg';
+}

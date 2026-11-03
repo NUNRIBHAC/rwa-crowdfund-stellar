@@ -5,7 +5,7 @@ import FundingGrid from './FundingGrid';
 import type { CampaignProfile } from '../data/profiles';
 import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
-import { CAMPAIGN_PHOTOS } from '../data/campaignPhotos';
+import CampaignPhoto from './CampaignPhoto';
 import { useI18n } from '../i18n';
 
 export type CampaignStatus = 'open' | 'funded' | 'ended';
@@ -44,12 +44,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
   const ended = dl.state === 'ended';
   return (
     <article className="card">
-      {CAMPAIGN_PHOTOS[c.id] ? (
-        <figure className="card-photo">
-          <img src={CAMPAIGN_PHOTOS[c.id]} alt={m.card.photoAlt} loading="lazy" />
-          <figcaption>{m.card.photoCaption}</figcaption>
-        </figure>
-      ) : null}
+      <CampaignPhoto campaignId={c.id} variant="card" />
       <div className="card-top">
         <div className="card-id">
           <svg className="card-mark" viewBox="0 0 240 240" aria-hidden="true">

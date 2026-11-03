@@ -75,7 +75,8 @@ test('illustrative photo renders for mapped campaigns with the honesty caption',
   }
 });
 
-test('no photo renders for unmapped campaigns', () => {
+test('every new or unmapped campaign has a captioned illustrative photo', () => {
   setup(openUnfunded);
-  expect(screen.queryByAltText('Aerial photograph of a solar farm (illustrative)')).toBeNull();
+  expect(screen.getByAltText('Aerial photograph of a solar farm (illustrative)').getAttribute('src')).toBe('/demo-solar-farm.jpg');
+  expect(screen.getByText('Illustrative photo - not the actual project.')).toBeTruthy();
 });
