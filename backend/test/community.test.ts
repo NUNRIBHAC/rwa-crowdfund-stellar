@@ -202,6 +202,47 @@ test('news: admin posts are labeled platform-demo and listed publicly', async ()
   assert.equal(listed[0].authorLabel, 'platform-demo');
 });
 
+test('news delete: admin delete removes the post, 404s on unknown id, and is audit-logged', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const post = await service.addNews('demo-solar', {
+    title: 'QA fixture post',
+    body: 'Synthetic fixture to be removed.',
+  });
+  assert.equal((await service.listAllNews()).length, 1);
+  await service.deleteNews(post.id, 'admin-key');
+  assert.equal((await service.listAllNews()).length, 0);
+  await assert.rejects(
+    () => service.deleteNews(post.id, 'admin-key'),
+    (e: any) => e.status === 404,
+  );
+  await assert.rejects(
+    () => service.deleteNews('news_missing', 'admin-key'),
+    (e: any) => e.status === 404,
+  );
+  const audit = (await store.read()).audit;
+  assert.ok(audit.some((e) => e.action === 'news.delete' && e.actor === 'admin-key' && e.target === post.id));
+});
+
+test('podcast delete: admin delete removes the episode, 404s on unknown id, and is audit-logged', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const ep = await service.addEpisode({
+    title: 'QA fixture episode',
+    description: 'Synthetic fixture to be removed.',
+    audioUrl: 'https://audio.example.com/qa-fixture.mp3',
+  });
+  assert.equal((await service.listEpisodes()).length, 1);
+  await service.deleteEpisode(ep.id, 'admin-key');
+  assert.equal((await service.listEpisodes()).length, 0);
+  await assert.rejects(
+    () => service.deleteEpisode(ep.id, 'admin-key'),
+    (e: any) => e.status === 404,
+  );
+  const audit = (await store.read()).audit;
+  assert.ok(audit.some((e) => e.action === 'podcast.delete' && e.actor === 'admin-key' && e.target === ep.id));
+});
+
 test('reports: operator-submitted reports are labeled platform-demo, listed per campaign, schema-enforced', async () => {
   const store = newStore();
   const service = new CommunityService(store);
