@@ -3035,3 +3035,8 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .social-link-row {
   margin-bottom: 0.5rem;
 }
+
+/* Generated reconciliation notes stay readable inside the scrollable table. */
+.operator-table td.reconciliation-notes {
+  min-width: 20rem;
+}

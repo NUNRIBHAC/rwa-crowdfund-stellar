@@ -2113,6 +2113,14 @@ export const pt: Messages = {
       colOpenIntents: 'Intents abertas',
       colNotes: 'Notas',
       colGenerated: 'Gerado',
+      reconNotes: {
+        MALFORMED_AMOUNT: '{hash}: Montante de contribuição inválido excluído da soma do diário.',
+        MISSING_AMOUNT: '{n}: Contribuições antigas sem montante registado são excluídas da soma do diário.',
+        CHAIN_UNAVAILABLE: 'A leitura on-chain está indisponível.',
+        EXTERNAL_VOLUME: 'O volume on-chain excede o diário desta app. São contribuições externas à app, não fundos em falta.',
+        HISTORY_MISMATCH: 'A soma do diário excede o contador on-chain; o histórico de implementação ou registo é diferente.',
+        COUNTER_INVALID: 'Não foi possível interpretar o contador on-chain.',
+      },
       reconEmpty: 'Sem campanhas no registo.',
       auditNote:
         'Histórico operacional recente de ações admin protegidas (500 mais recentes). As entradas expiram e as escritas não são bloqueantes - não é um registo de auditoria imutável.',

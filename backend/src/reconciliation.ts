@@ -37,6 +37,8 @@ export type CampaignReconciliation = {
   openIntentHashes: string[];
   failedIntents: number;
   notes: string[];
+  noteCodes: string[];
+  noteParams: Record<string, string>[];
 };
 
 const TERMINAL = new Set(['SUCCESS', 'FAILED']);
@@ -50,6 +52,8 @@ export function reconcileCampaigns(
   const rows = campaigns.map((c) => {
     const mine = intents.filter((i) => i.campaign === c.id);
     const notes: string[] = [];
+    const noteCodes: string[] = [];
+    const noteParams: Record<string, string>[] = [];
     let covered = 0n;
     let missingAmount = 0;
     let successContributes = 0;
@@ -80,6 +84,8 @@ export function reconcileCampaigns(
             // against raised are unit-inconsistent.
             covered += amountUnits(i.amount);
           } catch {
+            noteCodes.push('MALFORMED_AMOUNT');
+            noteParams.push({ hash: i.hash });
             notes.push(`intent ${i.hash} has a malformed or out-of-range amount and is excluded from the covered sum`);
           }
         }
@@ -90,19 +96,32 @@ export function reconcileCampaigns(
       }
     }
     if (missingAmount > 0) {
+      noteCodes.push('MISSING_AMOUNT');
+      noteParams.push({ n: String(missingAmount) });
       notes.push(`${missingAmount} SUCCESS contribute intent(s) carry no amount field (recorded before amount capture) and are excluded from the covered sum`);
     }
     let notJournalCovered: string | null = null;
     if (c.raised === null) {
+      noteCodes.push('CHAIN_UNAVAILABLE');
+      noteParams.push({});
       notes.push('on-chain read unavailable for this campaign');
     } else {
       try {
         const diff = BigInt(c.raised) - covered;
         notJournalCovered = diff.toString();
-        if (diff > 0n)
+        if (diff > 0n) {
+          noteCodes.push('EXTERNAL_VOLUME');
+          noteParams.push({});
           notes.push('on-chain volume exceeds this app journal: contributions came from outside this app (CLI tests, other tooling or pre-journal history)');
-        if (diff < 0n) notes.push('journal-covered sum exceeds the on-chain counter: journal rows reference different deployment or registry history');
+        }
+        if (diff < 0n) {
+          noteCodes.push('HISTORY_MISMATCH');
+          noteParams.push({});
+          notes.push('journal-covered sum exceeds the on-chain counter: journal rows reference different deployment or registry history');
+        }
       } catch {
+        noteCodes.push('COUNTER_INVALID');
+        noteParams.push({});
         notes.push('on-chain raised value is unparseable');
       }
     }
@@ -117,6 +136,8 @@ export function reconcileCampaigns(
       openIntentHashes,
       failedIntents,
       notes,
+      noteCodes,
+      noteParams,
     };
   });
   return { campaigns: rows, quarantinedIntents: quarantinedCount, pendingContributorProofs };

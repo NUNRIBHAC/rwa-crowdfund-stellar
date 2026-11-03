@@ -2053,6 +2053,14 @@ export const en = {
       colOpenIntents: 'Open intents',
       colNotes: 'Notes',
       colGenerated: 'Generated',
+      reconNotes: {
+        MALFORMED_AMOUNT: '{hash}: Malformed contribution amount excluded from the journal sum.',
+        MISSING_AMOUNT: '{n}: Older contributions without recorded amounts are excluded from the journal sum.',
+        CHAIN_UNAVAILABLE: 'The on-chain read is unavailable.',
+        EXTERNAL_VOLUME: "On-chain volume exceeds this app's journal. Contributions came from outside this app, not missing funds.",
+        HISTORY_MISMATCH: 'The journal sum exceeds the on-chain counter; deployment or registry history differs.',
+        COUNTER_INVALID: 'The on-chain counter could not be parsed.',
+      },
       reconEmpty: 'No campaigns in the registry.',
       auditNote:
         'Recent operational history of gated admin actions (newest 500). Entries age out and writes are non-blocking - this is not an immutable audit trail.',

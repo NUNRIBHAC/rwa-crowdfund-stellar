@@ -2107,6 +2107,14 @@ export const de: Messages = {
       colOpenIntents: 'Offene Intents',
       colNotes: 'Hinweise',
       colGenerated: 'Erstellt',
+      reconNotes: {
+        MALFORMED_AMOUNT: '{hash}: Ungültiger Beitragsbetrag ist von der Journalsumme ausgeschlossen.',
+        MISSING_AMOUNT: '{n}: Ältere Beiträge ohne erfassten Betrag sind von der Summe ausgeschlossen.',
+        CHAIN_UNAVAILABLE: 'Die On-chain-Abfrage ist nicht verfügbar.',
+        EXTERNAL_VOLUME: 'Das On-chain-Volumen übersteigt dieses App-Journal. Es sind externe Beiträge, keine fehlenden Gelder.',
+        HISTORY_MISMATCH: 'Die Journalsumme übersteigt den On-chain-Zähler; Bereitstellungs- oder Registerverlauf weicht ab.',
+        COUNTER_INVALID: 'Der On-chain-Zähler konnte nicht gelesen werden.',
+      },
       reconEmpty: 'Keine Kampagnen in der Registry.',
       auditNote:
         'Jüngste Betriebshistorie abgesicherter Admin-Aktionen (neueste 500). Einträge veralten und Schreibvorgänge sind nicht blockierend - dies ist kein unveränderliches Prüfprotokoll.',

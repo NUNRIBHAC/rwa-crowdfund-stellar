@@ -116,3 +116,10 @@ test('pending contributor-proof backlog is surfaced in the payload', () => {
   const r3 = reconcileCampaigns([{ id: 'c1', raised: '100' }], [intent({ amount: '100' })], 0, 3);
   assert.equal(r3.pendingContributorProofs, 3);
 });
+
+test('structured generated notes preserve codes and parameters without replacing diagnostic notes', () => {
+  const r = reconcileCampaigns([{ id: 'c1', raised: null }], [intent({ amount: 'abc' }), intent({ amount: undefined })], 0).campaigns[0];
+  assert.deepEqual(r.noteCodes, ['MALFORMED_AMOUNT', 'MISSING_AMOUNT', 'CHAIN_UNAVAILABLE']);
+  assert.deepEqual(r.noteParams, [{ hash: 'a'.repeat(64) }, { n: '1' }, {}]);
+  assert.equal(r.notes.length, r.noteCodes.length);
+});

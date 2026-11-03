@@ -473,6 +473,8 @@ export type CampaignReconciliation = {
   openIntentHashes: string[];
   failedIntents: number;
   notes: string[];
+  noteCodes?: string[];
+  noteParams?: Record<string, string>[];
 };
 export type ReconciliationResponse = {
   generatedAt: string;

@@ -191,3 +191,17 @@ test('podcast tab rejects a non-https audio URL without posting', async () => {
   expect(await screen.findByText('Title, description and an https audio URL are required.')).toBeTruthy();
   expect(posts).toBe(0);
 });
+
+test('PT generated reconciliation notes are localized, while older free-text responses stay verbatim', async () => {
+  localStorage.setItem('blockallisto-language', 'pt');
+  stubFetch({
+    '/api/operator/reconciliation': {
+      ...RECON,
+      campaigns: [{ ...RECON.campaigns[0], noteCodes: ['CHAIN_UNAVAILABLE'], noteParams: [{}], notes: ['on-chain read unavailable for this campaign'] }],
+    },
+  });
+  setup();
+  fireEvent.click(await screen.findByRole('button', { name: 'Reconciliação' }));
+  expect(await screen.findByText('A leitura on-chain está indisponível.')).toBeTruthy();
+  expect(screen.queryByText('on-chain read unavailable for this campaign')).toBeNull();
+});

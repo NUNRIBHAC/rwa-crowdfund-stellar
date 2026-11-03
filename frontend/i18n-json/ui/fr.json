@@ -1996,6 +1996,14 @@
       "colOpenIntents": "Intents ouverts",
       "colNotes": "Notes",
       "colGenerated": "Généré",
+      "reconNotes": {
+        "MALFORMED_AMOUNT": "{hash}: Montant de contribution invalide exclu du total du journal.",
+        "MISSING_AMOUNT": "{n}: Les anciennes contributions sans montant enregistré sont exclues du total.",
+        "CHAIN_UNAVAILABLE": "La lecture on-chain est indisponible.",
+        "EXTERNAL_VOLUME": "Le volume on-chain dépasse le journal de cette application. Il vient de contributions externes, pas de fonds manquants.",
+        "HISTORY_MISMATCH": "Le total du journal dépasse le compteur on-chain; l’historique du déploiement ou du registre diffère.",
+        "COUNTER_INVALID": "Le compteur on-chain est illisible."
+      },
       "reconEmpty": "Aucune campagne dans le registre.",
       "auditNote": "Historique opérationnel récent des actions admin protégées (500 plus récentes). Les entrées expirent et les écritures sont non bloquantes - ce n'est pas une piste d'audit immuable.",
       "auditEmpty": "Aucune action d'administration enregistrée pour l'instant.",

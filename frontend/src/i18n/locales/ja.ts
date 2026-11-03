@@ -2033,6 +2033,14 @@ export const ja: Messages = {
       colOpenIntents: '未完了インテント',
       colNotes: '注記',
       colGenerated: '生成',
+      reconNotes: {
+        MALFORMED_AMOUNT: '{hash}: 無効な出資額は記録の合計から除外されます。',
+        MISSING_AMOUNT: '{n}: 金額未記録の過去の出資は合計から除外されます。',
+        CHAIN_UNAVAILABLE: 'チェーンの読み取りは利用できません。',
+        EXTERNAL_VOLUME: 'チェーンの総額がこのアプリの記録を超えています。外部からの出資であり、資金の紛失ではありません。',
+        HISTORY_MISMATCH: '記録合計がチェーンのカウンターを超えています。デプロイまたは登録履歴が異なります。',
+        COUNTER_INVALID: 'チェーンのカウンターを解析できません。',
+      },
       reconEmpty: 'レジストリにキャンペーンがありません。',
       auditNote:
         '保護された管理操作の最近の運用履歴（最新500件）。エントリは期限切れになり、書き込みは非ブロッキングです。これは不変の監査証跡ではありません。',

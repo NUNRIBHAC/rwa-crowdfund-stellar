@@ -507,7 +507,16 @@ export default function OperatorSection({ campaigns }: Props) {
                           {c.successContributes}/{c.successRefunds}/{c.successWithdraws}
                         </td>
                         <td>{c.openIntentHashes.length}</td>
-                        <td>{c.notes.join(' ')}</td>
+                        <td className="reconciliation-notes">
+                          {c.noteCodes
+                            ? c.noteCodes
+                                .map((code, i) => {
+                                  const text = labels.reconNotes[code as keyof typeof labels.reconNotes];
+                                  return text ? tpl(text, c.noteParams?.[i] ?? {}) : (c.notes[i] ?? labels.reconNote);
+                                })
+                                .join(' ')
+                            : c.notes.join(' ')}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

@@ -1994,6 +1994,14 @@
       "colOpenIntents": "Intents abiertos",
       "colNotes": "Notas",
       "colGenerated": "Generado",
+      "reconNotes": {
+        "MALFORMED_AMOUNT": "{hash}: Importe de contribución inválido excluido de la suma del registro.",
+        "MISSING_AMOUNT": "{n}: Las contribuciones antiguas sin importe registrado se excluyen de la suma.",
+        "CHAIN_UNAVAILABLE": "La lectura on-chain no está disponible.",
+        "EXTERNAL_VOLUME": "El volumen on-chain supera el registro de esta app. Son contribuciones externas, no fondos perdidos.",
+        "HISTORY_MISMATCH": "La suma del registro supera el contador on-chain; el historial de despliegue o registro difiere.",
+        "COUNTER_INVALID": "No se pudo interpretar el contador on-chain."
+      },
       "reconEmpty": "No hay campañas en el registro.",
       "auditNote": "Historial operativo reciente de acciones admin protegidas (500 más recientes). Las entradas caducan y las escrituras no son bloqueantes - no es un registro de auditoría inmutable.",
       "auditEmpty": "Aún no hay acciones de administración registradas.",
