@@ -194,12 +194,14 @@ export class PostgresJournal implements Journal {
       amount text,
       xdr text NOT NULL,
       signed_xdr text,
-      status text NOT NULL
+      status text NOT NULL,
+      contract_id text
     )`;
     // Idempotent column migration for tables created before timestamps existed.
     const migrate = `ALTER TABLE soroban_intents
       ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
-      ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now()`;
+      ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now(),
+      ADD COLUMN IF NOT EXISTS contract_id text`;
     // Shared cross-process rate-limit state (sliding window). Additive only;
     // older code ignores the table, so the migration is backward compatible.
     const rateDdl = `CREATE TABLE IF NOT EXISTS soroban_rate_hits (
@@ -291,7 +293,7 @@ export class PostgresJournal implements Journal {
   async read(): Promise<IntentStore> {
     await this.ready;
     const r = await this.pool.query(
-      'SELECT hash, campaign, actor, action, amount, xdr, signed_xdr, status, created_at, updated_at FROM soroban_intents ORDER BY seq',
+      'SELECT hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id, created_at, updated_at FROM soroban_intents ORDER BY seq',
     );
     const intents: Intent[] = [];
     const quarantined: QuarantinedIntent[] = [];
@@ -307,6 +309,7 @@ export class PostgresJournal implements Journal {
         ...(row.amount != null ? { amount: row.amount } : {}),
         ...(row.created_at != null ? { createdAt: new Date(row.created_at).toISOString() } : {}),
         ...(row.updated_at != null ? { updatedAt: new Date(row.updated_at).toISOString() } : {}),
+        ...(row.contract_id != null ? { contractId: row.contract_id } : {}),
       };
       // Semantic validation: schema constraints prove columns are present and
       // non-null, not that their contents mean anything (corrupt writes,
@@ -370,10 +373,13 @@ export class PostgresJournal implements Journal {
           throw new Error(`conflicting signed envelope for intent ${i.hash}; refusing to overwrite`);
         }
         await db.query(
-          `INSERT INTO soroban_intents (hash, campaign, actor, action, amount, xdr, signed_xdr, status)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          `INSERT INTO soroban_intents (hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
            ON CONFLICT (hash) DO UPDATE SET campaign = EXCLUDED.campaign, actor = EXCLUDED.actor, action = EXCLUDED.action,
              amount = EXCLUDED.amount, xdr = EXCLUDED.xdr,
+             -- A journaled contract id is deployment progress: a later save of
+             -- the same row without the id must never erase it.
+             contract_id = COALESCE(EXCLUDED.contract_id, soroban_intents.contract_id),
              -- Never regress safety state on last-writer-wins: a stored signed
              -- envelope is never erased by an unsigned one, and a terminal
              -- (SUCCESS/FAILED) status is never overwritten by a stale save.
@@ -381,7 +387,7 @@ export class PostgresJournal implements Journal {
                ELSE COALESCE(soroban_intents.signed_xdr, EXCLUDED.signed_xdr) END,
              status = CASE WHEN soroban_intents.status IN ('SUCCESS','FAILED') THEN soroban_intents.status ELSE EXCLUDED.status END,
              updated_at = now()`,
-          [i.hash, i.campaign, i.actor, i.action, i.amount ?? null, i.xdr, i.signedXdr ?? null, i.status],
+          [i.hash, i.campaign, i.actor, i.action, i.amount ?? null, i.xdr, i.signedXdr ?? null, i.status, i.contractId ?? null],
         );
       }
       // Retention: prune only terminal intents past their retention window and
