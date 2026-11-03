@@ -632,3 +632,38 @@ export const farcasterChannelStatus = async (channelToken: string) => {
 
 export const farcasterLinkNonce = (token: string, proof: { password?: string; signature?: string }) =>
   call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/farcaster/link/nonce', { token, body: proof });
+
+// Corporate actions (prototype): operator-session cap table and distribution
+// preview. Read-only; nothing is saved, no funds move, never declarable.
+export type CapTableRow = {
+  publicKey: string;
+  position: string;
+  positionSource: 'on-chain' | 'journal-intended' | 'unknown';
+  basisPoints: number | null;
+  note?: string;
+};
+export type CapTableResponse = {
+  campaignId: string;
+  knownBase: string;
+  holdersKnown: number;
+  holdersUnknown: number;
+  complete: boolean;
+  basis: { onChain: number; journalIntended: number; unknown: number; mixed: boolean };
+  rows: CapTableRow[];
+};
+export type DistributionPreviewResponse = {
+  status: 'illustration' | 'unavailable';
+  unavailableReason?: string;
+  declarable: false;
+  total: string;
+  excludedUnknownHolderCount: number;
+  rows: { publicKey: string; position: string; amount: string }[];
+  notice: string;
+};
+export const fetchOperatorCapTable = (token: string, campaignId: string) =>
+  call<CapTableResponse>(`/api/operator/campaigns/${encodeURIComponent(campaignId)}/corporate-actions/cap-table`, { token });
+export const postOperatorDistributionPreview = (token: string, campaignId: string, total: string) =>
+  call<DistributionPreviewResponse>(`/api/operator/campaigns/${encodeURIComponent(campaignId)}/corporate-actions/distribution-preview`, {
+    token,
+    body: { total },
+  });

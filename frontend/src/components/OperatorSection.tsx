@@ -30,6 +30,7 @@ import {
   setOperatorCommentHidden,
 } from '../community/api';
 import type { IssuerApplication, OperatorComment, Ticket } from '../community/api';
+import CorporateActionsPanel from './CorporateActionsPanel';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 import { routeHash } from '../router';
@@ -39,7 +40,7 @@ type Props = {
   campaigns: { id: string; name: string }[];
 };
 
-type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'reports' | 'podcast' | 'reconciliation' | 'audit';
+type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'reports' | 'podcast' | 'reconciliation' | 'corporate' | 'audit';
 
 export default function OperatorSection({ campaigns }: Props) {
   const { m, locale } = useI18n();
@@ -169,7 +170,7 @@ export default function OperatorSection({ campaigns }: Props) {
       </h2>
       <p className="community-note">{labels.demoNote}</p>
       <div className="filter-chips" role="group" aria-label={labels.title}>
-        {(['applications', 'comments', 'tickets', 'news', 'reports', 'podcast', 'reconciliation', 'audit'] as Tab[]).map(tabBtn)}
+        {(['applications', 'comments', 'tickets', 'news', 'reports', 'podcast', 'reconciliation', 'corporate', 'audit'] as Tab[]).map(tabBtn)}
       </div>
       {error && (
         <p role="alert" className="community-error">
@@ -522,6 +523,8 @@ export default function OperatorSection({ campaigns }: Props) {
           )}
         </>
       )}
+
+      {tab === 'corporate' && <CorporateActionsPanel token={token} campaigns={campaigns} />}
 
       {tab === 'audit' && (
         <>
