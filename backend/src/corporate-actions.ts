@@ -48,12 +48,17 @@ export function buildCapTable(register: ShareRegisterPayload): CapTable {
   const raw: { publicKey: string; units: bigint | null; source: CapTableRow['positionSource']; note?: string }[] = register.contributors.map((c) => {
     if (c.onChainBalance !== undefined) {
       const u = toUnits(c.onChainBalance);
-      return u !== null && u >= 0n ? { publicKey: c.publicKey, units: u, source: 'on-chain' as const } : { publicKey: c.publicKey, units: null, source: 'unknown' as const, note: 'unreadable on-chain balance' };
+      return u !== null && u >= 0n
+        ? { publicKey: c.publicKey, units: u, source: 'on-chain' as const }
+        : { publicKey: c.publicKey, units: null, source: 'unknown' as const, note: 'unreadable on-chain balance' };
     }
     if (c.netIntended === 'UNKNOWN') return { publicKey: c.publicKey, units: null, source: 'unknown' as const, note: 'a SUCCESS intent has no usable amount' };
     const u = toUnits(c.netIntended.startsWith('-') ? '0' : c.netIntended);
-    if (c.netIntended.startsWith('-')) return { publicKey: c.publicKey, units: null, source: 'unknown' as const, note: 'refunds exceed journal-recorded contributions' };
-    return u !== null ? { publicKey: c.publicKey, units: u, source: 'journal-intended' as const } : { publicKey: c.publicKey, units: null, source: 'unknown' as const, note: 'unparseable amount' };
+    if (c.netIntended.startsWith('-'))
+      return { publicKey: c.publicKey, units: null, source: 'unknown' as const, note: 'refunds exceed journal-recorded contributions' };
+    return u !== null
+      ? { publicKey: c.publicKey, units: u, source: 'journal-intended' as const }
+      : { publicKey: c.publicKey, units: null, source: 'unknown' as const, note: 'unparseable amount' };
   });
   const base = raw.reduce((s, r) => s + (r.units ?? 0n), 0n);
   const rows: CapTableRow[] = raw.map((r) => ({
