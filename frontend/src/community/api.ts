@@ -579,3 +579,14 @@ export const buildCampaignDeploy = (
 ) => call<CampaignDeployBuild>('/api/operator/campaign-deploy/build', { method: 'POST', body: input, token });
 export const submitCampaignDeploy = (token: string, input: { xdr: string; name?: string; contractSet?: 'v1' | 'v2' }) =>
   call<CampaignDeploySubmit>('/api/operator/campaign-deploy/submit', { method: 'POST', body: input, token });
+
+// Identity-only providers (Telegram): the provider proved who you are but not
+// an email. The ticket from #social-email is bound server-side to this
+// browser (httpOnly cookie) and needs a mailed 6-digit code to finish.
+export const requestSocialEmailCode = (ticket: string, email: string) =>
+  call<{ status: 'code-sent' }>('/api/auth/social/email/request', { body: { ticket, email } });
+
+export const confirmSocialEmailCode = (ticket: string, code: string) =>
+  call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean; totpTicket?: string }>('/api/auth/social/email/confirm', {
+    body: { ticket, code },
+  });

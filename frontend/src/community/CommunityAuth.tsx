@@ -12,6 +12,8 @@ import { tpl } from '../format';
 import {
   ApiError,
   completeTotpLogin,
+  confirmSocialEmailCode,
+  requestSocialEmailCode,
   emailLogin,
   emailRegister,
   emailResend,
@@ -57,6 +59,10 @@ export type CommunityAuthState = {
   /** Set when the wallet signature passed but the account has a second
       factor: the session is not issued until completeTotp succeeds. */
   totpPending: { ticket: string } | null;
+  /** Set when an identity-only provider (Telegram) signed in a NEW identity: an allowlisted email must be proven by code before the account exists. */
+  socialEmailPending?: { ticket: string } | null;
+  socialEmailRequest?: (email: string) => Promise<void>;
+  socialEmailConfirm?: (code: string) => Promise<void>;
   /** Second step of a gated sign-in: TOTP or a single-use recovery code. */
   completeTotp: (code: string) => Promise<void>;
   /** Social (OAuth) providers configured on this deployment (abuse-config);
@@ -108,6 +114,9 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
   totp_not_enabled: 'errorTotpNotEnabled',
   social_provider_denied: 'errorSocialProviderDenied',
   social_flow_expired: 'errorSocialFlowExpired',
+  social_pending_expired: 'errorSocialPendingExpired',
+  social_code_invalid: 'errorSocialCodeInvalid',
+  social_email_in_use: 'errorSocialEmailInUse',
   social_exchange_failed: 'errorSocialExchangeFailed',
   social_registration_restricted: 'errorSocialRegistrationRestricted',
   social_identity_taken: 'errorSocialIdentityTaken',
@@ -122,14 +131,14 @@ const API_ERROR_MESSAGE_KEYS: Record<string, keyof CatalogMessages['community']>
 // Social sign-in outcomes arrive from the backend callback as a redirect to
 // /account#social-<kind>=<payload> (never in the query string: fragments do
 // not reach access logs). Returns the cleaned hash-less outcome or null.
-function readSocialFragment(): { kind: 'token' | 'totp' | 'error' | 'linked'; value: string } | null {
+function readSocialFragment(): { kind: 'token' | 'totp' | 'email' | 'error' | 'linked'; value: string } | null {
   if (typeof window === 'undefined') return null;
-  const m = window.location.hash.match(/^#social-(token|totp|error|linked)=([A-Za-z0-9_\-]+)$/);
+  const m = window.location.hash.match(/^#social-(token|totp|email|error|linked)=([A-Za-z0-9_\-]+)$/);
   if (!m) return null;
   // Strip the fragment immediately so a session token never lingers in the
   // URL (history, shoulder-surfing, screenshots).
   window.history.replaceState(null, '', window.location.pathname + window.location.search);
-  return { kind: m[1] as 'token' | 'totp' | 'error', value: m[2] };
+  return { kind: m[1] as 'token' | 'totp' | 'email' | 'error', value: m[2] };
 }
 
 // Localize known API failures; pass through anything unknown verbatim.
@@ -155,6 +164,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
   const [error, setError] = useState('');
   const [restored, setRestored] = useState(false);
   const [totpPending, setTotpPending] = useState<{ ticket: string } | null>(null);
+  const [socialEmailPending, setSocialEmailPending] = useState<{ ticket: string } | null>(null);
   const [socialProviders, setSocialProviders] = useState<string[]>([]);
   const [socialNotice, setSocialNotice] = useState('');
 
@@ -185,6 +195,11 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       // Provider accepted the identity; the account's second factor is still
       // owed. Keep only the one-purpose ticket (same gate as email/wallet).
       setTotpPending({ ticket: social.value });
+      setRestored(true);
+      return;
+    }
+    if (social?.kind === 'email') {
+      setSocialEmailPending({ ticket: social.value });
       setRestored(true);
       return;
     }
@@ -369,6 +384,50 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     [totpPending, messages],
   );
 
+  const socialEmailRequest = useCallback(
+    async (email: string) => {
+      if (!socialEmailPending) return;
+      setBusy(true);
+      setError('');
+      try {
+        await requestSocialEmailCode(socialEmailPending.ticket, email);
+      } catch (e) {
+        if (e instanceof ApiError && e.code === 'social_pending_expired') setSocialEmailPending(null);
+        setError(describeError(e, messages.community));
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [socialEmailPending, messages],
+  );
+
+  const socialEmailConfirm = useCallback(
+    async (code: string) => {
+      if (!socialEmailPending) return;
+      setBusy(true);
+      setError('');
+      try {
+        const v = await confirmSocialEmailCode(socialEmailPending.ticket, code);
+        setSocialEmailPending(null);
+        if (v.totpTicket) {
+          setTotpPending({ ticket: v.totpTicket });
+        } else {
+          saveCommunityToken(v.token);
+          setToken(v.token);
+          setAccount(v.account);
+          setIsOperator(v.isOperator === true);
+        }
+      } catch (e) {
+        if (e instanceof ApiError && (e.code === 'social_pending_expired' || e.code === 'social_email_in_use')) setSocialEmailPending(null);
+        setError(describeError(e, messages.community));
+      } finally {
+        setBusy(false);
+      }
+    },
+    [socialEmailPending, messages],
+  );
+
   const startSocialSignIn = useCallback(
     async (provider: string) => {
       setBusy(true);
@@ -399,6 +458,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setAccount(null);
       setIsOperator(false);
       setTotpPending(null);
+      setSocialEmailPending(null);
       setBusy(false);
     }
   }, [token]);
@@ -438,6 +498,9 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       signOut,
       totpPending,
       completeTotp,
+      socialEmailPending,
+      socialEmailRequest,
+      socialEmailConfirm,
       socialProviders,
       startSocialSignIn,
       socialNotice,
@@ -462,6 +525,9 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       setName,
       totpPending,
       completeTotp,
+      socialEmailPending,
+      socialEmailRequest,
+      socialEmailConfirm,
       socialProviders,
       startSocialSignIn,
       socialNotice,

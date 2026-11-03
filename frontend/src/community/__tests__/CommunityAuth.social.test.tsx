@@ -2,19 +2,19 @@
 // outcome in the URL fragment (#social-token / #social-totp / #social-error).
 // The provider consumes the fragment, strips it from the URL immediately
 // (tokens never linger in history) and applies the outcome.
-import { cleanup, render, waitFor } from '@testing-library/react';
+import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CommunityAuthProvider, useCommunityAuth } from '../CommunityAuth';
 
 const ACCOUNT = { id: 'a1', publicKey: 'GABCQAEXAMPLEPUBLICKEY', displayName: 'QA', createdAt: 1, totpEnabled: false };
 const MESSAGES = { freighterMissing: 'x', walletNoSign: 'y' };
 
-function stubFetch(handler: (url: string) => Response | undefined) {
+function stubFetch(handler: (url: string, init?: RequestInit) => Response | undefined) {
   vi.stubGlobal(
     'fetch',
-    vi.fn().mockImplementation((input: unknown) => {
+    vi.fn().mockImplementation((input: unknown, init?: RequestInit) => {
       const url = typeof input === 'string' ? input : (input as Request).url;
-      const res = handler(url);
+      const res = handler(url, init);
       return Promise.resolve(res ?? new Response('{}', { status: 404 }));
     }),
   );
@@ -91,5 +91,37 @@ describe('CommunityAuthProvider social fragment', () => {
     expect(seen.current?.totpPending).toEqual({ ticket: 'blt_ticket' });
     expect(seen.current?.account).toBeNull();
     expect(window.location.hash).toBe('');
+  });
+
+  it('#social-email parks the ticket, strips the fragment and confirms with a code', async () => {
+    window.history.replaceState(null, '', '/account#social-email=bsp_ticket');
+    const calls: string[] = [];
+    stubFetch((url, init) => {
+      if (url === '/api/auth/abuse-config') return Response.json({ socialProviders: [] });
+      if (url === '/api/auth/social/email/confirm') {
+        calls.push(String(init?.body));
+        return Response.json({ token: 'bls_x', expiresAt: 1, account: { publicKey: 'GA', displayName: null, createdAt: 1, authMethod: 'social' } });
+      }
+      return undefined;
+    });
+    const seen: { current: ReturnType<typeof useCommunityAuth> | null } = { current: null };
+    function Grab() {
+      seen.current = useCommunityAuth();
+      return null;
+    }
+    render(
+      <CommunityAuthProvider messages={MESSAGES}>
+        <Grab />
+      </CommunityAuthProvider>,
+    );
+    await waitFor(() => expect(seen.current?.restored).toBe(true));
+    expect(seen.current?.socialEmailPending).toEqual({ ticket: 'bsp_ticket' });
+    expect(window.location.hash).toBe('');
+    await act(async () => {
+      await seen.current?.socialEmailConfirm?.('123456');
+    });
+    expect(calls[0]).toBe(JSON.stringify({ ticket: 'bsp_ticket', code: '123456' }));
+    expect(seen.current?.account).not.toBeNull();
+    expect(seen.current?.socialEmailPending).toBeNull();
   });
 });
