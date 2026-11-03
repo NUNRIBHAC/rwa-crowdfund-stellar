@@ -41,6 +41,7 @@ import { MAIL_LOCALES, resetEmail, verificationEmail } from './email-templates.j
 import {
   completeSocialFlow,
   confirmSocialEmail,
+  newBindSecret,
   isSocialProvider,
   requestSocialEmail,
   requireSocialLinkStepUp,
@@ -269,6 +270,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       sendError(res, err);
     }
   });
+  const BIND_COOKIE = 'bl_sso';
+  const readBind = (req: express.Request): string | undefined => /(?:^|;\s*)bl_sso=([0-9a-f]{48})(?:;|$)/.exec(req.headers.cookie ?? '')?.[1];
   router.get('/api/auth/social/:provider/start', async (req, res) => {
     try {
       const provider = req.params.provider;
@@ -276,7 +279,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const cfg = socialConfigFromEnv(process.env, provider);
       if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
       await abuseGate(req);
-      const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch);
+      const bind = newBindSecret();
+      const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch, undefined, bind.hash);
+      res.setHeader(
+        'Set-Cookie',
+        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth/social; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
+      );
       res.redirect(302, url);
     } catch (err) {
       sendError(res, err);
@@ -293,7 +301,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
           store,
           requireMailer(),
           process.env,
-          { ticket: req.body?.ticket, email: req.body?.email },
+          { ticket: req.body?.ticket, email: req.body?.email, bind: readBind(req) },
           Date.now(),
           mailBudgetPerHour(),
           mailBudgetPerDay(),
@@ -308,7 +316,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`social-email-confirm-ip:${ip}`, 30, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
-      const r = await confirmSocialEmail(store, { ticket: req.body?.ticket, code: req.body?.code });
+      const r = await confirmSocialEmail(store, { ticket: req.body?.ticket, code: req.body?.code, bind: readBind(req) });
       if (r.kind === 'session') res.json({ token: r.token, expiresAt: r.expiresAt, account: publicAccount(r.account) });
       else if (r.kind === 'totp') res.json({ totpTicket: r.ticket, expiresAt: r.expiresAt });
       else res.json({ status: 'pending' });
@@ -329,7 +337,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       }
       if (typeof req.query.error === 'string') return fail('social_provider_denied');
       const currentUrl = `https://${req.get('host')}${req.originalUrl}`;
-      const result = await completeSocialFlow(store, process.env, provider, cfg, currentUrl, req.query.state, Date.now(), deps.socialFetch);
+      const result = await completeSocialFlow(store, process.env, provider, cfg, currentUrl, req.query.state, Date.now(), deps.socialFetch, readBind(req));
       if (result.kind === 'email') return res.redirect(302, `/account#social-email=${result.ticket}`);
       if (result.kind === 'totp') return res.redirect(302, `/account#social-totp=${result.ticket}`);
       if (result.kind === 'linked') return res.redirect(302, `/account#social-linked=${provider}`);

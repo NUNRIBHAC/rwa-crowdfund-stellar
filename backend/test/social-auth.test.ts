@@ -135,7 +135,13 @@ const CONF = { SOCIAL_GOOGLE_CLIENT_ID: CLIENT_ID, SOCIAL_GOOGLE_CLIENT_SECRET: 
 
 // Drive one full flow: /start (302 to the fake provider), then /callback
 // with the issued state. Returns the callback response.
-async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder: { challenge: string | null }, provider = 'google') {
+async function driveFlow(
+  base: string,
+  fetchImpl: typeof fetch,
+  challengeHolder: { challenge: string | null },
+  provider = 'google',
+  callbackCookie?: string | null,
+) {
   const start = await fetch(`${base}/api/auth/social/${provider}/start`, { redirect: 'manual' });
   assert.equal(start.status, 302);
   const authUrl = new URL(start.headers.get('location')!);
@@ -149,8 +155,13 @@ async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder:
   assert.ok(state && nonce, 'state and nonce issued');
   challengeHolder.challenge = authUrl.searchParams.get('code_challenge');
   (globalThis as any).__testNonce = nonce;
-  const cb = await fetch(`${base}/api/auth/social/${provider}/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
-  return cb;
+  const cookie = (start.headers.get('set-cookie') ?? '').split(';')[0];
+  const sent = callbackCookie === undefined ? cookie : callbackCookie;
+  const cb = await fetch(`${base}/api/auth/social/${provider}/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, {
+    redirect: 'manual',
+    headers: sent ? { cookie: sent } : {},
+  });
+  return Object.assign(cb, { bindCookie: cookie });
 }
 
 // A fake GitHub OAuth2 provider: token exchange (with the same PKCE
@@ -195,7 +206,10 @@ async function driveGithubFlow(base: string, challengeHolder: { challenge: strin
   const state = authUrl.searchParams.get('state')!;
   assert.ok(state, 'state issued');
   challengeHolder.challenge = authUrl.searchParams.get('code_challenge');
-  return fetch(`${base}/api/auth/social/github/callback?code=fake-gh-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
+  return fetch(`${base}/api/auth/social/github/callback?code=fake-gh-code&state=${encodeURIComponent(state)}`, {
+    headers: { cookie: (start.headers.get('set-cookie') ?? '').split(';')[0] },
+    redirect: 'manual',
+  });
 }
 
 test('github oauth2: fail-closed registration gate uses the verified primary email from userinfo', async () => {
@@ -474,7 +488,10 @@ test('allowlisted verified registration creates a social account and a working s
   fake.state.challenge = authUrl.searchParams.get('code_challenge');
   (globalThis as any).__testNonce = authUrl.searchParams.get('nonce');
   const state = authUrl.searchParams.get('state')!;
-  const cb = await fetch(`${base}/api/auth/social/google/callback?code=fake&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
+  const cb = await fetch(`${base}/api/auth/social/google/callback?code=fake&state=${encodeURIComponent(state)}`, {
+    headers: { cookie: (start.headers.get('set-cookie') ?? '').split(';')[0] },
+    redirect: 'manual',
+  });
   assert.equal(cb.status, 302);
   const loc = cb.headers.get('location')!;
   assert.ok(loc.startsWith('/account#social-token=bls_'), loc);
@@ -571,14 +588,17 @@ test('linkedin completes a full allowlisted registration flow and issues a worki
 test('telegram (identity only): pending ticket, allowlisted email proven by code, no auto-link', async () => {
   const sent: { to: string; text: string }[] = [];
   const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
-  const post = (base: string, path: string, body: unknown) =>
-    fetch(`${base}${path}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+  let cookie = '';
+  const post = (base: string, path: string, body: unknown, ck = cookie) =>
+    fetch(`${base}${path}`, { method: 'POST', headers: { 'content-type': 'application/json', ...(ck ? { cookie: ck } : {}) }, body: JSON.stringify(body) });
   const fake = await makeFakeProvider('telegram', {});
   const env = { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
   const { base, store } = await startApp(env, { socialFetch: fake.fetchImpl, mailer });
   const start = await fetch(`${base}/api/auth/social/telegram/start`, { redirect: 'manual' });
   assert.equal(new URL(start.headers.get('location')!).searchParams.get('scope'), 'openid profile');
   const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+  cookie = cb.bindCookie;
+  assert.match(cookie, /^bl_sso=[0-9a-f]{48}$/);
   const loc = cb.headers.get('location')!;
   assert.ok(loc.startsWith('/account#social-email=bsp_'), loc);
   const ticket = loc.split('=')[1];
@@ -601,6 +621,16 @@ test('telegram (identity only): pending ticket, allowlisted email proven by code
   assert.equal(sent.length, 1);
   assert.equal(sent[0].to, 'nuno@example.com');
   const code = sent[0].text.match(/\b(\d{6})\b/)![1];
+  // Cross-browser: the same ticket and the RIGHT code without this browser's
+  // cookie (or with another browser's) can neither request nor confirm.
+  const other = (await fetch(`${base}/api/auth/social/telegram/start`, { redirect: 'manual' })).headers.get('set-cookie')!.split(';')[0];
+  for (const ck of ['', other]) {
+    r = await post(base, '/api/auth/social/email/confirm', { ticket, code }, ck);
+    assert.equal(r.status, 401, 'stolen ticket + valid code must not bind');
+    r = await post(base, '/api/auth/social/email/request', { ticket, email: 'nuno@example.com' }, ck);
+    assert.equal(r.status, 401);
+  }
+  assert.equal(Object.keys((await store.read()).accounts).length, 0);
   // Wrong code and wrong ticket fail; the right pair creates the account.
   r = await post(base, '/api/auth/social/email/confirm', { ticket, code: code === '000000' ? '111111' : '000000' });
   assert.equal(r.status, 400);
@@ -635,10 +665,21 @@ test('telegram pending: an email that already has an account is never linked fro
   const ticket = cb.headers.get('location')!.split('=')[1];
   const r = await fetch(`${base}/api/auth/social/email/request`, {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', cookie: cb.bindCookie },
     body: JSON.stringify({ ticket, email: 'nuno@example.com' }),
   });
   assert.equal(r.status, 200);
   assert.equal(sent.length, 0, 'no code is mailed for an email that belongs to an account');
   assert.equal(Object.keys((await store.read()).socialIdentities).length, 0);
+});
+
+test('callback replayed from another browser (no cookie) is rejected and consumes the flow', async () => {
+  const fake = await makeFakeProvider('telegram', {});
+  const { base, store } = await startApp(
+    { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' },
+    { socialFetch: fake.fetchImpl, mailer: { send: async () => {} } },
+  );
+  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram', null);
+  assert.ok(!cb.headers.get('location')!.includes('social-email=bsp_'));
+  assert.equal(Object.keys((await store.read()).socialPending).length, 0);
 });

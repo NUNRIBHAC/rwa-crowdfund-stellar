@@ -54,6 +54,9 @@ export type SocialFlow = {
   // account holding this public key instead of signing anyone in. The
   // callback outcome is then a binding, never a session.
   linkTo?: string;
+  // sha256 of a per-browser secret set as an httpOnly cookie at /start;
+  // the callback must present the same cookie (browser binding).
+  bindHash?: string;
 };
 
 // A provider identity that proved who it is (sub / fid) but carries no
@@ -61,6 +64,7 @@ export type SocialFlow = {
 // ALLOWLISTED email by code. Keyed by sha256(ticket); the raw ticket lives
 // only in the browser fragment of the callback that created it.
 export type SocialPending = {
+  bindHash: string;
   provider: string;
   subject: string;
   createdAt: number;
