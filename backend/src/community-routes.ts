@@ -316,6 +316,29 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       sendError(res, err);
     }
   });
+  // Authenticated LINK of a fid to the signed-in account. Same step-up proof
+  // as every other provider link (own credential, fresh). The nonce carries
+  // linkTo server-side, so /verify binds the fid to THAT account and issues
+  // no session; a fid already owned by another account is refused (409), an
+  // email is never used to match accounts, nothing is reassigned.
+  router.post('/api/auth/farcaster/link/nonce', async (req, res) => {
+    try {
+      const domain = farcasterDomain(process.env);
+      if (!domain) throw new CommunityError(404, 'not found', 'not_found');
+      await abuseGate(req);
+      const { account, sessionCreatedAt } = await authenticateWithSession(store, req.header('authorization'));
+      await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {});
+      const bind = newBindSecret();
+      const { nonce } = await issueFarcasterNonce(store, bind.hash, Date.now(), account.publicKey);
+      res.setHeader(
+        'Set-Cookie',
+        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
+      );
+      res.json({ nonce, domain, siweUri: `https://${domain}/account` });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.post('/api/auth/farcaster/verify', async (req, res) => {
     try {
       if (!farcasterDomain(process.env)) throw new CommunityError(404, 'not found', 'not_found');

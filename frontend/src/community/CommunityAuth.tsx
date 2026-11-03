@@ -15,6 +15,7 @@ import {
   confirmSocialEmailCode,
   farcasterChannelStatus,
   farcasterCreateChannel,
+  farcasterLinkNonce,
   farcasterNonce,
   farcasterVerify,
   requestSocialEmailCode,
@@ -68,6 +69,8 @@ export type CommunityAuthState = {
   /** Farcaster deep link to approve the sign-in in the user's Farcaster app, while a relay channel is open. */
   farcasterLink?: string | null;
   cancelFarcaster?: () => void;
+  /** Authenticated link of a Farcaster fid to the signed-in account (step-up proof already collected). */
+  startFarcasterLink?: (proof: { password?: string; signature?: string }) => Promise<void>;
   socialEmailRequest?: (email: string) => Promise<void>;
   socialEmailConfirm?: (code: string) => Promise<void>;
   /** Second step of a gated sign-in: TOTP or a single-use recovery code. */
@@ -443,46 +446,71 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     setBusy(false);
   }, []);
 
-  const startFarcaster = useCallback(async () => {
-    const run = ++farcasterRun.current;
-    setBusy(true);
-    setError('');
-    try {
-      const t = await turnstileToken();
-      const { nonce, domain, siweUri } = await farcasterNonce(t);
-      const { channelToken, url } = await farcasterCreateChannel(nonce, domain, siweUri);
-      if (run !== farcasterRun.current) return;
-      setFarcasterLink(url);
-      const deadline = Date.now() + 5 * 60 * 1000;
-      while (Date.now() < deadline && run === farcasterRun.current) {
-        await new Promise((r) => setTimeout(r, 2000));
+  const runFarcaster = useCallback(
+    async (
+      getNonce: () => Promise<{ nonce: string; domain: string; siweUri: string }>,
+      onVerified: (v: Awaited<ReturnType<typeof farcasterVerify>>) => void,
+    ) => {
+      const run = ++farcasterRun.current;
+      setBusy(true);
+      setError('');
+      try {
+        const { nonce, domain, siweUri } = await getNonce();
+        const { channelToken, url } = await farcasterCreateChannel(nonce, domain, siweUri);
         if (run !== farcasterRun.current) return;
-        const st = await farcasterChannelStatus(channelToken);
-        if (st.state === 'error') throw new ApiError('Farcaster relay unavailable', 'social_exchange_failed');
-        if (st.state === 'completed' && st.message && st.signature) {
-          const v = await farcasterVerify(nonce, st.message, st.signature);
-          setFarcasterLink(null);
-          if (v.socialEmailTicket) setSocialEmailPending({ ticket: v.socialEmailTicket });
-          else if (v.totpTicket) setTotpPending({ ticket: v.totpTicket });
-          else if (v.token && v.account) {
-            saveCommunityToken(v.token);
-            setToken(v.token);
-            setAccount(v.account);
-            setIsOperator(v.isOperator === true);
+        setFarcasterLink(url);
+        const deadline = Date.now() + 5 * 60 * 1000;
+        while (Date.now() < deadline && run === farcasterRun.current) {
+          await new Promise((r) => setTimeout(r, 2000));
+          if (run !== farcasterRun.current) return;
+          const st = await farcasterChannelStatus(channelToken);
+          if (st.state === 'error') throw new ApiError('Farcaster relay unavailable', 'social_exchange_failed');
+          if (st.state === 'completed' && st.message && st.signature) {
+            const v = await farcasterVerify(nonce, st.message, st.signature);
+            setFarcasterLink(null);
+            onVerified(v);
+            return;
           }
-          return;
         }
+        if (run === farcasterRun.current) throw new ApiError('sign-in expired', 'social_flow_expired');
+      } catch (e) {
+        if (run === farcasterRun.current) {
+          setFarcasterLink(null);
+          setError(describeError(e, messages.community));
+        }
+      } finally {
+        if (run === farcasterRun.current) setBusy(false);
       }
-      if (run === farcasterRun.current) throw new ApiError('sign-in expired', 'social_flow_expired');
-    } catch (e) {
-      if (run === farcasterRun.current) {
-        setFarcasterLink(null);
-        setError(describeError(e, messages.community));
-      }
-    } finally {
-      if (run === farcasterRun.current) setBusy(false);
-    }
-  }, [messages]);
+    },
+    [messages],
+  );
+
+  const startFarcaster = useCallback(async () => {
+    const t = await turnstileToken().catch(() => undefined);
+    await runFarcaster(
+      () => farcasterNonce(t),
+      (v) => {
+        if (v.socialEmailTicket) setSocialEmailPending({ ticket: v.socialEmailTicket });
+        else if (v.totpTicket) setTotpPending({ ticket: v.totpTicket });
+        else if (v.token && v.account) {
+          saveCommunityToken(v.token);
+          setToken(v.token);
+          setAccount(v.account);
+          setIsOperator(v.isOperator === true);
+        }
+      },
+    );
+  }, [runFarcaster]);
+
+  const startFarcasterLink = useCallback(
+    async (proof: { password?: string; signature?: string }) => {
+      await runFarcaster(
+        () => farcasterLinkNonce(token, proof),
+        () => setSocialNotice(tpl(messages.community?.socialLinkedSuccess ?? '', { provider: 'Farcaster' })),
+      );
+    },
+    [runFarcaster, token, messages],
+  );
 
   const startSocialSignIn = useCallback(
     async (provider: string) => {
@@ -560,6 +588,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       socialEmailConfirm,
       farcasterLink,
       cancelFarcaster,
+      startFarcasterLink,
       socialProviders,
       startSocialSignIn,
       socialNotice,
@@ -589,6 +618,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       socialEmailConfirm,
       farcasterLink,
       cancelFarcaster,
+      startFarcasterLink,
       socialProviders,
       startSocialSignIn,
       socialNotice,

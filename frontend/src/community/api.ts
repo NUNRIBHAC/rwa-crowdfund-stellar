@@ -622,3 +622,6 @@ export const farcasterChannelStatus = async (channelToken: string) => {
   const j = (await r.json().catch(() => ({}))) as { state?: string; message?: string; signature?: string };
   return { state: r.ok ? (j.state ?? 'pending') : 'error', message: j.message, signature: j.signature };
 };
+
+export const farcasterLinkNonce = (token: string, proof: { password?: string; signature?: string }) =>
+  call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/farcaster/link/nonce', { token, body: proof });

@@ -48,11 +48,19 @@ export function defaultFarcasterVerifier(env: NodeJS.ProcessEnv, connector?: Eth
 
 const nonceKey = (nonce: string): string => createHash('sha256').update(`farcaster:${nonce}`).digest('hex');
 
-export async function issueFarcasterNonce(store: CommunityStore, bindHash: string, now = Date.now()): Promise<{ nonce: string }> {
+export async function issueFarcasterNonce(store: CommunityStore, bindHash: string, now = Date.now(), linkTo?: string): Promise<{ nonce: string }> {
   const nonce = randomBytes(16).toString('hex');
   await store.change((s) => {
     for (const [k, f] of Object.entries(s.socialFlows)) if (f.expiresAt <= now) delete s.socialFlows[k];
-    s.socialFlows[nonceKey(nonce)] = { provider: FLOW_PROVIDER, nonce, codeVerifier: '', createdAt: now, expiresAt: now + NONCE_TTL_MS, bindHash };
+    s.socialFlows[nonceKey(nonce)] = {
+      provider: FLOW_PROVIDER,
+      nonce,
+      codeVerifier: '',
+      createdAt: now,
+      expiresAt: now + NONCE_TTL_MS,
+      bindHash,
+      ...(linkTo ? { linkTo } : {}),
+    };
   });
   return { nonce };
 }
