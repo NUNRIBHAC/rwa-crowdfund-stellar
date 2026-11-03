@@ -37,13 +37,36 @@ import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore } from './community-store.js';
 import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './accounts.js';
 
-export const SOCIAL_PROVIDERS = ['google'] as const;
+export const SOCIAL_PROVIDERS = ['google', 'github'] as const;
 export type SocialProvider = (typeof SOCIAL_PROVIDERS)[number];
 
 const SOCIAL_FLOW_TTL_MS = 10 * 60 * 1000;
 
-const PROVIDER_ISSUER: Record<SocialProvider, string> = {
+// Two provider kinds: OIDC (identity from the validated id_token) and plain
+// OAuth2 + userinfo (GitHub issues no id_token; identity comes from the
+// api.github.com/user id and the verified primary email from
+// /user/emails). The fail-closed registration gate below is identical for
+// both kinds - only the evidence source differs.
+type ProviderKind = 'oidc' | 'oauth2';
+const PROVIDER_KIND: Record<SocialProvider, ProviderKind> = {
+  google: 'oidc',
+  github: 'oauth2',
+};
+
+const PROVIDER_ISSUER: Partial<Record<SocialProvider, string>> = {
   google: 'https://accounts.google.com',
+};
+
+// Static OAuth2 endpoints for non-OIDC providers (GitHub publishes no
+// discovery document).
+const OAUTH2_ENDPOINTS: Partial<Record<SocialProvider, { authorize: string; token: string; user: string; emails: string; scope: string }>> = {
+  github: {
+    authorize: 'https://github.com/login/oauth/authorize',
+    token: 'https://github.com/login/oauth/access_token',
+    user: 'https://api.github.com/user',
+    emails: 'https://api.github.com/user/emails',
+    scope: 'read:user user:email',
+  },
 };
 
 export function isSocialProvider(value: unknown): value is SocialProvider {
@@ -76,8 +99,10 @@ export function socialRegistrationAllowedEmails(env: NodeJS.ProcessEnv): Set<str
 type FetchLike = typeof fetch;
 
 async function getClient(cfg: SocialClientConfig, provider: SocialProvider, fetchImpl?: FetchLike): Promise<client.Configuration> {
+  const issuer = PROVIDER_ISSUER[provider];
+  if (PROVIDER_KIND[provider] !== 'oidc' || !issuer) throw new AuthError(500, `provider ${provider} is not an OIDC provider`);
   return client.discovery(
-    new URL(PROVIDER_ISSUER[provider]),
+    new URL(issuer),
     cfg.clientId,
     undefined,
     client.ClientSecretPost(cfg.clientSecret),
@@ -107,6 +132,19 @@ export async function startSocialFlow(
     for (const [k, f] of Object.entries(s.socialFlows)) if (f.expiresAt <= now) delete s.socialFlows[k];
     s.socialFlows[flowKey(state)] = { provider, nonce, codeVerifier, createdAt: now, expiresAt: now + SOCIAL_FLOW_TTL_MS };
   });
+  if (PROVIDER_KIND[provider] === 'oauth2') {
+    const ep = OAUTH2_ENDPOINTS[provider];
+    if (!ep) throw new AuthError(500, `provider ${provider} has no OAuth2 endpoints configured`);
+    const params = new URLSearchParams({
+      client_id: cfg.clientId,
+      redirect_uri: redirectUri,
+      scope: ep.scope,
+      state,
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256',
+    });
+    return { url: `${ep.authorize}?${params.toString()}` };
+  }
   const conf = await getClient(cfg, provider, fetchImpl);
   const url = client.buildAuthorizationUrl(conf, {
     redirect_uri: redirectUri,
@@ -148,23 +186,30 @@ export async function completeSocialFlow(
   });
   if (!flow) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
 
-  const conf = await getClient(cfg, provider, fetchImpl);
-  let claims: client.IDToken | undefined;
-  try {
-    const tokens = await client.authorizationCodeGrant(conf, new URL(currentUrl), {
-      pkceCodeVerifier: flow.codeVerifier,
-      expectedState: stateParam,
-      expectedNonce: flow.nonce,
-      idTokenExpected: true,
-    });
-    claims = tokens.claims();
-  } catch {
-    throw new AuthError(502, 'the sign-in provider rejected the exchange; start again', 'social_exchange_failed');
+  let subject: string | null;
+  let email: string | null;
+  let emailVerified: boolean;
+  if (PROVIDER_KIND[provider] === 'oauth2') {
+    ({ subject, email, emailVerified } = await exchangeOAuth2Userinfo(provider, cfg, currentUrl, stateParam, flow.codeVerifier, fetchImpl));
+  } else {
+    const conf = await getClient(cfg, provider, fetchImpl);
+    let claims: client.IDToken | undefined;
+    try {
+      const tokens = await client.authorizationCodeGrant(conf, new URL(currentUrl), {
+        pkceCodeVerifier: flow.codeVerifier,
+        expectedState: stateParam,
+        expectedNonce: flow.nonce,
+        idTokenExpected: true,
+      });
+      claims = tokens.claims();
+    } catch {
+      throw new AuthError(502, 'the sign-in provider rejected the exchange; start again', 'social_exchange_failed');
+    }
+    subject = claims?.sub ?? null;
+    email = typeof claims?.email === 'string' ? (claims.email as string).trim().toLowerCase() : null;
+    emailVerified = claims?.email_verified === true;
   }
-  const subject = claims?.sub;
   if (!subject) throw new AuthError(502, 'the sign-in provider returned no identity', 'social_exchange_failed');
-  const email = typeof claims?.email === 'string' ? (claims.email as string).trim().toLowerCase() : null;
-  const emailVerified = claims?.email_verified === true;
   const identityKey = `${provider}:${subject}`;
 
   return store.change((s) => {
@@ -204,4 +249,69 @@ export async function completeSocialFlow(
     s.sessions[session.tokenHash] = session;
     return { kind: 'session' as const, token, expiresAt: session.expiresAt, account: { ...account } };
   });
+}
+
+// Plain OAuth2 (no OIDC): redeem the code for a short-lived access token,
+// read the stable numeric user id from /user and the verified primary email
+// from /user/emails. The access token is used for exactly these two reads
+// and then dropped - nothing is stored. GitHub's documented expiry for a
+// primary-email record is that verified stays true while the address stays
+// on the account; we re-read it on every sign-in rather than caching.
+async function exchangeOAuth2Userinfo(
+  provider: SocialProvider,
+  cfg: SocialClientConfig,
+  currentUrl: string,
+  stateParam: string,
+  codeVerifier: string,
+  fetchImpl?: FetchLike,
+): Promise<{ subject: string | null; email: string | null; emailVerified: boolean }> {
+  const ep = OAUTH2_ENDPOINTS[provider];
+  if (!ep) throw new AuthError(500, `provider ${provider} has no OAuth2 endpoints configured`);
+  const doFetch = fetchImpl ?? fetch;
+  const fail = () => new AuthError(502, 'the sign-in provider rejected the exchange; start again', 'social_exchange_failed');
+  const params = new URL(currentUrl).searchParams;
+  // openid-client performs this check for OIDC providers; for plain OAuth2
+  // we own it: the returned state must be the one we looked up.
+  if (params.get('state') !== stateParam) throw fail();
+  const code = params.get('code');
+  if (!code) throw fail();
+  let tokenJson: any;
+  try {
+    const tokenRes = await doFetch(ep.token, {
+      method: 'POST',
+      headers: { accept: 'application/json', 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: cfg.clientId,
+        client_secret: cfg.clientSecret,
+        code,
+        redirect_uri: `${new URL(currentUrl).origin}${new URL(currentUrl).pathname}`,
+        code_verifier: codeVerifier,
+        grant_type: 'authorization_code',
+      }).toString(),
+    });
+    tokenJson = await tokenRes.json();
+  } catch {
+    throw fail();
+  }
+  const accessToken = typeof tokenJson?.access_token === 'string' ? tokenJson.access_token : null;
+  if (!accessToken) throw fail();
+  const headers = { accept: 'application/vnd.github+json', authorization: `Bearer ${accessToken}` };
+  let user: any;
+  let emails: any;
+  try {
+    const userRes = await doFetch(ep.user, { headers });
+    user = await userRes.json();
+    const emailsRes = await doFetch(ep.emails, { headers });
+    emails = await emailsRes.json();
+  } catch {
+    throw fail();
+  }
+  const id = user?.id;
+  const subject = typeof id === 'number' && Number.isFinite(id) ? String(id) : null;
+  const list: { email?: unknown; verified?: unknown; primary?: unknown }[] = Array.isArray(emails) ? emails : [];
+  const primary = list.find((e) => e && e.primary === true) ?? null;
+  const chosen = primary ?? list[0] ?? null;
+  const email = typeof chosen?.email === 'string' ? chosen.email.trim().toLowerCase() : null;
+  const emailVerified = chosen?.verified === true;
+  return { subject, email, emailVerified };
 }

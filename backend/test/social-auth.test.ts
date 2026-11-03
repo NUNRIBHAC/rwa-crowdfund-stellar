@@ -96,6 +96,9 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_GOOGLE_CLIENT_ID',
     'SOCIAL_GOOGLE_CLIENT_SECRET',
     'SOCIAL_GOOGLE_REDIRECT_URI',
+    'SOCIAL_GITHUB_CLIENT_ID',
+    'SOCIAL_GITHUB_CLIENT_SECRET',
+    'SOCIAL_GITHUB_REDIRECT_URI',
     'SOCIAL_REGISTRATION_ALLOWED_EMAILS',
   ])
     delete process.env[k];
@@ -131,6 +134,107 @@ async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder:
   const cb = await fetch(`${base}/api/auth/social/google/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
   return cb;
 }
+
+// A fake GitHub OAuth2 provider: token exchange (with the same PKCE
+// binding check as the Google fake) plus /user and /user/emails userinfo.
+const GH_USER_ID = 424242;
+async function makeFakeGithub(opts: { email?: string; emailVerified?: boolean; userId?: number }) {
+  const state = { challenge: null as string | null };
+  const claims = { email: opts.email, emailVerified: opts.emailVerified };
+  const fetchImpl = async (input: any, init?: any): Promise<Response> => {
+    const url = typeof input === 'string' ? input : input.url;
+    if (url === 'https://github.com/login/oauth/access_token') {
+      const body = new URLSearchParams(init.body as string);
+      const verifier = body.get('code_verifier');
+      assert.ok(verifier, 'code_verifier present');
+      const computed = createHash('sha256').update(verifier!).digest('base64url');
+      assert.equal(computed, state.challenge, 'PKCE verifier matches the issued challenge');
+      assert.equal(body.get('grant_type'), 'authorization_code');
+      return Response.json({ access_token: 'gho_fake', token_type: 'bearer' });
+    }
+    if (url === 'https://api.github.com/user') {
+      assert.equal(init?.headers?.authorization, 'Bearer gho_fake');
+      return Response.json({ id: opts.userId ?? GH_USER_ID, login: 'octocat' });
+    }
+    if (url === 'https://api.github.com/user/emails') {
+      return Response.json([{ email: claims.email, verified: claims.emailVerified, primary: true }]);
+    }
+    throw new Error(`unexpected provider call: ${url}`);
+  };
+  return { fetchImpl: fetchImpl as typeof fetch, state, claims };
+}
+
+const GH_CONF = { SOCIAL_GITHUB_CLIENT_ID: 'gh-client-id', SOCIAL_GITHUB_CLIENT_SECRET: 'gh-secret' };
+
+async function driveGithubFlow(base: string, challengeHolder: { challenge: string | null }) {
+  const start = await fetch(`${base}/api/auth/social/github/start`, { redirect: 'manual' });
+  assert.equal(start.status, 302);
+  const authUrl = new URL(start.headers.get('location')!);
+  assert.equal(authUrl.origin + authUrl.pathname, 'https://github.com/login/oauth/authorize');
+  assert.equal(authUrl.searchParams.get('client_id'), 'gh-client-id');
+  assert.equal(authUrl.searchParams.get('scope'), 'read:user user:email');
+  assert.equal(authUrl.searchParams.get('code_challenge_method'), 'S256');
+  const state = authUrl.searchParams.get('state')!;
+  assert.ok(state, 'state issued');
+  challengeHolder.challenge = authUrl.searchParams.get('code_challenge');
+  return fetch(`${base}/api/auth/social/github/callback?code=fake-gh-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
+}
+
+test('github oauth2: fail-closed registration gate uses the verified primary email from userinfo', async () => {
+  // Case 1: allowlisted + GitHub-verified primary email -> account created, session issued.
+  const fake1 = await makeFakeGithub({ email: 'someone@example.com', emailVerified: true });
+  const app1 = await startApp({ ...GH_CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'someone@example.com' }, { socialFetch: fake1.fetchImpl });
+  let res = await driveGithubFlow(app1.base, fake1.state);
+  assert.equal(res.status, 302);
+  const loc = res.headers.get('location')!;
+  assert.ok(loc.startsWith('/account#social-token=bls_'), loc);
+  const state1 = await app1.store.read();
+  assert.equal(Object.keys(state1.accounts).length, 1);
+  assert.ok(state1.socialIdentities[`github:${GH_USER_ID}`], 'identity keyed on provider + numeric user id');
+
+  // Sign-in again with the same identity -> same account, no duplicate.
+  res = await driveGithubFlow(app1.base, fake1.state);
+  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=bls_'));
+  assert.equal(Object.keys((await app1.store.read()).accounts).length, 1);
+
+  // Case 2: GitHub has NOT verified the email -> refuse, nothing created.
+  const fake2 = await makeFakeGithub({ email: 'someone@example.com', emailVerified: false });
+  const app2 = await startApp({ ...GH_CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'someone@example.com' }, { socialFetch: fake2.fetchImpl });
+  res = await driveGithubFlow(app2.base, fake2.state);
+  assert.equal(res.headers.get('location'), '/account#social-error=social_registration_restricted');
+  assert.equal(Object.keys((await app2.store.read()).accounts).length, 0);
+
+  // Case 3: verified but not allowlisted -> refuse.
+  const fake3 = await makeFakeGithub({ email: 'someone@example.com', emailVerified: true });
+  const app3 = await startApp({ ...GH_CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'other@example.com' }, { socialFetch: fake3.fetchImpl });
+  res = await driveGithubFlow(app3.base, fake3.state);
+  assert.equal(res.headers.get('location'), '/account#social-error=social_registration_restricted');
+});
+
+test('github oauth2: provider rejection and missing user id fail closed', async () => {
+  // Token endpoint rejects -> exchange failure, no account.
+  const rejectFetch = (async (input: any): Promise<Response> => {
+    const url = typeof input === 'string' ? input : input.url;
+    if (url === 'https://github.com/login/oauth/access_token') return Response.json({ error: 'bad_verification_code' });
+    throw new Error(`unexpected provider call: ${url}`);
+  }) as typeof fetch;
+  const app1 = await startApp(GH_CONF, { socialFetch: rejectFetch });
+  let res = await driveGithubFlow(app1.base, { challenge: null });
+  assert.equal(res.headers.get('location'), '/account#social-error=social_exchange_failed');
+
+  // /user returns no id -> exchange failure.
+  const noIdFetch = (async (input: any): Promise<Response> => {
+    const url = typeof input === 'string' ? input : input.url;
+    if (url === 'https://github.com/login/oauth/access_token') return Response.json({ access_token: 'gho_fake', token_type: 'bearer' });
+    if (url === 'https://api.github.com/user') return Response.json({ login: 'octocat' });
+    if (url === 'https://api.github.com/user/emails') return Response.json([]);
+    throw new Error(`unexpected provider call: ${url}`);
+  }) as typeof fetch;
+  const app2 = await startApp(GH_CONF, { socialFetch: noIdFetch });
+  res = await driveGithubFlow(app2.base, { challenge: null });
+  assert.equal(res.headers.get('location'), '/account#social-error=social_exchange_failed');
+  assert.equal(Object.keys((await app2.store.read()).accounts).length, 0);
+});
 
 test('social routes fail closed: 404 without provider config, 404 for unknown providers', async () => {
   const { base } = await startApp({});
