@@ -347,8 +347,8 @@ export default function App() {
         {route.name === 'jobs' && <JobsPage />}
         {route.name === 'podcast' && <PodcastPage />}
 
-        <Footer />
         <FeedbackTab actor={actor} onConnect={connect} />
+        <Footer />
       </main>
     </CommunityAuthProvider>
   );
