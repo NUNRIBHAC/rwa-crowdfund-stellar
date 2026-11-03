@@ -2886,7 +2886,7 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 
 /* Status chips and date cells never wrap mid-word; the project/subject
    cells absorb the squeeze. Scoped to operator tables (not the shared
-   chip class) and bounded on mobile by the <=720px overflow-x wrapper. */
+   chip class) and bounded on mobile by the .table-scroll overflow-x wrapper. */
 .operator-table td .status-chip,
 .operator-table td.cell-nowrap {
   white-space: nowrap;
@@ -2912,15 +2912,35 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 }
 
 /* Operator tables never squeeze cells into mid-word breaks: columns keep a
-   readable, word-boundary minimum width and the surrounding section scrolls
+   readable, word-boundary minimum width and the table's own wrapper scrolls
    horizontally whenever the table's minimum content width exceeds the
-   available space - at any viewport, not only on phones. A global
+   available space - at any viewport, not only on phones. The scroll sits on
+   .table-scroll, not the section, so headings and tab controls stay in
+   place. A global
    overflow-wrap:anywhere (styles.css top) would otherwise shatter plain
    words like country names, and the lang=de hyphenation rule would split
    action labels like "Wiederoffnen"; both are reset inside these tables. */
-.community-section:has(.operator-table) {
+.table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  /* Horizontal scroll affordance: edge fades (white covers pinned to the
+     scroll position over shadows pinned to the content) signal clipped
+     columns on the side that still has overflow. */
+  background-image:
+    linear-gradient(to right, #ffffff, #ffffff), linear-gradient(to right, #ffffff, #ffffff),
+    linear-gradient(to right, rgba(17, 17, 43, 0.18), rgba(17, 17, 43, 0)), linear-gradient(to left, rgba(17, 17, 43, 0.18), rgba(17, 17, 43, 0));
+  background-position:
+    left center,
+    right center,
+    left center,
+    right center;
+  background-repeat: no-repeat;
+  background-size:
+    24px 100%,
+    24px 100%,
+    8px 100%,
+    8px 100%;
+  background-attachment: local, local, scroll, scroll;
 }
 .operator-table th,
 .operator-table td {
