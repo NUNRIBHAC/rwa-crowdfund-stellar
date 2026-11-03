@@ -14,6 +14,7 @@ import {
   Operation,
   scValToNative,
   rpc,
+  xdr,
 } from '@stellar/stellar-sdk';
 
 // No platform signer, local capacity counter or receipt token. Campaign
@@ -699,6 +700,49 @@ export async function buildCampaignDeploy(input: { actor: string; id: string; na
 // from the transaction meta and verify the deployed code against the
 // reviewed Wasm pin before a registry entry is returned. Bounded polling:
 // a still-pending deployment is reported, never guessed.
+// Created contract ids from the transaction meta: the RPC does not always
+// populate returnValue for createContract operations (observed on testnet,
+// where SUCCESS create txs return no returnValue), so the created contract
+// instance is recovered from the meta's created contractData entries. Upload
+// transactions create contractCode, not an instance, and yield nothing here.
+// Plain-object shape: change arm created, ledger-entry data type 6
+// (contractData), ScVal key type 20 (ledgerKeyContractInstance).
+function createdContractIdsFromMeta(resultMetaXdr: unknown): string[] {
+  if (!resultMetaXdr) return [];
+  let plain: unknown;
+  try {
+    // The typed RPC response carries an already-parsed TransactionMeta; a raw
+    // JSON-RPC payload carries the base64 XDR string. Accept both.
+    plain =
+      typeof resultMetaXdr === 'string'
+        ? (xdr.TransactionMeta.fromXDR(resultMetaXdr, 'base64') as any).toXdrObject()
+        : typeof (resultMetaXdr as { toXdrObject?: unknown })?.toXdrObject === 'function'
+          ? (resultMetaXdr as { toXdrObject: () => unknown }).toXdrObject()
+          : resultMetaXdr;
+  } catch {
+    return [];
+  }
+  const out: string[] = [];
+  const visit = (node: any): void => {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) {
+      node.forEach(visit);
+      return;
+    }
+    const data = node.created?.data;
+    if (data?.type === 6 && data.contractData?.key?.type === 20) {
+      const raw = data.contractData.contract?.contractId;
+      const bytes = typeof raw === 'string' ? Buffer.from(raw, 'hex') : raw ? Buffer.from(Object.values(raw) as number[]) : null;
+      if (bytes && bytes.length === 32) {
+        out.push(StrKey.encodeContract(bytes));
+        return;
+      }
+    }
+    for (const v of Object.values(node)) visit(v);
+  };
+  visit(plain);
+  return [...new Set(out)];
+}
 async function awaitDeployResult(hash: string): Promise<{ status: string; contractId: string | null }> {
   const client = sorobanDeps.client();
   for (let attempt = 0; attempt < 30; attempt++) {
@@ -708,14 +752,19 @@ async function awaitDeployResult(hash: string): Promise<{ status: string; contra
       if (!Number.isSafeInteger(result.ledger) || result.ledger <= 0) throw new Error('RPC result missing conclusive ledger');
       if (result.status === 'FAILED') return { status: 'FAILED', contractId: null };
       const rv = result.returnValue;
-      if (!rv) return { status: 'SUCCESS', contractId: null };
-      let contractId: string;
-      try {
-        contractId = Address.fromScVal(rv).toString();
-      } catch {
-        return { status: 'SUCCESS', contractId: null };
+      if (rv) {
+        try {
+          const contractId = Address.fromScVal(rv).toString();
+          if (contractId.startsWith('C')) return { status: 'SUCCESS', contractId };
+        } catch {
+          // Not an address (e.g. an upload's Wasm hash bytes): fall through
+          // to the transaction meta below.
+        }
       }
-      return { status: 'SUCCESS', contractId: contractId.startsWith('C') ? contractId : null };
+      const fromMeta = createdContractIdsFromMeta((result as { resultMetaXdr?: unknown }).resultMetaXdr);
+      if (fromMeta.length === 1) return { status: 'SUCCESS', contractId: fromMeta[0] };
+      if (fromMeta.length > 1) throw new Error(`ambiguous contract id in transaction meta for ${hash}; reconcile the exact hash manually`);
+      return { status: 'SUCCESS', contractId: null };
     }
     await new Promise((r) => setTimeout(r, Number(process.env.SOROBAN_DEPLOY_POLL_MS ?? '1000')));
   }
