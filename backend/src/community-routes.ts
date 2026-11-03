@@ -16,6 +16,7 @@ import {
   enableTotp,
   disableTotp,
   completeTotpLogin,
+  authenticateWithSession,
 } from './accounts.js';
 import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaignId } from './community.js';
 import { metadataFor } from './campaign-metadata.js';
@@ -37,7 +38,7 @@ import {
   sendBudgetedMail,
 } from './email-auth.js';
 import { MAIL_LOCALES, resetEmail, verificationEmail } from './email-templates.js';
-import { completeSocialFlow, isSocialProvider, SOCIAL_PROVIDERS, socialConfigFromEnv, startSocialFlow } from './social-auth.js';
+import { completeSocialFlow, isSocialProvider, requireSocialLinkStepUp, SOCIAL_PROVIDERS, socialConfigFromEnv, startSocialFlow } from './social-auth.js';
 import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
@@ -242,18 +243,23 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // account. Completion reuses the SAME registered callback URL below (no
   // provider console change); the flow's linkTo marker makes the outcome a
   // binding, never a session.
-  router.get(
-    '/api/auth/social/:provider/link/start',
-    authed(async (req, res, account) => {
+  router.post('/api/auth/social/:provider/link/start', async (req, res) => {
+    try {
       const provider = req.params.provider;
       if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
       const cfg = socialConfigFromEnv(process.env, provider);
       if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
       await abuseGate(req);
+      const { account, sessionCreatedAt } = await authenticateWithSession(store, req.header('authorization'));
+      await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {});
       const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch, account.publicKey);
-      res.redirect(302, url);
-    }),
-  );
+      // JSON, not a 302: the SPA navigates after collecting the step-up
+      // proof, so the provider URL is data here.
+      res.json({ url });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.get('/api/auth/social/:provider/start', async (req, res) => {
     try {
       const provider = req.params.provider;

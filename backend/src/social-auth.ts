@@ -42,7 +42,8 @@ import { createHash, randomBytes } from 'node:crypto';
 import * as client from 'openid-client';
 import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore } from './community-store.js';
-import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './accounts.js';
+import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS, verifySignature } from './accounts.js';
+import { verifyPassword } from './email-auth.js';
 
 // Providers with an implementation-verified OIDC discovery document.
 // google:    https://accounts.google.com/.well-known/openid-configuration
@@ -262,4 +263,71 @@ export async function completeSocialFlow(
     s.sessions[session.tokenHash] = session;
     return { kind: 'session' as const, token, expiresAt: session.expiresAt, account: { ...account } };
   });
+}
+
+// --- Link step-up ------------------------------------------------------------
+// Linking a provider identity adds a persistent new sign-in path to the
+// account: a stolen or merely old session must not be enough to create one.
+// link/start therefore requires a recent re-authentication appropriate to
+// the account's own credential, and linking is only offered to accounts
+// with a verified email on record (email accounts: credential.verified;
+// social accounts: the provider-verified email that registration required).
+// Wallet-only accounts have no verified email and cannot link.
+export const SOCIAL_LINK_STEPUP_FRESH_MS = 10 * 60 * 1000;
+
+export type LinkStepUpProof = { password?: unknown; signature?: unknown };
+
+export async function requireSocialLinkStepUp(
+  store: CommunityStore,
+  account: Account,
+  sessionCreatedAt: number,
+  proof: LinkStepUpProof,
+  now = Date.now(),
+): Promise<void> {
+  const fail = (code: string, msg: string) => new AuthError(403, msg, code);
+  if (!account.authMethod && !account.email) {
+    // Classic wallet account: no email record exists; the fresh-signature
+    // step-up below is the whole ceremony for this method.
+  } else if (!account.email) {
+    throw fail('social_link_requires_verified_email', 'linking a sign-in provider requires an account with a verified email');
+  }
+  if (account.authMethod === 'email') {
+    const ok = await store.change((s) => {
+      const cred = account.email ? s.emailCredentials[account.email] : undefined;
+      if (!cred || cred.publicKey !== account.publicKey || cred.verified !== true) return false;
+      return typeof proof.password === 'string' && verifyPassword(proof.password, cred.passwordRecord);
+    });
+    if (!ok) throw fail('social_stepup_failed', 're-authentication failed; enter your current password to link a provider');
+    return;
+  }
+  if (account.authMethod === 'social') {
+    // A social account's re-authentication IS a fresh provider sign-in: the
+    // session must be recent (sudo-style window). The stored email was
+    // provider-verified at registration.
+    if (now - sessionCreatedAt > SOCIAL_LINK_STEPUP_FRESH_MS) {
+      throw fail('social_stepup_required', 'sign in again to link a provider; your session is too old');
+    }
+    return;
+  }
+  // Wallet account: fresh signature over an unused login challenge for this
+  // exact account, consumed single-use here (no session issued).
+  if (typeof proof.signature !== 'string' || !proof.signature) {
+    throw fail('social_stepup_required', 'sign a fresh wallet challenge to link a provider');
+  }
+  let signature: Buffer;
+  try {
+    signature = Buffer.from(proof.signature, 'base64');
+    if (signature.length !== 64) throw new Error('bad length');
+  } catch {
+    throw fail('social_stepup_failed', 'signature must be base64-encoded 64-byte Ed25519');
+  }
+  const ok = await store.change((s) => {
+    const challenge = Object.values(s.challenges).find(
+      (c) => c.publicKey === account.publicKey && !c.used && c.expiresAt > now && verifySignature(account.publicKey, c.message, signature),
+    );
+    if (!challenge) return false;
+    challenge.used = true;
+    return true;
+  });
+  if (!ok) throw fail('social_stepup_failed', 'wallet challenge signature did not verify; request a fresh challenge');
 }

@@ -9,7 +9,7 @@ import * as jose from 'jose';
 import { FileCommunityStore } from '../src/community-store.js';
 import { CommunityService } from '../src/community.js';
 import { createCommunityRouter } from '../src/community-routes.js';
-import { completeSocialFlow, startSocialFlow } from '../src/social-auth.js';
+import { completeSocialFlow, requireSocialLinkStepUp, startSocialFlow } from '../src/social-auth.js';
 
 const requireAdmin: express.RequestHandler = (_req, _res, next) => next();
 
@@ -152,13 +152,14 @@ async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder:
 
 // Drive one LINK flow: authenticated /link/start, then the same /callback
 // path with the issued state. Returns the callback response.
-async function driveLinkFlow(base: string, provider: string, token: string, challengeHolder: { challenge: string | null }) {
+async function driveLinkFlow(base: string, provider: string, token: string, challengeHolder: { challenge: string | null }, body: Record<string, unknown> = {}) {
   const start = await fetch(`${base}/api/auth/social/${provider}/link/start`, {
-    redirect: 'manual',
-    headers: { authorization: `Bearer ${token}` },
+    method: 'POST',
+    headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+    body: JSON.stringify(body),
   });
-  assert.equal(start.status, 302);
-  const authUrl = new URL(start.headers.get('location')!);
+  assert.equal(start.status, 200);
+  const authUrl = new URL(((await start.json()) as any).url);
   const state = authUrl.searchParams.get('state')!;
   const nonce = authUrl.searchParams.get('nonce')!;
   assert.ok(state && nonce, 'state and nonce issued');
@@ -178,8 +179,8 @@ test('social linking: authenticated account binds its identity; link callback is
   const { base, store } = await startApp({ ...CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'owner@example.com' }, { socialFetch: fake.fetchImpl });
   const token = tokenFromRedirect(await driveFlow(base, fake.fetchImpl, fake.state));
 
-  // Link/start requires authentication.
-  assert.equal((await fetch(`${base}/api/auth/social/google/link/start`, { redirect: 'manual' })).status, 401);
+  // Link/start requires authentication (POST).
+  assert.equal((await fetch(`${base}/api/auth/social/google/link/start`, { method: 'POST' })).status, 401);
 
   // Binding the same identity to its own account: a no-op link outcome,
   // and crucially NO session comes back from a link flow.
@@ -245,6 +246,76 @@ test('social linking: an identity bound to another account is refused (social_id
   assert.equal(signin.kind, 'session');
   if (signin.kind !== 'session') throw new Error('unreachable');
   assert.equal(signin.account.publicKey, b.account.publicKey);
+});
+
+test('social linking step-up: stale social session and bad wallet signature are rejected; verified-email rule enforced', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'social-stepup-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const now = Date.now();
+
+  // Social account with a STALE session (created >10 min ago): refused.
+  const socialAccount = { publicKey: 'G' + 'A'.repeat(55), displayName: null, createdAt: now, authMethod: 'social' as const, email: 's@example.com' };
+  await assert.rejects(
+    () => requireSocialLinkStepUp(store, socialAccount as any, now - 11 * 60 * 1000, {}, now),
+    (e: any) => e.status === 403 && e.code === 'social_stepup_required',
+  );
+  // Fresh session passes.
+  await requireSocialLinkStepUp(store, socialAccount as any, now - 60 * 1000, {}, now);
+
+  // Email account, UNVERIFIED credential: refused even with the right password.
+  const { hashPassword } = await import('../src/email-auth.js');
+  const emailAccount = { publicKey: 'G' + 'B'.repeat(55), displayName: null, createdAt: now, authMethod: 'email' as const, email: 'e@example.com' };
+  await store.change((s) => {
+    s.emailCredentials['e@example.com'] = {
+      email: 'e@example.com',
+      passwordRecord: hashPassword('correct horse'),
+      publicKey: emailAccount.publicKey,
+      verified: false,
+      verifyTokenHash: null,
+      verifyExpiresAt: null,
+      createdAt: now,
+      failedAttempts: 0,
+      lockUntil: null,
+    };
+  });
+  await assert.rejects(
+    () => requireSocialLinkStepUp(store, emailAccount as any, now, { password: 'correct horse' }, now),
+    (e: any) => e.status === 403 && e.code === 'social_stepup_failed',
+  );
+  // Verified credential + WRONG password: refused. Right password: passes.
+  await store.change((s) => {
+    s.emailCredentials['e@example.com'].verified = true;
+  });
+  await assert.rejects(
+    () => requireSocialLinkStepUp(store, emailAccount as any, now, { password: 'wrong' }, now),
+    (e: any) => e.status === 403 && e.code === 'social_stepup_failed',
+  );
+  await requireSocialLinkStepUp(store, emailAccount as any, now, { password: 'correct horse' }, now);
+
+  // Wallet account (no email): missing signature refused; bad signature refused.
+  const { Keypair } = await import('@stellar/stellar-sdk');
+  const kp = Keypair.random();
+  const walletAccount = { publicKey: kp.publicKey(), displayName: null, createdAt: now };
+  await assert.rejects(
+    () => requireSocialLinkStepUp(store, walletAccount as any, now, {}, now),
+    (e: any) => e.status === 403 && e.code === 'social_stepup_required',
+  );
+  await assert.rejects(
+    () => requireSocialLinkStepUp(store, walletAccount as any, now, { signature: Buffer.alloc(64).toString('base64') }, now),
+    (e: any) => e.status === 403 && e.code === 'social_stepup_failed',
+  );
+  // Legitimate: fresh challenge signed by the wallet passes, single-use.
+  const { createChallenge } = await import('../src/accounts.js');
+  const { message } = await createChallenge(store, kp.publicKey(), now);
+  // SEP-53 framing, matching Freighter and accounts.ts verifySignature.
+  const framed = Buffer.concat([Buffer.from('Stellar Signed Message:\n', 'utf8'), Buffer.from(message, 'utf8')]);
+  const digest = (await import('node:crypto')).createHash('sha256').update(framed).digest();
+  const sig = Buffer.from(kp.sign(digest)).toString('base64');
+  await requireSocialLinkStepUp(store, walletAccount as any, now, { signature: sig }, now);
+  await assert.rejects(
+    () => requireSocialLinkStepUp(store, walletAccount as any, now, { signature: sig }, now),
+    (e: any) => e.status === 403 && e.code === 'social_stepup_failed',
+  );
 });
 
 test('social routes fail closed: 404 without provider config, 404 for unknown providers', async () => {
