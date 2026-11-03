@@ -33,6 +33,9 @@ export type CapTable = {
   holdersKnown: number;
   holdersUnknown: number;
   complete: boolean; // false when any holder is UNKNOWN
+  // How many positions rest on each basis. 'mixed' means on-chain balances and
+  // journal-intended amounts are combined: not a finalized register.
+  basis: { onChain: number; journalIntended: number; unknown: number; mixed: boolean };
   rows: CapTableRow[];
 };
 
@@ -77,6 +80,12 @@ export function buildCapTable(register: ShareRegisterPayload): CapTable {
     holdersKnown: raw.length - unknown,
     holdersUnknown: unknown,
     complete: unknown === 0,
+    basis: {
+      onChain: raw.filter((r) => r.source === 'on-chain').length,
+      journalIntended: raw.filter((r) => r.source === 'journal-intended').length,
+      unknown,
+      mixed: raw.some((r) => r.source === 'on-chain') && raw.some((r) => r.source === 'journal-intended'),
+    },
     rows,
   };
 }
@@ -86,9 +95,17 @@ export type DistributionPreview = {
   campaignId: string;
   semantics: string;
   kind: 'distribution-preview';
+  // 'illustration' only when every holder is known and one basis is used;
+  // otherwise 'unavailable' and NO amounts are returned (a partial table
+  // could be read as entitlements).
+  status: 'illustration' | 'unavailable';
+  unavailableReason?: string;
+  declarable: false;
+  basis: CapTable['basis'];
   total: string;
   allocated: string;
   complete: boolean;
+  excludedUnknownHolderCount: number;
   excludedUnknownHolders: string[];
   rows: DistributionPreviewRow[];
   notice: string;
@@ -116,15 +133,32 @@ export function buildDistributionPreview(table: CapTable, totalDecimal: string):
       });
   }
   const excluded = table.rows.filter((r) => r.positionSource === 'unknown').map((r) => r.publicKey);
+  const complete = excluded.length === 0 && base > 0n;
+  const reason =
+    excluded.length > 0
+      ? `${excluded.length} holder position(s) are UNKNOWN; allocating the total among the rest would imply wrong entitlements`
+      : base === 0n
+        ? 'no known positive positions'
+        : table.basis.mixed
+          ? 'positions mix on-chain balances and journal-intended amounts; not a finalized register'
+          : undefined;
+  const available = complete && !table.basis.mixed;
   return {
     campaignId: table.campaignId,
     semantics: CORPORATE_ACTIONS_SEMANTICS,
     kind: 'distribution-preview',
+    status: available ? 'illustration' : 'unavailable',
+    ...(reason && !available ? { unavailableReason: reason } : {}),
+    declarable: false,
+    basis: table.basis,
     total: formatUnits(total),
-    allocated: formatUnits(alloc.reduce((s, x) => s + x.a, 0n)),
-    complete: excluded.length === 0 && base > 0n,
+    allocated: available ? formatUnits(alloc.reduce((s, x) => s + x.a, 0n)) : '0',
+    complete,
+    excludedUnknownHolderCount: excluded.length,
     excludedUnknownHolders: excluded,
-    rows: alloc.map((x) => ({ publicKey: x.h.publicKey, position: x.h.position, amount: formatUnits(x.a) })),
-    notice: 'PREVIEW ONLY: no funds move and no dividend is declared. Unknown holders are excluded, not zero.',
+    rows: available ? alloc.map((x) => ({ publicKey: x.h.publicKey, position: x.h.position, amount: formatUnits(x.a) })) : [],
+    notice: available
+      ? 'ILLUSTRATION ONLY: no funds move and no dividend is declared; this is not a final or declarable allocation.'
+      : 'ALLOCATION UNAVAILABLE: ' + (reason ?? 'incomplete basis') + '. Nothing is declared or payable.',
   };
 }

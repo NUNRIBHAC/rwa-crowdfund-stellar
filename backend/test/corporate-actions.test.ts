@@ -38,13 +38,35 @@ test('cap table: on-chain balance wins over the journal figure', () => {
   assert.equal(t.knownBase, '35');
 });
 
-test('distribution preview: exact sum, largest remainder, unknown excluded and flagged', () => {
-  const t = buildCapTable(reg([row('A', '1'), row('B', '1'), row('C', '1'), row('U', 'UNKNOWN')]));
+test('distribution preview: unknown or negative holders make the allocation UNAVAILABLE, no amounts', () => {
+  const t = buildCapTable(reg([row('A', '1'), row('B', '1'), row('C', '1'), row('U', 'UNKNOWN'), row('N', '-3')]));
   const p = buildDistributionPreview(t, '100');
-  assert.equal(p.allocated, '100');
+  assert.equal(p.status, 'unavailable');
+  assert.equal(p.declarable, false);
   assert.equal(p.complete, false);
-  assert.deepEqual(p.excludedUnknownHolders, ['U']);
-  assert.equal(p.rows.length, 3);
+  assert.equal(p.excludedUnknownHolderCount, 2);
+  assert.deepEqual(p.excludedUnknownHolders, ['U', 'N']);
+  assert.deepEqual(p.rows, []);
+  assert.equal(p.allocated, '0');
+  assert.match(p.notice, /ALLOCATION UNAVAILABLE/);
+});
+
+test('distribution preview: mixed on-chain and journal basis is unavailable and flagged', () => {
+  const t = buildCapTable(reg([row('A', '10', { onChainBalance: '25' }), row('B', '10')]));
+  assert.equal(t.basis.mixed, true);
+  assert.deepEqual([t.basis.onChain, t.basis.journalIntended], [1, 1]);
+  const p = buildDistributionPreview(t, '10');
+  assert.equal(p.status, 'unavailable');
+  assert.match(p.unavailableReason ?? '', /mix/);
+  assert.deepEqual(p.rows, []);
+});
+
+test('distribution preview: complete single-basis table gives an exact-sum illustration, never declarable', () => {
+  const t = buildCapTable(reg([row('A', '1'), row('B', '1'), row('C', '1')]));
+  const p = buildDistributionPreview(t, '100');
+  assert.equal(p.status, 'illustration');
+  assert.equal(p.declarable, false);
+  assert.equal(p.allocated, '100');
   assert.equal(
     p.rows
       .map((r) => r.amount)
@@ -52,17 +74,13 @@ test('distribution preview: exact sum, largest remainder, unknown excluded and f
       .join(','),
     '33.3333333,33.3333333,33.3333334',
   );
-  assert.match(p.notice, /PREVIEW ONLY/);
-});
-
-test('distribution preview: complete only when all holders known; rejects bad totals', () => {
-  const t = buildCapTable(reg([row('A', '3'), row('B', '1')]));
-  const p = buildDistributionPreview(t, '10');
-  assert.equal(p.complete, true);
+  const u = buildCapTable(reg([row('A', '3', { onChainBalance: '3' }), row('B', '1', { onChainBalance: '1' })]));
+  const q = buildDistributionPreview(u, '10');
+  assert.equal(q.status, 'illustration');
   assert.deepEqual(
-    p.rows.map((r) => r.amount),
+    q.rows.map((r) => r.amount),
     ['7.5', '2.5'],
   );
   for (const bad of ['0', '-1', 'abc', '1.00000001', '']) assert.throws(() => buildDistributionPreview(t, bad));
-  assert.equal(buildDistributionPreview(buildCapTable(reg([])), '5').complete, false);
+  assert.equal(buildDistributionPreview(buildCapTable(reg([])), '5').status, 'unavailable');
 });
