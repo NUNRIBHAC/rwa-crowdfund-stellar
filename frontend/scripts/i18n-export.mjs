@@ -106,7 +106,11 @@ for (const locale of LOCALES) {
 
   const legal = {};
   for (const doc of LEGAL_DOCS) {
-    legal[doc] = blocksToJson(await loadTsModule(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`)), `legal.${locale}.${doc}`);
+    // A doc with no per-locale TS file is intentionally untranslated: the
+    // resolver serves the English source (labeled fallback), so no JSON unit.
+    const tsPath = join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`);
+    if (locale !== 'en' && !existsSync(tsPath)) continue;
+    legal[doc] = blocksToJson(await loadTsModule(tsPath), `legal.${locale}.${doc}`);
   }
   assertJsonSafe(legal, `legal.${locale}`);
   await emit(join('legal', `${locale}.json`), render(legal));
