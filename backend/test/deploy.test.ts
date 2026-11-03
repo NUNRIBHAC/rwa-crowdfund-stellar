@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { Account, Address, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, SorobanDataBuilder, xdr } from '@stellar/stellar-sdk';
 import { sorobanDeps, buildCampaignDeploy, submitCampaignDeploy, buildCampaignDeployV2, submitCampaignDeployV2 } from '../src/soroban.js';
+import { PostgresJournal, injectJournalBackendForTests, resetJournalBackendForTests } from '../src/journal.js';
 
 // Campaign deployment adapter tests: the fake RPC below is adapter evidence
 // only, not evidence of a real deployment. Build/submit reuse the journaled
@@ -44,7 +45,8 @@ const v2OfferingContractId = StrKey.encodeContract(Buffer.alloc(32, 8));
 let v2TokenOnLedger = false,
   v2OfferingOnLedger = false,
   v2LastCreateWasToken = false,
-  lastCreateWasV2 = false;
+  lastCreateWasV2 = false,
+  sendCount = 0;
 const client: any = {
   getAccount: async (pub: string) => {
     if (missingAccount) throw new Error('Account not found');
@@ -90,6 +92,7 @@ const client: any = {
     };
   },
   sendTransaction: async (tx: Transaction) => {
+    sendCount++;
     if (throwsOnSend) throw new Error('response lost');
     const func = (tx.operations[0] as any).func;
     lastSentWasCreate = func.type === 'hostFunctionTypeCreateContractV2';
@@ -164,6 +167,7 @@ function reset() {
   process.env.STELLAR_NETWORK = 'testnet';
   delete process.env.SOROBAN_RECOVERY_MODE;
   addressAuth = false;
+  sendCount = 0;
   restoreRequired = false;
   missingAccount = false;
   simError = false;
@@ -380,6 +384,80 @@ test('v2 create extracts the contract id from transaction meta when returnValue 
   assert.equal(done.contractId, v2TokenContractId);
   const next = await buildCampaignDeployV2(v2Input());
   assert.equal(next.step, 'create-offering');
+});
+
+// In-memory fake of the pg pool surface with a connect() client (the
+// PostgresJournal takes the advisory-lock path when connect exists), carrying
+// contract_id the way the migrated production table does.
+function pgFakePool() {
+  const rows = new Map<string, any>();
+  let seq = 0;
+  const query = async (text: string, params?: unknown[]) => {
+    const sql = text.replace(/\s+/g, ' ').trim();
+    if (/^(CREATE|ALTER|BEGIN|COMMIT|ROLLBACK)/.test(sql)) return { rows: [], rowCount: 0 };
+    if (/^SELECT pg_advisory_lock/.test(sql)) return { rows: [] };
+    if (/^SELECT pg_advisory_unlock/.test(sql)) return { rows: [] };
+    if (/^SELECT pg_backend_pid/.test(sql)) return { rows: [{ pid: 1 }] };
+    if (/^SELECT signed_xdr FROM soroban_intents/.test(sql)) {
+      const row = rows.get((params as any[])[0]);
+      return { rows: row ? [{ signed_xdr: row.signed_xdr ?? null }] : [] };
+    }
+    if (/^INSERT INTO soroban_intents/.test(sql)) {
+      const [hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id] = params as any[];
+      const prior = rows.get(hash);
+      // Mirror the upsert: a terminal stored status wins, and a stored
+      // contract id is never erased by an id-less save.
+      const terminal = prior?.status === 'SUCCESS' || prior?.status === 'FAILED';
+      rows.set(hash, {
+        seq: prior?.seq ?? ++seq, hash, campaign, actor, action, amount, xdr,
+        signed_xdr: status === 'SUCCESS' || status === 'FAILED' ? null : prior?.signed_xdr ?? signed_xdr ?? null,
+        status: terminal ? prior.status : status,
+        contract_id: contract_id ?? prior?.contract_id ?? null,
+      });
+      return { rows: [] };
+    }
+    if (/^SELECT .* FROM soroban_intents ORDER BY seq$/.test(sql)) return { rows: [...rows.values()].sort((a, b) => a.seq - b.seq) };
+    if (/^DELETE FROM soroban_intents/.test(sql)) return { rows: [], rowCount: 0 };
+    if (/^DELETE FROM soroban_rate_hits/.test(sql)) return { rows: [], rowCount: 0 };
+    if (/^SELECT count\(\*\) AS n FROM soroban_rate_hits/.test(sql)) return { rows: [{ n: 0 }] };
+    if (/^INSERT INTO soroban_rate_hits/.test(sql)) return { rows: [] };
+    throw new Error('unexpected SQL: ' + sql);
+  };
+  return {
+    query,
+    async connect() { return { query, release() {} }; },
+    async end() {},
+  };
+}
+
+test('v2 create progression persists the contract id through the Postgres journal backend', async () => {
+  reset();
+  v2TokenOnLedger = true;
+  v2OfferingOnLedger = true;
+  createMetaOnly = true;
+  // Production runs the Postgres journal; the file backend masked the
+  // contract_id drop that stalled v2 progression on testnet.
+  injectJournalBackendForTests(new PostgresJournal(pgFakePool() as any));
+  try {
+    const built = await buildCampaignDeployV2(v2Input());
+    assert.equal(built.step, 'create-token');
+    const done = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' });
+    assert.equal(done.confirmed, true);
+    assert.equal(done.contractId, v2TokenContractId);
+    // Fail-closed progression: a fresh PG read must return the journaled id,
+    // so the next build advances instead of repeating the create step.
+    const next = await buildCampaignDeployV2(v2Input());
+    assert.equal(next.step, 'create-offering');
+    // Idempotency: resubmitting the terminal intent sends no new transaction
+    // and returns the same confirmed contract id.
+    const sends = sendCount;
+    const again = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' });
+    assert.equal(sendCount, sends);
+    assert.equal(again.confirmed, true);
+    assert.equal(again.contractId, v2TokenContractId);
+  } finally {
+    resetJournalBackendForTests();
+  }
 });
 
 test('v2 resubmitting a stranded successful create repairs the journal without a new transaction', async () => {
