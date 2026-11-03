@@ -725,3 +725,27 @@ test('harassment upper bound across ALL send paths (register+resend+reset), inje
     assert.ok(c <= 6, `verified window at +${w}min has ${c} sends`);
   }
 });
+
+test('email login reports the server-designated operator flag immediately and never grants it to ordinary accounts', async () => {
+  const mailer = new FakeMailer();
+  const url = await startApp(mailer);
+  const email = 'operator-login@example.com';
+  const password = 'long-enough-operator-password';
+  await api(url, 'POST', '/api/auth/email/register', { body: { email, password } });
+  await api(url, 'POST', '/api/auth/email/verify', { body: { email, token: mailer.lastToken() } });
+  const first = await api(url, 'POST', '/api/auth/email/login', { body: { email, password } });
+  assert.equal(first.status, 200);
+  assert.equal(first.json.isOperator, false);
+  const old = process.env.OPERATOR_WALLETS;
+  try {
+    process.env.OPERATOR_WALLETS = first.json.account.publicKey;
+    const second = await api(url, 'POST', '/api/auth/email/login', { body: { email, password } });
+    assert.equal(second.status, 200);
+    assert.equal(second.json.isOperator, true);
+    const me = await api(url, 'GET', '/api/auth/me', { token: second.json.token });
+    assert.equal(me.json.isOperator, second.json.isOperator);
+  } finally {
+    if (old === undefined) delete process.env.OPERATOR_WALLETS;
+    else process.env.OPERATOR_WALLETS = old;
+  }
+});

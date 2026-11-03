@@ -1,8 +1,4 @@
-// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
-// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
-
 import type { LegalBlock } from './types';
-
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
@@ -123,22 +119,18 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ['3. Planned features (not yet live)'],
+    text: ['3. Test features and production limits'],
   },
   {
     t: 'p',
     text: [
-      'Blockallisto is being designed against the compliance surfaces of established EU crowdfunding platforms. Future versions ',
-      {
-        b: ['may'],
-      },
-      ' include: full user accounts with email registration (beyond the optional community sign-in); identity verification (KYC/AML), including beneficial-owner and source-of-funds checks for company investors; investor categorisation with an entry knowledge test and a loss-bearing-capacity simulation; a pre-contractual reflection period for non-sophisticated investors; key investment information sheets per campaign; payments processed by licensed payment service providers (never by us holding client funds); complaints management and conflicts-of-interest policies; and jurisdiction-based selling restrictions.',
+      'The prototype has community sign-in, email/password accounts, a testnet investor view, and demo knowledge-test and loss-simulation screens. Availability may be restricted; these are not legally validated investor protections.',
     ],
   },
   {
     t: 'p',
     text: [
-      'None of this exists today. The list above is indicative design direction drawn from our research corpus, not a specification: details, thresholds and whole features may change with design work and legal advice. These features will only launch under updated, legally reviewed terms, and only under the regulatory authorisations they require. Nothing in this section is a commitment to a launch date or a licence.',
+      'Real KYC/AML, licensed payment processing and a legally effective reflection period are not active. Test documents and screens do not establish regulatory approval or enforceable investor rights. Production use requires separate legal review and authorisations.',
     ],
   },
   {
@@ -199,7 +191,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'The Service runs on free-tier hosting and may be slow to start, unavailable, changed or withdrawn at any time without notice. Features labelled "not built" (accounts, KYC, fiat payments, investor dashboard) do not exist yet.',
+      'The Service uses free-tier hosting and may be slow, unavailable, changed or withdrawn. Implemented test features do not establish production readiness; real identity checks and fiat payments remain inactive.',
     ],
   },
   {

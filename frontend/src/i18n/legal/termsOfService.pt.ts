@@ -1,8 +1,4 @@
-// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
-// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
-
 import type { LegalBlock } from './types';
-
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
@@ -125,22 +121,18 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ['3. Funcionalidades planeadas (ainda não ativas)'],
+    text: ['3. Funcionalidades de teste e limites de produção'],
   },
   {
     t: 'p',
     text: [
-      'A Blockallisto está a ser desenhada tendo em conta as superfícies de conformidade de plataformas de crowdfunding europeias estabelecidas. Versões futuras ',
-      {
-        b: ['poderão'],
-      },
-      ' incluir: contas de utilizador completas com registo por email (para além do acesso comunitário opcional); verificação de identidade (KYC/AML), incluindo verificações de beneficiário efetivo e de origem dos fundos para investidores empresariais; categorização de investidores com um teste inicial de conhecimentos e uma simulação de capacidade de suportar perdas; um período de reflexão pré-contratual para investidores não sofisticados; fichas de informação fundamental de investimento por campanha; pagamentos processados por prestadores de serviços de pagamento licenciados (nunca por nós detendo fundos de clientes); gestão de reclamações e políticas de conflitos de interesses; e restrições de venda por jurisdição.',
+      'O protótipo tem início de sessão comunitário, contas de email/palavra-passe, uma vista do investidor de testnet e ecrãs de demonstração do teste de conhecimentos e simulação de perdas. O acesso pode estar restrito; não são proteções do investidor juridicamente validadas.',
     ],
   },
   {
     t: 'p',
     text: [
-      'Nada disto existe hoje. A lista acima é uma orientação indicativa de desenho retirada do nosso corpus de investigação, não uma especificação: detalhes, limites e funcionalidades inteiras podem mudar com o trabalho de desenho e o aconselhamento jurídico. Estas funcionalidades só serão lançadas sob termos atualizados e juridicamente revistos, e apenas ao abrigo das autorizações regulamentares que exigirem. Nada nesta secção constitui um compromisso quanto a uma data de lançamento ou a uma licença.',
+      'Não estão ativos KYC/AML reais, pagamentos por prestadores licenciados nem um período de reflexão com efeitos legais. Os documentos e ecrãs de teste não provam autorização regulamentar nem direitos de investidor exigíveis. A utilização em produção exige revisão jurídica e autorizações próprias.',
     ],
   },
   {
@@ -201,7 +193,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'O Serviço corre em alojamento de nível gratuito e pode ser lento a arrancar, estar indisponível, ser alterado ou retirado a qualquer momento sem aviso. As funcionalidades assinaladas como "não construídas" (contas, KYC, pagamentos em moeda fiduciária, painel do investidor) ainda não existem.',
+      'O Serviço usa alojamento gratuito e pode ser lento, ficar indisponível, mudar ou terminar. As funcionalidades de teste implementadas não provam prontidão para produção; a verificação real de identidade e os pagamentos em moeda fiduciária continuam inativos.',
     ],
   },
   {

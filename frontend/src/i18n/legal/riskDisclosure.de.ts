@@ -1,8 +1,4 @@
-// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
-// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
-
 import type { LegalBlock } from './types';
-
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
@@ -158,12 +154,12 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ['Über künftige Anleger­schutz­mechanismen'],
+    text: ['Anlegerschutz und dieser Prototyp'],
   },
   {
     t: 'p',
     text: [
-      'Die EU-Crowdfunding-Verordnung (die ECSPR, Verordnung (EU) 2020/1503) verlangt von autorisierten Plattformen eine Investoreneinstufung, einen Einstiegswissenstest, eine Simulation der Verlusttragfähigkeit und eine vorvertragliche Bedenkzeit von vier Kalendertagen für nicht erfahrene Investoren, bevor ein Angebot verbindlich wird; die Referenzplattformen in unserem Forschungskorpus setzen dies unter ihren eigenen Genehmigungen um. Die Blockallisto-Demo hat keinen dieser Mechanismen, weil keine echte Investition möglich ist. Falls je eine regulierte Version startet, werden diese Schutzmechanismen - und ihre Grenzen - in eigenen, rechtlich geprüften Dokumenten beschrieben. Schutzmechanismen wie Bedenkzeiten ermöglichen den Widerruf eines Angebots; sie mindern nicht das zugrunde liegende Investitionsrisiko.',
+      'Der Prototyp enthält Demo-Kategorisierung, Wissenstest und Verlustsimulation; die Erhebung echter Daten bleibt beschränkt. Diese Ansichten sind kein rechtlich geprüfter Schutz. Echte Investitionen und eine rechtlich wirksame Bedenkzeit sind nicht aktiv. Ein regulierter Dienst würde eine eigene rechtliche Prüfung und Genehmigungen benötigen. Diese Verfahren beseitigen das Anlagerisiko nicht.',
     ],
   },
   {

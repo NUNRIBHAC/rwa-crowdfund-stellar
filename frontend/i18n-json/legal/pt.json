@@ -43,13 +43,13 @@
       "p": "As contribuições de teste são tratadas por um contrato inteligente Soroban com o seguinte comportamento: financiamento tudo-ou-nada, pagamento à campanha apenas após o respetivo prazo, contribuições limitadas ao objetivo da campanha e saldos registados no contrato. Não é emitido nenhum token transmissível."
     },
     "b11": {
-      "h2": "3. Funcionalidades planeadas (ainda não ativas)"
+      "h2": "3. Funcionalidades de teste e limites de produção"
     },
     "b12": {
-      "p": "A Blockallisto está a ser desenhada tendo em conta as superfícies de conformidade de plataformas de crowdfunding europeias estabelecidas. Versões futuras <b>poderão</b> incluir: contas de utilizador completas com registo por email (para além do acesso comunitário opcional); verificação de identidade (KYC/AML), incluindo verificações de beneficiário efetivo e de origem dos fundos para investidores empresariais; categorização de investidores com um teste inicial de conhecimentos e uma simulação de capacidade de suportar perdas; um período de reflexão pré-contratual para investidores não sofisticados; fichas de informação fundamental de investimento por campanha; pagamentos processados por prestadores de serviços de pagamento licenciados (nunca por nós detendo fundos de clientes); gestão de reclamações e políticas de conflitos de interesses; e restrições de venda por jurisdição."
+      "p": "O protótipo tem início de sessão comunitário, contas de email/palavra-passe, uma vista do investidor de testnet e ecrãs de demonstração do teste de conhecimentos e simulação de perdas. O acesso pode estar restrito; não são proteções do investidor juridicamente validadas."
     },
     "b13": {
-      "p": "Nada disto existe hoje. A lista acima é uma orientação indicativa de desenho retirada do nosso corpus de investigação, não uma especificação: detalhes, limites e funcionalidades inteiras podem mudar com o trabalho de desenho e o aconselhamento jurídico. Estas funcionalidades só serão lançadas sob termos atualizados e juridicamente revistos, e apenas ao abrigo das autorizações regulamentares que exigirem. Nada nesta secção constitui um compromisso quanto a uma data de lançamento ou a uma licença."
+      "p": "Não estão ativos KYC/AML reais, pagamentos por prestadores licenciados nem um período de reflexão com efeitos legais. Os documentos e ecrãs de teste não provam autorização regulamentar nem direitos de investidor exigíveis. A utilização em produção exige revisão jurídica e autorizações próprias."
     },
     "b14": {
       "h2": "4. Elegibilidade e utilização aceitável"
@@ -80,7 +80,7 @@
       "h2": "7. Disponibilidade e alterações"
     },
     "b22": {
-      "p": "O Serviço corre em alojamento de nível gratuito e pode ser lento a arrancar, estar indisponível, ser alterado ou retirado a qualquer momento sem aviso. As funcionalidades assinaladas como \"não construídas\" (contas, KYC, pagamentos em moeda fiduciária, painel do investidor) ainda não existem."
+      "p": "O Serviço usa alojamento gratuito e pode ser lento, ficar indisponível, mudar ou terminar. As funcionalidades de teste implementadas não provam prontidão para produção; a verificação real de identidade e os pagamentos em moeda fiduciária continuam inativos."
     },
     "b23": {
       "h2": "8. Exclusões de responsabilidade e limitação de responsabilidade"
@@ -210,10 +210,10 @@
       }
     },
     "b10": {
-      "h2": "Sobre as futuras proteções do investidor"
+      "h2": "Proteções do investidor e este protótipo"
     },
     "b11": {
-      "p": "O regulamento europeu de crowdfunding (o ECSPR, Regulamento (UE) 2020/1503) exige que as plataformas autorizadas ofereçam categorização de investidores, um teste inicial de conhecimentos, uma simulação da capacidade de suportar perdas e um período de reflexão pré-contratual de quatro dias de calendário para investidores não sofisticados antes de uma oferta se tornar vinculativa; as plataformas de referência do nosso corpus de investigação implementam-nas ao abrigo das respetivas autorizações. A demonstração da Blockallisto não tem nenhum destes mecanismos, porque nenhum investimento real é possível. Se uma versão regulada for um dia lançada, essas proteções - e os seus limites - serão descritas nos respetivos documentos juridicamente revistos. Proteções como os períodos de reflexão permitem retirar uma oferta; não reduzem o risco de investimento subjacente."
+      "p": "O protótipo inclui demonstrações de categorização do investidor, teste de conhecimentos e simulação de perdas; a recolha de dados reais permanece restrita. Estes ecrãs não são proteções juridicamente validadas. Não é possível investir dinheiro real e não está ativo um período de reflexão com efeitos legais. Um serviço regulado exigiria revisão jurídica e autorizações próprias. Estes mecanismos não eliminam o risco do investimento."
     },
     "b12": {
       "h2": "Sem aconselhamento"

@@ -1,8 +1,4 @@
-// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
-// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
-
 import type { LegalBlock } from './types';
-
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
@@ -125,22 +121,18 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ['3. Geplante Funktionen (noch nicht live)'],
+    text: ['3. Testfunktionen und Grenzen des Produktivbetriebs'],
   },
   {
     t: 'p',
     text: [
-      'Blockallisto wird an den Compliance-Oberflächen etablierter EU-Crowdfunding-Plattformen ausgerichtet. Zukünftige Versionen ',
-      {
-        b: ['könnten'],
-      },
-      ' beinhalten: vollständige Benutzerkonten mit E-Mail-Registrierung (über die optionale Community-Anmeldung hinaus); Identitätsprüfung (KYC/AML), einschließlich Prüfungen des wirtschaftlich Berechtigten und der Herkunft der Mittel bei Unternehmensinvestoren; Investoreneinstufung mit einem Einstiegswissenstest und einer Simulation der Verlusttragfähigkeit; eine vorvertragliche Bedenkzeit für nicht erfahrene Investoren; Basisinformationsblätter je Kampagne; Zahlungen über lizenzierte Zahlungsdienstleister (niemals über uns, die Kundengelder halten); Beschwerdemanagement und Interessenkonflikt-Richtlinien; sowie rechtsraumbezogene Verkaufsbeschränkungen.',
+      'Der Prototyp bietet Community-Anmeldung, E-Mail/Passwort-Konten, eine Testnet-Anlegeransicht sowie Demo-Wissenstests und Verlustsimulationen. Der Zugang kann beschränkt sein; dies ist kein rechtlich geprüfter Anlegerschutz.',
     ],
   },
   {
     t: 'p',
     text: [
-      'Nichts davon existiert heute. Die obige Liste ist eine indikative Designrichtung aus unserem Forschungskorpus, keine Spezifikation: Details, Schwellenwerte und ganze Funktionen können sich mit der Designarbeit und Rechtsberatung ändern. Diese Funktionen starten nur unter aktualisierten, rechtlich geprüften Bedingungen und nur unter den erforderlichen behördlichen Genehmigungen. Nichts in diesem Abschnitt ist eine Zusage zu einem Startdatum oder einer Lizenz.',
+      'Echte KYC/AML-Prüfungen, Zahlungen über zugelassene Anbieter und eine rechtlich wirksame Bedenkzeit sind nicht aktiv. Testdokumente und Ansichten belegen weder Zulassung noch durchsetzbare Anlegerrechte. Der Produktivbetrieb erfordert eigene rechtliche Prüfung und Genehmigungen.',
     ],
   },
   {
@@ -201,7 +193,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Der Service läuft auf kostenlosem Hosting und kann langsam starten, nicht verfügbar sein oder jederzeit ohne Vorankündigung geändert oder eingestellt werden. Als "nicht gebaut" gekennzeichnete Funktionen (Konten, KYC, Fiat-Zahlungen, Investoren-Dashboard) existieren noch nicht.',
+      'Der Dienst nutzt kostenloses Hosting und kann langsam, nicht verfügbar, geändert oder eingestellt werden. Testfunktionen belegen keine Produktionsreife; echte Identitätsprüfungen und Fiat-Zahlungen bleiben inaktiv.',
     ],
   },
   {

@@ -1,8 +1,4 @@
-// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
-// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
-
 import type { LegalBlock } from './types';
-
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
@@ -158,12 +154,12 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ['About future investor protections'],
+    text: ['About investor protections and this prototype'],
   },
   {
     t: 'p',
     text: [
-      "EU crowdfunding regulation (the ECSPR, Regulation (EU) 2020/1503) requires authorised platforms to offer investor categorisation, an entry knowledge test, a simulation of the ability to bear loss, and a pre-contractual reflection period of four calendar days for non-sophisticated investors before an offer becomes binding; the reference platforms in our research corpus implement these under their own authorisations. Blockallisto's demo has none of these mechanisms, because no real investment is possible. If a regulated version ever launches, those protections - and their limits - will be described in its own legally reviewed documents. Protections like reflection periods let you withdraw an offer; they do not reduce the underlying investment risk.",
+      'The prototype includes demo investor categorisation, a knowledge test and loss simulation; real-data collection remains restricted. These screens are not legally validated protections. No real investment is possible, and no legally effective reflection period is active. Any regulated service would need separate legal review and authorisations. These mechanisms do not remove investment risk.',
     ],
   },
   {

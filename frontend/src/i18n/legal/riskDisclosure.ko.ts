@@ -1,8 +1,4 @@
-// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
-// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
-
 import type { LegalBlock } from './types';
-
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
@@ -158,12 +154,12 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ['향후 투자자 보호에 대해'],
+    text: ['투자자 보호와 이 프로토타입'],
   },
   {
     t: 'p',
     text: [
-      'EU 크라우드펀딩 규정(ECSPR, (EU) 2020/1503 규정)은 인가된 플랫폼에 투자자 분류, 입문 지식 테스트, 손실 감내 능력 시뮬레이션, 그리고 제안이 구속력을 갖기 전 비숙련 투자자를 위한 4개 역일의 사전 계약 숙려 기간을 요구합니다. 당사의 리서치 코퍼스에 있는 참조 플랫폼들은 각자의 인가 하에 이를 구현하고 있습니다. Blockallisto의 데모에는 이러한 메커니즘이 없습니다. 실제 투자가 불가능하기 때문입니다. 규제된 버전이 출시된다면, 이러한 보호 장치와 그 한계는 법적으로 검토된 자체 문서에 설명될 것입니다. 숙려 기간 같은 보호 장치는 제안을 철회할 수 있게 하지만, 기초 투자 리스크를 줄이지는 않습니다.',
+      '투자자 분류, 지식 평가 및 손실 시뮬레이션 데모가 있으나 실제 데이터 수집은 제한됩니다. 법적으로 검증된 보호가 아닙니다. 실제 투자와 법적 효력이 있는 숙려기간은 활성화되지 않았습니다. 규제 서비스에는 별도 법률 검토와 승인이 필요합니다. 이러한 장치가 투자 위험을 없애지는 않습니다.',
     ],
   },
   {

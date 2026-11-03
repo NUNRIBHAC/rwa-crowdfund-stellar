@@ -1,8 +1,4 @@
-// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
-// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
-
 import type { LegalBlock } from './types';
-
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
@@ -158,12 +154,12 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ['关于未来的投资者保护'],
+    text: ['投资者保护与此原型'],
   },
   {
     t: 'p',
     text: [
-      '欧盟众筹条例(ECSPR,(EU)2020/1503 号条例)要求获授权的平台提供投资者分类、入门知识测试、亏损承受能力模拟,并在要约生效前为非成熟投资者提供四个日历日的合同前冷静期;我们研究语料库中的参考平台在其各自的授权下实施了这些机制。Blockallisto 的演示不具备其中任何机制,因为不可能进行真实投资。如果未来推出受监管版本,这些保护及其限制将在其经过法律审查的专门文件中说明。冷静期等保护允许您撤回要约;它们并不降低底层投资风险。',
+      '原型包含投资者分类、知识测试及损失模拟的演示；真实数据收集仍受限制。这些页面并非经法律验证的保护。无法进行真实投资，也未启用具有法律效力的冷静期。受监管服务须另行法律审查与授权。这些机制不会消除投资风险。',
     ],
   },
   {

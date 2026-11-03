@@ -43,13 +43,13 @@
       "p": "Test contributions are handled by a Soroban smart contract with the following behaviour: all-or-nothing funding, payout to the campaign only after its deadline, contributions capped at the campaign target, and balances recorded in the contract. No transferable token is issued."
     },
     "b11": {
-      "h2": "3. Planned features (not yet live)"
+      "h2": "3. Test features and production limits"
     },
     "b12": {
-      "p": "Blockallisto is being designed against the compliance surfaces of established EU crowdfunding platforms. Future versions <b>may</b> include: full user accounts with email registration (beyond the optional community sign-in); identity verification (KYC/AML), including beneficial-owner and source-of-funds checks for company investors; investor categorisation with an entry knowledge test and a loss-bearing-capacity simulation; a pre-contractual reflection period for non-sophisticated investors; key investment information sheets per campaign; payments processed by licensed payment service providers (never by us holding client funds); complaints management and conflicts-of-interest policies; and jurisdiction-based selling restrictions."
+      "p": "The prototype has community sign-in, email/password accounts, a testnet investor view, and demo knowledge-test and loss-simulation screens. Availability may be restricted; these are not legally validated investor protections."
     },
     "b13": {
-      "p": "None of this exists today. The list above is indicative design direction drawn from our research corpus, not a specification: details, thresholds and whole features may change with design work and legal advice. These features will only launch under updated, legally reviewed terms, and only under the regulatory authorisations they require. Nothing in this section is a commitment to a launch date or a licence."
+      "p": "Real KYC/AML, licensed payment processing and a legally effective reflection period are not active. Test documents and screens do not establish regulatory approval or enforceable investor rights. Production use requires separate legal review and authorisations."
     },
     "b14": {
       "h2": "4. Eligibility and acceptable use"
@@ -80,7 +80,7 @@
       "h2": "7. Availability and changes"
     },
     "b22": {
-      "p": "The Service runs on free-tier hosting and may be slow to start, unavailable, changed or withdrawn at any time without notice. Features labelled \"not built\" (accounts, KYC, fiat payments, investor dashboard) do not exist yet."
+      "p": "The Service uses free-tier hosting and may be slow, unavailable, changed or withdrawn. Implemented test features do not establish production readiness; real identity checks and fiat payments remain inactive."
     },
     "b23": {
       "h2": "8. Disclaimers and limitation of liability"
@@ -210,10 +210,10 @@
       }
     },
     "b10": {
-      "h2": "About future investor protections"
+      "h2": "About investor protections and this prototype"
     },
     "b11": {
-      "p": "EU crowdfunding regulation (the ECSPR, Regulation (EU) 2020/1503) requires authorised platforms to offer investor categorisation, an entry knowledge test, a simulation of the ability to bear loss, and a pre-contractual reflection period of four calendar days for non-sophisticated investors before an offer becomes binding; the reference platforms in our research corpus implement these under their own authorisations. Blockallisto's demo has none of these mechanisms, because no real investment is possible. If a regulated version ever launches, those protections - and their limits - will be described in its own legally reviewed documents. Protections like reflection periods let you withdraw an offer; they do not reduce the underlying investment risk."
+      "p": "The prototype includes demo investor categorisation, a knowledge test and loss simulation; real-data collection remains restricted. These screens are not legally validated protections. No real investment is possible, and no legally effective reflection period is active. Any regulated service would need separate legal review and authorisations. These mechanisms do not remove investment risk."
     },
     "b12": {
       "h2": "No advice"

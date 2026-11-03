@@ -633,7 +633,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (ip && !service.limiter.allow(`email-verify-ip:${ip}`, 30, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       const result = await verifyEmailToken(store, { email: req.body?.email, token: req.body?.token });
-      res.json({ token: result.token, expiresAt: result.expiresAt, account: publicAccount(result.account) });
+      res.json({
+        token: result.token,
+        expiresAt: result.expiresAt,
+        account: publicAccount(result.account),
+        isOperator: operatorWallets().includes(result.account.publicKey),
+      });
     } catch (err) {
       sendError(res, err);
     }
@@ -650,7 +655,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         res.json({ requiresTotp: true, ticket: result.ticket, expiresAt: result.expiresAt, account: publicAccount(result.account) });
         return;
       }
-      res.json({ token: result.token, expiresAt: result.expiresAt, account: publicAccount(result.account) });
+      res.json({
+        token: result.token,
+        expiresAt: result.expiresAt,
+        account: publicAccount(result.account),
+        isOperator: operatorWallets().includes(result.account.publicKey),
+      });
     } catch (err) {
       sendError(res, err);
     }

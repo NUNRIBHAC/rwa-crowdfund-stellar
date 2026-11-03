@@ -1,8 +1,4 @@
-// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
-// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
-
 import type { LegalBlock } from './types';
-
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
@@ -158,12 +154,12 @@ export const blocks: LegalBlock[] = [
   },
   {
     t: 'h2',
-    text: ["À propos des futures protections de l'investisseur"],
+    text: ['Protections des investisseurs et prototype'],
   },
   {
     t: 'p',
     text: [
-      "Le règlement européen sur le financement participatif (l'ECSPR, règlement (UE) 2020/1503) exige des plateformes agréées qu'elles offrent une catégorisation des investisseurs, un test initial de connaissances, une simulation de la capacité à supporter des pertes et un délai de réflexion précontractuel de quatre jours calendaires pour les investisseurs non avertis avant qu'une offre ne devienne contraignante ; les plateformes de référence de notre corpus de recherche les mettent en œuvre au titre de leurs propres agréments. La démonstration de Blockallisto ne comporte aucun de ces mécanismes, car aucun investissement réel n'est possible. Si une version réglementée est un jour lancée, ces protections - et leurs limites - seront décrites dans ses propres documents juridiquement relus. Des protections comme les délais de réflexion vous permettent de retirer une offre ; elles ne réduisent pas le risque d'investissement sous-jacent.",
+      'Le prototype comprend des démonstrations de catégorisation, de test de connaissances et de simulation des pertes; la collecte de données réelles reste restreinte. Ces écrans ne sont pas des protections validées juridiquement. Aucun investissement réel ni délai de réflexion juridiquement effectif n’est actif. Un service réglementé nécessiterait une revue juridique et des autorisations propres. Ces mécanismes ne suppriment pas le risque d’investissement.',
     ],
   },
   {

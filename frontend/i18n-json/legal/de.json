@@ -43,13 +43,13 @@
       "p": "Testbeiträge werden von einem Soroban-Smart-Contract mit folgendem Verhalten verarbeitet: Alles-oder-nichts-Finanzierung, Auszahlung an die Kampagne erst nach ihrer Frist, Beiträge auf das Kampagnenziel begrenzt und Salden im Vertrag verzeichnet. Es wird kein übertragbarer Token ausgegeben."
     },
     "b11": {
-      "h2": "3. Geplante Funktionen (noch nicht live)"
+      "h2": "3. Testfunktionen und Grenzen des Produktivbetriebs"
     },
     "b12": {
-      "p": "Blockallisto wird an den Compliance-Oberflächen etablierter EU-Crowdfunding-Plattformen ausgerichtet. Zukünftige Versionen <b>könnten</b> beinhalten: vollständige Benutzerkonten mit E-Mail-Registrierung (über die optionale Community-Anmeldung hinaus); Identitätsprüfung (KYC/AML), einschließlich Prüfungen des wirtschaftlich Berechtigten und der Herkunft der Mittel bei Unternehmensinvestoren; Investoreneinstufung mit einem Einstiegswissenstest und einer Simulation der Verlusttragfähigkeit; eine vorvertragliche Bedenkzeit für nicht erfahrene Investoren; Basisinformationsblätter je Kampagne; Zahlungen über lizenzierte Zahlungsdienstleister (niemals über uns, die Kundengelder halten); Beschwerdemanagement und Interessenkonflikt-Richtlinien; sowie rechtsraumbezogene Verkaufsbeschränkungen."
+      "p": "Der Prototyp bietet Community-Anmeldung, E-Mail/Passwort-Konten, eine Testnet-Anlegeransicht sowie Demo-Wissenstests und Verlustsimulationen. Der Zugang kann beschränkt sein; dies ist kein rechtlich geprüfter Anlegerschutz."
     },
     "b13": {
-      "p": "Nichts davon existiert heute. Die obige Liste ist eine indikative Designrichtung aus unserem Forschungskorpus, keine Spezifikation: Details, Schwellenwerte und ganze Funktionen können sich mit der Designarbeit und Rechtsberatung ändern. Diese Funktionen starten nur unter aktualisierten, rechtlich geprüften Bedingungen und nur unter den erforderlichen behördlichen Genehmigungen. Nichts in diesem Abschnitt ist eine Zusage zu einem Startdatum oder einer Lizenz."
+      "p": "Echte KYC/AML-Prüfungen, Zahlungen über zugelassene Anbieter und eine rechtlich wirksame Bedenkzeit sind nicht aktiv. Testdokumente und Ansichten belegen weder Zulassung noch durchsetzbare Anlegerrechte. Der Produktivbetrieb erfordert eigene rechtliche Prüfung und Genehmigungen."
     },
     "b14": {
       "h2": "4. Berechtigung und zulässige Nutzung"
@@ -80,7 +80,7 @@
       "h2": "7. Verfügbarkeit und Änderungen"
     },
     "b22": {
-      "p": "Der Service läuft auf kostenlosem Hosting und kann langsam starten, nicht verfügbar sein oder jederzeit ohne Vorankündigung geändert oder eingestellt werden. Als \"nicht gebaut\" gekennzeichnete Funktionen (Konten, KYC, Fiat-Zahlungen, Investoren-Dashboard) existieren noch nicht."
+      "p": "Der Dienst nutzt kostenloses Hosting und kann langsam, nicht verfügbar, geändert oder eingestellt werden. Testfunktionen belegen keine Produktionsreife; echte Identitätsprüfungen und Fiat-Zahlungen bleiben inaktiv."
     },
     "b23": {
       "h2": "8. Haftungsausschlüsse und Haftungsbeschränkung"
@@ -210,10 +210,10 @@
       }
     },
     "b10": {
-      "h2": "Über künftige Anleger­schutz­mechanismen"
+      "h2": "Anlegerschutz und dieser Prototyp"
     },
     "b11": {
-      "p": "Die EU-Crowdfunding-Verordnung (die ECSPR, Verordnung (EU) 2020/1503) verlangt von autorisierten Plattformen eine Investoreneinstufung, einen Einstiegswissenstest, eine Simulation der Verlusttragfähigkeit und eine vorvertragliche Bedenkzeit von vier Kalendertagen für nicht erfahrene Investoren, bevor ein Angebot verbindlich wird; die Referenzplattformen in unserem Forschungskorpus setzen dies unter ihren eigenen Genehmigungen um. Die Blockallisto-Demo hat keinen dieser Mechanismen, weil keine echte Investition möglich ist. Falls je eine regulierte Version startet, werden diese Schutzmechanismen - und ihre Grenzen - in eigenen, rechtlich geprüften Dokumenten beschrieben. Schutzmechanismen wie Bedenkzeiten ermöglichen den Widerruf eines Angebots; sie mindern nicht das zugrunde liegende Investitionsrisiko."
+      "p": "Der Prototyp enthält Demo-Kategorisierung, Wissenstest und Verlustsimulation; die Erhebung echter Daten bleibt beschränkt. Diese Ansichten sind kein rechtlich geprüfter Schutz. Echte Investitionen und eine rechtlich wirksame Bedenkzeit sind nicht aktiv. Ein regulierter Dienst würde eine eigene rechtliche Prüfung und Genehmigungen benötigen. Diese Verfahren beseitigen das Anlagerisiko nicht."
     },
     "b12": {
       "h2": "Keine Beratung"
