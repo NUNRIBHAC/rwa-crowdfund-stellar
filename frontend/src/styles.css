@@ -2923,11 +2923,11 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  /* Horizontal scroll affordance: edge fades (white covers pinned to the
+  /* Horizontal scroll affordance: edge fades (covers pinned to the
      scroll position over shadows pinned to the content) signal clipped
      columns on the side that still has overflow. */
   background-image:
-    linear-gradient(to right, #ffffff, #ffffff), linear-gradient(to right, #ffffff, #ffffff),
+    linear-gradient(to right, var(--bg), var(--bg)), linear-gradient(to right, var(--bg), var(--bg)),
     linear-gradient(to right, rgba(17, 17, 43, 0.18), rgba(17, 17, 43, 0)), linear-gradient(to left, rgba(17, 17, 43, 0.18), rgba(17, 17, 43, 0));
   background-position:
     left center,
