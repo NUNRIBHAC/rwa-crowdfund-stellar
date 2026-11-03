@@ -53,7 +53,11 @@ export type ShareRegisterRow = {
   refundCount: number;
   contributedIntended: string;
   refundedIntended: string;
+  // 'UNKNOWN' when any SUCCESS intent for this wallet has no usable amount:
+  // the known subtotals above are then INCOMPLETE and no net is computable.
   netIntended: string;
+  contributedComplete: boolean;
+  refundedComplete: boolean;
   missingAmountIntents: number;
   intentHashes: string[];
   // Present only for v2 contract-set campaigns when the address was in the
@@ -73,7 +77,11 @@ export type ShareRegisterPayload = {
     refundCount: number;
     contributedIntended: string;
     refundedIntended: string;
+    // 'UNKNOWN' when any wallet is incomplete; the subtotals are then known-amount sums only.
     netIntended: string;
+    netKnownSubtotal: string;
+    contributedComplete: boolean;
+    refundedComplete: boolean;
     missingAmountIntents: number;
   };
   notes: string[];
@@ -101,6 +109,8 @@ type Accum = {
   contributed: bigint;
   refunded: bigint;
   missing: number;
+  missingContribute: number;
+  missingRefund: number;
   hashes: string[];
 };
 
@@ -115,7 +125,19 @@ export function buildShareRegister(
   const ensure = (publicKey: string): Accum => {
     let acc = rows.get(publicKey);
     if (!acc) {
-      acc = { publicKey, firstConfirmedAt: null, registered: false, contributeCount: 0, refundCount: 0, contributed: 0n, refunded: 0n, missing: 0, hashes: [] };
+      acc = {
+        publicKey,
+        firstConfirmedAt: null,
+        registered: false,
+        contributeCount: 0,
+        refundCount: 0,
+        contributed: 0n,
+        refunded: 0n,
+        missing: 0,
+        missingContribute: 0,
+        missingRefund: 0,
+        hashes: [],
+      };
       rows.set(publicKey, acc);
     }
     return acc;
@@ -134,6 +156,8 @@ export function buildShareRegister(
       // Rows written before the journal captured amounts: counted as intents
       // but excluded from the sums, and disclosed below.
       acc.missing += 1;
+      if (i.action === 'contribute') acc.missingContribute += 1;
+      else acc.missingRefund += 1;
     } else {
       try {
         if (i.action === 'contribute') acc.contributed += amountUnits(i.amount);
@@ -142,6 +166,8 @@ export function buildShareRegister(
         // Semantic journal validation should make this unreachable; a
         // malformed amount is excluded from the sums and disclosed.
         acc.missing += 1;
+        if (i.action === 'contribute') acc.missingContribute += 1;
+        else acc.missingRefund += 1;
       }
     }
     if (i.action === 'contribute') acc.contributeCount += 1;
@@ -153,6 +179,8 @@ export function buildShareRegister(
   );
   const notes: string[] = [];
   let missingTotal = 0;
+  let incompleteContribute = false;
+  let incompleteRefund = false;
   let negativeNet = 0;
   let unregistered = 0;
   let contributedTotal = 0n;
@@ -162,12 +190,14 @@ export function buildShareRegister(
   const balanceByHolder = new Map<string, string>((v2OnChain?.holders ?? []).map((h) => [h.publicKey, h.balance]));
   const outRows: ShareRegisterRow[] = sorted.map((acc) => {
     missingTotal += acc.missing;
+    if (acc.missingContribute > 0) incompleteContribute = true;
+    if (acc.missingRefund > 0) incompleteRefund = true;
     contributeCountTotal += acc.contributeCount;
     refundCountTotal += acc.refundCount;
     contributedTotal += acc.contributed;
     refundedTotal += acc.refunded;
     if (!acc.registered) unregistered += 1;
-    if (acc.refunded > acc.contributed) negativeNet += 1;
+    if (acc.missing === 0 && acc.refunded > acc.contributed) negativeNet += 1;
     return {
       publicKey: acc.publicKey,
       firstConfirmedAt: acc.firstConfirmedAt,
@@ -176,7 +206,9 @@ export function buildShareRegister(
       refundCount: acc.refundCount,
       contributedIntended: formatUnits(acc.contributed),
       refundedIntended: formatUnits(acc.refunded),
-      netIntended: formatUnits(acc.contributed - acc.refunded),
+      netIntended: acc.missing > 0 ? 'UNKNOWN' : formatUnits(acc.contributed - acc.refunded),
+      contributedComplete: acc.missingContribute === 0,
+      refundedComplete: acc.missingRefund === 0,
       missingAmountIntents: acc.missing,
       intentHashes: acc.hashes,
       ...(balanceByHolder.has(acc.publicKey) ? { onChainBalance: balanceByHolder.get(acc.publicKey)! } : {}),
@@ -184,7 +216,7 @@ export function buildShareRegister(
   });
   if (missingTotal > 0)
     notes.push(
-      `${missingTotal} SUCCESS intent(s) carry no parseable amount (recorded before amount capture or malformed) and are excluded from the amount sums`,
+      `${missingTotal} SUCCESS intent(s) carry no parseable amount (recorded before amount capture or malformed) and are excluded from the known-amount subtotals; affected wallets and the aggregate show net UNKNOWN (never 0 or a partial net), refunded/contributed there are INCOMPLETE lower bounds`,
     );
   if (negativeNet > 0)
     notes.push(
@@ -205,7 +237,10 @@ export function buildShareRegister(
       refundCount: refundCountTotal,
       contributedIntended: formatUnits(contributedTotal),
       refundedIntended: formatUnits(refundedTotal),
-      netIntended: formatUnits(contributedTotal - refundedTotal),
+      netIntended: missingTotal > 0 ? 'UNKNOWN' : formatUnits(contributedTotal - refundedTotal),
+      netKnownSubtotal: formatUnits(contributedTotal - refundedTotal),
+      contributedComplete: !incompleteContribute,
+      refundedComplete: !incompleteRefund,
       missingAmountIntents: missingTotal,
     },
     notes,
@@ -223,6 +258,8 @@ const CSV_FIELDS: Array<[keyof ShareRegisterRow, string]> = [
   ['contributedIntended', 'contributed_intended'],
   ['refundedIntended', 'refunded_intended'],
   ['netIntended', 'net_intended'],
+  ['contributedComplete', 'contributed_complete'],
+  ['refundedComplete', 'refunded_complete'],
   ['missingAmountIntents', 'missing_amount_intents'],
   ['intentHashes', 'intent_hashes'],
 ];

@@ -35,7 +35,7 @@ function rowLines(row: ShareRegisterRow): string[] {
   const lines = [
     `${escapeForPdf(row.publicKey)}${row.registered ? '' : '  [NOT IN REGISTRY - see notes]'}`,
     `    first confirmed: ${row.firstConfirmedAt ?? 'n/a'}   contributions: ${row.contributeCount}   refunds: ${row.refundCount}`,
-    `    contributed(intended): ${row.contributedIntended}   refunded(intended): ${row.refundedIntended}   net(intended): ${row.netIntended}`,
+    `    contributed(intended): ${row.contributedIntended}${row.contributedComplete ? '' : ' [INCOMPLETE]'}   refunded(intended): ${row.refundedIntended}${row.refundedComplete ? '' : ' [INCOMPLETE]'}   net(intended): ${row.netIntended}`,
   ];
   if (row.missingAmountIntents > 0) lines.push(`    intents without amount: ${row.missingAmountIntents}`);
   if (row.intentHashes.length > 0) lines.push(`    intent hashes: ${row.intentHashes.join('  ')}`);
@@ -94,12 +94,12 @@ function render(payload: ShareRegisterPayload, totalPages: number): Promise<{ pd
     doc.moveDown(1);
 
     const t = payload.totals;
-    doc.fontSize(10).text('Totals');
+    doc.fontSize(10).text('Totals (SUCCESS intents only; failed and pending refunds are not listed here)');
     doc.fontSize(9).text(`contributors: ${t.contributors}   contributions: ${t.contributeCount}   refunds: ${t.refundCount}`);
     doc
       .fontSize(9)
       .text(
-        `contributed(intended): ${t.contributedIntended}   refunded(intended): ${t.refundedIntended}   net(intended): ${t.netIntended}   intents without amount: ${t.missingAmountIntents}`,
+        `contributed(intended): ${t.contributedIntended}${t.contributedComplete ? '' : ' [INCOMPLETE]'}   refunded(intended): ${t.refundedIntended}${t.refundedComplete ? '' : ' [INCOMPLETE]'}   net(intended): ${t.netIntended}   intents without amount: ${t.missingAmountIntents}`,
       );
     doc.moveDown(1);
 

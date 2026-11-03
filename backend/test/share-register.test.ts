@@ -70,6 +70,39 @@ test('journal SUCCESS contributes/refunds sum to intended amounts; other statuse
   assert.ok(p.notes.some((n) => n.includes('not in the durable contributor registry')));
 });
 
+test('an amountless refund makes net UNKNOWN (wallet and aggregate), never zero-paid or a partial net', () => {
+  const mk = (h: number, actor: string, action: string, status: string, amount?: string) =>
+    intent({ hash: hash(h), actor, action, status, ...(amount ? { amount } : {}) });
+  const A = kpA;
+  const B = kpB;
+  const p = buildShareRegister(
+    'qa-demo',
+    [
+      mk(20, A, 'contribute', 'SUCCESS', '100'),
+      mk(21, A, 'refund', 'SUCCESS', '40'),
+      mk(22, A, 'refund', 'FAILED', '60'),
+      mk(23, A, 'refund', 'PENDING', '25'),
+      mk(24, B, 'contribute', 'SUCCESS', '50'),
+      mk(25, B, 'refund', 'SUCCESS'),
+    ],
+    [],
+    'testnet',
+  );
+  const a = p.contributors.find((r) => r.publicKey === A)!;
+  const b = p.contributors.find((r) => r.publicKey === B)!;
+  assert.equal(a.netIntended, '60');
+  assert.equal(a.refundedComplete, true);
+  assert.equal(a.refundCount, 1, 'failed and pending refunds are not counted');
+  assert.equal(b.netIntended, 'UNKNOWN');
+  assert.equal(b.refundedComplete, false);
+  assert.equal(b.refundedIntended, '0');
+  assert.equal(p.totals.netIntended, 'UNKNOWN');
+  assert.equal(p.totals.netKnownSubtotal, '110');
+  assert.equal(p.totals.refundedComplete, false);
+  assert.equal(p.totals.contributedComplete, true);
+  assert.ok(p.notes.some((n) => n.includes('UNKNOWN')));
+});
+
 test('missing amounts are counted and disclosed, not summed', () => {
   const p = buildShareRegister('qa-demo', [intent({ hash: hash(9) }), intent({ hash: hash(10), amount: 'bogus' })], [], 'testnet');
   assert.equal(p.contributors[0].contributedIntended, '0');

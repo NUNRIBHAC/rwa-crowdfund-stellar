@@ -21,6 +21,8 @@ const row = (n: number) => ({
   contributedIntended: `${n}.5`,
   refundedIntended: '1',
   netIntended: `${n - 1}.5`,
+  contributedComplete: true,
+  refundedComplete: true,
   missingAmountIntents: 0,
   intentHashes: n % 4 === 0 ? [n.toString(16).padStart(64, '0'), (n + 1).toString(16).padStart(64, '0')] : [],
 });
