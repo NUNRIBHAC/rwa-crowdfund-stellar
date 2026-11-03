@@ -1468,7 +1468,7 @@ export const ko: Messages = {
     knowledgeIntro: '크라우드펀딩 투자 위험에 관한 5개의 짧은 예/아니요 질문입니다. 답변은 채점 후 폐기되며 결과만 저장됩니다.',
     experienceLabel: '투자 경험',
     objectiveLabel: '투자 목표',
-    selectPlaceholder: '선택하세요...',
+    selectPlaceholder: '선택하세요…',
     yes: '예',
     no: '아니요',
     submitKnowledge: '답변 제출',
@@ -1667,7 +1667,7 @@ export const ko: Messages = {
     ],
   },
   community: {
-    loading: '로드 중...',
+    loading: '로드 중…',
     demoBadge: 'DEMO',
     requestFailed: '요청에 실패했습니다({status}). 다시 시도해 주세요.',
     errorNotFound: '찾을 수 없습니다.',
@@ -1836,7 +1836,7 @@ export const ko: Messages = {
       '상장하고 싶은 프로젝트를 운영자에게 알려 주세요. 이 양식 제출은 청약, 상장 또는 승인이 아니라 대화의 시작입니다. 데모 환경: 실제 영업 비밀은 제출하지 마세요.',
     applicationPreviewTitle: '신청 (미리보기)',
     applicationPreviewNote:
-      '발행사 신청 미리보기입니다. 여기에 입력한 내용은 전송되거나 저장되지 않습니다. 아래에서 지갑으로 로그인하여 운영자 검토용 실제 신청을 제출하세요.',
+      '발행사 신청 미리보기입니다. 여기에 입력한 내용은 전송되거나 저장되지 않습니다. 지갑으로 로그인하여 운영자 검토용 실제 신청을 제출하세요.',
     applicationPreviewPlaceholder: '미리보기 전용 - 로그인 후 신청',
     applicationPreviewSubmit: '신청 제출 (먼저 로그인)',
     applicationFields: {
@@ -1878,7 +1878,7 @@ export const ko: Messages = {
         country: '등록 국가',
       },
       submit: '신청 제출',
-      submitting: '제출 중...',
+      submitting: '제출 중…',
       submitted: '신청이 접수되었습니다. 위 목록에 심사 대기로 표시됩니다.',
       status: {
         pending: '심사 대기',
@@ -1913,8 +1913,7 @@ export const ko: Messages = {
       totpDisableCodeLabel: '인증 또는 복구 코드',
       totpDone: '완료',
       title: '보안',
-      authMethodNote:
-        'Stellar 지갑으로 메시지에 서명하여 로그인합니다: 지갑이 자격 증명입니다. 이 프로토타입에는 비밀번호가 없으며, 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
+      authMethodNote: 'Stellar 지갑으로 메시지에 서명하여 로그인합니다: 지갑이 자격 증명입니다. 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
       linkTitle: '로그인 제공자',
       linkNote: '이 계정에 다른 로그인 방법을 연결합니다. 먼저 본인임을 증명하고(비밀번호, 새 지갑 서명 또는 최근 로그인) 제공자에서 확인합니다.',
       linkAction: '{provider} 연결',

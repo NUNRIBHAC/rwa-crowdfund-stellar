@@ -1545,7 +1545,7 @@ export const pt: Messages = {
       'Cinco perguntas rápidas de sim/não sobre os riscos do investimento em financiamento colaborativo. As respostas são pontuadas e depois descartadas - só o resultado é guardado.',
     experienceLabel: 'Experiência de investimento',
     objectiveLabel: 'Objetivo de investimento',
-    selectPlaceholder: 'Selecionar...',
+    selectPlaceholder: 'Selecionar…',
     yes: 'Sim',
     no: 'Não',
     submitKnowledge: 'Submeter respostas',
@@ -1746,7 +1746,7 @@ export const pt: Messages = {
     ],
   },
   community: {
-    loading: 'A carregar...',
+    loading: 'A carregar…',
     demoBadge: 'DEMO',
     requestFailed: 'O pedido falhou ({status}). Tente novamente.',
     errorNotFound: 'Não encontrado.',
@@ -1968,7 +1968,7 @@ export const pt: Messages = {
         country: 'País de registo',
       },
       submit: 'Submeter candidatura',
-      submitting: 'A submeter...',
+      submitting: 'A submeter…',
       submitted: 'Candidatura recebida. Aparece acima como pendente de revisão.',
       status: {
         pending: 'Pendente de revisão',
@@ -2007,7 +2007,7 @@ export const pt: Messages = {
       totpDone: 'Concluído',
       title: 'Segurança',
       authMethodNote:
-        'Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Este protótipo não tem palavra-passe; pode adicionar abaixo um autenticador de dois fatores opcional.',
+        'Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Pode adicionar abaixo um autenticador de dois fatores opcional.',
       linkTitle: 'Fornecedores de início de sessão',
       linkNote:
         'Associe outro método de início de sessão a esta conta. Primeiro vai provar que é mesmo você (palavra-passe, assinatura nova da carteira ou um início de sessão recente) e depois confirmar no fornecedor.',

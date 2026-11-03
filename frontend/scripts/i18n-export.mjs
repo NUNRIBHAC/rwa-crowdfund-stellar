@@ -21,6 +21,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { format, resolveConfig } from 'prettier';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { isMachineField } from './i18n-machine-fields.mjs';
 import { blocksToJson } from './i18n-legal-codec.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -70,13 +71,14 @@ function render(tree) {
 // (optional empty fields) and non-string scalars (numeric answer indices).
 // Import re-injects them from the English TS tree, so the projection stays
 // roundtrip-lossless without exposing them as Weblate units.
-function stripNonTranslatable(value) {
+function stripNonTranslatable(value, path = '') {
+  if (isMachineField(path)) return undefined;
   if (typeof value === 'string') return value.trim() === '' ? undefined : value;
   if (value === null || typeof value !== 'object') return undefined;
-  if (Array.isArray(value)) return value.map(stripNonTranslatable);
+  if (Array.isArray(value)) return value.map((v, i) => stripNonTranslatable(v, `${path}[${i}]`) ?? null);
   const out = {};
   for (const [k, v] of Object.entries(value)) {
-    const stripped = stripNonTranslatable(v);
+    const stripped = stripNonTranslatable(v, `${path}.${k}`);
     if (stripped !== undefined) out[k] = stripped;
   }
   return out;

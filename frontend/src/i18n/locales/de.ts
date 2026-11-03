@@ -1537,7 +1537,7 @@ export const de: Messages = {
       'Fünf kurze Ja/Nein-Fragen zu den Risiken von Crowdfunding-Investitionen. Ihre Antworten werden bewertet und dann verworfen - nur das Ergebnis wird gespeichert.',
     experienceLabel: 'Anlageerfahrung',
     objectiveLabel: 'Anlageziel',
-    selectPlaceholder: 'Auswählen...',
+    selectPlaceholder: 'Auswählen…',
     yes: 'Ja',
     no: 'Nein',
     submitKnowledge: 'Antworten absenden',
@@ -1739,7 +1739,7 @@ export const de: Messages = {
     ],
   },
   community: {
-    loading: 'Wird geladen...',
+    loading: 'Wird geladen…',
     demoBadge: 'DEMO',
     requestFailed: 'Die Anfrage ist fehlgeschlagen ({status}). Bitte erneut versuchen.',
     errorNotFound: 'Nicht gefunden.',
@@ -1964,7 +1964,7 @@ export const de: Messages = {
         country: 'Land der Registrierung',
       },
       submit: 'Antrag absenden',
-      submitting: 'Wird gesendet...',
+      submitting: 'Wird gesendet…',
       submitted: 'Antrag erhalten. Er erscheint oben als ausstehende Prüfung.',
       status: {
         pending: 'Prüfung ausstehend',
@@ -2002,7 +2002,7 @@ export const de: Messages = {
       totpDone: 'Fertig',
       title: 'Sicherheit',
       authMethodNote:
-        'Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Berechtigung. Dieser Prototyp hat kein Passwort; unten kann optional ein Zwei-Faktor-Authenticator hinzugefügt werden.',
+        'Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Berechtigung. Unten kann optional ein Zwei-Faktor-Authenticator hinzugefügt werden.',
       linkTitle: 'Anmeldeanbieter',
       linkNote:
         'Verknüpfen Sie eine weitere Anmeldemethode mit diesem Konto. Sie weisen zuerst nach, dass Sie es wirklich sind (Passwort, frische Wallet-Signatur oder eine kürzliche Anmeldung), und bestätigen dann beim Anbieter.',

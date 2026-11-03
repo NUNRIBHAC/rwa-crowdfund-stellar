@@ -1425,7 +1425,7 @@ export const ar: Messages = {
     contractSetLabel: 'مجموعة العقود',
     contractSetV1: 'v1 تمويل جماعي - حملة USDC بمبدأ الكل أو لا شيء',
     contractSetV2: 'v2 رمز حصة + طرح (نموذج شبكة الاختبار)',
-    v2SymbolLabel: 'رمز رمز الحصة',
+    v2SymbolLabel: 'رمز توكن الحصة',
     v2SymbolError: 'أحرف وأرقام فقط، بحد أقصى 12 حرفاً (قاعدة الرمز).',
     v2DecimalsLabel: 'الخانات العشرية لرمز الحصة',
     v2DecimalsError: 'عدد صحيح من 0 إلى 18 (قاعدة الرمز).',
@@ -1472,7 +1472,7 @@ export const ar: Messages = {
     knowledgeIntro: 'خمسة أسئلة قصيرة بنعم/لا حول مخاطر الاستثمار في التمويل الجماعي. تُصحَّح إجاباتك ثم تُستبعد، ولا يُحفظ سوى النتيجة.',
     experienceLabel: 'الخبرة الاستثمارية',
     objectiveLabel: 'هدف الاستثمار',
-    selectPlaceholder: 'اختر...',
+    selectPlaceholder: 'اختر…',
     yes: 'نعم',
     no: 'لا',
     submitKnowledge: 'إرسال الإجابات',
@@ -1672,7 +1672,7 @@ export const ar: Messages = {
     ],
   },
   community: {
-    loading: 'جارٍ التحميل...',
+    loading: 'جارٍ التحميل…',
     demoBadge: 'DEMO',
     requestFailed: 'فشل الطلب ({status}). يُرجى المحاولة مرة أخرى.',
     errorNotFound: 'غير موجود.',
@@ -1882,7 +1882,7 @@ export const ar: Messages = {
         country: 'بلد التسجيل',
       },
       submit: 'إرسال الطلب',
-      submitting: 'جارٍ الإرسال...',
+      submitting: 'جارٍ الإرسال…',
       submitted: 'تم استلام الطلب. يظهر أعلاه بصفته قيد المراجعة.',
       status: {
         pending: 'قيد المراجعة',
@@ -1917,8 +1917,7 @@ export const ar: Messages = {
       totpDisableCodeLabel: 'رمز المصادقة أو الاسترداد',
       totpDone: 'تم',
       title: 'الأمان',
-      authMethodNote:
-        'تسجّل الدخول بتوقيع رسالة بمحفظة Stellar الخاصة بك: المحفظة هي الاعتماد. لا يحتوي هذا النموذج على كلمة مرور؛ ويمكن إضافة مصادقة ثنائية اختيارية أدناه.',
+      authMethodNote: 'تسجّل الدخول بتوقيع رسالة بمحفظة Stellar الخاصة بك: المحفظة هي الاعتماد. يمكن إضافة مصادقة ثنائية اختيارية أدناه.',
       linkTitle: 'مزوّدو تسجيل الدخول',
       linkNote:
         'اربط طريقة تسجيل دخول أخرى بهذا الحساب. ستثبت أولاً أنك أنت فعلاً (كلمة المرور، أو توقيع جديد بالمحفظة، أو تسجيل دخول حديث) ثم تؤكد لدى المزوّد.',

@@ -52,7 +52,7 @@ test('unknown holder shows UNKNOWN, never zero, and the preview is unavailable w
   fireEvent.change(screen.getByRole('textbox'), { target: { value: '10' } });
   fireEvent.click(screen.getByRole('button', { name: /preview distribution/i }));
   await waitFor(() => expect(screen.getByText(/Allocation unavailable/)).toBeTruthy());
-  expect(screen.getByText(/1 unknown holder/)).toBeTruthy();
+  expect(screen.getByText(/Unknown holders: 1/)).toBeTruthy();
 });
 
 test('a complete single-basis table shows an illustration notice and exact amounts', async () => {

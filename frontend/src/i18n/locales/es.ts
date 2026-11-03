@@ -1549,7 +1549,7 @@ export const es: Messages = {
       'Cinco preguntas rápidas de sí/no sobre los riesgos de la inversión en financiación participativa. Tus respuestas se puntúan y luego se descartan: solo se guarda el resultado.',
     experienceLabel: 'Experiencia inversora',
     objectiveLabel: 'Objetivo de inversión',
-    selectPlaceholder: 'Seleccionar...',
+    selectPlaceholder: 'Seleccionar…',
     yes: 'Sí',
     no: 'No',
     submitKnowledge: 'Enviar respuestas',
@@ -1751,7 +1751,7 @@ export const es: Messages = {
     ],
   },
   community: {
-    loading: 'Cargando...',
+    loading: 'Cargando…',
     demoBadge: 'DEMO',
     requestFailed: 'La solicitud falló ({status}). Inténtalo de nuevo.',
     errorNotFound: 'No encontrado.',
@@ -1974,7 +1974,7 @@ export const es: Messages = {
         country: 'País de registro',
       },
       submit: 'Enviar solicitud',
-      submitting: 'Enviando...',
+      submitting: 'Enviando…',
       submitted: 'Solicitud recibida. Aparece arriba como pendiente de revisión.',
       status: {
         pending: 'Pendiente de revisión',
@@ -2013,7 +2013,7 @@ export const es: Messages = {
       totpDone: 'Hecho',
       title: 'Seguridad',
       authMethodNote:
-        'Inicias sesión firmando un mensaje con tu monedero Stellar: el monedero es la credencial. Este prototipo no tiene contraseña; abajo puedes añadir un autenticador de dos factores opcional.',
+        'Inicias sesión firmando un mensaje con tu monedero Stellar: el monedero es la credencial. Abajo puedes añadir un autenticador de dos factores opcional.',
       linkTitle: 'Proveedores de inicio de sesión',
       linkNote:
         'Vincula otro método de inicio de sesión a esta cuenta. Primero demostrarás que eres tú (contraseña, firma nueva de la cartera o un inicio de sesión reciente) y luego lo confirmarás en el proveedor.',

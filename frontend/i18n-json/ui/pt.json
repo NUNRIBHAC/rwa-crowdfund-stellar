@@ -601,12 +601,10 @@
   "instruments": {
     "groups": [
       {
-        "id": "participation",
         "title": "Instrumentos de participação",
         "intro": "Instrumentos cuja remuneração depende do sucesso do negócio do emitente: direitos participativos nos lucros e capital próprio. A participação indireta está listada aqui como estrutura de titularidade, não como instrumento separado."
       },
       {
-        "id": "debt",
         "title": "Instrumentos de dívida",
         "intro": "Duas categorias-mãe genéricas - empréstimo e obrigação - cada uma emitida num de três estados de senioridade: sénior, subordinada ou senioridade não especificada. Os investidores posicionam-se como credores."
       }
@@ -618,10 +616,7 @@
     },
     "classes": [
       {
-        "id": "participation-certificate",
         "label": "Direito / certificado participativo",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Um direito (frequentemente titularizado como certificado participativo) a uma parcela dos lucros e ao reembolso do valor nominal, sem os direitos de governo plenos de um acionista.",
         "opportunities": [
           "Participação nos lucros sem comprar capital próprio pleno",
@@ -635,11 +630,8 @@
         "suitableFor": "Investidores que querem exposição aos resultados do negócio e aceitam risco semelhante ao do capital próprio."
       },
       {
-        "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "Subtipo de direito / certificado participativo",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Um direito participativo ligado à base de ativos (\"substância\") do emitente e não apenas ao seu lucro anual. A estruturação e os emitentes elegíveis variam consoante a jurisdição e os estatutos.",
         "opportunities": ["Participação no valor dos ativos do emitente", "Pode ser estruturado para emitentes mais pequenos quando os estatutos o permitem"],
         "risks": [
@@ -650,11 +642,8 @@
         "suitableFor": "Investidores à vontade com estruturas à medida, que leem primeiro as condições exatas do contrato."
       },
       {
-        "id": "share",
         "label": "Ação",
         "note": "Um aumento de capital é a operação societária que cria novas ações; não é um instrumento separado.",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Capital próprio direto da empresa emitente: direito a dividendos e participação no valor da empresa, com direitos definidos pelos estatutos. As novas ações chegam aos investidores através de um aumento de capital.",
         "opportunities": ["Participação plena no crescimento da empresa", "Direitos de voto ou de informação consoante a classe de ações"],
         "risks": [
@@ -665,11 +654,8 @@
         "suitableFor": "Investidores com horizonte longo que querem propriedade e aceitam o risco empresarial pleno."
       },
       {
-        "id": "indirect-participation",
         "label": "Participação indireta",
         "note": "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia.",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado.",
         "opportunities": ["Acesso a operações difíceis de deter diretamente", "Administração simplificada através da estrutura intermediária"],
         "risks": [
@@ -680,10 +666,7 @@
         "suitableFor": "Investidores que querem a economia da participação sem deter diretamente o interesse subjacente."
       },
       {
-        "id": "limited-partnership",
         "label": "Participação em sociedade em comandita",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Uma participação como sócio comanditário numa sociedade: participação nos lucros e perdas segundo o contrato de sociedade, com responsabilidade limitada à entrada.",
         "opportunities": ["Transmissão direta dos resultados da sociedade", "Responsabilidade limitada à entrada"],
         "risks": [
@@ -694,10 +677,7 @@
         "suitableFor": "Investidores que compreendem estruturas societárias e aceitam o risco empresarial."
       },
       {
-        "id": "loan",
         "label": "Empréstimo",
-        "group": "debt",
-        "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
         "opportunities": [
           "Um plano fixo é mais fácil de modelar do que capital próprio",
@@ -711,10 +691,7 @@
         "suitableFor": "Investidores que aceitam risco de crédito sem proteção bancária."
       },
       {
-        "id": "bond",
         "label": "Obrigação",
-        "group": "debt",
-        "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada.",
         "opportunities": [
           "Cupão e calendário de reembolso definidos",
@@ -730,29 +707,24 @@
     ],
     "overlays": [
       {
-        "id": "zero-coupon",
         "label": "Cupão zero (Zero Bond)",
         "summary": "Uma estrutura de cupão num empréstimo ou obrigação, não uma senioridade: sem juros periódicos; o retorno vem da emissão abaixo do valor nominal e do reembolso ao par. Combina com uma categoria-mãe de dívida, nunca existe sozinha."
       },
       {
-        "id": "convertible",
         "label": "Convertível",
         "summary": "Uma cláusula de conversão numa obrigação: segundo as condições configuradas (evento de ativação, janela de exercício, preço de conversão, regras de cessação de juros) a obrigação converte-se em ações. Combina com a categoria-mãe obrigação, nunca existe sozinha."
       }
     ],
     "qualifiers": [
       {
-        "id": "junior",
         "label": "\"Júnior\"",
         "summary": "Um rótulo de ranking inferior na terminologia das plataformas. Indica ranking subordinado, mas não estabelece por si só subordinação qualificada contratual."
       },
       {
-        "id": "qualified",
         "label": "\"Qualificada / qualifiziert\"",
         "summary": "Terminologia de plataformas encontrada em empréstimos e obrigações. Nas obrigações, não a leia como subordinação qualificada salvo se as próprias condições disserem subordinada."
       },
       {
-        "id": "mini-bond",
         "label": "\"Mini Bond\"",
         "summary": "Rótulo de plataforma para uma obrigação de baixo valor unitário."
       }
@@ -870,206 +842,167 @@
     },
     "categories": [
       {
-        "id": "about",
         "title": "Sobre esta plataforma",
         "entries": [
           {
             "q": "Isto é uma plataforma de investimento real?",
-            "a": "Não. É um protótipo técnico na testnet Stellar. Não lista ofertas reais, não aceita fundos reais e não é um prestador de serviços de crowdfunding autorizado. Os prestadores autorizados na UE estão listados no registo da ESMA.",
-            "state": "info"
+            "a": "Não. É um protótipo técnico na testnet Stellar. Não lista ofertas reais, não aceita fundos reais e não é um prestador de serviços de crowdfunding autorizado. Os prestadores autorizados na UE estão listados no registo da ESMA."
           },
           {
             "q": "Do que preciso para experimentar?",
-            "a": "Instale a extensão de carteira Freighter, mude-a para testnet, carregue-a com XLM e USDC de testnet gratuitos de um faucet ou de um amigo e ligue-a aqui. Os ativos de testnet não têm valor.",
-            "state": "live"
+            "a": "Instale a extensão de carteira Freighter, mude-a para testnet, carregue-a com XLM e USDC de testnet gratuitos de um faucet ou de um amigo e ligue-a aqui. Os ativos de testnet não têm valor."
           },
           {
             "q": "Preciso da minha própria carteira?",
-            "a": "Sim, para investir. Este desenho mantém as chaves com o utilizador: a carteira Freighter assina todas as transações e a plataforma não detém chaves nem saldos próprios. O início de sessão pode ser por carteira ou por registo opcional com email; nenhum partilha as suas chaves com o site. Algumas plataformas em produção optam por custodiar ativos através de parceiros especializados; este protótipo deliberadamente não o faz.",
-            "state": "live"
+            "a": "Sim, para investir. Este desenho mantém as chaves com o utilizador: a carteira Freighter assina todas as transações e a plataforma não detém chaves nem saldos próprios. O início de sessão pode ser por carteira ou por registo opcional com email; nenhum partilha as suas chaves com o site. Algumas plataformas em produção optam por custodiar ativos através de parceiros especializados; este protótipo deliberadamente não o faz."
           },
           {
             "q": "Quem pode investir numa plataforma como esta em produção?",
-            "a": "Uma plataforma em produção tem de verificar a identidade de cada investidor (KYC) e, quando o regime o exige, testar conhecimentos e simular a capacidade de suportar perdas antes de montantes maiores. Podem também aplicar-se restrições de residência. Nada disto existe aqui, porque os fundos de testnet não têm valor.",
-            "state": "info"
+            "a": "Uma plataforma em produção tem de verificar a identidade de cada investidor (KYC) e, quando o regime o exige, testar conhecimentos e simular a capacidade de suportar perdas antes de montantes maiores. Podem também aplicar-se restrições de residência. Nada disto existe aqui, porque os fundos de testnet não têm valor."
           }
         ]
       },
       {
-        "id": "contributing",
         "title": "Contribuir e pagamentos",
         "entries": [
           {
             "q": "Como funciona uma contribuição?",
-            "a": "Escolhe uma campanha, introduz um montante e assina uma transação na Freighter. O contrato Soroban coloca a contribuição em escrow e aplica o limite de financiamento atomicamente. A aplicação guarda a transação assinada exata para que um erro de rede nunca crie um duplicado.",
-            "state": "live"
+            "a": "Escolhe uma campanha, introduz um montante e assina uma transação na Freighter. O contrato Soroban coloca a contribuição em escrow e aplica o limite de financiamento atomicamente. A aplicação guarda a transação assinada exata para que um erro de rede nunca crie um duplicado."
           },
           {
             "q": "Que métodos de pagamento posso usar?",
-            "a": "Apenas USDC de testnet enviado através da sua carteira Freighter. Não há cartões, transferências bancárias nem qualquer moeda fiduciária. Uma versão em produção liquidaria através de um prestador de pagamentos licenciado com uma referência por investimento; esse passo está planeado, não construído.",
-            "state": "live"
+            "a": "Apenas USDC de testnet enviado através da sua carteira Freighter. Não há cartões, transferências bancárias nem qualquer moeda fiduciária. Uma versão em produção liquidaria através de um prestador de pagamentos licenciado com uma referência por investimento; esse passo está planeado, não construído."
           },
           {
             "q": "Posso contribuir mais do que uma vez para a mesma campanha?",
-            "a": "Sim. Cada contribuição é a sua própria transação assinada, e o contrato verifica o espaço restante até ao limite em cada uma. Um montante que fizesse a campanha ultrapassar o objetivo é rejeitado pelo contrato, não pela contabilidade da plataforma.",
-            "state": "live"
+            "a": "Sim. Cada contribuição é a sua própria transação assinada, e o contrato verifica o espaço restante até ao limite em cada uma. Um montante que fizesse a campanha ultrapassar o objetivo é rejeitado pelo contrato, não pela contabilidade da plataforma."
           },
           {
             "q": "O que acontece quando uma campanha atinge o objetivo?",
-            "a": "O limite é aplicado pelo contrato, por isso não há subscrição excedente: uma vez atingido o objetivo, as contribuições seguintes são rejeitadas. Após o prazo limite, o criador da campanha pode levantar os fundos em escrow.",
-            "state": "live"
+            "a": "O limite é aplicado pelo contrato, por isso não há subscrição excedente: uma vez atingido o objetivo, as contribuições seguintes são rejeitadas. Após o prazo limite, o criador da campanha pode levantar os fundos em escrow."
           },
           {
             "q": "Como verifico que a minha contribuição foi aceite?",
-            "a": "Ligue a sua carteira e abra a página da campanha para ver os totais em escrow reportados pelo contrato. Como a liquidação é uma transação na testnet Stellar, pode também verificá-la de forma independente num explorador público da testnet.",
-            "state": "live"
+            "a": "Ligue a sua carteira e abra a página da campanha para ver os totais em escrow reportados pelo contrato. Como a liquidação é uma transação na testnet Stellar, pode também verificá-la de forma independente num explorador público da testnet."
           }
         ]
       },
       {
-        "id": "refunds",
         "title": "Reembolsos e cancelamento",
         "entries": [
           {
             "q": "Como funcionam os reembolsos?",
-            "a": "Se uma campanha não atingir o objetivo dentro do prazo, cada contribuinte assina a sua própria transação de reembolso. Se o objetivo for atingido, apenas o criador da campanha pode levantar, e apenas após o prazo.",
-            "state": "live"
+            "a": "Se uma campanha não atingir o objetivo dentro do prazo, cada contribuinte assina a sua própria transação de reembolso. Se o objetivo for atingido, apenas o criador da campanha pode levantar, e apenas após o prazo."
           },
           {
             "q": "Posso cancelar uma contribuição depois de assinar?",
-            "a": "Não neste protótipo: uma transação de testnet assinada é final. O cancelamento é um passo planeado. Para comparação, o regime europeu de crowdfunding dá aos investidores não sofisticados um período de reflexão de 4 dias de calendário para desistir de uma oferta vinculativa numa plataforma real.",
-            "state": "planned"
+            "a": "Não neste protótipo: uma transação de testnet assinada é final. O cancelamento é um passo planeado. Para comparação, o regime europeu de crowdfunding dá aos investidores não sofisticados um período de reflexão de 4 dias de calendário para desistir de uma oferta vinculativa numa plataforma real."
           },
           {
             "q": "Quem detém o dinheiro enquanto a campanha decorre?",
-            "a": "O próprio contrato Soroban detém as contribuições em escrow até ao prazo. Nenhuma conta de operador as pode movimentar: o código só permite um levantamento pelo criador após um prazo com sucesso, ou reembolsos aos contribuintes após um prazo sem sucesso.",
-            "state": "live"
+            "a": "O próprio contrato Soroban detém as contribuições em escrow até ao prazo. Nenhuma conta de operador as pode movimentar: o código só permite um levantamento pelo criador após um prazo com sucesso, ou reembolsos aos contribuintes após um prazo sem sucesso."
           }
         ]
       },
       {
-        "id": "tokenization",
         "title": "Tokenização na Stellar",
         "entries": [
           {
             "q": "O que significa tokenização aqui?",
-            "a": "Tokenização significa representar digitalmente os direitos e obrigações de um investimento, de modo a que a titularidade e as transferências possam ser registadas e verificadas num ledger partilhado. Este protótipo dá um primeiro passo: os registos de contribuição vivem num contrato inteligente Soroban na rede de teste Stellar, aplicados por código e não por contabilidade da plataforma.",
-            "state": "info"
+            "a": "Tokenização significa representar digitalmente os direitos e obrigações de um investimento, de modo a que a titularidade e as transferências possam ser registadas e verificadas num ledger partilhado. Este protótipo dá um primeiro passo: os registos de contribuição vivem num contrato inteligente Soroban na rede de teste Stellar, aplicados por código e não por contabilidade da plataforma."
           },
           {
             "q": "O que aplica exatamente o contrato inteligente?",
-            "a": "O escrow das contribuições, o limite de financiamento em cada transação, o prazo da campanha, a liquidação tudo-ou-nada (levantamento pelo criador apenas após um prazo com sucesso) e os reembolsos assinados pelos contribuintes após um prazo sem sucesso. O que ele não faz está coberto pelos passos planeados na página Como funciona.",
-            "state": "live"
+            "a": "O escrow das contribuições, o limite de financiamento em cada transação, o prazo da campanha, a liquidação tudo-ou-nada (levantamento pelo criador apenas após um prazo com sucesso) e os reembolsos assinados pelos contribuintes após um prazo sem sucesso. O que ele não faz está coberto pelos passos planeados na página Como funciona."
           },
           {
             "q": "Existe um token negociável?",
-            "a": "Não. Os saldos de contribuição neste primeiro contrato são deliberadamente intransmissíveis. Um token de valor mobiliário transmissível precisaria de um registo legalmente reconhecido, titulares verificados e a camada de conformidade descrita nos documentos do projeto antes de poder representar um investimento real.",
-            "state": "planned"
+            "a": "Não. Os saldos de contribuição neste primeiro contrato são deliberadamente intransmissíveis. Um token de valor mobiliário transmissível precisaria de um registo legalmente reconhecido, titulares verificados e a camada de conformidade descrita nos documentos do projeto antes de poder representar um investimento real."
           },
           {
             "q": "Onde estão guardadas as minhas contribuições?",
-            "a": "No escrow do contrato na rede de teste pública, não junto do operador da plataforma. As chaves da sua carteira ficam na Freighter no seu próprio dispositivo; perdê-las significaria perder o acesso ao registo de contribuição, exatamente como em qualquer configuração de autocustódia.",
-            "state": "live"
+            "a": "No escrow do contrato na rede de teste pública, não junto do operador da plataforma. As chaves da sua carteira ficam na Freighter no seu próprio dispositivo; perdê-las significaria perder o acesso ao registo de contribuição, exatamente como em qualquer configuração de autocustódia."
           }
         ]
       },
       {
-        "id": "risks",
         "title": "Riscos e elegibilidade",
         "entries": [
           {
             "q": "Quais são os riscos do crowdfunding real?",
-            "a": "A perda total é possível, os investimentos são ilíquidos e não há garantia de depósitos. Uma regra prática comum é investir apenas uma pequena parcela dos fundos livremente disponíveis e diversificar. A página de avisos de risco cobre isto em detalhe.",
-            "state": "info"
+            "a": "A perda total é possível, os investimentos são ilíquidos e não há garantia de depósitos. Uma regra prática comum é investir apenas uma pequena parcela dos fundos livremente disponíveis e diversificar. A página de avisos de risco cobre isto em detalhe."
           },
           {
             "q": "Porque devem os investidores diversificar?",
-            "a": "Repartir o dinheiro por vários projetos, setores e tipos de instrumentos reduz o impacto quando um projeto falha. Concentrar tudo numa única oferta faz o resultado depender de uma só empresa.",
-            "state": "info"
+            "a": "Repartir o dinheiro por vários projetos, setores e tipos de instrumentos reduz o impacto quando um projeto falha. Concentrar tudo numa única oferta faz o resultado depender de uma só empresa."
           },
           {
             "q": "Esta plataforma é regulada?",
-            "a": "Não. Não é um prestador de serviços de crowdfunding autorizado e não lista ofertas reais. Na UE, os prestadores de crowdfunding são autorizados ao abrigo do regime ECSPR e listados no registo público da ESMA, que está linkado no rodapé de todas as páginas.",
-            "state": "info"
+            "a": "Não. Não é um prestador de serviços de crowdfunding autorizado e não lista ofertas reais. Na UE, os prestadores de crowdfunding são autorizados ao abrigo do regime ECSPR e listados no registo público da ESMA, que está linkado no rodapé de todas as páginas."
           }
         ]
       },
       {
-        "id": "transfers",
         "title": "Transferências e venda",
         "entries": [
           {
             "q": "Posso vender, oferecer ou transferir uma contribuição?",
-            "a": "Não. Os registos de contribuição neste protótipo são intransmissíveis por desenho. Em plataformas em produção, as transferências dependem das condições contratuais de cada instrumento, precisam frequentemente do consentimento do emitente e exigem sempre que o recetor seja identificado. Não há mercado secundário aqui.",
-            "state": "live"
+            "a": "Não. Os registos de contribuição neste protótipo são intransmissíveis por desenho. Em plataformas em produção, as transferências dependem das condições contratuais de cada instrumento, precisam frequentemente do consentimento do emitente e exigem sempre que o recetor seja identificado. Não há mercado secundário aqui."
           },
           {
             "q": "As transferências serão possíveis mais tarde?",
-            "a": "Transferências entre utilizadores verificados, e possivelmente um mercado de apregoamento, são passos de desenho planeados. Precisam primeiro de verificação de identidade e de regras contratuais por instrumento, e nenhuma delas existe no código hoje.",
-            "state": "planned"
+            "a": "Transferências entre utilizadores verificados, e possivelmente um mercado de apregoamento, são passos de desenho planeados. Precisam primeiro de verificação de identidade e de regras contratuais por instrumento, e nenhuma delas existe no código hoje."
           }
         ]
       },
       {
-        "id": "account",
         "title": "Conta e dados",
         "entries": [
           {
             "q": "Preciso de uma conta?",
-            "a": "Opcional. Pode registar-se com email e palavra-passe (confirmado com um token de utilização única), ou iniciar sessão provando o controlo da sua carteira Freighter assinando um desafio único. Ligar ou assinar nunca partilha as suas chaves com o site.",
-            "state": "live"
+            "a": "Opcional. Pode registar-se com email e palavra-passe (confirmado com um token de utilização única), ou iniciar sessão provando o controlo da sua carteira Freighter assinando um desafio único. Ligar ou assinar nunca partilha as suas chaves com o site."
           },
           {
             "q": "Que dados pessoais este protótipo recolhe?",
-            "a": "Apenas o que as funcionalidades comunitárias guardam se as usar: a sua chave pública Stellar, um nome de apresentação opcional e os comentários, pedidos de suporte ou candidaturas de emitente que submeter (as candidaturas podem incluir um email de contacto opcional). Os comentários são públicos. Não é pedido nome completo nem documento de identidade. O seu navegador guarda um registo local de uma transação pendente para não ser duplicada, e o backend mantém um diário técnico de pedidos; a Política de Privacidade lista o armazenamento e a retenção. Uma plataforma em produção teria de cumprir deveres do RGPD: acesso, correção, eliminação e portabilidade dos seus dados.",
-            "state": "live"
+            "a": "Apenas o que as funcionalidades comunitárias guardam se as usar: a sua chave pública Stellar, um nome de apresentação opcional e os comentários, pedidos de suporte ou candidaturas de emitente que submeter (as candidaturas podem incluir um email de contacto opcional). Os comentários são públicos. Não é pedido nome completo nem documento de identidade. O seu navegador guarda um registo local de uma transação pendente para não ser duplicada, e o backend mantém um diário técnico de pedidos; a Política de Privacidade lista o armazenamento e a retenção. Uma plataforma em produção teria de cumprir deveres do RGPD: acesso, correção, eliminação e portabilidade dos seus dados."
           }
         ]
       },
       {
-        "id": "documents",
         "title": "Documentos e impostos",
         "entries": [
           {
             "q": "Onde estão os meus documentos contratuais e comprovativos?",
-            "a": "Ainda em lado nenhum: o alojamento de documentos e uma carteira pessoal são passos planeados. Uma plataforma em produção guarda os documentos contratuais por investimento e emite uma confirmação quando um investimento é concluído.",
-            "state": "planned"
+            "a": "Ainda em lado nenhum: o alojamento de documentos e uma carteira pessoal são passos planeados. Uma plataforma em produção guarda os documentos contratuais por investimento e emite uma confirmação quando um investimento é concluído."
           },
           {
             "q": "Os impostos são deduzidos dos retornos?",
-            "a": "Este protótipo não paga retornos, por isso nada é tributado nem retido. Nas plataformas reais, o tratamento depende do seu país de residência, do instrumento e do país do emitente; alguns prestadores retêm imposto ou emitem certificados anuais, e o investidor continua responsável pela declaração correta.",
-            "state": "info"
+            "a": "Este protótipo não paga retornos, por isso nada é tributado nem retido. Nas plataformas reais, o tratamento depende do seu país de residência, do instrumento e do país do emitente; alguns prestadores retêm imposto ou emitem certificados anuais, e o investidor continua responsável pela declaração correta."
           }
         ]
       },
       {
-        "id": "issuers",
         "title": "Para empresas",
         "entries": [
           {
             "q": "Posso listar a minha empresa hoje?",
-            "a": "Pode submeter uma candidatura de emissor na página Financiamento; o operador analisa as candidaturas fora da plataforma e nada é listado automaticamente. O registo de campanhas contém atualmente apenas a campanha de demonstração.",
-            "state": "planned"
+            "a": "Pode submeter uma candidatura de emissor na página Financiamento; o operador analisa as candidaturas fora da plataforma e nada é listado automaticamente. O registo de campanhas contém atualmente apenas a campanha de demonstração."
           },
           {
             "q": "Que modelos de financiamento o desenho cobre?",
-            "a": "Quatro categorias-mãe do lado da participação - direito / certificado participativo (com o Substanzgenussrecht como subtipo), ação, participação indireta como estrutura de titularidade e participação em sociedade em comandita - e duas categorias-mãe de dívida, empréstimo e obrigação, cada uma emitida como sénior, subordinada ou com senioridade não especificada. Cupão zero e convertível são sobreposições de estrutura sobre dívida. O hub Aprender explica cada uma.",
-            "state": "info"
+            "a": "Quatro categorias-mãe do lado da participação - direito / certificado participativo (com o Substanzgenussrecht como subtipo), ação, participação indireta como estrutura de titularidade e participação em sociedade em comandita - e duas categorias-mãe de dívida, empréstimo e obrigação, cada uma emitida como sénior, subordinada ou com senioridade não especificada. Cupão zero e convertível são sobreposições de estrutura sobre dívida. O hub Aprender explica cada uma."
           },
           {
             "q": "Como receberia um emitente os fundos?",
-            "a": "Tudo-ou-nada: o criador da campanha só pode levantar os fundos em escrow se o objetivo for atingido, e apenas após o prazo. A regra é aplicada pelo contrato inteligente, não por uma promessa da plataforma.",
-            "state": "live"
+            "a": "Tudo-ou-nada: o criador da campanha só pode levantar os fundos em escrow se o objetivo for atingido, e apenas após o prazo. A regra é aplicada pelo contrato inteligente, não por uma promessa da plataforma."
           },
           {
             "q": "O que exigiria um lançamento real?",
-            "a": "Um percurso de licenciamento (autorização própria ou parceria com um prestador licenciado), um registo legalmente reconhecido para cada instrumento e jurisdição, processamento de pagamentos através de um prestador licenciado, KYC/AML e as páginas e documentos de conformidade descritos nos documentos do projeto. São decisões em aberto, não funcionalidades implementadas.",
-            "state": "info"
+            "a": "Um percurso de licenciamento (autorização própria ou parceria com um prestador licenciado), um registo legalmente reconhecido para cada instrumento e jurisdição, processamento de pagamentos através de um prestador licenciado, KYC/AML e as páginas e documentos de conformidade descritos nos documentos do projeto. São decisões em aberto, não funcionalidades implementadas."
           },
           {
             "q": "Quanto custa?",
-            "a": "O protótipo corre em alojamento de nível gratuito e infraestrutura de testnet. Nenhum modelo de comissões para emitentes ou investidores está definido ou cobrado.",
-            "state": "info"
+            "a": "O protótipo corre em alojamento de nível gratuito e infraestrutura de testnet. Nenhum modelo de comissões para emitentes ou investidores está definido ou cobrado."
           }
         ]
       }
@@ -1079,14 +1012,9 @@
     "sampleMarker": "Dados de exemplo - não é uma oferta real",
     "list": [
       {
-        "campaignId": "fixture-lisbon-riverside",
         "issuer": "Riverside Development Lda (emitente de exemplo)",
-        "country": "PT",
         "category": "Construção",
         "teaser": "Reabilitação de um prédio de apartamentos ribeirinho em Lisboa, financiada através de uma obrigação sénior de taxa fixa. Todas as condições nesta página são dados de exemplo.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "senior",
-        "instrumentOverlays": [],
         "interestRate": "6,5% a.a. (exemplo)",
         "term": "Até 2030-12-31 (exemplo)",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1162,14 +1090,9 @@
         ]
       },
       {
-        "campaignId": "fixture-alentejo-solar",
         "issuer": "Alentejo Solar Cooperative (emitente de exemplo)",
-        "country": "PT",
         "category": "Energia e utilities",
         "teaser": "Instalação solar comunitária no Alentejo, financiada através de uma obrigação subordinada com variante de juros em numerário. Todas as condições nesta página são dados de exemplo.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "subordinated",
-        "instrumentOverlays": [],
         "interestRate": "7,0% a.a. em numerário (exemplo)",
         "term": "Até 2032-06-30 (exemplo)",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1231,14 +1154,9 @@
         "news": []
       },
       {
-        "campaignId": "fixture-porto-logistics",
         "issuer": "Porto Logistics Hub SA (emitente de exemplo)",
-        "country": "PT",
         "category": "Transportes e logística",
         "teaser": "Estudo de tokenização para um hub logístico perto do Porto, estruturado como obrigação convertível. Este exemplo mostra uma campanha concluída. Todas as condições são dados de exemplo.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "unspecified",
-        "instrumentOverlays": ["convertible"],
         "interestRate": "8,0% a.a. até à conversão (exemplo)",
         "term": "Até 2031-12-31 (exemplo)",
         "minInvestment": "500 USDC de testnet (exemplo)",
@@ -1463,7 +1381,7 @@
     "knowledgeIntro": "Cinco perguntas rápidas de sim/não sobre os riscos do investimento em financiamento colaborativo. As respostas são pontuadas e depois descartadas - só o resultado é guardado.",
     "experienceLabel": "Experiência de investimento",
     "objectiveLabel": "Objetivo de investimento",
-    "selectPlaceholder": "Selecionar...",
+    "selectPlaceholder": "Selecionar…",
     "yes": "Sim",
     "no": "Não",
     "submitKnowledge": "Submeter respostas",
@@ -1654,7 +1572,7 @@
     ]
   },
   "community": {
-    "loading": "A carregar...",
+    "loading": "A carregar…",
     "demoBadge": "DEMO",
     "requestFailed": "O pedido falhou ({status}). Tente novamente.",
     "errorNotFound": "Não encontrado.",
@@ -1860,7 +1778,7 @@
         "country": "País de registo"
       },
       "submit": "Submeter candidatura",
-      "submitting": "A submeter...",
+      "submitting": "A submeter…",
       "submitted": "Candidatura recebida. Aparece acima como pendente de revisão.",
       "status": {
         "pending": "Pendente de revisão",
@@ -1895,7 +1813,7 @@
       "totpDisableCodeLabel": "Código de autenticação ou de recuperação",
       "totpDone": "Concluído",
       "title": "Segurança",
-      "authMethodNote": "Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Este protótipo não tem palavra-passe; pode adicionar abaixo um autenticador de dois fatores opcional.",
+      "authMethodNote": "Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Pode adicionar abaixo um autenticador de dois fatores opcional.",
       "linkTitle": "Fornecedores de início de sessão",
       "linkNote": "Associe outro método de início de sessão a esta conta. Primeiro vai provar que é mesmo você (palavra-passe, assinatura nova da carteira ou um início de sessão recente) e depois confirmar no fornecedor.",
       "linkAction": "Associar {provider}",

@@ -601,12 +601,10 @@
   "instruments": {
     "groups": [
       {
-        "id": "participation",
         "title": "Participation instruments",
         "intro": "Instruments whose return depends on the issuer's business success: profit-participating rights and equity. Indirect participation is listed here as an ownership structure, not as a separate instrument."
       },
       {
-        "id": "debt",
         "title": "Debt instruments",
         "intro": "Two generic parents - loan and bond - each issued in one of three seniority states: senior, subordinated, or seniority unspecified. Investors rank as creditors."
       }
@@ -618,21 +616,15 @@
     },
     "classes": [
       {
-        "id": "participation-certificate",
         "label": "Participation right / certificate",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "A right (often securitised as a participation certificate) to a profit share and to repayment of the nominal value, without the full governance rights of a shareholder.",
         "opportunities": ["Share in profits without buying full equity", "Often combines a base repayment claim with profit participation"],
         "risks": ["Profit share depends entirely on issuer performance", "Can rank behind ordinary creditors", "Usually illiquid until maturity"],
         "suitableFor": "Investors who want upside tied to business results and accept equity-like risk."
       },
       {
-        "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "Subtype of participation right / certificate",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "A participation right linked to the issuer's asset base (\"substance\") rather than only its annual profit. Structuring and eligible issuers vary by jurisdiction and statute.",
         "opportunities": ["Participation in the issuer's asset value", "Can be structured for smaller issuers where statutes allow"],
         "risks": [
@@ -643,11 +635,8 @@
         "suitableFor": "Investors comfortable with bespoke structures who read the exact contract terms first."
       },
       {
-        "id": "share",
         "label": "Share",
         "note": "A capital increase is the corporate action that creates new shares; it is not a separate instrument.",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Direct equity in the issuing company: dividend entitlement and participation in company value, with rights set by the articles. New shares reach investors through a capital increase.",
         "opportunities": ["Full participation in company growth", "Voting or information rights depending on share class"],
         "risks": [
@@ -658,21 +647,15 @@
         "suitableFor": "Investors with a long horizon who want ownership and accept full entrepreneurial risk."
       },
       {
-        "id": "indirect-participation",
         "label": "Indirect participation",
         "note": "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics.",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.",
         "opportunities": ["Access to deals that would be hard to hold directly", "Simplified administration through the intermediary structure"],
         "risks": ["An extra layer sits between investor and issuer", "Return depends on issuer performance", "Terms of the vehicle govern payouts and exit"],
         "suitableFor": "Investors who want participation economics without holding the underlying interest directly."
       },
       {
-        "id": "limited-partnership",
         "label": "Limited partnership interest",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "An interest as limited partner in a partnership: profit and loss participation per the partnership agreement, liability limited to the contribution.",
         "opportunities": ["Direct pass-through of partnership results", "Liability capped at the contribution"],
         "risks": [
@@ -683,20 +666,14 @@
         "suitableFor": "Investors who understand partnership structures and accept entrepreneurial risk."
       },
       {
-        "id": "loan",
         "label": "Loan",
-        "group": "debt",
-        "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
         "opportunities": ["Fixed schedule is easier to model than equity", "Subordinated variants pay higher interest in exchange for the lower rank"],
         "risks": ["Issuer default can mean total loss", "Subordinated claims are paid only after senior creditors in insolvency", "No deposit protection"],
         "suitableFor": "Investors who accept credit risk without bank-like protection."
       },
       {
-        "id": "bond",
         "label": "Bond",
-        "group": "debt",
-        "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
         "opportunities": ["Defined coupon and repayment calendar", "Senior issues rank ahead of subordinated capital and equity in insolvency"],
         "risks": ["Subordination raises loss severity in insolvency", "Still unsecured unless collateral is stated", "No participation in company growth"],
@@ -705,29 +682,24 @@
     ],
     "overlays": [
       {
-        "id": "zero-coupon",
         "label": "Zero-coupon (Zero Bond)",
         "summary": "A coupon structure on a loan or bond, not a seniority: no periodic interest; the return comes from issuance below nominal value and repayment at par. Combines with a debt parent, never stands alone."
       },
       {
-        "id": "convertible",
         "label": "Convertible",
         "summary": "A conversion feature on a bond: under configured terms (trigger event, exercise window, conversion price, interest-stop rules) the bond converts into shares. Combines with the bond parent, never stands alone."
       }
     ],
     "qualifiers": [
       {
-        "id": "junior",
         "label": "\"Junior\"",
         "summary": "A lower-rank label in platform wording. It indicates subordinated ranking but does not by itself establish contractual qualified subordination."
       },
       {
-        "id": "qualified",
         "label": "\"Qualified / qualifiziert\"",
         "summary": "Platform wording found on loans and bonds. On bonds, do not read it as qualified subordination unless the terms themselves say subordinated."
       },
       {
-        "id": "mini-bond",
         "label": "\"Mini Bond\"",
         "summary": "Platform label for a small-denomination bond."
       }
@@ -845,206 +817,167 @@
     },
     "categories": [
       {
-        "id": "about",
         "title": "About this platform",
         "entries": [
           {
             "q": "Is this a real investment platform?",
-            "a": "No. This is a technical prototype on Stellar testnet. It lists no live offers, accepts no real funds and is not an authorised crowdfunding service provider. Authorised EU providers are listed in the ESMA register.",
-            "state": "info"
+            "a": "No. This is a technical prototype on Stellar testnet. It lists no live offers, accepts no real funds and is not an authorised crowdfunding service provider. Authorised EU providers are listed in the ESMA register."
           },
           {
             "q": "What do I need to try it?",
-            "a": "Install the Freighter wallet extension, switch it to testnet, fund it with free testnet XLM and testnet USDC from a faucet or friend, then connect it here. Testnet assets are worthless.",
-            "state": "live"
+            "a": "Install the Freighter wallet extension, switch it to testnet, fund it with free testnet XLM and testnet USDC from a faucet or friend, then connect it here. Testnet assets are worthless."
           },
           {
             "q": "Do I need my own wallet?",
-            "a": "Yes, for investing. This design keeps keys with the user: the Freighter wallet signs every transaction, and the platform holds no keys and no balances of its own. Sign-in can be by wallet or by optional email registration; neither shares your keys with the site. Some production platforms instead custody assets through specialised partners; this prototype deliberately does not.",
-            "state": "live"
+            "a": "Yes, for investing. This design keeps keys with the user: the Freighter wallet signs every transaction, and the platform holds no keys and no balances of its own. Sign-in can be by wallet or by optional email registration; neither shares your keys with the site. Some production platforms instead custody assets through specialised partners; this prototype deliberately does not."
           },
           {
             "q": "Who can invest on a platform like this in production?",
-            "a": "A production platform must verify each investor's identity (KYC) and, where the regime requires it, test knowledge and simulate loss-bearing capacity before larger amounts. Residence restrictions can also apply. None of that exists here, because testnet funds are worthless.",
-            "state": "info"
+            "a": "A production platform must verify each investor's identity (KYC) and, where the regime requires it, test knowledge and simulate loss-bearing capacity before larger amounts. Residence restrictions can also apply. None of that exists here, because testnet funds are worthless."
           }
         ]
       },
       {
-        "id": "contributing",
         "title": "Contributing and payments",
         "entries": [
           {
             "q": "How does a contribution work?",
-            "a": "You pick a campaign, enter an amount and sign one transaction in Freighter. The Soroban contract escrows your contribution and enforces the funding cap atomically. The app keeps the exact signed transaction so a network error never creates a duplicate.",
-            "state": "live"
+            "a": "You pick a campaign, enter an amount and sign one transaction in Freighter. The Soroban contract escrows your contribution and enforces the funding cap atomically. The app keeps the exact signed transaction so a network error never creates a duplicate."
           },
           {
             "q": "Which payment methods can I use?",
-            "a": "Only testnet USDC sent through your Freighter wallet. There are no cards, no bank transfers and no fiat at all. A production version would settle through a licensed payment provider with a per-investment reference; that step is planned, not built.",
-            "state": "live"
+            "a": "Only testnet USDC sent through your Freighter wallet. There are no cards, no bank transfers and no fiat at all. A production version would settle through a licensed payment provider with a per-investment reference; that step is planned, not built."
           },
           {
             "q": "Can I contribute more than once to the same campaign?",
-            "a": "Yes. Each contribution is its own signed transaction, and the contract checks the remaining room under the funding cap on every one. An amount that would push the campaign past its goal is rejected by the contract, not by platform bookkeeping.",
-            "state": "live"
+            "a": "Yes. Each contribution is its own signed transaction, and the contract checks the remaining room under the funding cap on every one. An amount that would push the campaign past its goal is rejected by the contract, not by platform bookkeeping."
           },
           {
             "q": "What happens when a campaign reaches its goal?",
-            "a": "The cap is enforced by the contract, so there is no oversubscription: once the goal is met, further contributions are rejected. After the deadline has passed, the campaign creator can withdraw the escrowed funds.",
-            "state": "live"
+            "a": "The cap is enforced by the contract, so there is no oversubscription: once the goal is met, further contributions are rejected. After the deadline has passed, the campaign creator can withdraw the escrowed funds."
           },
           {
             "q": "How do I check that my contribution went through?",
-            "a": "Connect your wallet and open the campaign page to see the escrowed totals the contract reports. Because settlement is a Stellar testnet transaction, you can also verify it independently on a public testnet explorer.",
-            "state": "live"
+            "a": "Connect your wallet and open the campaign page to see the escrowed totals the contract reports. Because settlement is a Stellar testnet transaction, you can also verify it independently on a public testnet explorer."
           }
         ]
       },
       {
-        "id": "refunds",
         "title": "Refunds and cancellation",
         "entries": [
           {
             "q": "How do refunds work?",
-            "a": "If a campaign misses its goal by the deadline, each contributor signs their own refund transaction. If the goal is met, only the campaign creator can withdraw, and only after the deadline.",
-            "state": "live"
+            "a": "If a campaign misses its goal by the deadline, each contributor signs their own refund transaction. If the goal is met, only the campaign creator can withdraw, and only after the deadline."
           },
           {
             "q": "Can I cancel a contribution after signing?",
-            "a": "Not in this prototype: a signed testnet transaction is final. Cancellation is a planned step. For comparison, the EU crowdfunding regime gives non-sophisticated investors a reflection period of 4 calendar days to withdraw a binding offer on a real platform.",
-            "state": "planned"
+            "a": "Not in this prototype: a signed testnet transaction is final. Cancellation is a planned step. For comparison, the EU crowdfunding regime gives non-sophisticated investors a reflection period of 4 calendar days to withdraw a binding offer on a real platform."
           },
           {
             "q": "Who holds the money while a campaign is running?",
-            "a": "The Soroban contract itself escrows contributions until the deadline. No operator account can move them: the code allows only a creator withdrawal after a successful deadline, or contributor refunds after a failed one.",
-            "state": "live"
+            "a": "The Soroban contract itself escrows contributions until the deadline. No operator account can move them: the code allows only a creator withdrawal after a successful deadline, or contributor refunds after a failed one."
           }
         ]
       },
       {
-        "id": "tokenization",
         "title": "Tokenization on Stellar",
         "entries": [
           {
             "q": "What does tokenization mean here?",
-            "a": "Tokenization means representing the rights and obligations of an investment digitally, so ownership and transfers can be recorded and checked on a shared ledger. This prototype takes a first step: contribution records live in a Soroban smart contract on the Stellar test network, enforced by code rather than platform bookkeeping.",
-            "state": "info"
+            "a": "Tokenization means representing the rights and obligations of an investment digitally, so ownership and transfers can be recorded and checked on a shared ledger. This prototype takes a first step: contribution records live in a Soroban smart contract on the Stellar test network, enforced by code rather than platform bookkeeping."
           },
           {
             "q": "What does the smart contract actually enforce?",
-            "a": "Escrow of contributions, the funding cap on every transaction, the campaign deadline, all-or-nothing settlement (creator withdrawal only after a successful deadline) and contributor-signed refunds after a failed one. What it does not do is covered by the planned steps on the How it works page.",
-            "state": "live"
+            "a": "Escrow of contributions, the funding cap on every transaction, the campaign deadline, all-or-nothing settlement (creator withdrawal only after a successful deadline) and contributor-signed refunds after a failed one. What it does not do is covered by the planned steps on the How it works page."
           },
           {
             "q": "Is there a tradable token?",
-            "a": "No. Contribution balances in this first contract are deliberately nontransferable. A transferable security token would need a legally recognised register, verified holders and the compliance surface described in the project documents before it could represent a real investment.",
-            "state": "planned"
+            "a": "No. Contribution balances in this first contract are deliberately nontransferable. A transferable security token would need a legally recognised register, verified holders and the compliance surface described in the project documents before it could represent a real investment."
           },
           {
             "q": "Where are my contributions held?",
-            "a": "In the contract's escrow on the public test network, not with the platform operator. Your wallet keys stay in Freighter on your own device; losing them would lose access to the contribution record, exactly like any self-custody setup.",
-            "state": "live"
+            "a": "In the contract's escrow on the public test network, not with the platform operator. Your wallet keys stay in Freighter on your own device; losing them would lose access to the contribution record, exactly like any self-custody setup."
           }
         ]
       },
       {
-        "id": "risks",
         "title": "Risks and eligibility",
         "entries": [
           {
             "q": "What are the risks of real crowdfunding?",
-            "a": "Total loss is possible, investments are illiquid, and no deposit guarantee applies. A common rule of thumb is to invest only a small share of freely available funds and to diversify. The risk warnings page covers this in detail.",
-            "state": "info"
+            "a": "Total loss is possible, investments are illiquid, and no deposit guarantee applies. A common rule of thumb is to invest only a small share of freely available funds and to diversify. The risk warnings page covers this in detail."
           },
           {
             "q": "Why should investors diversify?",
-            "a": "Spreading money across several projects, sectors and instrument types reduces the impact when one project fails. Concentrating everything in a single offer makes the outcome depend on one company.",
-            "state": "info"
+            "a": "Spreading money across several projects, sectors and instrument types reduces the impact when one project fails. Concentrating everything in a single offer makes the outcome depend on one company."
           },
           {
             "q": "Is this platform regulated?",
-            "a": "No. It is not an authorised crowdfunding service provider and lists no live offers. In the EU, crowdfunding providers are authorised under the ECSPR regime and listed in the public ESMA register, which is linked in the footer of every page.",
-            "state": "info"
+            "a": "No. It is not an authorised crowdfunding service provider and lists no live offers. In the EU, crowdfunding providers are authorised under the ECSPR regime and listed in the public ESMA register, which is linked in the footer of every page."
           }
         ]
       },
       {
-        "id": "transfers",
         "title": "Transfers and selling",
         "entries": [
           {
             "q": "Can I sell, gift or transfer a contribution?",
-            "a": "No. Contribution records in this prototype are nontransferable by design. On production platforms, transfers depend on the contractual terms of each instrument, often need issuer consent, and always require the receiving person to be identified. There is no secondary market here.",
-            "state": "live"
+            "a": "No. Contribution records in this prototype are nontransferable by design. On production platforms, transfers depend on the contractual terms of each instrument, often need issuer consent, and always require the receiving person to be identified. There is no secondary market here."
           },
           {
             "q": "Will transfers be possible later?",
-            "a": "Transfers between verified users, and possibly a bulletin-board style marketplace, are planned design steps. They need identity verification and per-instrument contractual rules first, neither of which exists in the code today.",
-            "state": "planned"
+            "a": "Transfers between verified users, and possibly a bulletin-board style marketplace, are planned design steps. They need identity verification and per-instrument contractual rules first, neither of which exists in the code today."
           }
         ]
       },
       {
-        "id": "account",
         "title": "Account and data",
         "entries": [
           {
             "q": "Do I need an account?",
-            "a": "Optional. You can register with an email address and password (confirmed with a single-use token), or sign in by proving control of your Freighter wallet with a one-time challenge. Connecting or signing never shares your keys with the site.",
-            "state": "live"
+            "a": "Optional. You can register with an email address and password (confirmed with a single-use token), or sign in by proving control of your Freighter wallet with a one-time challenge. Connecting or signing never shares your keys with the site."
           },
           {
             "q": "What personal data does this prototype collect?",
-            "a": "Only what the community features store if you use them: your Stellar public key, an optional display name, and the comments, support tickets or issuer applications you submit (issuer applications may include an optional contact email). Comments are public. No full name or identity document is asked for. Your browser keeps a local record of a pending transaction so it cannot be duplicated, and the backend keeps a technical journal of requests; the Privacy Policy lists storage and retention. A production platform would have to meet GDPR duties: access, correction, erasure and portability of your data.",
-            "state": "live"
+            "a": "Only what the community features store if you use them: your Stellar public key, an optional display name, and the comments, support tickets or issuer applications you submit (issuer applications may include an optional contact email). Comments are public. No full name or identity document is asked for. Your browser keeps a local record of a pending transaction so it cannot be duplicated, and the backend keeps a technical journal of requests; the Privacy Policy lists storage and retention. A production platform would have to meet GDPR duties: access, correction, erasure and portability of your data."
           }
         ]
       },
       {
-        "id": "documents",
         "title": "Documents and taxes",
         "entries": [
           {
             "q": "Where are my contractual documents and receipts?",
-            "a": "Nowhere yet: document hosting and a personal portfolio are planned steps. A production platform stores the contractual documents per investment and issues a confirmation once an investment is concluded.",
-            "state": "planned"
+            "a": "Nowhere yet: document hosting and a personal portfolio are planned steps. A production platform stores the contractual documents per investment and issues a confirmation once an investment is concluded."
           },
           {
             "q": "Are taxes deducted from returns?",
-            "a": "This prototype pays no returns, so nothing is taxed or withheld. On real platforms the treatment depends on your country of residence, the instrument and the issuer's country; some providers withhold tax or issue annual certificates, and the investor stays responsible for correct declaration.",
-            "state": "info"
+            "a": "This prototype pays no returns, so nothing is taxed or withheld. On real platforms the treatment depends on your country of residence, the instrument and the issuer's country; some providers withhold tax or issue annual certificates, and the investor stays responsible for correct declaration."
           }
         ]
       },
       {
-        "id": "issuers",
         "title": "For companies",
         "entries": [
           {
             "q": "Can I list my company today?",
-            "a": "You can submit an issuer application from the Financing page; the operator reviews applications off-site and nothing is listed automatically. The campaign registry currently holds only the demo campaign.",
-            "state": "planned"
+            "a": "You can submit an issuer application from the Financing page; the operator reviews applications off-site and nothing is listed automatically. The campaign registry currently holds only the demo campaign."
           },
           {
             "q": "Which financing models does the design cover?",
-            "a": "Four participation-side parents - participation right / certificate (with Substanzgenussrecht as a subtype), share, indirect participation as an ownership structure, and limited partnership interest - and two debt parents, loan and bond, each issued senior, subordinated or with seniority unspecified. Zero-coupon and convertible are structure overlays on debt. The Learn hub explains each.",
-            "state": "info"
+            "a": "Four participation-side parents - participation right / certificate (with Substanzgenussrecht as a subtype), share, indirect participation as an ownership structure, and limited partnership interest - and two debt parents, loan and bond, each issued senior, subordinated or with seniority unspecified. Zero-coupon and convertible are structure overlays on debt. The Learn hub explains each."
           },
           {
             "q": "How would an issuer receive the funds?",
-            "a": "All-or-nothing: the campaign creator can withdraw the escrowed funds only if the goal is met, and only after the deadline. The rule is enforced by the smart contract, not by a platform promise.",
-            "state": "live"
+            "a": "All-or-nothing: the campaign creator can withdraw the escrowed funds only if the goal is met, and only after the deadline. The rule is enforced by the smart contract, not by a platform promise."
           },
           {
             "q": "What would a real launch require?",
-            "a": "A licence path (own authorisation or a partnership with a licensed provider), a legally recognised register for each instrument and jurisdiction, payment processing through a licensed provider, KYC/AML, and the compliance pages and documents described in the project docs. These are open decisions, not implemented features.",
-            "state": "info"
+            "a": "A licence path (own authorisation or a partnership with a licensed provider), a legally recognised register for each instrument and jurisdiction, payment processing through a licensed provider, KYC/AML, and the compliance pages and documents described in the project docs. These are open decisions, not implemented features."
           },
           {
             "q": "What does it cost?",
-            "a": "The prototype runs on free-tier hosting and testnet infrastructure. No fee model for issuers or investors is defined or charged.",
-            "state": "info"
+            "a": "The prototype runs on free-tier hosting and testnet infrastructure. No fee model for issuers or investors is defined or charged."
           }
         ]
       }
@@ -1054,14 +987,9 @@
     "sampleMarker": "Sample data - not a live offer",
     "list": [
       {
-        "campaignId": "fixture-lisbon-riverside",
         "issuer": "Riverside Development Lda (sample issuer)",
-        "country": "PT",
         "category": "Construction",
         "teaser": "Refurbishment of a riverside apartment block in Lisbon, financed through a fixed-rate senior bond. All terms on this page are sample data.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "senior",
-        "instrumentOverlays": [],
         "interestRate": "6.5% p.a. (sample)",
         "term": "Until 2030-12-31 (sample)",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1137,14 +1065,9 @@
         ]
       },
       {
-        "campaignId": "fixture-alentejo-solar",
         "issuer": "Alentejo Solar Cooperative (sample issuer)",
-        "country": "PT",
         "category": "Energy and utilities",
         "teaser": "Community solar installation in the Alentejo, financed through a subordinated bond with a cash interest variant. All terms on this page are sample data.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "subordinated",
-        "instrumentOverlays": [],
         "interestRate": "7.0% p.a. cash (sample)",
         "term": "Until 2032-06-30 (sample)",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1206,14 +1129,9 @@
         "news": []
       },
       {
-        "campaignId": "fixture-porto-logistics",
         "issuer": "Porto Logistics Hub SA (sample issuer)",
-        "country": "PT",
         "category": "Transportation and logistics",
         "teaser": "Tokenization study for a logistics hub near Porto, structured as a convertible bond. This fixture shows a completed campaign. All terms are sample data.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "unspecified",
-        "instrumentOverlays": ["convertible"],
         "interestRate": "8.0% p.a. until conversion (sample)",
         "term": "Until 2031-12-31 (sample)",
         "minInvestment": "500 USDC testnet (sample)",
@@ -1436,7 +1354,7 @@
     "knowledgeIntro": "Five short yes/no questions about the risks of crowdfunding investing. Your answers are scored and then discarded - only the result is stored.",
     "experienceLabel": "Investment experience",
     "objectiveLabel": "Investment objective",
-    "selectPlaceholder": "Select...",
+    "selectPlaceholder": "Select…",
     "yes": "Yes",
     "no": "No",
     "submitKnowledge": "Submit answers",
@@ -1627,7 +1545,7 @@
     ]
   },
   "community": {
-    "loading": "Loading...",
+    "loading": "Loading…",
     "demoBadge": "DEMO",
     "requestFailed": "Request failed ({status}). Please try again.",
     "errorNotFound": "Not found.",
@@ -1833,7 +1751,7 @@
         "country": "Country of registration"
       },
       "submit": "Submit application",
-      "submitting": "Submitting...",
+      "submitting": "Submitting…",
       "submitted": "Application received. It now shows as pending review above.",
       "status": {
         "pending": "Pending review",
@@ -1941,9 +1859,9 @@
         "colSource": "Basis",
         "colShare": "Share",
         "colAmount": "Amount",
-        "unavailable": "Allocation unavailable: some positions are unknown or the bases are mixed. {n} unknown holder(s). Nothing is declared or payable.",
+        "unavailable": "Allocation unavailable: some positions are unknown or the bases are mixed. Unknown holders: {n}. Nothing is declared or payable.",
         "illustration": "Illustration only: not a final or declarable allocation. No funds move.",
-        "excluded": "{n} unknown holder(s) excluded",
+        "excluded": "Unknown holders excluded: {n}",
         "empty": "No campaigns available."
       },
       "tabs": {
@@ -1984,7 +1902,7 @@
       "colAction": "Action",
       "colTargetRef": "Target",
       "colDetail": "Detail",
-      "reconQuarantined": "{n} quarantined journal row(s) require operator review.",
+      "reconQuarantined": "Journal rows in quarantine requiring operator review: {n}.",
       "colProject": "Project",
       "colCountry": "Country",
       "colInstrument": "Instrument",

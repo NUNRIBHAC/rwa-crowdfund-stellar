@@ -46,7 +46,7 @@
       "h2": "3. Fonctions de test et limites de production"
     },
     "b12": {
-      "p": "Le prototype propose une connexion communautaire, des comptes email et mot de passe, une vue investisseur sur testnet et des écrans de démonstration du test de connaissances et de simulation des pertes. Leur accès peut être restreint; ce ne sont pas des protections validées juridiquement."
+      "p": "Le prototype propose une connexion communautaire, des comptes email et mot de passe, une vue investisseur sur testnet et des écrans de démonstration du test de connaissances et de simulation des pertes. Leur accès peut être restreint ; ce ne sont pas des protections validées juridiquement."
     },
     "b13": {
       "p": "La vérification KYC/AML réelle, les paiements par des prestataires agréés et un délai de réflexion ayant un effet juridique ne sont pas actifs. Les documents et écrans de test ne prouvent ni agrément ni droits opposables. La production exige une revue juridique et les autorisations nécessaires."
@@ -80,7 +80,7 @@
       "h2": "7. Disponibilité et modifications"
     },
     "b22": {
-      "p": "Le Service utilise un hébergement gratuit et peut être lent, indisponible, modifié ou arrêté. Les fonctions de test ne prouvent pas une aptitude à la production; la vérification réelle d’identité et les paiements en monnaie fiduciaire restent inactifs."
+      "p": "Le Service utilise un hébergement gratuit et peut être lent, indisponible, modifié ou arrêté. Les fonctions de test ne prouvent pas une aptitude à la production ; la vérification réelle d’identité et les paiements en monnaie fiduciaire restent inactifs."
     },
     "b23": {
       "h2": "8. Exclusions de garantie et limitation de responsabilité"
@@ -213,7 +213,7 @@
       "h2": "Protections des investisseurs et prototype"
     },
     "b11": {
-      "p": "Le prototype comprend des démonstrations de catégorisation, de test de connaissances et de simulation des pertes; la collecte de données réelles reste restreinte. Ces écrans ne sont pas des protections validées juridiquement. Aucun investissement réel ni délai de réflexion juridiquement effectif n’est actif. Un service réglementé nécessiterait une revue juridique et des autorisations propres. Ces mécanismes ne suppriment pas le risque d’investissement."
+      "p": "Le prototype comprend des démonstrations de catégorisation, de test de connaissances et de simulation des pertes ; la collecte de données réelles reste restreinte. Ces écrans ne sont pas des protections validées juridiquement. Aucun investissement réel ni délai de réflexion juridiquement effectif n’est actif. Un service réglementé nécessiterait une revue juridique et des autorisations propres. Ces mécanismes ne suppriment pas le risque d’investissement."
     },
     "b12": {
       "h2": "Aucun conseil"

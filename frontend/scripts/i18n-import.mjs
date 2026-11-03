@@ -19,6 +19,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
+import { isMachineField } from './i18n-machine-fields.mjs';
 import { blocksToJson, jsonToBlocks, validateLegalAgainstBase } from './i18n-legal-codec.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -123,15 +124,16 @@ function deepEqual(a, b, path, diffs) {
 // leaves the projection deliberately omits (blank strings, non-string
 // scalars) come back from the base. Validated before merging, so a type
 // mismatch can never cross the overlay.
-function mergeOverBase(base, value) {
+function mergeOverBase(base, value, path = '') {
+  if (isMachineField(path)) return base;
   if (typeof base === 'string' || base === null || typeof base !== 'object') {
     return value === undefined ? base : value;
   }
   if (Array.isArray(base)) {
-    return base.map((b, i) => mergeOverBase(b, Array.isArray(value) ? value[i] : undefined));
+    return base.map((b, i) => mergeOverBase(b, Array.isArray(value) ? value[i] : undefined, `${path}[${i}]`));
   }
   const out = {};
-  for (const k of Object.keys(base)) out[k] = mergeOverBase(base[k], value?.[k]);
+  for (const k of Object.keys(base)) out[k] = mergeOverBase(base[k], value?.[k], `${path}.${k}`);
   return out;
 }
 
@@ -142,6 +144,10 @@ function mergeOverBase(base, value) {
 // absent; adding content there is rejected. Arrays keep the base's length
 // (per-locale arrays are parallel structures, e.g. legal blocks).
 function validateAgainstBase(base, value, path, diffs) {
+  if (isMachineField(path)) {
+    if (value !== undefined && value !== null) diffs.push(`${path}: machine field must stay out of the projection`);
+    return;
+  }
   if (typeof base === 'string' && base.trim() === '') {
     if (value !== undefined) diffs.push(`${path}: blank base field must stay out of the projection`);
     return;
@@ -185,6 +191,7 @@ function validateAgainstBase(base, value, path, diffs) {
   // scalars) are not required in the JSON; everything else is.
   const required = kb.filter((k) => {
     const b = base[k];
+    if (isMachineField(`${path}.${k}`)) return false;
     if (typeof b === 'string') return b.trim() !== '';
     return b !== null && typeof b === 'object';
   });

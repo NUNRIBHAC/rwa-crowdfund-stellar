@@ -601,12 +601,10 @@
   "instruments": {
     "groups": [
       {
-        "id": "participation",
         "title": "Beteiligungsinstrumente",
         "intro": "Instrumente, deren Rendite vom Geschäftserfolg des Emittenten abhängt: gewinnberechtigte Beteiligungsrechte und Eigenkapital. Die indirekte Beteiligung ist hier als Haltestruktur aufgeführt, nicht als eigenes Instrument."
       },
       {
-        "id": "debt",
         "title": "Fremdkapitalinstrumente",
         "intro": "Zwei generische Mutterkategorien - Darlehen und Anleihe - jeweils in einem von drei Rangfolge-Stati begeben: senior, nachrangig oder Rangfolge nicht angegeben. Anleger treten als Gläubiger auf."
       }
@@ -618,10 +616,7 @@
     },
     "classes": [
       {
-        "id": "participation-certificate",
         "label": "Beteiligungsrecht / -zertifikat",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs.",
         "opportunities": ["Gewinnbeteiligung ohne vollständigen Eigenkapitalerwerb", "Kombiniert oft einen Basis-Rückzahlungsanspruch mit Gewinnbeteiligung"],
         "risks": [
@@ -632,11 +627,8 @@
         "suitableFor": "Anleger, die eine Beteiligung an den Geschäftsergebnissen wollen und eigenkapitalähnliches Risiko akzeptieren."
       },
       {
-        "id": "substanzgenussrecht",
         "label": "Substanzgenussrecht",
         "subtypeOf": "Untertyp von Beteiligungsrecht / -zertifikat",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung.",
         "opportunities": ["Beteiligung am Substanzwert des Emittenten", "Kann für kleinere Emittenten strukturiert werden, wenn die Satzung es erlaubt"],
         "risks": [
@@ -647,11 +639,8 @@
         "suitableFor": "Anleger, die mit maßgeschneiderten Strukturen vertraut sind und zuerst die genauen Vertragsbedingungen lesen."
       },
       {
-        "id": "share",
         "label": "Aktie",
         "note": "Eine Kapitalerhöhung ist der gesellschaftsrechtliche Vorgang, der neue Aktien schafft; sie ist kein eigenes Instrument.",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Direktes Eigenkapital an der emittierenden Gesellschaft: Dividendenanspruch und Beteiligung am Unternehmenswert, mit Rechten nach der Satzung. Neue Aktien erreichen Anleger über eine Kapitalerhöhung.",
         "opportunities": ["Volle Teilhabe am Unternehmenswachstum", "Stimm- oder Informationsrechte je nach Aktiengattung"],
         "risks": [
@@ -662,11 +651,8 @@
         "suitableFor": "Anleger mit langem Horizont, die Eigentum wollen und volles Unternehmerrisiko akzeptieren."
       },
       {
-        "id": "indirect-participation",
         "label": "Indirekte Beteiligung",
         "note": "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie.",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
         "opportunities": ["Zugang zu Geschäften, die direkt schwer zu halten wären", "Vereinfachte Verwaltung über die Zwischenstruktur"],
         "risks": [
@@ -677,10 +663,7 @@
         "suitableFor": "Anleger, die die Ökonomie einer Beteiligung wollen, ohne das zugrunde liegende Interesse direkt zu halten."
       },
       {
-        "id": "limited-partnership",
         "label": "Kommanditbeteiligung",
-        "group": "participation",
-        "seniorityStates": [],
         "summary": "Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage.",
         "opportunities": ["Direkte Durchleitung der Gesellschaftsergebnisse", "Haftung auf die Einlage begrenzt"],
         "risks": [
@@ -691,10 +674,7 @@
         "suitableFor": "Anleger, die Personengesellschaftsstrukturen verstehen und Unternehmerrisiko akzeptieren."
       },
       {
-        "id": "loan",
         "label": "Darlehen",
-        "group": "debt",
-        "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
         "opportunities": [
           "Ein fester Plan ist leichter zu modellieren als Eigenkapital",
@@ -708,10 +688,7 @@
         "suitableFor": "Anleger, die Kreditrisiko ohne bankenähnlichen Schutz akzeptieren."
       },
       {
-        "id": "bond",
         "label": "Anleihe",
-        "group": "debt",
-        "seniorityStates": ["senior", "subordinated", "unspecified"],
         "summary": "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
         "opportunities": ["Definierter Kupon und Tilgungskalender", "Seniorserien haben im Insolvenzfall Vorrang vor nachrangigem Kapital und Eigenkapital"],
         "risks": [
@@ -724,29 +701,24 @@
     ],
     "overlays": [
       {
-        "id": "zero-coupon",
         "label": "Nullkupon (Zero Bond)",
         "summary": "Eine Kupon-Struktur auf einem Darlehen oder einer Anleihe, keine Rangfolge: keine periodischen Zinsen; die Rendite kommt aus der Emission unter dem Nennwert und der Rückzahlung zum Pari. Kombiniert mit einer Fremdkapital-Mutterkategorie, steht nie allein."
       },
       {
-        "id": "convertible",
         "label": "Wandelanleihe",
         "summary": "Ein Wandlungsmerkmal auf einer Anleihe: Nach konfigurierten Bedingungen (Auslöseereignis, Ausübungsfenster, Wandlungspreis, Zins-Stopp-Regeln) wandelt die Anleihe in Aktien. Kombiniert mit der Mutterkategorie Anleihe, steht nie allein."
       }
     ],
     "qualifiers": [
       {
-        "id": "junior",
         "label": "„Junior“",
         "summary": "Ein Label für niedrigeren Rang in der Plattformsprache. Es deutet auf Nachrangigkeit hin, begründet aber für sich keine vertragliche qualifizierte Nachrangigkeit."
       },
       {
-        "id": "qualified",
         "label": "„Qualified / qualifiziert“",
         "summary": "Plattformterminologie bei Darlehen und Anleihen. Bei Anleihen nicht als qualifizierte Nachrangigkeit lesen, es sei denn, die Bedingungen selbst sagen nachrangig."
       },
       {
-        "id": "mini-bond",
         "label": "„Mini Bond“",
         "summary": "Plattformlabel für eine Anleihe mit kleiner Stückelung."
       }
@@ -864,206 +836,167 @@
     },
     "categories": [
       {
-        "id": "about",
         "title": "Über diese Plattform",
         "entries": [
           {
             "q": "Ist das eine echte Anlageplattform?",
-            "a": "Nein. Dies ist ein technischer Prototyp im Stellar-Testnet. Er listet keine echten Angebote, nimmt keine echten Gelder an und ist kein zugelassener Crowdfunding-Dienstleister. Zugelassene EU-Anbieter stehen im ESMA-Register.",
-            "state": "info"
+            "a": "Nein. Dies ist ein technischer Prototyp im Stellar-Testnet. Er listet keine echten Angebote, nimmt keine echten Gelder an und ist kein zugelassener Crowdfunding-Dienstleister. Zugelassene EU-Anbieter stehen im ESMA-Register."
           },
           {
             "q": "Was brauche ich zum Ausprobieren?",
-            "a": "Installieren Sie die Freighter-Wallet-Erweiterung, stellen Sie sie auf Testnet, laden Sie sie mit kostenlosem Testnet-XLM und Testnet-USDC von einem Faucet oder einem Freund auf und verbinden Sie sie hier. Testnet-Vermögenswerte sind wertlos.",
-            "state": "live"
+            "a": "Installieren Sie die Freighter-Wallet-Erweiterung, stellen Sie sie auf Testnet, laden Sie sie mit kostenlosem Testnet-XLM und Testnet-USDC von einem Faucet oder einem Freund auf und verbinden Sie sie hier. Testnet-Vermögenswerte sind wertlos."
           },
           {
             "q": "Brauche ich eine eigene Wallet?",
-            "a": "Ja, zum Investieren. Dieses Design belässt die Schlüssel beim Nutzer: Die Freighter-Wallet signiert jede Transaktion, und die Plattform hält weder Schlüssel noch eigene Guthaben. Die Anmeldung kann per Wallet oder per optionaler E-Mail-Registrierung erfolgen; beide teilen Ihre Schlüssel nie mit der Website. Manche Produktionsplattformen verwahren Vermögenswerte über spezialisierte Partner; dieser Prototyp tut das bewusst nicht.",
-            "state": "live"
+            "a": "Ja, zum Investieren. Dieses Design belässt die Schlüssel beim Nutzer: Die Freighter-Wallet signiert jede Transaktion, und die Plattform hält weder Schlüssel noch eigene Guthaben. Die Anmeldung kann per Wallet oder per optionaler E-Mail-Registrierung erfolgen; beide teilen Ihre Schlüssel nie mit der Website. Manche Produktionsplattformen verwahren Vermögenswerte über spezialisierte Partner; dieser Prototyp tut das bewusst nicht."
           },
           {
             "q": "Wer kann auf einer solchen Plattform in Produktion investieren?",
-            "a": "Eine Produktionsplattform muss die Identität jedes Anlegers prüfen (KYC) und, wo das Regime es verlangt, Kenntnisse testen und die Verlusttragfähigkeit vor größeren Beträgen simulieren. Auch Wohnsitzbeschränkungen können gelten. Nichts davon existiert hier, weil Testnet-Gelder wertlos sind.",
-            "state": "info"
+            "a": "Eine Produktionsplattform muss die Identität jedes Anlegers prüfen (KYC) und, wo das Regime es verlangt, Kenntnisse testen und die Verlusttragfähigkeit vor größeren Beträgen simulieren. Auch Wohnsitzbeschränkungen können gelten. Nichts davon existiert hier, weil Testnet-Gelder wertlos sind."
           }
         ]
       },
       {
-        "id": "contributing",
         "title": "Beitragen und Zahlungen",
         "entries": [
           {
             "q": "Wie funktioniert ein Beitrag?",
-            "a": "Sie wählen eine Kampagne, geben einen Betrag ein und signieren eine Transaktion in Freighter. Der Soroban-Vertrag legt Ihren Beitrag in Escrow und setzt die Finanzierungsobergrenze atomar durch. Die App bewahrt die exakt signierte Transaktion auf, damit ein Netzwerkfehler nie ein Duplikat erzeugt.",
-            "state": "live"
+            "a": "Sie wählen eine Kampagne, geben einen Betrag ein und signieren eine Transaktion in Freighter. Der Soroban-Vertrag legt Ihren Beitrag in Escrow und setzt die Finanzierungsobergrenze atomar durch. Die App bewahrt die exakt signierte Transaktion auf, damit ein Netzwerkfehler nie ein Duplikat erzeugt."
           },
           {
             "q": "Welche Zahlungsmethoden kann ich nutzen?",
-            "a": "Nur Testnet-USDC über Ihre Freighter-Wallet. Keine Karten, keine Banküberweisungen, keinerlei Fiatgeld. Eine Produktionsversion würde über einen lizenzierten Zahlungsdienstleister mit Referenz pro Investition abwickeln; dieser Schritt ist geplant, nicht gebaut.",
-            "state": "live"
+            "a": "Nur Testnet-USDC über Ihre Freighter-Wallet. Keine Karten, keine Banküberweisungen, keinerlei Fiatgeld. Eine Produktionsversion würde über einen lizenzierten Zahlungsdienstleister mit Referenz pro Investition abwickeln; dieser Schritt ist geplant, nicht gebaut."
           },
           {
             "q": "Kann ich mehrmals zur selben Kampagne beitragen?",
-            "a": "Ja. Jeder Beitrag ist eine eigene signierte Transaktion, und der Vertrag prüft bei jedem den verbleibenden Raum unter der Obergrenze. Ein Betrag, der die Kampagne über das Ziel hinausführen würde, wird vom Vertrag abgelehnt, nicht von der Plattformbuchhaltung.",
-            "state": "live"
+            "a": "Ja. Jeder Beitrag ist eine eigene signierte Transaktion, und der Vertrag prüft bei jedem den verbleibenden Raum unter der Obergrenze. Ein Betrag, der die Kampagne über das Ziel hinausführen würde, wird vom Vertrag abgelehnt, nicht von der Plattformbuchhaltung."
           },
           {
             "q": "Was passiert, wenn eine Kampagne ihr Ziel erreicht?",
-            "a": "Die Obergrenze wird vom Vertrag durchgesetzt, also keine Überzeichnung: Sobald das Ziel erreicht ist, werden weitere Beiträge abgelehnt. Nach Ablauf der Frist kann der Kampagnenersteller die Escrow-Mittel abheben.",
-            "state": "live"
+            "a": "Die Obergrenze wird vom Vertrag durchgesetzt, also keine Überzeichnung: Sobald das Ziel erreicht ist, werden weitere Beiträge abgelehnt. Nach Ablauf der Frist kann der Kampagnenersteller die Escrow-Mittel abheben."
           },
           {
             "q": "Wie prüfe ich, ob mein Beitrag durchgegangen ist?",
-            "a": "Verbinden Sie Ihre Wallet und öffnen Sie die Kampagnenseite, um die vom Vertrag gemeldeten Escrow-Summen zu sehen. Da die Abwicklung eine Stellar-Testnet-Transaktion ist, können Sie sie auch unabhängig in einem öffentlichen Testnet-Explorer verifizieren.",
-            "state": "live"
+            "a": "Verbinden Sie Ihre Wallet und öffnen Sie die Kampagnenseite, um die vom Vertrag gemeldeten Escrow-Summen zu sehen. Da die Abwicklung eine Stellar-Testnet-Transaktion ist, können Sie sie auch unabhängig in einem öffentlichen Testnet-Explorer verifizieren."
           }
         ]
       },
       {
-        "id": "refunds",
         "title": "Rückerstattungen und Stornierung",
         "entries": [
           {
             "q": "Wie funktionieren Rückerstattungen?",
-            "a": "Wenn eine Kampagne ihr Ziel bis zur Frist verfehlt, signiert jeder Beitragende seine eigene Rückerstattungstransaktion. Wird das Ziel erreicht, kann nur der Kampagnenersteller abheben, und erst nach der Frist.",
-            "state": "live"
+            "a": "Wenn eine Kampagne ihr Ziel bis zur Frist verfehlt, signiert jeder Beitragende seine eigene Rückerstattungstransaktion. Wird das Ziel erreicht, kann nur der Kampagnenersteller abheben, und erst nach der Frist."
           },
           {
             "q": "Kann ich einen Beitrag nach dem Signieren stornieren?",
-            "a": "Nicht in diesem Prototyp: Eine signierte Testnet-Transaktion ist endgültig. Die Stornierung ist ein geplanter Schritt. Zum Vergleich: Das EU-Crowdfunding-Regime räumt nicht-sophistierten Anlegern eine Widerrufsfrist von 4 Kalendertagen ein, um ein verbindliches Angebot auf einer echten Plattform zurückzunehmen.",
-            "state": "planned"
+            "a": "Nicht in diesem Prototyp: Eine signierte Testnet-Transaktion ist endgültig. Die Stornierung ist ein geplanter Schritt. Zum Vergleich: Das EU-Crowdfunding-Regime räumt nicht-sophistierten Anlegern eine Widerrufsfrist von 4 Kalendertagen ein, um ein verbindliches Angebot auf einer echten Plattform zurückzunehmen."
           },
           {
             "q": "Wer hält das Geld während der Kampagne?",
-            "a": "Der Soroban-Vertrag selbst verwahrt die Beiträge bis zur Frist im Escrow. Kein Betreiberkonto kann sie bewegen: Der Code erlaubt nur eine Ersteller-Abhebung nach erfolgreicher Frist oder Beitragenden-Rückerstattungen nach einer gescheiterten.",
-            "state": "live"
+            "a": "Der Soroban-Vertrag selbst verwahrt die Beiträge bis zur Frist im Escrow. Kein Betreiberkonto kann sie bewegen: Der Code erlaubt nur eine Ersteller-Abhebung nach erfolgreicher Frist oder Beitragenden-Rückerstattungen nach einer gescheiterten."
           }
         ]
       },
       {
-        "id": "tokenization",
         "title": "Tokenisierung auf Stellar",
         "entries": [
           {
             "q": "Was bedeutet Tokenisierung hier?",
-            "a": "Tokenisierung bedeutet, die Rechte und Pflichten einer Investition digital abzubilden, sodass Eigentum und Übertragungen in einem gemeinsamen Ledger erfasst und geprüft werden können. Dieser Prototyp macht einen ersten Schritt: Beitragsregister liegen in einem Soroban-Smart-Contract im Stellar-Testnetz, durchgesetzt durch Code statt Plattformbuchhaltung.",
-            "state": "info"
+            "a": "Tokenisierung bedeutet, die Rechte und Pflichten einer Investition digital abzubilden, sodass Eigentum und Übertragungen in einem gemeinsamen Ledger erfasst und geprüft werden können. Dieser Prototyp macht einen ersten Schritt: Beitragsregister liegen in einem Soroban-Smart-Contract im Stellar-Testnetz, durchgesetzt durch Code statt Plattformbuchhaltung."
           },
           {
             "q": "Was setzt der Smart Contract tatsächlich durch?",
-            "a": "Escrow der Beiträge, die Finanzierungsobergrenze bei jeder Transaktion, die Kampagnenfrist, die Alles-oder-nichts-Abwicklung (Ersteller-Abhebung nur nach erfolgreicher Frist) und beitragendensignierte Rückerstattungen nach einer gescheiterten. Was er nicht tut, decken die geplanten Schritte auf der Seite So funktioniert es ab.",
-            "state": "live"
+            "a": "Escrow der Beiträge, die Finanzierungsobergrenze bei jeder Transaktion, die Kampagnenfrist, die Alles-oder-nichts-Abwicklung (Ersteller-Abhebung nur nach erfolgreicher Frist) und beitragendensignierte Rückerstattungen nach einer gescheiterten. Was er nicht tut, decken die geplanten Schritte auf der Seite So funktioniert es ab."
           },
           {
             "q": "Gibt es einen handelbaren Token?",
-            "a": "Nein. Beitragsguthaben in diesem ersten Vertrag sind bewusst nicht übertragbar. Ein übertragbarer Wertpapier-Token bräuchte ein rechtlich anerkanntes Register, verifizierte Inhaber und die in den Projektdokumenten beschriebene Compliance-Oberfläche, bevor er eine echte Investition abbilden könnte.",
-            "state": "planned"
+            "a": "Nein. Beitragsguthaben in diesem ersten Vertrag sind bewusst nicht übertragbar. Ein übertragbarer Wertpapier-Token bräuchte ein rechtlich anerkanntes Register, verifizierte Inhaber und die in den Projektdokumenten beschriebene Compliance-Oberfläche, bevor er eine echte Investition abbilden könnte."
           },
           {
             "q": "Wo werden meine Beiträge gehalten?",
-            "a": "Im Escrow des Vertrags im öffentlichen Testnetz, nicht beim Plattformbetreiber. Ihre Wallet-Schlüssel bleiben in Freighter auf Ihrem eigenen Gerät; ihr Verlust würde den Zugang zum Beitragsregister kosten, genau wie bei jeder Selbstverwahrung.",
-            "state": "live"
+            "a": "Im Escrow des Vertrags im öffentlichen Testnetz, nicht beim Plattformbetreiber. Ihre Wallet-Schlüssel bleiben in Freighter auf Ihrem eigenen Gerät; ihr Verlust würde den Zugang zum Beitragsregister kosten, genau wie bei jeder Selbstverwahrung."
           }
         ]
       },
       {
-        "id": "risks",
         "title": "Risiken und Eignung",
         "entries": [
           {
             "q": "Was sind die Risiken von echtem Crowdfunding?",
-            "a": "Totalverlust ist möglich, Investitionen sind illiquide, und keine Einlagensicherung gilt. Eine übliche Faustregel ist, nur einen kleinen Teil frei verfügbarer Mittel zu investieren und zu diversifizieren. Die Seite Risikohinweise behandelt das im Detail.",
-            "state": "info"
+            "a": "Totalverlust ist möglich, Investitionen sind illiquide, und keine Einlagensicherung gilt. Eine übliche Faustregel ist, nur einen kleinen Teil frei verfügbarer Mittel zu investieren und zu diversifizieren. Die Seite Risikohinweise behandelt das im Detail."
           },
           {
             "q": "Warum sollten Anleger diversifizieren?",
-            "a": "Die Verteilung auf mehrere Projekte, Branchen und Instrumententypen mildert die Wirkung, wenn ein Projekt scheitert. Alles in einem einzigen Angebot zu konzentrieren, macht das Ergebnis von einem einzigen Unternehmen abhängig.",
-            "state": "info"
+            "a": "Die Verteilung auf mehrere Projekte, Branchen und Instrumententypen mildert die Wirkung, wenn ein Projekt scheitert. Alles in einem einzigen Angebot zu konzentrieren, macht das Ergebnis von einem einzigen Unternehmen abhängig."
           },
           {
             "q": "Ist diese Plattform reguliert?",
-            "a": "Nein. Sie ist kein zugelassener Crowdfunding-Dienstleister und listet keine echten Angebote. In der EU werden Crowdfunding-Anbieter nach dem ECSPR-Regime zugelassen und im öffentlichen ESMA-Register gelistet, das in der Fußzeile jeder Seite verlinkt ist.",
-            "state": "info"
+            "a": "Nein. Sie ist kein zugelassener Crowdfunding-Dienstleister und listet keine echten Angebote. In der EU werden Crowdfunding-Anbieter nach dem ECSPR-Regime zugelassen und im öffentlichen ESMA-Register gelistet, das in der Fußzeile jeder Seite verlinkt ist."
           }
         ]
       },
       {
-        "id": "transfers",
         "title": "Übertragungen und Verkauf",
         "entries": [
           {
             "q": "Kann ich einen Beitrag verkaufen, verschenken oder übertragen?",
-            "a": "Nein. Beitragsregister in diesem Prototyp sind bewusst nicht übertragbar. Auf Produktionsplattformen hängen Übertragungen von den Vertragsbedingungen jedes Instruments ab, benötigen oft die Zustimmung des Emittenten und setzen immer voraus, dass der Empfänger identifiziert wird. Es gibt hier keinen Sekundärmarkt.",
-            "state": "live"
+            "a": "Nein. Beitragsregister in diesem Prototyp sind bewusst nicht übertragbar. Auf Produktionsplattformen hängen Übertragungen von den Vertragsbedingungen jedes Instruments ab, benötigen oft die Zustimmung des Emittenten und setzen immer voraus, dass der Empfänger identifiziert wird. Es gibt hier keinen Sekundärmarkt."
           },
           {
             "q": "Werden Übertragungen später möglich sein?",
-            "a": "Übertragungen zwischen verifizierten Nutzern und möglicherweise ein Schwarzes Brett sind geplante Design-Schritte. Sie brauchen zuerst Identitätsprüfung und vertragliche Regeln pro Instrument, und beides existiert heute nicht im Code.",
-            "state": "planned"
+            "a": "Übertragungen zwischen verifizierten Nutzern und möglicherweise ein Schwarzes Brett sind geplante Design-Schritte. Sie brauchen zuerst Identitätsprüfung und vertragliche Regeln pro Instrument, und beides existiert heute nicht im Code."
           }
         ]
       },
       {
-        "id": "account",
         "title": "Konto und Daten",
         "entries": [
           {
             "q": "Brauche ich ein Konto?",
-            "a": "Optional. Sie können sich mit E-Mail-Adresse und Passwort registrieren (bestätigt mit einem Einmal-Token), oder sich anmelden, indem Sie die Kontrolle über Ihre Freighter-Wallet mit einer einmaligen Challenge beweisen. Verbinden oder Signieren teilt Ihre Schlüssel nie mit der Website.",
-            "state": "live"
+            "a": "Optional. Sie können sich mit E-Mail-Adresse und Passwort registrieren (bestätigt mit einem Einmal-Token), oder sich anmelden, indem Sie die Kontrolle über Ihre Freighter-Wallet mit einer einmaligen Challenge beweisen. Verbinden oder Signieren teilt Ihre Schlüssel nie mit der Website."
           },
           {
             "q": "Welche personenbezogenen Daten erhebt dieser Prototyp?",
-            "a": "Nur was die Community-Funktionen speichern, wenn Sie sie nutzen: Ihren Stellar Public Key, einen optionalen Anzeigenamen und die Kommentare, Support-Tickets oder Emittentenbewerbungen, die Sie absenden (Bewerbungen können eine optionale Kontakt-E-Mail enthalten). Kommentare sind öffentlich. Weder vollständiger Name noch Ausweisdokument werden abgefragt. Ihr Browser hält eine lokale Aufzeichnung einer ausstehenden Transaktion gegen Duplikate, und das Backend führt ein technisches Journal der Anfragen; die Datenschutzerklärung listet Speicherung und Aufbewahrung. Eine Produktionsplattform müsste DSGVO-Pflichten erfüllen: Auskunft, Berichtigung, Löschung und Datenübertragbarkeit.",
-            "state": "live"
+            "a": "Nur was die Community-Funktionen speichern, wenn Sie sie nutzen: Ihren Stellar Public Key, einen optionalen Anzeigenamen und die Kommentare, Support-Tickets oder Emittentenbewerbungen, die Sie absenden (Bewerbungen können eine optionale Kontakt-E-Mail enthalten). Kommentare sind öffentlich. Weder vollständiger Name noch Ausweisdokument werden abgefragt. Ihr Browser hält eine lokale Aufzeichnung einer ausstehenden Transaktion gegen Duplikate, und das Backend führt ein technisches Journal der Anfragen; die Datenschutzerklärung listet Speicherung und Aufbewahrung. Eine Produktionsplattform müsste DSGVO-Pflichten erfüllen: Auskunft, Berichtigung, Löschung und Datenübertragbarkeit."
           }
         ]
       },
       {
-        "id": "documents",
         "title": "Dokumente und Steuern",
         "entries": [
           {
             "q": "Wo sind meine Vertragsdokumente und Belege?",
-            "a": "Noch nirgends: Dokumentenhosting und ein persönliches Portfolio sind geplante Schritte. Eine Produktionsplattform hinterlegt die Vertragsdokumente pro Investition und stellt nach Abschluss einer Investition eine Bestätigung aus.",
-            "state": "planned"
+            "a": "Noch nirgends: Dokumentenhosting und ein persönliches Portfolio sind geplante Schritte. Eine Produktionsplattform hinterlegt die Vertragsdokumente pro Investition und stellt nach Abschluss einer Investition eine Bestätigung aus."
           },
           {
             "q": "Werden Steuern von Erträgen abgezogen?",
-            "a": "Dieser Prototyp zahlt keine Erträge, also wird nichts besteuert oder einbehalten. Auf echten Plattformen hängt die Behandlung von Ihrem Wohnsitzland, dem Instrument und dem Land des Emittenten ab; manche Anbieter behalten Steuern ein oder stellen Jahresbescheinigungen aus, und der Anleger bleibt für die korrekte Erklärung verantwortlich.",
-            "state": "info"
+            "a": "Dieser Prototyp zahlt keine Erträge, also wird nichts besteuert oder einbehalten. Auf echten Plattformen hängt die Behandlung von Ihrem Wohnsitzland, dem Instrument und dem Land des Emittenten ab; manche Anbieter behalten Steuern ein oder stellen Jahresbescheinigungen aus, und der Anleger bleibt für die korrekte Erklärung verantwortlich."
           }
         ]
       },
       {
-        "id": "issuers",
         "title": "Für Unternehmen",
         "entries": [
           {
             "q": "Kann ich mein Unternehmen heute listen?",
-            "a": "Sie können auf der Seite Finanzierung einen Emittentenantrag einreichen; der Betreiber prüft Anträge außerhalb der Plattform und nichts wird automatisch gelistet. Das Kampagnenregister enthält derzeit nur die Demo-Kampagne.",
-            "state": "planned"
+            "a": "Sie können auf der Seite Finanzierung einen Emittentenantrag einreichen; der Betreiber prüft Anträge außerhalb der Plattform und nichts wird automatisch gelistet. Das Kampagnenregister enthält derzeit nur die Demo-Kampagne."
           },
           {
             "q": "Welche Finanzierungsmodelle deckt das Design ab?",
-            "a": "Vier Mutterkategorien auf der Beteiligungsseite - Beteiligungsrecht / -zertifikat (mit dem Substanzgenussrecht als Untertyp), Aktie, indirekte Beteiligung als Haltestruktur und Kommanditbeteiligung - und zwei Fremdkapital-Mutterkategorien, Darlehen und Anleihe, jeweils senior, nachrangig oder mit nicht angegebener Rangfolge begeben. Nullkupon und Wandelbar sind Strukturüberlagerungen auf Fremdkapital. Der Lern-Hub erklärt jede.",
-            "state": "info"
+            "a": "Vier Mutterkategorien auf der Beteiligungsseite - Beteiligungsrecht / -zertifikat (mit dem Substanzgenussrecht als Untertyp), Aktie, indirekte Beteiligung als Haltestruktur und Kommanditbeteiligung - und zwei Fremdkapital-Mutterkategorien, Darlehen und Anleihe, jeweils senior, nachrangig oder mit nicht angegebener Rangfolge begeben. Nullkupon und Wandelbar sind Strukturüberlagerungen auf Fremdkapital. Der Lern-Hub erklärt jede."
           },
           {
             "q": "Wie würde ein Emittent die Mittel erhalten?",
-            "a": "Alles-oder-nichts: Der Kampagnenersteller kann die Escrow-Mittel nur abheben, wenn das Ziel erreicht ist, und erst nach der Frist. Die Regel wird vom Smart Contract durchgesetzt, nicht von einem Plattformversprechen.",
-            "state": "live"
+            "a": "Alles-oder-nichts: Der Kampagnenersteller kann die Escrow-Mittel nur abheben, wenn das Ziel erreicht ist, und erst nach der Frist. Die Regel wird vom Smart Contract durchgesetzt, nicht von einem Plattformversprechen."
           },
           {
             "q": "Was würde ein echter Start erfordern?",
-            "a": "Einen Lizenzweg (eigene Zulassung oder Partnerschaft mit einem lizenzierten Anbieter), ein rechtlich anerkanntes Register für jedes Instrument und jede Jurisdiktion, Zahlungsabwicklung über einen lizenzierten Anbieter, KYC/AML und die in den Projektdokumenten beschriebenen Compliance-Seiten und -Dokumente. Das sind offene Entscheidungen, keine implementierten Funktionen.",
-            "state": "info"
+            "a": "Einen Lizenzweg (eigene Zulassung oder Partnerschaft mit einem lizenzierten Anbieter), ein rechtlich anerkanntes Register für jedes Instrument und jede Jurisdiktion, Zahlungsabwicklung über einen lizenzierten Anbieter, KYC/AML und die in den Projektdokumenten beschriebenen Compliance-Seiten und -Dokumente. Das sind offene Entscheidungen, keine implementierten Funktionen."
           },
           {
             "q": "Was kostet es?",
-            "a": "Der Prototyp läuft auf kostenlosem Hosting und Testnet-Infrastruktur. Kein Gebührenmodell für Emittenten oder Anleger ist definiert oder wird erhoben.",
-            "state": "info"
+            "a": "Der Prototyp läuft auf kostenlosem Hosting und Testnet-Infrastruktur. Kein Gebührenmodell für Emittenten oder Anleger ist definiert oder wird erhoben."
           }
         ]
       }
@@ -1073,14 +1006,9 @@
     "sampleMarker": "Beispieldaten - kein echtes Angebot",
     "list": [
       {
-        "campaignId": "fixture-lisbon-riverside",
         "issuer": "Riverside Development Lda (Beispiel-Emittent)",
-        "country": "PT",
         "category": "Bauwesen",
         "teaser": "Sanierung eines Flussufer-Apartmentgebäudes in Lissabon, finanziert über eine Senioranleihe mit festem Zinssatz. Alle Bedingungen auf dieser Seite sind Beispieldaten.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "senior",
-        "instrumentOverlays": [],
         "interestRate": "6,5% p.a. (Beispiel)",
         "term": "Bis 2030-12-31 (Beispiel)",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1156,14 +1084,9 @@
         ]
       },
       {
-        "campaignId": "fixture-alentejo-solar",
         "issuer": "Alentejo Solar Cooperative (Beispiel-Emittent)",
-        "country": "PT",
         "category": "Energie und Versorgung",
         "teaser": "Gemeinschafts-Solaranlage im Alentejo, finanziert über eine nachrangige Anleihe mit Barzins-Variante. Alle Bedingungen auf dieser Seite sind Beispieldaten.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "subordinated",
-        "instrumentOverlays": [],
         "interestRate": "7,0% p.a. in bar (Beispiel)",
         "term": "Bis 2032-06-30 (Beispiel)",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1225,14 +1148,9 @@
         "news": []
       },
       {
-        "campaignId": "fixture-porto-logistics",
         "issuer": "Porto Logistics Hub SA (Beispiel-Emittent)",
-        "country": "PT",
         "category": "Transport und Logistik",
         "teaser": "Tokenisierungsstudie für einen Logistik-Hub bei Porto, strukturiert als Wandelanleihe. Dieses Fixture zeigt eine abgeschlossene Kampagne. Alle Bedingungen sind Beispieldaten.",
-        "instrumentClass": "bond",
-        "instrumentSeniority": "unspecified",
-        "instrumentOverlays": ["convertible"],
         "interestRate": "8,0% p.a. bis zur Wandlung (Beispiel)",
         "term": "Bis 2031-12-31 (Beispiel)",
         "minInvestment": "500 Testnet-USDC (Beispiel)",
@@ -1455,7 +1373,7 @@
     "knowledgeIntro": "Fünf kurze Ja/Nein-Fragen zu den Risiken von Crowdfunding-Investitionen. Ihre Antworten werden bewertet und dann verworfen - nur das Ergebnis wird gespeichert.",
     "experienceLabel": "Anlageerfahrung",
     "objectiveLabel": "Anlageziel",
-    "selectPlaceholder": "Auswählen...",
+    "selectPlaceholder": "Auswählen…",
     "yes": "Ja",
     "no": "Nein",
     "submitKnowledge": "Antworten absenden",
@@ -1646,7 +1564,7 @@
     ]
   },
   "community": {
-    "loading": "Wird geladen...",
+    "loading": "Wird geladen…",
     "demoBadge": "DEMO",
     "requestFailed": "Die Anfrage ist fehlgeschlagen ({status}). Bitte erneut versuchen.",
     "errorNotFound": "Nicht gefunden.",
@@ -1852,7 +1770,7 @@
         "country": "Land der Registrierung"
       },
       "submit": "Antrag absenden",
-      "submitting": "Wird gesendet...",
+      "submitting": "Wird gesendet…",
       "submitted": "Antrag erhalten. Er erscheint oben als ausstehende Prüfung.",
       "status": {
         "pending": "Prüfung ausstehend",
@@ -1887,7 +1805,7 @@
       "totpDisableCodeLabel": "Authenticator- oder Wiederherstellungscode",
       "totpDone": "Fertig",
       "title": "Sicherheit",
-      "authMethodNote": "Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Berechtigung. Dieser Prototyp hat kein Passwort; unten kann optional ein Zwei-Faktor-Authenticator hinzugefügt werden.",
+      "authMethodNote": "Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Berechtigung. Unten kann optional ein Zwei-Faktor-Authenticator hinzugefügt werden.",
       "linkTitle": "Anmeldeanbieter",
       "linkNote": "Verknüpfen Sie eine weitere Anmeldemethode mit diesem Konto. Sie weisen zuerst nach, dass Sie es wirklich sind (Passwort, frische Wallet-Signatur oder eine kürzliche Anmeldung), und bestätigen dann beim Anbieter.",
       "linkAction": "{provider} verknüpfen",

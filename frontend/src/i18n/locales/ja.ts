@@ -1478,7 +1478,7 @@ export const ja: Messages = {
     knowledgeIntro: 'クラウドファンディング投資のリスクに関する5つの短いはい/いいえ質問です。回答は採点後に破棄され、結果のみが保存されます。',
     experienceLabel: '投資経験',
     objectiveLabel: '投資目的',
-    selectPlaceholder: '選択してください...',
+    selectPlaceholder: '選択してください…',
     yes: 'はい',
     no: 'いいえ',
     submitKnowledge: '回答を送信',
@@ -1676,7 +1676,7 @@ export const ja: Messages = {
     ],
   },
   community: {
-    loading: '読み込み中...',
+    loading: '読み込み中…',
     demoBadge: 'DEMO',
     requestFailed: 'リクエストに失敗しました（{status}）。もう一度お試しください。',
     errorNotFound: '見つかりません。',
@@ -1853,7 +1853,7 @@ export const ja: Messages = {
       '掲載したいプロジェクトを運営者にお知らせください。このフォームの送信はオファー、掲載、承認ではありません - 対話の開始です。デモ環境: 実際の企業秘密は送信しないでください。',
     applicationPreviewTitle: '申請（プレビュー）',
     applicationPreviewNote:
-      '発行者申請のプレビューです。ここに入力した内容は送信・保存されません。下でウォレットにサインインして、運営者レビュー用の本物の申請を送信してください。',
+      '発行者申請のプレビューです。ここに入力した内容は送信・保存されません。ウォレットにサインインして、運営者レビュー用の本物の申請を送信してください。',
     applicationPreviewPlaceholder: 'プレビューのみ - サインインして申請',
     applicationPreviewSubmit: '申請を送信（先にサインイン）',
     applicationFields: {
@@ -1895,7 +1895,7 @@ export const ja: Messages = {
         country: '登記国',
       },
       submit: '申請を送信',
-      submitting: '送信中...',
+      submitting: '送信中…',
       submitted: '申請を受け付けました。上の一覧に審査中と表示されます。',
       status: {
         pending: '審査中',
@@ -1930,8 +1930,7 @@ export const ja: Messages = {
       totpDisableCodeLabel: '認証コードまたはリカバリーコード',
       totpDone: '完了',
       title: 'セキュリティ',
-      authMethodNote:
-        'Stellarウォレットでメッセージに署名してサインインします: ウォレットが認証情報です。このプロトタイプにパスワードはありません。下で任意の二要素認証を追加できます。',
+      authMethodNote: 'Stellarウォレットでメッセージに署名してサインインします: ウォレットが認証情報です。下で任意の二要素認証を追加できます。',
       linkTitle: 'サインインプロバイダー',
       linkNote:
         '別のサインイン方法をこのアカウントにリンクします。まずご本人確認（パスワード、ウォレットの新しい署名、または最近のサインイン）を行い、その後プロバイダーで確認します。',
