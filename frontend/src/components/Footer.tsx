@@ -14,12 +14,8 @@ export default function Footer() {
               <img className="footer-brand-lockup-img" src={lockupFor(theme)} alt="Blockallisto" />
             </div>
             <p className="footer-tagline">{m.footer.tagline}</p>
-            {/* Social icons. All ten platforms link verified destinations. Facebook links the
-              brand Page created 2026-11-03 after the social worker passed Facebook's
-              authenticator-app challenge with a code supplied by the owner; the worker
-              verified the live Page (avatar/name/bio) and main inspected the screenshot.
-              the remaining platforms stay as visual presence only until their real profile
-              URLs exist - no placeholder links. Discord links the user-created server
+            {/* Social icons link verified brand destinations, including the Facebook
+              Page verified 2026-11-03. Discord links the user-created server
               (never-expiring, unlimited-use invite confirmed by the owner on 2026-11-02);
               Telegram links the authorized public brand channel (public page and
               t.me/s preview verified on 2026-11-02). Farcaster links the registered
