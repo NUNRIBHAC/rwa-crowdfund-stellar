@@ -1,12 +1,21 @@
 import { useI18n } from '../i18n';
+import FundingBlock from '../components/FundingBlock';
 
 export default function About() {
   const { m } = useI18n();
   return (
     <>
       <h1 className="page-title">{m.about.title}</h1>
-      <p>{m.about.p1}</p>
-      <p>{m.about.p2}</p>
+      <div className="about-intro">
+        <div>
+          <p>{m.about.p1}</p>
+          <p>{m.about.p2}</p>
+        </div>
+        <div className="about-animation">
+          <FundingBlock />
+          <p className="community-note">{m.hero.illustration}</p>
+        </div>
+      </div>
 
       <section aria-label={m.about.ethicsAria}>
         <h2 className="section-title">{m.about.ethicsTitle}</h2>

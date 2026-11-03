@@ -3142,3 +3142,26 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .card :where(.card-stats dd, .card-funded-pct) {
   font-variant-numeric: tabular-nums;
 }
+
+.about-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 340px);
+  align-items: center;
+  gap: 32px;
+}
+.about-animation .funding-block {
+  max-width: 340px;
+  margin-inline: auto;
+}
+.about-animation .community-note {
+  text-align: center;
+}
+@media (max-width: 760px) {
+  .about-intro {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .about-animation .funding-block {
+    max-width: 280px;
+  }
+}
