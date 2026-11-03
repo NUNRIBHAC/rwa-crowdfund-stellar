@@ -50,6 +50,10 @@ export type SocialFlow = {
   codeVerifier: string;
   createdAt: number;
   expiresAt: number;
+  // When set, this flow LINKS the provider identity to the authenticated
+  // account holding this public key instead of signing anyone in. The
+  // callback outcome is then a binding, never a session.
+  linkTo?: string;
 };
 
 export type TotpEnrollment = {

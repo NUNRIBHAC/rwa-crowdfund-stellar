@@ -9,6 +9,7 @@ import * as jose from 'jose';
 import { FileCommunityStore } from '../src/community-store.js';
 import { CommunityService } from '../src/community.js';
 import { createCommunityRouter } from '../src/community-routes.js';
+import { completeSocialFlow, startSocialFlow } from '../src/social-auth.js';
 
 const requireAdmin: express.RequestHandler = (_req, _res, next) => next();
 
@@ -148,6 +149,103 @@ async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder:
   const cb = await fetch(`${base}/api/auth/social/${provider}/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
   return cb;
 }
+
+// Drive one LINK flow: authenticated /link/start, then the same /callback
+// path with the issued state. Returns the callback response.
+async function driveLinkFlow(base: string, provider: string, token: string, challengeHolder: { challenge: string | null }) {
+  const start = await fetch(`${base}/api/auth/social/${provider}/link/start`, {
+    redirect: 'manual',
+    headers: { authorization: `Bearer ${token}` },
+  });
+  assert.equal(start.status, 302);
+  const authUrl = new URL(start.headers.get('location')!);
+  const state = authUrl.searchParams.get('state')!;
+  const nonce = authUrl.searchParams.get('nonce')!;
+  assert.ok(state && nonce, 'state and nonce issued');
+  challengeHolder.challenge = authUrl.searchParams.get('code_challenge');
+  (globalThis as any).__testNonce = nonce;
+  return fetch(`${base}/api/auth/social/${provider}/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
+}
+
+function tokenFromRedirect(res: Response): string {
+  const loc = res.headers.get('location')!;
+  assert.ok(loc.includes('#social-token=bls_'), loc);
+  return loc.split('#social-token=')[1];
+}
+
+test('social linking: authenticated account binds its identity; link callback issues no session; start requires auth', async () => {
+  const fake = await makeFakeGoogle({ email: 'owner@example.com', emailVerified: true, subject: 'sub-owner' });
+  const { base, store } = await startApp({ ...CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'owner@example.com' }, { socialFetch: fake.fetchImpl });
+  const token = tokenFromRedirect(await driveFlow(base, fake.fetchImpl, fake.state));
+
+  // Link/start requires authentication.
+  assert.equal((await fetch(`${base}/api/auth/social/google/link/start`, { redirect: 'manual' })).status, 401);
+
+  // Binding the same identity to its own account: a no-op link outcome,
+  // and crucially NO session comes back from a link flow.
+  const relink = await driveLinkFlow(base, 'google', token, fake.state);
+  assert.equal(relink.headers.get('location'), '/account#social-linked=google');
+  const state = await store.read();
+  assert.equal(Object.keys(state.socialIdentities).length, 1, 'no duplicate identity');
+  assert.equal(state.sessions ? Object.keys(state.sessions).length : 0, 1, 'no extra session from linking');
+});
+
+test('social linking: an identity bound to another account is refused (social_identity_taken)', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'social-link-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const cfg = { clientId: CLIENT_ID, clientSecret: CLIENT_SECRET };
+  const env = { ...CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'a@example.com,b@example.com' };
+  const fakeA = await makeFakeGoogle({ email: 'a@example.com', emailVerified: true, subject: 'sub-shared' });
+  const fakeB = await makeFakeGoogle({ email: 'b@example.com', emailVerified: true, subject: 'sub-b' });
+
+  const login = async (fake: Awaited<ReturnType<typeof makeFakeGoogle>>, linkTo?: string) => {
+    const { url } = await startSocialFlow(store, 'google', cfg, 'http://test/api/auth/social/google/callback', Date.now(), fake.fetchImpl, linkTo);
+    const authUrl = new URL(url);
+    fake.state.challenge = authUrl.searchParams.get('code_challenge');
+    (globalThis as any).__testNonce = authUrl.searchParams.get('nonce');
+    const state = authUrl.searchParams.get('state')!;
+    return completeSocialFlow(
+      store,
+      env,
+      'google',
+      cfg,
+      `http://test/api/auth/social/google/callback?code=x&state=${encodeURIComponent(state)}`,
+      state,
+      Date.now(),
+      fake.fetchImpl,
+    );
+  };
+
+  const a = await login(fakeA);
+  assert.equal(a.kind, 'session');
+  const b = await login(fakeB);
+  assert.equal(b.kind, 'session');
+  if (b.kind !== 'session') throw new Error('unreachable');
+
+  // Account B tries to bind sub-shared, already owned by A: refused.
+  await assert.rejects(
+    () => login(fakeA, b.account.publicKey),
+    (e: any) => e.status === 409 && e.code === 'social_identity_taken',
+  );
+
+  // Account B binds a fresh identity successfully - the link outcome
+  // carries no token and creates nothing but the binding.
+  const fakeC = await makeFakeGoogle({ email: undefined, emailVerified: false, subject: 'sub-c-noemail' });
+  const linked = await login(fakeC, b.account.publicKey);
+  assert.equal(linked.kind, 'linked');
+  if (linked.kind !== 'linked') throw new Error('unreachable');
+  assert.equal(linked.account.publicKey, b.account.publicKey);
+  const state = await store.read();
+  assert.equal(Object.keys(state.accounts).length, 2, 'linking never creates accounts');
+  assert.ok(state.socialIdentities['google:sub-c-noemail'], 'identity without any email evidence can link but never register');
+
+  // ...and that email-less identity can now SIGN IN to the linked account
+  // (existing identities always sign in; the gate only bars registration).
+  const signin = await login(fakeC);
+  assert.equal(signin.kind, 'session');
+  if (signin.kind !== 'session') throw new Error('unreachable');
+  assert.equal(signin.account.publicKey, b.account.publicKey);
+});
 
 test('social routes fail closed: 404 without provider config, 404 for unknown providers', async () => {
   const { base } = await startApp({});

@@ -238,6 +238,22 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // and error codes never touch URL access logs.
   const socialRedirectUri = (req: express.Request, provider: string): string =>
     (process.env[`SOCIAL_${provider.toUpperCase()}_REDIRECT_URI`] ?? '').trim() || `https://${req.get('host')}/api/auth/social/${provider}/callback`;
+  // Link flow: attach a provider identity to the currently authenticated
+  // account. Completion reuses the SAME registered callback URL below (no
+  // provider console change); the flow's linkTo marker makes the outcome a
+  // binding, never a session.
+  router.get(
+    '/api/auth/social/:provider/link/start',
+    authed(async (req, res, account) => {
+      const provider = req.params.provider;
+      if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
+      const cfg = socialConfigFromEnv(process.env, provider);
+      if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
+      await abuseGate(req);
+      const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch, account.publicKey);
+      res.redirect(302, url);
+    }),
+  );
   router.get('/api/auth/social/:provider/start', async (req, res) => {
     try {
       const provider = req.params.provider;
@@ -266,6 +282,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const currentUrl = `https://${req.get('host')}${req.originalUrl}`;
       const result = await completeSocialFlow(store, process.env, provider, cfg, currentUrl, req.query.state, Date.now(), deps.socialFetch);
       if (result.kind === 'totp') return res.redirect(302, `/account#social-totp=${result.ticket}`);
+      if (result.kind === 'linked') return res.redirect(302, `/account#social-linked=${provider}`);
       return res.redirect(302, `/account#social-token=${result.token}`);
     } catch (err) {
       const code = (err as { code?: string } | null)?.code;

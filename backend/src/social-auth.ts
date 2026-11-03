@@ -17,6 +17,13 @@
 // The subject comes from the validated id_token claims; access tokens are
 // discarded immediately (access_type=online: no refresh token is issued).
 //
+// Linking: an authenticated account can attach additional provider
+// identities through /api/auth/social/<provider>/link/start. The callback
+// is the SAME registered callback URL (no provider console change); the
+// stored flow's linkTo marker turns the outcome into a binding instead of
+// a session. An identity already bound to a different account is refused
+// (409 social_identity_taken).
+//
 // Registration is FAIL-CLOSED: creating a NEW account from a social
 // identity requires (a) the provider asserting email_verified=true and
 // (b) that address listed in the per-env SOCIAL_REGISTRATION_ALLOWED_EMAILS
@@ -122,6 +129,7 @@ export async function startSocialFlow(
   redirectUri: string,
   now = Date.now(),
   fetchImpl?: FetchLike,
+  linkTo?: string,
 ): Promise<{ url: string }> {
   const state = client.randomState();
   const nonce = client.randomNonce();
@@ -129,7 +137,7 @@ export async function startSocialFlow(
   const codeChallenge = await client.calculatePKCECodeChallenge(codeVerifier);
   await store.change((s) => {
     for (const [k, f] of Object.entries(s.socialFlows)) if (f.expiresAt <= now) delete s.socialFlows[k];
-    s.socialFlows[flowKey(state)] = { provider, nonce, codeVerifier, createdAt: now, expiresAt: now + SOCIAL_FLOW_TTL_MS };
+    s.socialFlows[flowKey(state)] = { provider, nonce, codeVerifier, createdAt: now, expiresAt: now + SOCIAL_FLOW_TTL_MS, ...(linkTo ? { linkTo } : {}) };
   });
   const conf = await getClient(cfg, provider, fetchImpl);
   const url = client.buildAuthorizationUrl(conf, {
@@ -144,7 +152,9 @@ export async function startSocialFlow(
 }
 
 export type SocialLoginResult =
-  { kind: 'session'; token: string; expiresAt: number; account: Account } | { kind: 'totp'; ticket: string; expiresAt: number; account: Account };
+  | { kind: 'session'; token: string; expiresAt: number; account: Account }
+  | { kind: 'totp'; ticket: string; expiresAt: number; account: Account }
+  | { kind: 'linked'; account: Account };
 
 // Complete a flow from the callback. currentUrl is the full callback URL
 // (openid-client validates state/iss against it). Errors:
@@ -190,6 +200,30 @@ export async function completeSocialFlow(
   const email = typeof claims?.email === 'string' ? (claims.email as string).trim().toLowerCase() : null;
   const emailVerified = claims?.email_verified === true;
   const identityKey = `${provider}:${subject}`;
+
+  if (flow.linkTo) {
+    // LINK flow (started by an authenticated account): bind the provider
+    // identity to that account. No session is issued here, no account is
+    // created, and the registration allowlist/email gate does not apply -
+    // the account already exists and proved control with its session when
+    // it started the flow. This is the only path a provider without email
+    // evidence (e.g. Telegram OIDC carries no email claims) can ever take:
+    // it can never register, only attach to an existing account.
+    return store.change((s) => {
+      const account = s.accounts[flow.linkTo as string];
+      if (!account) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
+      const existing = s.socialIdentities[identityKey];
+      if (existing && existing.publicKey !== account.publicKey) {
+        throw new AuthError(409, 'this provider identity is already linked to a different account', 'social_identity_taken');
+      }
+      if (!existing) {
+        s.socialIdentities[identityKey] = { provider, subject, publicKey: account.publicKey, email, createdAt: now, lastLoginAt: now };
+      } else {
+        existing.lastLoginAt = now;
+      }
+      return { kind: 'linked' as const, account: { ...account } };
+    });
+  }
 
   return store.change((s) => {
     const existing = s.socialIdentities[identityKey];
