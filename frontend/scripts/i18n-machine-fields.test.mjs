@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { isMachineField } from './i18n-machine-fields.mjs';
 test('machine field classifier protects routing, enums and identifiers, not visible country labels or locale composition', () => {

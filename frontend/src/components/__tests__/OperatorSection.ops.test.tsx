@@ -71,7 +71,7 @@ test('reconciliation tab renders the operational aid with honest framing and qua
   fireEvent.click(chip);
   await screen.findByText('staging-load');
   expect(screen.getByText(/not missing funds/)).toBeTruthy();
-  expect(screen.getByText(/2 quarantined journal row/)).toBeTruthy();
+  expect(screen.getByText(/Journal rows in quarantine requiring operator review: 2/)).toBeTruthy();
   expect(screen.getByText(/test note/)).toBeTruthy();
 });
 
