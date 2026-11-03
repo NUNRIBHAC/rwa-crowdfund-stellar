@@ -16,6 +16,7 @@ import {
   enableTotp,
   disableTotp,
   completeTotpLogin,
+  authenticateWithSession,
 } from './accounts.js';
 import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaignId } from './community.js';
 import { metadataFor } from './campaign-metadata.js';
@@ -37,7 +38,7 @@ import {
   sendBudgetedMail,
 } from './email-auth.js';
 import { MAIL_LOCALES, resetEmail, verificationEmail } from './email-templates.js';
-import { completeSocialFlow, isSocialProvider, SOCIAL_PROVIDERS, socialConfigFromEnv, startSocialFlow } from './social-auth.js';
+import { completeSocialFlow, isSocialProvider, requireSocialLinkStepUp, SOCIAL_PROVIDERS, socialConfigFromEnv, startSocialFlow } from './social-auth.js';
 import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
@@ -238,6 +239,27 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // and error codes never touch URL access logs.
   const socialRedirectUri = (req: express.Request, provider: string): string =>
     (process.env[`SOCIAL_${provider.toUpperCase()}_REDIRECT_URI`] ?? '').trim() || `https://${req.get('host')}/api/auth/social/${provider}/callback`;
+  // Link flow: attach a provider identity to the currently authenticated
+  // account. Completion reuses the SAME registered callback URL below (no
+  // provider console change); the flow's linkTo marker makes the outcome a
+  // binding, never a session.
+  router.post('/api/auth/social/:provider/link/start', async (req, res) => {
+    try {
+      const provider = req.params.provider;
+      if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
+      const cfg = socialConfigFromEnv(process.env, provider);
+      if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
+      await abuseGate(req);
+      const { account, sessionCreatedAt } = await authenticateWithSession(store, req.header('authorization'));
+      await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {});
+      const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch, account.publicKey);
+      // JSON, not a 302: the SPA navigates after collecting the step-up
+      // proof, so the provider URL is data here.
+      res.json({ url });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.get('/api/auth/social/:provider/start', async (req, res) => {
     try {
       const provider = req.params.provider;
@@ -266,6 +288,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const currentUrl = `https://${req.get('host')}${req.originalUrl}`;
       const result = await completeSocialFlow(store, process.env, provider, cfg, currentUrl, req.query.state, Date.now(), deps.socialFetch);
       if (result.kind === 'totp') return res.redirect(302, `/account#social-totp=${result.ticket}`);
+      if (result.kind === 'linked') return res.redirect(302, `/account#social-linked=${provider}`);
       return res.redirect(302, `/account#social-token=${result.token}`);
     } catch (err) {
       const code = (err as { code?: string } | null)?.code;
