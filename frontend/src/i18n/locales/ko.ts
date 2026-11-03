@@ -1880,14 +1880,14 @@ export const ko: Messages = {
       totpDisableCodeLabel: '인증 또는 복구 코드',
       totpDone: '완료',
       title: '보안',
+      authMethodNote:
+        'Stellar 지갑으로 메시지에 서명하여 로그인합니다: 지갑이 자격 증명입니다. 이 프로토타입에는 비밀번호가 없으며, 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
       linkTitle: '로그인 제공자',
       linkNote: '이 계정에 다른 로그인 방법을 연결합니다. 먼저 본인임을 증명하고(비밀번호, 새 지갑 서명 또는 최근 로그인) 제공자에서 확인합니다.',
       linkAction: '{provider} 연결',
       linkPasswordLabel: '현재 비밀번호',
       linkConfirm: '확인 후 계속',
       linkWalletNoSign: '지갑이 챌린지에 서명하지 않아 연결이 시작되지 않았습니다.',
-      authMethodNote:
-        'Stellar 지갑으로 메시지에 서명하여 로그인합니다: 지갑이 자격 증명입니다. 이 프로토타입에는 비밀번호가 없으며, 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
       authMethodNoteEmail: '이메일 주소와 비밀번호로 로그인합니다. 비밀번호가 자격 증명입니다. 아래에서 선택적 2단계 인증을 추가할 수 있습니다.',
       authMethodNoteSocial:
         '연결된 제공업체(Google, GitHub 등)로 로그인합니다. 자격 증명은 제공업체입니다. 아래에서 선택적으로 2단계 인증 앱을 추가할 수 있으며, 제공업체 로그인 후에 요청됩니다.',

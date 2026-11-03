@@ -903,7 +903,11 @@ for (const mode of ['invalid', 'error', 'valid'] as const) {
     const real = await siwe(nonce);
     // Forged: well-formed message for the fid owner, signed by a DIFFERENT key.
     const m = { message: real.message, signature: await privateKeyToAccount(generatePrivateKey()).signMessage({ message: real.message }) };
-    const res = await fetch(`${base}/api/auth/farcaster/verify`, { method: 'POST', headers: { 'content-type': 'application/json', cookie: ck }, body: JSON.stringify({ nonce, ...m }) });
+    const res = await fetch(`${base}/api/auth/farcaster/verify`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', cookie: ck },
+      body: JSON.stringify({ nonce, ...m }),
+    });
     assert.ok(res.status === 401 || res.status === 502, `status ${res.status}`);
     const body = (await res.json()) as Record<string, unknown>;
     assert.equal(body.token, undefined);
@@ -912,7 +916,11 @@ for (const mode of ['invalid', 'error', 'valid'] as const) {
     assert.equal(Object.keys(st.socialIdentities).length, 0);
     assert.equal(Object.keys(st.accounts).length, 0);
     assert.equal(Object.keys(st.sessions ?? {}).length, 0);
-    const again = await fetch(`${base}/api/auth/farcaster/verify`, { method: 'POST', headers: { 'content-type': 'application/json', cookie: ck }, body: JSON.stringify({ nonce, ...m }) });
+    const again = await fetch(`${base}/api/auth/farcaster/verify`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', cookie: ck },
+      body: JSON.stringify({ nonce, ...m }),
+    });
     assert.equal(again.status, 401, 'failed proof burns the nonce');
   });
 }

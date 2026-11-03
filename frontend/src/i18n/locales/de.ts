@@ -1969,7 +1969,6 @@ export const de: Messages = {
       title: 'Sicherheit',
       authMethodNote:
         'Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Berechtigung. Dieser Prototyp hat kein Passwort; unten kann optional ein Zwei-Faktor-Authenticator hinzugefügt werden.',
-
       linkTitle: 'Anmeldeanbieter',
       linkNote:
         'Verknüpfen Sie eine weitere Anmeldemethode mit diesem Konto. Sie weisen zuerst nach, dass Sie es wirklich sind (Passwort, frische Wallet-Signatur oder eine kürzliche Anmeldung), und bestätigen dann beim Anbieter.',

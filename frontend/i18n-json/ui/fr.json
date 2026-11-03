@@ -574,14 +574,14 @@
   "errors": {
     "freighterMissing": "Extension de portefeuille Freighter non détectée. Installez Freighter, puis réessayez Connecter.",
     "walletAccessFailed": "L'accès au portefeuille a échoué",
-    "connectFirst": "Connectez d'abord Freighter.",
+    "connectFirst": "Connectez d’abord Freighter.",
     "resolveSaved": "Réglez la transaction enregistrée avant d'en préparer une autre.",
     "walletMismatch": "Connectez le portefeuille qui a préparé cette transaction.",
     "walletNoSign": "Le portefeuille n'a pas signé",
     "apiFailed": "La requête API a échoué",
     "apiUnavailable": "Le service est temporairement indisponible. Veuillez réessayer dans un instant.",
     "prepareTrustlineMissing": "Ce portefeuille n'est pas encore configuré pour l'USDC de test (trustline manquante). Ajoutez une trustline USDC, puis réessayez.",
-    "prepareAccountMissing": "Ce compte de portefeuille n'existe pas encore sur le réseau de test. Financez-le d'abord, puis réessayez.",
+    "prepareAccountMissing": "Ce compte de portefeuille n'existe pas encore sur le réseau de test. Financez-le d’abord, puis réessayez.",
     "prepareInsufficientBalance": "Ce portefeuille ne contient pas assez d'USDC de test pour ce montant.",
     "prepareFailed": "Impossible de préparer cette transaction. Veuillez réessayer."
   },
@@ -637,7 +637,7 @@
           "Peut impliquer un fiduciaire ou un véhicule entre l'investisseur et l'émetteur",
           "Généralement illiquide"
         ],
-        "suitableFor": "Investisseurs à l'aise avec des structures sur mesure, qui lisent d'abord les conditions exactes du contrat."
+        "suitableFor": "Investisseurs à l'aise avec des structures sur mesure, qui lisent d’abord les conditions exactes du contrat."
       },
       {
         "id": "share",
@@ -995,7 +995,7 @@
           },
           {
             "q": "Les transferts seront-ils possibles plus tard ?",
-            "a": "Les transferts entre utilisateurs vérifiés, et éventuellement un marché de type babillard, sont des étapes de conception planifiées. Ils nécessitent d'abord une vérification d'identité et des règles contractuelles par instrument, et rien de tout cela n'existe dans le code aujourd'hui.",
+            "a": "Les transferts entre utilisateurs vérifiés, et éventuellement un marché de type babillard, sont des étapes de conception planifiées. Ils nécessitent d’abord une vérification d'identité et des règles contractuelles par instrument, et rien de tout cela n'existe dans le code aujourd'hui.",
             "state": "planned"
           }
         ]
@@ -1397,7 +1397,7 @@
     "deadlineNote": "La date limite est fixée à 00:00 UTC le jour choisi ; aujourd'hui est donc déjà trop tard.",
     "deadlineErrorPast": "La date limite doit être dans le futur (règle du contrat).",
     "creatorLabel": "Portefeuille du créateur",
-    "creatorPlaceholder": "Connectez d'abord un portefeuille",
+    "creatorPlaceholder": "Connectez d’abord un portefeuille",
     "tokenLabel": "Jeton",
     "previewAria": "Aperçu de déploiement",
     "previewTitle": "Ce qu'utiliserait un déploiement",
@@ -1564,7 +1564,7 @@
     "infoSustainabilityOptions": {
       "none": "Aucune préférence",
       "esg_important": "Les critères environnementaux ou sociaux comptent",
-      "impact_first": "L'impact d'abord"
+      "impact_first": "L'impact d’abord"
     },
     "infoStatusProvided": "Informations sur votre expérience enregistrées.",
     "infoStatusMissing": "Aucune information sur votre expérience pour l'instant - repassez le test pour la fournir.",
@@ -1687,7 +1687,7 @@
     "signInTitle": "Connexion à la communauté",
     "signInExplainer": "Signez un défi unique avec votre portefeuille Freighter pour prouver que vous contrôlez l'adresse. Aucune transaction n'est créée et aucun fonds ne bouge. La session débloque les commentaires, les tickets de support et les candidatures d'émetteur.",
     "signInButton": "Se connecter avec le portefeuille",
-    "signInConnectFirst": "Connectez d'abord votre portefeuille Freighter (en haut de la page).",
+    "signInConnectFirst": "Connectez d’abord votre portefeuille Freighter (en haut de la page).",
     "signInMethodLabel": "Méthode de connexion",
     "signInMethodWallet": "Portefeuille",
     "signInMethodEmail": "Email",
@@ -1740,9 +1740,32 @@
     "errorTotpNotEnabled": "L'authentification à deux facteurs n'est pas activée sur ce compte.",
     "errorSocialProviderDenied": "La connexion a été annulée chez le fournisseur. Aucune session n'a été ouverte.",
     "errorSocialFlowExpired": "La connexion a expiré. Recommencez.",
+    "farcasterWaitingTitle": "Approuvez dans Farcaster",
+    "farcasterWaitingNote": "Ouvrez le lien sur un appareil avec l'application Farcaster, approuvez la connexion, puis revenez sur cette page. L'attente dure jusqu'à 5 minutes.",
+    "farcasterOpenApp": "Ouvrir Farcaster",
+    "farcasterCancel": "Annuler",
+    "socialEmailTitle": "Confirmez votre e-mail",
+    "socialEmailExplainer": "Votre identité chez le fournisseur est vérifiée, mais elle ne partage pas d'e-mail. Saisissez l'e-mail avec lequel vous avez été invité et nous enverrons un code à 6 chiffres.",
+    "socialEmailEmailLabel": "E-mail",
+    "socialEmailSend": "Envoyer le code",
+    "socialEmailSentNote": "Si cette adresse est éligible, un code a été envoyé. Saisissez-le ci-dessous. Il expire dans 10 minutes.",
+    "socialEmailCodeLabel": "Code à 6 chiffres",
+    "socialEmailConfirm": "Confirmer et se connecter",
+    "errorSocialPendingExpired": "Cette connexion a expiré ou a été lancée dans un autre navigateur. Recommencez.",
+    "errorSocialCodeInvalid": "Ce code n'est pas valide. Vérifiez-le ou demandez-en un nouveau.",
+    "errorSocialEmailInUse": "Cet e-mail a déjà un compte. Connectez-vous et associez ce fournisseur depuis votre compte.",
     "errorSocialExchangeFailed": "Le fournisseur de connexion a rejeté l’échange. Recommencez.",
     "errorSocialRegistrationRestricted": "La connexion avec ce fournisseur n’est pas encore ouverte aux nouveaux comptes sur ce site.",
+    "errorSocialIdentityTaken": "Cette identité du fournisseur est déjà liée à un autre compte.",
+    "errorSocialStepupRequired": "Reconnectez-vous pour lier un fournisseur ; votre session est trop ancienne.",
+    "errorSocialStepupFailed": "La réauthentification a échoué. Vérifiez votre mot de passe ou signez un nouveau défi avec le portefeuille.",
+    "errorSocialLinkRequiresVerifiedEmail": "Lier un fournisseur de connexion nécessite un compte avec une adresse e-mail vérifiée.",
+    "socialLinkedSuccess": "La connexion avec {provider} est maintenant liée à votre compte.",
     "socialSignInGoogle": "Continuer avec Google",
+    "socialSignInGithub": "Continuer avec GitHub",
+    "socialSignInLinkedin": "Continuer avec LinkedIn",
+    "socialSignInTelegram": "Continuer avec Telegram",
+    "socialSignInGeneric": "Continuer avec {provider}",
     "signedInTitle": "Compte de la communauté",
     "signedInAs": "Connecté en tant que",
     "displayNameLabel": "Nom d'affichage (visible sur vos commentaires)",
@@ -1768,7 +1791,7 @@
     "applicationPreviewTitle": "Candidature (aperçu)",
     "applicationPreviewNote": "Aperçu de la candidature d'émetteur. Rien de ce que vous saisissez ici n'est envoyé ni conservé - connectez-vous avec votre portefeuille pour soumettre une vraie candidature pour examen par l'opérateur.",
     "applicationPreviewPlaceholder": "Aperçu uniquement - connectez-vous pour postuler",
-    "applicationPreviewSubmit": "Soumettre la candidature (connectez-vous d'abord)",
+    "applicationPreviewSubmit": "Soumettre la candidature (connectez-vous d’abord)",
     "applicationFields": {
       "projectName": "Nom du projet",
       "country": "Pays",
@@ -1784,6 +1807,8 @@
     "applicationStatus": {
       "received": "Reçue",
       "under_review": "À l'étude",
+      "approved": "Approuvée",
+      "rejected": "Rejetée",
       "closed": "Clôturée"
     },
     "myTicketsTitle": "Mes tickets de support et feedback",
@@ -1842,7 +1867,16 @@
       "totpDone": "Terminé",
       "title": "Sécurité",
       "authMethodNote": "Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille est la clé. Ce prototype n'a pas de mot de passe ; un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.",
+      "linkTitle": "Fournisseurs de connexion",
+      "linkNote": "Liez une autre méthode de connexion à ce compte. Vous prouverez d’abord qu’il s’agit bien de vous (mot de passe, nouvelle signature du portefeuille ou connexion récente), puis confirmerez auprès du fournisseur.",
+      "linkAction": "Lier {provider}",
+      "linkPasswordLabel": "Mot de passe actuel",
+      "linkConfirm": "Confirmer et continuer",
+      "linkWalletNoSign": "Le portefeuille n’a pas signé le défi ; la liaison n’a pas été lancée.",
       "authMethodNoteEmail": "Vous vous connectez avec votre email et votre mot de passe : le mot de passe est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.",
+      "authMethodNoteSocial": "Vous vous connectez via un fournisseur associé (Google, GitHub, etc.) : le fournisseur est l'identifiant. Vous pouvez ajouter ci-dessous un authentificateur à deux facteurs facultatif, demandé après la connexion au fournisseur.",
+      "totpOffNoteSocial": "Ajoutez une application d'authentification comme deuxième étape après la connexion au fournisseur. Facultatif, et valable pour ce compte uniquement.",
+      "totpOnNoteSocial": "L'authentification à deux facteurs est activée : après la connexion au fournisseur, un code de l'application d'authentification est aussi demandé.",
       "sessionsTitle": "Sessions actives",
       "sessionLabel": "Session",
       "currentBadge": "Cette session",
@@ -1872,6 +1906,8 @@
       "bodies": {
         "applicationReceived": "Votre candidature d'émetteur pour \"{projectName}\" a été reçue. L'opérateur examine les candidatures manuellement ; la soumission n'est ni une approbation, ni une cotation, ni une offre.",
         "applicationStatus": "Votre candidature d'émetteur pour \"{projectName}\" est maintenant \"{statusLabel}\".",
+        "applicationStatusReviewOnly": "Il s’agit uniquement d’un résultat d’examen du prototype - pas une approbation légale, une vérification d’identité, une cotation ou une offre.",
+        "applicationStatusNote": "Note de l’opérateur : {note}",
         "commentModerated": "Votre commentaire sur la campagne \"{campaignId}\" a été masqué par le modérateur.",
         "commentModeratedReason": "Motif : {reason}",
         "ticketClosed": "Votre ticket ({kindLabel}) \"{subject}\" a été clôturé.",
@@ -1933,6 +1969,9 @@
       "stateVisible": "Visible",
       "stateHidden": "Masqué",
       "markUnderReview": "Marquer en cours d'examen",
+      "approveApplication": "Approuver",
+      "rejectApplication": "Rejeter",
+      "rejectNotePrompt": "Note de rejet pour le candidat (obligatoire) :",
       "closeApplication": "Clôturer",
       "reopenApplication": "Rouvrir",
       "statusUpdated": "Statut mis à jour.",

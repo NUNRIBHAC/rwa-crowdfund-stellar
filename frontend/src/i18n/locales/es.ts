@@ -1980,7 +1980,6 @@ export const es: Messages = {
       title: 'Seguridad',
       authMethodNote:
         'Inicias sesión firmando un mensaje con tu monedero Stellar: el monedero es la credencial. Este prototipo no tiene contraseña; abajo puedes añadir un autenticador de dos factores opcional.',
-
       linkTitle: 'Proveedores de inicio de sesión',
       linkNote:
         'Vincula otro método de inicio de sesión a esta cuenta. Primero demostrarás que eres tú (contraseña, firma nueva de la cartera o un inicio de sesión reciente) y luego lo confirmarás en el proveedor.',
