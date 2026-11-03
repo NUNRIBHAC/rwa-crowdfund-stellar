@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildCapTable, buildDistributionPreview } from '../src/corporate-actions.js';
+import { buildCapTable, buildDistributionPreview, holdingFromCapTable } from '../src/corporate-actions.js';
 import type { ShareRegisterPayload } from '../src/share-register.js';
 
 const row = (publicKey: string, netIntended: string, extra: Record<string, unknown> = {}) => ({ publicKey, netIntended, ...extra }) as never;
@@ -83,4 +83,16 @@ test('distribution preview: complete single-basis table gives an exact-sum illus
   );
   for (const bad of ['0', '-1', 'abc', '1.00000001', '']) assert.throws(() => buildDistributionPreview(t, bad));
   assert.equal(buildDistributionPreview(buildCapTable(reg([])), '5').status, 'unavailable');
+});
+
+test('holding: own row only; UNKNOWN stays UNKNOWN; missing wallet is null', () => {
+  const t = buildCapTable(reg([row('A', '60'), row('B', 'UNKNOWN')]));
+  const a = holdingFromCapTable(t, 'A');
+  assert.equal(a?.position, '60');
+  assert.equal(a?.positionSource, 'journal-intended');
+  assert.equal(a?.registerComplete, false);
+  const b = holdingFromCapTable(t, 'B');
+  assert.equal(b?.position, 'UNKNOWN');
+  assert.equal(b?.basisPoints, null);
+  assert.equal(holdingFromCapTable(t, 'Z'), null);
 });

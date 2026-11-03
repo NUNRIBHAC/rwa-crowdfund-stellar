@@ -162,3 +162,30 @@ export function buildDistributionPreview(table: CapTable, totalDecimal: string):
       : 'ALLOCATION UNAVAILABLE: ' + (reason ?? 'incomplete basis') + '. Nothing is declared or payable.',
   };
 }
+
+export type Holding = {
+  campaignId: string;
+  position: string; // decimal units string, or 'UNKNOWN' (never 0 when unknown)
+  positionSource: CapTableRow['positionSource'];
+  basisPoints: number | null;
+  note?: string;
+  // Register-level honesty: the base the percentage rests on.
+  registerComplete: boolean;
+  basisMixed: boolean;
+};
+
+// One wallet's own position taken from a cap table. Returns null when the
+// wallet has no row; an UNKNOWN row stays UNKNOWN and is never coerced to 0.
+export function holdingFromCapTable(table: CapTable, publicKey: string): Holding | null {
+  const row = table.rows.find((r) => r.publicKey === publicKey);
+  if (!row) return null;
+  return {
+    campaignId: table.campaignId,
+    position: row.position,
+    positionSource: row.positionSource,
+    basisPoints: row.basisPoints,
+    ...(row.note ? { note: row.note } : {}),
+    registerComplete: table.complete,
+    basisMixed: table.basis.mixed,
+  };
+}
