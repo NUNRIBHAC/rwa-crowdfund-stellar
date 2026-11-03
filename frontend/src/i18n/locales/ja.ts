@@ -278,6 +278,7 @@ export const ja: Messages = {
     podcastEmpty: 'エピソードはありません。キャンペーンのポッドキャストエピソードがここに表示されます。',
     statusFunded: '資金調達に成功',
     statusEnded: '失敗',
+    viewContributionForm: '拠出フォームを見る',
     widgetContribute: '出資する',
     widgetOverview: '投資概要',
     widgetFixture: 'サンプルプレビュー。このキャンペーンはフィクスチャであり、デプロイされたコントラクトではなく、出資を受け付けることはできません。',

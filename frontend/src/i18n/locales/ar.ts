@@ -278,6 +278,7 @@ export const ar: Messages = {
     podcastEmpty: 'لا حلقات. حلقات بودكاست الحملة كانت ستظهر هنا.',
     statusFunded: 'تم التمويل بنجاح',
     statusEnded: 'غير ناجحة',
+    viewContributionForm: 'عرض نموذج المساهمة',
     widgetContribute: 'ساهم',
     widgetOverview: 'نظرة عامة على الاستثمار',
     widgetFixture: 'معاينة تجريبية. هذه الحملة بيانات ثابتة، وليست عقدًا منشورًا، ولا يمكنها قبول المساهمات.',

@@ -275,6 +275,7 @@ export const en = {
     podcastEmpty: 'No episodes. Campaign podcast episodes would appear here.',
     statusFunded: 'Successfully financed',
     statusEnded: 'Unsuccessful',
+    viewContributionForm: 'View contribution form',
     widgetContribute: 'Contribute',
     widgetOverview: 'Investment overview',
     widgetFixture: 'Sample preview. This campaign is a fixture, not a deployed contract, and cannot accept contributions.',

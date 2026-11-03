@@ -269,6 +269,7 @@
     "podcastEmpty": "에피소드가 없습니다. 캠페인 팟캐스트 에피소드가 여기에 표시됩니다.",
     "statusFunded": "자금 조달 성공",
     "statusEnded": "실패",
+    "viewContributionForm": "기여 양식 보기",
     "widgetContribute": "출자하기",
     "widgetOverview": "투자 개요",
     "widgetFixture": "샘플 미리보기. 이 캠페인은 픽스처이며 배포된 컨트랙트가 아니므로 출자를 받을 수 없습니다.",

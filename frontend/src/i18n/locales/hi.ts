@@ -278,6 +278,7 @@ export const hi: Messages = {
     podcastEmpty: 'कोई एपिसोड नहीं। कैंपेन पॉडकास्ट एपिसोड यहां दिखेंगे।',
     statusFunded: 'सफलतापूर्वक वित्तपोषित',
     statusEnded: 'असफल',
+    viewContributionForm: 'योगदान फ़ॉर्म देखें',
     widgetContribute: 'योगदान करें',
     widgetOverview: 'निवेश अवलोकन',
     widgetFixture: 'सैंपल पूर्वावलोकन। यह कैंपेन एक फिक्स्चर है, डिप्लॉय किया गया कॉन्ट्रैक्ट नहीं, और योगदान स्वीकार नहीं कर सकता।',

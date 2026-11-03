@@ -269,6 +269,7 @@
     "podcastEmpty": "暂无节目。项目播客节目将显示在这里。",
     "statusFunded": "融资成功",
     "statusEnded": "未成功",
+    "viewContributionForm": "查看出资表单",
     "widgetContribute": "出资",
     "widgetOverview": "投资概览",
     "widgetFixture": "示例预览。此项目是固定数据，不是已部署合约，无法接受出资。",

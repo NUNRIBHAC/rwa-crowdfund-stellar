@@ -286,6 +286,7 @@ export const fr: Messages = {
     podcastEmpty: 'Aucun épisode. Les épisodes du podcast de la campagne apparaîtraient ici.',
     statusFunded: 'Financée avec succès',
     statusEnded: 'Sans succès',
+    viewContributionForm: 'Voir le formulaire de contribution',
     widgetContribute: 'Contribuer',
     widgetOverview: "Résumé de l'investissement",
     widgetFixture: "Aperçu d'exemple. Cette campagne est un exemple (fixture), pas un contrat déployé, et ne peut pas accepter de contributions.",

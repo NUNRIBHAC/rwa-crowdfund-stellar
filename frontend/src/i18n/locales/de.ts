@@ -286,6 +286,7 @@ export const de: Messages = {
     podcastEmpty: 'Keine Episoden. Kampagnen-Podcast-Episoden würden hier erscheinen.',
     statusFunded: 'Erfolgreich finanziert',
     statusEnded: 'Nicht erfolgreich',
+    viewContributionForm: 'Beitragsformular anzeigen',
     widgetContribute: 'Beitragen',
     widgetOverview: 'Anlageübersicht',
     widgetFixture: 'Beispielvorschau. Diese Kampagne ist ein Beispiel (Fixture), kein bereitgestellter Vertrag, und kann keine Beiträge annehmen.',

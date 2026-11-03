@@ -339,7 +339,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
               document.querySelector<HTMLInputElement>('#campaign-funding input')?.focus({ preventScroll: true });
             }}
           >
-            {m.campaign.widgetContribute}
+            {m.campaign.viewContributionForm}
           </a>
         </div>
       )}
