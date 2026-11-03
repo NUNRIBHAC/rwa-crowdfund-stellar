@@ -83,3 +83,63 @@ test('a complete single-basis table shows an illustration notice and exact amoun
   await waitFor(() => expect(screen.getByText(/Illustration only/)).toBeTruthy());
   expect(screen.getByText('6')).toBeTruthy();
 });
+
+test('synthetic no-campaign state has no actionable load or preview controls', () => {
+  render(
+    <I18nProvider>
+      <CorporateActionsPanel token="t" campaigns={[]} />
+    </I18nProvider>,
+  );
+  expect(screen.getByText('No campaigns available.')).toBeTruthy();
+  expect(screen.queryByRole('button')).toBeNull();
+});
+test('synthetic read failure exposes error without inventing a cap table', async () => {
+  vi.stubGlobal('fetch', async () => new Response(JSON.stringify({ error: 'Synthetic cap table unavailable' }), { status: 503 }));
+  setup();
+  expect((await screen.findByRole('alert')).textContent).toContain('Synthetic cap table unavailable');
+  expect(screen.queryByRole('table')).toBeNull();
+});
+test('synthetic loading disables duplicate load and blank preview remains disabled', async () => {
+  let release: ((r: Response) => void) | undefined;
+  vi.stubGlobal(
+    'fetch',
+    () =>
+      new Promise<Response>((r) => {
+        release = r;
+      }),
+  );
+  setup();
+  expect((screen.getByRole('button', { name: /load cap table/i }) as HTMLButtonElement).disabled).toBe(true);
+  await waitFor(() => expect(release).toBeTruthy());
+  release!(new Response(JSON.stringify(table([]))));
+  await screen.findByRole('table');
+  expect((screen.getByRole('button', { name: /preview distribution/i }) as HTMLButtonElement).disabled).toBe(true);
+});
+test('synthetic mixed-basis table discloses its limitation and rejects unavailable allocation', async () => {
+  stub(table([{ publicKey: A, position: '60', positionSource: 'on-chain', basisPoints: null }], { onChain: 1, journalIntended: 1, unknown: 0, mixed: true }), {
+    status: 'unavailable',
+    declarable: false,
+    total: '10',
+    excludedUnknownHolderCount: 0,
+    rows: [],
+  });
+  setup();
+  expect(await screen.findByText(/Mixed bases/)).toBeTruthy();
+  fireEvent.change(screen.getByRole('textbox'), { target: { value: '10' } });
+  fireEvent.click(screen.getByRole('button', { name: /preview distribution/i }));
+  expect(await screen.findByText(/Allocation unavailable/)).toBeTruthy();
+  expect(screen.queryByText(/Illustration only/)).toBeNull();
+});
+test('synthetic preview refusal never shows a successful allocation', async () => {
+  vi.stubGlobal('fetch', async (input: RequestInfo | URL) =>
+    String(input).includes('distribution-preview')
+      ? new Response(JSON.stringify({ error: 'Synthetic preview refused' }), { status: 409 })
+      : new Response(JSON.stringify(table([]))),
+  );
+  setup();
+  await screen.findByRole('table');
+  fireEvent.change(screen.getByRole('textbox'), { target: { value: 'bad' } });
+  fireEvent.click(screen.getByRole('button', { name: /preview distribution/i }));
+  expect((await screen.findByRole('alert')).textContent).toContain('Synthetic preview refused');
+  expect(screen.queryByRole('status')).toBeNull();
+});
