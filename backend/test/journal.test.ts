@@ -125,7 +125,18 @@ function fakePool() {
       if (/^INSERT INTO soroban_intents/.test(sql)) {
         assert.ok(inTx, 'upsert outside transaction');
         const [hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id] = params as any[];
-        rows.set(hash, { seq: rows.get(hash)?.seq ?? ++seq, hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id: contract_id ?? rows.get(hash)?.contract_id ?? null });
+        rows.set(hash, {
+          seq: rows.get(hash)?.seq ?? ++seq,
+          hash,
+          campaign,
+          actor,
+          action,
+          amount,
+          xdr,
+          signed_xdr,
+          status,
+          contract_id: contract_id ?? rows.get(hash)?.contract_id ?? null,
+        });
         return { rows: [] };
       }
       if (/^SELECT .* FROM soroban_intents ORDER BY seq$/.test(sql)) {

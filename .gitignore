@@ -42,3 +42,4 @@ portal/.docusaurus/
 frontend/test-results/
 frontend/playwright-report/
 frontend/screenshots/
+data/community-store.json
