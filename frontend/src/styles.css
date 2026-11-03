@@ -3216,3 +3216,13 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   bottom: 0;
   background: repeating-linear-gradient(135deg, transparent 0 3px, #4b4fe2 3px 5px);
 }
+
+/* A contribution preview can be taller than the viewport. On a single-column
+   campaign, let the page scroll through the complete widget instead of pinning
+   its top beneath the header and hiding fee/outcome copy behind the bottom CTA. */
+@media (max-width: 900px) {
+  .campaign-columns .invest-widget {
+    position: static;
+    min-width: 0;
+  }
+}
