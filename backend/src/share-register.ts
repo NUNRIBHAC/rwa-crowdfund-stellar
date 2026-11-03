@@ -15,6 +15,7 @@ import { amountUnits } from './soroban.js';
 export const SHARE_REGISTER_SEMANTICS =
   "Per-campaign contributor register derived from THIS app's intent journal and durable contributor registry. " +
   'Amounts are INTENDED amounts from SUCCESS intents recorded by this app only; per-hash network confirmation (see intentHashes) is the only source of transferred truth. ' +
+  'Confirmed transfer totals and netConfirmed are separate evidence fields; they never overwrite missing build-time intent amounts. ' +
   'netIntended = contributedIntended - refundedIntended; a negative value means refund intents exceed journal-recorded contributions for that wallet (e.g. a chain-recovered contributor whose contribution predates the journal window). ' +
   'registered=false rows come from the journal but not (yet) the durable registry - check the pending-proof queue before treating them as gaps. ' +
   'Operator export aid over testnet demo data; no accounting, custody, audit-opinion or legal share-register claim is made or implied.';
