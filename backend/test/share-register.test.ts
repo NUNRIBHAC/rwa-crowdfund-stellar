@@ -265,3 +265,26 @@ test('csv gains the onchain_balance column only for v2 payloads', () => {
   assert.ok(csv.split('\n')[0].includes('"onchain_balance"'));
   assert.ok(csv.includes('"42000000"'));
 });
+
+test('netConfirmed uses only captured confirmed amounts; any uncaptured SUCCESS intent makes it UNKNOWN', () => {
+  const reg = buildShareRegister(
+    'qa-demo',
+    [
+      // wallet A: contribute 1 and refund 1, both confirmed -> 0 confirmed net, but the intended refund amount is missing
+      intent({ hash: hash(1), actor: kpA, action: 'contribute', amount: '1', confirmedAmount: '1' }),
+      intent({ hash: hash(2), actor: kpA, action: 'refund', confirmedAmount: '1' }),
+      // wallet B: confirmed contribute captured, a second one is not -> UNKNOWN
+      intent({ hash: hash(3), actor: kpB, action: 'contribute', amount: '2', confirmedAmount: '2' }),
+      intent({ hash: hash(4), actor: kpB, action: 'contribute', amount: '3' }),
+    ],
+    [],
+    'testnet',
+  );
+  const a = reg.contributors.find((r) => r.publicKey === kpA)!;
+  const b = reg.contributors.find((r) => r.publicKey === kpB)!;
+  assert.equal(a.netIntended, 'UNKNOWN');
+  assert.equal(a.netConfirmed, '0');
+  assert.equal(a.missingConfirmedIntents, 0);
+  assert.equal(b.netConfirmed, 'UNKNOWN');
+  assert.equal(b.missingConfirmedIntents, 1);
+});

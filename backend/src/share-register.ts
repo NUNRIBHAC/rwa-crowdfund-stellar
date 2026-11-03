@@ -56,6 +56,10 @@ export type ShareRegisterRow = {
   // 'UNKNOWN' when any SUCCESS intent for this wallet has no usable amount:
   // the known subtotals above are then INCOMPLETE and no net is computable.
   netIntended: string;
+  // Net from CONFIRMED transfer amounts only; 'UNKNOWN' unless every SUCCESS
+  // contribute/refund intent of this wallet has a captured confirmed amount.
+  netConfirmed: string;
+  missingConfirmedIntents: number;
   contributedComplete: boolean;
   refundedComplete: boolean;
   missingAmountIntents: number;
@@ -111,6 +115,10 @@ type Accum = {
   missing: number;
   missingContribute: number;
   missingRefund: number;
+  // CONFIRMED-transfer subtotals (journal confirmedAmount), kept apart from the intended ones.
+  confirmedContributed: bigint;
+  confirmedRefunded: bigint;
+  missingConfirmed: number;
   hashes: string[];
 };
 
@@ -136,6 +144,9 @@ export function buildShareRegister(
         missing: 0,
         missingContribute: 0,
         missingRefund: 0,
+        confirmedContributed: 0n,
+        confirmedRefunded: 0n,
+        missingConfirmed: 0,
         hashes: [],
       };
       rows.set(publicKey, acc);
@@ -169,6 +180,15 @@ export function buildShareRegister(
         if (i.action === 'contribute') acc.missingContribute += 1;
         else acc.missingRefund += 1;
       }
+    }
+    // Confirmed-transfer amount (captured from the chain event at confirmation,
+    // forward only). Absent or malformed = not captured: UNKNOWN, never 0.
+    try {
+      if (i.confirmedAmount === undefined || i.confirmedAmount === '') throw new Error('not captured');
+      if (i.action === 'contribute') acc.confirmedContributed += amountUnits(i.confirmedAmount);
+      else acc.confirmedRefunded += amountUnits(i.confirmedAmount);
+    } catch {
+      acc.missingConfirmed += 1;
     }
     if (i.action === 'contribute') acc.contributeCount += 1;
     else acc.refundCount += 1;
@@ -207,6 +227,8 @@ export function buildShareRegister(
       contributedIntended: formatUnits(acc.contributed),
       refundedIntended: formatUnits(acc.refunded),
       netIntended: acc.missing > 0 ? 'UNKNOWN' : formatUnits(acc.contributed - acc.refunded),
+      netConfirmed: acc.missingConfirmed > 0 ? 'UNKNOWN' : formatUnits(acc.confirmedContributed - acc.confirmedRefunded),
+      missingConfirmedIntents: acc.missingConfirmed,
       contributedComplete: acc.missingContribute === 0,
       refundedComplete: acc.missingRefund === 0,
       missingAmountIntents: acc.missing,
