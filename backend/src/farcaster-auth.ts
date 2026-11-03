@@ -14,6 +14,7 @@
 // Disabled (404) unless FARCASTER_AUTH_DOMAIN is set: fail-closed.
 import { createHash, randomBytes } from 'node:crypto';
 import { createAppClient, viemConnector } from '@farcaster/auth-client';
+import { recoverMessageAddress } from 'viem';
 import { parseSiweMessage } from 'viem/siwe';
 import { AuthError } from './accounts.js';
 import type { CommunityStore } from './community-store.js';
@@ -104,6 +105,16 @@ export async function verifyFarcasterSignIn(
   if (issuedAt === undefined || issuedAt < now - MESSAGE_MAX_AGE_MS || issuedAt > now + MESSAGE_MAX_FUTURE_MS) throw bad;
   if (parsed.expirationTime && parsed.expirationTime.getTime() <= now) throw bad;
   if (parsed.notBefore && parsed.notBefore.getTime() > now + MESSAGE_MAX_FUTURE_MS) throw bad;
+  // Defense in depth: do not rely only on the RPC's verdict. The signature must
+  // recover locally to the address named in the message (Farcaster custody and
+  // auth addresses are EOAs). Smart-contract-wallet / ERC-6492 signatures fail
+  // closed here.
+  try {
+    const signer = await recoverMessageAddress({ message, signature: signature as `0x${string}` });
+    if (!parsed.address || signer.toLowerCase() !== parsed.address.toLowerCase()) throw bad;
+  } catch {
+    throw bad;
+  }
   let verified: { fid: number } | null = null;
   try {
     verified = await verifier({ nonce, domain, message, signature: signature as `0x${string}` });

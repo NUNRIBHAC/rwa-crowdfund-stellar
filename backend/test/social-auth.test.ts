@@ -713,10 +713,18 @@ async function siwe(nonce: string, over: Record<string, unknown> = {}, acct = fc
 // nonce, domain, auth-address check). The Optimism RPC is stubbed: eth_call
 // answers "valid" for the signature validator (so signature forgery is NOT tested) and the fid
 // registry reads are replaced by an in-memory connector.
-function stubConnector(ownerFid: bigint | ((addr: string) => bigint)) {
+function stubConnector(ownerFid: bigint | ((addr: string) => bigint), callResult: 'valid' | 'invalid' | 'error' = 'valid') {
   const publicClient = createPublicClient({
     chain: optimism,
-    transport: custom({ request: async ({ method }: { method: string }) => (method === 'eth_call' ? '0x01' : method === 'eth_chainId' ? '0xa' : '0x') }),
+    transport: custom({
+      request: async ({ method }: { method: string }) => {
+        if (method === 'eth_call') {
+          if (callResult === 'error') throw new Error('rpc down');
+          return callResult === 'valid' ? '0x01' : '0x00';
+        }
+        return method === 'eth_chainId' ? '0xa' : '0x';
+      },
+    }),
   });
   return {
     publicClient,
@@ -744,7 +752,7 @@ test('farcaster: real SIWF verification, server nonce, browser binding, pending-
   const a = await getNonce();
   assert.equal(a.siweUri, `https://${FC_DOMAIN}/account`);
   const other = (await getNonce()).ck;
-  let m = await siwe(a.nonce);
+  const m = await siwe(a.nonce);
   let r = await post('/api/auth/farcaster/verify', { nonce: a.nonce, ...m }, other);
   assert.equal(r.status, 401);
   r = await post('/api/auth/farcaster/verify', { nonce: a.nonce, ...m }, a.ck);
@@ -843,7 +851,7 @@ test('farcaster linking: step-up, binds the fid to the signed-in account only; o
     return c.token;
   };
   const tokA = await register(accA, 11, 'a@example.com');
-  const tokB = await register(accB, 22, 'b@example.com');
+  await register(accB, 22, 'b@example.com');
   assert.equal(Object.keys((await store.read()).socialIdentities).length, 2);
 
   // Link requires authentication.
@@ -880,3 +888,31 @@ test('farcaster linking: step-up, binds the fid to the signed-in account only; o
   const r4 = await post('/api/auth/farcaster/verify', { nonce: l4.nonce, ...(await siwe(l4.nonce, {}, accC, 33)) }, 'bl_sso=' + 'f'.repeat(48));
   assert.equal(r4.status, 401);
 });
+
+// Negative contract: when the on-chain signature validator says "invalid" (a forged
+// or wrong-key signature) or the RPC fails, no session, identity, account, pending
+// ticket or link can result, even though the message itself is perfectly formed and
+// the signer "owns" the fid in the registry stub.
+for (const mode of ['invalid', 'error', 'valid'] as const) {
+  test(`farcaster: forged signature + bad signature proof (${mode}) never reaches a session, pending ticket or link`, async () => {
+    const env = { FARCASTER_AUTH_DOMAIN: FC_DOMAIN, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
+    const { base, store } = await startApp(env, { farcasterVerifier: defaultFarcasterVerifier({}, stubConnector(3357330n, mode)) });
+    const nr = await fetch(`${base}/api/auth/farcaster/nonce`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+    const ck = nr.headers.get('set-cookie')!.split(';')[0];
+    const { nonce } = (await nr.json()) as { nonce: string };
+    const real = await siwe(nonce);
+    // Forged: well-formed message for the fid owner, signed by a DIFFERENT key.
+    const m = { message: real.message, signature: await privateKeyToAccount(generatePrivateKey()).signMessage({ message: real.message }) };
+    const res = await fetch(`${base}/api/auth/farcaster/verify`, { method: 'POST', headers: { 'content-type': 'application/json', cookie: ck }, body: JSON.stringify({ nonce, ...m }) });
+    assert.ok(res.status === 401 || res.status === 502, `status ${res.status}`);
+    const body = (await res.json()) as Record<string, unknown>;
+    assert.equal(body.token, undefined);
+    assert.equal(body.socialEmailTicket, undefined);
+    const st = await store.read();
+    assert.equal(Object.keys(st.socialIdentities).length, 0);
+    assert.equal(Object.keys(st.accounts).length, 0);
+    assert.equal(Object.keys(st.sessions ?? {}).length, 0);
+    const again = await fetch(`${base}/api/auth/farcaster/verify`, { method: 'POST', headers: { 'content-type': 'application/json', cookie: ck }, body: JSON.stringify({ nonce, ...m }) });
+    assert.equal(again.status, 401, 'failed proof burns the nonce');
+  });
+}
