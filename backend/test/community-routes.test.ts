@@ -426,3 +426,22 @@ test('campaign metadata endpoint serves industry and documents', async () => {
   const unknown = await api('GET', '/api/campaigns/unknown-campaign/metadata');
   assert.equal(unknown.json.metadata, null);
 });
+
+test('simulated onboarding HTTP: auth, strict payload, durable reload and account isolation', async () => {
+  assert.equal((await api('GET', '/api/auth/demo-onboarding')).status, 401);
+  const owner = await login(Keypair.random());
+  const other = await login(Keypair.random());
+  const before = await api('GET', '/api/auth/demo-onboarding', { token: owner });
+  assert.equal(before.json.progress.identity, 'not_started');
+  assert.equal(
+    (await api('PUT', '/api/auth/demo-onboarding', { token: owner, body: { identity: 'passed', risksAcknowledged: true, passport: 'not accepted' } })).status,
+    400,
+  );
+  const saved = await api('PUT', '/api/auth/demo-onboarding', { token: owner, body: { identity: 'passed', risksAcknowledged: true } });
+  assert.equal(saved.status, 200);
+  assert.equal(saved.json.eligibility, 'demo_incomplete');
+  assert.equal(saved.json.realInvestmentEligible, false);
+  assert.equal(saved.json.realIdentityVerified, false);
+  assert.equal((await api('GET', '/api/auth/demo-onboarding', { token: owner })).json.progress.identity, 'passed');
+  assert.equal((await api('GET', '/api/auth/demo-onboarding', { token: other })).json.progress.identity, 'not_started');
+});

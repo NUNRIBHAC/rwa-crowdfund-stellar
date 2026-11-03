@@ -21,20 +21,8 @@ export default function CampaignTour() {
   const t = m.tour;
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
-  const [seen, setSeen] = useState(true);
   const cardRef = useRef<HTMLDivElement>(null);
   const restoreFocusRef = useRef<Element | null>(null);
-
-  useEffect(() => {
-    let wasSeen = false;
-    try {
-      wasSeen = localStorage.getItem(SEEN_KEY) === '1';
-    } catch {
-      wasSeen = true;
-    }
-    setSeen(wasSeen);
-    if (!wasSeen) setOpen(true);
-  }, []);
 
   const steps: Step[] = [
     { selector: '.fund-grid-wrap', title: t.tourStepFundingTitle, body: t.tourStepFundingBody },
@@ -105,11 +93,8 @@ export default function CampaignTour() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, index]);
 
-  if (!open && !seen) return null;
-
   const close = () => {
     setOpen(false);
-    setSeen(true);
     try {
       localStorage.setItem(SEEN_KEY, '1');
     } catch {
