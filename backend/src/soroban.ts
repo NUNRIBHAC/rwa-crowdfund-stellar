@@ -180,6 +180,12 @@ function actorAddress(actor: string): Address {
   if (!actor.startsWith('G')) throw new Error('ordinary wallet account required');
   return addr;
 }
+// Inverse of amountUnits: 7-decimal base units to a trimmed decimal string.
+export function unitsToAmount(units: bigint): string {
+  const whole = units / 10000000n;
+  const fraction = (units % 10000000n).toString().padStart(7, '0').replace(/0+$/, '');
+  return `${whole.toString()}${fraction ? `.${fraction}` : ''}`;
+}
 export function amountUnits(amount: string): bigint {
   if (typeof amount !== 'string' || !/^\d+(\.\d{1,7})?$/.test(amount)) throw new Error('amount must be a decimal string with at most 7 places');
   const [whole, fraction = ''] = amount.split('.');
@@ -372,6 +378,20 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     }
     throw e;
   });
+  // A refund returns the wallet's whole escrowed balance, so the journal
+  // (and the share register built from it) records that amount, read from
+  // the contract at build time. A client-supplied amount is never trusted
+  // for refunds. Zero or unreadable stays unrecorded and is disclosed by the
+  // register as "intents without amount".
+  let refundAmount: string | undefined;
+  if (input.action === 'refund') {
+    try {
+      const bal = await view(client, e, 'balance_of', [actor.toScVal()], input.actor);
+      if (typeof bal === 'bigint' && bal > 0n) refundAmount = unitsToAmount(bal);
+    } catch {
+      refundAmount = undefined;
+    }
+  }
   const args =
     input.action === 'contribute'
       ? [actor.toScVal(), nativeToScVal(amountUnits(input.amount!), { type: 'i128' })]
@@ -416,7 +436,15 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
     const open = openIntents(store, input.actor);
     if (open.length >= openIntentCap()) throw new Error(`too many open intents (${open.length}); resolve signed intents or let unsigned ones expire`);
-    store.intents.push({ hash, campaign: id, actor: input.actor, action: input.action, amount: input.amount, xdr: prepared.toXDR(), status: 'BUILT' });
+    store.intents.push({
+      hash,
+      campaign: id,
+      actor: input.actor,
+      action: input.action,
+      amount: input.action === 'refund' ? refundAmount : input.amount,
+      xdr: prepared.toXDR(),
+      status: 'BUILT',
+    });
     await save(store);
   });
   return {

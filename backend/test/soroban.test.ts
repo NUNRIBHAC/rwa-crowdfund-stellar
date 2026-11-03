@@ -47,6 +47,7 @@ let badWasm = false,
   restoreRequired = false,
   missingAccount = false;
 let lastEnvelope = '';
+let balanceUnits = 0n;
 const sends: string[] = [];
 const client: any = {
   getContractWasmByContractId: async () => (badWasm ? Buffer.from('wrong') : fs.readFileSync(wasmPath)),
@@ -63,7 +64,9 @@ const client: any = {
         ? { creator: actor.publicKey(), token: tokenId, goal: 1000000000n, deadline: 2000000000n }
         : method === 'is_withdrawn'
           ? false
-          : 0n;
+          : method === 'balance_of'
+            ? balanceUnits
+            : 0n;
     const auth = new xdr.SorobanAuthorizationEntry({
       credentials: addressAuth ? ({ type: 'sorobanCredentialsAddress' } as any) : xdr.SorobanCredentials.sorobanCredentialsSourceAccount(),
       rootInvocation: new xdr.SorobanAuthorizedInvocation({
@@ -101,6 +104,7 @@ const client: any = {
 };
 sorobanDeps.client = () => client;
 function reset() {
+  balanceUnits = 0n;
   fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true });
   process.env.SOROBAN_CAMPAIGNS_JSON = JSON.stringify([{ id: 's1', name: 'Soroban test campaign', contractId }]);
   process.env.STELLAR_NETWORK = 'testnet';
@@ -447,4 +451,20 @@ test('quarantined journal rows fail API safety holds closed with a reconciliatio
   } finally {
     resetJournalBackendForTests();
   }
+});
+
+test('refund intents journal the on-chain escrowed amount, never a client-supplied one', { skip: !fixtureAvailable }, async () => {
+  reset();
+  balanceUnits = 10000000n;
+  await buildSoroban('s1', { actor: actor.publicKey(), action: 'refund', amount: '999' });
+  const stored = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents[0];
+  assert.equal(stored.action, 'refund');
+  assert.equal(stored.amount, '1');
+});
+
+test('refund with a zero balance leaves the amount unrecorded', { skip: !fixtureAvailable }, async () => {
+  reset();
+  await buildSoroban('s1', { actor: actor.publicKey(), action: 'refund' });
+  const stored = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents[0];
+  assert.equal(stored.amount, undefined);
 });
