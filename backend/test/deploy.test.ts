@@ -30,6 +30,8 @@ let addressAuth = false,
   badDeployedWasm = false,
   wasmOnLedger = false,
   lastSentWasCreate = false,
+  createMetaOnly = false,
+  createNoId = false,
   txStatus = 'SUCCESS';
 // v2 harness: the fake RPC serves the real packaged v2 Wasms under their pin
 // hashes and hands out a distinct contract id per created instance kind.
@@ -106,10 +108,16 @@ const client: any = {
     ledger: 100,
     // Upload returns the Wasm hash (bytes), create returns the contract address.
     returnValue:
-      txStatus === 'SUCCESS'
+      txStatus === 'SUCCESS' && !createMetaOnly && !createNoId
         ? lastSentWasCreate
           ? new Address(lastCreateWasV2 ? (v2LastCreateWasToken ? v2TokenContractId : v2OfferingContractId) : newContractId).toScVal()
           : nativeToScVal(wasmHashBytes(), { type: 'bytes' })
+        : undefined,
+    // The real RPC does not populate returnValue for createContract
+    // operations; the created instance is then only in the meta.
+    resultMetaXdr:
+      txStatus === 'SUCCESS' && createMetaOnly && lastSentWasCreate
+        ? metaWithCreatedContract(lastCreateWasV2 ? (v2LastCreateWasToken ? v2TokenContractId : v2OfferingContractId) : newContractId)
         : undefined,
   }),
   getContractWasmByContractId: async (id: string) => {
@@ -121,6 +129,35 @@ const client: any = {
 };
 sorobanDeps.client = () => client;
 const wasmHashBytes = () => createHash('sha256').update(wasm).digest();
+// Minimal transaction meta carrying one created contractData instance entry,
+// shaped like what the testnet RPC serves for createContract operations.
+const metaWithCreatedContract = (contractId: string): string => {
+  const raw = Buffer.from(StrKey.decodeContract(contractId));
+  const entry = new xdr.LedgerEntry({
+    lastModifiedLedgerSeq: 1,
+    data: xdr.LedgerEntryData.contractData(
+      new xdr.ContractDataEntry({
+        ext: xdr.ExtensionPoint.v0(),
+        contract: Address.contract(raw).toScAddress(),
+        key: xdr.ScVal.scvLedgerKeyContractInstance(),
+        durability: xdr.ContractDataDurability.fromName('persistent'),
+        val: xdr.ScVal.scvVoid(),
+      }),
+    ),
+    ext: xdr.LedgerEntryExt.v0(),
+  });
+  return xdr.TransactionMeta.v4(
+    new xdr.TransactionMetaV4({
+      ext: xdr.ExtensionPoint.v0(),
+      txChangesBefore: [],
+      operations: [new xdr.OperationMetaV2({ ext: xdr.ExtensionPoint.v0(), changes: [xdr.LedgerEntryChange.ledgerEntryCreated(entry)], events: [] })],
+      txChangesAfter: [],
+      sorobanMeta: null,
+      events: [],
+      diagnosticEvents: [],
+    }),
+  ).toXDR('base64');
+};
 function reset() {
   fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true });
   process.env.SOROBAN_CAMPAIGNS_JSON = JSON.stringify([{ id: 'taken', name: 'Existing', contractId: StrKey.encodeContract(Buffer.alloc(32, 3)) }]);
@@ -136,6 +173,8 @@ function reset() {
   txStatus = 'SUCCESS';
   v2TokenOnLedger = false;
   v2OfferingOnLedger = false;
+  createMetaOnly = false;
+  createNoId = false;
 }
 const input = () => ({ actor: operator.publicKey(), id: 'solar-nine', name: 'Solar Nine', goal: '250', deadline: Math.floor(Date.now() / 1000) + 86400 });
 const signed = (builtXdr: string) => {
@@ -327,4 +366,43 @@ test('v2 create refuses to journal a contract id whose code mismatches the pin',
   badDeployedWasm = true;
   const built = await buildCampaignDeployV2(v2Input());
   await assert.rejects(submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr) }), /does not match its pin/);
+});
+
+test('v2 create extracts the contract id from transaction meta when returnValue is absent', async () => {
+  reset();
+  v2TokenOnLedger = true;
+  v2OfferingOnLedger = true;
+  createMetaOnly = true;
+  const built = await buildCampaignDeployV2(v2Input());
+  assert.equal(built.step, 'create-token');
+  const done = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' });
+  assert.equal(done.confirmed, true);
+  assert.equal(done.contractId, v2TokenContractId);
+  const next = await buildCampaignDeployV2(v2Input());
+  assert.equal(next.step, 'create-offering');
+});
+
+test('v2 resubmitting a stranded successful create repairs the journal without a new transaction', async () => {
+  reset();
+  v2TokenOnLedger = true;
+  v2OfferingOnLedger = true;
+  // Reproduces the observed testnet failure: the create confirms but no
+  // contract id is extractable, so nothing is journaled and the chain stalls.
+  createNoId = true;
+  const built = await buildCampaignDeployV2(v2Input());
+  assert.equal(built.step, 'create-token');
+  const signedXdr = signed(built.xdr);
+  const first = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signedXdr, name: 'Solar V2' });
+  assert.equal(first.confirmed, false);
+  const stuck = await buildCampaignDeployV2(v2Input());
+  assert.equal(stuck.step, 'create-token');
+  // Same-hash resubmission is terminal (no second sendTransaction) and heals
+  // the journal once the id is extractable from the meta.
+  createNoId = false;
+  createMetaOnly = true;
+  const repaired = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signedXdr, name: 'Solar V2' });
+  assert.equal(repaired.confirmed, true);
+  assert.equal(repaired.contractId, v2TokenContractId);
+  const next = await buildCampaignDeployV2(v2Input());
+  assert.equal(next.step, 'create-offering');
 });
