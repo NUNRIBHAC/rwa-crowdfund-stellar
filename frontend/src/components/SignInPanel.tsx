@@ -2,6 +2,7 @@
 // server challenge (no transaction, no funds move). The session unlocks
 // comment posting, support/feedback tickets and issuer applications.
 import { useCommunityAuth } from '../community/CommunityAuth';
+import { socialProviderDisplayName } from '../community/social';
 import { COMMUNITY_LIMITS } from '../community/api';
 import { useI18n } from '../i18n';
 import { shorten, tpl } from '../format';
@@ -168,7 +169,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
         </div>
         {(socialProviders ?? []).map((p) => (
           <button key={p} className="btn social-signin-btn" disabled={busy} onClick={() => startSocialSignIn(p).catch(() => undefined)}>
-            {SOCIAL_SIGNIN_LABELS[p] ? m.community[SOCIAL_SIGNIN_LABELS[p]] : tpl(m.community.socialSignInGeneric ?? '', { provider: p })}
+            {SOCIAL_SIGNIN_LABELS[p] ? m.community[SOCIAL_SIGNIN_LABELS[p]] : tpl(m.community.socialSignInGeneric ?? '', { provider: socialProviderDisplayName(p) })}
           </button>
         ))}
         {error && (

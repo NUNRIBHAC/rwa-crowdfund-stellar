@@ -6,6 +6,7 @@ import { tpl } from '../format';
 // are stored sha256-hashed server-side and addressed by a short hash prefix.
 import { useCallback, useEffect, useState } from 'react';
 import { disableTotp, enableTotp, enrollTotp, fetchSessions, logoutOtherSessions, requestChallenge, revokeSession, startSocialLink } from '../community/api';
+import { socialProviderDisplayName } from '../community/social';
 import { signMessage } from '@stellar/freighter-api';
 import type { SessionInfo } from '../community/api';
 import { describeError, useCommunityAuth } from '../community/CommunityAuth';
@@ -118,7 +119,7 @@ export default function SecuritySection() {
           {(socialProviders ?? []).map((p) => (
             <div key={p}>
               <button className="btn" disabled={busy} onClick={() => onLink(p)}>
-                {tpl(labels.linkAction, { provider: p })}
+                {tpl(labels.linkAction, { provider: socialProviderDisplayName(p) })}
               </button>
               {linkProvider === p && (
                 <span>
