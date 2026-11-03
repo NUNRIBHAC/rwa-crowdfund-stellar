@@ -191,6 +191,7 @@
     "rules": "Tragen Sie vor der Frist bis zum verbleibenden Zielbetrag bei. Nach der Frist kann der Ersteller die Mittel nur abheben, wenn das Ziel vollständig erreicht wurde; andernfalls signiert jeder Beitragende seine eigene Rückerstattung. Der Vertrag setzt diese Regeln atomar durch."
   },
   "grid": {
+    "blockUnit": "Jeder Block entspricht 1 % des Finanzierungsziels.",
     "ariaReady": "Finanzierungsfortschritt: {filled} von {count} Blöcken gefüllt, {percent}% des Ziels",
     "ariaUnavailable": "Finanzierungsfortschritt nicht verfügbar: On-Chain-Daten nicht geladen",
     "fundedTail": "finanziert - {filled} von {count} Blöcken",

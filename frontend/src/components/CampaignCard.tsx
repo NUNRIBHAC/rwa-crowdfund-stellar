@@ -37,7 +37,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
   const { locale, m } = useI18n();
   const dl = deadlineInfo(c.config.deadline, m.time);
   const status = campaignStatus(c);
-  const state = fundingState(c.raised, c.config.goal, 20);
+  const state = fundingState(c.raised, c.config.goal, 100);
   // Mirror the campaign-page widget state rules (849db5b): never offer an
   // action the contract is known to reject in the current state.
   const fundedNow = status === 'funded';

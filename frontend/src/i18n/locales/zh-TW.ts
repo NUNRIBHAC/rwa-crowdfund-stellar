@@ -189,6 +189,7 @@ export const zhTW: Messages = {
     rules: '在截止期限前出資，上限為目標的剩餘額度。截止期限後，只有完全融資時創建者才能提款；否則每位出資者自行簽署退款。合約以原子方式執行這些規則。',
   },
   grid: {
+    blockUnit: '每個方塊代表籌資目標的1%。',
     ariaReady: '融資進度：{count} 個方塊中已填 {filled} 個，達目標的 {percent}%',
     ariaUnavailable: '融資進度不可用：鏈上數據未加載',
     fundedTail: '已融資 - {count} 個方塊中的 {filled} 個',

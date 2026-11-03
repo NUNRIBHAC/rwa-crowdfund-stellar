@@ -9,12 +9,13 @@ import { useI18n } from '../i18n';
  * (BigInt, floor, never rounds up). Missing or invalid chain data renders an
  * empty grid with a "Progress unavailable" caption - never a fabricated 0%.
  *
- * layout "strip": 2 rows x 10 tiles (campaign cards, per the approved card
- *   reference; fill left to right, top row first).
+ * All campaign surfaces now default to the same 100-tile block: one tile
+ * is 1% of the goal. Legacy strip geometry remains an explicit option.
+ * layout "strip": 2 rows x 10 tiles; fill left to right, top row first.
  * layout "block": 10x10 tiles inside the Ink frame (campaign detail page;
  *   fill bottom row first, left to right, then upward, per the spec).
  */
-export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised?: string | null; goal?: string | null; layout?: 'strip' | 'block' }) {
+export default function FundingGrid({ raised, goal, layout = 'block' }: { raised?: string | null; goal?: string | null; layout?: 'strip' | 'block' }) {
   const { m } = useI18n();
   const cols = 10;
   const rows = layout === 'strip' ? 2 : 10;
@@ -74,6 +75,7 @@ export default function FundingGrid({ raised, goal, layout = 'strip' }: { raised
           ) : (
             m.grid.captionUnavailable
           )}
+          <span className="fund-grid-unit">{m.grid.blockUnit}</span>
         </p>
       )}
     </div>

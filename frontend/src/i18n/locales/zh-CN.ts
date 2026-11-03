@@ -189,6 +189,7 @@ export const zhCN: Messages = {
     rules: '在截止期限前出资，上限为目标的剩余额度。截止期限后，只有完全融资时创建者才能提款；否则每位出资者自行签署退款。合约以原子方式执行这些规则。',
   },
   grid: {
+    blockUnit: '每个方块代表筹资目标的1%。',
     ariaReady: '融资进度：{count} 个方块中已填 {filled} 个，达目标的 {percent}%',
     ariaUnavailable: '融资进度不可用：链上数据未加载',
     fundedTail: '已融资 - {count} 个方块中的 {filled} 个',

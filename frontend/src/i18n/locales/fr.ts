@@ -203,6 +203,7 @@ export const fr: Messages = {
       "Contribuez avant la date limite, jusqu'au montant restant de l'objectif. Passé le délai, le créateur ne lève les fonds que si l'objectif est entièrement atteint ; sinon, chaque contributeur signe son propre remboursement. Le contrat applique ces règles de façon atomique.",
   },
   grid: {
+    blockUnit: 'Chaque bloc représente 1 % de l’objectif de financement.',
     ariaReady: "Progression du financement : {filled} sur {count} blocs remplis, {percent}% de l'objectif",
     ariaUnavailable: 'Progression du financement indisponible : données on-chain non chargées',
     fundedTail: 'financé - {filled} sur {count} blocs',

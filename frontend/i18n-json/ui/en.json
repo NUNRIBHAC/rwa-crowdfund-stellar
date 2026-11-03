@@ -191,6 +191,7 @@
     "rules": "Contribute before the deadline, up to the remaining goal. After the deadline the creator withdraws only if fully funded; otherwise each contributor signs their own refund. The contract enforces these rules atomically."
   },
   "grid": {
+    "blockUnit": "Each block represents 1% of the funding goal.",
     "ariaReady": "Funding progress: {filled} of {count} blocks filled, {percent}% of the goal",
     "ariaUnavailable": "Funding progress unavailable: on-chain data not loaded",
     "fundedTail": "funded - {filled} of {count} blocks",

@@ -3130,3 +3130,15 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     padding-bottom: 84px;
   }
 }
+
+.fund-grid-unit {
+  display: block;
+  margin-top: 6px;
+}
+.card .fund-grid-block .fund-grid {
+  width: 100px;
+  height: 100px;
+}
+.card :where(.card-stats dd, .card-funded-pct) {
+  font-variant-numeric: tabular-nums;
+}

@@ -191,6 +191,7 @@
     "rules": "Contribuye antes de la fecha límite, hasta el importe restante del objetivo. Tras el plazo, el creador solo retira los fondos si el objetivo se alcanzó por completo; en caso contrario, cada contribuyente firma su propio reembolso. El contrato aplica estas reglas de forma atómica."
   },
   "grid": {
+    "blockUnit": "Cada bloque representa el 1% de la meta de financiación.",
     "ariaReady": "Progreso de financiación: {filled} de {count} bloques completados, {percent}% del objetivo",
     "ariaUnavailable": "Progreso de financiación no disponible: datos on-chain no cargados",
     "fundedTail": "financiado - {filled} de {count} bloques",

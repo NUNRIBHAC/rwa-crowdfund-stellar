@@ -191,6 +191,7 @@
     "rules": "Contribua antes do prazo limite, até ao valor restante do objetivo. Após o prazo, o criador só levanta os fundos se o objetivo for totalmente atingido; caso contrário, cada contribuinte assina o seu próprio reembolso. O contrato aplica estas regras atomicamente."
   },
   "grid": {
+    "blockUnit": "Cada bloco representa 1% da meta de financiamento.",
     "ariaReady": "Progresso do financiamento: {filled} de {count} blocos preenchidos, {percent}% do objetivo",
     "ariaUnavailable": "Progresso do financiamento indisponível: dados on-chain não carregados",
     "fundedTail": "financiado - {filled} de {count} blocos",
