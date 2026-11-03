@@ -12,7 +12,7 @@ import { tpl } from '../format';
 //   (the server already sends isOperator on GET /api/auth/me).
 // - community/CommunityAuth.tsx: carry isOperator from fetchMe/verifyChallenge
 //   into context and expose it alongside account/token.
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { formatTokenAmount } from '../funding-math';
 import {
   closeOperatorTicket,
@@ -48,6 +48,7 @@ export default function OperatorSection({ campaigns }: Props) {
   const labels = m.community.operator;
 
   const [tab, setTab] = useState<Tab>('applications');
+  const activeTab = useRef<Tab>('applications');
   const [applications, setApplications] = useState<IssuerApplication[] | null>(null);
   const [comments, setComments] = useState<OperatorComment[] | null>(null);
   const [tickets, setTickets] = useState<Ticket[] | null>(null);
@@ -91,12 +92,13 @@ export default function OperatorSection({ campaigns }: Props) {
   const fmt = (ts: number) => new Date(ts).toLocaleString(locale);
 
   const run = (action: Promise<unknown>, ok: string) => {
+    const actionTab = activeTab.current;
     setBusy(true);
     setNotice('');
     setError('');
     action
       .then(() => {
-        setNotice(ok);
+        if (activeTab.current === actionTab) setNotice(ok);
         load();
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)))
@@ -158,7 +160,16 @@ export default function OperatorSection({ campaigns }: Props) {
   };
 
   const tabBtn = (id: Tab) => (
-    <button key={id} className={`chip ${tab === id ? 'chip-active' : ''}`} onClick={() => setTab(id)} aria-pressed={tab === id}>
+    <button
+      key={id}
+      className={`chip ${tab === id ? 'chip-active' : ''}`}
+      onClick={() => {
+        activeTab.current = id;
+        setNotice('');
+        setTab(id);
+      }}
+      aria-pressed={tab === id}
+    >
       {labels.tabs[id]}
     </button>
   );

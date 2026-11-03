@@ -132,6 +132,7 @@ try {
   await page.getByRole('button', { name: 'Audit log', exact: true }).click();
   await page.getByText('ticket.close', { exact: true }).waitFor();
   await page.getByRole('button', { name: 'Tickets', exact: true }).click();
+  assert.equal(await page.getByText('Episode published as platform demo content.', { exact: true }).count(), 0);
   const notifications = await request('/api/notifications', ownerToken);
   for (const kind of ['application_status', 'comment_moderated', 'ticket_closed'])
     assert(

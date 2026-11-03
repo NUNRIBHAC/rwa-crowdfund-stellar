@@ -153,6 +153,11 @@ test('podcast tab publishes an episode through the operator route as platform de
     campaignId: null,
   });
   expect(await screen.findByText('Episode published as platform demo content.')).toBeTruthy();
+  await screen.findByText('Episode published as platform demo content.');
+  fireEvent.click(screen.getByRole('button', { name: 'Tickets', exact: true }));
+  expect(screen.queryByText('Episode published as platform demo content.')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Podcast', exact: true }));
+  expect(screen.queryByText('Episode published as platform demo content.')).toBeNull();
 });
 
 test('podcast tab rejects a non-https audio URL without posting', async () => {
