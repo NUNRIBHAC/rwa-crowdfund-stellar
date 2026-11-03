@@ -288,3 +288,23 @@ test('netConfirmed uses only captured confirmed amounts; any uncaptured SUCCESS 
   assert.equal(b.netConfirmed, 'UNKNOWN');
   assert.equal(b.missingConfirmedIntents, 1);
 });
+
+test('corporate-actions: cap table and distribution preview over the register, admin gated', async () => {
+  const base = await makeServer({ provider: 'payload' });
+  const cap = await fetch(`${base}/api/campaigns/qa-demo/corporate-actions/cap-table.json`);
+  assert.equal(cap.status, 200);
+  const capBody = (await cap.json()) as { campaignId: string; complete: boolean; rows: unknown[] };
+  assert.equal(capBody.campaignId, 'qa-demo');
+  assert.equal(capBody.rows.length, 0);
+  const post = (b: string) =>
+    fetch(`${base}/api/campaigns/qa-demo/corporate-actions/distribution-preview`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: b });
+  const ok = await post('{"total":"10"}');
+  assert.equal(ok.status, 200);
+  assert.equal(((await ok.json()) as { complete: boolean }).complete, false, 'no known holders is not complete');
+  assert.equal((await post('{"total":"-1"}')).status, 400);
+  assert.equal((await post('{}')).status, 400);
+  assert.equal((await fetch(`${await makeServer({ provider: 'null' })}/api/campaigns/x/corporate-actions/cap-table.json`)).status, 404);
+  assert.equal((await fetch(`${await makeServer({ provider: 'absent' })}/api/campaigns/x/corporate-actions/cap-table.json`)).status, 503);
+  const denied = await makeServer({ provider: 'payload', denyAdmin: true });
+  assert.equal((await fetch(`${denied}/api/campaigns/qa-demo/corporate-actions/cap-table.json`)).status, 401);
+});

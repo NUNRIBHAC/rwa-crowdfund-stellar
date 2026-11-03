@@ -23,6 +23,7 @@ import { metadataFor } from './campaign-metadata.js';
 import type { Account } from './community-store.js';
 import { shareRegisterCsv, type ShareRegisterPayload } from './share-register.js';
 import { buildShareRegisterPdf } from './share-register-pdf.js';
+import { buildCapTable, buildDistributionPreview } from './corporate-actions.js';
 import { turnstileConfigFromEnv, verifyTurnstileToken } from './turnstile.js';
 import { ipReputationFromEnv, type IpReputation } from './ip-reputation.js';
 import {
@@ -969,6 +970,52 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       }
       const pdf = await buildShareRegisterPdf(payload);
       res.type('application/pdf').send(pdf);
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
+  // --- Corporate actions prototype (operator, read-only, off-chain) ---
+  // Cap table and a distribution PREVIEW derived from the share register. No
+  // funds move, nothing is persisted, no holder right is created. Admin-gated
+  // like the register (wallet addresses are investor data).
+  router.get('/api/campaigns/:id/corporate-actions/cap-table.json', requireAdmin, async (req, res) => {
+    if (!deps.shareRegister) {
+      res.status(503).json({ error: 'share register unavailable: provider not configured' });
+      return;
+    }
+    try {
+      const payload = await deps.shareRegister(requireCampaignId(req.params.id));
+      if (!payload) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      res.json(buildCapTable(payload));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/campaigns/:id/corporate-actions/distribution-preview', requireAdmin, async (req, res) => {
+    if (!deps.shareRegister) {
+      res.status(503).json({ error: 'share register unavailable: provider not configured' });
+      return;
+    }
+    try {
+      const total = (req.body as { total?: unknown } | undefined)?.total;
+      if (typeof total !== 'string' || total.length > 40) {
+        res.status(400).json({ error: 'total must be a decimal string' });
+        return;
+      }
+      const payload = await deps.shareRegister(requireCampaignId(req.params.id));
+      if (!payload) {
+        res.status(404).json({ error: 'unknown campaign' });
+        return;
+      }
+      try {
+        res.json(buildDistributionPreview(buildCapTable(payload), total));
+      } catch (e) {
+        res.status(400).json({ error: e instanceof Error ? e.message : 'invalid total' });
+      }
     } catch (err) {
       sendError(res, err);
     }
