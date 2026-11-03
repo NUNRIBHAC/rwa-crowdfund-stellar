@@ -63,7 +63,9 @@ export default function InvestorOnboarding() {
                 </select>
               </label>
               <p>{record.assessmentCurrent && record.warningReady ? t.assessmentSaved : t.assessmentNeeded}</p>
-              <a href="#investor-assessment">{t.assessmentLink}</a>
+              <p>
+                <a href="#investor-assessment">{t.assessmentLink}</a>
+              </p>
               <label>
                 <input
                   type="checkbox"
