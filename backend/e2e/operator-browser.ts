@@ -77,6 +77,18 @@ try {
   };
   const operatorToken = await login(operator);
   const ownerToken = await login(owner);
+  const saveProgress = await fetch(origin + '/api/auth/demo-onboarding', {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${ownerToken}` },
+    body: JSON.stringify({ identity: 'passed', risksAcknowledged: true }),
+  });
+  assert.equal(saveProgress.status, 200);
+  const progress = await saveProgress.json();
+  assert.equal(progress.eligibility, 'demo_incomplete');
+  assert.equal(progress.realInvestmentEligible, false);
+  assert.equal((await request('/api/auth/demo-onboarding', operatorToken)).progress.identity, 'not_started');
+  assert.equal((await new FileCommunityStore(storePath).read()).accounts[owner.publicKey()].demoOnboarding?.identity, 'passed');
+
   await request('/api/issuer-applications', ownerToken, {
     projectName: 'ISOLATED SYNTHETIC PROJECT',
     country: 'PT',
