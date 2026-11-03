@@ -134,13 +134,13 @@ export const blocks: LegalBlock[] = [
       {
         b: ['könnten'],
       },
-      ' beinhalten: vollständige Benutzerkonten mit E-Mail-Registrierung (über die optionale Community-Anmeldung hinaus); Identitätsprüfung (KYC/AML), einschließlich Prüfungen des wirtschaftlich Berechtigten und der Herkunft der Mittel bei Unternehmensinvestoren; Investoreneinstufung mit einem Einstiegswissenstest und einer Simulation der Verlusttragfähigkeit; eine vorvertragliche Bedenkzeit für nicht erfahrene Investoren; Basisinformationsblätter je Kampagne; Zahlungen über lizenzierte Zahlungsdienstleister (niemals über uns, die Kundengelder halten); Beschwerdemanagement und Interessenkonflikt-Richtlinien; sowie rechtsraumbezogene Verkaufsbeschränkungen.',
+      ' beinhalten: Identitätsprüfung (KYC/AML), einschließlich Prüfungen des wirtschaftlich Berechtigten und der Herkunft der Mittel bei Unternehmensinvestoren; Investoreneinstufung mit einem Einstiegswissenstest und einer Simulation der Verlusttragfähigkeit; eine vorvertragliche Bedenkzeit für nicht erfahrene Investoren; Basisinformationsblätter je Kampagne; Zahlungen über lizenzierte Zahlungsdienstleister (niemals über uns, die Kundengelder halten); Beschwerdemanagement und Interessenkonflikt-Richtlinien; sowie rechtsraumbezogene Verkaufsbeschränkungen.',
     ],
   },
   {
     t: 'p',
     text: [
-      'Nichts davon existiert heute. Die obige Liste ist eine indikative Designrichtung aus unserem Forschungskorpus, keine Spezifikation: Details, Schwellenwerte und ganze Funktionen können sich mit der Designarbeit und Rechtsberatung ändern. Diese Funktionen starten nur unter aktualisierten, rechtlich geprüften Bedingungen und nur unter den erforderlichen behördlichen Genehmigungen. Nichts in diesem Abschnitt ist eine Zusage zu einem Startdatum oder einer Lizenz.',
+      'Keiner dieser Punkte existiert heute als vollständiger Produktions- oder Compliance-Workflow. Der Prototyp enthält jedoch partielle Demoversionen einzelner Punkte: Der Einstiegs-Kenntnistest und die Verlusttragfähigkeitssimulation laufen als ausdrücklich gekennzeichnete Demo, die Seiten zum Beschwerdemanagement und zu Interessenkonflikten sind Entwurfsvorlagen und keine betriebenen Richtlinien, und die gezeigten wesentlichen Anlageinformationen sind fiktiv. Die E-Mail-Registrierung mit Bestätigungscode existiert in diesem Prototyp bereits als optionale Community-Identität - sie ist keine Identitätsprüfung, und ihre Einführung ist derzeit eingeschränkt, solange die Missbrauchsschutzmaßnahmen verifiziert werden. Die obige Liste ist eine indikative Designrichtung aus unserem Recherche-Korpus, keine Spezifikation: Details, Schwellenwerte und ganze Funktionen können sich mit Designarbeit und Rechtsberatung ändern. Diese Funktionen werden nur unter aktualisierten, rechtlich geprüften Bedingungen und nur im Rahmen der erforderlichen behördlichen Genehmigungen eingeführt. Nichts in diesem Abschnitt ist eine Zusage zu einem Einführungstermin oder einer Lizenz.',
     ],
   },
   {

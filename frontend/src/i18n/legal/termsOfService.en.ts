@@ -132,13 +132,13 @@ export const blocks: LegalBlock[] = [
       {
         b: ['may'],
       },
-      ' include: full user accounts with email registration (beyond the optional community sign-in); identity verification (KYC/AML), including beneficial-owner and source-of-funds checks for company investors; investor categorisation with an entry knowledge test and a loss-bearing-capacity simulation; a pre-contractual reflection period for non-sophisticated investors; key investment information sheets per campaign; payments processed by licensed payment service providers (never by us holding client funds); complaints management and conflicts-of-interest policies; and jurisdiction-based selling restrictions.',
+      ' include: identity verification (KYC/AML), including beneficial-owner and source-of-funds checks for company investors; investor categorisation with an entry knowledge test and a loss-bearing-capacity simulation; a pre-contractual reflection period for non-sophisticated investors; key investment information sheets per campaign; payments processed by licensed payment service providers (never by us holding client funds); complaints management and conflicts-of-interest policies; and jurisdiction-based selling restrictions.',
     ],
   },
   {
     t: 'p',
     text: [
-      'None of this exists today. The list above is indicative design direction drawn from our research corpus, not a specification: details, thresholds and whole features may change with design work and legal advice. These features will only launch under updated, legally reviewed terms, and only under the regulatory authorisations they require. Nothing in this section is a commitment to a launch date or a licence.',
+      'None of these items exists today as a complete production or compliance workflow. The prototype does include partial demo versions of some of them: the entry knowledge test and the loss-bearing-capacity simulation run as an explicitly labelled demo, the complaints-management and conflicts-of-interest pages are draft templates rather than operated policies, and the key investment information sheets shown are fictional. Email registration with a confirmation code already exists in this prototype as an optional community identity - it is not identity verification, and its rollout is currently restricted while anti-abuse protections are verified. The list above is indicative design direction drawn from our research corpus, not a specification: details, thresholds and whole features may change with design work and legal advice. These features will only launch under updated, legally reviewed terms, and only under the regulatory authorisations they require. Nothing in this section is a commitment to a launch date or a licence.',
     ],
   },
   {
