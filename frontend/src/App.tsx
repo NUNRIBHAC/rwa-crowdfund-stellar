@@ -300,7 +300,7 @@ export default function App() {
       <RiskBanner />
       <Header actor={actor} busy={busy} onConnect={() => run(connect)} onDisconnect={() => setActor('')} current={route.name} />
       <main className="page" id="main">
-        {error && (
+        {error && !(!fixtureMode && !loaded && ['home', 'investments', 'campaign'].includes(route.name)) && (
           <p role="alert" className="error-banner">
             {(error.code === 'API_UNAVAILABLE' && m.errors.apiUnavailable) || error.text}
           </p>

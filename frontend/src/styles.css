@@ -574,10 +574,6 @@ section[id] {
   font-size: 13px;
 }
 .site-footer a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  min-width: 44px;
   color: #c7c8f9;
 }
 .site-footer a:hover {
@@ -2592,10 +2588,6 @@ input[type='checkbox'] {
   color: #3b3fd0;
 }
 [data-theme='light'] .site-footer a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  min-width: 44px;
   color: #3b3fd0;
 }
 [data-theme='light'] .site-footer a:hover {
@@ -3047,4 +3039,13 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 /* Generated reconciliation notes stay readable inside the scrollable table. */
 .operator-table td.reconciliation-notes {
   min-width: 20rem;
+}
+
+/* Navigation and social links are touch targets; prose links remain inline. */
+.footer-grid li > a,
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
 }
