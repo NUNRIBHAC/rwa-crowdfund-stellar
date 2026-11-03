@@ -22,15 +22,6 @@ import { blocks as termsOfServiceko } from './termsOfService.ko';
 import { blocks as termsOfServicear } from './termsOfService.ar';
 import { blocks as termsOfServicehi } from './termsOfService.hi';
 import { blocks as privacyPolicypt } from './privacyPolicy.pt';
-import { blocks as privacyPolicyes } from './privacyPolicy.es';
-import { blocks as privacyPolicyfr } from './privacyPolicy.fr';
-import { blocks as privacyPolicyde } from './privacyPolicy.de';
-import { blocks as privacyPolicyzhCN } from './privacyPolicy.zh-CN';
-import { blocks as privacyPolicyzhTW } from './privacyPolicy.zh-TW';
-import { blocks as privacyPolicyja } from './privacyPolicy.ja';
-import { blocks as privacyPolicyko } from './privacyPolicy.ko';
-import { blocks as privacyPolicyar } from './privacyPolicy.ar';
-import { blocks as privacyPolicyhi } from './privacyPolicy.hi';
 import { blocks as riskDisclosurept } from './riskDisclosure.pt';
 import { blocks as riskDisclosurees } from './riskDisclosure.es';
 import { blocks as riskDisclosurefr } from './riskDisclosure.fr';
@@ -101,15 +92,6 @@ export const LEGAL_REGISTRY: Record<LegalDocId, PerLocale> = {
   privacyPolicy: {
     en: privacyPolicyEn,
     pt: privacyPolicypt,
-    es: privacyPolicyes,
-    fr: privacyPolicyfr,
-    de: privacyPolicyde,
-    'zh-CN': privacyPolicyzhCN,
-    'zh-TW': privacyPolicyzhTW,
-    ja: privacyPolicyja,
-    ko: privacyPolicyko,
-    ar: privacyPolicyar,
-    hi: privacyPolicyhi,
   },
   riskDisclosure: {
     en: riskDisclosureEn,
@@ -179,6 +161,9 @@ export const LEGAL_REGISTRY: Record<LegalDocId, PerLocale> = {
 };
 
 export function legalBlocks(doc: LegalDocId, locale: Locale): { blocks: LegalBlock[]; renderedLocale: Locale } {
+  // The older nine translations predate real email-account processing.
+  // Until updated, use truthful English content with its real language tag.
+  if (doc === 'privacyPolicy' && locale !== 'en' && locale !== 'pt') return { blocks: privacyPolicyEn, renderedLocale: 'en' };
   const per = LEGAL_REGISTRY[doc];
   const translated = per[locale];
   if (translated) return { blocks: translated, renderedLocale: locale };
