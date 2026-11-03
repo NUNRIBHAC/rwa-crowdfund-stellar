@@ -1,6 +1,6 @@
 # Campaign photography
 
-Every current and future listing card and campaign page renders a photo through
+Every current and future TESTNET DEMO listing card and campaign page renders a photo through
 `CampaignPhoto`. Until authorized issuer photographs are supplied, the testnet
 site uses a shared illustrative photograph with a permanent visible caption:
 "Illustrative photo - not the actual project." The caption and factual alt text
@@ -33,3 +33,10 @@ factual alt text and accurate caption before replacing the illustration.
 - Genuine issuer-media upload, rights review and listing approval remain part of
   the connected business submission workflow; this rendering change does not
   claim that workflow has been completed.
+
+## Real publication gate (not activated)
+
+A future actual issuer listing must have its own authorized issuer photograph,
+source and rights confirmation before publication. The unrelated solar demo
+fallback does not satisfy that requirement. Real investment publication remains
+disabled; this demo rendering change grants no permission to activate it.
