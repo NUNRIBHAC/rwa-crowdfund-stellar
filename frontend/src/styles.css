@@ -2999,3 +2999,8 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   margin-bottom: 0.75rem;
   margin-inline-end: 0.5rem;
 }
+
+/* Security: provider link buttons are separate rows with a real gap */
+.social-link-row {
+  margin-bottom: 0.5rem;
+}
