@@ -14,9 +14,8 @@ export default function Footer() {
               <img className="footer-brand-lockup-img" src={lockupFor(theme)} alt="Blockallisto" />
             </div>
             <p className="footer-tagline">{m.footer.tagline}</p>
-            {/* Social icons. Verified profiles are linked (YouTube, Instagram, Threads, email);
-              the remaining platforms stay as visual presence only until their real profile
-              URLs exist - no placeholder links. Discord links the user-created server
+            {/* Social icons link verified brand destinations, including the Facebook
+              Page verified 2026-11-03. Discord links the user-created server
               (never-expiring, unlimited-use invite confirmed by the owner on 2026-11-02);
               Telegram links the authorized public brand channel (public page and
               t.me/s preview verified on 2026-11-02). Farcaster links the registered
@@ -36,7 +35,9 @@ export default function Footer() {
               <a href="https://www.instagram.com/blockallisto/" target="_blank" rel="noopener" aria-label="Blockallisto on Instagram">
                 <img src="/social/instagram.svg" alt="" />
               </a>
-              <img src="/social/facebook.svg" alt="" />
+              <a href="https://www.facebook.com/profile.php?id=61595902542764" target="_blank" rel="noopener" aria-label="Blockallisto on Facebook">
+                <img src="/social/facebook.svg" alt="" />
+              </a>
               <a href="https://www.threads.com/@blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on Threads">
                 <img src="/social/threads.svg" alt="" />
               </a>
