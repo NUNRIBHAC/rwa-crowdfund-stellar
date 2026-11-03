@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import Footer from '../Footer';
 
-// The footer links only verified, real profile URLs; unresolved platforms
-// stay decorative images (no placeholder hrefs).
+// The footer links only verified, real profile URLs; until 2026-11-03 the
+// Facebook glyph stayed decorative because no Page existed.
 describe('Footer social links', () => {
   it('links the verified profiles including the user-created Discord server', () => {
     render(<Footer />);
@@ -11,6 +11,7 @@ describe('Footer social links', () => {
       'Blockallisto on X': 'https://x.com/blockallisto',
       'Blockallisto on Instagram': 'https://www.instagram.com/blockallisto/',
       'Blockallisto on Threads': 'https://www.threads.com/@blockallisto',
+      'Blockallisto on Facebook': 'https://www.facebook.com/profile.php?id=61595902542764',
       'Blockallisto on YouTube': 'https://www.youtube.com/@blockallisto',
       'Blockallisto on Discord': 'https://discord.gg/BdXATtWNXJ',
       'Blockallisto on Telegram': 'https://t.me/blockallisto',
@@ -22,9 +23,9 @@ describe('Footer social links', () => {
       const a = screen.getByRole('link', { name: label });
       expect(a.getAttribute('href')).toBe(href);
     }
-    // Unresolved platforms must not be links.
+    // Every platform glyph is now a link; no decorative bare images remain.
     const social = document.querySelector('.footer-social')!;
     const imgs = [...social.querySelectorAll(':scope > img')].map((i) => i.getAttribute('src'));
-    expect(imgs).toEqual(['/social/facebook.svg']);
+    expect(imgs).toEqual([]);
   });
 });
