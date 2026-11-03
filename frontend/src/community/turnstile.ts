@@ -11,6 +11,8 @@
 // the widget is reset after every use.
 // https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/
 
+import { ApiError } from './api';
+
 declare global {
   interface Window {
     turnstile?: {
@@ -69,7 +71,7 @@ function loadScript(): Promise<void> {
             clearInterval(poll);
             // Let the next attempt retry instead of caching a rejection.
             scriptPromise = null;
-            reject(new Error('turnstile script failed to load'));
+            reject(new ApiError('turnstile script failed to load', 'turnstile_script_failed'));
           }
         }, 100);
       };
@@ -96,7 +98,7 @@ export async function getTurnstileToken(locale?: string): Promise<string | undef
   if (!sitekey) return undefined;
   await loadScript();
   const api = window.turnstile;
-  if (!api) throw new Error('turnstile unavailable');
+  if (!api) throw new ApiError('turnstile unavailable', 'turnstile_unavailable');
   return new Promise<string>((resolve, reject) => {
     const id = api.render(widgetContainer(), {
       sitekey,
@@ -108,7 +110,7 @@ export async function getTurnstileToken(locale?: string): Promise<string | undef
       },
       'error-callback': (code?: string) => {
         api.remove(id);
-        reject(new Error(`turnstile error${code ? `: ${code}` : ''}`));
+        reject(new ApiError(`turnstile error${code ? `: ${code}` : ''}`, 'turnstile_failed'));
       },
       'expired-callback': () => {
         api.reset(id);
