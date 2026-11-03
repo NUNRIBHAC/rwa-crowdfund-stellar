@@ -1553,6 +1553,55 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.json({ audit: await service.adminAuditLog(limit) });
     }),
   );
+  // Operator-session twins of the admin corporate-actions routes (the web UI
+  // has no admin key): same read-only, off-chain, nothing-persisted behavior.
+  router.get(
+    '/api/operator/campaigns/:id/corporate-actions/cap-table',
+    operator(async (req, res) => {
+      if (!deps.shareRegister) {
+        res.status(503).json({ error: 'share register unavailable: provider not configured' });
+        return;
+      }
+      try {
+        const payload = await deps.shareRegister(requireCampaignId(req.params.id));
+        if (!payload) {
+          res.status(404).json({ error: 'unknown campaign' });
+          return;
+        }
+        res.json(buildCapTable(payload));
+      } catch (err) {
+        sendError(res, err);
+      }
+    }),
+  );
+  router.post(
+    '/api/operator/campaigns/:id/corporate-actions/distribution-preview',
+    operator(async (req, res) => {
+      if (!deps.shareRegister) {
+        res.status(503).json({ error: 'share register unavailable: provider not configured' });
+        return;
+      }
+      try {
+        const total = (req.body as { total?: unknown } | undefined)?.total;
+        if (typeof total !== 'string' || total.length > 40) {
+          res.status(400).json({ error: 'total must be a decimal string' });
+          return;
+        }
+        const payload = await deps.shareRegister(requireCampaignId(req.params.id));
+        if (!payload) {
+          res.status(404).json({ error: 'unknown campaign' });
+          return;
+        }
+        try {
+          res.json(buildDistributionPreview(buildCapTable(payload), total));
+        } catch (e) {
+          res.status(400).json({ error: e instanceof Error ? e.message : 'invalid total' });
+        }
+      } catch (err) {
+        sendError(res, err);
+      }
+    }),
+  );
   router.get(
     '/api/operator/reconciliation',
     operator(async (_req, res) => {
