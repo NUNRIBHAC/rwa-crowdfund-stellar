@@ -141,6 +141,12 @@ export function createIpReputation(options: {
 export function ipReputationFromEnv(env: NodeJS.ProcessEnv = process.env, denyError?: (message: string, code: string) => Error): IpReputation {
   return createIpReputation({
     apiKey: env.IPREP_API_KEY?.trim() || undefined,
+    // Allocate this shared provider allowance across deployments. The counter
+    // remains in-memory: this is a best-effort cap, not durable quota accounting.
+    dailyBudget: (() => {
+      const raw = Number(env.IPREP_DAILY_BUDGET);
+      return Number.isInteger(raw) && raw >= 1 && raw <= DEFAULT_DAILY_BUDGET ? raw : DEFAULT_DAILY_BUDGET;
+    })(),
     enforce: env.IPREP_ENFORCE === '1',
     denyError,
   });

@@ -8,7 +8,7 @@ import type { AddressInfo } from 'node:net';
 import { FileCommunityStore } from '../src/community-store.js';
 import { CommunityError, CommunityService } from '../src/community.js';
 import { createCommunityRouter } from '../src/community-routes.js';
-import { createIpReputation, ABUSE_SCORE_DENY } from '../src/ip-reputation.js';
+import { createIpReputation, ipReputationFromEnv, ABUSE_SCORE_DENY } from '../src/ip-reputation.js';
 import { verifyTurnstileToken } from '../src/turnstile.js';
 import type { Mailer } from '../src/mailer.js';
 
@@ -417,4 +417,23 @@ test('xff-probe expect: sha256 equality reveals positions without raw IPs', asyn
   // Invalid expect is ignored (no equality fields).
   const bad = (await (await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', { headers: { 'x-xff-expect-sha256': 'xyz' } })).json()) as any;
   assert.equal('matchedPositions' in bad, false);
+});
+
+test('reputation env allocates a bounded per-deployment lookup allowance', async () => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = (async () => {
+    calls++;
+    return new Response(JSON.stringify({ is_abuser: false }), { status: 200 });
+  }) as typeof fetch;
+  try {
+    const reputation = ipReputationFromEnv({ IPREP_API_KEY: 'synthetic', IPREP_DAILY_BUDGET: '1' });
+    await reputation.check('198.51.100.1');
+    await reputation.check('198.51.100.2');
+    assert.equal(calls, 1);
+    assert.equal(reputation.stats().budgetTripped, true);
+    assert.equal(reputation.stats().verdicts.unknown, 1);
+  } finally {
+    globalThis.fetch = original;
+  }
 });
