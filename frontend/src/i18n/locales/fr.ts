@@ -1849,6 +1849,11 @@ export const fr: Messages = {
     errorTotpNotEnabled: "L'authentification à deux facteurs n'est pas activée sur ce compte.",
     errorSocialProviderDenied: "La connexion a été annulée chez le fournisseur. Aucune session n'a été ouverte.",
     errorSocialFlowExpired: 'La connexion a expiré. Recommencez.',
+    farcasterWaitingTitle: 'Approuvez dans Farcaster',
+    farcasterWaitingNote:
+      "Ouvrez le lien sur un appareil avec l'application Farcaster, approuvez la connexion, puis revenez sur cette page. L'attente dure jusqu'à 5 minutes.",
+    farcasterOpenApp: 'Ouvrir Farcaster',
+    farcasterCancel: 'Annuler',
     socialEmailTitle: 'Confirmez votre e-mail',
     socialEmailExplainer:
       "Votre identité chez le fournisseur est vérifiée, mais elle ne partage pas d'e-mail. Saisissez l'e-mail avec lequel vous avez été invité et nous enverrons un code à 6 chiffres.",

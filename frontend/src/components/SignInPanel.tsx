@@ -36,6 +36,8 @@ export default function SignInPanel({ actor }: { actor: string }) {
     socialEmailPending,
     socialEmailRequest,
     socialEmailConfirm,
+    farcasterLink,
+    cancelFarcaster,
     socialProviders,
     startSocialSignIn,
     clearError,
@@ -84,6 +86,20 @@ export default function SignInPanel({ actor }: { actor: string }) {
   if (!restored) return <p className="community-loading">{m.community.loading}</p>;
 
   if (!account) {
+    if (farcasterLink) {
+      return (
+        <section className="community-section" aria-labelledby="community-farcaster-wait">
+          <h2 id="community-farcaster-wait">{m.community.farcasterWaitingTitle}</h2>
+          <p className="community-note">{m.community.farcasterWaitingNote}</p>
+          <a className="btn btn-primary" href={farcasterLink} target="_blank" rel="noopener noreferrer">
+            {m.community.farcasterOpenApp}
+          </a>{' '}
+          <button className="btn" onClick={() => cancelFarcaster?.()}>
+            {m.community.farcasterCancel}
+          </button>
+        </section>
+      );
+    }
     if (socialEmailPending) {
       return (
         <section className="community-section" aria-labelledby="community-social-email">

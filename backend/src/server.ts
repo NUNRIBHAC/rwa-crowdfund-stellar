@@ -60,9 +60,12 @@ app.use((req, res, next) => {
   // iframe on the same origin, so script/frame/connect need it or the
   // widget fails closed with "turnstile script failed to load". No other
   // framing: frame-ancestors stays 'none'.
+  // Sign In With Farcaster talks to the public Farcaster relay from the
+  // browser; that origin is allowed ONLY when the feature is configured.
+  const relayOrigin = process.env.FARCASTER_AUTH_DOMAIN?.trim() ? ' https://relay.farcaster.xyz' : '';
   res.setHeader(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+    `default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com${relayOrigin}; frame-src https://challenges.cloudflare.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
   );
   res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
   res.setHeader('X-Frame-Options', 'DENY');

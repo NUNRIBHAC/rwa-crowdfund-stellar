@@ -1784,6 +1784,10 @@ export const hi: Messages = {
     errorTotpNotEnabled: 'इस खाते पर दो-कारक प्रमाणीकरण सक्षम नहीं है।',
     errorSocialProviderDenied: 'प्रदाता पर साइन-इन रद्द कर दिया गया। कोई सत्र शुरू नहीं हुआ।',
     errorSocialFlowExpired: 'साइन-इन समाप्त हो गया। फिर से शुरू करें।',
+    farcasterWaitingTitle: 'Farcaster में स्वीकृत करें',
+    farcasterWaitingNote: 'Farcaster ऐप वाले डिवाइस पर लिंक खोलें, वहाँ साइन-इन स्वीकृत करें, फिर इस पेज पर लौटें। यह 5 मिनट तक प्रतीक्षा करता है।',
+    farcasterOpenApp: 'Farcaster खोलें',
+    farcasterCancel: 'रद्द करें',
     socialEmailTitle: 'अपना ईमेल पुष्टि करें',
     socialEmailExplainer:
       'प्रदाता पर आपकी पहचान सत्यापित हुई, लेकिन वह ईमेल साझा नहीं करता। जिस ईमेल से आपको आमंत्रित किया गया था वह दर्ज करें; हम 6 अंकों का कोड भेजेंगे।',

@@ -1785,6 +1785,10 @@ export const en = {
     errorTotpNotEnabled: 'Two-factor authentication is not enabled on this account.',
     errorSocialProviderDenied: 'The sign-in was cancelled at the provider. Nothing was signed in.',
     errorSocialFlowExpired: 'The sign-in expired. Start again.',
+    farcasterWaitingTitle: 'Approve in Farcaster',
+    farcasterWaitingNote: 'Open the link on a device with the Farcaster app, approve the sign-in there, then return to this page. It waits up to 5 minutes.',
+    farcasterOpenApp: 'Open Farcaster',
+    farcasterCancel: 'Cancel',
     socialEmailTitle: 'Confirm your email',
     socialEmailExplainer:
       'Your provider identity was verified, but it does not share an email. Enter the email you were invited with and we will send a 6-digit code.',

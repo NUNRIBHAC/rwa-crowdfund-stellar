@@ -1839,6 +1839,10 @@ export const pt: Messages = {
     errorTotpNotEnabled: 'A autenticação de dois fatores não está ativa nesta conta.',
     errorSocialProviderDenied: 'O início de sessão foi cancelado no fornecedor. Nenhuma sessão foi iniciada.',
     errorSocialFlowExpired: 'O início de sessão expirou. Tente de novo.',
+    farcasterWaitingTitle: 'Aprove no Farcaster',
+    farcasterWaitingNote: 'Abra a ligação num dispositivo com a aplicação Farcaster, aprove o início de sessão e volte a esta página. Aguarda até 5 minutos.',
+    farcasterOpenApp: 'Abrir o Farcaster',
+    farcasterCancel: 'Cancelar',
     socialEmailTitle: 'Confirme o seu email',
     socialEmailExplainer:
       'A sua identidade no fornecedor foi verificada, mas não partilha um email. Introduza o email com que foi convidado e enviaremos um código de 6 dígitos.',

@@ -124,4 +124,40 @@ describe('CommunityAuthProvider social fragment', () => {
     expect(seen.current?.account).not.toBeNull();
     expect(seen.current?.socialEmailPending).toBeNull();
   });
+
+  it('farcaster: nonce, relay channel, poll, backend verify; ticket goes to the email step', async () => {
+    window.history.replaceState(null, '', '/account');
+    const verifyBodies: string[] = [];
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    stubFetch((url, init) => {
+      if (url === '/api/auth/abuse-config') return Response.json({ socialProviders: ['farcaster'] });
+      if (url === '/api/auth/farcaster/nonce') return Response.json({ nonce: 'a'.repeat(32), domain: 'app.test', siweUri: 'https://app.test/account' });
+      if (url === 'https://relay.farcaster.xyz/v1/channel') return Response.json({ channelToken: 'ct', url: 'https://farcaster.xyz/~/siwf?x=1' });
+      if (url === 'https://relay.farcaster.xyz/v1/channel/status') return Response.json({ state: 'completed', message: 'msg', signature: '0xabcd' });
+      if (url === '/api/auth/farcaster/verify') {
+        verifyBodies.push(String(init?.body));
+        return Response.json({ socialEmailTicket: 'bsp_t', expiresAt: 1 });
+      }
+      return undefined;
+    });
+    const seen: { current: ReturnType<typeof useCommunityAuth> | null } = { current: null };
+    function Grab() {
+      seen.current = useCommunityAuth();
+      return null;
+    }
+    render(
+      <CommunityAuthProvider messages={MESSAGES}>
+        <Grab />
+      </CommunityAuthProvider>,
+    );
+    await waitFor(() => expect(seen.current?.restored).toBe(true));
+    await act(async () => {
+      void seen.current?.startSocialSignIn('farcaster');
+      await vi.advanceTimersByTimeAsync(2500);
+    });
+    await waitFor(() => expect(seen.current?.socialEmailPending).toEqual({ ticket: 'bsp_t' }));
+    expect(verifyBodies[0]).toBe(JSON.stringify({ nonce: 'a'.repeat(32), message: 'msg', signature: '0xabcd' }));
+    expect(seen.current?.account).toBeNull();
+    vi.useRealTimers();
+  });
 });

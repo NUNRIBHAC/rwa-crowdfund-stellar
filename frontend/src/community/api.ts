@@ -590,3 +590,35 @@ export const confirmSocialEmailCode = (ticket: string, code: string) =>
   call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean; totpTicket?: string }>('/api/auth/social/email/confirm', {
     body: { ticket, code },
   });
+
+// Sign In With Farcaster. The relay (relay.farcaster.xyz) carries the signed
+// message from the user's Farcaster app back to this browser; the BACKEND
+// verifies it against a server-issued, browser-bound nonce and our domain.
+export const farcasterNonce = (turnstileToken?: string) =>
+  call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/farcaster/nonce', { body: turnstileToken ? { turnstileToken } : {} });
+
+export const farcasterVerify = (nonce: string, message: string, signature: string) =>
+  call<{ token?: string; expiresAt: number; account?: CommunityAccount; totpTicket?: string; socialEmailTicket?: string; isOperator?: boolean }>(
+    '/api/auth/farcaster/verify',
+    {
+      body: { nonce, message, signature },
+    },
+  );
+
+const FARCASTER_RELAY = 'https://relay.farcaster.xyz/v1';
+export const farcasterCreateChannel = async (nonce: string, domain: string, siweUri: string) => {
+  const r = await fetch(`${FARCASTER_RELAY}/channel`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nonce, domain, siweUri }),
+  });
+  const j = (await r.json().catch(() => ({}))) as { channelToken?: string; url?: string };
+  if (!r.ok || typeof j.channelToken !== 'string' || typeof j.url !== 'string' || !/^https:\/\//.test(j.url))
+    throw new ApiError('Farcaster relay unavailable', 'social_exchange_failed');
+  return { channelToken: j.channelToken, url: j.url };
+};
+export const farcasterChannelStatus = async (channelToken: string) => {
+  const r = await fetch(`${FARCASTER_RELAY}/channel/status`, { headers: { Authorization: `Bearer ${channelToken}`, 'Content-Type': 'application/json' } });
+  const j = (await r.json().catch(() => ({}))) as { state?: string; message?: string; signature?: string };
+  return { state: r.ok ? (j.state ?? 'pending') : 'error', message: j.message, signature: j.signature };
+};

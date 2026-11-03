@@ -1767,6 +1767,10 @@ export const ja: Messages = {
     errorTotpNotEnabled: 'このアカウントでは二要素認証は有効になっていません。',
     errorSocialProviderDenied: 'プロバイダでサインインがキャンセルされました。サインインは行われていません。',
     errorSocialFlowExpired: 'サインインの有効期限が切れました。もう一度始めてください。',
+    farcasterWaitingTitle: 'Farcasterで承認',
+    farcasterWaitingNote: 'Farcasterアプリのある端末でリンクを開き、そこでサインインを承認してから、このページに戻ってください。最大5分間待機します。',
+    farcasterOpenApp: 'Farcasterを開く',
+    farcasterCancel: 'キャンセル',
     socialEmailTitle: 'メールアドレスの確認',
     socialEmailExplainer:
       'プロバイダー上の本人確認は完了しましたが、メールアドレスは共有されません。招待を受けたメールアドレスを入力すると、6桁のコードを送信します。',

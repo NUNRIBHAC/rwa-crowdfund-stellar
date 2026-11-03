@@ -1834,6 +1834,11 @@ export const de: Messages = {
     errorTotpNotEnabled: 'Die Zwei-Faktor-Authentifizierung ist für dieses Konto nicht aktiviert.',
     errorSocialProviderDenied: 'Die Anmeldung wurde beim Anbieter abgebrochen. Es wurde keine Sitzung eröffnet.',
     errorSocialFlowExpired: 'Die Anmeldung ist abgelaufen. Bitte erneut starten.',
+    farcasterWaitingTitle: 'In Farcaster bestätigen',
+    farcasterWaitingNote:
+      'Öffnen Sie den Link auf einem Gerät mit der Farcaster-App, bestätigen Sie die Anmeldung dort und kehren Sie zu dieser Seite zurück. Es wird bis zu 5 Minuten gewartet.',
+    farcasterOpenApp: 'Farcaster öffnen',
+    farcasterCancel: 'Abbrechen',
     socialEmailTitle: 'E-Mail bestätigen',
     socialEmailExplainer:
       'Ihre Identität beim Anbieter wurde geprüft, teilt aber keine E-Mail. Geben Sie die E-Mail ein, mit der Sie eingeladen wurden; wir senden einen 6-stelligen Code.',
