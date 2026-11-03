@@ -1787,6 +1787,11 @@ export const en = {
     errorSocialFlowExpired: 'The sign-in expired. Start again.',
     errorSocialExchangeFailed: 'The sign-in provider rejected the exchange. Start again.',
     errorSocialRegistrationRestricted: 'Sign-in with this provider is not open for new accounts on this site yet.',
+    errorSocialIdentityTaken: 'That provider identity is already linked to a different account.',
+    errorSocialStepupRequired: 'Sign in again to link a provider; your session is too old.',
+    errorSocialStepupFailed: 'Re-authentication failed. Check your password or sign a fresh wallet challenge.',
+    errorSocialLinkRequiresVerifiedEmail: 'Linking a sign-in provider needs an account with a verified email.',
+    socialLinkedSuccess: 'Sign-in with {provider} is now linked to your account.',
     socialSignInGoogle: 'Continue with Google',
     signedInTitle: 'Community account',
     signedInAs: 'Signed in as',
@@ -1891,6 +1896,13 @@ export const en = {
       title: 'Security',
       authMethodNote:
         'You sign in by signing a message with your Stellar wallet: the wallet is the credential. An optional two-factor authenticator can be added below.',
+      linkTitle: 'Sign-in providers',
+      linkNote:
+        'Link another sign-in method to this account. You will prove it is really you first (password, fresh wallet signature, or a recent sign-in), then confirm at the provider.',
+      linkAction: 'Link {provider}',
+      linkPasswordLabel: 'Current password',
+      linkConfirm: 'Confirm and continue',
+      linkWalletNoSign: 'The wallet did not sign the challenge; linking was not started.',
       authMethodNoteEmail:
         'You sign in with your email address and password: the password is the credential. An optional two-factor authenticator can be added below.',
       sessionsTitle: 'Active sessions',

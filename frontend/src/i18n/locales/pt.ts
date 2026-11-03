@@ -1841,6 +1841,11 @@ export const pt: Messages = {
     errorSocialFlowExpired: 'O início de sessão expirou. Tente de novo.',
     errorSocialExchangeFailed: 'O fornecedor de início de sessão rejeitou a troca. Tente de novo.',
     errorSocialRegistrationRestricted: 'O início de sessão com este fornecedor ainda não está aberto a novas contas neste site.',
+    errorSocialIdentityTaken: 'Essa identidade do fornecedor já está associada a uma conta diferente.',
+    errorSocialStepupRequired: 'Inicie sessão novamente para associar um fornecedor; a sua sessão é demasiado antiga.',
+    errorSocialStepupFailed: 'A reautenticação falhou. Verifique a sua palavra-passe ou assine um novo desafio com a carteira.',
+    errorSocialLinkRequiresVerifiedEmail: 'Associar um fornecedor de início de sessão requer uma conta com um e-mail verificado.',
+    socialLinkedSuccess: 'O início de sessão com {provider} está agora associado à sua conta.',
     socialSignInGoogle: 'Continuar com o Google',
     signedInTitle: 'Conta da comunidade',
     signedInAs: 'Sessão iniciada como',
@@ -1948,6 +1953,14 @@ export const pt: Messages = {
       title: 'Segurança',
       authMethodNote:
         'Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Este protótipo não tem palavra-passe; pode adicionar abaixo um autenticador de dois fatores opcional.',
+
+      linkTitle: 'Fornecedores de início de sessão',
+      linkNote:
+        'Associe outro método de início de sessão a esta conta. Primeiro vai provar que é mesmo você (palavra-passe, assinatura nova da carteira ou um início de sessão recente) e depois confirmar no fornecedor.',
+      linkAction: 'Associar {provider}',
+      linkPasswordLabel: 'Palavra-passe atual',
+      linkConfirm: 'Confirmar e continuar',
+      linkWalletNoSign: 'A carteira não assinou o desafio; a associação não foi iniciada.',
       authMethodNoteEmail:
         'Inicia sessão com o seu email e palavra-passe: a palavra-passe é a credencial. Pode adicionar abaixo um autenticador de dois fatores opcional.',
       sessionsTitle: 'Sessões ativas',
