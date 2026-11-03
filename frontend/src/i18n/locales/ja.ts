@@ -156,6 +156,7 @@ export const ja: Messages = {
     completedTitle: '終了した投資',
   },
   card: {
+    purposeUnavailable: '資金の使途は提供されていません。',
     demo: 'デモ',
     statusFunded: '達成',
     statusEnded: '未達',

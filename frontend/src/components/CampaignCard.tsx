@@ -83,17 +83,10 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
         </div>
       </div>
 
-      {profile && <p className="card-teaser">{profile.teaser}</p>}
+      <p className="card-teaser">{profile ? profile.teaser : m.card.purposeUnavailable}</p>
 
       <FundingGrid raised={c.raised} goal={c.config.goal} />
 
-      <p className="card-funded">
-        {state.kind === 'ready' ? (
-          <span className="card-funded-pct">{tpl(m.card.fundedPct, { percent: state.percent })}</span>
-        ) : (
-          <span className="card-funded-blocks">{m.card.progressUnavailable}</span>
-        )}
-      </p>
       {/*
         Honesty rule (funding-math.ts): when chain data is missing or invalid
         the state is 'unavailable' - render no progressbar and no fabricated
@@ -104,7 +97,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
       */}
       {state.kind === 'ready' ? (
         <div
-          className="progress-track"
+          className="progress-track sr-only"
           role="progressbar"
           aria-valuenow={Math.min(100, state.percent)}
           aria-valuemin={0}
@@ -114,7 +107,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
           <div className="progress-fill" style={{ width: `${Math.min(100, state.percent)}%` }} />
         </div>
       ) : (
-        <div className="progress-track" role="img" aria-label={m.grid.ariaUnavailable} />
+        <div className="progress-track sr-only" role="img" aria-label={m.grid.ariaUnavailable} />
       )}
 
       {profile && (

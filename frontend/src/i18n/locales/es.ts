@@ -68,7 +68,7 @@ export const es: Messages = {
     titleA: 'Activos reales.',
     titleB: 'Posibilidades compartidas.',
     sub: 'Blockallisto es crowdfunding todo-o-nada aplicado por un contrato Soroban: cada contribución queda en escrow en Stellar y la comprobación del límite de financiación se ejecuta en la misma transacción atómica. El creador solo retira los fondos si el objetivo se alcanza dentro del plazo; en caso contrario, cada contribuyente firma su propio reembolso. De Portugal para el mundo.',
-    ctaBrowse: 'Ver campañas',
+    ctaBrowse: 'Explorar campañas',
     ctaHow: 'Cómo funciona',
     noteStrong: 'Prototipo en la testnet de Stellar - sin fondos reales.',
     noteLive:
@@ -162,6 +162,7 @@ export const es: Messages = {
     completedTitle: 'Inversiones completadas',
   },
   card: {
+    purposeUnavailable: 'Finalidad de la financiación no facilitada.',
     demo: 'Demo',
     statusFunded: 'Financiada',
     statusEnded: 'No financiada',

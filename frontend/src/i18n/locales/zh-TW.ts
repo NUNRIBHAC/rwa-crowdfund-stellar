@@ -58,7 +58,7 @@ export const zhTW: Messages = {
     titleA: '真實資產。',
     titleB: '共享可能。',
     sub: 'Blockallisto 是由 Soroban 合約強制執行的"全有或全無"眾籌：每筆出資都在 Stellar 上託管，融資上限檢查在同一原子交易中執行。只有目標在截止期限前達成，創建者才能提款，否則每位出資者自行簽署退款。從葡萄牙走向世界。',
-    ctaBrowse: '瀏覽項目',
+    ctaBrowse: '瀏覽籌資專案',
     ctaHow: '運作方式',
     noteStrong: 'Stellar 測試網原型 - 無真實資金。',
     noteLive: '下方每個項目都是 Stellar 測試網上的真實 Soroban 合約。未經審計，非生產環境。託管於免費套餐：閒置後的首個請求可能需要長達一分鐘等待實例喚醒。',
@@ -148,6 +148,7 @@ export const zhTW: Messages = {
     completedTitle: '已完成的投資',
   },
   card: {
+    purposeUnavailable: '未提供資金用途。',
     demo: '演示',
     statusFunded: '已融資',
     statusEnded: '未達標',

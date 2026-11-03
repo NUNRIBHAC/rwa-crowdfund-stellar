@@ -155,6 +155,7 @@ export const ko: Messages = {
     completedTitle: '종료된 투자',
   },
   card: {
+    purposeUnavailable: '자금 용도가 제공되지 않았습니다.',
     demo: '데모',
     statusFunded: '달성',
     statusEnded: '미달',
