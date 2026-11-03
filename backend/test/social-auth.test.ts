@@ -117,6 +117,9 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_GITHUB_CLIENT_ID',
     'SOCIAL_GITHUB_CLIENT_SECRET',
     'SOCIAL_GITHUB_REDIRECT_URI',
+    'SOCIAL_DISCORD_CLIENT_ID',
+    'SOCIAL_DISCORD_CLIENT_SECRET',
+    'SOCIAL_DISCORD_REDIRECT_URI',
     'SOCIAL_REGISTRATION_ALLOWED_EMAILS',
   ])
     delete process.env[k];
@@ -586,4 +589,71 @@ test('telegram uses its email-less scope and can never register under the fail-c
   const data = await store.read();
   assert.equal(Object.keys(data.socialIdentities).length, 0);
   assert.equal(Object.keys(data.accounts).length, 0);
+});
+
+// --- Discord (OAuth2 + /users/@me): verified flag gate, id binding ---------
+const DC_ID = '80351110224678912';
+const DC_CONF = { SOCIAL_DISCORD_CLIENT_ID: 'dc-client-id', SOCIAL_DISCORD_CLIENT_SECRET: 'dc-secret' };
+function makeFakeDiscord(user: Record<string, unknown>) {
+  const state = { challenge: null as string | null };
+  const fetchImpl = (async (input: any, init?: any): Promise<Response> => {
+    const url = typeof input === 'string' ? input : input.url;
+    if (url === 'https://discord.com/api/oauth2/token') {
+      const body = new URLSearchParams(init.body as string);
+      const computed = createHash('sha256').update(body.get('code_verifier')!).digest('base64url');
+      assert.equal(computed, state.challenge, 'PKCE verifier matches the issued challenge');
+      return Response.json({ access_token: 'dc_fake', token_type: 'Bearer' });
+    }
+    if (url === 'https://discord.com/api/users/@me') {
+      assert.equal(init?.headers?.authorization, 'Bearer dc_fake');
+      return Response.json(user);
+    }
+    throw new Error(`unexpected provider call: ${url}`);
+  }) as typeof fetch;
+  return { fetchImpl, state };
+}
+async function driveDiscordFlow(base: string, holder: { challenge: string | null }) {
+  const start = await fetch(`${base}/api/auth/social/discord/start`, { redirect: 'manual' });
+  assert.equal(start.status, 302);
+  const authUrl = new URL(start.headers.get('location')!);
+  assert.equal(authUrl.origin + authUrl.pathname, 'https://discord.com/oauth2/authorize');
+  assert.equal(authUrl.searchParams.get('scope'), 'identify email');
+  assert.equal(authUrl.searchParams.get('code_challenge_method'), 'S256');
+  const st = authUrl.searchParams.get('state')!;
+  holder.challenge = authUrl.searchParams.get('code_challenge');
+  return fetch(`${base}/api/auth/social/discord/callback?code=fake&state=${encodeURIComponent(st)}`, { redirect: 'manual' });
+}
+
+test('discord oauth2: only verified === true plus allowlist can register; id is the identity', async () => {
+  const ok = makeFakeDiscord({ id: DC_ID, email: 'Someone@Example.com', verified: true });
+  const app = await startApp({ ...DC_CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'someone@example.com' }, { socialFetch: ok.fetchImpl });
+  let res = await driveDiscordFlow(app.base, ok.state);
+  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=bls_'));
+  assert.ok((await app.store.read()).socialIdentities[`discord:${DC_ID}`], 'keyed on provider + snowflake id');
+  res = await driveDiscordFlow(app.base, ok.state);
+  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=bls_'));
+  assert.equal(Object.keys((await app.store.read()).accounts).length, 1);
+
+  for (const user of [
+    { id: DC_ID, email: 'someone@example.com', verified: false },
+    { id: DC_ID, email: 'someone@example.com' },
+    { id: DC_ID, verified: true },
+    { id: DC_ID, email: 'someone@example.com', verified: 'true' },
+  ]) {
+    const fake = makeFakeDiscord(user);
+    const a = await startApp({ ...DC_CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'someone@example.com' }, { socialFetch: fake.fetchImpl });
+    const r = await driveDiscordFlow(a.base, fake.state);
+    assert.equal(r.headers.get('location'), '/account#social-error=social_registration_restricted', JSON.stringify(user));
+    assert.equal(Object.keys((await a.store.read()).accounts).length, 0);
+  }
+});
+
+test('discord oauth2: a non-snowflake id is no identity; provider has no routes without env', async () => {
+  const bad = makeFakeDiscord({ id: 'not-an-id', email: 'someone@example.com', verified: true });
+  const app = await startApp({ ...DC_CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'someone@example.com' }, { socialFetch: bad.fetchImpl });
+  const res = await driveDiscordFlow(app.base, bad.state);
+  assert.match(res.headers.get('location')!, /social-error=social_exchange_failed/);
+  const none = await startApp({}, {});
+  const r = await fetch(`${none.base}/api/auth/social/discord/start`, { redirect: 'manual' });
+  assert.equal(r.status, 404);
 });

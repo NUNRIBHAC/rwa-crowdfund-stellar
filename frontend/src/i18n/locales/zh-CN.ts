@@ -1729,6 +1729,7 @@ export const zhCN: Messages = {
     socialSignInGithub: '使用 GitHub 继续',
     socialSignInLinkedin: '使用 LinkedIn 继续',
     socialSignInTelegram: '使用 Telegram 继续',
+    socialSignInDiscord: '使用 Discord 继续',
     socialSignInGeneric: '使用 {provider} 继续',
     signedInTitle: '社区账户',
     signedInAs: '已登录为',

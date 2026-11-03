@@ -54,7 +54,7 @@ import { verifyPassword } from './email-auth.js';
 // Discord/Facebook have no OIDC discovery + id_token and need the same
 // OAuth2 userinfo treatment before they can join this list; Farcaster is
 // AuthKit/SIWF, a different flow entirely.
-export const SOCIAL_PROVIDERS = ['google', 'linkedin', 'telegram', 'github'] as const;
+export const SOCIAL_PROVIDERS = ['google', 'linkedin', 'telegram', 'github', 'discord'] as const;
 export type SocialProvider = (typeof SOCIAL_PROVIDERS)[number];
 
 const SOCIAL_FLOW_TTL_MS = 10 * 60 * 1000;
@@ -70,6 +70,7 @@ const PROVIDER_KIND: Record<SocialProvider, ProviderKind> = {
   linkedin: 'oidc',
   telegram: 'oidc',
   github: 'oauth2',
+  discord: 'oauth2',
 };
 
 const PROVIDER_ISSUER: Partial<Record<SocialProvider, string>> = {
@@ -94,13 +95,23 @@ const PROVIDER_SCOPE: Partial<Record<SocialProvider, string>> = {
 
 // Static OAuth2 endpoints for non-OIDC providers (GitHub publishes no
 // discovery document).
-const OAUTH2_ENDPOINTS: Partial<Record<SocialProvider, { authorize: string; token: string; user: string; emails: string; scope: string }>> = {
+const OAUTH2_ENDPOINTS: Partial<Record<SocialProvider, { authorize: string; token: string; user: string; emails: string | null; scope: string }>> = {
   github: {
     authorize: 'https://github.com/login/oauth/authorize',
     token: 'https://github.com/login/oauth/access_token',
     user: 'https://api.github.com/user',
     emails: 'https://api.github.com/user/emails',
     scope: 'read:user user:email',
+  },
+  // Discord: OAuth2 + /users/@me. The id is a stable snowflake string; the
+  // email is only trusted when Discord's own `verified` flag is exactly true
+  // (absent or false = unverified, so no new account can be created from it).
+  discord: {
+    authorize: 'https://discord.com/oauth2/authorize',
+    token: 'https://discord.com/api/oauth2/token',
+    user: 'https://discord.com/api/users/@me',
+    emails: null,
+    scope: 'identify email',
   },
 };
 
@@ -357,16 +368,24 @@ async function exchangeOAuth2Userinfo(
   }
   const accessToken = typeof tokenJson?.access_token === 'string' ? tokenJson.access_token : null;
   if (!accessToken) throw fail();
-  const headers = { accept: 'application/vnd.github+json', authorization: `Bearer ${accessToken}` };
+  const headers = { accept: provider === 'github' ? 'application/vnd.github+json' : 'application/json', authorization: `Bearer ${accessToken}` };
   let user: any;
-  let emails: any;
+  let emails: any = null;
   try {
     const userRes = await doFetch(ep.user, { headers });
     user = await userRes.json();
-    const emailsRes = await doFetch(ep.emails, { headers });
-    emails = await emailsRes.json();
+    if (ep.emails) {
+      const emailsRes = await doFetch(ep.emails, { headers });
+      emails = await emailsRes.json();
+    }
   } catch {
     throw fail();
+  }
+  if (provider === 'discord') {
+    // Snowflake ids are strings of digits; anything else is not an identity.
+    const did = typeof user?.id === 'string' && /^\d{5,25}$/.test(user.id) ? user.id : null;
+    const demail = typeof user?.email === 'string' ? user.email.trim().toLowerCase() : null;
+    return { subject: did, email: demail, emailVerified: user?.verified === true && demail !== null };
   }
   const id = user?.id;
   const subject = typeof id === 'number' && Number.isFinite(id) ? String(id) : null;

@@ -1860,6 +1860,7 @@ export const fr: Messages = {
     socialSignInGithub: 'Continuer avec GitHub',
     socialSignInLinkedin: 'Continuer avec LinkedIn',
     socialSignInTelegram: 'Continuer avec Telegram',
+    socialSignInDiscord: 'Continuer avec Discord',
     socialSignInGeneric: 'Continuer avec {provider}',
     signedInTitle: 'Compte de la communauté',
     signedInAs: 'Connecté en tant que',

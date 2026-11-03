@@ -1850,6 +1850,7 @@ export const pt: Messages = {
     socialSignInGithub: 'Continuar com o GitHub',
     socialSignInLinkedin: 'Continuar com o LinkedIn',
     socialSignInTelegram: 'Continuar com o Telegram',
+    socialSignInDiscord: 'Continuar com o Discord',
     socialSignInGeneric: 'Continuar com {provider}',
     signedInTitle: 'Conta da comunidade',
     signedInAs: 'Sessão iniciada como',

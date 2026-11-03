@@ -6,6 +6,7 @@ export const SOCIAL_PROVIDER_DISPLAY_NAMES: Record<string, string> = {
   github: 'GitHub',
   linkedin: 'LinkedIn',
   telegram: 'Telegram',
+  discord: 'Discord',
 };
 
 export const socialProviderDisplayName = (provider: string): string => SOCIAL_PROVIDER_DISPLAY_NAMES[provider] ?? provider;
