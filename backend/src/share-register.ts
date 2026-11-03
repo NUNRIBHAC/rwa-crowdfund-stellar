@@ -58,6 +58,8 @@ export type ShareRegisterRow = {
   netIntended: string;
   // Net from CONFIRMED transfer amounts only; 'UNKNOWN' unless every SUCCESS
   // contribute/refund intent of this wallet has a captured confirmed amount.
+  contributedConfirmed: string;
+  refundedConfirmed: string;
   netConfirmed: string;
   missingConfirmedIntents: number;
   contributedComplete: boolean;
@@ -227,6 +229,8 @@ export function buildShareRegister(
       contributedIntended: formatUnits(acc.contributed),
       refundedIntended: formatUnits(acc.refunded),
       netIntended: acc.missing > 0 ? 'UNKNOWN' : formatUnits(acc.contributed - acc.refunded),
+      contributedConfirmed: acc.missingConfirmed > 0 ? 'UNKNOWN' : formatUnits(acc.confirmedContributed),
+      refundedConfirmed: acc.missingConfirmed > 0 ? 'UNKNOWN' : formatUnits(acc.confirmedRefunded),
       netConfirmed: acc.missingConfirmed > 0 ? 'UNKNOWN' : formatUnits(acc.confirmedContributed - acc.confirmedRefunded),
       missingConfirmedIntents: acc.missingConfirmed,
       contributedComplete: acc.missingContribute === 0,
@@ -280,6 +284,10 @@ const CSV_FIELDS: Array<[keyof ShareRegisterRow, string]> = [
   ['contributedIntended', 'contributed_intended'],
   ['refundedIntended', 'refunded_intended'],
   ['netIntended', 'net_intended'],
+  ['contributedConfirmed', 'contributed_confirmed'],
+  ['refundedConfirmed', 'refunded_confirmed'],
+  ['netConfirmed', 'net_confirmed'],
+  ['missingConfirmedIntents', 'missing_confirmed_intents'],
   ['contributedComplete', 'contributed_complete'],
   ['refundedComplete', 'refunded_complete'],
   ['missingAmountIntents', 'missing_amount_intents'],

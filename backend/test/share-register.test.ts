@@ -283,10 +283,26 @@ test('netConfirmed uses only captured confirmed amounts; any uncaptured SUCCESS 
   const a = reg.contributors.find((r) => r.publicKey === kpA)!;
   const b = reg.contributors.find((r) => r.publicKey === kpB)!;
   assert.equal(a.netIntended, 'UNKNOWN');
+  assert.equal(a.contributedConfirmed, '1');
+  assert.equal(a.refundedConfirmed, '1');
   assert.equal(a.netConfirmed, '0');
   assert.equal(a.missingConfirmedIntents, 0);
   assert.equal(b.netConfirmed, 'UNKNOWN');
   assert.equal(b.missingConfirmedIntents, 1);
+  const csv = shareRegisterCsv(reg);
+  assert.ok(csv.split('\n')[0].includes('"net_confirmed","missing_confirmed_intents"'));
+  assert.ok(
+    csv
+      .split('\n')
+      .find((line) => line.includes(kpA))
+      ?.includes('"UNKNOWN","1","1","0","0"'),
+  );
+  assert.ok(
+    csv
+      .split('\n')
+      .find((line) => line.includes(kpB))
+      ?.includes('"UNKNOWN","1"'),
+  );
 });
 
 test('corporate-actions: cap table and distribution preview over the register, admin gated', async () => {

@@ -37,6 +37,8 @@ function rowLines(row: ShareRegisterRow): string[] {
     `    first confirmed: ${row.firstConfirmedAt ?? 'n/a'}   contributions: ${row.contributeCount}   refunds: ${row.refundCount}`,
     `    contributed(intended): ${row.contributedIntended}${row.contributedComplete ? '' : ' [INCOMPLETE]'}   refunded(intended): ${row.refundedIntended}${row.refundedComplete ? '' : ' [INCOMPLETE]'}   net(intended): ${row.netIntended}`,
   ];
+  lines.push(`    confirmed contributions: ${row.contributedConfirmed ?? 'UNKNOWN'}   confirmed refunds: ${row.refundedConfirmed ?? 'UNKNOWN'}`);
+  lines.push(`    net(confirmed transfers): ${row.netConfirmed ?? 'UNKNOWN'}   uncaptured confirmed intents: ${row.missingConfirmedIntents ?? 'UNKNOWN'}`);
   if (row.missingAmountIntents > 0) lines.push(`    intents without amount: ${row.missingAmountIntents}`);
   if (row.intentHashes.length > 0) lines.push(`    intent hashes: ${row.intentHashes.join('  ')}`);
   return lines;
