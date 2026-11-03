@@ -189,3 +189,78 @@
     margin-bottom: 0;
   }
 }
+
+/* Compact mobile chrome: expandable normal-flow controls, never a floating
+   overlay. Native hidden display keeps collapsed links out of tab order. */
+.mobile-menu-toggle {
+  display: none;
+}
+@media (max-width: 720px) {
+  .header-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+  }
+  .mobile-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    font-size: 26px;
+    line-height: 1;
+    color: inherit;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .mobile-menu-toggle:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .site-header .site-nav,
+  .site-header .header-side {
+    display: none;
+  }
+  .site-header.mobile-menu-open {
+    max-height: 85vh;
+    max-height: 85dvh;
+    overflow-y: auto;
+  }
+  .mobile-menu-open .site-nav {
+    display: flex;
+    order: 2;
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+  .mobile-menu-open .header-side {
+    display: flex;
+    order: 3;
+    flex: 1 1 100%;
+    min-width: 0;
+    margin: 0;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mobile-menu-open .header-side-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .mobile-menu-open .header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .mobile-menu-open .lang-select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
