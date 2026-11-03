@@ -21,7 +21,10 @@ export default function Footer() {
               Telegram links the authorized public brand channel (public page and
               t.me/s preview verified on 2026-11-02). Farcaster links the registered
               @blockallisto profile; the owner chose to link it before the profile
-              bio/avatar are filled in (2026-11-02). aria-labels are hardcoded English until the
+              bio/avatar are filled in (2026-11-02). LinkedIn links the brand
+              company page created 2026-11-02 and pixel-verified in an authenticated
+              member view (anonymous fetches return ENTITY_NOT_FOUND; the crawler
+              response is not absence). aria-labels are hardcoded English until the
               locale batch adds footer keys. All platform glyphs are the user-provided set
               (brand/icons/social, Simple Icons geometry); linkedin.png is the official [in]
               Bug (InBug-Black, padded to a square transparent canvas) from LinkedIn's brand
@@ -49,7 +52,9 @@ export default function Footer() {
               <a href="https://farcaster.xyz/blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on Farcaster">
                 <img src="/social/farcaster.svg" alt="" />
               </a>
-              <img src="/social/linkedin.png" alt="LinkedIn" />
+              <a href="https://www.linkedin.com/company/blockallisto/" target="_blank" rel="noopener" aria-label="Blockallisto on LinkedIn">
+                <img src="/social/linkedin.png" alt="" />
+              </a>
               <a href="mailto:blockallisto@gmail.com" aria-label="Email Blockallisto">
                 <img src="/social/email.svg" alt="" />
               </a>
