@@ -49,7 +49,7 @@ export default function InvestorOnboarding() {
             <>
               <p role="status">{t.states[record.eligibility]}</p>
               <label>
-                {t.identity}
+                <span style={{ display: 'block', marginBottom: '0.5rem' }}>{t.identity}</span>
                 <select
                   disabled={busy}
                   value={record.progress.identity}

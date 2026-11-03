@@ -306,6 +306,24 @@ export default function App() {
           </p>
         )}
 
+        {!fixtureMode && ['home', 'investments', 'campaign'].includes(route.name) && !loaded && (
+          <section aria-live="polite">
+            <p role="status">{error ? m.errors.apiUnavailable : m.campaign.loading}</p>
+            <button
+              className="btn"
+              disabled={busy}
+              onClick={() =>
+                run(async () => {
+                  await refresh();
+                  setError(null);
+                })
+              }
+            >
+              {m.community.operator.retry}
+            </button>
+          </section>
+        )}
+
         {intent && (
           <IntentPanel
             intent={intent}
