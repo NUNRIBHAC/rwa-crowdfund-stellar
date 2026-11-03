@@ -15,7 +15,7 @@
 // --check: verify the TS sources' DATA matches the JSON (semantic compare,
 // not byte compare), exit 1 on drift. Complements i18n-export --check so both
 // directions of the projection are proven lossless in CI.
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
@@ -215,13 +215,23 @@ for (const locale of LOCALES) {
     const diffs = [];
     validateAgainstBase(enTree, uiJson, `ui.${locale}`, diffs);
     deepEqual(await loadTsModule(join(ROOT, 'src/i18n/locales', `${locale}.ts`)), mergeOverBase(enTree, uiJson), `ui.${locale}`, diffs);
+    const hasTs = (doc) => existsSync(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`));
     if (locale !== 'en') {
+      // Docs with no per-locale TS file are intentionally untranslated (the
+      // resolver serves English); they stay out of the JSON and out of the
+      // base comparison instead of pretending a stale translation exists.
       const legalBase = JSON.parse(readFileSync(join(ROOT, 'i18n-json/legal/en.json'), 'utf8'));
-      validateLegalAgainstBase(legalBase, legalJson, `legal.${locale}`, diffs);
+      const baseFiltered = Object.fromEntries(Object.entries(legalBase).filter(([d]) => hasTs(d)));
+      const jsonFiltered = Object.fromEntries(Object.entries(legalJson).filter(([d]) => hasTs(d)));
+      validateLegalAgainstBase(baseFiltered, jsonFiltered, `legal.${locale}`, diffs);
     }
     for (const doc of LEGAL_DOCS) {
       if (!(doc in legalJson)) {
-        diffs.push(`legal.${locale}.${doc}: missing from JSON`);
+        if (hasTs(doc)) diffs.push(`legal.${locale}.${doc}: missing from JSON`);
+        continue;
+      }
+      if (!hasTs(doc)) {
+        diffs.push(`legal.${locale}.${doc}: JSON present but no TS source (untranslated docs use the English fallback)`);
         continue;
       }
       let projected;
@@ -253,7 +263,10 @@ for (const locale of LOCALES) {
   writeFileSync(join(ROOT, 'src/i18n/locales', `${locale}.ts`), renderLocale(locale, mergeOverBase(enTree, uiJson)));
   written.push(`locales/${locale}.ts`);
   for (const doc of LEGAL_DOCS) {
-    if (!(doc in legalJson)) throw new Error(`legal.${locale}.${doc}: missing from JSON`);
+    if (!(doc in legalJson)) {
+      if (existsSync(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`))) throw new Error(`legal.${locale}.${doc}: missing from JSON`);
+      continue; // intentionally untranslated: resolver falls back to English
+    }
     writeFileSync(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`), renderLegal(jsonToBlocks(legalJson[doc], `legal.${locale}.${doc}`)));
   }
   written.push(`legal/*.${locale}.ts`);

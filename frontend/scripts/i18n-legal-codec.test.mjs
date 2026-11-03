@@ -6,7 +6,7 @@
 //    and reserved tokens in source strings all throw.
 // 4. Base validation: markup/variable multiset drift is caught; legitimate
 //    CJK reordering (bolded term moved to the front) is accepted.
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { describe, expect, it } from 'vitest';
@@ -52,6 +52,9 @@ function normalizeBlocks(blocks) {
 describe('legal codec roundtrip', () => {
   for (const doc of DOCS) {
     for (const locale of LOCALES) {
+      // A doc may be intentionally untranslated (no per-locale TS file): the
+      // resolver serves English, so there is nothing to roundtrip.
+      if (!existsSync(join(ROOT, 'src/i18n/legal', `${doc}.${locale}.ts`))) continue;
       it(`${doc}.${locale} survives blocks -> JSON -> blocks (modulo inert empty strings)`, async () => {
         const blocks = await loadDoc(doc, locale);
         expect(jsonToBlocks(blocksToJson(blocks))).toEqual(normalizeBlocks(blocks));
