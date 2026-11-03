@@ -247,14 +247,51 @@ function verifySignedTx(actor: string, xdrIn: string): Transaction {
 // Persist a status transition for one intent inside the journal lock. Runs
 // after network I/O completes, so the lock is held for a read-update-save
 // only, never across an RPC call.
-async function recordStatus(hash: string, status: string): Promise<void> {
+async function recordStatus(hash: string, status: string, confirmedAmount?: string): Promise<void> {
   return guarded(async () => {
     const store = await readStore();
     const intent = store.intents.find((i) => i.hash === hash);
     if (!intent) throw new Error('signed intent not found');
     intent.status = status;
+    // Forward capture only: set once from the confirmed transfer event, never
+    // overwritten, never derived from the build-time amount.
+    if (confirmedAmount !== undefined && status === 'SUCCESS' && intent.confirmedAmount === undefined) intent.confirmedAmount = confirmedAmount;
     await save(store);
   });
+}
+export type ConfirmedTransfer = { from: string; to: string; asset: string; units: bigint };
+// Token transfer events (SEP-41 shape: topics [transfer, from, to, asset?],
+// data i128 amount) from a confirmed getTransaction result. Anything that is
+// not a well-formed transfer is ignored; no events means an empty list.
+export function transferEventsFromResult(result: unknown): ConfirmedTransfer[] {
+  const groups = (result as { events?: { contractEventsXdr?: unknown[] } })?.events?.contractEventsXdr;
+  if (!Array.isArray(groups)) return [];
+  const out: ConfirmedTransfer[] = [];
+  for (const e of groups.flat() as any[]) {
+    try {
+      const v0 = e?.body?.v0;
+      if (!v0) continue;
+      const topics = (v0.topics as unknown[]).map((t) => scValToNative(t as never));
+      if (topics[0] !== 'transfer' || typeof topics[1] !== 'string' || typeof topics[2] !== 'string') continue;
+      const amount = scValToNative(v0.data as never);
+      if (typeof amount !== 'bigint' || amount <= 0n) continue;
+      out.push({ from: topics[1], to: topics[2], asset: typeof topics[3] === 'string' ? topics[3] : '', units: amount });
+    } catch {
+      continue;
+    }
+  }
+  return out;
+}
+// The amount the CONFIRMED transaction actually moved for this wallet: for a
+// contribute the transfer wallet -> campaign contract, for a refund the
+// transfer campaign contract -> wallet. Exactly one matching transfer is
+// required; zero or several means undeterminable (undefined, i.e. UNKNOWN).
+export function confirmedAmountFromResult(result: unknown, action: string, actor: string, campaignContract: string): string | undefined {
+  if (action !== 'contribute' && action !== 'refund') return undefined;
+  const m = transferEventsFromResult(result).filter((t) =>
+    action === 'contribute' ? t.from === actor && t.to === campaignContract : t.from === campaignContract && t.to === actor,
+  );
+  return m.length === 1 ? unitsToAmount(m[0].units) : undefined;
 }
 // Funding state for one registered campaign, for the post-funding report
 // publish gate: reads the same on-chain views as the campaign listing
@@ -600,8 +637,13 @@ export async function statusSoroban(hash: string): Promise<any> {
   // reservation release, expiry inference, or automatic replacement.
   if ((result.status === 'SUCCESS' || result.status === 'FAILED') && (!Number.isSafeInteger(result.ledger) || result.ledger <= 0))
     throw new Error('RPC result missing conclusive ledger');
-  // Phase 2 (journal lock): persist a terminal outcome.
-  if (result.status === 'SUCCESS' || result.status === 'FAILED') await recordStatus(hash, result.status);
+  // Phase 2 (journal lock): persist a terminal outcome, with the amount the
+  // confirmed transfer event shows (v1 campaigns; UNKNOWN when not exactly one).
+  if (result.status === 'SUCCESS' || result.status === 'FAILED') {
+    const v1 = result.status === 'SUCCESS' ? v1Entries().find((e) => e.id === intent.campaign) : undefined;
+    const confirmed = v1 ? confirmedAmountFromResult(result, intent.action, intent.actor, v1.contractId) : undefined;
+    await recordStatus(hash, result.status, confirmed);
+  }
   return { hash, status: result.status, confirmed: result.status === 'SUCCESS', held: result.status === 'NOT_FOUND' };
 }
 
