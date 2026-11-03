@@ -51,3 +51,14 @@ test('non-community paths still fall through the gate', async () => {
   const res = await fetch(`${base}/api/campaigns/demo-solar/share-register.xml`);
   assert.equal(res.status, 404, 'unrelated extensions must not be claimed by the community gate');
 });
+
+test('corporate-actions routes dispatch through the community gate to the admin guard', async () => {
+  const get = await fetch(`${base}/api/campaigns/demo-solar/corporate-actions/cap-table.json`);
+  assert.equal(get.status, 401, 'cap-table must reach requireAdmin anonymously');
+  const post = await fetch(`${base}/api/campaigns/demo-solar/corporate-actions/distribution-preview`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: '{"total":"10"}',
+  });
+  assert.equal(post.status, 401, 'distribution-preview must reach requireAdmin anonymously');
+});
