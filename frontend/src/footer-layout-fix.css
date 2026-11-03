@@ -298,3 +298,12 @@
     gap: 10px;
   }
 }
+
+/* Match the reference lockup scale and the brand-to-tagline breathing room
+   without widening the link tracks or changing coarse-pointer targets. */
+@media (min-width: 1440px) and (hover: hover) and (pointer: fine) {
+  .footer-brand-lockup-img {
+    height: 64px;
+    margin-bottom: 9px;
+  }
+}
