@@ -3071,3 +3071,62 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .hero-technical {
   margin-top: 32px;
 }
+
+.campaign-mobile-action {
+  display: none;
+}
+.campaign-page :where(.stat-grid dd, .metric-card dd, .info-grid dd) {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+#campaign-funding {
+  scroll-margin-top: 120px;
+}
+.instrument-disclosure > summary {
+  cursor: pointer;
+  padding: 14px 0;
+  min-height: 44px;
+  border-block: 1px solid var(--line);
+  font-weight: 700;
+}
+.instrument-disclosure .instrument-grid {
+  margin-top: 18px;
+}
+@media (max-width: 900px) {
+  .campaign-columns .invest-widget {
+    grid-row: 1;
+  }
+  .campaign-page .metric-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .campaign-page .metric-card {
+    padding: 12px;
+    border-radius: 4px;
+  }
+  .campaign-page .info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .campaign-mobile-action {
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: var(--card);
+    border-top: 1px solid var(--line);
+  }
+  .campaign-mobile-action .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 900px) {
+  .campaign-page:has(.campaign-mobile-action) {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+  .campaign-page .campaign-main {
+    padding-bottom: 84px;
+  }
+}

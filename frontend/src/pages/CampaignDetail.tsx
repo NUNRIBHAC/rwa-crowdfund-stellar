@@ -81,35 +81,37 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
         {profile ? <p className="campaign-issuer">{profile.issuer}</p> : <p className="campaign-issuer">{m.campaign.issuerMissing}</p>}
       </header>
 
-      <dl className="metric-cards">
-        <div className="metric-card">
-          <dt>{m.campaign.assetClass}</dt>
-          <dd>
-            {profile ? composeInstrumentLabel(m, profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays) : m.campaign.escrowTestnet}
-          </dd>
-        </div>
-        <div className="metric-card">
-          <dt>{m.campaign.interestRate}</dt>
-          <dd>{profile ? profile.interestRate : m.campaign.noInterest}</dd>
-        </div>
-        <div className="metric-card">
-          <dt>{m.campaign.term}</dt>
-          <dd>{profile ? profile.term : `${m.campaign.termDeadlinePrefix} ${dl.date}`}</dd>
-        </div>
-        <div className="metric-card">
-          <dt>{m.campaign.minInvestment}</dt>
-          <dd>{profile ? profile.minInvestment : m.campaign.minNote}</dd>
-        </div>
-      </dl>
-
-      {profile && (
-        <p className="instrument-explainer">
-          {instrumentExplainer(m, profile)} {m.campaign.explainerSuffix}
-        </p>
-      )}
-
       <div className="campaign-columns">
         <div className="campaign-main">
+          <dl className="metric-cards">
+            <div className="metric-card">
+              <dt>{m.campaign.assetClass}</dt>
+              <dd>
+                {profile
+                  ? composeInstrumentLabel(m, profile.instrumentClass, profile.instrumentSeniority, profile.instrumentOverlays)
+                  : m.campaign.escrowTestnet}
+              </dd>
+            </div>
+            <div className="metric-card">
+              <dt>{m.campaign.interestRate}</dt>
+              <dd>{profile ? profile.interestRate : m.campaign.noInterest}</dd>
+            </div>
+            <div className="metric-card">
+              <dt>{m.campaign.term}</dt>
+              <dd>{profile ? profile.term : `${m.campaign.termDeadlinePrefix} ${dl.date}`}</dd>
+            </div>
+            <div className="metric-card">
+              <dt>{m.campaign.minInvestment}</dt>
+              <dd>{profile ? profile.minInvestment : m.campaign.minNote}</dd>
+            </div>
+          </dl>
+
+          {profile && (
+            <p className="instrument-explainer">
+              {instrumentExplainer(m, profile)} {m.campaign.explainerSuffix}
+            </p>
+          )}
+
           <section aria-label={m.campaign.factsAria}>
             <h2 className="section-title">{m.campaign.additionalInfo}</h2>
             {profile ? (
@@ -238,7 +240,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           <CampaignTour />
         </div>
 
-        <aside className="invest-widget" aria-label={m.nav.investments}>
+        <aside id="campaign-funding" className="invest-widget" aria-label={m.nav.investments}>
           <h2 className="widget-title">{status === 'open' ? m.campaign.widgetContribute : m.campaign.widgetOverview}</h2>
           <FundingGrid raised={campaign.raised} goal={campaign.config.goal} layout="block" />
           <dl className="stat-grid">
@@ -326,6 +328,21 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           <p className="widget-risk">{m.campaign.widgetRisk}</p>
         </aside>
       </div>
+      {!market.fixtureMode && status === 'open' && (
+        <div className="campaign-mobile-action">
+          <a
+            className="btn btn-primary"
+            href="#campaign-funding"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('campaign-funding')?.scrollIntoView({ behavior: 'auto', block: 'start' });
+              document.querySelector<HTMLInputElement>('#campaign-funding input')?.focus({ preventScroll: true });
+            }}
+          >
+            {m.campaign.widgetContribute}
+          </a>
+        </div>
+      )}
     </article>
   );
 }

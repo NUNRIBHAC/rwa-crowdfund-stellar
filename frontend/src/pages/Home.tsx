@@ -65,15 +65,18 @@ export default function Home({ market }: { market: Market }) {
       <section aria-label={m.home.instrumentsAria}>
         <h2 className="section-title">{m.home.instrumentsTitle}</h2>
         <p>{m.home.instrumentsIntro}</p>
-        <div className="instrument-grid">
-          {m.instruments.classes.map((c) => (
-            <a key={c.id} className="instrument-tile" href={routeHash({ name: 'learn' })}>
-              <h3>{c.label}</h3>
-              {c.subtypeOf && <p className="instrument-sub">{c.subtypeOf}</p>}
-              <p>{c.summary}</p>
-            </a>
-          ))}
-        </div>
+        <details className="instrument-disclosure">
+          <summary>{m.home.instrumentsTitle}</summary>
+          <div className="instrument-grid">
+            {m.instruments.classes.map((c) => (
+              <a key={c.id} className="instrument-tile" href={routeHash({ name: 'learn' })}>
+                <h3>{c.label}</h3>
+                {c.subtypeOf && <p className="instrument-sub">{c.subtypeOf}</p>}
+                <p>{c.summary}</p>
+              </a>
+            ))}
+          </div>
+        </details>
       </section>
 
       <section aria-label={m.home.whyAria}>
