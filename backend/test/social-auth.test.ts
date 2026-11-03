@@ -568,22 +568,77 @@ test('linkedin completes a full allowlisted registration flow and issues a worki
   assert.ok(data.socialIdentities['linkedin:linkedin-sub-123'], 'identity stored under linkedin:subject');
 });
 
-test('telegram uses its email-less scope and can never register under the fail-closed email gate', async () => {
-  // Telegram's OIDC claims carry no email/email_verified; even an allowlist
-  // entry cannot satisfy the registration gate. Sign-in remains possible for
-  // identities linked through a deliberate authenticated flow (not yet
-  // implemented), so a fresh Telegram identity is refused today.
+test('telegram (identity only): pending ticket, allowlisted email proven by code, no auto-link', async () => {
+  const sent: { to: string; text: string }[] = [];
+  const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
+  const post = (base: string, path: string, body: unknown) =>
+    fetch(`${base}${path}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
   const fake = await makeFakeProvider('telegram', {});
-  const { base, store } = await startApp(
-    { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' },
-    { socialFetch: fake.fetchImpl },
-  );
+  const env = { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
+  const { base, store } = await startApp(env, { socialFetch: fake.fetchImpl, mailer });
   const start = await fetch(`${base}/api/auth/social/telegram/start`, { redirect: 'manual' });
-  const authUrl = new URL(start.headers.get('location')!);
-  assert.equal(authUrl.searchParams.get('scope'), 'openid profile');
+  assert.equal(new URL(start.headers.get('location')!).searchParams.get('scope'), 'openid profile');
   const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
-  assert.equal(cb.headers.get('location'), '/account#social-error=social_registration_restricted');
+  const loc = cb.headers.get('location')!;
+  assert.ok(loc.startsWith('/account#social-email=bsp_'), loc);
+  const ticket = loc.split('=')[1];
+  assert.equal(Object.keys((await store.read()).accounts).length, 0, 'no account before the email proof');
+
+  // An ineligible email gets the same answer and no mail.
+  let r = await post(base, '/api/auth/social/email/request', { ticket, email: 'stranger@example.com' });
+  assert.equal(r.status, 200);
+  assert.deepEqual(await r.json(), { status: 'code-sent' });
+  assert.equal(sent.length, 0);
+  // Cooldown applies to the next request too (no signal difference).
+  r = await post(base, '/api/auth/social/email/request', { ticket, email: 'nuno@example.com' });
+  assert.equal(sent.length, 0, 'cooldown blocks an immediate retry');
+  // Expire the cooldown, then the allowlisted email is mailed a code.
+  await store.change((s) => {
+    for (const p of Object.values(s.socialPending)) p.sentAt = 0;
+  });
+  r = await post(base, '/api/auth/social/email/request', { ticket, email: 'nuno@example.com' });
+  assert.equal(r.status, 200);
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].to, 'nuno@example.com');
+  const code = sent[0].text.match(/\b(\d{6})\b/)![1];
+  // Wrong code and wrong ticket fail; the right pair creates the account.
+  r = await post(base, '/api/auth/social/email/confirm', { ticket, code: code === '000000' ? '111111' : '000000' });
+  assert.equal(r.status, 400);
+  r = await post(base, '/api/auth/social/email/confirm', { ticket: 'bsp_' + '0'.repeat(48), code });
+  assert.equal(r.status, 401);
+  r = await post(base, '/api/auth/social/email/confirm', { ticket, code });
+  assert.equal(r.status, 200);
+  const body = (await r.json()) as { token: string };
+  assert.ok(body.token.startsWith('bls_'));
   const data = await store.read();
-  assert.equal(Object.keys(data.socialIdentities).length, 0);
-  assert.equal(Object.keys(data.accounts).length, 0);
+  assert.equal(Object.keys(data.accounts).length, 1);
+  assert.equal(Object.values(data.accounts)[0].email, 'nuno@example.com');
+  assert.ok(data.socialIdentities['telegram:telegram-sub-123']);
+  // Ticket is single use.
+  r = await post(base, '/api/auth/social/email/confirm', { ticket, code });
+  assert.equal(r.status, 401);
+  // The identity now signs in directly.
+  const again = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+  assert.ok(again.headers.get('location')!.startsWith('/account#social-token=bls_'));
+});
+
+test('telegram pending: an email that already has an account is never linked from here', async () => {
+  const sent: { to: string; text: string }[] = [];
+  const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
+  const fake = await makeFakeProvider('telegram', {});
+  const env = { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
+  const { base, store } = await startApp(env, { socialFetch: fake.fetchImpl, mailer });
+  await store.change((s) => {
+    s.accounts['GEXISTING'] = { publicKey: 'GEXISTING', displayName: null, createdAt: 1, authMethod: 'social', email: 'nuno@example.com' };
+  });
+  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+  const ticket = cb.headers.get('location')!.split('=')[1];
+  const r = await fetch(`${base}/api/auth/social/email/request`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ ticket, email: 'nuno@example.com' }),
+  });
+  assert.equal(r.status, 200);
+  assert.equal(sent.length, 0, 'no code is mailed for an email that belongs to an account');
+  assert.equal(Object.keys((await store.read()).socialIdentities).length, 0);
 });

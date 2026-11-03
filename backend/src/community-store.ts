@@ -56,6 +56,23 @@ export type SocialFlow = {
   linkTo?: string;
 };
 
+// A provider identity that proved who it is (sub / fid) but carries no
+// verified email: it may become an account only after the holder proves an
+// ALLOWLISTED email by code. Keyed by sha256(ticket); the raw ticket lives
+// only in the browser fragment of the callback that created it.
+export type SocialPending = {
+  provider: string;
+  subject: string;
+  createdAt: number;
+  expiresAt: number;
+  email?: string;
+  codeHash?: string;
+  codeExpiresAt?: number;
+  sentAt?: number;
+  sendCount: number;
+  failedAttempts: number;
+};
+
 export type TotpEnrollment = {
   status: 'pending' | 'enabled';
   encSeed: string; // totp.ts encryptSeed payload; never plaintext
@@ -385,6 +402,7 @@ export type CommunityState = {
   emailCredentials: Record<string, EmailCredential>;
   socialIdentities: Record<string, SocialIdentity>;
   socialFlows: Record<string, SocialFlow>;
+  socialPending: Record<string, SocialPending>;
   challenges: Record<string, Challenge>;
   totpTickets: Record<string, TotpTicket>;
   sessions: Record<string, Session>;
@@ -418,6 +436,7 @@ export function emptyCommunityState(): CommunityState {
     emailCredentials: {},
     socialIdentities: {},
     socialFlows: {},
+    socialPending: {},
     challenges: {},
     totpTickets: {},
     sessions: {},
@@ -445,6 +464,7 @@ function validate(state: any): CommunityState {
   // Same forward-compatible default for docs written before social sign-in.
   if (state && state.version === 1 && !state.socialIdentities) state.socialIdentities = {};
   if (state && state.version === 1 && !state.socialFlows) state.socialFlows = {};
+  if (state && state.version === 1 && !state.socialPending) state.socialPending = {};
   // Same forward-compatible default for docs written before the audit log.
   if (state && state.version === 1 && !state.audit) state.audit = [];
   if (state && state.version === 1 && !state.companies) state.companies = {};
