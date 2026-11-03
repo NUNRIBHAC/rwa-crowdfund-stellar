@@ -1,0 +1,1438 @@
+openapi: 3.0.3
+info:
+  title: Blockallisto API
+  version: 0.2.0-draft
+  description: >-
+    REST API contract for the Blockallisto testnet prototype, generated from the
+    Express route definitions in backend/src (server.ts, community-routes.ts,
+    infrastructure/router.ts) at current main. DRAFT: paths, methods and auth
+    requirements are source-verified; request/response schemas are intentionally
+    generic until each handler's zod validation is transcribed. Path coverage synchronized to main @0962c6f on 2026-11-03. The
+    /api/infrastructure/* group is a TEST-ONLY service bound to 127.0.0.1
+    (INFRA_PORT, default 4100) - never exposed publicly. Admin routes fail
+    closed (503) when ADMIN_SECRET is not configured.
+servers:
+  - url: https://blockallisto-demo.onrender.com
+    description: Demo (public testnet app)
+  - url: https://rwa-crowdfund-staging.onrender.com
+    description: Staging (load and realistic tests)
+  - url: http://127.0.0.1:4100
+    description: Infrastructure test API (localhost only)
+tags:
+  - name: System
+  - name: Campaigns
+  - name: Soroban
+  - name: Account
+  - name: Auth
+  - name: Appropriateness
+  - name: Companies
+  - name: Community
+  - name: Admin
+  - name: Content
+  - name: Support
+  - name: Issuer
+  - name: Notifications
+  - name: Operator
+  - name: Infrastructure (test-only)
+components:
+  securitySchemes:
+    sessionAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+      description: Session token from POST /api/auth/verify (Freighter challenge signature).
+    adminKey:
+      type: apiKey
+      in: header
+      name: x-admin-key
+      description: Shared admin secret (timing-safe compared against ADMIN_SECRET).
+    infraBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+      description: 'Per-principal infrastructure credential (roles: compliance, valuation, governor, operator, auditor); test-only service.'
+paths:
+  /health:
+    get:
+      tags: ['System']
+      summary: Liveness probe
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns:
+    get:
+      tags: ['Campaigns']
+      summary: List campaigns with current state
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/metadata:
+    get:
+      tags: ['Campaigns']
+      summary: Campaign metadata
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/soroban/build:
+    post:
+      tags: ['Soroban']
+      summary: Build an unsigned contribution transaction (XDR)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/soroban/submit:
+    post:
+      tags: ['Soroban']
+      summary: Submit a signed contribution transaction
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/soroban/recover:
+    post:
+      tags: ['Soroban']
+      summary: Re-sync a contribution after an interrupted flow
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/soroban/transactions/{hash}:
+    get:
+      tags: ['Soroban']
+      summary: Poll transaction status by hash
+      parameters:
+        - name: hash
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/account/activity:
+    get:
+      tags: ['Account']
+      summary: Current account activity feed
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/challenge:
+    post:
+      tags: ['Auth']
+      summary: Request a wallet sign-in challenge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/verify:
+    post:
+      tags: ['Auth']
+      summary: Verify a signed challenge; returns a session token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/logout:
+    post:
+      tags: ['Auth']
+      summary: Invalidate the current session
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/me:
+    get:
+      tags: ['Auth']
+      summary: Current account profile
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+    put:
+      tags: ['Auth']
+      summary: Update current account profile
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/totp/enroll:
+    post:
+      tags: ['Auth']
+      summary: Start TOTP second-factor enrollment
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/totp/enable:
+    post:
+      tags: ['Auth']
+      summary: Confirm and enable TOTP
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/totp/disable:
+    post:
+      tags: ['Auth']
+      summary: Disable TOTP
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/totp/complete:
+    post:
+      tags: ['Auth']
+      summary: Complete a login that requires TOTP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/sessions:
+    get:
+      tags: ['Auth']
+      summary: List active sessions
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/sessions/{id}:
+    delete:
+      tags: ['Auth']
+      summary: Revoke one session
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/logout-others:
+    post:
+      tags: ['Auth']
+      summary: Revoke all other sessions
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/appropriateness:
+    get:
+      tags: ['Appropriateness']
+      summary: Current appropriateness status
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/appropriateness/knowledge:
+    post:
+      tags: ['Appropriateness']
+      summary: Submit the knowledge test
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/appropriateness/simulation-result:
+    post:
+      tags: ['Appropriateness']
+      summary: Submit the loss-simulation result
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/appropriateness/acknowledge-warning:
+    post:
+      tags: ['Appropriateness']
+      summary: Acknowledge the risk warning
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/appropriateness/sophistication-request:
+    post:
+      tags: ['Appropriateness']
+      summary: Request sophisticated-investor classification
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/companies/mine:
+    get:
+      tags: ['Companies']
+      summary: List companies of the current account
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/companies:
+    post:
+      tags: ['Companies']
+      summary: Register a company for company investing
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/comments:
+    get:
+      tags: ['Community']
+      summary: List campaign comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+    post:
+      tags: ['Community']
+      summary: Post a campaign comment
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/comments/mine:
+    get:
+      tags: ['Community']
+      summary: Comments by the current account
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/news:
+    get:
+      tags: ['Campaigns']
+      summary: Campaign news items
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+    post:
+      tags: ['Admin']
+      summary: Publish a campaign news item
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/news:
+    get:
+      tags: ['Campaigns']
+      summary: Global news feed
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/reports:
+    get:
+      tags: ['Campaigns']
+      summary: Post-funding reports for a campaign
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/podcast/episodes:
+    get:
+      tags: ['Content']
+      summary: List podcast episodes
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+    post:
+      tags: ['Admin']
+      summary: Publish a podcast episode
+      security: [{ adminKey: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/podcast:
+    get:
+      tags: ['Content']
+      summary: Podcast episodes linked to a campaign
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/support/tickets:
+    post:
+      tags: ['Support']
+      summary: Open a support ticket
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+    get:
+      tags: ['Support']
+      summary: List own support tickets
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/issuer-applications:
+    post:
+      tags: ['Issuer']
+      summary: Submit an issuer application
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+    get:
+      tags: ['Issuer']
+      summary: List own issuer applications
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/notifications:
+    get:
+      tags: ['Notifications']
+      summary: List notifications
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/notifications/read-all:
+    post:
+      tags: ['Notifications']
+      summary: Mark all notifications read
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/notifications/{id}/read:
+    post:
+      tags: ['Notifications']
+      summary: Mark one notification read
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/comments:
+    get:
+      tags: ['Operator']
+      summary: 'Moderation queue: comments'
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/comments/{id}/hide:
+    post:
+      tags: ['Operator']
+      summary: Hide a comment
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/comments/{id}/unhide:
+    post:
+      tags: ['Operator']
+      summary: Unhide a comment
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/tickets:
+    get:
+      tags: ['Operator']
+      summary: Support ticket queue
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/tickets/{id}/close:
+    post:
+      tags: ['Operator']
+      summary: Close a support ticket
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/issuer-applications:
+    get:
+      tags: ['Operator']
+      summary: Issuer applications queue
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/issuer-applications/{id}/status:
+    post:
+      tags: ['Operator']
+      summary: Approve or reject an issuer application
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/companies:
+    get:
+      tags: ['Operator']
+      summary: Company applications queue
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/companies/{id}/status:
+    post:
+      tags: ['Operator']
+      summary: Approve or reject a company
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/campaigns/{id}/news:
+    post:
+      tags: ['Operator']
+      summary: Publish campaign news as operator
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/campaigns/{id}/reports:
+    post:
+      tags: ['Operator']
+      summary: Publish a post-funding report
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/podcast/episodes:
+    post:
+      tags: ['Operator']
+      summary: Publish a podcast episode as operator
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/audit-log:
+    get:
+      tags: ['Operator']
+      summary: Operator audit log
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/reconciliation:
+    get:
+      tags: ['Operator']
+      summary: Campaign reconciliation status
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/comments:
+    get:
+      tags: ['Admin']
+      summary: 'Admin: all comments'
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/comments/{id}/hide:
+    post:
+      tags: ['Admin']
+      summary: 'Admin: hide a comment'
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/comments/{id}/unhide:
+    post:
+      tags: ['Admin']
+      summary: 'Admin: unhide a comment'
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/tickets:
+    get:
+      tags: ['Admin']
+      summary: 'Admin: all tickets'
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/tickets/{id}/close:
+    post:
+      tags: ['Admin']
+      summary: 'Admin: close a ticket'
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/issuer-applications:
+    get:
+      tags: ['Admin']
+      summary: 'Admin: issuer applications'
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/issuer-applications/{id}/status:
+    post:
+      tags: ['Admin']
+      summary: 'Admin: set issuer application status'
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/audit-log:
+    get:
+      tags: ['Admin']
+      summary: 'Admin: audit log'
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/reconciliation:
+    get:
+      tags: ['Admin']
+      summary: 'Admin: campaign reconciliation'
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/legacy/campaigns:
+    get:
+      tags: ['Admin']
+      summary: 'Admin: legacy campaign records'
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/status:
+    get:
+      tags: ['Infrastructure (test-only)']
+      summary: Service status (open on localhost)
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/identities:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Record an identity
+      security: [{ infraBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/valuations:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Publish a signed valuation
+      security: [{ infraBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/proposals:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Create a governance proposal
+      security: [{ infraBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/proposals/{id}/approve:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Approve a proposal
+      security: [{ infraBearer: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/eligibility:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Check subject/asset eligibility
+      security: [{ infraBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/cashouts:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Request a cash-out
+      security: [{ infraBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/cashouts/{key}/approve:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Approve a cash-out
+      security: [{ infraBearer: [] }]
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/cashouts/{key}/dispatch:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Dispatch an approved cash-out
+      security: [{ infraBearer: [] }]
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/cashouts/{key}/resolve:
+    post:
+      tags: ['Infrastructure (test-only)']
+      summary: Resolve a cash-out
+      security: [{ infraBearer: [] }]
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/infrastructure/audit:
+    get:
+      tags: ['Infrastructure (test-only)']
+      summary: Audit log (auditor role only)
+      security: [{ infraBearer: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  # --- Added 2026-11-03: path sync to main @0962c6f (post-snapshot routes) ---
+  /api/auth/email/register:
+    post:
+      tags: ['Auth']
+      summary: Register an email account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/email/login:
+    post:
+      tags: ['Auth']
+      summary: Log in with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/email/verify:
+    post:
+      tags: ['Auth']
+      summary: Verify an email address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/email/resend:
+    post:
+      tags: ['Auth']
+      summary: Resend the verification email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/email/reset-request:
+    post:
+      tags: ['Auth']
+      summary: Request a password reset email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/email/reset-confirm:
+    post:
+      tags: ['Auth']
+      summary: Confirm a password reset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/social/{provider}/start:
+    get:
+      tags: ['Auth']
+      summary: Start social sign-in with a provider (302 redirect to the provider)
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/social/{provider}/callback:
+    get:
+      tags: ['Auth']
+      summary: Social sign-in callback (302 redirect to the SPA with the outcome)
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/abuse-config:
+    get:
+      tags: ['Auth']
+      summary: Public abuse-mitigation configuration for auth flows
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/account/payouts:
+    get:
+      tags: ['Account']
+      summary: Completed on-chain payouts for an actor (public journal fields only)
+      parameters:
+        - name: actor
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/abuse-diagnostics:
+    get:
+      tags: ['Admin']
+      summary: Abuse-mitigation diagnostics snapshot
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/abuse-diagnostics/mail-template-check:
+    post:
+      tags: ['Admin']
+      summary: Render mail templates as a configuration check
+      security: [{ adminKey: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/abuse-diagnostics/reputation-self-check:
+    post:
+      tags: ['Admin']
+      summary: Run the IP-reputation provider self-check
+      security: [{ adminKey: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/abuse-diagnostics/xff-probe:
+    get:
+      tags: ['Admin']
+      summary: Report trusted-proxy header classification for the caller
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/event-archive/snapshot:
+    get:
+      tags: ['Admin']
+      summary: Download the event-archive snapshot
+      security: [{ adminKey: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/admin/event-archive/snapshot/verify:
+    post:
+      tags: ['Admin']
+      summary: Verify an uploaded snapshot integrity header
+      security: [{ adminKey: [] }]
+      requestBody:
+        required: true
+        content:
+          'text/plain':
+            schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/share-register.json:
+    get:
+      tags: ['Admin']
+      summary: Export the campaign share register (JSON)
+      security: [{ adminKey: [] }]
+      description: Admin-gated read-only export from the contributor registry and intent journal; answers 503 when the register provider is not configured.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/share-register.csv:
+    get:
+      tags: ['Admin']
+      summary: Export the campaign share register (CSV)
+      security: [{ adminKey: [] }]
+      description: Admin-gated read-only export from the contributor registry and intent journal; answers 503 when the register provider is not configured.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/share-register.pdf:
+    get:
+      tags: ['Admin']
+      summary: Export the campaign share register (PDF)
+      security: [{ adminKey: [] }]
+      description: Admin-gated read-only export from the contributor registry and intent journal; answers 503 when the register provider is not configured.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/investment-documents:
+    get:
+      tags: ['Campaigns']
+      summary: List published investment documents for a campaign
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/investment-documents/{docId}/download:
+    get:
+      tags: ['Campaigns']
+      summary: Download an investment document
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: docId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/campaigns/{id}/investment-documents:
+    post:
+      tags: ['Operator']
+      summary: Publish an investment document for a campaign
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/investment-documents/{docId}/approve:
+    post:
+      tags: ['Operator']
+      summary: Approve an investment document
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: docId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/campaign-deploy/build:
+    post:
+      tags: ['Operator']
+      summary: Build an unsigned campaign-deploy transaction
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/campaign-deploy/submit:
+    post:
+      tags: ['Operator']
+      summary: Submit a signed campaign-deploy transaction
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
