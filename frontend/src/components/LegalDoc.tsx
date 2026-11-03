@@ -77,6 +77,9 @@ export default function LegalDoc({ doc }: { doc: LegalDocId }) {
   const rtl = renderedLocale === 'ar';
   return (
     <div lang={renderedLocale} dir={rtl ? undefined : 'ltr'}>
+      {locale !== renderedLocale && (
+        <p className="legal-demo-notice">English version shown. An updated, verified translation for your selected language is not yet available.</p>
+      )}
       {blocks.map(renderBlock)}
     </div>
   );
