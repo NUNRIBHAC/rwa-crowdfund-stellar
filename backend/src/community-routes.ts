@@ -938,6 +938,17 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }
   });
 
+  // Scoped admin deletes: moderation cleanup (e.g. synthetic fixtures). Hard
+  // removal from the content store; the audit log preserves the evidence.
+  router.delete('/api/news/:id', requireAdmin, async (req, res) => {
+    try {
+      await service.deleteNews(String(req.params.id), 'admin-key');
+      res.json({ ok: true });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   // --- Site-wide news feed (public; same visibility as per-campaign news) ---
   router.get('/api/news', async (_req, res) => {
     try {
@@ -970,6 +981,15 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.status(201).json({
         episode: await service.addEpisode(req.body, 'admin-key'),
       });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
+  router.delete('/api/podcast/episodes/:id', requireAdmin, async (req, res) => {
+    try {
+      await service.deleteEpisode(String(req.params.id), 'admin-key');
+      res.json({ ok: true });
     } catch (err) {
       sendError(res, err);
     }

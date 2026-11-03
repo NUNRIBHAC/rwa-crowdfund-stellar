@@ -168,6 +168,39 @@ test('news posting is admin-only and labeled', async () => {
   assert.equal(listed.json.news.length, 1);
 });
 
+test('news and podcast deletes are admin-only and remove public content', async () => {
+  // News: public until the admin delete; 401 without the key; 404 after.
+  const posted = await api('POST', '/api/campaigns/demo-solar/news', {
+    admin: true,
+    body: { title: 'QA fixture', body: 'Synthetic fixture to remove.' },
+  });
+  assert.equal(posted.status, 201);
+  const newsId = posted.json.post.id;
+  assert.equal((await api('DELETE', `/api/news/${newsId}`)).status, 401);
+  assert.equal((await api('DELETE', `/api/news/${newsId}`, { admin: true })).status, 200);
+  // Other tests in this file also post to demo-solar; assert this fixture is
+  // gone from both the per-campaign and site-wide feeds.
+  assert.ok(!(await api('GET', '/api/campaigns/demo-solar/news')).json.news.some((n: any) => n.id === newsId));
+  assert.ok(!(await api('GET', '/api/news')).json.news.some((n: any) => n.id === newsId));
+  assert.equal((await api('DELETE', `/api/news/${newsId}`, { admin: true })).status, 404);
+
+  // Podcast: same lifecycle.
+  const ep = await api('POST', '/api/podcast/episodes', {
+    admin: true,
+    body: {
+      title: 'QA fixture ep',
+      description: 'Synthetic fixture to remove.',
+      audioUrl: 'https://audio.example.com/qa.mp3',
+    },
+  });
+  assert.equal(ep.status, 201);
+  const epId = ep.json.episode.id;
+  assert.equal((await api('DELETE', `/api/podcast/episodes/${epId}`)).status, 401);
+  assert.equal((await api('DELETE', `/api/podcast/episodes/${epId}`, { admin: true })).status, 200);
+  assert.ok(!(await api('GET', '/api/podcast/episodes')).json.episodes.some((e: any) => e.id === epId));
+  assert.equal((await api('DELETE', `/api/podcast/episodes/${epId}`, { admin: true })).status, 404);
+});
+
 test('issuer application end to end with admin pipeline', async () => {
   const kp = Keypair.random();
   const token = await login(kp);
