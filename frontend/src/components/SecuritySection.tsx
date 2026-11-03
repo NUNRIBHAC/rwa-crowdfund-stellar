@@ -14,7 +14,7 @@ import { useI18n } from '../i18n';
 
 export default function SecuritySection() {
   const { m, locale } = useI18n();
-  const { account, token, socialProviders, socialNotice } = useCommunityAuth();
+  const { account, token, socialProviders, socialNotice, farcasterLink, cancelFarcaster, startFarcasterLink } = useCommunityAuth();
   const [sessions, setSessions] = useState<SessionInfo[] | null>(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -98,6 +98,12 @@ export default function SecuritySection() {
         if (!sig) throw new Error(labels.linkWalletNoSign);
         proof.signature = sig;
       }
+      if (provider === 'farcaster') {
+        setLinkPassword('');
+        setLinkProvider(null);
+        await startFarcasterLink?.(proof);
+        return;
+      }
       const { url } = await startSocialLink(token, provider, proof);
       setLinkPassword('');
       setLinkProvider(null);
@@ -117,6 +123,17 @@ export default function SecuritySection() {
         <>
           <h3>{labels.linkTitle}</h3>
           <p className="community-note">{labels.linkNote}</p>
+          {farcasterLink && (
+            <p className="community-note">
+              {m.community.farcasterWaitingNote}{' '}
+              <a className="btn btn-primary" href={farcasterLink} target="_blank" rel="noopener noreferrer">
+                {m.community.farcasterOpenApp}
+              </a>{' '}
+              <button className="btn" onClick={() => cancelFarcaster?.()}>
+                {m.community.farcasterCancel}
+              </button>
+            </p>
+          )}
           {(socialProviders ?? []).map((p) => (
             <div key={p}>
               <button className="btn" disabled={busy} onClick={() => onLink(p)}>

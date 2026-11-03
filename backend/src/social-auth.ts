@@ -43,7 +43,8 @@ import * as client from 'openid-client';
 import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore } from './community-store.js';
 import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS, verifySignature } from './accounts.js';
-import { verifyPassword } from './email-auth.js';
+import { normalizeEmail, sendBudgetedMail, verifyPassword } from './email-auth.js';
+import type { Mailer } from './mailer.js';
 
 // Providers with an implementation-verified OIDC discovery document.
 // google:    https://accounts.google.com/.well-known/openid-configuration
@@ -131,6 +132,24 @@ export function socialRegistrationAllowedEmails(env: NodeJS.ProcessEnv): Set<str
   );
 }
 
+// Providers whose identity carries no email evidence at all. A NEW identity
+// from one of these cannot register directly: it gets a pending ticket and
+// must prove an allowlisted email by code (requestSocialEmail/confirm).
+export const IDENTITY_ONLY_PROVIDERS: ReadonlySet<string> = new Set(['telegram', 'farcaster']);
+const PENDING_TTL_MS = 15 * 60 * 1000;
+const PENDING_CODE_TTL_MS = 10 * 60 * 1000;
+const PENDING_RESEND_MS = 60 * 1000;
+const PENDING_MAX_SENDS = 5;
+const PENDING_MAX_FAILURES = 5;
+
+export function newBindSecret(): { secret: string; hash: string } {
+  const secret = randomBytes(24).toString('hex');
+  return { secret, hash: hashToken(secret) };
+}
+export function bindMatches(hash: string, secret: unknown): boolean {
+  return typeof secret === 'string' && secret.length > 0 && hashToken(secret) === hash;
+}
+
 type FetchLike = typeof fetch;
 
 async function getClient(cfg: SocialClientConfig, provider: SocialProvider, fetchImpl?: FetchLike): Promise<client.Configuration> {
@@ -159,6 +178,7 @@ export async function startSocialFlow(
   now = Date.now(),
   fetchImpl?: FetchLike,
   linkTo?: string,
+  bindHash?: string,
 ): Promise<{ url: string }> {
   const state = client.randomState();
   const nonce = client.randomNonce();
@@ -166,7 +186,15 @@ export async function startSocialFlow(
   const codeChallenge = await client.calculatePKCECodeChallenge(codeVerifier);
   await store.change((s) => {
     for (const [k, f] of Object.entries(s.socialFlows)) if (f.expiresAt <= now) delete s.socialFlows[k];
-    s.socialFlows[flowKey(state)] = { provider, nonce, codeVerifier, createdAt: now, expiresAt: now + SOCIAL_FLOW_TTL_MS, ...(linkTo ? { linkTo } : {}) };
+    s.socialFlows[flowKey(state)] = {
+      provider,
+      nonce,
+      codeVerifier,
+      createdAt: now,
+      expiresAt: now + SOCIAL_FLOW_TTL_MS,
+      ...(linkTo ? { linkTo } : {}),
+      ...(bindHash ? { bindHash } : {}),
+    };
   });
   if (PROVIDER_KIND[provider] === 'oauth2') {
     const ep = OAUTH2_ENDPOINTS[provider];
@@ -196,6 +224,7 @@ export async function startSocialFlow(
 export type SocialLoginResult =
   | { kind: 'session'; token: string; expiresAt: number; account: Account }
   | { kind: 'totp'; ticket: string; expiresAt: number; account: Account }
+  | { kind: 'email'; ticket: string; expiresAt: number }
   | { kind: 'linked'; account: Account };
 
 // Complete a flow from the callback. currentUrl is the full callback URL
@@ -213,6 +242,7 @@ export async function completeSocialFlow(
   stateParam: unknown,
   now = Date.now(),
   fetchImpl?: FetchLike,
+  bindSecret?: string,
 ): Promise<SocialLoginResult> {
   if (typeof stateParam !== 'string' || !stateParam) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
   const key = flowKey(stateParam);
@@ -220,6 +250,9 @@ export async function completeSocialFlow(
     const f = s.socialFlows[key];
     if (!f || f.expiresAt <= now || f.provider !== provider) return null;
     delete s.socialFlows[key]; // single-use, consumed on ANY terminal outcome
+    // Browser binding: a callback replayed from another browser (no or wrong
+    // cookie) is rejected like an expired flow.
+    if (f.bindHash && !bindMatches(f.bindHash, bindSecret)) return null;
     return f;
   });
   if (!flow) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
@@ -248,6 +281,22 @@ export async function completeSocialFlow(
     emailVerified = claims?.email_verified === true;
   }
   if (!subject) throw new AuthError(502, 'the sign-in provider returned no identity', 'social_exchange_failed');
+  return finishSocialIdentity(store, env, provider, subject, email, emailVerified, flow, now);
+}
+
+// Shared tail of every provider flow: link to an existing account, sign an
+// existing identity in, or (identity-only providers) park a pending ticket.
+export type SocialFlowRecord = { linkTo?: string; bindHash?: string };
+export async function finishSocialIdentity(
+  store: CommunityStore,
+  env: NodeJS.ProcessEnv,
+  provider: string,
+  subject: string,
+  email: string | null,
+  emailVerified: boolean,
+  flow: SocialFlowRecord,
+  now: number,
+): Promise<SocialLoginResult> {
   const identityKey = `${provider}:${subject}`;
 
   if (flow.linkTo) {
@@ -283,6 +332,14 @@ export async function completeSocialFlow(
       if (!account) throw new AuthError(500, 'account record missing');
     } else {
       // New social registration: fail-closed gate (module header).
+      if (IDENTITY_ONLY_PROVIDERS.has(provider)) {
+        if (!flow.bindHash) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
+        const ticket = `bsp_${randomBytes(24).toString('hex')}`;
+        const expiresAt = now + PENDING_TTL_MS;
+        for (const [k, v] of Object.entries(s.socialPending)) if (v.expiresAt <= now) delete s.socialPending[k];
+        s.socialPending[hashToken(ticket)] = { bindHash: flow.bindHash, provider, subject, createdAt: now, expiresAt, sendCount: 0, failedAttempts: 0 };
+        return { kind: 'email' as const, ticket, expiresAt };
+      }
       const allowed = socialRegistrationAllowedEmails(env);
       if (!email || !emailVerified || !allowed.has(email)) {
         throw new AuthError(403, 'sign-in with this provider is not open for new accounts on this deployment', 'social_registration_restricted');
@@ -443,4 +500,102 @@ export async function requireSocialLinkStepUp(
     return true;
   });
   if (!ok) throw fail('social_stepup_failed', 'wallet challenge signature did not verify; request a fresh challenge');
+}
+
+// --- Email proof for identity-only providers -----------------------------------
+// Step 2: the holder of a pending ticket names an email. The answer is the
+// same whether or not the address is eligible (no enumeration). A code is
+// mailed only when the address is on SOCIAL_REGISTRATION_ALLOWED_EMAILS and no
+// account or email credential already uses it (an existing account is NEVER
+// linked from here: its owner signs in and uses the authenticated link flow).
+export async function requestSocialEmail(
+  store: CommunityStore,
+  mailer: Mailer,
+  env: NodeJS.ProcessEnv,
+  input: { ticket: unknown; email: unknown; bind: unknown },
+  now = Date.now(),
+  maxPerHour = 50,
+  maxPerDay = 250,
+): Promise<{ status: 'code-sent' }> {
+  if (typeof input.ticket !== 'string' || !input.ticket.startsWith('bsp_')) throw new AuthError(401, 'sign-in expired; start again', 'social_pending_expired');
+  const email = normalizeEmail(input.email);
+  const key = hashToken(input.ticket);
+  const code = String(randomBytes(4).readUInt32BE(0) % 1000000).padStart(6, '0');
+  const eligible = socialRegistrationAllowedEmails(env).has(email);
+  const go = await store.change((s) => {
+    const p = s.socialPending[key];
+    if (!p || p.expiresAt <= now || !bindMatches(p.bindHash, input.bind)) throw new AuthError(401, 'sign-in expired; start again', 'social_pending_expired');
+    if (p.sendCount >= PENDING_MAX_SENDS) throw new AuthError(429, 'too many codes requested; start again', 'rate_limited');
+    if (p.sentAt && now - p.sentAt < PENDING_RESEND_MS) return false;
+    const taken = !!s.emailCredentials[email] || Object.values(s.accounts).some((a) => a.email === email);
+    if (!eligible || taken) {
+      p.sentAt = now; // same cooldown and counter as a real send: no timing or count signal
+      p.sendCount += 1;
+      return false;
+    }
+    p.email = email;
+    p.codeHash = hashToken(code);
+    p.codeExpiresAt = now + PENDING_CODE_TTL_MS;
+    p.failedAttempts = 0;
+    p.sentAt = now;
+    p.sendCount += 1;
+    return true;
+  });
+  if (go) {
+    await sendBudgetedMail(
+      store,
+      mailer,
+      {
+        to: email,
+        subject: 'Your Blockallisto sign-in code',
+        text: `Your verification code is ${code}. It expires in 10 minutes. If you did not request it, ignore this email.`,
+      },
+      now,
+      maxPerHour,
+      maxPerDay,
+    );
+  }
+  return { status: 'code-sent' };
+}
+
+// Step 3: the right code for the pending ticket creates the account with that
+// email verified and binds the provider identity, then issues a session (or
+// the TOTP ticket when the new account somehow has TOTP enabled - it cannot,
+// but the path stays identical to every other flow).
+export async function confirmSocialEmail(
+  store: CommunityStore,
+  input: { ticket: unknown; code: unknown; bind: unknown },
+  now = Date.now(),
+): Promise<SocialLoginResult> {
+  if (typeof input.ticket !== 'string' || !input.ticket.startsWith('bsp_')) throw new AuthError(401, 'sign-in expired; start again', 'social_pending_expired');
+  const key = hashToken(input.ticket);
+  const code = typeof input.code === 'string' ? input.code.trim() : '';
+  const wrong = new AuthError(400, 'that code is not valid; check it or request a new one', 'social_code_invalid');
+  const outcome = await store.change((s) => {
+    const p = s.socialPending[key];
+    if (!p || p.expiresAt <= now || !bindMatches(p.bindHash, input.bind))
+      return { error: new AuthError(401, 'sign-in expired; start again', 'social_pending_expired') };
+    if (!p.codeHash || !p.codeExpiresAt || !p.email || p.codeExpiresAt <= now || p.failedAttempts >= PENDING_MAX_FAILURES) return { error: wrong };
+    if (!/^\d{6}$/.test(code) || hashToken(code) !== p.codeHash) {
+      p.failedAttempts += 1;
+      if (p.failedAttempts >= PENDING_MAX_FAILURES) delete s.socialPending[key];
+      return { error: wrong };
+    }
+    delete s.socialPending[key]; // single use
+    const identityKey = `${p.provider}:${p.subject}`;
+    if (s.socialIdentities[identityKey])
+      return { error: new AuthError(409, 'this provider identity is already linked to an account', 'social_identity_taken') };
+    if (s.emailCredentials[p.email] || Object.values(s.accounts).some((a) => a.email === p.email)) {
+      return { error: new AuthError(409, 'that email already has an account; sign in to it and link this provider from your account', 'social_email_in_use') };
+    }
+    const publicKey = Keypair.random().publicKey();
+    s.accounts[publicKey] = { publicKey, displayName: null, createdAt: now, authMethod: 'social', email: p.email } satisfies Account;
+    s.socialIdentities[identityKey] = { provider: p.provider, subject: p.subject, publicKey, email: p.email, createdAt: now, lastLoginAt: now };
+    const token = `bls_${randomBytes(24).toString('hex')}`;
+    const session = { tokenHash: hashToken(token), publicKey, createdAt: now, expiresAt: now + SESSION_TTL_MS };
+    s.sessions[session.tokenHash] = session;
+    return { ok: { kind: 'session' as const, token, expiresAt: session.expiresAt, account: { ...s.accounts[publicKey] } } };
+  });
+  if ('error' in outcome && outcome.error) throw outcome.error;
+  return (outcome as { ok: SocialLoginResult }).ok;
 }

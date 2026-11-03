@@ -33,11 +33,19 @@ export default function SignInPanel({ actor }: { actor: string }) {
     setDisplayName,
     totpPending,
     completeTotp,
+    socialEmailPending,
+    socialEmailRequest,
+    socialEmailConfirm,
+    farcasterLink,
+    cancelFarcaster,
     socialProviders,
     startSocialSignIn,
     clearError,
   } = useCommunityAuth();
   const [name, setName] = useState('');
+  const [socialEmail, setSocialEmail] = useState('');
+  const [socialCode, setSocialCode] = useState('');
+  const [socialCodeSent, setSocialCodeSent] = useState(false);
   const [totpCode, setTotpCode] = useState('');
   const [method, setMethod] = useState<'wallet' | 'email'>('wallet');
   const [emailMode, setEmailMode] = useState<'login' | 'register'>('register');
@@ -52,6 +60,16 @@ export default function SignInPanel({ actor }: { actor: string }) {
 
   // Sign-out must not leave the previous session's credentials or tokens in
   // the form: clear every sensitive field whenever the account goes away.
+  // A pending email proof is the one thing the visitor must do next: bring
+  // its heading into view and focus it (screen readers announce it).
+  useEffect(() => {
+    if (!socialEmailPending) return;
+    const h = document.getElementById('community-social-email');
+    h?.setAttribute('tabindex', '-1');
+    h?.scrollIntoView?.({ block: 'start' });
+    h?.focus?.({ preventScroll: true });
+  }, [socialEmailPending]);
+
   useEffect(() => {
     if (account) return;
     setEmail('');
@@ -68,6 +86,76 @@ export default function SignInPanel({ actor }: { actor: string }) {
   if (!restored) return <p className="community-loading">{m.community.loading}</p>;
 
   if (!account) {
+    if (farcasterLink) {
+      return (
+        <section className="community-section" aria-labelledby="community-farcaster-wait">
+          <h2 id="community-farcaster-wait">{m.community.farcasterWaitingTitle}</h2>
+          <p className="community-note">{m.community.farcasterWaitingNote}</p>
+          <a className="btn btn-primary" href={farcasterLink} target="_blank" rel="noopener noreferrer">
+            {m.community.farcasterOpenApp}
+          </a>{' '}
+          <button className="btn" onClick={() => cancelFarcaster?.()}>
+            {m.community.farcasterCancel}
+          </button>
+        </section>
+      );
+    }
+    if (socialEmailPending) {
+      return (
+        <section className="community-section" aria-labelledby="community-social-email">
+          <h2 id="community-social-email">{m.community.socialEmailTitle}</h2>
+          <p className="community-note">{m.community.socialEmailExplainer}</p>
+          {error && (
+            <p role="alert" className="community-error">
+              {error}
+            </p>
+          )}
+          <form
+            className="display-name-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              socialEmailRequest?.(socialEmail.trim())
+                .then(() => setSocialCodeSent(true))
+                .catch(() => undefined);
+            }}
+          >
+            <label>
+              {m.community.socialEmailEmailLabel}
+              <input type="email" value={socialEmail} onChange={(e) => setSocialEmail(e.target.value)} autoComplete="email" />
+            </label>
+            <button className="btn btn-primary" disabled={busy || !socialEmail.trim()}>
+              {m.community.socialEmailSend}
+            </button>
+          </form>
+          {socialCodeSent && (
+            <>
+              <p className="community-note">{m.community.socialEmailSentNote}</p>
+              <form
+                className="display-name-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  socialEmailConfirm?.(socialCode.trim());
+                }}
+              >
+                <label>
+                  {m.community.socialEmailCodeLabel}
+                  <input
+                    value={socialCode}
+                    onChange={(e) => setSocialCode(e.target.value)}
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    placeholder="123456"
+                  />
+                </label>
+                <button className="btn btn-primary" disabled={busy || !socialCode.trim()}>
+                  {m.community.socialEmailConfirm}
+                </button>
+              </form>
+            </>
+          )}
+        </section>
+      );
+    }
     if (totpPending) {
       return (
         <section className="community-section" aria-labelledby="community-totp">

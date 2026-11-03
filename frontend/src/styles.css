@@ -2997,4 +2997,5 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 }
 .social-signin-btn {
   margin-bottom: 0.75rem;
+  margin-inline-end: 0.5rem;
 }

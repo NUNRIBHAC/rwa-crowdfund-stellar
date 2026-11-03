@@ -118,6 +118,7 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_GITHUB_CLIENT_SECRET',
     'SOCIAL_GITHUB_REDIRECT_URI',
     'SOCIAL_REGISTRATION_ALLOWED_EMAILS',
+    'FARCASTER_AUTH_DOMAIN',
   ])
     delete process.env[k];
   Object.assign(process.env, env);
@@ -135,7 +136,13 @@ const CONF = { SOCIAL_GOOGLE_CLIENT_ID: CLIENT_ID, SOCIAL_GOOGLE_CLIENT_SECRET: 
 
 // Drive one full flow: /start (302 to the fake provider), then /callback
 // with the issued state. Returns the callback response.
-async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder: { challenge: string | null }, provider = 'google') {
+async function driveFlow(
+  base: string,
+  fetchImpl: typeof fetch,
+  challengeHolder: { challenge: string | null },
+  provider = 'google',
+  callbackCookie?: string | null,
+) {
   const start = await fetch(`${base}/api/auth/social/${provider}/start`, { redirect: 'manual' });
   assert.equal(start.status, 302);
   const authUrl = new URL(start.headers.get('location')!);
@@ -149,8 +156,13 @@ async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder:
   assert.ok(state && nonce, 'state and nonce issued');
   challengeHolder.challenge = authUrl.searchParams.get('code_challenge');
   (globalThis as any).__testNonce = nonce;
-  const cb = await fetch(`${base}/api/auth/social/${provider}/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
-  return cb;
+  const cookie = (start.headers.get('set-cookie') ?? '').split(';')[0];
+  const sent = callbackCookie === undefined ? cookie : callbackCookie;
+  const cb = await fetch(`${base}/api/auth/social/${provider}/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, {
+    redirect: 'manual',
+    headers: sent ? { cookie: sent } : {},
+  });
+  return Object.assign(cb, { bindCookie: cookie });
 }
 
 // A fake GitHub OAuth2 provider: token exchange (with the same PKCE
@@ -195,7 +207,10 @@ async function driveGithubFlow(base: string, challengeHolder: { challenge: strin
   const state = authUrl.searchParams.get('state')!;
   assert.ok(state, 'state issued');
   challengeHolder.challenge = authUrl.searchParams.get('code_challenge');
-  return fetch(`${base}/api/auth/social/github/callback?code=fake-gh-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
+  return fetch(`${base}/api/auth/social/github/callback?code=fake-gh-code&state=${encodeURIComponent(state)}`, {
+    headers: { cookie: (start.headers.get('set-cookie') ?? '').split(';')[0] },
+    redirect: 'manual',
+  });
 }
 
 test('github oauth2: fail-closed registration gate uses the verified primary email from userinfo', async () => {
@@ -474,7 +489,10 @@ test('allowlisted verified registration creates a social account and a working s
   fake.state.challenge = authUrl.searchParams.get('code_challenge');
   (globalThis as any).__testNonce = authUrl.searchParams.get('nonce');
   const state = authUrl.searchParams.get('state')!;
-  const cb = await fetch(`${base}/api/auth/social/google/callback?code=fake&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
+  const cb = await fetch(`${base}/api/auth/social/google/callback?code=fake&state=${encodeURIComponent(state)}`, {
+    headers: { cookie: (start.headers.get('set-cookie') ?? '').split(';')[0] },
+    redirect: 'manual',
+  });
   assert.equal(cb.status, 302);
   const loc = cb.headers.get('location')!;
   assert.ok(loc.startsWith('/account#social-token=bls_'), loc);
@@ -568,22 +586,333 @@ test('linkedin completes a full allowlisted registration flow and issues a worki
   assert.ok(data.socialIdentities['linkedin:linkedin-sub-123'], 'identity stored under linkedin:subject');
 });
 
-test('telegram uses its email-less scope and can never register under the fail-closed email gate', async () => {
-  // Telegram's OIDC claims carry no email/email_verified; even an allowlist
-  // entry cannot satisfy the registration gate. Sign-in remains possible for
-  // identities linked through a deliberate authenticated flow (not yet
-  // implemented), so a fresh Telegram identity is refused today.
+test('telegram (identity only): pending ticket, allowlisted email proven by code, no auto-link', async () => {
+  const sent: { to: string; text: string }[] = [];
+  const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
+  let cookie = '';
+  const post = (base: string, path: string, body: unknown, ck = cookie) =>
+    fetch(`${base}${path}`, { method: 'POST', headers: { 'content-type': 'application/json', ...(ck ? { cookie: ck } : {}) }, body: JSON.stringify(body) });
+  const fake = await makeFakeProvider('telegram', {});
+  const env = { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
+  const { base, store } = await startApp(env, { socialFetch: fake.fetchImpl, mailer });
+  const start = await fetch(`${base}/api/auth/social/telegram/start`, { redirect: 'manual' });
+  assert.equal(new URL(start.headers.get('location')!).searchParams.get('scope'), 'openid profile');
+  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+  cookie = cb.bindCookie;
+  assert.match(cookie, /^bl_sso=[0-9a-f]{48}$/);
+  const loc = cb.headers.get('location')!;
+  assert.ok(loc.startsWith('/account#social-email=bsp_'), loc);
+  const ticket = loc.split('=')[1];
+  assert.equal(Object.keys((await store.read()).accounts).length, 0, 'no account before the email proof');
+
+  // An ineligible email gets the same answer and no mail.
+  let r = await post(base, '/api/auth/social/email/request', { ticket, email: 'stranger@example.com' });
+  assert.equal(r.status, 200);
+  assert.deepEqual(await r.json(), { status: 'code-sent' });
+  assert.equal(sent.length, 0);
+  // Cooldown applies to the next request too (no signal difference).
+  r = await post(base, '/api/auth/social/email/request', { ticket, email: 'nuno@example.com' });
+  assert.equal(sent.length, 0, 'cooldown blocks an immediate retry');
+  // Expire the cooldown, then the allowlisted email is mailed a code.
+  await store.change((s) => {
+    for (const p of Object.values(s.socialPending)) p.sentAt = 0;
+  });
+  r = await post(base, '/api/auth/social/email/request', { ticket, email: 'nuno@example.com' });
+  assert.equal(r.status, 200);
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].to, 'nuno@example.com');
+  const code = sent[0].text.match(/\b(\d{6})\b/)![1];
+  // Cross-browser: the same ticket and the RIGHT code without this browser's
+  // cookie (or with another browser's) can neither request nor confirm.
+  const other = (await fetch(`${base}/api/auth/social/telegram/start`, { redirect: 'manual' })).headers.get('set-cookie')!.split(';')[0];
+  for (const ck of ['', other]) {
+    r = await post(base, '/api/auth/social/email/confirm', { ticket, code }, ck);
+    assert.equal(r.status, 401, 'stolen ticket + valid code must not bind');
+    r = await post(base, '/api/auth/social/email/request', { ticket, email: 'nuno@example.com' }, ck);
+    assert.equal(r.status, 401);
+  }
+  assert.equal(Object.keys((await store.read()).accounts).length, 0);
+  // Wrong code and wrong ticket fail; the right pair creates the account.
+  r = await post(base, '/api/auth/social/email/confirm', { ticket, code: code === '000000' ? '111111' : '000000' });
+  assert.equal(r.status, 400);
+  r = await post(base, '/api/auth/social/email/confirm', { ticket: 'bsp_' + '0'.repeat(48), code });
+  assert.equal(r.status, 401);
+  r = await post(base, '/api/auth/social/email/confirm', { ticket, code });
+  assert.equal(r.status, 200);
+  const body = (await r.json()) as { token: string };
+  assert.ok(body.token.startsWith('bls_'));
+  const data = await store.read();
+  assert.equal(Object.keys(data.accounts).length, 1);
+  assert.equal(Object.values(data.accounts)[0].email, 'nuno@example.com');
+  assert.ok(data.socialIdentities['telegram:telegram-sub-123']);
+  // Ticket is single use.
+  r = await post(base, '/api/auth/social/email/confirm', { ticket, code });
+  assert.equal(r.status, 401);
+  // The identity now signs in directly.
+  const again = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+  assert.ok(again.headers.get('location')!.startsWith('/account#social-token=bls_'));
+});
+
+test('telegram pending: an email that already has an account is never linked from here', async () => {
+  const sent: { to: string; text: string }[] = [];
+  const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
+  const fake = await makeFakeProvider('telegram', {});
+  const env = { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
+  const { base, store } = await startApp(env, { socialFetch: fake.fetchImpl, mailer });
+  await store.change((s) => {
+    s.accounts['GEXISTING'] = { publicKey: 'GEXISTING', displayName: null, createdAt: 1, authMethod: 'social', email: 'nuno@example.com' };
+  });
+  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+  const ticket = cb.headers.get('location')!.split('=')[1];
+  const r = await fetch(`${base}/api/auth/social/email/request`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', cookie: cb.bindCookie },
+    body: JSON.stringify({ ticket, email: 'nuno@example.com' }),
+  });
+  assert.equal(r.status, 200);
+  assert.equal(sent.length, 0, 'no code is mailed for an email that belongs to an account');
+  assert.equal(Object.keys((await store.read()).socialIdentities).length, 0);
+});
+
+test('callback replayed from another browser (no cookie) is rejected and consumes the flow', async () => {
   const fake = await makeFakeProvider('telegram', {});
   const { base, store } = await startApp(
     { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' },
-    { socialFetch: fake.fetchImpl },
+    { socialFetch: fake.fetchImpl, mailer: { send: async () => {} } },
   );
-  const start = await fetch(`${base}/api/auth/social/telegram/start`, { redirect: 'manual' });
-  const authUrl = new URL(start.headers.get('location')!);
-  assert.equal(authUrl.searchParams.get('scope'), 'openid profile');
-  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
-  assert.equal(cb.headers.get('location'), '/account#social-error=social_registration_restricted');
-  const data = await store.read();
-  assert.equal(Object.keys(data.socialIdentities).length, 0);
-  assert.equal(Object.keys(data.accounts).length, 0);
+  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram', null);
+  assert.ok(!cb.headers.get('location')!.includes('social-email=bsp_'));
+  assert.equal(Object.keys((await store.read()).socialPending).length, 0);
 });
+
+import { createSiweMessage } from 'viem/siwe';
+import { privateKeyToAccount, generatePrivateKey } from 'viem/accounts';
+import { createPublicClient, custom } from 'viem';
+import { optimism } from 'viem/chains';
+import { defaultFarcasterVerifier } from '../src/farcaster-auth.js';
+
+const FC_DOMAIN = 'app.example.test';
+const fcAccount = privateKeyToAccount(generatePrivateKey());
+async function siwe(nonce: string, over: Record<string, unknown> = {}, acct = fcAccount, fid = 3357330) {
+  const message = createSiweMessage({
+    address: acct.address,
+    chainId: 10,
+    domain: FC_DOMAIN,
+    nonce,
+    uri: `https://${FC_DOMAIN}/account`,
+    version: '1',
+    statement: 'Farcaster Auth',
+    resources: [`farcaster://fid/${fid}`],
+    issuedAt: new Date(),
+    expirationTime: new Date(Date.now() + 5 * 60 * 1000),
+    ...over,
+  } as never);
+  return { message, signature: await acct.signMessage({ message }) };
+}
+// REAL @farcaster/auth-client verification (statement, chain 10, fid resource,
+// nonce, domain, auth-address check). The Optimism RPC is stubbed: eth_call
+// answers "valid" for the signature validator (so signature forgery is NOT tested) and the fid
+// registry reads are replaced by an in-memory connector.
+function stubConnector(ownerFid: bigint | ((addr: string) => bigint), callResult: 'valid' | 'invalid' | 'error' = 'valid') {
+  const publicClient = createPublicClient({
+    chain: optimism,
+    transport: custom({
+      request: async ({ method }: { method: string }) => {
+        if (method === 'eth_call') {
+          if (callResult === 'error') throw new Error('rpc down');
+          return callResult === 'valid' ? '0x01' : '0x00';
+        }
+        return method === 'eth_chainId' ? '0xa' : '0x';
+      },
+    }),
+  });
+  return {
+    publicClient,
+    getFid: async (addr: string) => (typeof ownerFid === 'function' ? ownerFid(addr) : ownerFid),
+    isValidAuthAddress: async () => false,
+  } as never;
+}
+
+test('farcaster: real SIWF verification, server nonce, browser binding, pending-email then account', async () => {
+  const sent: { to: string; text: string }[] = [];
+  const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
+  const env = { FARCASTER_AUTH_DOMAIN: FC_DOMAIN, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
+  const farcasterVerifier = defaultFarcasterVerifier({}, stubConnector(3357330n));
+  const { base, store } = await startApp(env, { mailer, farcasterVerifier });
+  const post = (path: string, body: unknown, ck = '') =>
+    fetch(`${base}${path}`, { method: 'POST', headers: { 'content-type': 'application/json', ...(ck ? { cookie: ck } : {}) }, body: JSON.stringify(body) });
+  const getNonce = async () => {
+    const r = await post('/api/auth/farcaster/nonce', {});
+    return { ck: r.headers.get('set-cookie')!.split(';')[0], ...((await r.json()) as { nonce: string; domain: string; siweUri: string }) };
+  };
+  const cfg = (await (await fetch(`${base}/api/auth/abuse-config`)).json()) as { socialProviders: string[] };
+  assert.ok(cfg.socialProviders.includes('farcaster'));
+
+  // Wrong browser: rejected and does NOT burn the owner's nonce.
+  const a = await getNonce();
+  assert.equal(a.siweUri, `https://${FC_DOMAIN}/account`);
+  const other = (await getNonce()).ck;
+  const m = await siwe(a.nonce);
+  let r = await post('/api/auth/farcaster/verify', { nonce: a.nonce, ...m }, other);
+  assert.equal(r.status, 401);
+  r = await post('/api/auth/farcaster/verify', { nonce: a.nonce, ...m }, a.ck);
+  assert.equal(r.status, 200, 'owner browser still succeeds after a stranger attempt');
+  const { socialEmailTicket } = (await r.json()) as { socialEmailTicket: string };
+  assert.ok(socialEmailTicket.startsWith('bsp_'));
+  assert.equal(Object.keys((await store.read()).accounts).length, 0);
+  r = await post('/api/auth/farcaster/verify', { nonce: a.nonce, ...m }, a.ck);
+  assert.equal(r.status, 401, 'nonce is single use');
+
+  // Message-level rejections (each burns only its own nonce, after binding).
+  const rejects: Array<[string, (n: string) => Promise<{ message: string; signature: string }>]> = [
+    ['wrong domain', (n) => siwe(n, { domain: 'evil.example.test' })],
+    ['wrong uri', (n) => siwe(n, { uri: 'https://evil.example.test/account' })],
+    ['wrong chain', (n) => siwe(n, { chainId: 1 })],
+    ['wrong statement', (n) => siwe(n, { statement: 'Sign in to anything' })],
+    ['expired', (n) => siwe(n, { issuedAt: new Date(Date.now() - 3600_000), expirationTime: new Date(Date.now() - 1000) })],
+    ['stale issuedAt', (n) => siwe(n, { issuedAt: new Date(Date.now() - 3600_000), expirationTime: new Date(Date.now() + 3600_000) })],
+    ['no fid resource', (n) => siwe(n, { resources: [] })],
+    ['wrong nonce in message', () => siwe('b'.repeat(32))],
+  ];
+  for (const [label, build] of rejects) {
+    const n = await getNonce();
+    const bad = await build(n.nonce);
+    const res = await post('/api/auth/farcaster/verify', { nonce: n.nonce, ...bad }, n.ck);
+    assert.equal(res.status, 401, label);
+  }
+  // NOTE: signature validity itself is checked on-chain by the library through the
+  // Optimism RPC (stubbed here), so a forged-signature case is NOT proven by this test.
+  assert.equal(Object.keys((await store.read()).socialIdentities).length, 0);
+
+  // Email proof, same cookie only.
+  await post('/api/auth/social/email/request', { ticket: socialEmailTicket, email: 'nuno@example.com' }, a.ck);
+  assert.equal(sent.length, 1);
+  const code = sent[0].text.match(/\b(\d{6})\b/)![1];
+  r = await post('/api/auth/social/email/confirm', { ticket: socialEmailTicket, code }, other);
+  assert.equal(r.status, 401);
+  r = await post('/api/auth/social/email/confirm', { ticket: socialEmailTicket, code }, a.ck);
+  assert.equal(r.status, 200);
+  assert.ok((await store.read()).socialIdentities['farcaster:3357330']);
+
+  // Returning fid signs in directly.
+  const n4 = await getNonce();
+  r = await post('/api/auth/farcaster/verify', { nonce: n4.nonce, ...(await siwe(n4.nonce)) }, n4.ck);
+  assert.ok(((await r.json()) as { token?: string }).token?.startsWith('bls_'));
+
+  // A signer that does not own the claimed fid is refused.
+  const { base: base2 } = await startApp(env, { mailer, farcasterVerifier: defaultFarcasterVerifier({}, stubConnector(1n)) });
+  const rr = await fetch(`${base2}/api/auth/farcaster/nonce`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+  const n5 = (await rr.json()) as { nonce: string };
+  const res5 = await fetch(`${base2}/api/auth/farcaster/verify`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', cookie: rr.headers.get('set-cookie')!.split(';')[0] },
+    body: JSON.stringify({ nonce: n5.nonce, ...(await siwe(n5.nonce)) }),
+  });
+  assert.equal(res5.status, 401);
+});
+
+test('farcaster routes do not exist without FARCASTER_AUTH_DOMAIN (fail-closed)', async () => {
+  const { base } = await startApp({}, {});
+  const r = await fetch(`${base}/api/auth/farcaster/nonce`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+  assert.equal(r.status, 404);
+  const cfg = (await (await fetch(`${base}/api/auth/abuse-config`)).json()) as { socialProviders: string[] };
+  assert.ok(!cfg.socialProviders.includes('farcaster'));
+});
+
+test('farcaster linking: step-up, binds the fid to the signed-in account only; owned fid is never reassigned; no email auto-link', async () => {
+  const sent: { to: string; text: string }[] = [];
+  const mailer = { send: async (m: { to: string; subject: string; text: string }) => void sent.push(m) };
+  const accA = privateKeyToAccount(generatePrivateKey());
+  const accB = privateKeyToAccount(generatePrivateKey());
+  const accC = privateKeyToAccount(generatePrivateKey());
+  const fidOf = (addr: string) => (addr === accA.address ? 11n : addr === accC.address ? 33n : 22n);
+  const env = { FARCASTER_AUTH_DOMAIN: FC_DOMAIN, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'a@example.com,b@example.com' };
+  const { base, store } = await startApp(env, { mailer, farcasterVerifier: defaultFarcasterVerifier({}, stubConnector(fidOf)) });
+  const post = (path: string, body: unknown, ck = '', token = '') =>
+    fetch(`${base}${path}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', ...(ck ? { cookie: ck } : {}), ...(token ? { authorization: `Bearer ${token}` } : {}) },
+      body: JSON.stringify(body),
+    });
+  const nonceOf = async (path: string, token = '') => {
+    const r = await post(path, {}, '', token);
+    return { status: r.status, ck: (r.headers.get('set-cookie') ?? '').split(';')[0], ...((await r.json()) as { nonce: string }) };
+  };
+  const register = async (acct: typeof accA, fid: number, email: string) => {
+    const n = await nonceOf('/api/auth/farcaster/nonce');
+    const v = (await (await post('/api/auth/farcaster/verify', { nonce: n.nonce, ...(await siwe(n.nonce, {}, acct, fid)) }, n.ck)).json()) as {
+      socialEmailTicket: string;
+    };
+    const before = sent.length;
+    await post('/api/auth/social/email/request', { ticket: v.socialEmailTicket, email }, n.ck);
+    assert.equal(sent.length, before + 1);
+    const code = sent[sent.length - 1].text.match(/\b(\d{6})\b/)![1];
+    const c = (await (await post('/api/auth/social/email/confirm', { ticket: v.socialEmailTicket, code }, n.ck)).json()) as { token: string };
+    return c.token;
+  };
+  const tokA = await register(accA, 11, 'a@example.com');
+  await register(accB, 22, 'b@example.com');
+  assert.equal(Object.keys((await store.read()).socialIdentities).length, 2);
+
+  // Link requires authentication.
+  assert.equal((await post('/api/auth/farcaster/link/nonce', {})).status, 401);
+
+  // A (fid 11) links a SECOND fid (22 key is owned by B): refused, nothing reassigned.
+  const l1 = await nonceOf('/api/auth/farcaster/link/nonce', tokA);
+  assert.equal(l1.status, 200);
+  const r1 = await post('/api/auth/farcaster/verify', { nonce: l1.nonce, ...(await siwe(l1.nonce, {}, accB, 22)) }, l1.ck);
+  assert.equal(r1.status, 409);
+  assert.equal(
+    (await store.read()).socialIdentities['farcaster:22'].publicKey,
+    Object.values((await store.read()).accounts).find((a) => a.email === 'b@example.com')!.publicKey,
+  );
+
+  // A links its own fid again: idempotent no-op, no session issued, no duplicate.
+  const sessionsBefore = Object.keys((await store.read()).sessions).length;
+  const l2 = await nonceOf('/api/auth/farcaster/link/nonce', tokA);
+  const r2 = await post('/api/auth/farcaster/verify', { nonce: l2.nonce, ...(await siwe(l2.nonce, {}, accA, 11)) }, l2.ck);
+  assert.equal(r2.status, 200);
+  assert.deepEqual(await r2.json(), { status: 'linked' });
+  const st = await store.read();
+  assert.equal(Object.keys(st.socialIdentities).length, 2);
+  assert.equal(Object.keys(st.sessions).length, sessionsBefore);
+
+  // A new fid (33) linked by signed-in A attaches to A only.
+  const l3 = await nonceOf('/api/auth/farcaster/link/nonce', tokA);
+  const r3 = await post('/api/auth/farcaster/verify', { nonce: l3.nonce, ...(await siwe(l3.nonce, {}, accC, 33)) }, l3.ck);
+  assert.equal(r3.status, 200);
+  const aPub = Object.values((await store.read()).accounts).find((x) => x.email === 'a@example.com')!.publicKey;
+  assert.equal((await store.read()).socialIdentities['farcaster:33'].publicKey, aPub);
+  // Another browser cannot spend A's link nonce.
+  const l4 = await nonceOf('/api/auth/farcaster/link/nonce', tokA);
+  const r4 = await post('/api/auth/farcaster/verify', { nonce: l4.nonce, ...(await siwe(l4.nonce, {}, accC, 33)) }, 'bl_sso=' + 'f'.repeat(48));
+  assert.equal(r4.status, 401);
+});
+
+// Negative contract: when the on-chain signature validator says "invalid" (a forged
+// or wrong-key signature) or the RPC fails, no session, identity, account, pending
+// ticket or link can result, even though the message itself is perfectly formed and
+// the signer "owns" the fid in the registry stub.
+for (const mode of ['invalid', 'error', 'valid'] as const) {
+  test(`farcaster: forged signature + bad signature proof (${mode}) never reaches a session, pending ticket or link`, async () => {
+    const env = { FARCASTER_AUTH_DOMAIN: FC_DOMAIN, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' };
+    const { base, store } = await startApp(env, { farcasterVerifier: defaultFarcasterVerifier({}, stubConnector(3357330n, mode)) });
+    const nr = await fetch(`${base}/api/auth/farcaster/nonce`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+    const ck = nr.headers.get('set-cookie')!.split(';')[0];
+    const { nonce } = (await nr.json()) as { nonce: string };
+    const real = await siwe(nonce);
+    // Forged: well-formed message for the fid owner, signed by a DIFFERENT key.
+    const m = { message: real.message, signature: await privateKeyToAccount(generatePrivateKey()).signMessage({ message: real.message }) };
+    const res = await fetch(`${base}/api/auth/farcaster/verify`, { method: 'POST', headers: { 'content-type': 'application/json', cookie: ck }, body: JSON.stringify({ nonce, ...m }) });
+    assert.ok(res.status === 401 || res.status === 502, `status ${res.status}`);
+    const body = (await res.json()) as Record<string, unknown>;
+    assert.equal(body.token, undefined);
+    assert.equal(body.socialEmailTicket, undefined);
+    const st = await store.read();
+    assert.equal(Object.keys(st.socialIdentities).length, 0);
+    assert.equal(Object.keys(st.accounts).length, 0);
+    assert.equal(Object.keys(st.sessions ?? {}).length, 0);
+    const again = await fetch(`${base}/api/auth/farcaster/verify`, { method: 'POST', headers: { 'content-type': 'application/json', cookie: ck }, body: JSON.stringify({ nonce, ...m }) });
+    assert.equal(again.status, 401, 'failed proof burns the nonce');
+  });
+}
