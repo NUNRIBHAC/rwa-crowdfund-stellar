@@ -35,7 +35,7 @@ export default function SecuritySection() {
     fetchSessions(token)
       .then((v) => setSessions(v.sessions))
       .catch((e) => setError(describeError(e, m.community)));
-  }, [account, token]);
+  }, [account, token, m.community]);
 
   useEffect(() => {
     if (!account) {

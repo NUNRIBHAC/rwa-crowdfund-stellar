@@ -169,7 +169,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
         </div>
         {(socialProviders ?? []).map((p) => (
           <button key={p} className="btn social-signin-btn" disabled={busy} onClick={() => startSocialSignIn(p).catch(() => undefined)}>
-            {SOCIAL_SIGNIN_LABELS[p] ? m.community[SOCIAL_SIGNIN_LABELS[p]] : tpl(m.community.socialSignInGeneric ?? '', { provider: socialProviderDisplayName(p) })}
+            {SOCIAL_SIGNIN_LABELS[p]
+              ? m.community[SOCIAL_SIGNIN_LABELS[p]]
+              : tpl(m.community.socialSignInGeneric ?? '', { provider: socialProviderDisplayName(p) })}
           </button>
         ))}
         {error && (

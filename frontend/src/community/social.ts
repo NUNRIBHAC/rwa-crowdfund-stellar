@@ -8,5 +8,4 @@ export const SOCIAL_PROVIDER_DISPLAY_NAMES: Record<string, string> = {
   telegram: 'Telegram',
 };
 
-export const socialProviderDisplayName = (provider: string): string =>
-  SOCIAL_PROVIDER_DISPLAY_NAMES[provider] ?? provider;
+export const socialProviderDisplayName = (provider: string): string => SOCIAL_PROVIDER_DISPLAY_NAMES[provider] ?? provider;
