@@ -54,10 +54,15 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   // Web security headers on every response (API, static assets and SPA
   // fallback all pass through this middleware). CSP allows the Vite-built
-  // bundle and inline style attributes only; no inline script, no framing.
+  // bundle and inline style attributes only; no inline script. The only
+  // third-party origin is Cloudflare Turnstile: the bot-check widget script
+  // loads from challenges.cloudflare.com and renders its challenge in an
+  // iframe on the same origin, so script/frame/connect need it or the
+  // widget fails closed with "turnstile script failed to load". No other
+  // framing: frame-ancestors stays 'none'.
   res.setHeader(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+    "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
   );
   res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
   res.setHeader('X-Frame-Options', 'DENY');
