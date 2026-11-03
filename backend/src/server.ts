@@ -293,7 +293,11 @@ app.get('/api/campaigns', async (req, res) => {
   try {
     res.json({ campaigns: await sorobanCampaigns(typeof req.query.actor === 'string' ? req.query.actor : undefined), mode: 'soroban' });
   } catch (err) {
-    res.status(503).json({ error: err instanceof Error ? err.message : String(err) });
+    // Upstream (RPC/Horizon) failures carry raw client text such as
+    // "Request failed with status code 502": log it, never show it. The
+    // stable code lets the UI localize the banner.
+    console.error('campaigns read failed:', err instanceof Error ? err.message : String(err));
+    res.status(503).json({ error: 'campaign data is temporarily unavailable', code: 'API_UNAVAILABLE' });
   }
 });
 app.get('/api/account/payouts', async (req, res) => {
