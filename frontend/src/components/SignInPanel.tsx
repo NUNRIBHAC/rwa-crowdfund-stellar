@@ -8,7 +8,10 @@ import { useI18n } from '../i18n';
 import { shorten, tpl } from '../format';
 import { useEffect, useState } from 'react';
 
-const SOCIAL_SIGNIN_LABELS: Record<string, 'socialSignInGoogle' | 'socialSignInGithub' | 'socialSignInLinkedin' | 'socialSignInTelegram' | 'socialSignInDiscord'> = {
+const SOCIAL_SIGNIN_LABELS: Record<
+  string,
+  'socialSignInGoogle' | 'socialSignInGithub' | 'socialSignInLinkedin' | 'socialSignInTelegram' | 'socialSignInDiscord'
+> = {
   google: 'socialSignInGoogle',
   github: 'socialSignInGithub',
   linkedin: 'socialSignInLinkedin',
