@@ -1686,6 +1686,7 @@ export const en = {
   community: {
     loading: 'Loading...',
     demoBadge: 'DEMO',
+    requestFailed: 'Request failed ({status}). Please try again.',
     documentsTitle: 'Documents',
     documentsNote: 'Documents marked DEMO are fictional templates for this prototype - not offers, not advice, not verified issuer information.',
     rewardsTitle: 'Rewards',

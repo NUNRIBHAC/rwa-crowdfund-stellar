@@ -1664,6 +1664,7 @@ export const ja: Messages = {
   community: {
     loading: '読み込み中...',
     demoBadge: 'DEMO',
+    requestFailed: 'リクエストに失敗しました（{status}）。もう一度お試しください。',
     documentsTitle: 'ドキュメント',
     documentsNote:
       'DEMO と表示されたドキュメントは本プロトタイプの架空のテンプレートです - オファーではなく、助言ではなく、検証済みの発行者情報でもありません。',

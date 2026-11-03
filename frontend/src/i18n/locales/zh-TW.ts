@@ -1624,6 +1624,7 @@ export const zhTW: Messages = {
   community: {
     loading: '載入中...',
     demoBadge: 'DEMO',
+    requestFailed: '請求失敗（{status}）。請再試一次。',
     documentsTitle: '文件',
     documentsNote: '標示 DEMO 的文件為本原型的虛構範本 - 非要約、非建議、非經驗證的發行人資訊。',
     rewardsTitle: '獎勵',

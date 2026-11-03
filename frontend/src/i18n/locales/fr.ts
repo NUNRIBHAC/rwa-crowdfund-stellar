@@ -1744,6 +1744,7 @@ export const fr: Messages = {
   community: {
     loading: 'Chargement...',
     demoBadge: 'DEMO',
+    requestFailed: 'La requête a échoué ({status}). Réessayez.',
     documentsTitle: 'Documents',
     documentsNote:
       "Les documents marqués DEMO sont des modèles fictifs de ce prototype - ce ne sont ni des offres, ni des conseils, ni des informations vérifiées de l'émetteur.",

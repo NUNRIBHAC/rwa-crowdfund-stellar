@@ -1655,6 +1655,7 @@ export const ko: Messages = {
   community: {
     loading: '로드 중...',
     demoBadge: 'DEMO',
+    requestFailed: '요청에 실패했습니다({status}). 다시 시도해 주세요.',
     documentsTitle: '문서',
     documentsNote: 'DEMO로 표시된 문서는 이 프로토타입의 가상 템플릿입니다 - 청약이 아니며, 조언이 아니며, 검증된 발행인 정보가 아닙니다.',
     rewardsTitle: '리워드',

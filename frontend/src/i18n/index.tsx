@@ -88,6 +88,21 @@ function isLocale(v: string | null): v is Locale {
   return ['en', 'pt', 'es', 'fr', 'de', 'zh-TW', 'zh-CN', 'ja', 'ko', 'ar', 'hi'].includes(v ?? '');
 }
 
+/** Locale for non-React callers (API layer): the same key the provider persists. */
+export function storedLocale(): Locale | undefined {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return isLocale(saved) ? saved : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Localized fallback for an HTTP failure that carried no server error text. */
+export function requestFailedMessage(status: number): string {
+  return MESSAGES[storedLocale() ?? detectLocale()].community.requestFailed.replace('{status}', String(status));
+}
+
 function detectLocale(): Locale {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);

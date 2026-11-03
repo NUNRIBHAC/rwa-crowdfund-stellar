@@ -1739,6 +1739,7 @@ export const es: Messages = {
   community: {
     loading: 'Cargando...',
     demoBadge: 'DEMO',
+    requestFailed: 'La solicitud falló ({status}). Inténtalo de nuevo.',
     documentsTitle: 'Documentos',
     documentsNote:
       'Los documentos marcados DEMO son plantillas ficticias de este prototipo: no son ofertas, ni asesoramiento, ni información verificada del emisor.',

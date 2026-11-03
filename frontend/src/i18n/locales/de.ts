@@ -1727,6 +1727,7 @@ export const de: Messages = {
   community: {
     loading: 'Wird geladen...',
     demoBadge: 'DEMO',
+    requestFailed: 'Die Anfrage ist fehlgeschlagen ({status}). Bitte erneut versuchen.',
     documentsTitle: 'Dokumente',
     documentsNote:
       'Mit DEMO markierte Dokumente sind fiktive Vorlagen dieses Prototyps - keine Angebote, keine Beratung, keine verifizierten Emittenteninformationen.',

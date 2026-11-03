@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import { isConnected, signMessage } from '@stellar/freighter-api';
 import type { CommunityAccount } from './api';
 import { getTurnstileToken } from './turnstile';
+import { storedLocale } from '../i18n';
 import type { Messages as CatalogMessages } from '../i18n/locales/en';
 import { tpl } from '../format';
 import {
@@ -163,8 +164,7 @@ export function describeError(e: unknown, community: CatalogMessages['community'
 
 // Bot-check token for the mail-triggering flows; undefined when the
 // deployment has no Turnstile key (widget never loads in that case).
-const turnstileToken = (): Promise<string | undefined> =>
-  getTurnstileToken((typeof localStorage !== 'undefined' && localStorage.getItem('blockallisto-locale')) || undefined);
+const turnstileToken = (): Promise<string | undefined> => getTurnstileToken(storedLocale());
 
 export function CommunityAuthProvider({ children, messages }: { children: ReactNode; messages: Messages }) {
   const [account, setAccount] = useState<CommunityAccount | null>(null);

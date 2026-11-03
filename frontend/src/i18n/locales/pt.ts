@@ -1734,6 +1734,7 @@ export const pt: Messages = {
   community: {
     loading: 'A carregar...',
     demoBadge: 'DEMO',
+    requestFailed: 'O pedido falhou ({status}). Tente novamente.',
     documentsTitle: 'Documentos',
     documentsNote:
       'Os documentos marcados DEMO são modelos fictícios deste protótipo - não são ofertas, não são aconselhamento, não são informação verificada do emitente.',

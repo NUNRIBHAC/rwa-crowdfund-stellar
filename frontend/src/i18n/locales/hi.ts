@@ -1685,6 +1685,7 @@ export const hi: Messages = {
   community: {
     loading: 'लोड हो रहा है...',
     demoBadge: 'DEMO',
+    requestFailed: 'अनुरोध विफल रहा ({status})। कृपया फिर से प्रयास करें।',
     documentsTitle: 'दस्तावेज़',
     documentsNote: 'DEMO चिह्नित दस्तावेज़ इस प्रोटोटाइप के काल्पनिक नमूने हैं - न ऑफर, न सलाह, न सत्यापित जारीकर्ता जानकारी।',
     rewardsTitle: 'पुरस्कार',

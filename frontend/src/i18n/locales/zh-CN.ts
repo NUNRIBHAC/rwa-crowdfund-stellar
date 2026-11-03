@@ -1624,6 +1624,7 @@ export const zhCN: Messages = {
   community: {
     loading: '加载中...',
     demoBadge: 'DEMO',
+    requestFailed: '请求失败（{status}）。请重试。',
     documentsTitle: '文件',
     documentsNote: '标有 DEMO 的文件为本原型的虚构模板 - 非要约、非建议、非经核验的发行人信息。',
     rewardsTitle: '奖励',

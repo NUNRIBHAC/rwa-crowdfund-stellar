@@ -1660,6 +1660,7 @@ export const ar: Messages = {
   community: {
     loading: 'جارٍ التحميل...',
     demoBadge: 'DEMO',
+    requestFailed: 'فشل الطلب ({status}). يُرجى المحاولة مرة أخرى.',
     documentsTitle: 'المستندات',
     documentsNote: 'المستندات الموسومة DEMO هي قوالب افتراضية لهذا النموذج الأولي - ليست عروضاً ولا مشورة ولا معلومات موثقة عن المصدر.',
     rewardsTitle: 'المكافآت',

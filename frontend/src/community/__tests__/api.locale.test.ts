@@ -22,7 +22,7 @@ describe('mail-triggering calls propagate the UI locale', () => {
   });
 
   it('sends the stored UI locale on register, resend and reset-request', async () => {
-    localStorage.setItem('blockallisto-locale', 'ja');
+    localStorage.setItem('blockallisto-language', 'ja');
     const bodies = mockFetchCapture();
     await emailRegister('a@b.c', 'correct horse battery');
     await emailResend('a@b.c');
@@ -37,5 +37,21 @@ describe('mail-triggering calls propagate the UI locale', () => {
     await emailResend('a@b.c');
     await emailResetRequest('a@b.c');
     for (const body of bodies) expect('locale' in body).toBe(false);
+  });
+});
+
+describe('HTTP failure without server text is localized', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    localStorage.clear();
+  });
+  it('uses the stored UI language, not hardcoded English', async () => {
+    localStorage.setItem('blockallisto-language', 'ar');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response('bad gateway', { status: 502 })),
+    );
+    await expect(emailResend('a@b.c')).rejects.toThrow('502');
+    await expect(emailResend('a@b.c')).rejects.not.toThrow(/Request failed/);
   });
 });
