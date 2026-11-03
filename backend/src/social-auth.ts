@@ -37,13 +37,37 @@ import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore } from './community-store.js';
 import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './accounts.js';
 
-export const SOCIAL_PROVIDERS = ['google'] as const;
+// Providers with an implementation-verified OIDC discovery document.
+// google:    https://accounts.google.com/.well-known/openid-configuration
+// linkedin:  https://www.linkedin.com/oauth/.well-known/openid-configuration
+//            (issuer is https://www.linkedin.com/oauth, NOT the bare origin)
+// telegram:  https://oauth.telegram.org/.well-known/openid-configuration
+// GitHub/Discord/Facebook have no OIDC discovery + id_token and need a
+// separate OAuth2 userinfo flow before they can join this list; Farcaster
+// is AuthKit/SIWF, a different flow entirely.
+export const SOCIAL_PROVIDERS = ['google', 'linkedin', 'telegram'] as const;
 export type SocialProvider = (typeof SOCIAL_PROVIDERS)[number];
 
 const SOCIAL_FLOW_TTL_MS = 10 * 60 * 1000;
 
 const PROVIDER_ISSUER: Record<SocialProvider, string> = {
   google: 'https://accounts.google.com',
+  linkedin: 'https://www.linkedin.com/oauth',
+  telegram: 'https://oauth.telegram.org',
+};
+
+// Per-provider authorization scopes. Telegram's OIDC discovery advertises
+// scopes openid/phone/profile/telegram:bot_access/ton:wallet and claims with
+// NO email and NO email_verified - requesting an email scope it does not
+// support would fail the authorization, and the missing email_verified means
+// Telegram identities can NEVER create accounts under the fail-closed
+// registration gate (they can only sign in once linked by a deliberate
+// authenticated linking flow, which is not implemented yet). That is a
+// product/policy boundary, not a bug to code around silently.
+const PROVIDER_SCOPE: Record<SocialProvider, string> = {
+  google: 'openid email profile',
+  linkedin: 'openid email profile',
+  telegram: 'openid profile',
 };
 
 export function isSocialProvider(value: unknown): value is SocialProvider {
@@ -110,7 +134,7 @@ export async function startSocialFlow(
   const conf = await getClient(cfg, provider, fetchImpl);
   const url = client.buildAuthorizationUrl(conf, {
     redirect_uri: redirectUri,
-    scope: 'openid email profile',
+    scope: PROVIDER_SCOPE[provider],
     state,
     nonce,
     code_challenge: codeChallenge,

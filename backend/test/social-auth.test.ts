@@ -22,13 +22,24 @@ after(() => {
 
 const CLIENT_ID = 'test-client-id.apps.googleusercontent.com';
 const CLIENT_SECRET = 'test-secret';
-const ISSUER = 'https://accounts.google.com';
+const PROVIDER_ISSUERS: Record<string, string> = {
+  google: 'https://accounts.google.com',
+  linkedin: 'https://www.linkedin.com/oauth',
+  telegram: 'https://oauth.telegram.org',
+};
+const PROVIDER_SCOPES: Record<string, string> = {
+  google: 'openid email profile',
+  linkedin: 'openid email profile',
+  telegram: 'openid profile',
+};
 
 // A fake Google: discovery metadata, JWKS, token exchange (with a real
 // PKCE check against the challenge seen in the authorization URL) and a
 // signed id_token via jose. userinfo is never needed - the validated
 // id_token claims are the identity source.
-async function makeFakeGoogle(opts: { email?: string; emailVerified?: boolean; subject?: string }) {
+async function makeFakeProvider(provider: string, opts: { email?: string; emailVerified?: boolean; subject?: string }) {
+  const ISSUER = PROVIDER_ISSUERS[provider];
+  if (!ISSUER) throw new Error(`no fake for ${provider}`);
   // claims are mutable: tests update them between flows to simulate the
   // provider returning different profile data for the same subject.
   const claims = { email: opts.email, emailVerified: opts.emailVerified };
@@ -38,7 +49,7 @@ async function makeFakeGoogle(opts: { email?: string; emailVerified?: boolean; s
   publicJwk.alg = 'RS256';
   publicJwk.use = 'sig';
   const state = { challenge: null as string | null };
-  const subject = opts.subject ?? 'google-sub-123';
+  const subject = opts.subject ?? `${provider}-sub-123`;
   const fetchImpl = async (input: any, init?: any): Promise<Response> => {
     const url = typeof input === 'string' ? input : input.url;
     if (url.startsWith(`${ISSUER}/.well-known/openid-configuration`)) {
@@ -62,7 +73,7 @@ async function makeFakeGoogle(opts: { email?: string; emailVerified?: boolean; s
       assert.equal(body.get('client_id'), CLIENT_ID);
       assert.equal(body.get('client_secret'), CLIENT_SECRET);
       assert.equal(body.get('grant_type'), 'authorization_code');
-      assert.ok(body.get('redirect_uri')?.endsWith('/api/auth/social/google/callback'));
+      assert.ok(body.get('redirect_uri')?.endsWith(`/api/auth/social/${provider}/callback`));
       const idToken = await new jose.SignJWT({
         sub: subject,
         email: claims.email,
@@ -82,6 +93,8 @@ async function makeFakeGoogle(opts: { email?: string; emailVerified?: boolean; s
   return { fetchImpl: fetchImpl as typeof fetch, state, claims };
 }
 
+const makeFakeGoogle = (opts: { email?: string; emailVerified?: boolean; subject?: string }) => makeFakeProvider('google', opts);
+
 async function startApp(env: Record<string, string>, deps: Record<string, unknown> = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'social-auth-'));
   const app = express();
@@ -96,6 +109,10 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_GOOGLE_CLIENT_ID',
     'SOCIAL_GOOGLE_CLIENT_SECRET',
     'SOCIAL_GOOGLE_REDIRECT_URI',
+    'SOCIAL_LINKEDIN_CLIENT_ID',
+    'SOCIAL_LINKEDIN_CLIENT_SECRET',
+    'SOCIAL_TELEGRAM_CLIENT_ID',
+    'SOCIAL_TELEGRAM_CLIENT_SECRET',
     'SOCIAL_REGISTRATION_ALLOWED_EMAILS',
   ])
     delete process.env[k];
@@ -114,21 +131,21 @@ const CONF = { SOCIAL_GOOGLE_CLIENT_ID: CLIENT_ID, SOCIAL_GOOGLE_CLIENT_SECRET: 
 
 // Drive one full flow: /start (302 to the fake provider), then /callback
 // with the issued state. Returns the callback response.
-async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder: { challenge: string | null }) {
-  const start = await fetch(`${base}/api/auth/social/google/start`, { redirect: 'manual' });
+async function driveFlow(base: string, fetchImpl: typeof fetch, challengeHolder: { challenge: string | null }, provider = 'google') {
+  const start = await fetch(`${base}/api/auth/social/${provider}/start`, { redirect: 'manual' });
   assert.equal(start.status, 302);
   const authUrl = new URL(start.headers.get('location')!);
-  assert.equal(authUrl.origin, ISSUER);
+  assert.ok(authUrl.href.startsWith(PROVIDER_ISSUERS[provider]), `${provider} authorization URL on its issuer`);
   assert.equal(authUrl.searchParams.get('client_id'), CLIENT_ID);
   assert.equal(authUrl.searchParams.get('response_type'), 'code');
-  assert.equal(authUrl.searchParams.get('scope'), 'openid email profile');
+  assert.equal(authUrl.searchParams.get('scope'), PROVIDER_SCOPES[provider]);
   assert.equal(authUrl.searchParams.get('code_challenge_method'), 'S256');
   const state = authUrl.searchParams.get('state')!;
   const nonce = authUrl.searchParams.get('nonce')!;
   assert.ok(state && nonce, 'state and nonce issued');
   challengeHolder.challenge = authUrl.searchParams.get('code_challenge');
   (globalThis as any).__testNonce = nonce;
-  const cb = await fetch(`${base}/api/auth/social/google/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
+  const cb = await fetch(`${base}/api/auth/social/${provider}/callback?code=fake-auth-code&state=${encodeURIComponent(state)}`, { redirect: 'manual' });
   return cb;
 }
 
@@ -243,4 +260,57 @@ test('a TOTP-enabled account gets a one-purpose ticket, not a session', async ()
   const data = await store.read();
   assert.equal(Object.keys(data.sessions).length, 1, 'no second session issued behind TOTP');
   assert.equal(Object.keys(data.totpTickets).length, 1, 'one ticket issued');
+});
+
+const PROVIDER_CONFS: Record<string, Record<string, string>> = {
+  linkedin: { SOCIAL_LINKEDIN_CLIENT_ID: CLIENT_ID, SOCIAL_LINKEDIN_CLIENT_SECRET: CLIENT_SECRET },
+  telegram: { SOCIAL_TELEGRAM_CLIENT_ID: CLIENT_ID, SOCIAL_TELEGRAM_CLIENT_SECRET: CLIENT_SECRET },
+};
+
+test('linkedin and telegram routes exist only with their own env config; github stays 404', async () => {
+  const { base } = await startApp({});
+  for (const p of ['linkedin', 'telegram', 'github']) {
+    const res = await fetch(`${base}/api/auth/social/${p}/start`, { redirect: 'manual' });
+    assert.equal(res.status, 404, `${p} without env`);
+  }
+  const conf = { ...CONF, ...PROVIDER_CONFS.linkedin, ...PROVIDER_CONFS.telegram };
+  const fake = await makeFakeProvider('linkedin', {});
+  const app2 = await startApp(conf, { socialFetch: fake.fetchImpl });
+  const cfg = await (await fetch(`${app2.base}/api/auth/abuse-config`)).json();
+  assert.deepEqual([...cfg.socialProviders].sort(), ['google', 'linkedin', 'telegram']);
+  const gh = await fetch(`${app2.base}/api/auth/social/github/start`, { redirect: 'manual' });
+  assert.equal(gh.status, 404, 'github not implemented (no OIDC)');
+});
+
+test('linkedin completes a full allowlisted registration flow and issues a working session', async () => {
+  const fake = await makeFakeProvider('linkedin', { email: 'nuno@example.com', emailVerified: true });
+  const { base, store } = await startApp(
+    { ...PROVIDER_CONFS.linkedin, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' },
+    { socialFetch: fake.fetchImpl },
+  );
+  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'linkedin');
+  const loc = cb.headers.get('location')!;
+  assert.ok(loc.startsWith('/account#social-token=bls_'), loc);
+  const data = await store.read();
+  assert.ok(data.socialIdentities['linkedin:linkedin-sub-123'], 'identity stored under linkedin:subject');
+});
+
+test('telegram uses its email-less scope and can never register under the fail-closed email gate', async () => {
+  // Telegram's OIDC claims carry no email/email_verified; even an allowlist
+  // entry cannot satisfy the registration gate. Sign-in remains possible for
+  // identities linked through a deliberate authenticated flow (not yet
+  // implemented), so a fresh Telegram identity is refused today.
+  const fake = await makeFakeProvider('telegram', {});
+  const { base, store } = await startApp(
+    { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'nuno@example.com' },
+    { socialFetch: fake.fetchImpl },
+  );
+  const start = await fetch(`${base}/api/auth/social/telegram/start`, { redirect: 'manual' });
+  const authUrl = new URL(start.headers.get('location')!);
+  assert.equal(authUrl.searchParams.get('scope'), 'openid profile');
+  const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+  assert.equal(cb.headers.get('location'), '/account#social-error=social_registration_restricted');
+  const data = await store.read();
+  assert.equal(Object.keys(data.socialIdentities).length, 0);
+  assert.equal(Object.keys(data.accounts).length, 0);
 });
