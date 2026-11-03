@@ -300,7 +300,7 @@ test('corporate-actions: cap table and distribution preview over the register, a
     fetch(`${base}/api/campaigns/qa-demo/corporate-actions/distribution-preview`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: b });
   const ok = await post('{"total":"10"}');
   assert.equal(ok.status, 200);
-  assert.equal(((await ok.json()) as { complete: boolean }).complete, false, 'no known holders is not complete');
+  assert.equal(((await ok.json()) as { status: string }).status, 'unavailable', 'no known holders: no allocation');
   assert.equal((await post('{"total":"-1"}')).status, 400);
   assert.equal((await post('{}')).status, 400);
   assert.equal((await fetch(`${await makeServer({ provider: 'null' })}/api/campaigns/x/corporate-actions/cap-table.json`)).status, 404);
