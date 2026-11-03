@@ -1974,7 +1974,6 @@ export const pt: Messages = {
       title: 'Segurança',
       authMethodNote:
         'Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Este protótipo não tem palavra-passe; pode adicionar abaixo um autenticador de dois fatores opcional.',
-
       linkTitle: 'Fornecedores de início de sessão',
       linkNote:
         'Associe outro método de início de sessão a esta conta. Primeiro vai provar que é mesmo você (palavra-passe, assinatura nova da carteira ou um início de sessão recente) e depois confirmar no fornecedor.',

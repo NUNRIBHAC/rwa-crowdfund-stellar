@@ -1987,7 +1987,6 @@ export const fr: Messages = {
       title: 'Sécurité',
       authMethodNote:
         "Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille est la clé. Ce prototype n'a pas de mot de passe ; un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.",
-
       linkTitle: 'Fournisseurs de connexion',
       linkNote:
         'Liez une autre méthode de connexion à ce compte. Vous prouverez d’abord qu’il s’agit bien de vous (mot de passe, nouvelle signature du portefeuille ou connexion récente), puis confirmerez auprès du fournisseur.',
