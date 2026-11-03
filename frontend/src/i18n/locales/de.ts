@@ -1961,6 +1961,10 @@ export const de: Messages = {
       linkWalletNoSign: 'Die Wallet hat die Challenge nicht signiert; die Verknüpfung wurde nicht gestartet.',
       authMethodNoteEmail:
         'Sie melden sich mit Ihrer E-Mail-Adresse und Ihrem Passwort an: Das Passwort ist die Berechtigung. Ein optionaler Zwei-Faktor-Authenticator kann unten hinzugefügt werden.',
+      authMethodNoteSocial:
+        'Sie melden sich über einen verbundenen Anbieter an (Google, GitHub usw.): Der Anbieter ist die Anmeldeinformation. Unten können Sie optional einen Zwei-Faktor-Authenticator hinzufügen, der nach der Anbieter-Anmeldung abgefragt wird.',
+      totpOffNoteSocial: 'Fügen Sie nach der Anbieter-Anmeldung eine Authenticator-App als zweiten Schritt hinzu. Optional und nur für dieses Konto.',
+      totpOnNoteSocial: 'Die Zwei-Faktor-Authentifizierung ist aktiviert: Nach der Anbieter-Anmeldung wird zusätzlich ein Authenticator-Code verlangt.',
       sessionsTitle: 'Aktive Sitzungen',
       sessionLabel: 'Sitzung',
       currentBadge: 'Diese Sitzung',

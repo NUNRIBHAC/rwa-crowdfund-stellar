@@ -1967,6 +1967,10 @@ export const pt: Messages = {
       linkWalletNoSign: 'A carteira não assinou o desafio; a associação não foi iniciada.',
       authMethodNoteEmail:
         'Inicia sessão com o seu email e palavra-passe: a palavra-passe é a credencial. Pode adicionar abaixo um autenticador de dois fatores opcional.',
+      authMethodNoteSocial:
+        'Entra através de um fornecedor associado (Google, GitHub, etc.): o fornecedor é a credencial. Pode adicionar abaixo um autenticador de dois fatores opcional, pedido depois do início de sessão no fornecedor.',
+      totpOffNoteSocial: 'Adicione uma aplicação autenticadora como segundo passo depois do início de sessão no fornecedor. Opcional e só para esta conta.',
+      totpOnNoteSocial: 'A autenticação de dois fatores está ativa: depois do início de sessão no fornecedor, é pedido também um código do autenticador.',
       sessionsTitle: 'Sessões ativas',
       sessionLabel: 'Sessão',
       currentBadge: 'Esta sessão',

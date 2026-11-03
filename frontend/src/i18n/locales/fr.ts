@@ -1979,6 +1979,12 @@ export const fr: Messages = {
       linkWalletNoSign: 'Le portefeuille n’a pas signé le défi ; la liaison n’a pas été lancée.',
       authMethodNoteEmail:
         'Vous vous connectez avec votre email et votre mot de passe : le mot de passe est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.',
+      authMethodNoteSocial:
+        "Vous vous connectez via un fournisseur associé (Google, GitHub, etc.) : le fournisseur est l'identifiant. Vous pouvez ajouter ci-dessous un authentificateur à deux facteurs facultatif, demandé après la connexion au fournisseur.",
+      totpOffNoteSocial:
+        "Ajoutez une application d'authentification comme deuxième étape après la connexion au fournisseur. Facultatif, et valable pour ce compte uniquement.",
+      totpOnNoteSocial:
+        "L'authentification à deux facteurs est activée : après la connexion au fournisseur, un code de l'application d'authentification est aussi demandé.",
       sessionsTitle: 'Sessions actives',
       sessionLabel: 'Session',
       currentBadge: 'Cette session',
