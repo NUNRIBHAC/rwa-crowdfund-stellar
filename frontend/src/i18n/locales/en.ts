@@ -351,9 +351,10 @@ export const en = {
     explainerDefault: 'This instrument class is described in the Learn hub.',
   },
   howItWorks: {
+    partial: 'Partial prototype',
     title: 'How it works',
     intro:
-      'The journey a real crowdfunding platform must support, and exactly which parts this prototype already implements. Steps marked planned do not exist in the code and nothing on this site pretends they do.',
+      'Prototype journeys: badges distinguish implemented features, limited demo features and planned work. No real investment, identity verification or legal approval is provided.',
     investorTitle: 'Investor journey',
     issuerTitle: 'Issuer journey',
     live: 'Live in prototype',

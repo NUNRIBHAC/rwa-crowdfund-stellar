@@ -10,38 +10,42 @@ export default function Financing() {
   const { m } = useI18n();
   const { account } = useCommunityAuth();
   return (
-    <>
+    <div className="financing-page">
       <h1 className="page-title">{m.financing.title}</h1>
       <p>{m.financing.intro}</p>
 
-      <section aria-label={m.financing.journeyAria}>
-        <h2 className="section-title">{m.financing.journeyTitle}</h2>
-        <ol className="step-cards">
-          {m.financing.steps.map((s, i) => (
-            <li key={i} className="step-card">
-              <span className="step-num" aria-hidden="true">
-                {i + 1}
-              </span>
-              <h3>{s.h}</h3>
-              <p>{s.p}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <div className="financing-layout">
+        <section className="financing-journey" aria-label={m.financing.journeyAria}>
+          <h2 className="section-title">{m.financing.journeyTitle}</h2>
+          <ol className="step-cards">
+            {m.financing.steps.map((s, i) => (
+              <li key={i} className="step-card">
+                <span className="step-num" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <h3>{s.h}</h3>
+                <p>{s.p}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
 
-      <p className="community-note">
-        {m.financing.builderDraftLead} <a href="/campaign-builder">{m.financing.builderDraftLink}</a>
-      </p>
+        <div className="financing-application">
+          <p className="community-note">
+            {m.financing.builderDraftLead} <a href="/campaign-builder">{m.financing.builderDraftLink}</a>
+          </p>
 
-      <IssuerApplicationPreview />
-      {!account && (
-        <p>
-          <a className="btn btn-primary" href="/account">
-            {m.nav.account}
-          </a>
-        </p>
-      )}
-      <IssuerApplicationForm />
-    </>
+          <IssuerApplicationPreview />
+          {!account && (
+            <p>
+              <a className="btn btn-primary" href="/account">
+                {m.nav.account}
+              </a>
+            </p>
+          )}
+          <IssuerApplicationForm />
+        </div>
+      </div>
+    </div>
   );
 }

@@ -3559,3 +3559,142 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     aspect-ratio: 4 / 3;
   }
 }
+
+/* Educational taxonomy and issuer preview remain separate from account UI. */
+.learn-navigation {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.learn-navigation summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+.learn-navigation nav {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+.learn-navigation a {
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--bg);
+}
+.learn-content {
+  min-width: 0;
+}
+.learn-content section {
+  scroll-margin-top: 120px;
+}
+.learn-content .instrument-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+.learn-content .instrument-card {
+  border-radius: 12px;
+  box-shadow: none;
+}
+.financing-layout {
+  display: grid;
+  gap: 24px;
+}
+.financing-journey {
+  border-radius: 12px;
+  padding: 24px;
+  background: var(--ink);
+  color: var(--card);
+}
+.financing-journey .section-title {
+  color: inherit;
+  margin-top: 0;
+}
+.financing-journey .step-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.financing-journey .step-card {
+  background: transparent;
+  color: inherit;
+  border: 1px solid #ffffff40;
+  border-radius: 8px;
+}
+.financing-journey .step-card p {
+  color: inherit;
+}
+.financing-application {
+  min-width: 0;
+}
+.financing-application .community-section {
+  margin-top: 0;
+  border-radius: 12px;
+}
+@media (min-width: 1001px) {
+  .learn-page {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 20px 28px;
+    align-items: start;
+  }
+  .learn-page > .page-title,
+  .learn-page > p {
+    grid-column: 1 / -1;
+    margin-block: 0;
+  }
+  .learn-navigation {
+    position: sticky;
+    top: var(--sticky-header-h, 90px);
+  }
+  .learn-content > section:first-child .section-title {
+    margin-top: 0;
+  }
+  .financing-layout {
+    grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
+    align-items: start;
+  }
+}
+.journey-switch {
+  display: none;
+}
+.journey-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+.journey-panel {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  min-width: 0;
+}
+.journey-panel .section-title {
+  margin-top: 0;
+}
+.journey-panel .journey-item {
+  margin-bottom: 18px;
+}
+@media (max-width: 1000px) {
+  .journey-switch {
+    display: flex;
+    gap: 10px;
+    margin-block: 20px;
+  }
+  .journey-switch .btn {
+    flex: 1;
+  }
+  .journey-switch [aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--card);
+  }
+  .journey-columns {
+    grid-template-columns: 1fr;
+  }
+  .journey-panel:not(.journey-selected) {
+    display: none;
+  }
+  .financing-journey .step-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

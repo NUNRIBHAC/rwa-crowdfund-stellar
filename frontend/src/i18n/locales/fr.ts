@@ -360,9 +360,10 @@ export const fr: Messages = {
     explainerDefault: "Cette classe d'instrument est décrite dans le hub Apprendre.",
   },
   howItWorks: {
+    partial: 'Prototype partiel',
     title: 'Fonctionnement',
     intro:
-      "Le parcours qu'une vraie plateforme de crowdfunding doit prendre en charge, et exactement quelles parties ce prototype implémente déjà. Les étapes marquées comme planifiées n'existent pas dans le code et rien sur ce site ne prétend qu'elles existent.",
+      'Parcours du prototype : les statuts distinguent les fonctions réalisées, les démonstrations limitées et les travaux prévus. Aucun investissement réel, contrôle d’identité ou agrément légal n’est fourni.',
     investorTitle: "Parcours de l'investisseur",
     issuerTitle: "Parcours de l'émetteur",
     live: 'Existe dans le prototype',

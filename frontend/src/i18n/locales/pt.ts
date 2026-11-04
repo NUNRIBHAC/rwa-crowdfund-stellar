@@ -357,9 +357,10 @@ export const pt: Messages = {
     explainerDefault: 'Esta classe de instrumento está descrita no hub Aprender.',
   },
   howItWorks: {
+    partial: 'Protótipo parcial',
     title: 'Como funciona',
     intro:
-      'O percurso que uma plataforma de crowdfunding real tem de suportar, e exatamente quais as partes que este protótipo já implementa. Os passos marcados como planeados não existem no código e nada neste site finge que existem.',
+      'Percursos do protótipo: os estados distinguem funções implementadas, funções de demonstração limitadas e trabalho planeado. Não há investimento real, verificação de identidade nem aprovação legal.',
     investorTitle: 'Percurso do investidor',
     issuerTitle: 'Percurso do emitente',
     live: 'Existe no protótipo',

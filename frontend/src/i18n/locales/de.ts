@@ -360,9 +360,10 @@ export const de: Messages = {
     explainerDefault: 'Diese Instrumentenklasse wird im Lern-Hub beschrieben.',
   },
   howItWorks: {
+    partial: 'Teilweise im Prototyp',
     title: 'So funktioniert es',
     intro:
-      'Der Weg, den eine echte Crowdfunding-Plattform unterstützen muss, und genau welche Teile dieser Prototyp bereits implementiert. Als geplant markierte Schritte existieren nicht im Code, und nichts auf dieser Website tut so, als würden sie existieren.',
+      'Die Abläufe unterscheiden umgesetzte Funktionen, begrenzte Demo-Funktionen und geplante Arbeiten. Keine echte Investition, Identitätsprüfung oder rechtliche Genehmigung.',
     investorTitle: 'Weg des Anlegers',
     issuerTitle: 'Weg des Emittenten',
     live: 'Im Prototyp vorhanden',
