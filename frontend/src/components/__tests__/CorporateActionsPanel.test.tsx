@@ -165,3 +165,94 @@ test('reconciled cashflow remains separate from an unknown holding', async () =>
   expect(screen.getByText('Historical transfers only, not current holdings or rights. Excluded from allocations.')).toBeTruthy();
   expect(screen.getAllByText('UNKNOWN').length).toBeGreaterThan(0);
 });
+
+test('changing campaign clears the previous table, allocation, amount and error context', async () => {
+  stub(table([{ publicKey: A, position: '60', positionSource: 'on-chain', basisPoints: 6000 }]), {
+    status: 'illustration',
+    rows: [{ publicKey: A, amount: '6' }],
+    excludedUnknownHolderCount: 0,
+  });
+  render(
+    <I18nProvider>
+      <CorporateActionsPanel
+        token="t"
+        campaigns={[
+          { id: 'c1', name: 'Solar' },
+          { id: 'c2', name: 'Wind' },
+        ]}
+      />
+    </I18nProvider>,
+  );
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'c1' } });
+  fireEvent.click(screen.getByRole('button', { name: /load cap table/i }));
+  await screen.findByRole('table');
+  fireEvent.change(screen.getByRole('textbox'), { target: { value: '10' } });
+  fireEvent.click(screen.getByRole('button', { name: /preview distribution/i }));
+  await screen.findByText(/Illustration only/);
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'c2' } });
+  expect(screen.queryByRole('table')).toBeNull();
+  expect(screen.queryByRole('textbox')).toBeNull();
+  expect(screen.queryByRole('status')).toBeNull();
+});
+
+test('a late response from the previous campaign never appears under the new selection', async () => {
+  let release!: (value: Response) => void;
+  vi.stubGlobal(
+    'fetch',
+    () =>
+      new Promise<Response>((r) => {
+        release = r;
+      }),
+  );
+  render(
+    <I18nProvider>
+      <CorporateActionsPanel
+        token="t"
+        campaigns={[
+          { id: 'c1', name: 'Solar' },
+          { id: 'c2', name: 'Wind' },
+        ]}
+      />
+    </I18nProvider>,
+  );
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'c1' } });
+  fireEvent.click(screen.getByRole('button', { name: /load cap table/i }));
+  await waitFor(() => expect(release).toBeTruthy());
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'c2' } });
+  release(new Response(JSON.stringify(table([{ publicKey: A, position: '60', positionSource: 'on-chain', basisPoints: 6000 }]))));
+  await new Promise((r) => setTimeout(r, 0));
+  expect(screen.queryByRole('table')).toBeNull();
+  expect((screen.getByRole('button', { name: /load cap table/i }) as HTMLButtonElement).disabled).toBe(false);
+});
+
+test('removing a selected campaign clears loaded records and controls', async () => {
+  stub(table([]), {});
+  const renderPanel = (campaigns: { id: string; name: string }[]) => (
+    <I18nProvider>
+      <CorporateActionsPanel token="t" campaigns={campaigns} />
+    </I18nProvider>
+  );
+  const view = render(renderPanel([{ id: 'c1', name: 'Solar' }]));
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'c1' } });
+  fireEvent.click(screen.getByRole('button', { name: /load cap table/i }));
+  await screen.findByRole('table');
+  view.rerender(renderPanel([]));
+  await waitFor(() => expect(screen.queryByRole('table')).toBeNull());
+  expect(screen.queryByRole('textbox')).toBeNull();
+});
+
+test('changing authenticated actor clears loaded register and pending request context', async () => {
+  stub(table([]), {});
+  const panel = (token: string) => (
+    <I18nProvider>
+      <CorporateActionsPanel token={token} campaigns={[{ id: 'c1', name: 'Solar' }]} />
+    </I18nProvider>
+  );
+  const view = render(panel('first-actor'));
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'c1' } });
+  fireEvent.click(screen.getByRole('button', { name: /load cap table/i }));
+  await screen.findByRole('table');
+  view.rerender(panel('second-actor'));
+  await waitFor(() => expect(screen.queryByRole('table')).toBeNull());
+  expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('');
+});

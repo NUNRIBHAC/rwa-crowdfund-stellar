@@ -2,7 +2,7 @@
 // distribution preview. Unknown positions are shown as UNKNOWN (never zero);
 // the preview is withheld when positions are unknown or mixed-basis and is
 // never declarable. Nothing is saved and no funds move.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchOperatorCapTable, postOperatorDistributionPreview, type CapTableResponse, type DistributionPreviewResponse } from '../community/api';
 import { useI18n } from '../i18n';
 import { tpl } from '../format';
@@ -19,19 +19,59 @@ export default function CorporateActionsPanel({ token, campaigns }: Props) {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
-  const guard = (p: Promise<void>) => {
+  const requestVersion = useRef(0);
+  const campaignRef = useRef(campaign);
+  const tokenRef = useRef(token);
+  const reset = (next: string) => {
+    requestVersion.current++;
+    campaignRef.current = next;
+    setCampaign(next);
+    setTable(null);
+    setPreview(null);
+    setTotal('');
+    setError('');
+    setBusy(false);
+  };
+  useEffect(() => {
+    if (tokenRef.current !== token) {
+      tokenRef.current = token;
+      reset('');
+    }
+  }, [token]);
+  useEffect(() => {
+    if (campaignRef.current && !campaigns.some((c) => c.id === campaignRef.current)) reset('');
+  }, [campaigns]);
+  useEffect(
+    () => () => {
+      requestVersion.current++;
+    },
+    [],
+  );
+  const guard = <T,>(request: Promise<T>, apply: (value: T) => void) => {
+    const version = ++requestVersion.current;
     setBusy(true);
     setError('');
-    p.catch((e) => setError(e instanceof Error ? e.message : String(e))).finally(() => setBusy(false));
+    request
+      .then((value) => {
+        if (version === requestVersion.current) apply(value);
+      })
+      .catch((e) => {
+        if (version === requestVersion.current) setError(e instanceof Error ? e.message : String(e));
+      })
+      .finally(() => {
+        if (version === requestVersion.current) setBusy(false);
+      });
   };
   const load = () => {
-    if (!campaign) return;
+    if (!campaign || !campaigns.some((c) => c.id === campaign)) return;
+    setTable(null);
     setPreview(null);
-    guard(fetchOperatorCapTable(token, campaign).then(setTable));
+    guard(fetchOperatorCapTable(token, campaign), setTable);
   };
   const runPreview = () => {
-    if (!campaign || !total.trim()) return;
-    guard(postOperatorDistributionPreview(token, campaign, total.trim()).then(setPreview));
+    if (!campaign || !total.trim() || table?.campaignId !== campaign || !campaigns.some((c) => c.id === campaign)) return;
+    setPreview(null);
+    guard(postOperatorDistributionPreview(token, campaign, total.trim()), setPreview);
   };
   const sourceLabel = (s: string) => (s === 'on-chain' ? l.onChain : s === 'journal-intended' ? l.journal : l.unknown);
 
@@ -44,7 +84,7 @@ export default function CorporateActionsPanel({ token, campaigns }: Props) {
         <div className="corp-controls">
           <label>
             {l.campaign}
-            <select value={campaign} onChange={(e) => setCampaign(e.target.value)}>
+            <select value={campaign} onChange={(e) => reset(e.target.value)}>
               <option value="" />
               {campaigns.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -113,7 +153,7 @@ export default function CorporateActionsPanel({ token, campaigns }: Props) {
               {l.total}
               <input inputMode="decimal" dir="ltr" value={total} onChange={(e) => setTotal(e.target.value)} />
             </label>
-            <button className="btn" disabled={!total.trim() || busy} onClick={runPreview}>
+            <button className="btn" disabled={!total.trim() || busy || table.campaignId !== campaign} onClick={runPreview}>
               {l.preview}
             </button>
           </div>
