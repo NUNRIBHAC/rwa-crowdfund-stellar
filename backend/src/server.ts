@@ -255,6 +255,10 @@ const communityRouterReady = communityServiceFromEnv()
       reconciliation: reconciliationPayload,
       shareRegister: shareRegisterPayload,
       fundingState: sorobanCampaignFundingState,
+      applicationCampaign: async (id) => {
+        const campaign = (await sorobanCampaigns()).find((c) => c.id === id);
+        return campaign ? { id: campaign.id, contractId: campaign.contractId, creator: campaign.config.creator, network: NETWORK } : null;
+      },
       campaignDeploy: { build: buildCampaignDeploy, submit: submitCampaignDeploy, buildV2: buildCampaignDeployV2, submitV2: submitCampaignDeployV2 },
       investorEntitlement: async (campaignId: string, publicKey: string) => {
         // On-chain failure propagates so the route fails closed (503).

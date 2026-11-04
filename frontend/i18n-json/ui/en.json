@@ -1,4 +1,12 @@
 {
+  "applicationDocuments": {
+    "uploadNote": "DEMO documents: synthetic .txt only, maximum 16 KB each, five files. Do not upload personal or identity documents.",
+    "save": "Save document",
+    "view": "View document",
+    "link": "Link registered testnet campaign",
+    "unlinked": "No registered campaign linked",
+    "reviewNote": "Prototype review only. Not a legal approval, listing or investment offer."
+  },
   "contributionPreview": {
     "title": "Preview contribution",
     "note": "Preview only: no signature, transaction or ownership.",

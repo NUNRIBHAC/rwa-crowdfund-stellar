@@ -1,4 +1,5 @@
 import { tpl } from '../format';
+import ApplicationDocuments from './ApplicationDocuments';
 // Operator dashboard (demo admin surface): issuer application triage, comment
 // moderation, ticket closure, campaign news and podcast episode publishing
 // for wallets on the server-side OPERATOR_WALLETS allow-list. The allow-list is enforced on every
@@ -216,7 +217,10 @@ export default function OperatorSection({ campaigns }: Props) {
                 <tbody>
                   {applications.map((a) => (
                     <tr key={a.id}>
-                      <td>{a.projectName}</td>
+                      <td>
+                        {a.projectName}
+                        <ApplicationDocuments application={a} operator campaigns={campaigns} onChange={load} />
+                      </td>
                       <td>{a.country}</td>
                       <td>{a.instrumentType}</td>
                       <td>{a.targetAmount}</td>

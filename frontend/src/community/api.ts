@@ -66,6 +66,8 @@ export type Ticket = {
 };
 
 export type IssuerApplication = {
+  documents?: { id: string; filename: string; sha256: string; uploadedAt: number }[];
+  campaign?: { id: string; contractId: string; linkedAt: number; linkedBy: string };
   id: string;
   publicKey: string;
   projectName: string;
@@ -691,3 +693,20 @@ export type DemoOnboardingResponse = {
 export const fetchDemoOnboarding = (token: string) => call<DemoOnboardingResponse>('/api/auth/demo-onboarding', { token });
 export const saveDemoOnboarding = (token: string, body: Pick<DemoOnboardingResponse['progress'], 'identity' | 'risksAcknowledged'>) =>
   call<DemoOnboardingResponse>('/api/auth/demo-onboarding', { token, method: 'PUT', body });
+
+export const uploadApplicationDocument = (token: string, id: string, filename: string, content: string) =>
+  call<{ document: { id: string; filename: string; sha256: string } }>(`/api/issuer-applications/${encodeURIComponent(id)}/documents`, {
+    method: 'POST',
+    token,
+    body: { filename, content },
+  });
+export const linkApplicationCampaign = (token: string, id: string, campaignId: string) =>
+  call<{ ok: true }>(`/api/operator/issuer-applications/${encodeURIComponent(id)}/campaign`, { method: 'POST', token, body: { campaignId } });
+export async function readApplicationDocument(token: string, id: string, documentId: string, operator = false) {
+  const response = await fetch(
+    `${operator ? '/api/operator' : '/api'}/issuer-applications/${encodeURIComponent(id)}/documents/${encodeURIComponent(documentId)}`,
+    { headers: { authorization: `Bearer ${token}` }, cache: 'no-store' },
+  );
+  if (!response.ok) throw new Error(requestFailedMessage(response.status));
+  return response.text();
+}

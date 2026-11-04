@@ -4,6 +4,15 @@
 import type { Messages } from './en';
 
 export const de: Messages = {
+  applicationDocuments: {
+    uploadNote:
+      'DEMO-Dokumente: nur synthetische .txt-Dateien, höchstens 16 KB je Datei, fünf Dateien. Keine persönlichen Daten oder Ausweisdokumente hochladen.',
+    save: 'Dokument speichern',
+    view: 'Dokument ansehen',
+    link: 'Registrierte Testnet-Kampagne zuordnen',
+    unlinked: 'Keine registrierte Kampagne zugeordnet',
+    reviewNote: 'Nur Prototypprüfung. Keine rechtliche Genehmigung, Zulassung oder Anlageofferte.',
+  },
   contributionPreview: {
     title: 'Beitrag vorschauen',
     note: 'Nur Vorschau: keine Unterschrift, Transaktion oder Eigentumsrechte.',

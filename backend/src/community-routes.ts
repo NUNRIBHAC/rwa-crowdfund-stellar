@@ -61,6 +61,7 @@ import { MailerError } from './mailer.js';
 
 export type CommunityRouterDeps = {
   service: CommunityService;
+  applicationCampaign?: (id: string) => Promise<{ id: string; contractId: string; creator: string; network: string } | null>;
   // Abuse-defense overrides for tests; production wires both from env.
   ipReputation?: IpReputation;
   // OAuth provider HTTP override for tests; production uses global fetch.
@@ -178,6 +179,11 @@ function sendError(res: express.Response, err: unknown): void {
   }
   res.status(500).json({ error: 'internal error', code: 'internal_error' });
 }
+
+const applicationMetadata = (application: import('./community-store.js').IssuerApplication) => ({
+  ...application,
+  documents: application.documents?.map(({ content: _content, ...metadata }) => metadata),
+});
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
   const { service, requireAdmin, reconciliation, fundingState, investorEntitlement, mailer, campaignDeploy } = deps;
@@ -1250,7 +1256,22 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.get(
     '/api/issuer-applications',
     authed(async (_req, res, account) => {
-      res.json({ applications: await service.listOwnApplications(account) });
+      res.json({ applications: (await service.listOwnApplications(account)).map(applicationMetadata) });
+    }),
+  );
+
+  router.post(
+    '/api/issuer-applications/:id/documents',
+    authed(async (req, res, account) => {
+      const document = await service.addApplicationDocument(account, String(req.params.id), req.body);
+      res.status(201).json({ document: { ...document, content: undefined } });
+    }),
+  );
+  router.get(
+    '/api/issuer-applications/:id/documents/:documentId',
+    authed(async (req, res, account) => {
+      const document = await service.readApplicationDocument(String(req.params.id), String(req.params.documentId), account.publicKey);
+      res.set('Cache-Control', 'no-store').set('X-Content-Type-Options', 'nosniff').type('text/plain').send(document.content);
     }),
   );
 
@@ -1304,6 +1325,24 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       }
       await handler(req, res, account);
     });
+
+  router.get(
+    '/api/operator/issuer-applications/:id/documents/:documentId',
+    operator(async (req, res) => {
+      const document = await service.readApplicationDocument(String(req.params.id), String(req.params.documentId));
+      res.set('Cache-Control', 'no-store').set('X-Content-Type-Options', 'nosniff').type('text/plain').send(document.content);
+    }),
+  );
+  router.post(
+    '/api/operator/issuer-applications/:id/campaign',
+    operator(async (req, res, account) => {
+      if (!deps.applicationCampaign) throw new CommunityError(503, 'campaign registry unavailable', 'feature_unavailable');
+      const campaign = await deps.applicationCampaign(requireCampaignId(req.body?.campaignId));
+      if (!campaign) throw new CommunityError(404, 'registered campaign not found', 'not_found');
+      await service.linkApplicationCampaign(String(req.params.id), campaign, `operator:${account.publicKey}`);
+      res.json({ ok: true });
+    }),
+  );
 
   router.post(
     '/api/operator/campaigns/:id/investment-documents',
@@ -1429,7 +1468,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.get(
     '/api/operator/issuer-applications',
     operator(async (_req, res) => {
-      res.json({ applications: await service.adminListApplications() });
+      res.json({ applications: (await service.adminListApplications()).map(applicationMetadata) });
     }),
   );
   router.post(
@@ -1563,7 +1602,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.get('/api/admin/issuer-applications', requireAdmin, async (_req, res) => {
     try {
-      res.json({ applications: await service.adminListApplications() });
+      res.json({ applications: (await service.adminListApplications()).map(applicationMetadata) });
     } catch (err) {
       sendError(res, err);
     }

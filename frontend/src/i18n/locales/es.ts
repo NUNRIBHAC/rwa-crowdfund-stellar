@@ -4,6 +4,14 @@
 import type { Messages } from './en';
 
 export const es: Messages = {
+  applicationDocuments: {
+    uploadNote: 'Documentos DEMO: solo .txt sintéticos, máximo 16 KB cada uno, cinco archivos. No suba datos personales ni documentos de identidad.',
+    save: 'Guardar documento',
+    view: 'Ver documento',
+    link: 'Vincular campaña registrada en testnet',
+    unlinked: 'Sin campaña registrada vinculada',
+    reviewNote: 'Revisión de prototipo. No es aprobación legal, admisión ni oferta de inversión.',
+  },
   contributionPreview: {
     title: 'Vista previa de la aportación',
     note: 'Solo vista previa: sin firma, transacción ni propiedad.',

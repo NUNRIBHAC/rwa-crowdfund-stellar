@@ -353,7 +353,17 @@ export type CompanyApplication = {
   decidedAt: number | null;
 };
 
+export type IssuerApplicationDocument = {
+  id: string;
+  filename: string;
+  content: string;
+  sha256: string;
+  uploadedAt: number;
+};
+
 export type IssuerApplication = {
+  documents?: IssuerApplicationDocument[];
+  campaign?: { id: string; contractId: string; linkedAt: number; linkedBy: string };
   id: string;
   publicKey: string;
   projectName: string;

@@ -9,6 +9,7 @@ import { useCommunityAuth } from '../community/CommunityAuth';
 import { COMMUNITY_ACTIVITY_CHANGED } from '../community/events';
 import { useI18n } from '../i18n';
 import { routeHash } from '../router';
+import ApplicationDocuments from './ApplicationDocuments';
 
 export default function MyCommunityActivity() {
   const { m, locale } = useI18n();
@@ -69,7 +70,7 @@ export default function MyCommunityActivity() {
         ) : (
           <ul className="portfolio-list">
             {applications.map((a) => (
-              <li key={a.id} className="portfolio-row">
+              <li key={a.id} className="portfolio-row application-row">
                 <span>{a.projectName}</span>
                 <span className="doc-note">{fmt(a.createdAt)}</span>
                 <span
@@ -77,6 +78,7 @@ export default function MyCommunityActivity() {
                 >
                   {m.community.applicationStatus[a.status]}
                 </span>
+                <ApplicationDocuments application={a} />
               </li>
             ))}
           </ul>

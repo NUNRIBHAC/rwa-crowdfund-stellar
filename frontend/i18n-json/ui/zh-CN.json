@@ -1,4 +1,12 @@
 {
+  "applicationDocuments": {
+    "uploadNote": "DEMO 文件：仅限合成 .txt，每个最多 16 KB，最多五个。请勿上传个人或身份文件。",
+    "save": "保存文件",
+    "view": "查看文件",
+    "link": "关联已注册的测试网活动",
+    "unlinked": "尚未关联已注册活动",
+    "reviewNote": "仅为原型审核，并非法律批准、上市或投资要约。"
+  },
   "contributionPreview": {
     "title": "预览出资",
     "note": "仅供预览：不签署、不交易，也不产生所有权。",

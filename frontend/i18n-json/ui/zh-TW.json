@@ -1,4 +1,12 @@
 {
+  "applicationDocuments": {
+    "uploadNote": "DEMO 文件：僅限合成 .txt，每個最多 16 KB，最多五個。請勿上傳個人或身分文件。",
+    "save": "儲存文件",
+    "view": "查看文件",
+    "link": "連結已註冊的測試網活動",
+    "unlinked": "尚未連結已註冊活動",
+    "reviewNote": "僅為原型審查，並非法律批准、上市或投資要約。"
+  },
   "contributionPreview": {
     "title": "預覽出資",
     "note": "僅供預覽：不簽署、不交易，也不產生所有權。",

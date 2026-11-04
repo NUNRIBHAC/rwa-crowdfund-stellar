@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { z } from 'zod';
 import type {
   CompanyApplication,
@@ -831,6 +831,63 @@ export class CommunityService {
       { projectName: application.projectName },
     );
     return application;
+  }
+
+  // Application uploads are private plain-text DEMO documents, never identity
+  // evidence. Embedded storage inherits application ownership and retention.
+  // Only received/under-review submissions accept files; review sees the same
+  // immutable content hash as the applicant. No HTML/PDF execution or public URL.
+  async addApplicationDocument(account: Account, id: string, input: unknown) {
+    const parsed = z
+      .object({
+        filename: z
+          .string()
+          .trim()
+          .regex(/^[a-zA-Z0-9][a-zA-Z0-9._ -]{0,99}\.txt$/),
+        content: z.string().min(1).max(16000),
+      })
+      .strict()
+      .parse(input);
+    if (Buffer.byteLength(parsed.content, 'utf8') > 16000 || [...parsed.content].some((c) => c.charCodeAt(0) < 32 && !['\t', '\n', '\r'].includes(c)))
+      throw new CommunityError(400, 'invalid plain-text document', 'invalid_document');
+    const document = { id: newId('appdoc'), ...parsed, sha256: createHash('sha256').update(parsed.content).digest('hex'), uploadedAt: this.now() };
+    await this.store.change((state) => {
+      const a = state.applications[id];
+      if (!a || a.publicKey !== account.publicKey) throw new CommunityError(404, 'application not found', 'not_found');
+      if (a.campaign || !['received', 'under_review'].includes(a.status)) throw new CommunityError(409, 'application review is closed', 'review_closed');
+      if ((a.documents?.length ?? 0) >= 5) throw new CommunityError(409, 'document limit reached', 'document_limit');
+      (a.documents ??= []).push(document);
+    });
+    await this.recordAudit(account.publicKey, 'application.document', id, `document=${document.id} sha256=${document.sha256}`);
+    return document;
+  }
+
+  async readApplicationDocument(id: string, documentId: string, owner?: string) {
+    const state = await this.store.read();
+    const a = state.applications[id];
+    if (!a || (owner && a.publicKey !== owner)) throw new CommunityError(404, 'document not found', 'not_found');
+    const document = a.documents?.find((d) => d.id === documentId);
+    if (!document) throw new CommunityError(404, 'document not found', 'not_found');
+    return document;
+  }
+
+  // Link only a registered, creator-matching testnet campaign. This records a
+  // connection, not deployment, listing permission, identity or legal approval.
+  async linkApplicationCampaign(id: string, campaign: { id: string; contractId: string; creator: string; network: string }, actor: string) {
+    requireCampaignId(campaign.id);
+    if (campaign.network !== 'testnet' || !/^C[A-Z2-7]{55}$/.test(campaign.contractId))
+      throw new CommunityError(400, 'testnet campaign required', 'invalid_campaign');
+    await this.store.change((state) => {
+      const a = state.applications[id];
+      if (!a) throw new CommunityError(404, 'application not found', 'not_found');
+      if (a.status !== 'approved') throw new CommunityError(409, 'prototype review approval required', 'review_required');
+      if (a.publicKey !== campaign.creator) throw new CommunityError(409, 'campaign creator does not match applicant', 'creator_mismatch');
+      if (!a.documents?.length) throw new CommunityError(409, 'application document required', 'document_required');
+      if (a.campaign || Object.values(state.applications).some((x) => x.campaign?.id === campaign.id))
+        throw new CommunityError(409, 'campaign already linked', 'campaign_linked');
+      a.campaign = { id: campaign.id, contractId: campaign.contractId, linkedAt: this.now(), linkedBy: actor };
+    });
+    await this.recordAudit(actor, 'application.campaign', id, `campaign=${campaign.id} contract=${campaign.contractId} testnet`);
   }
 
   // --- Owner-scoped notifications ---

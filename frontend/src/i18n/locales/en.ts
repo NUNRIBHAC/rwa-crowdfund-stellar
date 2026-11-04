@@ -2,6 +2,14 @@
 // Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
 
 export const en = {
+  applicationDocuments: {
+    uploadNote: 'DEMO documents: synthetic .txt only, maximum 16 KB each, five files. Do not upload personal or identity documents.',
+    save: 'Save document',
+    view: 'View document',
+    link: 'Link registered testnet campaign',
+    unlinked: 'No registered campaign linked',
+    reviewNote: 'Prototype review only. Not a legal approval, listing or investment offer.',
+  },
   contributionPreview: {
     title: 'Preview contribution',
     note: 'Preview only: no signature, transaction or ownership.',

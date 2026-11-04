@@ -4,6 +4,14 @@
 import type { Messages } from './en';
 
 export const ko: Messages = {
+  applicationDocuments: {
+    uploadNote: 'DEMO 문서: 합성 .txt만, 각 16 KB 이하, 최대 5개. 개인정보나 신분증을 업로드하지 마세요.',
+    save: '문서 저장',
+    view: '문서 보기',
+    link: '등록된 테스트넷 캠페인 연결',
+    unlinked: '연결된 등록 캠페인 없음',
+    reviewNote: '프로토타입 검토만 해당합니다. 법적 승인, 상장 또는 투자 제안이 아닙니다.',
+  },
   contributionPreview: {
     title: '기여금 미리보기',
     note: '미리보기만 제공됩니다. 서명, 거래, 소유권은 발생하지 않습니다.',
