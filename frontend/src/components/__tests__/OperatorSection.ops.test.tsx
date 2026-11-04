@@ -456,3 +456,59 @@ test('corporate tools distinguish campaign loading and unavailable from a true e
   expect(screen.getByRole('status').textContent).toContain('temporarily unavailable');
   expect(screen.queryByText('No campaigns available.')).toBeNull();
 });
+
+for (const tabName of ['News', 'Reports', 'Podcast']) {
+  test(`${tabName} distinguishes pending and unavailable campaign reads without blank selector ambiguity`, async () => {
+    stubFetch();
+    const content = (state: 'loading' | 'error' | 'empty' | 'ready') => (
+      <I18nProvider>
+        <CommunityAuthProvider messages={{ freighterMissing: 'x', walletNoSign: 'y' }}>
+          <OperatorSection
+            campaigns={state === 'ready' ? [{ id: 'demo', name: 'Demo campaign' }] : []}
+            campaignsLoading={state === 'loading'}
+            campaignsUnavailable={state === 'error'}
+          />
+        </CommunityAuthProvider>
+      </I18nProvider>
+    );
+    const view = render(content('loading'));
+    fireEvent.click(await screen.findByRole('button', { name: tabName }));
+    expect(screen.getByRole('status').textContent).toContain('Loading');
+    const campaignSelector = screen.getAllByRole('combobox')[0] as HTMLSelectElement;
+    expect(campaignSelector.disabled).toBe(true);
+    view.rerender(content('error'));
+    expect(screen.getByRole('status').textContent).toContain('temporarily unavailable');
+    expect(campaignSelector.disabled).toBe(true);
+    view.rerender(content('ready'));
+    expect(screen.queryByRole('status')).toBeNull();
+    expect(campaignSelector.disabled).toBe(false);
+    expect(screen.getByRole('option', { name: 'Demo campaign' })).toBeTruthy();
+    view.rerender(content('empty'));
+    expect(screen.getByRole('status').textContent).toContain('No campaigns available.');
+  });
+}
+
+test('pending campaign reads block selected podcast association but preserve platform-only publishing', async () => {
+  stubFetch();
+  const content = (loading: boolean) => (
+    <I18nProvider>
+      <CommunityAuthProvider messages={{ freighterMissing: 'x', walletNoSign: 'y' }}>
+        <OperatorSection campaigns={[{ id: 'demo', name: 'Demo campaign' }]} campaignsLoading={loading} />
+      </CommunityAuthProvider>
+    </I18nProvider>
+  );
+  const view = render(content(false));
+  fireEvent.click(await screen.findByRole('button', { name: 'Podcast' }));
+  fireEvent.change(screen.getByLabelText('Episode title'), { target: { value: 'Synthetic title' } });
+  fireEvent.change(screen.getByLabelText('Description'), { target: { value: 'Synthetic description' } });
+  fireEvent.change(screen.getByLabelText('Audio URL (https)'), { target: { value: 'https://example.invalid/audio.mp3' } });
+  const selector = screen.getByRole('combobox');
+  fireEvent.change(selector, { target: { value: 'demo' } });
+  view.rerender(content(true));
+  const submit = screen.getByRole('button', { name: 'Publish episode' }) as HTMLButtonElement;
+  expect(submit.disabled).toBe(true);
+  view.rerender(content(false));
+  fireEvent.change(selector, { target: { value: '' } });
+  view.rerender(content(true));
+  expect(submit.disabled).toBe(false);
+});

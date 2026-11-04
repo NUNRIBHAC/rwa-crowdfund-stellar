@@ -49,6 +49,16 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
   const { m, locale } = useI18n();
   const { account, token, isOperator } = useCommunityAuth();
   const labels = m.community.operator;
+  const campaignReadsBlocked = campaignsLoading || campaignsUnavailable;
+  const campaignReadStatus = campaignReadsBlocked ? (
+    <p role="status" className={campaignsUnavailable ? 'community-error' : 'community-loading'}>
+      {campaignsUnavailable ? m.errors.apiUnavailable : m.community.loading}
+    </p>
+  ) : campaigns.length === 0 ? (
+    <p role="status" className="community-note">
+      {labels.corp.empty}
+    </p>
+  ) : null;
 
   const [tab, setTab] = useState<Tab>('applications');
   const activeTab = useRef<Tab>('applications');
@@ -118,6 +128,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
 
   const submitNews = (e: React.FormEvent) => {
     e.preventDefault();
+    if (campaignReadsBlocked) return;
     if (!newsCampaign || !newsTitle.trim() || !newsBody.trim()) {
       setError(labels.newsValidation);
       return;
@@ -129,6 +140,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
 
   const submitReport = (e: React.FormEvent) => {
     e.preventDefault();
+    if (campaignReadsBlocked) return;
     if (!repCampaign || !repTitle.trim() || !repBody.trim()) {
       setError(labels.repValidation);
       return;
@@ -143,6 +155,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
 
   const submitEpisode = (e: React.FormEvent) => {
     e.preventDefault();
+    if (epCampaign && campaignReadsBlocked) return;
     if (!epTitle.trim() || !epDescription.trim() || !epAudio.trim().startsWith('https://')) {
       setError(labels.epValidation);
       return;
@@ -395,9 +408,10 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
       {tab === 'news' && (
         <form onSubmit={submitNews}>
           <h3>{labels.newsFormTitle}</h3>
+          {campaignReadStatus}
           <label>
             {labels.newsCampaignLabel}
-            <select value={newsCampaign} onChange={(e) => setNewsCampaign(e.target.value)} required>
+            <select disabled={campaignReadsBlocked} value={newsCampaign} onChange={(e) => setNewsCampaign(e.target.value)} required>
               <option value="">-</option>
               {campaigns.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -415,7 +429,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
             <textarea value={newsBody} onChange={(e) => setNewsBody(e.target.value)} maxLength={4000} required />
           </label>
           <p className="community-note">{m.community.newsAuthorDemo}</p>
-          <button className="btn btn-primary" disabled={busy || !newsCampaign || !newsTitle.trim() || !newsBody.trim()}>
+          <button className="btn btn-primary" disabled={busy || campaignReadsBlocked || !newsCampaign || !newsTitle.trim() || !newsBody.trim()}>
             {labels.newsSubmit}
           </button>
         </form>
@@ -424,9 +438,10 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
         <form onSubmit={submitReport}>
           <h3>{labels.repFormTitle}</h3>
           <p className="community-note">{labels.repGateNote}</p>
+          {campaignReadStatus}
           <label>
             {labels.newsCampaignLabel}
-            <select value={repCampaign} onChange={(e) => setRepCampaign(e.target.value)} required>
+            <select disabled={campaignReadsBlocked} value={repCampaign} onChange={(e) => setRepCampaign(e.target.value)} required>
               <option value="">-</option>
               {campaigns.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -454,7 +469,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
             <textarea value={repBody} onChange={(e) => setRepBody(e.target.value)} maxLength={4000} required />
           </label>
           <p className="community-note">{m.community.newsAuthorDemo}</p>
-          <button className="btn btn-primary" disabled={busy || !repCampaign || !repTitle.trim() || !repBody.trim()}>
+          <button className="btn btn-primary" disabled={busy || campaignReadsBlocked || !repCampaign || !repTitle.trim() || !repBody.trim()}>
             {labels.repSubmit}
           </button>
         </form>
@@ -462,6 +477,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
       {tab === 'podcast' && (
         <form onSubmit={submitEpisode}>
           <h3>{labels.epFormTitle}</h3>
+          {campaignReadStatus}
           <label>
             {labels.epTitleLabel}
             <input value={epTitle} onChange={(e) => setEpTitle(e.target.value)} maxLength={200} required />
@@ -476,7 +492,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
           </label>
           <label>
             {labels.epCampaignLabel}
-            <select value={epCampaign} onChange={(e) => setEpCampaign(e.target.value)}>
+            <select disabled={campaignReadsBlocked} value={epCampaign} onChange={(e) => setEpCampaign(e.target.value)}>
               <option value="">{labels.epPlatformOption}</option>
               {campaigns.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -486,7 +502,10 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
             </select>
           </label>
           <p className="community-note">{labels.epNote}</p>
-          <button className="btn btn-primary" disabled={busy || !epTitle.trim() || !epDescription.trim() || !epAudio.trim()}>
+          <button
+            className="btn btn-primary"
+            disabled={busy || (!!epCampaign && campaignReadsBlocked) || !epTitle.trim() || !epDescription.trim() || !epAudio.trim()}
+          >
             {labels.epSubmit}
           </button>
         </form>
