@@ -4,7 +4,7 @@
 // Signed-out visitors get a working route in: connect the wallet and sign
 // the challenge without leaving the panel, then the form appears.
 // Mount once at app root (below the header so the theme/nav z-order is kept).
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createTicket } from '../community/api';
 import { notifyCommunityActivityChanged } from '../community/events';
 import { useCommunityAuth } from '../community/CommunityAuth';
@@ -22,6 +22,27 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
   const [done, setDone] = useState(false);
   const [connectBusy, setConnectBusy] = useState(false);
   const [connectError, setConnectError] = useState('');
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Non-modal dialog: opening moves focus into the panel so keyboard and
+  // screen-reader users land on it; closing returns focus to the tab that
+  // opened it. Escape closes through the same path as the Close button.
+  useEffect(() => {
+    if (open) panelRef.current?.focus();
+  }, [open]);
+
+  const close = () => {
+    // After a successful send, closing finishes it: the next open starts
+    // with a fresh empty form. Fields were already cleared on submit, so
+    // nothing old can be resent or leak back.
+    if (done) {
+      setDone(false);
+      setError('');
+    }
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
 
   const connect = () => {
     setConnectBusy(true);
@@ -49,11 +70,20 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
 
   return (
     <>
-      <button className="feedback-tab" onClick={() => setOpen(true)} aria-haspopup="dialog">
+      <button className="feedback-tab" ref={triggerRef} onClick={() => setOpen(true)} aria-haspopup="dialog">
         {labels.feedbackTabLabel}
       </button>
       {open && (
-        <div className="feedback-panel" role="dialog" aria-label={labels.feedbackPanelTitle}>
+        <div
+          className="feedback-panel"
+          role="dialog"
+          aria-label={labels.feedbackPanelTitle}
+          tabIndex={-1}
+          ref={panelRef}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') close();
+          }}
+        >
           <h3>{labels.feedbackPanelTitle}</h3>
           <p className="community-note">{labels.feedbackPanelIntro}</p>
           {!account ? (
@@ -102,19 +132,7 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
               </button>
             </form>
           )}
-          <button
-            className="btn"
-            onClick={() => {
-              // After a successful send, closing finishes it: the next open
-              // starts with a fresh empty form. Fields were already cleared
-              // on submit, so nothing old can be resent or leak back.
-              if (done) {
-                setDone(false);
-                setError('');
-              }
-              setOpen(false);
-            }}
-          >
+          <button className="btn" onClick={close}>
             {labels.feedbackClose}
           </button>
         </div>

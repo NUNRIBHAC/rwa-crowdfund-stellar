@@ -114,3 +114,33 @@ test('signed-in visitor sees the ticket form', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Feedback' }));
   expect(screen.getByText('Subject')).toBeTruthy();
 });
+
+test('Escape closes the panel and focus returns to the feedback tab', async () => {
+  authState({});
+  render(
+    <I18nProvider>
+      <FeedbackTab actor="" onConnect={vi.fn().mockResolvedValue(undefined)} />
+    </I18nProvider>,
+  );
+  const trigger = screen.getByRole('button', { name: 'Feedback' });
+  fireEvent.click(trigger);
+  const dialog = screen.getByRole('dialog');
+  await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
+  fireEvent.keyDown(dialog, { key: 'Escape' });
+  await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  expect(document.activeElement).toBe(trigger);
+});
+
+test('Close button closes through the same path and restores focus', async () => {
+  authState({});
+  render(
+    <I18nProvider>
+      <FeedbackTab actor="" onConnect={vi.fn().mockResolvedValue(undefined)} />
+    </I18nProvider>,
+  );
+  const trigger = screen.getByRole('button', { name: 'Feedback' });
+  fireEvent.click(trigger);
+  fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+  await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  expect(document.activeElement).toBe(trigger);
+});
