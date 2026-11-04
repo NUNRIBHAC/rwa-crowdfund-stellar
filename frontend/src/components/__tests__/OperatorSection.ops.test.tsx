@@ -512,3 +512,35 @@ test('pending campaign reads block selected podcast association but preserve pla
   view.rerender(content(true));
   expect(submit.disabled).toBe(false);
 });
+
+for (const tabName of ['News', 'Reports', 'Podcast']) {
+  test(`${tabName} rejects a retained campaign id removed by a successful registry refresh`, async () => {
+    stubFetch();
+    const requestSpy = vi.spyOn(globalThis, 'fetch');
+    const content = (campaigns: { id: string; name: string }[]) => (
+      <I18nProvider>
+        <CommunityAuthProvider messages={{ freighterMissing: 'x', walletNoSign: 'y' }}>
+          <OperatorSection campaigns={campaigns} />
+        </CommunityAuthProvider>
+      </I18nProvider>
+    );
+    const view = render(content([{ id: 'removed', name: 'Removed campaign' }]));
+    fireEvent.click(await screen.findByRole('button', { name: tabName }));
+    fireEvent.change(screen.getAllByRole('combobox')[0], { target: { value: 'removed' } });
+    fireEvent.change(screen.getByLabelText(tabName === 'Podcast' ? 'Episode title' : 'Title'), { target: { value: 'Synthetic title' } });
+    if (tabName === 'Podcast') {
+      fireEvent.change(screen.getByLabelText('Description'), { target: { value: 'Synthetic description' } });
+      fireEvent.change(screen.getByLabelText('Audio URL (https)'), { target: { value: 'https://example.invalid/audio.mp3' } });
+    } else fireEvent.change(screen.getByLabelText('Body'), { target: { value: 'Synthetic body' } });
+    const submit = screen.getByRole('button', {
+      name: tabName === 'News' ? 'Publish news post' : tabName === 'Reports' ? 'Publish report' : 'Publish episode',
+    }) as HTMLButtonElement;
+    expect(submit.disabled).toBe(false);
+    view.rerender(content([{ id: 'other', name: 'Other campaign' }]));
+    expect(submit.disabled).toBe(true);
+    const requestsBefore = requestSpy.mock.calls.length;
+    fireEvent.submit(submit.closest('form')!);
+    expect(requestSpy.mock.calls.length).toBe(requestsBefore);
+    expect(screen.queryByText(/published as platform demo content/)).toBeNull();
+  });
+}

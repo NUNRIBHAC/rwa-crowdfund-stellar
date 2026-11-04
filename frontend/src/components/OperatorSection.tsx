@@ -49,6 +49,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
   const { m, locale } = useI18n();
   const { account, token, isOperator } = useCommunityAuth();
   const labels = m.community.operator;
+  const campaignExists = (id: string) => campaigns.some((campaign) => campaign.id === id);
   const campaignReadsBlocked = campaignsLoading || campaignsUnavailable;
   const campaignReadStatus = campaignReadsBlocked ? (
     <p role="status" className={campaignsUnavailable ? 'community-error' : 'community-loading'}>
@@ -129,7 +130,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
   const submitNews = (e: React.FormEvent) => {
     e.preventDefault();
     if (campaignReadsBlocked) return;
-    if (!newsCampaign || !newsTitle.trim() || !newsBody.trim()) {
+    if (!campaignExists(newsCampaign) || !newsTitle.trim() || !newsBody.trim()) {
       setError(labels.newsValidation);
       return;
     }
@@ -141,7 +142,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
   const submitReport = (e: React.FormEvent) => {
     e.preventDefault();
     if (campaignReadsBlocked) return;
-    if (!repCampaign || !repTitle.trim() || !repBody.trim()) {
+    if (!campaignExists(repCampaign) || !repTitle.trim() || !repBody.trim()) {
       setError(labels.repValidation);
       return;
     }
@@ -155,7 +156,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
 
   const submitEpisode = (e: React.FormEvent) => {
     e.preventDefault();
-    if (epCampaign && campaignReadsBlocked) return;
+    if (epCampaign && (campaignReadsBlocked || !campaignExists(epCampaign))) return;
     if (!epTitle.trim() || !epDescription.trim() || !epAudio.trim().startsWith('https://')) {
       setError(labels.epValidation);
       return;
@@ -429,7 +430,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
             <textarea value={newsBody} onChange={(e) => setNewsBody(e.target.value)} maxLength={4000} required />
           </label>
           <p className="community-note">{m.community.newsAuthorDemo}</p>
-          <button className="btn btn-primary" disabled={busy || campaignReadsBlocked || !newsCampaign || !newsTitle.trim() || !newsBody.trim()}>
+          <button className="btn btn-primary" disabled={busy || campaignReadsBlocked || !campaignExists(newsCampaign) || !newsTitle.trim() || !newsBody.trim()}>
             {labels.newsSubmit}
           </button>
         </form>
@@ -469,7 +470,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
             <textarea value={repBody} onChange={(e) => setRepBody(e.target.value)} maxLength={4000} required />
           </label>
           <p className="community-note">{m.community.newsAuthorDemo}</p>
-          <button className="btn btn-primary" disabled={busy || campaignReadsBlocked || !repCampaign || !repTitle.trim() || !repBody.trim()}>
+          <button className="btn btn-primary" disabled={busy || campaignReadsBlocked || !campaignExists(repCampaign) || !repTitle.trim() || !repBody.trim()}>
             {labels.repSubmit}
           </button>
         </form>
@@ -504,7 +505,9 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
           <p className="community-note">{labels.epNote}</p>
           <button
             className="btn btn-primary"
-            disabled={busy || (!!epCampaign && campaignReadsBlocked) || !epTitle.trim() || !epDescription.trim() || !epAudio.trim()}
+            disabled={
+              busy || (!!epCampaign && (campaignReadsBlocked || !campaignExists(epCampaign))) || !epTitle.trim() || !epDescription.trim() || !epAudio.trim()
+            }
           >
             {labels.epSubmit}
           </button>
