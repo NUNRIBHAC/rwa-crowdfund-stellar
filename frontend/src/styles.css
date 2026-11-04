@@ -4517,3 +4517,33 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   height: 12px;
   flex: none;
 }
+/* Spread over the available right-hand zone rather than fixed pixel offsets
+   that fall outside a short desktop footer. Keep the 3s gather/spread cycle. */
+.footer-tiles .ft-1 {
+  --sx: 4%;
+  --sy: 4%;
+}
+.footer-tiles .ft-2 {
+  --sx: 84%;
+  --sy: 5%;
+}
+.footer-tiles .ft-3 {
+  --sx: 62%;
+  --sy: 40%;
+}
+.footer-tiles .ft-4 {
+  --sx: 8%;
+  --sy: 49%;
+}
+.footer-tiles .ft-5 {
+  --sx: 38%;
+  --sy: 76%;
+}
+.footer-tiles .ft-6 {
+  --sx: 77%;
+  --sy: calc(100% - 28px);
+}
+.footer-tiles .ft-7 {
+  --sx: 9%;
+  --sy: calc(100% - 38px);
+}
