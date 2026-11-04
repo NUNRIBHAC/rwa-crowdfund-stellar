@@ -103,7 +103,7 @@ test('protected records and operator membership block deletion without submittin
     });
     const before = await store.read();
     await assert.rejects(deleteEmailAccount(store, `Bearer ${one}`, { confirmation: 'DELETE', password }, protection === 'operator' ? ['owner'] : [], now), {
-      code: ['wallet', 'social'].includes(protection) ? 'deletion_unsupported' : 'deletion_protected_records',
+      code: protection === 'wallet' ? 'deletion_unavailable' : protection === 'social' ? 'deletion_unsupported' : 'deletion_protected_records',
     });
     assert.deepEqual(await store.read(), before);
   }

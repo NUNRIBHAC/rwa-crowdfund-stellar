@@ -102,6 +102,8 @@ export async function verifyChallenge(
     );
     if (!challenge) return null;
     challenge.used = true;
+    const cutoff = state.deletedWalletBefore?.[publicKey];
+    if (cutoff !== undefined && challenge.expiresAt - CHALLENGE_TTL_MS <= cutoff) return null;
     const account =
       state.accounts[publicKey] ??
       (state.accounts[publicKey] = {

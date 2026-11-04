@@ -419,6 +419,8 @@ export type CommunityState = {
   // Isolated non-binding fixture meetings; never a legal rights register.
   simulatedMeetings?: Record<string, import('./meeting-simulation.js').SimulatedMeeting>;
   version: 1;
+  deletedWalletBefore?: Record<string, number>;
+  deletionChallenges?: Record<string, import('./deletion-proof.js').DeletionChallenge>;
   accounts: Record<string, Account>;
   emailCredentials: Record<string, EmailCredential>;
   socialIdentities: Record<string, SocialIdentity>;
