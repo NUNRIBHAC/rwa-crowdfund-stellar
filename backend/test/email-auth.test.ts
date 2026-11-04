@@ -96,7 +96,7 @@ test('registration fails closed (503) without a configured mailer and stores not
   assert.equal(login.json.code, 'credentials_invalid');
 });
 
-test('recipient allowlist guard at the route: blocked address gets an honest 503 and no account', async () => {
+test('recipient allowlist guard at the route: blocked delivery keeps one unverified account for a safe retry', async () => {
   const mailer = new FakeMailer();
   const { AllowlistMailer } = await import('../src/mailer.js');
   const url = await startApp(new AllowlistMailer(mailer, new Set(['nunrib@sapo.pt'])));
@@ -106,6 +106,13 @@ test('recipient allowlist guard at the route: blocked address gets an honest 503
   assert.equal(blocked.status, 503);
   assert.equal(blocked.json.code, 'email_recipient_restricted');
   assert.equal(mailer.sent.length, 0); // nothing left the platform
+  // The credential is created before delivery. Keep it unverified, with its
+  // original password, so an allowed retry can finish without duplication.
+  const pending = await api(url, 'POST', '/api/auth/email/login', {
+    body: { email: 'visitor@example.com', password: 'long-enough-password' },
+  });
+  assert.equal(pending.status, 403);
+  assert.equal(pending.json.code, 'email_unverified');
   const allowed = await api(url, 'POST', '/api/auth/email/register', {
     body: { email: 'nunrib@sapo.pt', password: 'long-enough-password' },
   });
@@ -747,5 +754,35 @@ test('email login reports the server-designated operator flag immediately and ne
   } finally {
     if (old === undefined) delete process.env.OPERATOR_WALLETS;
     else process.env.OPERATOR_WALLETS = old;
+  }
+});
+
+test('allowlist failure then retry preserves identity and password and refunds the failed mail slot', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'email-allowlist-retry-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const mailer = new FakeMailer();
+  const { AllowlistMailer } = await import('../src/mailer.js');
+  const input = { email: 'retry@example.com', password: 'original-long-password' };
+  const now = Date.now();
+  try {
+    await assert.rejects(registerEmail(store, new AllowlistMailer(mailer, new Set()), input, now), { code: 'email_recipient_restricted' });
+    const failed = await store.read();
+    const identity = failed.emailCredentials[input.email].publicKey;
+    const passwordRecord = failed.emailCredentials[input.email].passwordRecord;
+    assert.equal(failed.emailCredentials[input.email].verified, false);
+    assert.equal(failed.emailCredentials[input.email].resendSentAt, null);
+    assert.equal(failed.mailSendLog.length, 0);
+    assert.equal(Object.keys(failed.accounts).length, 1);
+    assert.equal(mailer.sent.length, 0);
+    await registerEmail(store, new AllowlistMailer(mailer, new Set([input.email])), { ...input, password: 'different-long-password' }, now + 1);
+    const retried = await store.read();
+    assert.equal(retried.emailCredentials[input.email].publicKey, identity);
+    assert.equal(retried.emailCredentials[input.email].passwordRecord, passwordRecord);
+    assert.equal(Object.keys(retried.accounts).length, 1);
+    assert.equal(mailer.sent.length, 1);
+    assert.equal(retried.mailSendLog.length, 1);
+    assert.equal(retried.emailCredentials[input.email].resendSentAt, now + 1);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
   }
 });

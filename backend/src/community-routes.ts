@@ -245,13 +245,22 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // Public abuse-defense config for the frontend: the Turnstile SITE key is a
   // public value by design; the secret never leaves the backend.
   router.get('/api/auth/abuse-config', (_req, res) => {
+    // Fully configured providers may be kept out of the ordinary UI while
+    // their real canonical callback is validated in an isolated test session.
+    // This affects presentation only, never the auth or registration gates.
+    const validationProviders = new Set(
+      (process.env.SOCIAL_VALIDATION_PROVIDERS ?? '')
+        .split(',')
+        .map((p) => p.trim().toLowerCase())
+        .filter(Boolean),
+    );
     res.json({
       turnstileSiteKey: process.env.TURNSTILE_SITE_KEY?.trim() || null,
       // Providers with full per-env credentials; the frontend renders a
       // sign-in button only for these. IDs/secrets never leave this object.
       socialProviders: [
-        ...SOCIAL_PROVIDERS.filter((p) => socialConfigFromEnv(process.env, p) !== null),
-        ...(farcasterDomain(process.env) ? ['farcaster'] : []),
+        ...SOCIAL_PROVIDERS.filter((p) => socialConfigFromEnv(process.env, p) !== null && !validationProviders.has(p)),
+        ...(farcasterDomain(process.env) && !validationProviders.has('farcaster') ? ['farcaster'] : []),
       ],
     });
   });

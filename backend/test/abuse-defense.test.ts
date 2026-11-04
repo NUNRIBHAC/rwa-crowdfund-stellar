@@ -54,6 +54,7 @@ async function startApp(env: Record<string, string>, deps: Parameters<typeof cre
     'COMMUNITY_EMAIL_MAX_SENDS_PER_DAY',
     'SOCIAL_GOOGLE_CLIENT_ID',
     'SOCIAL_GOOGLE_CLIENT_SECRET',
+    'SOCIAL_VALIDATION_PROVIDERS',
   ])
     delete process.env[k];
   Object.assign(process.env, env);
@@ -436,4 +437,21 @@ test('reputation env allocates a bounded per-deployment lookup allowance', async
   } finally {
     globalThis.fetch = original;
   }
+});
+
+test('validation-only social providers stay hidden without exposing credentials or changing the bot gate', async () => {
+  const full = { SOCIAL_GOOGLE_CLIENT_ID: 'test-client', SOCIAL_GOOGLE_CLIENT_SECRET: 'private-secret' };
+  const hiddenBase = await startApp({ ...full, SOCIAL_VALIDATION_PROVIDERS: ' GOOGLE, unknown, ', TURNSTILE_SECRET_KEY: 'bot-secret' });
+  const hidden = await (await fetch(hiddenBase + '/api/auth/abuse-config')).json();
+  assert.deepEqual(hidden.socialProviders, []);
+  assert.ok(!JSON.stringify(hidden).includes('private-secret'));
+  const blocked = await fetch(hiddenBase + '/api/auth/social/google/start', { redirect: 'manual' });
+  assert.equal(blocked.status, 403, 'a hidden provider still requires the genuine configured challenge');
+  assert.equal((await blocked.json()).code, 'turnstile_failed');
+  const visibleBase = await startApp({ ...full, SOCIAL_VALIDATION_PROVIDERS: 'github, unknown' });
+  const visible = await (await fetch(visibleBase + '/api/auth/abuse-config')).json();
+  assert.deepEqual(visible.socialProviders, ['google'], 'only named providers are hidden');
+  const partialBase = await startApp({ SOCIAL_GOOGLE_CLIENT_ID: 'only-id', SOCIAL_VALIDATION_PROVIDERS: '' });
+  const partial = await (await fetch(partialBase + '/api/auth/abuse-config')).json();
+  assert.deepEqual(partial.socialProviders, [], 'removing validation flag cannot expose incomplete configuration');
 });
