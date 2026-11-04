@@ -4394,3 +4394,126 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   border-color: var(--accent);
   white-space: nowrap;
 }
+/* Navigation fonts must be same-origin: the deployment CSP intentionally does
+   not allow the external Google Fonts stylesheet. Scoped to this correction. */
+@font-face {
+  font-family: 'Blockallisto Nav';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Blockallisto Nav';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Blockallisto Nav';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/inter-600.woff2') format('woff2');
+}
+.site-header {
+  font-family: 'Blockallisto Nav', 'Inter', system-ui, sans-serif;
+}
+.site-header .nav-link,
+.site-header .nav-link:visited {
+  font-family: inherit;
+  color: #e9e9f4;
+  font-weight: 500;
+  opacity: 1;
+}
+.site-header .nav-link-active,
+.site-header .nav-link-active:visited {
+  color: #fff;
+}
+.site-header .nav-link-secondary {
+  font-size: 14px;
+}
+.site-header .nav-more-panel a {
+  font-family: inherit;
+  font-weight: 400;
+  color: #e9e9f4;
+}
+.site-header .lang-select,
+.site-header .header-theme-toggle {
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid rgba(233, 233, 244, 0.35);
+  background: transparent;
+  color: #e9e9f4;
+}
+.site-header .header-theme-toggle {
+  width: 40px;
+  padding: 7px;
+}
+.site-header .header-actions .btn {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+}
+.site-header .lang-select {
+  font-family: inherit;
+  font-size: 14px;
+}
+[data-theme='light'] .site-header .nav-link,
+[data-theme='light'] .site-header .nav-link:visited,
+[data-theme='light'] .site-header .nav-more-panel a,
+[data-theme='light'] .site-header .lang-select,
+[data-theme='light'] .site-header .header-theme-toggle {
+  color: var(--ink);
+}
+[data-theme='light'] .site-header .lang-select,
+[data-theme='light'] .site-header .header-theme-toggle {
+  border-color: #7376e8;
+}
+/* Primary navigation follows the supplied 20px semibold reference. */
+.site-header .site-nav > .nav-link,
+.site-header .nav-more-toggle {
+  font-size: 20px;
+  font-weight: 600;
+}
+@media (min-width: 721px) {
+  .site-header .site-nav {
+    gap: 12px;
+  }
+  .site-header .site-nav > .nav-link,
+  .site-header .nav-more-toggle {
+    padding-inline: 8px;
+  }
+}
+@media (max-width: 720px) {
+  .site-header .site-nav > .nav-link {
+    font-size: 16px;
+    font-weight: 400;
+  }
+}
+.site-footer .risk-banner {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  padding: 0 0 24px;
+  text-align: start;
+  font-weight: 400;
+}
+.site-header .nav-more-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex: none;
+}
+.nav-more-chevron {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}

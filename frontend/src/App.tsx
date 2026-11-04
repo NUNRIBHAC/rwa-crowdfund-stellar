@@ -8,7 +8,6 @@ import type { ContributionError } from './format';
 import { FIXTURE_CAMPAIGNS } from './fixtures';
 import type { Market } from './market';
 import { useRoute } from './router';
-import RiskBanner from './components/RiskBanner';
 import Header from './components/Header';
 import IntentPanel from './components/IntentPanel';
 import Footer from './components/Footer';
@@ -297,7 +296,6 @@ export default function App() {
       <a className="skip-link" href="#main">
         {m.meta.skipLink}
       </a>
-      <RiskBanner />
       <Header actor={actor} busy={busy} onConnect={() => run(connect)} onDisconnect={() => setActor('')} current={route.name} />
       <main className="page" id="main">
         {error && !(!fixtureMode && !loaded && ['home', 'investments', 'campaign'].includes(route.name)) && (

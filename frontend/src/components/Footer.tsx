@@ -1,3 +1,4 @@
+import RiskBanner from './RiskBanner';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import { lockupFor, useTheme } from '../theme';
@@ -7,6 +8,7 @@ export default function Footer() {
   const theme = useTheme();
   return (
     <footer className="site-footer">
+      <RiskBanner />
       <div className="footer-brand">
         <div className="footer-brand-inner">
           <div className="footer-brand-word">

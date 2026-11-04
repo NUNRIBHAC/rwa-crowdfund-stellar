@@ -163,7 +163,19 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
                 aria-controls="header-more-links"
                 onClick={() => setMoreOpen((open) => !open)}
               >
-                {m.nav.more} <span aria-hidden="true">⌄</span>
+                {m.nav.more}{' '}
+                <svg
+                  className="nav-more-chevron"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m3 6 5 5 5-5" />
+                </svg>
               </button>
               <div className={`nav-more-panel ${moreOpen ? 'is-open' : ''}`} id="header-more-links">
                 {(
