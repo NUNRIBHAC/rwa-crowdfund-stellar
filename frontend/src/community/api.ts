@@ -734,5 +734,9 @@ export const fetchDemoJourney = (token: string) => call<DemoJourneyView>('/api/a
 export const advanceDemoJourney = (token: string, action: DemoJourneyAction) =>
   call<DemoJourneyView>('/api/auth/demo-journey', { token, method: 'POST', body: { action } });
 
-export const deleteOwnAccount = (token: string, proof: { confirmation: string; password: string; totpCode?: string }) =>
+export const deleteOwnAccount = (token: string, proof: { confirmation: string; password?: string; totpCode?: string; socialProof?: string }) =>
   call<{ ok: true }>('/api/auth/account/delete', { method: 'POST', token, body: proof });
+
+export const fetchDeletionProviders = (token: string) => call<{ providers: string[] }>('/api/auth/account/deletion-providers', { token });
+export const startDeletionProvider = (token: string, provider: string, confirmation: string) =>
+  call<{ url: string }>(`/api/auth/account/deletion-provider/${encodeURIComponent(provider)}/start`, { method: 'POST', token, body: { confirmation } });

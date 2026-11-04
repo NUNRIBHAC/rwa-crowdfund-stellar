@@ -4,9 +4,9 @@ import { AuthError, hashToken, TOTP_LOCK_MS, TOTP_MAX_FAILURES } from './account
 import { EMAIL_MAX_FAILURES, EMAIL_LOCK_MS, verifyPassword } from './email-auth.js';
 import { decryptSeed, verifyTotp } from './totp.js';
 
-// Deliberately limited to verified email identities. Wallet/social deletion
-// needs a purpose-bound proof and external-record retention adapter, not a
-// login signature or a recent bearer session treated as destructive consent.
+// Verified email and dedicated linked-social proof are supported. Wallet
+// deletion additionally requires an injected retention adapter, absent from
+// the hosted router. A login signature or session alone is never proof.
 export async function deleteEmailAccount(
   store: CommunityStore,
   authorization: string | undefined,
@@ -121,7 +121,7 @@ export async function deleteEmailAccount(
   if (result === 'deleted') return;
   const failures: Record<string, [number, string, string]> = {
     unauthorized: [401, 'sign in again', 'unauthorized'],
-    unsupported: [409, 'self-service deletion currently supports verified email accounts only; no request has been submitted', 'deletion_unsupported'],
+    unsupported: [409, 'this account has no supported deletion identity; no request has been submitted', 'deletion_unsupported'],
     protected: [
       409,
       'linked protected records prevent self-service deletion; nothing was deleted and no review request was submitted',

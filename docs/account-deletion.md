@@ -1,6 +1,8 @@
 # Prototype account deletion
 
-The first implementation supports verified email accounts only. It is not an
+The released implementation supports verified email accounts. Local unpublished
+work adds a dedicated linked-social identity ceremony. Wallet accounts remain
+unavailable without a coherent external-retention adapter. It is not an
 all-data erasure or legal compliance guarantee. No owner account is deleted as
 part of release verification; tests use disposable local fixtures.
 
@@ -21,9 +23,14 @@ are not erased.
 Contributor, issuer, company, assessment, investment-document, operator audit or
 simulation-meeting references block the operation conservatively. Operator
 allowlist members are blocked too. A block deletes nothing and creates no
-review/support request. Wallet/social identities remain unsupported until
-purpose-bound fresh proof and external-record checks are implemented. A current
-login signature or recent social session alone is not destructive consent.
+review/support request. A current login signature or recent social session
+alone is not destructive consent. Local social deletion starts only after
+DELETE, verifies an already-linked provider subject, returns a five-minute
+session-bound proof without signing in or deleting, and requires a new final
+DELETE plus enabled TOTP. Provider identity is verified; newly typed provider
+credentials are not promised. Unsupported Farcaster-only accounts stay blocked.
+The dedicated authenticated start is rate-limited and does not send email; it
+does not alter public registration, challenge or mail abuse gates.
 
 After success the tab clears its session and private-test provider names. A
 subsequent registration is a new account, not recovery of the deleted profile.

@@ -963,3 +963,41 @@ test('validation-provider list requires a verified allowlisted account and expos
   process.env.SOCIAL_REGISTRATION_ALLOWED_EMAILS = 'other@example.com';
   assert.equal((await fetch(url, { headers: goodHeaders })).status, 403, 'revoked allowlist access fails closed');
 });
+
+test('dedicated social deletion HTTP ceremony returns proof only and requires a separate final DELETE', async () => {
+  const fake = await makeFakeProvider('google', { email: 'delete@example.com', emailVerified: true });
+  const { base, store } = await startApp({ ...CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'delete@example.com' }, { socialFetch: fake.fetchImpl });
+  const login = await driveFlow(base, fake.fetchImpl, fake.state);
+  const token = login.headers.get('location')!.split('social-token=')[1];
+  assert.ok(token?.startsWith('bls_'));
+  const headers = { authorization: `Bearer ${token}`, 'content-type': 'application/json' };
+  assert.equal((await fetch(base + '/api/auth/account/deletion-providers')).status, 401);
+  assert.deepEqual(await (await fetch(base + '/api/auth/account/deletion-providers', { headers })).json(), { providers: ['google'] });
+  const startUrl = base + '/api/auth/account/deletion-provider/google/start';
+  assert.equal((await fetch(startUrl, { method: 'POST', headers, body: '{}' })).status, 400);
+  const start = await fetch(startUrl, { method: 'POST', headers, body: JSON.stringify({ confirmation: 'DELETE' }) });
+  assert.equal(start.status, 200);
+  const authUrl = new URL((await start.json()).url);
+  fake.state.challenge = authUrl.searchParams.get('code_challenge');
+  (globalThis as any).__testNonce = authUrl.searchParams.get('nonce');
+  const before = await store.read();
+  const callback = await fetch(base + '/api/auth/social/google/callback?code=fake&state=' + encodeURIComponent(authUrl.searchParams.get('state')!), {
+    redirect: 'manual',
+    headers: { cookie: (start.headers.get('set-cookie') ?? '').split(';')[0] },
+  });
+  const location = callback.headers.get('location')!;
+  assert.match(location, /^\/account#deletion-proof=bld_[0-9a-f]{48}$/);
+  const after = await store.read();
+  assert.deepEqual(after.accounts, before.accounts);
+  assert.deepEqual(after.sessions, before.sessions);
+  assert.deepEqual(after.socialIdentities, before.socialIdentities);
+  const socialProof = location.split('deletion-proof=')[1];
+  const deleteUrl = base + '/api/auth/account/delete';
+  assert.equal((await fetch(deleteUrl, { method: 'POST', headers, body: JSON.stringify({ socialProof }) })).status, 400);
+  assert.equal((await fetch(deleteUrl, { method: 'POST', headers, body: JSON.stringify({ confirmation: 'DELETE', socialProof }) })).status, 200);
+  const final = await store.read();
+  assert.equal(Object.keys(final.accounts).length, 0);
+  assert.equal(Object.keys(final.sessions).length, 0);
+  assert.equal(Object.keys(final.socialIdentities).length, 0);
+  assert.equal((await fetch(base + '/api/auth/me', { headers })).status, 401);
+});

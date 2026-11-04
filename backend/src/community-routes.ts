@@ -1,3 +1,4 @@
+import { socialDeletionPurpose } from './deletion-proof.js';
 import { deleteEmailAccount } from './account-deletion.js';
 import { readDemoJourney, advanceDemoJourney } from './demo-journey.js';
 import { readOnboarding, saveOnboarding } from './investor-onboarding.js';
@@ -942,6 +943,55 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.json({ ok: true });
     }),
   );
+  router.get('/api/auth/account/deletion-providers', async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      if (account.authMethod !== 'social') return res.json({ providers: [] });
+      const state = await store.read();
+      res.json({
+        providers: SOCIAL_PROVIDERS.filter(
+          (provider) =>
+            socialConfigFromEnv(process.env, provider) !== null &&
+            Object.values(state.socialIdentities).some((identity) => identity.publicKey === account.publicKey && identity.provider === provider),
+        ),
+      });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/account/deletion-provider/:provider/start', async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try {
+      if (req.body?.confirmation !== 'DELETE') throw new AuthError(400, 'type DELETE to begin deletion identity proof', 'deletion_confirmation_required');
+      const provider = req.params.provider;
+      if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
+      const cfg = socialConfigFromEnv(process.env, provider);
+      if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
+      const account = await authenticate(store, req.header('authorization'));
+      if (!service.limiter.allow(`deletion-proof:${account.publicKey}`, 10, 60 * 60 * 1000)) throw new AuthError(429, 'retry later', 'rate_limited');
+      const purpose = await socialDeletionPurpose(store, req.header('authorization'), provider);
+      const bind = newBindSecret();
+      const { url } = await startSocialFlow(
+        store,
+        provider,
+        cfg,
+        socialRedirectUri(req, provider),
+        Date.now(),
+        deps.socialFetch,
+        undefined,
+        bind.hash,
+        purpose,
+      );
+      res.setHeader(
+        'Set-Cookie',
+        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
+      );
+      res.json({ url });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.post('/api/auth/account/delete', async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     try {

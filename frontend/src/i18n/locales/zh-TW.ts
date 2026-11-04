@@ -1909,10 +1909,15 @@ export const zhTW: Messages = {
     displayNameSave: '儲存名稱',
     signOutButton: '登出',
     deletion: {
+      providerVerify: '驗證關聯身分',
+      providerNote: '使用已關聯的服務繼續。這驗證身分，不代表輸入了新密碼。返回不會刪除任何內容。請重新輸入 DELETE 並在下方確認。',
+      providerReady: '關聯身分已驗證。請重新輸入 DELETE，如已啟用則輸入目前驗證器代碼，然後確認刪除。',
+      noProvider: '沒有可用的受支援關聯服務。未刪除任何內容，也未提交審查請求。',
+
       title: '刪除帳戶',
       boundary:
         '刪除此原型資料、電子郵件登入、關聯登入、工作階段、留言和支援訊息。不會清除區塊鏈、交易、稽核、備份或供應商記錄。受保護記錄會阻止此操作；不會提交審查請求。',
-      unsupported: '目前自動刪除僅支援已驗證的電子郵件帳戶。暫不支援錢包和社群帳戶。',
+      unsupported: '暫不支援錢包帳戶自助刪除。社群帳戶需要受支援的關聯服務。受保護記錄可能阻止刪除。',
       password: '目前密碼',
       factor: '目前驗證器代碼（如已啟用）',
       confirmation: '輸入 DELETE 確認',
