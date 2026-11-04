@@ -4476,11 +4476,11 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 [data-theme='light'] .site-header .header-theme-toggle {
   border-color: #7376e8;
 }
-/* Primary navigation follows the supplied 20px semibold reference. */
+/* Keep navigation subordinate to the logo, with the requested wider spacing. */
 .site-header .site-nav > .nav-link,
 .site-header .nav-more-toggle {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
 }
 @media (min-width: 721px) {
   .site-header .site-nav {
