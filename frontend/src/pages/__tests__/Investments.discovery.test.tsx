@@ -68,3 +68,20 @@ test('search narrows campaigns by name', () => {
   expect(screen.getByText('QA Ended Zulu')).toBeTruthy();
   expect(screen.queryByText('QA Open Alpha')).toBeNull();
 });
+
+test('registry search has a fitting placeholder and a complete accessible label', () => {
+  setup([openCampaign]);
+  const box = screen.getByRole('textbox', { name: 'Search campaigns' });
+  expect(box.getAttribute('placeholder')).toBe('Search campaigns');
+  expect(box.getAttribute('title')).toBe('Search campaigns by name or contract');
+});
+
+test('status filter and list view preserve campaign separation', () => {
+  setup([openCampaign, endedCampaign]);
+  fireEvent.click(screen.getByRole('button', { name: 'Open' }));
+  expect(screen.getByText('QA Open Alpha')).toBeTruthy();
+  expect(screen.queryByText('QA Ended Zulu')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'List' }));
+  expect(screen.getByRole('button', { name: 'List' }).getAttribute('aria-pressed')).toBe('true');
+  expect(screen.getByText('QA Open Alpha')).toBeTruthy();
+});

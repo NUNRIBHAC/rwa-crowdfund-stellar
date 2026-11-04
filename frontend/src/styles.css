@@ -3455,3 +3455,107 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     margin-block: 10px;
   }
 }
+
+/* Public registry: existing discovery controls, consistent comparison cards.
+   No dashboard navigation, placeholders or new campaign facts are introduced. */
+.campaign-registry-page .registry-results {
+  min-width: 0;
+}
+.campaign-registry-page .registry-results > .section-title {
+  margin-bottom: 16px;
+}
+.campaign-registry-page .card {
+  border-radius: 12px;
+  box-shadow: none;
+}
+.campaign-registry-page .card-photo img {
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+}
+.card-purpose {
+  padding: 10px 0;
+  border-block: 1px solid var(--line);
+}
+.card-purpose .card-teaser {
+  margin: 0;
+}
+.card-purpose small {
+  display: block;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+@media (min-width: 1001px) {
+  .campaign-registry-page {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 20px 24px;
+    align-items: start;
+  }
+  .campaign-registry-page > .page-title,
+  .campaign-registry-page > .registry-bar {
+    grid-column: 1 / -1;
+    margin-block: 0;
+  }
+  .campaign-registry-page .registry-filter-panel {
+    grid-column: 1;
+    grid-row: 3 / span 5;
+    position: sticky;
+    top: var(--sticky-header-h, 90px);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    padding: 16px;
+    margin: 0;
+  }
+  .registry-filter-panel .discovery-search,
+  .registry-filter-panel .discovery-sort {
+    width: 100%;
+    min-width: 0;
+  }
+  .registry-filter-panel .filter-chips {
+    flex-wrap: wrap;
+  }
+  .campaign-registry-page > :not(.page-title, .registry-bar, .registry-filter-panel) {
+    grid-column: 2;
+  }
+  .campaign-registry-page .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1000px) {
+  .campaign-registry-page .registry-filter-panel {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    background: var(--card);
+    margin-bottom: 24px;
+  }
+  .campaign-registry-page .registry-results {
+    margin-block: 24px;
+  }
+}
+@media (min-width: 1001px) {
+  .campaign-registry-page .card-grid:has(> .card:only-child) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .campaign-registry-page .card-grid > .card:only-child {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 12px 22px;
+  }
+  .campaign-registry-page .card-grid > .card:only-child > * {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .campaign-registry-page .card-grid > .card:only-child > .card-photo {
+    grid-column: 1;
+    grid-row: 1 / span 10;
+  }
+  .campaign-registry-page .card-grid > .card:only-child .card-photo img {
+    aspect-ratio: 4 / 3;
+  }
+}

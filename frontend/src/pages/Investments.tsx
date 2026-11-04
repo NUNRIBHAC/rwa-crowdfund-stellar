@@ -93,7 +93,7 @@ export default function Investments({ market }: { market: Market }) {
   );
 
   return (
-    <>
+    <div className="campaign-registry-page">
       <h1 className="page-title">{m.invest.title}</h1>
       <div className="registry-bar">
         <p className="registry-note">{fixtureMode ? m.invest.noteFixture : m.invest.noteLive}</p>
@@ -103,12 +103,13 @@ export default function Investments({ market }: { market: Market }) {
       </div>
 
       {campaigns.length > 0 && (
-        <div className="discovery-bar">
+        <div className="discovery-bar registry-filter-panel">
           <input
             className="discovery-search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={m.invest.searchPlaceholder}
+            placeholder={m.invest.searchAria}
+            title={m.invest.searchPlaceholder}
             aria-label={m.invest.searchAria}
           />
           <div className="filter-chips" role="group" aria-label={m.invest.filterStatusAria}>
@@ -175,17 +176,17 @@ export default function Investments({ market }: { market: Market }) {
       {fixtureMode && <EmptyState fixtureMode onToggleFixtures={market.onToggleFixtures} />}
 
       {active.length > 0 && (
-        <section aria-label={m.invest.activeAria}>
+        <section className="registry-results" aria-label={m.invest.activeAria}>
           <h2 className="section-title">{m.invest.activeTitle}</h2>
           <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{active.map(renderCard)}</div>
         </section>
       )}
       {completed.length > 0 && (
-        <section aria-label={m.invest.completedAria}>
+        <section className="registry-results" aria-label={m.invest.completedAria}>
           <h2 className="section-title">{m.invest.completedTitle}</h2>
           <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{completed.map(renderCard)}</div>
         </section>
       )}
-    </>
+    </div>
   );
 }

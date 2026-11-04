@@ -78,7 +78,10 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
         </div>
       </div>
 
-      <p className="card-teaser">{profile ? profile.teaser : m.card.purposeUnavailable}</p>
+      <div className="card-purpose">
+        <p className="card-teaser">{profile ? profile.teaser : m.card.purposeUnavailable}</p>
+        {profile && <small>{m.campaign.marketingDivider}</small>}
+      </div>
 
       <FundingGrid raised={c.raised} goal={c.config.goal} />
 
