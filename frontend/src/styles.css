@@ -1964,7 +1964,7 @@ textarea:focus-visible,
 .ft {
   position: absolute;
   display: block;
-  animation: footer-gather 6s ease-in-out infinite;
+  animation: footer-gather 3s ease-in-out infinite;
 }
 /* Motion cycle: shapes hold a tight cluster (the reference composition), then
    spread out across the full-height zone, then gather again. All shapes share
