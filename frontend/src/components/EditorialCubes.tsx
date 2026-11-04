@@ -5,9 +5,9 @@ export default function EditorialCubes() {
     { x: 250, y: 75, h: 64 },
     { x: 182, y: 147, h: 46 },
     { x: 318, y: 147, h: 64 },
-    { x: 114, y: 219, h: 33 },
-    { x: 250, y: 219, h: 34 },
-    { x: 386, y: 219, h: 35 },
+    { x: 114, y: 202, h: 33 },
+    { x: 250, y: 274, h: 34 },
+    { x: 386, y: 202, h: 35 },
   ];
   return (
     <svg className="editorial-cubes" viewBox="0 0 500 380" aria-hidden="true" focusable="false">
@@ -22,7 +22,7 @@ export default function EditorialCubes() {
       </g>
       {cubes.map(({ x, y, h }, index) => (
         <g
-          className="editorial-cube-motion"
+          className={`editorial-cube-motion ${index >= 3 ? 'editorial-cube-grounded' : ''}`}
           style={{ animationDelay: `${index * -0.35}s` }}
           key={`${x}-${y}`}
           stroke="var(--ink)"
