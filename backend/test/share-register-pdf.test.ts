@@ -118,3 +118,37 @@ test('pdf route: 503 without provider, 404 unknown campaign, 401 without admin, 
   const bytes = Buffer.from(await res.arrayBuffer());
   assert.equal(bytes.subarray(0, 5).toString(), '%PDF-');
 });
+
+test('v2 PDF projection retains chain positions and app-known/truncated basis separately from intended and confirmed transfers', async () => {
+  const { pdfPositionLines, pdfContributorLines } = await import('../src/share-register-pdf.js');
+  const payload = buildShareRegister('v2-fixture', [], [{ campaignId: 'v2-fixture', publicKey: kp(), firstConfirmedAt: 1 }], 'testnet');
+  payload.v2OnChain = {
+    tokenContractId: 'C-TOKEN-FIXTURE',
+    offeringContractId: 'C-OFFERING-FIXTURE',
+    token: { name: 'Synthetic token', symbol: 'SYN', decimals: 7, totalSupply: '999' },
+    offering: { token: 'C-TOKEN-FIXTURE', issuer: 'G-ISSUER-FIXTURE', minPerInvestor: '1', maxPerInvestor: '100', goal: '1000', deadline: '2000000000' },
+    holders: [{ publicKey: payload.contributors[0].publicKey, balance: '12.3456789' }],
+    holdersTruncated: true,
+    semantics: 'Fixture positions only, not legal ownership.',
+  };
+  payload.contributors[0].onChainBalance = '12.3456789';
+  const basis = pdfPositionLines(payload).join('\n');
+  assert.match(basis, /999/);
+  assert.match(basis, /C-TOKEN-FIXTURE/);
+  assert.match(basis, /C-OFFERING-FIXTURE/);
+  assert.match(basis, /beyond cap are absent, not zero/);
+  assert.match(basis, /not a complete or legal ownership register/);
+  const known = pdfContributorLines(payload.contributors[0], true).join('\n');
+  assert.match(known, /on-chain share-token balance: 12\.3456789/);
+  assert.match(known, /not an intended amount or historical cashflow/);
+  assert.match(known, /net\(confirmed transfers\)/);
+  assert.match(known, /net\(intended\)/);
+  delete payload.contributors[0].onChainBalance;
+  assert.match(pdfContributorLines(payload.contributors[0], true).join('\n'), /UNKNOWN \/ NOT SUPPLIED \(not zero\)/);
+  assert.doesNotMatch(pdfContributorLines(payload.contributors[0]).join('\n'), /on-chain share-token balance/);
+  payload.v2OnChain.holdersTruncated = false;
+  assert.match(pdfPositionLines(payload).join('\n'), /read cap reached: no/);
+  assert.equal((await buildShareRegisterPdf(payload)).subarray(0, 5).toString(), '%PDF-');
+  payload.v2OnChain = null;
+  assert.deepEqual(pdfPositionLines(payload), []);
+});
