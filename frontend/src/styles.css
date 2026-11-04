@@ -4083,6 +4083,12 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   padding-block: 6px;
 }
 .journey-final-action {
+  /* One button box, including when localized labels wrap onto several lines. */
+  display: inline-block;
+  box-sizing: border-box;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
   margin-block: 24px;
 }
 .editorial-cube-motion {
