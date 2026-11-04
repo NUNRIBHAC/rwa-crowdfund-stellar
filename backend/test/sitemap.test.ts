@@ -38,7 +38,7 @@ test('sitemap.xml lists every public page path plus live campaign URLs', async (
       `${origin}/glossary`,
       `${origin}/risk-warnings`,
       `${origin}/faq`,
-      `${origin}/financing`,
+      `${origin}/for-businesses`,
       `${origin}/about`,
       `${origin}/terms-of-service`,
       `${origin}/privacy-policy`,
@@ -138,5 +138,15 @@ test('old investments listing permanently redirects to campaigns and preserves q
       assert.equal(res.status, 308);
       assert.equal(res.headers.get('location'), '/campaigns?language=pt');
     }
+  });
+});
+
+test('old financing page redirects to for-businesses and preserves query', async () => {
+  const app = express();
+  registerDiscoveryEndpoints(app);
+  await withServer(app, async (base) => {
+    const res = await fetch(`${base}/financing?language=pt`, { redirect: 'manual' });
+    assert.equal(res.status, 308);
+    assert.equal(res.headers.get('location'), '/for-businesses?language=pt');
   });
 });

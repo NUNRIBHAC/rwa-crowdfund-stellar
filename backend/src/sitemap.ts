@@ -11,7 +11,7 @@ const PUBLIC_PATHS = [
   '/glossary',
   '/risk-warnings',
   '/faq',
-  '/financing',
+  '/for-businesses',
   '/about',
   '/terms-of-service',
   '/privacy-policy',
@@ -65,10 +65,15 @@ export interface DiscoveryOptions {
 
 export function registerDiscoveryEndpoints(app: Express, options: DiscoveryOptions = {}): void {
   // Permanent alias preserves existing bookmarks and their query parameters.
-  app.get('/investments', (req, res) => {
-    const query = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
-    res.redirect(308, `/campaigns${query}`);
-  });
+  for (const [oldPath, newPath] of [
+    ['/investments', '/campaigns'],
+    ['/financing', '/for-businesses'],
+  ]) {
+    app.get(oldPath, (req, res) => {
+      const query = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
+      res.redirect(308, `${newPath}${query}`);
+    });
+  }
   app.get('/sitemap.xml', async (req, res) => {
     const origin = publicOrigin(req);
     if (!origin) return res.status(503).json({ error: 'public origin not configured' });

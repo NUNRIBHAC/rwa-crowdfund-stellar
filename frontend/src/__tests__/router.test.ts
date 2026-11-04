@@ -13,6 +13,7 @@ describe('routeFromPath', () => {
     ['/risk-warnings', 'risk-warnings'],
     ['/faq', 'faq'],
     ['/financing', 'financing'],
+    ['/for-businesses', 'financing'],
     ['/about', 'about'],
     ['/account', 'account'],
     ['/terms-of-service', 'terms-of-service'],
@@ -43,6 +44,10 @@ describe('routePath', () => {
   test('listing links use the canonical campaigns path', () => {
     expect(routePath({ name: 'investments' })).toBe('/campaigns');
     expect(routeFromPath('/investments')).toEqual(routeFromPath('/campaigns'));
+  });
+  test('business page links use the canonical for-businesses path', () => {
+    expect(routePath({ name: 'financing' })).toBe('/for-businesses');
+    expect(routeFromPath('/financing')).toEqual(routeFromPath('/for-businesses'));
   });
   test('campaign ids are encoded', () => {
     expect(routePath({ name: 'campaign', campaignId: 'a b' })).toBe('/campaigns/a%20b');

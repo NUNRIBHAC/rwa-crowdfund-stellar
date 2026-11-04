@@ -37,6 +37,7 @@ const KNOWN_SEGMENTS = new Set([
   'risk-warnings',
   'faq',
   'financing',
+  'for-businesses',
   'campaign-builder',
   'about',
   'account',
@@ -75,6 +76,7 @@ export function routeFromPath(pathname: string): Route {
       return { name: 'risk-warnings' };
     case 'faq':
       return { name: 'faq' };
+    case 'for-businesses':
     case 'financing':
       return { name: 'financing' };
     case 'campaign-builder':
@@ -116,6 +118,7 @@ export function routePath(route: Route): string {
   if (route.name === 'campaign') return `/campaigns/${encodeURIComponent(route.campaignId ?? '')}`;
   if (route.name === 'home') return '/';
   if (route.name === 'investments') return '/campaigns';
+  if (route.name === 'financing') return '/for-businesses';
   return `/${route.name}`;
 }
 
@@ -145,7 +148,7 @@ function currentRoute(): Route {
     return route;
   }
   const route = routeFromPath(window.location.pathname);
-  if (/^\/investments\/?$/.test(window.location.pathname)) {
+  if (/^\/(investments|financing)\/?$/.test(window.location.pathname)) {
     window.history.replaceState(null, '', routePath(route) + window.location.search + window.location.hash);
   }
   return route;

@@ -12,7 +12,7 @@ export const PUBLIC_PAGES = [
   '/conflicts-of-interest',
   '/events',
   '/faq',
-  '/financing',
+  '/for-businesses',
   '/glossary',
   '/how-it-works',
   '/campaigns',
