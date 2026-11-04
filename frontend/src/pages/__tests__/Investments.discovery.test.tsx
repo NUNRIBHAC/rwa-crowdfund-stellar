@@ -85,3 +85,28 @@ test('status filter and list view preserve campaign separation', () => {
   expect(screen.getByRole('button', { name: 'List' }).getAttribute('aria-pressed')).toBe('true');
   expect(screen.getByText('QA Open Alpha')).toBeTruthy();
 });
+
+test('discovery cards have no transaction controls and closed history stays expandable', () => {
+  const { container } = render(
+    <I18nProvider>
+      <Investments market={marketFor([openCampaign, endedCampaign])} />
+    </I18nProvider>,
+  );
+  expect(container.querySelector('.card input')).toBeNull();
+  expect(container.querySelector('.card details')).toBeNull();
+  const archive = container.querySelector('details.registry-closed') as HTMLDetailsElement;
+  expect(archive.open).toBe(false);
+  expect(archive.textContent).toContain('Goal missed');
+  expect(screen.getAllByRole('link', { name: 'View campaign' }).length).toBe(2);
+  const filters = screen.getByRole('button', { name: 'Filters' });
+  fireEvent.click(filters);
+  expect(filters.getAttribute('aria-expanded')).toBe('true');
+});
+
+test('known staging fixture is grouped for testing without guessing from campaign names', () => {
+  setup([openCampaign, { ...openCampaign, id: 'staging-load', name: 'Staging Load' }]);
+  const testing = screen.getByRole('region', { name: 'Testing campaigns' });
+  expect(within(testing).getByText('Staging Load')).toBeTruthy();
+  expect(within(testing).queryByText('QA Open Alpha')).toBeNull();
+  expect(within(screen.getByRole('region', { name: 'Open campaigns' })).getByText('QA Open Alpha')).toBeTruthy();
+});

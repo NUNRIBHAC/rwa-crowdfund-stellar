@@ -8,10 +8,12 @@ export default function CampaignPhoto({ campaignId, variant }: { campaignId: str
   const { m } = useI18n();
   const [failed, setFailed] = useState(false);
   const src = campaignPhoto(campaignId);
+  const displayed = failed ? campaignPhoto('') : src;
+  const illustration = displayed.endsWith('.svg');
   return (
     <figure className={`${variant}-photo`}>
-      <img src={failed ? campaignPhoto('') : src} alt={m.card.photoAlt} loading="lazy" onError={() => setFailed(true)} />
-      <figcaption>{m.card.photoCaption}</figcaption>
+      <img src={displayed} alt={illustration ? m.invest.illustrativeCover : m.card.photoAlt} loading="lazy" onError={() => setFailed(true)} />
+      <figcaption>{illustration ? m.invest.illustrativeCover : m.card.photoCaption}</figcaption>
     </figure>
   );
 }

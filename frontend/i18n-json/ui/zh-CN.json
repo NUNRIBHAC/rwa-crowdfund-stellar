@@ -166,6 +166,11 @@
     ]
   },
   "invest": {
+    "illustrativeCover": "示意封面 - 非实际项目。",
+    "testingTitle": "测试募资活动",
+    "exploreTitle": "探索募资活动",
+    "filters": "筛选",
+    "closedTitle": "已结束的募资活动",
     "title": "全部投资",
     "noteFixture": "示例项目用于展示布局。它们不是已部署合约，无法接受出资。",
     "noteLive": "真实项目是 Stellar 测试网上的 Soroban 合约。测试网资产毫无价值。",
@@ -194,8 +199,8 @@
       "one": "显示 {n} 个众筹项目",
       "other": "显示 {n} 个众筹项目"
     },
-    "activeAria": "进行中的投资",
-    "activeTitle": "进行中的投资",
+    "activeAria": "开放中的募资活动",
+    "activeTitle": "开放中的募资活动",
     "completedAria": "已完成的投资",
     "completedTitle": "已完成的投资"
   },

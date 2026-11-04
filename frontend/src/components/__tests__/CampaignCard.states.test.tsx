@@ -65,18 +65,14 @@ test('ended funded withdrawn campaign offers nothing and says so', () => {
   expect(screen.getByText(/creator has withdrawn the raised funds/)).toBeTruthy();
 });
 
-test('illustrative photo renders for mapped campaigns with the honesty caption', () => {
-  for (const id of ['demo-solar', 'staging-load']) {
-    cleanup();
-    setup({ ...openUnfunded, id });
-    const img = screen.getByAltText('Aerial photograph of a solar farm (illustrative)');
-    expect(img.getAttribute('src')).toBe('/demo-solar-farm.jpg');
-    expect(screen.getByText('Illustrative photo - not the actual project.')).toBeTruthy();
-  }
-});
-
-test('every new or unmapped campaign has a captioned illustrative photo', () => {
-  setup(openUnfunded);
+test('canonical demo keeps its illustrative photo and caption', () => {
+  setup({ ...openUnfunded, id: 'demo-solar' });
   expect(screen.getByAltText('Aerial photograph of a solar farm (illustrative)').getAttribute('src')).toBe('/demo-solar-farm.jpg');
   expect(screen.getByText('Illustrative photo - not the actual project.')).toBeTruthy();
+});
+
+test('new campaigns use a clearly labelled original illustrative cover', () => {
+  setup(openUnfunded);
+  expect(screen.getByAltText('Illustrative cover - not the actual project.').getAttribute('src')).toMatch(/^\/illustrative-covers\/blocks-[0-3]\.svg$/);
+  expect(screen.getByText(/Illustrative cover/)).toBeTruthy();
 });

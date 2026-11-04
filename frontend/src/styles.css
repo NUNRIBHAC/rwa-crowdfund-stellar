@@ -3834,3 +3834,146 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .home-introduction .home-single-campaign .card-photo img {
   width: 100%;
 }
+/* Discovery v2: compare first, transact only after reading campaign detail. */
+.registry-discovery-v2 {
+  display: block;
+}
+.registry-discovery-v2 .registry-filter-panel {
+  position: static;
+  display: block;
+  padding: 18px;
+  margin-block: 20px;
+}
+.registry-discovery-v2 .discovery-search {
+  width: 100%;
+  max-width: none;
+  margin-bottom: 16px;
+}
+.registry-filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+.registry-filter-toggle {
+  display: none;
+}
+.registry-discovery-v2 .card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.registry-discovery-v2 .card-grid.registry-many {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.registry-discovery-v2 .card-grid > .card:only-child {
+  display: block;
+  max-width: 660px;
+}
+.registry-discovery-v2 .card .fund-grid {
+  width: 70px;
+  height: 70px;
+}
+.registry-discovery-v2 .card .fund-grid-caption strong {
+  font-size: 22px;
+}
+.registry-discovery-v2 .card .stat-grid dd {
+  font-size: 18px;
+}
+.registry-discovery-v2 .card .card-details-link .btn {
+  display: block;
+  text-align: center;
+}
+.registry-discovery-v2 .card-list .card {
+  display: grid;
+  grid-template-columns: 160px 1fr 1fr;
+  gap: 12px 20px;
+  padding: 16px;
+}
+.registry-discovery-v2 .card-list .card-photo {
+  grid-column: 1;
+  grid-row: 1 / span 5;
+  margin: 0;
+}
+.registry-discovery-v2 .card-list .card-photo img {
+  aspect-ratio: 4 / 3;
+}
+.registry-discovery-v2 .card-list .card-top {
+  grid-column: 2 / -1;
+}
+.registry-discovery-v2 .card-list .card-purpose {
+  grid-column: 2 / -1;
+}
+.registry-closed {
+  margin-top: 32px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  background: var(--card);
+}
+.registry-closed summary {
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.registry-outcome {
+  font-weight: 700;
+  margin-top: 20px;
+}
+@media (max-width: 1000px) {
+  .registry-discovery-v2 .card-grid,
+  .registry-discovery-v2 .card-grid.registry-many {
+    grid-template-columns: 1fr;
+  }
+  .registry-filter-toggle {
+    display: block;
+  }
+  .registry-filter-controls {
+    display: none;
+    margin-top: 16px;
+  }
+  .filters-open .registry-filter-controls {
+    display: flex;
+  }
+  .registry-discovery-v2 .card-list .card {
+    grid-template-columns: 100px 1fr;
+  }
+  .registry-discovery-v2 .card-list .card > * {
+    grid-column: 2;
+  }
+  .registry-discovery-v2 .card-list .card-photo {
+    grid-column: 1;
+  }
+  .registry-discovery-v2 .card-grid > .card:only-child {
+    max-width: none;
+  }
+}
+@media (min-width: 1001px) {
+  .registry-discovery-v2 .card-grid:has(> .card:only-child) {
+    grid-template-columns: 1fr;
+  }
+  .registry-discovery-v2 .card-grid > .card:only-child {
+    max-width: none;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+  .registry-discovery-v2 .card-grid > .card:only-child > .card-photo {
+    grid-column: 1;
+    grid-row: 1 / span 9;
+  }
+  .registry-discovery-v2 .card-grid > .card:only-child > * {
+    grid-column: 2;
+  }
+  .registry-discovery-v2 .card-grid > .card:only-child > .card-photo {
+    grid-column: 1;
+  }
+  .registry-discovery-v2 .card-photo img {
+    aspect-ratio: 16 / 9;
+    max-height: 240px;
+    object-fit: cover;
+  }
+  .registry-discovery-v2 .registry-filter-controls .discovery-sort {
+    width: auto;
+    min-width: 180px;
+  }
+}

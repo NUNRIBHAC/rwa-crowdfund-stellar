@@ -13,8 +13,8 @@ for (const variant of ['card', 'campaign'] as const) {
         <CampaignPhoto campaignId="future-unlisted-project" variant={variant} />
       </I18nProvider>,
     );
-    expect(screen.getByRole('img').getAttribute('src')).toBe('/demo-solar-farm.jpg');
-    expect(screen.getByText('Illustrative photo - not the actual project.').closest('figure')?.className).toBe(`${variant}-photo`);
+    expect(screen.getByRole('img').getAttribute('src')).toBe(campaignPhoto('future-unlisted-project'));
+    expect(screen.getByText(/Illustrative cover/).closest('figure')?.className).toBe(`${variant}-photo`);
   });
 }
 
@@ -27,6 +27,6 @@ test('a failed campaign-specific photo falls back without removing the honesty c
   );
   fireEvent.error(screen.getByRole('img'));
   expect(screen.getByRole('img').getAttribute('src')).toBe(campaignPhoto(''));
-  expect(screen.getByText('Illustrative photo - not the actual project.')).toBeTruthy();
+  expect(screen.getByText(/Illustrative cover/)).toBeTruthy();
   delete CAMPAIGN_PHOTOS['photo-failure-test'];
 });

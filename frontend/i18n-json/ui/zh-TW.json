@@ -166,6 +166,11 @@
     ]
   },
   "invest": {
+    "illustrativeCover": "示意封面 - 非實際專案。",
+    "testingTitle": "測試募資活動",
+    "exploreTitle": "探索募資活動",
+    "filters": "篩選",
+    "closedTitle": "已結束的募資活動",
     "title": "全部投資",
     "noteFixture": "示例項目用於展示佈局。它們不是已部署合約，無法接受出資。",
     "noteLive": "真實項目是 Stellar 測試網上的 Soroban 合約。測試網資產毫無價值。",
@@ -194,8 +199,8 @@
       "one": "顯示 {n} 個募資專案",
       "other": "顯示 {n} 個募資專案"
     },
-    "activeAria": "進行中的投資",
-    "activeTitle": "進行中的投資",
+    "activeAria": "開放中的募資活動",
+    "activeTitle": "開放中的募資活動",
     "completedAria": "已完成的投資",
     "completedTitle": "已完成的投資"
   },

@@ -166,6 +166,11 @@
     ]
   },
   "invest": {
+    "illustrativeCover": "예시 표지 - 실제 프로젝트가 아닙니다.",
+    "testingTitle": "테스트 캠페인",
+    "exploreTitle": "캠페인 살펴보기",
+    "filters": "필터",
+    "closedTitle": "종료된 캠페인",
     "title": "모든 투자",
     "noteFixture": "샘플 캠페인은 레이아웃을 보여줍니다. 배포된 컨트랙트가 아니며 출자를 받을 수 없습니다.",
     "noteLive": "라이브 캠페인은 Stellar 테스트넷의 Soroban 컨트랙트입니다. 테스트넷 자산은 가치가 없습니다.",
@@ -194,8 +199,8 @@
       "one": "캠페인 {n}개 표시됨",
       "other": "캠페인 {n}개 표시됨"
     },
-    "activeAria": "진행 중인 투자",
-    "activeTitle": "진행 중인 투자",
+    "activeAria": "모금 중인 캠페인",
+    "activeTitle": "모금 중인 캠페인",
     "completedAria": "종료된 투자",
     "completedTitle": "종료된 투자"
   },

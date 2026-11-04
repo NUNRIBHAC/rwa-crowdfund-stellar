@@ -15,6 +15,7 @@ export default function Investments({ market }: { market: Market }) {
   const [statusFilter, setStatusFilter] = useState<'all' | CampaignStatus>('all');
   const [category, setCategory] = useState('all');
   const [sortBy, setSortBy] = useState<'deadline' | 'progress' | 'name'>('deadline');
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [view, setView] = useState<'grid' | 'list'>('grid');
 
   // Industry classification: fixture mode uses the localized sample profiles;
@@ -71,8 +72,11 @@ export default function Investments({ market }: { market: Market }) {
     .filter((c) => statusFilter === 'all' || campaignStatus(c) === statusFilter)
     .filter((c) => category === 'all' || categoryOf(c) === category)
     .sort(compareCampaigns(sortBy));
-  const active = shown.filter((c) => campaignStatus(c) === 'open');
-  const completed = shown.filter((c) => campaignStatus(c) !== 'open');
+  // Exact checked-in staging fixture identity, never inferred from campaign names.
+  const testing = shown.filter((c) => c.id === 'staging-load');
+  const catalog = shown.filter((c) => c.id !== 'staging-load');
+  const active = catalog.filter((c) => campaignStatus(c) === 'open');
+  const completed = catalog.filter((c) => campaignStatus(c) !== 'open');
   const showEmpty = loaded && !fixtureMode && campaigns.length === 0;
 
   const renderCard = (c: (typeof campaigns)[number]) => (
@@ -84,6 +88,7 @@ export default function Investments({ market }: { market: Market }) {
       busy={market.busy}
       readOnly={fixtureMode}
       demo={fixtureMode}
+      discoveryOnly
       amount={market.amounts[c.id] ?? ''}
       amountError={market.amountErrors[c.id]}
       prepareError={market.prepareErrors[c.id]}
@@ -93,8 +98,8 @@ export default function Investments({ market }: { market: Market }) {
   );
 
   return (
-    <div className="campaign-registry-page">
-      <h1 className="page-title">{m.invest.title}</h1>
+    <div className={`campaign-registry-page registry-discovery-v2 ${filtersOpen ? 'filters-open' : ''}`}>
+      <h1 className="page-title">{m.invest.exploreTitle}</h1>
       <div className="registry-bar">
         <p className="registry-note">{fixtureMode ? m.invest.noteFixture : m.invest.noteLive}</p>
         <button className="btn btn-ghost" disabled={market.busy || fixtureMode} onClick={market.onRefresh}>
@@ -112,56 +117,71 @@ export default function Investments({ market }: { market: Market }) {
             title={m.invest.searchPlaceholder}
             aria-label={m.invest.searchAria}
           />
-          <div className="filter-chips" role="group" aria-label={m.invest.filterStatusAria}>
-            {(['all', 'open', 'funded', 'ended'] as const).map((f) => (
-              <button
-                key={f}
-                className={`chip ${statusFilter === f ? 'chip-active' : ''}`}
-                aria-pressed={statusFilter === f}
-                onClick={() => setStatusFilter(f)}
-              >
-                {f === 'all' ? m.invest.all : f === 'open' ? m.invest.open : f === 'funded' ? m.invest.funded : m.invest.underfunded}
-              </button>
-            ))}
-          </div>
-          {categories.length > 0 && (
-            <div className="filter-chips" role="group" aria-label={m.invest.filterIndustryAria}>
-              <button className={`chip ${category === 'all' ? 'chip-active' : ''}`} aria-pressed={category === 'all'} onClick={() => setCategory('all')}>
-                {m.invest.allIndustries}
-              </button>
-              {categories.map((cat) => (
-                <button key={cat} className={`chip ${category === cat ? 'chip-active' : ''}`} aria-pressed={category === cat} onClick={() => setCategory(cat)}>
-                  {cat}
+          <button
+            className="btn registry-filter-toggle"
+            aria-expanded={filtersOpen}
+            aria-controls="registry-filter-controls"
+            onClick={() => setFiltersOpen(!filtersOpen)}
+          >
+            {m.invest.filters}
+          </button>
+          <div id="registry-filter-controls" className="registry-filter-controls">
+            <div className="filter-chips" role="group" aria-label={m.invest.filterStatusAria}>
+              {(['all', 'open', 'funded', 'ended'] as const).map((f) => (
+                <button
+                  key={f}
+                  className={`chip ${statusFilter === f ? 'chip-active' : ''}`}
+                  aria-pressed={statusFilter === f}
+                  onClick={() => setStatusFilter(f)}
+                >
+                  {f === 'all' ? m.invest.all : f === 'open' ? m.invest.open : f === 'funded' ? m.invest.funded : m.invest.underfunded}
                 </button>
               ))}
             </div>
-          )}
-          {/* Stable wrapper: browser automation layers and some extensions
+            {categories.length > 0 && (
+              <div className="filter-chips" role="group" aria-label={m.invest.filterIndustryAria}>
+                <button className={`chip ${category === 'all' ? 'chip-active' : ''}`} aria-pressed={category === 'all'} onClick={() => setCategory('all')}>
+                  {m.invest.allIndustries}
+                </button>
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    className={`chip ${category === cat ? 'chip-active' : ''}`}
+                    aria-pressed={category === cat}
+                    onClick={() => setCategory(cat)}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+            {/* Stable wrapper: browser automation layers and some extensions
               wrap native selects in an injected container, moving the select
               out of its React parent; if React's sibling anchor is the select
               itself, the next conditional insertion (industry chips) throws
               NotFoundError and unmounts the page. The anchor must be a node
               only React manages. display:contents keeps the wrapper
               layout-neutral. */}
-          <div className="discovery-sort-slot">
-            <select
-              className="discovery-sort"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
-              aria-label={m.invest.sortAria}
-            >
-              <option value="deadline">{m.invest.sortDeadline}</option>
-              <option value="progress">{m.invest.sortProgress}</option>
-              <option value="name">{m.invest.sortName}</option>
-            </select>
-          </div>
-          <div className="filter-chips" role="group" aria-label={m.invest.viewAria}>
-            <button className={`chip ${view === 'grid' ? 'chip-active' : ''}`} aria-pressed={view === 'grid'} onClick={() => setView('grid')}>
-              {m.invest.grid}
-            </button>
-            <button className={`chip ${view === 'list' ? 'chip-active' : ''}`} aria-pressed={view === 'list'} onClick={() => setView('list')}>
-              {m.invest.list}
-            </button>
+            <div className="discovery-sort-slot">
+              <select
+                className="discovery-sort"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
+                aria-label={m.invest.sortAria}
+              >
+                <option value="deadline">{m.invest.sortDeadline}</option>
+                <option value="progress">{m.invest.sortProgress}</option>
+                <option value="name">{m.invest.sortName}</option>
+              </select>
+            </div>
+            <div className="filter-chips" role="group" aria-label={m.invest.viewAria}>
+              <button className={`chip ${view === 'grid' ? 'chip-active' : ''}`} aria-pressed={view === 'grid'} onClick={() => setView('grid')}>
+                {m.invest.grid}
+              </button>
+              <button className={`chip ${view === 'list' ? 'chip-active' : ''}`} aria-pressed={view === 'list'} onClick={() => setView('list')}>
+                {m.invest.list}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -178,13 +198,30 @@ export default function Investments({ market }: { market: Market }) {
       {active.length > 0 && (
         <section className="registry-results" aria-label={m.invest.activeAria}>
           <h2 className="section-title">{m.invest.activeTitle}</h2>
-          <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{active.map(renderCard)}</div>
+          <div className={view === 'grid' ? `card-grid ${active.length > 2 ? 'registry-many' : ''}` : 'card-list'}>{active.map(renderCard)}</div>
+        </section>
+      )}
+      {testing.length > 0 && (
+        <section className="registry-results registry-testing" aria-label={m.invest.testingTitle}>
+          <h2 className="section-title">{m.invest.testingTitle}</h2>
+          <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{testing.map(renderCard)}</div>
         </section>
       )}
       {completed.length > 0 && (
         <section className="registry-results" aria-label={m.invest.completedAria}>
-          <h2 className="section-title">{m.invest.completedTitle}</h2>
-          <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{completed.map(renderCard)}</div>
+          <details className="registry-closed" open={statusFilter === 'ended' || statusFilter === 'funded' || undefined}>
+            <summary>
+              {m.invest.closedTitle} ({completed.length})
+            </summary>
+            <div className={view === 'grid' ? 'card-grid' : 'card-list'}>
+              {completed.map((c) => (
+                <div key={c.id}>
+                  <p className="registry-outcome">{campaignStatus(c) === 'funded' ? m.hero.goalReached : m.hero.goalMissed}</p>
+                  {renderCard(c)}
+                </div>
+              ))}
+            </div>
+          </details>
         </section>
       )}
     </div>

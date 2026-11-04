@@ -166,6 +166,11 @@
     ]
   },
   "invest": {
+    "illustrativeCover": "イメージ表紙 - 実際のプロジェクトではありません。",
+    "testingTitle": "テストキャンペーン",
+    "exploreTitle": "キャンペーンを探す",
+    "filters": "絞り込み",
+    "closedTitle": "終了したキャンペーン",
     "title": "すべての投資",
     "noteFixture": "サンプルキャンペーンはレイアウトのデモです。デプロイされたコントラクトではなく、出資を受け付けることはできません。",
     "noteLive": "稼働中のキャンペーンは Stellar テストネット上の Soroban コントラクトです。テストネットの資産に価値はありません。",
@@ -194,8 +199,8 @@
       "one": "{n} 件のキャンペーンを表示中",
       "other": "{n} 件のキャンペーンを表示中"
     },
-    "activeAria": "進行中の投資",
-    "activeTitle": "進行中の投資",
+    "activeAria": "募集中のキャンペーン",
+    "activeTitle": "募集中のキャンペーン",
     "completedAria": "終了した投資",
     "completedTitle": "終了した投資"
   },

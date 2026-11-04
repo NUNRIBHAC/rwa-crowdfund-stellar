@@ -166,6 +166,11 @@
     ]
   },
   "invest": {
+    "illustrativeCover": "Capa ilustrativa - não é o projeto real.",
+    "testingTitle": "Campanhas de teste",
+    "exploreTitle": "Explorar campanhas",
+    "filters": "Filtros",
+    "closedTitle": "Campanhas encerradas",
     "title": "Todos os investimentos",
     "noteFixture": "As campanhas de exemplo demonstram o layout. Não são contratos implementados e não podem aceitar contribuições.",
     "noteLive": "As campanhas reais são contratos Soroban na testnet Stellar. Os ativos de testnet não têm valor.",
@@ -194,8 +199,8 @@
       "one": "{n} campanha visível",
       "other": "{n} campanhas visíveis"
     },
-    "activeAria": "Investimentos ativos",
-    "activeTitle": "Investimentos ativos",
+    "activeAria": "Campanhas abertas",
+    "activeTitle": "Campanhas abertas",
     "completedAria": "Investimentos concluídos",
     "completedTitle": "Investimentos concluídos"
   },
