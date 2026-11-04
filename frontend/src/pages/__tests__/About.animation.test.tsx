@@ -35,5 +35,5 @@ test('the shadow uses each animated tile silhouette, never a generic oval', () =
     const outline = [a, b, [b[0], b[1] + 22], [c[0], c[1] + 22], [d[0], d[1] + 22], d];
     expect(shadowTiles[index].querySelector('polygon')?.getAttribute('points')).toBe(outline.map((p) => p.join(',')).join(' '));
   });
-  expect(illustration).toContain('@media(prefers-reduced-motion:reduce)');
+  expect(illustration).toContain('@media(prefers-reduced-motion:reduce){.b{animation:none!important;opacity:1;transform:none}}');
 });
