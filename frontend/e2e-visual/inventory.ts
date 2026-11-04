@@ -25,6 +25,8 @@ export const PUBLIC_PAGES = [
   '/risk-disclosure',
   '/risk-warnings',
   '/terms-of-service',
+  // Unknown-path capture: routes to the not-found view, keeping the bad URL.
+  '/404',
 ].map((path) => ({ path, name: path === '/' ? 'home' : path.slice(1).replaceAll('/', '-') }));
 export const VISUAL_LOCALES = ['en', 'pt', 'es', 'fr', 'de', 'zh-TW', 'zh-CN', 'ja', 'ko', 'ar', 'hi'];
 export const VISUAL_WIDTHS = [390, 820, 1440];
