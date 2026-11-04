@@ -163,6 +163,16 @@
 
 /* Narrow viewports keep today's wrapped behavior: two-column grid, context+Status full width. */
 @media (max-width: 1150px) {
+  /* The social row's intrinsic width must not expand the brand column into
+     the reserved decorative tile zone. Wrap icons inside the available
+     text width, including long labels and RTL locales. */
+  .footer-brand-word {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .footer-tagline {
+    overflow-wrap: anywhere;
+  }
   .footer-brand-inner .footer-context {
     grid-column: 1 / -1;
   }
