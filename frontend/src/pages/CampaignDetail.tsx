@@ -236,7 +236,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           <CampaignTour />
         </div>
 
-        <aside id="campaign-funding" className="invest-widget" aria-label={m.nav.investments}>
+        <aside id="campaign-funding" className="invest-widget campaign-funding-summary" aria-label={m.nav.investments}>
           <h2 className="widget-title">{status === 'open' ? m.campaign.widgetContribute : m.campaign.widgetOverview}</h2>
           <FundingGrid raised={campaign.raised} goal={campaign.config.goal} layout="block" />
           <dl className="stat-grid">
@@ -254,6 +254,13 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
             </div>
           </dl>
 
+          {!market.fixtureMode && status === 'open' && (
+            <a className="btn btn-outline campaign-summary-jump" href="#campaign-contribution">
+              {m.campaign.viewContributionForm}
+            </a>
+          )}
+        </aside>
+        <aside id="campaign-contribution" className="invest-widget campaign-contribution-form" aria-label={m.contributionPreview.title}>
           {status === 'open' && (
             <ContributionPreview
               raised={campaign.raised}
@@ -323,21 +330,6 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           <p className="widget-risk">{m.campaign.widgetRisk}</p>
         </aside>
       </div>
-      {!market.fixtureMode && status === 'open' && (
-        <div className="campaign-mobile-action">
-          <a
-            className="btn btn-primary"
-            href="#campaign-funding"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById('campaign-funding')?.scrollIntoView({ behavior: 'auto', block: 'start' });
-              document.querySelector<HTMLInputElement>('#campaign-funding input')?.focus({ preventScroll: true });
-            }}
-          >
-            {m.campaign.viewContributionForm}
-          </a>
-        </div>
-      )}
     </article>
   );
 }

@@ -90,7 +90,7 @@ test('funded campaign still before its deadline is fully subscribed with no cont
 test('open unfunded campaign shows contribute only (no guaranteed-failure refund/withdraw)', () => {
   setup(campaignWith({ config: { ...FIXTURE_CAMPAIGNS[0].config, creator, deadline: future } }));
   expect(screen.getByRole('button', { name: /contribute/i })).toBeTruthy();
-  expect(screen.getByRole('link', { name: /view contribution form/i }).getAttribute('href')).toBe('#campaign-funding');
+  expect(screen.getByRole('link', { name: /view contribution form/i }).getAttribute('href')).toBe('#campaign-contribution');
   expect(screen.queryByRole('button', { name: /refund/i })).toBeNull();
   expect(screen.queryByRole('button', { name: /withdraw/i })).toBeNull();
 });

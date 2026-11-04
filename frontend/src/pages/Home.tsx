@@ -23,7 +23,7 @@ export default function Home({ market }: { market: Market }) {
               {m.home.allInvestments}
             </a>
           </div>
-          <div className="card-grid home-editorial-cards">
+          <div className={`card-grid home-editorial-cards ${latest.length === 1 ? 'home-single-campaign' : ''}`}>
             {latest.map((c) => (
               <CampaignCard
                 key={c.id}
