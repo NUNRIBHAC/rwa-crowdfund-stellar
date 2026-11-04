@@ -386,6 +386,18 @@ export const de: Messages = {
     explainerDefault: 'Diese Instrumentenklasse wird im Lern-Hub beschrieben.',
   },
   howItWorks: {
+    guidedTitle: 'Von der Entdeckung einer Kampagne bis zur Verfolgung ihres Ergebnisses.',
+    guidedIntro: 'Entdecken Sie die Anleger- und Unternehmensabläufe mit klaren Hinweisen zu den Funktionen dieses Prototyps.',
+    contributorTab: 'Für Beitragende',
+    businessTab: 'Für Unternehmen',
+    tryNow: 'Was Sie jetzt ausprobieren können',
+    fullJourney: 'Der vollständige Plattformablauf',
+    details: 'Details',
+    exploreDemo: 'Demokampagnen entdecken',
+    applicationPreview: 'Bewerbungsvorschau ansehen',
+    campaignRecords: 'Kampagnenaufzeichnungen ansehen',
+    contributionPayment: 'Beitrag und Zahlung',
+
     partial: 'Teilweise im Prototyp',
     title: 'So funktioniert es',
     intro:

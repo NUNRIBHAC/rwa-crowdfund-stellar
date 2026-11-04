@@ -377,6 +377,18 @@ export const en = {
     explainerDefault: 'This instrument class is described in the Learn hub.',
   },
   howItWorks: {
+    guidedTitle: 'From discovering a campaign to following its outcome.',
+    guidedIntro: "Explore the investor and business journeys, with clear labels showing what's available in this prototype.",
+    contributorTab: 'For contributors',
+    businessTab: 'For businesses',
+    tryNow: 'What you can try now',
+    fullJourney: 'The full platform journey',
+    details: 'Details',
+    exploreDemo: 'Explore demo campaigns',
+    applicationPreview: 'View application preview',
+    campaignRecords: 'View campaign records',
+    contributionPayment: 'Contribution and payment',
+
     partial: 'Partial prototype',
     title: 'How it works',
     intro:

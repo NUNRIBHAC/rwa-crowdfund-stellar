@@ -381,6 +381,18 @@ export const hi: Messages = {
     explainerDefault: 'इस इंस्ट्रूमेंट वर्ग का वर्णन सीखें हब में है।',
   },
   howItWorks: {
+    guidedTitle: 'अभियान खोजने से उसके परिणाम का अनुसरण करने तक।',
+    guidedIntro: 'इस प्रोटोटाइप में उपलब्ध सुविधाओं के स्पष्ट संकेतों के साथ निवेशक और व्यवसाय की प्रक्रियाएँ देखें।',
+    contributorTab: 'योगदानकर्ताओं के लिए',
+    businessTab: 'व्यवसायों के लिए',
+    tryNow: 'अभी क्या आज़मा सकते हैं',
+    fullJourney: 'प्लेटफ़ॉर्म की पूरी प्रक्रिया',
+    details: 'विवरण',
+    exploreDemo: 'डेमो अभियान देखें',
+    applicationPreview: 'आवेदन पूर्वावलोकन देखें',
+    campaignRecords: 'अभियान रिकॉर्ड देखें',
+    contributionPayment: 'योगदान और भुगतान',
+
     partial: 'आंशिक प्रोटोटाइप',
     title: 'यह कैसे काम करता है',
     intro:

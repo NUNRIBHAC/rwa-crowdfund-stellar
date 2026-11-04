@@ -378,6 +378,18 @@ export const ja: Messages = {
     explainerDefault: 'この金融商品クラスは学習ハブで説明しています。',
   },
   howItWorks: {
+    guidedTitle: 'キャンペーンの発見から結果の確認まで。',
+    guidedIntro: '投資家と企業の流れを、プロトタイプで利用できる機能の表示とともに確認できます。',
+    contributorTab: '出資者向け',
+    businessTab: '事業者向け',
+    tryNow: '今試せること',
+    fullJourney: 'プラットフォーム全体の流れ',
+    details: '詳細',
+    exploreDemo: 'デモキャンペーンを見る',
+    applicationPreview: '申請プレビューを見る',
+    campaignRecords: 'キャンペーン記録を見る',
+    contributionPayment: '出資と支払い',
+
     partial: '一部のみ実装',
     title: '仕組み',
     intro: 'プロトタイプの流れ：実装済みの機能、限定的なデモ機能、計画中の作業を区別します。実際の投資、本人確認、法的承認は提供しません。',

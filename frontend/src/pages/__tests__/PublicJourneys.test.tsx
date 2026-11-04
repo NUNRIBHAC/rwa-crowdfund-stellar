@@ -10,14 +10,15 @@ function show(component: React.ReactNode) {
   localStorage.setItem('blockallisto-language', 'en');
   return render(<I18nProvider>{component}</I18nProvider>);
 }
-test('journey selector changes the mobile panel without hiding desktop content', () => {
+test('journey tabs show one selected audience on every viewport', () => {
   const { container } = show(<HowItWorks />);
-  expect(container.querySelector('.journey-selected')?.getAttribute('aria-label')).toBe('Investor journey');
-  fireEvent.click(screen.getByRole('button', { name: 'Issuer journey' }));
-  expect(container.querySelector('.journey-selected')?.getAttribute('aria-label')).toBe('Issuer journey');
-  expect(screen.getByRole('region', { name: 'Investor journey' })).toBeTruthy();
-  expect(screen.getAllByText('Partial prototype').length).toBe(6);
+  expect(container.querySelector('.journey-selected')?.getAttribute('aria-labelledby')).toBe('journey-tab-investor');
   expect(screen.getByText(/no approval process runs on this deployment/)).toBeTruthy();
+  fireEvent.click(screen.getByRole('tab', { name: 'For businesses' }));
+  expect(container.querySelector('.journey-selected')?.getAttribute('aria-labelledby')).toBe('journey-tab-issuer');
+  expect(screen.queryByRole('tab', { name: 'For contributors', selected: true })).toBeNull();
+  expect(container.querySelectorAll('.journey-panel')).toHaveLength(1);
+  expect(screen.getAllByText('Partial prototype').length).toBe(3);
 });
 test('Learn separates debt parents from participation and retains taxonomy anchors', () => {
   show(<Learn />);

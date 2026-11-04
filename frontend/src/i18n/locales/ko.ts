@@ -377,6 +377,18 @@ export const ko: Messages = {
     explainerDefault: '이 금융상품 클래스는 배우기 허브에 설명되어 있습니다.',
   },
   howItWorks: {
+    guidedTitle: '캠페인 발견부터 결과 확인까지.',
+    guidedIntro: '이 프로토타입에서 이용할 수 있는 기능을 표시한 투자자 및 기업 절차를 살펴보세요.',
+    contributorTab: '기여자용',
+    businessTab: '기업용',
+    tryNow: '지금 체험할 수 있는 기능',
+    fullJourney: '전체 플랫폼 절차',
+    details: '자세히',
+    exploreDemo: '데모 캠페인 탐색',
+    applicationPreview: '신청 미리보기',
+    campaignRecords: '캠페인 기록 보기',
+    contributionPayment: '기여 및 결제',
+
     partial: '일부만 구현',
     title: '작동 방식',
     intro: '프로토타입 흐름: 구현된 기능, 제한된 데모 기능, 계획된 작업을 구분합니다. 실제 투자, 신원 확인 또는 법적 승인은 제공하지 않습니다.',

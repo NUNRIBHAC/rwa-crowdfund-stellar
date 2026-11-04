@@ -361,6 +361,17 @@
     "explainerDefault": "該工具類別在學習中心中有說明。"
   },
   "howItWorks": {
+    "guidedTitle": "從探索募資活動到追蹤其結果。",
+    "guidedIntro": "探索投資人與企業流程，清楚了解此原型已提供的功能。",
+    "contributorTab": "支持者流程",
+    "businessTab": "企業流程",
+    "tryNow": "現在可以體驗的功能",
+    "fullJourney": "完整平台流程",
+    "details": "詳細資訊",
+    "exploreDemo": "探索示範募資活動",
+    "applicationPreview": "查看申請預覽",
+    "campaignRecords": "查看募資活動紀錄",
+    "contributionPayment": "出資與付款",
     "partial": "部分原型功能",
     "title": "運作方式",
     "intro": "原型流程：狀態標籤區分已實作功能、有限的示範功能和規劃中的工作。不提供真實投資、身分驗證或法律核准。",

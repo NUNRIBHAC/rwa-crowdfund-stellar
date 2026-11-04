@@ -361,6 +361,17 @@
     "explainerDefault": "Cette classe d'instrument est décrite dans le hub Apprendre."
   },
   "howItWorks": {
+    "guidedTitle": "De la découverte d’une campagne au suivi de son résultat.",
+    "guidedIntro": "Explorez les parcours investisseur et entreprise, avec des indications claires sur les fonctions de ce prototype.",
+    "contributorTab": "Pour les contributeurs",
+    "businessTab": "Pour les entreprises",
+    "tryNow": "Ce que vous pouvez essayer maintenant",
+    "fullJourney": "Le parcours complet de la plateforme",
+    "details": "Détails",
+    "exploreDemo": "Explorer les campagnes de démonstration",
+    "applicationPreview": "Voir l’aperçu de candidature",
+    "campaignRecords": "Voir les registres de campagne",
+    "contributionPayment": "Contribution et paiement",
     "partial": "Prototype partiel",
     "title": "Fonctionnement",
     "intro": "Parcours du prototype : les statuts distinguent les fonctions réalisées, les démonstrations limitées et les travaux prévus. Aucun investissement réel, contrôle d’identité ou agrément légal n’est fourni.",

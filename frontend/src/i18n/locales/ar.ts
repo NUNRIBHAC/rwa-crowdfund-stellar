@@ -378,6 +378,18 @@ export const ar: Messages = {
     explainerDefault: 'توضح هذه الفئة من الأدوات في مركز التعلم.',
   },
   howItWorks: {
+    guidedTitle: 'من اكتشاف الحملة إلى متابعة نتيجتها.',
+    guidedIntro: 'استكشف مساري المستثمر والشركة مع توضيح الوظائف المتاحة في هذا النموذج الأولي.',
+    contributorTab: 'للمساهمين',
+    businessTab: 'للشركات',
+    tryNow: 'ما يمكنك تجربته الآن',
+    fullJourney: 'المسار الكامل للمنصة',
+    details: 'التفاصيل',
+    exploreDemo: 'استكشاف الحملات التجريبية',
+    applicationPreview: 'عرض معاينة الطلب',
+    campaignRecords: 'عرض سجلات الحملة',
+    contributionPayment: 'المساهمة والدفع',
+
     partial: 'نموذج أولي جزئي',
     title: 'كيف يعمل',
     intro:

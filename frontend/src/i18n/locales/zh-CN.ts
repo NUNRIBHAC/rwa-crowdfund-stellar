@@ -367,6 +367,18 @@ export const zhCN: Messages = {
     explainerDefault: '该工具类别在学习中心中有说明。',
   },
   howItWorks: {
+    guidedTitle: '从探索募资活动到追踪其结果。',
+    guidedIntro: '探索投资人与企业流程，清楚了解此原型已提供的功能。',
+    contributorTab: '支持者流程',
+    businessTab: '企业流程',
+    tryNow: '现在可以体验的功能',
+    fullJourney: '完整平台流程',
+    details: '详细信息',
+    exploreDemo: '探索演示募资活动',
+    applicationPreview: '查看申请预览',
+    campaignRecords: '查看募资活动记录',
+    contributionPayment: '出资与付款',
+
     partial: '部分原型功能',
     title: '运作方式',
     intro: '原型流程：状态标签区分已实现功能、有限的演示功能和规划中的工作。不提供真实投资、身份验证或法律批准。',

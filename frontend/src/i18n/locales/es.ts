@@ -384,6 +384,18 @@ export const es: Messages = {
     explainerDefault: 'Esta clase de instrumento se describe en el hub Aprender.',
   },
   howItWorks: {
+    guidedTitle: 'Desde descubrir una campaña hasta seguir su resultado.',
+    guidedIntro: 'Explore los recorridos del inversor y la empresa, con etiquetas claras sobre lo disponible en este prototipo.',
+    contributorTab: 'Para contribuyentes',
+    businessTab: 'Para empresas',
+    tryNow: 'Qué puede probar ahora',
+    fullJourney: 'El recorrido completo de la plataforma',
+    details: 'Detalles',
+    exploreDemo: 'Explorar campañas de demostración',
+    applicationPreview: 'Ver vista previa de la solicitud',
+    campaignRecords: 'Ver registros de la campaña',
+    contributionPayment: 'Contribución y pago',
+
     partial: 'Prototipo parcial',
     title: 'Cómo funciona',
     intro:

@@ -20,8 +20,15 @@ export default function EditorialCubes() {
           }),
         )}
       </g>
-      {cubes.map(({ x, y, h }) => (
-        <g key={`${x}-${y}`} stroke="var(--ink)" strokeWidth="0.7" strokeLinejoin="round">
+      {cubes.map(({ x, y, h }, index) => (
+        <g
+          className="editorial-cube-motion"
+          style={{ animationDelay: `${index * -0.35}s` }}
+          key={`${x}-${y}`}
+          stroke="var(--ink)"
+          strokeWidth="0.7"
+          strokeLinejoin="round"
+        >
           <polygon points={`${x - 34},${y + 18 - h} ${x},${y + 36 - h} ${x},${y + 36} ${x - 34},${y + 18}`} fill="#c7c8f9" />
           <polygon points={`${x},${y + 36 - h} ${x + 34},${y + 18 - h} ${x + 34},${y + 18} ${x},${y + 36}`} fill="#4b4fe2" />
           <polygon points={tile(x, y - h)} fill="#f6f6fe" />
