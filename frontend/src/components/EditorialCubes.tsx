@@ -2,9 +2,9 @@
 export default function EditorialCubes() {
   const tile = (x: number, y: number) => `${x},${y} ${x + 34},${y + 18} ${x},${y + 36} ${x - 34},${y + 18}`;
   const cubes = [
-    { x: 250, y: 75, h: 64 },
-    { x: 182, y: 147, h: 46 },
-    { x: 318, y: 147, h: 64 },
+    { x: 250, y: 130, h: 64 },
+    { x: 182, y: 166, h: 46 },
+    { x: 318, y: 166, h: 64 },
     { x: 114, y: 202, h: 33 },
     { x: 250, y: 274, h: 34 },
     { x: 386, y: 202, h: 35 },
@@ -22,7 +22,7 @@ export default function EditorialCubes() {
       </g>
       {cubes.map(({ x, y, h }, index) => (
         <g
-          className={`editorial-cube-motion ${index >= 3 ? 'editorial-cube-grounded' : ''}`}
+          className="editorial-cube-motion"
           style={{ animationDelay: `${index * -0.35}s` }}
           key={`${x}-${y}`}
           stroke="var(--ink)"

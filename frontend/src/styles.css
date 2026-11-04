@@ -4092,14 +4092,11 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 }
 @keyframes editorial-cube-rise {
   0%,
-  15%,
-  85%,
   100% {
     transform: translateY(0);
   }
-  45%,
-  55% {
-    transform: translateY(-12px);
+  50% {
+    transform: translateY(-28px);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -4559,10 +4556,6 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     font-family: 'Blockallisto Nav', 'Inter', system-ui, sans-serif;
     font-size: 16px;
   }
-}
-/* Three front cubes rest on exact grid tiles; the back cubes keep floating. */
-.editorial-cube-grounded {
-  animation: none;
 }
 .faq-intro {
   display: grid;
