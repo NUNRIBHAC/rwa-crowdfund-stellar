@@ -1,3 +1,4 @@
+import { issueSocialDeletionProof } from './deletion-proof.js';
 // Social (OAuth/OIDC) sign-in, sitting NEXT TO the email+password flow
 // (email-auth.ts) and the wallet-challenge flow (accounts.ts).
 //
@@ -179,6 +180,7 @@ export async function startSocialFlow(
   fetchImpl?: FetchLike,
   linkTo?: string,
   bindHash?: string,
+  deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose,
 ): Promise<{ url: string }> {
   const state = client.randomState();
   const nonce = client.randomNonce();
@@ -193,6 +195,7 @@ export async function startSocialFlow(
       createdAt: now,
       expiresAt: now + SOCIAL_FLOW_TTL_MS,
       ...(linkTo ? { linkTo } : {}),
+      ...(deletionPurpose ? { deletionPurpose } : {}),
       ...(bindHash ? { bindHash } : {}),
     };
   });
@@ -225,7 +228,8 @@ export type SocialLoginResult =
   | { kind: 'session'; token: string; expiresAt: number; account: Account }
   | { kind: 'totp'; ticket: string; expiresAt: number; account: Account }
   | { kind: 'email'; ticket: string; expiresAt: number }
-  | { kind: 'linked'; account: Account };
+  | { kind: 'linked'; account: Account }
+  | { kind: 'deletion-proof'; proof: string; expiresAt: number };
 
 // Complete a flow from the callback. currentUrl is the full callback URL
 // (openid-client validates state/iss against it). Errors:
@@ -286,7 +290,12 @@ export async function completeSocialFlow(
 
 // Shared tail of every provider flow: link to an existing account, sign an
 // existing identity in, or (identity-only providers) park a pending ticket.
-export type SocialFlowRecord = { linkTo?: string; bindHash?: string; createdAt?: number };
+export type SocialFlowRecord = {
+  deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose;
+  linkTo?: string;
+  bindHash?: string;
+  createdAt?: number;
+};
 export async function finishSocialIdentity(
   store: CommunityStore,
   env: NodeJS.ProcessEnv,
@@ -303,6 +312,12 @@ export async function finishSocialIdentity(
     if (cutoff !== undefined && (flow.createdAt === undefined || flow.createdAt <= cutoff))
       throw new AuthError(401, 'account was deleted; start a new sign-in explicitly', 'social_flow_expired');
   };
+
+  if (flow.deletionPurpose)
+    return store.change((s) => {
+      rejectDeletedFlow(s);
+      return { kind: 'deletion-proof' as const, ...issueSocialDeletionProof(s, flow.deletionPurpose!, provider, subject, now) };
+    });
 
   if (flow.linkTo) {
     // LINK flow (started by an authenticated account): bind the provider

@@ -56,6 +56,7 @@ export type SocialFlow = {
   // account holding this public key instead of signing anyone in. The
   // callback outcome is then a binding, never a session.
   linkTo?: string;
+  deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose;
   // sha256 of a per-browser secret set as an httpOnly cookie at /start;
   // the callback must present the same cookie (browser binding).
   bindHash?: string;
@@ -419,6 +420,7 @@ export type CommunityState = {
   // Isolated non-binding fixture meetings; never a legal rights register.
   simulatedMeetings?: Record<string, import('./meeting-simulation.js').SimulatedMeeting>;
   version: 1;
+  socialDeletionProofs?: Record<string, import('./deletion-proof.js').SocialDeletionProof>;
   deletedWalletBefore?: Record<string, number>;
   deletionChallenges?: Record<string, import('./deletion-proof.js').DeletionChallenge>;
   accounts: Record<string, Account>;

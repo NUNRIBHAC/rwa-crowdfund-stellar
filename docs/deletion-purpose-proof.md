@@ -30,3 +30,23 @@ may make a new empty profile with the same public key; no old content or tokens
 are restored. Social proof still needs a dedicated provider flow bound to the
 original session/identity and a separate final destructive confirmation. A recent
 ordinary login or email match alone must not stand in for that proof.
+
+## Social foundation
+
+The local backend can tag a dedicated OAuth flow with deletion purpose bound to
+an existing linked provider subject and the exact original session. Provider
+callback verification still uses the normal state, nonce, PKCE and browser
+binding. The callback issues only a five-minute, hash-stored, one-use deletion
+proof. It does not delete data, sign in, link a new provider, or create an account.
+A different provider subject, email-only match, expired session, removed binding
+or another session cannot use it. A separate final request must still supply
+DELETE and enabled TOTP. Ordinary OAuth login never produces deletion proof.
+
+No deletion-purpose flow start route or frontend is wired yet. Do not publish or
+claim social-account support from this foundation alone. Complete normal UI
+collection, explicit review before leaving for the provider, correct fragment
+handling back in the SAME signed-in tab, new final confirmation and cancellation
+before enabling this route. Unsupported Farcaster requires its own equivalent
+purpose-bound ceremony, not a fake OAuth start. Provider login freshness must be
+requested/checked where the provider actually supports it, with honest wording
+where the callback establishes identity but not a newly typed password.

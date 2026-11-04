@@ -55,3 +55,64 @@ export function consumeWalletDeletionProof(
   const signature = Buffer.from(input.signature, 'base64');
   return signature.length === 64 && verifySignature(session.publicKey, challenge.message, signature);
 }
+
+export type SocialDeletionProof = { publicKey: string; sessionHash: string; identityHash: string; expiresAt: number };
+export type SocialDeletionPurpose = { publicKey: string; sessionHash: string; identityHash: string };
+// Called only at the start of a dedicated provider ceremony, never inferred
+// from a fresh ordinary sign-in. The chosen identity must already be linked.
+export async function socialDeletionPurpose(
+  store: CommunityStore,
+  authorization: string | undefined,
+  provider: string,
+  now = Date.now(),
+): Promise<SocialDeletionPurpose> {
+  const state = await store.read();
+  const { session, sessionHash } = sessionFor(state, authorization, now);
+  const account = state.accounts[session.publicKey];
+  if (account.authMethod !== 'social') throw new AuthError(409, 'social deletion proof requires a social account', 'deletion_unsupported');
+  const identity = Object.values(state.socialIdentities).find((i) => i.publicKey === account.publicKey && i.provider === provider);
+  if (!identity) throw new AuthError(403, 'choose a provider already linked to this account', 'deletion_proof_failed');
+  return { publicKey: account.publicKey, sessionHash, identityHash: hashToken(`${identity.provider}:${identity.subject}`) };
+}
+// Provider callback supplies only cryptographically verified identity. It
+// issues a short-lived approval, NEVER deletes anything or creates a session.
+export function issueSocialDeletionProof(
+  state: CommunityState,
+  purpose: SocialDeletionPurpose,
+  provider: string,
+  subject: string,
+  now: number,
+): { proof: string; expiresAt: number } {
+  const session = state.sessions[purpose.sessionHash];
+  const account = state.accounts[purpose.publicKey];
+  const identity = state.socialIdentities[`${provider}:${subject}`];
+  if (
+    !session ||
+    session.expiresAt <= now ||
+    session.publicKey !== purpose.publicKey ||
+    account?.authMethod !== 'social' ||
+    !identity ||
+    identity.publicKey !== purpose.publicKey ||
+    hashToken(`${provider}:${subject}`) !== purpose.identityHash
+  )
+    throw new AuthError(403, 'provider proof does not match the original account and session', 'deletion_proof_failed');
+  const proof = `bld_${randomBytes(24).toString('hex')}`;
+  const expiresAt = now + DELETION_PROOF_TTL_MS;
+  state.socialDeletionProofs ??= {};
+  for (const [id, previous] of Object.entries(state.socialDeletionProofs))
+    if (previous.expiresAt <= now || previous.sessionHash === purpose.sessionHash) delete state.socialDeletionProofs[id];
+  state.socialDeletionProofs[hashToken(proof)] = { ...purpose, expiresAt };
+  return { proof, expiresAt };
+}
+export function consumeSocialDeletionProof(state: CommunityState, authorization: string | undefined, proof: unknown, now: number): boolean {
+  const { session, sessionHash } = sessionFor(state, authorization, now);
+  if (typeof proof !== 'string' || !/^bld_[0-9a-f]{48}$/.test(proof)) return false;
+  const id = hashToken(proof);
+  const stored = state.socialDeletionProofs?.[id];
+  if (!stored || stored.expiresAt <= now || stored.publicKey !== session.publicKey || stored.sessionHash !== sessionHash) return false;
+  const stillLinked = Object.values(state.socialIdentities).some(
+    (identity) => identity.publicKey === session.publicKey && hashToken(`${identity.provider}:${identity.subject}`) === stored.identityHash,
+  );
+  delete state.socialDeletionProofs![id];
+  return stillLinked;
+}

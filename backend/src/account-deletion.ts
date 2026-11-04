@@ -1,4 +1,4 @@
-import { consumeWalletDeletionProof } from './deletion-proof.js';
+import { consumeSocialDeletionProof, consumeWalletDeletionProof } from './deletion-proof.js';
 import type { CommunityStore } from './community-store.js';
 import { AuthError, hashToken, TOTP_LOCK_MS, TOTP_MAX_FAILURES } from './accounts.js';
 import { EMAIL_MAX_FAILURES, EMAIL_LOCK_MS, verifyPassword } from './email-auth.js';
@@ -10,7 +10,7 @@ import { decryptSeed, verifyTotp } from './totp.js';
 export async function deleteEmailAccount(
   store: CommunityStore,
   authorization: string | undefined,
-  input: { confirmation?: unknown; password?: unknown; totpCode?: unknown; nonce?: unknown; signature?: unknown },
+  input: { confirmation?: unknown; password?: unknown; totpCode?: unknown; nonce?: unknown; signature?: unknown; socialProof?: unknown },
   operatorKeys: string[] = [],
   now = Date.now(),
   walletRetentionCheck?: (publicKey: string) => Promise<'clear' | 'protected' | 'unavailable'>,
@@ -38,7 +38,8 @@ export async function deleteEmailAccount(
     const key = account.publicKey;
     const credential = account.email ? state.emailCredentials[account.email] : undefined;
     const wallet = !account.authMethod;
-    if (!wallet && (account.authMethod !== 'email' || !credential?.verified || credential.publicKey !== key)) return 'unsupported';
+    const social = account.authMethod === 'social';
+    if (!wallet && !social && (account.authMethod !== 'email' || !credential?.verified || credential.publicKey !== key)) return 'unsupported';
     if (wallet && walletRetention !== 'clear') return walletRetention === 'protected' ? 'protected' : 'unavailable';
     // Do not orphan financial, issuer, assessment, operator or fixture-meeting
     // records. No manual request is created by this response.
@@ -54,6 +55,8 @@ export async function deleteEmailAccount(
     if (operatorKeys.includes(key) || protectedRecords.some((records) => JSON.stringify(records ?? {}).includes(key))) return 'protected';
     if (wallet) {
       if (!consumeWalletDeletionProof(state, authorization, input, now)) return 'proof';
+    } else if (social) {
+      if (!consumeSocialDeletionProof(state, authorization, input.socialProof, now)) return 'proof';
     } else {
       if (credential!.lockUntil && credential!.lockUntil > now) return 'locked';
       if (typeof input.password !== 'string' || !verifyPassword(input.password, credential!.passwordRecord)) {
@@ -92,6 +95,8 @@ export async function deleteEmailAccount(
       if (record.email === account.email || identities.some((identity) => identity.provider === record.provider && identity.subject === record.subject))
         delete state.socialPending[id];
     }
+    for (const [id, record] of Object.entries(state.socialDeletionProofs ?? {})) if (record.publicKey === key) delete state.socialDeletionProofs![id];
+    for (const [id, record] of Object.entries(state.socialFlows)) if (record.deletionPurpose?.publicKey === key) delete state.socialFlows[id];
     for (const [id, record] of Object.entries(state.deletionChallenges ?? {})) if (record.publicKey === key) delete state.deletionChallenges![id];
     for (const [id, record] of Object.entries(state.socialFlows)) if (record.linkTo === key) delete state.socialFlows[id];
     for (const records of [

@@ -149,3 +149,122 @@ test('wallet purpose proof does not bypass an enabled second factor', async () =
     else process.env.COMMUNITY_TOTP_KEY = old;
   }
 });
+
+async function socialFixture() {
+  const f = await fixture();
+  await f.store.change((s) => {
+    const key = f.kp.publicKey();
+    s.accounts[key].authMethod = 'social';
+    s.accounts[key].email = 'social@example.invalid';
+    s.socialIdentities['google:my-subject'] = {
+      provider: 'google',
+      subject: 'my-subject',
+      publicKey: key,
+      email: 'social@example.invalid',
+      createdAt: now,
+      lastLoginAt: now,
+    };
+  });
+  return f;
+}
+test('dedicated social callback issues only deletion proof, never deletes or creates another session', async () => {
+  const { socialDeletionPurpose } = await import('../src/deletion-proof.js');
+  const { finishSocialIdentity } = await import('../src/social-auth.js');
+  const { deleteEmailAccount } = await import('../src/account-deletion.js');
+  const { store, kp, authorization } = await socialFixture();
+  const purpose = await socialDeletionPurpose(store, authorization, 'google', now);
+  const before = await store.read();
+  const outcome = await finishSocialIdentity(
+    store,
+    {},
+    'google',
+    'my-subject',
+    'different@example.invalid',
+    true,
+    { createdAt: now, deletionPurpose: purpose },
+    now + 1,
+  );
+  assert.equal(outcome.kind, 'deletion-proof');
+  assert.ok((await store.read()).accounts[kp.publicKey()]);
+  assert.deepEqual((await store.read()).sessions, before.sessions);
+  if (outcome.kind !== 'deletion-proof') throw Error('wrong outcome');
+  await deleteEmailAccount(store, authorization, { confirmation: 'DELETE', socialProof: outcome.proof }, [], now + 2);
+  assert.equal((await store.read()).accounts[kp.publicKey()], undefined);
+});
+test('social deletion rejects different identity, another session, expired/reused proof and provider removed after callback', async () => {
+  const { socialDeletionPurpose, issueSocialDeletionProof, consumeSocialDeletionProof } = await import('../src/deletion-proof.js');
+  const { finishSocialIdentity } = await import('../src/social-auth.js');
+  const { store, kp, authorization } = await socialFixture();
+  const purpose = await socialDeletionPurpose(store, authorization, 'google', now);
+  await assert.rejects(
+    finishSocialIdentity(store, {}, 'google', 'other-subject', 'social@example.invalid', true, { createdAt: now, deletionPurpose: purpose }, now + 1),
+    { code: 'deletion_proof_failed' },
+  );
+  const result = await store.change((s) => issueSocialDeletionProof(s, purpose, 'google', 'my-subject', now));
+  const second = 'bls_' + '9'.repeat(48);
+  await store.change((s) => {
+    s.sessions[hashToken(second)] = { tokenHash: hashToken(second), publicKey: kp.publicKey(), createdAt: now, expiresAt: now + 1000000 };
+  });
+  assert.equal(await store.change((s) => consumeSocialDeletionProof(s, `Bearer ${second}`, result.proof, now)), false);
+  assert.equal(await store.change((s) => consumeSocialDeletionProof(s, authorization, result.proof, now)), true);
+  assert.equal(await store.change((s) => consumeSocialDeletionProof(s, authorization, result.proof, now)), false);
+  const expired = await store.change((s) => issueSocialDeletionProof(s, purpose, 'google', 'my-subject', now));
+  assert.equal(await store.change((s) => consumeSocialDeletionProof(s, `Bearer ${second}`, expired.proof, now + 300001)), false);
+  const removed = await store.change((s) => issueSocialDeletionProof(s, purpose, 'google', 'my-subject', now));
+  await store.change((s) => {
+    delete s.socialIdentities['google:my-subject'];
+  });
+  assert.equal(await store.change((s) => consumeSocialDeletionProof(s, authorization, removed.proof, now)), false);
+});
+test('social deletion still requires confirmation, enabled 2FA, and leaves protected state intact', async () => {
+  const { socialDeletionPurpose, issueSocialDeletionProof } = await import('../src/deletion-proof.js');
+  const { deleteEmailAccount } = await import('../src/account-deletion.js');
+  const { store, kp, authorization } = await socialFixture();
+  const purpose = await socialDeletionPurpose(store, authorization, 'google', now);
+  const result = await store.change((s) => issueSocialDeletionProof(s, purpose, 'google', 'my-subject', now));
+  await assert.rejects(deleteEmailAccount(store, authorization, { socialProof: result.proof }, [], now), { code: 'deletion_confirmation_required' });
+  await store.change((s) => {
+    s.appropriateness[kp.publicKey()] = { publicKey: kp.publicKey() } as any;
+  });
+  const before = await store.read();
+  await assert.rejects(deleteEmailAccount(store, authorization, { confirmation: 'DELETE', socialProof: result.proof }, [], now), {
+    code: 'deletion_protected_records',
+  });
+  assert.deepEqual(await store.read(), before);
+});
+
+test('social purpose proof cannot skip enabled TOTP and an ordinary provider login is not a deletion proof', async () => {
+  const { socialDeletionPurpose, issueSocialDeletionProof } = await import('../src/deletion-proof.js');
+  const { deleteEmailAccount } = await import('../src/account-deletion.js');
+  const { encryptSeed, totpAt } = await import('../src/totp.js');
+  const { store, kp, authorization } = await socialFixture();
+  const old = process.env.COMMUNITY_TOTP_KEY;
+  process.env.COMMUNITY_TOTP_KEY = 'local-social-key';
+  const seed = 'JBSWY3DPEHPK3PXP';
+  try {
+    await store.change((s) => {
+      s.accounts[kp.publicKey()].totp = {
+        status: 'enabled',
+        encSeed: encryptSeed('local-social-key', seed),
+        lastUsedStep: -1,
+        recoveryHashes: [],
+        enabledAt: now,
+        failedAttempts: 0,
+        lockUntil: null,
+      };
+    });
+    await assert.rejects(deleteEmailAccount(store, authorization, { confirmation: 'DELETE' }, [], now), { code: 'deletion_proof_failed' });
+    const purpose = await socialDeletionPurpose(store, authorization, 'google', now);
+    const first = await store.change((s) => issueSocialDeletionProof(s, purpose, 'google', 'my-subject', now));
+    await assert.rejects(deleteEmailAccount(store, authorization, { confirmation: 'DELETE', socialProof: first.proof }, [], now), {
+      code: 'deletion_factor_required',
+    });
+    assert.ok((await store.read()).accounts[kp.publicKey()]);
+    const second = await store.change((s) => issueSocialDeletionProof(s, purpose, 'google', 'my-subject', now + 1));
+    await deleteEmailAccount(store, authorization, { confirmation: 'DELETE', socialProof: second.proof, totpCode: totpAt(seed, now / 1000) }, [], now + 2);
+    assert.equal((await store.read()).accounts[kp.publicKey()], undefined);
+  } finally {
+    if (old === undefined) delete process.env.COMMUNITY_TOTP_KEY;
+    else process.env.COMMUNITY_TOTP_KEY = old;
+  }
+});

@@ -451,6 +451,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const result = await completeSocialFlow(store, process.env, provider, cfg, currentUrl, req.query.state, Date.now(), deps.socialFetch, readBind(req));
       if (result.kind === 'email') return res.redirect(302, `/account#social-email=${result.ticket}`);
       if (result.kind === 'totp') return res.redirect(302, `/account#social-totp=${result.ticket}`);
+      if (result.kind === 'deletion-proof') return res.redirect(302, `/account#deletion-proof=${result.proof}`);
       if (result.kind === 'linked') return res.redirect(302, `/account#social-linked=${provider}`);
       return res.redirect(302, `/account#social-token=${result.token}`);
     } catch (err) {
