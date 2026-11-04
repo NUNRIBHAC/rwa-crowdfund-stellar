@@ -412,3 +412,71 @@
     --gy: 68px;
   }
 }
+
+/* Approved compact mobile footer navigation (2026-11-04).
+   Desktop retains four expanded groups; mobile starts with four native,
+   keyboard-operable disclosures. Risk/context text stays visible. */
+.footer-nav-group > summary {
+  list-style: none;
+  pointer-events: none;
+}
+.footer-nav-group > summary::-webkit-details-marker {
+  display: none;
+}
+@media (max-width: 560px) {
+  .footer-brand-inner .footer-grid,
+  html[lang='de'] .footer-brand-inner .footer-grid {
+    columns: auto;
+  }
+  .footer-nav-group {
+    border-bottom: 1px solid var(--line);
+  }
+  .footer-nav-group > summary {
+    pointer-events: auto;
+    cursor: pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .footer-nav-group > summary::after {
+    content: '+';
+    font-size: 20px;
+  }
+  .footer-nav-group[open] > summary::after {
+    content: '−';
+  }
+  .footer-nav-group > summary .footer-heading {
+    margin: 0;
+  }
+  .footer-nav-group ul {
+    padding-bottom: 8px;
+  }
+  .footer-brand-inner .footer-context {
+    margin-top: 12px;
+  }
+  .footer-brand-word {
+    gap: 6px;
+  }
+}
+
+/* User's approved accordion follow-up: revealed links need a denser visual
+   cadence as well. Full-width 32px rows remain above the 24px WCAG 2.2 AA
+   minimum target size; social icons and disclosure headings retain 44px.
+   Wrapped labels grow naturally instead of clipping at a fixed height. */
+@media (max-width: 560px) {
+  .footer-nav-group li > a {
+    display: flex;
+    width: 100%;
+    min-height: 32px;
+    min-width: 24px;
+    padding-block: 4px;
+    line-height: 1.4;
+    box-sizing: border-box;
+  }
+  .footer-nav-group ul {
+    line-height: 1.4;
+    padding-bottom: 4px;
+  }
+}

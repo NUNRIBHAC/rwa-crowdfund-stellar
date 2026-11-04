@@ -1,7 +1,36 @@
+import { useEffect, useState, type ReactNode } from 'react';
 import RiskBanner from './RiskBanner';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import { lockupFor, useTheme } from '../theme';
+
+function FooterGroup({ title, children }: { title: string; children: ReactNode }) {
+  const [mobile, setMobile] = useState(() => window.matchMedia?.('(max-width: 560px)').matches ?? false);
+  const [open, setOpen] = useState(() => !mobile);
+  useEffect(() => {
+    const query = window.matchMedia?.('(max-width: 560px)');
+    if (!query) return;
+    const update = () => {
+      setMobile(query.matches);
+      setOpen(!query.matches);
+    };
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  return (
+    <details className="footer-nav-group" open={open} onToggle={(event) => setOpen(event.currentTarget.open)}>
+      <summary
+        tabIndex={mobile ? 0 : -1}
+        onClick={(event) => {
+          if (!mobile) event.preventDefault();
+        }}
+      >
+        <h2 className="footer-heading">{title}</h2>
+      </summary>
+      {children}
+    </details>
+  );
+}
 
 export default function Footer() {
   const { m } = useI18n();
@@ -63,8 +92,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="footer-grid">
-            <div>
-              <h2 className="footer-heading">{m.footer.platform}</h2>
+            <FooterGroup title={m.footer.platform}>
               <ul>
                 <li>
                   <a href={routeHash({ name: 'investments' })}>{m.footer.invest}</a>
@@ -76,9 +104,8 @@ export default function Footer() {
                   <a href={routeHash({ name: 'financing' })}>{m.footer.financingIssuers}</a>
                 </li>
               </ul>
-            </div>
-            <div>
-              <h2 className="footer-heading">{m.footer.legal}</h2>
+            </FooterGroup>
+            <FooterGroup title={m.footer.legal}>
               <ul>
                 <li>
                   <a href={routeHash({ name: 'terms-of-service' })}>{m.footer.termsOfService}</a>
@@ -102,9 +129,8 @@ export default function Footer() {
                   <a href={routeHash({ name: 'business-continuity' })}>{m.footer.businessContinuity}</a>
                 </li>
               </ul>
-            </div>
-            <div>
-              <h2 className="footer-heading">{m.footer.learn}</h2>
+            </FooterGroup>
+            <FooterGroup title={m.footer.learn}>
               <ul>
                 <li>
                   <a href={routeHash({ name: 'learn' })}>{m.footer.instrumentHub}</a>
@@ -122,9 +148,8 @@ export default function Footer() {
                   <a href={routeHash({ name: 'about' })}>{m.footer.aboutProject}</a>
                 </li>
               </ul>
-            </div>
-            <div>
-              <h2 className="footer-heading">{m.footer.communication}</h2>
+            </FooterGroup>
+            <FooterGroup title={m.footer.communication}>
               <ul>
                 <li>
                   <a href={routeHash({ name: 'events' })}>{m.contentPages.eventsTitle}</a>
@@ -142,7 +167,7 @@ export default function Footer() {
                   <a href={routeHash({ name: 'podcast' })}>{m.contentPages.podcastTitle}</a>
                 </li>
               </ul>
-            </div>
+            </FooterGroup>
             <div className="footer-context">
               <p className="footer-legal">
                 {m.footer.legalPre}{' '}
