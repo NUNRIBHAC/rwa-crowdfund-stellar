@@ -358,8 +358,14 @@
     font-size: 15px;
   }
   .mobile-menu-open .lang-select {
-    width: 80px;
-    max-width: 90px;
+    /* Content-sized like the desktop side control: the fixed 80px clipped
+       the final glyph of the five-character locale codes (ZH-CN/ZH-TW)
+       under the select arrow at every mobile width (QA-confirmed on the
+       live build). min-width keeps the compact size for short codes;
+       max-width caps at the panel so long codes can never overflow it. */
+    width: auto;
+    min-width: 80px;
+    max-width: 100%;
   }
   .mobile-menu-open .header-theme-toggle {
     justify-self: end;
