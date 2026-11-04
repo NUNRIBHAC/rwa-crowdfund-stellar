@@ -73,12 +73,12 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           <span className={`status-chip ${status === 'funded' ? 'status-funded' : status === 'ended' ? 'status-ended' : 'status-open'}`}>{statusLabel}</span>
         </div>
         <h1 className="page-title">{campaign.name}</h1>
-        <CampaignPhoto campaignId={campaign.id} variant="campaign" />
         {profile ? <p className="campaign-issuer">{profile.issuer}</p> : <p className="campaign-issuer">{m.campaign.issuerMissing}</p>}
       </header>
 
       <div className="campaign-columns">
         <div className="campaign-main">
+          <CampaignPhoto campaignId={campaign.id} variant="campaign" />
           <dl className="metric-cards">
             <div className="metric-card">
               <dt>{m.campaign.assetClass}</dt>

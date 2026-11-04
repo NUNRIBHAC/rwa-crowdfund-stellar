@@ -15,24 +15,6 @@ export default function Home({ market }: { market: Market }) {
     <>
       <Hero mode={mode} />
 
-      <section aria-label={m.home.stepsAria}>
-        <h2 className="section-title">{m.home.stepsTitle}</h2>
-        <ol className="step-cards">
-          {m.home.steps.map((s, i) => (
-            <li key={i} className="step-card">
-              <span className="step-num" aria-hidden="true">
-                {i + 1}
-              </span>
-              <h3>{s.title}</h3>
-              <p>{s.text}</p>
-            </li>
-          ))}
-        </ol>
-        <p className="section-link">
-          <a href={routeHash({ name: 'how-it-works' })}>{m.home.fullJourneyLink}</a>
-        </p>
-      </section>
-
       {latest.length > 0 && (
         <section aria-label={m.home.latestAria}>
           <div className="registry-bar">
@@ -41,7 +23,7 @@ export default function Home({ market }: { market: Market }) {
               {m.home.allInvestments}
             </a>
           </div>
-          <div className="card-grid">
+          <div className="card-grid home-editorial-cards">
             {latest.map((c) => (
               <CampaignCard
                 key={c.id}
@@ -61,6 +43,24 @@ export default function Home({ market }: { market: Market }) {
           </div>
         </section>
       )}
+
+      <section aria-label={m.home.stepsAria}>
+        <h2 className="section-title">{m.home.stepsTitle}</h2>
+        <ol className="step-cards">
+          {m.home.steps.map((s, i) => (
+            <li key={i} className="step-card">
+              <span className="step-num" aria-hidden="true">
+                {i + 1}
+              </span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="section-link">
+          <a href={routeHash({ name: 'how-it-works' })}>{m.home.fullJourneyLink}</a>
+        </p>
+      </section>
 
       <section aria-label={m.home.instrumentsAria}>
         <h2 className="section-title">{m.home.instrumentsTitle}</h2>
