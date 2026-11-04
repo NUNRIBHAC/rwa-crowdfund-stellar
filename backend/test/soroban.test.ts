@@ -1,10 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {
   Account,
+  Address,
   Asset,
   Keypair,
   Networks,
@@ -49,8 +51,39 @@ let badWasm = false,
 let lastEnvelope = '';
 let balanceUnits = 0n;
 const sends: string[] = [];
+const reviewedWasmHash = createHash('sha256').update(fs.readFileSync(wasmPath)).digest();
+// Fake instance ledger entry: carries the contract's current wasm hash, the
+// field verifyCode now reads per request instead of downloading full code.
+// badWasm swaps in a wrong hash; restoreRequired empties the live entries
+// (archived instance).
+const instanceEntry = () => ({
+  latestLedger: 1,
+  entries: restoreRequired
+    ? []
+    : [
+        {
+          key: '',
+          val: xdr.LedgerEntryData.contractData(
+            new xdr.ContractDataEntry({
+              ext: xdr.ExtensionPoint.v0(),
+              contract: Address.fromString(contractId).toScAddress(),
+              key: xdr.ScVal.scvLedgerKeyContractInstance(),
+              durability: xdr.ContractDataDurability.fromName('persistent'),
+              val: xdr.ScVal.scvContractInstance(
+                new xdr.ScContractInstance({
+                  executable: xdr.ContractExecutable.contractExecutableWasm(badWasm ? Buffer.alloc(32, 9) : reviewedWasmHash),
+                  storage: [],
+                }),
+              ),
+            }),
+          ),
+          lastModifiedLedgerSeq: 1,
+          liveUntilLedgerSeq: 100,
+        },
+      ],
+});
 const client: any = {
-  getContractWasmByContractId: async () => (badWasm ? Buffer.from('wrong') : fs.readFileSync(wasmPath)),
+  getLedgerEntries: async () => instanceEntry(),
   getAccount: async (pub: string) => {
     if (missingAccount) throw new Error('Account not found');
     return new Account(pub, '1');

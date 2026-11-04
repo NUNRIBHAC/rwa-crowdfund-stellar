@@ -52,6 +52,21 @@ const lock = <T>(fn: () => Promise<T>): Promise<T> => {
 // Network I/O (simulation, submission, status polls) runs OUTSIDE the lock:
 // only the read-check-save phases hold it, so a slow RPC never stalls every
 // other wallet operation behind the advisory lock (finding 5).
+// Bounded fan-out: at most `limit` items in flight, result order preserved.
+// Caps simultaneous public-RPC calls so a listing burst cannot fan out to
+// campaigns x per-campaign reads at once on a shared egress IP.
+async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const results = new Array<R>(items.length);
+  let next = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length) {
+      const i = next++;
+      results[i] = await fn(items[i]);
+    }
+  });
+  await Promise.all(workers);
+  return results;
+}
 const JOURNAL_OPS_LOCK_KEY = 'soroban-journal-ops';
 async function guarded<T>(fn: () => Promise<T>): Promise<T> {
   return lock(async () => {
@@ -196,9 +211,25 @@ export function amountUnits(amount: string): bigint {
 function jsonValue(value: any): any {
   return JSON.parse(JSON.stringify(value, (_k, v) => (typeof v === 'bigint' ? v.toString() : v)));
 }
+// Per-request code-integrity check without the full Wasm download. The
+// contract instance ledger entry carries the live wasm hash, and that hash
+// IS the sha256 of the deployed code, so comparing it against the pinned
+// reviewed hash is exactly the check getContractWasmByContractId + local
+// sha256 performed - a small entry read instead of a full code download
+// (the dominant per-campaign cost of listing and read endpoints). The read
+// is live on every call: no cached verdict, no TTL, and an upgraded,
+// replaced or archived contract fails closed exactly as before.
 async function verifyCode(client: rpc.Server, e: V1Entry): Promise<void> {
-  const wasm = await client.getContractWasmByContractId(e.contractId);
-  if (createHash('sha256').update(wasm).digest('hex') !== WASM_HASH) throw new Error('contract code does not match reviewed crowdfund Wasm; refusing');
+  const response = await client.getLedgerEntries(new Contract(e.contractId).getFootprint());
+  const found = response.entries[0];
+  if (!found) throw new Error('contract state archived; operator restoration required');
+  const data = found.val;
+  if (data.type !== 'contractData') throw new Error('contract instance entry missing; refusing');
+  const instance = data.value.val;
+  if (instance.type !== 'scvContractInstance') throw new Error('contract instance entry malformed; refusing');
+  const executable = instance.instance.executable;
+  if (executable.type !== 'contractExecutableWasm') throw new Error('contract is not Wasm-executable; refusing');
+  if (Buffer.from(executable.wasmHash.value).toString('hex') !== WASM_HASH) throw new Error('contract code does not match reviewed crowdfund Wasm; refusing');
 }
 async function viewContract(client: rpc.Server, contractId: string, method: string, args: any[] = [], actor?: string): Promise<any> {
   // Simulation only: this dummy account is never submitted or funded.
@@ -221,17 +252,24 @@ async function view(client: rpc.Server, e: V1Entry, method: string, args: any[] 
 export async function sorobanCampaigns(actor?: string): Promise<any[]> {
   if (actor) actorAddress(actor);
   const client = sorobanDeps.client();
-  return Promise.all(
-    v1Entries().map(async (e) => {
-      await verifyCode(client, e);
-      const config = await view(client, e, 'get_config');
-      if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
-      const raised = await view(client, e, 'total_raised');
-      const withdrawn = await view(client, e, 'is_withdrawn');
-      const balance = actor ? await view(client, e, 'balance_of', [actorAddress(actor).toScVal()], actor) : null;
-      return jsonValue({ ...e, mode: 'soroban', config, raised, withdrawn, balance, network: 'testnet', productionEligible: false });
-    }),
-  );
+  return mapLimit(v1Entries(), 3, async (e) => {
+    // Verification runs concurrently with the live reads, and the combined
+    // promise rejects when verification fails, so unverified data never
+    // leaves this function. Every value returned is fresh chain state read
+    // during this request - fresh INDIVIDUAL reads at possibly different
+    // ledger sequences, not one atomic snapshot across campaigns or fields,
+    // exactly as when the reads were sequential. No cached display data
+    // participates in invest/refund or reconciliation decisions.
+    const [, config, raised, withdrawn, balance] = await Promise.all([
+      verifyCode(client, e),
+      view(client, e, 'get_config'),
+      view(client, e, 'total_raised'),
+      view(client, e, 'is_withdrawn'),
+      actor ? view(client, e, 'balance_of', [actorAddress(actor).toScVal()], actor) : Promise.resolve(null),
+    ]);
+    if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+    return jsonValue({ ...e, mode: 'soroban', config, raised, withdrawn, balance, network: 'testnet', productionEligible: false });
+  });
 }
 function verifySignedTx(actor: string, xdrIn: string): Transaction {
   const tx = TransactionBuilder.fromXDR(xdrIn, passphrase);
@@ -306,11 +344,13 @@ export async function sorobanCampaignFundingState(
   if (!e) return null;
   if (isV2Entry(e)) throw new Error('v2 contract-set campaigns have no v1 funding-state view');
   const client = sorobanDeps.client();
-  await verifyCode(client, e);
-  const config = await view(client, e, 'get_config');
+  const [, config, raised, withdrawn] = await Promise.all([
+    verifyCode(client, e),
+    view(client, e, 'get_config'),
+    view(client, e, 'total_raised'),
+    view(client, e, 'is_withdrawn'),
+  ]);
   if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
-  const raised = await view(client, e, 'total_raised');
-  const withdrawn = await view(client, e, 'is_withdrawn');
   const raw = Number(config.deadline);
   // Contracts store the deadline in unix seconds; tolerate a millisecond value.
   const deadlineSeconds = raw > 1e12 ? Math.floor(raw / 1000) : raw;
@@ -327,10 +367,12 @@ export async function sorobanInvestorEntitlement(id: string, actor: string): Pro
   const e = entries().find((x) => x.id === id);
   if (!e || isV2Entry(e)) return { registered: false, balanceUnits: 0n };
   const client = sorobanDeps.client();
-  await verifyCode(client, e);
-  const config = await view(client, e, 'get_config');
+  const [, config, balance] = await Promise.all([
+    verifyCode(client, e),
+    view(client, e, 'get_config'),
+    view(client, e, 'balance_of', [actorAddress(actor).toScVal()], actor),
+  ]);
   if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
-  const balance = await view(client, e, 'balance_of', [actorAddress(actor).toScVal()], actor);
   return { registered: true, balanceUnits: BigInt(balance ?? 0) };
 }
 
