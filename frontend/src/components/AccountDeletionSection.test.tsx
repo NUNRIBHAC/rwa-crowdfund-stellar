@@ -8,12 +8,20 @@ const fixtures = vi.hoisted(() => ({
   deleteAccount: vi.fn(),
   fetchProviders: vi.fn().mockResolvedValue({ providers: [] }),
   startProvider: vi.fn(),
+  fcNonce: vi.fn(),
+  fcCreate: vi.fn(),
+  fcStatus: vi.fn(),
+  fcVerify: vi.fn(),
 }));
 vi.mock('../community/CommunityAuth', () => ({ useCommunityAuth: () => fixtures.auth }));
 vi.mock('../community/api', () => ({
   deleteOwnAccount: fixtures.deleteAccount,
   fetchDeletionProviders: fixtures.fetchProviders,
   startDeletionProvider: fixtures.startProvider,
+  farcasterDeletionNonce: fixtures.fcNonce,
+  farcasterCreateChannel: fixtures.fcCreate,
+  farcasterChannelStatus: fixtures.fcStatus,
+  farcasterDeletionVerify: fixtures.fcVerify,
 }));
 afterEach(() => {
   cleanup();
@@ -117,4 +125,40 @@ test('strict-mode effect replay keeps callback proof while stripping the fragmen
   await screen.findByText(/Linked identity checked/);
   expect(location.hash).toBe('');
   expect(fixtures.deleteAccount).not.toHaveBeenCalled();
+});
+
+test('Farcaster deletion cancel ignores a late relay response and never deletes', async () => {
+  fixtures.auth.account = { authMethod: 'social', totpEnabled: false, publicKey: 'owner' };
+  fixtures.fetchProviders.mockResolvedValue({ providers: ['farcaster'] });
+  fixtures.fcNonce.mockResolvedValue({ nonce: 'nonce', domain: 'example.test', siweUri: 'https://example.test/account?purpose=account-deletion' });
+  fixtures.fcCreate.mockResolvedValue({ channelToken: 'fixturechannel', url: 'https://example.test/local-fixture' });
+  fixtures.fcStatus.mockResolvedValue({ state: 'completed', message: 'fixture', signature: 'fixture' });
+  open();
+  const provider = await screen.findByRole('button', { name: 'Verify linked identity: Farcaster' });
+  fireEvent.change(screen.getByLabelText('Type DELETE to confirm'), { target: { value: 'DELETE' } });
+  fireEvent.click(provider);
+  await screen.findByRole('link', { name: 'Verify linked identity: Farcaster' });
+  expect(fixtures.fcNonce).toHaveBeenCalledWith('fixture-token', 'DELETE');
+  fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+  expect(screen.getByRole('button', { name: 'Delete account' })).toBeTruthy();
+  expect(fixtures.fcVerify).not.toHaveBeenCalled();
+  expect(fixtures.deleteAccount).not.toHaveBeenCalled();
+});
+
+test('Farcaster returned identity proof resets final confirmation and never auto-deletes', async () => {
+  fixtures.auth.account = { authMethod: 'social', totpEnabled: false, publicKey: 'owner' };
+  fixtures.fetchProviders.mockResolvedValue({ providers: ['farcaster'] });
+  fixtures.fcNonce.mockResolvedValue({ nonce: 'nonce', domain: 'example.test', siweUri: 'https://example.test/account?purpose=account-deletion' });
+  fixtures.fcCreate.mockResolvedValue({ channelToken: 'fixturechannel', url: 'https://example.test/local-fixture' });
+  fixtures.fcStatus.mockResolvedValue({ state: 'completed', message: 'fixture', signature: 'fixture' });
+  fixtures.fcVerify.mockResolvedValue({ proof: 'bld_' + 'd'.repeat(48), expiresAt: Date.now() + 300000 });
+  open();
+  const provider = await screen.findByRole('button', { name: 'Verify linked identity: Farcaster' });
+  fireEvent.change(screen.getByLabelText('Type DELETE to confirm'), { target: { value: 'DELETE' } });
+  fireEvent.click(provider);
+  await screen.findByText(/Linked identity checked/, {}, { timeout: 4000 });
+  expect((screen.getByLabelText('Type DELETE to confirm') as HTMLInputElement).value).toBe('');
+  expect(screen.getByRole('button', { name: 'Permanently delete account' }).hasAttribute('disabled')).toBe(true);
+  expect(fixtures.deleteAccount).not.toHaveBeenCalled();
+  expect(fixtures.fcVerify).toHaveBeenCalledWith('fixture-token', 'nonce', 'fixture', 'fixture');
 });

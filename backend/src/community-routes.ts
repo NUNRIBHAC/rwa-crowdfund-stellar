@@ -55,7 +55,14 @@ import {
   socialRegistrationAllowedEmails,
   startSocialFlow,
 } from './social-auth.js';
-import { defaultFarcasterVerifier, farcasterDomain, issueFarcasterNonce, verifyFarcasterSignIn, type FarcasterVerifier } from './farcaster-auth.js';
+import {
+  defaultFarcasterVerifier,
+  farcasterDomain,
+  issueFarcasterDeletionNonce,
+  issueFarcasterNonce,
+  verifyFarcasterSignIn,
+  type FarcasterVerifier,
+} from './farcaster-auth.js';
 import { allowedRecipientsFromEnv, type Mailer } from './mailer.js';
 import { MailerError } from './mailer.js';
 
@@ -377,6 +384,46 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
       );
       res.json({ nonce, domain, siweUri: `https://${domain}/account` });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  // Explicit deletion identity proof. Does not alter sign-in/link/mail routes.
+  router.post('/api/auth/account/deletion-farcaster/nonce', async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try {
+      const domain = farcasterDomain(process.env);
+      if (!domain) throw new CommunityError(404, 'not found', 'not_found');
+      const account = await authenticate(store, req.header('authorization'));
+      if (!service.limiter.allow(`deletion-proof:${account.publicKey}`, 10, 60 * 60 * 1000)) throw new AuthError(429, 'retry later', 'rate_limited');
+      const bind = newBindSecret();
+      const result = await issueFarcasterDeletionNonce(store, req.header('authorization'), bind.hash, req.body?.confirmation);
+      res.setHeader(
+        'Set-Cookie',
+        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
+      );
+      res.json({ ...result, domain, siweUri: `https://${domain}/account?purpose=account-deletion` });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/account/deletion-farcaster/verify', async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try {
+      if (!farcasterDomain(process.env)) throw new CommunityError(404, 'not found', 'not_found');
+      const account = await authenticate(store, req.header('authorization'));
+      if (!service.limiter.allow(`deletion-farcaster-verify:${account.publicKey}`, 10, 60 * 60 * 1000)) throw new AuthError(429, 'retry later', 'rate_limited');
+      const verifier = deps.farcasterVerifier ?? (farcasterVerifierCache ??= defaultFarcasterVerifier(process.env));
+      const result = await verifyFarcasterSignIn(
+        store,
+        process.env,
+        verifier,
+        { nonce: req.body?.nonce, message: req.body?.message, signature: req.body?.signature, bind: readBind(req) },
+        Date.now(),
+        req.header('authorization'),
+      );
+      if (result.kind !== 'deletion-proof') throw new AuthError(403, 'deletion proof required', 'deletion_proof_failed');
+      res.json({ proof: result.proof, expiresAt: result.expiresAt });
     } catch (err) {
       sendError(res, err);
     }
@@ -950,11 +997,16 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (account.authMethod !== 'social') return res.json({ providers: [] });
       const state = await store.read();
       res.json({
-        providers: SOCIAL_PROVIDERS.filter(
-          (provider) =>
-            socialConfigFromEnv(process.env, provider) !== null &&
-            Object.values(state.socialIdentities).some((identity) => identity.publicKey === account.publicKey && identity.provider === provider),
-        ),
+        providers: [
+          ...SOCIAL_PROVIDERS.filter(
+            (provider) =>
+              socialConfigFromEnv(process.env, provider) !== null &&
+              Object.values(state.socialIdentities).some((identity) => identity.publicKey === account.publicKey && identity.provider === provider),
+          ),
+          ...(farcasterDomain(process.env) && Object.values(state.socialIdentities).some((i) => i.publicKey === account.publicKey && i.provider === 'farcaster')
+            ? ['farcaster']
+            : []),
+        ],
       });
     } catch (err) {
       sendError(res, err);

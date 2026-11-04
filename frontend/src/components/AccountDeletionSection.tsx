@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { deleteOwnAccount, fetchDeletionProviders, startDeletionProvider } from '../community/api';
+import {
+  deleteOwnAccount,
+  fetchDeletionProviders,
+  startDeletionProvider,
+  farcasterDeletionNonce,
+  farcasterDeletionVerify,
+  farcasterCreateChannel,
+  farcasterChannelStatus,
+} from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { socialProviderDisplayName } from '../community/social';
 import { useI18n } from '../i18n';
@@ -8,12 +16,17 @@ export default function AccountDeletionSection() {
   const { account, token, signOut, disableSocialValidation } = useCommunityAuth();
   const { m } = useI18n();
   const text = m.community.deletion;
+  const farcasterRun = useRef(0);
+  const [farcasterUrl, setFarcasterUrl] = useState('');
   const [socialProof, setSocialProof] = useState('');
   const [providers, setProviders] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const proofOwner = useRef('');
   useEffect(() => {
     let active = true;
+    farcasterRun.current += 1;
+    setFarcasterUrl('');
+    setBusy(false);
     const owner = `${account?.publicKey ?? ''}:${token}`;
     if (proofOwner.current !== owner) {
       proofOwner.current = owner;
@@ -43,6 +56,7 @@ export default function AccountDeletionSection() {
     }
     return () => {
       active = false;
+      farcasterRun.current += 1;
     };
   }, [account?.publicKey, account?.authMethod, token]);
   const [confirmation, setConfirmation] = useState('');
@@ -52,6 +66,9 @@ export default function AccountDeletionSection() {
   const [error, setError] = useState(false);
   if (!account) return null;
   const cancel = () => {
+    farcasterRun.current += 1;
+    setFarcasterUrl('');
+    setBusy(false);
     setOpen(false);
     setPassword('');
     setCode('');
@@ -114,7 +131,7 @@ export default function AccountDeletionSection() {
             {text.confirmation}
             <input autoComplete="off" required value={confirmation} onChange={(event) => setConfirmation(event.target.value)} />
           </label>
-          {account.authMethod === 'social' && !socialProof && (
+          {account.authMethod === 'social' && !socialProof && !farcasterUrl && (
             <div className="community-actions" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {providers.map((provider) => (
                 <button
@@ -125,10 +142,41 @@ export default function AccountDeletionSection() {
                   onClick={async () => {
                     setBusy(true);
                     setError(false);
+                    const operation = ++farcasterRun.current;
                     try {
+                      if (provider === 'farcaster') {
+                        const run = operation;
+                        const n = await farcasterDeletionNonce(token, confirmation);
+                        if (run !== farcasterRun.current) return;
+                        const channel = await farcasterCreateChannel(n.nonce, n.domain, n.siweUri);
+                        if (run !== farcasterRun.current) return;
+                        setFarcasterUrl(channel.url);
+                        const deadline = Date.now() + 5 * 60 * 1000;
+                        while (Date.now() < deadline && run === farcasterRun.current) {
+                          await new Promise((resolve) => setTimeout(resolve, 2000));
+                          if (run !== farcasterRun.current) return;
+                          const status = await farcasterChannelStatus(channel.channelToken);
+                          if (run !== farcasterRun.current) return;
+                          if (status.state === 'completed' && status.message && status.signature) {
+                            const proof = await farcasterDeletionVerify(token, n.nonce, status.message, status.signature);
+                            if (run !== farcasterRun.current) return;
+                            setSocialProof(proof.proof);
+                            setConfirmation('');
+                            setCode('');
+                            setFarcasterUrl('');
+                            setBusy(false);
+                            return;
+                          }
+                          if (status.state === 'error') throw new Error('provider unavailable');
+                        }
+                        if (run === farcasterRun.current) throw new Error('provider expired');
+                        return;
+                      }
                       const result = await startDeletionProvider(token, provider, confirmation);
                       location.assign(result.url);
                     } catch {
+                      if (operation !== farcasterRun.current) return;
+                      setFarcasterUrl('');
                       setError(true);
                       setBusy(false);
                     }
@@ -139,6 +187,11 @@ export default function AccountDeletionSection() {
               ))}
             </div>
           )}
+          {farcasterUrl && (
+            <a className="btn" href={farcasterUrl} target="_blank" rel="noopener noreferrer">
+              {text.providerVerify}: Farcaster
+            </a>
+          )}
           <div className="community-actions" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <button
               className="btn"
@@ -147,7 +200,7 @@ export default function AccountDeletionSection() {
             >
               {text.submit}
             </button>
-            <button className="btn" type="button" disabled={busy} onClick={cancel}>
+            <button className="btn" type="button" disabled={busy && !farcasterUrl} onClick={cancel}>
               {text.cancel}
             </button>
           </div>

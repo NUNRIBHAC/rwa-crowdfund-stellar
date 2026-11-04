@@ -740,3 +740,8 @@ export const deleteOwnAccount = (token: string, proof: { confirmation: string; p
 export const fetchDeletionProviders = (token: string) => call<{ providers: string[] }>('/api/auth/account/deletion-providers', { token });
 export const startDeletionProvider = (token: string, provider: string, confirmation: string) =>
   call<{ url: string }>(`/api/auth/account/deletion-provider/${encodeURIComponent(provider)}/start`, { method: 'POST', token, body: { confirmation } });
+
+export const farcasterDeletionNonce = (token: string, confirmation: string) =>
+  call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/account/deletion-farcaster/nonce', { token, body: { confirmation } });
+export const farcasterDeletionVerify = (token: string, nonce: string, message: string, signature: string) =>
+  call<{ proof: string; expiresAt: number }>('/api/auth/account/deletion-farcaster/verify', { token, body: { nonce, message, signature } });

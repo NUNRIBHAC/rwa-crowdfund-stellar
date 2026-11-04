@@ -17,7 +17,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { createAppClient, viemConnector } from '@farcaster/auth-client';
 import { recoverMessageAddress } from 'viem';
 import { parseSiweMessage } from 'viem/siwe';
-import { AuthError } from './accounts.js';
+import { AuthError, hashToken } from './accounts.js';
 import type { CommunityStore } from './community-store.js';
 import { bindMatches, finishSocialIdentity, type SocialLoginResult } from './social-auth.js';
 
@@ -94,6 +94,7 @@ export async function verifyFarcasterSignIn(
   verifier: FarcasterVerifier,
   input: { nonce: unknown; message: unknown; signature: unknown; bind: unknown },
   now = Date.now(),
+  deletionAuthorization?: string,
 ): Promise<SocialLoginResult> {
   const expired = () => new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
   const domain = farcasterDomain(env);
@@ -113,6 +114,11 @@ export async function verifyFarcasterSignIn(
     const f = s.socialFlows[key];
     if (!f || f.provider !== FLOW_PROVIDER || f.expiresAt <= now) return null;
     if (!f.bindHash || !bindMatches(f.bindHash, input.bind)) return null;
+    // A generic verify route cannot consume a deletion nonce, nor vice versa.
+    if (f.deletionPurpose) {
+      const token = deletionAuthorization?.match(/^Bearer (bls_[0-9a-f]{48})$/)?.[1];
+      if (!token || hashToken(token) !== f.deletionPurpose.sessionHash) return null;
+    } else if (deletionAuthorization !== undefined) return null;
     delete s.socialFlows[key];
     return f;
   });

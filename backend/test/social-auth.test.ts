@@ -1019,23 +1019,44 @@ test('Farcaster deletion foundation: dedicated signed URI, linked fid and origin
   const verifier = defaultFarcasterVerifier({}, stubConnector(3357330n));
   const ordinary = await issueFarcasterDeletionNonce(store, authorization, bind.hash, 'DELETE');
   await assert.rejects(
-    verifyFarcasterSignIn(store, { FARCASTER_AUTH_DOMAIN: FC_DOMAIN }, verifier, { nonce: ordinary.nonce, ...(await siwe(ordinary.nonce)), bind: bind.secret }),
+    verifyFarcasterSignIn(
+      store,
+      { FARCASTER_AUTH_DOMAIN: FC_DOMAIN },
+      verifier,
+      { nonce: ordinary.nonce, ...(await siwe(ordinary.nonce)), bind: bind.secret },
+      Date.now(),
+      authorization,
+    ),
     { code: 'social_exchange_failed' },
   );
   const otherIdentity = await issueFarcasterDeletionNonce(store, authorization, bind.hash, 'DELETE');
   const otherSigned = await siwe(otherIdentity.nonce, { uri: `https://${FC_DOMAIN}/account?purpose=account-deletion` }, fcAccount, 123);
   await assert.rejects(
-    verifyFarcasterSignIn(store, { FARCASTER_AUTH_DOMAIN: FC_DOMAIN }, defaultFarcasterVerifier({}, stubConnector(123n)), {
-      nonce: otherIdentity.nonce,
-      ...otherSigned,
-      bind: bind.secret,
-    }),
+    verifyFarcasterSignIn(
+      store,
+      { FARCASTER_AUTH_DOMAIN: FC_DOMAIN },
+      defaultFarcasterVerifier({}, stubConnector(123n)),
+      {
+        nonce: otherIdentity.nonce,
+        ...otherSigned,
+        bind: bind.secret,
+      },
+      Date.now(),
+      authorization,
+    ),
     { code: 'deletion_proof_failed' },
   );
   const dedicated = await issueFarcasterDeletionNonce(store, authorization, bind.hash, 'DELETE');
   const signed = await siwe(dedicated.nonce, { uri: `https://${FC_DOMAIN}/account?purpose=account-deletion` });
   const before = await store.read();
-  const result = await verifyFarcasterSignIn(store, { FARCASTER_AUTH_DOMAIN: FC_DOMAIN }, verifier, { nonce: dedicated.nonce, ...signed, bind: bind.secret });
+  const result = await verifyFarcasterSignIn(
+    store,
+    { FARCASTER_AUTH_DOMAIN: FC_DOMAIN },
+    verifier,
+    { nonce: dedicated.nonce, ...signed, bind: bind.secret },
+    Date.now(),
+    authorization,
+  );
   assert.equal(result.kind, 'deletion-proof');
   if (result.kind !== 'deletion-proof') throw new Error('wrong outcome');
   const { consumeSocialDeletionProof } = await import('../src/deletion-proof.js');
@@ -1044,9 +1065,19 @@ test('Farcaster deletion foundation: dedicated signed URI, linked fid and origin
   assert.deepEqual(after.accounts, before.accounts);
   assert.deepEqual(after.sessions, before.sessions);
   assert.deepEqual(after.socialIdentities, before.socialIdentities);
-  await assert.rejects(verifyFarcasterSignIn(store, { FARCASTER_AUTH_DOMAIN: FC_DOMAIN }, verifier, { nonce: dedicated.nonce, ...signed, bind: bind.secret }), {
-    code: 'social_flow_expired',
-  });
+  await assert.rejects(
+    verifyFarcasterSignIn(
+      store,
+      { FARCASTER_AUTH_DOMAIN: FC_DOMAIN },
+      verifier,
+      { nonce: dedicated.nonce, ...signed, bind: bind.secret },
+      Date.now(),
+      authorization,
+    ),
+    {
+      code: 'social_flow_expired',
+    },
+  );
 });
 
 test('Farcaster client builds the dedicated deletion URI without replacing it', async () => {
@@ -1066,4 +1097,46 @@ test('Farcaster client builds the dedicated deletion URI without replacing it', 
   assert.equal(built.isError, false);
   assert.equal(built.siweMessage?.uri, uri);
   assert.equal(built.siweMessage?.statement, 'Farcaster Auth');
+});
+
+test('dedicated Farcaster deletion HTTP routes separate identity proof from login and final deletion', async () => {
+  const fake = await makeFakeProvider('google', { email: 'fc-http@example.com', emailVerified: true });
+  const { base, store } = await startApp(
+    { ...CONF, FARCASTER_AUTH_DOMAIN: FC_DOMAIN, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'fc-http@example.com' },
+    { socialFetch: fake.fetchImpl, farcasterVerifier: defaultFarcasterVerifier({}, stubConnector(3357330n)) },
+  );
+  const login = await driveFlow(base, fake.fetchImpl, fake.state);
+  const token = login.headers.get('location')!.split('social-token=')[1];
+  const state = await store.read();
+  const publicKey = Object.keys(state.accounts)[0];
+  await store.change((s) => {
+    s.socialIdentities['farcaster:3357330'] = { provider: 'farcaster', subject: '3357330', publicKey, createdAt: Date.now(), lastLoginAt: Date.now() };
+  });
+  const headers = { authorization: `Bearer ${token}`, 'content-type': 'application/json' };
+  const post = (path: string, body: unknown, extra = {}) =>
+    fetch(base + path, { method: 'POST', headers: { ...headers, ...extra }, body: JSON.stringify(body) });
+  assert.deepEqual((await (await fetch(base + '/api/auth/account/deletion-providers', { headers })).json()).providers, ['google', 'farcaster']);
+  assert.equal((await post('/api/auth/account/deletion-farcaster/nonce', {})).status, 400);
+  const start = await post('/api/auth/account/deletion-farcaster/nonce', { confirmation: 'DELETE' });
+  assert.equal(start.status, 200);
+  const n = await start.json();
+  assert.equal(n.siweUri, `https://${FC_DOMAIN}/account?purpose=account-deletion`);
+  const cookie = (start.headers.get('set-cookie') ?? '').split(';')[0];
+  const signed = await siwe(n.nonce, { uri: n.siweUri });
+  // Existing public verifier cannot consume deletion nonce, even with cookie.
+  assert.equal((await post('/api/auth/farcaster/verify', { nonce: n.nonce, ...signed }, { cookie })).status, 401);
+  assert.equal((await post('/api/auth/account/deletion-farcaster/verify', { nonce: n.nonce, ...signed })).status, 401);
+  const before = await store.read();
+  const verified = await post('/api/auth/account/deletion-farcaster/verify', { nonce: n.nonce, ...signed }, { cookie });
+  assert.equal(verified.status, 200);
+  const proof = await verified.json();
+  assert.match(proof.proof, /^bld_[0-9a-f]{48}$/);
+  assert.equal(proof.token, undefined);
+  const after = await store.read();
+  assert.deepEqual(after.accounts, before.accounts);
+  assert.deepEqual(after.sessions, before.sessions);
+  assert.deepEqual(after.socialIdentities, before.socialIdentities);
+  assert.equal((await post('/api/auth/account/delete', { socialProof: proof.proof })).status, 400);
+  assert.equal((await post('/api/auth/account/delete', { confirmation: 'DELETE', socialProof: proof.proof })).status, 200);
+  assert.equal(Object.keys((await store.read()).accounts).length, 0);
 });

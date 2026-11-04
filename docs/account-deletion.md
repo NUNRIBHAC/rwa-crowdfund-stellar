@@ -28,7 +28,9 @@ alone is not destructive consent. Local social deletion starts only after
 DELETE, verifies an already-linked provider subject, returns a five-minute
 session-bound proof without signing in or deleting, and requires a new final
 DELETE plus enabled TOTP. Provider identity is verified; newly typed provider
-credentials are not promised. Unsupported Farcaster-only accounts stay blocked.
+credentials are not promised. Hosted Farcaster-only accounts stay blocked. A local unpublished extension
+adds a distinct signed deletion URI, original-session verification and relay
+cancellation; genuine wallet-app proof and release checks remain outstanding.
 The dedicated authenticated start is rate-limited and does not send email; it
 does not alter public registration, challenge or mail abuse gates.
 
