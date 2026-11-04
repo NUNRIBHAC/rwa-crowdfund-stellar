@@ -1,10 +1,10 @@
 import { pluralText } from '../format';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Market } from '../market';
 import CampaignCard, { campaignStatus, type CampaignStatus } from '../components/CampaignCard';
 import { compareCampaigns } from '../sort-campaigns';
 import EmptyState from '../components/EmptyState';
-import { categoriesFor, profileFor } from '../data/profiles';
+import { profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
 
@@ -49,22 +49,15 @@ export default function Investments({ market }: { market: Market }) {
   }, [campaigns, fixtureMode]);
 
   const categoryOf = (c: (typeof campaigns)[number]): string | undefined => {
-    if (fixtureMode) return profileFor(c, fixtureMode, m.profiles.list)?.category;
-    const ind = industries[c.id];
-    if (!ind) return undefined;
-    return m.invest.industryLabels[ind.key] ?? ind.label;
+    if (!fixtureMode) return industries[c.id]?.key;
+    // Explicit fixture profile identities, not guesses from campaign names.
+    const sampleCategory = profileFor(c, fixtureMode, m.profiles.list)?.category;
+    if (sampleCategory === m.profiles.list[0]?.category) return 'real-estate';
+    if (sampleCategory === m.profiles.list[1]?.category) return 'energy-utilities';
+    if (sampleCategory === m.profiles.list[2]?.category) return 'transport-logistics';
+    return undefined;
   };
-
-  const categories = useMemo(() => {
-    if (fixtureMode) return categoriesFor(campaigns, fixtureMode, m.profiles.list);
-    const set = new Set<string>();
-    for (const c of campaigns) {
-      const cat = categoryOf(c);
-      if (cat) set.add(cat);
-    }
-    return [...set].sort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [campaigns, fixtureMode, m, industries]);
+  const categories = Object.entries(m.invest.industryLabels);
 
   const q = query.trim().toLowerCase();
   const shown = campaigns
@@ -138,23 +131,17 @@ export default function Investments({ market }: { market: Market }) {
                 </button>
               ))}
             </div>
-            {categories.length > 0 && (
-              <div className="filter-chips" role="group" aria-label={m.invest.filterIndustryAria}>
-                <button className={`chip ${category === 'all' ? 'chip-active' : ''}`} aria-pressed={category === 'all'} onClick={() => setCategory('all')}>
-                  {m.invest.allIndustries}
-                </button>
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    className={`chip ${category === cat ? 'chip-active' : ''}`}
-                    aria-pressed={category === cat}
-                    onClick={() => setCategory(cat)}
-                  >
-                    {cat}
-                  </button>
+            <label className="registry-industry-select">
+              <span>{m.invest.filterIndustryAria}</span>
+              <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label={m.invest.filterIndustryAria}>
+                <option value="all">{m.invest.allIndustries}</option>
+                {categories.map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
                 ))}
-              </div>
-            )}
+              </select>
+            </label>
             {/* Stable wrapper: browser automation layers and some extensions
               wrap native selects in an injected container, moving the select
               out of its React parent; if React's sibling anchor is the select

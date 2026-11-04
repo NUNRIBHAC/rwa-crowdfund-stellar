@@ -3977,3 +3977,26 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     min-width: 180px;
   }
 }
+
+.registry-industry-select {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  max-width: 100%;
+}
+.registry-industry-select select {
+  width: min(420px, 100%);
+  max-width: 100%;
+  min-height: 40px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+}
+@media (max-width: 700px) {
+  .registry-industry-select {
+    width: 100%;
+  }
+}

@@ -110,3 +110,16 @@ test('known staging fixture is grouped for testing without guessing from campaig
   expect(within(testing).queryByText('QA Open Alpha')).toBeNull();
   expect(within(screen.getByRole('region', { name: 'Open campaigns' })).getByText('QA Open Alpha')).toBeTruthy();
 });
+
+test('industry taxonomy always exposes all 18 choices in the requested order, including empty categories', () => {
+  setup([openCampaign]);
+  const select = screen.getByRole('combobox', { name: 'Filter by industry' }) as HTMLSelectElement;
+  expect(select.options.length).toBe(19);
+  expect(select.options[0].textContent).toBe('All industries');
+  expect(select.options[1].textContent).toBe('Food and beverage products');
+  expect(select.options[2].textContent).toBe('Information Technology, software and digital platforms');
+  expect(select.options[18].textContent).toBe('Unclear');
+  fireEvent.change(select, { target: { value: 'food-beverage' } });
+  expect(screen.getByText('No campaigns match the current search and filters.')).toBeTruthy();
+  expect(screen.queryByText('QA Open Alpha')).toBeNull();
+});
