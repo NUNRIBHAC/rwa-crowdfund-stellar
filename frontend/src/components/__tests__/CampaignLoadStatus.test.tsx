@@ -9,6 +9,7 @@ afterEach(() => {
   window.history.replaceState(null, '', '/');
 });
 test('campaign load failure offers retry without empty/not-found claim; retry settles', async () => {
+  window.history.replaceState(null, '', '/campaigns/demo-solar');
   let campaignCalls = 0;
   vi.stubGlobal(
     'fetch',
@@ -28,7 +29,9 @@ test('campaign load failure offers retry without empty/not-found claim; retry se
     </I18nProvider>,
   );
   const retry = await screen.findByRole('button', { name: 'Retry' });
-  await screen.findByText('The service is temporarily unavailable. Please try again in a moment.');
+  expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('The service is temporarily unavailable. Please try again in a moment.');
+  expect(screen.queryByText('Loading campaign…')).toBeNull();
+  expect(screen.queryByText('Campaign not found')).toBeNull();
   fireEvent.click(retry);
   await waitFor(() => expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull());
   expect(campaignCalls).toBeGreaterThan(1);

@@ -27,10 +27,10 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
 
   if (!campaign) {
     if (!market.loaded) {
-      // Registry still loading: never claim "not found" before the fetch settles.
+      // An unresolved read is not "not found"; a failed read is no longer loading.
       return (
         <section aria-live="polite">
-          <h1 className="page-title">{m.campaign.loading}</h1>
+          <h1 className="page-title">{market.campaignLoadError ? m.errors.apiUnavailable : m.campaign.loading}</h1>
         </section>
       );
     }
