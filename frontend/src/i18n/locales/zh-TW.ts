@@ -1983,6 +1983,11 @@ export const zhTW: Messages = {
     totpSubmit: '驗證並登入',
     totpRecoveryHint: '無法使用驗證器？請輸入您的復原代碼之一。',
     security: {
+      validationNote: '在此分頁測試社群登入。請先驗證信箱，用密碼連結服務，再登出進行測試。一般登入選項保持不變。',
+      validationStart: '開始私人測試',
+      validationStop: '結束私人測試',
+      validationActive: '此分頁的私人測試已啟用。這些服務尚未驗證。',
+
       totpTitle: '兩步驟驗證',
       totpOffNote: '在錢包簽名之後新增驗證器應用程式作為第二步。選用；您的錢包仍是主要憑證。',
       totpOffNoteEmail: '在密碼之後新增驗證器應用程式作為第二步驟。選用；你的密碼仍是主要憑證。',

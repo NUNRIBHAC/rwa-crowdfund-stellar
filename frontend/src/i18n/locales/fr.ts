@@ -2122,6 +2122,12 @@ export const fr: Messages = {
     totpSubmit: 'Vérifier et se connecter',
     totpRecoveryHint: "Vous n'avez plus accès à votre application ? Saisissez l'un de vos codes de récupération.",
     security: {
+      validationNote:
+        'Testez la connexion sociale dans cet onglet. Vérifiez votre e-mail, associez un service avec votre mot de passe, puis déconnectez-vous pour le tester. Les options habituelles restent inchangées.',
+      validationStart: 'Démarrer le test privé',
+      validationStop: 'Terminer le test privé',
+      validationActive: 'Test privé actif dans cet onglet. Ces services ne sont pas encore vérifiés.',
+
       totpTitle: 'Authentification à deux facteurs',
       totpOffNote:
         "Ajoutez une application d'authentification comme deuxième étape après votre signature de portefeuille. Optionnel ; votre portefeuille reste la clé principale.",

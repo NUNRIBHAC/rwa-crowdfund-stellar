@@ -79,6 +79,9 @@ export type CommunityAuthState = {
   /** Social (OAuth) providers configured on this deployment (abuse-config);
       the sign-in panel renders a button per listed provider. */
   socialProviders: string[];
+  socialValidationActive?: boolean;
+  enableSocialValidation?: () => Promise<void>;
+  disableSocialValidation?: () => void;
   /** Begin a social sign-in: bot check, then a top-level navigation to the
       provider through the backend /start route. */
   startSocialSignIn: (provider: string) => Promise<void>;
@@ -141,7 +144,29 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
   const [socialEmailPending, setSocialEmailPending] = useState<{ ticket: string } | null>(null);
   const [farcasterLink, setFarcasterLink] = useState<string | null>(null);
   const farcasterRun = useRef(0);
-  const [socialProviders, setSocialProviders] = useState<string[]>([]);
+  const validationStorage = 'blockallisto-social-validation';
+  const [validationProviders, setValidationProviders] = useState<string[]>(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(validationStorage) ?? '[]');
+      return Array.isArray(saved) ? saved.filter((p) => ['google', 'github', 'linkedin', 'telegram'].includes(p)) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [publicSocialProviders, setSocialProviders] = useState<string[]>([]);
+  const socialProviders = useMemo(() => [...new Set([...publicSocialProviders, ...validationProviders])], [publicSocialProviders, validationProviders]);
+  const enableSocialValidation = useCallback(async () => {
+    const res = await fetch('/api/auth/social/validation-providers', { headers: { authorization: `Bearer ${token}` }, cache: 'no-store' });
+    if (!res.ok) throw new Error('Validation is unavailable for this account.');
+    const json = await res.json();
+    const providers = Array.isArray(json.socialProviders) ? json.socialProviders.filter((p: unknown) => typeof p === 'string') : [];
+    sessionStorage.setItem(validationStorage, JSON.stringify(providers));
+    setValidationProviders(providers);
+  }, [token]);
+  const disableSocialValidation = useCallback(() => {
+    sessionStorage.removeItem(validationStorage);
+    setValidationProviders([]);
+  }, []);
   const [socialNotice, setSocialNotice] = useState('');
 
   // A social sign-in returns here with its outcome in the URL fragment;
@@ -554,6 +579,9 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       cancelFarcaster,
       startFarcasterLink,
       socialProviders,
+      socialValidationActive: validationProviders.length > 0,
+      enableSocialValidation,
+      disableSocialValidation,
       startSocialSignIn,
       socialNotice,
       setDisplayName: setName,
@@ -584,6 +612,9 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       cancelFarcaster,
       startFarcasterLink,
       socialProviders,
+      validationProviders,
+      enableSocialValidation,
+      disableSocialValidation,
       startSocialSignIn,
       socialNotice,
     ],

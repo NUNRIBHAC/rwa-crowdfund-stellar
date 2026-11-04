@@ -1920,6 +1920,10 @@
     "totpSubmit": "Verificar e iniciar sesión",
     "totpRecoveryHint": "¿Perdiste el acceso a tu autenticador? Introduce uno de tus códigos de recuperación.",
     "security": {
+      "validationNote": "Prueba el acceso social en esta pestaña. Verifica tu correo, vincula un servicio con tu contraseña y cierra sesión para probarlo. Las opciones normales no cambian.",
+      "validationStart": "Iniciar prueba privada",
+      "validationStop": "Finalizar prueba privada",
+      "validationActive": "Prueba privada activa en esta pestaña. Estos servicios aún no están verificados.",
       "totpTitle": "Autenticación de dos factores",
       "totpOffNote": "Añade una aplicación de autenticación como segundo paso tras tu firma de monedero. Opcional; tu monedero sigue siendo la credencial principal.",
       "totpOffNoteEmail": "Añade una aplicación de autenticación como segundo paso tras tu contraseña. Opcional; tu contraseña sigue siendo la credencial principal.",

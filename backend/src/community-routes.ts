@@ -50,6 +50,7 @@ import {
   requireSocialLinkStepUp,
   SOCIAL_PROVIDERS,
   socialConfigFromEnv,
+  socialRegistrationAllowedEmails,
   startSocialFlow,
 } from './social-auth.js';
 import { defaultFarcasterVerifier, farcasterDomain, issueFarcasterNonce, verifyFarcasterSignIn, type FarcasterVerifier } from './farcaster-auth.js';
@@ -263,6 +264,26 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         ...(farcasterDomain(process.env) && !validationProviders.has('farcaster') ? ['farcaster'] : []),
       ],
     });
+  });
+
+  // Owner-assisted validation: read-only presentation access for an already
+  // verified, explicitly allowlisted email account. No session or factor is
+  // created here, and provider starts retain all ordinary auth protections.
+  router.get('/api/auth/social/validation-providers', async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      const email = account.email?.trim().toLowerCase();
+      const state = await store.read();
+      const credential = email ? state.emailCredentials[email] : undefined;
+      if (!email || !credential?.verified || credential.publicKey !== account.publicKey || !socialRegistrationAllowedEmails(process.env).has(email)) {
+        throw new CommunityError(403, 'not available for this account', 'forbidden');
+      }
+      const hidden = new Set((process.env.SOCIAL_VALIDATION_PROVIDERS ?? '').split(',').map((p) => p.trim().toLowerCase()));
+      res.json({ socialProviders: SOCIAL_PROVIDERS.filter((p) => hidden.has(p) && socialConfigFromEnv(process.env, p) !== null) });
+    } catch (err) {
+      sendError(res, err);
+    }
   });
 
   // Social (OAuth/OIDC) sign-in: /start behind the same abuseGate as the

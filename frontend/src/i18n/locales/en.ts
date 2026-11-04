@@ -2056,6 +2056,12 @@ export const en = {
     totpSubmit: 'Verify and sign in',
     totpRecoveryHint: 'Lost access to your authenticator? Enter one of your recovery codes instead.',
     security: {
+      validationNote:
+        'Test social sign-in in this tab. Verify your email first, link a provider using your password, then sign out and test it. Ordinary sign-in options stay unchanged.',
+      validationStart: 'Start private test',
+      validationStop: 'End private test',
+      validationActive: 'Private test active in this tab. These providers are not yet verified.',
+
       totpTitle: 'Two-factor authentication',
       totpOffNote: 'Add an authenticator app as a second step after your wallet signature. Optional; your wallet stays the main credential.',
       totpOffNoteEmail: 'Add an authenticator app as a second step after your password. Optional; your password stays the main credential.',

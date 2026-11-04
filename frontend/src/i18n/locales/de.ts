@@ -2108,6 +2108,12 @@ export const de: Messages = {
     totpSubmit: 'Bestätigen und anmelden',
     totpRecoveryHint: 'Kein Zugriff mehr auf Ihren Authenticator? Geben Sie stattdessen einen Ihrer Wiederherstellungscodes ein.',
     security: {
+      validationNote:
+        'Teste die soziale Anmeldung in diesem Tab. Bestätige deine E-Mail, verknüpfe einen Dienst mit deinem Passwort und melde dich zum Testen ab. Die normalen Optionen bleiben unverändert.',
+      validationStart: 'Privaten Test starten',
+      validationStop: 'Privaten Test beenden',
+      validationActive: 'Privater Test in diesem Tab aktiv. Diese Dienste sind noch nicht geprüft.',
+
       totpTitle: 'Zwei-Faktor-Authentifizierung',
       totpOffNote: 'Fügen Sie eine Authenticator-App als zweiten Schritt nach Ihrer Wallet-Signatur hinzu. Optional; Ihre Wallet bleibt die Hauptberechtigung.',
       totpOffNoteEmail: 'Fügen Sie eine Authenticator-App als zweiten Schritt nach Ihrem Passwort hinzu. Optional; Ihr Passwort bleibt die Hauptberechtigung.',

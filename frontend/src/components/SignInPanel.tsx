@@ -39,6 +39,8 @@ export default function SignInPanel({ actor }: { actor: string }) {
     farcasterLink,
     cancelFarcaster,
     socialProviders,
+    socialValidationActive,
+    disableSocialValidation,
     startSocialSignIn,
     clearError,
   } = useCommunityAuth();
@@ -256,6 +258,14 @@ export default function SignInPanel({ actor }: { actor: string }) {
             {m.community.signInMethodEmail}
           </button>
         </div>
+        {socialValidationActive && (
+          <p className="community-note" style={{ whiteSpace: 'normal', overflowWrap: 'anywhere' }}>
+            {m.community.security.validationActive}{' '}
+            <button className="btn" onClick={() => disableSocialValidation?.()}>
+              {m.community.security.validationStop}
+            </button>
+          </p>
+        )}
         {(socialProviders ?? []).map((p) => (
           <button key={p} className="btn social-signin-btn" disabled={busy} onClick={() => startSocialSignIn(p).catch(() => undefined)}>
             {SOCIAL_SIGNIN_LABELS[p]

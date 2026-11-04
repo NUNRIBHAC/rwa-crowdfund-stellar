@@ -1873,6 +1873,10 @@
     "totpSubmit": "验证并登录",
     "totpRecoveryHint": "无法使用身份验证器？请输入您的恢复代码之一。",
     "security": {
+      "validationNote": "在此标签页测试社交登录。请先验证邮箱，用密码关联服务，再退出登录进行测试。普通登录选项保持不变。",
+      "validationStart": "开始私密测试",
+      "validationStop": "结束私密测试",
+      "validationActive": "此标签页的私密测试已启用。这些服务尚未验证。",
       "totpTitle": "双重身份验证",
       "totpOffNote": "在钱包签名之后添加身份验证器应用作为第二步。可选；您的钱包仍是主要凭证。",
       "totpOffNoteEmail": "在密码之后添加身份验证器应用作为第二步。可选；你的密码仍是主要凭据。",

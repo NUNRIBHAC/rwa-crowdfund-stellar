@@ -14,7 +14,18 @@ import { useI18n } from '../i18n';
 
 export default function SecuritySection() {
   const { m, locale } = useI18n();
-  const { account, token, socialProviders, socialNotice, farcasterLink, cancelFarcaster, startFarcasterLink } = useCommunityAuth();
+  const {
+    account,
+    token,
+    socialProviders,
+    socialValidationActive,
+    enableSocialValidation,
+    disableSocialValidation,
+    socialNotice,
+    farcasterLink,
+    cancelFarcaster,
+    startFarcasterLink,
+  } = useCommunityAuth();
   const [sessions, setSessions] = useState<SessionInfo[] | null>(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -119,6 +130,24 @@ export default function SecuritySection() {
       </h2>
       <p>{isEmail ? labels.authMethodNoteEmail : isSocial ? labels.authMethodNoteSocial : labels.authMethodNote}</p>
       {socialNotice && <p className="community-note">{socialNotice}</p>}
+      {isEmail && enableSocialValidation && (
+        <div className="community-note">
+          <p>{labels.validationNote}</p>
+          <button
+            className="btn"
+            disabled={busy}
+            onClick={() =>
+              run(async () => {
+                if (socialValidationActive) disableSocialValidation?.();
+                else await enableSocialValidation();
+              })
+            }
+          >
+            {socialValidationActive ? labels.validationStop : labels.validationStart}
+          </button>
+        </div>
+      )}
+
       {(socialProviders ?? []).length > 0 && (
         <>
           <h3>{labels.linkTitle}</h3>

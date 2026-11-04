@@ -118,6 +118,7 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_GITHUB_CLIENT_SECRET',
     'SOCIAL_GITHUB_REDIRECT_URI',
     'SOCIAL_REGISTRATION_ALLOWED_EMAILS',
+    'SOCIAL_VALIDATION_PROVIDERS',
     'FARCASTER_AUTH_DOMAIN',
   ])
     delete process.env[k];
@@ -924,3 +925,41 @@ for (const mode of ['invalid', 'error', 'valid'] as const) {
     assert.equal(again.status, 401, 'failed proof burns the nonce');
   });
 }
+
+test('validation-provider list requires a verified allowlisted account and exposes no credentials', async () => {
+  const { hashToken } = await import('../src/accounts.js');
+  const { base, store } = await startApp({ ...CONF, SOCIAL_VALIDATION_PROVIDERS: 'google, github', SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'owner@example.com' });
+  const url = base + '/api/auth/social/validation-providers';
+  assert.equal((await fetch(url)).status, 401);
+  const token = 'bls_' + 'a'.repeat(48);
+  const publicKey = 'GVALIDATIONOWNER';
+  const headers = { authorization: `Bearer ${token}` };
+  await store.change((s) => {
+    s.accounts[publicKey] = { publicKey, displayName: null, createdAt: Date.now(), authMethod: 'email', email: 'owner@example.com' };
+    s.sessions[hashToken(token)] = { tokenHash: hashToken(token), publicKey, createdAt: Date.now(), expiresAt: Date.now() + 60000 };
+  });
+  assert.equal((await fetch(url, { headers })).status, 403, 'email text alone is not verified ownership');
+  const { registerEmail, verifyEmailToken } = await import('../src/email-auth.js');
+  let mail = '';
+  await registerEmail(
+    store,
+    {
+      send: async (m) => {
+        mail = m.text;
+      },
+    },
+    { email: 'owner@example.com', password: 'original-long-password' },
+  );
+  const proof = mail.match(/blv_[0-9a-f]{48}/)?.[0];
+  assert.ok(proof);
+  const verified = await verifyEmailToken(store, { email: 'owner@example.com', token: proof });
+  const goodHeaders = { authorization: `Bearer ${verified.token}` };
+  const accepted = await fetch(url, { headers: goodHeaders });
+  assert.equal(accepted.status, 200);
+  assert.equal(accepted.headers.get('cache-control'), 'no-store');
+  const data = await accepted.json();
+  assert.deepEqual(data, { socialProviders: ['google'] });
+  assert.ok(!JSON.stringify(data).includes(CLIENT_SECRET));
+  process.env.SOCIAL_REGISTRATION_ALLOWED_EMAILS = 'other@example.com';
+  assert.equal((await fetch(url, { headers: goodHeaders })).status, 403, 'revoked allowlist access fails closed');
+});

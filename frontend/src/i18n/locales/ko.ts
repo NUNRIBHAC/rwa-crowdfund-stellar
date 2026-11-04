@@ -2019,6 +2019,12 @@ export const ko: Messages = {
     totpSubmit: '확인 후 로그인',
     totpRecoveryHint: '인증 앱에 접근할 수 없나요? 복구 코드 중 하나를 입력하세요.',
     security: {
+      validationNote:
+        '이 탭에서 소셜 로그인을 테스트합니다. 이메일을 인증하고 비밀번호로 서비스를 연결한 다음 로그아웃하여 테스트하세요. 일반 로그인 옵션은 바뀌지 않습니다.',
+      validationStart: '비공개 테스트 시작',
+      validationStop: '비공개 테스트 종료',
+      validationActive: '이 탭에서 비공개 테스트 중입니다. 이 서비스는 아직 검증되지 않았습니다.',
+
       totpTitle: '2단계 인증',
       totpOffNote: '지갑 서명 후 두 번째 단계로 인증 앱을 추가하세요. 선택 사항이며 지갑이 기본 자격 증명으로 유지됩니다.',
       totpOffNoteEmail: '비밀번호 다음에 두 번째 단계로 인증 앱을 추가하세요. 선택 사항이며, 비밀번호가 계속 기본 자격 증명입니다.',

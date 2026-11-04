@@ -2111,6 +2111,12 @@ export const pt: Messages = {
     totpSubmit: 'Verificar e entrar',
     totpRecoveryHint: 'Perdeu o acesso à sua aplicação de autenticação? Introduza antes um dos seus códigos de recuperação.',
     security: {
+      validationNote:
+        'Testa o login social neste separador. Primeiro verifica o email, associa um serviço com a tua palavra-passe e depois termina sessão para o testar. As opções normais não mudam.',
+      validationStart: 'Iniciar teste privado',
+      validationStop: 'Terminar teste privado',
+      validationActive: 'Teste privado ativo neste separador. Estes serviços ainda não foram verificados.',
+
       totpTitle: 'Autenticação de dois fatores',
       totpOffNote:
         'Adicione uma aplicação de autenticação como segundo passo após a assinatura da carteira. Opcional; a carteira continua a ser a credencial principal.',

@@ -161,3 +161,66 @@ describe('CommunityAuthProvider social fragment', () => {
     vi.useRealTimers();
   });
 });
+
+describe('private social validation mode', () => {
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+    sessionStorage.clear();
+    localStorage.clear();
+    window.history.replaceState(null, '', '/account');
+  });
+  it('uses the authenticated protected list only after explicit opt-in and can clear the tab', async () => {
+    window.history.replaceState(null, '', '/account#social-token=bls_validation');
+    let proofHeader = '';
+    stubFetch((url, init) => {
+      if (url === '/api/auth/abuse-config') return Response.json({ socialProviders: [] });
+      if (url === '/api/auth/me') return Response.json({ account: ACCOUNT });
+      if (url === '/api/auth/social/validation-providers') {
+        proofHeader = new Headers(init?.headers).get('authorization') ?? '';
+        return Response.json({ socialProviders: ['google'] });
+      }
+      return undefined;
+    });
+    const seen: { current: ReturnType<typeof useCommunityAuth> | null } = { current: null };
+    function Grab() {
+      seen.current = useCommunityAuth();
+      return null;
+    }
+    render(
+      <CommunityAuthProvider messages={MESSAGES}>
+        <Grab />
+      </CommunityAuthProvider>,
+    );
+    await waitFor(() => expect(seen.current?.account).not.toBeNull());
+    expect(seen.current?.socialProviders).toEqual([]);
+    expect(proofHeader).toBe('');
+    await act(() => seen.current!.enableSocialValidation!());
+    expect(proofHeader).toBe('Bearer bls_validation');
+    expect(seen.current?.socialProviders).toEqual(['google']);
+    expect(seen.current?.socialValidationActive).toBe(true);
+    expect(sessionStorage.getItem('blockallisto-social-validation')).toBe('["google"]');
+    act(() => seen.current!.disableSocialValidation!());
+    expect(seen.current?.socialProviders).toEqual([]);
+    expect(sessionStorage.getItem('blockallisto-social-validation')).toBeNull();
+  });
+  it('cannot enable the test list when the server rejects access', async () => {
+    stubFetch((url) => (url === '/api/auth/abuse-config' ? Response.json({ socialProviders: [] }) : new Response('{}', { status: 403 })));
+    const seen: { current: ReturnType<typeof useCommunityAuth> | null } = { current: null };
+    function Grab() {
+      seen.current = useCommunityAuth();
+      return null;
+    }
+    render(
+      <CommunityAuthProvider messages={MESSAGES}>
+        <Grab />
+      </CommunityAuthProvider>,
+    );
+    await waitFor(() => expect(seen.current?.restored).toBe(true));
+    await act(async () => {
+      await expect(seen.current!.enableSocialValidation!()).rejects.toThrow();
+    });
+    expect(seen.current?.socialProviders).toEqual([]);
+    expect(sessionStorage.getItem('blockallisto-social-validation')).toBeNull();
+  });
+});
