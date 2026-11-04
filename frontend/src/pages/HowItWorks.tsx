@@ -70,9 +70,11 @@ export default function HowItWorks() {
       <section className="journey-try-now" aria-label={h.tryNow}>
         <h2>{h.tryNow}</h2>
         <div className="hero-actions">
-          <a className="btn btn-outline" href={destination}>
-            {action}
-          </a>
+          {journey === 'issuer' && (
+            <a className="btn btn-outline" href={destination}>
+              {action}
+            </a>
+          )}
           {journey === 'investor' && (
             <a className="btn btn-ghost" href={routeHash({ name: 'investments' })}>
               {h.campaignRecords}

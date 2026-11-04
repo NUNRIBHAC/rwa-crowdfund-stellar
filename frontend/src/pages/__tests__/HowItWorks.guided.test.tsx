@@ -18,6 +18,11 @@ test('one audience journey is shown at a time with demo actions separate from in
   expect(screen.getAllByText('Partial prototype').length).toBeGreaterThan(0);
   expect(screen.getAllByText('Planned - not built').length).toBeGreaterThan(0);
   expect(container.querySelectorAll('details').length).toBe(8);
+  const tryNow = container.querySelector('.journey-try-now')!;
+  expect(tryNow.querySelectorAll('a')).toHaveLength(1);
+  expect(tryNow.textContent).not.toContain('Explore demo campaigns');
+  expect(tryNow.querySelector('a')?.textContent).toBe('View campaign records');
+  expect(tryNow.querySelector('a')?.getAttribute('href')).toBe('/campaigns');
   fireEvent.click(screen.getByRole('tab', { name: 'For businesses' }));
   expect(container.querySelectorAll('.journey-list > li').length).toBe(5);
   expect(screen.queryByRole('heading', { name: 'Contribution and payment' })).toBeNull();
