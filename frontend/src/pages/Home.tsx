@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Market } from '../market';
 import Hero from '../components/Hero';
 import CampaignCard from '../components/CampaignCard';
@@ -5,7 +6,7 @@ import { profileFor } from '../data/profiles';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 
-export default function Home({ market }: { market: Market }) {
+export default function Home({ market, loadStatus }: { market: Market; loadStatus?: ReactNode }) {
   const { m } = useI18n();
   const { campaigns, loaded, fixtureMode } = market;
   const mode = fixtureMode ? 'sample' : loaded && campaigns.length > 0 ? 'live' : 'unknown';
@@ -14,6 +15,7 @@ export default function Home({ market }: { market: Market }) {
   return (
     <div className="home-introduction">
       <Hero mode={mode} />
+      {loadStatus}
 
       {latest.length > 0 && (
         <section aria-label={m.home.latestAria}>

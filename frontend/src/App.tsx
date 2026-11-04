@@ -285,6 +285,26 @@ export default function App() {
     onToggleFixtures: toggleFixtures,
   };
 
+  const campaignLoadStatus = !fixtureMode && ['home', 'investments', 'campaign'].includes(route.name) && !loaded && (
+    <section aria-live="polite">
+      <p role={error ? 'alert' : 'status'}>{error ? m.errors.apiUnavailable : m.campaign.loading}</p>
+      {error && (
+        <button
+          className="btn"
+          disabled={busy}
+          onClick={() =>
+            run(async () => {
+              await refresh();
+              setError(null);
+            })
+          }
+        >
+          {m.community.operator.retry}
+        </button>
+      )}
+    </section>
+  );
+
   return (
     <CommunityAuthProvider
       messages={{
@@ -304,25 +324,7 @@ export default function App() {
           </p>
         )}
 
-        {!fixtureMode && ['home', 'investments', 'campaign'].includes(route.name) && !loaded && (
-          <section aria-live="polite">
-            <p role={error ? 'alert' : 'status'}>{error ? m.errors.apiUnavailable : m.campaign.loading}</p>
-            {error && (
-              <button
-                className="btn"
-                disabled={busy}
-                onClick={() =>
-                  run(async () => {
-                    await refresh();
-                    setError(null);
-                  })
-                }
-              >
-                {m.community.operator.retry}
-              </button>
-            )}
-          </section>
-        )}
+        {route.name !== 'home' && campaignLoadStatus}
 
         {intent && (
           <IntentPanel
@@ -340,7 +342,7 @@ export default function App() {
           />
         )}
 
-        {route.name === 'home' && <Home market={market} />}
+        {route.name === 'home' && <Home market={market} loadStatus={campaignLoadStatus} />}
         {route.name === 'investments' && <Investments market={market} />}
         {route.name === 'campaign' && <CampaignDetail market={market} campaignId={route.campaignId ?? ''} />}
         {route.name === 'how-it-works' && <HowItWorks />}

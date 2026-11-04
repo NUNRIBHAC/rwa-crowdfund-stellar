@@ -52,7 +52,9 @@ test('an in-flight first load explains loading without offering a duplicate retr
       <App />
     </I18nProvider>,
   );
-  expect(await screen.findByRole('status')).toBeTruthy();
+  const status = await screen.findByRole('status');
+  expect(status.closest('.home-introduction')).toBeTruthy();
+  expect(screen.getByRole('heading', { level: 1 }).compareDocumentPosition(status) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
   expect(screen.queryByText('No deployed campaign configured')).toBeNull();
   settle({ ok: true, json: async () => ({ campaigns: [] }) });
