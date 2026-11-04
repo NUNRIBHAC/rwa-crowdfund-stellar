@@ -1048,3 +1048,22 @@ test('Farcaster deletion foundation: dedicated signed URI, linked fid and origin
     code: 'social_flow_expired',
   });
 });
+
+test('Farcaster client builds the dedicated deletion URI without replacing it', async () => {
+  const { createWalletClient } = await import('@farcaster/auth-client');
+  const wallet = createWalletClient({});
+  const uri = `https://${FC_DOMAIN}/account?purpose=account-deletion`;
+  const request = new URL('farcaster://connect');
+  request.searchParams.set('channelToken', 'local-fixture-channel');
+  request.searchParams.set('nonce', '1234567890abcdef');
+  request.searchParams.set('siweUri', uri);
+  request.searchParams.set('domain', FC_DOMAIN);
+  const parsed = wallet.parseSignInURI({ uri: request.href });
+  assert.equal(parsed.isError, false);
+  assert.equal(parsed.channelToken, 'local-fixture-channel');
+  // Installed0.7.1 parser returns only channelToken, unlike the current docs.
+  const built = wallet.buildSignInMessage({ uri, domain: FC_DOMAIN, nonce: '1234567890abcdef', address: fcAccount.address, fid: 3357330 });
+  assert.equal(built.isError, false);
+  assert.equal(built.siweMessage?.uri, uri);
+  assert.equal(built.siweMessage?.statement, 'Farcaster Auth');
+});

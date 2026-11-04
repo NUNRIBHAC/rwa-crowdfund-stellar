@@ -77,3 +77,18 @@ that the full flow is usable. Do not reuse an ordinary sign-in result or alter
 the fixed statement in an attempt to make the library accept deletion consent.
 Local tests use real signature recovery and client validation with a stubbed
 Farcaster registry/RPC, not real-provider end-to-end proof.
+
+Public protocol grounding checked 2026-11-04:
+
+- https://docs.farcaster.xyz/auth-kit/client/app/create-channel documents a
+  caller-supplied `siweUri` and nonce.
+- https://docs.farcaster.xyz/auth-kit/client/wallet/build-sign-in-message
+  documents carrying the supplied URI into the signed message.
+  This supports the dedicated-URI design, not acceptance by a real wallet app
+  or a successful deletion ceremony. The local dependency also enforces its
+  fixed statement. A real provider proof is still required.
+
+Installed 0.7.1 differs from the current parser docs: parseSignInURI returns
+only channelToken, not URI/domain/nonce. The local buildSignInMessage test
+therefore supplies the URI explicitly. No wallet-app round trip is inferred
+from the current documentation or a channel-token-only parser result.
