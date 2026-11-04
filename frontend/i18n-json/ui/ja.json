@@ -1,4 +1,29 @@
 {
+  "demoJourney": {
+    "title": "全体の流れ - シミュレーション",
+    "notice": "架空の事業者と投資家を使用します。各ステップは模擬で、アカウント内にのみ保存されます。実際の申請、承認、公開募集、本人確認、署名、送金、投資権利は発生しません。",
+    "steps": {
+      "submit_application": "架空の申請を送信",
+      "attach_document": "架空の書類を添付",
+      "review": "書類審査を模擬",
+      "approve": "申請承認を模擬",
+      "create_campaign": "模擬キャンペーンを作成",
+      "complete_onboarding": "模擬投資家確認を完了",
+      "contribute": "模擬出資を記録"
+    },
+    "complete": "シミュレーション完了。両者に同じ保存済み記録が表示されます。取引は行われていません。",
+    "application": "申請",
+    "document": "架空の書類",
+    "campaign": "模擬キャンペーン",
+    "businessReceipt": "事業者記録 - 模擬",
+    "investorReceipt": "投資家記録 - 模擬",
+    "match": "両画面のキャンペーン、記録ID、金額が一致します。再読み込み後も記録を表示できます。",
+    "receipt": "記録ID",
+    "amount": "金額",
+    "units": "模擬単位",
+    "status": "状態",
+    "simulated": "模擬"
+  },
   "applicationDocuments": {
     "uploadNote": "DEMO文書：合成.txtのみ、各16 KBまで、最大5件。個人情報や本人確認書類を送信しないでください。",
     "save": "文書を保存",

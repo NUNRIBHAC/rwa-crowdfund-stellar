@@ -16,6 +16,7 @@ import type { PgPoolLike } from './journal.js';
 // typed. Retention pruning lives in community.ts (pruneCommunity).
 
 export type Account = {
+  demoJourney?: import('./demo-journey.js').DemoJourney;
   demoOnboarding?: import('./investor-onboarding.js').DemoOnboarding;
   publicKey: string;
   displayName: string | null;

@@ -1,3 +1,4 @@
+import { readDemoJourney, advanceDemoJourney } from './demo-journey.js';
 import { readOnboarding, saveOnboarding } from './investor-onboarding.js';
 import { createHash } from 'node:crypto';
 import express from 'express';
@@ -773,6 +774,19 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }
     next();
   };
+  router.get(
+    '/api/auth/demo-journey',
+    authed(async (_req, res, account) => {
+      res.set('Cache-Control', 'no-store').json(await readDemoJourney(store, account));
+    }),
+  );
+  router.post(
+    '/api/auth/demo-journey',
+    authed(async (req, res, account) => {
+      service.checkRate(`demo-journey:${account.publicKey}`, 30, 60 * 1000);
+      res.set('Cache-Control', 'no-store').json(await advanceDemoJourney(store, account, req.body));
+    }),
+  );
   router.get('/api/auth/demo-onboarding', async (req, res) => {
     try {
       const account = await authenticate(store, req.header('authorization'));

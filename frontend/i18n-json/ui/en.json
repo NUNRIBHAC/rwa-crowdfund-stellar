@@ -1,4 +1,29 @@
 {
+  "demoJourney": {
+    "title": "Complete sandbox journey - simulation",
+    "notice": "Fixed fictional business and investor personas. Every step is simulated and saved only to your account. No real application, approval, campaign listing, identity check, wallet signature, funds or investor rights are created.",
+    "steps": {
+      "submit_application": "Submit synthetic application",
+      "attach_document": "Attach synthetic project document",
+      "review": "Simulate document review",
+      "approve": "Simulate application approval",
+      "create_campaign": "Create simulated campaign",
+      "complete_onboarding": "Complete simulated investor checks",
+      "contribute": "Record simulated contribution"
+    },
+    "complete": "Simulation complete. Both personas show the same saved contribution receipt. No transaction occurred.",
+    "application": "Application",
+    "document": "Synthetic document",
+    "campaign": "Simulated campaign",
+    "businessReceipt": "Business receipt - simulation",
+    "investorReceipt": "Investor receipt - simulation",
+    "match": "The campaign, receipt ID and amount match in both views. Reload to resume these saved records.",
+    "receipt": "Receipt ID",
+    "amount": "Amount",
+    "units": "simulated units",
+    "status": "Status",
+    "simulated": "SIMULATED"
+  },
   "applicationDocuments": {
     "uploadNote": "DEMO documents: synthetic .txt only, maximum 16 KB each, five files. Do not upload personal or identity documents.",
     "save": "Save document",

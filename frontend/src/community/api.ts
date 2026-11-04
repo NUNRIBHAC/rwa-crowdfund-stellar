@@ -710,3 +710,26 @@ export async function readApplicationDocument(token: string, id: string, documen
   if (!response.ok) throw new Error(requestFailedMessage(response.status));
   return response.text();
 }
+
+export type DemoJourneyAction = 'submit_application' | 'attach_document' | 'review' | 'approve' | 'create_campaign' | 'complete_onboarding' | 'contribute';
+type SimulatedReceipt = { id: string; campaignId: string; amount: string; unit: 'SIMULATED_UNITS'; status: 'SIMULATED'; transactionHash: null };
+export type DemoJourneyView = {
+  demo: true;
+  simulation: true;
+  productionEligible: false;
+  realFundsMoved: false;
+  realIdentityVerified: false;
+  realInvestmentEligible: false;
+  id: string | null;
+  completed: string[];
+  nextAction: DemoJourneyAction | null;
+  applicationId: string | null;
+  campaignId: string | null;
+  document: { id: string; filename: string; content: string; sha256: string } | null;
+  business: { persona: string; applicationStatus: string; contribution: SimulatedReceipt | null };
+  investor: { persona: string; onboardingStatus: string; contribution: SimulatedReceipt | null };
+  updatedAt: number | null;
+};
+export const fetchDemoJourney = (token: string) => call<DemoJourneyView>('/api/auth/demo-journey', { token });
+export const advanceDemoJourney = (token: string, action: DemoJourneyAction) =>
+  call<DemoJourneyView>('/api/auth/demo-journey', { token, method: 'POST', body: { action } });

@@ -1,4 +1,29 @@
 {
+  "demoJourney": {
+    "title": "Parcours complet - simulation",
+    "notice": "Entreprise et investisseur fictifs fixes. Chaque étape est simulée et enregistrée uniquement dans votre compte. Aucune demande réelle, approbation, campagne publique, vérification, signature, transaction ou droit ne sont créés.",
+    "steps": {
+      "submit_application": "Envoyer une demande fictive",
+      "attach_document": "Joindre un document fictif",
+      "review": "Simuler la revue du document",
+      "approve": "Simuler une approbation",
+      "create_campaign": "Créer une campagne simulée",
+      "complete_onboarding": "Terminer les contrôles simulés",
+      "contribute": "Enregistrer une contribution simulée"
+    },
+    "complete": "Simulation terminée. Les deux personnes affichent le même reçu enregistré. Aucune transaction n’a eu lieu.",
+    "application": "Demande",
+    "document": "Document fictif",
+    "campaign": "Campagne simulée",
+    "businessReceipt": "Reçu entreprise - simulation",
+    "investorReceipt": "Reçu investisseur - simulation",
+    "match": "La campagne, le reçu et le montant correspondent dans les deux vues. Rechargez pour retrouver les données.",
+    "receipt": "Identifiant du reçu",
+    "amount": "Montant",
+    "units": "unités simulées",
+    "status": "Statut",
+    "simulated": "SIMULÉ"
+  },
   "applicationDocuments": {
     "uploadNote": "Documents DEMO : .txt synthétiques uniquement, 16 Ko chacun, cinq fichiers. Aucun document personnel ou d’identité.",
     "save": "Enregistrer le document",

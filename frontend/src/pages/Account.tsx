@@ -1,3 +1,4 @@
+import DemoJourney from '../components/DemoJourney';
 import { useEffect, useMemo, useState } from 'react';
 import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
@@ -233,6 +234,8 @@ export default function Account({ market }: { market: Market }) {
           <p>{m.account.noWallet}</p>
         )}
       </section>
+
+      <DemoJourney />
 
       <InvestorOnboarding />
 

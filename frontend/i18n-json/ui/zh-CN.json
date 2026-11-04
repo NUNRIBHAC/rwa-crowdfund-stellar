@@ -1,4 +1,29 @@
 {
+  "demoJourney": {
+    "title": "完整流程 - 模拟",
+    "notice": "固定的虚构企业与投资人角色。每一步都是模拟，仅保存于您的账户。不会创建真实申请、批准、公开募资、身份验证、钱包签名、资金转移或投资权利。",
+    "steps": {
+      "submit_application": "提交模拟申请",
+      "attach_document": "附加模拟文件",
+      "review": "模拟文件审核",
+      "approve": "模拟申请批准",
+      "create_campaign": "创建模拟募资",
+      "complete_onboarding": "完成模拟投资人检查",
+      "contribute": "记录模拟出资"
+    },
+    "complete": "模拟完成。双方显示相同的已保存收据。未发生任何交易。",
+    "application": "申请",
+    "document": "模拟文件",
+    "campaign": "模拟募资",
+    "businessReceipt": "企业收据 - 模拟",
+    "investorReceipt": "投资人收据 - 模拟",
+    "match": "两个画面的募资、收据编号与金额相同。重新加载可继续查看记录。",
+    "receipt": "收据编号",
+    "amount": "金额",
+    "units": "模拟单位",
+    "status": "状态",
+    "simulated": "模拟"
+  },
   "applicationDocuments": {
     "uploadNote": "DEMO 文件：仅限合成 .txt，每个最多 16 KB，最多五个。请勿上传个人或身份文件。",
     "save": "保存文件",

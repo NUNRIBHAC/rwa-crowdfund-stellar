@@ -1,4 +1,29 @@
 {
+  "demoJourney": {
+    "title": "Recorrido completo - simulación",
+    "notice": "Empresa e inversor ficticios fijos. Cada paso se simula y se guarda solo en tu cuenta. No se crean solicitudes reales, aprobaciones, campañas públicas, verificaciones de identidad, firmas, transferencias ni derechos.",
+    "steps": {
+      "submit_application": "Enviar solicitud ficticia",
+      "attach_document": "Adjuntar documento ficticio",
+      "review": "Simular revisión documental",
+      "approve": "Simular aprobación",
+      "create_campaign": "Crear campaña simulada",
+      "complete_onboarding": "Completar comprobaciones simuladas",
+      "contribute": "Registrar aportación simulada"
+    },
+    "complete": "Simulación completa. Ambas personas muestran el mismo recibo guardado. No hubo ninguna transacción.",
+    "application": "Solicitud",
+    "document": "Documento ficticio",
+    "campaign": "Campaña simulada",
+    "businessReceipt": "Recibo de empresa - simulación",
+    "investorReceipt": "Recibo del inversor - simulación",
+    "match": "La campaña, el identificador y el importe coinciden en ambas vistas. Recarga para recuperar los registros.",
+    "receipt": "Identificador del recibo",
+    "amount": "Importe",
+    "units": "unidades simuladas",
+    "status": "Estado",
+    "simulated": "SIMULADO"
+  },
   "applicationDocuments": {
     "uploadNote": "Documentos DEMO: solo .txt sintéticos, máximo 16 KB cada uno, cinco archivos. No suba datos personales ni documentos de identidad.",
     "save": "Guardar documento",

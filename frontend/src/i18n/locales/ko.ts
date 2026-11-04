@@ -4,6 +4,32 @@
 import type { Messages } from './en';
 
 export const ko: Messages = {
+  demoJourney: {
+    title: '전체 과정 - 시뮬레이션',
+    notice:
+      '고정된 가상의 기업과 투자자를 사용합니다. 모든 단계는 모의 과정이며 계정에만 저장됩니다. 실제 신청, 승인, 공개 캠페인, 신원 확인, 서명, 송금 또는 투자 권리가 생성되지 않습니다.',
+    steps: {
+      submit_application: '가상 신청 제출',
+      attach_document: '가상 문서 첨부',
+      review: '문서 검토 시뮬레이션',
+      approve: '신청 승인 시뮬레이션',
+      create_campaign: '모의 캠페인 생성',
+      complete_onboarding: '모의 투자자 확인 완료',
+      contribute: '모의 기여 기록',
+    },
+    complete: '시뮬레이션 완료. 양쪽에 동일한 저장 기록이 표시됩니다. 실제 거래는 없었습니다.',
+    application: '신청',
+    document: '가상 문서',
+    campaign: '모의 캠페인',
+    businessReceipt: '기업 기록 - 시뮬레이션',
+    investorReceipt: '투자자 기록 - 시뮬레이션',
+    match: '두 화면의 캠페인, 기록 ID 및 금액이 일치합니다. 새로 고침 후에도 기록이 유지됩니다.',
+    receipt: '기록 ID',
+    amount: '금액',
+    units: '모의 단위',
+    status: '상태',
+    simulated: '시뮬레이션',
+  },
   applicationDocuments: {
     uploadNote: 'DEMO 문서: 합성 .txt만, 각 16 KB 이하, 최대 5개. 개인정보나 신분증을 업로드하지 마세요.',
     save: '문서 저장',

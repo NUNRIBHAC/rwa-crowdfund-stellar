@@ -1,4 +1,29 @@
 {
+  "demoJourney": {
+    "title": "完整流程 - 模擬",
+    "notice": "固定的虛構企業與投資人角色。每一步都是模擬，僅儲存於您的帳戶。不會建立真實申請、核准、公開募資、身分驗證、錢包簽章、資金轉移或投資權利。",
+    "steps": {
+      "submit_application": "提交模擬申請",
+      "attach_document": "附加模擬文件",
+      "review": "模擬文件審查",
+      "approve": "模擬申請核准",
+      "create_campaign": "建立模擬募資",
+      "complete_onboarding": "完成模擬投資人檢查",
+      "contribute": "記錄模擬出資"
+    },
+    "complete": "模擬完成。雙方顯示相同的已儲存收據。未發生任何交易。",
+    "application": "申請",
+    "document": "模擬文件",
+    "campaign": "模擬募資",
+    "businessReceipt": "企業收據 - 模擬",
+    "investorReceipt": "投資人收據 - 模擬",
+    "match": "兩個畫面的募資、收據編號與金額相同。重新載入可繼續查看記錄。",
+    "receipt": "收據編號",
+    "amount": "金額",
+    "units": "模擬單位",
+    "status": "狀態",
+    "simulated": "模擬"
+  },
   "applicationDocuments": {
     "uploadNote": "DEMO 文件：僅限合成 .txt，每個最多 16 KB，最多五個。請勿上傳個人或身分文件。",
     "save": "儲存文件",

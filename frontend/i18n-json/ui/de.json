@@ -1,4 +1,29 @@
 {
+  "demoJourney": {
+    "title": "Vollständiger Ablauf - Simulation",
+    "notice": "Festgelegte fiktive Firma und Anlegerperson. Alle Schritte sind simuliert und nur in Ihrem Konto gespeichert. Keine echten Anträge, Genehmigungen, öffentlichen Kampagnen, Identitätsprüfungen, Signaturen, Zahlungen oder Rechte entstehen.",
+    "steps": {
+      "submit_application": "Fiktiven Antrag senden",
+      "attach_document": "Fiktives Dokument anhängen",
+      "review": "Dokumentprüfung simulieren",
+      "approve": "Genehmigung simulieren",
+      "create_campaign": "Simulierte Kampagne erstellen",
+      "complete_onboarding": "Simulierte Anlegerprüfung abschließen",
+      "contribute": "Simulierten Beitrag speichern"
+    },
+    "complete": "Simulation abgeschlossen. Beide Personen sehen denselben gespeicherten Beleg. Es gab keine Transaktion.",
+    "application": "Antrag",
+    "document": "Fiktives Dokument",
+    "campaign": "Simulierte Kampagne",
+    "businessReceipt": "Firmenbeleg - Simulation",
+    "investorReceipt": "Anlegerbeleg - Simulation",
+    "match": "Kampagne, Beleg-ID und Betrag stimmen in beiden Ansichten überein. Nach dem Neuladen bleiben die Daten erhalten.",
+    "receipt": "Beleg-ID",
+    "amount": "Betrag",
+    "units": "simulierte Einheiten",
+    "status": "Status",
+    "simulated": "SIMULIERT"
+  },
   "applicationDocuments": {
     "uploadNote": "DEMO-Dokumente: nur synthetische .txt-Dateien, höchstens 16 KB je Datei, fünf Dateien. Keine persönlichen Daten oder Ausweisdokumente hochladen.",
     "save": "Dokument speichern",

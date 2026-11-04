@@ -3253,3 +3253,18 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .application-documents input[type='file'] {
   max-width: 100%;
 }
+
+/* Synthetic scenario IDs are records, never wallet/chain identifiers. */
+.demo-journey code,
+.demo-journey-receipt dd {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.demo-journey-receipt {
+  border: 1px solid var(--border);
+  padding: 1rem;
+}
+.demo-journey-receipt dd {
+  margin-inline-start: 1rem;
+  margin-bottom: 0.5rem;
+}
