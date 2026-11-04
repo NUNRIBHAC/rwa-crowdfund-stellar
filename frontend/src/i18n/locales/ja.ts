@@ -74,6 +74,11 @@ export const ja: Messages = {
     saved: 'このアカウントに保存済み。再読み込みで再開できます。損失計算の入力値は保存しません。',
     refresh: '保存した進捗を更新',
   },
+  notFound: {
+    title: 'ページが見つかりません',
+    body: 'このアドレスに一致するページはこのサイトにありません。',
+    homeLink: 'ホームに戻る',
+  },
   meta: {
     title: 'Blockallisto - リアルアセットを、みんなの可能性に。',
     skipLink: 'メインコンテンツへスキップ',

@@ -24,7 +24,8 @@ export type RouteName =
   | 'press'
   | 'jobs'
   | 'podcast'
-  | 'campaign-builder';
+  | 'campaign-builder'
+  | 'not-found';
 
 export type Route = { name: RouteName; campaignId?: string };
 
@@ -58,7 +59,9 @@ const KNOWN_SEGMENTS = new Set([
 // Path routing serves real per-page URLs (needed for the XML sitemap and
 // shareable links); the server SPA fallback covers direct loads. Legacy #/
 // links are upgraded to their path equivalent, so old shared links keep
-// working. Unknown segments keep the historical home fallback for now.
+// working. Unknown segments route to a truthful not-found state: the URL is
+// kept as typed and the app renders a localized not-found view instead of
+// silently showing home under the wrong address.
 export function routeFromPath(pathname: string): Route {
   const parts = pathname.replace(/^\//, '').split('/').filter(Boolean);
   switch (parts[0]) {
@@ -109,12 +112,16 @@ export function routeFromPath(pathname: string): Route {
       return { name: 'jobs' };
     case 'podcast':
       return { name: 'podcast' };
-    default:
+    case undefined:
       return { name: 'home' };
+    default:
+      return { name: 'not-found' };
   }
 }
 
 export function routePath(route: Route): string {
+  // not-found is never linked to; it only describes the current bad URL.
+  if (route.name === 'not-found') return '/';
   if (route.name === 'campaign') return `/campaigns/${encodeURIComponent(route.campaignId ?? '')}`;
   if (route.name === 'home') return '/';
   if (route.name === 'investments') return '/campaigns';

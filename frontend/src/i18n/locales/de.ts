@@ -76,6 +76,11 @@ export const de: Messages = {
     saved: 'In diesem Konto gespeichert. Zum Fortsetzen neu laden. Eingaben zur Verlustsimulation werden nie gespeichert.',
     refresh: 'Fortschritt aktualisieren',
   },
+  notFound: {
+    title: 'Seite nicht gefunden',
+    body: 'Diese Adresse entspricht keiner Seite dieser Website.',
+    homeLink: 'Zurück zur Startseite',
+  },
   meta: {
     title: 'Blockallisto - Reale Vermögenswerte. Geteilte Möglichkeiten.',
     skipLink: 'Zum Hauptinhalt springen',

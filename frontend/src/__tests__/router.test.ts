@@ -30,8 +30,15 @@ describe('routeFromPath', () => {
     expect(routeFromPath('/campaigns')).toEqual({ name: 'investments' });
     expect(routeFromPath('/campaigns/')).toEqual({ name: 'investments' });
   });
-  test('unknown segments keep the home fallback', () => {
-    expect(routeFromPath('/no-such-page')).toEqual({ name: 'home' });
+  test('unknown segments route to a truthful not-found state', () => {
+    expect(routeFromPath('/no-such-page')).toEqual({ name: 'not-found' });
+    expect(routeFromPath('/NO-SUCH-PAGE')).toEqual({ name: 'not-found' });
+  });
+  test('not-found is never linked to; it only describes the current bad URL', () => {
+    expect(routePath({ name: 'not-found' })).toBe('/');
+  });
+  test('legacy hash of an unknown route upgrades to not-found', () => {
+    expect(routeFromHash('#/no-such-page')).toEqual({ name: 'not-found' });
   });
 });
 

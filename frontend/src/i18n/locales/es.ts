@@ -75,6 +75,11 @@ export const es: Messages = {
     saved: 'Guardado en esta cuenta. Recarga para continuar. Los datos de entrada de pérdidas nunca se guardan.',
     refresh: 'Actualizar progreso',
   },
+  notFound: {
+    title: 'Página no encontrada',
+    body: 'Esta dirección no corresponde a ninguna página de este sitio.',
+    homeLink: 'Volver al inicio',
+  },
   meta: {
     title: 'Blockallisto - Activos reales. Posibilidades compartidas.',
     skipLink: 'Saltar al contenido principal',

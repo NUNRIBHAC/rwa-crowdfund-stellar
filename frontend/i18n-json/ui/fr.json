@@ -68,6 +68,11 @@
     "saved": "Enregistré dans ce compte. Rechargez pour reprendre. Les données de calcul des pertes ne sont jamais enregistrées.",
     "refresh": "Actualiser la progression"
   },
+  "notFound": {
+    "title": "Page introuvable",
+    "body": "Cette adresse ne correspond à aucune page de ce site.",
+    "homeLink": "Retour à l'accueil"
+  },
   "meta": {
     "title": "Blockallisto - Des actifs réels. Des possibilités partagées.",
     "skipLink": "Aller au contenu principal"

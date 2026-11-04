@@ -73,6 +73,11 @@ export const zhCN: Messages = {
     saved: '保存在当前账户。刷新后可继续。损失模拟的原始输入不会保存。',
     refresh: '刷新已保存进度',
   },
+  notFound: {
+    title: '页面未找到',
+    body: '此地址与本网站的任何页面都不匹配。',
+    homeLink: '返回首页',
+  },
   meta: {
     title: 'Blockallisto - 真实资产，共享可能。',
     skipLink: '跳至主要内容',

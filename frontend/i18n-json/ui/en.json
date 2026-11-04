@@ -68,6 +68,11 @@
     "saved": "Saved to this signed-in account. Reload to resume. Raw loss-simulation inputs are never saved.",
     "refresh": "Refresh saved progress"
   },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This address does not match any page on this site.",
+    "homeLink": "Back to home"
+  },
   "meta": {
     "title": "Blockallisto - Real assets. Shared possibilities.",
     "skipLink": "Skip to main content"

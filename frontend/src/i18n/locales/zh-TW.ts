@@ -73,6 +73,11 @@ export const zhTW: Messages = {
     saved: '儲存在目前帳戶。重新整理後可繼續。損失模擬的原始輸入不會儲存。',
     refresh: '更新已儲存進度',
   },
+  notFound: {
+    title: '找不到頁面',
+    body: '此網址與本網站的任何頁面都不相符。',
+    homeLink: '返回首頁',
+  },
   meta: {
     title: 'Blockallisto - 真實資產，共享可能。',
     skipLink: '跳至主要內容',

@@ -292,8 +292,8 @@ export default function App() {
   const CAMPAIGN_DATA_ROUTES = ['home', 'investments', 'campaign', 'account'];
   const campaignLoadStatus = !fixtureMode && ['home', 'investments', 'campaign'].includes(route.name) && !loaded && (
     <section aria-live="polite">
-      <p role={error ? 'alert' : 'status'}>{error ? m.errors.apiUnavailable : m.campaign.loading}</p>
-      {error && (
+      <p role={error?.campaignLoad ? 'alert' : 'status'}>{error?.campaignLoad ? m.errors.apiUnavailable : m.campaign.loading}</p>
+      {error?.campaignLoad && (
         <button
           className="btn"
           disabled={busy}
@@ -328,7 +328,7 @@ export default function App() {
       <main className="page" id="main">
         {error &&
           !(error.campaignLoad && !CAMPAIGN_DATA_ROUTES.includes(route.name)) &&
-          !(!fixtureMode && !loaded && ['home', 'investments', 'campaign'].includes(route.name)) && (
+          !(error.campaignLoad && !fixtureMode && !loaded && ['home', 'investments', 'campaign'].includes(route.name)) && (
             <p role="alert" className="error-banner">
               {(error.code === 'API_UNAVAILABLE' && m.errors.apiUnavailable) || error.text}
             </p>
@@ -376,6 +376,19 @@ export default function App() {
         {route.name === 'press' && <PressPage />}
         {route.name === 'jobs' && <JobsPage />}
         {route.name === 'podcast' && <PodcastPage />}
+        {route.name === 'not-found' && (
+          <section aria-labelledby="not-found-title">
+            <h1 id="not-found-title" className="page-title">
+              {m.notFound.title}
+            </h1>
+            <p>{m.notFound.body}</p>
+            <p>
+              <a className="btn" href="/">
+                {m.notFound.homeLink}
+              </a>
+            </p>
+          </section>
+        )}
 
         <FeedbackTab actor={actor} onConnect={connect} />
         <Footer />

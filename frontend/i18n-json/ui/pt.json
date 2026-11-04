@@ -68,6 +68,11 @@
     "saved": "Guardado nesta conta. Recarregue para continuar. Os dados de entrada da simulação de perdas nunca são guardados.",
     "refresh": "Atualizar progresso guardado"
   },
+  "notFound": {
+    "title": "Página não encontrada",
+    "body": "Este endereço não corresponde a nenhuma página deste site.",
+    "homeLink": "Voltar ao início"
+  },
   "meta": {
     "title": "Blockallisto - Ativos reais. Possibilidades partilhadas.",
     "skipLink": "Saltar para o conteúdo principal"
