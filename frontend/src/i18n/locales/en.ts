@@ -139,7 +139,7 @@ export const en = {
     campaignsNav: 'Campaigns',
     rulesTitle: 'Funding rules and limitations',
     viewCampaign: 'View campaign',
-    forBusinesses: 'For businesses',
+    forBusinesses: 'For Businesses',
     stepsAria: 'How investing works',
     stepsTitle: 'How funding works',
     steps: [
