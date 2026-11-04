@@ -286,7 +286,7 @@ export async function completeSocialFlow(
 
 // Shared tail of every provider flow: link to an existing account, sign an
 // existing identity in, or (identity-only providers) park a pending ticket.
-export type SocialFlowRecord = { linkTo?: string; bindHash?: string };
+export type SocialFlowRecord = { linkTo?: string; bindHash?: string; createdAt?: number };
 export async function finishSocialIdentity(
   store: CommunityStore,
   env: NodeJS.ProcessEnv,
@@ -298,6 +298,11 @@ export async function finishSocialIdentity(
   now: number,
 ): Promise<SocialLoginResult> {
   const identityKey = `${provider}:${subject}`;
+  const rejectDeletedFlow = (s: import('./community-store.js').CommunityState) => {
+    const cutoff = s.deletedSocialIdentityBefore?.[hashToken(identityKey)];
+    if (cutoff !== undefined && (flow.createdAt === undefined || flow.createdAt <= cutoff))
+      throw new AuthError(401, 'account was deleted; start a new sign-in explicitly', 'social_flow_expired');
+  };
 
   if (flow.linkTo) {
     // LINK flow (started by an authenticated account): bind the provider
@@ -308,6 +313,7 @@ export async function finishSocialIdentity(
     // evidence (e.g. Telegram OIDC carries no email claims) can ever take:
     // it can never register, only attach to an existing account.
     return store.change((s) => {
+      rejectDeletedFlow(s);
       const account = s.accounts[flow.linkTo as string];
       if (!account) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
       const existing = s.socialIdentities[identityKey];
@@ -324,6 +330,7 @@ export async function finishSocialIdentity(
   }
 
   return store.change((s) => {
+    rejectDeletedFlow(s);
     const existing = s.socialIdentities[identityKey];
     let account: Account;
     if (existing) {

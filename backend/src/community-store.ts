@@ -422,6 +422,8 @@ export type CommunityState = {
   accounts: Record<string, Account>;
   emailCredentials: Record<string, EmailCredential>;
   socialIdentities: Record<string, SocialIdentity>;
+  // Hash-only callback fence: pre-deletion flows cannot recreate a removed binding.
+  deletedSocialIdentityBefore?: Record<string, number>;
   socialFlows: Record<string, SocialFlow>;
   socialPending: Record<string, SocialPending>;
   challenges: Record<string, Challenge>;

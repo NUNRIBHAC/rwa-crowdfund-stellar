@@ -101,10 +101,11 @@ test('protected records and operator membership block deletion without submittin
       if (protection === 'wallet') delete s.accounts.owner.authMethod;
       if (protection === 'social') s.accounts.owner.authMethod = 'social';
     });
+    const before = await store.read();
     await assert.rejects(deleteEmailAccount(store, `Bearer ${one}`, { confirmation: 'DELETE', password }, protection === 'operator' ? ['owner'] : [], now), {
       code: ['wallet', 'social'].includes(protection) ? 'deletion_unsupported' : 'deletion_protected_records',
     });
-    assert.ok((await store.read()).accounts.owner);
+    assert.deepEqual(await store.read(), before);
   }
 });
 test('enabled 2FA requires a new current code, rejects replay, and deletes only after both proofs', async () => {
@@ -170,4 +171,19 @@ test('HTTP deletion is owner-scoped, rejects unauthenticated or wrong proof, and
   } finally {
     await new Promise<void>((resolve) => server.close(() => resolve()));
   }
+});
+
+test('deleted social binding rejects stale callbacks and cannot resurrect the old account', async () => {
+  const { finishSocialIdentity } = await import('../src/social-auth.js');
+  const store = await fixture();
+  await deleteEmailAccount(store, `Bearer ${one}`, { confirmation: 'DELETE', password }, [], now);
+  const env = { SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'test@example.invalid' };
+  for (const flow of [{ createdAt: now - 1 }, { linkTo: 'owner', createdAt: now - 1 }, {}]) {
+    await assert.rejects(finishSocialIdentity(store, env, 'google', 'owner', 'test@example.invalid', true, flow, now + 1), { code: 'social_flow_expired' });
+  }
+  assert.equal((await store.read()).accounts.owner, undefined);
+  const result = await finishSocialIdentity(store, env, 'google', 'owner', 'test@example.invalid', true, { createdAt: now + 1 }, now + 2);
+  assert.equal(result.kind, 'session');
+  if (result.kind === 'session') assert.notEqual(result.account.publicKey, 'owner');
+  assert.equal((await store.read()).accounts.owner, undefined);
 });

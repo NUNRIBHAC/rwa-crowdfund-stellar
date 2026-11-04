@@ -63,6 +63,10 @@ export async function deleteEmailAccount(
       }
     }
     const identities = Object.values(state.socialIdentities).filter((identity) => identity.publicKey === key);
+    for (const identity of identities) {
+      state.deletedSocialIdentityBefore ??= {};
+      state.deletedSocialIdentityBefore[hashToken(`${identity.provider}:${identity.subject}`)] = now;
+    }
     for (const [id, record] of Object.entries(state.socialPending)) {
       if (record.email === account.email || identities.some((identity) => identity.provider === record.provider && identity.subject === record.subject))
         delete state.socialPending[id];
