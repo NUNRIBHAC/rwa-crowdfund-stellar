@@ -1,5 +1,4 @@
 import { useI18n } from '../i18n';
-import FundingBlock from '../components/FundingBlock';
 
 export default function About() {
   const { m } = useI18n();
@@ -12,7 +11,7 @@ export default function About() {
           <p>{m.about.p2}</p>
         </div>
         <div className="about-animation">
-          <FundingBlock />
+          <img className="about-question" src="/about-question.svg" alt="" />
           <p className="community-note">{m.hero.illustration}</p>
         </div>
       </div>

@@ -526,7 +526,7 @@ export const ko: Messages = {
   },
   about: {
     title: '이 프로젝트 소개',
-    p1: 'Blockallisto(저장소 rwa-crowdfund-stellar)는 Stellar 네트워크에서 토큰화된 크라우드펀딩을 탐구하는 개인 프로토타입입니다: Soroban 스마트 컨트랙트로 강제되는 캠페인 자금 조달과 더 넓은 플랫폼(계정, 검증, 금융상품, 결제)이 저장소에 공개적으로 설계·문서화되어 있습니다.',
+    p1: 'Blockallisto(저장소 rwa-crowdfund-stellar)는 Stellar 네트워크에서 토큰화된 크라우드펀딩을 탐구하는 개인 프로토타입입니다: Soroban 스마트 컨트랙트로 강제되는 캠페인 자금 조달과 더 넓은 플랫폼(계정, 검증, 금융상품, 결제)이 프로젝트 저장소에 설계·문서화되어 있습니다.',
     p2: '회사가 아니며, 인가된 크라우드펀딩 서비스 제공자도 아니며, 유가증권 공모도 아닙니다. 시장 프레이밍: 포르투갈에서 세계로.',
     ethicsAria: '윤리적 배제 정책',
     ethicsTitle: '윤리적 배제 정책',

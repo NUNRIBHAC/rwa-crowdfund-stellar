@@ -4214,3 +4214,10 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .home-contract .hero-interactive .hero-actions {
   margin-top: 12px;
 }
+
+.about-question {
+  display: block;
+  width: min(100%, 240px);
+  height: auto;
+  margin-inline: auto;
+}
