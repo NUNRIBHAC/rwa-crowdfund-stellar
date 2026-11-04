@@ -4432,7 +4432,7 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   color: #fff;
 }
 .site-header .nav-link-secondary {
-  font-size: 14px;
+  font-size: 16px;
 }
 .site-header .nav-more-panel a {
   font-family: inherit;
