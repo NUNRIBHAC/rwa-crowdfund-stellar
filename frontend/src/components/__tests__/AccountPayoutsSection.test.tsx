@@ -67,3 +67,13 @@ describe('AccountPayoutsSection', () => {
     expect(screen.queryByText('No payouts recorded yet. Completed refunds or withdrawals will appear here.')).toBeNull();
   });
 });
+
+it('shows loading without an error or empty claim while the read is pending', () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(() => new Promise(() => {})),
+  );
+  renderSection();
+  expect(screen.getByRole('status').textContent).toContain('Loading');
+  expect(screen.queryByText(/could not be loaded/)).toBeNull();
+});

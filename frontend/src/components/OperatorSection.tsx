@@ -39,11 +39,13 @@ import { routeHash } from '../router';
 type Props = {
   // Campaign registry subset for the news form selector (id + display name).
   campaigns: { id: string; name: string }[];
+  campaignsLoading?: boolean;
+  campaignsUnavailable?: boolean;
 };
 
 type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'reports' | 'podcast' | 'reconciliation' | 'corporate' | 'audit';
 
-export default function OperatorSection({ campaigns }: Props) {
+export default function OperatorSection({ campaigns, campaignsLoading = false, campaignsUnavailable = false }: Props) {
   const { m, locale } = useI18n();
   const { account, token, isOperator } = useCommunityAuth();
   const labels = m.community.operator;
@@ -548,7 +550,18 @@ export default function OperatorSection({ campaigns }: Props) {
         </>
       )}
 
-      {tab === 'corporate' && <CorporateActionsPanel token={token} campaigns={campaigns} />}
+      {tab === 'corporate' &&
+        (campaignsUnavailable ? (
+          <p role="status" className="community-error">
+            {m.errors.apiUnavailable}
+          </p>
+        ) : campaignsLoading ? (
+          <p role="status" className="community-loading">
+            {m.community.loading}
+          </p>
+        ) : (
+          <CorporateActionsPanel token={token} campaigns={campaigns} />
+        ))}
 
       {tab === 'audit' && (
         <>

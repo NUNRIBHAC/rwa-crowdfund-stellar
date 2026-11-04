@@ -433,3 +433,26 @@ test('synthetic application refusal leaves truthful error and no success notice'
   expect((await screen.findByRole('alert')).textContent).toContain('Synthetic server refusal');
   expect(screen.queryByText('Status updated.')).toBeNull();
 });
+
+test('corporate tools distinguish campaign loading and unavailable from a true empty registry', async () => {
+  stubFetch();
+  const view = render(
+    <I18nProvider>
+      <CommunityAuthProvider messages={{ freighterMissing: 'x', walletNoSign: 'y' }}>
+        <OperatorSection campaigns={[]} campaignsLoading />
+      </CommunityAuthProvider>
+    </I18nProvider>,
+  );
+  fireEvent.click(await screen.findByRole('button', { name: 'Corporate actions' }));
+  expect(screen.getByRole('status').textContent).toContain('Loading');
+  expect(screen.queryByText('No campaigns available.')).toBeNull();
+  view.rerender(
+    <I18nProvider>
+      <CommunityAuthProvider messages={{ freighterMissing: 'x', walletNoSign: 'y' }}>
+        <OperatorSection campaigns={[]} campaignsUnavailable />
+      </CommunityAuthProvider>
+    </I18nProvider>,
+  );
+  expect(screen.getByRole('status').textContent).toContain('temporarily unavailable');
+  expect(screen.queryByText('No campaigns available.')).toBeNull();
+});

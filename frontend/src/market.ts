@@ -4,6 +4,7 @@ import type { Campaign } from './types';
 export type Market = {
   campaigns: Campaign[];
   loaded: boolean;
+  campaignLoadError?: boolean;
   fixtureMode: boolean;
   actor: string;
   busy: boolean;

@@ -18,17 +18,18 @@ type PayoutRow = {
 
 export default function AccountPayoutsSection({ actor }: { actor: string }) {
   const { locale, m } = useI18n();
-  const [payouts, setPayouts] = useState<PayoutRow[] | null>(null);
+  const [payouts, setPayouts] = useState<PayoutRow[] | 'loading' | 'error'>('loading');
 
   useEffect(() => {
     let live = true;
+    setPayouts('loading');
     fetch(`/api/account/payouts?actor=${encodeURIComponent(actor)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((j) => {
         if (live) setPayouts(Array.isArray(j.payouts) ? j.payouts : []);
       })
       .catch(() => {
-        if (live) setPayouts(null);
+        if (live) setPayouts('error');
       });
     return () => {
       live = false;
@@ -39,7 +40,11 @@ export default function AccountPayoutsSection({ actor }: { actor: string }) {
     <section aria-label={m.account.payoutsAria}>
       <h2 className="section-title">{m.account.payoutsTitle}</h2>
       <p className="account-note">{m.account.payoutsNote}</p>
-      {payouts === null ? (
+      {payouts === 'loading' ? (
+        <p className="community-loading" role="status">
+          {m.community.loading}
+        </p>
+      ) : payouts === 'error' ? (
         <p className="community-error" role="status">
           {m.account.payoutsUnavailable}
         </p>

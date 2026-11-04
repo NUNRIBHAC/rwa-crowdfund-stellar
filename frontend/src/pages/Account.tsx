@@ -79,24 +79,26 @@ export default function Account({ market }: { market: Market }) {
   const readActor = accountReadActor(actor, account);
   const [tab, setTab] = useState<PortfolioStatus | 'all'>('all');
   const intent = useMemo(readIntent, []);
-  const [activity, setActivity] = useState<ActivityRow[] | null>(null);
+  const [activityRead, setActivityRead] = useState<{ actor: string; data: ActivityRow[] | 'loading' | 'error' } | null>(null);
+  const activity = !readActor ? null : activityRead?.actor === readActor ? activityRead.data : 'loading';
 
   // Real activity feed: the wallet's recorded intents from the platform
   // journal. Falls back to the locally saved intent when the feed is
   // unavailable or empty, so the section never shows fabricated history.
   useEffect(() => {
-    setActivity(null);
+    setActivityRead(null);
     if (!readActor) {
       return;
     }
     let live = true;
+    setActivityRead({ actor: readActor, data: 'loading' });
     fetch(`/api/account/activity?actor=${encodeURIComponent(readActor)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((j) => {
-        if (live) setActivity(Array.isArray(j.activity) ? j.activity : []);
+        if (live) setActivityRead({ actor: readActor, data: Array.isArray(j.activity) ? j.activity : [] });
       })
       .catch(() => {
-        if (live) setActivity(null);
+        if (live) setActivityRead({ actor: readActor, data: 'error' });
       });
     return () => {
       live = false;
@@ -184,9 +186,9 @@ export default function Account({ market }: { market: Market }) {
 
       {hasPositions && <AccountNewsSection campaigns={rows.map((r) => ({ id: r.id, name: r.name }))} />}
 
-      {readActor && <AccountPayoutsSection actor={readActor} />}
+      {readActor && <AccountPayoutsSection key={`payouts:${readActor}`} actor={readActor} />}
 
-      {readActor && <AccountHoldingsSection actor={readActor} />}
+      {readActor && <AccountHoldingsSection key={`holdings:${readActor}`} actor={readActor} />}
 
       {hasPositions && rows.length > 0 && (
         <section aria-label={m.account.documentsAria}>
@@ -203,7 +205,15 @@ export default function Account({ market }: { market: Market }) {
 
       <section aria-label={m.account.activityAria}>
         <h2 className="section-title">{m.account.recentActivity}</h2>
-        {activity && activity.length > 0 ? (
+        {activity === 'loading' ? (
+          <p className="community-loading" role="status">
+            {m.community.loading}
+          </p>
+        ) : activity === 'error' ? (
+          <p className="community-error" role="status">
+            {m.errors.apiUnavailable}
+          </p>
+        ) : activity && activity.length > 0 ? (
           <ul className="activity-list">
             {activity.map((a) => (
               <li key={a.hash}>
@@ -253,7 +263,11 @@ export default function Account({ market }: { market: Market }) {
         <AppropriatenessSection />
       </div>
 
-      <OperatorSection campaigns={campaigns.map((c) => ({ id: c.id, name: c.name }))} />
+      <OperatorSection
+        campaignsLoading={!market.loaded}
+        campaignsUnavailable={market.campaignLoadError}
+        campaigns={campaigns.map((c) => ({ id: c.id, name: c.name }))}
+      />
 
       <MyCommunityActivity />
       <SignInPanel actor={actor} />

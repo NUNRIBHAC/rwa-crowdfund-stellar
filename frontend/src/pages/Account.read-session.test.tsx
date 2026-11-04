@@ -1,4 +1,4 @@
-import { cleanup, render, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { I18nProvider } from '../i18n';
 import Account from './Account';
@@ -47,4 +47,63 @@ describe('account restored wallet records', () => {
     );
     expect(fetcher).not.toHaveBeenCalled();
   });
+});
+
+it('keeps activity pending and failure distinct from a successful empty response', async () => {
+  auth.account = { publicKey: 'wallet-session', authMethod: 'wallet' };
+  let rejectRead: (error: Error) => void = () => {};
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((url: string) =>
+      url.includes('/activity')
+        ? new Promise((_, reject) => {
+            rejectRead = reject;
+          })
+        : Promise.resolve(new Response(JSON.stringify({ holdings: [], payouts: [] }))),
+    ),
+  );
+  render(
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>,
+  );
+  const activity = screen.getByRole('region', { name: 'Recent activity' });
+  expect(activity.textContent).toContain('Loading');
+  expect(activity.textContent).not.toContain('No activity');
+  rejectRead(new Error('synthetic offline'));
+  await waitFor(() => expect(activity.textContent).toContain('temporarily unavailable'));
+  expect(activity.textContent).not.toContain('No activity');
+});
+
+it('does not retain an old actor activity row while the next actor read is pending', async () => {
+  auth.account = { publicKey: 'wallet-one', authMethod: 'wallet' };
+  let finishOld: (v: Response) => void = () => {};
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((url: string) =>
+      url.includes('/activity')
+        ? new Promise<Response>((resolve) => {
+            if (url.includes('wallet-one')) finishOld = resolve;
+          })
+        : Promise.resolve(new Response(JSON.stringify({ holdings: [], payouts: [] }))),
+    ),
+  );
+  const view = render(
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>,
+  );
+  auth.account = { publicKey: 'wallet-two', authMethod: 'wallet' };
+  view.rerender(
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>,
+  );
+  finishOld(
+    new Response(
+      JSON.stringify({ activity: [{ hash: 'old', campaign: 'OLD-ACTOR-ROW', action: 'contribute', status: 'SUCCESS', amount: '1', createdAt: null }] }),
+    ),
+  );
+  await waitFor(() => expect(screen.getByRole('region', { name: 'Recent activity' }).textContent).toContain('Loading'));
+  expect(screen.queryByText('OLD-ACTOR-ROW')).toBeNull();
 });

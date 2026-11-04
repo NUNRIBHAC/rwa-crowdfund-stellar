@@ -116,3 +116,13 @@ describe('AccountHoldingsSection', () => {
     expect(screen.queryByText('0')).toBeNull();
   });
 });
+
+it('shows loading without an error or empty claim while the read is pending', () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(() => new Promise(() => {})),
+  );
+  renderSection();
+  expect(screen.getByRole('status').textContent).toContain('Loading');
+  expect(screen.queryByText(/could not be loaded/)).toBeNull();
+});

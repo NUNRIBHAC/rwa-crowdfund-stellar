@@ -63,7 +63,11 @@ export default function AccountHoldingsSection({ actor }: { actor: string }) {
     <section aria-label={a.holdingsAria}>
       <h2 className="section-title">{a.holdingsTitle}</h2>
       <p className="account-note">{a.holdingsNote}</p>
-      {state === 'loading' ? null : state === 'error' ? (
+      {state === 'loading' ? (
+        <p className="community-loading" role="status">
+          {m.community.loading}
+        </p>
+      ) : state === 'error' ? (
         <p className="community-error" role="status">
           {a.holdingsUnavailable}
         </p>

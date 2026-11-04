@@ -268,6 +268,7 @@ export default function App() {
   const market: Market = {
     campaigns: base,
     loaded,
+    campaignLoadError: !loaded && error !== null,
     fixtureMode,
     actor,
     busy,
