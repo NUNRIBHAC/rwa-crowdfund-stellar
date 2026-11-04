@@ -25,6 +25,34 @@ export type PendingContribution = {
 const storePath = () =>
   process.env.PENDING_CONTRIBUTORS_PATH ?? path.join(path.dirname(process.env.SOROBAN_INTENTS_PATH ?? 'intents.json'), 'pending-contributors.json');
 
+// Deletion safety must not interpret an unreadable/corrupt file as no records.
+// Keep existing recovery behavior separate; this strict reader is not wired
+// into account deletion until a coherent external retention adapter exists.
+export function readPendingStrict(): PendingContribution[] {
+  let raw: string;
+  try {
+    raw = fs.readFileSync(storePath(), 'utf8');
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+    throw error;
+  }
+  const value: unknown = JSON.parse(raw);
+  if (
+    !Array.isArray(value) ||
+    value.some(
+      (entry) =>
+        !entry ||
+        typeof entry.hash !== 'string' ||
+        !/^[0-9a-f]{64}$/.test(entry.hash) ||
+        typeof entry.firstPendingAt !== 'number' ||
+        !Number.isFinite(entry.firstPendingAt) ||
+        (entry.contributor !== undefined && typeof entry.contributor !== 'string'),
+    )
+  )
+    throw new Error('pending contributor safety records are unreadable');
+  return value as PendingContribution[];
+}
+
 export function readPending(): PendingContribution[] {
   try {
     const raw = fs.readFileSync(storePath(), 'utf8');
