@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { StrictMode } from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, expect, test, vi } from 'vitest';
 import AccountDeletionSection from './AccountDeletionSection';
@@ -103,4 +104,17 @@ test('social proof final confirmation sends only the proof and clears it on fail
   expect(screen.queryByText(/Linked identity checked/)).toBeNull();
   expect((screen.getByLabelText('Type DELETE to confirm') as HTMLInputElement).value).toBe('');
   expect((screen.getByLabelText('Current authenticator code (if enabled)') as HTMLInputElement).value).toBe('');
+});
+
+test('strict-mode effect replay keeps callback proof while stripping the fragment', async () => {
+  fixtures.auth.account = { authMethod: 'social', totpEnabled: false, publicKey: 'owner' };
+  history.replaceState(null, '', '/account#deletion-proof=bld_' + 'c'.repeat(48));
+  render(
+    <StrictMode>
+      <AccountDeletionSection />
+    </StrictMode>,
+  );
+  await screen.findByText(/Linked identity checked/);
+  expect(location.hash).toBe('');
+  expect(fixtures.deleteAccount).not.toHaveBeenCalled();
 });

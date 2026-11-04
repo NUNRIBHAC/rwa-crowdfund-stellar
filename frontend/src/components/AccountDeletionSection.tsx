@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { deleteOwnAccount, fetchDeletionProviders, startDeletionProvider } from '../community/api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { socialProviderDisplayName } from '../community/social';
@@ -11,14 +11,19 @@ export default function AccountDeletionSection() {
   const [socialProof, setSocialProof] = useState('');
   const [providers, setProviders] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+  const proofOwner = useRef('');
   useEffect(() => {
     let active = true;
-    setSocialProof('');
-    setProviders([]);
-    setConfirmation('');
-    setPassword('');
-    setCode('');
-    setOpen(false);
+    const owner = `${account?.publicKey ?? ''}:${token}`;
+    if (proofOwner.current !== owner) {
+      proofOwner.current = owner;
+      setSocialProof('');
+      setProviders([]);
+      setConfirmation('');
+      setPassword('');
+      setCode('');
+      setOpen(false);
+    }
     if (account?.authMethod === 'social' && token) {
       fetchDeletionProviders(token)
         .then((value) => {
