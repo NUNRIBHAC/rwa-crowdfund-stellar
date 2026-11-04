@@ -509,7 +509,7 @@
   },
   "about": {
     "title": "Über dieses Projekt",
-    "p1": "Blockallisto (Repository rwa-crowdfund-stellar) ist ein persönlicher Prototyp, der tokenisiertes Crowdfunding im Stellar-Netzwerk erkundet: Kampagnenfinanzierung, durchgesetzt durch einen Soroban-Smart-Contract, mit der breiteren Plattform - Konten, Verifizierung, Instrumente, Zahlungen - offen im Repository entworfen und dokumentiert.",
+    "p1": "Blockallisto (Repository rwa-crowdfund-stellar) ist ein persönlicher Prototyp, der tokenisiertes Crowdfunding im Stellar-Netzwerk erkundet: Kampagnenfinanzierung, durchgesetzt durch einen Soroban-Smart-Contract, mit der breiteren Plattform - Konten, Verifizierung, Instrumente, Zahlungen - im Projekt-Repository entworfen und dokumentiert.",
     "p2": "Es ist kein Unternehmen, kein zugelassener Crowdfunding-Dienstleister und kein Wertpapierangebot. Marktkontext: von Portugal in die Welt.",
     "ethicsAria": "Ethische Ausschlussrichtlinie",
     "ethicsTitle": "Ethische Ausschlussrichtlinie",

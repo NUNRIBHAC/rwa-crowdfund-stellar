@@ -509,7 +509,7 @@
   },
   "about": {
     "title": "關於本項目",
-    "p1": "Blockallisto（倉庫 rwa-crowdfund-stellar）是一個個人原型，探索在 Stellar 網絡上進行代幣化眾籌：由 Soroban 智能合約強制執行項目融資，而更完整的平臺——賬戶、驗證、金融工具、支付——在倉庫中以開放方式設計和記錄。",
+    "p1": "Blockallisto（倉庫 rwa-crowdfund-stellar）是一個個人原型，探索在 Stellar 網絡上進行代幣化眾籌：由 Soroban 智能合約強制執行項目融資，而更完整的平臺——賬戶、驗證、金融工具、支付——在項目倉庫中設計和記錄。",
     "p2": "它不是一家公司，不是持牌眾籌服務提供商，也不構成證券發行。市場定位：從葡萄牙走向世界。",
     "ethicsAria": "倫理排除政策",
     "ethicsTitle": "倫理排除政策",

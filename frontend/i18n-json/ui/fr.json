@@ -509,7 +509,7 @@
   },
   "about": {
     "title": "À propos de ce projet",
-    "p1": "Blockallisto (dépôt rwa-crowdfund-stellar) est un prototype personnel qui explore le crowdfunding tokenisé sur le réseau Stellar : financement de campagnes appliqué par un contrat intelligent Soroban, avec la plateforme plus large - comptes, vérification, instruments, paiements - conçue et documentée ouvertement dans le dépôt.",
+    "p1": "Blockallisto (dépôt rwa-crowdfund-stellar) est un prototype personnel qui explore le crowdfunding tokenisé sur le réseau Stellar : financement de campagnes appliqué par un contrat intelligent Soroban, avec la plateforme plus large - comptes, vérification, instruments, paiements - conçue et documentée dans le dépôt du projet.",
     "p2": "Ce n'est ni une entreprise, ni un prestataire de services de crowdfunding agréé, ni une offre de titres. Contexte de marché : du Portugal vers le monde.",
     "ethicsAria": "Politique d'exclusion éthique",
     "ethicsTitle": "Politique d'exclusion éthique",
