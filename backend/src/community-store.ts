@@ -416,6 +416,8 @@ export type AuditEntry = {
 };
 
 export type CommunityState = {
+  // Isolated non-binding fixture meetings; never a legal rights register.
+  simulatedMeetings?: Record<string, import('./meeting-simulation.js').SimulatedMeeting>;
   version: 1;
   accounts: Record<string, Account>;
   emailCredentials: Record<string, EmailCredential>;
