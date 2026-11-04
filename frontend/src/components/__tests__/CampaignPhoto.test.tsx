@@ -14,7 +14,7 @@ for (const variant of ['card', 'campaign'] as const) {
       </I18nProvider>,
     );
     expect(screen.getByRole('img').getAttribute('src')).toBe(campaignPhoto('future-unlisted-project'));
-    expect(screen.getByText(/Illustrative cover/).closest('figure')?.className).toBe(`${variant}-photo`);
+    expect(screen.getByText(/Illustrative photo/).closest('figure')?.className).toBe(`${variant}-photo`);
   });
 }
 
@@ -26,7 +26,7 @@ test('a failed campaign-specific photo falls back without removing the honesty c
     </I18nProvider>,
   );
   fireEvent.error(screen.getByRole('img'));
-  expect(screen.getByRole('img').getAttribute('src')).toBe(campaignPhoto(''));
+  expect(screen.getByRole('img').getAttribute('src')).toBe('/illustrative-covers/blocks-0.svg');
   expect(screen.getByText(/Illustrative cover/)).toBeTruthy();
   delete CAMPAIGN_PHOTOS['photo-failure-test'];
 });

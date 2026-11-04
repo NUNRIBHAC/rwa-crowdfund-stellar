@@ -8,7 +8,7 @@ export default function CampaignPhoto({ campaignId, variant }: { campaignId: str
   const { m } = useI18n();
   const [failed, setFailed] = useState(false);
   const src = campaignPhoto(campaignId);
-  const displayed = failed ? campaignPhoto('') : src;
+  const displayed = failed ? '/illustrative-covers/blocks-0.svg' : src;
   const illustration = displayed.endsWith('.svg');
   return (
     <figure className={`${variant}-photo`}>

@@ -95,7 +95,7 @@
   "riskBanner": "Las inversiones en crowdfunding conllevan riesgo de pérdida total. Esto es un prototipo en la testnet de Stellar: sin ofertas reales, sin fondos reales, sin asesoramiento de inversión.",
   "hero": {
     "introTitle": "Financiar un proyecto juntos.",
-    "intro": "Explora campañas de financiación. Consulta el objetivo, el plazo y qué ocurre después.",
+    "intro": "Explora campañas de financiación. Contribuye a un objetivo compartido. Tras el plazo, el resultado decide qué ocurre después.",
     "illustration": "Ilustración interactiva - sin transacción",
     "goalReached": "Meta alcanzada",
     "goalMissed": "Meta no alcanzada",
@@ -162,7 +162,7 @@
       "Reglas de financiación aplicadas por un contrato público, no por la contabilidad de la plataforma.",
       "Protección todo-o-nada: los contribuyentes firman su propio reembolso si el objetivo no se alcanza.",
       "Cada transacción es verificable en una red de pruebas pública.",
-      "Diseño abierto: clases de instrumentos, recorrido del inversor y superficie de cumplimiento documentados en el repositorio."
+      "Documentación del proyecto: clases de instrumentos, recorrido del inversor y requisitos de cumplimiento descritos en la documentación."
     ]
   },
   "invest": {

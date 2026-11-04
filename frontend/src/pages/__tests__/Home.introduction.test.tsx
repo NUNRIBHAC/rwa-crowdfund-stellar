@@ -27,10 +27,20 @@ test('home introduces funding, preserves the slogan and sends contribution actio
     </I18nProvider>,
   );
   expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Real assets. Shared possibilities.');
-  expect(screen.getByText('Explore funding campaigns. See the goal, the deadline and what happens next.')).toBeTruthy();
+  expect(
+    screen.getByText('Explore funding campaigns. Contribute toward a shared goal. After the deadline, the result decides what happens next.'),
+  ).toBeTruthy();
   expect(container.querySelector('.card input')).toBeNull();
   expect(container.querySelector('.card details')).toBeNull();
   expect(screen.getByRole('link', { name: 'View campaign' }).getAttribute('href')).toBe('/campaigns/fixture-lisbon-riverside');
+  const contract = container.querySelector('.home-contract') as HTMLDetailsElement;
+  expect(contract.open).toBe(false);
+  fireEvent.click(screen.getByText('How the contract works'));
+  expect(contract.open).toBe(true);
+  expect(container.querySelectorAll('.hero-cubes .editorial-cube-motion')).toHaveLength(6);
+  expect(container.querySelector('.home-contract .funding-illustration')).toBeTruthy();
+  expect(container.querySelectorAll('.home-funding-rules .instrument-card')).toHaveLength(7);
+  expect(container.querySelectorAll('.home-funding-rules details')).toHaveLength(4);
   const missed = screen.getByRole('button', { name: 'Goal missed' });
   fireEvent.click(missed);
   expect(missed.getAttribute('aria-pressed')).toBe('true');

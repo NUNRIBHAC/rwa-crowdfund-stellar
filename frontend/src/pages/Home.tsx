@@ -67,9 +67,17 @@ export default function Home({ market }: { market: Market }) {
         <h2 className="section-title">{m.home.rulesTitle}</h2>
         <p className="hero-unavailable">{m.hero.unavailable}</p>
         <details className="hero-technical">
-          <summary>{m.hero.technicalTitle}</summary>
-          <p>{m.hero.sub}</p>
-          <p>{m.card.rules}</p>
+          <summary>{m.home.instrumentsTitle}</summary>
+          <p>{m.home.instrumentsIntro}</p>
+          <div className="instrument-grid">
+            {m.instruments.classes.map((c) => (
+              <article className="instrument-card" key={c.id}>
+                <h3>{c.label}</h3>
+                {c.subtypeOf && <p className="instrument-sub">{c.subtypeOf}</p>}
+                <p>{c.summary}</p>
+              </article>
+            ))}
+          </div>
         </details>
         <details className="hero-technical">
           <summary>{m.hero.goalMissed}</summary>
@@ -80,6 +88,14 @@ export default function Home({ market }: { market: Market }) {
           <p>{m.hero.noteUnknown}</p>
           <p>{mode === 'live' ? m.hero.noteLive : mode === 'sample' ? m.hero.noteSample : m.hero.noteUnknown}</p>
           <a href="/risk-disclosure">{m.footer.riskDisclosure}</a>
+        </details>
+        <details className="hero-technical home-why">
+          <summary>{m.home.whyTitle}</summary>
+          <ul className="why-list">
+            {m.home.whyPoints.map((point) => (
+              <li key={point}>{point}</li>
+            ))}
+          </ul>
         </details>
       </section>
       <section className="home-final-cta">

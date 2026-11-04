@@ -103,7 +103,7 @@ export const fr: Messages = {
     'Les investissements en crowdfunding comportent un risque de perte totale. Ceci est un prototype sur le testnet Stellar : aucune offre réelle, aucun fonds réel, aucun conseil en investissement.',
   hero: {
     introTitle: 'Financer un projet ensemble.',
-    intro: 'Explorez les campagnes de financement. Consultez l’objectif, la date limite et la suite.',
+    intro: 'Explorez les campagnes de financement. Contribuez à un objectif commun. Après la date limite, le résultat décide de la suite.',
     illustration: 'Illustration interactive - aucune transaction',
     goalReached: 'Objectif atteint',
     goalMissed: 'Objectif non atteint',
@@ -175,7 +175,7 @@ export const fr: Messages = {
       'Règles de financement appliquées par un contrat public, pas par la comptabilité de la plateforme.',
       "Protection tout-ou-rien : les contributeurs signent leur propre remboursement si l'objectif n'est pas atteint.",
       'Chaque transaction est vérifiable sur un réseau de test public.',
-      "Conception ouverte : classes d'instruments, parcours de l'investisseur et surface de conformité documentées dans le dépôt.",
+      'Documentation du projet : classes d’instruments, parcours investisseur et exigences de conformité y sont décrits.',
     ],
   },
   invest: {
@@ -397,7 +397,6 @@ export const fr: Messages = {
     applicationPreview: 'Voir l’aperçu de candidature',
     campaignRecords: 'Voir les registres de campagne',
     contributionPayment: 'Contribution et paiement',
-
     partial: 'Prototype partiel',
     title: 'Fonctionnement',
     intro:

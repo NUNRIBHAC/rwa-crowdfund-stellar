@@ -4137,3 +4137,72 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     gap: 8px;
   }
 }
+/* Reference batch: same-surface disclosures, decorative hero, interactive contract on demand. */
+.home-contract {
+  margin-top: 24px;
+  text-align: center;
+  background: transparent;
+}
+.home-contract > summary {
+  text-align: center;
+}
+.home-contract .hero-interactive {
+  max-width: 600px;
+  margin: 20px auto 0;
+  background: transparent;
+  border: 0;
+}
+.home-contract .hero-interactive .fund-grid {
+  width: min(300px, 90%);
+}
+.home-contract .hero-interactive .fund-grid-unit,
+.home-contract .hero-interactive .funding-illustration > .community-note:last-of-type {
+  display: block;
+}
+.hero-cubes {
+  width: 100%;
+  margin: 0;
+  display: grid;
+  place-items: center;
+}
+.hero-cubes .editorial-cubes {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+}
+.home-introduction .home-funding-rules {
+  background: transparent;
+  border: 0;
+}
+.home-funding-rules .hero-technical {
+  background: transparent;
+}
+.home-funding-rules .instrument-grid {
+  margin-block: 20px;
+}
+.home-why > summary {
+  font-size: 24px;
+}
+.how-funding-animation {
+  min-width: 0;
+  width: 100%;
+  max-width: 420px;
+  justify-self: center;
+}
+.how-funding-animation .funding-block {
+  max-width: 100%;
+}
+.home-contract .hero-interactive .fund-grid-unit {
+  display: none;
+}
+.home-contract .hero-actions .btn {
+  text-decoration: none;
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+}
+.home-contract .hero-actions [aria-pressed='true'] {
+  border-color: var(--accent);
+}
+.home-funding-rules .instrument-card h3 {
+  color: var(--accent);
+}

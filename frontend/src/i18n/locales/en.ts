@@ -100,7 +100,7 @@ export const en = {
   riskBanner: 'Crowdfunding investments carry a risk of total loss. This is a Stellar testnet prototype: no live offers, no real funds, no investment advice.',
   hero: {
     introTitle: 'Fund a project together.',
-    intro: 'Explore funding campaigns. See the goal, the deadline and what happens next.',
+    intro: 'Explore funding campaigns. Contribute toward a shared goal. After the deadline, the result decides what happens next.',
     illustration: 'Interactive illustration - no transaction',
     goalReached: 'Goal reached',
     goalMissed: 'Goal missed',
@@ -171,7 +171,7 @@ export const en = {
       'Funding rules enforced by a public contract, not by platform bookkeeping.',
       'All-or-nothing protection: contributors sign their own refund if the goal is missed.',
       'Every transaction is verifiable on a public test network.',
-      'Open design: instrument classes, investor journey and compliance surface documented in the repository.',
+      'Design documentation: instrument classes, investor journey and compliance surface are described in the project documentation.',
     ],
   },
   invest: {
@@ -388,7 +388,6 @@ export const en = {
     applicationPreview: 'View application preview',
     campaignRecords: 'View campaign records',
     contributionPayment: 'Contribution and payment',
-
     partial: 'Partial prototype',
     title: 'How it works',
     intro:

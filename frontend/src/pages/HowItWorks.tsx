@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useI18n } from '../i18n';
 import { routeHash } from '../router';
-import EditorialCubes from '../components/EditorialCubes';
+import FundingBlock from '../components/FundingBlock';
 
 // The intended sequence is distinct from today's restricted testnet features.
 export default function HowItWorks() {
@@ -47,7 +47,10 @@ export default function HowItWorks() {
           <h1 className="page-title">{h.guidedTitle}</h1>
           <p>{h.guidedIntro}</p>
         </div>
-        <EditorialCubes />
+        <div className="how-funding-animation">
+          <FundingBlock />
+          <p className="community-note">{m.hero.illustration}</p>
+        </div>
       </div>
       <div className="journey-switch" role="tablist" aria-label={h.title}>
         {(['investor', 'issuer'] as const).map((id) => (

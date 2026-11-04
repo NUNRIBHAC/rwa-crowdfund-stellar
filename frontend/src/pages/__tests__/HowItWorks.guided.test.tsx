@@ -22,6 +22,6 @@ test('one audience journey is shown at a time with demo actions separate from in
   expect(container.querySelectorAll('.journey-list > li').length).toBe(5);
   expect(screen.queryByRole('heading', { name: 'Contribution and payment' })).toBeNull();
   expect(screen.getAllByRole('link', { name: 'View application preview' }).length).toBe(2);
-  expect(container.querySelector('.editorial-cubes')?.getAttribute('aria-hidden')).toBe('true');
-  expect(container.querySelectorAll('.editorial-cube-motion').length).toBe(6);
+  expect(container.querySelector('.editorial-cubes')).toBeNull();
+  expect(container.querySelector('.how-funding-animation .funding-block')).toBeTruthy();
 });

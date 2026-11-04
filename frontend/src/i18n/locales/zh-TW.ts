@@ -100,7 +100,7 @@ export const zhTW: Messages = {
   riskBanner: '眾籌投資存在全部損失的風險。這是 Stellar 測試網原型：無真實發行、無真實資金、無投資建議。',
   hero: {
     introTitle: '共同為專案籌資。',
-    intro: '探索募資活動。查看目標、截止日期和後續安排。',
+    intro: '探索募資活動，為共同目標出資。截止日期後，結果將決定下一步。',
     illustration: '互動示意 - 不進行交易',
     goalReached: '目標達成',
     goalMissed: '目標未達成',
@@ -168,7 +168,7 @@ export const zhTW: Messages = {
       '融資規則由公開合約執行，而非平臺記賬。',
       '"全有或全無"保護：目標未達成時，出資者自行簽署退款。',
       '每筆交易都可在公共測試網絡上驗證。',
-      '開放設計：工具類別、投資者旅程和合規範圍均在倉庫中文檔化。',
+      '專案文件說明金融工具類別、投資人流程及合規要求。',
     ],
   },
   invest: {
@@ -378,7 +378,6 @@ export const zhTW: Messages = {
     applicationPreview: '查看申請預覽',
     campaignRecords: '查看募資活動紀錄',
     contributionPayment: '出資與付款',
-
     partial: '部分原型功能',
     title: '運作方式',
     intro: '原型流程：狀態標籤區分已實作功能、有限的示範功能和規劃中的工作。不提供真實投資、身分驗證或法律核准。',
