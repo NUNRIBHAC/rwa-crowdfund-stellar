@@ -73,6 +73,7 @@
     "skipLink": "メインコンテンツへスキップ"
   },
   "nav": {
+    "menu": "メニュー",
     "ariaMain": "メイン",
     "home": "ホーム",
     "investments": "投資",
@@ -81,9 +82,11 @@
     "financing": "資金調達",
     "faq": "よくある質問",
     "about": "概要",
-    "account": "マイアカウント"
+    "account": "マイアカウント",
+    "more": "その他"
   },
   "header": {
+    "connectWallet": "ウォレットを接続",
     "testnetBadge": "Stellar テストネット",
     "connect": "Freighter を接続",
     "connectedPrefix": "接続済み",

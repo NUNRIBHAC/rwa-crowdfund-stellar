@@ -78,6 +78,7 @@ export const zhCN: Messages = {
     skipLink: '跳至主要内容',
   },
   nav: {
+    menu: '菜单',
     ariaMain: '主导航',
     home: '首页',
     investments: '投资',
@@ -87,8 +88,10 @@ export const zhCN: Messages = {
     faq: '常见问题',
     about: '关于',
     account: '我的账户',
+    more: '更多',
   },
   header: {
+    connectWallet: '连接钱包',
     testnetBadge: 'Stellar 测试网',
     connect: '连接 Freighter',
     connectedPrefix: '已连接',

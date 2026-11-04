@@ -73,6 +73,7 @@
     "skipLink": "Saltar para o conteúdo principal"
   },
   "nav": {
+    "menu": "Menu",
     "ariaMain": "Principal",
     "home": "Início",
     "investments": "Investir",
@@ -81,9 +82,11 @@
     "financing": "Financiamento",
     "faq": "FAQ",
     "about": "Sobre",
-    "account": "A minha conta"
+    "account": "A minha conta",
+    "more": "Mais"
   },
   "header": {
+    "connectWallet": "Ligar carteira",
     "testnetBadge": "Testnet Stellar",
     "connect": "Ligar Freighter",
     "connectedPrefix": "Ligado",

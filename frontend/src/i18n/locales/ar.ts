@@ -79,6 +79,7 @@ export const ar: Messages = {
     skipLink: 'انتقل إلى المحتوى الرئيسي',
   },
   nav: {
+    menu: 'القائمة',
     ariaMain: 'التنقل الرئيسي',
     home: 'الرئيسية',
     investments: 'استثمر',
@@ -88,8 +89,10 @@ export const ar: Messages = {
     faq: 'الأسئلة الشائعة',
     about: 'حول',
     account: 'حسابي',
+    more: 'المزيد',
   },
   header: {
+    connectWallet: 'ربط المحفظة',
     testnetBadge: 'شبكة Stellar التجريبية',
     connect: 'ربط Freighter',
     connectedPrefix: 'متصل',

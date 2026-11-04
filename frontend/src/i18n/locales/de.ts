@@ -81,6 +81,7 @@ export const de: Messages = {
     skipLink: 'Zum Hauptinhalt springen',
   },
   nav: {
+    menu: 'Menü',
     ariaMain: 'Hauptnavigation',
     home: 'Start',
     investments: 'Investieren',
@@ -90,8 +91,10 @@ export const de: Messages = {
     faq: 'FAQ',
     about: 'Über uns',
     account: 'Mein Konto',
+    more: 'Mehr',
   },
   header: {
+    connectWallet: 'Wallet verbinden',
     testnetBadge: 'Stellar-Testnet',
     connect: 'Freighter verbinden',
     connectedPrefix: 'Verbunden',

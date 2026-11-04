@@ -73,6 +73,7 @@
     "skipLink": "انتقل إلى المحتوى الرئيسي"
   },
   "nav": {
+    "menu": "القائمة",
     "ariaMain": "التنقل الرئيسي",
     "home": "الرئيسية",
     "investments": "استثمر",
@@ -81,9 +82,11 @@
     "financing": "التمويل",
     "faq": "الأسئلة الشائعة",
     "about": "حول",
-    "account": "حسابي"
+    "account": "حسابي",
+    "more": "المزيد"
   },
   "header": {
+    "connectWallet": "ربط المحفظة",
     "testnetBadge": "شبكة Stellar التجريبية",
     "connect": "ربط Freighter",
     "connectedPrefix": "متصل",

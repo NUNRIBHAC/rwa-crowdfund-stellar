@@ -79,6 +79,7 @@ export const ja: Messages = {
     skipLink: 'メインコンテンツへスキップ',
   },
   nav: {
+    menu: 'メニュー',
     ariaMain: 'メイン',
     home: 'ホーム',
     investments: '投資',
@@ -88,8 +89,10 @@ export const ja: Messages = {
     faq: 'よくある質問',
     about: '概要',
     account: 'マイアカウント',
+    more: 'その他',
   },
   header: {
+    connectWallet: 'ウォレットを接続',
     testnetBadge: 'Stellar テストネット',
     connect: 'Freighter を接続',
     connectedPrefix: '接続済み',

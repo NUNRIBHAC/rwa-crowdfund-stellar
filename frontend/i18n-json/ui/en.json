@@ -73,6 +73,7 @@
     "skipLink": "Skip to main content"
   },
   "nav": {
+    "menu": "Menu",
     "ariaMain": "Main",
     "home": "Home",
     "investments": "Invest",
@@ -81,9 +82,11 @@
     "financing": "Financing",
     "faq": "FAQ",
     "about": "About",
-    "account": "My account"
+    "account": "My account",
+    "more": "More"
   },
   "header": {
+    "connectWallet": "Connect wallet",
     "testnetBadge": "Stellar testnet",
     "connect": "Connect Freighter",
     "connectedPrefix": "Connected",

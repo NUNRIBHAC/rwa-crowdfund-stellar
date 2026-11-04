@@ -80,6 +80,7 @@ export const hi: Messages = {
     skipLink: 'मुख्य सामग्री पर जाएं',
   },
   nav: {
+    menu: 'मेनू',
     ariaMain: 'मुख्य',
     home: 'होम',
     investments: 'निवेश',
@@ -89,8 +90,10 @@ export const hi: Messages = {
     faq: 'अक्सर पूछे जाने वाले प्रश्न',
     about: 'परिचय',
     account: 'मेरा खाता',
+    more: 'अधिक',
   },
   header: {
+    connectWallet: 'वॉलेट कनेक्ट करें',
     testnetBadge: 'Stellar टेस्टनेट',
     connect: 'Freighter कनेक्ट करें',
     connectedPrefix: 'कनेक्टेड',

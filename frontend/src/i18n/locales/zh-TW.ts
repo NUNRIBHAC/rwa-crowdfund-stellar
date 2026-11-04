@@ -78,6 +78,7 @@ export const zhTW: Messages = {
     skipLink: '跳至主要內容',
   },
   nav: {
+    menu: '選單',
     ariaMain: '主導航',
     home: '首頁',
     investments: '投資',
@@ -87,8 +88,10 @@ export const zhTW: Messages = {
     faq: '常見問題',
     about: '關於',
     account: '我的賬戶',
+    more: '更多',
   },
   header: {
+    connectWallet: '連接錢包',
     testnetBadge: 'Stellar 測試網',
     connect: '連接 Freighter',
     connectedPrefix: '已連接',

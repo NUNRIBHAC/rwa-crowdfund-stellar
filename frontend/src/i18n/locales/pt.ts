@@ -80,6 +80,7 @@ export const pt: Messages = {
     skipLink: 'Saltar para o conteúdo principal',
   },
   nav: {
+    menu: 'Menu',
     ariaMain: 'Principal',
     home: 'Início',
     investments: 'Investir',
@@ -89,8 +90,10 @@ export const pt: Messages = {
     faq: 'FAQ',
     about: 'Sobre',
     account: 'A minha conta',
+    more: 'Mais',
   },
   header: {
+    connectWallet: 'Ligar carteira',
     testnetBadge: 'Testnet Stellar',
     connect: 'Ligar Freighter',
     connectedPrefix: 'Ligado',

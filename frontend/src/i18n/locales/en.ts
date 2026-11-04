@@ -78,6 +78,7 @@ export const en = {
     skipLink: 'Skip to main content',
   },
   nav: {
+    menu: 'Menu',
     ariaMain: 'Main',
     home: 'Home',
     investments: 'Invest',
@@ -87,8 +88,10 @@ export const en = {
     faq: 'FAQ',
     about: 'About',
     account: 'My account',
+    more: 'More',
   },
   header: {
+    connectWallet: 'Connect wallet',
     testnetBadge: 'Stellar testnet',
     connect: 'Connect Freighter',
     connectedPrefix: 'Connected',

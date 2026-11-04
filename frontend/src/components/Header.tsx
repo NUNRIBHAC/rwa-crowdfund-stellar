@@ -1,9 +1,36 @@
 import { shorten } from '../format';
 import { routeHash, type RouteName } from '../router';
 import { LOCALES, useI18n, type Locale } from '../i18n';
-import { lockupFor, useTheme } from '../theme';
+import { lockupFor, setTheme, useTheme } from '../theme';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useEffect, useRef, useState } from 'react';
+
+function NavIcon({ name }: { name: string }) {
+  const paths: Record<string, string> = {
+    investments: 'M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h6v6h-6z',
+    'how-it-works': 'M9 8a3 3 0 0 1 6 0c0 2-3 2-3 5M12 17h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',
+    learn: 'M12 5c-3-2-6-2-10 0v15c4-2 7-2 10 0 3-2 6-2 10 0V5c-4-2-7-2-10 0ZM12 5v15',
+    financing: 'M3 7h18v14H3zM8 7V3h8v4M3 12c6 3 12 3 18 0M10 13h4',
+    about: 'M12 11v6M12 7h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',
+    faq: 'M7 18 3 22l1-7a9 9 0 1 1 3 3M8 11h.01M12 11h.01M16 11h.01',
+    account: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3',
+  };
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d={paths[name] || 'M3 11 12 3l9 8v10H3z'} />
+    </svg>
+  );
+}
 
 type Props = {
   actor: string;
@@ -16,10 +43,21 @@ type Props = {
 // Header arrangement (user target, 2026-10-31): brand at the left spanning both
 // rows; the right column carries the testnet badge + Connect on the top row and
 // the language selector directly below; the nav sits on the lower middle row.
-// The theme toggle lives in the risk banner above, not here.
+// The current user reference places account, compact locale, theme and wallet after More.
 export default function Header({ actor, busy, onConnect, onDisconnect, current }: Props) {
   const theme = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+  const moreButtonRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const closeOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !moreRef.current?.contains(event.target)) setMoreOpen(false);
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    return () => document.removeEventListener('pointerdown', closeOutside);
+  }, []);
+  useEffect(() => setMoreOpen(false), [current]);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   // Publish the real sticky-header height so anchored sections clear it on
@@ -48,16 +86,31 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
     { route: 'how-it-works', label: m.nav.howItWorks },
     { route: 'learn', label: m.nav.learn },
     { route: 'financing', label: m.home.forBusinesses },
-    { route: 'faq', label: m.nav.faq },
-    { route: 'about', label: m.nav.about },
-    { route: 'account', label: m.nav.account },
   ];
   return (
     <header
       className={`site-header${current === 'home' ? ' header-home' : ''}${menuOpen ? ' mobile-menu-open' : ''}`}
       ref={headerRef}
       onKeyDown={(e) => {
-        if (e.key === 'Escape' && menuOpen) {
+        if (e.key === 'Tab' && menuOpen && window.matchMedia('(max-width: 720px)').matches) {
+          const controls = Array.from(headerRef.current?.querySelectorAll<HTMLElement>('a[href], button:not(:disabled), select') || []).filter(
+            (el) => el.getClientRects().length > 0,
+          );
+          const first = controls[0];
+          const last = controls[controls.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last?.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first?.focus();
+          }
+        }
+        if (e.key === 'Escape' && moreOpen) {
+          setMoreOpen(false);
+          moreButtonRef.current?.focus();
+          e.stopPropagation();
+        } else if (e.key === 'Escape' && menuOpen) {
           setMenuOpen(false);
           menuButtonRef.current?.focus();
         }
@@ -74,9 +127,13 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
             aria-label={m.nav.ariaMain}
             aria-expanded={menuOpen}
             aria-controls="header-navigation header-controls"
-            onClick={() => setMenuOpen((open) => !open)}
+            onClick={() => {
+              setMenuOpen((open) => !open);
+              setMoreOpen(false);
+            }}
             ref={menuButtonRef}
           >
+            {!menuOpen && <span className="mobile-menu-label">{m.nav.menu}</span>}
             <span aria-hidden="true">{menuOpen ? '×' : '☰'}</span>
           </button>
           <nav className="site-nav" id="header-navigation" aria-label={m.nav.ariaMain}>
@@ -90,13 +147,79 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
                   href={routeHash({ name: item.route })}
                   onClick={() => setMenuOpen(false)}
                 >
+                  <span className="mobile-nav-icon">
+                    <NavIcon name={item.route} />
+                  </span>
                   {item.label}
                 </a>
               );
             })}
+            <div className="nav-more" ref={moreRef}>
+              <button
+                className={`nav-link nav-more-toggle ${['about', 'faq'].includes(current) ? 'nav-link-active' : ''}`}
+                type="button"
+                ref={moreButtonRef}
+                aria-expanded={moreOpen}
+                aria-controls="header-more-links"
+                onClick={() => setMoreOpen((open) => !open)}
+              >
+                {m.nav.more} <span aria-hidden="true">⌄</span>
+              </button>
+              <div className={`nav-more-panel ${moreOpen ? 'is-open' : ''}`} id="header-more-links">
+                {(
+                  [
+                    { route: 'about', label: m.nav.about, icon: 'ⓘ' },
+                    { route: 'faq', label: m.nav.faq, icon: '⋯' },
+                  ] as const
+                ).map((item) => (
+                  <a
+                    key={item.route}
+                    href={routeHash({ name: item.route })}
+                    aria-current={current === item.route ? 'page' : undefined}
+                    onClick={() => {
+                      setMoreOpen(false);
+                      setMenuOpen(false);
+                    }}
+                  >
+                    <span className="nav-more-icon" aria-hidden="true">
+                      <NavIcon name={item.route} />
+                    </span>
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </div>
           </nav>
         </div>
         <div className="header-side" id="header-controls">
+          <a
+            className={`nav-link nav-link-secondary ${current === 'account' ? 'nav-link-active' : ''}`}
+            href={routeHash({ name: 'account' })}
+            aria-current={current === 'account' ? 'page' : undefined}
+            onClick={() => setMenuOpen(false)}
+          >
+            <span className="mobile-nav-icon">
+              <NavIcon name="account" />
+            </span>
+            {m.nav.account}
+          </a>
+          <select className="lang-select" value={locale} onChange={(e) => setLocale(e.target.value as Locale)} aria-label={m.header.languageLabel}>
+            {LOCALES.map((l) => (
+              <option key={l.id} value={l.id} aria-label={l.accessibleLabel}>
+                {l.id.toUpperCase()}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            className="theme-toggle header-theme-toggle"
+            onClick={() => setTheme(theme === 'light' ? 'navy' : 'light')}
+            aria-label={theme === 'light' ? m.header.themeToDark : m.header.themeToLight}
+            title={theme === 'light' ? m.header.themeToDark : m.header.themeToLight}
+          >
+            <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>
+          </button>
+
           <div className="header-side-top">
             <span className="badge badge-testnet">{m.header.testnetBadge}</span>
             <div className="header-actions">
@@ -121,18 +244,11 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
                 </>
               ) : (
                 <button className={`btn ${current === 'home' ? 'btn-outline' : 'btn-primary'}`} disabled={busy} onClick={onConnect}>
-                  {m.header.connect}
+                  {m.header.connectWallet}
                 </button>
               )}
             </div>
           </div>
-          <select className="lang-select" value={locale} onChange={(e) => setLocale(e.target.value as Locale)} aria-label={m.header.languageLabel}>
-            {LOCALES.map((l) => (
-              <option key={l.id} value={l.id} aria-label={l.accessibleLabel}>
-                {l.label}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
     </header>

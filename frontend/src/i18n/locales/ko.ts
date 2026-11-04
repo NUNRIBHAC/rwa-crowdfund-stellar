@@ -79,6 +79,7 @@ export const ko: Messages = {
     skipLink: '본문으로 건너뛰기',
   },
   nav: {
+    menu: '메뉴',
     ariaMain: '메인',
     home: '홈',
     investments: '투자',
@@ -88,8 +89,10 @@ export const ko: Messages = {
     faq: '자주 묻는 질문',
     about: '소개',
     account: '내 계정',
+    more: '더 보기',
   },
   header: {
+    connectWallet: '지갑 연결',
     testnetBadge: 'Stellar 테스트넷',
     connect: 'Freighter 연결',
     connectedPrefix: '연결됨',
