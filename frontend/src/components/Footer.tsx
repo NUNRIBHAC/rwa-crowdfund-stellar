@@ -8,7 +8,6 @@ export default function Footer() {
   const theme = useTheme();
   return (
     <footer className="site-footer">
-      <RiskBanner />
       <div className="footer-brand">
         <div className="footer-brand-inner">
           <div className="footer-brand-word">
@@ -155,6 +154,7 @@ export default function Footer() {
               <div className="footer-status">
                 <h2 className="footer-heading">{m.footer.status}</h2>
                 <p>{m.footer.statusText}</p>
+                <RiskBanner />
               </div>
             </div>
           </div>

@@ -4501,7 +4501,7 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   background: transparent;
   border: 0;
   color: inherit;
-  padding: 0 0 24px;
+  padding: 12px 0 0;
   text-align: start;
   font-weight: 400;
 }
