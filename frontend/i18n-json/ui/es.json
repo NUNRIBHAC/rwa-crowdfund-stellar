@@ -1845,6 +1845,17 @@
     "displayNameLabel": "Nombre visible (se muestra en tus comentarios)",
     "displayNameSave": "Guardar nombre",
     "signOutButton": "Cerrar sesión",
+    "deletion": {
+      "title": "Eliminar cuenta",
+      "boundary": "Elimina este perfil de prototipo, acceso por email, accesos vinculados, sesiones, comentarios y mensajes de soporte. No borra blockchain, transacciones, auditoría, copias de seguridad ni registros de proveedores. Los registros protegidos bloquean esta opción; no se envía ninguna solicitud de revisión.",
+      "unsupported": "La eliminación automática solo admite cuentas de email verificadas. Las cuentas de cartera y sociales aún no se admiten.",
+      "password": "Contraseña actual",
+      "factor": "Código actual del autenticador (si está activo)",
+      "confirmation": "Escribe DELETE para confirmar",
+      "submit": "Eliminar cuenta permanentemente",
+      "cancel": "Cancelar",
+      "failure": "No se eliminó nada. Comprueba la contraseña y el código actual del autenticador o inténtalo más tarde. Las cuentas no admitidas o con registros protegidos no se pueden eliminar aquí."
+    },
     "ticketsTitle": "Soporte y feedback",
     "ticketsNote": "Los tickets son visibles solo para tu cuenta de monedero y el operador del sitio. Esto es un prototipo: no incluyas datos personales, contraseñas ni datos de pago reales.",
     "ticketKindLabel": "Tipo",

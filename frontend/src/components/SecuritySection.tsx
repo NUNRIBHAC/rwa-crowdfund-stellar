@@ -1,3 +1,4 @@
+import AccountDeletionSection from './AccountDeletionSection';
 import { tpl } from '../format';
 // Account security: honest wallet-auth posture (no password or 2FA app in
 // this prototype; the wallet signature is the credential) plus real session
@@ -359,6 +360,7 @@ export default function SecuritySection() {
           {labels.revokeOthers}
         </button>
       ) : null}
+      <AccountDeletionSection />
       {notice ? <p role="status">{notice}</p> : null}
       {error ? (
         <p role="alert" className="community-error">

@@ -1908,6 +1908,18 @@ export const zhTW: Messages = {
     displayNameLabel: '顯示名稱(顯示於您的留言)',
     displayNameSave: '儲存名稱',
     signOutButton: '登出',
+    deletion: {
+      title: '刪除帳戶',
+      boundary:
+        '刪除此原型資料、電子郵件登入、關聯登入、工作階段、留言和支援訊息。不會清除區塊鏈、交易、稽核、備份或供應商記錄。受保護記錄會阻止此操作；不會提交審查請求。',
+      unsupported: '目前自動刪除僅支援已驗證的電子郵件帳戶。暫不支援錢包和社群帳戶。',
+      password: '目前密碼',
+      factor: '目前驗證器代碼（如已啟用）',
+      confirmation: '輸入 DELETE 確認',
+      submit: '永久刪除帳戶',
+      cancel: '取消',
+      failure: '未刪除任何內容。請檢查密碼和目前驗證器代碼，或稍後重試。此處無法刪除不支援的帳戶或有受保護記錄的帳戶。',
+    },
     ticketsTitle: '支援與意見回饋',
     ticketsNote: '工單僅您的錢包帳戶與網站營運方可見。此為原型:請勿包含個人資料、密碼或真實付款資訊。',
     ticketKindLabel: '類型',

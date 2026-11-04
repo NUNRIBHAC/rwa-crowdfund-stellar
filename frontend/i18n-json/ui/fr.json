@@ -1847,6 +1847,17 @@
     "displayNameLabel": "Nom d'affichage (visible sur vos commentaires)",
     "displayNameSave": "Enregistrer le nom",
     "signOutButton": "Se déconnecter",
+    "deletion": {
+      "title": "Supprimer le compte",
+      "boundary": "Supprime ce profil de prototype, accès par email, connexions associées, sessions, commentaires et messages de support. Les registres blockchain, transactions, audits, sauvegardes et fournisseurs ne sont pas effacés. Les registres protégés bloquent cette option ; aucune demande de révision n’est envoyée.",
+      "unsupported": "La suppression automatique prend uniquement en charge les comptes email vérifiés. Les comptes portefeuille et sociaux ne sont pas encore pris en charge.",
+      "password": "Mot de passe actuel",
+      "factor": "Code actuel de l’authentificateur (si activé)",
+      "confirmation": "Saisissez DELETE pour confirmer",
+      "submit": "Supprimer définitivement le compte",
+      "cancel": "Annuler",
+      "failure": "Rien n’a été supprimé. Vérifiez le mot de passe et le code actuel de l’authentificateur ou réessayez plus tard. Les comptes non pris en charge ou avec des registres protégés ne peuvent pas être supprimés ici."
+    },
     "ticketsTitle": "Support et feedback",
     "ticketsNote": "Les tickets ne sont visibles que par votre compte de portefeuille et l'opérateur du site. Ceci est un prototype : n'incluez ni données personnelles, ni mots de passe, ni vraies informations de paiement.",
     "ticketKindLabel": "Type",

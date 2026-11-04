@@ -733,3 +733,6 @@ export type DemoJourneyView = {
 export const fetchDemoJourney = (token: string) => call<DemoJourneyView>('/api/auth/demo-journey', { token });
 export const advanceDemoJourney = (token: string, action: DemoJourneyAction) =>
   call<DemoJourneyView>('/api/auth/demo-journey', { token, method: 'POST', body: { action } });
+
+export const deleteOwnAccount = (token: string, proof: { confirmation: string; password: string; totpCode?: string }) =>
+  call<{ ok: true }>('/api/auth/account/delete', { method: 'POST', token, body: proof });

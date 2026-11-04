@@ -1,3 +1,4 @@
+import { deleteEmailAccount } from './account-deletion.js';
 import { readDemoJourney, advanceDemoJourney } from './demo-journey.js';
 import { readOnboarding, saveOnboarding } from './investor-onboarding.js';
 import { createHash } from 'node:crypto';
@@ -940,6 +941,15 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.json({ ok: true });
     }),
   );
+  router.post('/api/auth/account/delete', async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try {
+      await deleteEmailAccount(store, req.header('authorization'), req.body ?? {}, operatorWallets());
+      res.json({ ok: true });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.get(
     '/api/auth/me',
     authed(async (_req, res, account) => {

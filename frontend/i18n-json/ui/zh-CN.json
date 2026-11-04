@@ -1798,6 +1798,17 @@
     "displayNameLabel": "显示名称(显示在您的评论中)",
     "displayNameSave": "保存名称",
     "signOutButton": "退出登录",
+    "deletion": {
+      "title": "删除账户",
+      "boundary": "删除此原型资料、邮箱登录、关联登录、会话、评论和支持消息。不会清除区块链、交易、审计、备份或提供商记录。受保护记录会阻止此操作；不会提交审核请求。",
+      "unsupported": "目前自动删除仅支持已验证的邮箱账户。暂不支持钱包和社交账户。",
+      "password": "当前密码",
+      "factor": "当前验证器代码（如已启用）",
+      "confirmation": "输入 DELETE 确认",
+      "submit": "永久删除账户",
+      "cancel": "取消",
+      "failure": "未删除任何内容。请检查密码和当前验证器代码，或稍后重试。此处无法删除不支持的账户或有受保护记录的账户。"
+    },
     "ticketsTitle": "支持与反馈",
     "ticketsNote": "工单仅您的钱包账户与网站运营方可见。此为原型:请勿包含个人数据、密码或真实付款信息。",
     "ticketKindLabel": "类型",

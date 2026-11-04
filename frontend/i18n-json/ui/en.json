@@ -1817,6 +1817,17 @@
     "displayNameLabel": "Display name (shown on your comments)",
     "displayNameSave": "Save name",
     "signOutButton": "Sign out",
+    "deletion": {
+      "title": "Delete account",
+      "boundary": "Delete this prototype profile, email login, linked sign-ins, sessions, comments and support messages. This does not erase blockchain, transaction, audit, backups or provider records. Protected records block this option; no review request is submitted.",
+      "unsupported": "Self-service deletion currently supports verified email accounts only. Wallet and social accounts are not supported yet.",
+      "password": "Current password",
+      "factor": "Current authenticator code (if enabled)",
+      "confirmation": "Type DELETE to confirm",
+      "submit": "Permanently delete account",
+      "cancel": "Cancel",
+      "failure": "Nothing was deleted. Check your password and current authenticator code, or try later. Protected records or unsupported accounts cannot be deleted here."
+    },
     "ticketsTitle": "Support and feedback",
     "ticketsNote": "Tickets are visible only to your wallet account and the site operator. This is a prototype: do not include personal data, passwords or real payment details.",
     "ticketKindLabel": "Type",

@@ -2033,6 +2033,19 @@ export const pt: Messages = {
     displayNameLabel: 'Nome de apresentação (mostrado nos seus comentários)',
     displayNameSave: 'Guardar nome',
     signOutButton: 'Sair',
+    deletion: {
+      title: 'Eliminar conta',
+      boundary:
+        'Elimina este perfil de protótipo, acesso por email, acessos associados, sessões, comentários e mensagens de suporte. Não apaga registos blockchain, transações, auditoria, cópias de segurança ou registos dos fornecedores. Registos protegidos bloqueiam esta opção; não é enviado nenhum pedido de revisão.',
+      unsupported: 'A eliminação automática só suporta contas de email verificadas. Contas de carteira e sociais ainda não são suportadas.',
+      password: 'Palavra-passe atual',
+      factor: 'Código atual do autenticador (se ativo)',
+      confirmation: 'Escreve DELETE para confirmar',
+      submit: 'Eliminar conta permanentemente',
+      cancel: 'Cancelar',
+      failure:
+        'Nada foi eliminado. Confirma a palavra-passe e o código atual do autenticador, ou tenta mais tarde. Contas não suportadas ou com registos protegidos não podem ser eliminadas aqui.',
+    },
     ticketsTitle: 'Suporte e feedback',
     ticketsNote:
       'Os pedidos são visíveis apenas para a sua conta de carteira e para a operadora do site. Isto é um protótipo: não inclua dados pessoais, palavras-passe ou dados de pagamento reais.',

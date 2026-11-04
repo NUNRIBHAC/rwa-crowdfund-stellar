@@ -2030,6 +2030,19 @@ export const de: Messages = {
     displayNameLabel: 'Anzeigename (wird bei Ihren Kommentaren gezeigt)',
     displayNameSave: 'Namen speichern',
     signOutButton: 'Abmelden',
+    deletion: {
+      title: 'Konto löschen',
+      boundary:
+        'Löscht dieses Prototyp-Profil, E-Mail-Zugang, verknüpfte Anmeldungen, Sitzungen, Kommentare und Supportnachrichten. Blockchain-, Transaktions-, Prüf-, Sicherungs- und Anbieterdaten werden nicht gelöscht. Geschützte Datensätze blockieren diese Option; es wird kein Prüfauftrag gesendet.',
+      unsupported: 'Die automatische Löschung unterstützt nur bestätigte E-Mail-Konten. Wallet- und soziale Konten werden noch nicht unterstützt.',
+      password: 'Aktuelles Passwort',
+      factor: 'Aktueller Authentifizierungscode (falls aktiviert)',
+      confirmation: 'Zur Bestätigung DELETE eingeben',
+      submit: 'Konto endgültig löschen',
+      cancel: 'Abbrechen',
+      failure:
+        'Nichts wurde gelöscht. Passwort und aktuellen Authentifizierungscode prüfen oder später erneut versuchen. Nicht unterstützte Konten oder Konten mit geschützten Datensätzen können hier nicht gelöscht werden.',
+    },
     ticketsTitle: 'Support und Feedback',
     ticketsNote:
       'Tickets sind nur für Ihr Wallet-Konto und den Seitenbetreiber sichtbar. Dies ist ein Prototyp: Geben Sie keine persönlichen Daten, Passwörter oder echten Zahlungsdaten ein.',
