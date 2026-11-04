@@ -30,3 +30,9 @@ Files use private permissions and atomic replace with file and directory synchro
 - A complete app-known register can still omit holders outside the app. This simulation does not certify the completeness of a legal register, record-date entitlements or current balances.
 - Real execution still requires validated issuer instructions, holder/record-date evidence, rights and tax rules, payment-provider controls, authorization, reconciliation, security review and separately approved activation. The mock receipt is not evidence of payment.
 - Investor meetings, resolutions, votes, issuer messaging and their UI remain separate work. This module does not claim those are implemented.
+
+## Optional local HTTP harness
+
+`createDistributionSimulationRouter` is available for isolated integration tests, but is **not mounted** in the application server. Its dependencies must explicitly select `test_only`, provide an isolated ledger and synthetic register, and use authenticated account sessions. The current allowlist is checked for every request. Request bodies cannot supply actors or register snapshots. Preparation fetches the injected synthetic testnet register; approval and simulation use the session's account identity. The local HTTP test signs fresh fixture challenges, checks anonymous/non-operator/removed-operator rejection and distinct review, then verifies the community store was unchanged.
+
+This is local session/API integration evidence, not a hosted operator-session verification or a production-ready authentication/authorization review. Two authenticated fixture actors are two accounts, not proof of independent real people.
