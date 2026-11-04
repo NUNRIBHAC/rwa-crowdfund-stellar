@@ -1069,6 +1069,17 @@ section[id] {
   margin: 0;
   font-size: 14px;
 }
+.card-details-link:has(.btn) {
+  margin-block-start: 12px;
+}
+.card-details-link .btn {
+  /* Reserve the complete button height instead of painting over the stats. */
+  display: inline-block;
+  box-sizing: border-box;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
 .card-list {
   display: flex;
   flex-direction: column;
