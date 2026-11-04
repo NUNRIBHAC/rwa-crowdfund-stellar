@@ -101,7 +101,7 @@ export const ja: Messages = {
   riskBanner: 'クラウドファンディング投資には全損のリスクがあります。これは Stellar テストネットのプロトタイプです：実際の募集も実資金も投資助言もありません。',
   hero: {
     introTitle: '一緒にプロジェクトを支える。',
-    intro: '共通の目標に向けて拠出します。期限後、結果によって次の手順が決まります。',
+    intro: '資金調達キャンペーンを探す。目標、期限、その後の流れを確認しましょう。',
     illustration: '操作できる説明図 - 取引は行いません',
     goalReached: '目標達成',
     goalMissed: '目標未達',
@@ -135,8 +135,12 @@ export const ja: Messages = {
     emptyCta: 'サンプルキャンペーンでプレビュー',
   },
   home: {
+    campaignsNav: 'キャンペーン',
+    rulesTitle: '資金調達のルールと制限',
+    viewCampaign: 'キャンペーンを見る',
+    forBusinesses: '企業向け',
     stepsAria: '投資の進め方',
-    stepsTitle: '初めての出資までの4ステップ',
+    stepsTitle: '資金調達の仕組み',
     steps: [
       {
         title: '接続',
@@ -158,7 +162,7 @@ export const ja: Messages = {
     fullJourneyLink: '投資家ジャーニーの全体像（各ステップに稼働中/計画中の表示付き）',
     latestAria: '最新のキャンペーン',
     latestTitle: '最新のキャンペーン',
-    allInvestments: 'すべての投資',
+    allInvestments: 'すべてのキャンペーン',
     instrumentsAria: '金融商品クラス',
     instrumentsTitle: 'この設計が対象とする金融商品クラス',
     instrumentsIntro:

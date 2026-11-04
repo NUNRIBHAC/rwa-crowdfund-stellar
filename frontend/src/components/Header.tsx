@@ -44,17 +44,17 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
   const { locale, setLocale, m } = useI18n();
   const NAV: { route: RouteName; label: string }[] = [
     { route: 'home', label: m.nav.home },
-    { route: 'investments', label: m.nav.investments },
+    { route: 'investments', label: m.home.campaignsNav },
     { route: 'how-it-works', label: m.nav.howItWorks },
     { route: 'learn', label: m.nav.learn },
-    { route: 'financing', label: m.nav.financing },
+    { route: 'financing', label: m.home.forBusinesses },
     { route: 'faq', label: m.nav.faq },
     { route: 'about', label: m.nav.about },
     { route: 'account', label: m.nav.account },
   ];
   return (
     <header
-      className={`site-header${menuOpen ? ' mobile-menu-open' : ''}`}
+      className={`site-header${current === 'home' ? ' header-home' : ''}${menuOpen ? ' mobile-menu-open' : ''}`}
       ref={headerRef}
       onKeyDown={(e) => {
         if (e.key === 'Escape' && menuOpen) {
@@ -85,7 +85,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
               return (
                 <a
                   key={item.route}
-                  className={`nav-link ${active ? 'nav-link-active' : ''}`}
+                  className={`nav-link ${['faq', 'about', 'account'].includes(item.route) ? 'nav-link-secondary' : ''} ${active ? 'nav-link-active' : ''}`}
                   aria-current={active ? 'page' : undefined}
                   href={routeHash({ name: item.route })}
                   onClick={() => setMenuOpen(false)}
@@ -120,7 +120,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
                   </button>
                 </>
               ) : (
-                <button className="btn btn-primary" disabled={busy} onClick={onConnect}>
+                <button className={`btn ${current === 'home' ? 'btn-outline' : 'btn-primary'}`} disabled={busy} onClick={onConnect}>
                   {m.header.connect}
                 </button>
               )}

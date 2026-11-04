@@ -104,7 +104,7 @@ export const de: Messages = {
     'Crowdfunding-Investitionen bergen ein Totalverlustrisiko. Dies ist ein Prototyp im Stellar-Testnet: keine echten Angebote, keine echten Gelder, keine Anlageberatung.',
   hero: {
     introTitle: 'Gemeinsam ein Projekt finanzieren.',
-    intro: 'Tragen Sie zu einem gemeinsamen Ziel bei. Nach Ablauf der Frist bestimmt das Ergebnis den nächsten Schritt.',
+    intro: 'Entdecke Finanzierungskampagnen. Sieh dir das Ziel, die Frist und die nächsten Schritte an.',
     illustration: 'Interaktive Illustration - keine Transaktion',
     goalReached: 'Ziel erreicht',
     goalMissed: 'Ziel verfehlt',
@@ -138,8 +138,12 @@ export const de: Messages = {
     emptyCta: 'Vorschau mit Beispielkampagnen',
   },
   home: {
+    campaignsNav: 'Kampagnen',
+    rulesTitle: 'Finanzierungsregeln und Grenzen',
+    viewCampaign: 'Kampagne ansehen',
+    forBusinesses: 'Für Unternehmen',
     stepsAria: 'So funktioniert das Investieren',
-    stepsTitle: '4 Schritte zu Ihrem ersten Beitrag',
+    stepsTitle: 'So funktioniert die Finanzierung',
     steps: [
       {
         title: 'Verbinden',
@@ -161,7 +165,7 @@ export const de: Messages = {
     fullJourneyLink: 'Der vollständige Anlegerweg, jeder Schritt als vorhanden oder geplant markiert',
     latestAria: 'Neueste Kampagnen',
     latestTitle: 'Neueste Kampagnen',
-    allInvestments: 'Alle Investitionen',
+    allInvestments: 'Alle Kampagnen',
     instrumentsAria: 'Instrumentenklassen',
     instrumentsTitle: 'Von diesem Design abgedeckte Instrumentenklassen',
     instrumentsIntro:

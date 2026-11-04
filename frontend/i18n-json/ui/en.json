@@ -95,7 +95,7 @@
   "riskBanner": "Crowdfunding investments carry a risk of total loss. This is a Stellar testnet prototype: no live offers, no real funds, no investment advice.",
   "hero": {
     "introTitle": "Fund a project together.",
-    "intro": "Contribute toward a shared goal. After the deadline, the result decides what happens next.",
+    "intro": "Explore funding campaigns. See the goal, the deadline and what happens next.",
     "illustration": "Interactive illustration - no transaction",
     "goalReached": "Goal reached",
     "goalMissed": "Goal missed",
@@ -125,8 +125,12 @@
     "emptyCta": "Preview with sample campaigns"
   },
   "home": {
+    "campaignsNav": "Campaigns",
+    "rulesTitle": "Funding rules and limitations",
+    "viewCampaign": "View campaign",
+    "forBusinesses": "For businesses",
     "stepsAria": "How investing works",
-    "stepsTitle": "4 steps to your first contribution",
+    "stepsTitle": "How funding works",
     "steps": [
       {
         "title": "Connect",
@@ -148,7 +152,7 @@
     "fullJourneyLink": "Full investor journey, with each step marked live or planned",
     "latestAria": "Latest campaigns",
     "latestTitle": "Latest campaigns",
-    "allInvestments": "All investments",
+    "allInvestments": "All campaigns",
     "instrumentsAria": "Instrument classes",
     "instrumentsTitle": "Instrument classes this design covers",
     "instrumentsIntro": "The platform design covers four participation-side parents (participation right / certificate - with Substanzgenussrecht as a subtype - share, indirect participation as an ownership structure, and limited partnership interest) and two debt parents, loan and bond, each issued senior, subordinated or with seniority unspecified, plus structure overlays such as zero-coupon and convertible. This prototype implements contract escrow only; the classes below are educational.",

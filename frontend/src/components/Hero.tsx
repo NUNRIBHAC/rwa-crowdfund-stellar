@@ -1,7 +1,6 @@
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import FundingIllustration from './FundingIllustration';
-import EditorialCubes from './EditorialCubes';
 
 type Props = { mode: 'live' | 'sample' | 'unknown' };
 
@@ -25,25 +24,13 @@ export default function Hero({ mode }: Props) {
             </a>
           </div>
           <p className="hero-note">
-            <strong>{m.hero.noteStrong}</strong> {mode === 'live' && m.hero.noteLive}
-            {mode === 'sample' && m.hero.noteSample}
-            {mode === 'unknown' && m.hero.noteUnknown}
+            <strong>{m.hero.noteStrong}</strong> {mode === 'sample' && m.card.demoNote}
           </p>
         </div>
-        <figure className="hero-art">
-          <EditorialCubes />
-          <figcaption>{m.hero.noteStrong}</figcaption>
-        </figure>
+        <div className="hero-art hero-interactive">
+          <FundingIllustration />
+        </div>
       </div>
-      <details className="hero-technical">
-        <summary>{m.hero.technicalTitle}</summary>
-        <p>{m.hero.sub}</p>
-        <p>
-          {m.hero.titleA} {m.hero.titleB}
-        </p>
-        <FundingIllustration />
-      </details>
-      <p className="hero-unavailable">{m.hero.unavailable}</p>
     </section>
   );
 }

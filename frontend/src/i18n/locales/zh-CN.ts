@@ -100,7 +100,7 @@ export const zhCN: Messages = {
   riskBanner: '众筹投资存在全部损失的风险。这是 Stellar 测试网原型：无真实发行、无真实资金、无投资建议。',
   hero: {
     introTitle: '共同为项目筹资。',
-    intro: '向共同目标出资。截止后，结果决定下一步。',
+    intro: '探索募资活动。查看目标、截止日期和后续安排。',
     illustration: '交互示意 - 不进行交易',
     goalReached: '目标达成',
     goalMissed: '目标未达成',
@@ -130,8 +130,12 @@ export const zhCN: Messages = {
     emptyCta: '用示例项目预览',
   },
   home: {
+    campaignsNav: '募资活动',
+    rulesTitle: '募资规则与限制',
+    viewCampaign: '查看募资活动',
+    forBusinesses: '企业专区',
     stepsAria: '投资流程',
-    stepsTitle: '4 步完成首次出资',
+    stepsTitle: '募资如何运作',
     steps: [
       {
         title: '连接',
@@ -153,7 +157,7 @@ export const zhCN: Messages = {
     fullJourneyLink: '完整的投资者旅程，每一步都标注为已上线或计划中',
     latestAria: '最新项目',
     latestTitle: '最新项目',
-    allInvestments: '全部投资',
+    allInvestments: '所有募资活动',
     instrumentsAria: '工具类别',
     instrumentsTitle: '本设计涵盖的工具类别',
     instrumentsIntro:

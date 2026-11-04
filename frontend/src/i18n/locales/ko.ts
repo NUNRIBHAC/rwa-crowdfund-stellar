@@ -101,7 +101,7 @@ export const ko: Messages = {
   riskBanner: '크라우드펀딩 투자는 전액 손실 위험이 있습니다. 이것은 Stellar 테스트넷 프로토타입입니다: 실제 공모도, 실제 자금도, 투자 조언도 없습니다.',
   hero: {
     introTitle: '함께 프로젝트에 자금을 모으세요.',
-    intro: '공동 목표를 향해 기여하세요. 마감 후 결과에 따라 다음 단계가 결정됩니다.',
+    intro: '자금 조달 캠페인을 살펴보세요. 목표, 마감일, 이후 절차를 확인하세요.',
     illustration: '대화형 예시 - 거래 없음',
     goalReached: '목표 달성',
     goalMissed: '목표 미달',
@@ -134,8 +134,12 @@ export const ko: Messages = {
     emptyCta: '샘플 캠페인으로 미리보기',
   },
   home: {
+    campaignsNav: '캠페인',
+    rulesTitle: '자금 조달 규칙과 제한',
+    viewCampaign: '캠페인 보기',
+    forBusinesses: '기업용',
     stepsAria: '투자 방법',
-    stepsTitle: '첫 출자까지 4단계',
+    stepsTitle: '자금 조달 방식',
     steps: [
       {
         title: '연결',
@@ -157,7 +161,7 @@ export const ko: Messages = {
     fullJourneyLink: '각 단계가 라이브 또는 계획됨으로 표시된 전체 투자자 여정',
     latestAria: '최신 캠페인',
     latestTitle: '최신 캠페인',
-    allInvestments: '모든 투자',
+    allInvestments: '모든 캠페인',
     instrumentsAria: '금융상품 클래스',
     instrumentsTitle: '이 설계가 다루는 금융상품 클래스',
     instrumentsIntro:

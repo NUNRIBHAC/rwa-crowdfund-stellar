@@ -3698,3 +3698,139 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+/* Homepage introduction: discover first, technical detail on demand. */
+.home-introduction > section + section {
+  margin-top: 56px;
+}
+.hero-interactive {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  margin: 0;
+}
+.hero-interactive .funding-illustration {
+  width: 100%;
+  margin: 0;
+}
+.hero-interactive .hero-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+.hero-interactive button {
+  flex: 1;
+}
+.hero-interactive [aria-pressed='true'] {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--line);
+}
+.home-introduction .home-single-campaign > .card {
+  width: 100%;
+  max-width: none;
+}
+.home-introduction .home-single-campaign .funding-grid-block {
+  max-width: 100%;
+}
+.home-introduction .home-single-campaign .card-details-link {
+  margin-bottom: 0;
+}
+.home-introduction .home-funding-rules {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.home-funding-rules .section-title {
+  margin-top: 0;
+}
+.home-final-cta {
+  padding-block: 20px;
+  text-align: center;
+}
+.nav-link-secondary {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+.header-home .header-actions .btn {
+  box-shadow: none;
+}
+.site-footer .footer-grid {
+  gap: 20px;
+}
+.site-footer .footer-grid a {
+  font-size: 12px;
+  line-height: 1.7;
+}
+.site-footer .footer-legal,
+.site-footer .footer-status p {
+  font-size: 12px;
+  line-height: 1.65;
+}
+@media (max-width: 680px) {
+  .home-introduction > section + section {
+    margin-top: 36px;
+  }
+  .hero-interactive {
+    padding: 16px;
+  }
+  .hero-interactive .hero-actions {
+    display: flex;
+  }
+  .hero-interactive .hero-actions button {
+    width: auto;
+    min-width: 0;
+    font-size: 13px;
+    padding-inline: 8px;
+  }
+  .site-footer .footer-grid a {
+    font-size: 13px;
+  }
+}
+.home-introduction .home-single-campaign {
+  max-width: none;
+}
+.hero-interactive .funding-illustration {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+.hero-interactive .fund-grid-wrap {
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+.hero-interactive .fund-grid {
+  width: min(240px, 80%);
+  max-width: 100%;
+}
+.hero-interactive .fund-grid-caption {
+  text-align: center;
+}
+.hero-interactive .fund-grid-unit,
+.hero-interactive .funding-illustration > .community-note:last-of-type {
+  display: none;
+}
+@media (max-width: 600px) {
+  .home-introduction .home-editorial-cards .card {
+    display: block;
+  }
+  .home-introduction .home-editorial-cards .card .card-photo {
+    margin-bottom: 16px;
+  }
+  .home-introduction .home-editorial-cards .card-photo img {
+    aspect-ratio: 16 / 9;
+  }
+  .hero-interactive .fund-grid {
+    width: 200px;
+  }
+}
+.hero-interactive .fund-grid {
+  height: auto;
+}
+.home-introduction .home-single-campaign .card-photo img {
+  width: 100%;
+}

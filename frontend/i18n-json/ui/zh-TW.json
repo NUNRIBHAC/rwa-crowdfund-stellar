@@ -95,7 +95,7 @@
   "riskBanner": "眾籌投資存在全部損失的風險。這是 Stellar 測試網原型：無真實發行、無真實資金、無投資建議。",
   "hero": {
     "introTitle": "共同為專案籌資。",
-    "intro": "向共同目標出資。截止後，結果決定下一步。",
+    "intro": "探索募資活動。查看目標、截止日期和後續安排。",
     "illustration": "互動示意 - 不進行交易",
     "goalReached": "目標達成",
     "goalMissed": "目標未達成",
@@ -125,8 +125,12 @@
     "emptyCta": "用示例項目預覽"
   },
   "home": {
+    "campaignsNav": "募資活動",
+    "rulesTitle": "募資規則與限制",
+    "viewCampaign": "查看募資活動",
+    "forBusinesses": "企業專區",
     "stepsAria": "投資流程",
-    "stepsTitle": "4 步完成首次出資",
+    "stepsTitle": "募資如何運作",
     "steps": [
       {
         "title": "連接",
@@ -148,7 +152,7 @@
     "fullJourneyLink": "完整的投資者旅程，每一步都標註為已上線或計劃中",
     "latestAria": "最新項目",
     "latestTitle": "最新項目",
-    "allInvestments": "全部投資",
+    "allInvestments": "所有募資活動",
     "instrumentsAria": "工具類別",
     "instrumentsTitle": "本設計涵蓋的工具類別",
     "instrumentsIntro": "平臺設計涵蓋四個參與方母類（參與權/證書——以 Substanzgenussrecht 為子類型——股份、作為所有權結構的間接參與，以及有限合夥權益）和兩個債務母類（貸款和債券），各自可按優先、次級或未指定優先級發行，另有零息、可轉換等結構疊加。本原型僅實現合約託管；以下類別為教學內容。",

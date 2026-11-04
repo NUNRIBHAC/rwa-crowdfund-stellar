@@ -10,10 +10,8 @@ test('editorial hero keeps approved slogan and access to truthful 100-block expl
     </I18nProvider>,
   );
   expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Real assets. Shared possibilities.');
-  expect(document.querySelector('.editorial-cubes')?.getAttribute('aria-hidden')).toBe('true');
-  const details = document.querySelector('details')!;
-  expect(details.open).toBe(false);
-  fireEvent.click(screen.getByText('How the contract works'));
+  expect(document.querySelectorAll('.funding-illustration .fund-grid-tile')).toHaveLength(100);
+  fireEvent.click(screen.getByRole('button', { name: 'Goal missed' }));
   expect(screen.getByText('Each block is 1% of this illustrative goal.')).toBeTruthy();
   expect(screen.getByRole('button', { name: 'Goal missed' })).toBeTruthy();
 });

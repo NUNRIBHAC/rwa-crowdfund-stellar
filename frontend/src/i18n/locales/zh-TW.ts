@@ -100,7 +100,7 @@ export const zhTW: Messages = {
   riskBanner: '眾籌投資存在全部損失的風險。這是 Stellar 測試網原型：無真實發行、無真實資金、無投資建議。',
   hero: {
     introTitle: '共同為專案籌資。',
-    intro: '向共同目標出資。截止後，結果決定下一步。',
+    intro: '探索募資活動。查看目標、截止日期和後續安排。',
     illustration: '互動示意 - 不進行交易',
     goalReached: '目標達成',
     goalMissed: '目標未達成',
@@ -130,8 +130,12 @@ export const zhTW: Messages = {
     emptyCta: '用示例項目預覽',
   },
   home: {
+    campaignsNav: '募資活動',
+    rulesTitle: '募資規則與限制',
+    viewCampaign: '查看募資活動',
+    forBusinesses: '企業專區',
     stepsAria: '投資流程',
-    stepsTitle: '4 步完成首次出資',
+    stepsTitle: '募資如何運作',
     steps: [
       {
         title: '連接',
@@ -153,7 +157,7 @@ export const zhTW: Messages = {
     fullJourneyLink: '完整的投資者旅程，每一步都標註為已上線或計劃中',
     latestAria: '最新項目',
     latestTitle: '最新項目',
-    allInvestments: '全部投資',
+    allInvestments: '所有募資活動',
     instrumentsAria: '工具類別',
     instrumentsTitle: '本設計涵蓋的工具類別',
     instrumentsIntro:

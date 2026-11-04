@@ -12,7 +12,7 @@ export default function Home({ market }: { market: Market }) {
   const latest = [...campaigns].sort((a, b) => Number(a.config.deadline) - Number(b.config.deadline)).slice(0, 3);
 
   return (
-    <>
+    <div className="home-introduction">
       <Hero mode={mode} />
 
       {latest.length > 0 && (
@@ -33,6 +33,7 @@ export default function Home({ market }: { market: Market }) {
                 busy={market.busy}
                 readOnly={fixtureMode}
                 demo={fixtureMode}
+                discoveryOnly
                 amount={market.amounts[c.id] ?? ''}
                 amountError={market.amountErrors[c.id]}
                 prepareError={market.prepareErrors[c.id]}
@@ -62,31 +63,30 @@ export default function Home({ market }: { market: Market }) {
         </p>
       </section>
 
-      <section aria-label={m.home.instrumentsAria}>
-        <h2 className="section-title">{m.home.instrumentsTitle}</h2>
-        <p>{m.home.instrumentsIntro}</p>
-        <details className="instrument-disclosure">
-          <summary>{m.home.instrumentsTitle}</summary>
-          <div className="instrument-grid">
-            {m.instruments.classes.map((c) => (
-              <a key={c.id} className="instrument-tile" href={routeHash({ name: 'learn' })}>
-                <h3>{c.label}</h3>
-                {c.subtypeOf && <p className="instrument-sub">{c.subtypeOf}</p>}
-                <p>{c.summary}</p>
-              </a>
-            ))}
-          </div>
+      <section className="home-funding-rules" aria-label={m.home.rulesTitle}>
+        <h2 className="section-title">{m.home.rulesTitle}</h2>
+        <p className="hero-unavailable">{m.hero.unavailable}</p>
+        <details className="hero-technical">
+          <summary>{m.hero.technicalTitle}</summary>
+          <p>{m.hero.sub}</p>
+          <p>{m.card.rules}</p>
+        </details>
+        <details className="hero-technical">
+          <summary>{m.hero.goalMissed}</summary>
+          <p>{m.hero.missedOutcome}</p>
+        </details>
+        <details className="hero-technical">
+          <summary>{m.riskWarnings.title}</summary>
+          <p>{m.hero.noteUnknown}</p>
+          <p>{mode === 'live' ? m.hero.noteLive : mode === 'sample' ? m.hero.noteSample : m.hero.noteUnknown}</p>
+          <a href="/risk-disclosure">{m.footer.riskDisclosure}</a>
         </details>
       </section>
-
-      <section aria-label={m.home.whyAria}>
-        <h2 className="section-title">{m.home.whyTitle}</h2>
-        <ul className="why-list">
-          {m.home.whyPoints.map((p, i) => (
-            <li key={i}>{p}</li>
-          ))}
-        </ul>
+      <section className="home-final-cta">
+        <a className="btn btn-primary" href={routeHash({ name: 'investments' })}>
+          {m.hero.ctaBrowse}
+        </a>
       </section>
-    </>
+    </div>
   );
 }

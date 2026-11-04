@@ -103,7 +103,7 @@ export const hi: Messages = {
     'क्राउडफंडिंग निवेश में पूर्ण हानि का जोखिम होता है। यह एक Stellar टेस्टनेट प्रोटोटाइप है: कोई लाइव ऑफर नहीं, कोई असली धन नहीं, कोई निवेश सलाह नहीं।',
   hero: {
     introTitle: 'मिलकर किसी परियोजना को वित्त दें।',
-    intro: 'साझा लक्ष्य में योगदान दें। समय सीमा के बाद, परिणाम अगला कदम तय करता है।',
+    intro: 'वित्तपोषण अभियान देखें। लक्ष्य, अंतिम तिथि और आगे की प्रक्रिया जानें।',
     illustration: 'इंटरैक्टिव उदाहरण - कोई लेनदेन नहीं',
     goalReached: 'लक्ष्य पूरा हुआ',
     goalMissed: 'लक्ष्य पूरा नहीं हुआ',
@@ -136,8 +136,12 @@ export const hi: Messages = {
     emptyCta: 'सैंपल कैंपेन से पूर्वावलोकन करें',
   },
   home: {
+    campaignsNav: 'अभियान',
+    rulesTitle: 'वित्तपोषण के नियम और सीमाएँ',
+    viewCampaign: 'अभियान देखें',
+    forBusinesses: 'व्यवसायों के लिए',
     stepsAria: 'निवेश कैसे काम करता है',
-    stepsTitle: 'पहले योगदान तक 4 कदम',
+    stepsTitle: 'वित्तपोषण कैसे काम करता है',
     steps: [
       {
         title: 'कनेक्ट करें',
@@ -159,7 +163,7 @@ export const hi: Messages = {
     fullJourneyLink: 'पूरी निवेशक यात्रा, हर कदम लाइव या योजनाबद्ध चिह्नित',
     latestAria: 'नवीनतम कैंपेन',
     latestTitle: 'नवीनतम कैंपेन',
-    allInvestments: 'सभी निवेश',
+    allInvestments: 'सभी अभियान',
     instrumentsAria: 'इंस्ट्रूमेंट वर्ग',
     instrumentsTitle: 'यह डिज़ाइन जिन इंस्ट्रूमेंट वर्गों को कवर करता है',
     instrumentsIntro:

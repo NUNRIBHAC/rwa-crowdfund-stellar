@@ -41,7 +41,7 @@ describe('site chrome accessibility semantics', () => {
     await screen.findByRole('button', { name: 'All' });
     const nav = screen.getByRole('navigation', { name: 'Main' });
     const invest = nav.querySelector('a[aria-current="page"]');
-    expect(invest?.textContent).toBe('Invest');
+    expect(invest?.textContent).toBe('Campaigns');
   });
 });
 

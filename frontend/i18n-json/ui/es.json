@@ -95,7 +95,7 @@
   "riskBanner": "Las inversiones en crowdfunding conllevan riesgo de pérdida total. Esto es un prototipo en la testnet de Stellar: sin ofertas reales, sin fondos reales, sin asesoramiento de inversión.",
   "hero": {
     "introTitle": "Financiar un proyecto juntos.",
-    "intro": "Contribuye a una meta compartida. Tras el plazo, el resultado determina el siguiente paso.",
+    "intro": "Explora campañas de financiación. Consulta el objetivo, el plazo y qué ocurre después.",
     "illustration": "Ilustración interactiva - sin transacción",
     "goalReached": "Meta alcanzada",
     "goalMissed": "Meta no alcanzada",
@@ -125,8 +125,12 @@
     "emptyCta": "Vista previa con campañas de ejemplo"
   },
   "home": {
+    "campaignsNav": "Campañas",
+    "rulesTitle": "Reglas y limitaciones de financiación",
+    "viewCampaign": "Ver campaña",
+    "forBusinesses": "Para empresas",
     "stepsAria": "Cómo funciona la inversión",
-    "stepsTitle": "4 pasos para tu primera contribución",
+    "stepsTitle": "Cómo funciona la financiación",
     "steps": [
       {
         "title": "Conectar",
@@ -148,7 +152,7 @@
     "fullJourneyLink": "Recorrido completo del inversor, con cada paso marcado como existente o planeado",
     "latestAria": "Campañas más recientes",
     "latestTitle": "Campañas más recientes",
-    "allInvestments": "Todas las inversiones",
+    "allInvestments": "Todas las campañas",
     "instrumentsAria": "Clases de instrumentos",
     "instrumentsTitle": "Clases de instrumentos cubiertas por este diseño",
     "instrumentsIntro": "El diseño de la plataforma cubre cuatro categorías madre del lado de la participación (derecho/certificado participativo - con el Substanzgenussrecht como subtipo - acción, participación indirecta como estructura de titularidad y participación en sociedad comanditaria) y dos categorías madre de deuda, préstamo y bono, cada una emitida como sénior, subordinada o con senioridad no especificada, más capas de estructura como cupón cero y convertible. Este prototipo implementa solo el escrow por contrato; las clases siguientes son educativas.",

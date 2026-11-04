@@ -29,11 +29,25 @@ type Props = {
   prepareError?: string;
   /** True when the campaign is sample fixture data; renders the DEMO badge and disclaimer. */
   demo?: boolean;
+  discoveryOnly?: boolean;
   onAmount: (v: string) => void;
   onPrepare: (action: 'contribute' | 'refund' | 'withdraw') => void;
 };
 
-export default function CampaignCard({ campaign: c, profile, actor, busy, readOnly, amount, amountError, prepareError, demo, onAmount, onPrepare }: Props) {
+export default function CampaignCard({
+  campaign: c,
+  profile,
+  actor,
+  busy,
+  readOnly,
+  amount,
+  amountError,
+  prepareError,
+  demo,
+  discoveryOnly,
+  onAmount,
+  onPrepare,
+}: Props) {
   const { locale, m } = useI18n();
   const dl = deadlineInfo(c.config.deadline, m.time);
   const status = campaignStatus(c);
@@ -108,7 +122,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
         <div className="progress-track sr-only" role="img" aria-label={m.grid.ariaUnavailable} />
       )}
 
-      {profile && (
+      {profile && !discoveryOnly && (
         <dl className="metric-chips">
           <div>
             <dt>{m.card.interest}</dt>
@@ -154,7 +168,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
         </div>
       </dl>
 
-      {c.balance !== null && (
+      {!discoveryOnly && c.balance !== null && (
         <p className="your-position">
           {m.card.yourPosition}{' '}
           <strong>
@@ -164,49 +178,53 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
       )}
 
       <p className="card-details-link">
-        <a href={routeHash({ name: 'campaign', campaignId: c.id })}>{m.card.viewDetails}</a>
+        <a className={discoveryOnly ? 'btn btn-primary' : undefined} href={routeHash({ name: 'campaign', campaignId: c.id })}>
+          {discoveryOnly ? m.home.viewCampaign : m.card.viewDetails}
+        </a>
       </p>
 
       {demo && <p className="card-demo-note">{m.card.demoNote}</p>}
 
-      <details className="card-details">
-        <summary>{m.card.contractData}</summary>
-        <dl>
-          <div>
-            <dt>{m.card.contract}</dt>
-            <dd>
-              <code>{c.contractId}</code>
-            </dd>
-          </div>
-          <div>
-            <dt>{m.card.creator}</dt>
-            <dd>
-              <code>{c.config.creator}</code>
-            </dd>
-          </div>
-          <div>
-            <dt>{m.card.assetContract}</dt>
-            <dd>
-              <code>{shorten(c.config.token, 10, 6)}</code> ({m.card.assetValidated})
-            </dd>
-          </div>
-          <div>
-            <dt>{m.card.exactRaisedGoal}</dt>
-            <dd>
-              <code>
-                {c.raised} / {c.config.goal}
-              </code>{' '}
-              ({m.card.unitsNote})
-            </dd>
-          </div>
-          <div>
-            <dt>{m.card.creatorWithdrawn}</dt>
-            <dd>{c.withdrawn ? m.card.yes : m.card.no}</dd>
-          </div>
-        </dl>
-      </details>
+      {!discoveryOnly && (
+        <details className="card-details">
+          <summary>{m.card.contractData}</summary>
+          <dl>
+            <div>
+              <dt>{m.card.contract}</dt>
+              <dd>
+                <code>{c.contractId}</code>
+              </dd>
+            </div>
+            <div>
+              <dt>{m.card.creator}</dt>
+              <dd>
+                <code>{c.config.creator}</code>
+              </dd>
+            </div>
+            <div>
+              <dt>{m.card.assetContract}</dt>
+              <dd>
+                <code>{shorten(c.config.token, 10, 6)}</code> ({m.card.assetValidated})
+              </dd>
+            </div>
+            <div>
+              <dt>{m.card.exactRaisedGoal}</dt>
+              <dd>
+                <code>
+                  {c.raised} / {c.config.goal}
+                </code>{' '}
+                ({m.card.unitsNote})
+              </dd>
+            </div>
+            <div>
+              <dt>{m.card.creatorWithdrawn}</dt>
+              <dd>{c.withdrawn ? m.card.yes : m.card.no}</dd>
+            </div>
+          </dl>
+        </details>
+      )}
 
-      {!readOnly && status === 'open' ? (
+      {!discoveryOnly && !readOnly && status === 'open' ? (
         <div className="card-actions">
           <label className="amount-label">
             {m.card.amountLabel}
@@ -232,7 +250,7 @@ export default function CampaignCard({ campaign: c, profile, actor, busy, readOn
           <p className="card-rules">{m.card.rules}</p>
         </div>
       ) : null}
-      {!readOnly && status !== 'open' ? (
+      {!discoveryOnly && !readOnly && status !== 'open' ? (
         <div className="card-actions">
           <p className="widget-note">
             {ended

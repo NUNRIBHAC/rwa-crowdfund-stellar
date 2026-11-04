@@ -102,7 +102,7 @@ export const ar: Messages = {
     'تحمل استثمارات التمويل الجماعي خطر الخسارة الكاملة. هذا نموذج أولي على الشبكة التجريبية لـ Stellar: لا عروض حقيقية، لا أموال حقيقية، لا مشورة استثمارية.',
   hero: {
     introTitle: 'لنموّل مشروعًا معًا.',
-    intro: 'ساهم في هدف مشترك. بعد انتهاء المهلة، تحدد النتيجة الخطوة التالية.',
+    intro: 'استكشف حملات التمويل. اطّلع على الهدف والموعد النهائي وما يحدث بعد ذلك.',
     illustration: 'رسم توضيحي تفاعلي - لا معاملة',
     goalReached: 'تحقق الهدف',
     goalMissed: 'لم يتحقق الهدف',
@@ -135,8 +135,12 @@ export const ar: Messages = {
     emptyCta: 'عاين بحملات تجريبية',
   },
   home: {
+    campaignsNav: 'الحملات',
+    rulesTitle: 'قواعد التمويل وحدوده',
+    viewCampaign: 'عرض الحملة',
+    forBusinesses: 'للشركات',
     stepsAria: 'كيف يعمل الاستثمار',
-    stepsTitle: '4 خطوات إلى مساهمتك الأولى',
+    stepsTitle: 'كيف يعمل التمويل',
     steps: [
       {
         title: 'اربط',
@@ -158,7 +162,7 @@ export const ar: Messages = {
     fullJourneyLink: 'رحلة المستثمر الكاملة، مع تمييز كل خطوة كحية أو مخططة',
     latestAria: 'أحدث الحملات',
     latestTitle: 'أحدث الحملات',
-    allInvestments: 'كل الاستثمارات',
+    allInvestments: 'كل الحملات',
     instrumentsAria: 'فئات الأدوات',
     instrumentsTitle: 'فئات الأدوات التي يغطيها هذا التصميم',
     instrumentsIntro:

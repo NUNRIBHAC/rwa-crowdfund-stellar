@@ -103,7 +103,7 @@ export const es: Messages = {
     'Las inversiones en crowdfunding conllevan riesgo de pérdida total. Esto es un prototipo en la testnet de Stellar: sin ofertas reales, sin fondos reales, sin asesoramiento de inversión.',
   hero: {
     introTitle: 'Financiar un proyecto juntos.',
-    intro: 'Contribuye a una meta compartida. Tras el plazo, el resultado determina el siguiente paso.',
+    intro: 'Explora campañas de financiación. Consulta el objetivo, el plazo y qué ocurre después.',
     illustration: 'Ilustración interactiva - sin transacción',
     goalReached: 'Meta alcanzada',
     goalMissed: 'Meta no alcanzada',
@@ -137,8 +137,12 @@ export const es: Messages = {
     emptyCta: 'Vista previa con campañas de ejemplo',
   },
   home: {
+    campaignsNav: 'Campañas',
+    rulesTitle: 'Reglas y limitaciones de financiación',
+    viewCampaign: 'Ver campaña',
+    forBusinesses: 'Para empresas',
     stepsAria: 'Cómo funciona la inversión',
-    stepsTitle: '4 pasos para tu primera contribución',
+    stepsTitle: 'Cómo funciona la financiación',
     steps: [
       {
         title: 'Conectar',
@@ -160,7 +164,7 @@ export const es: Messages = {
     fullJourneyLink: 'Recorrido completo del inversor, con cada paso marcado como existente o planeado',
     latestAria: 'Campañas más recientes',
     latestTitle: 'Campañas más recientes',
-    allInvestments: 'Todas las inversiones',
+    allInvestments: 'Todas las campañas',
     instrumentsAria: 'Clases de instrumentos',
     instrumentsTitle: 'Clases de instrumentos cubiertas por este diseño',
     instrumentsIntro:
