@@ -1001,3 +1001,50 @@ test('dedicated social deletion HTTP ceremony returns proof only and requires a 
   assert.equal(Object.keys(final.socialIdentities).length, 0);
   assert.equal((await fetch(base + '/api/auth/me', { headers })).status, 401);
 });
+
+test('Farcaster deletion foundation: dedicated signed URI, linked fid and original session, callback proof only', async () => {
+  const { issueFarcasterDeletionNonce, verifyFarcasterSignIn } = await import('../src/farcaster-auth.js');
+  const { newBindSecret } = await import('../src/social-auth.js');
+  const fake = await makeFakeProvider('google', { email: 'fcdelete@example.com', emailVerified: true });
+  const { base, store } = await startApp({ ...CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'fcdelete@example.com' }, { socialFetch: fake.fetchImpl });
+  const login = await driveFlow(base, fake.fetchImpl, fake.state);
+  const authorization = 'Bearer ' + login.headers.get('location')!.split('social-token=')[1];
+  const state = await store.read();
+  const publicKey = Object.keys(state.accounts)[0];
+  await store.change((s) => {
+    s.socialIdentities['farcaster:3357330'] = { provider: 'farcaster', subject: '3357330', publicKey, createdAt: Date.now(), lastLoginAt: Date.now() };
+  });
+  const bind = newBindSecret();
+  await assert.rejects(issueFarcasterDeletionNonce(store, authorization, bind.hash, 'delete'), { code: 'deletion_confirmation_required' });
+  const verifier = defaultFarcasterVerifier({}, stubConnector(3357330n));
+  const ordinary = await issueFarcasterDeletionNonce(store, authorization, bind.hash, 'DELETE');
+  await assert.rejects(
+    verifyFarcasterSignIn(store, { FARCASTER_AUTH_DOMAIN: FC_DOMAIN }, verifier, { nonce: ordinary.nonce, ...(await siwe(ordinary.nonce)), bind: bind.secret }),
+    { code: 'social_exchange_failed' },
+  );
+  const otherIdentity = await issueFarcasterDeletionNonce(store, authorization, bind.hash, 'DELETE');
+  const otherSigned = await siwe(otherIdentity.nonce, { uri: `https://${FC_DOMAIN}/account?purpose=account-deletion` }, fcAccount, 123);
+  await assert.rejects(
+    verifyFarcasterSignIn(store, { FARCASTER_AUTH_DOMAIN: FC_DOMAIN }, defaultFarcasterVerifier({}, stubConnector(123n)), {
+      nonce: otherIdentity.nonce,
+      ...otherSigned,
+      bind: bind.secret,
+    }),
+    { code: 'deletion_proof_failed' },
+  );
+  const dedicated = await issueFarcasterDeletionNonce(store, authorization, bind.hash, 'DELETE');
+  const signed = await siwe(dedicated.nonce, { uri: `https://${FC_DOMAIN}/account?purpose=account-deletion` });
+  const before = await store.read();
+  const result = await verifyFarcasterSignIn(store, { FARCASTER_AUTH_DOMAIN: FC_DOMAIN }, verifier, { nonce: dedicated.nonce, ...signed, bind: bind.secret });
+  assert.equal(result.kind, 'deletion-proof');
+  if (result.kind !== 'deletion-proof') throw new Error('wrong outcome');
+  const { consumeSocialDeletionProof } = await import('../src/deletion-proof.js');
+  assert.equal(await store.change((s) => consumeSocialDeletionProof(s, undefined, result.proof, Date.now())).catch(() => false), false);
+  const after = await store.read();
+  assert.deepEqual(after.accounts, before.accounts);
+  assert.deepEqual(after.sessions, before.sessions);
+  assert.deepEqual(after.socialIdentities, before.socialIdentities);
+  await assert.rejects(verifyFarcasterSignIn(store, { FARCASTER_AUTH_DOMAIN: FC_DOMAIN }, verifier, { nonce: dedicated.nonce, ...signed, bind: bind.secret }), {
+    code: 'social_flow_expired',
+  });
+});

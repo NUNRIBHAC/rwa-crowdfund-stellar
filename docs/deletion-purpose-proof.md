@@ -57,3 +57,23 @@ The strict pending-record reader and conservative retention evidence evaluator
 are local foundations only. They distinguish unreadable, invalid, uncertain or
 protected records from clear evidence. No live coherent chain-history/lock
 adapter is connected, so wallet deletion remains unavailable.
+
+## Farcaster purpose extension (local, not released)
+
+The installed Farcaster client fixes the signed statement to Farcaster Auth
+(or accepts Farcaster Connect), so a custom deletion statement cannot be
+assumed. The local extension uses the signed URI
+`https://<configured-domain>/account?purpose=account-deletion` instead, with a
+server-side deletion purpose tied to the already-linked fid and original
+session. A normal `/account` SIWF message cannot satisfy this proof. Existing
+domain, nonce, time, local EOA recovery, Farcaster registry verification and
+browser-cookie binding remain in force. Verification produces only the shared
+five-minute deletion proof, never a session, link, account or deletion. The
+separate final DELETE/TOTP operation is still required.
+
+There is no Farcaster deletion start route, relay/UI wiring or deployment yet.
+Real relay support for the dedicated signed URI must be checked before claiming
+that the full flow is usable. Do not reuse an ordinary sign-in result or alter
+the fixed statement in an attempt to make the library accept deletion consent.
+Local tests use real signature recovery and client validation with a stubbed
+Farcaster registry/RPC, not real-provider end-to-end proof.

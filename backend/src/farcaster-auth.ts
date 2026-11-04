@@ -12,6 +12,7 @@
 //     signed for another site/nonce is rejected. The fid is read from the
 //     verified result, never from the request body.
 // Disabled (404) unless FARCASTER_AUTH_DOMAIN is set: fail-closed.
+import { socialDeletionPurpose, type SocialDeletionPurpose } from './deletion-proof.js';
 import { createHash, randomBytes } from 'node:crypto';
 import { createAppClient, viemConnector } from '@farcaster/auth-client';
 import { recoverMessageAddress } from 'viem';
@@ -49,7 +50,13 @@ export function defaultFarcasterVerifier(env: NodeJS.ProcessEnv, connector?: Eth
 
 const nonceKey = (nonce: string): string => createHash('sha256').update(`farcaster:${nonce}`).digest('hex');
 
-export async function issueFarcasterNonce(store: CommunityStore, bindHash: string, now = Date.now(), linkTo?: string): Promise<{ nonce: string }> {
+export async function issueFarcasterNonce(
+  store: CommunityStore,
+  bindHash: string,
+  now = Date.now(),
+  linkTo?: string,
+  deletionPurpose?: SocialDeletionPurpose,
+): Promise<{ nonce: string }> {
   const nonce = randomBytes(16).toString('hex');
   await store.change((s) => {
     for (const [k, f] of Object.entries(s.socialFlows)) if (f.expiresAt <= now) delete s.socialFlows[k];
@@ -61,9 +68,24 @@ export async function issueFarcasterNonce(store: CommunityStore, bindHash: strin
       expiresAt: now + NONCE_TTL_MS,
       bindHash,
       ...(linkTo ? { linkTo } : {}),
+      ...(deletionPurpose ? { deletionPurpose } : {}),
     };
   });
   return { nonce };
+}
+
+// Local foundation only: no hosted start route/UI calls this yet. A dedicated
+// signed URI distinguishes deletion identity proof from ordinary SIWF login.
+export async function issueFarcasterDeletionNonce(
+  store: CommunityStore,
+  authorization: string | undefined,
+  bindHash: string,
+  confirmation: unknown,
+  now = Date.now(),
+): Promise<{ nonce: string }> {
+  if (confirmation !== 'DELETE') throw new AuthError(400, 'type DELETE to begin deletion identity proof', 'deletion_confirmation_required');
+  const purpose = await socialDeletionPurpose(store, authorization, FLOW_PROVIDER, now);
+  return issueFarcasterNonce(store, bindHash, now, undefined, purpose);
 }
 
 export async function verifyFarcasterSignIn(
@@ -101,7 +123,8 @@ export async function verifyFarcasterSignIn(
   const parsed = parseSiweMessage(message);
   const issuedAt = parsed.issuedAt?.getTime();
   const bad = new AuthError(401, 'the Farcaster sign-in message is not valid for this site; start again', 'social_exchange_failed');
-  if (parsed.uri !== `https://${domain}/account`) throw bad;
+  const expectedUri = `https://${domain}/account${flow.deletionPurpose ? '?purpose=account-deletion' : ''}`;
+  if (parsed.uri !== expectedUri) throw bad;
   if (issuedAt === undefined || issuedAt < now - MESSAGE_MAX_AGE_MS || issuedAt > now + MESSAGE_MAX_FUTURE_MS) throw bad;
   if (parsed.expirationTime && parsed.expirationTime.getTime() <= now) throw bad;
   if (parsed.notBefore && parsed.notBefore.getTime() > now + MESSAGE_MAX_FUTURE_MS) throw bad;
