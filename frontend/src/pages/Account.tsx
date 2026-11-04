@@ -1,4 +1,6 @@
 import DemoJourney from '../components/DemoJourney';
+import { useCommunityAuth } from '../community/CommunityAuth';
+import { accountReadActor } from '../account-read-actor';
 import { useEffect, useMemo, useState } from 'react';
 import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
@@ -73,6 +75,8 @@ function readIntent(): {
 export default function Account({ market }: { market: Market }) {
   const { locale, m } = useI18n();
   const { campaigns, actor, fixtureMode } = market;
+  const { account } = useCommunityAuth();
+  const readActor = accountReadActor(actor, account);
   const [tab, setTab] = useState<PortfolioStatus | 'all'>('all');
   const intent = useMemo(readIntent, []);
   const [activity, setActivity] = useState<ActivityRow[] | null>(null);
@@ -81,12 +85,12 @@ export default function Account({ market }: { market: Market }) {
   // journal. Falls back to the locally saved intent when the feed is
   // unavailable or empty, so the section never shows fabricated history.
   useEffect(() => {
-    if (!actor) {
-      setActivity(null);
+    setActivity(null);
+    if (!readActor) {
       return;
     }
     let live = true;
-    fetch(`/api/account/activity?actor=${encodeURIComponent(actor)}`)
+    fetch(`/api/account/activity?actor=${encodeURIComponent(readActor)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((j) => {
         if (live) setActivity(Array.isArray(j.activity) ? j.activity : []);
@@ -97,7 +101,7 @@ export default function Account({ market }: { market: Market }) {
     return () => {
       live = false;
     };
-  }, [actor]);
+  }, [readActor]);
 
   const rows: Row[] = useMemo(
     () =>
@@ -180,9 +184,9 @@ export default function Account({ market }: { market: Market }) {
 
       {hasPositions && <AccountNewsSection campaigns={rows.map((r) => ({ id: r.id, name: r.name }))} />}
 
-      {actor && <AccountPayoutsSection actor={actor} />}
+      {readActor && <AccountPayoutsSection actor={readActor} />}
 
-      {actor && <AccountHoldingsSection actor={actor} />}
+      {readActor && <AccountHoldingsSection actor={readActor} />}
 
       {hasPositions && rows.length > 0 && (
         <section aria-label={m.account.documentsAria}>
