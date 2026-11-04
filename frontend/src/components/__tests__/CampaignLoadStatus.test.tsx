@@ -63,3 +63,48 @@ test('an in-flight first load explains loading without offering a duplicate retr
   settle({ ok: true, json: async () => ({ campaigns: [] }) });
   await waitFor(() => expect(screen.queryByRole('status')).toBeNull());
 });
+
+test('mount campaign-load failure stays off static content routes', async () => {
+  window.history.replaceState(null, '', '/about');
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input) => {
+      const url = String(input);
+      if (url.startsWith('/api/campaigns') && !url.includes('/metadata'))
+        return { ok: false, status: 503, json: async () => ({ code: 'API_UNAVAILABLE', error: 'upstream' }) };
+      return { ok: true, json: async () => ({ enabled: false, comments: [], episodes: [], news: [] }) };
+    }),
+  );
+  const { container } = render(
+    <I18nProvider>
+      <App />
+    </I18nProvider>,
+  );
+  expect(await screen.findByRole('heading', { level: 1, name: 'About this project' })).toBeTruthy();
+  await waitFor(() => expect(container.querySelector('.error-banner')).toBeNull());
+  expect(screen.queryByRole('alert')).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
+});
+
+test('mount campaign-load failure keeps an honest banner on the account consumer route', async () => {
+  window.history.replaceState(null, '', '/account');
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input) => {
+      const url = String(input);
+      if (url.startsWith('/api/campaigns') && !url.includes('/metadata'))
+        return { ok: false, status: 503, json: async () => ({ code: 'API_UNAVAILABLE', error: 'upstream' }) };
+      return { ok: true, json: async () => ({ enabled: false, comments: [], episodes: [], news: [] }) };
+    }),
+  );
+  const { container } = render(
+    <I18nProvider>
+      <App />
+    </I18nProvider>,
+  );
+  // Account is a campaign-data consumer route (OperatorSection), so the
+  // honest error surface is preserved here even though static routes
+  // suppress it.
+  await screen.findByRole('alert');
+  expect(container.querySelector('.error-banner')?.textContent).toBe('The service is temporarily unavailable. Please try again in a moment.');
+});

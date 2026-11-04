@@ -95,7 +95,7 @@ export default function App() {
   }, [route]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [actor, setActor] = useState('');
-  const [error, setError] = useState<{ code?: string; text: string } | null>(null);
+  const [error, setError] = useState<{ code?: string; text: string; campaignLoad?: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
   // Per-card errors store machine codes (not localized strings) so a locale
@@ -135,7 +135,7 @@ export default function App() {
       setFixtureMode(true);
       setLoaded(true);
     }
-    refresh().catch((e) => setError(bannerError(e)));
+    refresh().catch((e) => setError({ ...bannerError(e), campaignLoad: true }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -144,13 +144,13 @@ export default function App() {
     localStorage.setItem(INTENT_KEY, JSON.stringify(i));
   }
 
-  async function run(fn: () => Promise<void>) {
+  async function run(fn: () => Promise<void>, errTag?: { campaignLoad: true }) {
     setBusy(true);
     setError(null);
     try {
       await fn();
     } catch (e) {
-      setError(bannerError(e));
+      setError({ ...bannerError(e), ...(errTag ?? {}) });
     } finally {
       setBusy(false);
     }
@@ -282,10 +282,14 @@ export default function App() {
       setAmountErrorCodes({ ...amountErrorCodes, [id]: v.trim() === '' ? '' : (contributionError(v, c.config.goal, c.raised) ?? '') });
     },
     onPrepare: (c, action) => run(() => prepare(c, action)),
-    onRefresh: () => run(() => refresh()),
+    onRefresh: () => run(() => refresh(), { campaignLoad: true }),
     onToggleFixtures: toggleFixtures,
   };
 
+  // Routes that render campaign data (Home/Investments/CampaignDetail via
+  // market, Account via OperatorSection) keep honest load errors and retry;
+  // static content routes never surface the background campaign load.
+  const CAMPAIGN_DATA_ROUTES = ['home', 'investments', 'campaign', 'account'];
   const campaignLoadStatus = !fixtureMode && ['home', 'investments', 'campaign'].includes(route.name) && !loaded && (
     <section aria-live="polite">
       <p role={error ? 'alert' : 'status'}>{error ? m.errors.apiUnavailable : m.campaign.loading}</p>
@@ -294,10 +298,13 @@ export default function App() {
           className="btn"
           disabled={busy}
           onClick={() =>
-            run(async () => {
-              await refresh();
-              setError(null);
-            })
+            run(
+              async () => {
+                await refresh();
+                setError(null);
+              },
+              { campaignLoad: true },
+            )
           }
         >
           {m.community.operator.retry}
@@ -319,11 +326,13 @@ export default function App() {
       </a>
       <Header actor={actor} busy={busy} onConnect={() => run(connect)} onDisconnect={() => setActor('')} current={route.name} />
       <main className="page" id="main">
-        {error && !(!fixtureMode && !loaded && ['home', 'investments', 'campaign'].includes(route.name)) && (
-          <p role="alert" className="error-banner">
-            {(error.code === 'API_UNAVAILABLE' && m.errors.apiUnavailable) || error.text}
-          </p>
-        )}
+        {error &&
+          !(error.campaignLoad && !CAMPAIGN_DATA_ROUTES.includes(route.name)) &&
+          !(!fixtureMode && !loaded && ['home', 'investments', 'campaign'].includes(route.name)) && (
+            <p role="alert" className="error-banner">
+              {(error.code === 'API_UNAVAILABLE' && m.errors.apiUnavailable) || error.text}
+            </p>
+          )}
 
         {route.name !== 'home' && campaignLoadStatus}
 
