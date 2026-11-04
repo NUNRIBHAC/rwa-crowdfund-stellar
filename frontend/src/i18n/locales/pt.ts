@@ -2032,7 +2032,7 @@ export const pt: Messages = {
     signedInAs: 'Sessão iniciada como',
     displayNameLabel: 'Nome de apresentação (mostrado nos seus comentários)',
     displayNameSave: 'Guardar nome',
-    signOutButton: 'Terminar sessão',
+    signOutButton: 'Sair',
     ticketsTitle: 'Suporte e feedback',
     ticketsNote:
       'Os pedidos são visíveis apenas para a sua conta de carteira e para a operadora do site. Isto é um protótipo: não inclua dados pessoais, palavras-passe ou dados de pagamento reais.',

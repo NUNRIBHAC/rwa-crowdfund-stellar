@@ -81,7 +81,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
-  const { signOut } = useCommunityAuth();
+  const { account, signOut, busy: sessionBusy } = useCommunityAuth();
   const { locale, setLocale, m } = useI18n();
   const NAV: { route: RouteName; label: string }[] = [
     { route: 'home', label: m.nav.home },
@@ -236,7 +236,20 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
           </button>
 
           <div className="header-side-top">
-            <div className="header-actions">
+            <div className="header-actions" style={account ? { gap: 8, flexWrap: 'wrap' } : undefined}>
+              {account && (
+                <button
+                  className="btn btn-disconnect"
+                  disabled={sessionBusy}
+                  onClick={() => {
+                    void signOut();
+                    setMenuOpen(false);
+                  }}
+                >
+                  {m.community.signOutButton}
+                </button>
+              )}
+
               {actor ? (
                 <>
                   <span className="wallet-chip" title={actor}>
