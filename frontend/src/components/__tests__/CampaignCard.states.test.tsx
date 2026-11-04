@@ -76,3 +76,13 @@ test('new campaigns use a clearly labelled illustrative photo', () => {
   expect(screen.getByAltText('Aerial photograph of a solar farm (illustrative)').getAttribute('src')).toBe('/demo-solar-farm.jpg');
   expect(screen.getByText(/Illustrative photo/)).toBeTruthy();
 });
+
+test.each([
+  [-1, 'ended'],
+  [5, 'soon'],
+  [57, 'open'],
+])('deadline status has a distinct tone for %s days', (days, tone) => {
+  const campaign = { ...openUnfunded, config: { ...openUnfunded.config, deadline: String(Math.floor(Date.now() / 1000) + Number(days) * 86400) } };
+  setup(campaign);
+  expect(document.querySelector(`.deadline-status-${tone}`)?.textContent).toBeTruthy();
+});

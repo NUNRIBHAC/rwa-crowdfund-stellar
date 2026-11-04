@@ -56,6 +56,8 @@ export default function CampaignCard({
   // action the contract is known to reject in the current state.
   const fundedNow = status === 'funded';
   const ended = dl.state === 'ended';
+  // A visual reminder only: this does not change contract deadlines or eligibility.
+  const deadlineTone = ended ? 'ended' : Number(c.config.deadline) * 1000 - Date.now() <= 7 * 86400000 ? 'soon' : 'open';
   return (
     <article className="card">
       <CampaignPhoto campaignId={c.id} variant="card" />
@@ -164,7 +166,9 @@ export default function CampaignCard({
         </div>
         <div>
           <dt>{m.card.status}</dt>
-          <dd className={dl.state === 'closing' ? 'deadline-closing' : ''}>{dl.label}</dd>
+          <dd>
+            <span className={`deadline-status deadline-status-${deadlineTone}`}>{dl.label}</span>
+          </dd>
         </div>
       </dl>
 

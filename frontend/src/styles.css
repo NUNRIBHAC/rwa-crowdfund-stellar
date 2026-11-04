@@ -4221,3 +4221,26 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   height: auto;
   margin-inline: auto;
 }
+
+/* Deadline labels keep their words; color is a second, non-exclusive cue. */
+.deadline-status {
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+.deadline-status-open {
+  color: #075c3b;
+  background: #e6f4ee;
+  border-color: #8abda6;
+}
+.deadline-status-soon {
+  color: #7a4300;
+  background: #fff1cc;
+  border-color: #d2aa55;
+}
+.deadline-status-ended {
+  color: #992b25;
+  background: #fee4e2;
+  border-color: #d69b96;
+}
