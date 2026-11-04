@@ -122,7 +122,6 @@ export const zhCN: Messages = {
     sub: 'Blockallisto 是由 Soroban 合约强制执行的"全有或全无"众筹：每笔出资都在 Stellar 上托管，融资上限检查在同一原子交易中执行。只有目标在截止期限前达成，创建者才能提款，否则每位出资者自行签署退款。从葡萄牙走向世界。',
     ctaBrowse: '浏览筹资项目',
     ctaHow: '运作方式',
-    noteStrong: 'Stellar 测试网原型 - 无真实资金。',
     noteLive: '下方每个项目都是 Stellar 测试网上的真实 Soroban 合约。未经审计，非生产环境。托管于免费套餐：闲置后的首个请求可能需要长达一分钟等待实例唤醒。',
     noteSample: '下方项目为演示用固定数据，并非已部署合约。未经审计，非生产环境。',
     noteUnknown: '未经审计，非生产环境。',

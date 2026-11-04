@@ -11,18 +11,26 @@
   transform: translateY(-50%);
   writing-mode: vertical-rl;
   z-index: 40;
-  background: #4b4fe2;
-  color: #fff;
-  border: none;
+  /* Quieter secondary treatment on every screen (user feedback 2026-11-04:
+     the filled primary-blue pill read as a twin of the page's primary CTA).
+     Outlined neutral styling keeps it discoverable without competing;
+     behavior, focus ring and panel are unchanged. */
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-right: none;
   border-radius: 8px 0 0 8px;
-  padding: 16px 8px;
-  font-size: 0.875rem;
+  padding: 14px 7px;
+  font-size: 0.8125rem;
   cursor: pointer;
-  transition: background-color 200ms ease;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
 }
 
 .feedback-tab:hover {
-  background: #363ab2;
+  background: var(--bg);
+  border-color: #7376e8;
 }
 
 .feedback-tab:focus-visible {
@@ -177,7 +185,8 @@
     margin: 24px 0 0 auto;
     transform: none;
     writing-mode: horizontal-tb;
-    padding: 12px 18px;
+    border: 1px solid var(--line);
+    padding: 10px 16px;
     border-radius: 8px;
   }
   .page {
@@ -294,9 +303,8 @@
     align-items: stretch;
     gap: 0;
   }
-  .mobile-menu-open .site-nav > a:first-child {
-    display: none;
-  }
+  /* Home stays visible as the first drawer row, matching the desktop nav
+     order (user request 2026-11-04); it was previously hidden on mobile. */
   .mobile-menu-open .site-nav > a {
     display: flex;
     gap: 12px;
@@ -345,6 +353,11 @@
     grid-template-columns: 1fr auto;
     gap: 14px;
     width: 100%;
+    /* Keep "My account" adjacent to the menu rows above it: the 14px group
+       gap read as a detached item (user feedback 2026-11-04, "Devem estar
+       juntos"). Cancelling it here gives the account row the same shared
+       border rhythm as every other drawer row. */
+    margin-top: -14px;
   }
   .mobile-menu-open .header-side > a {
     grid-column: 1 / -1;
@@ -362,10 +375,14 @@
        the final glyph of the five-character locale codes (ZH-CN/ZH-TW)
        under the select arrow at every mobile width (QA-confirmed on the
        live build). min-width keeps the compact size for short codes;
-       max-width caps at the panel so long codes can never overflow it. */
+       max-width caps at the panel so long codes can never overflow it.
+       justify-self keeps the box at content width inside the grid column:
+       stretching a two-letter code across the whole row read as oversized
+       (user feedback 2026-11-04) without adding any tap area. */
     width: auto;
     min-width: 80px;
     max-width: 100%;
+    justify-self: start;
   }
   .mobile-menu-open .header-theme-toggle {
     justify-self: end;

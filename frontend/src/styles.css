@@ -245,6 +245,15 @@ section[id] {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
 }
+@media (max-width: 600px) {
+  .card-grid {
+    /* The minmax(320px, 1fr) track floor pinned cards to 320px and bled
+       past the right edge of narrower effective viewports (user's
+       physical-phone defect 2026-11-04; html/body overflow-x: clip hid it
+       from scrollWidth checks). Fluid single column instead. */
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 .card {
   position: relative;
   background: var(--card);
@@ -261,6 +270,9 @@ section[id] {
   justify-content: space-between;
   align-items: flex-start;
   gap: 10px;
+  /* Title + tag chips may wrap to two lines instead of forcing the card
+     past its column (measured 459px min-content at 300px viewport). */
+  flex-wrap: wrap;
 }
 .card-title {
   margin: 0;
@@ -299,9 +311,21 @@ section[id] {
 .card-tags {
   display: flex;
   gap: 6px;
-  flex-shrink: 0;
   flex-wrap: wrap;
   justify-content: flex-end;
+  /* May shrink below the chips' combined width so a long chip row wraps
+     instead of flooring the card (physical-phone defect 2026-11-04). */
+  min-width: 0;
+}
+@media (max-width: 600px) {
+  .card-tags .status-chip {
+    /* A single long chip (e.g. the instrument label in wider locales)
+       otherwise overflowed cards narrower than ~350px. Cap it and let
+       its label wrap to two lines instead of forcing card width. */
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
 }
 
 .progress-row {
@@ -2129,7 +2153,20 @@ textarea:focus-visible,
     /* 50px slack over the 200px tiles, same reason as the base rule. */
     padding-right: 250px;
     flex-wrap: wrap;
-    gap: 24px;
+    /* Compact mobile footer (user request 2026-11-04): tighter section
+       rhythm while 44px coarse-pointer targets stay untouched. */
+    gap: 16px;
+  }
+  .footer-social {
+    /* Dense icon block: 44px touch targets remain, only the inter-target
+       gaps shrink (same pointer-aware treatment as the desktop fix). */
+    gap: 4px;
+  }
+  .footer-brand-inner .footer-grid {
+    gap: 8px 20px;
+  }
+  .footer-grid ul {
+    line-height: 1.5;
   }
   .footer-brand-inner .footer-grid {
     /* Min grid 260px <= 561-24-250 = 287px, fixing the 561-573px overlap
@@ -3344,27 +3381,32 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
     text-align: center;
   }
   .home-editorial-cards .card {
-    display: grid;
-    grid-template-columns: 104px minmax(0, 1fr);
-    gap: 10px 14px;
+    /* Single fluid column (user's physical-phone defect 2026-11-04: the
+       104px-thumb grid pinned the card to a ~320px minimum and bled past
+       the right edge whenever the effective viewport was narrower, e.g.
+       iOS display/page zoom). Flex stacking plus min-width:0 children lets
+       the card shrink to any viewport; the photo returns to full width. */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     padding: 14px;
   }
   .home-editorial-cards .card > * {
-    grid-column: 1 / -1;
     min-width: 0;
   }
   .home-editorial-cards .card .card-photo {
-    grid-column: 1;
-    grid-row: 1;
     margin-bottom: 0;
   }
-  .home-editorial-cards .card .card-top {
-    grid-column: 2;
-    grid-row: 1;
-    display: block;
-  }
   .home-editorial-cards .card-photo img {
-    aspect-ratio: 1;
+    aspect-ratio: 16 / 9;
+  }
+  .home-editorial-cards .card .fund-grid-wrap {
+    /* The nowrap block-grid + caption row set the card's old 290px
+       min-content floor; wrapping keeps both fully visible at any width. */
+    flex-wrap: wrap;
+  }
+  .home-editorial-cards .card .stat-grid {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   }
   .home-editorial-cards .card-title {
     font-size: 17px;
@@ -3450,7 +3492,10 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 }
 @media (max-width: 600px) {
   .hero-art .editorial-cubes {
-    max-height: 150px;
+    /* User request 2026-11-04: the animation was squeezed to a 150px
+       letterbox; let the width drive it (natural ~272px at 390px) with a
+       300px ceiling so it reads at full width without overwhelming. */
+    max-height: 300px;
   }
   .hero-grid {
     gap: 4px;

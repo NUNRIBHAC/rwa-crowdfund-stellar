@@ -117,7 +117,6 @@
     "sub": "A Blockallisto é crowdfunding tudo-ou-nada aplicado por um contrato Soroban: cada contribuição fica em escrow na Stellar e a verificação do limite de financiamento é executada na mesma transação atómica. O criador só levanta os fundos se o objetivo for atingido dentro do prazo; caso contrário, cada contribuinte assina o seu próprio reembolso. De Portugal para o mundo.",
     "ctaBrowse": "Explorar campanhas",
     "ctaHow": "Como funciona",
-    "noteStrong": "Protótipo na testnet Stellar - sem fundos reais.",
     "noteLive": "Cada campanha abaixo é um contrato Soroban real na testnet Stellar. Não auditado, não pronto para produção. Alojado num plano gratuito: o primeiro pedido após inatividade pode demorar até um minuto enquanto a instância acorda.",
     "noteSample": "As campanhas abaixo são exemplos (fixtures), não contratos implementados. Não auditado, não pronto para produção.",
     "noteUnknown": "Não auditado, não pronto para produção.",

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 
 function NavIcon({ name }: { name: string }) {
   const paths: Record<string, string> = {
+    home: 'M3 11 12 3l9 8M5 10v11h14V10',
     investments: 'M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h6v6h-6z',
     'how-it-works': 'M9 8a3 3 0 0 1 6 0c0 2-3 2-3 5M12 17h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',
     learn: 'M12 5c-3-2-6-2-10 0v15c4-2 7-2 10 0 3-2 6-2 10 0V5c-4-2-7-2-10 0ZM12 5v15',
@@ -41,9 +42,11 @@ type Props = {
 };
 
 // Header arrangement (user target, 2026-10-31): brand at the left spanning both
-// rows; the right column carries the testnet badge + Connect on the top row and
-// the language selector directly below; the nav sits on the lower middle row.
-// The current user reference places account, compact locale, theme and wallet after More.
+// rows; the right column carries Connect on the top row and the language
+// selector directly below; the nav sits on the lower middle row. The testnet
+// badge was removed from the header/drawer at the user's request (2026-11-04);
+// page-level demo and no-real-funds disclosures stay. The current user
+// reference places account, compact locale, theme and wallet after More.
 export default function Header({ actor, busy, onConnect, onDisconnect, current }: Props) {
   const theme = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -233,7 +236,6 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
           </button>
 
           <div className="header-side-top">
-            <span className="badge badge-testnet">{m.header.testnetBadge}</span>
             <div className="header-actions">
               {actor ? (
                 <>

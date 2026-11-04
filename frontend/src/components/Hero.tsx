@@ -24,9 +24,11 @@ export default function Hero({ mode }: Props) {
               {m.hero.ctaHow}
             </a>
           </div>
-          <p className="hero-note">
-            <strong>{m.hero.noteStrong}</strong> {mode === 'sample' && m.card.demoNote}
-          </p>
+          {/* User request 2026-11-04: the "Stellar testnet prototype - no real
+              funds" line is removed from the homepage hero; the sample-data
+              note stays in fixtures mode and transaction/wallet disclosures
+              elsewhere are unchanged. */}
+          {mode === 'sample' && <p className="hero-note">{m.card.demoNote}</p>}
         </div>
         <div className="hero-art hero-cubes">
           <EditorialCubes />

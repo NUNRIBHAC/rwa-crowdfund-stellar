@@ -126,7 +126,6 @@ export const de: Messages = {
     sub: 'Blockallisto ist Alles-oder-nichts-Crowdfunding, durchgesetzt durch einen Soroban-Vertrag: Jeder Beitrag bleibt auf Stellar im Escrow und die Prüfung der Finanzierungsobergrenze erfolgt in derselben atomaren Transaktion. Der Ersteller kann die Mittel nur abheben, wenn das Ziel fristgerecht erreicht wird; andernfalls signiert jeder Beitragende seine eigene Rückerstattung. Von Portugal in die Welt.',
     ctaBrowse: 'Kampagnen erkunden',
     ctaHow: 'So funktioniert es',
-    noteStrong: 'Prototyp im Stellar-Testnet - keine echten Gelder.',
     noteLive:
       'Jede Kampagne unten ist ein echter Soroban-Vertrag im Stellar-Testnet. Nicht geprüft, nicht produktionsreif. Auf einem kostenlosen Tarif gehostet: Die erste Anfrage nach Inaktivität kann bis zu einer Minute dauern, während die Instanz aufwacht.',
     noteSample: 'Die Kampagnen unten sind Beispiele (Fixtures), keine bereitgestellten Verträge. Nicht geprüft, nicht produktionsreif.',
