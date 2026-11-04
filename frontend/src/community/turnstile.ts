@@ -82,10 +82,14 @@ function loadScript(): Promise<void> {
 }
 
 function widgetContainer(): HTMLElement {
-  if (!container) {
+  const activePanel = document.activeElement?.closest('.community-section');
+  const mount = activePanel?.querySelector<HTMLElement>('[data-turnstile-mount]') ?? document.querySelector<HTMLElement>('[data-turnstile-mount]');
+  if (!container || !container.isConnected) {
     container = document.createElement('div');
     container.className = 'turnstile-widget';
-    document.body.appendChild(container);
+    (mount ?? document.body).appendChild(container);
+  } else if (mount && container.parentElement !== mount) {
+    mount.appendChild(container);
   }
   return container;
 }
@@ -113,7 +117,8 @@ export async function getTurnstileToken(locale?: string): Promise<string | undef
       api.remove(id);
       reject(new ApiError('turnstile error: timeout', 'turnstile_failed'));
     }, RENDER_TIMEOUT_MS);
-    const id = api.render(widgetContainer(), {
+    const target = widgetContainer();
+    const id = api.render(target, {
       sitekey,
       appearance: 'interaction-only',
       ...(locale ? { language: locale } : {}),
@@ -136,5 +141,8 @@ export async function getTurnstileToken(locale?: string): Promise<string | undef
         api.reset(id);
       },
     });
+    // A managed challenge may require interaction. Keep it beside the active
+    // sign-in form rather than below the page footer, and bring it into view.
+    target.scrollIntoView?.({ block: 'center', behavior: 'smooth' });
   });
 }

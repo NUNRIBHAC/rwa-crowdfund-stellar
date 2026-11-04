@@ -223,6 +223,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
           </button>
           {resent && <p className="community-note">{m.community.emailResendDone}</p>}
           <p className="community-note">{m.community.emailDemoNote}</p>
+          <div data-turnstile-mount />
         </section>
       );
     }
@@ -405,6 +406,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
             {resetDone && <p className="community-note">{m.community.emailResetDone}</p>}
           </>
         )}
+        <div data-turnstile-mount />
       </section>
     );
   }
