@@ -4564,3 +4564,24 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .editorial-cube-grounded {
   animation: none;
 }
+.faq-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 32px;
+  align-items: center;
+}
+.faq-question {
+  display: block;
+  width: min(100%, 240px);
+  height: auto;
+  margin-inline: auto;
+}
+.faq-animation .community-note {
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .faq-intro {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

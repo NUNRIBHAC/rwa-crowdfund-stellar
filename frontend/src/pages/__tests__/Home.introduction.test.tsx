@@ -38,6 +38,7 @@ test('home introduces funding, preserves the slogan and sends contribution actio
   fireEvent.click(screen.getByText('How the contract works'));
   expect(contract.open).toBe(true);
   expect(container.querySelectorAll('.hero-cubes .editorial-cube-motion')).toHaveLength(6);
+  expect(container.querySelectorAll('.hero-cubes .editorial-cube-grounded')).toHaveLength(3);
   expect(container.querySelector('.home-contract .funding-illustration')).toBeTruthy();
   expect(container.querySelectorAll('.home-funding-rules .instrument-card')).toHaveLength(7);
   expect(container.querySelectorAll('.home-funding-rules details')).toHaveLength(4);

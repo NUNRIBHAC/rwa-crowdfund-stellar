@@ -27,10 +27,18 @@ export default function Faq() {
   return (
     <>
       <h1 className="page-title">{m.faqPage.title}</h1>
-      <p>
-        {m.faqPage.introPre} <strong>{m.faqPage.introLive}</strong> {m.faqPage.introMid1} <strong>{m.faqPage.introPlanned}</strong> {m.faqPage.introMid2}{' '}
-        <strong>{m.faqPage.introInfo}</strong> {m.faqPage.introPost}
-      </p>
+      <div className="faq-intro">
+        <div>
+          <p>
+            {m.faqPage.introPre} <strong>{m.faqPage.introLive}</strong> {m.faqPage.introMid1} <strong>{m.faqPage.introPlanned}</strong> {m.faqPage.introMid2}{' '}
+            <strong>{m.faqPage.introInfo}</strong> {m.faqPage.introPost}
+          </p>
+        </div>
+        <div className="faq-animation">
+          <img className="faq-question" src="/faq-question.svg" alt="" />
+          <p className="community-note">{m.hero.illustration}</p>
+        </div>
+      </div>
       <div className="faq-controls">
         <input
           className="discovery-search"
