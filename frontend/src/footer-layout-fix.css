@@ -317,3 +317,98 @@
     margin-bottom: 9px;
   }
 }
+
+/* Mobile compactness follow-up (2026-11-04): preserve every visible link
+   and 44px touch target, but stop equal-height grid rows from leaving dead
+   space under short groups. Two balanced flow columns pack whole groups.
+   Context stays full width; the complete seven-shape animation gets a
+   shallow dedicated band rather than a second 260px screenful. */
+@media (max-width: 560px) {
+  .footer-brand-inner {
+    gap: 12px;
+    padding-block: 16px;
+  }
+  .footer-brand-word {
+    gap: 8px;
+  }
+  .footer-brand-lockup-img {
+    height: 36px;
+  }
+  .footer-tagline {
+    font-size: 15px;
+  }
+  .footer-social {
+    gap: 0;
+  }
+  .footer-brand-inner .footer-grid,
+  html[lang='de'] .footer-brand-inner .footer-grid {
+    display: block;
+    columns: 2;
+    column-gap: 20px;
+    width: 100%;
+  }
+  .footer-grid > div:not(.footer-context) {
+    break-inside: avoid;
+    margin-bottom: 12px;
+  }
+  .footer-grid .footer-heading {
+    margin-bottom: 4px;
+  }
+  .footer-grid li {
+    margin: 0;
+  }
+  .footer-brand-inner .footer-context {
+    column-span: all;
+    margin-top: 4px;
+    padding-top: 12px;
+  }
+  .footer-status {
+    margin-top: 10px;
+  }
+  .footer-tiles {
+    height: 120px;
+    margin-top: 0;
+  }
+  .footer-tiles .ft-1 {
+    --sx: 5%;
+    --sy: 8px;
+    --gx: 18%;
+    --gy: 18px;
+  }
+  .footer-tiles .ft-2 {
+    --sx: 41%;
+    --sy: 6px;
+    --gx: 52%;
+    --gy: 12px;
+  }
+  .footer-tiles .ft-3 {
+    --sx: 72%;
+    --sy: 14px;
+    --gx: 65%;
+    --gy: 34px;
+  }
+  .footer-tiles .ft-4 {
+    --sx: 27%;
+    --sy: 60px;
+    --gx: 35%;
+    --gy: 65px;
+  }
+  .footer-tiles .ft-5 {
+    --sx: 8%;
+    --sy: 72px;
+    --gx: 15%;
+    --gy: 66px;
+  }
+  .footer-tiles .ft-6 {
+    --sx: 57%;
+    --sy: 74px;
+    --gx: 48%;
+    --gy: 80px;
+  }
+  .footer-tiles .ft-7 {
+    --sx: 82%;
+    --sy: 72px;
+    --gx: 78%;
+    --gy: 68px;
+  }
+}
