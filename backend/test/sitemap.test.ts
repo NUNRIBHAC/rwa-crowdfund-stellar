@@ -32,7 +32,7 @@ test('sitemap.xml lists every public page path plus live campaign URLs', async (
     const locs = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
     assert.deepEqual(locs, [
       `${origin}/`,
-      `${origin}/investments`,
+      `${origin}/campaigns`,
       `${origin}/how-it-works`,
       `${origin}/learn`,
       `${origin}/glossary`,
@@ -73,7 +73,7 @@ test('a campaign-registry failure still serves the static page list', async () =
     const res = await fetch(`${base}/sitemap.xml`);
     assert.equal(res.status, 200);
     const body = await res.text();
-    assert.match(body, /<loc>[^<]+\/investments<\/loc>/);
+    assert.match(body, /<loc>[^<]+\/campaigns<\/loc>/);
     assert.ok(!body.includes('/campaigns/'), 'no campaign URLs without a registry');
   });
 });
@@ -127,4 +127,16 @@ test('production without a configured origin fails closed (503), never reflects 
   } finally {
     process.env.NODE_ENV = saved;
   }
+});
+
+test('old investments listing permanently redirects to campaigns and preserves query', async () => {
+  const app = express();
+  registerDiscoveryEndpoints(app);
+  await withServer(app, async (base) => {
+    for (const path of ['/investments', '/investments/']) {
+      const res = await fetch(`${base}${path}?language=pt`, { redirect: 'manual' });
+      assert.equal(res.status, 308);
+      assert.equal(res.headers.get('location'), '/campaigns?language=pt');
+    }
+  });
 });

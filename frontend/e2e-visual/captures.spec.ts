@@ -42,7 +42,7 @@ for (const locale of VISUAL_LOCALES)
         await page.goto(path);
         await expect(page.locator('main h1').first()).toBeVisible();
         await expect(page.locator('html')).toHaveAttribute('lang', locale === 'pt' ? 'pt-PT' : locale === 'es' ? 'es-ES' : locale === 'ar' ? 'ar' : locale);
-        if (path === '/' || path === '/investments') await expect(page.locator('.card').first()).toBeVisible();
+        if (path === '/' || path === '/campaigns') await expect(page.locator('.card').first()).toBeVisible();
         if (path.startsWith('/campaigns/')) await expect(page.locator('#campaign-funding')).toBeVisible();
         await page.evaluate(async () => {
           await document.fonts.ready;

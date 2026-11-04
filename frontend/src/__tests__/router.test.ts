@@ -40,6 +40,10 @@ describe('routePath', () => {
     expect(routePath({ name: 'risk-warnings' })).toBe('/risk-warnings');
     expect(routePath({ name: 'account' })).toBe('/account');
   });
+  test('listing links use the canonical campaigns path', () => {
+    expect(routePath({ name: 'investments' })).toBe('/campaigns');
+    expect(routeFromPath('/investments')).toEqual(routeFromPath('/campaigns'));
+  });
   test('campaign ids are encoded', () => {
     expect(routePath({ name: 'campaign', campaignId: 'a b' })).toBe('/campaigns/a%20b');
   });
@@ -73,7 +77,7 @@ describe('legacy hash compatibility', () => {
     expect(routeFromHash('#/campaigns/demo-solar')).toEqual({ name: 'campaign', campaignId: 'demo-solar' });
   });
   test('routeHash keeps its name and emits path URLs', () => {
-    expect(routeHash({ name: 'investments' })).toBe('/investments');
+    expect(routeHash({ name: 'investments' })).toBe('/campaigns');
     expect(routeHash({ name: 'campaign', campaignId: 'demo-solar' })).toBe('/campaigns/demo-solar');
     // A legacy hash link and its path upgrade resolve to the same route.
     expect(routeFromHash('#/campaigns/demo-solar')).toEqual(routeFromPath(routeHash({ name: 'campaign', campaignId: 'demo-solar' })));

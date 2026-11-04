@@ -15,7 +15,7 @@ export const PUBLIC_PAGES = [
   '/financing',
   '/glossary',
   '/how-it-works',
-  '/investments',
+  '/campaigns',
   '/jobs',
   '/learn',
   '/legal-notice',

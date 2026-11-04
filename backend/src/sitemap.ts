@@ -5,7 +5,7 @@ import type { Express, Request } from 'express';
 // only exists as a plan - sitemap entries must be real, served pages.
 const PUBLIC_PATHS = [
   '/',
-  '/investments',
+  '/campaigns',
   '/how-it-works',
   '/learn',
   '/glossary',
@@ -64,6 +64,11 @@ export interface DiscoveryOptions {
 }
 
 export function registerDiscoveryEndpoints(app: Express, options: DiscoveryOptions = {}): void {
+  // Permanent alias preserves existing bookmarks and their query parameters.
+  app.get('/investments', (req, res) => {
+    const query = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
+    res.redirect(308, `/campaigns${query}`);
+  });
   app.get('/sitemap.xml', async (req, res) => {
     const origin = publicOrigin(req);
     if (!origin) return res.status(503).json({ error: 'public origin not configured' });

@@ -115,6 +115,7 @@ export function routeFromPath(pathname: string): Route {
 export function routePath(route: Route): string {
   if (route.name === 'campaign') return `/campaigns/${encodeURIComponent(route.campaignId ?? '')}`;
   if (route.name === 'home') return '/';
+  if (route.name === 'investments') return '/campaigns';
   return `/${route.name}`;
 }
 
@@ -143,7 +144,11 @@ function currentRoute(): Route {
     window.history.replaceState(null, '', routePath(route));
     return route;
   }
-  return routeFromPath(window.location.pathname);
+  const route = routeFromPath(window.location.pathname);
+  if (/^\/investments\/?$/.test(window.location.pathname)) {
+    window.history.replaceState(null, '', routePath(route) + window.location.search + window.location.hash);
+  }
+  return route;
 }
 
 export function useRoute(): Route {
