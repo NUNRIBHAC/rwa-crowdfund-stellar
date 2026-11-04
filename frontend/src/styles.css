@@ -4180,9 +4180,6 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 .home-funding-rules .instrument-grid {
   margin-block: 20px;
 }
-.home-why > summary {
-  font-size: 24px;
-}
 .how-funding-animation {
   min-width: 0;
   width: 100%;
@@ -4205,4 +4202,15 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
 }
 .home-funding-rules .instrument-card h3 {
   color: var(--accent);
+}
+/* Compact the expanded funding illustration without shrinking the hero artwork. */
+.home-contract .hero-interactive {
+  max-width: 440px;
+  padding-block: 12px;
+}
+.home-contract .hero-interactive .fund-grid {
+  width: min(220px, 80%);
+}
+.home-contract .hero-interactive .hero-actions {
+  margin-top: 12px;
 }

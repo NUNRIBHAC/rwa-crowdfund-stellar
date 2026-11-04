@@ -33,3 +33,28 @@ test('campaign load failure offers retry without empty/not-found claim; retry se
   await waitFor(() => expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull());
   expect(campaignCalls).toBeGreaterThan(1);
 });
+
+test('an in-flight first load explains loading without offering a duplicate retry or claiming empty data', async () => {
+  let settle: (value: unknown) => void = () => {};
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((input) => {
+      const url = String(input);
+      if (url.startsWith('/api/campaigns') && !url.includes('/metadata'))
+        return new Promise((resolve) => {
+          settle = resolve;
+        });
+      return Promise.resolve({ ok: true, json: async () => ({ enabled: false, comments: [], episodes: [], news: [] }) });
+    }),
+  );
+  render(
+    <I18nProvider>
+      <App />
+    </I18nProvider>,
+  );
+  expect(await screen.findByRole('status')).toBeTruthy();
+  expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
+  expect(screen.queryByText('No deployed campaign configured')).toBeNull();
+  settle({ ok: true, json: async () => ({ campaigns: [] }) });
+  await waitFor(() => expect(screen.queryByRole('status')).toBeNull());
+});
