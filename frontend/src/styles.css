@@ -4547,3 +4547,9 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   --sx: 9%;
   --sy: calc(100% - 38px);
 }
+.about-accumulation {
+  display: block;
+  width: min(100%, 420px);
+  height: auto;
+  margin-inline: auto;
+}
