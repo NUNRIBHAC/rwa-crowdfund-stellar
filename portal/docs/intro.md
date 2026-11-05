@@ -16,7 +16,7 @@ smart contract rather than by platform promises.
 payouts use test assets only; no real funds flow through the platform.
 
 A public demo deployment is available at
-[blockallisto-demo.onrender.com](https://blockallisto-demo.onrender.com).
+[demo.92-5-187-71.sslip.io](https://demo.92-5-187-71.sslip.io).
 
 ## What this documentation covers
 

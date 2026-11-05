@@ -3,7 +3,7 @@
 ## Environments
 
 - **Demo** - the public testnet deployment at
-  [blockallisto-demo.onrender.com](https://blockallisto-demo.onrender.com).
+  [demo.92-5-187-71.sslip.io](https://demo.92-5-187-71.sslip.io).
   This is the canonical, user-facing prototype.
 - **Staging** - a separate environment with its own database and testnet
   contract, used for load testing and validating changes before they reach
