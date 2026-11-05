@@ -178,7 +178,7 @@ export default function Account({ market }: { market: Market }) {
             <p className="account-stat-sub">{m.account.activeSub}</p>
           </div>
         </div>
-        {!actor && <p>{m.account.connectNote}</p>}
+        {!readActor && <p>{m.account.connectNote}</p>}
         {fixtureMode && <p>{m.account.fixtureNote}</p>}
       </section>
 
