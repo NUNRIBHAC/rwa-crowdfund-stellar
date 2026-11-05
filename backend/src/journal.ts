@@ -37,6 +37,13 @@ export type Intent = {
 export type QuarantinedIntent = { hash?: string; reason: string; possiblySigned: boolean };
 export type IntentStore = { intents: Intent[]; quarantined?: QuarantinedIntent[] };
 
+// Envelope-free projection of an intent: every field except the Stellar
+// envelopes (xdr/signedXdr), which are ~90% of the journal's wire bytes and
+// unused by status/aggregation readers (account views, operator
+// reconciliation, share register, the contributor reconcile loop).
+export type IntentSummary = Omit<Intent, 'xdr' | 'signedXdr'>;
+export type IntentSummaryStore = { intents: IntentSummary[]; quarantined?: QuarantinedIntent[] };
+
 const TERMINAL_STATUSES = ['SUCCESS', 'FAILED'];
 // Every status the app itself can persist (soroban.ts): local build/sign
 // states, RPC submission states (ERROR is normalized to UNKNOWN), RPC
@@ -52,7 +59,18 @@ const KNOWN_STATUSES = ['BUILT', 'SIGNED', 'PENDING', 'DUPLICATE', 'TRY_AGAIN_LA
 // valid envelopes) is NOT detectable offline; the controls for that are the
 // UNIQUE hash constraint, conflict refusal and terminal non-regression in
 // save(), plus quarantine fail-closed handling for everything detectable.
-export function validateIntentSemantics(i: Intent): string | null {
+// The one Stellar-envelope parse used by every validation path (full read,
+// summary-read targeted revalidation). Returns the failure reason or null.
+function envelopeParseReason(envelope: string): string | null {
+  try {
+    TransactionBuilder.fromXDR(envelope, Networks.TESTNET);
+    return null;
+  } catch {
+    return 'is not a parseable Stellar transaction envelope';
+  }
+}
+
+export function validateIntentSemantics(i: IntentSummary & { xdr?: string; signedXdr?: string }): string | null {
   if (!/^[0-9a-f]{64}$/.test(i.hash)) return 'hash is not a 64-char lowercase hex transaction hash';
   if (!KNOWN_STATUSES.includes(i.status)) return `unknown status '${i.status}'`;
   if (typeof i.campaign !== 'string' || i.campaign.length === 0 || i.campaign.length > 120) return 'invalid campaign';
@@ -63,11 +81,8 @@ export function validateIntentSemantics(i: Intent): string | null {
     ['signedXdr', i.signedXdr],
   ] as const) {
     if (envelope == null) continue;
-    try {
-      TransactionBuilder.fromXDR(envelope, Networks.TESTNET);
-    } catch {
-      return `${field} is not a parseable Stellar transaction envelope`;
-    }
+    const reason = envelopeParseReason(envelope);
+    if (reason != null) return `${field} ${reason}`;
   }
   if (i.amount != null && !/^\d+(\.\d{1,7})?$/.test(i.amount)) return 'amount is not a decimal string with at most 7 places';
   if (i.confirmedAmount != null && !/^\d+(\.\d{1,7})?$/.test(i.confirmedAmount)) return 'confirmedAmount is not a decimal string with at most 7 places';
@@ -107,6 +122,12 @@ export function logEvent(event: string, fields: Record<string, unknown> = {}): v
 
 export interface Journal {
   read(): Promise<IntentStore>;
+  // Slim read for status/aggregation callers: same row mapping, semantic
+  // validation and quarantine as read(), without transferring envelopes.
+  // Corrupt-envelope detection stays with read(); writers, drains and
+  // per-hash resolution must keep using read(). Optional so custom or older
+  // backends stay valid; readJournalSummary falls back to read()+strip.
+  readSummary?(): Promise<IntentSummaryStore>;
   save(store: IntentStore): Promise<void>;
   // Cross-process mutual exclusion for the read-check-save critical section,
   // when the backend supports it (Postgres advisory lock). The file backend
@@ -150,6 +171,12 @@ class FileJournal implements Journal {
       }));
     return store;
   }
+  async readSummary(): Promise<IntentSummaryStore> {
+    const s = await this.read();
+    const out: IntentSummaryStore = { intents: s.intents.map(({ xdr: _xdr, signedXdr: _sx, ...rest }) => rest) };
+    if (s.quarantined) out.quarantined = s.quarantined;
+    return out;
+  }
   async save(store: IntentStore): Promise<void> {
     const before = store.intents.length;
     store = { intents: pruneIntents(purgeTerminalEnvelopes(store.intents)) };
@@ -186,7 +213,43 @@ export interface PgPoolLike {
 export class PostgresJournal implements Journal {
   private ready: Promise<void>;
   private quarantinedCount = 0;
-  constructor(private pool: PgPoolLike) {
+  private summaryQuarantinedCount = 0;
+  // Envelope parse verdicts keyed by exact-content fingerprint: the columns
+  // are text, fingerprinted as SHA-256 of convert_to(text,'UTF8') via built-in
+  // sha256() - the exact bytes the parser decodes. Same text ->
+  // same verdict, so cache hits are exactly read()'s validation without
+  // re-fetching or re-parsing. Bounded: oldest entries evicted past the cap.
+  private envelopeVerdicts = new Map<string, string | null>();
+  private verdictCap: number;
+  private shaChecked: boolean | null = null;
+  private async builtinShaAvailable(): Promise<boolean> {
+    if (this.shaChecked != null) return this.shaChecked;
+    try {
+      await this.pool.query("SELECT encode(sha256(convert_to('00', 'UTF8')), 'hex')");
+      this.shaChecked = true;
+    } catch (err: any) {
+      // Only a known missing-function error (pre-PG18 servers) selects the
+      // fallback; operational errors (connectivity, permissions) propagate.
+      if (err?.code !== '42883') throw err;
+      this.shaChecked = false;
+      logEvent('journal.summary_fallback', { reason: 'built-in sha256() unavailable (pre-PG18 server); summary reads use read()+strip' });
+    }
+    return this.shaChecked;
+  }
+  private cacheVerdict(fp: string, verdict: string | null): void {
+    if (this.envelopeVerdicts.has(fp)) this.envelopeVerdicts.delete(fp);
+    this.envelopeVerdicts.set(fp, verdict);
+    while (this.envelopeVerdicts.size > this.verdictCap) {
+      const oldest = this.envelopeVerdicts.keys().next().value;
+      if (oldest === undefined) break;
+      this.envelopeVerdicts.delete(oldest);
+    }
+  }
+  constructor(
+    private pool: PgPoolLike,
+    verdictCap = 10000,
+  ) {
+    this.verdictCap = verdictCap;
     // Concurrent first-boot processes (rolling deploys) can race CREATE TABLE
     // IF NOT EXISTS into a catalog duplicate-key error. Serialize schema init
     // with an advisory lock when the pool exposes dedicated clients; fakes
@@ -265,6 +328,146 @@ export class PostgresJournal implements Journal {
       return out;
     } finally {
       await client.query('SELECT pg_advisory_unlock(hashtext($1))', [key]).catch(() => {});
+    }
+  }
+  async readSummary(): Promise<IntentSummaryStore> {
+    await this.ready;
+    // Full validation parity with read() at a fraction of the wire cost,
+    // WITHOUT weakening anything: envelope bytes never cross the wire on the
+    // steady path; instead each row carries a SHA-256 content fingerprint
+    // (built-in sha256(convert_to(text,'UTF8')), PG18+) of its envelope text, and parse verdicts are
+    // cached per fingerprint (this.envelopeVerdicts) using the SAME
+    // TransactionBuilder.fromXDR parse as read(). Only rows with new or
+    // changed envelope content are fetched (targeted, by hash) and really
+    // parsed. Scan and fetch run in one REPEATABLE READ transaction, so all
+    // fields and envelope bytes describe the same observed row version; a
+    // residual fingerprint mismatch (or a serialization failure) fails
+    // closed: the row (or the whole read) is retried on a later run.
+    // Without a collision-resistant digest available in SQL (pre-PG18
+    // servers lack built-in sha256) NO approximate check is substituted:
+    // fall back to read()+strip (old cost, old semantics).
+    if (!(await this.builtinShaAvailable())) {
+      const full = await this.read();
+      const out: IntentSummaryStore = { intents: full.intents.map(({ xdr: _xdr, signedXdr: _sx, ...rest }) => rest) };
+      if (full.quarantined) out.quarantined = full.quarantined;
+      return out;
+    }
+    const client = await (this.pool as any).connect();
+    let inSummaryTx = false;
+    const rollbackQuietly = async () => {
+      if (inSummaryTx) await client.query('ROLLBACK').catch(() => {});
+      inSummaryTx = false;
+    };
+    try {
+      await client.query('BEGIN');
+      inSummaryTx = true;
+      await client.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+      let r;
+      try {
+        r = await client.query(
+          `SELECT hash, campaign, actor, action, amount, status, contract_id, confirmed_amount, created_at, updated_at,
+                  encode(sha256(convert_to(xdr, 'UTF8')), 'hex') AS xdr_fp, encode(sha256(convert_to(signed_xdr, 'UTF8')), 'hex') AS signed_fp,
+                  (xdr IS NULL) AS xdr_null, (signed_xdr IS NULL) AS signed_null
+           FROM soroban_intents ORDER BY seq`,
+        );
+      } catch (err) {
+        await rollbackQuietly();
+        throw err;
+      }
+      // convert_to/sha256 are strict (NULL in, NULL out): a NULL fingerprint marks an
+      // absent envelope, never a verdict-cache key.
+      const rows = r.rows as any[];
+      const needFetch = new Set<string>();
+      for (const row of rows) {
+        for (const fp of [row.xdr_fp, row.signed_fp]) if (fp != null && !this.envelopeVerdicts.has(fp)) needFetch.add(row.hash);
+      }
+      const fetched = new Map<string, { xdr_fp: string | null; signed_fp: string | null }>();
+      if (needFetch.size > 0) {
+        let targets;
+        try {
+          targets = await client.query(
+            "SELECT hash, xdr, signed_xdr, encode(sha256(convert_to(xdr, 'UTF8')), 'hex') AS xdr_fp, encode(sha256(convert_to(signed_xdr, 'UTF8')), 'hex') AS signed_fp FROM soroban_intents WHERE hash = ANY($1)",
+            [[...needFetch]],
+          );
+        } catch (err) {
+          await rollbackQuietly();
+          throw err;
+        }
+        for (const t of targets.rows as any[]) {
+          if (t.xdr_fp != null) this.cacheVerdict(t.xdr_fp, t.xdr != null ? envelopeParseReason(t.xdr) : null);
+          if (t.signed_fp != null) this.cacheVerdict(t.signed_fp, t.signed_xdr != null ? envelopeParseReason(t.signed_xdr) : null);
+          fetched.set(t.hash, { xdr_fp: t.xdr_fp, signed_fp: t.signed_fp });
+        }
+      }
+      await client.query('COMMIT');
+      inSummaryTx = false;
+      const intents: IntentSummary[] = [];
+      const quarantined: QuarantinedIntent[] = [];
+      for (const row of rows) {
+        const intent: IntentSummary = {
+          hash: row.hash,
+          campaign: row.campaign,
+          actor: row.actor,
+          action: row.action,
+          status: row.status,
+          ...(row.amount != null ? { amount: row.amount } : {}),
+          ...(row.created_at != null ? { createdAt: new Date(row.created_at).toISOString() } : {}),
+          ...(row.updated_at != null ? { updatedAt: new Date(row.updated_at).toISOString() } : {}),
+          ...(row.contract_id != null ? { contractId: row.contract_id } : {}),
+          ...(row.confirmed_amount != null ? { confirmedAmount: row.confirmed_amount } : {}),
+        };
+        let reason: string | null = null;
+        if (needFetch.has(row.hash)) {
+          // Defense in depth: verdicts apply only to the exact fingerprinted
+          // bytes seen in the scan. Under REPEATABLE READ this cannot
+          // mismatch; if it ever does, quarantine for this run (fail closed)
+          // and revalidate next run.
+          const f = fetched.get(row.hash);
+          if (!f || f.xdr_fp !== row.xdr_fp || f.signed_fp !== row.signed_fp) {
+            reason = 'row changed during summary validation; revalidated next run';
+          }
+        }
+        if (reason == null && row.xdr_fp != null) {
+          const v = this.envelopeVerdicts.get(row.xdr_fp);
+          // Fail closed: an evicted verdict is unknown, never "valid".
+          if (v === undefined) reason = 'envelope verdict evicted; revalidated next run';
+          else if (v) reason = `xdr ${v}`;
+        }
+        if (reason == null && row.signed_fp != null) {
+          const v = this.envelopeVerdicts.get(row.signed_fp);
+          if (v === undefined) reason = 'envelope verdict evicted; revalidated next run';
+          else if (v) reason = `signed_xdr ${v}`;
+        }
+        if (reason == null) reason = validateIntentSemantics(intent);
+        if (reason == null) {
+          intents.push(intent);
+          continue;
+        }
+        // possiblySigned mirrors read(): a signed envelope is present, or the
+        // (untrustworthy) status is not terminal.
+        quarantined.push({
+          hash: typeof row.hash === 'string' ? row.hash : undefined,
+          reason,
+          possiblySigned: row.signed_null === false || !TERMINAL_STATUSES.includes(String(row.status)),
+        });
+      }
+      if (quarantined.length !== this.summaryQuarantinedCount)
+        logEvent('journal.malformed_rows', {
+          backend: 'postgres-summary',
+          quarantined: quarantined.length,
+          possiblySigned: quarantined.filter((q) => q.possiblySigned).length,
+        });
+      this.summaryQuarantinedCount = quarantined.length;
+      const store: IntentSummaryStore = { intents };
+      if (quarantined.length) store.quarantined = quarantined;
+      return store;
+    } catch (err) {
+      // Any failure after BEGIN (SET TRANSACTION, scan, fetch, COMMIT) rolls
+      // the snapshot transaction back before the client returns to the pool.
+      await rollbackQuietly();
+      throw err;
+    } finally {
+      client.release();
     }
   }
   async runExclusive<T>(key: string, fn: () => Promise<T>): Promise<T> {
@@ -420,6 +623,17 @@ export class PostgresJournal implements Journal {
 }
 
 let instance: Promise<Journal> | null = null;
+// Summary read with a built-in fallback: backends without a native slim
+// read pay the full read and strip envelopes in memory (same semantics, no
+// wire savings - exactly the old behavior).
+export async function readJournalSummary(j: Journal): Promise<IntentSummaryStore> {
+  if (j.readSummary) return j.readSummary();
+  const s = await j.read();
+  const out: IntentSummaryStore = { intents: s.intents.map(({ xdr: _xdr, signedXdr: _sx, ...rest }) => rest) };
+  if (s.quarantined) out.quarantined = s.quarantined;
+  return out;
+}
+
 export function journalBackend(): Promise<Journal> {
   if (!instance) {
     const backend = (process.env.SOROBAN_JOURNAL_BACKEND ?? 'file').toLowerCase();

@@ -74,3 +74,29 @@ test('accountActivity rejects a malformed actor', async () => {
     resetJournalBackendForTests();
   }
 });
+
+test('accountActivity excludes quarantined rows and other actors on a native-summary backend', async () => {
+  const summaryJournal = {
+    readSummary: async () => ({
+      intents: [
+        { hash: 'ok1', campaign: 'demo', actor: alice, action: 'contribute', status: 'SUCCESS', amount: '3', createdAt: '2026-10-30T10:00:00Z' },
+        { hash: 'ok2', campaign: 'demo', actor: bob, action: 'contribute', status: 'SUCCESS', amount: '4', createdAt: '2026-10-30T11:00:00Z' },
+      ],
+      quarantined: [{ hash: 'corrupt1', reason: 'xdr is not a parseable Stellar transaction envelope', possiblySigned: true }],
+    }),
+    save: async () => {
+      throw new Error('read-only path must not save');
+    },
+  };
+  injectJournalBackendForTests(summaryJournal as any);
+  try {
+    const rows = await accountActivity(alice);
+    assert.deepEqual(
+      rows.map((r: any) => r.hash),
+      ['ok1'],
+      "only alice's valid row; quarantined and other-actor rows excluded",
+    );
+  } finally {
+    resetJournalBackendForTests();
+  }
+});

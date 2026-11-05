@@ -26,8 +26,8 @@ export const sorobanDeps = {
 const passphrase = Networks.TESTNET;
 const expectedToken = () => new Asset('USDC', process.env.USDC_ISSUER ?? '').contractId(passphrase);
 const WASM_HASH = '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564';
-import { journalBackend } from './journal.js';
-import type { Intent, IntentStore } from './journal.js';
+import { journalBackend, readJournalSummary } from './journal.js';
+import type { Intent, IntentStore, IntentSummaryStore } from './journal.js';
 // Registry entries come in two shapes. v1 entries point at one reviewed
 // crowdfund contract; v2 entries point at the share-token + offering pair
 // deployed through the v2 builder chain. The server never edits the
@@ -76,6 +76,9 @@ async function guarded<T>(fn: () => Promise<T>): Promise<T> {
 }
 async function readStore(): Promise<IntentStore> {
   return (await journalBackend()).read();
+}
+async function readSummaryStore(): Promise<IntentSummaryStore> {
+  return readJournalSummary(await journalBackend());
 }
 async function save(store: IntentStore): Promise<void> {
   return (await journalBackend()).save(store);
@@ -700,7 +703,7 @@ export async function recoverSoroban(input: { actor: string; xdr: string }): Pro
 export async function accountActivity(actor: string): Promise<any[]> {
   guard();
   actorAddress(actor);
-  const store = await readStore();
+  const store = await readSummaryStore();
   return store.intents
     .filter((i) => i.actor === actor)
     .sort((a, b) => (Date.parse(b.createdAt ?? '') || 0) - (Date.parse(a.createdAt ?? '') || 0))
@@ -725,7 +728,7 @@ export async function accountActivity(actor: string): Promise<any[]> {
 export async function accountPayouts(actor: string): Promise<any[]> {
   guard();
   actorAddress(actor);
-  const store = await readStore();
+  const store = await readSummaryStore();
   return store.intents
     .filter((i) => i.actor === actor && (i.action === 'refund' || i.action === 'withdraw') && i.status === 'SUCCESS')
     .sort((a, b) => (Date.parse(b.updatedAt ?? b.createdAt ?? '') || 0) - (Date.parse(a.updatedAt ?? a.createdAt ?? '') || 0))

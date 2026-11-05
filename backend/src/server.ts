@@ -27,7 +27,7 @@ import {
   isV2Entry,
   readV2SharePositions,
 } from './soroban.js';
-import { journalBackend } from './journal.js';
+import { journalBackend, readJournalSummary } from './journal.js';
 import { drainPendingContributors, pendContribution, readPending } from './pending-contributors.js';
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { backfillCampaignContributors } from './contributor-backfill.js';
@@ -162,7 +162,7 @@ const reconcileContributorRegistry = async (): Promise<void> => {
       derive: deriveContributionFromNetwork,
     });
     if (drain.pending > 0) console.error('contributor pending queue not fully drained:', drain.pending);
-    const journal = await (await journalBackend()).read();
+    const journal = await readJournalSummary(await journalBackend());
     for (const i of journal.intents) {
       if (i.status !== 'SUCCESS' || i.action !== 'contribute') continue;
       if (await service.hasContributed(i.campaign, i.actor)) continue;
@@ -368,6 +368,9 @@ app.get('/api/account/activity', async (req, res) => {
 // no accounting, custody or compliance claim is made or implied.
 const reconciliationPayload = async () => {
   const campaigns = await sorobanCampaigns();
+  // Deliberately a FULL read: this operator payload's quarantinedIntents
+  // count must include envelope-corrupt rows, which only read() detects.
+  // Admin-gated and human-cadence, so the envelope transfer cost is bounded.
   const store = await (await journalBackend()).read();
   const result = reconcileCampaigns(
     campaigns.map((c: { id: string; raised?: string | null }) => ({ id: c.id, raised: c.raised ?? null })),
@@ -424,6 +427,8 @@ const shareRegisterPayload = async (campaignId: string): Promise<ShareRegisterPa
   // listing's crowdfund code-pin read.
   const entry = sorobanRegistryEntry(campaignId);
   if (!entry) return null;
+  // Full read on purpose: share-register integrity inherits the full
+  // quarantine semantics (incl. envelope corruption). Admin-gated, bounded.
   const store = await (await journalBackend()).read();
   const service = await communityServiceFromEnv();
   const contributors = await service.listContributors(campaignId);

@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { Account, Asset, Keypair, Networks, Operation, TransactionBuilder } from '@stellar/stellar-sdk';
@@ -92,8 +93,13 @@ function fakePool() {
   let seq = 0;
   const calls: string[] = [];
   let inTx = false;
-  return {
+  const pool: any = {
+    builtinSha: true,
     calls,
+    async connect() {
+      return pool;
+    },
+    release() {},
     async query(text: string, params?: unknown[]) {
       const sql = text.replace(/\s+/g, ' ').trim();
       calls.push(sql.split(' ')[0].toUpperCase());
@@ -139,6 +145,66 @@ function fakePool() {
         });
         return { rows: [] };
       }
+      if (/^SET TRANSACTION /.test(sql)) return { rows: [] };
+      if (/^SELECT pg_advisory_lock/.test(sql)) return { rows: [] };
+      if (/^SELECT pg_advisory_unlock/.test(sql)) return { rows: [] };
+      if (/^SELECT pg_backend_pid/.test(sql)) return { rows: [{ pid: 1 }] };
+      if (/^SELECT encode\(sha256\(convert_to\('00', 'UTF8'\)\), 'hex'\)$/.test(sql)) {
+        if (!pool.builtinSha) {
+          const e: any = new Error('function sha256(bytea) does not exist');
+          e.code = '42883';
+          throw e;
+        }
+        return { rows: [{ encode: '2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae' }] };
+      }
+      if (
+        /^SELECT hash, campaign, actor, action, amount, status, contract_id, confirmed_amount, created_at, updated_at,/.test(sql) &&
+        /sha256\(convert_to\(xdr/.test(sql)
+      ) {
+        // Emulate the slim summary select: no envelope bytes, only fingerprints.
+        // Emulates sha256(convert_to(text,'UTF8')): the text column's UTF-8 bytes.
+        const sha = (v: any) =>
+          v != null
+            ? createHash('sha256')
+                .update(Buffer.isBuffer(v) ? v.toString('utf8') : String(v), 'utf8')
+                .digest('hex')
+            : null;
+        return {
+          rows: [...rows.values()]
+            .sort((a, b) => a.seq - b.seq)
+            .map((r) => ({
+              hash: r.hash,
+              campaign: r.campaign,
+              actor: r.actor,
+              action: r.action,
+              amount: r.amount ?? null,
+              status: r.status,
+              contract_id: r.contract_id ?? null,
+              confirmed_amount: r.confirmed_amount ?? null,
+              created_at: r.created_at ?? null,
+              updated_at: r.updated_at ?? null,
+              xdr_fp: sha(r.xdr),
+              signed_fp: sha(r.signed_xdr),
+              xdr_null: r.xdr == null,
+              signed_null: r.signed_xdr == null,
+            })),
+        };
+      }
+      if (/^SELECT hash, xdr, signed_xdr, encode\(sha256\(convert_to/.test(sql)) {
+        // Emulates sha256(convert_to(text,'UTF8')): the text column's UTF-8 bytes.
+        const sha = (v: any) =>
+          v != null
+            ? createHash('sha256')
+                .update(Buffer.isBuffer(v) ? v.toString('utf8') : String(v), 'utf8')
+                .digest('hex')
+            : null;
+        const wanted = new Set((params as any[])[0] as string[]);
+        return {
+          rows: [...rows.values()]
+            .filter((r) => wanted.has(r.hash))
+            .map((r) => ({ hash: r.hash, xdr: r.xdr ?? null, signed_xdr: r.signed_xdr ?? null, xdr_fp: sha(r.xdr), signed_fp: sha(r.signed_xdr) })),
+        };
+      }
       if (/^SELECT .* FROM soroban_intents ORDER BY seq$/.test(sql)) {
         return { rows: [...rows.values()].sort((a, b) => a.seq - b.seq) };
       }
@@ -150,10 +216,17 @@ function fakePool() {
     seed(row: any) {
       rows.set(row.hash, { seq: ++seq, ...row });
     },
+    drop(hash: string) {
+      rows.delete(hash);
+    },
     rawRows() {
       return [...rows.values()];
     },
+    removeRow(hash: string) {
+      rows.delete(hash);
+    },
   };
+  return pool;
 }
 
 test('postgres journal persists, updates and re-reads intents in order', async () => {
@@ -431,4 +504,198 @@ test('postgres rate limit is shared state serialized by an advisory lock', async
     queries.some((q) => q.includes('soroban-rate-limit:build:GACTOR') || q.includes('pg_advisory_lock')),
     'window serialized across processes',
   );
+});
+
+const SUMMARY_SELECT = /^SELECT hash, campaign, actor, action, amount, status, contract_id, confirmed_amount, created_at, updated_at,/;
+const TARGETED_FETCH =
+  /^SELECT hash, xdr, signed_xdr, encode\(sha256\(convert_to\(xdr, 'UTF8'\)\), 'hex'\) AS xdr_fp, encode\(sha256\(convert_to\(signed_xdr, 'UTF8'\)\), 'hex'\) AS signed_fp FROM soroban_intents WHERE hash = ANY/;
+
+test('postgres journal readSummary: slim rows, real envelope validation, fail-closed quarantine', async () => {
+  const pool = fakePool();
+  const queries: string[] = [];
+  const qparams: unknown[][] = [];
+  const orig = pool.query.bind(pool);
+  (pool as any).query = async (text: string, params?: unknown[]) => {
+    queries.push(text.replace(/\s+/g, ' ').trim());
+    qparams.push(params ?? []);
+    return orig(text, params);
+  };
+  const j = new PostgresJournal(pool);
+  await j.save({ intents: [pgSigned] });
+  // Well-formed base64 but NOT a parseable Stellar envelope: only a real
+  // parse (targeted fetch) can quarantine this - a syntactic check cannot.
+  pool.seed({ ...pgRow(pgSample, {}), hash: 'c'.repeat(64), xdr: Buffer.from('not a stellar envelope').toString('base64'), signed_xdr: null, status: 'BUILT' });
+  // NULL xdr is not corruption (read() skips absent envelopes).
+  pool.seed({ ...pgRow(pgSample, {}), hash: 'd'.repeat(64), xdr: null, signed_xdr: null, status: 'BUILT' });
+  // Malformed core field: no hash.
+  pool.seed({ seq: 999, campaign: 'c', actor: 'g', action: 'contribute', status: 'PENDING' });
+  queries.length = 0;
+  qparams.length = 0;
+  const s = await j.readSummary();
+  const select = queries.find((q) => SUMMARY_SELECT.test(q));
+  assert.ok(select, 'summary select issued');
+  const selectList = (select as string).slice('SELECT '.length, (select as string).indexOf(' FROM soroban_intents'));
+  let depth = 0;
+  const cols: string[] = [];
+  let cur = '';
+  for (const ch of selectList) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (ch === ',' && depth === 0) {
+      cols.push(cur.trim());
+      cur = '';
+    } else cur += ch;
+  }
+  cols.push(cur.trim());
+  for (const c of cols) assert.ok(!/^(xdr|signed_xdr)$/.test(c), 'raw envelope column selected: ' + c);
+  const fetchIdx = queries.findIndex((q) => TARGETED_FETCH.test(q));
+  assert.ok(fetchIdx >= 0, 'targeted fetch issued');
+  assert.equal(queries.filter((q) => TARGETED_FETCH.test(q)).length, 1, 'exactly one targeted fetch batch');
+  assert.deepEqual(
+    (qparams[fetchIdx] as any[])[0],
+    [pgSigned.hash, 'c'.repeat(64)],
+    'first run fetches only rows with unseen envelope content (save does not seed the verdict cache)',
+  );
+  assert.deepEqual(
+    s.intents.map((i) => i.hash).sort(),
+    [pgSigned.hash, 'd'.repeat(64)].sort(),
+    'valid rows listed, envelope-corrupt and core-corrupt rows excluded',
+  );
+  for (const i of s.intents) {
+    assert.equal('xdr' in i, false);
+    assert.equal('signedXdr' in i, false);
+  }
+  assert.equal(s.quarantined?.length, 2);
+  const eq = s.quarantined?.find((q) => q.hash === 'c'.repeat(64));
+  assert.match(eq?.reason ?? '', /xdr is not a parseable Stellar transaction envelope/);
+  assert.equal(eq?.possiblySigned, true, 'non-terminal corrupt row fails closed');
+  assert.equal(s.quarantined?.find((q) => q.hash === undefined)?.reason.includes('hash') ?? false, true, 'missing-hash row quarantined');
+
+  // Second run: identical content => cached verdicts, no targeted fetch.
+  queries.length = 0;
+  const s2 = await j.readSummary();
+  assert.equal(
+    queries.some((q) => TARGETED_FETCH.test(q)),
+    false,
+    'unchanged envelopes are not refetched',
+  );
+  assert.deepEqual(s2.intents.map((i) => i.hash).sort(), s.intents.map((i) => i.hash).sort());
+  assert.equal(s2.quarantined?.length, 2);
+
+  // Changed envelope content on an existing row => exactly that row refetched and revalidated.
+  const row = (pool as any).rawRows().find((r: any) => r.hash === 'c'.repeat(64));
+  row.xdr = pgUnsignedTx.toXDR();
+  queries.length = 0;
+  const s3 = await j.readSummary();
+  const fetches = queries.filter((q) => TARGETED_FETCH.test(q));
+  assert.equal(fetches.length, 1, 'changed content refetched');
+  assert.ok(
+    s3.intents.some((i) => i.hash === 'c'.repeat(64)),
+    'repaired row rejoins the valid set',
+  );
+  assert.equal(s3.quarantined?.length, 1);
+});
+
+test('postgres journal readSummary: row changed between scan and fetch is quarantined for the run', async () => {
+  const pool = fakePool();
+  // Seeded without save(): no cached verdict, so the row needs a targeted fetch.
+  pool.seed(pgRow(pgSample, {}));
+  const j = new PostgresJournal(pool);
+  const orig = pool.query.bind(pool);
+  let armed = true;
+  (pool as any).query = async (text: string, params?: unknown[]) => {
+    const sql = text.replace(/\s+/g, ' ').trim();
+    if (armed && TARGETED_FETCH.test(sql)) {
+      armed = false;
+      // Another writer mutates the envelope between the fingerprint scan and the fetch.
+      const row = (pool as any).rawRows().find((r: any) => r.hash === pgSample.hash);
+      row.xdr = pgSignedTx.toXDR();
+    }
+    return orig(text, params);
+  };
+  const s = await j.readSummary();
+  assert.equal(s.intents.length, 0, 'raced row excluded this run');
+  assert.equal(s.quarantined?.length, 1);
+  assert.match(s.quarantined?.[0].reason ?? '', /changed during summary validation/);
+  const s2 = await j.readSummary();
+  assert.equal(s2.intents.length, 1, 'next run revalidates and lists the row');
+});
+
+test('postgres journal readSummary: signed-only change, removal and reinsert are revalidated', async () => {
+  const pool = fakePool();
+  const j = new PostgresJournal(pool);
+  pool.seed(pgRow(pgSample, {}));
+  const s1 = await j.readSummary();
+  assert.equal(s1.intents.length, 1);
+  // Signing the envelope (xdr unchanged, signed_xdr added) changes the signed
+  // fingerprint: exactly that content is fetched and revalidated.
+  const row = (pool as any).rawRows().find((r: any) => r.hash === pgSample.hash);
+  row.signed_xdr = pgSignedTx.toXDR();
+  const queries: string[] = [];
+  const orig = pool.query.bind(pool);
+  (pool as any).query = async (text: string, params?: unknown[]) => {
+    queries.push(text.replace(/\s+/g, ' ').trim());
+    return orig(text, params);
+  };
+  const s2 = await j.readSummary();
+  assert.equal(queries.filter((q) => TARGETED_FETCH.test(q)).length, 1, 'signed-only change refetched');
+  assert.equal(s2.intents.length, 1, 'validly signed row stays listed');
+  // Removal drops the row; reinsertion with changed content is revalidated.
+  (pool as any).drop(pgSample.hash);
+  queries.length = 0;
+  const s3 = await j.readSummary();
+  assert.equal(s3.intents.length, 0, 'removed row gone');
+  pool.seed({ ...pgRow(pgSample, {}), xdr: Buffer.from('garbage envelope').toString('base64') });
+  const s4 = await j.readSummary();
+  assert.equal(s4.intents.length, 0, 'reinserted corrupt row not listed');
+  assert.equal(s4.quarantined?.length, 1, 'reinserted corrupt row quarantined');
+});
+
+test('postgres journal readSummary: pre-PG18 (no built-in sha256) falls back to read()+strip with no digest queries', async () => {
+  const pool = fakePool();
+  pool.builtinSha = false;
+  pool.seed(pgRow(pgSample, {}));
+  const queries: string[] = [];
+  const orig = pool.query.bind(pool);
+  (pool as any).query = async (text: string, params?: unknown[]) => {
+    queries.push(text.replace(/\s+/g, ' ').trim());
+    return orig(text, params);
+  };
+  const j = new PostgresJournal(pool);
+  const s = await j.readSummary();
+  assert.equal(s.intents.length, 1);
+  assert.equal('xdr' in s.intents[0], false, 'envelopes stripped');
+  assert.equal(queries.filter((q) => /sha256\(/.test(q)).length, 1, 'only the one-time availability probe mentions sha256');
+  assert.ok(
+    queries.some((q) => /FROM soroban_intents ORDER BY seq$/.test(q)),
+    'full read used',
+  );
+});
+
+test('postgres journal readSummary: verdict cache is bounded and evicted entries are refetched', async () => {
+  const pool = fakePool();
+  const j = new PostgresJournal(pool, 1); // cap of 1 verdict
+  pool.seed(pgRow(pgSample, {}));
+  pool.seed({ ...pgRow(pgSigned, {}), hash: 'e'.repeat(64) });
+  const s1 = await j.readSummary();
+  // Cap 1 with three distinct envelope fingerprints: within-run eviction fails
+  // closed (quarantined for the run), never silently dropped or assumed valid.
+  assert.equal(s1.intents.length + (s1.quarantined?.length ?? 0), 2, 'no row silently dropped');
+  for (const q of s1.quarantined ?? []) assert.match(q.reason, /revalidated next run/);
+  const queries: string[] = [];
+  const orig = pool.query.bind(pool);
+  (pool as any).query = async (text: string, params?: unknown[]) => {
+    queries.push(text.replace(/\s+/g, ' ').trim());
+    return orig(text, params);
+  };
+  // Same content, but the cap-1 cache evicted earlier verdicts: refetch happens,
+  // and anything whose verdict cannot be retained fails CLOSED (quarantined for
+  // the run, revalidated next run) - an evicted verdict is never assumed valid.
+  const s2 = await j.readSummary();
+  assert.ok(
+    queries.some((q) => TARGETED_FETCH.test(q)),
+    'evicted verdicts are refetched, never assumed',
+  );
+  assert.equal(s2.intents.length + (s2.quarantined?.length ?? 0), 2, 'no row silently dropped');
+  for (const q of s2.quarantined ?? []) assert.match(q.reason, /revalidated next run/);
 });

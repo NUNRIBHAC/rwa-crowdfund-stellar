@@ -1,4 +1,4 @@
-import type { Intent } from './journal.js';
+import type { IntentSummary } from './journal.js';
 import { amountUnits } from './soroban.js';
 
 // Operator reconciliation aid (read-only). Compares what THIS deployment's
@@ -45,7 +45,7 @@ const TERMINAL = new Set(['SUCCESS', 'FAILED']);
 
 export function reconcileCampaigns(
   campaigns: ReconciliationCampaignInput[],
-  intents: Intent[],
+  intents: IntentSummary[],
   quarantinedCount: number,
   pendingContributorProofs = 0,
 ): { campaigns: CampaignReconciliation[]; quarantinedIntents: number; pendingContributorProofs: number } {

@@ -1,4 +1,4 @@
-import type { Intent } from './journal.js';
+import type { IntentSummary } from './journal.js';
 import type { ContributorRecord } from './community-store.js';
 import { amountUnits } from './soroban.js';
 
@@ -127,7 +127,7 @@ type Accum = {
 
 export function buildShareRegister(
   campaignId: string,
-  intents: Intent[],
+  intents: IntentSummary[],
   contributors: ContributorRecord[],
   network: string,
   v2OnChain?: V2OnChainData | null,
