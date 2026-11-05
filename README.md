@@ -64,10 +64,13 @@ Frontend:
 
 ## Current status and known limits
 
-- Staging: https://rwa-crowdfund-staging.onrender.com deploys the
+- Staging: https://staging.92-5-187-71.sslip.io tracks the
   `feature/community-platform` branch. The public demo at
-  https://blockallisto-demo.onrender.com deploys `main` via `render.yaml`;
-  the community/localization work reaches it after review and merge.
+  https://demo.92-5-187-71.sslip.io tracks `main`; the
+  community/localization work reaches it after review and merge. Both
+  sites migrated from Render to an Oracle VM (November 2026); the
+  onrender.com services are suspended and `render.yaml` is retained for
+  reference only.
 - Community sign-in, comment posting/rendering, tickets and applications
   have been exercised on staging with a simulated wallet. Real Freighter
   extension sign-in (including Ledger-backed wallets) is not yet verified

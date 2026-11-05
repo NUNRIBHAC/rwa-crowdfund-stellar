@@ -40,7 +40,7 @@ contract, which acts only within its rules: the issuer may withdraw after a
 successful campaign's deadline, and contributors may reclaim after a failed
 one. Non-custodial does not mean risk-free: you still rely on the contract
 and the platform behaving as documented. Read the risk disclosure on the
-[demo site](https://blockallisto-demo.onrender.com).
+[demo site](https://demo.92-5-187-71.sslip.io).
 
 ## Is any of this investment advice?
 

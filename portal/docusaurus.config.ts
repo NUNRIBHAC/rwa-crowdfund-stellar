@@ -15,7 +15,7 @@ const config: Config = {
   tagline: 'Real assets. Shared possibilities.',
   favicon: 'img/favicon.ico',
 
-  url: 'https://blockallisto-docs.onrender.com',
+  url: 'https://docs.92-5-187-71.sslip.io',
   baseUrl: '/',
 
   organizationName: 'NUNRIBHAC',
@@ -111,7 +111,7 @@ const config: Config = {
         ...(isInternal
           ? [{ type: 'docSidebar' as const, sidebarId: 'internalSidebar', docsPluginId: 'internal', position: 'left' as const, label: 'Internal' }]
           : []),
-        { href: 'https://blockallisto-demo.onrender.com', label: 'Live demo (testnet)', position: 'right' },
+        { href: 'https://demo.92-5-187-71.sslip.io', label: 'Live demo (testnet)', position: 'right' },
       ],
     },
     footer: {

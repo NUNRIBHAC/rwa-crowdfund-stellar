@@ -14,7 +14,7 @@ network to **Testnet**. The Blockallisto app may still call the wallet
 
 ## 2. Connect your wallet
 
-Open [blockallisto-demo.onrender.com](https://blockallisto-demo.onrender.com)
+Open [demo.92-5-187-71.sslip.io](https://demo.92-5-187-71.sslip.io)
 and click **Connect**. Connecting shares your public wallet address with the
 app so it can show balances and prepare investment transactions. Connecting
 is not an account login and does not sign anything.
