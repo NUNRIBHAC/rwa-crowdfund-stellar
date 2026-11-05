@@ -1871,6 +1871,7 @@ export const ko: Messages = {
     emailModeRegister: '새 계정 만들기',
     emailVerifyTitle: '받은 편지함을 확인하세요',
     emailVerifyExplainer: '인증 토큰이 {email}(으)로 발송되었습니다. 여기에 붙여 넣어 가입을 완료하세요. 24시간 유효합니다.',
+    emailVerifyExplainerManual: '{email}으로 받은 인증 토큰을 붙여넣으세요. 이 양식을 열어도 새 토큰이 전송되지 않습니다 - 새 토큰이 필요하면 토큰 재전송을 사용하세요.',
     emailVerifyTokenLabel: '인증 토큰',
     emailVerifySubmit: '인증하고 로그인',
     emailResendButton: '토큰 재전송',

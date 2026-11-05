@@ -1906,6 +1906,7 @@ export const en = {
     emailModeRegister: 'Create a new account',
     emailVerifyTitle: 'Check your inbox',
     emailVerifyExplainer: 'A verification token was sent to {email}. Paste it here to finish registration. It is valid for 24 hours.',
+    emailVerifyExplainerManual: 'Paste the verification token you received for {email}. Opening this form did not send a new one - use Resend token if you need a fresh token.',
     emailVerifyTokenLabel: 'Verification token',
     emailVerifySubmit: 'Verify and sign in',
     emailResendButton: 'Resend token',

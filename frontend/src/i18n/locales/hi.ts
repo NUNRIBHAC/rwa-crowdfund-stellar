@@ -1905,6 +1905,7 @@ export const hi: Messages = {
     emailModeRegister: 'नया खाता बनाएँ',
     emailVerifyTitle: 'अपना इनबॉक्स देखें',
     emailVerifyExplainer: '{email} पर एक सत्यापन टोकन भेजा गया है। पंजीकरण पूरा करने के लिए इसे यहाँ चिपकाएँ। यह 24 घंटे मान्य है।',
+    emailVerifyExplainerManual: '{email} के लिए प्राप्त सत्यापन टोकन यहाँ पेस्ट करें। यह फ़ॉर्म खोलने से कोई नया टोकन नहीं भेजा गया - नया टोकन चाहिए तो टोकन फिर भेजें का उपयोग करें।',
     emailVerifyTokenLabel: 'सत्यापन टोकन',
     emailVerifySubmit: 'सत्यापित करें और साइन इन करें',
     emailResendButton: 'टोकन फिर भेजें',

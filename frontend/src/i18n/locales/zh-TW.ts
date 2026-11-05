@@ -1838,6 +1838,7 @@ export const zhTW: Messages = {
     emailModeRegister: '建立新帳戶',
     emailVerifyTitle: '查看您的收件匣',
     emailVerifyExplainer: '驗證權杖已發送至 {email}。請將其貼到此處以完成註冊。權杖 24 小時內有效。',
+    emailVerifyExplainerManual: '貼上您為 {email} 收到的驗證權杖。開啟此表單並不會傳送新權杖 - 如需新權杖，請使用「重新發送權杖」。',
     emailVerifyTokenLabel: '驗證權杖',
     emailVerifySubmit: '驗證並登入',
     emailResendButton: '重新發送權杖',

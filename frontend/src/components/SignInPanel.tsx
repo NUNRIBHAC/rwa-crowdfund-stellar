@@ -54,6 +54,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [pendingVerifyEmail, setPendingVerifyEmail] = useState('');
+  const [verifyManualEntry, setVerifyManualEntry] = useState(false);
   const [verifyToken, setVerifyToken] = useState('');
   const [resent, setResent] = useState(false);
   const [resetStage, setResetStage] = useState<null | 'request' | 'confirm'>(null);
@@ -79,6 +80,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
     setVerifyToken('');
     setTotpCode('');
     setPendingVerifyEmail('');
+    setVerifyManualEntry(false);
     setResent(false);
     setResetStage(null);
     setResetToken('');
@@ -191,7 +193,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
       return (
         <section className="community-section" aria-labelledby="community-verify">
           <h2 id="community-verify">{m.community.emailVerifyTitle}</h2>
-          <p className="community-note">{m.community.emailVerifyExplainer.replace('{email}', pendingVerifyEmail)}</p>
+          <p className="community-note">
+            {(verifyManualEntry ? m.community.emailVerifyExplainerManual : m.community.emailVerifyExplainer).replace('{email}', pendingVerifyEmail)}
+          </p>
           {error && (
             <p role="alert" className="community-error">
               {error}
@@ -224,7 +228,14 @@ export default function SignInPanel({ actor }: { actor: string }) {
             {m.community.emailResendButton}
           </button>
           {resent && <p className="community-note">{m.community.emailResendDone}</p>}
-          <button className="btn" disabled={busy} onClick={() => setPendingVerifyEmail('')}>
+          <button
+            className="btn"
+            disabled={busy}
+            onClick={() => {
+              setPendingVerifyEmail('');
+              setVerifyManualEntry(false);
+            }}
+          >
             {m.community.emailResetBack}
           </button>
           <p className="community-note">{m.community.emailDemoNote}</p>
@@ -360,6 +371,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
                   emailSignUp(addr, password)
                     .then(() => {
                       setPendingVerifyEmail(addr.toLowerCase());
+                      setVerifyManualEntry(false);
                       setResent(false);
                     })
                     .catch(() => undefined);
@@ -413,6 +425,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
                   // from an earlier registration or resend and only needs the
                   // entry form. The verify screen still offers a resend.
                   setResent(false);
+                  setVerifyManualEntry(true);
                   setPendingVerifyEmail(email.trim().toLowerCase());
                 }}
               >

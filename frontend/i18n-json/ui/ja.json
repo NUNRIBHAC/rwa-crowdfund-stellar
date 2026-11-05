@@ -1734,6 +1734,7 @@
     "emailModeRegister": "新規アカウント作成",
     "emailVerifyTitle": "受信トレイを確認してください",
     "emailVerifyExplainer": "確認トークンを {email} に送信しました。ここに貼り付けて登録を完了してください。24時間有効です。",
+    "emailVerifyExplainerManual": "{email} で受け取った確認トークンを貼り付けてください。このフォームを開いても新しいトークンは送信されていません - 必要な場合は「トークンを再送」を使ってください。",
     "emailVerifyTokenLabel": "確認トークン",
     "emailVerifySubmit": "確認してログイン",
     "emailResendButton": "トークンを再送",

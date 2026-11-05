@@ -1957,6 +1957,7 @@ export const pt: Messages = {
     emailModeRegister: 'Criar uma nova conta',
     emailVerifyTitle: 'Verifique a sua caixa de entrada',
     emailVerifyExplainer: 'Foi enviado um token de verificação para {email}. Cole-o aqui para concluir o registo. É válido por 24 horas.',
+    emailVerifyExplainerManual: 'Cole o token de verificação que recebeu para {email}. Abrir este formulário não enviou um novo - use Reenviar token se precisar de um novo token.',
     emailVerifyTokenLabel: 'Token de verificação',
     emailVerifySubmit: 'Verificar e entrar',
     emailResendButton: 'Reenviar token',

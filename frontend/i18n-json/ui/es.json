@@ -1775,6 +1775,7 @@
     "emailModeRegister": "Crear una cuenta nueva",
     "emailVerifyTitle": "Revisa tu bandeja de entrada",
     "emailVerifyExplainer": "Se envió un token de verificación a {email}. Pégalo aquí para completar el registro. Es válido por 24 horas.",
+    "emailVerifyExplainerManual": "Pega el token de verificación que recibiste para {email}. Abrir este formulario no envió uno nuevo - usa Reenviar token si necesitas un token nuevo.",
     "emailVerifyTokenLabel": "Token de verificación",
     "emailVerifySubmit": "Verificar y entrar",
     "emailResendButton": "Reenviar token",

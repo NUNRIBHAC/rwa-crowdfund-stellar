@@ -1967,6 +1967,7 @@ export const fr: Messages = {
     emailModeRegister: 'Créer un nouveau compte',
     emailVerifyTitle: 'Vérifiez votre boîte de réception',
     emailVerifyExplainer: 'Un jeton de vérification a été envoyé à {email}. Collez-le ici pour terminer l’inscription. Il est valable 24 heures.',
+    emailVerifyExplainerManual: 'Collez le jeton de vérification reçu pour {email}. L\'ouverture de ce formulaire n\'en a pas envoyé un nouveau - utilisez Renvoyer le jeton si vous en avez besoin.',
     emailVerifyTokenLabel: 'Jeton de vérification',
     emailVerifySubmit: 'Vérifier et se connecter',
     emailResendButton: 'Renvoyer le jeton',

@@ -1728,6 +1728,7 @@
     "emailModeRegister": "创建新账户",
     "emailVerifyTitle": "查看您的收件箱",
     "emailVerifyExplainer": "验证令牌已发送至 {email}。请将其粘贴到此处以完成注册。令牌 24 小时内有效。",
+    "emailVerifyExplainerManual": "粘贴您为 {email} 收到的验证令牌。打开此表单不会发送新令牌 - 如需新令牌，请使用“重新发送令牌”。",
     "emailVerifyTokenLabel": "验证令牌",
     "emailVerifySubmit": "验证并登录",
     "emailResendButton": "重新发送令牌",

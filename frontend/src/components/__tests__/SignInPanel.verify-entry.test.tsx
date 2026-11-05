@@ -67,6 +67,9 @@ describe('SignInPanel no-send verification entry', () => {
     // Token form opens for the normalized address; nothing was sent or posted.
     expect(await screen.findByLabelText('Verification token')).toBeTruthy();
     expect(screen.getByText(/qa@example\.com/)).toBeTruthy();
+    // Manual entry must not claim a fresh dispatch happened.
+    expect(screen.getByText(/did not send a new one/)).toBeTruthy();
+    expect(screen.queryByText(/A verification token was sent/)).toBeNull();
     expect((mock as any).emailResendToken).not.toHaveBeenCalled();
     expect((mock as any).emailSignUp).not.toHaveBeenCalled();
     expect((mock as any).emailSignIn).not.toHaveBeenCalled();
@@ -87,6 +90,17 @@ describe('SignInPanel no-send verification entry', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Back to sign in' }));
     expect(await screen.findByRole('button', { name: 'Sign in with email' })).toBeTruthy();
     expect((mock2 as any).emailResendToken).not.toHaveBeenCalled();
+  });
+
+  it('register success keeps the sent-token explainer', async () => {
+    const mock = auth({ emailSignUp: vi.fn().mockResolvedValue(undefined) });
+    renderPanel(mock);
+    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'qa@example.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'a long password' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Create account' }));
+    expect(await screen.findByText(/A verification token was sent to qa@example\.com/)).toBeTruthy();
+    expect(screen.queryByText(/did not send a new one/)).toBeNull();
   });
 
   it('register mode does not show the no-send entry button', async () => {

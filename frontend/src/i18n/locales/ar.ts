@@ -1876,6 +1876,7 @@ export const ar: Messages = {
     emailModeRegister: 'إنشاء حساب جديد',
     emailVerifyTitle: 'تحقق من بريدك الوارد',
     emailVerifyExplainer: 'تم إرسال رمز تحقق إلى {email}. الصقه هنا لإتمام التسجيل. الرمز صالح لمدة 24 ساعة.',
+    emailVerifyExplainerManual: 'الصق رمز التحقق الذي تلقيته لـ {email}. فتح هذا النموذج لم يرسل رمزًا جديدًا - استخدم إعادة إرسال الرمز إذا كنت بحاجة إلى رمز جديد.',
     emailVerifyTokenLabel: 'رمز التحقق',
     emailVerifySubmit: 'تحقق وسجّل الدخول',
     emailResendButton: 'إعادة إرسال الرمز',
