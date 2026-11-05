@@ -81,6 +81,11 @@ export default function Account({ market }: { market: Market }) {
   const intent = useMemo(readIntent, []);
   const [activityRead, setActivityRead] = useState<{ actor: string; data: ActivityRow[] | 'loading' | 'error' } | null>(null);
   const activity = !readActor ? null : activityRead?.actor === readActor ? activityRead.data : 'loading';
+  // Positions for the selected proven read actor: the same public /api/campaigns?actor= read the connected-wallet
+  // path uses, never fabricated rows. Transaction paths still require the
+  // connected wallet - this feeds only the read-only portfolio/invested-news
+  // sections.
+  const [positionsRead, setPositionsRead] = useState<{ actor: string; data: Campaign[] | 'loading' | 'error' } | null>(null);
 
   // Real activity feed: the wallet's recorded intents from the platform
   // journal. Falls back to the locally saved intent when the feed is
@@ -105,9 +110,35 @@ export default function Account({ market }: { market: Market }) {
     };
   }, [readActor]);
 
+  useEffect(() => {
+    setPositionsRead(null);
+    if (!readActor) {
+      return;
+    }
+    let live = true;
+    setPositionsRead({ actor: readActor, data: 'loading' });
+    fetch(`/api/campaigns?actor=${encodeURIComponent(readActor)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((j) => {
+        if (!Array.isArray(j.campaigns)) throw new Error('invalid campaign response');
+        if (live) setPositionsRead({ actor: readActor, data: j.campaigns });
+      })
+      .catch(() => {
+        if (live) setPositionsRead({ actor: readActor, data: 'error' });
+      });
+    return () => {
+      live = false;
+    };
+  }, [readActor]);
+
+  const positions = !readActor ? null : positionsRead?.actor === readActor ? positionsRead.data : 'loading';
+  const positionCampaigns = useMemo(() => (Array.isArray(positions) ? positions : []), [positions]);
+  const positionsReady = Array.isArray(positions);
+  const positionsStatus = positions === 'loading' ? m.community.loading : positions === 'error' ? m.errors.apiUnavailable : '';
+
   const rows: Row[] = useMemo(
     () =>
-      campaigns
+      positionCampaigns
         .filter((c) => c.balance && BigInt(c.balance) > 0n)
         .map((c) => ({
           id: c.id,
@@ -115,12 +146,12 @@ export default function Account({ market }: { market: Market }) {
           balance: c.balance as string,
           status: rowStatus(c),
         })),
-    [campaigns],
+    [positionCampaigns],
   );
   const total = rows.reduce((acc, r) => acc + BigInt(r.balance), 0n);
   const active = rows.filter((r) => r.status === 'pending' || r.status === 'paid').length;
   const shown = tab === 'all' ? rows : rows.filter((r) => r.status === tab);
-  const hasPositions = actor && !fixtureMode;
+  const hasPositions = Boolean(readActor) && !fixtureMode;
 
   return (
     <>
@@ -133,7 +164,7 @@ export default function Account({ market }: { market: Market }) {
         <div className="account-stats">
           <div className="account-stat">
             <h2>{m.account.totalContributed}</h2>
-            <p className="account-stat-value">{hasPositions ? `${formatAmount(total.toString(), locale)} USDC` : '—'}</p>
+            <p className="account-stat-value">{hasPositions && positionsReady ? `${formatAmount(total.toString(), locale)} USDC` : '—'}</p>
             <p className="account-stat-sub">{m.account.totalSub}</p>
           </div>
           <div className="account-stat">
@@ -143,7 +174,7 @@ export default function Account({ market }: { market: Market }) {
           </div>
           <div className="account-stat">
             <h2>{m.account.activeInvestments}</h2>
-            <p className="account-stat-value">{hasPositions ? String(active) : '—'}</p>
+            <p className="account-stat-value">{hasPositions && positionsReady ? String(active) : '—'}</p>
             <p className="account-stat-sub">{m.account.activeSub}</p>
           </div>
         </div>
@@ -169,7 +200,9 @@ export default function Account({ market }: { market: Market }) {
           })}
         </div>
         <p className="account-tabnote">{m.account.tabNote}</p>
-        {shown.length === 0 ? (
+        {positionsStatus ? (
+          <p role="status">{positionsStatus}</p>
+        ) : shown.length === 0 ? (
           <p className="empty-state">{m.account.noInvestments}</p>
         ) : (
           <ul className="portfolio-list">
@@ -184,7 +217,12 @@ export default function Account({ market }: { market: Market }) {
         )}
       </section>
 
-      {hasPositions && <AccountNewsSection campaigns={rows.map((r) => ({ id: r.id, name: r.name }))} />}
+      {hasPositions && positionsReady && (
+        <AccountNewsSection
+          key={`news:${readActor}:${account?.publicKey ?? ''}:${account?.authMethod ?? ''}`}
+          campaigns={rows.map((r) => ({ id: r.id, name: r.name }))}
+        />
+      )}
 
       {readActor && <AccountPayoutsSection key={`payouts:${readActor}`} actor={readActor} />}
 
@@ -194,7 +232,7 @@ export default function Account({ market }: { market: Market }) {
         <section aria-label={m.account.documentsAria}>
           <h2 className="section-title">{m.account.documentsTitle}</h2>
           {rows.map((r) => (
-            <div key={r.id}>
+            <div key={`${readActor}:${account?.publicKey ?? ''}:${r.id}`}>
               <h3>{r.name}</h3>
               <DocumentsList campaignId={r.id} fallback={<p className="empty-state">{m.account.documentsEmpty}</p>} />
               <AccountInvestmentDocuments campaignId={r.id} />

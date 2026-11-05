@@ -33,7 +33,18 @@ describe('account restored wallet records', () => {
     );
     await waitFor(() => expect(fetcher).toHaveBeenCalledWith('/api/account/holdings?actor=wallet-session'));
     expect(fetcher).toHaveBeenCalledWith('/api/account/activity?actor=wallet-session');
-    expect(fetcher.mock.calls.every(([url]) => String(url).startsWith('/api/account/'))).toBe(true);
+    // Read-only scope for a proven wallet session: account-record endpoints,
+    // the session-token news feed, plus the same public campaign-catalog
+    // balance read the connected-wallet path uses - always for the session's
+    // own proven key, never a transaction/prepare call.
+    expect(
+      fetcher.mock.calls.every(
+        ([url]) =>
+          String(url).startsWith('/api/account/') ||
+          String(url) === '/api/news' ||
+          String(url) === `/api/campaigns?actor=${encodeURIComponent('wallet-session')}`,
+      ),
+    ).toBe(true);
     expect(market.actor).toBe('');
   });
   it('does not fetch wallet records for an email identity with no connected wallet', () => {

@@ -53,7 +53,17 @@ describe('account campaign-news wallet switch', () => {
     auth.account = null;
     vi.stubGlobal(
       'fetch',
-      vi.fn((url: string) => Promise.resolve(String(url).includes('/api/news') ? ok(NEWS) : ok({ activity: [], payouts: [], holdings: [], unavailable: [] }))),
+      vi.fn((url: string) =>
+        Promise.resolve(
+          String(url).includes('/api/news')
+            ? ok(NEWS)
+            : String(url).includes('/api/campaigns?actor=wallet-a')
+              ? ok({ campaigns: [invested('camp-a', 'Campaign Alpha', '1000000')] })
+              : String(url).includes('/api/campaigns?actor=wallet-b')
+                ? ok({ campaigns: [invested('camp-b', 'Campaign Beta', '2000000')] })
+                : ok({ activity: [], payouts: [], holdings: [], unavailable: [] }),
+        ),
+      ),
     );
     const { rerender } = render(
       <I18nProvider>
