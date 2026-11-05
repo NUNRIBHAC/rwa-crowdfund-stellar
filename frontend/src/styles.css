@@ -3783,6 +3783,16 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   border-color: var(--accent);
   box-shadow: 0 0 0 2px var(--line);
 }
+/* Outline hover/active rules otherwise replace the selected fill while keeping
+   its white label. Keep each interaction state paired with an opaque fill. */
+.hero-interactive .btn[aria-pressed='true']:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.hero-interactive .btn[aria-pressed='true']:active:not(:disabled) {
+  background: var(--accent-active);
+  border-color: var(--accent-active);
+}
 .home-introduction .home-single-campaign > .card {
   width: 100%;
   max-width: none;
