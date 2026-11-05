@@ -224,6 +224,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
             {m.community.emailResendButton}
           </button>
           {resent && <p className="community-note">{m.community.emailResendDone}</p>}
+          <button className="btn" disabled={busy} onClick={() => setPendingVerifyEmail('')}>
+            {m.community.emailResetBack}
+          </button>
           <p className="community-note">{m.community.emailDemoNote}</p>
           <div data-turnstile-mount />
         </section>
@@ -401,6 +404,21 @@ export default function SignInPanel({ actor }: { actor: string }) {
               </button>
             )}
             {resent && <p className="community-note">{m.community.emailResendDone}</p>}
+            {emailMode === 'login' && (
+              <button
+                className="btn"
+                disabled={busy || !email.trim()}
+                onClick={() => {
+                  // No email is sent here: the visitor already holds a token
+                  // from an earlier registration or resend and only needs the
+                  // entry form. The verify screen still offers a resend.
+                  setResent(false);
+                  setPendingVerifyEmail(email.trim().toLowerCase());
+                }}
+              >
+                {m.community.emailHaveCodeButton}
+              </button>
+            )}
             {emailMode === 'login' && (
               <button
                 className="btn"

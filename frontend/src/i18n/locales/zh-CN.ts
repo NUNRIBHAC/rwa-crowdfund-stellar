@@ -1841,6 +1841,7 @@ export const zhCN: Messages = {
     emailVerifyTokenLabel: '验证令牌',
     emailVerifySubmit: '验证并登录',
     emailResendButton: '重新发送令牌',
+    emailHaveCodeButton: '我已有令牌',
     emailResendDone: '如果该地址已注册，新令牌正在发送中。',
     emailDemoNote: '演示环境：送达取决于已配置的邮件服务商。如未收到，请联系网站运营方。',
     emailForgotButton: '忘记密码？',

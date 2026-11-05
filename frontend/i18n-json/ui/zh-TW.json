@@ -1731,6 +1731,7 @@
     "emailVerifyTokenLabel": "驗證權杖",
     "emailVerifySubmit": "驗證並登入",
     "emailResendButton": "重新發送權杖",
+    "emailHaveCodeButton": "我已有權杖",
     "emailResendDone": "如果該地址已註冊，新權杖正在發送中。",
     "emailDemoNote": "示範環境：送達取決於已設定的郵件服務商。如未收到，請聯絡網站營運方。",
     "emailForgotButton": "忘記密碼？",

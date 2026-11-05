@@ -1879,6 +1879,7 @@ export const ar: Messages = {
     emailVerifyTokenLabel: 'رمز التحقق',
     emailVerifySubmit: 'تحقق وسجّل الدخول',
     emailResendButton: 'إعادة إرسال الرمز',
+    emailHaveCodeButton: 'لديّ الرمز بالفعل',
     emailResendDone: 'إذا كان هذا العنوان مسجلاً، فالرمز الجديد في الطريق.',
     emailDemoNote: 'بيئة تجريبية: يعتمد التسليم على مزوّد البريد المُهيأ. إذا لم يصل شيء، اسأل مشغّل الموقع.',
     emailForgotButton: 'هل نسيت كلمة المرور؟',

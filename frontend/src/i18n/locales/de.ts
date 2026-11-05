@@ -1956,6 +1956,7 @@ export const de: Messages = {
     emailVerifyTokenLabel: 'Verifizierungstoken',
     emailVerifySubmit: 'Verifizieren und anmelden',
     emailResendButton: 'Token erneut senden',
+    emailHaveCodeButton: 'Ich habe bereits einen Token',
     emailResendDone: 'Falls diese Adresse registriert ist, ist ein neues Token unterwegs.',
     emailDemoNote: 'Demo-Umgebung: Die Zustellung hängt vom konfigurierten E-Mail-Anbieter ab. Falls nichts ankommt, fragen Sie den Seitenbetreiber.',
     emailForgotButton: 'Passwort vergessen?',

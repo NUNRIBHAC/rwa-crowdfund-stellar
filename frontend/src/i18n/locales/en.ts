@@ -1909,6 +1909,7 @@ export const en = {
     emailVerifyTokenLabel: 'Verification token',
     emailVerifySubmit: 'Verify and sign in',
     emailResendButton: 'Resend token',
+    emailHaveCodeButton: 'I already have a token',
     emailResendDone: 'If that address is registered, a new token is on its way.',
     emailDemoNote: 'Demo environment: delivery depends on the configured email provider. If nothing arrives, ask the site operator.',
     emailForgotButton: 'Forgot password?',

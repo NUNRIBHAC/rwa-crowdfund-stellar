@@ -1970,6 +1970,7 @@ export const fr: Messages = {
     emailVerifyTokenLabel: 'Jeton de vérification',
     emailVerifySubmit: 'Vérifier et se connecter',
     emailResendButton: 'Renvoyer le jeton',
+    emailHaveCodeButton: 'J\'ai déjà un jeton',
     emailResendDone: 'Si cette adresse est enregistrée, un nouveau jeton est en route.',
     emailDemoNote: "Environnement de démonstration : la livraison dépend du fournisseur d'email configuré. Si rien n'arrive, contactez l'opérateur du site.",
     emailForgotButton: 'Mot de passe oublié ?',

@@ -1777,6 +1777,7 @@
     "emailVerifyTokenLabel": "Token de verificação",
     "emailVerifySubmit": "Verificar e entrar",
     "emailResendButton": "Reenviar token",
+    "emailHaveCodeButton": "Já tenho um token",
     "emailResendDone": "Se esse endereço estiver registado, um novo token está a caminho.",
     "emailDemoNote": "Ambiente de demonstração: a entrega depende do fornecedor de email configurado. Se nada chegar, fale com o operador do site.",
     "emailForgotButton": "Esqueceu a palavra-passe?",

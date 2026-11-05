@@ -1744,6 +1744,7 @@
     "emailVerifyTokenLabel": "सत्यापन टोकन",
     "emailVerifySubmit": "सत्यापित करें और साइन इन करें",
     "emailResendButton": "टोकन फिर भेजें",
+    "emailHaveCodeButton": "मेरे पास पहले से टोकन है",
     "emailResendDone": "यदि वह पता पंजीकृत है, तो नया टोकन रास्ते में है।",
     "emailDemoNote": "डेमो वातावरण: डिलीवरी कॉन्फ़िगर किए गए ईमेल प्रदाता पर निर्भर करती है। कुछ न आए तो साइट ऑपरेटर से पूछें।",
     "emailForgotButton": "पासवर्ड भूल गए?",

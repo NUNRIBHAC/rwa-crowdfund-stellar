@@ -1737,6 +1737,7 @@
     "emailVerifyTokenLabel": "確認トークン",
     "emailVerifySubmit": "確認してログイン",
     "emailResendButton": "トークンを再送",
+    "emailHaveCodeButton": "トークンをすでに持っています",
     "emailResendDone": "そのアドレスが登録されていれば、新しいトークンが送信されます。",
     "emailDemoNote": "デモ環境：配信は設定されたメールプロバイダに依存します。届かない場合はサイト運営者にお問い合わせください。",
     "emailForgotButton": "パスワードをお忘れですか？",

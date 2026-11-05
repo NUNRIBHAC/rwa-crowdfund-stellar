@@ -1965,6 +1965,7 @@ export const es: Messages = {
     emailVerifyTokenLabel: 'Token de verificación',
     emailVerifySubmit: 'Verificar y entrar',
     emailResendButton: 'Reenviar token',
+    emailHaveCodeButton: 'Ya tengo un token',
     emailResendDone: 'Si esa dirección está registrada, un nuevo token está en camino.',
     emailDemoNote: 'Entorno de demostración: la entrega depende del proveedor de email configurado. Si no llega nada, pregunta al operador del sitio.',
     emailForgotButton: '¿Olvidaste la contraseña?',

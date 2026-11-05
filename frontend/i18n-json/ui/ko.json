@@ -1731,6 +1731,7 @@
     "emailVerifyTokenLabel": "인증 토큰",
     "emailVerifySubmit": "인증하고 로그인",
     "emailResendButton": "토큰 재전송",
+    "emailHaveCodeButton": "이미 토큰이 있습니다",
     "emailResendDone": "해당 주소가 등록되어 있다면 새 토큰이 발송됩니다.",
     "emailDemoNote": "데모 환경: 전달은 설정된 이메일 제공업체에 따라 달라집니다. 도착하지 않으면 사이트 운영자에게 문의하세요.",
     "emailForgotButton": "비밀번호를 잊으셨나요?",
