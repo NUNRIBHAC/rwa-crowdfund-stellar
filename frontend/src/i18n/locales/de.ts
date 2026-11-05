@@ -1953,7 +1953,8 @@ export const de: Messages = {
     emailVerifyTitle: 'Prüfen Sie Ihren Posteingang',
     emailVerifyExplainer:
       'Ein Verifizierungstoken wurde an {email} gesendet. Fügen Sie es hier ein, um die Registrierung abzuschließen. Es ist 24 Stunden gültig.',
-    emailVerifyExplainerManual: 'Fügen Sie das Verifizierungstoken ein, das Sie für {email} erhalten haben. Beim Öffnen dieses Formulars wurde kein neues gesendet - verwenden Sie bei Bedarf „Token erneut senden“.',
+    emailVerifyExplainerManual:
+      'Fügen Sie das Verifizierungstoken ein, das Sie für {email} erhalten haben. Beim Öffnen dieses Formulars wurde kein neues gesendet - verwenden Sie bei Bedarf „Token erneut senden“.',
     emailVerifyTokenLabel: 'Verifizierungstoken',
     emailVerifySubmit: 'Verifizieren und anmelden',
     emailResendButton: 'Token erneut senden',
