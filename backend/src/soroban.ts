@@ -219,9 +219,13 @@ function jsonValue(value: any): any {
 // (the dominant per-campaign cost of listing and read endpoints). The read
 // is live on every call: no cached verdict, no TTL, and an upgraded,
 // replaced or archived contract fails closed exactly as before.
-async function verifyCode(client: rpc.Server, e: V1Entry): Promise<void> {
-  const response = await client.getLedgerEntries(new Contract(e.contractId).getFootprint());
-  const found = response.entries[0];
+type LedgerEntryLike = { key?: xdr.LedgerKey; val: xdr.LedgerEntryData };
+
+// Shared refusal checks for a fetched crowdfund instance entry: archived or
+// missing state, wrong entry kind, non-Wasm executable and any code other
+// than the pinned reviewed hash all fail closed, exactly as the simulation
+// read path refused them.
+function assertReviewedInstance(found: LedgerEntryLike | undefined): xdr.ScContractInstance {
   if (!found) throw new Error('contract state archived; operator restoration required');
   const data = found.val;
   if (data.type !== 'contractData') throw new Error('contract instance entry missing; refusing');
@@ -230,6 +234,65 @@ async function verifyCode(client: rpc.Server, e: V1Entry): Promise<void> {
   const executable = instance.instance.executable;
   if (executable.type !== 'contractExecutableWasm') throw new Error('contract is not Wasm-executable; refusing');
   if (Buffer.from(executable.wasmHash.value).toString('hex') !== WASM_HASH) throw new Error('contract code does not match reviewed crowdfund Wasm; refusing');
+  return instance.instance;
+}
+
+async function verifyCode(client: rpc.Server, e: V1Entry): Promise<void> {
+  const response = await client.getLedgerEntries(new Contract(e.contractId).getFootprint());
+  assertReviewedInstance(response.entries[0]);
+}
+
+// Config, Raised and Withdrawn live in instance storage inside the SAME
+// ledger entry the code check already reads (contract source: storage()
+// .instance().set in constructor/contribute/withdraw). Reading them there is
+// the value the view functions return: get_config / total_raised /
+// is_withdrawn are pure getters over exactly these keys. Defaults replicate
+// the contract's own unwrap_or: missing Raised reads 0, missing Withdrawn
+// reads false. A missing Config is the contract's Error(Contract, #2)
+// NotInitialized: it fails the read, never defaults.
+function campaignInstanceFields(found: LedgerEntryLike | undefined): { config: any; raised: any; withdrawn: any } {
+  const instance = assertReviewedInstance(found);
+  let config: unknown;
+  let raised: unknown = 0n;
+  let withdrawn: unknown = false;
+  for (const entry of instance.storage ?? []) {
+    // contracttype unit variants serialize as vec![symbol "Name"], matching
+    // the tuple variant Balance(Address) = vec![symbol, address].
+    const name = scValToNative(entry.key);
+    const tag = Array.isArray(name) ? name[0] : name;
+    if (tag === 'Config') config = scValToNative(entry.val);
+    else if (tag === 'Raised') raised = scValToNative(entry.val);
+    else if (tag === 'Withdrawn') withdrawn = scValToNative(entry.val);
+  }
+  if (config === undefined) throw new Error('contract read failed: Error(Contract, #2)');
+  return { config, raised, withdrawn };
+}
+
+// Persistent per-contributor balance key, matching DataKey::Balance(Address)
+// = vec![symbol "Balance", address] under PERSISTENT durability.
+function balanceLedgerKey(contractId: string, actor: string): xdr.LedgerKey {
+  return xdr.LedgerKey.contractData(
+    new xdr.LedgerKeyContractData({
+      contract: new Contract(contractId).address().toScAddress(),
+      key: xdr.ScVal.scvVec([xdr.ScVal.scvSymbol('Balance'), actorAddress(actor).toScVal()]),
+      durability: xdr.ContractDataDurability.persistent,
+    }),
+  );
+}
+
+// Batched entry fetch, chunked so a large registry stays inside RPC key
+// limits. Entries are matched back by their key XDR: response order is never
+// assumed. Every entry is read live in this request; nothing is cached.
+const LEDGER_ENTRY_CHUNK = 100;
+async function ledgerEntriesByKey(client: rpc.Server, keys: xdr.LedgerKey[]): Promise<Map<string, LedgerEntryLike>> {
+  const out = new Map<string, LedgerEntryLike>();
+  for (let i = 0; i < keys.length; i += LEDGER_ENTRY_CHUNK) {
+    const response = await client.getLedgerEntries(...(keys.slice(i, i + LEDGER_ENTRY_CHUNK) as [xdr.LedgerKey, ...xdr.LedgerKey[]]));
+    for (const entry of response.entries ?? []) {
+      if (entry.key) out.set(entry.key.toXDR('base64'), entry);
+    }
+  }
+  return out;
 }
 async function viewContract(client: rpc.Server, contractId: string, method: string, args: any[] = [], actor?: string): Promise<any> {
   // Simulation only: this dummy account is never submitted or funded.
@@ -252,22 +315,38 @@ async function view(client: rpc.Server, e: V1Entry, method: string, args: any[] 
 export async function sorobanCampaigns(actor?: string): Promise<any[]> {
   if (actor) actorAddress(actor);
   const client = sorobanDeps.client();
-  return mapLimit(v1Entries(), 3, async (e) => {
-    // Verification runs concurrently with the live reads, and the combined
-    // promise rejects when verification fails, so unverified data never
-    // leaves this function. Every value returned is fresh chain state read
-    // during this request - fresh INDIVIDUAL reads at possibly different
-    // ledger sequences, not one atomic snapshot across campaigns or fields,
-    // exactly as when the reads were sequential. No cached display data
-    // participates in invest/refund or reconciliation decisions.
-    const [, config, raised, withdrawn, balance] = await Promise.all([
-      verifyCode(client, e),
-      view(client, e, 'get_config'),
-      view(client, e, 'total_raised'),
-      view(client, e, 'is_withdrawn'),
-      actor ? view(client, e, 'balance_of', [actorAddress(actor).toScVal()], actor) : Promise.resolve(null),
-    ]);
+  const entries = v1Entries();
+  // One batched entry read covers every campaign instance (code check plus
+  // Config/Raised/Withdrawn from instance storage) and every requested
+  // contributor balance key, instead of five RPC round trips per campaign.
+  // Every value is still fresh chain state read during this request - one
+  // batched snapshot for the instances, possibly a different ledger than a
+  // simulation fallback for a missing balance entry, exactly as individual
+  // reads were never one atomic snapshot. No cached display data
+  // participates in invest/refund or reconciliation decisions.
+  const instanceKeys = entries.map((e) => new Contract(e.contractId).getFootprint());
+  const balanceKeys = actor ? entries.map((e) => balanceLedgerKey(e.contractId, actor)) : [];
+  const fetched = await ledgerEntriesByKey(client, [...instanceKeys, ...balanceKeys]);
+  const indexByEntry = new Map(entries.map((e, i) => [e, i] as const));
+  return mapLimit(entries, 3, async (e) => {
+    const i = indexByEntry.get(e)!;
+    const { config, raised, withdrawn } = campaignInstanceFields(fetched.get(instanceKeys[i].toXDR('base64')));
     if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+    // A balance entry present in the response is live by definition and used
+    // directly. A MISSING entry is ambiguous - never-contributed zero versus
+    // archived state - so it falls back to the simulation, which still
+    // distinguishes an archived balance (restore error) from a real zero,
+    // exactly as before.
+    let balance = null;
+    if (actor) {
+      const bEntry = fetched.get(balanceKeys[i].toXDR('base64'));
+      // Anything but a plain contract-data entry falls back to simulation
+      // rather than trusting an unexpected shape.
+      balance =
+        bEntry && bEntry.val.type === 'contractData'
+          ? scValToNative(bEntry.val.value.val)
+          : await view(client, e, 'balance_of', [actorAddress(actor).toScVal()], actor);
+    }
     return jsonValue({ ...e, mode: 'soroban', config, raised, withdrawn, balance, network: 'testnet', productionEligible: false });
   });
 }

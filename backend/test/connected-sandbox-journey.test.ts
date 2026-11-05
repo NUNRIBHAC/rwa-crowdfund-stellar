@@ -10,6 +10,7 @@ import {
   Account,
   Address,
   Asset,
+  Contract,
   Keypair,
   Networks,
   StrKey,
@@ -54,7 +55,7 @@ const instanceEntry = () => ({
     ? []
     : [
         {
-          key: '',
+          key: new Contract(contractId).getFootprint(),
           val: xdr.LedgerEntryData.contractData(
             new xdr.ContractDataEntry({
               ext: xdr.ExtensionPoint.v0(),
@@ -64,7 +65,12 @@ const instanceEntry = () => ({
               val: xdr.ScVal.scvContractInstance(
                 new xdr.ScContractInstance({
                   executable: xdr.ContractExecutable.contractExecutableWasm(badWasm ? Buffer.alloc(32, 9) : reviewedWasmHash),
-                  storage: [],
+                  storage: [
+                    new xdr.ScMapEntry({
+                      key: xdr.ScVal.scvVec([xdr.ScVal.scvSymbol('Config')]),
+                      val: nativeToScVal({ creator: issuer.publicKey(), token: tokenId, goal: 1000000000n, deadline: 2000000000n }),
+                    }),
+                  ],
                 }),
               ),
             }),
@@ -75,7 +81,10 @@ const instanceEntry = () => ({
       ],
 });
 const client: any = {
-  getLedgerEntries: async () => instanceEntry(),
+  getLedgerEntries: async (...keys: xdr.LedgerKey[]) => {
+    const live = new Map((instanceEntry().entries as any[]).map((e) => [e.key.toXDR('base64'), e]));
+    return { latestLedger: 1, entries: keys.map((k) => live.get(k.toXDR('base64'))).filter(Boolean) };
+  },
   getAccount: async (pub: string) => {
     if (missingAccount) throw new Error('Account not found');
     return new Account(pub, '1');
