@@ -1,12 +1,12 @@
 # Environments and infrastructure
 
-|              | Demo (canonical)                       | Staging                                    |
-| ------------ | -------------------------------------- | ------------------------------------------ |
-| URL          | https://demo.92-5-187-71.sslip.io | https://staging.92-5-187-71.sslip.io |
-| Purpose      | Public testnet prototype               | Load/realistic testing before merge        |
-| Deploys from | `main` (auto-deploy)                   | `feature/community-platform` (auto-deploy) |
-| Database     | own Neon Postgres                      | own Neon Postgres                          |
-| Contract     | own testnet instance                   | own testnet instance                       |
+|              | Demo (canonical)                  | Staging                                    |
+| ------------ | --------------------------------- | ------------------------------------------ |
+| URL          | https://demo.92-5-187-71.sslip.io | https://staging.92-5-187-71.sslip.io       |
+| Purpose      | Public testnet prototype          | Load/realistic testing before merge        |
+| Deploys from | `main` (auto-deploy)              | `feature/community-platform` (auto-deploy) |
+| Database     | own Neon Postgres                 | own Neon Postgres                          |
+| Contract     | own testnet instance              | own testnet instance                       |
 
 - Hosting: Render free tier (web services), Node 24. Free services sleep
   when idle; expect ~30s cold starts.
