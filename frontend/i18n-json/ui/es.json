@@ -563,7 +563,7 @@
   },
   "account": {
     "title": "Mi cuenta",
-    "note": "Tu área de cuenta: las posiciones de testnet de este monedero y la actividad de la comunidad guardada bajo él (solo activos de testnet - sin fondos ni rendimientos reales). Las posiciones proceden de tu monedero Freighter conectado o de tu sesión de monedero iniciada en la testnet de Stellar y no tienen valor. El inicio de sesión opcional en la comunidad y los formularios de soporte y de emisor de esta página tratan los datos introducidos como se describe en la política de privacidad.",
+    "note": "Tu área de cuenta: las posiciones de testnet vinculadas a tu inicio de sesión y la actividad de la comunidad guardada bajo él (solo activos de testnet - sin fondos ni rendimientos reales). Las posiciones aparecen cuando conectas un monedero en la testnet de Stellar y no tienen valor. El inicio de sesión opcional en la comunidad y los formularios de soporte y de emisor de esta página tratan los datos introducidos como se describe en la política de privacidad.",
     "summaryAria": "Resumen de la cartera",
     "totalContributed": "Total contribuido",
     "totalSub": "En escrow on-chain, sumado por campañas",
@@ -1863,7 +1863,7 @@
       "failure": "No se eliminó nada. Comprueba la contraseña y el código actual del autenticador o inténtalo más tarde. Las cuentas no admitidas o con registros protegidos no se pueden eliminar aquí."
     },
     "ticketsTitle": "Soporte y feedback",
-    "ticketsNote": "Los tickets son visibles solo para tu cuenta de monedero y el operador del sitio. Esto es un prototipo: no incluyas datos personales, contraseñas ni datos de pago reales.",
+    "ticketsNote": "Los tickets son visibles solo para tu cuenta y el operador del sitio. Esto es un prototipo: no incluyas datos personales, contraseñas ni datos de pago reales.",
     "ticketKindLabel": "Tipo",
     "ticketKinds": {
       "support": "Solicitud de soporte",

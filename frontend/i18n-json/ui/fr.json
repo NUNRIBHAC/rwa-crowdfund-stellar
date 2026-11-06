@@ -563,7 +563,7 @@
   },
   "account": {
     "title": "Mon compte",
-    "note": "Votre espace compte : les positions testnet de ce portefeuille et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds ni rendement réel). Les positions proviennent de votre portefeuille Freighter connecté ou de votre session de portefeuille connectée sur le testnet Stellar et sont sans valeur. La connexion communautaire optionnelle et les formulaires de support et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
+    "note": "Votre espace compte : les positions testnet liées à votre connexion et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds ni rendement réel). Les positions apparaissent lorsque vous connectez un portefeuille sur le testnet Stellar et sont sans valeur. La connexion communautaire optionnelle et les formulaires de support et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
     "summaryAria": "Résumé du portefeuille",
     "totalContributed": "Total contribué",
     "totalSub": "En séquestre on-chain, additionné sur les campagnes",
@@ -1865,7 +1865,7 @@
       "failure": "Rien n’a été supprimé. Vérifiez le mot de passe et le code actuel de l’authentificateur ou réessayez plus tard. Les comptes non pris en charge ou avec des registres protégés ne peuvent pas être supprimés ici."
     },
     "ticketsTitle": "Support et feedback",
-    "ticketsNote": "Les tickets ne sont visibles que par votre compte de portefeuille et l'opérateur du site. Ceci est un prototype : n'incluez ni données personnelles, ni mots de passe, ni vraies informations de paiement.",
+    "ticketsNote": "Les tickets ne sont visibles que par votre compte et l'opérateur du site. Ceci est un prototype : n'incluez ni données personnelles, ni mots de passe, ni vraies informations de paiement.",
     "ticketKindLabel": "Type",
     "ticketKinds": {
       "support": "Demande de support",

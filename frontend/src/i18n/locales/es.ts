@@ -594,7 +594,7 @@ export const es: Messages = {
   },
   account: {
     title: 'Mi cuenta',
-    note: 'Tu área de cuenta: las posiciones de testnet de este monedero y la actividad de la comunidad guardada bajo él (solo activos de testnet - sin fondos ni rendimientos reales). Las posiciones proceden de tu monedero Freighter conectado o de tu sesión de monedero iniciada en la testnet de Stellar y no tienen valor. El inicio de sesión opcional en la comunidad y los formularios de soporte y de emisor de esta página tratan los datos introducidos como se describe en la política de privacidad.',
+    note: 'Tu área de cuenta: las posiciones de testnet vinculadas a tu inicio de sesión y la actividad de la comunidad guardada bajo él (solo activos de testnet - sin fondos ni rendimientos reales). Las posiciones aparecen cuando conectas un monedero en la testnet de Stellar y no tienen valor. El inicio de sesión opcional en la comunidad y los formularios de soporte y de emisor de esta página tratan los datos introducidos como se describe en la política de privacidad.',
     summaryAria: 'Resumen de la cartera',
     totalContributed: 'Total contribuido',
     totalSub: 'En escrow on-chain, sumado por campañas',
@@ -2049,7 +2049,6 @@ export const es: Messages = {
         'Continúa con un servicio ya vinculado. Confirma tu identidad, no que hayas escrito una nueva contraseña. Volver no elimina nada. Escribe DELETE de nuevo y confirma abajo.',
       providerReady: 'Identidad vinculada comprobada. Escribe DELETE de nuevo, introduce el código actual si está activo y confirma la eliminación.',
       noProvider: 'No hay ningún servicio vinculado compatible disponible. No se eliminó nada ni se envió una solicitud de revisión.',
-
       title: 'Eliminar cuenta',
       boundary:
         'Elimina este perfil de prototipo, acceso por email, accesos vinculados, sesiones, comentarios y mensajes de soporte. No borra blockchain, transacciones, auditoría, copias de seguridad ni registros de proveedores. Los registros protegidos bloquean esta opción; no se envía ninguna solicitud de revisión.',
@@ -2065,7 +2064,7 @@ export const es: Messages = {
     },
     ticketsTitle: 'Soporte y feedback',
     ticketsNote:
-      'Los tickets son visibles solo para tu cuenta de monedero y el operador del sitio. Esto es un prototipo: no incluyas datos personales, contraseñas ni datos de pago reales.',
+      'Los tickets son visibles solo para tu cuenta y el operador del sitio. Esto es un prototipo: no incluyas datos personales, contraseñas ni datos de pago reales.',
     ticketKindLabel: 'Tipo',
     ticketKinds: {
       support: 'Solicitud de soporte',
@@ -2146,7 +2145,6 @@ export const es: Messages = {
       validationStart: 'Iniciar prueba privada',
       validationStop: 'Finalizar prueba privada',
       validationActive: 'Prueba privada activa en esta pestaña. Estos servicios aún no están verificados.',
-
       totpTitle: 'Autenticación de dos factores',
       totpOffNote:
         'Añade una aplicación de autenticación como segundo paso tras tu firma de monedero. Opcional; tu monedero sigue siendo la credencial principal.',

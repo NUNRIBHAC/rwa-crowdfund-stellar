@@ -568,7 +568,7 @@ export const zhCN: Messages = {
   },
   account: {
     title: '我的账户',
-    note: '您的账户区域:此钱包的测试网头寸以及保存在其下的社区活动(仅限测试网资产 - 无真实资金或收益)。头寸来自您在 Stellar 测试网上连接的 Freighter 钱包或已登录的钱包账户,不具有任何价值。本页面上可选的社区登录以及支持和发行方表单将按照隐私政策所述处理您输入的数据。',
+    note: '您的账户区域:与您的登录关联的测试网头寸以及保存在其下的社区活动(仅限测试网资产 - 无真实资金或收益)。在 Stellar 测试网上连接钱包后,头寸即会显示,且不具有任何价值。本页面上可选的社区登录以及支持和发行方表单将按照隐私政策所述处理您输入的数据。',
     summaryAria: '投资组合概览',
     totalContributed: '累计出资',
     totalSub: '链上托管金额，按项目汇总',
@@ -1915,7 +1915,6 @@ export const zhCN: Messages = {
       providerNote: '使用已关联的服务继续。这验证身份，不代表输入了新密码。返回不会删除任何内容。请重新输入 DELETE 并在下方确认。',
       providerReady: '关联身份已验证。请重新输入 DELETE，如已启用则输入当前验证器代码，然后确认删除。',
       noProvider: '没有可用的受支持关联服务。未删除任何内容，也未提交审核请求。',
-
       title: '删除账户',
       boundary:
         '删除此原型资料、邮箱登录、关联登录、会话、评论和支持消息。不会清除区块链、交易、审计、备份或提供商记录。受保护记录会阻止此操作；不会提交审核请求。',
@@ -1928,7 +1927,7 @@ export const zhCN: Messages = {
       failure: '未删除任何内容。请检查密码和当前验证器代码，或稍后重试。此处无法删除不支持的账户或有受保护记录的账户。',
     },
     ticketsTitle: '支持与反馈',
-    ticketsNote: '工单仅您的钱包账户与网站运营方可见。此为原型:请勿包含个人数据、密码或真实付款信息。',
+    ticketsNote: '工单仅您的账户与网站运营方可见。此为原型:请勿包含个人数据、密码或真实付款信息。',
     ticketKindLabel: '类型',
     ticketKinds: {
       support: '支持请求',
@@ -2006,7 +2005,6 @@ export const zhCN: Messages = {
       validationStart: '开始私密测试',
       validationStop: '结束私密测试',
       validationActive: '此标签页的私密测试已启用。这些服务尚未验证。',
-
       totpTitle: '双重身份验证',
       totpOffNote: '在钱包签名之后添加身份验证器应用作为第二步。可选；您的钱包仍是主要凭证。',
       totpOffNoteEmail: '在密码之后添加身份验证器应用作为第二步。可选；你的密码仍是主要凭据。',

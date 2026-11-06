@@ -596,7 +596,7 @@ export const fr: Messages = {
   },
   account: {
     title: 'Mon compte',
-    note: "Votre espace compte : les positions testnet de ce portefeuille et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds ni rendement réel). Les positions proviennent de votre portefeuille Freighter connecté ou de votre session de portefeuille connectée sur le testnet Stellar et sont sans valeur. La connexion communautaire optionnelle et les formulaires de support et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
+    note: "Votre espace compte : les positions testnet liées à votre connexion et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds ni rendement réel). Les positions apparaissent lorsque vous connectez un portefeuille sur le testnet Stellar et sont sans valeur. La connexion communautaire optionnelle et les formulaires de support et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
     summaryAria: 'Résumé du portefeuille',
     totalContributed: 'Total contribué',
     totalSub: 'En séquestre on-chain, additionné sur les campagnes',
@@ -2054,7 +2054,6 @@ export const fr: Messages = {
         'Continuez avec un service déjà associé. Ceci confirme l’identité, pas la saisie d’un nouveau mot de passe. Le retour ne supprime rien. Saisissez à nouveau DELETE et confirmez ci-dessous.',
       providerReady: 'Identité associée vérifiée. Saisissez à nouveau DELETE, le code actuel si activé, puis confirmez la suppression.',
       noProvider: 'Aucun service associé pris en charge n’est disponible. Rien n’a été supprimé et aucune demande de révision n’a été envoyée.',
-
       title: 'Supprimer le compte',
       boundary:
         'Supprime ce profil de prototype, accès par email, connexions associées, sessions, commentaires et messages de support. Les registres blockchain, transactions, audits, sauvegardes et fournisseurs ne sont pas effacés. Les registres protégés bloquent cette option ; aucune demande de révision n’est envoyée.',
@@ -2070,7 +2069,7 @@ export const fr: Messages = {
     },
     ticketsTitle: 'Support et feedback',
     ticketsNote:
-      "Les tickets ne sont visibles que par votre compte de portefeuille et l'opérateur du site. Ceci est un prototype : n'incluez ni données personnelles, ni mots de passe, ni vraies informations de paiement.",
+      "Les tickets ne sont visibles que par votre compte et l'opérateur du site. Ceci est un prototype : n'incluez ni données personnelles, ni mots de passe, ni vraies informations de paiement.",
     ticketKindLabel: 'Type',
     ticketKinds: {
       support: 'Demande de support',
@@ -2151,7 +2150,6 @@ export const fr: Messages = {
       validationStart: 'Démarrer le test privé',
       validationStop: 'Terminer le test privé',
       validationActive: 'Test privé actif dans cet onglet. Ces services ne sont pas encore vérifiés.',
-
       totpTitle: 'Authentification à deux facteurs',
       totpOffNote:
         "Ajoutez une application d'authentification comme deuxième étape après votre signature de portefeuille. Optionnel ; votre portefeuille reste la clé principale.",

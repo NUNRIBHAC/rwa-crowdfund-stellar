@@ -1,4 +1,4 @@
-// Transactional email text, synchronized with Weblate mail JSON.
+// Generated from frontend/i18n-json/mail/ by scripts/i18n-mail.mjs.
 export const MAIL_COPY = {
   en: {
     verifySubject: 'Blockallisto demo - verify your email',

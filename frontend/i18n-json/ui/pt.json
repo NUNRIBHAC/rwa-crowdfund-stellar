@@ -563,7 +563,7 @@
   },
   "account": {
     "title": "A minha conta",
-    "note": "A sua área de conta: as posições de testnet desta carteira e a atividade da comunidade guardada sob ela (apenas ativos de testnet - sem fundos ou rendimentos reais). As posições provêm da sua carteira Freighter ligada ou da sua sessão de carteira iniciada na testnet Stellar e não têm valor. O início de sessão opcional na comunidade e os formulários de suporte e de emitente nesta página tratam os dados introduzidos conforme descrito na política de privacidade.",
+    "note": "A sua área de conta: as posições de testnet associadas ao seu início de sessão e a atividade da comunidade guardada sob ela (apenas ativos de testnet - sem fundos ou rendimentos reais). As posições aparecem quando liga uma carteira na testnet Stellar e não têm valor. O início de sessão opcional na comunidade e os formulários de suporte e de emitente nesta página tratam os dados introduzidos conforme descrito na política de privacidade.",
     "summaryAria": "Resumo da carteira",
     "totalContributed": "Total contribuído",
     "totalSub": "Em escrow on-chain, somado por campanhas",
@@ -1862,7 +1862,7 @@
       "failure": "Nada foi eliminado. Confirma a palavra-passe e o código atual do autenticador, ou tenta mais tarde. Contas não suportadas ou com registos protegidos não podem ser eliminadas aqui."
     },
     "ticketsTitle": "Suporte e feedback",
-    "ticketsNote": "Os pedidos são visíveis apenas para a sua conta de carteira e para a operadora do site. Isto é um protótipo: não inclua dados pessoais, palavras-passe ou dados de pagamento reais.",
+    "ticketsNote": "Os pedidos são visíveis apenas para a sua conta e para a operadora do site. Isto é um protótipo: não inclua dados pessoais, palavras-passe ou dados de pagamento reais.",
     "ticketKindLabel": "Tipo",
     "ticketKinds": {
       "support": "Pedido de suporte",

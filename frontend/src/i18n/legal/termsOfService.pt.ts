@@ -1,4 +1,8 @@
+// Generated from frontend/i18n-json/ by scripts/i18n-import.mjs.
+// Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
+
 import type { LegalBlock } from './types';
+
 export const blocks: LegalBlock[] = [
   {
     t: 'notice',
