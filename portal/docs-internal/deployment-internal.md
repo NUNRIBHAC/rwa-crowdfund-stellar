@@ -1,19 +1,27 @@
 # Deploying the two portals
 
-The private portal is live. The public portal's Render service is
-SUSPENDED (observed 2026-11-06: "This service has been suspended by its
-owner"); restoration on free hosting is tracked as outstanding work.
+Both portals are live on the Oracle VM (observed 2026-11-06).
 
 ## Public portal
 
+- Live at
+  [pubdocs.92-5-187-71.sslip.io](https://pubdocs.92-5-187-71.sslip.io), served
+  since 2026-11-06 by the `public-docs` nginx container on the Oracle VM
+  (static files behind https-portal, same pattern as the private portal but
+  without htpasswd).
 - Previous address
   [blockallisto-docs.onrender.com](https://blockallisto-docs.onrender.com)
-  suspended since at latest 2026-11-06; no current public URL.
-- Verified 2026-11-02 (pre-suspension): all routes 200, search functional,
-  leak grep clean (see below).
-- Render static site on the existing account, auto-deploy from `main`.
+  suspended since at latest 2026-11-06 (Render Hobby workspace over its 5 GB
+  free monthly bandwidth); no longer the host.
+- Verified 2026-11-02 (pre-suspension, on Render): all routes 200, search
+  functional, leak grep clean (see below). Re-verified 2026-11-06 on the
+  Oracle host: homepage 200 in a real browser, demo link points at the
+  current demo host.
 - Build command: `cd portal && npm ci && npm run build:public`
-- Publish directory: `portal/build-public`
+- Publish: rsync `portal/build-public/` into `/home/opc/public-docs/html/` on
+  the VM. Update files in place; if the `html` directory itself is ever
+  replaced (mv/rename), restart the `public-docs` container so its bind mount
+  re-resolves the new directory.
 
 ## Private portal (this build)
 
