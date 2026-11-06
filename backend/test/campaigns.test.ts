@@ -14,6 +14,8 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'crowdfund-test-'));
 const storePath = path.join(tmp, 'campaigns.json');
 const creatorPath = path.join(tmp, 'creator.json');
 const demoPath = path.join(tmp, 'demo-investors.json');
+process.env.COMMUNITY_STORE_PATH = path.join(tmp, 'community-store.json');
+process.env.EVENT_ARCHIVE_PATH = path.join(tmp, 'event-archive.json');
 
 // Env must be set before importing the modules under test (config reads env at import).
 process.env.NODE_ENV = 'test';

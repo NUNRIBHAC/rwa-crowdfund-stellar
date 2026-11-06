@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { PgPoolLike } from './journal.js';
+import { assertPooledDatabaseUrlTestSafe, assertTestSafeDatabaseUrl } from './test-storage-guard.js';
 
 // Community/platform content storage: accounts, wallet-login sessions,
 // comments, campaign news, support/feedback tickets and issuer applications.
@@ -582,6 +583,7 @@ const PG_DOC_ID = 'main';
 export class PostgresCommunityStore implements CommunityStore {
   private ready: Promise<void>;
   constructor(private pool: PgPoolLike) {
+    assertPooledDatabaseUrlTestSafe(pool);
     const ddl = `CREATE TABLE IF NOT EXISTS community_store (
       id text PRIMARY KEY,
       doc jsonb NOT NULL,
@@ -604,6 +606,7 @@ export class PostgresCommunityStore implements CommunityStore {
       : this.pool.query(ddl).then(() => {});
   }
   static async connect(url: string): Promise<PostgresCommunityStore> {
+    assertTestSafeDatabaseUrl(url, 'COMMUNITY_DATABASE_URL');
     const { Pool } = (await import('pg')).default;
     return new PostgresCommunityStore(new Pool({ connectionString: url, max: 5 }));
   }

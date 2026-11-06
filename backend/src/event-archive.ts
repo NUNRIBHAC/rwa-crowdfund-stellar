@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { Address } from '@stellar/stellar-sdk';
 import { topicSymbol, topicAddress, type BackfillClient, type BackfillCheckpoint, type BackfillGap } from './contributor-backfill.js';
+import { assertExplicitFileStorePath, assertPooledDatabaseUrlTestSafe, assertTestSafeDatabaseUrl } from './test-storage-guard.js';
 
 // Prospective durable chain-event archive. The RPC only retains a moving
 // window of ledgers (stock default ~7 days) and testnet resets wipe history,
@@ -262,7 +263,9 @@ export class PostgresEventArchiveStore implements EventArchiveStore {
   // Init runs on first use; a failed init clears itself so the next
   // operation retries instead of reusing a permanently failed store.
   private ready: Promise<void> | null = null;
-  constructor(private pool: import('pg').Pool) {}
+  constructor(private pool: import('pg').Pool) {
+    assertPooledDatabaseUrlTestSafe(pool);
+  }
   private ensureReady(): Promise<void> {
     if (this.ready) return this.ready;
     this.ready = (async () => {
@@ -342,10 +345,12 @@ export async function eventArchiveBackend(): Promise<EventArchiveStore> {
       throw new Error(
         'event archive requires EVENT_ARCHIVE_DATABASE_URL, COMMUNITY_DATABASE_URL or SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file archive',
       );
+    assertTestSafeDatabaseUrl(url, 'EVENT_ARCHIVE_DATABASE_URL/COMMUNITY_DATABASE_URL/SOROBAN_JOURNAL_DATABASE_URL');
     const { Pool } = await import('pg');
     cached = new PostgresEventArchiveStore(new Pool({ connectionString: url }));
     return cached;
   }
+  assertExplicitFileStorePath(process.env.EVENT_ARCHIVE_PATH, 'EVENT_ARCHIVE_PATH');
   cached = new FileEventArchiveStore(process.env.EVENT_ARCHIVE_PATH ?? './data/event-archive.json');
   return cached;
 }

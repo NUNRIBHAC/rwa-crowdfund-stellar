@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { Networks, StrKey, TransactionBuilder } from '@stellar/stellar-sdk';
+import { assertExplicitFileStorePath, assertPooledDatabaseUrlTestSafe, assertTestSafeDatabaseUrl } from './test-storage-guard.js';
 
 // Durable signed-intent journal. The journal is safety state: it records
 // every prepared/signed envelope so broadcast ambiguity is never resolved by
@@ -249,6 +250,7 @@ export class PostgresJournal implements Journal {
     private pool: PgPoolLike,
     verdictCap = 10000,
   ) {
+    assertPooledDatabaseUrlTestSafe(pool);
     this.verdictCap = verdictCap;
     // Concurrent first-boot processes (rolling deploys) can race CREATE TABLE
     // IF NOT EXISTS into a catalog duplicate-key error. Serialize schema init
@@ -301,6 +303,7 @@ export class PostgresJournal implements Journal {
   }
   static async connect(url: string | undefined): Promise<PostgresJournal> {
     if (!url) throw new Error('SOROBAN_JOURNAL_BACKEND=postgres requires SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file journal');
+    assertTestSafeDatabaseUrl(url, 'SOROBAN_JOURNAL_DATABASE_URL');
     const { Pool } = (await import('pg')).default;
     // Small pool: Neon direct connections are limited (104 on the free 0.25 CU) and the demo is single-instance.
     return new PostgresJournal(new Pool({ connectionString: url, max: 5 }));
@@ -638,6 +641,7 @@ export function journalBackend(): Promise<Journal> {
   if (!instance) {
     const backend = (process.env.SOROBAN_JOURNAL_BACKEND ?? 'file').toLowerCase();
     if (backend === 'file') {
+      assertExplicitFileStorePath(process.env.SOROBAN_INTENTS_PATH, 'SOROBAN_INTENTS_PATH');
       instance = Promise.resolve(new FileJournal(process.env.SOROBAN_INTENTS_PATH ?? path.resolve('data/soroban-intents.json')));
     } else if (backend === 'postgres') {
       instance = PostgresJournal.connect(process.env.SOROBAN_JOURNAL_DATABASE_URL);

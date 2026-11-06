@@ -37,6 +37,8 @@ process.env.STELLAR_NETWORK = 'testnet';
 process.env.USDC_ISSUER = Keypair.random().publicKey();
 const tokenId = new Asset('USDC', process.env.USDC_ISSUER).contractId(Networks.TESTNET);
 process.env.SOROBAN_INTENTS_PATH = path.join(tmp, 'intents.json');
+process.env.COMMUNITY_STORE_PATH = path.join(tmp, 'community-store.json');
+process.env.EVENT_ARCHIVE_PATH = path.join(tmp, 'event-archive.json');
 const wasmPath = new URL('./fixtures/reviewed-crowdfund.wasm', import.meta.url);
 // Reviewed Wasm fixture reproduced from the pinned contract build. This fake
 // RPC is adapter evidence only, not evidence of a deployment.

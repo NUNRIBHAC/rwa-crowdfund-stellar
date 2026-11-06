@@ -1,3 +1,4 @@
+import { assertExplicitFileStorePath } from './test-storage-guard.js';
 import { createHash, randomBytes } from 'node:crypto';
 import { z } from 'zod';
 import type {
@@ -1192,5 +1193,6 @@ export async function communityStoreFromEnv(): Promise<CommunityStore> {
   if (process.env.SOROBAN_JOURNAL_BACKEND === 'postgres' || process.env.COMMUNITY_REQUIRE_POSTGRES === '1') {
     throw new Error('community storage requires COMMUNITY_DATABASE_URL or SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file store');
   }
+  assertExplicitFileStorePath(process.env.COMMUNITY_STORE_PATH, 'COMMUNITY_STORE_PATH');
   return new FileCommunityStore(process.env.COMMUNITY_STORE_PATH ?? './data/community-store.json');
 }

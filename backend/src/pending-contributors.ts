@@ -7,6 +7,7 @@
 // confirmed) and are removed only after the registry write succeeds.
 // File-backed and independent of both the journal backend and the community
 // store, so a community-store outage never takes the proofs down with it.
+import { assertExplicitFileStorePath } from './test-storage-guard.js';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -22,8 +23,10 @@ export type PendingContribution = {
   lastError?: string;
 };
 
-const storePath = () =>
-  process.env.PENDING_CONTRIBUTORS_PATH ?? path.join(path.dirname(process.env.SOROBAN_INTENTS_PATH ?? 'intents.json'), 'pending-contributors.json');
+const storePath = () => {
+  assertExplicitFileStorePath(process.env.PENDING_CONTRIBUTORS_PATH ?? process.env.SOROBAN_INTENTS_PATH, 'PENDING_CONTRIBUTORS_PATH (or SOROBAN_INTENTS_PATH)');
+  return process.env.PENDING_CONTRIBUTORS_PATH ?? path.join(path.dirname(process.env.SOROBAN_INTENTS_PATH ?? 'intents.json'), 'pending-contributors.json');
+};
 
 // Deletion safety must not interpret an unreadable/corrupt file as no records.
 // Keep existing recovery behavior separate; this strict reader is not wired
