@@ -1,0 +1,35 @@
+# Oracle Always Free VM deployment for the Blockallisto app (see docs/oracle-hosting.md).
+# Joins the existing weblate_default network so the established https-portal
+# container can route <name>.92-5-187-71.sslip.io -> http://<service>:4000.
+# Env files live at deploy/env/*.env on the VM only - never committed (.env* is
+# gitignored); each value is provisioned at deploy time per docs/oracle-hosting.md.
+services:
+  staging:
+    build: .
+    image: blockallisto-app:local
+    container_name: blockallisto-staging
+    env_file: ./deploy/env/staging.env
+    expose:
+      - '4000'
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 0.75
+    networks:
+      - weblate_default
+
+  demo:
+    build: .
+    image: blockallisto-app:local
+    container_name: blockallisto-demo
+    env_file: ./deploy/env/demo.env
+    expose:
+      - '4000'
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 0.75
+    networks:
+      - weblate_default
+
+networks:
+  weblate_default:
+    external: true
