@@ -23,16 +23,21 @@ Campaign flow (Soroban):
 Community and accounts (docs/community-api.md):
 
 - Wallet-based registration/sign-in: one-time challenge signed with
-  Freighter, server-verified session tokens (sha256-hashed at rest). No
-  passwords; the wallet is the identity.
+  Freighter, server-verified session tokens (sha256-hashed at rest).
+  Email/password registration with localized verification emails, TOTP
+  2FA and session management; social sign-in (Google, GitHub, LinkedIn,
+  Telegram, Farcaster) with provider linking on the same account.
+  Several social flows are configured but not yet verified end to end
+  in a real browser.
 - Campaign comments: authenticated public writes, server-resolved masked
   author labels, per-account and per-IP rate limits, admin hide/unhide.
 - Campaign news: admin-posted updates, labeled `platform-demo` while no
   verified issuer identity exists.
 - Support tickets and issuer applications: authenticated submission,
   owner-only reads, admin list/close/status, 90-day retention with hard
-  delete. The Financing page carries the issuer application form behind
-  community sign-in; the Account area lists the signed-in user's own
+  delete. The For Businesses page (`/for-businesses`, also served at
+  `/financing`) carries the issuer application form behind community
+  sign-in; the Account area lists the signed-in user's own
   applications, support tickets and comments.
 - Campaign metadata: industry tags, document entries and campaign tabs
   (Overview/Details/Documents/News) per campaign.
@@ -83,8 +88,9 @@ Frontend:
   limits are per-process.
 - The admin gate is a demo-grade shared secret; production needs real
   admin identities with individual accountability.
-- Footer social icons are placeholders; no official profile URLs exist
-  yet.
+- Footer social icons link the official Blockallisto profiles (X,
+  Instagram, Facebook, Threads, YouTube, Telegram, Discord, Farcaster,
+  LinkedIn).
 - Legal templates are demo content (above), not operative legal documents.
 
 ## Brand
@@ -143,6 +149,8 @@ overrides are documented in `backend/.env.example`.
   under `contracts/crowdfund/` (cargo + the pinned toolchain in
   `rust-toolchain.toml`); CI runs the Rust tests and Wasm build.
 - [Earlier hardening checkpoint and its residual classic lockup limits](docs/review-hardening.md)
+- [Load testing (k6) scenarios and execution rules](load/README.md)
+- [Crowdfund v1 security self-review (2026-11-01)](docs/security/crowdfund-v1-self-review-2026-11-01.md)
 - [Legal demo templates](legal/) - illustrative, non-operative; see the status section
 - [Separate mock-only identity, valuation, governance and cashout API](IMPLEMENTATION.md)
 - [Historical classic README, not current behavior](docs/classic-readme-historical.md)

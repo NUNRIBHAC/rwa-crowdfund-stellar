@@ -1,8 +1,9 @@
 # Load testing (k6)
 
-Authored k6 scenarios for the two burst paths the platform must survive:
-contribution bursts near a deadline and refund storms after a failed
-campaign.
+Authored k6 scenarios for the paths the platform must survive:
+contribution bursts near a deadline, refund storms after a failed
+campaign, and the read-heavy browse journey that normal traffic puts on
+the public API.
 
 ## Run
 
@@ -10,6 +11,7 @@ Start a local backend first (default http://localhost:4000), then:
 
     k6 run k6-contribution-burst.js
     k6 run k6-refund-storm.js
+    k6 run k6-browse-journey.js
 
 Environment:
 
@@ -18,8 +20,9 @@ Environment:
 
 ## Execution rules
 
-- Local backend first. Staging only owner-aware LOW; Render sleep/shared
-  limits mean wake-up time is not capacity.
+- Local backend first. Staging only owner-aware LOW
+  (`https://staging.92-5-187-71.sslip.io`, Oracle VM, shared CPU): treat
+  timings as indicative, not capacity proof.
 - Never run against the public demo under evaluation, or mainnet.
 - The scripts exercise read paths and invalid-payload build/submit
   validation paths only. They perform no valid signed submissions and no
