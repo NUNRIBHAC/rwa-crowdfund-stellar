@@ -12,7 +12,14 @@ function harness(ttlMs = TTL) {
     return { n: calls, actor: actor ?? null };
   };
   const cache = new CampaignListCache<{ n: number; actor: string | null }>(ttlMs, () => t);
-  return { cache, fetcher, calls: () => calls, advance: (ms: number) => { t += ms; } };
+  return {
+    cache,
+    fetcher,
+    calls: () => calls,
+    advance: (ms: number) => {
+      t += ms;
+    },
+  };
 }
 
 test('production TTL is 30 seconds', () => {
@@ -56,8 +63,13 @@ test('expired entry is refreshed, never served stale', async () => {
 test('concurrent reads share a single in-flight fetch', async () => {
   let calls = 0;
   let release!: (v: string) => void;
-  const gate = new Promise<string>((resolve) => { release = resolve; });
-  const fetcher = () => { calls += 1; return gate; };
+  const gate = new Promise<string>((resolve) => {
+    release = resolve;
+  });
+  const fetcher = () => {
+    calls += 1;
+    return gate;
+  };
   const cache = new CampaignListCache<string>(TTL);
   const p1 = cache.read(fetcher);
   const p2 = cache.read(fetcher);
@@ -130,7 +142,10 @@ test('map stays bounded: oldest key evicted at maxEntries', async () => {
   await cache.read(fetcher, 'D');
   // A (oldest) evicted; B/C/D cached: only A needs a refetch
   let calls = 0;
-  const counter = async (a?: string) => { calls += 1; return `data-${a}`; };
+  const counter = async (a?: string) => {
+    calls += 1;
+    return `data-${a}`;
+  };
   await cache.read(counter, 'B');
   await cache.read(counter, 'C');
   await cache.read(counter, 'D');
@@ -152,7 +167,10 @@ test('expired entries are swept before any live eviction', async () => {
   // map held OLD1/OLD2 (expired) + LIVE; sweep removed the expired two, so
   // NEW fits without evicting LIVE
   let calls = 0;
-  const counter = async (a?: string) => { calls += 1; return `data-${a}`; };
+  const counter = async (a?: string) => {
+    calls += 1;
+    return `data-${a}`;
+  };
   await cache.read(counter, 'LIVE');
   await cache.read(counter, 'NEW');
   assert.equal(calls, 0, 'live entries survived the sweep');
@@ -162,7 +180,10 @@ test('maxEntries bound holds under many distinct actors', async () => {
   let t = 1_000_000;
   const cache = new CampaignListCache<number>(TTL, () => t, 16);
   let calls = 0;
-  const fetcher = async () => { calls += 1; return calls; };
+  const fetcher = async () => {
+    calls += 1;
+    return calls;
+  };
   for (let i = 0; i < 200; i += 1) {
     t += 1;
     await cache.read(fetcher, `G${i.toString().padStart(55, 'A')}`);
@@ -171,7 +192,10 @@ test('maxEntries bound holds under many distinct actors', async () => {
   // and the last key is present
   assert.equal(calls, 200);
   let extra = 0;
-  const counter = async () => { extra += 1; return 0; };
+  const counter = async () => {
+    extra += 1;
+    return 0;
+  };
   await cache.read(counter, `G${(199).toString().padStart(55, 'A')}`);
   assert.equal(extra, 0, 'most recent key still cached');
 });
