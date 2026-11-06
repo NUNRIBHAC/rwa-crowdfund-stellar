@@ -302,7 +302,7 @@
     "cancelUnsigned": "إلغاء المعاملة غير الموقعة",
     "clearConfirmed": "مسح السجل المؤكد",
     "statusLabels": {
-      "BUILT": "BUILT",
+      "BUILT": "مُعدَّة",
       "SIGNED": "مُوقَّعة",
       "PENDING": "قيد الانتظار",
       "SUCCESS": "ناجحة",
