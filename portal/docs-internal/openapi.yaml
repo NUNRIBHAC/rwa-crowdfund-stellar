@@ -7,7 +7,7 @@ info:
     Express route definitions in backend/src (server.ts, community-routes.ts,
     infrastructure/router.ts) at current main. DRAFT: paths, methods and auth
     requirements are source-verified; request/response schemas are intentionally
-    generic until each handler's zod validation is transcribed. Path coverage synchronized to main @0962c6f on 2026-11-03. The
+    generic until each handler's zod validation is transcribed. Path coverage synchronized to main @6b0afcb on 2026-11-06 (26 operations added). The
     /api/infrastructure/* group is a TEST-ONLY service bound to 127.0.0.1
     (INFRA_PORT, default 4100) - never exposed publicly. Admin routes fail
     closed (503) when ADMIN_SECRET is not configured.
@@ -1428,6 +1428,375 @@ paths:
       tags: ['Operator']
       summary: Submit a signed campaign-deploy transaction
       security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+  # --- 2026-11-06 coverage sync: 26 operations verified against backend/src
+  # --- (server.ts, community-routes.ts) route registrations on current main.
+
+  /api/account/holdings:
+    get:
+      tags: ['Account']
+      summary: Cap-table holdings for an actor across campaigns with SUCCESS contribute/refund journal rows (max 20 campaigns)
+      parameters:
+        - name: actor
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: 'Success: holdings, unavailable campaign ids, semantics, network; productionEligible false' }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/social/validation-providers:
+    get:
+      tags: ['Auth']
+      summary: Social providers usable to validate this account (verified allowlisted email accounts only)
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/social/{provider}/link/start:
+    post:
+      tags: ['Auth']
+      summary: Start linking a social provider identity to the signed-in account (fresh step-up proof required)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: 'Success: provider authorization URL; bind cookie set' }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/farcaster/nonce:
+    post:
+      tags: ['Auth']
+      summary: Issue a Farcaster sign-in nonce (rate-limited, abuse-gated; sets bind cookie; 404 when Farcaster is not configured)
+      responses:
+        '200': { description: 'Success: nonce, domain, siweUri' }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/farcaster/verify:
+    post:
+      tags: ['Auth']
+      summary: Verify a Farcaster Sign-In-with-Ethereum message; returns a session, a TOTP ticket, an email-verification ticket, or a link confirmation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/farcaster/link/nonce:
+    post:
+      tags: ['Auth']
+      summary: Issue a Farcaster nonce for linking an fid to the signed-in account (step-up proof required)
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: 'Success: nonce, domain, siweUri; bind cookie set' }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/social/email/request:
+    post:
+      tags: ['Auth']
+      summary: Request an email verification code for a social sign-in that needs email proof (rate-limited, abuse-gated)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/social/email/confirm:
+    post:
+      tags: ['Auth']
+      summary: Confirm a social email code; returns a session, a TOTP ticket, or pending status
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/demo-onboarding:
+    get:
+      tags: ['Auth']
+      summary: Read the signed-in account's onboarding checklist state
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+    put:
+      tags: ['Auth']
+      summary: Save the signed-in account's onboarding checklist state (rate-limited)
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/demo-journey:
+    get:
+      tags: ['Auth']
+      summary: Read the signed-in account's guided demo journey state
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+    post:
+      tags: ['Auth']
+      summary: Advance the signed-in account's guided demo journey (rate-limited)
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/account/deletion-providers:
+    get:
+      tags: ['Auth']
+      summary: Providers that can prove identity for deleting the signed-in social account
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/account/deletion-provider/{provider}/start:
+    post:
+      tags: ['Auth']
+      summary: Start a provider identity proof for account deletion (body must contain confirmation 'DELETE'; rate-limited)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: 'Success: provider authorization URL; bind cookie set' }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/account/deletion-farcaster/nonce:
+    post:
+      tags: ['Auth']
+      summary: Issue a Farcaster nonce scoped to an account-deletion identity proof (rate-limited)
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: 'Success: nonce, domain, siweUri; bind cookie set' }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/account/deletion-farcaster/verify:
+    post:
+      tags: ['Auth']
+      summary: Verify a Farcaster deletion-proof message; returns a time-limited deletion proof
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/auth/account/delete:
+    post:
+      tags: ['Auth']
+      summary: Delete the signed-in email account when no protected records require retention
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/news/{id}:
+    delete:
+      tags: ['Admin']
+      summary: Hard-delete a news post (moderation cleanup; audit log preserves evidence)
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/podcast/episodes/{id}:
+    delete:
+      tags: ['Admin']
+      summary: Hard-delete a podcast episode (moderation cleanup; audit log preserves evidence)
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/corporate-actions/cap-table.json:
+    get:
+      tags: ['Admin']
+      summary: Cap table derived from the campaign share register (503 when no share-register provider is configured)
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/campaigns/{id}/corporate-actions/distribution-preview:
+    post:
+      tags: ['Admin']
+      summary: Preview a distribution of a decimal-string total across the cap table (no execution)
+      security: [{ adminKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/issuer-applications/{id}/documents:
+    post:
+      tags: ['Issuer']
+      summary: Attach a document to the signed-in account's own issuer application (content omitted from the response)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/issuer-applications/{id}/documents/{documentId}:
+    get:
+      tags: ['Issuer']
+      summary: Read one document of the signed-in account's own issuer application (text/plain, no-store)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: documentId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/issuer-applications/{id}/documents/{documentId}:
+    get:
+      tags: ['Operator']
+      summary: Read one issuer-application document as operator (text/plain, no-store)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: documentId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/issuer-applications/{id}/campaign:
+    post:
+      tags: ['Operator']
+      summary: Link an issuer application to a registered campaign (503 when the campaign registry is not wired)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/campaigns/{id}/corporate-actions/cap-table:
+    get:
+      tags: ['Operator']
+      summary: Cap table derived from the campaign share register (503 when no share-register provider is configured)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Success }
+        '4XX': { description: Client error (validation, auth or state) }
+
+  /api/operator/campaigns/{id}/corporate-actions/distribution-preview:
+    post:
+      tags: ['Operator']
+      summary: Preview a distribution of a decimal-string total across the cap table (no execution)
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
       requestBody:
         required: true
         content:
