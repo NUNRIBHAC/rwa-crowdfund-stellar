@@ -232,7 +232,7 @@ export const hi: Messages = {
     list: 'सूची',
     noMatches: 'वर्तमान खोज और फ़िल्टर से कोई कैंपेन मेल नहीं खाता।',
     resultCount: {
-      one: '{n} अभियान दिखाए गए',
+      one: '{n} अभियान दिखाया गया',
       other: '{n} अभियान दिखाए गए',
     },
     activeAria: 'खुले अभियान',
@@ -734,7 +734,7 @@ export const hi: Messages = {
       other: '{n} मिनट शेष',
     },
     hoursLeft: {
-      one: '{n} घंटे शेष',
+      one: '{n} घंटा शेष',
       other: '{n} घंटे शेष',
     },
     daysLeft: {
