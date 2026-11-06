@@ -7,3 +7,4 @@ package-lock.json
 backend/test/fixtures/
 NOTICE
 brand/
+frontend/i18n-json/ui/.whitespace-baseline.json

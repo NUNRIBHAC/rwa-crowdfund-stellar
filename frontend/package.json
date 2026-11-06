@@ -10,7 +10,7 @@
     "test": "vitest run --coverage",
     "i18n:export": "node scripts/i18n-export.mjs && node scripts/i18n-mail.mjs export",
     "i18n:import": "node scripts/i18n-import.mjs && node scripts/i18n-mail.mjs import",
-    "i18n:check": "node scripts/i18n-export.mjs --check && node scripts/i18n-import.mjs --check && node scripts/i18n-mail.mjs check"
+    "i18n:check": "node scripts/i18n-export.mjs --check && node scripts/i18n-import.mjs --check && node scripts/i18n-mail.mjs check && node scripts/i18n-whitespace-guard.mjs --check"
   },
   "dependencies": {
     "@stellar/freighter-api": "^6.0.1",
