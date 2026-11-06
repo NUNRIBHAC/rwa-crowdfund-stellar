@@ -17,8 +17,9 @@ relying on them later. This document fills the reference in
 - All validation therefore runs on the existing Oracle Always Free VM:
   - Tests (including dependency-update gates) run in disposable Docker
     containers from an exact reviewed commit. They are configured for mocks,
-    fake pools and local disposable databases only; zero Prisma Cloud
-    consumption by test traffic is the architectural goal, enforced by the
+    fake pools and local disposable databases only; zero external Prisma
+    Postgres free-plan quota consumption by test traffic is the
+    architectural goal, enforced by the
     fail-closed test-storage guard (any test process refuses a non-localhost
     Postgres URL) and by never injecting hosted database credentials into test
     environments. It is a design property, not a measured universal zero.
@@ -37,18 +38,32 @@ relying on them later. This document fills the reference in
 - Routing from https-portal to the staging and demo app containers is internal
   on the Docker network; app ports are not published publicly.
 - Cloudflare Turnstile operates independently at the application layer for
-  form anti-abuse validation; network traffic goes directly to the VM.
+  form anti-abuse validation: the widget runs in the client AND the token is
+  verified server-side by the app backend (community-routes Turnstile
+  verify). No Cloudflare proxy sits in front of the VM; network traffic
+  goes directly to the VM (sslip.io is DNS only).
+- Local port surface: rpcbind is DISABLED (unit and socket `disabled`,
+  not `masked` - verified 2026-11-06) and nothing listens on port 111 on
+  any interface.
 
 ### Data layer
 
 - The staging app connects exclusively to the staging Prisma Postgres
-  database; the demo app exclusively to the demo database. The two databases
+  database; the demo app exclusively to the demo database. These are
+  OUTBOUND connections over the internet to Prisma's hosted service with
+  verified TLS (DATABASE_URL sslmode=require; pg-connection-string 2.14.1
+  maps that to full certificate verification) - "exclusively" names the
+  database pairing, not an internal network path. The two databases
   are logically separate but share and compete for the limits of one Prisma
   free plan (measured engine: PostgreSQL 17.2).
 - The apps use the raw `pg` driver (no Prisma Client / ORM). Pool caps are set
   per store via env (`COMMUNITY_POOL_MAX=2`, `SOROBAN_JOURNAL_POOL_MAX=2`
   direct, `EVENT_ARCHIVE_POOL_MAX=1` pooled per app); pools open lazily and a
   2026-11-06 snapshot showed 1-2 idle connections per app.
+- The Weblate platform's own database (weblate-database-1,
+  postgres:18-alpine) is fully local: named volume weblate_postgres-data on
+  the VM disk, no dependency on the shared external Prisma Postgres quota;
+  it is dumped nightly by the backup script below.
 - Nightly backup at 03:00 Europe/Lisbon to an OCI Object Storage bucket via a
   versioned, seam-testable script (see the backup section below).
 
