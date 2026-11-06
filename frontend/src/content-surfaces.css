@@ -199,7 +199,7 @@
 .mobile-menu-toggle {
   display: none;
 }
-@media (max-width: 720px) {
+@media (max-width: 960px) {
   .header-inner {
     display: flex;
     flex-wrap: wrap;
@@ -270,7 +270,7 @@
 }
 
 /* Mobile reference: the navigation opens as a compact vertical panel. */
-@media (max-width: 720px) {
+@media (max-width: 960px) {
   .mobile-menu-toggle {
     width: auto;
     gap: 12px;

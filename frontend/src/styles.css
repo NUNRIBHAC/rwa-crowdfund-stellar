@@ -948,7 +948,7 @@ section[id] {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 960px) {
   .header-inner {
     display: flex;
     flex-wrap: wrap;
@@ -4551,7 +4551,7 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   font-size: 16px;
   font-weight: 500;
 }
-@media (min-width: 721px) {
+@media (min-width: 961px) {
   .site-header .site-nav {
     gap: 12px;
   }
