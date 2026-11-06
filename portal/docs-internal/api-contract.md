@@ -30,6 +30,11 @@ Boundaries worth knowing:
 - Unknown `/api/*` POST paths get a generic 404 from a catch-all; it is not an
   API route and is intentionally not in the spec.
 
+Public copy: the public portal serves a sanitized derivative at
+`portal/static/openapi.yaml` (platform-administration, operator-console,
+internal test-only and legacy-admin paths removed; servers trimmed to the
+public hosts). Regenerate it from this file whenever the spec changes.
+
 Rendering: keep the YAML in the repo as the single source of truth and link it
 from this page. If an interactive viewer is wanted later, evaluate the
 docusaurus-openapi-docs plugin as a separate change (build weight + audit);
