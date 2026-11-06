@@ -17,6 +17,14 @@ a public issue - follow SECURITY.md instead.
   gate, on every pull request.
 - `npm run format` normalizes formatting with Prettier; `npm run format:check`
   verifies it.
+- The test suites are self-contained: they need no database, mailer or
+  other services and must run in a clean environment, exactly like CI
+  (which sets no project env vars). Running them inside a deployed
+  container (for example via `docker exec`) inherits that container's
+  service configuration - Turnstile keys, allowlists, mailer and database
+  settings - and produces false failures (for example registration
+  answered 403). Use a plain shell, or scrub the environment explicitly:
+  `env -i PATH="$PATH" HOME="$HOME" CI=true npm test`.
 - Contracts are Rust (pinned toolchain); `contracts/crowdfund` has its own
   `cargo test` and a pinned Stellar CLI build whose Wasm output is
   hash-verified in CI.
