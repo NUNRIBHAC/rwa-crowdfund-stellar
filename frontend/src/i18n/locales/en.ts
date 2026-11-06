@@ -1987,7 +1987,6 @@ export const en = {
         'Continue with a provider already linked to this account. This proves provider identity, not that you typed a new provider password. Returning does not delete anything. Type DELETE again and confirm below.',
       providerReady: 'Linked identity checked. Type DELETE again, enter the current authenticator code if enabled, then confirm deletion.',
       noProvider: 'No supported linked provider is available. Nothing was deleted and no review request was submitted.',
-
       title: 'Delete account',
       boundary:
         'Delete this prototype profile, email login, linked sign-ins, sessions, comments and support messages. This does not erase blockchain, transaction, audit, backups or provider records. Protected records block this option; no review request is submitted.',
@@ -2084,7 +2083,6 @@ export const en = {
       validationStart: 'Start private test',
       validationStop: 'End private test',
       validationActive: 'Private test active in this tab. These providers are not yet verified.',
-
       totpTitle: 'Two-factor authentication',
       totpOffNote: 'Add an authenticator app as a second step after your wallet signature. Optional; your wallet stays the main credential.',
       totpOffNoteEmail: 'Add an authenticator app as a second step after your password. Optional; your password stays the main credential.',

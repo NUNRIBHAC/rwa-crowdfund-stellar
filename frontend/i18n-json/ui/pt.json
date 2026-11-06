@@ -279,12 +279,7 @@
   },
   "intent": {
     "title": "Transação guardada",
-    "steps": [
-      "Preparada",
-      "Assinada",
-      "Submetida",
-      "Confirmada"
-    ],
+    "steps": ["Preparada", "Assinada", "Submetida", "Confirmada"],
     "action": "Ação",
     "campaign": "Campanha",
     "contract": "Contrato",
@@ -344,13 +339,7 @@
     "interestIsinDocsNote": "Não disponível - este protótipo apenas regista contribuições e não emite valores mobiliários",
     "marketingDivider": "Conteúdo fornecido pelo emitente abaixo - não verificado pela plataforma",
     "marketingDividerAria": "Conteúdo de marketing abaixo",
-    "tabs": [
-      "Visão geral",
-      "Detalhes",
-      "Documentos",
-      "Notícias",
-      "Podcast"
-    ],
+    "tabs": ["Visão geral", "Detalhes", "Documentos", "Notícias", "Podcast"],
     "tabsAria": "Secções da campanha",
     "overviewMissing": "O conteúdo de marketing do emitente não está disponível neste protótipo. Numa plataforma em produção, esta área teria a descrição, a equipa e o modelo de negócio do próprio emitente, claramente separados dos factos da plataforma pelo separador acima.",
     "detailsPre": "Modelo de negócio, mercado, finanças e marcos apareceriam aqui como secções fornecidas pelo emitente.",
@@ -770,10 +759,7 @@
         "label": "Substanzgenussrecht",
         "subtypeOf": "Subtipo de direito / certificado participativo",
         "summary": "Um direito participativo ligado à base de ativos (\"substância\") do emitente e não apenas ao seu lucro anual. A estruturação e os emitentes elegíveis variam consoante a jurisdição e os estatutos.",
-        "opportunities": [
-          "Participação no valor dos ativos do emitente",
-          "Pode ser estruturado para emitentes mais pequenos quando os estatutos o permitem"
-        ],
+        "opportunities": ["Participação no valor dos ativos do emitente", "Pode ser estruturado para emitentes mais pequenos quando os estatutos o permitem"],
         "risks": [
           "A forma jurídica e a proteção do investidor variam fortemente consoante a jurisdição",
           "Pode envolver um fiduciário ou veículo entre o investidor e o emitente",
@@ -785,10 +771,7 @@
         "label": "Ação",
         "note": "Um aumento de capital é a operação societária que cria novas ações; não é um instrumento separado.",
         "summary": "Capital próprio direto da empresa emitente: direito a dividendos e participação no valor da empresa, com direitos definidos pelos estatutos. As novas ações chegam aos investidores através de um aumento de capital.",
-        "opportunities": [
-          "Participação plena no crescimento da empresa",
-          "Direitos de voto ou de informação consoante a classe de ações"
-        ],
+        "opportunities": ["Participação plena no crescimento da empresa", "Direitos de voto ou de informação consoante a classe de ações"],
         "risks": [
           "Sem direito fixo de reembolso; os dividendos não são garantidos",
           "Perda total possível",
@@ -800,10 +783,7 @@
         "label": "Participação indireta",
         "note": "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia.",
         "summary": "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado.",
-        "opportunities": [
-          "Acesso a operações difíceis de deter diretamente",
-          "Administração simplificada através da estrutura intermediária"
-        ],
+        "opportunities": ["Acesso a operações difíceis de deter diretamente", "Administração simplificada através da estrutura intermediária"],
         "risks": [
           "Há uma camada extra entre o investidor e o emitente",
           "O retorno depende do desempenho do emitente",
@@ -814,10 +794,7 @@
       {
         "label": "Participação em sociedade em comandita",
         "summary": "Uma participação como sócio comanditário numa sociedade: participação nos lucros e perdas segundo o contrato de sociedade, com responsabilidade limitada à entrada.",
-        "opportunities": [
-          "Transmissão direta dos resultados da sociedade",
-          "Responsabilidade limitada à entrada"
-        ],
+        "opportunities": ["Transmissão direta dos resultados da sociedade", "Responsabilidade limitada à entrada"],
         "risks": [
           "A participação nas perdas pode reduzir ou anular a participação",
           "A saída é frequentemente restringida pelo contrato de sociedade",
@@ -1299,7 +1276,8 @@
             "label": "Condições de emissão (entrada de exemplo)",
             "note": "Nenhum ficheiro alojado neste protótipo"
           }
-        ]
+        ],
+        "news": []
       },
       {
         "issuer": "Porto Logistics Hub SA (emitente de exemplo)",

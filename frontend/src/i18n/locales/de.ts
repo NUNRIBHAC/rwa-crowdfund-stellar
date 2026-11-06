@@ -595,7 +595,7 @@ export const de: Messages = {
   },
   account: {
     title: 'Mein Konto',
-    note: 'Dein Kontobereich: die Testnet-Positionen dieser Wallet und die darunter gespeicherten Community-Aktivitäten (nur Testnet-Assets - keine echten Gelder oder Erträge). Positionen stammen aus deiner verbundenen Freighter-Wallet oder deinem angemeldeten Wallet-Konto auf dem Stellar-Testnet und sind wertlos. Die optionale Community-Anmeldung und die Support- und Emittentenformulare auf dieser Seite verarbeiten die eingegebenen Daten wie in der Datenschutzerklärung beschrieben.',
+    note: 'Dein Kontobereich: die Testnet-Positionen, die mit deiner Anmeldung verknüpft sind, und die darunter gespeicherten Community-Aktivitäten (nur Testnet-Assets - keine echten Gelder oder Erträge). Positionen erscheinen, wenn du eine Wallet im Stellar-Testnet verbindest, und sind wertlos. Die optionale Community-Anmeldung und die Support- und Emittentenformulare auf dieser Seite verarbeiten die eingegebenen Daten wie in der Datenschutzerklärung beschrieben.',
     summaryAria: 'Portfolioübersicht',
     totalContributed: 'Insgesamt beigetragen',
     totalSub: 'On-Chain im Escrow, summiert über Kampagnen',
@@ -2040,7 +2040,6 @@ export const de: Messages = {
         'Mit einem bereits verknüpften Dienst fortfahren. Dies prüft die Identität, nicht die Eingabe eines neuen Passworts. Die Rückkehr löscht nichts. DELETE erneut eingeben und unten bestätigen.',
       providerReady: 'Verknüpfte Identität geprüft. DELETE erneut und gegebenenfalls den aktuellen Authentifizierungscode eingeben, dann Löschung bestätigen.',
       noProvider: 'Kein unterstützter verknüpfter Dienst verfügbar. Nichts wurde gelöscht und kein Prüfauftrag gesendet.',
-
       title: 'Konto löschen',
       boundary:
         'Löscht dieses Prototyp-Profil, E-Mail-Zugang, verknüpfte Anmeldungen, Sitzungen, Kommentare und Supportnachrichten. Blockchain-, Transaktions-, Prüf-, Sicherungs- und Anbieterdaten werden nicht gelöscht. Geschützte Datensätze blockieren diese Option; es wird kein Prüfauftrag gesendet.',
@@ -2056,7 +2055,7 @@ export const de: Messages = {
     },
     ticketsTitle: 'Support und Feedback',
     ticketsNote:
-      'Tickets sind nur für Ihr Wallet-Konto und den Seitenbetreiber sichtbar. Dies ist ein Prototyp: Geben Sie keine persönlichen Daten, Passwörter oder echten Zahlungsdaten ein.',
+      'Tickets sind nur für Ihr Konto und den Seitenbetreiber sichtbar. Dies ist ein Prototyp: Geben Sie keine persönlichen Daten, Passwörter oder echten Zahlungsdaten ein.',
     ticketKindLabel: 'Typ',
     ticketKinds: {
       support: 'Support-Anfrage',
@@ -2137,7 +2136,6 @@ export const de: Messages = {
       validationStart: 'Privaten Test starten',
       validationStop: 'Privaten Test beenden',
       validationActive: 'Privater Test in diesem Tab aktiv. Diese Dienste sind noch nicht geprüft.',
-
       totpTitle: 'Zwei-Faktor-Authentifizierung',
       totpOffNote: 'Fügen Sie eine Authenticator-App als zweiten Schritt nach Ihrer Wallet-Signatur hinzu. Optional; Ihre Wallet bleibt die Hauptberechtigung.',
       totpOffNoteEmail: 'Fügen Sie eine Authenticator-App als zweiten Schritt nach Ihrem Passwort hinzu. Optional; Ihr Passwort bleibt die Hauptberechtigung.',

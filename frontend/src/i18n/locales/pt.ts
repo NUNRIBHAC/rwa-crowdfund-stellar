@@ -593,7 +593,7 @@ export const pt: Messages = {
   },
   account: {
     title: 'A minha conta',
-    note: 'A sua área de conta: as posições de testnet desta carteira e a atividade da comunidade guardada sob ela (apenas ativos de testnet - sem fundos ou rendimentos reais). As posições provêm da sua carteira Freighter ligada ou da sua sessão de carteira iniciada na testnet Stellar e não têm valor. O início de sessão opcional na comunidade e os formulários de suporte e de emitente nesta página tratam os dados introduzidos conforme descrito na política de privacidade.',
+    note: 'A sua área de conta: as posições de testnet associadas ao seu início de sessão e a atividade da comunidade guardada sob ela (apenas ativos de testnet - sem fundos ou rendimentos reais). As posições aparecem quando liga uma carteira na testnet Stellar e não têm valor. O início de sessão opcional na comunidade e os formulários de suporte e de emitente nesta página tratam os dados introduzidos conforme descrito na política de privacidade.',
     summaryAria: 'Resumo da carteira',
     totalContributed: 'Total contribuído',
     totalSub: 'Em escrow on-chain, somado por campanhas',
@@ -2044,7 +2044,6 @@ export const pt: Messages = {
       providerReady:
         'Identidade associada confirmada. Escreve DELETE novamente, introduz o código atual do autenticador se estiver ativo e confirma a eliminação.',
       noProvider: 'Não há serviço associado suportado disponível. Nada foi eliminado e não foi enviado nenhum pedido de revisão.',
-
       title: 'Eliminar conta',
       boundary:
         'Elimina este perfil de protótipo, acesso por email, acessos associados, sessões, comentários e mensagens de suporte. Não apaga registos blockchain, transações, auditoria, cópias de segurança ou registos dos fornecedores. Registos protegidos bloqueiam esta opção; não é enviado nenhum pedido de revisão.',
@@ -2060,7 +2059,7 @@ export const pt: Messages = {
     },
     ticketsTitle: 'Suporte e feedback',
     ticketsNote:
-      'Os pedidos são visíveis apenas para a sua conta de carteira e para a operadora do site. Isto é um protótipo: não inclua dados pessoais, palavras-passe ou dados de pagamento reais.',
+      'Os pedidos são visíveis apenas para a sua conta e para a operadora do site. Isto é um protótipo: não inclua dados pessoais, palavras-passe ou dados de pagamento reais.',
     ticketKindLabel: 'Tipo',
     ticketKinds: {
       support: 'Pedido de suporte',
@@ -2141,7 +2140,6 @@ export const pt: Messages = {
       validationStart: 'Iniciar teste privado',
       validationStop: 'Terminar teste privado',
       validationActive: 'Teste privado ativo neste separador. Estes serviços ainda não foram verificados.',
-
       totpTitle: 'Autenticação de dois fatores',
       totpOffNote:
         'Adicione uma aplicação de autenticação como segundo passo após a assinatura da carteira. Opcional; a carteira continua a ser a credencial principal.',
