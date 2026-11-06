@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { poolMaxFromEnv } from './db-pool.js';
 import path from 'node:path';
 import { Networks, StrKey, TransactionBuilder } from '@stellar/stellar-sdk';
 import { assertExplicitFileStorePath, assertPooledDatabaseUrlTestSafe, assertTestSafeDatabaseUrl } from './test-storage-guard.js';
@@ -305,8 +306,9 @@ export class PostgresJournal implements Journal {
     if (!url) throw new Error('SOROBAN_JOURNAL_BACKEND=postgres requires SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file journal');
     assertTestSafeDatabaseUrl(url, 'SOROBAN_JOURNAL_DATABASE_URL');
     const { Pool } = (await import('pg')).default;
-    // Small pool: Neon direct connections are limited (104 on the free 0.25 CU) and the demo is single-instance.
-    return new PostgresJournal(new Pool({ connectionString: url, max: 5 }));
+    // Small pool: hosted providers cap direct connections per database and the demo is single-instance.
+    // Override with SOROBAN_JOURNAL_POOL_MAX for tighter budgets (e.g. Prisma free: 5 usable direct).
+    return new PostgresJournal(new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.SOROBAN_JOURNAL_POOL_MAX, 'SOROBAN_JOURNAL_POOL_MAX', 5) }));
   }
   // Session advisory lock with a backend-stability check. Session locks only
   // work when every query lands on the same Postgres backend; a transaction

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { poolMaxFromEnv } from './db-pool.js';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { Address } from '@stellar/stellar-sdk';
@@ -347,7 +348,10 @@ export async function eventArchiveBackend(): Promise<EventArchiveStore> {
       );
     assertTestSafeDatabaseUrl(url, 'EVENT_ARCHIVE_DATABASE_URL/COMMUNITY_DATABASE_URL/SOROBAN_JOURNAL_DATABASE_URL');
     const { Pool } = await import('pg');
-    cached = new PostgresEventArchiveStore(new Pool({ connectionString: url }));
+    // Default 10 preserves the pg driver default; override with EVENT_ARCHIVE_POOL_MAX for tighter budgets.
+    cached = new PostgresEventArchiveStore(
+      new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.EVENT_ARCHIVE_POOL_MAX, 'EVENT_ARCHIVE_POOL_MAX', 10) }),
+    );
     return cached;
   }
   assertExplicitFileStorePath(process.env.EVENT_ARCHIVE_PATH, 'EVENT_ARCHIVE_PATH');

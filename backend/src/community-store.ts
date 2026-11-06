@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { poolMaxFromEnv } from './db-pool.js';
 import path from 'node:path';
 import type { PgPoolLike } from './journal.js';
 import { assertPooledDatabaseUrlTestSafe, assertTestSafeDatabaseUrl } from './test-storage-guard.js';
@@ -608,7 +609,7 @@ export class PostgresCommunityStore implements CommunityStore {
   static async connect(url: string): Promise<PostgresCommunityStore> {
     assertTestSafeDatabaseUrl(url, 'COMMUNITY_DATABASE_URL');
     const { Pool } = (await import('pg')).default;
-    return new PostgresCommunityStore(new Pool({ connectionString: url, max: 5 }));
+    return new PostgresCommunityStore(new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.COMMUNITY_POOL_MAX, 'COMMUNITY_POOL_MAX', 5) }));
   }
   async read(): Promise<CommunityState> {
     await this.ready;
