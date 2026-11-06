@@ -5,6 +5,7 @@ import cors from 'cors';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { PORT, NETWORK } from './config.js';
 import { listCampaigns } from './campaigns.js';
+import { CampaignListCache, CAMPAIGN_LIST_CACHE_TTL_MS } from './campaign-list-cache.js';
 import { registerDiscoveryEndpoints } from './sitemap.js';
 import {
   sorobanCampaigns,
@@ -296,9 +297,14 @@ app.get('/health', (_req, res) => {
   res.json({ ok: true, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
 });
 
+// Display cache for the LIST route only: 30s TTL + single-flight; expired
+// entries are re-read fresh and failures keep the existing 503 contract.
+// Decision/operator paths (reconciliation, entitlement, invest/refund,
+// discovery, community) bypass it and stay live-chain.
+const campaignListCache = new CampaignListCache<unknown[]>(CAMPAIGN_LIST_CACHE_TTL_MS);
 app.get('/api/campaigns', async (req, res) => {
   try {
-    res.json({ campaigns: await sorobanCampaigns(typeof req.query.actor === 'string' ? req.query.actor : undefined), mode: 'soroban' });
+    res.json({ campaigns: await campaignListCache.read(sorobanCampaigns, typeof req.query.actor === 'string' ? req.query.actor : undefined), mode: 'soroban' });
   } catch (err) {
     // Upstream (RPC/Horizon) failures carry raw client text such as
     // "Request failed with status code 502": log it, never show it. The
