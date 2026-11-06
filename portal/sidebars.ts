@@ -11,7 +11,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Technical',
-      items: ['smart-contract', 'testing', 'deployment'],
+      items: ['smart-contract', 'testing', 'deployment', 'api'],
     },
     'faq',
     'contributing',
