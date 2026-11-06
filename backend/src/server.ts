@@ -1,4 +1,5 @@
 import { publicFailure } from './public-errors.js';
+import { readLimiter } from './read-limiter.js';
 import express from 'express';
 import cors from 'cors';
 import { createHash, timingSafeEqual } from 'node:crypto';
@@ -82,6 +83,7 @@ app.use(
   }),
 );
 app.use(express.json({ limit: '64kb' }));
+app.use(readLimiter());
 
 // Admin gate for operations that move money or spend platform/demo funds
 // (create, demo invest, finalize, refund, retry, seed). Demo-grade shared

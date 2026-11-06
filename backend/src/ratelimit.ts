@@ -17,6 +17,14 @@ export class RateLimiter {
     this.hits.set(key, list);
     return true;
   }
+  // Non-mutating existence check (for the caller's cardinality bound).
+  has(key: string): boolean {
+    return this.hits.has(key);
+  }
+  // Number of currently tracked keys (for the caller's cardinality bound).
+  trackedCount(): number {
+    return this.hits.size;
+  }
   // Bound memory: drop idle keys lazily on a coarse sweep.
   sweep(windowMs: number): void {
     const cutoff = this.nowFn() - windowMs;
