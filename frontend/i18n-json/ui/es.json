@@ -279,7 +279,12 @@
   },
   "intent": {
     "title": "Transacción guardada",
-    "steps": ["Preparada", "Firmada", "Enviada", "Confirmada"],
+    "steps": [
+      "Preparada",
+      "Firmada",
+      "Enviada",
+      "Confirmada"
+    ],
     "action": "Acción",
     "campaign": "Campaña",
     "contract": "Contrato",
@@ -339,7 +344,13 @@
     "interestIsinDocsNote": "No disponible - este prototipo solo registra contribuciones y no emite valores",
     "marketingDivider": "Contenido proporcionado por el emisor a continuación - no verificado por la plataforma",
     "marketingDividerAria": "Contenido de marketing a continuación",
-    "tabs": ["Resumen", "Detalles", "Documentos", "Noticias", "Podcast"],
+    "tabs": [
+      "Resumen",
+      "Detalles",
+      "Documentos",
+      "Noticias",
+      "Podcast"
+    ],
     "tabsAria": "Secciones de la campaña",
     "overviewMissing": "El contenido de marketing del emisor no está disponible en este prototipo. En una plataforma en producción, esta zona mostraría la descripción, el equipo y el modelo de negocio del propio emisor, claramente separados de los hechos de la plataforma por el separador anterior.",
     "detailsPre": "El modelo de negocio, el mercado, las finanzas y los hitos aparecerían aquí como secciones proporcionadas por el emisor.",
@@ -563,7 +574,7 @@
   },
   "account": {
     "title": "Mi cuenta",
-    "note": "Tu área de cuenta: las posiciones de testnet de este monedero y la actividad de la comunidad guardada bajo él (solo activos de testnet - sin fondos ni rendimientos reales). Las posiciones proceden de tu monedero Freighter conectado o de tu sesión de monedero iniciada en la testnet de Stellar y no tienen valor. El inicio de sesión opcional en la comunidad y los formularios de soporte y de emisor de esta página tratan los datos introducidos como se describe en la política de privacidad.",
+    "note": "Tu área de cuenta: las posiciones de testnet vinculadas a tu inicio de sesión y la actividad de la comunidad guardada bajo él (solo activos de testnet - sin fondos ni rendimientos reales). Las posiciones aparecen cuando conectas un monedero en la testnet de Stellar y no tienen valor. El inicio de sesión opcional en la comunidad y los formularios de soporte y de emisor de esta página tratan los datos introducidos como se describe en la política de privacidad.",
     "summaryAria": "Resumen de la cartera",
     "totalContributed": "Total contribuido",
     "totalSub": "En escrow on-chain, sumado por campañas",
@@ -774,7 +785,10 @@
         "label": "Acción",
         "note": "Una ampliación de capital es la operación societaria que crea nuevas acciones; no es un instrumento separado.",
         "summary": "Capital propio directo de la empresa emisora: derecho a dividendos y participación en el valor de la empresa, con derechos fijados por los estatutos. Las nuevas acciones llegan a los inversores mediante una ampliación de capital.",
-        "opportunities": ["Participación plena en el crecimiento de la empresa", "Derechos de voto o de información según la clase de acciones"],
+        "opportunities": [
+          "Participación plena en el crecimiento de la empresa",
+          "Derechos de voto o de información según la clase de acciones"
+        ],
         "risks": [
           "Sin derecho fijo de reembolso; los dividendos no están garantizados",
           "Pérdida total posible",
@@ -786,7 +800,10 @@
         "label": "Participación indirecta",
         "note": "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía.",
         "summary": "Los inversores participan indirectamente en una inversión en una PYME - por ejemplo a través de un vehículo o fiduciario - con tramitación simplificada.",
-        "opportunities": ["Acceso a operaciones difíciles de mantener directamente", "Administración simplificada a través de la estructura intermediaria"],
+        "opportunities": [
+          "Acceso a operaciones difíciles de mantener directamente",
+          "Administración simplificada a través de la estructura intermediaria"
+        ],
         "risks": [
           "Hay una capa adicional entre el inversor y el emisor",
           "El rendimiento depende del desempeño del emisor",
@@ -797,7 +814,10 @@
       {
         "label": "Participación en sociedad comanditaria",
         "summary": "Una participación como socio comanditario en una sociedad: participación en beneficios y pérdidas según el contrato social, con responsabilidad limitada a la aportación.",
-        "opportunities": ["Traslado directo de los resultados de la sociedad", "Responsabilidad limitada a la aportación"],
+        "opportunities": [
+          "Traslado directo de los resultados de la sociedad",
+          "Responsabilidad limitada a la aportación"
+        ],
         "risks": [
           "La participación en pérdidas puede reducir o anular la participación",
           "La salida suele estar restringida por el contrato social",
@@ -1279,8 +1299,7 @@
             "label": "Condiciones de emisión (entrada de ejemplo)",
             "note": "Ningún archivo alojado en este prototipo"
           }
-        ],
-        "news": []
+        ]
       },
       {
         "issuer": "Porto Logistics Hub SA (emisor de ejemplo)",
@@ -1331,7 +1350,9 @@
             "value": "Ninguno. Este prototipo no es un proveedor de servicios de crowdfunding"
           }
         ],
-        "overview": ["Datos de ejemplo - no es una oferta real. Las campañas completadas permanecen visibles con su estado final de financiación, como esta."],
+        "overview": [
+          "Datos de ejemplo - no es una oferta real. Las campañas completadas permanecen visibles con su estado final de financiación, como esta."
+        ],
         "documents": [
           {
             "label": "Condiciones del bono convertible (entrada de ejemplo)",
@@ -1863,7 +1884,7 @@
       "failure": "No se eliminó nada. Comprueba la contraseña y el código actual del autenticador o inténtalo más tarde. Las cuentas no admitidas o con registros protegidos no se pueden eliminar aquí."
     },
     "ticketsTitle": "Soporte y feedback",
-    "ticketsNote": "Los tickets son visibles solo para tu cuenta de monedero y el operador del sitio. Esto es un prototipo: no incluyas datos personales, contraseñas ni datos de pago reales.",
+    "ticketsNote": "Los tickets son visibles solo para tu cuenta y el operador del sitio. Esto es un prototipo: no incluyas datos personales, contraseñas ni datos de pago reales.",
     "ticketKindLabel": "Tipo",
     "ticketKinds": {
       "support": "Solicitud de soporte",
