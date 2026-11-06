@@ -12,8 +12,10 @@ services:
     # Durable contributor-recovery queue: PENDING_CONTRIBUTORS_PATH in
     # deploy/env/staging.env points here (/app is root-owned, the app runs as
     # node/1000). Named volumes are created root-owned, so after the FIRST
-    # `compose up` of this change, run once per service:
-    #   docker run --rm -v blockallisto-queue-staging:/q alpine chown 1000:1000 /q
+    # `compose up` of this change, chown the ACTUAL volume (compose prefixes
+    # the project name; confirm with `docker inspect <container> --format
+    # '{{range .Mounts}}{{.Name}}{{"\n"}}{{end}}'`), e.g.:
+    #   docker run --rm -v <actual-volume>:/q alpine chown 1000:1000 /q
     # The volume survives container replacement (and any Neon rollback), which
     # is what makes the queue durable.
     volumes:
