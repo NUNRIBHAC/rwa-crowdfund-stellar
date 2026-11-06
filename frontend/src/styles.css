@@ -2114,6 +2114,15 @@ textarea:focus-visible,
   .footer-brand-inner .footer-grid {
     grid-template-columns: repeat(2, minmax(140px, 1fr));
   }
+  /* German: the desktop html[lang='de'] auto-fit minmax(250px) rule above
+     wins on specificity (0,2,1 vs 0,2,0) inside this band, collapsing the
+     561-1150px footer to one column while the other ten locales render 2x2
+     (QA finding at 820px, signed-out detail, light). Pin German to the same
+     tracks; hyphens:auto on de body remains the fallback for compounds
+     longer than the stretched track. */
+  html[lang='de'] .footer-brand-inner .footer-grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
   .footer-brand-inner .footer-context {
     grid-column: 1 / -1;
     max-width: 560px;
@@ -2171,6 +2180,11 @@ textarea:focus-visible,
   .footer-brand-inner .footer-grid {
     /* Min grid 260px <= 561-24-250 = 287px, fixing the 561-573px overlap
        where the old 340px minimum exceeded the 327px tile-free width. */
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+  /* Same German specificity pin as the <=1150px band: keep 561-720px
+     two-column for de as well. */
+  html[lang='de'] .footer-brand-inner .footer-grid {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
   }
   .footer-tiles {
