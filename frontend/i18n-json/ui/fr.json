@@ -279,7 +279,12 @@
   },
   "intent": {
     "title": "Transaction enregistrée",
-    "steps": ["Préparée", "Signée", "Envoyée", "Confirmée"],
+    "steps": [
+      "Préparée",
+      "Signée",
+      "Envoyée",
+      "Confirmée"
+    ],
     "action": "Action",
     "campaign": "Campagne",
     "contract": "Contrat",
@@ -339,7 +344,13 @@
     "interestIsinDocsNote": "Non disponible - ce prototype n'enregistre que des contributions et n'émet aucun titre",
     "marketingDivider": "Contenu fourni par l'émetteur ci-dessous - non vérifié par la plateforme",
     "marketingDividerAria": "Contenu marketing ci-dessous",
-    "tabs": ["Vue d'ensemble", "Détails", "Documents", "Actualités", "Podcast"],
+    "tabs": [
+      "Vue d'ensemble",
+      "Détails",
+      "Documents",
+      "Actualités",
+      "Podcast"
+    ],
     "tabsAria": "Sections de la campagne",
     "overviewMissing": "Le contenu marketing de l'émetteur n'est pas disponible dans ce prototype. Sur une plateforme en production, cette zone afficherait la description, l'équipe et le modèle économique de l'émetteur lui-même, clairement séparés des faits de la plateforme par le séparateur ci-dessus.",
     "detailsPre": "Le modèle économique, le marché, les finances et les jalons apparaîtraient ici comme sections fournies par l'émetteur.",
@@ -563,7 +574,7 @@
   },
   "account": {
     "title": "Mon compte",
-    "note": "Votre espace compte : les positions testnet de ce portefeuille et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds ni rendement réel). Les positions proviennent de votre portefeuille Freighter connecté ou de votre session de portefeuille connectée sur le testnet Stellar et sont sans valeur. La connexion communautaire optionnelle et les formulaires de support et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
+    "note": "Votre espace compte : les positions testnet liées à votre connexion et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds ni rendement réel). Les positions apparaissent lorsque vous connectez un portefeuille sur le testnet Stellar et sont sans valeur. La connexion communautaire optionnelle et les formulaires de support et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
     "summaryAria": "Résumé du portefeuille",
     "totalContributed": "Total contribué",
     "totalSub": "En séquestre on-chain, additionné sur les campagnes",
@@ -774,7 +785,10 @@
         "label": "Action",
         "note": "Une augmentation de capital est l'opération sociétaire qui crée de nouvelles actions ; ce n'est pas un instrument séparé.",
         "summary": "Capitaux propres directs de la société émettrice : droit aux dividendes et participation à la valeur de l'entreprise, avec des droits fixés par les statuts. Les nouvelles actions parviennent aux investisseurs via une augmentation de capital.",
-        "opportunities": ["Participation pleine à la croissance de l'entreprise", "Droits de vote ou d'information selon la classe d'actions"],
+        "opportunities": [
+          "Participation pleine à la croissance de l'entreprise",
+          "Droits de vote ou d'information selon la classe d'actions"
+        ],
         "risks": [
           "Aucun droit de remboursement fixe ; les dividendes ne sont pas garantis",
           "Perte totale possible",
@@ -786,7 +800,10 @@
         "label": "Participation indirecte",
         "note": "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie.",
         "summary": "Les investisseurs participent indirectement à un investissement dans une PME - par exemple via un véhicule ou un fiduciaire - avec un traitement simplifié.",
-        "opportunities": ["Accès à des opérations difficiles à détenir directement", "Administration simplifiée via la structure intermédiaire"],
+        "opportunities": [
+          "Accès à des opérations difficiles à détenir directement",
+          "Administration simplifiée via la structure intermédiaire"
+        ],
         "risks": [
           "Une couche supplémentaire entre l'investisseur et l'émetteur",
           "Le rendement dépend de la performance de l'émetteur",
@@ -797,7 +814,10 @@
       {
         "label": "Part de société en commandite",
         "summary": "Une part de commanditaire dans une société de personnes : participation aux bénéfices et aux pertes selon le contrat de société, responsabilité limitée à l'apport.",
-        "opportunities": ["Transmission directe des résultats de la société", "Responsabilité plafonnée à l'apport"],
+        "opportunities": [
+          "Transmission directe des résultats de la société",
+          "Responsabilité plafonnée à l'apport"
+        ],
         "risks": [
           "La participation aux pertes peut réduire ou annuler la part",
           "La sortie est souvent restreinte par le contrat de société",
@@ -1279,8 +1299,7 @@
             "label": "Conditions d'émission (entrée d'exemple)",
             "note": "Aucun fichier hébergé dans ce prototype"
           }
-        ],
-        "news": []
+        ]
       },
       {
         "issuer": "Porto Logistics Hub SA (émetteur d'exemple)",
@@ -1865,7 +1884,7 @@
       "failure": "Rien n’a été supprimé. Vérifiez le mot de passe et le code actuel de l’authentificateur ou réessayez plus tard. Les comptes non pris en charge ou avec des registres protégés ne peuvent pas être supprimés ici."
     },
     "ticketsTitle": "Support et feedback",
-    "ticketsNote": "Les tickets ne sont visibles que par votre compte de portefeuille et l'opérateur du site. Ceci est un prototype : n'incluez ni données personnelles, ni mots de passe, ni vraies informations de paiement.",
+    "ticketsNote": "Les tickets ne sont visibles que par votre compte et l'opérateur du site. Ceci est un prototype : n'incluez ni données personnelles, ni mots de passe, ni vraies informations de paiement.",
     "ticketKindLabel": "Type",
     "ticketKinds": {
       "support": "Demande de support",
