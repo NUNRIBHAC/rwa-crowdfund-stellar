@@ -9,6 +9,15 @@ services:
     image: blockallisto-app:local
     container_name: blockallisto-staging
     env_file: ./deploy/env/staging.env
+    # Durable contributor-recovery queue: PENDING_CONTRIBUTORS_PATH in
+    # deploy/env/staging.env points here (/app is root-owned, the app runs as
+    # node/1000). Named volumes are created root-owned, so after the FIRST
+    # `compose up` of this change, run once per service:
+    #   docker run --rm -v blockallisto-queue-staging:/q alpine chown 1000:1000 /q
+    # The volume survives container replacement (and any Neon rollback), which
+    # is what makes the queue durable.
+    volumes:
+      - blockallisto-queue-staging:/queue
     expose:
       - '4000'
     restart: unless-stopped
@@ -22,6 +31,8 @@ services:
     image: blockallisto-app:local
     container_name: blockallisto-demo
     env_file: ./deploy/env/demo.env
+    volumes:
+      - blockallisto-queue-demo:/queue
     expose:
       - '4000'
     restart: unless-stopped
@@ -29,6 +40,10 @@ services:
     cpus: 0.75
     networks:
       - weblate_default
+
+volumes:
+  blockallisto-queue-staging:
+  blockallisto-queue-demo:
 
 networks:
   weblate_default:
