@@ -83,7 +83,7 @@ const mode = process.argv[2];
 const current = collect();
 
 if (mode === '--write') {
-  writeFileSync(BASELINE, `${JSON.stringify(current, null, 1)}\n`);
+  writeFileSync(BASELINE, `${JSON.stringify(current, null, 2)}\n`);
   console.log(`baseline written: ${Object.keys(current).length} unit signatures`);
   process.exit(0);
 }
