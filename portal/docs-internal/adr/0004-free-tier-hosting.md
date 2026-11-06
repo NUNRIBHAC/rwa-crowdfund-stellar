@@ -33,6 +33,9 @@ free tiers, with any paid upgrade brought to him first.
 
 ## Verification anchors (observed state, 2 Nov 2026)
 
+Superseded by the November 2026 Oracle migration; see
+[environments.md](../environments.md) for current hosts. Historical:
+
 - Public demo: blockallisto-demo.onrender.com; staging:
   rwa-crowdfund-staging.onrender.com; public docs:
   blockallisto-docs.onrender.com; private docs on the Oracle VM.

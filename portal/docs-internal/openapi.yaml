@@ -12,9 +12,9 @@ info:
     (INFRA_PORT, default 4100) - never exposed publicly. Admin routes fail
     closed (503) when ADMIN_SECRET is not configured.
 servers:
-  - url: https://blockallisto-demo.onrender.com
+  - url: https://demo.92-5-187-71.sslip.io
     description: Demo (public testnet app)
-  - url: https://rwa-crowdfund-staging.onrender.com
+  - url: https://staging.92-5-187-71.sslip.io
     description: Staging (load and realistic tests)
   - url: http://127.0.0.1:4100
     description: Infrastructure test API (localhost only)
