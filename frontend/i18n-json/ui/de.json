@@ -279,7 +279,12 @@
   },
   "intent": {
     "title": "Gespeicherte Transaktion",
-    "steps": ["Vorbereitet", "Signiert", "Gesendet", "Bestätigt"],
+    "steps": [
+      "Vorbereitet",
+      "Signiert",
+      "Gesendet",
+      "Bestätigt"
+    ],
     "action": "Aktion",
     "campaign": "Kampagne",
     "contract": "Vertrag",
@@ -339,7 +344,13 @@
     "interestIsinDocsNote": "Nicht verfügbar - dieser Prototyp erfasst nur Beiträge und begibt keine Wertpapiere",
     "marketingDivider": "Vom Emittenten bereitgestellter Inhalt unten - nicht von der Plattform geprüft",
     "marketingDividerAria": "Marketinginhalt unten",
-    "tabs": ["Übersicht", "Details", "Dokumente", "Neuigkeiten", "Podcast"],
+    "tabs": [
+      "Übersicht",
+      "Details",
+      "Dokumente",
+      "Neuigkeiten",
+      "Podcast"
+    ],
     "tabsAria": "Kampagnenbereiche",
     "overviewMissing": "Der Marketinginhalt des Emittenten ist in diesem Prototyp nicht verfügbar. Auf einer Produktionsplattform würde dieser Bereich die Beschreibung, das Team und das Geschäftsmodell des Emittenten selbst zeigen, durch die Trennlinie oben klar von den Plattform-Fakten getrennt.",
     "detailsPre": "Geschäftsmodell, Markt, Finanzen und Meilensteine würden hier als vom Emittenten bereitgestellte Abschnitte erscheinen.",
@@ -563,7 +574,7 @@
   },
   "account": {
     "title": "Mein Konto",
-    "note": "Dein Kontobereich: die Testnet-Positionen dieser Wallet und die darunter gespeicherten Community-Aktivitäten (nur Testnet-Assets - keine echten Gelder oder Erträge). Positionen stammen aus deiner verbundenen Freighter-Wallet oder deinem angemeldeten Wallet-Konto auf dem Stellar-Testnet und sind wertlos. Die optionale Community-Anmeldung und die Support- und Emittentenformulare auf dieser Seite verarbeiten die eingegebenen Daten wie in der Datenschutzerklärung beschrieben.",
+    "note": "Dein Kontobereich: die Testnet-Positionen, die mit deiner Anmeldung verknüpft sind, und die darunter gespeicherten Community-Aktivitäten (nur Testnet-Assets - keine echten Gelder oder Erträge). Positionen erscheinen, wenn du eine Wallet im Stellar-Testnet verbindest, und sind wertlos. Die optionale Community-Anmeldung und die Support- und Emittentenformulare auf dieser Seite verarbeiten die eingegebenen Daten wie in der Datenschutzerklärung beschrieben.",
     "summaryAria": "Portfolioübersicht",
     "totalContributed": "Insgesamt beigetragen",
     "totalSub": "On-Chain im Escrow, summiert über Kampagnen",
@@ -744,7 +755,10 @@
       {
         "label": "Beteiligungsrecht / -zertifikat",
         "summary": "Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs.",
-        "opportunities": ["Gewinnbeteiligung ohne vollständigen Eigenkapitalerwerb", "Kombiniert oft einen Basis-Rückzahlungsanspruch mit Gewinnbeteiligung"],
+        "opportunities": [
+          "Gewinnbeteiligung ohne vollständigen Eigenkapitalerwerb",
+          "Kombiniert oft einen Basis-Rückzahlungsanspruch mit Gewinnbeteiligung"
+        ],
         "risks": [
           "Der Gewinnanteil hängt vollständig von der Leistung des Emittenten ab",
           "Kann hinter gewöhnlichen Gläubigern stehen",
@@ -756,7 +770,10 @@
         "label": "Substanzgenussrecht",
         "subtypeOf": "Untertyp von Beteiligungsrecht / -zertifikat",
         "summary": "Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung.",
-        "opportunities": ["Beteiligung am Substanzwert des Emittenten", "Kann für kleinere Emittenten strukturiert werden, wenn die Satzung es erlaubt"],
+        "opportunities": [
+          "Beteiligung am Substanzwert des Emittenten",
+          "Kann für kleinere Emittenten strukturiert werden, wenn die Satzung es erlaubt"
+        ],
         "risks": [
           "Rechtsform und Anlegerschutz unterscheiden sich je nach Jurisdiktion stark",
           "Kann einen Treuhänder oder ein Vehikel zwischen Anleger und Emittent einschieben",
@@ -768,7 +785,10 @@
         "label": "Aktie",
         "note": "Eine Kapitalerhöhung ist der gesellschaftsrechtliche Vorgang, der neue Aktien schafft; sie ist kein eigenes Instrument.",
         "summary": "Direktes Eigenkapital an der emittierenden Gesellschaft: Dividendenanspruch und Beteiligung am Unternehmenswert, mit Rechten nach der Satzung. Neue Aktien erreichen Anleger über eine Kapitalerhöhung.",
-        "opportunities": ["Volle Teilhabe am Unternehmenswachstum", "Stimm- oder Informationsrechte je nach Aktiengattung"],
+        "opportunities": [
+          "Volle Teilhabe am Unternehmenswachstum",
+          "Stimm- oder Informationsrechte je nach Aktiengattung"
+        ],
         "risks": [
           "Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert",
           "Totalverlust möglich",
@@ -780,7 +800,10 @@
         "label": "Indirekte Beteiligung",
         "note": "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie.",
         "summary": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
-        "opportunities": ["Zugang zu Geschäften, die direkt schwer zu halten wären", "Vereinfachte Verwaltung über die Zwischenstruktur"],
+        "opportunities": [
+          "Zugang zu Geschäften, die direkt schwer zu halten wären",
+          "Vereinfachte Verwaltung über die Zwischenstruktur"
+        ],
         "risks": [
           "Eine zusätzliche Ebene zwischen Anleger und Emittent",
           "Die Rendite hängt von der Leistung des Emittenten ab",
@@ -791,7 +814,10 @@
       {
         "label": "Kommanditbeteiligung",
         "summary": "Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage.",
-        "opportunities": ["Direkte Durchleitung der Gesellschaftsergebnisse", "Haftung auf die Einlage begrenzt"],
+        "opportunities": [
+          "Direkte Durchleitung der Gesellschaftsergebnisse",
+          "Haftung auf die Einlage begrenzt"
+        ],
         "risks": [
           "Die Verlustbeteiligung kann die Beteiligung schmälern oder auslöschen",
           "Der Ausstieg ist oft durch den Gesellschaftsvertrag beschränkt",
@@ -816,7 +842,10 @@
       {
         "label": "Anleihe",
         "summary": "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
-        "opportunities": ["Definierter Kupon und Tilgungskalender", "Seniorserien haben im Insolvenzfall Vorrang vor nachrangigem Kapital und Eigenkapital"],
+        "opportunities": [
+          "Definierter Kupon und Tilgungskalender",
+          "Seniorserien haben im Insolvenzfall Vorrang vor nachrangigem Kapital und Eigenkapital"
+        ],
         "risks": [
           "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
           "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
@@ -1270,8 +1299,7 @@
             "label": "Emissionsbedingungen (Beispieleintrag)",
             "note": "Keine Datei in diesem Prototyp gehostet"
           }
-        ],
-        "news": []
+        ]
       },
       {
         "issuer": "Porto Logistics Hub SA (Beispiel-Emittent)",
@@ -1322,7 +1350,9 @@
             "value": "Keiner. Dieser Prototyp ist kein Crowdfunding-Dienstleister"
           }
         ],
-        "overview": ["Beispieldaten - kein echtes Angebot. Abgeschlossene Kampagnen bleiben mit ihrem endgültigen Finanzierungsstatus sichtbar, wie diese."],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot. Abgeschlossene Kampagnen bleiben mit ihrem endgültigen Finanzierungsstatus sichtbar, wie diese."
+        ],
         "documents": [
           {
             "label": "Wandelanleihebedingungen (Beispieleintrag)",
@@ -1854,7 +1884,7 @@
       "failure": "Nichts wurde gelöscht. Passwort und aktuellen Authentifizierungscode prüfen oder später erneut versuchen. Nicht unterstützte Konten oder Konten mit geschützten Datensätzen können hier nicht gelöscht werden."
     },
     "ticketsTitle": "Support und Feedback",
-    "ticketsNote": "Tickets sind nur für Ihr Wallet-Konto und den Seitenbetreiber sichtbar. Dies ist ein Prototyp: Geben Sie keine persönlichen Daten, Passwörter oder echten Zahlungsdaten ein.",
+    "ticketsNote": "Tickets sind nur für Ihr Konto und den Seitenbetreiber sichtbar. Dies ist ein Prototyp: Geben Sie keine persönlichen Daten, Passwörter oder echten Zahlungsdaten ein.",
     "ticketKindLabel": "Typ",
     "ticketKinds": {
       "support": "Support-Anfrage",
