@@ -125,7 +125,6 @@ export type CommunityRouterDeps = {
   farcasterVerifier?: FarcasterVerifier;
 };
 
-
 function sendError(res: express.Response, err: unknown): void {
   if (err instanceof AuthError || err instanceof CommunityError || err instanceof MailerError) {
     res.status(err.status).json(err.code ? { error: err.message, code: err.code } : { error: err.message });

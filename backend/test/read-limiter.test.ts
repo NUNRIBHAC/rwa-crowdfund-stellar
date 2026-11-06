@@ -163,7 +163,7 @@ test('cardinality bound: while the key table is full, NEW keys are 429 but exist
   }
 });
 
-test('cardinality bound is not a bypass: flooding fresh keys never resets an existing key\'s budget', async () => {
+test("cardinality bound is not a bypass: flooding fresh keys never resets an existing key's budget", async () => {
   const app = await freshApp({ READ_LIMIT_PER_MIN: '2', READ_LIMIT_WINDOW_MS: '60000', READ_LIMIT_MAX_KEYS: '3', TRUST_PROXY_DEPTH: '1' });
   try {
     const a = { 'x-forwarded-for': '198.51.100.7' };
