@@ -146,3 +146,24 @@ stellar-anchor-skill
 
 <https://github.com/stellar-scaffold/cli>: `stellar-scaffold`, kept in
 folder `scaffold-stellar`
+
+### prisma/skills (MIT License)
+
+<https://github.com/prisma/skills> (upstream main
+`8ea289b730c2e89f7ff1f518af128b113d842a92`, LICENSE preserved in each folder):
+`prisma-cli`, `prisma-client-api`, `prisma-upgrade-v7`,
+`prisma-mongodb-upgrade`, `prisma-database-setup`, `prisma-postgres`,
+`prisma-postgres-setup`, `prisma-compute`,
+`prisma-driver-adapter-implementation`
+
+### prisma/composer (Apache License 2.0)
+
+<https://github.com/prisma/composer> (upstream main
+`48b12382509e08f56a4722004d2cef43aa9d5667`, LICENSE preserved in the folder):
+`prisma-composer-core-concepts`
+
+### prisma/orm (Apache License 2.0)
+
+<https://github.com/prisma/orm> (upstream main
+`27848960349a0a124c1bdc0e56a649df19dbfcbc`, LICENSE preserved in the folder):
+`prisma-8`

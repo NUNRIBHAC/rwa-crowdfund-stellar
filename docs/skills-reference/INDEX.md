@@ -415,3 +415,37 @@ Not include:
 | `pptx` (anthropics/skills) | Source-available, NOT open source per the repository README | Reference only - do not copy in. |
 | `xlsx` (anthropics/skills) | Source-available, NOT open source per the repository README | Reference only - do not copy in. |
 | Marketing/GTM mega-collections (from curated lists) | Unverified | Names surveyed; quality and licenses unverified. |
+
+## Prisma Postgres, ORM and Composer (11 owner-requested, added 2026-11-06)
+
+Requested by the project owner on 2026-11-06. Nine skills from the official
+[prisma/skills](https://github.com/prisma/skills) repository (upstream main
+`8ea289b730c2e89f7ff1f518af128b113d842a92`, MIT),
+`prisma-composer-core-concepts` from
+[prisma/composer](https://github.com/prisma/composer) (upstream main
+`48b12382509e08f56a4722004d2cef43aa9d5667`, Apache-2.0), and `prisma-8` from
+[prisma/orm](https://github.com/prisma/orm) (upstream main
+`27848960349a0a124c1bdc0e56a649df19dbfcbc`, Apache-2.0). SKILL.md and
+reference content verified byte-identical to the pinned upstream commits;
+each upstream LICENSE file copied into the skill folder. These are reference
+copies for the database migration work (raw `pg` driver against Prisma
+Postgres); the project does not use Prisma ORM. Per the owner's standing
+rule, skills in this collection are there to be consulted and used in project
+work where relevant, not archived-only; that never authorizes executing their
+commands, installing packages, or changing architecture by itself.
+
+Include now (11):
+
+| Skill | Rights | Why |
+|---|---|---|
+| `skills/prisma-cli` | MIT (Prisma) | Prisma ORM 7 CLI reference. |
+| `skills/prisma-client-api` | MIT (Prisma) | Prisma Client API reference (queries, filters, transactions). |
+| `skills/prisma-upgrade-v7` | MIT (Prisma) | Prisma ORM v6 to v7 migration guide. |
+| `skills/prisma-mongodb-upgrade` | MIT (Prisma) | Prisma ORM MongoDB v6 decision and migration guide. |
+| `skills/prisma-database-setup` | MIT (Prisma) | Provider setup guides (deprecated compatibility name for `prisma-orm-setup`; requested by name). |
+| `skills/prisma-postgres` | MIT (Prisma) | Prisma Postgres workflows (deprecated compatibility name for `prisma-postgres-setup`; requested by name). |
+| `skills/prisma-postgres-setup` | MIT (Prisma) | Provision or reuse a Prisma Postgres database and connect an application - the live migration reference. |
+| `skills/prisma-compute` | MIT (Prisma) | Deploy and operate apps on Prisma Compute (Prisma 8 CLI). |
+| `skills/prisma-driver-adapter-implementation` | MIT (Prisma) | Prisma ORM 7 SQL driver adapter implementation reference. |
+| `skills/prisma-composer-core-concepts` | Apache-2.0 (Prisma) | Prisma Composer mental model and authoring API. Pinned reference copy - upstream keeps the canonical version inside the `@prisma/composer` package, so re-sync if Composer is adopted. |
+| `skills/prisma-8` | Apache-2.0 (Prisma) | Prisma ORM 8 full reference: contracts, queries, migrations, client setup, upgrade paths. Pinned reference copy - upstream ships the canonical version inside the `@prisma/orm-*` packages, so re-sync if the ORM is adopted. |

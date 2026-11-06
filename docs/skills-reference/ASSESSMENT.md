@@ -716,3 +716,32 @@ duplicate pairs and records the map in INDEX.md.
 - supabase and microsoft/vscode skills - internal tooling for those products.
 - Marketing/GTM mega-collections from curated lists - names surveyed; quality
   and licenses unverified.
+
+## Addendum: Prisma skills (assessed 2026-11-06)
+
+Nine skills from the official [prisma/skills](https://github.com/prisma/skills)
+repository, requested by name by the project owner on 2026-11-06. Each
+skill's `SKILL.md` and reference files were verified byte-identical to
+upstream main `8ea289b730c2e89f7ff1f518af128b113d842a92` (diff -r against the
+GitHub source archive of that commit). License verified MIT both in the
+repository LICENSE file and via the GitHub API; copyright (c) 2025 Prisma.
+`prisma-database-setup` and `prisma-postgres` are upstream-deprecated
+compatibility names; they are included because the owner requested them by
+name. Fit: `prisma-postgres-setup` is directly useful for the 2026-11 Prisma
+Postgres migration; the ORM-specific guides are reference for possible future
+ORM adoption only - the project currently uses the raw `pg` driver.
+
+`prisma-composer-core-concepts` and `prisma-8` (added the same day, also
+owner-requested): `skills/prisma-composer-core-concepts` from prisma/composer
+upstream main `48b12382509e08f56a4722004d2cef43aa9d5667` and `skills/prisma-8`
+from prisma/orm upstream main `27848960349a0a124c1bdc0e56a649df19dbfcbc`,
+each verified byte-identical against the GitHub source archive of the pinned
+commit. Licenses verified Apache-2.0 in each repository LICENSE and via the
+GitHub API (both differ from prisma/skills, which is MIT). `prisma-8`
+contains upstream codemod scripts (.ts/.mjs) under `upgrading/` as reference
+content; nothing here is wired into the build, CI, or application. Freshness
+caveat for both: upstream ships the canonical copy of each skill inside its
+npm packages (`@prisma/composer`, `@prisma/orm-postgres` and siblings), so
+these pinned copies can drift from future releases and should be re-synced if
+the project adopts Composer or the ORM. No Composer or ORM runtime, package,
+postinstall hook, or architecture change is included - reference only.
