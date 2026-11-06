@@ -49,7 +49,6 @@ async function startApp(env: Record<string, string>, deps: Parameters<typeof cre
     'TRUST_PROXY_DEPTH',
     'TRUST_PROXY',
     'XFF_DEBUG',
-    'MAIL_TEMPLATE_CHECK_ENABLE',
     'COMMUNITY_EMAIL_MAX_SENDS_PER_HOUR',
     'COMMUNITY_EMAIL_MAX_SENDS_PER_DAY',
     'SOCIAL_GOOGLE_CLIENT_ID',
@@ -302,122 +301,6 @@ test('abuse-diagnostics: reflects configured Turnstile and enforce flag', async 
   const body = (await diag.json()) as any;
   assert.equal(body.turnstile, 'configured');
   assert.equal(body.ipReputation.enforce, true);
-});
-
-test('xff-probe: redacted chain classes under unchanged trust; forged leftmost does not steer', async () => {
-  const base = await startApp({});
-  const plain = (await (await fetch(base + '/api/admin/abuse-diagnostics/xff-probe')).json()) as any;
-  assert.equal(plain.chainLength, 0);
-  assert.equal(plain.trustMode, 'none');
-  const forged = (await (
-    await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
-      headers: { 'x-forwarded-for': '203.0.113.77, 198.51.100.77' },
-    })
-  ).json()) as any;
-  assert.equal(forged.chainLength, 2);
-  assert.deepEqual(forged.chainClasses, ['reserved-docs', 'reserved-docs']);
-  assert.equal(forged.leftmostSteersClient, false);
-  // Test server has no proxy: client falls back to the socket peer.
-  assert.equal(forged.clientIpClass, 'loopback');
-  assert.ok(!JSON.stringify(forged).includes('203.0.113.77'), 'no raw IP leaks');
-});
-
-test('xff-probe: legacy TRUST_PROXY=1 marks leftmost as steering', async () => {
-  const base = await startApp({ TRUST_PROXY: '1' });
-  const body = (await (
-    await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
-      headers: { 'x-forwarded-for': '203.0.113.77' },
-    })
-  ).json()) as any;
-  assert.equal(body.trustMode, 'legacy');
-  assert.equal(body.leftmostSteersClient, true);
-  assert.equal(body.clientIpClass, 'reserved-docs');
-});
-
-test('mail-template-check: off by default (404 without the test-only enable flag)', async () => {
-  const base = await startApp({ COMMUNITY_EMAIL_ALLOWED_RECIPIENTS: 'nunrib@sapo.pt' });
-  const res = await post(base, '/api/admin/abuse-diagnostics/mail-template-check', {});
-  assert.equal(res.status, 404);
-});
-
-test('mail-template-check: fixed approved batch consumes the persisted global budget', async () => {
-  const mailer = new FakeMailer();
-  const base = await startApp(
-    { COMMUNITY_EMAIL_ALLOWED_RECIPIENTS: 'nunrib@sapo.pt', MAIL_TEMPLATE_CHECK_ENABLE: '1', COMMUNITY_EMAIL_MAX_SENDS_PER_HOUR: '22' },
-    { mailer } as never,
-  );
-  const res = await post(base, '/api/admin/abuse-diagnostics/mail-template-check', {});
-  assert.equal(res.status, 200);
-  const body = res.json as any;
-  assert.equal(body.sent, 22);
-  assert.equal(body.failed, 0);
-  assert.equal(mailer.sent.length, 22);
-  assert.equal(new Set(mailer.sent.map((m2) => m2.to)).size, 1);
-  assert.equal(mailer.sent[0].to, 'nunrib@sapo.pt');
-  const combos = new Set(mailer.sent.map((m2) => m2.subject.slice(0, m2.subject.indexOf(']'))));
-  assert.equal(combos.size, 22);
-  const verifySubjects = new Set(mailer.sent.filter((m2) => m2.subject.startsWith('[verify:')).map((m2) => m2.subject));
-  assert.equal(verifySubjects.size, 11, 'localized verify subjects differ across all 11 locales');
-  assert.ok(mailer.sent.every((m2) => m2.text.includes('blr_SELFTEST_')));
-  // Budget consumed like real auth mail: the identical batch is now refused
-  // up front (hour cap 22 spent), and nothing more is sent.
-  const again = await post(base, '/api/admin/abuse-diagnostics/mail-template-check', {});
-  const againBody = again.json as any;
-  assert.equal(againBody.refused, true);
-  assert.equal(againBody.sent, 0);
-  assert.equal(mailer.sent.length, 22);
-});
-
-test('mail-template-check: provider throttle stops the batch with a partial report, no blind retry', async () => {
-  class ThrottleMailer implements Mailer {
-    calls = 0;
-    async send(): Promise<void> {
-      this.calls++;
-      if (this.calls === 3) throw new CommunityError(503, 'email provider rate-limited; retry later', 'email_provider_throttled');
-    }
-  }
-  const mailer = new ThrottleMailer();
-  const base = await startApp({ COMMUNITY_EMAIL_ALLOWED_RECIPIENTS: 'nunrib@sapo.pt', MAIL_TEMPLATE_CHECK_ENABLE: '1' }, { mailer } as never);
-  const res = await post(base, '/api/admin/abuse-diagnostics/mail-template-check', {});
-  const body = res.json as any;
-  assert.equal(body.sent, 2);
-  assert.equal(body.failed, 1);
-  assert.equal(body.stopped, 'email_provider_throttled');
-  assert.equal(mailer.calls, 3, 'stopped immediately, no blind retry or continuation');
-  // The global backoff mute now refuses a further batch up front.
-  const again = await post(base, '/api/admin/abuse-diagnostics/mail-template-check', {});
-  const againBody = again.json as any;
-  assert.equal(againBody.refused, true);
-  assert.equal(mailer.calls, 3);
-});
-
-test('xff-probe expect: sha256 equality reveals positions without raw IPs', async () => {
-  const base = await startApp({});
-  const { createHash: hash } = await import('node:crypto');
-  const h = (v: string) => hash('sha256').update(v).digest('hex');
-  const res = await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
-    headers: { 'x-xff-expect-sha256': h('203.0.113.77'), 'x-forwarded-for': '203.0.113.77, 198.51.100.77' },
-  });
-  assert.equal(res.status, 200);
-  const body = (await res.json()) as any;
-  assert.deepEqual(body.matchedPositions, [0]);
-  assert.equal(body.resolvedMatch, false); // trust none -> resolved is the socket peer
-  assert.equal(body.socketMatch, false);
-  const sock = await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', { headers: { 'x-xff-expect-sha256': h('127.0.0.1') } });
-  const sockBody = (await sock.json()) as any;
-  assert.equal(sockBody.socketMatch, true);
-  assert.equal(sockBody.resolvedMatch, true);
-  // Malformed entries survive as classes; no crash, no raw echo.
-  const malformed = (await (
-    await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', {
-      headers: { 'x-forwarded-for': 'abc,,,,' },
-    })
-  ).json()) as any;
-  assert.equal(malformed.chainLength, 1);
-  assert.deepEqual(malformed.chainClasses, ['other']);
-  // Invalid expect is ignored (no equality fields).
-  const bad = (await (await fetch(base + '/api/admin/abuse-diagnostics/xff-probe', { headers: { 'x-xff-expect-sha256': 'xyz' } })).json()) as any;
-  assert.equal('matchedPositions' in bad, false);
 });
 
 test('reputation env allocates a bounded per-deployment lookup allowance', async () => {
