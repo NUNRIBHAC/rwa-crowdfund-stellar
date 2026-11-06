@@ -584,7 +584,7 @@ export const en = {
   },
   account: {
     title: 'My account',
-    note: 'Your account area: the testnet positions of this wallet and the community activity saved under it (testnet assets only - no real funds or returns). Positions come from your connected Freighter wallet or your signed-in wallet account on the Stellar testnet and are worthless. The optional community sign-in and the support and issuer forms on this page process the data you enter as described in the privacy policy.',
+    note: 'Your account area: the testnet positions linked to your sign-in and the community activity saved under it (testnet assets only - no real funds or returns). Positions appear when you connect a wallet on the Stellar testnet and are worthless. The optional community sign-in and the support and issuer forms on this page process the data you enter as described in the privacy policy.',
     summaryAria: 'Portfolio summary',
     totalContributed: 'Total contributed',
     totalSub: 'Escrowed on-chain, summed over campaigns',
@@ -2003,7 +2003,7 @@ export const en = {
     },
     ticketsTitle: 'Support and feedback',
     ticketsNote:
-      'Tickets are visible only to your wallet account and the site operator. This is a prototype: do not include personal data, passwords or real payment details.',
+      'Tickets are visible only to your account and the site operator. This is a prototype: do not include personal data, passwords or real payment details.',
     ticketKindLabel: 'Type',
     ticketKinds: {
       support: 'Support request',
