@@ -95,7 +95,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
       className={`site-header${current === 'home' ? ' header-home' : ''}${menuOpen ? ' mobile-menu-open' : ''}`}
       ref={headerRef}
       onKeyDown={(e) => {
-        if (e.key === 'Tab' && menuOpen && window.matchMedia('(max-width: 720px)').matches) {
+        if (e.key === 'Tab' && menuOpen && window.matchMedia('(max-width: 960px)').matches) {
           const controls = Array.from(headerRef.current?.querySelectorAll<HTMLElement>('a[href], button:not(:disabled), select') || []).filter(
             (el) => el.getClientRects().length > 0,
           );
