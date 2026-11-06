@@ -131,3 +131,24 @@ failed leg via ONS and Uptime Kuma. Failure-isolation tests (stubbed legs,
 encrypt and upload failures) run in a fully fixture-bound harness. The first
 real nightly run including the Prisma legs, and its restore verification, are
 still pending; the harness is not a restore proof.
+
+## Docker container log caps
+
+Policy (approved by Nuno 2026-11-06): every container's json-file logs are
+capped at 3 files x 10 MB. Current container logs were ~16 MB total when the
+cap was approved; the cap prevents unbounded growth (docker's default is
+unbounded).
+
+- Compose-managed services (weblate stack, https-portal, dozzle + socket
+  proxy, blockallisto staging + demo): the `logging:` block lives in the
+  owning compose file and takes effect on each service's next natural
+  recreate (deploy or stack update) - no fleet-wide restart was done.
+- Run-based containers (kuma, bitwarden, public-docs, private-docs): any
+  future `docker run` / recreate MUST include
+  `--log-driver json-file --log-opt max-size=10m --log-opt max-file=3`.
+  Recreate by reusing the container's inspected config (image, volumes,
+  ports, env) rather than retyping it.
+
+https-portal's nginx file logs (/var/log/nginx inside its volume) rotate
+independently via the image's own logrotate (daily, 30 rotations,
+compressed) - separate mechanism, already active.
