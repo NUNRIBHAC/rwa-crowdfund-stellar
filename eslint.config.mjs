@@ -22,6 +22,12 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-object-type': 'off',
       'no-empty': ['error', { allowEmptyCatch: true }],
       'no-useless-escape': 'off',
+      // @eslint/js 10 promotes these three rules into eslint:recommended; keep the
+      // version bump lint-neutral. Adopting them (6 existing hits in backend) is
+      // tracked as a separate follow-up.
+      'no-unassigned-vars': 'off',
+      'no-useless-assignment': 'off',
+      'preserve-caught-error': 'off',
     },
   },
   {
