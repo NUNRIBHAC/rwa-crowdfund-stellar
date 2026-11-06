@@ -1,14 +1,16 @@
 # Deploying the two portals
 
-Both portals are live as of 2026-11-02. Details below describe the
-verified running services.
+The private portal is live. The public portal's Render service is
+SUSPENDED (observed 2026-11-06: "This service has been suspended by its
+owner"); restoration on free hosting is tracked as outstanding work.
 
 ## Public portal
 
-- Live at [blockallisto-docs.onrender.com](https://blockallisto-docs.onrender.com) (custom
-  domain later,
-  after the domain purchase). Verified 2026-11-02: all routes 200, search
-  functional, leak grep clean (see below).
+- Previous address
+  [blockallisto-docs.onrender.com](https://blockallisto-docs.onrender.com)
+  suspended since at latest 2026-11-06; no current public URL.
+- Verified 2026-11-02 (pre-suspension): all routes 200, search functional,
+  leak grep clean (see below).
 - Render static site on the existing account, auto-deploy from `main`.
 - Build command: `cd portal && npm ci && npm run build:public`
 - Publish directory: `portal/build-public`
