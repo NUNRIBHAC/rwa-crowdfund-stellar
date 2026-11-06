@@ -15,6 +15,8 @@ export type ListFetcher<T> = (actor?: string) => Promise<T>;
 
 export const CAMPAIGN_LIST_CACHE_TTL_MS = 30_000;
 
+export const CAMPAIGN_LIST_CACHE_MAX_ENTRIES = 128;
+
 export class CampaignListCache<T> {
   private readonly entries = new Map<string, { at: number; data: T }>();
   private readonly inflight = new Map<string, Promise<T>>();
@@ -22,7 +24,30 @@ export class CampaignListCache<T> {
   constructor(
     private readonly ttlMs: number = CAMPAIGN_LIST_CACHE_TTL_MS,
     private readonly now: () => number = Date.now,
+    private readonly maxEntries: number = CAMPAIGN_LIST_CACHE_MAX_ENTRIES,
   ) {}
+
+  // Public query input keys this map, so it must stay bounded on a small
+  // host: expired entries are swept on every write, and a full map evicts
+  // its oldest entry before admitting a new key.
+  private store(key: string, data: T): void {
+    const now = this.now();
+    for (const [k, v] of this.entries) {
+      if (now - v.at >= this.ttlMs) this.entries.delete(k);
+    }
+    if (!this.entries.has(key) && this.entries.size >= this.maxEntries) {
+      let oldestKey: string | undefined;
+      let oldestAt = Infinity;
+      for (const [k, v] of this.entries) {
+        if (v.at < oldestAt) {
+          oldestAt = v.at;
+          oldestKey = k;
+        }
+      }
+      if (oldestKey !== undefined) this.entries.delete(oldestKey);
+    }
+    this.entries.set(key, { at: now, data });
+  }
 
   async read(fetcher: ListFetcher<T>, actor?: string): Promise<T> {
     const key = actor ?? '';
@@ -32,7 +57,7 @@ export class CampaignListCache<T> {
     if (pending) return pending;
     const p: Promise<T> = fetcher(actor)
       .then((data) => {
-        this.entries.set(key, { at: this.now(), data });
+        this.store(key, data);
         return data;
       })
       .finally(() => {

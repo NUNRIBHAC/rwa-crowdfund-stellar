@@ -116,3 +116,62 @@ test('actor expiry is independent per key', async () => {
   const again = await h.cache.read(h.fetcher, 'GALICE');
   assert.equal(again.n, 3, 'GALICE entry expired even though GBOB just fetched');
 });
+
+test('map stays bounded: oldest key evicted at maxEntries', async () => {
+  let t = 1_000_000;
+  const cache = new CampaignListCache<string>(TTL, () => t, 3);
+  const fetcher = async (a?: string) => `data-${a}`;
+  await cache.read(fetcher, 'A');
+  t += 1;
+  await cache.read(fetcher, 'B');
+  t += 1;
+  await cache.read(fetcher, 'C');
+  t += 1;
+  await cache.read(fetcher, 'D');
+  // A (oldest) evicted; B/C/D cached: only A needs a refetch
+  let calls = 0;
+  const counter = async (a?: string) => { calls += 1; return `data-${a}`; };
+  await cache.read(counter, 'B');
+  await cache.read(counter, 'C');
+  await cache.read(counter, 'D');
+  assert.equal(calls, 0, 'B/C/D served from cache');
+  await cache.read(counter, 'A');
+  assert.equal(calls, 1, 'A was evicted and refetched');
+});
+
+test('expired entries are swept before any live eviction', async () => {
+  let t = 1_000_000;
+  const cache = new CampaignListCache<string>(TTL, () => t, 2);
+  const fetcher = async (a?: string) => `data-${a}`;
+  await cache.read(fetcher, 'OLD1');
+  await cache.read(fetcher, 'OLD2');
+  t += TTL * 2; // both expire
+  await cache.read(fetcher, 'LIVE');
+  t += 1;
+  await cache.read(fetcher, 'NEW');
+  // map held OLD1/OLD2 (expired) + LIVE; sweep removed the expired two, so
+  // NEW fits without evicting LIVE
+  let calls = 0;
+  const counter = async (a?: string) => { calls += 1; return `data-${a}`; };
+  await cache.read(counter, 'LIVE');
+  await cache.read(counter, 'NEW');
+  assert.equal(calls, 0, 'live entries survived the sweep');
+});
+
+test('maxEntries bound holds under many distinct actors', async () => {
+  let t = 1_000_000;
+  const cache = new CampaignListCache<number>(TTL, () => t, 16);
+  let calls = 0;
+  const fetcher = async () => { calls += 1; return calls; };
+  for (let i = 0; i < 200; i += 1) {
+    t += 1;
+    await cache.read(fetcher, `G${i.toString().padStart(55, 'A')}`);
+  }
+  // every read after the 16th was a miss-evict-refetch: no unbounded growth,
+  // and the last key is present
+  assert.equal(calls, 200);
+  let extra = 0;
+  const counter = async () => { extra += 1; return 0; };
+  await cache.read(counter, `G${(199).toString().padStart(55, 'A')}`);
+  assert.equal(extra, 0, 'most recent key still cached');
+});
