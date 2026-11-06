@@ -89,10 +89,24 @@ future external audit starts from documented invariants and known gaps.
 
 ### 4. Security tools
 
-- NOT RUN yet: Scout static analysis, Certora Sunbeam formal verification
+- ATTEMPTED 2026-11-06, BLOCKED: Scout static analysis. The crate itself
+  compiles clean (`cargo test --locked`, 12/12 passed, rust 1.99.1). The
+  scan could not be produced within free infrastructure: (a) the official
+  coinfabrik/scout Docker image ships x86-64 only and cannot run on this
+  arm64 (Ampere) host; (b) building cargo-scout-audit 0.3.17 from source
+  exhausted the free-tier VM disk while installing its required nightly
+  toolchain (os error 28); (c) scout 0.3.17 officially supports
+  soroban-sdk 28 while this crate pins 29.0.1, so analysis success was
+  uncertain even if built (CoinFabrik/scout-audit#341 class). The
+  contracts will NOT be downgraded to fit the tool. Interim controls
+  remain this manual self-review plus `overflow-checks = true` in the
+  release profile. NOT RUN yet: Certora Sunbeam formal verification
   (Sunbeam is noted by the guide as not part of initial Audit Bank
-  engagements). Next concrete step: run Scout against this crate and fix
-  or document every finding, then wire it into CI.
+  engagements). Next concrete step: re-attempt Scout when upstream ships
+  SDK-29 support (watch CoinFabrik/scout-audit releases; candidate
+  independent fork mihaieremia/scout-audit, SDK-29 support unverified) or
+  when an aarch64 image or larger runner is available within free
+  resources, then fix or document every finding and wire it into CI.
 
 ### 5. Application readiness (Audit Bank)
 
