@@ -1,4 +1,4 @@
-import illustration from '../../../public/about-accumulation.svg?raw';
+import illustration from '../../../media-external/about-accumulation.svg?raw';
 import { render, screen } from '@testing-library/react';
 import { expect, test } from 'vitest';
 import About from '../About';
