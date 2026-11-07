@@ -35,7 +35,7 @@ export default function Faq() {
           </p>
         </div>
         <div className="faq-animation">
-          <img className="faq-question" src="/faq-question.svg" alt="" />
+          <img className="faq-question" src="https://blockallisto-media.nunrib-df6.workers.dev/faq-question.svg" alt="" />
           <p className="community-note">{m.hero.illustration}</p>
         </div>
       </div>

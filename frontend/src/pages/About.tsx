@@ -11,7 +11,7 @@ export default function About() {
           <p>{m.about.p2}</p>
         </div>
         <div className="about-animation">
-          <img className="about-accumulation" src="/about-accumulation.svg" alt="" />
+          <img className="about-accumulation" src="https://blockallisto-media.nunrib-df6.workers.dev/about-accumulation.svg" alt="" />
           <p className="community-note">{m.hero.illustration}</p>
         </div>
       </div>

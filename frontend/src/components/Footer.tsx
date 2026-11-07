@@ -60,34 +60,34 @@ export default function Footer() {
               download: https://brand.linkedin.com/downloads -> in-logo.zip (content.linkedin.com). */}
             <div className="footer-social" aria-label="Blockallisto social media profiles">
               <a href="https://x.com/blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on X">
-                <img src="/social/x.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/x.svg" alt="" />
               </a>
               <a href="https://www.instagram.com/blockallisto/" target="_blank" rel="noopener" aria-label="Blockallisto on Instagram">
-                <img src="/social/instagram.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/instagram.svg" alt="" />
               </a>
               <a href="https://www.facebook.com/profile.php?id=61595902542764" target="_blank" rel="noopener" aria-label="Blockallisto on Facebook">
-                <img src="/social/facebook.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/facebook.svg" alt="" />
               </a>
               <a href="https://www.threads.com/@blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on Threads">
-                <img src="/social/threads.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/threads.svg" alt="" />
               </a>
               <a href="https://www.youtube.com/@blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on YouTube">
-                <img src="/social/youtube.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/youtube.svg" alt="" />
               </a>
               <a href="https://t.me/blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on Telegram">
-                <img src="/social/telegram.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/telegram.svg" alt="" />
               </a>
               <a href="https://discord.gg/BdXATtWNXJ" target="_blank" rel="noopener" aria-label="Blockallisto on Discord">
-                <img src="/social/discord.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/discord.svg" alt="" />
               </a>
               <a href="https://farcaster.xyz/blockallisto" target="_blank" rel="noopener" aria-label="Blockallisto on Farcaster">
-                <img src="/social/farcaster.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/farcaster.svg" alt="" />
               </a>
               <a href="https://www.linkedin.com/company/blockallisto/" target="_blank" rel="noopener" aria-label="Blockallisto on LinkedIn">
-                <img src="/social/linkedin.png" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/linkedin.png" alt="" />
               </a>
               <a href="mailto:blockallisto@gmail.com" aria-label="Email Blockallisto">
-                <img src="/social/email.svg" alt="" />
+                <img src="https://blockallisto-media.nunrib-df6.workers.dev/social/email.svg" alt="" />
               </a>
             </div>
           </div>
