@@ -72,8 +72,13 @@ export default {
     const cache = caches.default;
     const reqOrigin = request.headers.get("Origin") || "";
     const corsOrigin = ALLOWED_ORIGINS.has(reqOrigin) ? reqOrigin : "";
+    // Cache generation: bump CACHE_VERSION when ANY B2 object is replaced in
+    // place under an existing key (e.g. the 2026-11-07 about-accumulation.svg
+    // visible-base fix). The version segment orphans all previous edge
+    // entries (one bounded refetch per object); mapping/SAFE/CORS untouched.
+    const CACHE_VERSION = "v2";
     const cacheKey = new Request(
-      new URL(request.url).origin + "/" + p + (corsOrigin ? "?__origin=" + encodeURIComponent(corsOrigin) : ""),
+      new URL(request.url).origin + "/" + CACHE_VERSION + "/" + p + (corsOrigin ? "?__origin=" + encodeURIComponent(corsOrigin) : ""),
       { method: "GET" }
     );
     if (request.method === "GET") {
