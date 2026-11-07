@@ -52,7 +52,9 @@ export default {
       ? "social icons/" + p.slice("social/".length)
       : /^(favicon\.ico|favicon\.svg|favicon-(48|32|16)\.png|apple-touch-icon\.png)$/.test(p)
         ? "icons/" + p
-        : p;
+        : p === "og-image.png"
+          ? "social/og-image.png"
+          : p;
     // Edge cache (Cache API): serve repeat requests without a B2 fetch.
     // Safe invalidation comes from VERSIONED asset keys (writer uploads
     // content-hashed/versioned paths, e.g. icons/logo.<hash>.svg), so a
