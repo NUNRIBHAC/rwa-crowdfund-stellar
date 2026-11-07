@@ -326,6 +326,37 @@ export async function fetchReports(campaignId: string, token: string): Promise<R
   }
 }
 
+// --- Investor-issuer messaging (backend community-routes.ts on
+// feat/investor-issuer-messaging, b3a79ee) ---
+// One private thread per investor per campaign with the platform operator.
+// Entitlement is enforced server-side on read AND write (fail-closed 503
+// when the on-chain check is unavailable, 403 investor_only without a
+// position); the UI renders the server's localized error codes instead of
+// pre-gating. Operators read every thread of a campaign through the same
+// GET (one flat list - group by investorKey client-side) and reply through
+// the operator route naming the thread. No edit/delete endpoints exist.
+export type IssuerMessage = {
+  id: string;
+  campaignId: string;
+  // The investor account key the thread belongs to; operators use it to
+  // group the flat list into per-investor threads.
+  investorKey: string;
+  authorKey: string;
+  authorRole: 'investor' | 'operator';
+  body: string;
+  createdAt: number;
+};
+
+export const fetchIssuerMessages = (token: string, campaignId: string) =>
+  call<{ messages: IssuerMessage[] }>(`/api/campaigns/${encodeURIComponent(campaignId)}/messages`, { token });
+
+// The 201 response is the created message object directly (NOT wrapped).
+export const postIssuerMessage = (token: string, campaignId: string, body: string) =>
+  call<IssuerMessage>(`/api/campaigns/${encodeURIComponent(campaignId)}/messages`, { token, body: { body } });
+
+export const replyIssuerMessage = (token: string, campaignId: string, investorKey: string, body: string) =>
+  call<IssuerMessage>(`/api/operator/campaigns/${encodeURIComponent(campaignId)}/messages`, { token, body: { investorKey, body } });
+
 export const postOperatorReport = (token: string, campaignId: string, kind: PostFundingReport['kind'], title: string, body: string) =>
   call<{ report: PostFundingReport }>(`/api/operator/campaigns/${encodeURIComponent(campaignId)}/reports`, {
     body: { kind, title, body },

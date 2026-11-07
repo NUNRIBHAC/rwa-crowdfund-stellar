@@ -1,0 +1,16 @@
+# Font archive (blockallisto-media parity)
+
+Byte-exact backup of the public/fonts/ object set served by the media worker
+from Backblaze B2 (494 woff2 + 8 CSS + 12 license/checksum files = 514 keys;
+the 3 Inter woff2 + Inter-OFL.txt also still live in frontend/public/fonts/
+for the app build).
+
+Provenance: downloaded through the worker from B2 on 2026-11-07; every file
+sha1-verified against a fresh b2_list_file_names listing (543-key audit).
+SHA256SUMS.txt inside this directory is the B2 copy (sha256 of each woff2).
+Fonts are open-source (OFL); upstream re-derivation: Google Fonts (Inter,
+Montserrat, Plus Jakarta Sans, Poppins, Noto families).
+
+This directory carries `export-ignore` in .gitattributes so gate/deploy
+archives (git archive) stay slim; it ships in full clones only.
+Owner decision 2026-11-07 (wamid.HBgMMzUxOTEwMTMwMTIxFQIAEhgWM0VCMDMxNDAwQjI1ODM4OUFFNTFENgA=).

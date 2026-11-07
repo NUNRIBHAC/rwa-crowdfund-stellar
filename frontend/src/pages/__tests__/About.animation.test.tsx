@@ -1,4 +1,4 @@
-import illustration from '../../../public/about-accumulation.svg?raw';
+import illustration from '../../../media-external/about-accumulation.svg?raw';
 import { render, screen } from '@testing-library/react';
 import { expect, test } from 'vitest';
 import About from '../About';
@@ -10,7 +10,7 @@ test('About uses the supplied accumulating-block animation with a simulation cap
       <About />
     </I18nProvider>,
   );
-  expect(container.querySelector('.about-accumulation')?.getAttribute('src')).toBe('https://blockallisto-media.nunrib-df6.workers.dev/about-accumulation.svg');
+  expect(container.querySelector('.about-accumulation')?.getAttribute('src')).toBe('https://blockallisto-media.nunrib-df6.workers.dev/animations/about-accumulation.svg');
   expect(container.querySelector('.funding-block')).toBeNull();
   expect(screen.getByText(/Interactive illustration - no transaction/)).toBeTruthy();
 });

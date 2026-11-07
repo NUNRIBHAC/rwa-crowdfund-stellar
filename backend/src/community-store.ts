@@ -189,6 +189,24 @@ export type PostFundingReport = {
   createdAt: number;
 };
 
+// Investor-issuer messaging: private per-investor threads on one campaign.
+// The investor side carries the same on-chain entitlement as post-funding
+// reports, enforced at the router before any content is read or written.
+// The issuer side is operator-only: there is no verified issuer identity in
+// this prototype, so operator authorship is labeled as such, never as a
+// verified issuer. This is not a legal, advice or regulatory record channel.
+export type IssuerMessage = {
+  id: string;
+  campaignId: string;
+  // The investor wallet the thread belongs to. Operators see every thread of
+  // the campaign for moderation/ops, mirroring the reports posture.
+  investorKey: string;
+  authorKey: string;
+  authorRole: 'investor' | 'operator';
+  body: string;
+  createdAt: number;
+};
+
 // Investor investment documents: issuer/operator-published files deliverable
 // ONLY to entitled investors of that campaign (same entitlement rule as
 // post-funding reports), after an explicit approval step. Content is stored
@@ -383,7 +401,8 @@ export type IssuerApplication = {
   createdAt: number;
 };
 
-export type NotificationKind = 'application_received' | 'application_status' | 'comment_moderated' | 'ticket_closed' | 'company_received' | 'company_status';
+export type NotificationKind =
+  'application_received' | 'application_status' | 'comment_moderated' | 'ticket_closed' | 'company_received' | 'company_status' | 'issuer_message';
 
 // Owner-scoped notification generated server-side from a real event on the
 // owner's own content (application submitted or status change, comment
@@ -439,6 +458,7 @@ export type CommunityState = {
   news: Record<string, NewsPost>;
   reports: Record<string, PostFundingReport>;
   investmentDocuments: Record<string, InvestmentDocument>;
+  issuerMessages?: Record<string, IssuerMessage>;
   // Keyed `${campaignId}:${publicKey}`.
   contributors: Record<string, ContributorRecord>;
   // Chain-history backfill progress per campaign (contributor-backfill.ts):
@@ -473,6 +493,7 @@ export function emptyCommunityState(): CommunityState {
     news: {},
     reports: {},
     investmentDocuments: {},
+    issuerMessages: {},
     contributors: {},
     backfillCheckpoints: {},
     episodes: {},
@@ -513,6 +534,8 @@ function validate(state: any): CommunityState {
   if (state && state.version === 1 && !state.emailCredentials) state.emailCredentials = {};
   // Same forward-compatible default for docs written before investment documents.
   if (state && state.version === 1 && !state.investmentDocuments) state.investmentDocuments = {};
+  // Same forward-compatible default for docs written before investor-issuer messaging.
+  if (state && state.version === 1 && !state.issuerMessages) state.issuerMessages = {};
   // Same forward-compatible default for docs written before the mail budget.
   if (state && state.version === 1 && !state.mailSendLog) state.mailSendLog = [];
   if (

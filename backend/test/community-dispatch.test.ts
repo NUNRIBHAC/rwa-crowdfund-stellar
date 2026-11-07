@@ -47,6 +47,18 @@ test('query string on the pdf route still dispatches', async () => {
   assert.equal(res.status, 401);
 });
 
+test('campaign messages routes dispatch through the community gate (anonymous -> 401, never 404)', async () => {
+  const get = await fetch(`${base}/api/campaigns/demo-solar/messages`);
+  assert.notEqual(get.status, 404, 'messages GET fell through the community gate (route unreachable)');
+  assert.equal(get.status, 401, 'messages GET must reach the auth guard anonymously');
+  const post = await fetch(`${base}/api/campaigns/demo-solar/messages`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: '{}',
+  });
+  assert.equal(post.status, 401, 'messages POST must reach the auth guard anonymously');
+});
+
 test('non-community paths still fall through the gate', async () => {
   const res = await fetch(`${base}/api/campaigns/demo-solar/share-register.xml`);
   assert.equal(res.status, 404, 'unrelated extensions must not be claimed by the community gate');

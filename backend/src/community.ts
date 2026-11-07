@@ -10,6 +10,7 @@ import type {
   NewsPost,
   PostFundingReport,
   InvestmentDocument,
+  IssuerMessage,
   ContributorRecord,
   PodcastEpisode,
   AppropriatenessRecord,
@@ -71,6 +72,11 @@ export const LIMITS = {
 const commentInput = z.object({
   body: z.string().min(1).max(LIMITS.commentBody),
 });
+const issuerMessageInput = z
+  .object({
+    body: z.string().trim().min(1).max(LIMITS.ticketBody),
+  })
+  .strict();
 const ticketInput = z.object({
   kind: z.enum(['support', 'feedback']),
   subject: z.string().trim().min(1).max(LIMITS.ticketSubject),
@@ -551,6 +557,83 @@ export class CommunityService {
       .filter((r) => r.campaignId === campaignId)
       .sort((a, b) => b.createdAt - a.createdAt)
       .slice(0, LIMITS.commentsPage);
+  }
+
+  // --- Investor-issuer messaging ---
+  // Private per-investor threads on one campaign. Entitlement (investor) and
+  // operator gates are enforced at the ROUTER before these run - the service
+  // never decides access. Author honesty: operator messages are labeled
+  // operator, never a verified issuer (none exists in this prototype).
+  // Not a legal, advice or regulatory record channel.
+
+  // Investor posts into their own thread. operatorKeys receive a
+  // notification; the caller (router) resolves them from its own config.
+  async postIssuerMessage(campaignId: string, account: Account, input: unknown, operatorKeys: string[]): Promise<IssuerMessage> {
+    requireCampaignId(campaignId);
+    const { body } = issuerMessageInput.parse(input ?? {});
+    const message: IssuerMessage = {
+      id: newId('msg'),
+      campaignId,
+      investorKey: account.publicKey,
+      authorKey: account.publicKey,
+      authorRole: 'investor',
+      body,
+      createdAt: this.now(),
+    };
+    await this.store.change((state) => {
+      state.issuerMessages![message.id] = message;
+    });
+    await this.recordAudit(account.publicKey, 'issuer_message.post', message.id, `campaign=${campaignId} role=investor`);
+    for (const key of operatorKeys.slice(0, 20)) {
+      await this.notify(key, 'issuer_message', 'issuer_message.new', body.slice(0, 280), message.id, { campaignId });
+    }
+    return message;
+  }
+
+  // Operator replies into an investor's thread. The investor gets notified.
+  async replyIssuerMessage(campaignId: string, investorKey: string, operator: Account, input: unknown): Promise<IssuerMessage> {
+    requireCampaignId(campaignId);
+    if (!/^[a-zA-Z0-9]{1,120}$/.test(investorKey)) throw new CommunityError(400, 'invalid thread reference', 'invalid_input');
+    // input carries { investorKey, body } - parse only the body so the strict schema never rejects the thread key
+    const { body } = issuerMessageInput.parse({ body: (input as { body?: unknown } | null | undefined)?.body });
+    const existing = await this.store.read();
+    const thread = Object.values(existing.issuerMessages ?? {}).filter((m) => m.campaignId === campaignId && m.investorKey === investorKey);
+    if (thread.length === 0) throw new CommunityError(404, 'message thread not found', 'not_found');
+    const message: IssuerMessage = {
+      id: newId('msg'),
+      campaignId,
+      investorKey,
+      authorKey: operator.publicKey,
+      authorRole: 'operator',
+      body,
+      createdAt: this.now(),
+    };
+    await this.store.change((state) => {
+      state.issuerMessages![message.id] = message;
+    });
+    await this.recordAudit(operator.publicKey, 'issuer_message.reply', message.id, `campaign=${campaignId} role=operator`);
+    await this.notify(investorKey, 'issuer_message', 'issuer_message.reply', body.slice(0, 280), message.id, { campaignId });
+    return message;
+  }
+
+  // The investor's own thread, oldest first. Caller's entitlement gate ran.
+  async listIssuerThread(campaignId: string, investorKey: string): Promise<IssuerMessage[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.issuerMessages ?? {})
+      .filter((m) => m.campaignId === campaignId && m.investorKey === investorKey)
+      .sort((a, b) => a.createdAt - b.createdAt)
+      .slice(-LIMITS.commentsPage);
+  }
+
+  // Operator view: every thread of the campaign, oldest first per thread.
+  async listIssuerThreads(campaignId: string): Promise<IssuerMessage[]> {
+    requireCampaignId(campaignId);
+    const state = await this.store.read();
+    return Object.values(state.issuerMessages ?? {})
+      .filter((m) => m.campaignId === campaignId)
+      .sort((a, b) => a.createdAt - b.createdAt)
+      .slice(-500);
   }
 
   // Podcast episodes. Admin/operator-gated at the router, same honesty

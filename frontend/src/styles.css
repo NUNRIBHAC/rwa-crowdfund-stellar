@@ -1,3 +1,81 @@
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/inter-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/inter-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/inter-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/inter-700-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/inter-700-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/montserrat-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/montserrat-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/plusjakartasans-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/plusjakartasans-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
   --ink: #14163a;
   --ink-soft: #5a5c75;
@@ -2769,6 +2847,99 @@ input[type='checkbox'] {
   padding: 4px 0;
 }
 
+/* Investor-issuer messaging (campaign-detail thread + operator dashboard
+   tab). Bubbles use logical alignment: outgoing sits on the inline-end side
+   in every locale, and each body carries dir="auto" so a message keeps its
+   own direction inside the bubble regardless of the UI locale. */
+.message-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 640px;
+}
+.message {
+  max-width: 85%;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.message.outgoing {
+  align-self: flex-end;
+  background: var(--indigo-100);
+  border-color: var(--indigo-200);
+}
+.message p {
+  margin: 2px 0;
+}
+.message-meta {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.thread-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 560px;
+}
+.thread-item {
+  display: block;
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  color: var(--ink);
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  cursor: pointer;
+}
+.thread-item[aria-current='true'] {
+  border-color: var(--accent);
+}
+.thread-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 600;
+}
+.thread-preview {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  margin: 4px 0 0;
+}
+.messaging-filter {
+  margin: 12px 0;
+  max-width: 360px;
+}
+.messaging-filter label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.messaging-filter select {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--indigo-500);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+}
+@media (max-width: 600px) {
+  .message {
+    max-width: 100%;
+  }
+}
+
 /* Arabic text direction: layout geometry stays identical to every other
    locale (header, hero, cards, grids, footer keep their LTR positions);
    only text-level blocks flip inline direction so Arabic reads RTL.
@@ -2802,9 +2973,49 @@ html.rtl-text
     textarea,
     select,
     a
-  ) {
+  ):not(.message-body) {
   direction: rtl;
 }
+/* .message-body is excluded above: it carries dir="auto" and is USER
+   content, so the UA direction mapping must win - otherwise the author
+   direction: rtl would force Latin message bodies right-aligned with
+   reordered trailing punctuation inside the Arabic UI. */
+/* Arabic: direction: rtl above also flips text-align: start to the right,
+   which shifted every heading, paragraph and input to the right side of the
+   page (user 2026-11-07: 'O arabe esta todo para a direita' - layout must
+   stay identical to the other 10 locales). Pin block-text alignment to the
+   LTR geometry at zero specificity so any component-level text-align (center
+   notes, badges, tables) still wins; direction: rtl keeps governing the
+   reading order inside each line. Lists are excluded: marker placement
+   follows direction and needs its own treatment if a page needs it.
+   .home-contract descendants are excluded: that widget centres its whole
+   block by design (verified 2026-11-07 cross-page audit). Messaging bubbles
+   and thread rows (.message, .thread-item) are excluded too: message bodies
+   are USER content with dir="auto", so alignment follows each message's own
+   direction instead of the UI pin. The direction: rtl rule above excludes
+   .message-body for the same reason (the pin cannot: it targets alignment). */
+:where(html.rtl-text)
+  :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    blockquote,
+    figcaption,
+    dd,
+    dt,
+    caption,
+    label,
+    legend,
+    input,
+    textarea
+  ):not(:where(.home-contract, .message, .thread-item) *) {
+  text-align: left;
+}
+
 html.rtl-text
   [dir='ltr']
   :where(
@@ -2845,6 +3056,12 @@ html.rtl-text
    these containers stay LTR while the dt/dd/p text inside them still flips. */
 html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .intent-facts, .step-cards, .portfolio-row, .account-checklist-item) {
   direction: ltr;
+}
+html.rtl-text .accordion summary {
+  direction: ltr;
+}
+html.rtl-text .accordion summary > span:first-child {
+  direction: rtl;
 }
 
 @media (min-width: 1151px) and (max-width: 1439px) {

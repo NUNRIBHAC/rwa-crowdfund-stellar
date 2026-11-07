@@ -141,6 +141,7 @@ export const API_ERROR_MESSAGE_KEYS: Record<string, keyof Messages['community']>
   feature_restricted: 'errorFeatureRestricted',
   operator_required: 'errorOperatorRequired',
   investor_only: 'errorInvestorOnly',
+  operator_reply_route: 'errorOperatorReplyRoute',
   verification_unavailable: 'errorVerificationUnavailable',
   invalid_status: 'errorInvalidStatus',
   note_required: 'errorNoteRequired',
