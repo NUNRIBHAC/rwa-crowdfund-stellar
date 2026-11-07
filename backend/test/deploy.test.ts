@@ -20,6 +20,7 @@ process.env.USDC_ISSUER = Keypair.random().publicKey();
 process.env.SOROBAN_INTENTS_PATH = path.join(tmp, 'intents.json');
 process.env.SOROBAN_BUILD_RATE_PER_MIN = '1000';
 process.env.SOROBAN_DEPLOY_POLL_MS = '1';
+process.env.DEPLOYMENT_MANIFEST_PATH = path.join(tmp, 'deployment-manifest.json');
 const wasmPath = new URL('./fixtures/reviewed-crowdfund.wasm', import.meta.url);
 const wasm = fs.readFileSync(wasmPath);
 
@@ -259,6 +260,32 @@ test('deploy create step runs directly when the reviewed Wasm is already on the 
   assert.equal(tx.operations.length, 1);
 });
 
+test('successful create records the contract creation in the deployment manifest', async () => {
+  reset();
+  wasmOnLedger = true;
+  createMetaOnly = true; // create id only in the transaction meta, like the real RPC
+  fs.rmSync(process.env.DEPLOYMENT_MANIFEST_PATH!, { force: true });
+  const built = await buildCampaignDeploy(input());
+  const created = await submitCampaignDeploy({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar Nine' });
+  assert.equal(created.status, 'SUCCESS');
+  assert.equal(created.contractId, newContractId);
+  const manifest = JSON.parse(fs.readFileSync(process.env.DEPLOYMENT_MANIFEST_PATH!, 'utf8'));
+  const record = manifest[newContractId];
+  assert.equal(record.campaignId, 'solar-nine');
+  assert.equal(record.contractId, newContractId);
+  assert.equal(record.createdLedger, 100); // the fake RPC's confirmed ledger
+  assert.equal(record.deploymentHash, built.hash);
+  assert.equal(record.networkPassphrase, Networks.TESTNET);
+  // A recording failure never fails the deploy: meta-less SUCCESS still confirms.
+  reset();
+  wasmOnLedger = true;
+  const built2 = await buildCampaignDeploy({ ...input(), id: 'solar-ten' });
+  const created2 = await submitCampaignDeploy({ actor: operator.publicKey(), xdr: signed(built2.xdr), name: 'Solar Ten' });
+  assert.equal(created2.status, 'SUCCESS');
+  const manifest2 = JSON.parse(fs.readFileSync(process.env.DEPLOYMENT_MANIFEST_PATH!, 'utf8'));
+  assert.equal(Object.keys(manifest2).length, 1); // meta-less create logged, not recorded
+});
+
 test('deploy submit rejects envelopes this API did not prepare', async () => {
   reset();
   wasmOnLedger = true;
@@ -384,6 +411,9 @@ test('v2 create extracts the contract id from transaction meta when returnValue 
   assert.equal(done.contractId, v2TokenContractId);
   const next = await buildCampaignDeployV2(v2Input());
   assert.equal(next.step, 'create-offering');
+  const manifest = JSON.parse(fs.readFileSync(process.env.DEPLOYMENT_MANIFEST_PATH!, 'utf8'));
+  assert.equal(manifest[v2TokenContractId]?.campaignId, v2Input().id);
+  assert.equal(manifest[v2TokenContractId]?.createdLedger, 100);
 });
 
 // In-memory fake of the pg pool surface with a connect() client (the

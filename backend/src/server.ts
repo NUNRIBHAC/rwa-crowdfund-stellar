@@ -26,6 +26,7 @@ import {
   buildCampaignDeployV2,
   submitCampaignDeployV2,
   sorobanRegistryEntry,
+  sorobanArchiveTargets,
   isV2Entry,
   readV2SharePositions,
 } from './soroban.js';
@@ -227,17 +228,28 @@ const runContributorBackfill = async (): Promise<void> => {
     } catch (err) {
       console.error('contributor backfill failed:', c.id, err instanceof Error ? err.message : err);
     }
-    // Verbatim chain-event archive (prospective, never pruned). Runs on the
-    // same cadence as the contributor backfill; its own store and checkpoint
-    // so a contributor-registry issue can never block archiving and vice
-    // versa. Gaps (RPC floor passed the cursor) are logged loudly and kept
-    // on the checkpoint for the reconciliation view.
+  }
+  // Verbatim chain-event archive (prospective, never pruned). Runs on the
+  // same cadence as the contributor backfill, in its own loop over EVERY
+  // registry contract (v1 campaigns plus each v2 token/offering member under
+  // its own key): a contributor-registry issue can never block archiving and
+  // vice versa, and deletion-history coverage needs per-contract checkpoints
+  // for v2 sets too. Gaps (RPC floor passed the cursor) are logged loudly
+  // and kept on the checkpoint for the reconciliation view.
+  let targets: { id: string; contractId: string }[];
+  try {
+    targets = sorobanArchiveTargets();
+  } catch (err) {
+    console.error('event archive unavailable:', err instanceof Error ? err.message : err);
+    return;
+  }
+  for (const t of targets) {
     try {
       const store = await eventArchiveBackend();
-      const a = await archiveCampaignEvents({ client: sorobanDeps.client(), campaignId: c.id, contractId: c.contractId, store });
-      if (a.gap) console.error('event archive gap:', c.id, a.gap);
+      const a = await archiveCampaignEvents({ client: sorobanDeps.client(), campaignId: t.id, contractId: t.contractId, store });
+      if (a.gap) console.error('event archive gap:', t.id, a.gap);
     } catch (err) {
-      console.error('event archive failed:', c.id, err instanceof Error ? err.message : err);
+      console.error('event archive failed:', t.id, err instanceof Error ? err.message : err);
     }
   }
 };

@@ -175,6 +175,21 @@ export function sorobanRegisteredCampaigns(): { id: string; contractId: string }
   // events; v2 offering events have no backfill consumer yet.
   return v1Entries().map((e) => ({ id: e.id, contractId: e.contractId }));
 }
+// Contracts the verbatim event archive must cover: v1 crowdfund contracts
+// under the bare campaign id, plus every v2 contract-set member under its own
+// `${id}:token` / `${id}:offering` key so each contract's checkpoint and
+// events are tracked independently (deletion-history coverage needs both).
+// Same validation/throw behavior as every other registry reader.
+export function sorobanArchiveTargets(): { id: string; contractId: string }[] {
+  return entries().flatMap((e) =>
+    isV2Entry(e)
+      ? [
+          { id: `${e.id}:token`, contractId: e.tokenContractId },
+          { id: `${e.id}:offering`, contractId: e.offeringContractId },
+        ]
+      : [{ id: e.id, contractId: e.contractId }],
+  );
+}
 // Validated registry read without any RPC call. Returns null for unknown
 // ids; throws on the same registry validation as every other reader.
 export function sorobanRegistryEntry(id: string): RegistryEntry | null {
@@ -964,6 +979,26 @@ async function awaitDeployResult(hash: string): Promise<{ status: string; contra
   }
   return { status: 'PENDING', contractId: null };
 }
+// Record a successfully deployed contract in the durable creation manifest
+// (the deletion-history coverage checker's independent creation-ledger
+// grounding). Best-effort beside the deploy confirmation: a recording
+// failure is logged, never fails the deploy, and deletion evidence stays
+// fail-closed without the record. Dynamic import avoids a module cycle
+// (deployment-manifest reuses createdContractIdsFromMeta from this module).
+async function recordContractCreation(hash: string, campaignId: string): Promise<void> {
+  try {
+    const { deploymentManifestBackend, recordCreationFromTransaction } = await import('./deployment-manifest.js');
+    await recordCreationFromTransaction({
+      client: sorobanDeps.client(),
+      hash,
+      campaignId,
+      networkPassphrase: passphrase,
+      store: await deploymentManifestBackend(),
+    });
+  } catch (err) {
+    console.error('deployment manifest record failed:', campaignId, err instanceof Error ? err.message : err);
+  }
+}
 export async function submitCampaignDeploy(input: { actor: string; xdr: string; name?: string }): Promise<any> {
   guard();
   actorAddress(input.actor);
@@ -1021,6 +1056,7 @@ export async function submitCampaignDeploy(input: { actor: string; xdr: string; 
   const deployedWasm = await sorobanDeps.client().getContractWasmByContractId(outcome.contractId);
   if (createHash('sha256').update(deployedWasm).digest('hex') !== WASM_HASH)
     throw new Error('deployed contract code does not match the reviewed crowdfund Wasm; refusing to produce a registry entry');
+  await recordContractCreation(hash, intent.campaign);
   return {
     hash,
     status: 'SUCCESS',
@@ -1402,6 +1438,7 @@ export async function submitCampaignDeployV2(input: { actor: string; xdr: string
     const persisted = (await readStore()).intents.find((i) => i.hash === hash)?.contractId;
     if (persisted !== outcome.contractId)
       throw new Error(`journal did not retain the contract id for ${hash}; refusing to confirm - reconcile the exact hash manually before any retry`);
+    await recordContractCreation(hash, intent.campaign);
     return {
       hash,
       status: 'SUCCESS',

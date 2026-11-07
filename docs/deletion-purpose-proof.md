@@ -150,3 +150,31 @@ hash-only pending proofs (unavailable) and deploy-intent creator keys
 (protected). Wiring this into the hosted deletion route still requires the
 final mutation to re-check under its own serialized lock, plus its own full
 gate and explicit authorization. No financial or on-chain record is deleted.
+
+## Deployment auto-recording and v2 archive targets (local, not wired)
+
+Deployments now record each successfully deployed campaign contract into the
+creation manifest at submit time, in both the v1 and v2 paths. The record is
+written only after the Wasm-pin checks pass and the deployment transaction
+returns SUCCESS, and it is keyed by the exact transaction hash fetched back
+from the network; a recording failure never fails an otherwise successful
+deployment, it only leaves the manifest without that record, which the
+snapshot builder conservatively treats as creation at ledger 1 (widening,
+never narrowing, the span coverage must prove). The manifest store can be
+selected by deploymentManifestBackend (file or Postgres), and the Postgres
+store is fail-closed: a corrupt or conflicting row throws rather than
+silently degrading to a file fallback.
+
+The archive now also loops the v2 campaign targets (`<id>:token` and
+`<id>:offering` from sorobanArchiveTargets) alongside the v1 registry, while
+the backfill pass remains v1-only. v2 targets are derived from the same
+recordContractCreation hook, so only contracts that were actually deployed
+through this server are archived; an undeployed or externally created v2
+campaign simply has no target. Archive cadence, gap honesty and the
+prospective-start caveat are unchanged: the archive still starts from its
+first run, retains honest gaps, and parses participants best-effort.
+
+Neither addition changes the deletion verdict: no hosted route injects the
+composed wallet verdict, wallet deletion stays unavailable on the hosted
+service, and no financial or on-chain record is deleted. Wiring remains held
+for explicit authorization and its own full gate.

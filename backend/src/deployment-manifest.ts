@@ -177,3 +177,83 @@ export async function recordCreationFromTransaction(opts: {
   await opts.store.put(record);
   return record;
 }
+
+// --- Postgres backend (hosted deployments; same database family as the
+// community store, own table so manifest volume never bloats the community
+// jsonb document) -------------------------------------------------------------
+export class PostgresDeploymentManifestStore implements DeploymentManifestStore {
+  // Lazy, retryable init (same discipline as the archive store): a failed
+  // init clears itself so the next operation retries instead of reusing a
+  // permanently failed store.
+  private ready: Promise<void> | null = null;
+  constructor(private pool: import('pg').Pool) {}
+  private ensureReady(): Promise<void> {
+    if (this.ready) return this.ready;
+    this.ready = (async () => {
+      await this.pool.query(`CREATE TABLE IF NOT EXISTS contract_creations (
+        contract_id text PRIMARY KEY,
+        doc jsonb NOT NULL,
+        recorded_at timestamptz NOT NULL DEFAULT now()
+      )`);
+    })();
+    this.ready.catch(() => {
+      this.ready = null;
+    });
+    return this.ready;
+  }
+  async put(record: ContractCreationRecord): Promise<void> {
+    if (!validateCreationRecord(record)) throw new Error('refusing to store an invalid contract creation record');
+    await this.ensureReady();
+    const existing = await this.get(record.contractId);
+    if (existing) {
+      if (!sameRecord(existing, record)) throw new Error(`conflicting creation record for ${record.contractId}; reconcile manually, never overwrite`);
+      return;
+    }
+    await this.pool.query('INSERT INTO contract_creations (contract_id, doc) VALUES ($1, $2)', [record.contractId, JSON.stringify(record)]);
+  }
+  async get(contractId: string): Promise<ContractCreationRecord | undefined> {
+    await this.ensureReady();
+    const r = await this.pool.query('SELECT doc FROM contract_creations WHERE contract_id = $1', [contractId]);
+    if (r.rows.length === 0) return undefined;
+    const parsed = validateCreationRecord(r.rows[0]?.doc);
+    if (!parsed) throw new Error(`stored creation record for ${contractId} is corrupt`);
+    return parsed;
+  }
+  async list(): Promise<ContractCreationRecord[]> {
+    await this.ensureReady();
+    const r = await this.pool.query('SELECT doc FROM contract_creations');
+    return r.rows.map((row: { doc: unknown }, i: number) => {
+      const parsed = validateCreationRecord(row.doc);
+      if (!parsed) throw new Error(`stored creation record at row ${i} is corrupt`);
+      return parsed;
+    });
+  }
+}
+
+// Backend selection is explicit and fails closed (same rule as the event
+// archive): when the deployment requires Postgres (Render's filesystem is
+// ephemeral), a missing database URL refuses rather than silently recording
+// to a volatile file that vanishes on redeploy.
+let cached: DeploymentManifestStore | null = null;
+export async function deploymentManifestBackend(): Promise<DeploymentManifestStore> {
+  if (cached) return cached;
+  const requirePostgres =
+    process.env.DEPLOYMENT_MANIFEST_BACKEND === 'postgres' ||
+    process.env.SOROBAN_JOURNAL_BACKEND === 'postgres' ||
+    process.env.COMMUNITY_REQUIRE_POSTGRES === '1';
+  const url = process.env.DEPLOYMENT_MANIFEST_DATABASE_URL ?? process.env.COMMUNITY_DATABASE_URL ?? process.env.SOROBAN_JOURNAL_DATABASE_URL;
+  if (requirePostgres || url) {
+    if (!url)
+      throw new Error(
+        'deployment manifest requires DEPLOYMENT_MANIFEST_DATABASE_URL, COMMUNITY_DATABASE_URL or SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file manifest',
+      );
+    const { Pool } = await import('pg');
+    cached = new PostgresDeploymentManifestStore(new Pool({ connectionString: url }));
+    return cached;
+  }
+  cached = new FileDeploymentManifestStore(process.env.DEPLOYMENT_MANIFEST_PATH ?? './data/deployment-manifest.json');
+  return cached;
+}
+export function resetDeploymentManifestBackendForTests(): void {
+  cached = null;
+}

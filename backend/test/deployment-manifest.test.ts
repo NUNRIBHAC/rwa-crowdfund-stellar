@@ -98,3 +98,64 @@ test('recordCreationFromTransaction grounds creation in a SUCCESS transaction on
   await assert.rejects(recordCreationFromTransaction({ client, hash, campaignId: 'bad id', networkPassphrase: 'n', store }), /invalid campaign id/);
   await assert.rejects(recordCreationFromTransaction({ client, hash, campaignId: 'demo-solar', networkPassphrase: '', store }), /passphrase/);
 });
+
+test('postgres store mirrors the same semantics', async () => {
+  const rows = new Map<string, unknown>();
+  const pool = {
+    query: async (text: string, params?: unknown[]) => {
+      const sql = text.replace(/\s+/g, ' ').trim();
+      if (/^CREATE TABLE/.test(sql)) return { rows: [], rowCount: 0 };
+      if (/^SELECT doc FROM contract_creations WHERE/.test(sql)) {
+        const doc = rows.get((params as string[])[0]);
+        return { rows: doc ? [{ doc }] : [], rowCount: doc ? 1 : 0 };
+      }
+      if (/^SELECT doc FROM contract_creations$/.test(sql)) return { rows: [...rows.values()].map((doc) => ({ doc })), rowCount: rows.size };
+      if (/^INSERT INTO contract_creations/.test(sql)) {
+        rows.set((params as string[])[0], JSON.parse((params as string[])[1]));
+        return { rows: [], rowCount: 1 };
+      }
+      throw new Error(`unexpected query: ${sql}`);
+    },
+  };
+  const { PostgresDeploymentManifestStore } = await import('../src/deployment-manifest.js');
+  const store = new PostgresDeploymentManifestStore(pool as never);
+  assert.equal(await store.get(contractId), undefined);
+  await store.put(record());
+  await store.put(record());
+  assert.deepEqual(await store.get(contractId), record());
+  assert.deepEqual(await store.list(), [record()]);
+  await assert.rejects(store.put({ ...record(), createdLedger: 9999 }), /conflicting/);
+  rows.set(contractId, { ...record(), createdLedger: 'bad' });
+  await assert.rejects(store.get(contractId), /corrupt/);
+  await assert.rejects(store.list(), /corrupt/);
+});
+
+test('backend selection is explicit and fails closed without a database URL', async () => {
+  const { deploymentManifestBackend, resetDeploymentManifestBackendForTests, FileDeploymentManifestStore, PostgresDeploymentManifestStore } =
+    await import('../src/deployment-manifest.js');
+  const saved = { ...process.env };
+  try {
+    for (const key of [
+      'DEPLOYMENT_MANIFEST_BACKEND',
+      'DEPLOYMENT_MANIFEST_DATABASE_URL',
+      'DEPLOYMENT_MANIFEST_PATH',
+      'COMMUNITY_REQUIRE_POSTGRES',
+      'COMMUNITY_DATABASE_URL',
+      'SOROBAN_JOURNAL_BACKEND',
+      'SOROBAN_JOURNAL_DATABASE_URL',
+    ])
+      delete process.env[key];
+    resetDeploymentManifestBackendForTests();
+    process.env.DEPLOYMENT_MANIFEST_PATH = path.join(tmpdir(), 'manifest.json');
+    assert.ok((await deploymentManifestBackend()) instanceof FileDeploymentManifestStore);
+    resetDeploymentManifestBackendForTests();
+    process.env.COMMUNITY_REQUIRE_POSTGRES = '1';
+    await assert.rejects(deploymentManifestBackend(), /refusing to fall back to a volatile file/);
+    resetDeploymentManifestBackendForTests();
+    process.env.DEPLOYMENT_MANIFEST_DATABASE_URL = 'postgres://localhost:1/test';
+    assert.ok((await deploymentManifestBackend()) instanceof PostgresDeploymentManifestStore);
+  } finally {
+    process.env = saved;
+    resetDeploymentManifestBackendForTests();
+  }
+});
