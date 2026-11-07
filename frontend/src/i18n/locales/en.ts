@@ -1976,6 +1976,7 @@ export const en = {
     socialSignInGithub: 'Continue with GitHub',
     socialSignInLinkedin: 'Continue with LinkedIn',
     socialSignInTelegram: 'Continue with Telegram',
+    socialSignInDiscord: 'Continue with Discord',
     socialSignInGeneric: 'Continue with {provider}',
     signedInTitle: 'Community account',
     signedInAs: 'Signed in as',

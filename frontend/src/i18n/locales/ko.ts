@@ -1940,6 +1940,7 @@ export const ko: Messages = {
     socialSignInGithub: 'GitHub로 계속',
     socialSignInLinkedin: 'LinkedIn으로 계속',
     socialSignInTelegram: 'Telegram으로 계속',
+    socialSignInDiscord: 'Discord으로 계속',
     socialSignInGeneric: '{provider}로 계속',
     signedInTitle: '커뮤니티 계정',
     signedInAs: '로그인:',

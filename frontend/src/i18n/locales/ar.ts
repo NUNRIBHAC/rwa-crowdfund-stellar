@@ -1946,6 +1946,7 @@ export const ar: Messages = {
     socialSignInGithub: 'المتابعة عبر GitHub',
     socialSignInLinkedin: 'المتابعة عبر LinkedIn',
     socialSignInTelegram: 'المتابعة عبر Telegram',
+    socialSignInDiscord: 'المتابعة عبر Discord',
     socialSignInGeneric: 'المتابعة عبر {provider}',
     signedInTitle: 'حساب المجتمع',
     signedInAs: 'تم تسجيل الدخول باسم',

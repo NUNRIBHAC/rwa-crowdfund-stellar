@@ -1977,6 +1977,7 @@ export const hi: Messages = {
     socialSignInGithub: 'GitHub से जारी रखें',
     socialSignInLinkedin: 'LinkedIn से जारी रखें',
     socialSignInTelegram: 'Telegram से जारी रखें',
+    socialSignInDiscord: 'Discord से जारी रखें',
     socialSignInGeneric: '{provider} से जारी रखें',
     signedInTitle: 'कम्युनिटी खाता',
     signedInAs: 'साइन इन:',

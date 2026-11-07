@@ -1957,6 +1957,7 @@ export const ja: Messages = {
     socialSignInGithub: 'GitHubで続行',
     socialSignInLinkedin: 'LinkedInで続行',
     socialSignInTelegram: 'Telegramで続行',
+    socialSignInDiscord: 'Discordで続行',
     socialSignInGeneric: '{provider}で続行',
     signedInTitle: 'コミュニティアカウント',
     signedInAs: 'サインイン中:',

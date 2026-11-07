@@ -7,6 +7,7 @@ export const SOCIAL_PROVIDER_DISPLAY_NAMES: Record<string, string> = {
   linkedin: 'LinkedIn',
   telegram: 'Telegram',
   farcaster: 'Farcaster',
+  discord: 'Discord',
 };
 
 export const socialProviderDisplayName = (provider: string): string => SOCIAL_PROVIDER_DISPLAY_NAMES[provider] ?? provider;
