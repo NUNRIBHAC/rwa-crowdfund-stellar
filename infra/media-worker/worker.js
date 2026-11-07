@@ -48,7 +48,11 @@ export default {
     // reference changes; only the B2 key is remapped. b2get() percent-encodes
     // each segment, so the space is safe on the wire. Old social/* keys are
     // retained until explicit owner approval - no deletion on this change.
-    const key = p.startsWith("social/") ? "social icons/" + p.slice("social/".length) : p;
+    const key = p.startsWith("social/")
+      ? "social icons/" + p.slice("social/".length)
+      : /^(favicon\.ico|favicon\.svg|favicon-(48|32|16)\.png)$/.test(p)
+        ? "icons/" + p
+        : p;
     // Edge cache (Cache API): serve repeat requests without a B2 fetch.
     // Safe invalidation comes from VERSIONED asset keys (writer uploads
     // content-hashed/versioned paths, e.g. icons/logo.<hash>.svg), so a
