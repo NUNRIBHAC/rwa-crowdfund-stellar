@@ -1089,6 +1089,73 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.json({ reports: await service.listReports(campaignId) });
     }),
   );
+
+  // --- Investor-issuer messaging ---
+  // Private per-investor thread between an entitled investor and the operator
+  // (no verified issuer identity exists; operator authorship is labeled
+  // operator). Read AND write gates mirror post-funding reports exactly:
+  // authenticated wallet, on-chain/registry entitlement (fail closed 503 when
+  // unverifiable), investors see only their own thread. Not a legal channel.
+  const messageEntitlement = async (res: express.Response, account: Account, campaignId: string): Promise<'investor' | 'operator' | null> => {
+    const wallets = operatorWallets();
+    if (wallets.length > 0 && wallets.includes(account.publicKey)) return 'operator';
+    if (!investorEntitlement) {
+      res.status(503).json({ error: 'investor entitlement verification is not configured; messaging disabled', code: 'feature_unavailable' });
+      return null;
+    }
+    let entitlement: { registered: boolean; balanceUnits: bigint; contributedBefore: boolean };
+    try {
+      entitlement = await investorEntitlement(campaignId, account.publicKey);
+    } catch (err) {
+      console.error('on-chain verification failed', err instanceof Error ? err.message : String(err));
+      res.status(503).json({ error: 'could not verify on-chain investor entitlement; refusing message access', code: 'verification_unavailable' });
+      return null;
+    }
+    if (!entitlement.registered) {
+      res.status(404).json({ error: 'unknown campaign', code: 'campaign_not_found' });
+      return null;
+    }
+    if (entitlement.balanceUnits <= 0n && !entitlement.contributedBefore) {
+      res.status(403).json({ error: 'issuer messages are available to investors in this campaign', code: 'investor_only' });
+      return null;
+    }
+    return 'investor';
+  };
+
+  router.get(
+    '/api/campaigns/:id/messages',
+    authed(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      const role = await messageEntitlement(res, account, campaignId);
+      if (!role) return;
+      if (role === 'operator') {
+        res.json({ messages: await service.listIssuerThreads(campaignId) });
+        return;
+      }
+      res.json({ messages: await service.listIssuerThread(campaignId, account.publicKey) });
+    }),
+  );
+
+  router.post(
+    '/api/campaigns/:id/messages',
+    authed(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      const ip = clientIp(req);
+      if (ip && !service.limiter.allow(`issuer-message-ip:${ip}`, 20, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      const role = await messageEntitlement(res, account, campaignId);
+      if (!role) return;
+      if (role !== 'investor') {
+        // Operators reply through the operator endpoint with an explicit thread.
+        res.status(403).json({ error: 'operators reply via the operator endpoint naming the investor thread', code: 'operator_reply_route' });
+        return;
+      }
+      res.status(201).json(await service.postIssuerMessage(campaignId, account, req.body, operatorWallets()));
+    }),
+  );
+
+  // Operator reply into a named investor thread. operator() gate (same as
+  // post-funding report publishing) ran before this.
   // --- Investment documents (investor-entitled delivery) ---
   // Read gating mirrors post-funding reports exactly: authenticated wallet,
   // on-chain/registry entitlement (fail closed 503 when unverifiable),
@@ -1544,6 +1611,15 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.status(201).json({
         report: await service.addReport(campaignId, req.body, `operator:${account.publicKey}`),
       });
+    }),
+  );
+
+  router.post(
+    '/api/operator/campaigns/:id/messages',
+    operator(async (req, res, account) => {
+      const campaignId = requireCampaignId(req.params.id);
+      const investorKey = String((req.body ?? {}).investorKey ?? '');
+      res.status(201).json(await service.replyIssuerMessage(campaignId, investorKey, account, req.body));
     }),
   );
   router.post(
