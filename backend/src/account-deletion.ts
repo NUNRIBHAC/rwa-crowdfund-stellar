@@ -5,8 +5,9 @@ import { EMAIL_MAX_FAILURES, EMAIL_LOCK_MS, verifyPassword } from './email-auth.
 import { decryptSeed, verifyTotp } from './totp.js';
 
 // Verified email and dedicated linked-social proof are supported. Wallet
-// deletion additionally requires an injected retention adapter, absent from
-// the hosted router. A login signature or session alone is never proof.
+// deletion additionally requires an injected retention adapter AND a final
+// mutation recheck, both absent from the hosted router. A login signature or
+// session alone is never proof.
 export async function deleteEmailAccount(
   store: CommunityStore,
   authorization: string | undefined,
@@ -14,6 +15,7 @@ export async function deleteEmailAccount(
   operatorKeys: string[] = [],
   now = Date.now(),
   walletRetentionCheck?: (publicKey: string) => Promise<'clear' | 'protected' | 'unavailable'>,
+  walletRetentionRecheck?: (publicKey: string) => 'clear' | 'protected' | 'unavailable',
 ): Promise<void> {
   if (input.confirmation !== 'DELETE') throw new AuthError(400, 'type DELETE to confirm account deletion', 'deletion_confirmation_required');
   const token = authorization?.match(/^Bearer (bls_[0-9a-f]{48})$/)?.[1] ?? '';
@@ -85,6 +87,13 @@ export async function deleteEmailAccount(
         }
         return 'factor';
       }
+    }
+    if (wallet) {
+      // Final mutation recheck inside this serialized change: the retention
+      // verdict must be re-validated here. An earlier verdict alone, or a
+      // missing recheck, never authorizes the mutation.
+      const again = walletRetentionRecheck ? walletRetentionRecheck(key) : 'unavailable';
+      if (again !== 'clear') return again === 'protected' ? 'protected' : 'unavailable';
     }
     const identities = Object.values(state.socialIdentities).filter((identity) => identity.publicKey === key);
     for (const identity of identities) {

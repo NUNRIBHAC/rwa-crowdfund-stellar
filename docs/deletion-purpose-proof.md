@@ -178,3 +178,27 @@ Neither addition changes the deletion verdict: no hosted route injects the
 composed wallet verdict, wallet deletion stays unavailable on the hosted
 service, and no financial or on-chain record is deleted. Wiring remains held
 for explicit authorization and its own full gate.
+
+## Prepared deletion wiring with final mutation recheck (local, not wired)
+
+`wallet-deletion-wiring.ts` prepares the adapter that would connect the
+composed wallet evidence verdict to the account deletion mutation. The
+hosted router still injects nothing: no route passes the adapter, so hosted
+wallet deletion stays unavailable, and activation remains a separate held
+decision requiring its own full gate and explicit authorization.
+
+The adapter serializes verdict computation per owner so "latest" is well
+defined, coerces any throwing or malformed verdict to unavailable, and gives
+the final mutation a synchronous recheck. `deleteEmailAccount` now requires
+both: the verdict check before its serialized change and the recheck inside
+it, immediately before the destructive steps. An earlier verdict alone, a
+missing recheck, a verdict older than 30 seconds, or anything but clear
+fails closed; a protected recheck reports protected without consuming the
+single-use proof challenge. The recheck always reads the latest completed
+verdict, never a cached older one.
+
+Honest residual: the journal, pending-proof, archive and manifest inputs
+live outside the community store's mutation lock, so evidence can still
+drift inside the freshness window. Closing that needs a cross-store
+serialized boundary and remains an open precondition for any activation.
+No financial or on-chain record is deleted.

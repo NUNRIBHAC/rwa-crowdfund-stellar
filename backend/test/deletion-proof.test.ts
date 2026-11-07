@@ -80,19 +80,37 @@ test('wallet deletion fails closed without retention proof, requires purpose sig
     ),
     { code: 'deletion_proof_failed' },
   );
-  const fresh = await createDeletionChallenge(store, authorization, now + 3);
+  // A clear verdict without the final mutation recheck fails closed.
+  const noRecheck = await createDeletionChallenge(store, authorization, now + 3);
+  await assert.rejects(
+    deleteEmailAccount(
+      store,
+      authorization,
+      { confirmation: 'DELETE', nonce: noRecheck.nonce, signature: Buffer.from(kp.signMessage(noRecheck.message)).toString('base64') },
+      [],
+      now + 4,
+      async () => 'clear',
+    ),
+    { code: 'deletion_unavailable' },
+  );
+  // The account survives; only the single-use proof challenge was consumed.
+  const afterNoRecheck = await store.read();
+  assert.ok(afterNoRecheck.accounts[kp.publicKey()]);
+  assert.equal(afterNoRecheck.deletionChallenges?.[hashToken(noRecheck.nonce)], undefined);
+  const fresh = await createDeletionChallenge(store, authorization, now + 5);
   await deleteEmailAccount(
     store,
     authorization,
     { confirmation: 'DELETE', nonce: fresh.nonce, signature: Buffer.from(kp.signMessage(fresh.message)).toString('base64') },
     [],
-    now + 4,
+    now + 6,
     async () => 'clear',
+    () => 'clear',
   );
   assert.equal((await store.read()).accounts[kp.publicKey()], undefined);
-  await assert.rejects(verifyChallenge(store, kp.publicKey(), Buffer.from(kp.signMessage(stale.message)).toString('base64'), now + 5));
-  const newLogin = await createChallenge(store, kp.publicKey(), now + 6);
-  const result = await verifyChallenge(store, kp.publicKey(), Buffer.from(kp.signMessage(newLogin.message)).toString('base64'), now + 7);
+  await assert.rejects(verifyChallenge(store, kp.publicKey(), Buffer.from(kp.signMessage(stale.message)).toString('base64'), now + 7));
+  const newLogin = await createChallenge(store, kp.publicKey(), now + 8);
+  const result = await verifyChallenge(store, kp.publicKey(), Buffer.from(kp.signMessage(newLogin.message)).toString('base64'), now + 9);
   assert.ok('token' in result);
   assert.equal(result.account.displayName, null);
 });
@@ -142,6 +160,7 @@ test('wallet purpose proof does not bypass an enabled second factor', async () =
       [],
       now + 2,
       async () => 'clear',
+      () => 'clear',
     );
     assert.equal((await store.read()).accounts[kp.publicKey()], undefined);
   } finally {
