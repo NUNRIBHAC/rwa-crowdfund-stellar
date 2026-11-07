@@ -1,6 +1,11 @@
-import '@testing-library/jest-dom/vitest';
+// Hoisting-neutral matcher registration: the /vitest entry imports 'vitest' from inside the
+// (possibly root-hoisted) jest-dom package, which breaks under npm workspaces when vitest is
+// not hoisted to the same level. Import matchers directly and extend the local expect instead.
+import * as jestDomMatchers from '@testing-library/jest-dom/matchers';
 import { fireEvent, render, screen, waitFor, cleanup } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+expect.extend(jestDomMatchers);
 import RehearsalPanel from './RehearsalPanel';
 import { rehearsalRequest } from './api';
 const draft = {
