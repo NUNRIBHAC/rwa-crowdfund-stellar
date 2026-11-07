@@ -178,10 +178,20 @@ export default function CampaignBuilderDraft() {
         </label>
         <label>
           {t.contractSetLabel}
-          <select value={contractSet} onChange={(e) => setContractSet(e.target.value === 'v2' ? 'v2' : 'v1')}>
+          <select
+            value={contractSet}
+            onChange={(e) => setContractSet(e.target.value === 'v2' ? 'v2' : 'v1')}
+            title={contractSet === 'v2' ? t.contractSetV2 : t.contractSetV1}
+          >
             <option value="v1">{t.contractSetV1}</option>
             <option value="v2">{t.contractSetV2}</option>
           </select>
+          {/* The closed select clips longer translations at narrow widths; the
+              full selected label stays visible here for touch users, who get
+              no title hover. Uses the same translation strings, no new copy. */}
+          <span className="community-note">
+            {contractSet === 'v2' ? t.contractSetV2 : t.contractSetV1}
+          </span>
         </label>
         {contractSet === 'v2' && (
           <>
