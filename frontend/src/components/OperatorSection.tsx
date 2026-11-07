@@ -14,6 +14,7 @@ import ApplicationDocuments from './ApplicationDocuments';
 // - community/CommunityAuth.tsx: carry isOperator from fetchMe/verifyChallenge
 //   into context and expose it alongside account/token.
 import { useCallback, useEffect, useRef, useState } from 'react';
+import OperatorIssuerMessages from './OperatorIssuerMessages';
 import { formatTokenAmount } from '../funding-math';
 import {
   closeOperatorTicket,
@@ -43,7 +44,7 @@ type Props = {
   campaignsUnavailable?: boolean;
 };
 
-type Tab = 'applications' | 'comments' | 'tickets' | 'news' | 'reports' | 'podcast' | 'reconciliation' | 'corporate' | 'audit';
+type Tab = 'applications' | 'comments' | 'tickets' | 'messages' | 'news' | 'reports' | 'podcast' | 'reconciliation' | 'corporate' | 'audit';
 
 export default function OperatorSection({ campaigns, campaignsLoading = false, campaignsUnavailable = false }: Props) {
   const { m, locale } = useI18n();
@@ -198,7 +199,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
       </h2>
       <p className="community-note">{labels.demoNote}</p>
       <div className="filter-chips" role="group" aria-label={labels.title}>
-        {(['applications', 'comments', 'tickets', 'news', 'reports', 'podcast', 'reconciliation', 'corporate', 'audit'] as Tab[]).map(tabBtn)}
+        {(['applications', 'comments', 'tickets', 'messages', 'news', 'reports', 'podcast', 'reconciliation', 'corporate', 'audit'] as Tab[]).map(tabBtn)}
       </div>
       {error && (
         <p role="alert" className="community-error">
@@ -210,6 +211,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
       )}
       {notice && <p className="community-note">{notice}</p>}
 
+      {tab === 'messages' && <OperatorIssuerMessages campaigns={campaigns} />}
       {tab === 'applications' && (
         <>
           {!applications ? (

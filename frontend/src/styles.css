@@ -2847,6 +2847,99 @@ input[type='checkbox'] {
   padding: 4px 0;
 }
 
+/* Investor-issuer messaging (campaign-detail thread + operator dashboard
+   tab). Bubbles use logical alignment: outgoing sits on the inline-end side
+   in every locale, and each body carries dir="auto" so a message keeps its
+   own direction inside the bubble regardless of the UI locale. */
+.message-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 640px;
+}
+.message {
+  max-width: 85%;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.message.outgoing {
+  align-self: flex-end;
+  background: var(--indigo-100);
+  border-color: var(--indigo-200);
+}
+.message p {
+  margin: 2px 0;
+}
+.message-meta {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.thread-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 560px;
+}
+.thread-item {
+  display: block;
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  color: var(--ink);
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  cursor: pointer;
+}
+.thread-item[aria-current='true'] {
+  border-color: var(--accent);
+}
+.thread-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 600;
+}
+.thread-preview {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  margin: 4px 0 0;
+}
+.messaging-filter {
+  margin: 12px 0;
+  max-width: 360px;
+}
+.messaging-filter label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.messaging-filter select {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--indigo-500);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+}
+@media (max-width: 600px) {
+  .message {
+    max-width: 100%;
+  }
+}
+
 /* Arabic text direction: layout geometry stays identical to every other
    locale (header, hero, cards, grids, footer keep their LTR positions);
    only text-level blocks flip inline direction so Arabic reads RTL.
@@ -2880,9 +2973,13 @@ html.rtl-text
     textarea,
     select,
     a
-  ) {
+  ):not(.message-body) {
   direction: rtl;
 }
+/* .message-body is excluded above: it carries dir="auto" and is USER
+   content, so the UA direction mapping must win - otherwise the author
+   direction: rtl would force Latin message bodies right-aligned with
+   reordered trailing punctuation inside the Arabic UI. */
 /* Arabic: direction: rtl above also flips text-align: start to the right,
    which shifted every heading, paragraph and input to the right side of the
    page (user 2026-11-07: 'O arabe esta todo para a direita' - layout must
@@ -2892,7 +2989,11 @@ html.rtl-text
    reading order inside each line. Lists are excluded: marker placement
    follows direction and needs its own treatment if a page needs it.
    .home-contract descendants are excluded: that widget centres its whole
-   block by design (verified 2026-11-07 cross-page audit). */
+   block by design (verified 2026-11-07 cross-page audit). Messaging bubbles
+   and thread rows (.message, .thread-item) are excluded too: message bodies
+   are USER content with dir="auto", so alignment follows each message's own
+   direction instead of the UI pin. The direction: rtl rule above excludes
+   .message-body for the same reason (the pin cannot: it targets alignment). */
 :where(html.rtl-text)
   :where(
     h1,
@@ -2911,7 +3012,7 @@ html.rtl-text
     legend,
     input,
     textarea
-  ):not(:where(.home-contract) *) {
+  ):not(:where(.home-contract, .message, .thread-item) *) {
   text-align: left;
 }
 

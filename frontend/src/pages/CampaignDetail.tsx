@@ -13,6 +13,7 @@ import NewsList from '../components/NewsList';
 import ReportsList from '../components/ReportsList';
 import PodcastList from '../components/PodcastList';
 import Comments from '../components/Comments';
+import IssuerMessages from '../components/IssuerMessages';
 import type { Messages } from '../i18n/locales/en';
 import CampaignTour from '../components/CampaignTour';
 import CampaignPhoto from '../components/CampaignPhoto';
@@ -233,6 +234,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           )}
 
           <Comments campaignId={campaign.id} />
+          <IssuerMessages campaignId={campaign.id} />
           <CampaignTour />
         </div>
 

@@ -1682,6 +1682,7 @@
     "errorFeatureRestricted": "This feature is not available for this account.",
     "errorOperatorRequired": "This wallet is not a designated operator.",
     "errorInvestorOnly": "Available to investors in this campaign only.",
+    "errorOperatorReplyRoute": "Operators reply from the operator dashboard messaging tab.",
     "errorVerificationUnavailable": "The on-chain check could not be completed right now. Please try again later.",
     "errorInvalidStatus": "Invalid status.",
     "errorNoteRequired": "A note is required to reject.",
@@ -2016,6 +2017,7 @@
         "applications": "Applications",
         "comments": "Comments",
         "tickets": "Tickets",
+        "messages": "Messages",
         "news": "News",
         "reports": "Reports",
         "podcast": "Podcast",
@@ -2116,5 +2118,24 @@
     "feedbackSignInPrompt": "Sign in with your wallet to send feedback.",
     "feedbackSubmitted": "Thank you - your feedback was sent.",
     "feedbackClose": "Close"
+  },
+  "messaging": {
+    "title": "Messages",
+    "operatorNote": "Replies come from the platform operator - there is no verified issuer identity in this prototype. This channel is not a legal, advice or regulatory record.",
+    "signInHint": "Sign in to read and send private messages about this campaign.",
+    "empty": "No messages yet. Start the conversation below.",
+    "you": "You",
+    "operatorLabel": "Platform operator",
+    "composerLabel": "Your message to the operator",
+    "send": "Send",
+    "sending": "Sending…",
+    "selectCampaign": "Campaign",
+    "threadListLabel": "Investor conversations",
+    "threadWith": "Investor {key}",
+    "noThreads": "No investor conversations for this campaign yet.",
+    "selectThread": "Choose a conversation to read it.",
+    "replyLabel": "Reply to this investor",
+    "reply": "Send reply",
+    "noCampaigns": "No campaigns available."
   }
 }
