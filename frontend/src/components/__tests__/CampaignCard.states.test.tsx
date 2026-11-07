@@ -68,7 +68,7 @@ test('ended funded withdrawn campaign offers nothing and says so', () => {
 test('canonical demo keeps its illustrative photo and caption', () => {
   setup({ ...openUnfunded, id: 'demo-solar' });
   expect(screen.getByAltText('Aerial photograph of a solar farm (illustrative)').getAttribute('src')).toBe(
-    'https://blockallisto-media.nunrib-df6.workers.dev/demo-solar-farm.jpg',
+    'https://blockallisto-media.nunrib-df6.workers.dev/campaigns/demo-solar-farm.jpg',
   );
   expect(screen.getByText('Illustrative photo - not the actual project.')).toBeTruthy();
 });
@@ -76,7 +76,7 @@ test('canonical demo keeps its illustrative photo and caption', () => {
 test('new campaigns use a clearly labelled illustrative photo', () => {
   setup(openUnfunded);
   expect(screen.getByAltText('Aerial photograph of a solar farm (illustrative)').getAttribute('src')).toBe(
-    'https://blockallisto-media.nunrib-df6.workers.dev/demo-solar-farm.jpg',
+    'https://blockallisto-media.nunrib-df6.workers.dev/campaigns/demo-solar-farm.jpg',
   );
   expect(screen.getByText(/Illustrative photo/)).toBeTruthy();
 });
