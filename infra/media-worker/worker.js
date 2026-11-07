@@ -43,6 +43,27 @@ export default {
     if (!p || !SAFE.test(p) || p.includes("..") || p.includes("//") || !EXT.test(p)) {
       return new Response(null, { status: 404 });
     }
+    // B2 storage folder rename (owner decision 2026-11-07): the bucket folder
+    // is now "social icons". The public URL path stays /social/ so no site
+    // reference changes; only the B2 key is remapped. b2get() percent-encodes
+    // each segment, so the space is safe on the wire. Old social/* keys are
+    // retained until explicit owner approval - no deletion on this change.
+    const key = p === "social/og-image.png"
+      ? p
+      : p.startsWith("social/")
+      ? "social icons/" + p.slice("social/".length)
+      : /^(favicon\.ico|favicon\.svg|favicon-(48|32|16)\.png|apple-touch-icon\.png)$/.test(p)
+        ? "icons/" + p
+        : p === "og-image.png"
+          ? "social/og-image.png"
+          : p === "about-accumulation.svg" || p === "faq-question.svg"
+            ? "animations/" + p
+            : p === "blockallisto-lockup-horizontal.svg" ||
+                p === "blockallisto-lockup-horizontal-reversed.svg"
+              ? "logo/" + p
+              : p === "demo-solar-farm.jpg"
+                ? "campaigns/demo-solar-farm.jpg"
+                : p;
     // Edge cache (Cache API): serve repeat requests without a B2 fetch.
     // Safe invalidation comes from VERSIONED asset keys (writer uploads
     // content-hashed/versioned paths, e.g. icons/logo.<hash>.svg), so a
@@ -51,8 +72,13 @@ export default {
     const cache = caches.default;
     const reqOrigin = request.headers.get("Origin") || "";
     const corsOrigin = ALLOWED_ORIGINS.has(reqOrigin) ? reqOrigin : "";
+    // Cache generation: bump CACHE_VERSION when ANY B2 object is replaced in
+    // place under an existing key (e.g. the 2026-11-07 about-accumulation.svg
+    // visible-base fix). The version segment orphans all previous edge
+    // entries (one bounded refetch per object); mapping/SAFE/CORS untouched.
+    const CACHE_VERSION = "v2";
     const cacheKey = new Request(
-      new URL(request.url).origin + "/" + p + (corsOrigin ? "?__origin=" + encodeURIComponent(corsOrigin) : ""),
+      new URL(request.url).origin + "/" + CACHE_VERSION + "/" + p + (corsOrigin ? "?__origin=" + encodeURIComponent(corsOrigin) : ""),
       { method: "GET" }
     );
     if (request.method === "GET") {
@@ -64,8 +90,8 @@ export default {
       }
     }
     try {
-      let r = await b2get(env, PREFIX + p, request.method, false);
-      if (r.status === 401) r = await b2get(env, PREFIX + p, request.method, true);
+      let r = await b2get(env, PREFIX + key, request.method, false);
+      if (r.status === 401) r = await b2get(env, PREFIX + key, request.method, true);
       if (!r.ok) return new Response(null, { status: 404 });
       const h = new Headers();
       h.set("Content-Type", r.headers.get("Content-Type") || "application/octet-stream");
