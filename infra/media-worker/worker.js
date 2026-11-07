@@ -50,7 +50,7 @@ export default {
     // retained until explicit owner approval - no deletion on this change.
     const key = p.startsWith("social/")
       ? "social icons/" + p.slice("social/".length)
-      : /^(favicon\.ico|favicon\.svg|favicon-(48|32|16)\.png)$/.test(p)
+      : /^(favicon\.ico|favicon\.svg|favicon-(48|32|16)\.png|apple-touch-icon\.png)$/.test(p)
         ? "icons/" + p
         : p;
     // Edge cache (Cache API): serve repeat requests without a B2 fetch.
