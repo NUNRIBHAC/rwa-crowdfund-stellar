@@ -51,6 +51,10 @@ export type EventArchiveStore = {
   put(events: ArchivedChainEvent[]): Promise<number>;
   list(campaignId?: string): Promise<ArchivedChainEvent[]>;
   count(campaignId?: string): Promise<number>;
+  // Distinct campaign ids present in the archive. Completeness checks use
+  // this to catch contracts the registry cannot explain; a listing failure
+  // must propagate (fail closed), never return a partial list as complete.
+  campaigns(): Promise<string[]>;
   readCheckpoint(campaignId: string): Promise<EventArchiveCheckpoint | undefined>;
   writeCheckpoint(campaignId: string, cp: EventArchiveCheckpoint): Promise<void>;
 };
@@ -242,6 +246,10 @@ export class FileEventArchiveStore implements EventArchiveStore {
     const doc = await this.readDoc();
     return Object.values(doc.events).filter((e) => !campaignId || e.campaignId === campaignId).length;
   }
+  async campaigns(): Promise<string[]> {
+    const doc = await this.readDoc();
+    return [...new Set(Object.values(doc.events).map((e) => e.campaignId))].sort();
+  }
   async readCheckpoint(campaignId: string): Promise<EventArchiveCheckpoint | undefined> {
     return (await this.readDoc()).checkpoints[campaignId];
   }
@@ -317,6 +325,11 @@ export class PostgresEventArchiveStore implements EventArchiveStore {
       ? await this.pool.query('SELECT count(*)::int AS n FROM event_archive WHERE campaign_id = $1', [campaignId])
       : await this.pool.query('SELECT count(*)::int AS n FROM event_archive');
     return r.rows[0].n as number;
+  }
+  async campaigns(): Promise<string[]> {
+    await this.ensureReady();
+    const r = await this.pool.query('SELECT DISTINCT campaign_id FROM event_archive ORDER BY campaign_id');
+    return r.rows.map((row: { campaign_id: string }) => row.campaign_id);
   }
   async readCheckpoint(campaignId: string): Promise<EventArchiveCheckpoint | undefined> {
     await this.ensureReady();

@@ -901,7 +901,7 @@ export async function buildCampaignDeploy(input: { actor: string; id: string; na
 // transactions create contractCode, not an instance, and yield nothing here.
 // Plain-object shape: change arm created, ledger-entry data type 6
 // (contractData), ScVal key type 20 (ledgerKeyContractInstance).
-function createdContractIdsFromMeta(resultMetaXdr: unknown): string[] {
+export function createdContractIdsFromMeta(resultMetaXdr: unknown): string[] {
   if (!resultMetaXdr) return [];
   let plain: unknown;
   try {

@@ -117,3 +117,36 @@ Actual collection still needs trustworthy contract-creation/manifest coverage,
 all-role event parsing, and one coherent lock/snapshot boundary across journal,
 pending proofs, registry, archive and community changes. No permission to erase
 financial/on-chain records is implied.
+
+## Wallet lifetime snapshot builder (local, not wired)
+
+`deletion-history-snapshot.ts` collects the checker inputs from the platform's
+own sources, and `deployment-manifest.ts` grounds each contract's creation in
+chain evidence. Both remain local foundations: no hosted route injects the
+composed verdict, and wallet deletion stays unavailable on the hosted service.
+
+The creation manifest records campaign, contract, creation ledger, deployment
+hash and network only from a SUCCESSFUL deployment transaction fetched by exact
+hash; conflicting or corrupt rows throw, and a missing record falls back to the
+conservative bound ledger 1, which only ever widens the span coverage must
+prove. It never compensates for contracts the registry does not know: any
+campaign reference found in the journal, pending queue, contributor registry
+or archive that the registry cannot explain marks the manifest incomplete.
+
+The snapshot pins one target ledger: the highest ledger every contract's
+archive checkpoint has fully processed, capped by the chain tip. Only
+current-version, gap-free checkpoints count. Participant keys are derived from
+every topic position and the event value, XDR-decoded and raw-scanned, so all
+roles are covered, not only contributors; events archived beyond the shared
+target are still checked (over-inclusion only ever turns clear into
+protected), and any field that cannot be fully decoded or scanned is an
+unreadable event, never an empty one.
+
+Coherence requires the caller to refresh the archive toward the chain tip
+immediately before the snapshot; a failed refresh is unavailable. The composed
+verdict (`walletDeletionEvidenceVerdict`) feeds the history result into the
+retention evaluator together with the journal (quarantine fails closed),
+hash-only pending proofs (unavailable) and deploy-intent creator keys
+(protected). Wiring this into the hosted deletion route still requires the
+final mutation to re-check under its own serialized lock, plus its own full
+gate and explicit authorization. No financial or on-chain record is deleted.
