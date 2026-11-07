@@ -3,9 +3,9 @@ import { useSyncExternalStore } from 'react';
 export type Theme = 'navy' | 'light';
 
 const STORAGE_KEY = 'blockallisto-theme';
-const LOCKUP_NAVY = 'https://blockallisto-media.nunrib-df6.workers.dev/blockallisto-lockup-horizontal-reversed.svg';
+const LOCKUP_NAVY = 'https://blockallisto-media.nunrib-df6.workers.dev/logo/blockallisto-lockup-horizontal-reversed.svg';
 export const FOOTER_LOCKUP = LOCKUP_NAVY;
-const LOCKUP_LIGHT = 'https://blockallisto-media.nunrib-df6.workers.dev/blockallisto-lockup-horizontal.svg';
+const LOCKUP_LIGHT = 'https://blockallisto-media.nunrib-df6.workers.dev/logo/blockallisto-lockup-horizontal.svg';
 
 export function lockupFor(theme: Theme): string {
   return theme === 'light' ? LOCKUP_LIGHT : LOCKUP_NAVY;
