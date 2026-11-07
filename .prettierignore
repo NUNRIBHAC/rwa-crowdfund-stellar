@@ -8,3 +8,6 @@ backend/test/fixtures/
 NOTICE
 brand/
 frontend/i18n-json/ui/.whitespace-baseline.json
+infra/media-worker/worker.js
+infra/media-worker/worker-v2-rollback.js
+infra/media-worker/worker-v3-rollback.js

@@ -26,7 +26,7 @@ test('a failed campaign-specific photo falls back without removing the honesty c
     </I18nProvider>,
   );
   fireEvent.error(screen.getByRole('img'));
-  expect(screen.getByRole('img').getAttribute('src')).toBe('/illustrative-covers/blocks-0.svg');
+  expect(screen.getByRole('img').getAttribute('src')).toBe('https://blockallisto-media.nunrib-df6.workers.dev/illustrative-covers/blocks-0.svg');
   expect(screen.getByText(/Illustrative cover/)).toBeTruthy();
   delete CAMPAIGN_PHOTOS['photo-failure-test'];
 });

@@ -7,7 +7,19 @@ import reactHooks from 'eslint-plugin-react-hooks';
 // Deliberate `any` casts are common at SDK boundaries and allowed; unused-var
 // and empty-block patterns get narrow exceptions instead of mass edits.
 export default tseslint.config(
-  { ignores: ['**/dist/', '**/node_modules/', '**/coverage/', 'contracts/', 'docs/', 'backend/test/fixtures/'] },
+  {
+    ignores: [
+      '**/dist/',
+      '**/node_modules/',
+      '**/coverage/',
+      'contracts/',
+      'docs/',
+      'backend/test/fixtures/',
+      'infra/media-worker/worker.js',
+      'infra/media-worker/worker-v2-rollback.js',
+      'infra/media-worker/worker-v3-rollback.js',
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
