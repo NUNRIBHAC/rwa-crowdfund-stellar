@@ -56,7 +56,14 @@ export default {
         ? "icons/" + p
         : p === "og-image.png"
           ? "social/og-image.png"
-          : p;
+          : p === "about-accumulation.svg" || p === "faq-question.svg"
+            ? "animations/" + p
+            : p === "blockallisto-lockup-horizontal.svg" ||
+                p === "blockallisto-lockup-horizontal-reversed.svg"
+              ? "logo/" + p
+              : p === "demo-solar-farm.jpg"
+                ? "campaigns/demo-solar-farm.jpg"
+                : p;
     // Edge cache (Cache API): serve repeat requests without a B2 fetch.
     // Safe invalidation comes from VERSIONED asset keys (writer uploads
     // content-hashed/versioned paths, e.g. icons/logo.<hash>.svg), so a
