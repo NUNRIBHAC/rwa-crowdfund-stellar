@@ -97,3 +97,23 @@ Installed 0.7.1 differs from the current parser docs: parseSignInURI returns
 only channelToken, not URI/domain/nonce. The local buildSignInMessage test
 therefore supplies the URI explicitly. No wallet-app round trip is inferred
 from the current documentation or a channel-token-only parser result.
+
+## Wallet lifetime coverage policy (local, not wired)
+
+`deletion-history.ts` validates a runtime evidence snapshot before it can return
+clear. It requires a complete campaign manifest, one explicit network and
+ledger, no duplicate campaign/contract, each contract's independently grounded
+creation ledger, complete all-event/all-participant-role coverage from creation
+through exactly that ledger, no gaps or unreadable events, and valid participant
+keys. Historic participation is protected even if balances are now zero. Missing
+or malformed evidence is unavailable, including a forged TypeScript cast.
+
+This is a policy checker, not a live source of those assurances. The current
+archive starts prospectively, retains honest gaps, and its parsedContributor is
+only a best-effort field. A contributor-only checkpoint, current zero balance,
+empty pruned journal or parse-success on some events cannot fill these inputs.
+The checker is not called by hosted deletion and enables no wallet route.
+Actual collection still needs trustworthy contract-creation/manifest coverage,
+all-role event parsing, and one coherent lock/snapshot boundary across journal,
+pending proofs, registry, archive and community changes. No permission to erase
+financial/on-chain records is implied.
