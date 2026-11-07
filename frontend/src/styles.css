@@ -2883,6 +2883,38 @@ html.rtl-text
   ) {
   direction: rtl;
 }
+/* Arabic: direction: rtl above also flips text-align: start to the right,
+   which shifted every heading, paragraph and input to the right side of the
+   page (user 2026-11-07: 'O arabe esta todo para a direita' - layout must
+   stay identical to the other 10 locales). Pin block-text alignment to the
+   LTR geometry at zero specificity so any component-level text-align (center
+   notes, badges, tables) still wins; direction: rtl keeps governing the
+   reading order inside each line. Lists are excluded: marker placement
+   follows direction and needs its own treatment if a page needs it.
+   .home-contract descendants are excluded: that widget centres its whole
+   block by design (verified 2026-11-07 cross-page audit). */
+:where(html.rtl-text)
+  :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    blockquote,
+    figcaption,
+    dd,
+    dt,
+    caption,
+    label,
+    legend,
+    input,
+    textarea
+  ):not(:where(.home-contract) *) {
+  text-align: left;
+}
+
 html.rtl-text
   [dir='ltr']
   :where(
@@ -2923,6 +2955,12 @@ html.rtl-text
    these containers stay LTR while the dt/dd/p text inside them still flips. */
 html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .intent-facts, .step-cards, .portfolio-row, .account-checklist-item) {
   direction: ltr;
+}
+html.rtl-text .accordion summary {
+  direction: ltr;
+}
+html.rtl-text .accordion summary > span:first-child {
+  direction: rtl;
 }
 
 @media (min-width: 1151px) and (max-width: 1439px) {
