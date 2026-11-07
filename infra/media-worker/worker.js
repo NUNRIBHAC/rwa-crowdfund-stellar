@@ -48,7 +48,9 @@ export default {
     // reference changes; only the B2 key is remapped. b2get() percent-encodes
     // each segment, so the space is safe on the wire. Old social/* keys are
     // retained until explicit owner approval - no deletion on this change.
-    const key = p.startsWith("social/")
+    const key = p === "social/og-image.png"
+      ? p
+      : p.startsWith("social/")
       ? "social icons/" + p.slice("social/".length)
       : /^(favicon\.ico|favicon\.svg|favicon-(48|32|16)\.png|apple-touch-icon\.png)$/.test(p)
         ? "icons/" + p
