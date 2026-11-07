@@ -43,6 +43,12 @@ export default {
     if (!p || !SAFE.test(p) || p.includes("..") || p.includes("//") || !EXT.test(p)) {
       return new Response(null, { status: 404 });
     }
+    // B2 storage folder rename (owner decision 2026-11-07): the bucket folder
+    // is now "social icons". The public URL path stays /social/ so no site
+    // reference changes; only the B2 key is remapped. b2get() percent-encodes
+    // each segment, so the space is safe on the wire. Old social/* keys are
+    // retained until explicit owner approval - no deletion on this change.
+    const key = p.startsWith("social/") ? "social icons/" + p.slice("social/".length) : p;
     // Edge cache (Cache API): serve repeat requests without a B2 fetch.
     // Safe invalidation comes from VERSIONED asset keys (writer uploads
     // content-hashed/versioned paths, e.g. icons/logo.<hash>.svg), so a
@@ -64,8 +70,8 @@ export default {
       }
     }
     try {
-      let r = await b2get(env, PREFIX + p, request.method, false);
-      if (r.status === 401) r = await b2get(env, PREFIX + p, request.method, true);
+      let r = await b2get(env, PREFIX + key, request.method, false);
+      if (r.status === 401) r = await b2get(env, PREFIX + key, request.method, true);
       if (!r.ok) return new Response(null, { status: 404 });
       const h = new Headers();
       h.set("Content-Type", r.headers.get("Content-Type") || "application/octet-stream");
