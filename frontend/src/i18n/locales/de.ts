@@ -2370,7 +2370,7 @@ export const de: Messages = {
     sending: 'Wird gesendet…',
     selectCampaign: 'Kampagne',
     threadListLabel: 'Investorengespräche',
-    threadWith: 'Investor {key}',
+    threadWith: 'Anleger {key}',
     noThreads: 'Noch keine Investorengespräche zu dieser Kampagne.',
     selectThread: 'Wählen Sie eine Unterhaltung zum Lesen.',
     replyLabel: 'Diesem Investor antworten',
