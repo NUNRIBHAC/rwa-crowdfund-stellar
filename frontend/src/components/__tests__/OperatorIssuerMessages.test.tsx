@@ -124,7 +124,7 @@ describe('OperatorIssuerMessages', () => {
   });
 
   it('a 404 reply (thread gone) surfaces the localized not-found error', async () => {
-    stubFetch((url, init) => {
+    stubFetch((url, _init) => {
       if (url.includes('/api/auth/abuse-config')) return resp(200, {});
       if (url.includes('/api/auth/me')) return resp(200, ME_OPERATOR);
       if (url.includes('/api/operator/campaigns/demo-solar/messages')) {
