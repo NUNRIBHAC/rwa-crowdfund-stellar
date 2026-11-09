@@ -596,6 +596,9 @@ export const en = {
     ],
   },
   account: {
+    contributionRecordDownload: 'Download testnet journal record (JSON)',
+    contributionRecordNote:
+      'Downloads are platform journal records, not legal receipts, investment documents or proof of ownership or current balance. Recorded amounts may be intended or unknown. The latest 50 records are shown, not a complete statement.',
     title: 'My account',
     note: 'Your account area: the testnet positions linked to your sign-in and the community activity saved under it (testnet assets only - no real funds or returns). Positions appear when you connect a wallet on the Stellar testnet and are worthless. The optional community sign-in and the support and issuer forms on this page process the data you enter as described in the privacy policy.',
     summaryAria: 'Portfolio summary',

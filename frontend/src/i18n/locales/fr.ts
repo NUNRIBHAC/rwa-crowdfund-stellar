@@ -608,6 +608,9 @@ export const fr: Messages = {
     ],
   },
   account: {
+    contributionRecordDownload: "Télécharger l'enregistrement du journal testnet (JSON)",
+    contributionRecordNote:
+      "Ces fichiers sont des enregistrements de la plateforme, pas des reçus légaux, des documents d'investissement ou des preuves de propriété ou de solde actuel. Les montants peuvent être prévus ou inconnus. Seuls les 50 derniers enregistrements sont affichés, pas un relevé complet.",
     title: 'Mon compte',
     note: "Votre espace compte : les positions testnet liées à votre connexion et l'activité communautaire enregistrée sous celui-ci (actifs testnet uniquement - aucun fonds ni rendement réel). Les positions apparaissent lorsque vous connectez un portefeuille sur le testnet Stellar et sont sans valeur. La connexion communautaire optionnelle et les formulaires de support et d'émetteur de cette page traitent les données saisies comme décrit dans la politique de confidentialité.",
     summaryAria: 'Résumé du portefeuille',

@@ -607,6 +607,9 @@ export const de: Messages = {
     ],
   },
   account: {
+    contributionRecordDownload: 'Testnet-Journaleintrag herunterladen (JSON)',
+    contributionRecordNote:
+      'Die Dateien sind Plattformprotokolle, keine rechtlichen Belege, Anlagedokumente oder Nachweise über Eigentum oder den aktuellen Saldo. Beträge können beabsichtigt oder unbekannt sein. Angezeigt werden die letzten 50 Einträge, kein vollständiger Kontoauszug.',
     title: 'Mein Konto',
     note: 'Dein Kontobereich: die Testnet-Positionen, die mit deiner Anmeldung verknüpft sind, und die darunter gespeicherten Community-Aktivitäten (nur Testnet-Assets - keine echten Gelder oder Erträge). Positionen erscheinen, wenn du eine Wallet im Stellar-Testnet verbindest, und sind wertlos. Die optionale Community-Anmeldung und die Support- und Emittentenformulare auf dieser Seite verarbeiten die eingegebenen Daten wie in der Datenschutzerklärung beschrieben.',
     summaryAria: 'Portfolioübersicht',

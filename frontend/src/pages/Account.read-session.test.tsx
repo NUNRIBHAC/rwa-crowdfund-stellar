@@ -118,3 +118,43 @@ it('does not retain an old actor activity row while the next actor read is pendi
   await waitFor(() => expect(screen.getByRole('region', { name: 'Recent activity' }).textContent).toContain('Loading'));
   expect(screen.queryByText('OLD-ACTOR-ROW')).toBeNull();
 });
+
+it('only exports a current-actor SUCCESS contribution with explicit testnet evidence, clearing it on actor change', async () => {
+  const one = 'G' + 'A'.repeat(55),
+    two = 'G' + 'B'.repeat(55);
+  auth.account = { publicKey: one, authMethod: 'wallet' };
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((url: string) => {
+      if (url.includes('/activity') && url.includes(two)) return new Promise<Response>(() => {});
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            network: 'testnet',
+            productionEligible: false,
+            campaigns: [],
+            holdings: [],
+            payouts: [],
+            activity: [
+              { hash: 'a'.repeat(64), campaign: 'current-actor-campaign', action: 'contribute', status: 'SUCCESS', amount: '1.0000001', createdAt: null },
+            ],
+          }),
+        ),
+      );
+    }),
+  );
+  const view = render(
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>,
+  );
+  await screen.findByRole('button', { name: /Download testnet journal record/ });
+  auth.account = { publicKey: two, authMethod: 'wallet' };
+  view.rerender(
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>,
+  );
+  expect(screen.queryByRole('button', { name: /Download testnet journal record/ })).toBeNull();
+  expect(screen.queryByText('current-actor-campaign')).toBeNull();
+});

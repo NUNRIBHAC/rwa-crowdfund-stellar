@@ -606,6 +606,9 @@ export const es: Messages = {
     ],
   },
   account: {
+    contributionRecordDownload: 'Descargar registro testnet (JSON)',
+    contributionRecordNote:
+      'Los archivos son registros de la plataforma, no recibos legales, documentos de inversión ni pruebas de propiedad o saldo actual. Los importes pueden ser previstos o desconocidos. Se muestran los últimos 50 registros, no un extracto completo.',
     title: 'Mi cuenta',
     note: 'Tu área de cuenta: las posiciones de testnet vinculadas a tu inicio de sesión y la actividad de la comunidad guardada bajo él (solo activos de testnet - sin fondos ni rendimientos reales). Las posiciones aparecen cuando conectas un monedero en la testnet de Stellar y no tienen valor. El inicio de sesión opcional en la comunidad y los formularios de soporte y de emisor de esta página tratan los datos introducidos como se describe en la política de privacidad.',
     summaryAria: 'Resumen de la cartera',

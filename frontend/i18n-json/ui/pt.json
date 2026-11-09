@@ -571,6 +571,8 @@
     ]
   },
   "account": {
+    "contributionRecordDownload": "Descarregar registo testnet (JSON)",
+    "contributionRecordNote": "Os ficheiros são registos da plataforma, não recibos legais, documentos de investimento ou provas de propriedade ou saldo atual. Os montantes podem ser previstos ou desconhecidos. São mostrados os últimos 50 registos, não um extrato completo.",
     "title": "A minha conta",
     "note": "A sua área de conta: as posições de testnet associadas ao seu início de sessão e a atividade da comunidade guardada sob ela (apenas ativos de testnet - sem fundos ou rendimentos reais). As posições aparecem quando liga uma carteira na testnet Stellar e não têm valor. O início de sessão opcional na comunidade e os formulários de suporte e de emitente nesta página tratam os dados introduzidos conforme descrito na política de privacidade.",
     "summaryAria": "Resumo da carteira",

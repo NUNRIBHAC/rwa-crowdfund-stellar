@@ -1,3 +1,4 @@
+import ContributionRecordButton from '../components/ContributionRecordButton';
 import DemoJourney from '../components/DemoJourney';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { accountReadActor } from '../account-read-actor';
@@ -79,7 +80,12 @@ export default function Account({ market }: { market: Market }) {
   const readActor = accountReadActor(actor, account);
   const [tab, setTab] = useState<PortfolioStatus | 'all'>('all');
   const intent = useMemo(readIntent, []);
-  const [activityRead, setActivityRead] = useState<{ actor: string; data: ActivityRow[] | 'loading' | 'error' } | null>(null);
+  const [activityRead, setActivityRead] = useState<{
+    actor: string;
+    data: ActivityRow[] | 'loading' | 'error';
+    network?: unknown;
+    productionEligible?: unknown;
+  } | null>(null);
   const activity = !readActor ? null : activityRead?.actor === readActor ? activityRead.data : 'loading';
   // Positions for the selected proven read actor: the same public /api/campaigns?actor= read the connected-wallet
   // path uses, never fabricated rows. Transaction paths still require the
@@ -100,7 +106,13 @@ export default function Account({ market }: { market: Market }) {
     fetch(`/api/account/activity?actor=${encodeURIComponent(readActor)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((j) => {
-        if (live) setActivityRead({ actor: readActor, data: Array.isArray(j.activity) ? j.activity : [] });
+        if (live)
+          setActivityRead({
+            actor: readActor,
+            data: Array.isArray(j.activity) ? j.activity : [],
+            network: j.network,
+            productionEligible: j.productionEligible,
+          });
       })
       .catch(() => {
         if (live) setActivityRead({ actor: readActor, data: 'error' });
@@ -243,6 +255,9 @@ export default function Account({ market }: { market: Market }) {
 
       <section aria-label={m.account.activityAria}>
         <h2 className="section-title">{m.account.recentActivity}</h2>
+        {Array.isArray(activity) && activity.some((a) => a.action === 'contribute' && a.status === 'SUCCESS') && (
+          <p className="account-note">{m.account.contributionRecordNote}</p>
+        )}
         {activity === 'loading' ? (
           <p className="community-loading" role="status">
             {m.community.loading}
@@ -261,7 +276,7 @@ export default function Account({ market }: { market: Market }) {
                 <a href={`https://stellar.expert/explorer/testnet/tx/${a.hash}`} target="_blank" rel="noreferrer">
                   tx
                 </a>
-                )
+                ) <ContributionRecordButton row={a} actor={readActor} network={activityRead?.network} productionEligible={activityRead?.productionEligible} />
               </li>
             ))}
           </ul>
