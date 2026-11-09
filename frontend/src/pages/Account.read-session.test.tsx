@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { I18nProvider } from '../i18n';
 import Account from './Account';
 import type { Market } from '../market';
-const auth = vi.hoisted(() => ({ account: { publicKey: 'wallet-session', authMethod: 'wallet' } as any }));
+const auth = vi.hoisted(() => ({ token: '', account: { publicKey: 'wallet-session', authMethod: 'wallet' } as any }));
 vi.mock('../community/CommunityAuth', () => ({ useCommunityAuth: () => auth }));
 vi.mock('../components/DemoJourney', () => ({ default: () => null }));
 vi.mock('../components/InvestorOnboarding', () => ({ default: () => null }));
@@ -157,4 +157,55 @@ it('only exports a current-actor SUCCESS contribution with explicit testnet evid
   );
   expect(screen.queryByRole('button', { name: /Download testnet journal record/ })).toBeNull();
   expect(screen.queryByText('current-actor-campaign')).toBeNull();
+});
+
+it('passes the reactive session token to documents and removes old labels before the next session response', async () => {
+  auth.account = { publicKey: 'wallet-session', authMethod: 'wallet' };
+  auth.token = 'synthetic-token-a';
+  const campaign = {
+    id: 'synthetic-docs',
+    name: 'Synthetic campaign',
+    contractId: 'C',
+    raised: '10',
+    balance: '10',
+    withdrawn: false,
+    config: { creator: 'G', token: 'C', goal: '100', deadline: '9999999999' },
+  };
+  let resolveNext!: (r: Response) => void;
+  const fetcher = vi.fn((url: string, init?: RequestInit) => {
+    if (url.startsWith('/api/campaigns?actor=')) return Promise.resolve(new Response(JSON.stringify({ campaigns: [campaign] })));
+    if (url.endsWith('/investment-documents')) {
+      if ((init?.headers as Record<string, string>).Authorization === 'Bearer synthetic-token-a') {
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              documents: [{ id: 'old-doc', campaignId: campaign.id, title: 'Old session document', status: 'approved', demo: true }],
+              demo: true,
+            }),
+          ),
+        );
+      }
+      return new Promise<Response>((resolve) => {
+        resolveNext = resolve;
+      });
+    }
+    return Promise.resolve(new Response(JSON.stringify({ activity: [], holdings: [], payouts: [], unavailable: [], news: [], documents: [], metadata: null })));
+  });
+  vi.stubGlobal('fetch', fetcher);
+  const view = () => (
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>
+  );
+  const { rerender } = render(view());
+  await screen.findByRole('button', { name: /Old session document/ });
+  auth.token = 'synthetic-token-b';
+  rerender(view());
+  expect(screen.queryByRole('button', { name: /Old session document/ })).toBeNull();
+  await waitFor(() => expect(resolveNext).toBeDefined());
+  resolveNext(new Response(JSON.stringify({ documents: [], demo: true })));
+  expect(await screen.findByText('No investment documents are available for this campaign yet.')).toBeTruthy();
+  auth.token = '';
+  rerender(view());
+  expect(screen.queryByText('No investment documents are available for this campaign yet.')).toBeNull();
 });

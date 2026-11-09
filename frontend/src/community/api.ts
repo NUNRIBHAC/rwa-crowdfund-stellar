@@ -258,9 +258,10 @@ export const fetchInvestmentDocuments = (token: string, campaignId: string) =>
 
 // Authorized download: fetches the file with the session bearer and hands a
 // blob to the caller (no token in any URL).
-export async function downloadInvestmentDocument(token: string, docId: string): Promise<{ blob: Blob; filename: string }> {
+export async function downloadInvestmentDocument(token: string, docId: string, signal?: AbortSignal): Promise<{ blob: Blob; filename: string }> {
   const r = await fetch(`/api/investment-documents/${encodeURIComponent(docId)}/download`, {
     headers: { Authorization: `Bearer ${token}` },
+    signal,
   });
   if (!r.ok) {
     const v = (await r.json().catch(() => ({}))) as { error?: string; code?: string };

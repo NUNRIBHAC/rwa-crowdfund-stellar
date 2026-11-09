@@ -76,7 +76,7 @@ function readIntent(): {
 export default function Account({ market }: { market: Market }) {
   const { locale, m } = useI18n();
   const { campaigns, actor, fixtureMode } = market;
-  const { account } = useCommunityAuth();
+  const { account, token } = useCommunityAuth();
   const readActor = accountReadActor(actor, account);
   const [tab, setTab] = useState<PortfolioStatus | 'all'>('all');
   const intent = useMemo(readIntent, []);
@@ -247,7 +247,7 @@ export default function Account({ market }: { market: Market }) {
             <div key={`${readActor}:${account?.publicKey ?? ''}:${r.id}`}>
               <h3>{r.name}</h3>
               <DocumentsList campaignId={r.id} fallback={<p className="empty-state">{m.account.documentsEmpty}</p>} />
-              <AccountInvestmentDocuments campaignId={r.id} />
+              <AccountInvestmentDocuments campaignId={r.id} token={token} />
             </div>
           ))}
         </section>

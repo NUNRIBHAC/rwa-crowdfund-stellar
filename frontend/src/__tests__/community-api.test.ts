@@ -14,6 +14,7 @@ import {
   verifyChallenge,
   createTicket,
   fetchNews,
+  downloadInvestmentDocument,
 } from '../community/api';
 
 const ok = (v: unknown) => ({ ok: true, status: 200, json: () => Promise.resolve(v) }) as Response;
@@ -115,5 +116,26 @@ describe('community api client', () => {
   it('surfaces server error messages', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(fail(401, 'invalid or expired session')));
     await expect(fetchMe('bls_bad')).rejects.toThrow('invalid or expired session');
+  });
+
+  it('passes the download AbortSignal with bearer auth, never in the URL', async () => {
+    const controller = new AbortController();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response('synthetic', { status: 200, headers: { 'content-disposition': 'attachment; filename="terms.txt"' } }));
+    vi.stubGlobal('fetch', fetchMock);
+    const { filename } = await downloadInvestmentDocument('private-token', 'doc/one', controller.signal);
+    expect(filename).toBe('terms.txt');
+    expect(fetchMock).toHaveBeenCalledWith('/api/investment-documents/doc%2Fone/download', {
+      headers: { Authorization: 'Bearer private-token' },
+      signal: controller.signal,
+    });
+  });
+
+  it('propagates an aborted download without returning a blob', async () => {
+    const controller = new AbortController();
+    controller.abort();
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new DOMException('aborted', 'AbortError')));
+    await expect(downloadInvestmentDocument('private-token', 'doc', controller.signal)).rejects.toHaveProperty('name', 'AbortError');
   });
 });

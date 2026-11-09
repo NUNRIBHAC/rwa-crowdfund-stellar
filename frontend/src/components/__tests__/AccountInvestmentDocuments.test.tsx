@@ -1,74 +1,132 @@
-// Investor documents section: approved docs render with demo badge and an
-// authorized (bearer) download; failure shows an unavailable note, never a
-// false empty state; no token -> nothing rendered.
-import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { I18nProvider } from '../../i18n';
 import AccountInvestmentDocuments from '../AccountInvestmentDocuments';
 
-function ok(v: unknown) {
-  return new Response(JSON.stringify(v), { status: 200, headers: { 'Content-Type': 'application/json' } });
+const api = vi.hoisted(() => ({ list: vi.fn(), download: vi.fn() }));
+vi.mock('../../community/api', () => ({ fetchInvestmentDocuments: api.list, downloadInvestmentDocument: api.download }));
+const doc = { id: 'doc1', campaignId: 'first', title: '[SYNTHETIC] Terms', demo: true, kind: 'terms', status: 'approved', createdAt: 1, approvedAt: 2 };
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  let reject!: (reason: unknown) => void;
+  const promise = new Promise<T>((a, b) => {
+    resolve = a;
+    reject = b;
+  });
+  return { promise, resolve, reject };
 }
-
-function renderSection() {
-  return render(
+function view(token = 'token-a', campaignId = 'first') {
+  return (
     <I18nProvider>
-      <AccountInvestmentDocuments campaignId="qa-newsproof" />
-    </I18nProvider>,
+      <AccountInvestmentDocuments token={token} campaignId={campaignId} />
+    </I18nProvider>
   );
 }
+let click: ReturnType<typeof vi.spyOn>;
+let create: ReturnType<typeof vi.fn>;
+let revoke: ReturnType<typeof vi.fn>;
+beforeEach(() => {
+  api.list.mockReset();
+  api.download.mockReset();
+  create = vi.fn(() => 'blob:synthetic');
+  revoke = vi.fn();
+  vi.stubGlobal('URL', Object.assign(URL, { createObjectURL: create, revokeObjectURL: revoke }));
+  click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
+});
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
 
-describe('AccountInvestmentDocuments', () => {
-  afterEach(() => {
-    cleanup();
-    vi.unstubAllGlobals();
-    localStorage.clear();
-  });
-
-  it('renders nothing without a community session token', () => {
-    const { container } = renderSection();
+describe('AccountInvestmentDocuments request scope', () => {
+  it('renders nothing and makes no request without a token', () => {
+    const { container } = render(view(''));
     expect(container.innerHTML).toBe('');
+    expect(api.list).not.toHaveBeenCalled();
   });
-
-  it('lists approved documents with the demo badge', async () => {
-    localStorage.setItem('blockallisto-community-token', 'tok');
-    const fetchMock = vi.fn().mockResolvedValue(
-      ok({
-        documents: [
-          {
-            id: 'idoc_1',
-            campaignId: 'qa-newsproof',
-            title: '[SYNTHETIC] Sample terms',
-            kind: 'terms',
-            status: 'approved',
-            demo: true,
-            createdAt: 1,
-            approvedAt: 2,
-          },
-        ],
-        demo: true,
-      }),
-    );
-    vi.stubGlobal('fetch', fetchMock);
-    renderSection();
-    expect(await screen.findByText(/\[SYNTHETIC\] Sample terms/)).toBeTruthy();
+  it('shows loading, never false empty, while the list is pending', () => {
+    api.list.mockReturnValue(new Promise(() => undefined));
+    render(view());
+    expect(screen.getByRole('status')).toBeTruthy();
+    expect(screen.queryByText('No investment documents are available for this campaign yet.')).toBeNull();
+  });
+  it('shows approved demo documents after loading', async () => {
+    api.list.mockResolvedValue({ documents: [doc] });
+    render(view());
+    expect(await screen.findByRole('button', { name: /SYNTHETIC/ })).toBeTruthy();
     expect(screen.getByText('DEMO')).toBeTruthy();
-    // bearer token used, never a URL token
-    const [, init] = fetchMock.mock.calls[0];
-    expect(init.headers.Authorization).toBe('Bearer tok');
+    expect(api.list).toHaveBeenCalledWith('token-a', 'first');
   });
-
-  it('load failure shows an unavailable note, not a false empty state', async () => {
-    localStorage.setItem('blockallisto-community-token', 'tok');
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('down')));
-    renderSection();
+  it('shows empty only after an empty result', async () => {
+    api.list.mockResolvedValue({ documents: [] });
+    render(view());
+    expect(await screen.findByText('No investment documents are available for this campaign yet.')).toBeTruthy();
+  });
+  it('shows unavailable on a failed list, not empty', async () => {
+    api.list.mockRejectedValue(new Error('down'));
+    render(view());
     expect(await screen.findByText('Investment documents could not be loaded. That does not mean there are none - try again later.')).toBeTruthy();
   });
-
-  it('honest empty state on a loaded zero-document feed', async () => {
-    localStorage.setItem('blockallisto-community-token', 'tok');
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(ok({ documents: [], demo: true })));
-    renderSection();
+  it('removes old documents immediately on campaign change and ignores late old responses', async () => {
+    const old = deferred<{ documents: (typeof doc)[] }>();
+    api.list.mockReturnValueOnce(old.promise).mockResolvedValueOnce({ documents: [] });
+    const { rerender } = render(view());
+    rerender(view('token-a', 'second'));
+    old.resolve({ documents: [doc] });
     expect(await screen.findByText('No investment documents are available for this campaign yet.')).toBeTruthy();
+    expect(screen.queryByRole('button')).toBeNull();
+  });
+  it('does not retain failure or old documents across session changes', async () => {
+    api.list.mockRejectedValueOnce(new Error('old')).mockResolvedValueOnce({ documents: [doc] });
+    const { rerender } = render(view());
+    await screen.findByText('Investment documents could not be loaded. That does not mean there are none - try again later.');
+    rerender(view('token-b'));
+    expect(await screen.findByRole('button')).toBeTruthy();
+    expect(screen.queryByText('Investment documents could not be loaded. That does not mean there are none - try again later.')).toBeNull();
+  });
+  it('catches download failure, shows feedback and permits retry without losing the list', async () => {
+    api.list.mockResolvedValue({ documents: [doc] });
+    api.download.mockRejectedValueOnce(new Error('403'));
+    render(view());
+    fireEvent.click(await screen.findByRole('button'));
+    await waitFor(() => expect(api.download).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(screen.getByRole('status')).toBeTruthy());
+    expect(screen.getByRole('button').hasAttribute('disabled')).toBe(false);
+    expect(click).not.toHaveBeenCalled();
+    api.download.mockResolvedValueOnce({ blob: new Blob(['test']), filename: 'terms.txt' });
+    fireEvent.click(screen.getByRole('button'));
+    await waitFor(() => expect(click).toHaveBeenCalledTimes(1));
+    expect(create).toHaveBeenCalledTimes(1);
+    expect(revoke).toHaveBeenCalledWith('blob:synthetic');
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+  for (const change of ['session', 'campaign', 'logout', 'unmount']) {
+    it(`aborts and suppresses a pending download after ${change}`, async () => {
+      const download = deferred<{ blob: Blob; filename: string }>();
+      api.list.mockResolvedValue({ documents: [doc] });
+      api.download.mockReturnValue(download.promise);
+      const { rerender, unmount } = render(view());
+      fireEvent.click(await screen.findByRole('button'));
+      const signal = api.download.mock.calls[0][2] as AbortSignal;
+      expect(signal.aborted).toBe(false);
+      if (change === 'unmount') unmount();
+      else rerender(view(change === 'logout' ? '' : change === 'session' ? 'token-b' : 'token-a', change === 'campaign' ? 'second' : 'first'));
+      expect(signal.aborted).toBe(true);
+      download.resolve({ blob: new Blob(['old']), filename: 'old.txt' });
+      await new Promise((r) => setTimeout(r, 0));
+      expect(click).not.toHaveBeenCalled();
+      expect(create).not.toHaveBeenCalled();
+    });
+  }
+  it('prevents duplicate pending downloads', async () => {
+    api.list.mockResolvedValue({ documents: [doc] });
+    api.download.mockReturnValue(new Promise(() => undefined));
+    render(view());
+    const button = await screen.findByRole('button');
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(api.download).toHaveBeenCalledTimes(1);
+    expect(button.hasAttribute('disabled')).toBe(true);
   });
 });
