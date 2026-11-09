@@ -15,7 +15,7 @@ describe('Arabic RTL: text direction flips, block geometry does not', () => {
   });
 
   it('pins block-text alignment to the LTR geometry at zero specificity', () => {
-    const pin = norm.match(/:where\(html\.rtl-text\) :where\(([^)]*)\):not\(:where\(([^)]*)\) \*\) \{ text-align: left; \}/);
+    const pin = norm.match(/:where\(html\.rtl-text\) :where\(([^)]*)\):not\(\s*:where\(([^)]*)\) \*\s*\) \{ text-align: left; \}/);
     expect(pin, 'zero-specificity text-align pin missing').toBeTruthy();
     for (const el of ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'blockquote', 'input', 'textarea', 'label', 'dd', 'dt']) {
       expect(pin[1], `pin must cover ${el}`).toContain(el);
