@@ -1,57 +1,83 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { fetchDemoOnboarding, saveDemoOnboarding, type DemoOnboardingResponse } from '../community/api';
 import { useI18n } from '../i18n';
 export default function InvestorOnboarding() {
   const { account, token } = useCommunityAuth();
+  // A new session owns a new component instance, so an old account response
+  // cannot populate the next signed-in account or a signed-out screen.
+  return <OnboardingSession key={account && token ? `${account.publicKey}:${token}` : 'signed-out'} signedIn={!!account && !!token} token={token} />;
+}
+
+function OnboardingSession({ signedIn, token }: { signedIn: boolean; token: string }) {
   const { m } = useI18n();
   const t = m.onboarding;
   const [record, setRecord] = useState<DemoOnboardingResponse | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  useEffect(() => {
-    let live = true;
-    setRecord(null);
+  const [loading, setLoading] = useState(false);
+  const active = useRef(true);
+  const reads = useRef(0);
+  const load = useCallback(async () => {
+    if (!signedIn) return;
+    const request = ++reads.current;
+    setLoading(true);
     setError('');
-    if (token)
-      fetchDemoOnboarding(token)
-        .then((x) => {
-          if (live) setRecord(x);
-        })
-        .catch((e) => {
-          if (live) setError(String(e.message));
-        });
+    try {
+      const saved = await fetchDemoOnboarding(token);
+      if (active.current && reads.current === request) setRecord(saved);
+    } catch (e) {
+      if (active.current && reads.current === request) setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      if (active.current && reads.current === request) setLoading(false);
+    }
+  }, [signedIn, token]);
+  useEffect(() => {
+    active.current = true;
+    void load();
     return () => {
-      live = false;
+      active.current = false;
     };
-  }, [token]);
+  }, [load]);
   async function save(identity: DemoOnboardingResponse['progress']['identity'], risksAcknowledged: boolean) {
+    const request = ++reads.current;
     setBusy(true);
     setError('');
     try {
-      setRecord(await saveDemoOnboarding(token, { identity, risksAcknowledged }));
+      const saved = await saveDemoOnboarding(token, { identity, risksAcknowledged });
+      if (active.current && reads.current === request) setRecord(saved);
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      if (active.current && reads.current === request) setError(e instanceof Error ? e.message : String(e));
     } finally {
-      setBusy(false);
+      if (active.current && reads.current === request) setBusy(false);
     }
   }
   return (
     <section className="community-section" aria-labelledby="demo-onboarding">
       <h2 id="demo-onboarding">{t.title}</h2>
       <p className="community-note">{t.note}</p>
-      {!account ? (
+      {!signedIn ? (
         <p>{t.signIn}</p>
       ) : (
         <>
-          {error && <p role="alert">{error}</p>}
+          {loading && <p role="status">{m.community.loading}</p>}
+          {error && (
+            <>
+              <p role="alert">{error}</p>
+              {!record && (
+                <button className="btn" disabled={busy || loading} onClick={() => void load()}>
+                  {t.refresh}
+                </button>
+              )}
+            </>
+          )}
           {record && (
             <>
               <p role="status">{t.states[record.eligibility]}</p>
               <label>
                 <span style={{ display: 'block', marginBottom: '0.5rem' }}>{t.identity}</span>
                 <select
-                  disabled={busy}
+                  disabled={busy || loading}
                   value={record.progress.identity}
                   onChange={(e) => void save(e.target.value as DemoOnboardingResponse['progress']['identity'], record.progress.risksAcknowledged)}
                 >
@@ -70,15 +96,17 @@ export default function InvestorOnboarding() {
                 <input
                   type="checkbox"
                   checked={record.progress.risksAcknowledged}
-                  disabled={busy}
+                  disabled={busy || loading}
                   onChange={(e) => void save(record.progress.identity, e.target.checked)}
                 />
                 {t.risks}
               </label>
               <p>{t.saved}</p>
-              <button className="btn" disabled={busy} onClick={() => void save(record.progress.identity, record.progress.risksAcknowledged)}>
-                {t.refresh}
-              </button>
+              {!record && (
+                <button className="btn" disabled={busy || loading} onClick={() => void load()}>
+                  {t.refresh}
+                </button>
+              )}
             </>
           )}
         </>
