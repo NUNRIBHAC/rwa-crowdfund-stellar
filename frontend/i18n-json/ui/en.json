@@ -32,6 +32,15 @@
     "unlinked": "No registered campaign linked",
     "reviewNote": "Prototype review only. Not a legal approval, listing or investment offer."
   },
+  "contributionTerms": {
+    "title": "What a contribution means",
+    "fixture": "Sample preview only. This campaign is not a deployed contract and cannot accept contributions. The sample issuer, instrument and documents do not create investment rights.",
+    "record": "A confirmed contribution to this testnet escrow creates a non-transferable balance record for the contributing wallet inside the campaign contract. It does not issue a receipt token, shares, a loan or a reward.",
+    "rights": "The escrow contract creates no interest, repayment schedule, voting rights or ownership rights. A contribution record is not proof of legal ownership or a claim to investment returns.",
+    "missingTitle": "Information not verified or published",
+    "missing": "Verified issuer identity, use of funds, financial position and legally defined offer terms are not available here. Educational examples and documents labelled DEMO are not verified issuer disclosures or live offer terms.",
+    "fees": "This escrow contract transfers the full contribution into escrow without a platform-fee deduction. Network fees in XLM are separate. A real platform fee schedule is not published here."
+  },
   "contributionPreview": {
     "title": "Preview contribution",
     "note": "Preview only: no signature, transaction or ownership.",

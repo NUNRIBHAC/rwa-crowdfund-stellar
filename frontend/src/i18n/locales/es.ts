@@ -38,6 +38,19 @@ export const es: Messages = {
     unlinked: 'Sin campaña registrada vinculada',
     reviewNote: 'Revisión de prototipo. No es aprobación legal, admisión ni oferta de inversión.',
   },
+  contributionTerms: {
+    title: 'Qué significa una contribución',
+    fixture:
+      'Solo vista previa de ejemplo. Esta campaña no es un contrato desplegado y no acepta contribuciones. El emisor, el instrumento y los documentos de ejemplo no crean derechos de inversión.',
+    record:
+      'Una contribución confirmada a este depósito en garantía en testnet crea un registro de saldo no transferible para la cartera contribuyente dentro del contrato de la campaña. No emite un token de recibo, acciones, un préstamo ni una recompensa.',
+    rights:
+      'El contrato de depósito en garantía no crea intereses, calendario de reembolso, derechos de voto ni derechos de propiedad. Un registro de contribución no prueba la propiedad legal ni un derecho a rendimientos de inversión.',
+    missingTitle: 'Información no verificada o publicada',
+    missing:
+      'La identidad verificada del emisor, el uso de fondos, la situación financiera y las condiciones legales de la oferta no están disponibles aquí. Los ejemplos educativos y los documentos DEMO no son información verificada del emisor ni condiciones de una oferta real.',
+    fees: 'Este contrato transfiere la contribución completa al depósito en garantía sin deducir una comisión de plataforma. Las tarifas de red en XLM son independientes. Aquí no se publica una tabla de comisiones de una plataforma real.',
+  },
   contributionPreview: {
     title: 'Vista previa de la aportación',
     note: 'Solo vista previa: sin firma, transacción ni propiedad.',

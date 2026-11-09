@@ -39,6 +39,19 @@ export const de: Messages = {
     unlinked: 'Keine registrierte Kampagne zugeordnet',
     reviewNote: 'Nur Prototypprüfung. Keine rechtliche Genehmigung, Zulassung oder Anlageofferte.',
   },
+  contributionTerms: {
+    title: 'Was ein Beitrag bedeutet',
+    fixture:
+      'Nur eine Beispielvorschau. Diese Kampagne ist kein bereitgestellter Vertrag und kann keine Beiträge annehmen. Beispiel-Emittent, Instrument und Dokumente begründen keine Anlagerechte.',
+    record:
+      'Ein bestätigter Beitrag zu diesem Testnet-Treuhandvertrag erzeugt einen nicht übertragbaren Saldoeintrag für die beitragende Wallet im Kampagnenvertrag. Es werden weder Belegtoken noch Aktien, Darlehen oder Prämien ausgegeben.',
+    rights:
+      'Der Treuhandvertrag begründet keine Zinsen, Rückzahlungspläne, Stimmrechte oder Eigentumsrechte. Ein Beitragseintrag ist kein Nachweis für rechtliches Eigentum oder einen Anspruch auf Anlageerträge.',
+    missingTitle: 'Nicht geprüfte oder veröffentlichte Informationen',
+    missing:
+      'Eine geprüfte Emittentenidentität, Mittelverwendung, Finanzlage und rechtlich festgelegte Angebotsbedingungen sind hier nicht verfügbar. Lehrbeispiele und DEMO-Dokumente sind keine geprüften Emittentenangaben oder Bedingungen eines echten Angebots.',
+    fees: 'Dieser Vertrag überträgt den gesamten Beitrag ohne Abzug einer Plattformgebühr in die Treuhandverwaltung. XLM-Netzwerkgebühren fallen getrennt an. Eine Gebührenordnung für eine echte Plattform ist hier nicht veröffentlicht.',
+  },
   contributionPreview: {
     title: 'Beitrag vorschauen',
     note: 'Nur Vorschau: keine Unterschrift, Transaktion oder Eigentumsrechte.',

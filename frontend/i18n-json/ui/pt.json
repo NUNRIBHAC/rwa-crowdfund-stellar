@@ -32,6 +32,15 @@
     "unlinked": "Sem campanha registada associada",
     "reviewNote": "Revisão de protótipo. Não é aprovação legal, admissão nem oferta de investimento."
   },
+  "contributionTerms": {
+    "title": "O que significa uma contribuição",
+    "fixture": "Apenas pré-visualização de exemplo. Esta campanha não é um contrato publicado e não aceita contribuições. O emitente, o instrumento e os documentos de exemplo não criam direitos de investimento.",
+    "record": "Uma contribuição confirmada neste depósito em garantia na testnet cria um registo de saldo não transferível para a carteira contribuinte no contrato da campanha. Não emite um token de recibo, ações, um empréstimo ou uma recompensa.",
+    "rights": "O contrato de depósito em garantia não cria juros, calendário de reembolso, direitos de voto ou direitos de propriedade. Um registo de contribuição não comprova propriedade legal nem um direito a rendimentos de investimento.",
+    "missingTitle": "Informação não verificada ou publicada",
+    "missing": "A identidade verificada do emitente, a utilização dos fundos, a situação financeira e as condições legais da oferta não estão disponíveis aqui. Os exemplos educativos e os documentos DEMO não são divulgações verificadas do emitente nem condições de uma oferta real.",
+    "fees": "Este contrato transfere a contribuição completa para o depósito em garantia sem deduzir uma comissão da plataforma. As taxas de rede em XLM são separadas. Não está publicada aqui uma tabela de comissões de uma plataforma real."
+  },
   "contributionPreview": {
     "title": "Pré-visualizar contribuição",
     "note": "Só pré-visualização: sem assinatura, transação ou propriedade.",

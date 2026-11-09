@@ -18,6 +18,7 @@ import type { Messages } from '../i18n/locales/en';
 import CampaignTour from '../components/CampaignTour';
 import CampaignPhoto from '../components/CampaignPhoto';
 import ContributionPreview from '../components/ContributionPreview';
+import ContributionTerms from '../components/ContributionTerms';
 
 const TAB_IDS = ['overview', 'details', 'documents', 'news', 'podcast'] as const;
 
@@ -155,6 +156,8 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
               </dl>
             )}
           </section>
+
+          <ContributionTerms fixtureMode={market.fixtureMode} />
 
           <div className="marketing-divider" role="separator" aria-label={m.campaign.marketingDividerAria}>
             <span>{m.campaign.marketingDivider}</span>

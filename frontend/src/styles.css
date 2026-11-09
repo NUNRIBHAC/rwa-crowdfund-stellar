@@ -4885,3 +4885,18 @@ html.rtl-text .accordion summary > span:first-child {
     gap: 8px;
   }
 }
+
+/* A decision-facing disclosure, separate from issuer marketing content. */
+.contribution-terms {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.contribution-terms h3 {
+  font-size: 1rem;
+  margin-block: 1.25rem 0.5rem;
+}
+.contribution-terms p:last-child {
+  margin-bottom: 0;
+}

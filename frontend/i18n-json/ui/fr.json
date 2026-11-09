@@ -32,6 +32,15 @@
     "unlinked": "Aucune campagne enregistrée liée",
     "reviewNote": "Examen de prototype uniquement. Ni approbation juridique, ni admission, ni offre d’investissement."
   },
+  "contributionTerms": {
+    "title": "Ce que signifie une contribution",
+    "fixture": "Aperçu fictif uniquement. Cette campagne n'est pas un contrat déployé et ne peut pas recevoir de contributions. L'émetteur, l'instrument et les documents fictifs ne créent aucun droit d'investissement.",
+    "record": "Une contribution confirmée à ce séquestre sur testnet crée un solde non transférable pour le portefeuille contributeur dans le contrat de la campagne. Elle n'émet ni jeton de reçu, ni actions, ni prêt, ni récompense.",
+    "rights": "Le contrat de séquestre ne crée ni intérêts, ni échéancier de remboursement, ni droits de vote ou de propriété. Un enregistrement de contribution ne prouve pas la propriété légale ni un droit à des rendements.",
+    "missingTitle": "Informations non vérifiées ou non publiées",
+    "missing": "L'identité vérifiée de l'émetteur, l'utilisation des fonds, la situation financière et les conditions juridiques de l'offre ne sont pas disponibles ici. Les exemples éducatifs et les documents DEMO ne sont pas des informations vérifiées de l'émetteur ni les conditions d'une offre réelle.",
+    "fees": "Ce contrat transfère la contribution entière au séquestre sans déduction de frais de plateforme. Les frais de réseau en XLM sont distincts. Aucun barème de frais d'une plateforme réelle n'est publié ici."
+  },
   "contributionPreview": {
     "title": "Aperçu de la contribution",
     "note": "Aperçu uniquement : sans signature, transaction ni droit de propriété.",
