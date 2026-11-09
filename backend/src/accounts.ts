@@ -334,10 +334,14 @@ export async function authenticateWithSession(store: CommunityStore, authorizati
   // behind the global community lock and rewrites unchanged data, including
   // for an unknown well-formed token. Each call still reads current state;
   // no session cache or revocation/expiry bypass is introduced.
-  const state = await store.read();
-  const session = state.sessions[tokenHash];
-  const account = session && session.expiresAt > now ? state.accounts[session.publicKey] : undefined;
-  const found = account ? { account: { ...account }, sessionCreatedAt: session!.createdAt } : null;
+  const snapshot = store.readSessionAccount
+    ? await store.readSessionAccount(tokenHash)
+    : await store.read().then((state) => {
+        const session = state.sessions[tokenHash];
+        return { session, account: session ? state.accounts[session.publicKey] : undefined };
+      });
+  const { session, account } = snapshot;
+  const found = session && session.expiresAt > now && account ? { account: { ...account }, sessionCreatedAt: session.createdAt } : null;
   if (!found) throw new AuthError(401, 'session expired or unknown; log in again');
   return found;
 }

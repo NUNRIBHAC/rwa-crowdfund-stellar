@@ -562,9 +562,13 @@ function validate(state: any): CommunityState {
   return state as CommunityState;
 }
 
+export type SessionAccountSnapshot = { session?: Session; account?: Account };
+
 export interface CommunityStore {
   change<T>(fn: (state: CommunityState) => T): Promise<T>;
   read(): Promise<CommunityState>;
+  // Optional minimal same-snapshot projection. No cache or write is allowed.
+  readSessionAccount?(tokenHash: string): Promise<SessionAccountSnapshot>;
 }
 
 export class FileCommunityStore implements CommunityStore {
@@ -639,6 +643,42 @@ export class PostgresCommunityStore implements CommunityStore {
     const { rows } = await this.pool.query('SELECT doc FROM community_store WHERE id = $1', [PG_DOC_ID]);
     if (rows.length === 0) return emptyCommunityState();
     return validate(rows[0].doc);
+  }
+  async readSessionAccount(tokenHash: string): Promise<SessionAccountSnapshot> {
+    // Keep arbitrary keys and raw bearer tokens away from this query contract.
+    if (!/^[0-9a-f]{64}$/.test(tokenHash)) throw new Error('invalid session hash');
+    await this.ready;
+    // One statement gives session and account the same MVCC snapshot. Only
+    // these objects cross the DB connection, not every application/document.
+    // Deconstruct the root once to avoid repeated large JSONB extraction.
+    // Keep primitive JSON values in the tiny validation header. JavaScript's
+    // JSON number conversion is part of existing validate() semantics: SQL
+    // exact numerics would disagree on underflow and rounding near version 1.
+    // Objects/arrays are always truthy in JS, so only those become true.
+    const { rows } = await this.pool.query(
+      `WITH roots AS MATERIALIZED (
+ SELECT r.* FROM community_store s CROSS JOIN LATERAL jsonb_to_record(s.doc) AS r(version jsonb,accounts jsonb,challenges jsonb,sessions jsonb,comments jsonb,news jsonb,tickets jsonb,applications jsonb) WHERE s.id=$1
+), picked AS MATERIALIZED (
+ SELECT roots.*,sessions->($2::text) AS session FROM roots
+)
+SELECT jsonb_build_object('version',version,'accounts',CASE WHEN jsonb_typeof(accounts) IN ('object','array') THEN 'true'::jsonb ELSE accounts END,
+'challenges',CASE WHEN jsonb_typeof(challenges) IN ('object','array') THEN 'true'::jsonb ELSE challenges END,
+'sessions',CASE WHEN jsonb_typeof(sessions) IN ('object','array') THEN 'true'::jsonb ELSE sessions END,
+'comments',CASE WHEN jsonb_typeof(comments) IN ('object','array') THEN 'true'::jsonb ELSE comments END,
+'news',CASE WHEN jsonb_typeof(news) IN ('object','array') THEN 'true'::jsonb ELSE news END,
+'tickets',CASE WHEN jsonb_typeof(tickets) IN ('object','array') THEN 'true'::jsonb ELSE tickets END,
+'applications',CASE WHEN jsonb_typeof(applications) IN ('object','array') THEN 'true'::jsonb ELSE applications END) AS validation_header,
+session,CASE WHEN jsonb_typeof(session->'publicKey')='string' THEN accounts->(session->>'publicKey') ELSE NULL END AS account FROM picked`,
+      [PG_DOC_ID, tokenHash],
+    );
+    if (rows.length === 0) return {};
+    validate(rows[0].validation_header);
+    // Explicit fail-closed strengthening for malformed stored sessions. SQL
+    // ->> key coercion is not JS accounts[session.publicKey] coercion. Product
+    // writers persist strings; never turn a corrupt object/array/number into
+    // a newly accepted account lookup. This is stricter than the old full read.
+    if (typeof rows[0].session?.publicKey !== 'string') return {};
+    return { session: rows[0].session ?? undefined, account: rows[0].account ?? undefined };
   }
   async change<T>(fn: (state: CommunityState) => T): Promise<T> {
     await this.ready;
