@@ -27,6 +27,10 @@ describe('Arabic RTL: text direction flips, block geometry does not', () => {
     expect(pin[2]).toContain('.home-contract');
   });
 
+  it('pins campaign-card definition grids above the global RTL text rule', () => {
+    expect(norm).toContain('html.rtl-text .card dl.stat-grid { direction: ltr; }');
+  });
+
   it('keeps accordion summary cell order LTR while the question text reads RTL', () => {
     expect(norm).toContain('html.rtl-text .accordion summary { direction: ltr; }');
     expect(norm).toContain('html.rtl-text .accordion summary > span:first-child { direction: rtl; }');

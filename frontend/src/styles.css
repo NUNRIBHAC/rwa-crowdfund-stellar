@@ -3054,6 +3054,13 @@ html.rtl-text
 html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .intent-facts, .step-cards, .portfolio-row, .account-checklist-item) {
   direction: ltr;
 }
+/* A dl matches the global RTL text rule, including its message-body
+   exclusion. Give campaign-card geometry an explicit scoped override so
+   raised/goal and deadline/status keep their canonical column positions. */
+html.rtl-text .card dl.stat-grid {
+  direction: ltr;
+}
+
 html.rtl-text .accordion summary {
   direction: ltr;
 }
