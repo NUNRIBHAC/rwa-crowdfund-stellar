@@ -13,17 +13,23 @@ const here = dirname(fileURLToPath(import.meta.url));
 const css = readFileSync(join(here, '..', 'src', 'styles.css'), 'utf8');
 const W = 'https://blockallisto-media.nunrib-df6.workers.dev/fonts/';
 
-const fontUrls = [...css.matchAll(/url\('https:\/\/blockallisto-media[^']+\/fonts\/([^']+)'\)/g)]
-  .map((m) => m[1]);
+const fontUrls = [...css.matchAll(/url\('https:\/\/blockallisto-media[^']+\/fonts\/([^']+)'\)/g)].map((m) => m[1]);
 
 describe('brand font loading (CSP-safe)', () => {
   it('references only the 9 pre-existing worker font objects (no new uploads)', () => {
-    expect(new Set(fontUrls)).toEqual(new Set([
-      'inter-400.woff2', 'inter-500.woff2', 'inter-600.woff2',
-      'inter-700-latin.woff2', 'inter-700-latin-ext.woff2',
-      'montserrat-var-latin.woff2', 'montserrat-var-latin-ext.woff2',
-      'plusjakartasans-var-latin.woff2', 'plusjakartasans-var-latin-ext.woff2',
-    ]));
+    expect(new Set(fontUrls)).toEqual(
+      new Set([
+        'inter-400.woff2',
+        'inter-500.woff2',
+        'inter-600.woff2',
+        'inter-700-latin.woff2',
+        'inter-700-latin-ext.woff2',
+        'montserrat-var-latin.woff2',
+        'montserrat-var-latin-ext.woff2',
+        'plusjakartasans-var-latin.woff2',
+        'plusjakartasans-var-latin-ext.woff2',
+      ]),
+    );
   });
 
   it('declares Inter 400-700, variable Montserrat and variable Plus Jakarta Sans faces', () => {
@@ -52,9 +58,7 @@ describe('brand font loading (CSP-safe)', () => {
   });
 
   it('keeps the original heading-family rule mapping h1-h4/.section-title to --font-display', () => {
-    expect(css.replace(/\s+/g, ' ')).toMatch(
-      /h1, h2, h3, h4, \.section-title \{\s*font-family: var\(--font-display\);/,
-    );
+    expect(css.replace(/\s+/g, ' ')).toMatch(/h1, h2, h3, h4, \.section-title \{\s*font-family: var\(--font-display\);/);
   });
 
   it('keeps figures on Plus Jakarta Sans via --font-figures (weight 700 usage unchanged)', () => {

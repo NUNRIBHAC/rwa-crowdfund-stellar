@@ -4,13 +4,14 @@ The media worker serves ONLY objects under the `public/` bucket prefix.
 Therefore every object under `public/` is world-readable by construction.
 
 Rules:
+
 - NEVER place non-public objects under `public/` (no secrets, no PII, no
   drafts, no backups, no credentials). If it is under public/, assume it is
   already public forever (edge caches may hold copies for 24h).
 - Non-public data belongs under a different prefix the worker never maps
   (the worker hard-fails any request outside its fixed mapping + SAFE
   allowlist, and all constructed keys start with the constant `public/`).
-- The SAFE regex intentionally rejects spaces and `%` in *request* paths.
+- The SAFE regex intentionally rejects spaces and `%` in _request_ paths.
   Folder names containing spaces (e.g. `social icons/`) are reachable only
   through the fixed mapping constants in worker.js (`/social/<file>`),
   never directly (`/social%20icons/<file>` is 404 by design).

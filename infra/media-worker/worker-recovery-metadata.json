@@ -1,44 +1,44 @@
 {
- "worker_recovery_metadata": {
-  "captured_at": "2026-11-07T03:30:45Z",
-  "script_name": "blockallisto-media",
-  "script_url": "https://blockallisto-media.nunrib-df6.workers.dev/",
-  "account_id": "df6a6c336a69b2f5f62d53e89bcefe22",
-  "deployed_sha256": "c35e7935154df59b2393f6f3c5d28b186921741d0d01ff05a524d533acf44c8e",
-  "deployed_bytes": 5394,
-  "etag": "ab2f1f7fac8ce021541acf835e1e1416d1e7a82faf20f568bd6f0357e22c4319",
-  "modified_on": "2026-11-07T03:02:02.190292Z",
-  "compatibility_date": "2026-11-06",
-  "compatibility_flags": [],
-  "usage_model": "standard",
-  "logpush": false,
-  "bindings": [
-   {
-    "name": "B2_KEY_ID",
-    "type": "secret_text"
-   },
-   {
-    "name": "B2_KEY",
-    "type": "secret_text"
-   }
-  ],
-  "cf_version_id": "28cd5a1d-0842-49bb-bded-8b83a6e475db",
-  "redeploy": "PUT multipart form (field worker.js, type application/javascript+module; metadata {main_module: worker.js, compatibility_date: 2026-11-06}) to https://api.cloudflare.com/client/v4/accounts/ACCOUNT/workers/scripts/blockallisto-media",
-  "vault_items_for_redeploy_names_only": [
-   "Cloudflare API token - blockallisto-media-worker-deploy",
-   "Backblaze B2 app key - blockallisto-media-rw",
-   "Backblaze B2 app key - blockallisto-media-public-ro"
-  ],
-  "b2": {
-   "bucket": "blockallisto-media",
-   "bucketId": "435986d81e2ab338a91e071a",
-   "type": "allPrivate",
-   "prefix": "public/"
-  },
-  "rollback_sources": {
-   "pre_repair_eb52ed07": "GitHub main infra/media-worker/worker.js (committed)",
-   "mapping_repair_a3ddb780": "worker.js.after in both /downloads packages",
-   "current_c35e7935": "deployed-worker-c35e7935.js sibling file in this bundle"
+  "worker_recovery_metadata": {
+    "captured_at": "2026-11-07T03:30:45Z",
+    "script_name": "blockallisto-media",
+    "script_url": "https://blockallisto-media.nunrib-df6.workers.dev/",
+    "account_id": "df6a6c336a69b2f5f62d53e89bcefe22",
+    "deployed_sha256": "c35e7935154df59b2393f6f3c5d28b186921741d0d01ff05a524d533acf44c8e",
+    "deployed_bytes": 5394,
+    "etag": "ab2f1f7fac8ce021541acf835e1e1416d1e7a82faf20f568bd6f0357e22c4319",
+    "modified_on": "2026-11-07T03:02:02.190292Z",
+    "compatibility_date": "2026-11-06",
+    "compatibility_flags": [],
+    "usage_model": "standard",
+    "logpush": false,
+    "bindings": [
+      {
+        "name": "B2_KEY_ID",
+        "type": "secret_text"
+      },
+      {
+        "name": "B2_KEY",
+        "type": "secret_text"
+      }
+    ],
+    "cf_version_id": "28cd5a1d-0842-49bb-bded-8b83a6e475db",
+    "redeploy": "PUT multipart form (field worker.js, type application/javascript+module; metadata {main_module: worker.js, compatibility_date: 2026-11-06}) to https://api.cloudflare.com/client/v4/accounts/ACCOUNT/workers/scripts/blockallisto-media",
+    "vault_items_for_redeploy_names_only": [
+      "Cloudflare API token - blockallisto-media-worker-deploy",
+      "Backblaze B2 app key - blockallisto-media-rw",
+      "Backblaze B2 app key - blockallisto-media-public-ro"
+    ],
+    "b2": {
+      "bucket": "blockallisto-media",
+      "bucketId": "435986d81e2ab338a91e071a",
+      "type": "allPrivate",
+      "prefix": "public/"
+    },
+    "rollback_sources": {
+      "pre_repair_eb52ed07": "GitHub main infra/media-worker/worker.js (committed)",
+      "mapping_repair_a3ddb780": "worker.js.after in both /downloads packages",
+      "current_c35e7935": "deployed-worker-c35e7935.js sibling file in this bundle"
+    }
   }
- }
 }

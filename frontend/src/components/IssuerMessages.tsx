@@ -91,13 +91,7 @@ export default function IssuerMessages({ campaignId }: { campaignId: string }) {
             <form onSubmit={submit}>
               <label>
                 {m.messaging.composerLabel}
-                <textarea
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  maxLength={COMMUNITY_LIMITS.ticketBody}
-                  rows={3}
-                  required
-                />
+                <textarea value={body} onChange={(e) => setBody(e.target.value)} maxLength={COMMUNITY_LIMITS.ticketBody} rows={3} required />
               </label>
               <button className="btn btn-primary" disabled={busy || !body.trim()}>
                 {busy ? m.messaging.sending : m.messaging.send}

@@ -189,9 +189,7 @@ export default function CampaignBuilderDraft() {
           {/* The closed select clips longer translations at narrow widths; the
               full selected label stays visible here for touch users, who get
               no title hover. Uses the same translation strings, no new copy. */}
-          <span className="community-note">
-            {contractSet === 'v2' ? t.contractSetV2 : t.contractSetV1}
-          </span>
+          <span className="community-note">{contractSet === 'v2' ? t.contractSetV2 : t.contractSetV1}</span>
         </label>
         {contractSet === 'v2' && (
           <>

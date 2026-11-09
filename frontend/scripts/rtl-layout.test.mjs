@@ -33,6 +33,8 @@ describe('Arabic RTL: text direction flips, block geometry does not', () => {
   });
 
   it('keeps the existing metric/grid containers LTR (unchanged behavior)', () => {
-    expect(norm).toContain('.metric-chips, .stat-grid, .metric-cards, .info-grid, .intent-facts, .step-cards, .portfolio-row, .account-checklist-item) { direction: ltr; }');
+    expect(norm).toContain(
+      '.metric-chips, .stat-grid, .metric-cards, .info-grid, .intent-facts, .step-cards, .portfolio-row, .account-checklist-item) { direction: ltr; }',
+    );
   });
 });

@@ -91,9 +91,7 @@ export default function OperatorIssuerMessages({ campaigns }: { campaigns: { id:
           {error}
         </p>
       )}
-      {campaignId && messages === null && !error ? (
-        <p className="community-loading">{m.community.loading}</p>
-      ) : null}
+      {campaignId && messages === null && !error ? <p className="community-loading">{m.community.loading}</p> : null}
       {messages !== null && threads.length === 0 ? <p className="community-note">{m.messaging.noThreads}</p> : null}
       {threads.length > 0 && (
         <ul className="thread-list" aria-label={m.messaging.threadListLabel}>
@@ -132,9 +130,7 @@ export default function OperatorIssuerMessages({ campaigns }: { campaigns: { id:
               <li key={msg.id} className={`message ${msg.authorRole === 'operator' ? 'outgoing' : 'incoming'}`}>
                 <p className="message-meta">
                   <strong>
-                    {msg.authorRole === 'operator'
-                      ? m.messaging.operatorLabel
-                      : tpl(m.messaging.threadWith, { key: shorten(msg.authorKey, 6, 4) })}
+                    {msg.authorRole === 'operator' ? m.messaging.operatorLabel : tpl(m.messaging.threadWith, { key: shorten(msg.authorKey, 6, 4) })}
                   </strong>{' '}
                   - {new Date(msg.createdAt).toLocaleString(locale)}
                 </p>
@@ -147,13 +143,7 @@ export default function OperatorIssuerMessages({ campaigns }: { campaigns: { id:
           <form onSubmit={submit}>
             <label>
               {m.messaging.replyLabel}
-              <textarea
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                maxLength={COMMUNITY_LIMITS.ticketBody}
-                rows={3}
-                required
-              />
+              <textarea value={body} onChange={(e) => setBody(e.target.value)} maxLength={COMMUNITY_LIMITS.ticketBody} rows={3} required />
             </label>
             <button className="btn btn-primary" disabled={busy || !body.trim()}>
               {busy ? m.messaging.sending : m.messaging.reply}

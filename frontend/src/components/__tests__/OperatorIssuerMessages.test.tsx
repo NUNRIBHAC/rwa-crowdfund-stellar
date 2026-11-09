@@ -17,9 +17,33 @@ const ME_OPERATOR = { account: { publicKey: 'G' + 'B'.repeat(55), displayName: n
 
 const FLAT = {
   messages: [
-    { id: 'm1', campaignId: 'demo-solar', investorKey: INVESTOR_1, authorKey: INVESTOR_1, authorRole: 'investor', body: 'First question from investor one.', createdAt: 1730000000000 },
-    { id: 'm2', campaignId: 'demo-solar', investorKey: INVESTOR_2, authorKey: INVESTOR_2, authorRole: 'investor', body: 'Other investor asking.', createdAt: 1730000050000 },
-    { id: 'm3', campaignId: 'demo-solar', investorKey: INVESTOR_1, authorKey: 'G' + 'B'.repeat(55), authorRole: 'operator', body: 'Answer from the operator.', createdAt: 1730000100000 },
+    {
+      id: 'm1',
+      campaignId: 'demo-solar',
+      investorKey: INVESTOR_1,
+      authorKey: INVESTOR_1,
+      authorRole: 'investor',
+      body: 'First question from investor one.',
+      createdAt: 1730000000000,
+    },
+    {
+      id: 'm2',
+      campaignId: 'demo-solar',
+      investorKey: INVESTOR_2,
+      authorKey: INVESTOR_2,
+      authorRole: 'investor',
+      body: 'Other investor asking.',
+      createdAt: 1730000050000,
+    },
+    {
+      id: 'm3',
+      campaignId: 'demo-solar',
+      investorKey: INVESTOR_1,
+      authorKey: 'G' + 'B'.repeat(55),
+      authorRole: 'operator',
+      body: 'Answer from the operator.',
+      createdAt: 1730000100000,
+    },
   ],
 };
 
