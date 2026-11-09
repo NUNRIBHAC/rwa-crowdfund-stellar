@@ -3055,9 +3055,9 @@ html.rtl-text :where(.metric-chips, .stat-grid, .metric-cards, .info-grid, .inte
   direction: ltr;
 }
 /* A dl matches the global RTL text rule, including its message-body
-   exclusion. Give campaign-card geometry an explicit scoped override so
+   exclusion. Give funding-stat geometry an explicit scoped override so
    raised/goal and deadline/status keep their canonical column positions. */
-html.rtl-text .card dl.stat-grid {
+html.rtl-text dl.stat-grid {
   direction: ltr;
 }
 
