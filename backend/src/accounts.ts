@@ -330,12 +330,14 @@ export async function authenticateWithSession(store: CommunityStore, authorizati
   const token = authorizationHeader?.match(/^Bearer (bls_[0-9a-f]{48})$/)?.[1];
   if (!token) throw new AuthError(401, 'missing or malformed bearer token');
   const tokenHash = hashToken(token);
-  const found = await store.change((state) => {
-    const session = state.sessions[tokenHash];
-    if (!session || session.expiresAt <= now) return null;
-    const account = state.accounts[session.publicKey];
-    return account ? { account: { ...account }, sessionCreatedAt: session.createdAt } : null;
-  });
+  // Authentication is a read. A write here serializes all bearer requests
+  // behind the global community lock and rewrites unchanged data, including
+  // for an unknown well-formed token. Each call still reads current state;
+  // no session cache or revocation/expiry bypass is introduced.
+  const state = await store.read();
+  const session = state.sessions[tokenHash];
+  const account = session && session.expiresAt > now ? state.accounts[session.publicKey] : undefined;
+  const found = account ? { account: { ...account }, sessionCreatedAt: session!.createdAt } : null;
   if (!found) throw new AuthError(401, 'session expired or unknown; log in again');
   return found;
 }
