@@ -871,6 +871,11 @@ export class CommunityService {
   }
 
   async listOwnApplications(account: Account): Promise<IssuerApplication[]> {
+    if (this.store.readOwnApplications) {
+      const rows = await this.store.readOwnApplications(account.publicKey);
+      if (!Array.isArray(rows) || rows.some((a) => !a || typeof a !== 'object' || Array.isArray(a))) throw new Error('invalid owner application projection');
+      return rows.filter((a) => a.publicKey === account.publicKey).sort((a, b) => b.createdAt - a.createdAt);
+    }
     const state = await this.store.read();
     return Object.values(state.applications)
       .filter((a) => a.publicKey === account.publicKey)

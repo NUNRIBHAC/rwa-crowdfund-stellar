@@ -569,6 +569,8 @@ export interface CommunityStore {
   read(): Promise<CommunityState>;
   // Optional minimal same-snapshot projection. No cache or write is allowed.
   readSessionAccount?(tokenHash: string): Promise<SessionAccountSnapshot>;
+  readOwnApplications?(publicKey: string): Promise<IssuerApplication[]>;
+  readOwnSessions?(publicKey: string): Promise<Session[]>;
 }
 
 export class FileCommunityStore implements CommunityStore {
@@ -679,6 +681,41 @@ session,CASE WHEN jsonb_typeof(session->'publicKey')='string' THEN accounts->(se
     // a newly accepted account lookup. This is stricter than the old full read.
     if (typeof rows[0].session?.publicKey !== 'string') return {};
     return { session: rows[0].session ?? undefined, account: rows[0].account ?? undefined };
+  }
+  // Candidate only: read current singleton in one statement, no mirror/cache.
+  // Keep original JS validation header semantics and Object.values ordering.
+  private async readOwnerCollection(kind: 'applications' | 'sessions', publicKey: string): Promise<any[]> {
+    await this.ready;
+    const { rows } = await this.pool.query(
+      `WITH roots AS MATERIALIZED (
+      SELECT r.* FROM community_store s CROSS JOIN LATERAL jsonb_to_record(s.doc) AS r(version jsonb,accounts jsonb,challenges jsonb,sessions jsonb,comments jsonb,news jsonb,tickets jsonb,applications jsonb) WHERE s.id=$1
+    ), members AS MATERIALIZED (
+      SELECT key,value FROM roots CROSS JOIN LATERAL jsonb_each(roots.${kind})
+    ) SELECT jsonb_build_object('version',version,
+      'accounts',CASE WHEN jsonb_typeof(accounts) IN ('object','array') THEN 'true'::jsonb ELSE accounts END,
+      'challenges',CASE WHEN jsonb_typeof(challenges) IN ('object','array') THEN 'true'::jsonb ELSE challenges END,
+      'sessions',CASE WHEN jsonb_typeof(sessions) IN ('object','array') THEN 'true'::jsonb ELSE sessions END,
+      'comments',CASE WHEN jsonb_typeof(comments) IN ('object','array') THEN 'true'::jsonb ELSE comments END,
+      'news',CASE WHEN jsonb_typeof(news) IN ('object','array') THEN 'true'::jsonb ELSE news END,
+      'tickets',CASE WHEN jsonb_typeof(tickets) IN ('object','array') THEN 'true'::jsonb ELSE tickets END,
+      'applications',CASE WHEN jsonb_typeof(applications) IN ('object','array') THEN 'true'::jsonb ELSE applications END) AS validation_header,
+      COALESCE((SELECT jsonb_object_agg(key,value) FROM members WHERE jsonb_typeof(value->'publicKey')='string' AND value->>'publicKey'=$2),'{}'::jsonb) AS selected,
+      EXISTS(SELECT 1 FROM members WHERE value='null'::jsonb) AS has_null
+      FROM roots`,
+      [PG_DOC_ID, publicKey],
+    );
+    if (!rows.length) return [];
+    validate(rows[0].validation_header);
+    // Old full-collection filter throws on null records. Never hide them by
+    // projecting only matching rows, even when the corrupt row is another owner.
+    if (rows[0].has_null) throw new Error('invalid community collection record');
+    return Object.values(rows[0].selected);
+  }
+  async readOwnApplications(publicKey: string): Promise<IssuerApplication[]> {
+    return (await this.readOwnerCollection('applications', publicKey)).filter((a) => a.publicKey === publicKey).sort((a, b) => b.createdAt - a.createdAt);
+  }
+  async readOwnSessions(publicKey: string): Promise<Session[]> {
+    return (await this.readOwnerCollection('sessions', publicKey)).filter((s) => s.publicKey === publicKey);
   }
   async change<T>(fn: (state: CommunityState) => T): Promise<T> {
     await this.ready;

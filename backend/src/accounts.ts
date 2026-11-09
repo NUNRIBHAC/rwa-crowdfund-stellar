@@ -376,8 +376,9 @@ export async function listSessions(
 ): Promise<SessionInfo[]> {
   const currentHash = authorizationHeader?.match(/^Bearer (bls_[0-9a-f]{48})$/)?.[1];
   const current = currentHash ? hashToken(currentHash) : null;
-  const state = await store.read();
-  return Object.values(state.sessions)
+  const sessions = store.readOwnSessions ? await store.readOwnSessions(publicKey) : Object.values((await store.read()).sessions);
+  if (!Array.isArray(sessions)) throw new Error('invalid session collection projection');
+  return sessions
     .filter((sess) => sess.publicKey === publicKey && sess.expiresAt > now)
     .sort((a, b) => b.createdAt - a.createdAt)
     .map((sess) => ({
