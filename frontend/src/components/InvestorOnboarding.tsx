@@ -102,11 +102,9 @@ function OnboardingSession({ signedIn, token }: { signedIn: boolean; token: stri
                 {t.risks}
               </label>
               <p>{t.saved}</p>
-              {!record && (
-                <button className="btn" disabled={busy || loading} onClick={() => void load()}>
-                  {t.refresh}
-                </button>
-              )}
+              <button className="btn" disabled={busy || loading} onClick={() => void load()}>
+                {t.refresh}
+              </button>
             </>
           )}
         </>
