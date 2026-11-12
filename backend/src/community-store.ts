@@ -381,7 +381,8 @@ export type CompanyApplication = {
 export type IssuerApplicationDocument = {
   id: string;
   filename: string;
-  content: string;
+  content?: string;
+  object?: import('./oci-private-text-store.js').PrivateTextRef;
   sha256: string;
   uploadedAt: number;
 };
@@ -397,7 +398,8 @@ export type IssuerApplication = {
   targetAmount: string;
   description: string;
   contactEmail: string | null;
-  status: 'received' | 'under_review' | 'approved' | 'rejected' | 'closed';
+  status: 'draft' | 'received' | 'under_review' | 'approved' | 'rejected' | 'closed';
+  submittedAt?: number;
   reviewedBy: string | null;
   reviewedAt: number | null;
   reviewNote: string | null;
@@ -441,6 +443,21 @@ export type AuditEntry = {
 };
 
 export type CommunityState = {
+  // Versioned durable intents. Never prune independently of owned-object reconciliation.
+  privateApplicationDeletions?: Record<
+    string,
+    {
+      applicationId: string;
+      owner: string;
+      documentId: string;
+      object: import('./oci-private-text-store.js').PrivateTextRef;
+      status: 'pending' | 'deleting' | 'deleted';
+      claim?: string;
+      claimUntil?: number;
+      createdAt: number;
+    }
+  >;
+  privateApplicationUploads?: { version: 1; intents: Record<string, import('./private-application-upload-workflow.js').UploadIntent> };
   // Isolated non-binding fixture meetings; never a legal rights register.
   simulatedMeetings?: Record<string, import('./meeting-simulation.js').SimulatedMeeting>;
   version: 1;
@@ -695,7 +712,7 @@ session,CASE WHEN jsonb_typeof(session->'publicKey')='string' THEN accounts->(se
     await this.ready;
     const { rows } = await this.pool.query(
       `WITH roots AS MATERIALIZED (
-      SELECT r.* FROM community_store s CROSS JOIN LATERAL jsonb_to_record(s.doc) AS r(version jsonb,accounts jsonb,challenges jsonb,sessions jsonb,comments jsonb,news jsonb,tickets jsonb,applications jsonb) WHERE s.id=$1
+      SELECT r.* FROM community_store s CROSS JOIN LATERAL jsonb_to_record(s.doc) AS r(version jsonb,accounts jsonb,challenges jsonb,sessions jsonb,comments jsonb,news jsonb,tickets jsonb,applications jsonb,"privateApplicationDeletions" jsonb) WHERE s.id=$1
     ), members AS MATERIALIZED (
       SELECT key,value FROM roots CROSS JOIN LATERAL jsonb_each(roots.${kind})
     ) SELECT jsonb_build_object('version',version,
@@ -707,7 +724,13 @@ session,CASE WHEN jsonb_typeof(session->'publicKey')='string' THEN accounts->(se
       'tickets',CASE WHEN jsonb_typeof(tickets) IN ('object','array') THEN 'true'::jsonb ELSE tickets END,
       'applications',CASE WHEN jsonb_typeof(applications) IN ('object','array') THEN 'true'::jsonb ELSE applications END) AS validation_header,
       COALESCE((SELECT jsonb_object_agg(key,value) FROM members WHERE jsonb_typeof(value->'publicKey')='string' AND value->>'publicKey'=$2),'{}'::jsonb) AS selected,
-      EXISTS(SELECT 1 FROM members WHERE value='null'::jsonb) AS has_null
+      EXISTS(SELECT 1 FROM members WHERE value='null'::jsonb) AS has_null${
+        kind === 'applications'
+          ? `,
+      COALESCE((SELECT jsonb_agg(job.value->>'applicationId') FROM jsonb_each(COALESCE("privateApplicationDeletions",'{}'::jsonb)) job
+      WHERE job.value->>'owner'=$2 AND job.value->>'status' IS DISTINCT FROM 'deleted'),'[]'::jsonb) AS pending_cleanup_applications`
+          : ''
+      }
       FROM roots`,
       [PG_DOC_ID, publicKey],
     );
@@ -716,7 +739,12 @@ session,CASE WHEN jsonb_typeof(session->'publicKey')='string' THEN accounts->(se
     // Old full-collection filter throws on null records. Never hide them by
     // projecting only matching rows, even when the corrupt row is another owner.
     if (rows[0].has_null) throw new Error('invalid community collection record');
-    return Object.values(rows[0].selected);
+    const selected = Object.values(rows[0].selected);
+    if (kind === 'sessions') return selected;
+    const pending = rows[0].pending_cleanup_applications;
+    if (!Array.isArray(pending) || pending.some((id: unknown) => typeof id !== 'string')) throw new Error('invalid application cleanup projection');
+    const pendingIds = new Set(pending);
+    return selected.map((application: any) => ({ ...application, documentCleanupPending: pendingIds.has(application.id) }));
   }
   async readOwnApplications(publicKey: string): Promise<IssuerApplication[]> {
     return (await this.readOwnerCollection('applications', publicKey)).filter((a) => a.publicKey === publicKey).sort((a, b) => b.createdAt - a.createdAt);

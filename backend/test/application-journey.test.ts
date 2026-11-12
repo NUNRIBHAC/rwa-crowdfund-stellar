@@ -16,13 +16,17 @@ test('application -> private document -> review -> creator-matched registered ca
   const other = { ...owner, publicKey: Keypair.random().publicKey() };
   let service = new CommunityService(new FileCommunityStore(file));
   try {
-    const application = await service.submitApplication(owner, {
-      projectName: 'Synthetic solar project - DEMO',
-      country: 'PT',
-      instrumentType: 'Testnet escrow only, no investment rights',
-      targetAmount: '2 testnet USDC',
-      description: 'Synthetic application for isolated integration testing only.',
-    });
+    const application = await service.submitApplication(
+      owner,
+      {
+        projectName: 'Synthetic solar project - DEMO',
+        country: 'PT',
+        instrumentType: 'Testnet escrow only, no investment rights',
+        targetAmount: '2 testnet USDC',
+        description: 'Synthetic application for isolated integration testing only.',
+      },
+      true,
+    );
     const document = await service.addApplicationDocument(owner, application.id, {
       filename: 'synthetic-project.txt',
       content: 'DEMO. No issuer identity or legal rights are verified.',
@@ -33,24 +37,38 @@ test('application -> private document -> review -> creator-matched registered ca
     await assert.rejects(service.addApplicationDocument(owner, application.id, { filename: 'active.html', content: '<script>bad</script>' }));
     await assert.rejects(service.addApplicationDocument(owner, application.id, { filename: 'big.txt', content: 'x'.repeat(16001) }));
     const campaign = { id: 'synthetic-demo', contractId: 'C' + 'A'.repeat(55), creator: owner.publicKey, network: 'testnet' };
-    await assert.rejects(service.linkApplicationCampaign(application.id, campaign, 'operator:test'), /approval required/);
+    await assert.rejects(service.linkApplicationCampaign(application.id, campaign, 'operator:test'), /not found/);
+    await service.submitDraftApplication(owner, application.id);
+    await assert.rejects(service.addApplicationDocument(owner, application.id, { filename: 'after-submit.txt', content: 'blocked' }), /closed/);
     await service.adminSetApplicationStatus(application.id, 'under_review', 'operator:test', 'Synthetic private document reviewed.');
     assert.equal((await service.readApplicationDocument(application.id, document.id)).sha256, document.sha256);
     await service.adminSetApplicationStatus(application.id, 'approved', 'operator:test', 'Prototype only, no legal approval.');
     await assert.rejects(service.linkApplicationCampaign(application.id, { ...campaign, network: 'public' }, 'operator:test'), /testnet/);
     await assert.rejects(service.linkApplicationCampaign(application.id, { ...campaign, creator: other.publicKey }, 'operator:test'), /creator/);
-    const second = await service.submitApplication(owner, {
-      projectName: 'Second synthetic application',
+    const empty = await service.submitApplication(owner, {
+      projectName: 'Empty synthetic application',
       country: 'PT',
       instrumentType: 'Testnet only',
       targetAmount: '2',
-      description: 'Synthetic duplicate check.',
+      description: 'Synthetic empty check.',
     });
-    await service.adminSetApplicationStatus(second.id, 'approved', 'operator:test');
-    await assert.rejects(service.linkApplicationCampaign(second.id, { ...campaign, id: 'another-demo' }, 'operator:test'), /document required/);
-    await service.adminSetApplicationStatus(second.id, 'under_review', 'operator:test');
+    await service.adminSetApplicationStatus(empty.id, 'approved', 'operator:test');
+    await assert.rejects(service.linkApplicationCampaign(empty.id, { ...campaign, id: 'another-demo' }, 'operator:test'), /document required/);
+    const second = await service.submitApplication(
+      owner,
+      {
+        projectName: 'Second synthetic application',
+        country: 'PT',
+        instrumentType: 'Testnet only',
+        targetAmount: '2',
+        description: 'Synthetic duplicate check.',
+      },
+      true,
+    );
     for (let n = 0; n < 5; n++) await service.addApplicationDocument(owner, second.id, { filename: `demo-${n}.txt`, content: 'synthetic' });
     await assert.rejects(service.addApplicationDocument(owner, second.id, { filename: 'sixth.txt', content: 'synthetic' }), /limit/);
+    await service.submitDraftApplication(owner, second.id);
+    await assert.rejects(service.addApplicationDocument(owner, second.id, { filename: 'after-submit.txt', content: 'blocked' }), /closed/);
     await service.adminSetApplicationStatus(second.id, 'approved', 'operator:test');
     await service.linkApplicationCampaign(application.id, campaign, 'operator:test');
     await assert.rejects(service.linkApplicationCampaign(second.id, campaign, 'operator:test'), /already linked/);

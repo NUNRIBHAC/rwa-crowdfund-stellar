@@ -56,7 +56,7 @@ test('HTTP owner/operator isolation, metadata-only lists, registered-campaign lo
       ot = await login(operator),
       xt = await login(outsider);
     assert.equal((await request('/api/issuer-applications')).status, 401);
-    const submitted = await request('/api/issuer-applications', it, {
+    const submitted = await request('/api/issuer-applications/drafts', it, {
       projectName: 'Synthetic DEMO',
       country: 'PT',
       instrumentType: 'Testnet escrow',
@@ -76,6 +76,8 @@ test('HTTP owner/operator isolation, metadata-only lists, registered-campaign lo
     assert.equal(await read.text(), 'SYNTHETIC PRIVATE DOCUMENT');
     assert.equal(read.headers.get('cache-control'), 'no-store');
     assert.match(read.headers.get('content-type')!, /text\/plain/);
+    assert.equal((await request(root + '/submit', it, {})).status, 200);
+    assert.equal((await request(root + '/documents', it, { filename: 'late.txt', content: 'blocked' })).status, 409);
     assert.equal((await request(`/api/operator/issuer-applications/${application.id}/documents/${document.id}`, ot)).status, 200);
     const listed = await (await request('/api/issuer-applications', it)).json();
     assert.equal(listed.applications[0].documents[0].content, undefined);
