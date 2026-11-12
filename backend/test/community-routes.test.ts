@@ -445,3 +445,32 @@ test('simulated onboarding HTTP: auth, strict payload, durable reload and accoun
   assert.equal((await api('GET', '/api/auth/demo-onboarding', { token: owner })).json.progress.identity, 'passed');
   assert.equal((await api('GET', '/api/auth/demo-onboarding', { token: other })).json.progress.identity, 'not_started');
 });
+
+test('unexpected community failures log only allowlisted metadata and return a safe code', async () => {
+  const app = express();
+  const privateDiagnostic = 'synthetic-user-secret';
+  const broken = {
+    store: {},
+    listAllNews: async () => {
+      throw new Error(privateDiagnostic);
+    },
+  } as unknown as CommunityService;
+  app.use(createCommunityRouter({ service: broken, requireAdmin }));
+  const instance = app.listen(0, '127.0.0.1');
+  await new Promise<void>((resolve) => instance.once('listening', resolve));
+  const original = console.error;
+  const logged: unknown[][] = [];
+  console.error = (...args: unknown[]) => {
+    logged.push(args);
+  };
+  try {
+    const response = await fetch(`http://127.0.0.1:${(instance.address() as AddressInfo).port}/api/news`);
+    assert.equal(response.status, 500);
+    assert.deepEqual(await response.json(), { error: 'internal error', code: 'internal_error' });
+    assert.deepEqual(logged, [[JSON.stringify({ event: 'community.internal_error', code: 'internal_error', errorType: 'Error' })]]);
+    assert.equal(JSON.stringify(logged).includes(privateDiagnostic), false);
+  } finally {
+    console.error = original;
+    await new Promise<void>((resolve) => instance.close(() => resolve()));
+  }
+});

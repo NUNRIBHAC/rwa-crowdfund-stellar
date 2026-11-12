@@ -127,8 +127,8 @@ test('recipient allowlist guard at the route: blocked delivery keeps one unverif
   const pending = await api(url, 'POST', '/api/auth/email/login', {
     body: { email: 'visitor@example.com', password: 'long-enough-password' },
   });
-  assert.equal(pending.status, 403);
-  assert.equal(pending.json.code, 'email_unverified');
+  assert.equal(pending.status, 401);
+  assert.equal(pending.json.code, 'credentials_invalid');
   const allowed = await api(url, 'POST', '/api/auth/email/register', {
     body: { email: 'nunrib@sapo.pt', password: 'long-enough-password' },
   });
@@ -171,12 +171,15 @@ test('full flow: register -> verification email -> verify -> session; token is s
   assert.match(mailer.sent[0].text, /demo/);
   const token = extractToken(mailer.sent[0].text);
 
-  // Unverified login is refused distinctly.
+  // Unverified and unknown credentials have the same public failure.
   const early = await api(url, 'POST', '/api/auth/email/login', {
     body: { email: 'nuno@example.com', password: 'correct horse battery' },
   });
-  assert.equal(early.status, 403);
-  assert.match(early.json.error, /not verified/);
+  assert.equal(early.status, 401);
+  assert.equal(early.json.code, 'credentials_invalid');
+  const unknown = await api(url, 'POST', '/api/auth/email/login', { body: { email: 'unknown@example.com', password: 'correct horse battery' } });
+  assert.equal(unknown.status, early.status);
+  assert.deepEqual(unknown.json, early.json);
 
   // Wrong token rejected.
   const wrong = await api(url, 'POST', '/api/auth/email/verify', {
@@ -801,4 +804,68 @@ test('allowlist failure then retry preserves identity and password and refunds t
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('registration and resend reserve a single verification delivery before mail completes', async () => {
+  for (const mode of ['register', 'resend']) {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'verification-reservation-'));
+    const store = new FileCommunityStore(path.join(dir, 'store.json'));
+    const at = 1800000000000;
+    const email = 'race@example.invalid';
+    if (mode === 'resend') await registerEmail(store, { send: async () => {} }, { email, password: 'synthetic-password-123' }, at - 700000);
+    let release!: () => void;
+    const blocked = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let sends = 0;
+    const mailer = {
+      send: async () => {
+        sends++;
+        await blocked;
+      },
+    };
+    const invoke = () =>
+      mode === 'register' ? registerEmail(store, mailer, { email, password: 'synthetic-password-123' }, at) : resendVerification(store, mailer, { email }, at);
+    const one = invoke();
+    while (sends < 1) await new Promise((resolve) => setTimeout(resolve, 1));
+    const two = invoke();
+    await two;
+    assert.equal(sends, 1);
+    assert.equal((await store.read()).emailCredentials[email].resendSentAt, at);
+    release();
+    await one;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+test('failed verification delivery releases only its own reservation for an immediate retry', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'verification-failure-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const input = { email: 'failed@example.invalid', password: 'synthetic-password-123' };
+  const at = 1800000000000;
+  await assert.rejects(
+    registerEmail(
+      store,
+      {
+        send: async () => {
+          throw new Error('synthetic failure');
+        },
+      },
+      input,
+      at,
+    ),
+  );
+  assert.equal((await store.read()).emailCredentials[input.email].resendSentAt, null);
+  let sends = 0;
+  await resendVerification(
+    store,
+    {
+      send: async () => {
+        sends++;
+      },
+    },
+    input,
+    at,
+  );
+  assert.equal(sends, 1);
+  fs.rmSync(dir, { recursive: true, force: true });
 });
