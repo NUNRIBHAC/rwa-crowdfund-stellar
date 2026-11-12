@@ -25,6 +25,18 @@
     "simulated": "시뮬레이션"
   },
   "applicationDocuments": {
+    "refresh": "상태 새로 고침",
+    "saveDraft": "초안 저장",
+    "draftSaved": "초안이 저장되었습니다. 내 신청에서 문서를 추가한 다음 검토를 위해 제출하세요.",
+    "submit": "신청 제출",
+    "submitWarning": "제출 후에는 문서를 추가, 교체 또는 삭제할 수 없습니다. 신청을 제출할까요?",
+    "delete": "문서 삭제",
+    "confirmDelete": "이 문서를 삭제할까요? 다른 문서를 업로드할 필요는 없습니다.",
+    "confirm": "확인",
+    "cancel": "취소",
+    "deletionPending": "삭제를 요청했습니다. 문서에 더 이상 접근할 수 없지만 클라우드 저장소에서의 삭제는 아직 진행 중입니다.",
+    "operationUnavailable": "안전한 재시도 식별자를 저장하지 못했습니다. 파일은 업로드되지 않았습니다. 브라우저 저장소를 활성화한 뒤 다시 시도하세요.",
+    "reconciliation": "이 작업은 상태 확인이 필요합니다. 재시도를 위해 새 업로드를 만들지 마세요.",
     "uploadNote": "DEMO 문서: 합성 .txt만, 각 16 KB 이하, 최대 5개. 개인정보나 신분증을 업로드하지 마세요.",
     "save": "문서 저장",
     "view": "문서 보기",
@@ -1863,6 +1875,7 @@
     "myApplicationsTitle": "내 발행자 신청",
     "myApplicationsEmpty": "아직 신청이 없습니다.",
     "applicationStatus": {
+      "draft": "초안",
       "received": "접수됨",
       "under_review": "검토 중",
       "approved": "승인됨",

@@ -31,6 +31,20 @@ export const pt: Messages = {
     simulated: 'SIMULADO',
   },
   applicationDocuments: {
+    refresh: 'Atualizar estado',
+    saveDraft: 'Guardar rascunho',
+    draftSaved: 'Rascunho guardado. Adiciona os documentos em As minhas candidaturas e submete para revisão.',
+    submit: 'Submeter candidatura',
+    submitWarning: 'Depois de submeter, não podes adicionar, substituir nem eliminar documentos. Submeter a candidatura?',
+    delete: 'Eliminar documento',
+    confirmDelete: 'Eliminar este documento? Não é necessário enviar outro.',
+    confirm: 'Confirmar',
+    cancel: 'Cancelar',
+    deletionPending: 'Eliminação pedida. O documento já não está acessível, mas a remoção no armazenamento ainda está pendente.',
+    operationUnavailable:
+      'Não foi possível guardar um identificador para repetir em segurança. Nenhum ficheiro foi enviado. Ativa o armazenamento do navegador e tenta novamente.',
+    reconciliation: 'Esta operação precisa de reconciliação. Não cries outro upload para a repetir.',
+
     uploadNote: 'Documentos DEMO: apenas .txt sintéticos, até 16 KB por ficheiro, cinco ficheiros. Não envie dados pessoais nem documentos de identidade.',
     save: 'Guardar documento',
     view: 'Ver documento',
@@ -2113,6 +2127,7 @@ export const pt: Messages = {
     myApplicationsTitle: 'As minhas candidaturas de emitente',
     myApplicationsEmpty: 'Ainda não há candidaturas.',
     applicationStatus: {
+      draft: 'Rascunho',
       received: 'Recebida',
       under_review: 'Em análise',
       approved: 'Aprovada',

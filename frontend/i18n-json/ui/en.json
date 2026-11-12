@@ -25,6 +25,18 @@
     "simulated": "SIMULATED"
   },
   "applicationDocuments": {
+    "refresh": "Refresh status",
+    "saveDraft": "Save draft",
+    "draftSaved": "Draft saved. Add your documents in My applications, then submit for review.",
+    "submit": "Submit application",
+    "submitWarning": "After submission, you cannot add, replace or delete documents. Submit this application?",
+    "delete": "Delete document",
+    "confirmDelete": "Delete this document? You do not have to upload another.",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "deletionPending": "Deletion requested. The document is no longer accessible, but cloud cleanup is still pending.",
+    "operationUnavailable": "Cannot save a safe retry identifier. No file was uploaded. Enable browser storage and try again.",
+    "reconciliation": "This operation needs reconciliation. Do not create another upload to retry it.",
     "uploadNote": "DEMO documents: synthetic .txt only, maximum 16 KB each, five files. Do not upload personal or identity documents.",
     "save": "Save document",
     "view": "View document",
@@ -1882,6 +1894,7 @@
     "myApplicationsTitle": "My issuer applications",
     "myApplicationsEmpty": "No applications yet.",
     "applicationStatus": {
+      "draft": "Draft",
       "received": "Received",
       "under_review": "Under review",
       "approved": "Approved",

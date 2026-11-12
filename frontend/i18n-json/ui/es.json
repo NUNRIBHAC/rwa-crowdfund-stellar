@@ -25,6 +25,18 @@
     "simulated": "SIMULADO"
   },
   "applicationDocuments": {
+    "refresh": "Actualizar estado",
+    "saveDraft": "Guardar borrador",
+    "draftSaved": "Borrador guardado. Añade los documentos en Mis solicitudes y envía la solicitud para su revisión.",
+    "submit": "Enviar solicitud",
+    "submitWarning": "Después del envío no podrás añadir, sustituir ni eliminar documentos. ¿Enviar la solicitud?",
+    "delete": "Eliminar documento",
+    "confirmDelete": "¿Eliminar este documento? No es necesario subir otro.",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "deletionPending": "Eliminación solicitada. El documento ya no está accesible, pero su eliminación del almacenamiento en la nube sigue pendiente.",
+    "operationUnavailable": "No se pudo guardar un identificador seguro para reintentar. No se ha subido ningún archivo. Activa el almacenamiento del navegador e inténtalo de nuevo.",
+    "reconciliation": "Esta operación necesita conciliación. No crees otra subida para repetirla.",
     "uploadNote": "Documentos DEMO: solo .txt sintéticos, máximo 16 KB cada uno, cinco archivos. No suba datos personales ni documentos de identidad.",
     "save": "Guardar documento",
     "view": "Ver documento",
@@ -1910,6 +1922,7 @@
     "myApplicationsTitle": "Mis solicitudes de emisor",
     "myApplicationsEmpty": "Aún no hay solicitudes.",
     "applicationStatus": {
+      "draft": "Borrador",
       "received": "Recibida",
       "under_review": "En revisión",
       "approved": "Aprobada",
