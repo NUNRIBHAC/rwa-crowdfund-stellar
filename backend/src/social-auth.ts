@@ -1,3 +1,4 @@
+import { issueSocialLinkProof, consumeSocialLinkProof } from './social-link-proof.js';
 import { issueSocialDeletionProof } from './deletion-proof.js';
 // Social (OAuth/OIDC) sign-in, sitting NEXT TO the email+password flow
 // (email-auth.ts) and the wallet-challenge flow (accounts.ts).
@@ -207,6 +208,7 @@ export async function startSocialFlow(
   bindHash?: string,
   deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose,
   registrationMethod?: 'phone',
+  linkPurpose?: import('./social-link-proof.js').SocialLinkPurpose,
 ): Promise<{ url: string }> {
   const state = client.randomState();
   const nonce = client.randomNonce();
@@ -221,6 +223,7 @@ export async function startSocialFlow(
       createdAt: now,
       expiresAt: now + SOCIAL_FLOW_TTL_MS,
       ...(linkTo ? { linkTo } : {}),
+      ...(linkPurpose ? { linkPurpose } : {}),
       ...(deletionPurpose ? { deletionPurpose } : {}),
       ...(bindHash ? { bindHash } : {}),
       ...(provider === 'telegram' && registrationMethod === 'phone' ? { registrationMethod } : {}),
@@ -256,7 +259,8 @@ export type SocialLoginResult =
   | { kind: 'totp'; ticket: string; expiresAt: number; account: Account }
   | { kind: 'email'; ticket: string; expiresAt: number }
   | { kind: 'linked'; account: Account }
-  | { kind: 'deletion-proof'; proof: string; expiresAt: number };
+  | { kind: 'deletion-proof'; proof: string; expiresAt: number }
+  | { kind: 'link-proof'; proof: string; expiresAt: number };
 
 // Complete a flow from the callback. currentUrl is the full callback URL
 // (openid-client validates state/iss against it). Errors:
@@ -321,6 +325,7 @@ export async function completeSocialFlow(
 // existing identity in, admit an allowlisted Telegram phone, or park a pending
 // email-proof ticket for other new identity-only registrations.
 export type SocialFlowRecord = {
+  linkPurpose?: import('./social-link-proof.js').SocialLinkPurpose;
   deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose;
   linkTo?: string;
   bindHash?: string;
@@ -344,6 +349,12 @@ export async function finishSocialIdentity(
     if (cutoff !== undefined && (flow.createdAt === undefined || flow.createdAt <= cutoff))
       throw new AuthError(401, 'account was deleted; start a new sign-in explicitly', 'social_flow_expired');
   };
+
+  if (flow.linkPurpose)
+    return store.change((s) => {
+      rejectDeletedFlow(s);
+      return { kind: 'link-proof' as const, ...issueSocialLinkProof(s, flow.linkPurpose!, provider, subject, now) };
+    });
 
   if (flow.deletionPurpose)
     return store.change((s) => {
@@ -510,14 +521,15 @@ async function exchangeOAuth2Userinfo(
 // Wallet-only accounts have no verified email and cannot link.
 export const SOCIAL_LINK_STEPUP_FRESH_MS = 10 * 60 * 1000;
 
-export type LinkStepUpProof = { password?: unknown; signature?: unknown };
+export type LinkStepUpProof = { password?: unknown; signature?: unknown; providerProof?: unknown };
 
 export async function requireSocialLinkStepUp(
   store: CommunityStore,
   account: Account,
-  sessionCreatedAt: number,
+  _sessionCreatedAt: number,
   proof: LinkStepUpProof,
   now = Date.now(),
+  authorization?: string,
 ): Promise<void> {
   const fail = (code: string, msg: string) => new AuthError(403, msg, code);
   if (!account.authMethod && !account.email) {
@@ -536,12 +548,8 @@ export async function requireSocialLinkStepUp(
     return;
   }
   if (account.authMethod === 'social') {
-    // A social account's re-authentication IS a fresh provider sign-in: the
-    // session must be recent (sudo-style window). The stored email was
-    // provider-verified at registration.
-    if (now - sessionCreatedAt > SOCIAL_LINK_STEPUP_FRESH_MS) {
-      throw fail('social_stepup_required', 'sign in again to link a provider; your session is too old');
-    }
+    const ok = await store.change((s) => consumeSocialLinkProof(s, account.publicKey, authorization, proof.providerProof, now));
+    if (!ok) throw fail('social_stepup_required', 'prove an already linked provider identity before linking another provider');
     return;
   }
   // Wallet account: fresh signature over an unused login challenge for this

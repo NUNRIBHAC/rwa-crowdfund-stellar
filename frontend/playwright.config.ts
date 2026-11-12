@@ -9,7 +9,9 @@ export default defineConfig({
   retries: 0,
   workers: 2,
   fullyParallel: true,
-  reporter: [['list'], ['@argos-ci/playwright/reporter', { uploadToArgos: !!process.env.ARGOS_TOKEN }]],
+  // Without the Argos reporter, argosScreenshot writes PNG + metadata under
+  // ./screenshots. The token-bearing trusted-main step uploads only those files.
+  reporter: [['list']],
   use: {
     baseURL: 'http://localhost:4173',
     launchOptions: {

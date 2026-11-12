@@ -18,6 +18,7 @@ import {
   farcasterCreateChannel,
   farcasterLinkNonce,
   farcasterNonce,
+  farcasterLinkProofNonce,
   farcasterVerify,
   requestSocialEmailCode,
   emailLogin,
@@ -54,7 +55,7 @@ export type CommunityAuthState = {
   /** Sign in with email + password (verified accounts only). */
   emailSignIn: (email: string, password: string) => Promise<void>;
   /** Redeem a verification token; also signs the new account in. */
-  emailCompleteVerification: (email: string, verificationToken: string) => Promise<void>;
+  emailCompleteVerification: (email: string, verificationToken: string, password: string) => Promise<void>;
   /** Ask for a fresh verification token (anti-enumeration response). */
   emailResendToken: (email: string) => Promise<void>;
   /** Ask for a password-reset token (anti-enumeration response). */
@@ -71,7 +72,8 @@ export type CommunityAuthState = {
   farcasterLink?: string | null;
   cancelFarcaster?: () => void;
   /** Authenticated link of a Farcaster fid to the signed-in account (step-up proof already collected). */
-  startFarcasterLink?: (proof: { password?: string; signature?: string }) => Promise<void>;
+  startFarcasterLinkProof?: () => Promise<string | undefined>;
+  startFarcasterLink?: (proof: { password?: string; signature?: string; providerProof?: string }) => Promise<void>;
   socialEmailRequest?: (email: string) => Promise<void>;
   socialEmailConfirm?: (code: string) => Promise<void>;
   /** Second step of a gated sign-in: TOTP or a single-use recovery code. */
@@ -297,11 +299,11 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
   );
 
   const emailCompleteVerification = useCallback(
-    async (email: string, verificationToken: string) => {
+    async (email: string, verificationToken: string, password: string) => {
       setBusy(true);
       setError('');
       try {
-        const v = await emailVerify(email, verificationToken);
+        const v = await emailVerify(email, verificationToken, password);
         saveCommunityToken(v.token);
         setToken(v.token);
         setAccount(v.account);
@@ -491,8 +493,19 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     );
   }, [runFarcaster]);
 
+  const startFarcasterLinkProof = useCallback(async () => {
+    let proof: string | undefined;
+    await runFarcaster(
+      () => farcasterLinkProofNonce(token),
+      (v) => {
+        proof = v.providerProof;
+      },
+    );
+    return proof;
+  }, [runFarcaster, token]);
+
   const startFarcasterLink = useCallback(
-    async (proof: { password?: string; signature?: string }) => {
+    async (proof: { password?: string; signature?: string; providerProof?: string }) => {
       await runFarcaster(
         () => farcasterLinkNonce(token, proof),
         () => setSocialNotice(tpl(messages.community?.socialLinkedSuccess ?? '', { provider: 'Farcaster' })),
@@ -581,6 +594,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       farcasterLink,
       cancelFarcaster,
       startFarcasterLink,
+      startFarcasterLinkProof,
       socialProviders,
       socialValidationActive: validationProviders.length > 0,
       enableSocialValidation,
@@ -614,6 +628,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       farcasterLink,
       cancelFarcaster,
       startFarcasterLink,
+      startFarcasterLinkProof,
       socialProviders,
       validationProviders,
       enableSocialValidation,

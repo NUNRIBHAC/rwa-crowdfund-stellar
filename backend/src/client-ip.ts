@@ -5,8 +5,8 @@
 // TRUST_PROXY_DEPTH=N: the N rightmost XFF entries are trusted proxy
 // appends, so the client is chain[length - N]. The depth must come from a
 // MEASURED chain on the deployed environment (XFF_DEBUG=1 window), never
-// from assumption - the legacy TRUST_PROXY=1 mode below trusts the leftmost
-// entry, which a client can spoof. When the received chain is shorter than
+// from assumption. The legacy TRUST_PROXY=1 boolean is ignored because it
+// trusts a caller-controlled leftmost entry. When the received chain is shorter than
 // the assumed depth the topology guess is wrong: fall back to the socket
 // address (coarse but unspoofable) rather than to a spoofable entry.
 // Used for rate limiting and abuse-defense checks, never persisted.
@@ -29,8 +29,7 @@ export function clientIp(req: express.Request): string | undefined {
     if (chain.length >= depth) return chain[chain.length - depth];
     return req.socket.remoteAddress ?? undefined;
   }
-  // Legacy mode, kept for unchanged deployments: leftmost XFF is trusted
-  // when TRUST_PROXY=1. Known-spoofable; migrate to TRUST_PROXY_DEPTH.
-  if (process.env.TRUST_PROXY === '1' && fwd) return fwd.split(',')[0].trim();
+  // No implicit proxy trust. Legacy TRUST_PROXY=1 falls back to the socket
+  // until a measured TRUST_PROXY_DEPTH is explicitly configured.
   return req.socket.remoteAddress ?? undefined;
 }

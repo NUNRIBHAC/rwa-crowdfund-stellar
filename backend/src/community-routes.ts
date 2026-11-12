@@ -1,3 +1,4 @@
+import { socialLinkPurpose } from './social-link-proof.js';
 import { socialDeletionPurpose } from './deletion-proof.js';
 import { clientIp } from './client-ip.js';
 import { deleteEmailAccount } from './account-deletion.js';
@@ -257,6 +258,71 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // account. Completion reuses the SAME registered callback URL below (no
   // provider console change); the flow's linkTo marker makes the outcome a
   // binding, never a session.
+  router.get('/api/auth/social/link-proof/providers', async (req, res) => {
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      const state = await store.read();
+      res.json({
+        providers: [
+          ...new Set(
+            Object.values(state.socialIdentities)
+              .filter((i) => i.publicKey === account.publicKey)
+              .map((i) => i.provider),
+          ),
+        ],
+      });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/farcaster/link-proof/nonce', async (req, res) => {
+    try {
+      const domain = farcasterDomain(process.env);
+      if (!domain) throw new CommunityError(404, 'not found', 'not_found');
+      await abuseGate(req);
+      const purpose = await socialLinkPurpose(store, req.header('authorization'), 'farcaster');
+      const bind = newBindSecret();
+      const { nonce } = await issueFarcasterNonce(store, bind.hash, Date.now(), undefined, undefined, purpose);
+      res.setHeader(
+        'Set-Cookie',
+        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
+      );
+      res.json({ nonce, domain, siweUri: `https://${domain}/account?purpose=account-link` });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+  router.post('/api/auth/social/:provider/link-proof/start', async (req, res) => {
+    try {
+      const provider = req.params.provider;
+      if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
+      const cfg = socialConfigFromEnv(process.env, provider);
+      if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
+      await abuseGate(req);
+      const purpose = await socialLinkPurpose(store, req.header('authorization'), provider);
+      const bind = newBindSecret();
+      const { url } = await startSocialFlow(
+        store,
+        provider,
+        cfg,
+        socialRedirectUri(req, provider),
+        Date.now(),
+        deps.socialFetch,
+        undefined,
+        bind.hash,
+        undefined,
+        undefined,
+        purpose,
+      );
+      res.setHeader(
+        'Set-Cookie',
+        `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,
+      );
+      res.json({ url });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
   router.post('/api/auth/social/:provider/link/start', async (req, res) => {
     try {
       const provider = req.params.provider;
@@ -265,7 +331,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
       await abuseGate(req);
       const { account, sessionCreatedAt } = await authenticateWithSession(store, req.header('authorization'));
-      await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {});
+      await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {}, Date.now(), req.header('authorization'));
       const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch, account.publicKey);
       // JSON, not a 302: the SPA navigates after collecting the step-up
       // proof, so the provider URL is data here.
@@ -336,7 +402,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (!domain) throw new CommunityError(404, 'not found', 'not_found');
       await abuseGate(req);
       const { account, sessionCreatedAt } = await authenticateWithSession(store, req.header('authorization'));
-      await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {});
+      await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {}, Date.now(), req.header('authorization'));
       const bind = newBindSecret();
       const { nonce } = await issueFarcasterNonce(store, bind.hash, Date.now(), account.publicKey);
       res.setHeader(
@@ -403,6 +469,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       });
       if (r.kind === 'session') res.json({ token: r.token, expiresAt: r.expiresAt, account: publicAccount(r.account) });
       else if (r.kind === 'totp') res.json({ totpTicket: r.ticket, expiresAt: r.expiresAt });
+      else if (r.kind === 'link-proof') res.json({ providerProof: r.proof, expiresAt: r.expiresAt });
       else if (r.kind === 'email') res.json({ socialEmailTicket: r.ticket, expiresAt: r.expiresAt });
       else res.json({ status: 'linked' });
     } catch (err) {
@@ -459,6 +526,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const result = await completeSocialFlow(store, process.env, provider, cfg, currentUrl, req.query.state, Date.now(), deps.socialFetch, readBind(req));
       if (result.kind === 'email') return res.redirect(302, `/account#social-email=${result.ticket}`);
       if (result.kind === 'totp') return res.redirect(302, `/account#social-totp=${result.ticket}`);
+      if (result.kind === 'link-proof') return res.redirect(302, `/account#link-proof=${result.proof}`);
       if (result.kind === 'deletion-proof') return res.redirect(302, `/account#deletion-proof=${result.proof}`);
       if (result.kind === 'linked') return res.redirect(302, `/account#social-linked=${provider}`);
       return res.redirect(302, `/account#social-token=${result.token}`);
@@ -568,7 +636,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`email-verify-ip:${ip}`, 30, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
-      const result = await verifyEmailToken(store, { email: req.body?.email, token: req.body?.token });
+      const result = await verifyEmailToken(store, { email: req.body?.email, token: req.body?.token, password: req.body?.password });
       res.json({
         token: result.token,
         expiresAt: result.expiresAt,
@@ -649,6 +717,9 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   router.post(
     '/api/auth/totp/disable',
     authed(async (req, res, account) => {
+      const ip = clientIp(req) ?? 'unknown';
+      if (!service.limiter.allow(`totp-disable-ip:${ip}`, 30, 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
       await disableTotp(store, account.publicKey, String(req.body?.code ?? ''));
       res.json({ ok: true });
     }),
