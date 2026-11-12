@@ -76,8 +76,9 @@ describe('SignInPanel no-send verification entry', () => {
 
     // Submitting the token goes through the ordinary verification call.
     fireEvent.change(screen.getByLabelText('Verification token'), { target: { value: 'blv_'.concat('b'.repeat(48)) } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'fresh-inbox-owner-password' } });
     fireEvent.click(screen.getByRole('button', { name: 'Verify and sign in' }));
-    expect((mock as any).emailCompleteVerification).toHaveBeenCalledWith('qa@example.com', 'blv_'.concat('b'.repeat(48)));
+    expect((mock as any).emailCompleteVerification).toHaveBeenCalledWith('qa@example.com', 'blv_'.concat('b'.repeat(48)), 'fresh-inbox-owner-password');
 
     // Back returns to the sign-in form without any API call.
     cleanup();

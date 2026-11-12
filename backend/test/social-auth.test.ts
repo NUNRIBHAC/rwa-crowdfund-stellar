@@ -279,6 +279,24 @@ test('github oauth2: provider rejection and missing user id fail closed', async 
 // Drive one LINK flow: authenticated /link/start, then the same /callback
 // path with the issued state. Returns the callback response.
 async function driveLinkFlow(base: string, provider: string, token: string, challengeHolder: { challenge: string | null }, body: Record<string, unknown> = {}) {
+  if (!body.password && !body.signature) {
+    const proofStart = await fetch(`${base}/api/auth/social/${provider}/link-proof/start`, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+      body: '{}',
+    });
+    assert.equal(proofStart.status, 200);
+    const proofUrl = new URL(((await proofStart.json()) as any).url);
+    challengeHolder.challenge = proofUrl.searchParams.get('code_challenge');
+    (globalThis as any).__testNonce = proofUrl.searchParams.get('nonce');
+    const callback = await fetch(
+      `${base}/api/auth/social/${provider}/callback?code=fake-auth-code&state=${encodeURIComponent(proofUrl.searchParams.get('state')!)}`,
+      { redirect: 'manual', headers: { cookie: proofStart.headers.get('set-cookie')!.split(';')[0] } },
+    );
+    const location = callback.headers.get('location')!;
+    assert.match(location, /#link-proof=bll_/);
+    body = { ...body, providerProof: location.split('#link-proof=')[1] };
+  }
   const start = await fetch(`${base}/api/auth/social/${provider}/link/start`, {
     method: 'POST',
     headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
@@ -385,8 +403,8 @@ test('social linking step-up: stale social session and bad wallet signature are 
     () => requireSocialLinkStepUp(store, socialAccount as any, now - 11 * 60 * 1000, {}, now),
     (e: any) => e.status === 403 && e.code === 'social_stepup_required',
   );
-  // Fresh session passes.
-  await requireSocialLinkStepUp(store, socialAccount as any, now - 60 * 1000, {}, now);
+  // A fresh bearer is not a fresh linked-provider identity proof.
+  await assert.rejects(requireSocialLinkStepUp(store, socialAccount as any, now - 60 * 1000, {}, now), (e: any) => e.code === 'social_stepup_required');
 
   // Email account, UNVERIFIED credential: refused even with the right password.
   const { hashPassword } = await import('../src/email-auth.js');
@@ -842,7 +860,17 @@ test('farcaster linking: step-up, binds the fid to the signed-in account only; o
       body: JSON.stringify(body),
     });
   const nonceOf = async (path: string, token = '') => {
-    const r = await post(path, {}, '', token);
+    let body: Record<string, string> = {};
+    if (path === '/api/auth/farcaster/link/nonce' && token) {
+      const start = await post('/api/auth/farcaster/link-proof/nonce', {}, '', token);
+      assert.equal(start.status, 200);
+      const nonce = ((await start.json()) as { nonce: string }).nonce;
+      const signed = await siwe(nonce, { uri: `https://${FC_DOMAIN}/account?purpose=account-link` }, accA, 11);
+      const verified = await post('/api/auth/farcaster/verify', { nonce, ...signed }, start.headers.get('set-cookie')!.split(';')[0]);
+      assert.equal(verified.status, 200);
+      body = { providerProof: ((await verified.json()) as { providerProof: string }).providerProof };
+    }
+    const r = await post(path, body, '', token);
     return { status: r.status, ck: (r.headers.get('set-cookie') ?? '').split(';')[0], ...((await r.json()) as { nonce: string }) };
   };
   const register = async (acct: typeof accA, fid: number, email: string) => {
@@ -958,7 +986,7 @@ test('validation-provider list requires a verified allowlisted account and expos
   );
   const proof = mail.match(/blv_[0-9a-f]{48}/)?.[0];
   assert.ok(proof);
-  const verified = await verifyEmailToken(store, { email: 'owner@example.com', token: proof });
+  const verified = await verifyEmailToken(store, { email: 'owner@example.com', token: proof, password: 'original-long-password' });
   const goodHeaders = { authorization: `Bearer ${verified.token}` };
   const accepted = await fetch(url, { headers: goodHeaders });
   assert.equal(accepted.status, 200);
@@ -1255,4 +1283,35 @@ test('telegram phone is an explicit alternative; default email remains primary a
       assert.equal(Object.keys((await store.read()).accounts).length, 1);
     }
   }
+});
+
+test('social linking proof HTTP routes reject bare bearer, unlinked provider, wrong session and replay', async () => {
+  const fake = await makeFakeGoogle({ email: 'proof@example.com', emailVerified: true, subject: 'proof-owner' });
+  const { base, store } = await startApp({ ...CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'proof@example.com' }, { socialFetch: fake.fetchImpl });
+  const firstToken = tokenFromRedirect(await driveFlow(base, fake.fetchImpl, fake.state));
+  const secondToken = tokenFromRedirect(await driveFlow(base, fake.fetchImpl, fake.state));
+  const post = (path: string, token: string, body: unknown = {}) =>
+    fetch(base + path, { method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' }, body: JSON.stringify(body) });
+  assert.equal((await post('/api/auth/social/google/link-proof/start', '')).status, 403);
+  assert.equal((await post('/api/auth/social/google/link/start', firstToken)).status, 403);
+  const providers = await fetch(base + '/api/auth/social/link-proof/providers', { headers: { authorization: `Bearer ${firstToken}` } });
+  assert.deepEqual(await providers.json(), { providers: ['google'] });
+  const start = await post('/api/auth/social/google/link-proof/start', firstToken);
+  assert.equal(start.status, 200);
+  const url = new URL(((await start.json()) as { url: string }).url);
+  fake.state.challenge = url.searchParams.get('code_challenge');
+  (globalThis as any).__testNonce = url.searchParams.get('nonce');
+  const callback = await fetch(base + '/api/auth/social/google/callback?code=fake-auth-code&state=' + encodeURIComponent(url.searchParams.get('state')!), {
+    redirect: 'manual',
+    headers: { cookie: start.headers.get('set-cookie')!.split(';')[0] },
+  });
+  const location = callback.headers.get('location')!;
+  assert.match(location, /^\/account#link-proof=bll_/);
+  const proof = location.split('#link-proof=')[1];
+  assert.equal((await post('/api/auth/social/google/link/start', secondToken, { providerProof: proof })).status, 403);
+  assert.equal((await post('/api/auth/social/google/link/start', firstToken, { providerProof: proof })).status, 200);
+  assert.equal((await post('/api/auth/social/google/link/start', firstToken, { providerProof: proof })).status, 403);
+  assert.equal(Object.keys((await store.read()).sessions).length, 2, 'proof callback issues no session');
+  const { socialLinkPurpose } = await import('../src/social-link-proof.js');
+  await assert.rejects(socialLinkPurpose(store, `Bearer ${firstToken}`, 'github'), (e: any) => e.code === 'social_stepup_required');
 });

@@ -4900,3 +4900,13 @@ html.rtl-text .accordion summary > span:first-child {
 .contribution-terms p:last-child {
   margin-bottom: 0;
 }
+
+.social-link-proof {
+  margin: 0.75rem 0;
+  padding: 1rem;
+  border: 1px solid currentColor;
+  border-radius: 0.5rem;
+}
+.social-link-proof .btn {
+  margin: 0.25rem 0.5rem 0.25rem 0;
+}

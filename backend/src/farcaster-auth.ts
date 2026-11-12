@@ -56,6 +56,7 @@ export async function issueFarcasterNonce(
   now = Date.now(),
   linkTo?: string,
   deletionPurpose?: SocialDeletionPurpose,
+  linkPurpose?: import('./social-link-proof.js').SocialLinkPurpose,
 ): Promise<{ nonce: string }> {
   const nonce = randomBytes(16).toString('hex');
   await store.change((s) => {
@@ -68,6 +69,7 @@ export async function issueFarcasterNonce(
       expiresAt: now + NONCE_TTL_MS,
       bindHash,
       ...(linkTo ? { linkTo } : {}),
+      ...(linkPurpose ? { linkPurpose } : {}),
       ...(deletionPurpose ? { deletionPurpose } : {}),
     };
   });
@@ -129,7 +131,7 @@ export async function verifyFarcasterSignIn(
   const parsed = parseSiweMessage(message);
   const issuedAt = parsed.issuedAt?.getTime();
   const bad = new AuthError(401, 'the Farcaster sign-in message is not valid for this site; start again', 'social_exchange_failed');
-  const expectedUri = `https://${domain}/account${flow.deletionPurpose ? '?purpose=account-deletion' : ''}`;
+  const expectedUri = `https://${domain}/account${flow.deletionPurpose ? '?purpose=account-deletion' : flow.linkPurpose ? '?purpose=account-link' : ''}`;
   if (parsed.uri !== expectedUri) throw bad;
   if (issuedAt === undefined || issuedAt < now - MESSAGE_MAX_AGE_MS || issuedAt > now + MESSAGE_MAX_FUTURE_MS) throw bad;
   if (parsed.expirationTime && parsed.expirationTime.getTime() <= now) throw bad;

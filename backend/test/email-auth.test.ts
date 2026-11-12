@@ -67,7 +67,23 @@ async function startApp(mailer: Mailer | null): Promise<string> {
 const servers: ReturnType<express.Express['listen']>[] = [];
 after(() => servers.forEach((s) => s.close()));
 
+const verificationPasswords = new Map<string, string>();
 async function api(baseUrl: string, method: string, p: string, opts: { token?: string; body?: unknown } = {}) {
+  if (p === '/api/auth/email/register' && opts.body) {
+    const body = opts.body as { email: string; password: string };
+    const key = baseUrl + ':' + String(body.email).trim().toLowerCase();
+    if (typeof body.password === 'string' && body.password.length >= 12 && !verificationPasswords.has(key)) verificationPasswords.set(key, body.password);
+  }
+  if (p === '/api/auth/email/verify' && opts.body) {
+    const body = opts.body as { email: string; password?: string };
+    opts = {
+      ...opts,
+      body: {
+        ...body,
+        password: body.password ?? verificationPasswords.get(baseUrl + ':' + String(body.email).trim().toLowerCase()) ?? 'verification-password-test',
+      },
+    };
+  }
   const res = await fetch(baseUrl + p, {
     method,
     headers: {
@@ -547,9 +563,9 @@ test('cooldown timing (direct calls with injected clock): resend and reset send 
   assert.equal(mailer.sent.length, 3);
   const token = extractToken(mailer.sent[2].text);
   assert.notEqual(token, superseded);
-  await assert.rejects(verifyEmailToken(store, { email, token: superseded }, t0 + 23 * 60 * 1000));
+  await assert.rejects(verifyEmailToken(store, { email, token: superseded, password: 'correct horse battery' }, t0 + 23 * 60 * 1000));
   mailer.sent.length = 0; // keep later indexes simple
-  await verifyEmailToken(store, { email, token }, t0 + 23 * 60 * 1000);
+  await verifyEmailToken(store, { email, token, password: 'correct horse battery' }, t0 + 23 * 60 * 1000);
 
   // Reset cooldown follows the same rule.
   await requestPasswordReset(store, mailer, { email }, t0 + 30 * 60 * 1000);
@@ -570,7 +586,7 @@ test('cooldown timing (direct calls with injected clock): resend and reset send 
   const mailer2 = new FakeMailer();
   await registerEmail(store2, mailer2, { email, password: 'correct horse battery' }, t0);
   const vtoken = extractToken(mailer2.sent[0].text);
-  await verifyEmailToken(store2, { email, token: vtoken }, t0 + 60 * 1000);
+  await verifyEmailToken(store2, { email, token: vtoken, password: 'correct horse battery' }, t0 + 60 * 1000);
   await requestPasswordReset(store2, mailer2, { email }, t0 + 2 * 60 * 1000);
   const stale = extractResetToken(mailer2.sent[1].text);
   await assert.rejects(confirmPasswordReset(store2, { email, token: stale, password: 'fresh password ok' }, t0 + 3 * 60 * 60 * 1000), (err: unknown) => {
@@ -714,7 +730,7 @@ test('harassment upper bound across ALL send paths (register+resend+reset), inje
   const victim2 = 'victim2@example.com';
   await registerEmail(store, mailer, { email: victim2, ...pw }, t0);
   const vtoken = extractToken(mailer.sent.at(-1)!.text);
-  await verifyEmailToken(store, { email: victim2, token: vtoken }, t0 + MIN);
+  await verifyEmailToken(store, { email: victim2, token: vtoken, password: 'correct horse battery' }, t0 + MIN);
   const base = mailer.sent.length;
   for (let m = 2; m <= 182; m++) {
     const now = t0 + m * MIN;

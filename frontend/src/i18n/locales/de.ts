@@ -2037,7 +2037,7 @@ export const de: Messages = {
     errorSocialExchangeFailed: 'Der Anmeldeanbieter hat den Austausch abgelehnt. Bitte erneut starten.',
     errorSocialRegistrationRestricted: 'Die Anmeldung mit diesem Anbieter ist auf dieser Website noch nicht für neue Konten geöffnet.',
     errorSocialIdentityTaken: 'Diese Anbieter-Identität ist bereits mit einem anderen Konto verknüpft.',
-    errorSocialStepupRequired: 'Melden Sie sich erneut an, um einen Anbieter zu verknüpfen; Ihre Sitzung ist zu alt.',
+    errorSocialStepupRequired: 'Bestätigen Sie eine bereits verknüpfte Anbieteridentität, bevor Sie einen weiteren Anbieter verknüpfen.',
     errorSocialStepupFailed: 'Die erneute Authentifizierung ist fehlgeschlagen. Prüfen Sie Ihr Passwort oder signieren Sie eine neue Wallet-Challenge.',
     errorSocialLinkRequiresVerifiedEmail: 'Das Verknüpfen eines Anmeldeanbieters erfordert ein Konto mit bestätigter E-Mail-Adresse.',
     socialLinkedSuccess: 'Die Anmeldung mit {provider} ist jetzt mit Ihrem Konto verknüpft.',
@@ -2181,7 +2181,12 @@ export const de: Messages = {
         'Sie melden sich an, indem Sie eine Nachricht mit Ihrer Stellar-Wallet signieren: Die Wallet ist die Berechtigung. Unten kann optional ein Zwei-Faktor-Authenticator hinzugefügt werden.',
       linkTitle: 'Anmeldeanbieter',
       linkNote:
-        'Verknüpfen Sie eine weitere Anmeldemethode mit diesem Konto. Sie weisen zuerst nach, dass Sie es wirklich sind (Passwort, frische Wallet-Signatur oder eine kürzliche Anmeldung), und bestätigen dann beim Anbieter.',
+        'Verknüpfen Sie eine weitere Anmeldemethode mit diesem Konto. Bestätigen Sie zuerst Ihr Passwort, signieren Sie eine neue Wallet-Anfrage oder bestätigen Sie eine bereits verknüpfte Identität. Bestätigen Sie danach den neuen Anbieter.',
+      linkProofTarget: 'Neue Anmeldemethode: {provider}',
+      linkProofNote:
+        'Um {provider} zu verknüpfen, bestätige zuerst eine bereits mit diesem Konto verknüpfte Identität. Diese kann von einem anderen Anbieter stammen.',
+      linkProofAction: 'Mit bestehender {provider}-Identität bestätigen',
+      linkProofReady: 'Identität bestätigt. Wähle oben die neue Anmeldemethode, um fortzufahren.',
       linkAction: '{provider} verknüpfen',
       linkPasswordLabel: 'Aktuelles Passwort',
       linkConfirm: 'Bestätigen und fortfahren',

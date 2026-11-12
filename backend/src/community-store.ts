@@ -60,6 +60,7 @@ export type SocialFlow = {
   linkTo?: string;
   // Explicit alternative to default email-proof registration, bound to state.
   registrationMethod?: 'phone';
+  linkPurpose?: import('./social-link-proof.js').SocialLinkPurpose;
   deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose;
   // sha256 of a per-browser secret set as an httpOnly cookie at /start;
   // the callback must present the same cookie (browser binding).
@@ -443,6 +444,7 @@ export type CommunityState = {
   // Isolated non-binding fixture meetings; never a legal rights register.
   simulatedMeetings?: Record<string, import('./meeting-simulation.js').SimulatedMeeting>;
   version: 1;
+  socialLinkProofs?: Record<string, import('./social-link-proof.js').SocialLinkProof>;
   socialDeletionProofs?: Record<string, import('./deletion-proof.js').SocialDeletionProof>;
   deletedWalletBefore?: Record<string, number>;
   deletionChallenges?: Record<string, import('./deletion-proof.js').DeletionChallenge>;
@@ -625,11 +627,14 @@ export class PostgresCommunityStore implements CommunityStore {
     this.ready = connector
       ? connector().then(async (client: any) => {
           try {
-            await client.query('SELECT pg_advisory_lock(hashtext($1))', ['community_store_schema_init']);
+            await client.query('BEGIN');
             try {
+              await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', ['community_store_schema_init']);
               await client.query(ddl);
-            } finally {
-              await client.query('SELECT pg_advisory_unlock(hashtext($1))', ['community_store_schema_init']).catch(() => {});
+              await client.query('COMMIT');
+            } catch (err) {
+              await client.query('ROLLBACK').catch(() => {});
+              throw err;
             }
           } finally {
             client.release();
@@ -734,8 +739,9 @@ session,CASE WHEN jsonb_typeof(session->'publicKey')='string' THEN accounts->(se
     }
     const client = await connector();
     try {
-      await client.query('SELECT pg_advisory_lock(hashtext($1))', ['community_store_change']);
+      await client.query('BEGIN');
       try {
+        await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', ['community_store_change']);
         const { rows } = await client.query('SELECT doc FROM community_store WHERE id = $1', [PG_DOC_ID]);
         const state = rows.length === 0 ? emptyCommunityState() : validate(rows[0].doc);
         const result = fn(state);
@@ -743,9 +749,11 @@ session,CASE WHEN jsonb_typeof(session->'publicKey')='string' THEN accounts->(se
           'INSERT INTO community_store (id, doc, updated_at) VALUES ($1, $2, now()) ON CONFLICT (id) DO UPDATE SET doc = $2, updated_at = now()',
           [PG_DOC_ID, JSON.stringify(state)],
         );
+        await client.query('COMMIT');
         return result;
-      } finally {
-        await client.query('SELECT pg_advisory_unlock(hashtext($1))', ['community_store_change']).catch(() => {});
+      } catch (err) {
+        await client.query('ROLLBACK').catch(() => {});
+        throw err;
       }
     } finally {
       client.release();

@@ -29,8 +29,8 @@ const storePath = () => {
 };
 
 // Deletion safety must not interpret an unreadable/corrupt file as no records.
-// Keep existing recovery behavior separate; this strict reader is not wired
-// into account deletion until a coherent external retention adapter exists.
+// Recovery reads use this too. Account deletion still needs its coherent
+// external retention adapter before it can rely on this queue as evidence.
 export function readPendingStrict(): PendingContribution[] {
   let raw: string;
   try {
@@ -56,15 +56,10 @@ export function readPendingStrict(): PendingContribution[] {
   return value as PendingContribution[];
 }
 
+// Every recovery read is strict too: corrupt/denied state must never be
+// mistaken for an empty queue by a writer. Only ENOENT means no proofs.
 export function readPending(): PendingContribution[] {
-  try {
-    const raw = fs.readFileSync(storePath(), 'utf8');
-    const v = JSON.parse(raw);
-    if (!Array.isArray(v)) return [];
-    return v.filter((e) => e && typeof e.hash === 'string' && /^[0-9a-f]{64}$/.test(e.hash));
-  } catch {
-    return [];
-  }
+  return readPendingStrict();
 }
 
 function writePending(entries: PendingContribution[]): void {

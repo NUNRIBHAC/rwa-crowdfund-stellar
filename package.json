@@ -27,5 +27,8 @@
     "globals": "^17.14.0",
     "prettier": "^3.7.3",
     "typescript-eslint": "^8.46.4"
+  },
+  "overrides": {
+    "minimatch": "11.0.8"
   }
 }

@@ -181,8 +181,14 @@ export const verifyChallenge = (publicKey: string, signature: string) => call<Ve
 // Social account linking (backend social-auth.ts): POST with the
 // method-appropriate step-up proof; the response carries the provider URL
 // to navigate to. Completion returns to /account#social-linked=<provider>.
-export const startSocialLink = (token: string, provider: string, proof: { password?: string; signature?: string }) =>
+export const startSocialLink = (token: string, provider: string, proof: { password?: string; signature?: string; providerProof?: string }) =>
   call<{ url: string }>(`/api/auth/social/${encodeURIComponent(provider)}/link/start`, { token, body: proof });
+
+export const socialLinkProofProviders = (token: string) => call<{ providers: string[] }>('/api/auth/social/link-proof/providers', { token });
+export const startSocialLinkProof = (token: string, provider: string) =>
+  call<{ url: string }>(`/api/auth/social/${encodeURIComponent(provider)}/link-proof/start`, { token, body: {} });
+export const farcasterLinkProofNonce = (token: string) =>
+  call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/farcaster/link-proof/nonce', { token, body: {} });
 
 // Email + password registration/login (backend email-auth.ts). Register and
 // resend intentionally return the same anti-enumeration shape whether the
@@ -197,9 +203,9 @@ export const emailRegister = (email: string, password: string, turnstileToken?: 
 export const emailResend = (email: string, turnstileToken?: string) =>
   call<{ status: 'verification-sent' }>('/api/auth/email/resend', { body: { email, locale: uiLocale(), turnstileToken } });
 
-export const emailVerify = (email: string, verificationToken: string) =>
+export const emailVerify = (email: string, verificationToken: string, password: string) =>
   call<{ token: string; expiresAt: number; account: CommunityAccount; isOperator?: boolean }>('/api/auth/email/verify', {
-    body: { email, token: verificationToken },
+    body: { email, token: verificationToken, password },
   });
 
 export const emailLogin = (email: string, password: string) =>
@@ -648,12 +654,17 @@ export const farcasterNonce = (turnstileToken?: string) =>
   call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/farcaster/nonce', { body: turnstileToken ? { turnstileToken } : {} });
 
 export const farcasterVerify = (nonce: string, message: string, signature: string) =>
-  call<{ token?: string; expiresAt: number; account?: CommunityAccount; totpTicket?: string; socialEmailTicket?: string; isOperator?: boolean }>(
-    '/api/auth/farcaster/verify',
-    {
-      body: { nonce, message, signature },
-    },
-  );
+  call<{
+    token?: string;
+    expiresAt: number;
+    account?: CommunityAccount;
+    totpTicket?: string;
+    socialEmailTicket?: string;
+    providerProof?: string;
+    isOperator?: boolean;
+  }>('/api/auth/farcaster/verify', {
+    body: { nonce, message, signature },
+  });
 
 const FARCASTER_RELAY = 'https://relay.farcaster.xyz/v1';
 export const farcasterCreateChannel = async (nonce: string, domain: string, siweUri: string) => {
@@ -673,7 +684,7 @@ export const farcasterChannelStatus = async (channelToken: string) => {
   return { state: r.ok ? (j.state ?? 'pending') : 'error', message: j.message, signature: j.signature };
 };
 
-export const farcasterLinkNonce = (token: string, proof: { password?: string; signature?: string }) =>
+export const farcasterLinkNonce = (token: string, proof: { password?: string; signature?: string; providerProof?: string }) =>
   call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/farcaster/link/nonce', { token, body: proof });
 
 // Corporate actions (prototype): operator-session cap table and distribution

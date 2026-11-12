@@ -104,6 +104,8 @@ export async function deleteEmailAccount(
       if (record.email === account.email || identities.some((identity) => identity.provider === record.provider && identity.subject === record.subject))
         delete state.socialPending[id];
     }
+    for (const [id, record] of Object.entries(state.socialLinkProofs ?? {})) if (record.publicKey === key) delete state.socialLinkProofs![id];
+    for (const [id, record] of Object.entries(state.socialFlows)) if (record.linkPurpose?.publicKey === key) delete state.socialFlows[id];
     for (const [id, record] of Object.entries(state.socialDeletionProofs ?? {})) if (record.publicKey === key) delete state.socialDeletionProofs![id];
     for (const [id, record] of Object.entries(state.socialFlows)) if (record.deletionPurpose?.publicKey === key) delete state.socialFlows[id];
     for (const [id, record] of Object.entries(state.deletionChallenges ?? {})) if (record.publicKey === key) delete state.deletionChallenges![id];

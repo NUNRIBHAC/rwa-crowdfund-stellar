@@ -225,7 +225,7 @@ export async function registerEmail(
   maxPerDay = DEFAULT_MAIL_BUDGET_PER_DAY,
 ): Promise<{ status: 'verification-sent' }> {
   const email = normalizeEmail(input.email);
-  const password = validatePassword(input.password);
+  validatePassword(input.password); // Validate legacy clients; never retain their pre-proof password.
   const locale = normalizeMailLocale(input.locale);
   const created = await store.change((state) => {
     const existing = state.emailCredentials[email];
@@ -243,7 +243,7 @@ export async function registerEmail(
     const publicKey = Keypair.random().publicKey();
     const credential: EmailCredential = {
       email,
-      passwordRecord: hashPassword(password),
+      passwordRecord: '', // Inbox owner sets this only when redeeming the verification token.
       publicKey,
       verified: false,
       verifyTokenHash: null,
@@ -329,7 +329,10 @@ export async function requestPasswordReset(
     reserveMailSlot(state, now, maxPerHour, maxPerDay);
     credential.resetTokenHash = createHash('sha256').update(token).digest('hex');
     credential.resetExpiresAt = now + RESET_TOKEN_TTL_MS;
-    return { token, locale: credential.preferredLocale };
+    const previousSentAt = credential.resetSentAt;
+    // Reserve inside the same atomic change as the token and mail budget.
+    credential.resetSentAt = now;
+    return { token, locale: credential.preferredLocale, previousSentAt, tokenHash: credential.resetTokenHash };
   });
   if (!prepared) return { status: 'reset-sent' };
   const mail = resetEmail(normalizeMailLocale(prepared.locale), email, prepared.token);
@@ -342,13 +345,16 @@ export async function requestPasswordReset(
   } catch (err) {
     if (isProviderThrottle(err)) await noteProviderThrottle(store, now);
     await refundMailSlot(store, now);
+    await store.change((state) => {
+      const current = state.emailCredentials[email];
+      if (current?.resetTokenHash === prepared.tokenHash) {
+        current.resetSentAt = prepared.previousSentAt;
+        current.resetTokenHash = null;
+        current.resetExpiresAt = null;
+      }
+    });
     throw err;
   }
-  // Cooldown marker only after a successful send (provider 503 -> free retry).
-  await store.change((state) => {
-    const current = state.emailCredentials[email];
-    if (current) current.resetSentAt = now;
-  });
   return { status: 'reset-sent' };
 }
 
@@ -398,17 +404,18 @@ export async function confirmPasswordReset(
   return { status: 'password-reset' };
 }
 
-// Verify the token and log the user in immediately: they just proved the
-// inbox, so a separate password round-trip adds nothing.
+// Redeem inbox proof with a password chosen by the inbox holder. Never
+// promote a password supplied by whoever initiated the registration.
 export async function verifyEmailToken(
   store: CommunityStore,
-  input: { email: unknown; token: unknown },
+  input: { email: unknown; token: unknown; password?: unknown },
   now = Date.now(),
 ): Promise<{ token: string; expiresAt: number; account: Account }> {
   const email = normalizeEmail(input.email);
   if (typeof input.token !== 'string' || !/^blv_[0-9a-f]{48}$/.test(input.token)) {
     throw new AuthError(400, 'invalid verification token', 'token_invalid');
   }
+  const password = validatePassword(input.password);
   const tokenHash = createHash('sha256').update(input.token).digest('hex');
   const result = await store.change((state) => {
     const credential = state.emailCredentials[email];
@@ -423,6 +430,7 @@ export async function verifyEmailToken(
     ) {
       return null;
     }
+    credential.passwordRecord = hashPassword(password);
     credential.verified = true;
     credential.verifyTokenHash = null; // single-use
     credential.verifyExpiresAt = null;
@@ -452,6 +460,7 @@ export async function loginEmail(
   const result = await store.change((state) => {
     const credential = state.emailCredentials[email];
     if (!credential) return null;
+    if (!credential.verified) return { unverified: true as const };
     if (credential.lockUntil && credential.lockUntil > now) {
       throw new AuthError(429, 'too many failed attempts; retry in a few minutes', 'login_throttled');
     }
