@@ -48,6 +48,8 @@ export async function deleteEmailAccount(
     const protectedRecords = [
       state.contributors,
       state.applications,
+      state.privateApplicationUploads,
+      state.privateApplicationDeletions,
       state.companies,
       state.appropriateness,
       state.investmentDocuments,
