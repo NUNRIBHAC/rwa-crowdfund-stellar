@@ -298,6 +298,7 @@ export async function disableTotp(store: CommunityStore, publicKey: string, code
     const account = state.accounts[publicKey];
     const enrollment = account?.totp;
     if (!account || !enrollment || enrollment.status !== 'enabled') throw new AuthError(400, 'second factor is not enabled', 'totp_not_enabled');
+    if (enrollment.lockUntil && enrollment.lockUntil > now) throw new AuthError(429, 'too many failed attempts; retry in a few minutes');
     const seed = decryptSeed(serverSecret, enrollment.encSeed);
     const step = verifyTotp(seed, code, Math.floor(now / 1000), enrollment.lastUsedStep);
     if (step !== null) {
@@ -305,12 +306,24 @@ export async function disableTotp(store: CommunityStore, publicKey: string, code
     } else {
       const hash = hashRecoveryCode(code);
       const idx = enrollment.recoveryHashes.findIndex((h) => h.length === hash.length && timingSafeEqual(Buffer.from(h), Buffer.from(hash)));
-      if (idx === -1) return false;
+      if (idx === -1) {
+        // Return the failure so store.change commits the attempt atomically.
+        // Throwing here would roll back the counter with file/PG stores.
+        enrollment.failedAttempts += 1;
+        if (enrollment.failedAttempts >= TOTP_MAX_FAILURES) {
+          enrollment.lockUntil = now + TOTP_LOCK_MS;
+          enrollment.failedAttempts = 0;
+        }
+        return false;
+      }
     }
     delete account.totp;
     return true;
   });
-  if (!ok) throw new AuthError(401, 'code did not match; second factor not disabled', 'totp_code_invalid');
+  if (!ok) {
+    console.warn(JSON.stringify({ event: 'totp_disable_failed', publicKey, at: now }));
+    throw new AuthError(401, 'code did not match; second factor not disabled', 'totp_code_invalid');
+  }
 }
 
 export function verifySignature(publicKey: string, message: string, signature: Buffer): boolean {

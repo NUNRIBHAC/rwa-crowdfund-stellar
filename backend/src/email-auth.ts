@@ -329,7 +329,10 @@ export async function requestPasswordReset(
     reserveMailSlot(state, now, maxPerHour, maxPerDay);
     credential.resetTokenHash = createHash('sha256').update(token).digest('hex');
     credential.resetExpiresAt = now + RESET_TOKEN_TTL_MS;
-    return { token, locale: credential.preferredLocale };
+    const previousSentAt = credential.resetSentAt;
+    // Reserve inside the same atomic change as the token and mail budget.
+    credential.resetSentAt = now;
+    return { token, locale: credential.preferredLocale, previousSentAt, tokenHash: credential.resetTokenHash };
   });
   if (!prepared) return { status: 'reset-sent' };
   const mail = resetEmail(normalizeMailLocale(prepared.locale), email, prepared.token);
@@ -342,13 +345,16 @@ export async function requestPasswordReset(
   } catch (err) {
     if (isProviderThrottle(err)) await noteProviderThrottle(store, now);
     await refundMailSlot(store, now);
+    await store.change((state) => {
+      const current = state.emailCredentials[email];
+      if (current?.resetTokenHash === prepared.tokenHash) {
+        current.resetSentAt = prepared.previousSentAt;
+        current.resetTokenHash = null;
+        current.resetExpiresAt = null;
+      }
+    });
     throw err;
   }
-  // Cooldown marker only after a successful send (provider 503 -> free retry).
-  await store.change((state) => {
-    const current = state.emailCredentials[email];
-    if (current) current.resetSentAt = now;
-  });
   return { status: 'reset-sent' };
 }
 

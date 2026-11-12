@@ -20,7 +20,18 @@ function isLocalDatabaseUrl(raw: string): boolean {
     // Unparseable DSN: refuse, fail closed.
     return false;
   }
-  return LOCAL_HOSTS.has(url.hostname);
+  if (url.protocol !== 'postgres:' && url.protocol !== 'postgresql:') return false;
+  // pg-connection-string copies query options before the authority host;
+  // the last host query value wins; an empty value uses the authority host.
+  // Refuse native/libpq alternate routing rather than guessing its target.
+  if (url.searchParams.has('hostaddr') || url.searchParams.has('service')) return false;
+  try {
+    const hosts = url.searchParams.getAll('host');
+    const host = hosts.at(-1) || decodeURIComponent(url.hostname);
+    return LOCAL_HOSTS.has(host) || host.startsWith('/');
+  } catch {
+    return false;
+  }
 }
 
 // Two markers: the npm test scripts set NODE_ENV=test, and `node --test`

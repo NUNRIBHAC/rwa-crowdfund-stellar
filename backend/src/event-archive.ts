@@ -137,7 +137,8 @@ export async function archiveCampaignEvents(opts: {
   while (cursor <= latest) {
     const windowEnd = Math.min(cursor + windowLedgers - 1, latest);
     const page = await client.getEvents({ startLedger: cursor, filters, limit: eventLimit });
-    const events = Array.isArray(page.events) ? page.events : [];
+    if (!Array.isArray(page.events)) throw new Error('event response has no event array; refusing to advance checkpoint');
+    const events = page.events;
     // A window returning exactly the limit may be truncated; advancing past
     // it could silently drop events, so fail the run and keep the checkpoint
     // at the last fully processed window.
@@ -147,9 +148,10 @@ export async function archiveCampaignEvents(opts: {
     const batch: ArchivedChainEvent[] = [];
     for (const ev of events as any[]) {
       const ledger = Number(ev?.ledger);
-      if (!Number.isSafeInteger(ledger) || ledger > windowEnd) continue;
+      if (!Number.isSafeInteger(ledger) || ledger < 1) throw new Error('event has an invalid ledger; refusing to advance checkpoint');
+      if (ledger > windowEnd) continue;
       const eventId = typeof ev?.id === 'string' ? ev.id : typeof ev?.pagingToken === 'string' ? ev.pagingToken : null;
-      if (!eventId) continue; // an event without a stable id cannot be deduped; skip rather than duplicate
+      if (!eventId) throw new Error(`event in window ${cursor}-${windowEnd} has no stable id; refusing to advance checkpoint`);
       scanned += 1;
       const topics: any[] = Array.isArray(ev?.topic) ? ev.topic : Array.isArray(ev?.topics) ? ev.topics : [];
       const contributor = topicAddress(topics[1]);
@@ -435,9 +437,46 @@ function parseSnapshotHeader(lines: string[]): { header?: ArchiveSnapshotHeader;
     return { error: 'snapshot header is not parseable JSON' };
   }
   const h = parsed as Partial<ArchiveSnapshotHeader> | null;
-  if (!h || h.type !== 'event-archive-snapshot' || typeof h.version !== 'number' || typeof h.events !== 'number' || typeof h.sha256 !== 'string')
+  if (
+    !h ||
+    h.type !== 'event-archive-snapshot' ||
+    h.version !== ARCHIVE_VERSION ||
+    !Number.isSafeInteger(h.events) ||
+    (h.events as number) < 0 ||
+    typeof h.sha256 !== 'string' ||
+    !/^[0-9a-f]{64}$/.test(h.sha256)
+  )
     return { error: 'snapshot integrity header missing or invalid (expected type event-archive-snapshot with version, events and sha256)' };
   return { header: h as ArchiveSnapshotHeader };
+}
+
+// Validate the complete snapshot envelope BEFORE any target writes. The
+// aggregate uses the ordered row-hash declarations written by snapshotJsonl;
+// row content is checked separately, preserving explicit partial recovery.
+function snapshotIntegrityErrors(lines: string[], header: ArchiveSnapshotHeader): string[] {
+  const rows = lines.slice(1);
+  const errors: string[] = [];
+  if (header.events !== rows.length) errors.push(`header claims ${header.events} events but ${rows.length} lines are present`);
+  const hashes: string[] = [];
+  const ids = new Set<string>();
+  for (const line of rows) {
+    try {
+      const row: unknown = JSON.parse(line);
+      const hash = (row as Partial<ArchiveSnapshotLine> | null)?.sha256;
+      if (typeof hash !== 'string' || !/^[0-9a-f]{64}$/.test(hash)) throw new Error('invalid row hash');
+      const id = (row as Partial<ArchiveSnapshotLine>)?.event?.eventId;
+      if (typeof id !== 'string' || !id || ids.has(id)) {
+        errors.push('snapshot has missing or duplicate event ids');
+      } else ids.add(id);
+      hashes.push(hash);
+    } catch {
+      errors.push('snapshot aggregate cannot be validated: invalid row hash declaration');
+      return errors;
+    }
+  }
+  const aggregate = createHash('sha256').update(hashes.join('\n')).digest('hex');
+  if (aggregate !== header.sha256) errors.push('snapshot aggregate hash does not match integrity header');
+  return errors;
 }
 
 export async function restoreArchiveSnapshot(
@@ -446,7 +485,9 @@ export async function restoreArchiveSnapshot(
 ): Promise<{ restored: number; refused: number; errors: string[] }> {
   const lines = snapshotJsonl.trim().split('\n');
   const headerCheck = parseSnapshotHeader(lines);
-  if (headerCheck.error) return { restored: 0, refused: 0, errors: [headerCheck.error] };
+  if (!headerCheck.header) return { restored: 0, refused: 0, errors: [headerCheck.error!] };
+  const integrityErrors = snapshotIntegrityErrors(lines, headerCheck.header);
+  if (integrityErrors.length) return { restored: 0, refused: 0, errors: integrityErrors };
   const errors: string[] = [];
   const batch: ArchivedChainEvent[] = [];
   let refused = 0;
@@ -477,6 +518,7 @@ export function verifyArchiveSnapshot(snapshotJsonl: string, live: ArchivedChain
   const headerCheck = parseSnapshotHeader(lines);
   if (headerCheck.error) errors.push(headerCheck.error);
   const header = headerCheck.header;
+  if (header) errors.push(...snapshotIntegrityErrors(lines, header));
   const snap = new Map<string, ArchiveSnapshotLine>();
   for (const line of lines.slice(1)) {
     try {
@@ -492,8 +534,7 @@ export function verifyArchiveSnapshot(snapshotJsonl: string, live: ArchivedChain
       errors.push('a snapshot line is not parseable JSON');
     }
   }
-  if (header && header.events !== snap.size + mismatches.length)
-    errors.push(`header claims ${header.events} events but ${snap.size + mismatches.length} lines are present`);
+  if (header && header.events !== snap.size + mismatches.length) errors.push('snapshot has duplicate or invalid event rows');
   const liveById = new Map(live.map((e) => [e.eventId, e]));
   for (const [id, line] of snap) {
     const liveEv = liveById.get(id);

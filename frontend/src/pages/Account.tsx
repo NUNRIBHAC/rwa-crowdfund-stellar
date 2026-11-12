@@ -60,14 +60,16 @@ function rowStatus(c: Campaign): PortfolioStatus {
   return 'canceled';
 }
 
-function readIntent(): {
+function readIntent(actor: string): {
+  actor: string;
   action?: string;
   campaign?: string;
   status?: string;
 } | null {
   try {
     const raw = localStorage.getItem(INTENT_KEY);
-    return raw ? JSON.parse(raw) : null;
+    const parsed = raw ? JSON.parse(raw) : null;
+    return actor && parsed && typeof parsed === 'object' && parsed.actor === actor ? parsed : null;
   } catch {
     return null;
   }
@@ -79,7 +81,7 @@ export default function Account({ market }: { market: Market }) {
   const { account, token } = useCommunityAuth();
   const readActor = accountReadActor(actor, account);
   const [tab, setTab] = useState<PortfolioStatus | 'all'>('all');
-  const intent = useMemo(readIntent, []);
+  const intent = useMemo(() => readIntent(readActor), [readActor]);
   const [activityRead, setActivityRead] = useState<{
     actor: string;
     data: ActivityRow[] | 'loading' | 'error';
