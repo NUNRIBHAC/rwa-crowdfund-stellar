@@ -10,6 +10,15 @@ This is testnet-only integration code, not a deployed or production-ready
 service. No real funds, no real identity verification, no investment advice.
 The frontend says so explicitly on every page.
 
+## Architecture
+
+[![Blockallisto system map: browser, API, records, Stellar testnet and external services](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)
+
+See the [architecture guide](docs/architecture.md) for full-size views of
+accounts, transaction evidence and delivery. These diagrams describe the
+source at `045e042` (12 November 2026), not a runtime or production-readiness
+audit. Open an image for readable labels.
+
 ## What is implemented
 
 Campaign flow (Soroban):
