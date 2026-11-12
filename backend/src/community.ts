@@ -1,3 +1,4 @@
+import { PrivateApplicationUploadWorkflow, type PrivateTextObjects } from './private-application-upload-workflow.js';
 import { assertExplicitFileStorePath } from './test-storage-guard.js';
 import { createHash, randomBytes } from 'node:crypto';
 import { z } from 'zod';
@@ -305,7 +306,12 @@ export class CommunityService {
   readonly limiter = new RateLimiter();
   constructor(
     public readonly store: CommunityStore,
-    private opts: { retentionDays: number; now?: () => number } = {
+    private opts: {
+      retentionDays: number;
+      now?: () => number;
+      applicationUploadMode?: 'legacy-inline' | 'oracle-private';
+      privateApplicationObjects?: PrivateTextObjects;
+    } = {
       retentionDays: 90,
     },
   ) {}
@@ -879,6 +885,12 @@ export class CommunityService {
     const state = await this.store.read();
     return Object.values(state.applications)
       .filter((a) => a.publicKey === account.publicKey)
+      .map((a) => ({
+        ...a,
+        documentCleanupPending: Object.values(state.privateApplicationDeletions ?? {}).some(
+          (job) => job.applicationId === a.id && job.owner === account.publicKey && job.status !== 'deleted',
+        ),
+      }))
       .sort((a, b) => b.createdAt - a.createdAt);
   }
 
@@ -890,7 +902,7 @@ export class CommunityService {
       .map((c) => ({ ...publicComment(c), hidden: Boolean(c.hiddenAt) }));
   }
 
-  async submitApplication(account: Account, input: unknown): Promise<IssuerApplication> {
+  async submitApplication(account: Account, input: unknown, draft = false): Promise<IssuerApplication> {
     const parsed = applicationInput.parse(input ?? {});
     this.checkRate(`application:${account.publicKey}`, 3, 24 * 60 * 60 * 1000);
     const application: IssuerApplication = {
@@ -902,7 +914,8 @@ export class CommunityService {
       targetAmount: parsed.targetAmount,
       description: parsed.description,
       contactEmail: parsed.contactEmail ? parsed.contactEmail : null,
-      status: 'received',
+      status: draft ? 'draft' : 'received',
+      ...(!draft ? { submittedAt: this.now() } : {}),
       reviewedBy: null,
       reviewedAt: null,
       reviewNote: null,
@@ -911,22 +924,241 @@ export class CommunityService {
     await this.store.change((state) => {
       state.applications[application.id] = application;
     });
-    await this.notify(
-      account.publicKey,
-      'application_received',
-      'Issuer application received',
-      `Your issuer application for "${application.projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.`,
-      application.id,
-      { projectName: application.projectName },
-    );
+    if (!draft)
+      await this.notify(
+        account.publicKey,
+        'application_received',
+        'Issuer application received',
+        `Your issuer application for "${application.projectName}" was received. The operator reviews applications manually; submission is not an approval, a listing or an offer.`,
+        application.id,
+        { projectName: application.projectName },
+      );
     return application;
+  }
+
+  async submitDraftApplication(account: Account, id: string) {
+    const result = await this.store.change((s) => {
+      const a = s.applications[id];
+      if (!a || a.publicKey !== account.publicKey) throw new CommunityError(404, 'application not found', 'not_found');
+      if (a.status !== 'draft' || a.submittedAt !== undefined) throw new CommunityError(409, 'application already submitted', 'review_closed');
+      const pending = Object.values(s.privateApplicationUploads?.intents ?? {}).some(
+        (i) => i.applicationId === id && i.status !== 'committed' && i.status !== 'deleted',
+      );
+      const pendingDelete = Object.values(s.privateApplicationDeletions ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted');
+      if (pending || pendingDelete) throw new CommunityError(409, 'document reconciliation required before submission', 'upload_reconciliation');
+      a.status = 'received';
+      a.submittedAt = this.now();
+      return a;
+    });
+    await this.recordAudit(account.publicKey, 'application.submit', id, 'draft submitted');
+    return result;
+  }
+
+  // Only cleanup status proves this request already observed a completed PUT.
+  // Never promote uploading/uncertain merely because time elapsed or GET is 404.
+  async queueFailedApplicationUploadCleanup(operationId: string): Promise<'pending' | 'blocked' | 'deleted'> {
+    return this.store.change((s) => {
+      if (s.privateApplicationUploads?.version !== 1) return 'blocked';
+      const i = s.privateApplicationUploads.intents[operationId];
+      if (!i) return 'blocked';
+      if (i.status === 'deleted') return 'deleted';
+      if (i.status !== 'cleanup') return 'blocked';
+      const same = (ref: import('./oci-private-text-store.js').PrivateTextRef) => ref.key === i.object.key && ref.storageId === i.object.storageId;
+      if (
+        Object.values(s.applications).some((a) => a.documents?.some((d) => d.object && same(d.object))) ||
+        Object.values(s.privateApplicationUploads?.intents ?? {}).some((other) => other !== i && other.status !== 'deleted' && same(other.object))
+      )
+        return 'blocked';
+      const documentId = i.documentId ?? `appdoc_${i.id}`;
+      const old = s.privateApplicationDeletions?.[documentId];
+      if (old?.status === 'deleted') return 'blocked';
+      if (
+        old &&
+        (old.applicationId !== i.applicationId ||
+          old.owner !== i.owner ||
+          old.object.key !== i.object.key ||
+          old.object.storageId !== i.object.storageId ||
+          old.object.sha256 !== i.object.sha256 ||
+          old.object.bytes !== i.object.bytes)
+      )
+        return 'blocked';
+      i.documentId = documentId;
+      s.privateApplicationDeletions ??= {};
+      s.privateApplicationDeletions[documentId] ??= {
+        applicationId: i.applicationId,
+        owner: i.owner,
+        documentId,
+        object: { ...i.object },
+        status: 'pending',
+        createdAt: this.now(),
+      };
+      return 'pending';
+    });
+  }
+
+  // Internal worker entry point, never exposed as an HTTP caller-supplied ref.
+  async reconcileApplicationDocumentDeletion(documentId: string): Promise<'deleted' | 'pending' | 'blocked'> {
+    const remove = this.opts.privateApplicationObjects?.remove;
+    if (!remove) return 'pending';
+    const claim = newId('cleanup');
+    const reservation = await this.store.change((s) => {
+      const job = s.privateApplicationDeletions?.[documentId];
+      if (!job) return { status: 'blocked' as const };
+      if (job.status === 'deleted') return { status: 'deleted' as const };
+      if (job.status === 'deleting' && (job.claimUntil ?? Infinity) > this.now()) return { status: 'pending' as const };
+      const matches = (ref: import('./oci-private-text-store.js').PrivateTextRef) => ref.key === job.object.key && ref.storageId === job.object.storageId;
+      const intent = Object.values(s.privateApplicationUploads?.intents ?? {}).find(
+        (i) =>
+          i.documentId === documentId &&
+          i.applicationId === job.applicationId &&
+          i.owner === job.owner &&
+          i.status === 'cleanup' &&
+          matches(i.object) &&
+          i.object.sha256 === job.object.sha256 &&
+          i.object.bytes === job.object.bytes,
+      );
+      const referenced = Object.values(s.applications).some((a) => a.documents?.some((d) => d.object && matches(d.object)));
+      const otherIntent = Object.values(s.privateApplicationUploads?.intents ?? {}).some((i) => i !== intent && i.status !== 'deleted' && matches(i.object));
+      if (!intent || referenced || otherIntent) return { status: 'blocked' as const };
+      job.status = 'deleting';
+      job.claim = claim;
+      job.claimUntil = this.now() + 60_000;
+      return { status: 'claimed' as const, object: { ...job.object }, operationId: intent.id };
+    });
+    if (reservation.status !== 'claimed') return reservation.status;
+    try {
+      await remove.call(this.opts.privateApplicationObjects, reservation.object);
+    } catch {
+      return 'pending';
+    } // Unknown outcome: retain same key and claim for safe retry.
+    try {
+      return await this.store.change((s) => {
+        const job = s.privateApplicationDeletions?.[documentId];
+        const intent = s.privateApplicationUploads?.intents[reservation.operationId];
+        if (!job || job.claim !== claim || job.status !== 'deleting' || !intent || intent.status !== 'cleanup') return 'pending' as const;
+        // A late older claim must never finalize a newer worker's claim.
+        job.status = 'deleted';
+        delete job.claim;
+        delete job.claimUntil;
+        intent.status = 'deleted';
+        return 'deleted' as const;
+      });
+    } catch {
+      return 'pending';
+    }
+  }
+
+  async deleteApplicationDocument(account: Account, id: string, documentId: string) {
+    return this.store.change((s) => {
+      const a = s.applications[id];
+      if (!a || a.publicKey !== account.publicKey) throw new CommunityError(404, 'document not found', 'not_found');
+      const document = a.documents?.find((d) => d.id === documentId);
+      if (!document) throw new CommunityError(404, 'document not found', 'not_found');
+      if (a.status !== 'draft' || a.submittedAt !== undefined || a.campaign)
+        throw new CommunityError(409, 'submitted application documents cannot be deleted', 'review_closed');
+      if (document.object) {
+        const intents = Object.values(s.privateApplicationUploads?.intents ?? {});
+        const intent = intents.find(
+          (i) =>
+            i.applicationId === id &&
+            i.owner === account.publicKey &&
+            i.status === 'committed' &&
+            i.documentId === documentId &&
+            i.object.storageId === document.object!.storageId &&
+            i.object.key === document.object!.key &&
+            i.object.sha256 === document.object!.sha256 &&
+            i.object.bytes === document.object!.bytes,
+        );
+        if (!intent) throw new CommunityError(503, 'upload reconciliation required', 'upload_reconciliation');
+        s.privateApplicationDeletions ??= {};
+        s.privateApplicationDeletions[documentId] = {
+          applicationId: id,
+          owner: account.publicKey,
+          documentId,
+          object: { ...document.object },
+          status: 'pending',
+          createdAt: this.now(),
+        };
+        intent.status = 'cleanup';
+      }
+      a.documents = a.documents!.filter((d) => d.id !== documentId);
+      s.audit.push({
+        id: newId('audit'),
+        actor: account.publicKey,
+        action: 'application.document.delete_requested',
+        target: id,
+        detail: `document=${documentId}`,
+        at: this.now(),
+      });
+      if (s.audit.length > 1000) s.audit = s.audit.slice(-1000);
+      return { pending: Boolean(document.object) };
+    });
   }
 
   // Application uploads are private plain-text DEMO documents, never identity
   // evidence. Embedded storage inherits application ownership and retention.
-  // Only received/under-review submissions accept files; review sees the same
+  // Only unsubmitted drafts accept files; review sees the same
   // immutable content hash as the applicant. No HTML/PDF execution or public URL.
+  private privateApplicationWorkflow() {
+    const repo = {
+      read: async () => {
+        const s = await this.store.read();
+        return { applications: s.applications, intents: s.privateApplicationUploads?.intents ?? {} };
+      },
+      change: <T>(fn: (s: import('./private-application-upload-workflow.js').UploadState) => T) =>
+        this.store.change((s) => {
+          const uploads = (s.privateApplicationUploads ??= { version: 1 as const, intents: {} });
+          if (uploads.version !== 1) throw new CommunityError(503, 'upload reconciliation required', 'upload_reconciliation');
+          const committed = new Set(
+            Object.values(uploads.intents)
+              .filter((i) => i.status === 'committed')
+              .map((i) => i.id),
+          );
+          const result = fn({ applications: s.applications, intents: uploads.intents });
+          for (const i of Object.values(uploads.intents))
+            if (i.status === 'committed' && !committed.has(i.id))
+              s.audit.push({
+                id: newId('audit'),
+                at: this.now(),
+                actor: i.owner,
+                action: 'application.document',
+                target: i.applicationId,
+                detail: `document=${i.documentId} sha256=${i.object.sha256}`,
+              });
+          if (s.audit.length > 1000) s.audit = s.audit.slice(-1000);
+          return result;
+        }),
+    };
+    return new PrivateApplicationUploadWorkflow(repo, this.opts.privateApplicationObjects, () => this.now());
+  }
+
   async addApplicationDocument(account: Account, id: string, input: unknown) {
+    if (
+      this.opts.applicationUploadMode === 'oracle-private' ||
+      this.opts.privateApplicationObjects ||
+      (input && typeof input === 'object' && 'operationId' in input)
+    ) {
+      const parsed = z
+        .object({ filename: z.string().trim(), content: z.string().min(1).max(16000), operationId: z.string() })
+        .strict()
+        .parse(input);
+      try {
+        return await this.privateApplicationWorkflow().upload(account.publicKey, id, parsed.operationId, parsed.filename, parsed.content);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : '';
+        const errors: Record<string, [number, string]> = {
+          'document not found': [404, 'not_found'],
+          'application review is closed': [409, 'review_closed'],
+          'document limit reached': [409, 'document_limit'],
+          'invalid plain-text document': [400, 'invalid_document'],
+          'invalid upload operation': [400, 'invalid_input'],
+          'upload operation conflict': [409, 'upload_conflict'],
+          'upload reconciliation required': [503, 'upload_reconciliation'],
+        };
+        const [status, code] = errors[message] ?? [503, 'feature_unavailable'];
+        throw new CommunityError(status, errors[message] ? message : 'private document storage unavailable', code);
+      }
+    }
     const parsed = z
       .object({
         filename: z
@@ -943,7 +1175,7 @@ export class CommunityService {
     await this.store.change((state) => {
       const a = state.applications[id];
       if (!a || a.publicKey !== account.publicKey) throw new CommunityError(404, 'application not found', 'not_found');
-      if (a.campaign || !['received', 'under_review'].includes(a.status)) throw new CommunityError(409, 'application review is closed', 'review_closed');
+      if (a.campaign || a.status !== 'draft' || a.submittedAt !== undefined) throw new CommunityError(409, 'application review is closed', 'review_closed');
       if ((a.documents?.length ?? 0) >= 5) throw new CommunityError(409, 'document limit reached', 'document_limit');
       (a.documents ??= []).push(document);
     });
@@ -954,9 +1186,18 @@ export class CommunityService {
   async readApplicationDocument(id: string, documentId: string, owner?: string) {
     const state = await this.store.read();
     const a = state.applications[id];
-    if (!a || (owner && a.publicKey !== owner)) throw new CommunityError(404, 'document not found', 'not_found');
+    if (!a || (owner !== undefined ? a.publicKey !== owner : a.status === 'draft')) throw new CommunityError(404, 'document not found', 'not_found');
     const document = a.documents?.find((d) => d.id === documentId);
     if (!document) throw new CommunityError(404, 'document not found', 'not_found');
+    if (document.object) {
+      if (!this.opts.privateApplicationObjects) throw new CommunityError(503, 'private document storage unavailable', 'feature_unavailable');
+      try {
+        return { ...document, content: await this.opts.privateApplicationObjects.read(document.object) };
+      } catch {
+        throw new CommunityError(503, 'private document storage unavailable', 'feature_unavailable');
+      }
+    }
+    if (typeof document.content !== 'string') throw new CommunityError(404, 'document not found', 'not_found');
     return document;
   }
 
@@ -968,7 +1209,7 @@ export class CommunityService {
       throw new CommunityError(400, 'testnet campaign required', 'invalid_campaign');
     await this.store.change((state) => {
       const a = state.applications[id];
-      if (!a) throw new CommunityError(404, 'application not found', 'not_found');
+      if (!a || a.status === 'draft') throw new CommunityError(404, 'application not found', 'not_found');
       if (a.status !== 'approved') throw new CommunityError(409, 'prototype review approval required', 'review_required');
       if (a.publicKey !== campaign.creator) throw new CommunityError(409, 'campaign creator does not match applicant', 'creator_mismatch');
       if (!a.documents?.length) throw new CommunityError(409, 'application document required', 'document_required');
@@ -1180,7 +1421,9 @@ export class CommunityService {
 
   async adminListApplications(): Promise<IssuerApplication[]> {
     const state = await this.store.read();
-    return Object.values(state.applications).sort((a, b) => b.createdAt - a.createdAt);
+    return Object.values(state.applications)
+      .filter((a) => a.status !== 'draft')
+      .sort((a, b) => b.createdAt - a.createdAt);
   }
   // Review outcomes are prototype review states only: 'approved' here means
   // the operator finished reviewing the demo submission. It is NOT a legal
@@ -1197,7 +1440,7 @@ export class CommunityService {
     let target: IssuerApplication | undefined;
     await this.store.change((state) => {
       const a = state.applications[id];
-      if (!a) throw new CommunityError(404, 'application not found', 'not_found');
+      if (!a || a.status === 'draft') throw new CommunityError(404, 'application not found', 'not_found');
       a.status = status;
       if (terminal || reviewNote) {
         a.reviewedBy = actor;
@@ -1238,6 +1481,12 @@ export class CommunityService {
       }
       for (const [id, a] of Object.entries(state.applications)) {
         if (now - a.createdAt > retentionMs) {
+          if (
+            a.documents?.some((d) => d.object) ||
+            Object.values(state.privateApplicationUploads?.intents ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted') ||
+            Object.values(state.privateApplicationDeletions ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted')
+          )
+            continue; // Offline activation blocker: owned-object reconciliation must precede pruning.
           delete state.applications[id];
           removed++;
         }

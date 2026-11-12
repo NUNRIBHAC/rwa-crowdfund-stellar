@@ -177,14 +177,20 @@ test('connected application, review, onboarding, contribution adapter and matchi
     s.accounts[business.publicKey] = business;
     s.accounts[investor.publicKey] = investor;
   });
-  const application = await service.submitApplication(business, {
-    projectName: 'Connected synthetic project - DEMO',
-    country: 'PT',
-    instrumentType: 'Testnet escrow, no rights',
-    targetAmount: '100',
-    description: 'Isolated adapter proof only.',
-  });
+  const application = await service.submitApplication(
+    business,
+    {
+      projectName: 'Connected synthetic project - DEMO',
+      country: 'PT',
+      instrumentType: 'Testnet escrow, no rights',
+      targetAmount: '100',
+      description: 'Isolated adapter proof only.',
+    },
+    true,
+  );
   await service.addApplicationDocument(business, application.id, { filename: 'synthetic.txt', content: 'SYNTHETIC DOCUMENT. No verified business or rights.' });
+  await service.submitDraftApplication(business, application.id);
+  await assert.rejects(service.addApplicationDocument(business, application.id, { filename: 'late.txt', content: 'blocked' }), /closed/);
   await service.adminSetApplicationStatus(application.id, 'under_review', 'isolated:test');
   await service.adminSetApplicationStatus(application.id, 'approved', 'isolated:test', 'Prototype only');
   const campaign = (await sorobanCampaigns())[0];

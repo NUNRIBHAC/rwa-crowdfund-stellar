@@ -141,15 +141,26 @@ function sendError(res: express.Response, err: unknown): void {
   res.status(500).json({ error: 'internal error', code: 'internal_error' });
 }
 
+const applicationDocumentMetadata = (d: import('./community-store.js').IssuerApplicationDocument) => ({
+  id: d.id,
+  filename: d.filename,
+  sha256: d.sha256,
+  uploadedAt: d.uploadedAt,
+});
 const applicationMetadata = (application: import('./community-store.js').IssuerApplication) => ({
   ...application,
-  documents: application.documents?.map(({ content: _content, ...metadata }) => metadata),
+  documents: application.documents?.map(applicationDocumentMetadata),
 });
 
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
   const { service, requireAdmin, reconciliation, fundingState, investorEntitlement, mailer, campaignDeploy } = deps;
   const store = service.store;
   const router = express.Router();
+  // Private metadata and denial responses must never be shared-cacheable.
+  router.use(['/api/issuer-applications', '/api/operator/issuer-applications', '/api/admin/issuer-applications'], (_req, res, next) => {
+    res.set('Cache-Control', 'no-store').set('X-Content-Type-Options', 'nosniff');
+    next();
+  });
 
   const operatorWallets = (): string[] =>
     (process.env.OPERATOR_WALLETS ?? '')
@@ -1388,6 +1399,27 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
 
   // --- Issuer applications ---
   router.post(
+    '/api/issuer-applications/drafts',
+    authed(async (req, res, account) => {
+      res.status(201).json({ application: applicationMetadata(await service.submitApplication(account, req.body, true)) });
+    }),
+  );
+  router.post(
+    '/api/issuer-applications/:id/submit',
+    authed(async (req, res, account) => {
+      res.json({ application: applicationMetadata(await service.submitDraftApplication(account, String(req.params.id))) });
+    }),
+  );
+  router.delete(
+    '/api/issuer-applications/:id/documents/:documentId',
+    authed(async (req, res, account) => {
+      const result = await service.deleteApplicationDocument(account, String(req.params.id), String(req.params.documentId));
+      if (result.pending) res.status(202).json({ status: 'deletion_pending' });
+      else res.status(204).end();
+    }),
+  );
+
+  router.post(
     '/api/issuer-applications',
     authed(async (_req, res, account) => {
       res.status(201).json({
@@ -1407,7 +1439,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     '/api/issuer-applications/:id/documents',
     authed(async (req, res, account) => {
       const document = await service.addApplicationDocument(account, String(req.params.id), req.body);
-      res.status(201).json({ document: { ...document, content: undefined } });
+      res.status(201).json({ document: applicationDocumentMetadata(document) });
     }),
   );
   router.get(
