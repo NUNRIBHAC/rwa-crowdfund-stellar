@@ -187,3 +187,71 @@ test('deleted social binding rejects stale callbacks and cannot resurrect the ol
   if (result.kind === 'session') assert.notEqual(result.account.publicKey, 'owner');
   assert.equal((await store.read()).accounts.owner, undefined);
 });
+
+test('foreign free text cannot create a protected retention reference', async () => {
+  const store = await fixture();
+  await store.change((s) => {
+    s.applications.foreign = {
+      id: 'foreign',
+      publicKey: 'other',
+      projectName: 'owner',
+      country: 'PT',
+      instrumentType: 'owner',
+      targetAmount: '2',
+      description: 'mentions owner in free text',
+      contactEmail: null,
+      status: 'draft',
+      reviewedBy: null,
+      reviewedAt: null,
+      reviewNote: 'owner',
+      createdAt: now,
+    };
+    s.audit[0].detail = 'owner';
+  });
+  await deleteEmailAccount(store, `Bearer ${one}`, { confirmation: 'DELETE', password }, [], now);
+  assert.equal((await store.read()).accounts.owner, undefined);
+  assert.ok((await store.read()).applications.foreign);
+});
+test('exact structured reviewer and nested private-upload ownership remain protected', async () => {
+  for (const reference of ['reviewer', 'upload', 'operator-audit']) {
+    const store = await fixture();
+    await store.change((s) => {
+      if (reference === 'reviewer')
+        s.applications.foreign = {
+          id: 'foreign',
+          publicKey: 'other',
+          projectName: 'Other',
+          country: 'PT',
+          instrumentType: 'test',
+          targetAmount: '2',
+          description: 'None',
+          contactEmail: null,
+          status: 'under_review',
+          reviewedBy: 'owner',
+          reviewedAt: now,
+          reviewNote: null,
+          createdAt: now,
+        };
+      if (reference === 'upload')
+        s.privateApplicationUploads = {
+          version: 1,
+          intents: {
+            op: {
+              id: 'op',
+              applicationId: 'foreign',
+              owner: 'owner',
+              filename: 'test.txt',
+              object: { storageId: 'test', key: 'owned.txt', sha256: 'a'.repeat(64), bytes: 1 },
+              status: 'uncertain',
+            },
+          },
+        };
+      if (reference === 'operator-audit') s.audit.push({ id: 'op', at: now, actor: 'operator:owner', action: 'test', target: 'other' });
+    });
+    await assert.rejects(
+      deleteEmailAccount(store, `Bearer ${one}`, { confirmation: 'DELETE', password }, [], now),
+      (e: any) => e.code === 'deletion_protected_records',
+    );
+    assert.ok((await store.read()).accounts.owner);
+  }
+});

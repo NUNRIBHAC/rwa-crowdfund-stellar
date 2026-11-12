@@ -640,44 +640,61 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     testOnly: true,
   };
 }
+const pendingSubmissions = new Map<string, Promise<any>>();
 export async function submitSoroban(id: string, input: { actor: string; xdr: string }): Promise<any> {
   entry(id);
   actorAddress(input.actor);
   // Phase 1 (no lock): parse and cryptographically verify the envelope.
   const tx = verifySignedTx(input.actor, input.xdr);
   const hash = Buffer.from(tx.hash()).toString('hex');
-  // Phase 2 (journal lock): match the intent, short-circuit terminal,
-  // enforce the one-unresolved-signed-intent rule, record the signature.
-  return guarded(async () => {
-    const store = await readStore();
-    const intent = store.intents.find((i) => i.hash === hash && i.campaign === id && i.actor === input.actor);
-    if (!intent) throw new Error(quarantinedHash(store, hash) ?? 'transaction was not prepared by this API');
-    if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
-    const other = store.intents.find((i) => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
-    if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
-    if (!intent.signedXdr) {
-      intent.signedXdr = input.xdr;
-      intent.status = 'SIGNED';
-      await save(store);
-    }
-    return { terminal: false };
-  }).then(async (r: any) => {
-    if (r?.terminal) return { hash, status: r.status, confirmed: r.status === 'SUCCESS' };
-    // Phase 3 (no lock): broadcast. Phase 4 (lock): persist the outcome.
-    const store = await readStore();
-    const intent = store.intents.find((i) => i.hash === hash)!;
-    const sendTx = TransactionBuilder.fromXDR(intent.signedXdr!, passphrase) as Transaction;
-    try {
-      const result = await sorobanDeps.client().sendTransaction(sendTx);
-      if (result.hash !== hash) throw new Error('RPC returned mismatched transaction hash');
-      const status = result.status === 'ERROR' ? 'UNKNOWN' : result.status;
-      await recordStatus(hash, status);
-      return { hash, status, confirmed: false, message: 'Submission is not confirmation. Check the hash before another action.' };
-    } catch (err) {
-      await recordStatus(hash, 'UNKNOWN');
-      throw err;
-    }
-  });
+  const submissionKey = `${id}:${input.actor}:${hash}`;
+  const pending = pendingSubmissions.get(submissionKey);
+  if (pending) return pending;
+  if (pendingSubmissions.size >= 1000) throw new Error('submission capacity exceeded; retry later');
+  // Per-process single flight: identical concurrent envelopes share the RPC
+  // result. Durable intent checks remain under the existing journal lock.
+  // This does not claim cross-process coalescing or payment confirmation.
+  const result = submitVerified();
+  pendingSubmissions.set(submissionKey, result);
+  try {
+    return await result;
+  } finally {
+    if (pendingSubmissions.get(submissionKey) === result) pendingSubmissions.delete(submissionKey);
+  }
+  async function submitVerified() {
+    // Phase 2 (journal lock): match the intent, short-circuit terminal,
+    // enforce the one-unresolved-signed-intent rule, record the signature.
+    return guarded(async () => {
+      const store = await readStore();
+      const intent = store.intents.find((i) => i.hash === hash && i.campaign === id && i.actor === input.actor);
+      if (!intent) throw new Error(quarantinedHash(store, hash) ?? 'transaction was not prepared by this API');
+      if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
+      const other = store.intents.find((i) => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
+      if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
+      if (!intent.signedXdr) {
+        intent.signedXdr = input.xdr;
+        intent.status = 'SIGNED';
+        await save(store);
+      }
+      return { terminal: false };
+    }).then(async (r: any) => {
+      if (r?.terminal) return { hash, status: r.status, confirmed: r.status === 'SUCCESS' };
+      // Phase 3 (no lock): broadcast. Phase 4 (lock): persist the outcome.
+      const store = await readStore();
+      const intent = store.intents.find((i) => i.hash === hash)!;
+      const sendTx = TransactionBuilder.fromXDR(intent.signedXdr!, passphrase) as Transaction;
+      try {
+        const result = await sorobanDeps.client().sendTransaction(sendTx);
+        if (result.hash !== hash) throw new Error('RPC returned mismatched transaction hash');
+        const status = result.status === 'ERROR' ? 'UNKNOWN' : result.status;
+        await recordStatus(hash, status);
+        return { hash, status, confirmed: false, message: 'Submission is not confirmation. Check the hash before another action.' };
+      } catch (err) {
+        await recordStatus(hash, 'UNKNOWN');
+        throw err;
+      }
+    });
+  }
 }
 // Journal-loss recovery: re-register one exact signed envelope whose journal
 // entry was lost (e.g. restored from a stale backup). Never builds, replaces

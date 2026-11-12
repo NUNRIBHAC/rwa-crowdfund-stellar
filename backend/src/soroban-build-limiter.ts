@@ -6,6 +6,12 @@ import { clientIp } from './client-ip.js';
 
 type Options = { now?: () => number; global?: number; ip?: number; campaign?: number; actor?: number; maxKeys?: number };
 export function sorobanBuildLimiter(options: Options = {}): express.RequestHandler {
+  return sorobanWriteLimiter('build', options);
+}
+export function sorobanSubmitLimiter(options: Options = {}): express.RequestHandler {
+  return sorobanWriteLimiter('submit', options);
+}
+function sorobanWriteLimiter(action: 'build' | 'submit', options: Options): express.RequestHandler {
   const nowFn = options.now ?? Date.now;
   const windowMs = 60000;
   const limits = { global: options.global ?? 120, ip: options.ip ?? 20, campaign: options.campaign ?? 60, actor: options.actor ?? 10 };
@@ -13,7 +19,7 @@ export function sorobanBuildLimiter(options: Options = {}): express.RequestHandl
   const hits = new Map<string, number[]>();
   let globalHits: number[] = [];
   return (req, res, next) => {
-    if (req.method !== 'POST' || !/^\/api\/campaigns\/[^/]+\/soroban\/build\/?$/i.test(req.path)) return next();
+    if (req.method !== 'POST' || !new RegExp(`^/api/campaigns/[^/]+/soroban/${action}/?$`, 'i').test(req.path)) return next();
     const now = nowFn();
     const cutoff = now - windowMs;
     // Lazy expiry on every request also bounds distinct-wallet attacks, without
