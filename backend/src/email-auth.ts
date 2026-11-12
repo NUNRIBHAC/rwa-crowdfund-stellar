@@ -193,13 +193,19 @@ async function issueVerification(
   maxPerDay: number,
 ): Promise<void> {
   const token = `blv_${randomBytes(24).toString('hex')}`;
-  await store.change((state) => {
+  const tokenHash = createHash('sha256').update(token).digest('hex');
+  const reservation = await store.change((state) => {
     const current = state.emailCredentials[credential.email];
-    if (!current) throw new AuthError(404, 'account not found');
+    if (!current || current.verified) return null;
+    if (current.resendSentAt && now - current.resendSentAt < EMAIL_RESEND_COOLDOWN_MS) return null;
     reserveMailSlot(state, now, maxPerHour, maxPerDay);
-    current.verifyTokenHash = createHash('sha256').update(token).digest('hex');
+    const previous = { tokenHash: current.verifyTokenHash, expiresAt: current.verifyExpiresAt, sentAt: current.resendSentAt };
+    current.verifyTokenHash = tokenHash;
     current.verifyExpiresAt = now + VERIFY_TOKEN_TTL_MS;
+    current.resendSentAt = now;
+    return previous;
   });
+  if (!reservation) return;
   // Send AFTER the hash is durably stored: a delivered token must always be
   // redeemable. If the send throws, the caller reports failure and the user
   // can request a fresh token via resend.
@@ -209,6 +215,16 @@ async function issueVerification(
   } catch (err) {
     if (isProviderThrottle(err)) await noteProviderThrottle(store, now);
     await refundMailSlot(store, now);
+    await store.change((state) => {
+      const current = state.emailCredentials[credential.email];
+      // A late failed delivery must never clear a newer reservation or a
+      // verification that already consumed this token.
+      if (current && !current.verified && current.verifyTokenHash === tokenHash && current.resendSentAt === now) {
+        current.verifyTokenHash = reservation.tokenHash;
+        current.verifyExpiresAt = reservation.expiresAt;
+        current.resendSentAt = reservation.sentAt;
+      }
+    });
     throw err;
   }
 }
@@ -269,12 +285,6 @@ export async function registerEmail(
   });
   if (!created) return { status: 'verification-sent' };
   await issueVerification(store, mailer, created, now, maxPerHour, maxPerDay);
-  // Cooldown marker only after a successful send: a provider failure (503)
-  // must not lock the user out of an immediate retry.
-  await store.change((state) => {
-    const current = state.emailCredentials[email];
-    if (current) current.resendSentAt = now;
-  });
   return { status: 'verification-sent' };
 }
 
@@ -298,12 +308,6 @@ export async function resendVerification(
   });
   if (!credential) return { status: 'verification-sent' }; // same anti-enumeration shape
   await issueVerification(store, mailer, credential, now, maxPerHour, maxPerDay);
-  // Mark the cooldown only after a successful send: a provider failure (503)
-  // must not lock the user out of an immediate retry.
-  await store.change((state) => {
-    const current = state.emailCredentials[email];
-    if (current) current.resendSentAt = now;
-  });
   return { status: 'verification-sent' };
 }
 
@@ -460,7 +464,7 @@ export async function loginEmail(
   const result = await store.change((state) => {
     const credential = state.emailCredentials[email];
     if (!credential) return null;
-    if (!credential.verified) return { unverified: true as const };
+    if (!credential.verified) return null;
     if (credential.lockUntil && credential.lockUntil > now) {
       throw new AuthError(429, 'too many failed attempts; retry in a few minutes', 'login_throttled');
     }
@@ -474,7 +478,6 @@ export async function loginEmail(
     }
     credential.failedAttempts = 0;
     credential.lockUntil = null;
-    if (!credential.verified) return { unverified: true as const };
     const account = state.accounts[credential.publicKey];
     if (!account) throw new AuthError(500, 'account record missing');
     // Second-factor parity with the wallet flow: a correct password alone is
@@ -497,8 +500,5 @@ export async function loginEmail(
     return { token, expiresAt: session.expiresAt, account: { ...account } };
   });
   if (!result) throw new AuthError(401, 'invalid email or password', 'credentials_invalid');
-  if ('unverified' in result) {
-    throw new AuthError(403, 'email not verified yet; check your inbox or request a new verification token', 'email_unverified');
-  }
   return result;
 }

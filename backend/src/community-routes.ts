@@ -138,6 +138,11 @@ function sendError(res: express.Response, err: unknown): void {
     });
     return;
   }
+  // Never log message, stack, URL, input, bearer or provider bodies here.
+  // Keep an allowlisted error class so operators see the failure without
+  // exposing account data or credential-bearing upstream diagnostics.
+  const errorType = err instanceof TypeError ? 'TypeError' : err instanceof SyntaxError ? 'SyntaxError' : err instanceof Error ? 'Error' : 'Unknown';
+  console.error(JSON.stringify({ event: 'community.internal_error', code: 'internal_error', errorType }));
   res.status(500).json({ error: 'internal error', code: 'internal_error' });
 }
 
