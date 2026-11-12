@@ -12,6 +12,10 @@ import { routeHash } from '../router';
 import ApplicationDocuments from './ApplicationDocuments';
 
 export default function MyCommunityActivity() {
+  const { account, token } = useCommunityAuth();
+  return <ScopedCommunityActivity key={`${account?.publicKey ?? ''}:${token}`} />;
+}
+function ScopedCommunityActivity() {
   const { m, locale } = useI18n();
   const { account, token } = useCommunityAuth();
   const [applications, setApplications] = useState<IssuerApplication[] | null>(null);

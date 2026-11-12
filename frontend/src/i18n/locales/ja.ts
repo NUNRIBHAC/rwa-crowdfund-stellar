@@ -31,6 +31,20 @@ export const ja: Messages = {
     simulated: '模擬',
   },
   applicationDocuments: {
+    refresh: '状態を更新',
+    saveDraft: '下書きを保存',
+    draftSaved: '下書きを保存しました。「自分の申請」で書類を追加し、審査のために送信してください。',
+    submit: '申請を送信',
+    submitWarning: '送信後は書類の追加、差し替え、削除はできません。申請を送信しますか？',
+    delete: '書類を削除',
+    confirmDelete: 'この書類を削除しますか？別の書類をアップロードする必要はありません。',
+    confirm: '確認',
+    cancel: 'キャンセル',
+    deletionPending: '削除を受け付けました。書類にはアクセスできませんが、クラウドストレージからの削除はまだ完了していません。',
+    operationUnavailable:
+      '安全な再試行用の識別子を保存できませんでした。ファイルはアップロードされていません。ブラウザーのストレージを有効にして再試行してください。',
+    reconciliation: 'この操作には照合が必要です。再試行のために別のアップロードを作成しないでください。',
+
     uploadNote: 'DEMO文書：合成.txtのみ、各16 KBまで、最大5件。個人情報や本人確認書類を送信しないでください。',
     save: '文書を保存',
     view: '文書を見る',
@@ -2036,6 +2050,7 @@ export const ja: Messages = {
     myApplicationsTitle: '自分の発行者申請',
     myApplicationsEmpty: '申請はまだありません。',
     applicationStatus: {
+      draft: '下書き',
       received: '受付済み',
       under_review: '審査中',
       approved: '承認済み',

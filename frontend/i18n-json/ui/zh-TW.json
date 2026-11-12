@@ -25,6 +25,18 @@
     "simulated": "模擬"
   },
   "applicationDocuments": {
+    "refresh": "重新整理狀態",
+    "saveDraft": "儲存草稿",
+    "draftSaved": "草稿已儲存。請在我的申請中新增文件，然後提交審核。",
+    "submit": "提交申請",
+    "submitWarning": "提交後將無法新增、替換或刪除文件。是否提交申請？",
+    "delete": "刪除文件",
+    "confirmDelete": "是否刪除此文件？無需上傳其他文件。",
+    "confirm": "確認",
+    "cancel": "取消",
+    "deletionPending": "已請求刪除。文件已無法存取，但雲端儲存中的刪除作業仍待完成。",
+    "operationUnavailable": "無法儲存安全重試識別碼。未上傳任何檔案。請啟用瀏覽器儲存後重試。",
+    "reconciliation": "此操作需要核對狀態。請勿為重試而建立新的上傳。",
     "uploadNote": "DEMO 文件：僅限合成 .txt，每個最多 16 KB，最多五個。請勿上傳個人或身分文件。",
     "save": "儲存文件",
     "view": "查看文件",
@@ -1863,6 +1875,7 @@
     "myApplicationsTitle": "我的發行方申請",
     "myApplicationsEmpty": "尚無申請。",
     "applicationStatus": {
+      "draft": "草稿",
       "received": "已收到",
       "under_review": "審核中",
       "approved": "已核准",

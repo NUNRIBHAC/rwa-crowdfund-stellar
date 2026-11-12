@@ -25,6 +25,18 @@
     "simulated": "模拟"
   },
   "applicationDocuments": {
+    "refresh": "刷新状态",
+    "saveDraft": "保存草稿",
+    "draftSaved": "草稿已保存。请在我的申请中添加文件，然后提交审核。",
+    "submit": "提交申请",
+    "submitWarning": "提交后将无法添加、替换或删除文件。是否提交申请？",
+    "delete": "删除文件",
+    "confirmDelete": "是否删除此文件？无需上传其他文件。",
+    "confirm": "确认",
+    "cancel": "取消",
+    "deletionPending": "已请求删除。文件已无法访问，但云存储中的删除操作仍待完成。",
+    "operationUnavailable": "无法保存安全重试标识。未上传任何文件。请启用浏览器存储后重试。",
+    "reconciliation": "此操作需要核对状态。请勿为重试而创建新的上传。",
     "uploadNote": "DEMO 文件：仅限合成 .txt，每个最多 16 KB，最多五个。请勿上传个人或身份文件。",
     "save": "保存文件",
     "view": "查看文件",
@@ -1863,6 +1875,7 @@
     "myApplicationsTitle": "我的发行方申请",
     "myApplicationsEmpty": "暂无申请。",
     "applicationStatus": {
+      "draft": "草稿",
       "received": "已收到",
       "under_review": "审核中",
       "approved": "已批准",

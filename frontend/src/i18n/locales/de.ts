@@ -31,6 +31,20 @@ export const de: Messages = {
     simulated: 'SIMULIERT',
   },
   applicationDocuments: {
+    refresh: 'Status aktualisieren',
+    saveDraft: 'Entwurf speichern',
+    draftSaved: 'Entwurf gespeichert. Füge unter Meine Anträge Dokumente hinzu und reiche den Antrag dann zur Prüfung ein.',
+    submit: 'Antrag einreichen',
+    submitWarning: 'Nach dem Einreichen kannst du keine Dokumente hinzufügen, ersetzen oder löschen. Antrag einreichen?',
+    delete: 'Dokument löschen',
+    confirmDelete: 'Dieses Dokument löschen? Du musst kein anderes hochladen.',
+    confirm: 'Bestätigen',
+    cancel: 'Abbrechen',
+    deletionPending: 'Löschung angefordert. Das Dokument ist nicht mehr zugänglich, die Löschung im Cloud-Speicher steht aber noch aus.',
+    operationUnavailable:
+      'Eine sichere Kennung für erneute Versuche konnte nicht gespeichert werden. Keine Datei wurde hochgeladen. Aktiviere den Browserspeicher und versuche es erneut.',
+    reconciliation: 'Dieser Vorgang muss abgeglichen werden. Erstelle keinen weiteren Upload, um ihn zu wiederholen.',
+
     uploadNote:
       'DEMO-Dokumente: nur synthetische .txt-Dateien, höchstens 16 KB je Datei, fünf Dateien. Keine persönlichen Daten oder Ausweisdokumente hochladen.',
     save: 'Dokument speichern',
@@ -2109,6 +2123,7 @@ export const de: Messages = {
     myApplicationsTitle: 'Meine Emittentenanträge',
     myApplicationsEmpty: 'Noch keine Anträge.',
     applicationStatus: {
+      draft: 'Entwurf',
       received: 'Eingegangen',
       under_review: 'In Prüfung',
       approved: 'Genehmigt',

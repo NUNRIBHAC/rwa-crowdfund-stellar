@@ -11,7 +11,7 @@
 // the browser's validationMessage as fallback for unconstrained cases. Server zod errors keep surfacing in the role=alert region.
 import { useState } from 'react';
 import type { FormEvent, InvalidEvent } from 'react';
-import { COMMUNITY_LIMITS, submitIssuerApplication } from '../community/api';
+import { COMMUNITY_LIMITS, createIssuerApplicationDraft } from '../community/api';
 import { notifyCommunityActivityChanged } from '../community/events';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
@@ -19,6 +19,10 @@ import { useI18n } from '../i18n';
 type FieldKey = 'projectName' | 'country' | 'instrumentType' | 'targetAmount' | 'description' | 'contactEmail';
 
 export default function IssuerApplicationForm() {
+  const { account, token } = useCommunityAuth();
+  return <ScopedIssuerApplicationForm key={`${account?.publicKey ?? ''}:${token}`} />;
+}
+function ScopedIssuerApplicationForm() {
   const { m } = useI18n();
   const { account, token } = useCommunityAuth();
   const [projectName, setProjectName] = useState('');
@@ -80,7 +84,7 @@ export default function IssuerApplicationForm() {
     setBusy(true);
     setError('');
     try {
-      await submitIssuerApplication(token, {
+      await createIssuerApplicationDraft(token, {
         projectName: projectName.trim(),
         country: country.trim(),
         instrumentType: instrumentType.trim(),
@@ -108,7 +112,7 @@ export default function IssuerApplicationForm() {
         </p>
       )}
       {done ? (
-        <p className="community-success">{m.community.applicationDone}</p>
+        <p className="community-success">{m.applicationDocuments.draftSaved}</p>
       ) : (
         <form onSubmit={submit} onInvalidCapture={markInvalid} className="application-form">
           <label>
@@ -197,7 +201,7 @@ export default function IssuerApplicationForm() {
             {fieldMessage('contactEmail')}
           </label>
           <button className="btn btn-primary" disabled={busy}>
-            {m.community.applicationSubmit}
+            {m.applicationDocuments.saveDraft}
           </button>
         </form>
       )}

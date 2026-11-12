@@ -76,7 +76,9 @@ export type IssuerApplication = {
   targetAmount: string;
   description: string;
   contactEmail: string | null;
-  status: 'received' | 'under_review' | 'approved' | 'rejected' | 'closed';
+  status: 'draft' | 'received' | 'under_review' | 'approved' | 'rejected' | 'closed';
+  submittedAt?: number;
+  documentCleanupPending?: boolean;
   reviewedBy: string | null;
   reviewedAt: number | null;
   reviewNote: string | null;
@@ -737,11 +739,11 @@ export const fetchDemoOnboarding = (token: string) => call<DemoOnboardingRespons
 export const saveDemoOnboarding = (token: string, body: Pick<DemoOnboardingResponse['progress'], 'identity' | 'risksAcknowledged'>) =>
   call<DemoOnboardingResponse>('/api/auth/demo-onboarding', { token, method: 'PUT', body });
 
-export const uploadApplicationDocument = (token: string, id: string, filename: string, content: string) =>
+export const uploadApplicationDocument = (token: string, id: string, filename: string, content: string, operationId?: string) =>
   call<{ document: { id: string; filename: string; sha256: string } }>(`/api/issuer-applications/${encodeURIComponent(id)}/documents`, {
     method: 'POST',
     token,
-    body: { filename, content },
+    body: { filename, content, ...(operationId ? { operationId } : {}) },
   });
 export const linkApplicationCampaign = (token: string, id: string, campaignId: string) =>
   call<{ ok: true }>(`/api/operator/issuer-applications/${encodeURIComponent(id)}/campaign`, { method: 'POST', token, body: { campaignId } });
@@ -788,3 +790,13 @@ export const farcasterDeletionNonce = (token: string, confirmation: string) =>
   call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/account/deletion-farcaster/nonce', { token, body: { confirmation } });
 export const farcasterDeletionVerify = (token: string, nonce: string, message: string, signature: string) =>
   call<{ proof: string; expiresAt: number }>('/api/auth/account/deletion-farcaster/verify', { token, body: { nonce, message, signature } });
+
+export const createIssuerApplicationDraft = (token: string, input: Parameters<typeof submitIssuerApplication>[1]) =>
+  call<{ application: IssuerApplication }>('/api/issuer-applications/drafts', { token, body: input });
+export const submitIssuerApplicationDraft = (token: string, id: string) =>
+  call<{ application: IssuerApplication }>(`/api/issuer-applications/${encodeURIComponent(id)}/submit`, { token, body: {} });
+export const deleteApplicationDocument = (token: string, id: string, documentId: string) =>
+  call<{ status?: 'deletion_pending' }>(`/api/issuer-applications/${encodeURIComponent(id)}/documents/${encodeURIComponent(documentId)}`, {
+    token,
+    method: 'DELETE',
+  });

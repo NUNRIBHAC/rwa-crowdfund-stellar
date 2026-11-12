@@ -25,6 +25,18 @@
     "simulated": "SIMULÉ"
   },
   "applicationDocuments": {
+    "refresh": "Actualiser le statut",
+    "saveDraft": "Enregistrer le brouillon",
+    "draftSaved": "Brouillon enregistré. Ajoutez vos documents dans Mes candidatures, puis envoyez la candidature pour examen.",
+    "submit": "Envoyer la candidature",
+    "submitWarning": "Après l'envoi, vous ne pourrez plus ajouter, remplacer ni supprimer de documents. Envoyer la candidature ?",
+    "delete": "Supprimer le document",
+    "confirmDelete": "Supprimer ce document ? Vous n'avez pas à en importer un autre.",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "deletionPending": "Suppression demandée. Le document n'est plus accessible, mais sa suppression du stockage cloud est encore en attente.",
+    "operationUnavailable": "Impossible d'enregistrer un identifiant sûr pour réessayer. Aucun fichier n'a été importé. Activez le stockage du navigateur et réessayez.",
+    "reconciliation": "Cette opération nécessite une réconciliation. Ne créez pas un autre import pour la répéter.",
     "uploadNote": "Documents DEMO : .txt synthétiques uniquement, 16 Ko chacun, cinq fichiers. Aucun document personnel ou d’identité.",
     "save": "Enregistrer le document",
     "view": "Voir le document",
@@ -1912,6 +1924,7 @@
     "myApplicationsTitle": "Mes candidatures d'émetteur",
     "myApplicationsEmpty": "Aucune candidature pour le moment.",
     "applicationStatus": {
+      "draft": "Brouillon",
       "received": "Reçue",
       "under_review": "À l'étude",
       "approved": "Approuvée",
