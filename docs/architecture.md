@@ -43,6 +43,16 @@ Builds, CI, translations, documentation, hosting and isolated QA.
 
 [Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg). Classic write routes are disabled. Simulations and the infrastructure prototype are not live money-moving services.
 
+## Earlier whole-code overview
+
+This fifth diagram labels itself `main @ 177c8c1` (12 November 2026). It is
+retained for comparison, not presented as the newer `045e042` source map.
+Its smaller labels are best read in the full-size SVG.
+
+[![Earlier whole-code overview - source177c8c1](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)
+
+[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg).
+
 ## Reading limits and related code
 
 - Record stores are selected by configuration. A database node does not prove
@@ -58,11 +68,10 @@ Builds, CI, translations, documentation, hosting and isolated QA.
 
 ## Media provenance
 
-The four content-named SVGs above were read from B2 and checked byte-for-byte
+All five SVGs above were read from B2 and checked byte-for-byte
 against their public responses on 12 November 2026. They are linked rather
-than copied into the repository or app images. Together they are 88,516 bytes;
+than copied into the repository or app images. Together they are 656,537 bytes;
 viewing this guide uses the existing media service and its request limits.
 
-The same folder also contains `blockallisto-architecture-5997b399.svg`
-(568,021 bytes). That older overview labels itself `main @ 177c8c1`; it is not
-used here as the current source map. No object was changed or deleted.
+The older overview is 568,021 bytes of that total. Its key and image bytes
+are unchanged. No image is copied into the repository or app build.

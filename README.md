@@ -12,12 +12,30 @@ The frontend says so explicitly on every page.
 
 ## Architecture
 
-[![Blockallisto system map: browser, API, records, Stellar testnet and external services](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)
+Five views are available below and in the [architecture guide](docs/architecture.md).
+The first four describe source `045e042` (12 November 2026); the fifth is the
+earlier `177c8c1` overview. These are source snapshots, not a runtime or
+production-readiness audit. Open each image for readable labels.
 
-See the [architecture guide](docs/architecture.md) for full-size views of
-accounts, transaction evidence and delivery. These diagrams describe the
-source at `045e042` (12 November 2026), not a runtime or production-readiness
-audit. Open an image for readable labels.
+### Whole system - source045e042
+
+[![Whole system - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)
+
+### Accounts, community and safety - source045e042
+
+[![Accounts, community and safety - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)
+
+### Transactions and durable evidence - source045e042
+
+[![Transactions and durable evidence - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)
+
+### Delivery, documentation and held code - source045e042
+
+[![Delivery, documentation and held code - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)
+
+### Earlier whole-code overview - source177c8c1
+
+[![Earlier whole-code overview - source177c8c1](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)
 
 ## What is implemented
 
