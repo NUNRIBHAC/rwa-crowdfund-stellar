@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import type { PrivateTextRef } from './oci-private-text-store.js';
 
-// Offline integration model. Not connected to CommunityService/routes or OCI.
+// Durable upload workflow. Runtime provider activation is separately gated.
 export type UploadDocument = {
   id: string;
   filename: string;

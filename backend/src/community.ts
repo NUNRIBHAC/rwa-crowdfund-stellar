@@ -1486,7 +1486,7 @@ export class CommunityService {
             Object.values(state.privateApplicationUploads?.intents ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted') ||
             Object.values(state.privateApplicationDeletions ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted')
           )
-            continue; // Offline activation blocker: owned-object reconciliation must precede pruning.
+            continue; // Keep private applications until a separately reviewed retention policy clears every owned object.
           delete state.applications[id];
           removed++;
         }
