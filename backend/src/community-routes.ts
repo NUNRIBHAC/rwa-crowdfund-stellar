@@ -1,3 +1,5 @@
+import { privateApplicationOptionsFromEnv, startPrivateApplicationCleanup } from './private-application-runtime.js';
+import type { CommunityStore } from './community-store.js';
 import { socialLinkPurpose } from './social-link-proof.js';
 import { socialDeletionPurpose } from './deletion-proof.js';
 import { clientIp } from './client-ip.js';
@@ -1890,13 +1892,20 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
 
 // Boot helper for server.ts: builds store + service from env and prunes on a
 // slow interval (unref'd; never keeps the process alive).
-export async function communityServiceFromEnv(): Promise<CommunityService> {
-  const store = await communityStoreFromEnv();
+export async function communityServiceFromEnv(
+  dependencies: { store?: CommunityStore; transport?: typeof fetch; startTimers?: boolean } = {},
+): Promise<CommunityService> {
+  const uploadOptions = privateApplicationOptionsFromEnv(process.env, dependencies.transport);
+  const store = dependencies.store ?? (await communityStoreFromEnv());
   const service = new CommunityService(store, {
     retentionDays: Number(process.env.COMMUNITY_RETENTION_DAYS ?? 90),
+    ...uploadOptions,
   });
   await service.prune();
-  const timer = setInterval(() => service.prune().catch(() => {}), 60 * 60 * 1000);
-  timer.unref();
+  if (dependencies.startTimers !== false) {
+    const timer = setInterval(() => service.prune().catch(() => {}), 60 * 60 * 1000);
+    timer.unref();
+    if ('privateApplicationObjects' in uploadOptions) startPrivateApplicationCleanup(service);
+  }
   return service;
 }

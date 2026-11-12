@@ -1,6 +1,6 @@
 import { createHash, createHmac, randomUUID } from 'node:crypto';
 
-// Private synthetic application text only. Not wired into live routes yet.
+// Private synthetic application text only. Runtime wiring is explicitly gated.
 // No disk fallback, public URL, bucket creation, IAM change or legacy migration.
 export type PrivateTextRef = {
   storageId: string;
@@ -164,7 +164,7 @@ export class OciPrivateTextStore {
       throw new Error('private document integrity failure');
     }
   }
-  // For explicitly owned compensation/retention only. Wiring and policy pending.
+  // Only durable owned cleanup jobs may call this; never caller-supplied refs.
   async remove(ref: PrivateTextRef): Promise<void> {
     if (ref.storageId !== privateStorageIdentity(this.config)) throw new Error('private document storage identity mismatch');
     const response = await this.request('DELETE', ref.key);
