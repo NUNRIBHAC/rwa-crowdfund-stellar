@@ -41,6 +41,8 @@ import { buildShareRegister, type ShareRegisterPayload } from './share-register.
 import { buildCapTable, holdingFromCapTable, CORPORATE_ACTIONS_SEMANTICS } from './corporate-actions.js';
 import { archiveCampaignEvents, eventArchiveBackend, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
 
+import { apiNotFound, jsonErrors } from './json-errors.js';
+
 const app = express();
 app.disable('x-powered-by');
 // Browser-origin requests are denied unless explicitly allowlisted. No-Origin
@@ -53,7 +55,7 @@ const allowedOrigins = () =>
 app.use((req, res, next) => {
   const origin = req.header('origin');
   if (origin && !allowedOrigins().includes(origin)) {
-    res.status(403).json({ error: 'origin not allowed' });
+    res.status(403).json({ error: 'origin not allowed', code: 'forbidden' });
     return;
   }
   res.setHeader('Cache-Control', 'no-store');
@@ -109,7 +111,8 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
   const adminSecret = process.env.ADMIN_SECRET ?? '';
   if (!adminSecret) {
     res.status(503).json({
-      error: 'ADMIN_SECRET not configured (backend/.env); admin endpoints disabled',
+      error: 'admin endpoints disabled',
+      code: 'feature_unavailable',
     });
     return;
   }
@@ -121,7 +124,7 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
       createHash('sha256').update(adminSecret).digest(),
     )
   ) {
-    res.status(401).json({ error: 'missing or invalid admin key (x-admin-key header)' });
+    res.status(401).json({ error: 'missing or invalid admin key', code: 'unauthorized' });
     return;
   }
   next();
@@ -311,7 +314,7 @@ app.use((req, res, next) => {
   if (!COMMUNITY_PATH.test(req.path)) return next();
   communityRouterReady.then((router) => {
     if (!router) {
-      res.status(503).json({ error: 'Community API unavailable: community storage is not configured or failed to start' });
+      res.status(503).json({ error: 'community API unavailable', code: 'API_UNAVAILABLE' });
       return;
     }
     router(req, res, next);
@@ -340,7 +343,7 @@ app.get('/api/campaigns', async (req, res) => {
 app.get('/api/account/payouts', async (req, res) => {
   try {
     const actor = typeof req.query.actor === 'string' ? req.query.actor : '';
-    if (!actor) return res.status(400).json({ error: 'actor query param required' });
+    if (!actor) return res.status(400).json({ error: 'actor query param required', code: 'invalid_input' });
     // Public read of on-chain-equivalent journal fields only; no signed material.
     // Completed refunds/withdrawals ONLY - no return distributions exist in
     // this prototype and none are fabricated.
@@ -358,7 +361,7 @@ app.get('/api/account/payouts', async (req, res) => {
 app.get('/api/account/holdings', async (req, res) => {
   try {
     const actor = typeof req.query.actor === 'string' ? req.query.actor : '';
-    if (!actor) return res.status(400).json({ error: 'actor query param required' });
+    if (!actor) return res.status(400).json({ error: 'actor query param required', code: 'invalid_input' });
     const activity = await accountActivity(actor);
     const ids = [
       ...new Set(
@@ -387,7 +390,7 @@ app.get('/api/account/holdings', async (req, res) => {
 app.get('/api/account/activity', async (req, res) => {
   try {
     const actor = typeof req.query.actor === 'string' ? req.query.actor : '';
-    if (!actor) return res.status(400).json({ error: 'actor query param required' });
+    if (!actor) return res.status(400).json({ error: 'actor query param required', code: 'invalid_input' });
     // Public read of on-chain-equivalent fields only; no signed material.
     res.json({ activity: await accountActivity(actor), network: NETWORK, productionEligible: false });
   } catch (err) {
@@ -585,10 +588,14 @@ app.get('/api/soroban/transactions/:hash', async (req, res) => {
 // All old money-moving and wallet submission routes are disabled. Existing
 // classic state is never converted, cleared or resubmitted by the new server.
 app.post('/api/{*path}', (_req, res) => {
-  res
-    .status(410)
-    .json({ error: 'Classic campaign writes disabled. Soroban is the active flow. Legacy state requires a separately reviewed migration/reconciliation.' });
+  res.status(410).json({
+    error: 'Classic campaign writes disabled. Soroban is the active flow. Legacy state requires a separately reviewed migration/reconciliation.',
+    code: 'feature_unavailable',
+  });
 });
+
+app.use(apiNotFound);
+app.use(jsonErrors);
 
 export { app };
 if (process.env.NODE_ENV !== 'test' && !process.env.EMBEDDED_HOST) {

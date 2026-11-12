@@ -1,7 +1,7 @@
 // Regression: the account campaign-news feed shows only news for campaigns
 // the wallet invested in (never other campaigns' news), newest first, with
 // the campaign name linked, and an honest empty state when there is none.
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { I18nProvider } from '../../i18n';
 import AccountNewsSection from '../AccountNewsSection';
@@ -27,7 +27,10 @@ function renderSection(campaigns: { id: string; name: string }[]) {
 }
 
 describe('AccountNewsSection', () => {
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+  });
 
   it('shows only invested-campaign news, newest first, with campaign name', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(ok(FEED)));
@@ -47,10 +50,13 @@ describe('AccountNewsSection', () => {
     const { unmount } = renderSection([{ id: 'demo-solar', name: 'Demo Solar' }]);
     expect(await screen.findByText('Newer invested news')).toBeTruthy();
     unmount();
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(ok({ news: [] })));
-    renderSection([{ id: 'demo-solar', name: 'Demo Solar' }]);
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation(async () => ok({ news: [] })),
+    );
+    const empty = renderSection([{ id: 'demo-solar', name: 'Demo Solar' }]);
     expect(await screen.findByText('No news yet for the campaigns you invested in.')).toBeTruthy();
-    unmount();
+    empty.unmount();
     renderSection([]);
     expect(await screen.findByText('News from campaigns you invest in will appear here.')).toBeTruthy();
   });

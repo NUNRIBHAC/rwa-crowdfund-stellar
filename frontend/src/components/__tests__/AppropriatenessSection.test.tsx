@@ -14,7 +14,10 @@ function ok(v: unknown) {
 }
 
 function err(status: number, message: string) {
-  return new Response(JSON.stringify({ error: message }), { status, headers: { 'Content-Type': 'application/json' } });
+  return new Response(JSON.stringify({ error: message, code: status === 503 ? 'feature_unavailable' : status === 403 ? 'feature_restricted' : undefined }), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
 
 const MANDATED = 'An investment in a crowdfunding project includes the risk of losing the entirety of the money invested.';

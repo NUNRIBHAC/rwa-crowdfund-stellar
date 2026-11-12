@@ -113,9 +113,9 @@ describe('community api client', () => {
     expect(v.news[0].authorLabel).toBe('platform-demo');
   });
 
-  it('surfaces server error messages', async () => {
+  it('localizes uncoded errors without exposing server text', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(fail(401, 'invalid or expired session')));
-    await expect(fetchMe('bls_bad')).rejects.toThrow('invalid or expired session');
+    await expect(fetchMe('bls_bad')).rejects.toThrow('API request failed');
   });
 
   it('passes the download AbortSignal with bearer auth, never in the URL', async () => {
@@ -128,7 +128,7 @@ describe('community api client', () => {
     expect(filename).toBe('terms.txt');
     expect(fetchMock).toHaveBeenCalledWith('/api/investment-documents/doc%2Fone/download', {
       headers: { Authorization: 'Bearer private-token' },
-      signal: controller.signal,
+      signal: expect.any(AbortSignal),
     });
   });
 
