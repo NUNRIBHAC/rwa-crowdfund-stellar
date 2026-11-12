@@ -2054,6 +2054,7 @@ export const es: Messages = {
     socialSignInGithub: 'Continuar con GitHub',
     socialSignInLinkedin: 'Continuar con LinkedIn',
     socialSignInTelegram: 'Continuar con Telegram',
+    socialSignInTelegramPhone: 'Alternativa: teléfono de Telegram',
     socialSignInDiscord: 'Continuar con Discord',
     socialSignInGeneric: 'Continuar con {provider}',
     signedInTitle: 'Cuenta de la comunidad',

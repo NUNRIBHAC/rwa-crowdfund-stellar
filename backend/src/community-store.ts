@@ -58,6 +58,8 @@ export type SocialFlow = {
   // account holding this public key instead of signing anyone in. The
   // callback outcome is then a binding, never a session.
   linkTo?: string;
+  // Explicit alternative to default email-proof registration, bound to state.
+  registrationMethod?: 'phone';
   deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose;
   // sha256 of a per-browser secret set as an httpOnly cookie at /start;
   // the callback must present the same cookie (browser binding).

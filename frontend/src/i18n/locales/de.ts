@@ -2045,6 +2045,7 @@ export const de: Messages = {
     socialSignInGithub: 'Mit GitHub fortfahren',
     socialSignInLinkedin: 'Mit LinkedIn fortfahren',
     socialSignInTelegram: 'Mit Telegram fortfahren',
+    socialSignInTelegramPhone: 'Alternative: Telegram-Telefonnummer',
     socialSignInDiscord: 'Mit Discord fortfahren',
     socialSignInGeneric: 'Mit {provider} fortfahren',
     signedInTitle: 'Community-Konto',

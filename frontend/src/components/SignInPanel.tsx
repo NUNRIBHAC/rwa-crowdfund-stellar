@@ -291,6 +291,11 @@ export default function SignInPanel({ actor }: { actor: string }) {
               : tpl(m.community.socialSignInGeneric ?? '', { provider: socialProviderDisplayName(p) })}
           </button>
         ))}
+        {(socialProviders ?? []).includes('telegram') && (
+          <button className="btn social-signin-btn" disabled={busy} onClick={() => startSocialSignIn('telegram', 'phone').catch(() => undefined)}>
+            {m.community.socialSignInTelegramPhone}
+          </button>
+        )}
         {error && (
           <p role="alert" className="community-error">
             {error}

@@ -1992,6 +1992,7 @@ export const en = {
     socialSignInGithub: 'Continue with GitHub',
     socialSignInLinkedin: 'Continue with LinkedIn',
     socialSignInTelegram: 'Continue with Telegram',
+    socialSignInTelegramPhone: 'Alternative: Telegram phone',
     socialSignInDiscord: 'Continue with Discord',
     socialSignInGeneric: 'Continue with {provider}',
     signedInTitle: 'Community account',

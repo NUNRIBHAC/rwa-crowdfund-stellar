@@ -1918,6 +1918,7 @@ export const zhTW: Messages = {
     socialSignInGithub: '使用 GitHub 繼續',
     socialSignInLinkedin: '使用 LinkedIn 繼續',
     socialSignInTelegram: '使用 Telegram 繼續',
+    socialSignInTelegramPhone: '其他方式：Telegram 電話號碼',
     socialSignInDiscord: '使用 Discord 繼續',
     socialSignInGeneric: '使用 {provider} 繼續',
     signedInTitle: '社群帳戶',

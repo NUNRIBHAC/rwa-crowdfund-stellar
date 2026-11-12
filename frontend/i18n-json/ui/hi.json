@@ -1819,6 +1819,7 @@
     "socialSignInGithub": "GitHub से जारी रखें",
     "socialSignInLinkedin": "LinkedIn से जारी रखें",
     "socialSignInTelegram": "Telegram से जारी रखें",
+    "socialSignInTelegramPhone": "विकल्प: Telegram फ़ोन नंबर",
     "socialSignInDiscord": "Discord से जारी रखें",
     "socialSignInGeneric": "{provider} से जारी रखें",
     "signedInTitle": "कम्युनिटी खाता",

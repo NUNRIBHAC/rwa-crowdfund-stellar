@@ -1806,6 +1806,7 @@
     "socialSignInGithub": "GitHub로 계속",
     "socialSignInLinkedin": "LinkedIn으로 계속",
     "socialSignInTelegram": "Telegram으로 계속",
+    "socialSignInTelegramPhone": "다른 방법: Telegram 전화번호",
     "socialSignInDiscord": "Discord으로 계속",
     "socialSignInGeneric": "{provider}로 계속",
     "signedInTitle": "커뮤니티 계정",

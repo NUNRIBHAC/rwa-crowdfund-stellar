@@ -84,7 +84,7 @@ export type CommunityAuthState = {
   disableSocialValidation?: () => void;
   /** Begin a social sign-in: bot check, then a top-level navigation to the
       provider through the backend /start route. */
-  startSocialSignIn: (provider: string) => Promise<void>;
+  startSocialSignIn: (provider: string, registrationMethod?: 'phone') => Promise<void>;
   /** One-shot success notice from a social LINK callback
       (/account#social-linked=<provider>); consumed on render. */
   socialNotice: string;
@@ -502,13 +502,16 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
   );
 
   const startSocialSignIn = useCallback(
-    async (provider: string) => {
+    async (provider: string, registrationMethod?: 'phone') => {
       if (provider === 'farcaster') return startFarcaster();
       setBusy(true);
       setError('');
       try {
         const t = await turnstileToken();
-        const q = t ? `?turnstileToken=${encodeURIComponent(t)}` : '';
+        const params = new URLSearchParams();
+        if (t) params.set('turnstileToken', t);
+        if (provider === 'telegram' && registrationMethod === 'phone') params.set('registration', 'phone');
+        const q = params.size ? `?${params}` : '';
         // Top-level navigation: the backend validates the bot check, starts
         // the OIDC flow and 302s to the provider. busy stays set - the page
         // is leaving.

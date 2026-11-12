@@ -285,7 +285,18 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
       await abuseGate(req);
       const bind = newBindSecret();
-      const { url } = await startSocialFlow(store, provider, cfg, socialRedirectUri(req, provider), Date.now(), deps.socialFetch, undefined, bind.hash);
+      const { url } = await startSocialFlow(
+        store,
+        provider,
+        cfg,
+        socialRedirectUri(req, provider),
+        Date.now(),
+        deps.socialFetch,
+        undefined,
+        bind.hash,
+        undefined,
+        provider === 'telegram' && req.query.registration === 'phone' ? 'phone' : undefined,
+      );
       res.setHeader(
         'Set-Cookie',
         `${BIND_COOKIE}=${bind.secret}; Path=/api/auth; HttpOnly; SameSite=Lax; Max-Age=900${req.secure || req.get('x-forwarded-proto') === 'https' ? '; Secure' : ''}`,

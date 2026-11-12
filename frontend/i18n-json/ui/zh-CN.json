@@ -1806,6 +1806,7 @@
     "socialSignInGithub": "使用 GitHub 继续",
     "socialSignInLinkedin": "使用 LinkedIn 继续",
     "socialSignInTelegram": "使用 Telegram 继续",
+    "socialSignInTelegramPhone": "其他方式：Telegram 电话号码",
     "socialSignInDiscord": "使用 Discord 继续",
     "socialSignInGeneric": "使用 {provider} 继续",
     "signedInTitle": "社区账户",

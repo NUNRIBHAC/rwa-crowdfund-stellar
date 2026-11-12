@@ -25,9 +25,12 @@ import { issueSocialDeletionProof } from './deletion-proof.js';
 // a session. An identity already bound to a different account is refused
 // (409 social_identity_taken).
 //
-// Registration is FAIL-CLOSED: creating a NEW account from a social
-// identity requires (a) the provider asserting email_verified=true and
-// (b) that address listed in the per-env SOCIAL_REGISTRATION_ALLOWED_EMAILS
+// Registration is FAIL-CLOSED: email registration requires email proof and
+// SOCIAL_REGISTRATION_ALLOWED_EMAILS. Telegram has an explicit alternative
+// using its signed phone claim and SOCIAL_REGISTRATION_ALLOWED_PHONES.
+// No phone claim is persisted. For email-bearing providers, (a) the provider
+// must assert email_verified=true and (b) that address must be listed in
+// SOCIAL_REGISTRATION_ALLOWED_EMAILS
 // (comma-separated). Unset = no new social registrations on this
 // deployment, independent of provider-side consent-screen restrictions.
 // Existing linked identities always sign in. TOTP, when enabled on the
@@ -81,14 +84,9 @@ const PROVIDER_ISSUER: Partial<Record<SocialProvider, string>> = {
   telegram: 'https://oauth.telegram.org',
 };
 
-// Per-provider authorization scopes. Telegram's OIDC discovery advertises
-// scopes openid/phone/profile/telegram:bot_access/ton:wallet and claims with
-// NO email and NO email_verified - requesting an email scope it does not
-// support would fail the authorization, and the missing email_verified means
-// Telegram identities can NEVER create accounts under the fail-closed
-// registration gate (they can only sign in once LINKED to an existing
-// account through the authenticated step-up link flow). That is a
-// product/policy boundary, not a bug to code around silently.
+// Telegram carries no email claim. An explicitly allowlisted signed phone
+// can admit a new identity without email; otherwise the existing browser-bound
+// email-proof registration path remains in place. Neither path auto-links.
 const PROVIDER_SCOPE: Partial<Record<SocialProvider, string>> = {
   google: 'openid email profile',
   linkedin: 'openid email profile',
@@ -144,6 +142,22 @@ export function socialRegistrationAllowedEmails(env: NodeJS.ProcessEnv): Set<str
   );
 }
 
+// Telegram phone admission is explicitly opt-in per deployment. Only digits
+// are compared; the claim is used transiently and never persisted.
+export function normalizePhone(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const digits = value.replace(/\D/g, '');
+  return digits.length >= 7 && digits.length <= 15 ? digits : null;
+}
+export function socialRegistrationAllowedPhones(env: NodeJS.ProcessEnv): Set<string> {
+  const out = new Set<string>();
+  for (const part of (env.SOCIAL_REGISTRATION_ALLOWED_PHONES ?? '').split(',')) {
+    const n = normalizePhone(part);
+    if (n) out.add(n);
+  }
+  return out;
+}
+
 // Providers whose identity carries no email evidence at all. A NEW identity
 // from one of these cannot register directly: it gets a pending ticket and
 // must prove an allowlisted email by code (requestSocialEmail/confirm).
@@ -192,6 +206,7 @@ export async function startSocialFlow(
   linkTo?: string,
   bindHash?: string,
   deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose,
+  registrationMethod?: 'phone',
 ): Promise<{ url: string }> {
   const state = client.randomState();
   const nonce = client.randomNonce();
@@ -208,6 +223,7 @@ export async function startSocialFlow(
       ...(linkTo ? { linkTo } : {}),
       ...(deletionPurpose ? { deletionPurpose } : {}),
       ...(bindHash ? { bindHash } : {}),
+      ...(provider === 'telegram' && registrationMethod === 'phone' ? { registrationMethod } : {}),
     };
   });
   if (PROVIDER_KIND[provider] === 'oauth2') {
@@ -226,7 +242,7 @@ export async function startSocialFlow(
   const conf = await getClient(cfg, provider, fetchImpl);
   const url = client.buildAuthorizationUrl(conf, {
     redirect_uri: redirectUri,
-    scope: PROVIDER_SCOPE[provider] ?? 'openid',
+    scope: provider === 'telegram' && registrationMethod === 'phone' ? 'openid profile phone' : (PROVIDER_SCOPE[provider] ?? 'openid'),
     state,
     nonce,
     code_challenge: codeChallenge,
@@ -275,6 +291,7 @@ export async function completeSocialFlow(
   let subject: string | null;
   let email: string | null;
   let emailVerified: boolean;
+  let phone: string | null = null;
   if (PROVIDER_KIND[provider] === 'oauth2') {
     ({ subject, email, emailVerified } = await exchangeOAuth2Userinfo(provider, cfg, currentUrl, stateParam, flow.codeVerifier, fetchImpl));
   } else {
@@ -294,18 +311,21 @@ export async function completeSocialFlow(
     subject = claims?.sub ?? null;
     email = typeof claims?.email === 'string' ? (claims.email as string).trim().toLowerCase() : null;
     emailVerified = claims?.email_verified === true;
+    if (provider === 'telegram') phone = normalizePhone(claims?.phone_number);
   }
   if (!subject) throw new AuthError(502, 'the sign-in provider returned no identity', 'social_exchange_failed');
-  return finishSocialIdentity(store, env, provider, subject, email, emailVerified, flow, now);
+  return finishSocialIdentity(store, env, provider, subject, email, emailVerified, flow, now, phone);
 }
 
 // Shared tail of every provider flow: link to an existing account, sign an
-// existing identity in, or (identity-only providers) park a pending ticket.
+// existing identity in, admit an allowlisted Telegram phone, or park a pending
+// email-proof ticket for other new identity-only registrations.
 export type SocialFlowRecord = {
   deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose;
   linkTo?: string;
   bindHash?: string;
   createdAt?: number;
+  registrationMethod?: 'phone';
 };
 export async function finishSocialIdentity(
   store: CommunityStore,
@@ -316,6 +336,7 @@ export async function finishSocialIdentity(
   emailVerified: boolean,
   flow: SocialFlowRecord,
   now: number,
+  phone: string | null = null,
 ): Promise<SocialLoginResult> {
   const identityKey = `${provider}:${subject}`;
   const rejectDeletedFlow = (s: import('./community-store.js').CommunityState) => {
@@ -335,9 +356,8 @@ export async function finishSocialIdentity(
     // identity to that account. No session is issued here, no account is
     // created, and the registration allowlist/email gate does not apply -
     // the account already exists and proved control with its session when
-    // it started the flow. This is the only path a provider without email
-    // evidence (e.g. Telegram OIDC carries no email claims) can ever take:
-    // it can never register, only attach to an existing account.
+    // it started the flow. This path stays separate from phone/email
+    // registration and never merges accounts by a contact address.
     return store.change((s) => {
       rejectDeletedFlow(s);
       const account = s.accounts[flow.linkTo as string];
@@ -365,7 +385,11 @@ export async function finishSocialIdentity(
       if (!account) throw new AuthError(500, 'account record missing');
     } else {
       // New social registration: fail-closed gate (module header).
-      if (IDENTITY_ONLY_PROVIDERS.has(provider)) {
+      const phoneChosen = provider === 'telegram' && flow.registrationMethod === 'phone';
+      const phoneAllowed = phoneChosen && phone !== null && socialRegistrationAllowedPhones(env).has(phone);
+      if (phoneChosen && !phoneAllowed)
+        throw new AuthError(403, 'sign-in with this provider is not open for new accounts on this deployment', 'social_registration_restricted');
+      if (IDENTITY_ONLY_PROVIDERS.has(provider) && !phoneAllowed) {
         if (!flow.bindHash) throw new AuthError(401, 'sign-in flow expired; start again', 'social_flow_expired');
         const ticket = `bsp_${randomBytes(24).toString('hex')}`;
         const expiresAt = now + PENDING_TTL_MS;
@@ -374,7 +398,7 @@ export async function finishSocialIdentity(
         return { kind: 'email' as const, ticket, expiresAt };
       }
       const allowed = socialRegistrationAllowedEmails(env);
-      if (!email || !emailVerified || !allowed.has(email)) {
+      if (!phoneAllowed && (!email || !emailVerified || !allowed.has(email))) {
         throw new AuthError(403, 'sign-in with this provider is not open for new accounts on this deployment', 'social_registration_restricted');
       }
       const publicKey = Keypair.random().publicKey();
@@ -383,7 +407,7 @@ export async function finishSocialIdentity(
         displayName: null,
         createdAt: now,
         authMethod: 'social',
-        email,
+        ...(email ? { email } : {}),
       } satisfies Account;
       s.socialIdentities[identityKey] = { provider, subject, publicKey, email, createdAt: now, lastLoginAt: now };
       account = s.accounts[publicKey];

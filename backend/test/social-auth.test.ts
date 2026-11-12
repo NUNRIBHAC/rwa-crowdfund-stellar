@@ -38,12 +38,12 @@ const PROVIDER_SCOPES: Record<string, string> = {
 // PKCE check against the challenge seen in the authorization URL) and a
 // signed id_token via jose. userinfo is never needed - the validated
 // id_token claims are the identity source.
-async function makeFakeProvider(provider: string, opts: { email?: string; emailVerified?: boolean; subject?: string }) {
+async function makeFakeProvider(provider: string, opts: { email?: string; emailVerified?: boolean; subject?: string; phone?: string }) {
   const ISSUER = PROVIDER_ISSUERS[provider];
   if (!ISSUER) throw new Error(`no fake for ${provider}`);
   // claims are mutable: tests update them between flows to simulate the
   // provider returning different profile data for the same subject.
-  const claims = { email: opts.email, emailVerified: opts.emailVerified };
+  const claims = { email: opts.email, emailVerified: opts.emailVerified, phone: opts.phone };
   const { publicKey, privateKey } = await jose.generateKeyPair('RS256');
   const publicJwk = await jose.exportJWK(publicKey);
   publicJwk.kid = 'test-key';
@@ -79,6 +79,7 @@ async function makeFakeProvider(provider: string, opts: { email?: string; emailV
         sub: subject,
         email: claims.email,
         email_verified: claims.emailVerified,
+        phone_number: claims.phone,
         nonce: body.get('nonce') ?? (globalThis as any).__testNonce,
       })
         .setProtectedHeader({ alg: 'RS256', kid: 'test-key' })
@@ -121,6 +122,7 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_DISCORD_CLIENT_SECRET',
     'SOCIAL_DISCORD_REDIRECT_URI',
     'SOCIAL_REGISTRATION_ALLOWED_EMAILS',
+    'SOCIAL_REGISTRATION_ALLOWED_PHONES',
     'SOCIAL_VALIDATION_PROVIDERS',
     'FARCASTER_AUTH_DOMAIN',
   ])
@@ -146,14 +148,15 @@ async function driveFlow(
   challengeHolder: { challenge: string | null },
   provider = 'google',
   callbackCookie?: string | null,
+  registrationMethod?: 'phone',
 ) {
-  const start = await fetch(`${base}/api/auth/social/${provider}/start`, { redirect: 'manual' });
+  const start = await fetch(`${base}/api/auth/social/${provider}/start${registrationMethod ? '?registration=phone' : ''}`, { redirect: 'manual' });
   assert.equal(start.status, 302);
   const authUrl = new URL(start.headers.get('location')!);
   assert.ok(authUrl.href.startsWith(PROVIDER_ISSUERS[provider]), `${provider} authorization URL on its issuer`);
   assert.equal(authUrl.searchParams.get('client_id'), CLIENT_ID);
   assert.equal(authUrl.searchParams.get('response_type'), 'code');
-  assert.equal(authUrl.searchParams.get('scope'), PROVIDER_SCOPES[provider]);
+  assert.equal(authUrl.searchParams.get('scope'), registrationMethod === 'phone' ? 'openid profile phone' : PROVIDER_SCOPES[provider]);
   assert.equal(authUrl.searchParams.get('code_challenge_method'), 'S256');
   const state = authUrl.searchParams.get('state')!;
   const nonce = authUrl.searchParams.get('nonce')!;
@@ -1212,4 +1215,44 @@ test('discord oauth2: a non-snowflake id is no identity; provider has no routes 
   const none = await startApp({}, {});
   const r = await fetch(`${none.base}/api/auth/social/discord/start`, { redirect: 'manual' });
   assert.equal(r.status, 404);
+});
+
+test('telegram phone is an explicit alternative; default email remains primary and phone is never stored', async () => {
+  const allowedPhone = '+351 910 000 111';
+  for (const scenario of [
+    { phone: undefined, allowed: allowedPhone, direct: false },
+    { phone: '351910999999', allowed: allowedPhone, direct: false },
+    { phone: '351910000111', allowed: '', direct: false },
+    { phone: 'bad', allowed: allowedPhone, direct: false },
+    { phone: '351910000111', allowed: allowedPhone, direct: true },
+  ]) {
+    const fake = await makeFakeProvider('telegram', { phone: scenario.phone });
+    const { base, store } = await startApp(
+      { ...PROVIDER_CONFS.telegram, SOCIAL_REGISTRATION_ALLOWED_PHONES: scenario.allowed },
+      { socialFetch: fake.fetchImpl },
+    );
+    const primary = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+    assert.ok(primary.headers.get('location')!.startsWith('/account#social-email=bsp_'), 'default stays email even for allowlisted phone');
+    const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram', undefined, 'phone');
+    const loc = cb.headers.get('location')!;
+    assert.ok(loc.startsWith(scenario.direct ? '/account#social-token=bls_' : '/account#social-error=social_registration_restricted'), loc);
+    const data = await store.read();
+    assert.equal(Object.keys(data.accounts).length, scenario.direct ? 1 : 0);
+    assert.ok(!JSON.stringify(data).includes('910000111'), 'phone claim not persisted');
+    if (scenario.direct) {
+      const identity = data.socialIdentities['telegram:telegram-sub-123'];
+      assert.ok(identity);
+      assert.equal(data.accounts[identity.publicKey].email, undefined, 'no email invented or verified');
+      // Existing identities stay bound to their account even if the phone
+      // changes and admission is closed. Enabled TOTP still gates sessions.
+      await store.change((s) => {
+        s.accounts[identity.publicKey].totp = { status: 'enabled' } as never;
+      });
+      process.env.SOCIAL_REGISTRATION_ALLOWED_PHONES = '';
+      fake.claims.phone = '351910999999';
+      const again = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
+      assert.ok(again.headers.get('location')!.startsWith('/account#social-totp=blt_'));
+      assert.equal(Object.keys((await store.read()).accounts).length, 1);
+    }
+  }
 });
