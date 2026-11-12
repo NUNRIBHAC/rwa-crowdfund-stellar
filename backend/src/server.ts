@@ -1,5 +1,5 @@
 import { publicFailure } from './public-errors.js';
-import { sorobanBuildLimiter } from './soroban-build-limiter.js';
+import { sorobanBuildLimiter, sorobanSubmitLimiter } from './soroban-build-limiter.js';
 import { readLimiter } from './read-limiter.js';
 import express from 'express';
 import cors from 'cors';
@@ -543,6 +543,7 @@ app.get('/api/legacy/campaigns', requireAdmin, async (_req, res) => {
   });
 });
 app.use(sorobanBuildLimiter());
+app.use(sorobanSubmitLimiter());
 app.post('/api/campaigns/:id/soroban/build', async (req, res) => {
   try {
     res.json(await buildSoroban(String(req.params.id), req.body ?? {}));

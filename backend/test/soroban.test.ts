@@ -512,3 +512,54 @@ test('refund with a zero balance leaves the amount unrecorded', { skip: !fixture
   const stored = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents[0];
   assert.equal(stored.amount, undefined);
 });
+
+test('identical concurrent submissions coalesce and later retries remain possible', async () => {
+  reset();
+  const built = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  const envelope = signed(built);
+  const original = client.sendTransaction;
+  let finish!: () => void;
+  const blocked = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  let calls = 0;
+  client.sendTransaction = async (tx: Transaction) => {
+    calls++;
+    await blocked;
+    return { hash: Buffer.from(tx.hash()).toString('hex'), status: 'PENDING' };
+  };
+  try {
+    const one = submitSoroban('s1', { actor: actor.publicKey(), xdr: envelope });
+    const two = submitSoroban('s1', { actor: actor.publicKey(), xdr: envelope });
+    while (calls < 1) await new Promise((resolve) => setTimeout(resolve, 1));
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    assert.equal(calls, 1);
+    finish();
+    assert.deepEqual(await one, await two);
+    await submitSoroban('s1', { actor: actor.publicKey(), xdr: envelope });
+    assert.equal(calls, 2, 'a later explicit retry of the same unresolved envelope is allowed');
+  } finally {
+    finish();
+    client.sendTransaction = original;
+  }
+});
+
+test('a failed coalesced submission releases its slot without changing the signed envelope', async () => {
+  reset();
+  const built = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '1' });
+  const envelope = signed(built);
+  throwsOnSend = true;
+  const outcomes = await Promise.allSettled([
+    submitSoroban('s1', { actor: actor.publicKey(), xdr: envelope }),
+    submitSoroban('s1', { actor: actor.publicKey(), xdr: envelope }),
+  ]);
+  assert.deepEqual(
+    outcomes.map((r) => r.status),
+    ['rejected', 'rejected'],
+  );
+  assert.equal(sendCount, 1);
+  throwsOnSend = false;
+  await submitSoroban('s1', { actor: actor.publicKey(), xdr: envelope });
+  assert.equal(sendCount, 2);
+  assert.equal(sends[0], sends[1]);
+});

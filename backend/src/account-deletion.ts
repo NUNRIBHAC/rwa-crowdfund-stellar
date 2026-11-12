@@ -45,18 +45,22 @@ export async function deleteEmailAccount(
     if (wallet && walletRetention !== 'clear') return walletRetention === 'protected' ? 'protected' : 'unavailable';
     // Do not orphan financial, issuer, assessment, operator or fixture-meeting
     // records. No manual request is created by this response.
-    const protectedRecords = [
-      state.contributors,
-      state.applications,
-      state.privateApplicationUploads,
-      state.privateApplicationDeletions,
-      state.companies,
-      state.appropriateness,
-      state.investmentDocuments,
-      state.audit,
-      state.simulatedMeetings,
-    ];
-    if (operatorKeys.includes(key) || protectedRecords.some((records) => JSON.stringify(records ?? {}).includes(key))) return 'protected';
+    const protectedReference =
+      Object.values(state.contributors).some((r) => r.publicKey === key) ||
+      Object.values(state.applications).some((r) => r.publicKey === key || r.reviewedBy === key || r.campaign?.linkedBy === key) ||
+      Object.values(state.privateApplicationUploads?.intents ?? {}).some((r) => r.owner === key) ||
+      Object.values(state.privateApplicationDeletions ?? {}).some((r) => r.owner === key) ||
+      Object.values(state.companies).some((r) => r.publicKey === key) ||
+      Object.values(state.appropriateness).some((r) => r.publicKey === key) ||
+      Object.values(state.investmentDocuments).some((r) => r.createdBy === key || r.approvedBy === key) ||
+      Object.values(state.issuerMessages ?? {}).some((r) => r.investorKey === key || r.authorKey === key) ||
+      state.audit.some((r) => r.actor === key || r.actor === `operator:${key}` || r.target === key) ||
+      Object.values(state.simulatedMeetings ?? {}).some(
+        (r) => r.organizer === key || r.participants.includes(key) || Object.hasOwn(r.ballots, key) || r.audit.some((a) => a.actor === key),
+      );
+    // Free text (description, review notes, audit detail, document content)
+    // cannot create an ownership or retention relationship to another account.
+    if (operatorKeys.includes(key) || protectedReference) return 'protected';
     if (wallet) {
       if (!consumeWalletDeletionProof(state, authorization, input, now)) return 'proof';
     } else if (social) {

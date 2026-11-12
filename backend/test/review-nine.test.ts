@@ -309,3 +309,30 @@ test('R3 Express case-insensitive routes and encoded campaign aliases share the 
     await new Promise<void>((r) => server.close(() => r()));
   }
 });
+
+test('submit gate rejects before handler, with separate build and submit budgets', async () => {
+  const { sorobanSubmitLimiter } = await import('../src/soroban-build-limiter.js');
+  const gate = sorobanSubmitLimiter({ ip: 1 });
+  let calls = 0;
+  const statuses: number[] = [];
+  for (const path of ['/api/campaigns/demo/soroban/build', '/api/campaigns/demo/soroban/submit', '/API/campaigns/%64emo/soroban/submit/']) {
+    let status = 200;
+    gate(
+      { method: 'POST', path, body: { actor: 'wallet' }, header: () => undefined, socket: { remoteAddress: 'one' } } as any,
+      {
+        set() {},
+        status(n: number) {
+          status = n;
+          return this;
+        },
+        json() {},
+      } as any,
+      () => {
+        calls++;
+      },
+    );
+    statuses.push(status);
+  }
+  assert.deepEqual(statuses, [200, 200, 429]);
+  assert.equal(calls, 2);
+});
