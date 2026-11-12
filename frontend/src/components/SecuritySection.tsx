@@ -7,6 +7,7 @@ import { tpl } from '../format';
 // are stored sha256-hashed server-side and addressed by a short hash prefix.
 import { useCallback, useEffect, useState } from 'react';
 import { disableTotp, enableTotp, enrollTotp, fetchSessions, logoutOtherSessions, requestChallenge, revokeSession, startSocialLink } from '../community/api';
+import { socialLinkProofProviders, startSocialLinkProof } from '../community/api';
 import { socialProviderDisplayName } from '../community/social';
 import { signMessage } from '@stellar/freighter-api';
 import type { SessionInfo } from '../community/api';
@@ -26,6 +27,7 @@ export default function SecuritySection() {
     farcasterLink,
     cancelFarcaster,
     startFarcasterLink,
+    startFarcasterLinkProof,
   } = useCommunityAuth();
   const [sessions, setSessions] = useState<SessionInfo[] | null>(null);
   const [error, setError] = useState('');
@@ -33,6 +35,23 @@ export default function SecuritySection() {
   const [busy, setBusy] = useState(false);
   const [linkProvider, setLinkProvider] = useState<string | null>(null);
   const [linkPassword, setLinkPassword] = useState('');
+  const [providerProof, setProviderProof] = useState('');
+  const [proofProviders, setProofProviders] = useState<string[]>([]);
+  useEffect(() => {
+    if (account?.authMethod !== 'social' || !token) {
+      setProviderProof('');
+      setProofProviders([]);
+      return;
+    }
+    socialLinkProofProviders(token)
+      .then((v) => setProofProviders(v.providers))
+      .catch(() => setProofProviders([]));
+    const match = window.location.hash.match(/^#link-proof=(bll_[a-f0-9]{48})$/);
+    if (match) {
+      setProviderProof(match[1]);
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }, [account?.publicKey, account?.authMethod, token]);
 
   const labels = m.community.security;
   const isEmail = account?.authMethod === 'email';
@@ -93,10 +112,18 @@ export default function SecuritySection() {
   // Linking attaches a persistent new sign-in path to this account, so the
   // backend demands a fresh proof of the account's OWN credential first
   // (step-up): the password for email accounts, a fresh wallet signature
-  // for wallet accounts, or a recently-issued session for social accounts.
+  // for wallet accounts, or a dedicated existing-provider identity proof for social accounts.
   const onLink = (provider: string) =>
     run(async () => {
-      const proof: { password?: string; signature?: string } = {};
+      const proof: { password?: string; signature?: string; providerProof?: string } = {};
+      if (account.authMethod === 'social') {
+        if (!providerProof) {
+          setLinkProvider(provider);
+          return;
+        }
+        proof.providerProof = providerProof;
+        setProviderProof('');
+      }
       if (account?.authMethod === 'email') {
         if (!linkPassword) {
           setLinkProvider(provider);
@@ -169,7 +196,32 @@ export default function SecuritySection() {
               <button className="btn" disabled={busy} onClick={() => onLink(p)}>
                 {tpl(labels.linkAction, { provider: socialProviderDisplayName(p) })}
               </button>
-              {linkProvider === p && (
+              {linkProvider === p && isSocial && !providerProof && (
+                <div>
+                  <p className="community-note">{labels.linkNote}</p>
+                  {proofProviders.map((existing) => (
+                    <button
+                      className="btn"
+                      disabled={busy}
+                      key={existing}
+                      onClick={() =>
+                        run(async () => {
+                          if (existing === 'farcaster') {
+                            const proof = await startFarcasterLinkProof?.();
+                            if (proof) setProviderProof(proof);
+                          } else {
+                            const { url } = await startSocialLinkProof(token, existing);
+                            window.location.assign(url);
+                          }
+                        })
+                      }
+                    >
+                      {socialProviderDisplayName(existing)}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {linkProvider === p && isEmail && (
                 <span>
                   <input
                     type="password"

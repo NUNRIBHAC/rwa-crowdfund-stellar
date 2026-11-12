@@ -2051,7 +2051,7 @@ export const fr: Messages = {
     errorSocialExchangeFailed: 'Le fournisseur de connexion a rejeté l’échange. Recommencez.',
     errorSocialRegistrationRestricted: 'La connexion avec ce fournisseur n’est pas encore ouverte aux nouveaux comptes sur ce site.',
     errorSocialIdentityTaken: 'Cette identité du fournisseur est déjà liée à un autre compte.',
-    errorSocialStepupRequired: 'Reconnectez-vous pour lier un fournisseur ; votre session est trop ancienne.',
+    errorSocialStepupRequired: 'Vérifiez une identité de fournisseur déjà liée avant de lier un autre fournisseur.',
     errorSocialStepupFailed: 'La réauthentification a échoué. Vérifiez votre mot de passe ou signez un nouveau défi avec le portefeuille.',
     errorSocialLinkRequiresVerifiedEmail: 'Lier un fournisseur de connexion nécessite un compte avec une adresse e-mail vérifiée.',
     socialLinkedSuccess: 'La connexion avec {provider} est maintenant liée à votre compte.',
@@ -2198,7 +2198,7 @@ export const fr: Messages = {
         'Vous vous connectez en signant un message avec votre portefeuille Stellar : le portefeuille est la clé. Un authentificateur à deux facteurs optionnel peut être ajouté ci-dessous.',
       linkTitle: 'Fournisseurs de connexion',
       linkNote:
-        'Liez une autre méthode de connexion à ce compte. Vous prouverez d’abord qu’il s’agit bien de vous (mot de passe, nouvelle signature du portefeuille ou connexion récente), puis confirmerez auprès du fournisseur.',
+        'Liez une autre méthode de connexion à ce compte. Confirmez votre mot de passe, signez un nouveau défi de portefeuille ou vérifiez une identité déjà liée à ce compte. Confirmez ensuite le nouveau fournisseur.',
       linkAction: 'Lier {provider}',
       linkPasswordLabel: 'Mot de passe actuel',
       linkConfirm: 'Confirmer et continuer',

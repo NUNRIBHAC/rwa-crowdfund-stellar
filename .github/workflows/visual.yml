@@ -33,8 +33,14 @@ jobs:
       - name: Install Chromium
         working-directory: frontend
         run: npx playwright install --with-deps chromium
-      - name: Capture and upload to Argos
+      - name: Capture screenshots
+        working-directory: frontend
+        run: npx playwright test
+      - name: Upload screenshots
+        # No secret ever reaches PR-controlled tests. Only reviewed main can
+        # upload, including manual main runs; branch dispatches stay tokenless.
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         working-directory: frontend
         env:
           ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
-        run: npx playwright test
+        run: node --input-type=module -e "import { upload } from '@argos-ci/core'; await upload({root:'screenshots',files:['**/*.png']});"

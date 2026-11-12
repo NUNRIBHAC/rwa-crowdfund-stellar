@@ -111,7 +111,13 @@ async function rateLimit(kind: 'build' | 'recover', actor: string): Promise<void
     return;
   }
   const now = Date.now();
-  const hits = (rateHits.get(key) ?? []).filter((t) => now - t < 60000);
+  for (const [oldKey, list] of rateHits) {
+    const kept = list.filter((t) => now - t < 60000);
+    if (kept.length) rateHits.set(oldKey, kept);
+    else rateHits.delete(oldKey);
+  }
+  if (!rateHits.has(key) && rateHits.size >= 10000) throw new Error('rate limit exceeded; retry later');
+  const hits = rateHits.get(key) ?? [];
   if (hits.length >= limit) throw new Error(`rate limit exceeded for ${kind}; wait and retry`);
   hits.push(now);
   rateHits.set(key, hits);
@@ -542,10 +548,6 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
   // Phase 1 (no journal lock): every network call - code verification,
   // config read, account load, simulation, assembly.
   const client = sorobanDeps.client();
-  await verifyCode(client, e);
-  const config = await view(client, e, 'get_config');
-  if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
-  if (input.action === 'withdraw' && config.creator !== input.actor) throw new Error('only the creator may prepare withdrawal');
   const account = await client.getAccount(input.actor).catch((e: unknown) => {
     if (/account not found/i.test(e instanceof Error ? e.message : String(e))) {
       const err = new Error('Transaction preparation failed: wallet account does not exist on testnet.');
@@ -554,6 +556,10 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     }
     throw e;
   });
+  await verifyCode(client, e);
+  const config = await view(client, e, 'get_config');
+  if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+  if (input.action === 'withdraw' && config.creator !== input.actor) throw new Error('only the creator may prepare withdrawal');
   // A refund returns the wallet's whole escrowed balance, so the journal
   // (and the share register built from it) records that amount, read from
   // the contract at build time. A client-supplied amount is never trusted

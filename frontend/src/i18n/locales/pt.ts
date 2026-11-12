@@ -2040,7 +2040,7 @@ export const pt: Messages = {
     errorSocialExchangeFailed: 'O fornecedor de início de sessão rejeitou a troca. Tente de novo.',
     errorSocialRegistrationRestricted: 'O início de sessão com este fornecedor ainda não está aberto a novas contas neste site.',
     errorSocialIdentityTaken: 'Essa identidade do fornecedor já está associada a uma conta diferente.',
-    errorSocialStepupRequired: 'Inicie sessão novamente para associar um fornecedor; a sua sessão é demasiado antiga.',
+    errorSocialStepupRequired: 'Verifique uma identidade de fornecedor já associada antes de associar outro fornecedor.',
     errorSocialStepupFailed: 'A reautenticação falhou. Verifique a sua palavra-passe ou assine um novo desafio com a carteira.',
     errorSocialLinkRequiresVerifiedEmail: 'Associar um fornecedor de início de sessão requer uma conta com um e-mail verificado.',
     socialLinkedSuccess: 'O início de sessão com {provider} está agora associado à sua conta.',
@@ -2186,7 +2186,7 @@ export const pt: Messages = {
         'Inicia sessão ao assinar uma mensagem com a sua carteira Stellar: a carteira é a credencial. Pode adicionar abaixo um autenticador de dois fatores opcional.',
       linkTitle: 'Fornecedores de início de sessão',
       linkNote:
-        'Associe outro método de início de sessão a esta conta. Primeiro vai provar que é mesmo você (palavra-passe, assinatura nova da carteira ou um início de sessão recente) e depois confirmar no fornecedor.',
+        'Associe outro método de início de sessão a esta conta. Primeiro confirme a sua palavra-passe, assine um novo desafio da carteira ou verifique uma identidade já associada à conta. Depois confirme o novo fornecedor.',
       linkAction: 'Associar {provider}',
       linkPasswordLabel: 'Palavra-passe atual',
       linkConfirm: 'Confirmar e continuar',

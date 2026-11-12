@@ -209,14 +209,19 @@ export default function SignInPanel({ actor }: { actor: string }) {
             className="display-name-form"
             onSubmit={(e) => {
               e.preventDefault();
-              emailCompleteVerification(pendingVerifyEmail, verifyToken.trim()).catch(() => undefined);
+              emailCompleteVerification(pendingVerifyEmail, verifyToken.trim(), password).catch(() => undefined);
             }}
           >
             <label>
               {m.community.emailVerifyTokenLabel}
               <input value={verifyToken} onChange={(e) => setVerifyToken(e.target.value)} autoComplete="one-time-code" placeholder="blv_..." />
             </label>
-            <button className="btn btn-primary" disabled={busy || !verifyToken.trim()}>
+            <label>
+              {m.community.passwordLabel}
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required />
+            </label>
+            <p className="community-note">{m.community.emailPasswordHint}</p>
+            <button className="btn btn-primary" disabled={busy || !verifyToken.trim() || !password}>
               {m.community.emailVerifySubmit}
             </button>
           </form>
@@ -379,6 +384,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
                 if (emailMode === 'register') {
                   emailSignUp(addr, password)
                     .then(() => {
+                      setPassword('');
                       setPendingVerifyEmail(addr.toLowerCase());
                       setVerifyManualEntry(false);
                       setResent(false);

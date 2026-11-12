@@ -9,7 +9,7 @@ export default defineConfig({
   retries: 0,
   workers: 2,
   fullyParallel: true,
-  reporter: [['list'], ['@argos-ci/playwright/reporter', { uploadToArgos: !!process.env.ARGOS_TOKEN }]],
+  reporter: [['list'], ['@argos-ci/playwright/reporter', { uploadToArgos: false }]],
   use: {
     baseURL: 'http://localhost:4173',
     launchOptions: {

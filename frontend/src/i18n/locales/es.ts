@@ -2046,7 +2046,7 @@ export const es: Messages = {
     errorSocialExchangeFailed: 'El proveedor de inicio de sesión rechazó el intercambio. Empieza de nuevo.',
     errorSocialRegistrationRestricted: 'El inicio de sesión con este proveedor aún no está abierto a cuentas nuevas en este sitio.',
     errorSocialIdentityTaken: 'Esa identidad del proveedor ya está vinculada a una cuenta diferente.',
-    errorSocialStepupRequired: 'Inicia sesión de nuevo para vincular un proveedor; tu sesión es demasiado antigua.',
+    errorSocialStepupRequired: 'Verifica una identidad de proveedor ya vinculada antes de vincular otro proveedor.',
     errorSocialStepupFailed: 'La reautenticación falló. Comprueba tu contraseña o firma un nuevo reto con la cartera.',
     errorSocialLinkRequiresVerifiedEmail: 'Vincular un proveedor de inicio de sesión requiere una cuenta con un correo verificado.',
     socialLinkedSuccess: 'El inicio de sesión con {provider} ahora está vinculado a tu cuenta.',
@@ -2191,7 +2191,7 @@ export const es: Messages = {
         'Inicias sesión firmando un mensaje con tu monedero Stellar: el monedero es la credencial. Abajo puedes añadir un autenticador de dos factores opcional.',
       linkTitle: 'Proveedores de inicio de sesión',
       linkNote:
-        'Vincula otro método de inicio de sesión a esta cuenta. Primero demostrarás que eres tú (contraseña, firma nueva de la cartera o un inicio de sesión reciente) y luego lo confirmarás en el proveedor.',
+        'Vincula otro método de inicio de sesión a esta cuenta. Primero confirma tu contraseña, firma un nuevo desafío de cartera o verifica una identidad ya vinculada a esta cuenta. Después confirma el nuevo proveedor.',
       linkAction: 'Vincular {provider}',
       linkPasswordLabel: 'Contraseña actual',
       linkConfirm: 'Confirmar y continuar',
