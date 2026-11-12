@@ -92,7 +92,7 @@ test('a full page trips the truncation guard and moves nothing', async () => {
   assert.equal(await store.readCheckpoint('qa'), undefined);
 });
 
-test('events without a stable id are skipped rather than duplicated', async () => {
+test('events without a stable id refuse checkpoint advancement', async () => {
   const store = newStore();
   const noId = { ledger: 5, topic: [{ symbol: 'contributed' }], value: 'x' };
   const c = {
@@ -103,9 +103,9 @@ test('events without a stable id are skipped rather than duplicated', async () =
       return { events: [noId, ev('e1', 5)] };
     },
   };
-  const r = await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
-  assert.equal(r.scanned, 1);
-  assert.equal(await store.count('qa'), 1);
+  await assert.rejects(archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store }), /no stable id/);
+  assert.equal(await store.readCheckpoint('qa'), undefined);
+  assert.equal(await store.count('qa'), 0);
 });
 
 test('snapshot round-trips clean and detects tampering', async () => {

@@ -211,3 +211,46 @@ test('late positions response after a wallet switch cannot restore the previous 
   await waitFor(() => expect(screen.queryByText('Session Wallet Solar')).toBeNull());
   expect(screen.getAllByText('Second Wallet Wind').length).toBeGreaterThan(0);
 });
+
+test('R8 saved intent from another wallet is never shown as current activity', async () => {
+  mockAccount = walletAccount(W2);
+  campaignsByActor[W2] = [C2];
+  localStorage.setItem(
+    'rwa-soroban-intent',
+    JSON.stringify({ actor: W1, campaign: 'foreign-wallet-secret-campaign', action: 'contribute', status: 'SUCCESS' }),
+  );
+  show(market(''));
+  await waitFor(() => expect(screen.getAllByText('Second Wallet Wind').length).toBeGreaterThan(0));
+  expect(screen.queryByText('foreign-wallet-secret-campaign')).toBeNull();
+});
+
+test('R8 matching saved intent disappears on wallet switch and signout', async () => {
+  mockAccount = walletAccount(W1);
+  localStorage.setItem('rwa-soroban-intent', JSON.stringify({ actor: W1, campaign: 'saved-wallet-campaign', action: 'contribute', status: 'SUCCESS' }));
+  const mkt = market('');
+  const { rerender } = show(mkt);
+  await waitFor(() => expect(screen.getByText('saved-wallet-campaign')).toBeTruthy());
+  mockAccount = walletAccount(W2);
+  rerender(
+    <I18nProvider>
+      <Account market={mkt} />
+    </I18nProvider>,
+  );
+  await waitFor(() => expect(screen.queryByText('saved-wallet-campaign')).toBeNull());
+  mockAccount = null;
+  rerender(
+    <I18nProvider>
+      <Account market={mkt} />
+    </I18nProvider>,
+  );
+  expect(screen.queryByText('saved-wallet-campaign')).toBeNull();
+});
+
+test('R8 legacy unbound intent is not attributed to a wallet', async () => {
+  mockAccount = walletAccount(W1);
+  campaignsByActor[W1] = [C1];
+  localStorage.setItem('rwa-soroban-intent', JSON.stringify({ campaign: 'unbound-campaign', action: 'contribute', status: 'SUCCESS' }));
+  show(market(''));
+  await waitFor(() => expect(screen.getAllByText('Session Wallet Solar').length).toBeGreaterThan(0));
+  expect(screen.queryByText('unbound-campaign')).toBeNull();
+});

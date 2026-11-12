@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { assertTestSafeDatabaseUrl, assertPooledDatabaseUrlTestSafe, assertExplicitFileStorePath } from './test-storage-guard.js';
 import { StrKey } from '@stellar/stellar-sdk';
 import { createdContractIdsFromMeta } from './soroban.js';
 
@@ -186,7 +187,9 @@ export class PostgresDeploymentManifestStore implements DeploymentManifestStore 
   // init clears itself so the next operation retries instead of reusing a
   // permanently failed store.
   private ready: Promise<void> | null = null;
-  constructor(private pool: import('pg').Pool) {}
+  constructor(private pool: import('pg').Pool) {
+    assertPooledDatabaseUrlTestSafe(pool);
+  }
   private ensureReady(): Promise<void> {
     if (this.ready) return this.ready;
     this.ready = (async () => {
@@ -247,10 +250,12 @@ export async function deploymentManifestBackend(): Promise<DeploymentManifestSto
       throw new Error(
         'deployment manifest requires DEPLOYMENT_MANIFEST_DATABASE_URL, COMMUNITY_DATABASE_URL or SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file manifest',
       );
+    assertTestSafeDatabaseUrl(url, 'DEPLOYMENT_MANIFEST_DATABASE_URL/COMMUNITY_DATABASE_URL/SOROBAN_JOURNAL_DATABASE_URL');
     const { Pool } = await import('pg');
     cached = new PostgresDeploymentManifestStore(new Pool({ connectionString: url }));
     return cached;
   }
+  assertExplicitFileStorePath(process.env.DEPLOYMENT_MANIFEST_PATH, 'DEPLOYMENT_MANIFEST_PATH');
   cached = new FileDeploymentManifestStore(process.env.DEPLOYMENT_MANIFEST_PATH ?? './data/deployment-manifest.json');
   return cached;
 }
