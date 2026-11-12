@@ -2127,6 +2127,10 @@ export const en = {
       linkTitle: 'Sign-in providers',
       linkNote:
         'Link another sign-in method to this account. First prove your password, sign a fresh wallet challenge, or verify an identity already linked to this account. Then confirm the new provider.',
+      linkProofTarget: 'New sign-in method: {provider}',
+      linkProofNote: 'To link {provider}, first confirm an identity already linked to this account. This identity may be from a different provider.',
+      linkProofAction: 'Verify using existing {provider}',
+      linkProofReady: 'Identity confirmed. Select the new sign-in method above to continue.',
       linkAction: 'Link {provider}',
       linkPasswordLabel: 'Current password',
       linkConfirm: 'Confirm and continue',

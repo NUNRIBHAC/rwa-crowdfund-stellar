@@ -2187,6 +2187,10 @@ export const pt: Messages = {
       linkTitle: 'Fornecedores de início de sessão',
       linkNote:
         'Associe outro método de início de sessão a esta conta. Primeiro confirme a sua palavra-passe, assine um novo desafio da carteira ou verifique uma identidade já associada à conta. Depois confirme o novo fornecedor.',
+      linkProofTarget: 'Novo método de início de sessão: {provider}',
+      linkProofNote: 'Para associar {provider}, confirme primeiro uma identidade já associada a esta conta. Esta identidade pode ser de outro fornecedor.',
+      linkProofAction: 'Verificar com a identidade existente de {provider}',
+      linkProofReady: 'Identidade confirmada. Selecione acima o novo método de início de sessão para continuar.',
       linkAction: 'Associar {provider}',
       linkPasswordLabel: 'Palavra-passe atual',
       linkConfirm: 'Confirmar e continuar',

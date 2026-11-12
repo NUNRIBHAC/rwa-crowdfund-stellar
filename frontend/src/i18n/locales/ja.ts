@@ -2106,6 +2106,10 @@ export const ja: Messages = {
       linkTitle: 'サインインプロバイダー',
       linkNote:
         'このアカウントに別のログイン方法を連携します。まずパスワードを確認するか、新しいウォレットのチャレンジに署名するか、連携済みの本人情報を確認してください。その後、新しいプロバイダーで確認します。',
+      linkProofTarget: '新しいログイン方法：{provider}',
+      linkProofNote: '{provider}をリンクするには、このアカウントにリンク済みの本人情報を確認してください。別のプロバイダーでも構いません。',
+      linkProofAction: '既存の{provider}の本人情報で確認',
+      linkProofReady: '本人確認が完了しました。上の新しいログイン方法を選択して続行してください。',
       linkAction: '{provider}をリンク',
       linkPasswordLabel: '現在のパスワード',
       linkConfirm: '確認して続行',

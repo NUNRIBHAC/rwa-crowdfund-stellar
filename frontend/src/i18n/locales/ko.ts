@@ -2087,6 +2087,10 @@ export const ko: Messages = {
       linkTitle: '로그인 제공자',
       linkNote:
         '이 계정에 다른 로그인 방법을 연결합니다. 먼저 비밀번호를 확인하거나 새 지갑 요청에 서명하거나 이미 연결된 제공자의 신원을 확인하세요. 그런 다음 새 제공자에서 확인하세요.',
+      linkProofTarget: '새 로그인 방법: {provider}',
+      linkProofNote: '{provider} 연결을 위해 먼저 이 계정에 이미 연결된 신원을 확인하세요. 다른 제공업체의 신원도 사용할 수 있습니다.',
+      linkProofAction: '기존 {provider} 신원으로 확인',
+      linkProofReady: '신원이 확인되었습니다. 위에서 새 로그인 방법을 선택하여 계속하세요.',
       linkAction: '{provider} 연결',
       linkPasswordLabel: '현재 비밀번호',
       linkConfirm: '확인 후 계속',

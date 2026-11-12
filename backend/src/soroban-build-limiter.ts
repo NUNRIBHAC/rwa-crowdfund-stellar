@@ -13,7 +13,7 @@ export function sorobanBuildLimiter(options: Options = {}): express.RequestHandl
   const hits = new Map<string, number[]>();
   let globalHits: number[] = [];
   return (req, res, next) => {
-    if (req.method !== 'POST' || !/^\/api\/campaigns\/[^/]+\/soroban\/build\/?$/.test(req.path)) return next();
+    if (req.method !== 'POST' || !/^\/api\/campaigns\/[^/]+\/soroban\/build\/?$/i.test(req.path)) return next();
     const now = nowFn();
     const cutoff = now - windowMs;
     // Lazy expiry on every request also bounds distinct-wallet attacks, without
@@ -25,7 +25,14 @@ export function sorobanBuildLimiter(options: Options = {}): express.RequestHandl
     }
     globalHits = globalHits.filter((t) => t > cutoff);
     const actor = typeof req.body?.actor === 'string' && req.body.actor.length <= 64 ? req.body.actor : 'invalid';
-    const campaign = req.path.split('/')[3];
+    let campaign = req.path.split('/')[3];
+    // Express accepts percent-encoded path parameters and case-insensitive
+    // static route segments. Aliases must not create fresh campaign budgets.
+    try {
+      campaign = decodeURIComponent(campaign);
+    } catch {
+      /* Express rejects malformed encodings before its handler. */
+    }
     const buckets: [string, number][] = [
       [`ip:${clientIp(req) ?? 'unknown'}`, limits.ip],
       [`campaign:${campaign}`, limits.campaign],

@@ -171,6 +171,8 @@ test('R2 PR-controlled capture step has no Argos token; upload is restricted to 
   assert.match(upload, /github.event_name == 'workflow_dispatch'/);
   assert.match(upload, /secrets.ARGOS_TOKEN/);
   assert.equal(upload.includes('playwright test'), false);
+  const config = fs.readFileSync(new URL('../../frontend/playwright.config.ts', import.meta.url), 'utf8');
+  assert.equal(config.includes('@argos-ci/playwright/reporter'), false, 'reporter diverts captures into a temporary upload directory, not screenshots');
 });
 
 test('R1 inbox owner selects password during verification, never inherits pre-registration password', async () => {
@@ -257,4 +259,53 @@ test('R3 the live server installs the build gate before the build route', async 
   const fs = await import('node:fs');
   const source = fs.readFileSync(new URL('../src/server.ts', import.meta.url), 'utf8');
   assert.ok(source.indexOf('app.use(sorobanBuildLimiter())') < source.indexOf("app.post('/api/campaigns/:id/soroban/build'"));
+});
+
+test('R8 legacy boolean proxy trust cannot select a caller-supplied leftmost IP', async () => {
+  const { clientIp } = await import('../src/client-ip.js');
+  const old = { trust: process.env.TRUST_PROXY, depth: process.env.TRUST_PROXY_DEPTH };
+  try {
+    process.env.TRUST_PROXY = '1';
+    delete process.env.TRUST_PROXY_DEPTH;
+    assert.equal(clientIp({ header: () => 'attacker, 203.0.113.1', socket: { remoteAddress: '127.0.0.1' } } as any), '127.0.0.1');
+    process.env.TRUST_PROXY_DEPTH = '1';
+    assert.equal(clientIp({ header: () => 'attacker, 203.0.113.1', socket: { remoteAddress: '127.0.0.1' } } as any), '203.0.113.1');
+  } finally {
+    if (old.trust === undefined) delete process.env.TRUST_PROXY;
+    else process.env.TRUST_PROXY = old.trust;
+    if (old.depth === undefined) delete process.env.TRUST_PROXY_DEPTH;
+    else process.env.TRUST_PROXY_DEPTH = old.depth;
+  }
+});
+
+test('R3 Express case-insensitive routes and encoded campaign aliases share the same build budgets', async () => {
+  const express = (await import('express')).default;
+  const { sorobanBuildLimiter } = await import('../src/soroban-build-limiter.js');
+  const app = express();
+  let handlerHits = 0;
+  app.use(express.json());
+  app.use(sorobanBuildLimiter({ global: 100, ip: 100, campaign: 2, actor: 100 }));
+  app.post('/api/campaigns/:id/soroban/build', (_req, res) => {
+    handlerHits++;
+    res.json({ ok: true });
+  });
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise<void>((r) => server.once('listening', r));
+  try {
+    const address = server.address() as import('node:net').AddressInfo;
+    const statuses = [];
+    for (const path of ['/api/campaigns/demo/soroban/build', '/api/campaigns/%64emo/soroban/build', '/API/CAMPAIGNS/demo/SOROBAN/BUILD']) {
+      const response = await fetch(`http://127.0.0.1:${address.port}${path}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: '{"actor":"fresh"}',
+      });
+      await response.arrayBuffer();
+      statuses.push(response.status);
+    }
+    assert.deepEqual(statuses, [200, 200, 429]);
+    assert.equal(handlerHits, 2);
+  } finally {
+    await new Promise<void>((r) => server.close(() => r()));
+  }
 });
