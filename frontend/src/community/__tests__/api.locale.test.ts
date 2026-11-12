@@ -51,7 +51,7 @@ describe('HTTP failure without server text is localized', () => {
       'fetch',
       vi.fn(async () => new Response('bad gateway', { status: 502 })),
     );
-    await expect(emailResend('a@b.c')).rejects.toThrow('502');
+    await expect(emailResend('a@b.c')).rejects.toThrow('فشل طلب الواجهة البرمجية');
     await expect(emailResend('a@b.c')).rejects.not.toThrow(/Request failed/);
   });
 });
@@ -61,7 +61,7 @@ describe('backend error codes are localized at the API layer', () => {
     vi.unstubAllGlobals();
     localStorage.clear();
   });
-  it('maps a known code to the stored language and keeps unknown server text', async () => {
+  it('maps a known code to the stored language and hides unknown server text', async () => {
     localStorage.setItem('blockallisto-language', 'pt');
     vi.stubGlobal(
       'fetch',
@@ -72,14 +72,14 @@ describe('backend error codes are localized at the API layer', () => {
       'fetch',
       vi.fn(async () => new Response(JSON.stringify({ error: 'some new server text', code: 'brand_new' }), { status: 400 })),
     );
-    await expect(emailResend('a@b.c')).rejects.toThrow('some new server text');
+    await expect(emailResend('a@b.c')).rejects.toThrow('O pedido à API falhou');
   });
-  it('keeps validation detail after the localized lead', async () => {
+  it('shows the localized validation lead without raw English detail', async () => {
     localStorage.setItem('blockallisto-language', 'de');
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => new Response(JSON.stringify({ error: 'invalid input: amount required', code: 'invalid_input' }), { status: 400 })),
     );
-    await expect(emailResend('a@b.c')).rejects.toThrow('amount required');
+    await expect(emailResend('a@b.c')).rejects.not.toThrow('amount required');
   });
 });

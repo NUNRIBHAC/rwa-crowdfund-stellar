@@ -104,7 +104,7 @@ test('failing operator endpoints surface the error banner with retry, not fake d
   });
   setup();
   await waitFor(() => expect(screen.queryByRole('alert')).toBeTruthy());
-  expect(screen.getByRole('alert').textContent).toContain('operator endpoints disabled');
+  expect(screen.getByRole('alert').textContent).toContain('API request failed');
   expect(screen.queryByText('staging-load')).toBeNull();
 });
 
@@ -350,7 +350,7 @@ for (const tab of ['News', 'Reports'])
     fireEvent.click(button);
     await waitFor(() => expect(writes.length).toBe(1));
     expect(writes[0].body).toMatchObject({ title: 'Synthetic title', body: 'Synthetic body' });
-    expect((await screen.findByRole('alert')).textContent).toContain('Synthetic server refusal');
+    expect((await screen.findByRole('alert')).textContent).toContain('API request failed');
     expect(screen.queryByText(tab === 'News' ? 'News post published.' : 'Report published as platform demo content.')).toBeNull();
   });
 
@@ -398,7 +398,7 @@ test('synthetic loading state resolves and a failed independent read does not bl
   await waitFor(() => expect(release).toBeTruthy());
   release!(new Response(JSON.stringify({ applications: [APP_FIXTURE] })));
   expect(await screen.findByText('Synthetic project')).toBeTruthy();
-  expect((await screen.findByRole('alert')).textContent).toContain('Synthetic comments unavailable');
+  expect((await screen.findByRole('alert')).textContent).toContain('API request failed');
   fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
   await waitFor(() => expect(attempts).toBe(2));
   fireEvent.click(screen.getByRole('button', { name: 'Comments' }));
@@ -430,7 +430,7 @@ test('synthetic application refusal leaves truthful error and no success notice'
   workflowFetch({}, true);
   setup();
   fireEvent.click(await screen.findByRole('button', { name: 'Approve' }));
-  expect((await screen.findByRole('alert')).textContent).toContain('Synthetic server refusal');
+  expect((await screen.findByRole('alert')).textContent).toContain('API request failed');
   expect(screen.queryByText('Status updated.')).toBeNull();
 });
 

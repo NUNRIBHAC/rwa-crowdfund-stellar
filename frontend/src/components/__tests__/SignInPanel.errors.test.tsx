@@ -1,6 +1,6 @@
 // Localized API error mapping: known backend error codes render in the
 // active catalog language (never raw English server text), while unknown
-// failures pass through verbatim - honest, never masked.
+// failures use a localized fallback without exposing server diagnostics.
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { I18nProvider } from '../../i18n';
@@ -68,10 +68,10 @@ describe('SignInPanel API error mapping', () => {
     expect(screen.getByRole('alert').textContent).not.toContain('email provider not configured');
   });
 
-  it('unknown failures pass through verbatim (honest fallback)', async () => {
+  it('unknown failures use a localized fallback', async () => {
     await renderAndSubmitEmail({ error: 'weird upstream condition 7' }, 500);
     await waitFor(() => {
-      expect(screen.getByRole('alert').textContent).toContain('weird upstream condition 7');
+      expect(screen.getByRole('alert').textContent).toContain('API request failed');
     });
   });
 });
@@ -123,10 +123,10 @@ describe('SignInPanel TOTP error mapping', () => {
     expect(screen.getByRole('alert').textContent).not.toContain('invalid or expired ticket');
   });
 
-  it('code-less TOTP failures pass through verbatim (honest fallback)', async () => {
+  it('code-less TOTP failures use a localized fallback', async () => {
     await renderAndSubmitTotpCode({ error: 'unexpected totp backend state 3' }, 500);
     await waitFor(() => {
-      expect(screen.getByRole('alert').textContent).toContain('unexpected totp backend state 3');
+      expect(screen.getByRole('alert').textContent).toContain('API request failed');
     });
   });
 });

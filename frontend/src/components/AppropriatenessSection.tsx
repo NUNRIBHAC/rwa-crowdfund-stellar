@@ -110,11 +110,10 @@ export default function AppropriatenessSection() {
       })
       .catch((e) => {
         const msg = e instanceof Error ? e.message : String(e);
-        // Branch on the stable server code (messages are localized); the
-        // English substrings stay as a fallback for uncoded legacy responses.
+        // Branch on stable codes; user-facing messages are always localized.
         const code = e instanceof ApiError ? e.code : undefined;
-        if (code === 'feature_unavailable' || msg.includes('disabled on this deployment')) setState('held');
-        else if (code === 'feature_restricted' || msg.includes('limited to designated')) setState('limited');
+        if (code === 'feature_unavailable') setState('held');
+        else if (code === 'feature_restricted') setState('limited');
         else {
           setError(msg);
           setState('error');

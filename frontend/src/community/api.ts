@@ -1,4 +1,4 @@
-import { localizedApiError, requestFailedMessage, storedLocale } from '../i18n';
+import { localizedApiError, storedLocale } from '../i18n';
 // Community API client: wallet-authenticated accounts, comments, news,
 // support/feedback tickets, issuer applications and campaign metadata.
 // Matches backend/src/community-routes.ts + accounts.ts on
@@ -138,35 +138,26 @@ export function saveCommunityToken(token: string) {
   }
 }
 
-// API error with the backend's stable machine-readable code (when it sent
-// one) so the UI can localize known failures instead of showing raw English
-// server text. Unknown/absent code: the raw message is shown as-is.
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    public readonly code?: string,
-  ) {
-    super(message);
-  }
-}
+export { ApiError } from '../http';
+import { ApiError, responseCall } from '../http';
 
 async function call<T>(url: string, opts: { method?: string; body?: unknown; token?: string } = {}): Promise<T> {
   const headers: Record<string, string> = {};
   if (opts.body !== undefined) headers['Content-Type'] = 'application/json';
   if (opts.token) headers.Authorization = `Bearer ${opts.token}`;
-  const r = await fetch(url, {
-    method: opts.method ?? (opts.body !== undefined ? 'POST' : 'GET'),
-    headers,
-    body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
-  });
-  const v = (await r.json().catch(() => ({}))) as { error?: string; code?: string };
-  if (!r.ok) {
-    const local = localizedApiError(v.code);
-    // Validation keeps its field detail (server text) after the localized lead.
-    const detail = v.code === 'invalid_input' && v.error ? ` (${v.error.replace(/^invalid input: /, '')})` : '';
-    throw new ApiError(local ? local + detail : (v.error ?? requestFailedMessage(r.status)), v.code);
-  }
-  return v as T;
+  return responseCall(
+    url,
+    {
+      method: opts.method ?? (opts.body !== undefined ? 'POST' : 'GET'),
+      headers,
+      body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
+    },
+    async (response) => {
+      const value: unknown = await response.json();
+      if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('invalid API object');
+      return value as T;
+    },
+  );
 }
 
 // --- Auth ---
@@ -267,17 +258,15 @@ export const fetchInvestmentDocuments = (token: string, campaignId: string) =>
 // Authorized download: fetches the file with the session bearer and hands a
 // blob to the caller (no token in any URL).
 export async function downloadInvestmentDocument(token: string, docId: string, signal?: AbortSignal): Promise<{ blob: Blob; filename: string }> {
-  const r = await fetch(`/api/investment-documents/${encodeURIComponent(docId)}/download`, {
-    headers: { Authorization: `Bearer ${token}` },
-    signal,
-  });
-  if (!r.ok) {
-    const v = (await r.json().catch(() => ({}))) as { error?: string; code?: string };
-    throw new Error(localizedApiError(v.code) ?? v.error ?? requestFailedMessage(r.status));
-  }
-  const dispo = r.headers.get('content-disposition') ?? '';
-  const m = /filename="([^"]+)"/.exec(dispo);
-  return { blob: await r.blob(), filename: m?.[1] ?? `${docId}.txt` };
+  return responseCall(
+    `/api/investment-documents/${encodeURIComponent(docId)}/download`,
+    { headers: { Authorization: `Bearer ${token}` }, signal },
+    async (r) => {
+      const dispo = r.headers.get('content-disposition') ?? '';
+      const m = /filename="([^"]+)"/.exec(dispo);
+      return { blob: await r.blob(), filename: m?.[1] ?? `${docId}.txt` };
+    },
+  );
 }
 
 // --- Campaign metadata / documents ---
@@ -320,18 +309,14 @@ export type ReportsResult =
 export async function fetchReports(campaignId: string, token: string): Promise<ReportsResult> {
   if (!token) return { ok: false, reason: 'unauthenticated' };
   try {
-    const r = await fetch(`/api/campaigns/${encodeURIComponent(campaignId)}/reports`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const v = (await r.json().catch(() => ({}))) as { reports?: PostFundingReport[]; error?: string; code?: string };
-    if (r.ok) return { ok: true, reports: v.reports ?? [] };
-    const text = localizedApiError(v.code) ?? v.error;
-    if (r.status === 401) return { ok: false, reason: 'unauthenticated', message: text };
-    if (r.status === 403) return { ok: false, reason: 'not-investor', message: text };
-    if (r.status === 404) return { ok: false, reason: 'unknown-campaign', message: text };
-    return { ok: false, reason: 'unavailable', message: text ?? requestFailedMessage(r.status) };
+    const value = await call<{ reports: PostFundingReport[] }>(`/api/campaigns/${encodeURIComponent(campaignId)}/reports`, { token });
+    if (!Array.isArray(value.reports)) throw new ApiError(localizedApiError('API_UNAVAILABLE'), 'API_UNAVAILABLE');
+    return { ok: true, reports: value.reports };
   } catch (e) {
-    return { ok: false, reason: 'unavailable', message: e instanceof Error ? e.message : String(e) };
+    const message = e instanceof ApiError ? e.message : localizedApiError('API_UNAVAILABLE');
+    const status = e instanceof ApiError ? e.status : undefined;
+    const reason = status === 401 ? 'unauthenticated' : status === 403 ? 'not-investor' : status === 404 ? 'unknown-campaign' : 'unavailable';
+    return { ok: false, reason, message };
   }
 }
 
@@ -669,22 +654,33 @@ export const farcasterVerify = (nonce: string, message: string, signature: strin
   });
 
 const FARCASTER_RELAY = 'https://relay.farcaster.xyz/v1';
-export const farcasterCreateChannel = async (nonce: string, domain: string, siweUri: string) => {
-  const r = await fetch(`${FARCASTER_RELAY}/channel`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nonce, domain, siweUri }),
-  });
-  const j = (await r.json().catch(() => ({}))) as { channelToken?: string; url?: string };
-  if (!r.ok || typeof j.channelToken !== 'string' || typeof j.url !== 'string' || !/^https:\/\//.test(j.url))
-    throw new ApiError('Farcaster relay unavailable', 'social_exchange_failed');
-  return { channelToken: j.channelToken, url: j.url };
-};
-export const farcasterChannelStatus = async (channelToken: string) => {
-  const r = await fetch(`${FARCASTER_RELAY}/channel/status`, { headers: { Authorization: `Bearer ${channelToken}`, 'Content-Type': 'application/json' } });
-  const j = (await r.json().catch(() => ({}))) as { state?: string; message?: string; signature?: string };
-  return { state: r.ok ? (j.state ?? 'pending') : 'error', message: j.message, signature: j.signature };
-};
+export const farcasterCreateChannel = async (nonce: string, domain: string, siweUri: string) =>
+  responseCall(
+    `${FARCASTER_RELAY}/channel`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nonce, domain, siweUri }),
+    },
+    async (r) => {
+      const j = (await r.json()) as { channelToken?: string; url?: string };
+      if (!j || typeof j.channelToken !== 'string' || typeof j.url !== 'string' || !/^https:\/\//.test(j.url))
+        throw new ApiError(localizedApiError('social_exchange_failed'), 'social_exchange_failed');
+      return { channelToken: j.channelToken, url: j.url };
+    },
+  );
+export const farcasterChannelStatus = async (channelToken: string) =>
+  responseCall(
+    `${FARCASTER_RELAY}/channel/status`,
+    {
+      headers: { Authorization: `Bearer ${channelToken}`, 'Content-Type': 'application/json' },
+    },
+    async (r) => {
+      const j = (await r.json()) as { state?: string; message?: string; signature?: string };
+      if (!j || typeof j.state !== 'string') throw new ApiError(localizedApiError('API_UNAVAILABLE'), 'API_UNAVAILABLE');
+      return { state: j.state, message: j.message, signature: j.signature };
+    },
+  );
 
 export const farcasterLinkNonce = (token: string, proof: { password?: string; signature?: string; providerProof?: string }) =>
   call<{ nonce: string; domain: string; siweUri: string }>('/api/auth/farcaster/link/nonce', { token, body: proof });
@@ -748,12 +744,11 @@ export const uploadApplicationDocument = (token: string, id: string, filename: s
 export const linkApplicationCampaign = (token: string, id: string, campaignId: string) =>
   call<{ ok: true }>(`/api/operator/issuer-applications/${encodeURIComponent(id)}/campaign`, { method: 'POST', token, body: { campaignId } });
 export async function readApplicationDocument(token: string, id: string, documentId: string, operator = false) {
-  const response = await fetch(
+  return responseCall(
     `${operator ? '/api/operator' : '/api'}/issuer-applications/${encodeURIComponent(id)}/documents/${encodeURIComponent(documentId)}`,
     { headers: { authorization: `Bearer ${token}` }, cache: 'no-store' },
+    (response) => response.text(),
   );
-  if (!response.ok) throw new Error(requestFailedMessage(response.status));
-  return response.text();
 }
 
 export type DemoJourneyAction = 'submit_application' | 'attach_document' | 'review' | 'approve' | 'create_campaign' | 'complete_onboarding' | 'contribute';

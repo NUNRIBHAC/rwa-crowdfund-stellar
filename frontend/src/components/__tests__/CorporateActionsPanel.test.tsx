@@ -96,7 +96,7 @@ test('synthetic no-campaign state has no actionable load or preview controls', (
 test('synthetic read failure exposes error without inventing a cap table', async () => {
   vi.stubGlobal('fetch', async () => new Response(JSON.stringify({ error: 'Synthetic cap table unavailable' }), { status: 503 }));
   setup();
-  expect((await screen.findByRole('alert')).textContent).toContain('Synthetic cap table unavailable');
+  expect((await screen.findByRole('alert')).textContent).toContain('API request failed');
   expect(screen.queryByRole('table')).toBeNull();
 });
 test('synthetic loading disables duplicate load and blank preview remains disabled', async () => {
@@ -140,7 +140,7 @@ test('synthetic preview refusal never shows a successful allocation', async () =
   await screen.findByRole('table');
   fireEvent.change(screen.getByRole('textbox'), { target: { value: 'bad' } });
   fireEvent.click(screen.getByRole('button', { name: /preview distribution/i }));
-  expect((await screen.findByRole('alert')).textContent).toContain('Synthetic preview refused');
+  expect((await screen.findByRole('alert')).textContent).toContain('API request failed');
   expect(screen.queryByRole('status')).toBeNull();
 });
 
