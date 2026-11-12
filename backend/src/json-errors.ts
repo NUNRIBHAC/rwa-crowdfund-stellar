@@ -1,6 +1,9 @@
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 
-export const apiNotFound: RequestHandler = (_req, res) => {
+export const apiNotFound: RequestHandler = (req, res, next) => {
+  // The production host mounts static assets and SPA routes after the API.
+  // Match the API boundary exactly, leaving /apiary and page paths alone.
+  if (req.path !== '/api' && !req.path.startsWith('/api/')) return next();
   res.status(404).json({ error: 'not found', code: 'not_found' });
 };
 
