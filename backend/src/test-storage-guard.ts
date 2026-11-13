@@ -1,3 +1,7 @@
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+
 // Fail-closed test isolation: a test process must never open a Postgres
 // connection to a non-local database. Test runs inherit the environment of
 // the shell that launched them; when that shell is inside a live deployment
@@ -82,17 +86,51 @@ export function assertPooledDatabaseUrlTestSafe(pool: unknown, env: NodeJS.Proce
   }
 }
 
-// G2: file-backed stores default to paths under the process working
-// directory. A suite launched with an inherited cwd inside a live deployment
-// (container WorkDir /app) would then mutate the live app's data files. In
-// test processes the default is refused: every file store must point at an
-// explicit, isolated per-test path. Runtime behavior outside test processes
-// is unchanged - the defaults remain for normal operation.
+// Community test storage must be issued by this process, not authorized by an
+// inherited environment string. Other file stores retain their existing guard.
+const communityTestRoots = new Map<string, { dev: number; ino: number }>();
+export function createCommunityTestDirectory(): string {
+  if (!isTestProcess()) throw new Error('community test directories are available only in test processes');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'community-isolated-test-'));
+  fs.chmodSync(root, 0o700);
+  const canonical = fs.realpathSync(root);
+  const stat = fs.statSync(canonical);
+  communityTestRoots.set(canonical, { dev: stat.dev, ino: stat.ino });
+  return canonical;
+}
+
+// Undefined and empty values never authorize a test file. For community storage,
+// reject inherited live paths, traversal and symlinks, even if explicitly set.
 export function assertExplicitFileStorePath(explicitPath: string | undefined, sourceVar: string, env: NodeJS.ProcessEnv = process.env): void {
   if (!isTestProcess(env)) return;
-  if (explicitPath === undefined) {
-    throw new Error(
-      `test isolation: ${sourceVar} is not set in a test process; refusing the working-directory default, which can point at live deployment data. Set ${sourceVar} to an isolated per-test path.`,
-    );
+  if (explicitPath === undefined || explicitPath.trim() === '') {
+    throw new Error(`test isolation: ${sourceVar} is not set in a test process; use an explicit isolated per-test path`);
+  }
+  if (sourceVar !== 'COMMUNITY_STORE_PATH') return;
+  const fail = () => {
+    throw new Error('test isolation: COMMUNITY_STORE_PATH must be a file directly inside a process-issued community test directory');
+  };
+  if (!path.isAbsolute(explicitPath) || path.normalize(explicitPath) !== explicitPath) return fail();
+  const parent = path.dirname(explicitPath);
+  const registered = communityTestRoots.get(parent);
+  if (!registered) return fail();
+  try {
+    const stat = fs.lstatSync(parent);
+    if (!stat.isDirectory() || stat.isSymbolicLink() || stat.dev !== registered.dev || stat.ino !== registered.ino || fs.realpathSync(parent) !== parent)
+      return fail();
+    if (fs.existsSync(explicitPath)) {
+      const file = fs.lstatSync(explicitPath);
+      if (!file.isFile() || file.isSymbolicLink() || file.nlink !== 1) return fail();
+    } else {
+      // existsSync follows links; a dangling link still has an lstat entry.
+      try {
+        fs.lstatSync(explicitPath);
+        return fail();
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+      }
+    }
+  } catch {
+    return fail();
   }
 }

@@ -1,15 +1,15 @@
+import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Keypair } from '@stellar/stellar-sdk';
 import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 import { FileCommunityStore } from '../src/community-store.js';
 import { communityServiceFromEnv } from '../src/community-routes.js';
 import { runPrivateApplicationCleanup } from '../src/private-application-runtime.js';
 
 test('real server + env factory + fake OCI: private upload/read/delete/cleanup and freeze after Submit', async () => {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'private-server-'));
+  const dir = createCommunityTestDirectory();
   const file = path.join(dir, 'store.json');
   const owner = Keypair.random(),
     outsider = Keypair.random(),

@@ -1,12 +1,12 @@
+import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 import { Keypair } from '@stellar/stellar-sdk';
 
 test('real default server advertises legacy mode, accepts inline upload and never enables private transport', async () => {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'legacy-upload-server-'));
+  const dir = createCommunityTestDirectory();
   const previous = { store: process.env.COMMUNITY_STORE_PATH, mode: process.env.COMMUNITY_APPLICATION_UPLOAD_MODE };
   process.env.COMMUNITY_STORE_PATH = path.join(dir, 'community.json');
   delete process.env.COMMUNITY_APPLICATION_UPLOAD_MODE;

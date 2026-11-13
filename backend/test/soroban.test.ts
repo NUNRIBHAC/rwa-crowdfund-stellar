@@ -1,8 +1,8 @@
+import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import {
   Account,
@@ -30,7 +30,7 @@ import {
   confirmedContribution,
   deriveContributionFromNetwork,
 } from '../src/soroban.js';
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'soroban-api-'));
+const tmp = createCommunityTestDirectory();
 const actor = Keypair.random();
 const contractId = StrKey.encodeContract(Buffer.alloc(32, 2));
 process.env.STELLAR_NETWORK = 'testnet';
