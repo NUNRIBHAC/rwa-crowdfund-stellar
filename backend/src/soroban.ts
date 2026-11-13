@@ -1238,6 +1238,13 @@ function v2NextStep(
 ): { action: string; tokenContractId?: string; offeringContractId?: string } {
   const ok = (action: string) => campaignIntents.some((i) => i.action === action && i.status === 'SUCCESS');
   const cid = (action: string) => campaignIntents.find((i) => i.action === action && i.status === 'SUCCESS')?.contractId;
+  // A confirmed create without its verified durable contract id is not a
+  // failed create. Only the original hash may be reconciled, never replaced.
+  for (const action of ['deploy-v2-create-token', 'deploy-v2-create-offering']) {
+    if (ok(action) && !cid(action)) {
+      throw new Error(`successful ${action} has no durable contract id; reconcile the exact original hash before building another transaction`);
+    }
+  }
   if (!ok('deploy-v2-upload-token') && !tokenOnLedger) return { action: 'deploy-v2-upload-token' };
   if (!ok('deploy-v2-upload-offering') && !offeringOnLedger) return { action: 'deploy-v2-upload-offering' };
   const tokenContractId = cid('deploy-v2-create-token');
