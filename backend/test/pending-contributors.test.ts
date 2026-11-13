@@ -50,6 +50,7 @@ test('drain writes fact-complete entries without any network call and removes th
     },
   });
   assert.equal(res.pending, 0);
+  assert.equal(res.drained, 1);
   assert.deepEqual(recorded, [`demo-solar:${'G' + 'A'.repeat(55)}`]);
   assert.deepEqual(readPending(), []);
 });
@@ -66,6 +67,7 @@ test('drain re-derives hash-only entries from the network (post-prune safe)', as
   });
   assert.deepEqual(derived, [H1]);
   assert.equal(res.pending, 0);
+  assert.equal(res.drained, 1);
   assert.deepEqual(readPending(), []);
 });
 
@@ -78,6 +80,7 @@ test('failed drains keep proofs queued with lastError (extended outage survival)
     derive: async () => null,
   });
   assert.equal(res.pending, 1);
+  assert.equal(res.drained, 0);
   const after = readPending();
   assert.equal(after[0].hash, H1);
   assert.match(after[0].lastError ?? '', /still down/);
@@ -91,4 +94,23 @@ test('journal terminal pruning would drop the row, but the pending queue preserv
   assert.equal(pruneIntents(intents).length, 0, 'journal prunes the terminal row after retention');
   pendContribution({ hash: H1, campaignId: 'demo-solar', contributor: 'G' + 'A'.repeat(55), lastError: 'deferred' });
   assert.equal(readPending().length, 1, 'pending queue still holds the durable proof');
+});
+
+test('drained counts successful writes, not dropped proofs or failed writes', async () => {
+  for (const [hash, campaignId] of [
+    ['a'.repeat(64), 'ok'],
+    ['b'.repeat(64), 'fail'],
+    ['c'.repeat(64), undefined],
+  ])
+    pendContribution({ hash, campaignId, contributor: campaignId ? 'G' + 'A'.repeat(55) : undefined });
+  const result = await drainPendingContributors({
+    record: async (c) => {
+      if (c === 'fail') throw new Error('retry');
+    },
+    derive: async () => null,
+  });
+  assert.deepEqual(result, { drained: 1, pending: 1 });
+  assert.equal(readPending()[0].campaignId, 'fail');
+  assert.deepEqual(await drainPendingContributors({ record: async () => {}, derive: async () => null }), { drained: 1, pending: 0 });
+  assert.deepEqual(await drainPendingContributors({ record: async () => {}, derive: async () => null }), { drained: 0, pending: 0 });
 });

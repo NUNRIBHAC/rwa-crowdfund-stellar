@@ -98,6 +98,7 @@ export async function drainPendingContributors(deps: {
   record: (campaignId: string, contributor: string) => Promise<void>;
   derive: (hash: string) => Promise<{ campaignId: string; contributor: string } | null>;
 }): Promise<{ drained: number; pending: number }> {
+  let drained = 0;
   for (const entry of readPending()) {
     try {
       let facts = entry.campaignId && entry.contributor ? { campaignId: entry.campaignId, contributor: entry.contributor } : null;
@@ -112,10 +113,11 @@ export async function drainPendingContributors(deps: {
       }
       await deps.record(facts.campaignId, facts.contributor);
       clearPending(entry.hash);
+      drained += 1;
     } catch (err) {
       pendContribution({ ...entry, lastError: err instanceof Error ? err.message : String(err) });
     }
   }
   const rest = readPending();
-  return { drained: 0, pending: rest.length };
+  return { drained, pending: rest.length };
 }
