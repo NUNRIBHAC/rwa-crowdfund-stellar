@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { argosScreenshot } from '@argos-ci/playwright';
 import { PUBLIC_PAGES, VISUAL_LOCALES, VISUAL_WIDTHS } from './inventory';
 

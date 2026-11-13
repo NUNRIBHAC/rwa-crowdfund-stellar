@@ -9,13 +9,16 @@ COPY backend/package.json backend/
 COPY frontend/package.json frontend/
 RUN npm ci
 COPY . .
+ARG VITE_PUBLIC_MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev
+ENV VITE_PUBLIC_MEDIA_ORIGIN=$VITE_PUBLIC_MEDIA_ORIGIN
 RUN npm run build
 RUN node backend/scripts/check-reviewed-wasm.mjs
 
 FROM node:24-alpine AS runtime
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
-    PORT=4000
+    PORT=4000 \
+    MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY backend/package.json backend/

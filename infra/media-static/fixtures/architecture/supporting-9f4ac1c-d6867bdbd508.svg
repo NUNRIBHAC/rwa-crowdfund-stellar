@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1170" viewBox="0 0 1440 1170" role="img" aria-labelledby="title desc" font-family="Arial, Helvetica, sans-serif">
+<title id="title">Delivery, documentation and held code - source 9f4ac1c</title>
+<desc id="desc">Reviewed releases, app-only builds, translations and explicit QA limits. Release snapshot: 13 Nov 2026. CI checks are not wallet acceptance. No automatic demo deployment or QA completeness claim.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#688a78"/></marker></defs>
+<rect width="1440" height="1170" rx="16" fill="#f4f5f7"/>
+<text x="32" y="51" font-size="15" fill="#59636e" font-weight="700">BLOCKALLISTO / ARCHITECTURE / 13 NOV 2026</text>
+<text x="32" y="96" font-size="35" fill="#1f2328" font-weight="700">Delivery, documentation and held code</text>
+<text x="32" y="130" font-size="19" fill="#59636e" font-weight="400">Reviewed releases, app-only builds, translations and explicit QA limits</text>
+<text x="1408" text-anchor="end" y="51" font-size="15" fill="#1f883d" font-weight="700">main 9f4ac1c</text>
+<text x="32" y="166" font-size="15" fill="#59636e" font-weight="700">BUILD AND TEST</text>
+<rect x="32" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="219" font-size="22" fill="#1f2328" font-weight="700">Source and CI</text>
+<text x="51" y="253" font-size="17" fill="#59636e" font-weight="400">JavaScript / Rust / secret scan gates</text>
+<text x="51" y="280" font-size="17" fill="#59636e" font-weight="400">Pinned toolchains and Wasm checks</text>
+<text x="51" y="323" font-size="13" fill="#59636e" font-weight="400">.github/workflows</text>
+<path d="M470 267 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="380" font-size="13" fill="#59636e" font-weight="400">reviewed source</text>
+<rect x="502" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="219" font-size="22" fill="#1f2328" font-weight="700">App-only builder</text>
+<text x="521" y="253" font-size="17" fill="#59636e" font-weight="400">BuildKit 0.35.0 / app-oled</text>
+<text x="521" y="280" font-size="17" fill="#59636e" font-weight="400">OCI worker state on OLED; no TCP</text>
+<text x="521" y="323" font-size="13" fill="#59636e" font-weight="400">infra/build-app-image.sh</text>
+<path d="M940 267 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="380" font-size="13" fill="#59636e" font-weight="400">load, not activate</text>
+<rect x="972" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="219" font-size="22" fill="#1f2328" font-weight="700">Docker image</text>
+<text x="991" y="253" font-size="17" fill="#59636e" font-weight="400">Explicit linux-arm64 build and load</text>
+<text x="991" y="280" font-size="17" fill="#59636e" font-weight="400">Final image still uses root storage</text>
+<text x="991" y="323" font-size="13" fill="#59636e" font-weight="400">Dockerfile</text>
+<text x="32" y="391" font-size="15" fill="#59636e" font-weight="700">RELEASE ACTIVATION</text>
+<rect x="32" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="444" font-size="22" fill="#1f2328" font-weight="700">Approved release helper</text>
+<text x="51" y="478" font-size="17" fill="#59636e" font-weight="400">Explicit target and expected prior image</text>
+<text x="51" y="505" font-size="17" fill="#59636e" font-weight="400">Health, runtime and disk gates</text>
+<text x="51" y="548" font-size="13" fill="#59636e" font-weight="400">docs/app-oled-builder.md</text>
+<path d="M470 492 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="605" font-size="13" fill="#59636e" font-weight="400">approved target only</text>
+<rect x="502" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="444" font-size="22" fill="#1f2328" font-weight="700">Compose activation</text>
+<text x="521" y="478" font-size="17" fill="#59636e" font-weight="400">Use built image with --no-build</text>
+<text x="521" y="505" font-size="17" fill="#59636e" font-weight="400">Does not select a global builder</text>
+<text x="521" y="548" font-size="13" fill="#59636e" font-weight="400">infra</text>
+<path d="M940 492 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="605" font-size="13" fill="#59636e" font-weight="400">verify actual deployment</text>
+<rect x="972" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="444" font-size="22" fill="#1f2328" font-weight="700">Oracle-hosted apps</text>
+<text x="991" y="478" font-size="17" fill="#59636e" font-weight="400">Staging: PR172 / source 9f4ac1c</text>
+<text x="991" y="505" font-size="17" fill="#59636e" font-weight="400">Demo: source cd6eddc / not auto-main</text>
+<text x="991" y="548" font-size="13" fill="#59636e" font-weight="400">docs/architecture.md</text>
+<text x="32" y="616" font-size="15" fill="#59636e" font-weight="700">FRONTEND AND TRANSLATIONS</text>
+<rect x="32" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="669" font-size="22" fill="#1f2328" font-weight="700">Weblate workflow</text>
+<text x="51" y="703" font-size="17" fill="#59636e" font-weight="400">Eleven UI locales including Arabic</text>
+<text x="51" y="730" font-size="17" fill="#59636e" font-weight="400">Translation branch and tests</text>
+<text x="51" y="773" font-size="13" fill="#59636e" font-weight="400">frontend/src/i18n/locales</text>
+<path d="M470 717 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="830" font-size="13" fill="#59636e" font-weight="400">review / sync</text>
+<rect x="502" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="669" font-size="22" fill="#1f2328" font-weight="700">React / Vite build</text>
+<text x="521" y="703" font-size="17" fill="#59636e" font-weight="400">Validated translations / shared layout</text>
+<text x="521" y="730" font-size="17" fill="#59636e" font-weight="400">Fonts and media are external</text>
+<text x="521" y="773" font-size="13" fill="#59636e" font-weight="400">frontend</text>
+<path d="M940 717 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="830" font-size="13" fill="#59636e" font-weight="400">inspect built app</text>
+<rect x="972" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="669" font-size="22" fill="#1f2328" font-weight="700">Browser QA</text>
+<text x="991" y="703" font-size="17" fill="#59636e" font-weight="400">Real SPA routes and visual inspection</text>
+<text x="991" y="730" font-size="17" fill="#59636e" font-weight="400">Full pages x locales x themes pending</text>
+<text x="991" y="773" font-size="13" fill="#59636e" font-weight="400">docs/architecture.md</text>
+<text x="32" y="841" font-size="15" fill="#59636e" font-weight="700">DOCUMENTATION AND HELD PATHS</text>
+<rect x="32" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="894" font-size="22" fill="#1f2328" font-weight="700">Docs and legal templates</text>
+<text x="51" y="928" font-size="17" fill="#59636e" font-weight="400">Public and private documentation</text>
+<text x="51" y="955" font-size="17" fill="#59636e" font-weight="400">Demo content; not legal approval</text>
+<text x="51" y="998" font-size="13" fill="#59636e" font-weight="400">docs / legal / portal</text>
+<rect x="502" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="894" font-size="22" fill="#1f2328" font-weight="700">Isolated simulations</text>
+<text x="521" y="928" font-size="17" fill="#59636e" font-weight="400">Distribution / meetings / infra mocks</text>
+<text x="521" y="955" font-size="17" fill="#59636e" font-weight="400">No live payout or real-money service</text>
+<text x="521" y="998" font-size="13" fill="#59636e" font-weight="400">backend/src/infrastructure</text>
+<rect x="972" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="894" font-size="22" fill="#1f2328" font-weight="700">Legacy and QA limits</text>
+<text x="991" y="928" font-size="17" fill="#59636e" font-weight="400">Classic write routes return HTTP 410</text>
+<text x="991" y="955" font-size="17" fill="#59636e" font-weight="400">Argos upload quota held; k6 gated</text>
+<text x="991" y="998" font-size="13" fill="#59636e" font-weight="400">backend/src/server.ts</text>
+<path d="M32 1081 H1408" stroke="#d1d9e0"/>
+<text x="32" y="1114" font-size="16" fill="#1f2328" font-weight="400">Release snapshot: 13 Nov 2026. CI checks are not wallet acceptance. No automatic demo deployment or QA completeness claim.</text>
+<text x="32" y="1144" font-size="15" fill="#59636e" font-weight="400">Arrows describe the labeled source path. Enabled runtime state is stated separately; configuration and tests have limits.</text>
+</svg>

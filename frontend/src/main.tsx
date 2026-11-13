@@ -4,12 +4,15 @@ import App from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { I18nProvider } from './i18n';
 import { initTheme } from './theme';
+import { installMediaFallback, installFontTimeout } from './media-fallback';
 import './styles.css';
 import './content-surfaces.css';
 import './tour-highlight.css';
 import './footer-layout-fix.css';
 
 initTheme();
+installMediaFallback();
+installFontTimeout();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

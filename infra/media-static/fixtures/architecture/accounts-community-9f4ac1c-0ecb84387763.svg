@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1170" viewBox="0 0 1440 1170" role="img" aria-labelledby="title desc" font-family="Arial, Helvetica, sans-serif">
+<title id="title">Accounts, community and document safety - source 9f4ac1c</title>
+<desc id="desc">Shared process runtime, authenticated workflows and explicit storage gates. Staging uses legacy-inline; private upload and cleanup are OFF. Private retention needs separate activation review.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#688a78"/></marker></defs>
+<rect width="1440" height="1170" rx="16" fill="#f4f5f7"/>
+<text x="32" y="51" font-size="15" fill="#59636e" font-weight="700">BLOCKALLISTO / ARCHITECTURE / 13 NOV 2026</text>
+<text x="32" y="96" font-size="35" fill="#1f2328" font-weight="700">Accounts, community and document safety</text>
+<text x="32" y="130" font-size="19" fill="#59636e" font-weight="400">Shared process runtime, authenticated workflows and explicit storage gates</text>
+<text x="1408" text-anchor="end" y="51" font-size="15" fill="#1f883d" font-weight="700">main 9f4ac1c</text>
+<text x="32" y="166" font-size="15" fill="#59636e" font-weight="700">SHARED RUNTIME</text>
+<rect x="32" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="219" font-size="22" fill="#1f2328" font-weight="700">HTTP and background callers</text>
+<text x="51" y="253" font-size="17" fill="#59636e" font-weight="400">Same community factory</text>
+<text x="51" y="280" font-size="17" fill="#59636e" font-weight="400">Concurrent initialization is shared</text>
+<text x="51" y="323" font-size="13" fill="#59636e" font-weight="400">backend/src/community-routes.ts</text>
+<path d="M470 267 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="380" font-size="13" fill="#59636e" font-weight="400">resolve runtime</text>
+<rect x="502" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="219" font-size="22" fill="#1f2328" font-weight="700">One runtime per process</text>
+<text x="521" y="253" font-size="17" fill="#59636e" font-weight="400">One service, store and pruning timer</text>
+<text x="521" y="280" font-size="17" fill="#59636e" font-weight="400">Initialization failures can retry</text>
+<text x="521" y="323" font-size="13" fill="#59636e" font-weight="400">backend/src/community-routes.ts</text>
+<path d="M940 267 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="380" font-size="13" fill="#59636e" font-weight="400">close on startup failure</text>
+<rect x="972" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="219" font-size="22" fill="#1f2328" font-weight="700">Store lifecycle</text>
+<text x="991" y="253" font-size="17" fill="#59636e" font-weight="400">Owned PostgreSQL pool can close</text>
+<text x="991" y="280" font-size="17" fill="#59636e" font-weight="400">Per-process limits are not global</text>
+<text x="991" y="323" font-size="13" fill="#59636e" font-weight="400">backend/src/community-store.ts</text>
+<text x="32" y="391" font-size="15" fill="#59636e" font-weight="700">IDENTITY AND MODERATION</text>
+<rect x="32" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="444" font-size="22" fill="#1f2328" font-weight="700">Sign-in and community UI</text>
+<text x="51" y="478" font-size="17" fill="#59636e" font-weight="400">Sessions / TOTP / comments / tickets</text>
+<text x="51" y="505" font-size="17" fill="#59636e" font-weight="400">Owner views and operator moderation</text>
+<text x="51" y="548" font-size="13" fill="#59636e" font-weight="400">frontend/src</text>
+<path d="M470 492 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="605" font-size="13" fill="#59636e" font-weight="400">HTTPS / JSON</text>
+<rect x="502" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="444" font-size="22" fill="#1f2328" font-weight="700">Authenticated routes</text>
+<text x="521" y="478" font-size="17" fill="#59636e" font-weight="400">Schemas, roles and request guards</text>
+<text x="521" y="505" font-size="17" fill="#59636e" font-weight="400">Deletion proof and retention checks</text>
+<text x="521" y="548" font-size="13" fill="#59636e" font-weight="400">backend/src/community-routes.ts</text>
+<path d="M940 492 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="605" font-size="13" fill="#59636e" font-weight="400">check / persist</text>
+<rect x="972" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="444" font-size="22" fill="#1f2328" font-weight="700">Identity and records</text>
+<text x="991" y="478" font-size="17" fill="#59636e" font-weight="400">Email / social proof, PG or test file</text>
+<text x="991" y="505" font-size="17" fill="#59636e" font-weight="400">Safe diagnostics; secrets stay server-side</text>
+<text x="991" y="548" font-size="13" fill="#59636e" font-weight="400">backend/src/accounts.ts</text>
+<text x="32" y="616" font-size="15" fill="#59636e" font-weight="700">ISSUER DOCUMENT WORKFLOW</text>
+<rect x="32" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="669" font-size="22" fill="#1f2328" font-weight="700">Issuer application draft</text>
+<text x="51" y="703" font-size="17" fill="#59636e" font-weight="400">Add, replace or delete own draft docs</text>
+<text x="51" y="730" font-size="17" fill="#59636e" font-weight="400">Changes freeze after Submit</text>
+<text x="51" y="773" font-size="13" fill="#59636e" font-weight="400">frontend/src/community/api.ts</text>
+<path d="M470 717 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="830" font-size="13" fill="#59636e" font-weight="400">read mode first</text>
+<rect x="502" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="669" font-size="22" fill="#1f2328" font-weight="700">Upload-mode discovery</text>
+<text x="521" y="703" font-size="17" fill="#59636e" font-weight="400">Authenticated no-store response</text>
+<text x="521" y="730" font-size="17" fill="#59636e" font-weight="400">Choose legacy-inline or oracle-private</text>
+<text x="521" y="773" font-size="13" fill="#59636e" font-weight="400">backend/src/community-routes.ts</text>
+<path d="M940 717 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="830" font-size="13" fill="#59636e" font-weight="400">match configured protocol</text>
+<rect x="972" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="669" font-size="22" fill="#1f2328" font-weight="700">Configured storage</text>
+<text x="991" y="703" font-size="17" fill="#59636e" font-weight="400">Default: legacy-inline</text>
+<text x="991" y="730" font-size="17" fill="#59636e" font-weight="400">Private operations fail closed by default</text>
+<text x="991" y="773" font-size="13" fill="#59636e" font-weight="400">backend/src/private-application-runtime.ts</text>
+<text x="32" y="841" font-size="15" fill="#59636e" font-weight="700">PRIVATE PROVIDER: GATED CODE</text>
+<rect x="32" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="894" font-size="22" fill="#1f2328" font-weight="700">Private upload workflow</text>
+<text x="51" y="928" font-size="17" fill="#59636e" font-weight="400">Synthetic .txt only / 16 KB / max 5</text>
+<text x="51" y="955" font-size="17" fill="#59636e" font-weight="400">Ownership, hashes and durable intents</text>
+<text x="51" y="998" font-size="13" fill="#59636e" font-weight="400">backend/src/private-application-upload-workflow.ts</text>
+<path d="M470 942 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="1055" font-size="13" fill="#59636e" font-weight="400">same-key object operations</text>
+<rect x="502" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="894" font-size="22" fill="#1f2328" font-weight="700">OCI private adapter</text>
+<text x="521" y="928" font-size="17" fill="#59636e" font-weight="400">Requires both explicit feature gates</text>
+<text x="521" y="955" font-size="17" fill="#59636e" font-weight="400">No activation by this source map</text>
+<text x="521" y="998" font-size="13" fill="#59636e" font-weight="400">backend/src/oci-private-text-store.ts</text>
+<path d="M970 942 H940" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="1055" font-size="13" fill="#59636e" font-weight="400">DELETE saved references</text>
+<rect x="972" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="894" font-size="22" fill="#1f2328" font-weight="700">Finite cleanup worker</text>
+<text x="991" y="928" font-size="17" fill="#59636e" font-weight="400">Durable deletion jobs and claims</text>
+<text x="991" y="955" font-size="17" fill="#59636e" font-weight="400">Never deletes submitted live references</text>
+<text x="991" y="998" font-size="13" fill="#59636e" font-weight="400">backend/src/private-application-runtime.ts</text>
+<path d="M32 1081 H1408" stroke="#d1d9e0"/>
+<text x="32" y="1114" font-size="16" fill="#1f2328" font-weight="400">Staging uses legacy-inline; private upload and cleanup are OFF. Private retention needs separate activation review.</text>
+<text x="32" y="1144" font-size="15" fill="#59636e" font-weight="400">Arrows describe the labeled source path. Enabled runtime state is stated separately; configuration and tests have limits.</text>
+</svg>

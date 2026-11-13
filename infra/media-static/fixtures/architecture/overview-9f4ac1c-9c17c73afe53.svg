@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1170" viewBox="0 0 1440 1170" role="img" aria-labelledby="title desc" font-family="Arial, Helvetica, sans-serif">
+<title id="title">Whole-code overview - source 9f4ac1c</title>
+<desc id="desc">Current source groups and their boundaries. Source 9f4ac1c, not proof that every branch is enabled, externally configured, deployed or tested end to end.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#688a78"/></marker></defs>
+<rect width="1440" height="1170" rx="16" fill="#f4f5f7"/>
+<text x="32" y="51" font-size="15" fill="#59636e" font-weight="700">BLOCKALLISTO / ARCHITECTURE / 13 NOV 2026</text>
+<text x="32" y="96" font-size="35" fill="#1f2328" font-weight="700">Whole-code overview</text>
+<text x="32" y="130" font-size="19" fill="#59636e" font-weight="400">Current source groups and their boundaries</text>
+<text x="1408" text-anchor="end" y="51" font-size="15" fill="#1f883d" font-weight="700">main 9f4ac1c</text>
+<text x="32" y="166" font-size="15" fill="#59636e" font-weight="700">USER-FACING APPLICATION</text>
+<rect x="32" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="219" font-size="22" fill="#1f2328" font-weight="700">Campaign and wallet pages</text>
+<text x="51" y="253" font-size="17" fill="#59636e" font-weight="400">Discovery, details and contract actions</text>
+<text x="51" y="280" font-size="17" fill="#59636e" font-weight="400">Freighter signing; account records</text>
+<text x="51" y="323" font-size="13" fill="#59636e" font-weight="400">frontend/src</text>
+<rect x="502" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="219" font-size="22" fill="#1f2328" font-weight="700">Community and issuer pages</text>
+<text x="521" y="253" font-size="17" fill="#59636e" font-weight="400">Comments, tickets, applications</text>
+<text x="521" y="280" font-size="17" fill="#59636e" font-weight="400">Draft-only document changes</text>
+<text x="521" y="323" font-size="13" fill="#59636e" font-weight="400">frontend/src</text>
+<rect x="972" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="219" font-size="22" fill="#1f2328" font-weight="700">Interface and content</text>
+<text x="991" y="253" font-size="17" fill="#59636e" font-weight="400">11 locales, themes and legal pages</text>
+<text x="991" y="280" font-size="17" fill="#59636e" font-weight="400">Public media loaded through Worker</text>
+<text x="991" y="323" font-size="13" fill="#59636e" font-weight="400">frontend / legal</text>
+<text x="32" y="391" font-size="15" fill="#59636e" font-weight="700">SERVER RESPONSIBILITIES</text>
+<rect x="32" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="444" font-size="22" fill="#1f2328" font-weight="700">Express and request boundary</text>
+<text x="51" y="478" font-size="17" fill="#59636e" font-weight="400">SPA host, JSON errors, read limits</text>
+<text x="51" y="505" font-size="17" fill="#59636e" font-weight="400">CSP, client-IP and abuse guards</text>
+<text x="51" y="548" font-size="13" fill="#59636e" font-weight="400">backend/src/server.ts</text>
+<rect x="502" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="444" font-size="22" fill="#1f2328" font-weight="700">Identity and community</text>
+<text x="521" y="478" font-size="17" fill="#59636e" font-weight="400">Email / social / wallet / TOTP</text>
+<text x="521" y="505" font-size="17" fill="#59636e" font-weight="400">Shared runtime and store lifecycle</text>
+<text x="521" y="548" font-size="13" fill="#59636e" font-weight="400">backend/src/community-routes.ts</text>
+<rect x="972" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="444" font-size="22" fill="#1f2328" font-weight="700">Application storage</text>
+<text x="991" y="478" font-size="17" fill="#59636e" font-weight="400">Inline default; OCI path gated</text>
+<text x="991" y="505" font-size="17" fill="#59636e" font-weight="400">Intent, cleanup and retention checks</text>
+<text x="991" y="548" font-size="13" fill="#59636e" font-weight="400">backend/src/private-application-runtime.ts</text>
+<text x="32" y="616" font-size="15" fill="#59636e" font-weight="700">TRANSACTIONS AND PERSISTENCE</text>
+<rect x="32" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="669" font-size="22" fill="#1f2328" font-weight="700">Soroban and chain services</text>
+<text x="51" y="703" font-size="17" fill="#59636e" font-weight="400">Build / submit / confirm exact XDR</text>
+<text x="51" y="730" font-size="17" fill="#59636e" font-weight="400">Reconciliation and pending proofs</text>
+<text x="51" y="773" font-size="13" fill="#59636e" font-weight="400">backend/src/soroban.ts</text>
+<rect x="502" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="669" font-size="22" fill="#1f2328" font-weight="700">Records and registries</text>
+<text x="521" y="703" font-size="17" fill="#59636e" font-weight="400">Journal, queue, event archive</text>
+<text x="521" y="730" font-size="17" fill="#59636e" font-weight="400">Contributor / share register exports</text>
+<text x="521" y="773" font-size="13" fill="#59636e" font-weight="400">backend/src</text>
+<rect x="972" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="669" font-size="22" fill="#1f2328" font-weight="700">Contracts</text>
+<text x="991" y="703" font-size="17" fill="#59636e" font-weight="400">v1 crowdfund: nontransferable records</text>
+<text x="991" y="730" font-size="17" fill="#59636e" font-weight="400">v2 offering and share-ledger sources</text>
+<text x="991" y="773" font-size="13" fill="#59636e" font-weight="400">contracts</text>
+<text x="32" y="841" font-size="15" fill="#59636e" font-weight="700">DELIVERY AND NON-LIVE CODE</text>
+<rect x="32" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="894" font-size="22" fill="#1f2328" font-weight="700">Build and localization</text>
+<text x="51" y="928" font-size="17" fill="#59636e" font-weight="400">GitHub CI, Weblate, React / Vite</text>
+<text x="51" y="955" font-size="17" fill="#59636e" font-weight="400">Dedicated app-oled image build</text>
+<text x="51" y="998" font-size="13" fill="#59636e" font-weight="400">infra / .github / frontend</text>
+<rect x="502" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="894" font-size="22" fill="#1f2328" font-weight="700">Hosting and documentation</text>
+<text x="521" y="928" font-size="17" fill="#59636e" font-weight="400">Oracle staging and separate demo</text>
+<text x="521" y="955" font-size="17" fill="#59636e" font-weight="400">Docs portal and public media Worker</text>
+<text x="521" y="998" font-size="13" fill="#59636e" font-weight="400">infra / portal / docs</text>
+<rect x="972" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="894" font-size="22" fill="#1f2328" font-weight="700">Explicitly held capabilities</text>
+<text x="991" y="928" font-size="17" fill="#59636e" font-weight="400">Classic writes disabled; QA gated</text>
+<text x="991" y="955" font-size="17" fill="#59636e" font-weight="400">Simulations and infra prototype only</text>
+<text x="991" y="998" font-size="13" fill="#59636e" font-weight="400">backend/src/infrastructure</text>
+<path d="M32 1081 H1408" stroke="#d1d9e0"/>
+<text x="32" y="1114" font-size="16" fill="#1f2328" font-weight="400">Source 9f4ac1c, not proof that every branch is enabled, externally configured, deployed or tested end to end.</text>
+<text x="32" y="1144" font-size="15" fill="#59636e" font-weight="400">Boxes group related source modules, not a data-flow sequence. Runtime enablement and acceptance are separate checks.</text>
+</svg>
