@@ -69,9 +69,12 @@ Its smaller labels are best read in the full-size SVG.
 ## Media provenance
 
 All five SVGs above were read from B2 and checked byte-for-byte
-against their public responses on 12 November 2026. They are linked rather
-than copied into the repository or app images. Together they are 656,537 bytes;
-viewing this guide uses the existing media service and its request limits.
+against their public responses on 12 November 2026. Their keys and image bytes
+are unchanged. Together they are 656,537 bytes; the older overview accounts for
+568,021 bytes of that total.
 
-The older overview is 568,021 bytes of that total. Its key and image bytes
-are unchanged. No image is copied into the repository or app build.
+This guide links to the static public Pages host, not the quota-limited media
+Worker. The repository now retains hash-verified public fixtures for the
+independent public export. On the app host the reserve is a separate read-only
+mount under `/var/oled`, not a copy in the runtime image. The frontend's media
+fallback does not run on GitHub's Markdown pages.
