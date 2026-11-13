@@ -1,7 +1,7 @@
+import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { Keypair } from '@stellar/stellar-sdk';
 
@@ -14,7 +14,7 @@ let base: string;
 let srv: ReturnType<import('express').Express['listen']>;
 
 before(async () => {
-  dir = mkdtempSync(join(tmpdir(), 'community-store-'));
+  dir = createCommunityTestDirectory();
   process.env.COMMUNITY_STORE_PATH = join(dir, 'store.json');
   const { app } = await import('../src/server.js');
   await new Promise<void>((resolve) => {

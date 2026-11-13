@@ -1,3 +1,4 @@
+import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 // Offline unit tests for the backend fix patch. All Stellar network calls are
 // replaced by fakes via __setDepsForTests; no testnet access needed.
 // The fake Horizon simulates a ledger: applied tx hashes are replayed on
@@ -6,11 +7,10 @@
 import { test, before } from 'node:test';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs';
-import * as os from 'node:os';
 import * as path from 'node:path';
 import { Account, Asset, Keypair, Memo, Networks, Operation, TransactionBuilder, type Transaction } from '@stellar/stellar-sdk';
 
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'crowdfund-test-'));
+const tmp = createCommunityTestDirectory();
 const storePath = path.join(tmp, 'campaigns.json');
 const creatorPath = path.join(tmp, 'creator.json');
 const demoPath = path.join(tmp, 'demo-investors.json');

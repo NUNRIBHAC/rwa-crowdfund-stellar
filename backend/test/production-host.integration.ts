@@ -17,20 +17,28 @@ test('production host serves SPA, built assets and discovery without weakening A
   const port = (reserve.address() as { port: number }).port;
   await new Promise<void>((done) => reserve.close(() => done()));
   const cwd = resolve(import.meta.dirname, '../..');
-  const child = spawn(process.execPath, ['backend/scripts/host.mjs'], {
-    cwd,
-    env: {
-      ...process.env,
-      NODE_ENV: 'test',
-      HOST: '127.0.0.1',
-      PORT: String(port),
-      COMMUNITY_STORE_PATH: join(dir, 'store.json'),
-      COMMUNITY_APPLICATION_UPLOAD_MODE: 'legacy-inline',
-      COMMUNITY_PRIVATE_UPLOAD_ENABLED: '0',
-      COMMUNITY_PRIVATE_CLEANUP_ENABLED: '0',
+  const child = spawn(
+    process.execPath,
+    [
+      '--input-type=module',
+      '-e',
+      `const { createCommunityTestDirectory } = await import('./backend/dist/test-storage-guard.js'); const root = createCommunityTestDirectory(); process.env.COMMUNITY_STORE_PATH = root + '/store.json'; console.log('COMMUNITY_TEST_ROOT=' + root); await import('./backend/scripts/host.mjs');`,
+    ],
+    {
+      cwd,
+      env: {
+        ...process.env,
+        NODE_ENV: 'test',
+        HOST: '127.0.0.1',
+        PORT: String(port),
+        COMMUNITY_STORE_PATH: join(dir, 'store.json'),
+        COMMUNITY_APPLICATION_UPLOAD_MODE: 'legacy-inline',
+        COMMUNITY_PRIVATE_UPLOAD_ENABLED: '0',
+        COMMUNITY_PRIVATE_CLEANUP_ENABLED: '0',
+      },
+      stdio: ['ignore', 'pipe', 'pipe'],
     },
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
+  );
   let output = '';
   child.stdout.on('data', (data) => {
     output += String(data);
@@ -90,6 +98,8 @@ test('production host serves SPA, built assets and discovery without weakening A
       child.kill('SIGTERM');
       await once(child, 'exit');
     }
+    const childRoot = output.match(/^COMMUNITY_TEST_ROOT=(.+)$/m)?.[1];
+    if (childRoot) await rm(childRoot, { recursive: true, force: true });
     await rm(dir, { recursive: true, force: true });
   }
 });
