@@ -10,7 +10,9 @@ COPY frontend/package.json frontend/
 RUN npm ci
 COPY . .
 ARG VITE_PUBLIC_MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev
-ENV VITE_PUBLIC_MEDIA_ORIGIN=$VITE_PUBLIC_MEDIA_ORIGIN
+ARG VITE_COUNTRY_ORIGIN=https://blockallisto-country.nunrib-df6.workers.dev
+ENV VITE_PUBLIC_MEDIA_ORIGIN=$VITE_PUBLIC_MEDIA_ORIGIN \
+    VITE_COUNTRY_ORIGIN=$VITE_COUNTRY_ORIGIN
 RUN npm run build
 RUN node backend/scripts/check-reviewed-wasm.mjs
 
@@ -23,7 +25,8 @@ COPY package.json package-lock.json ./
 COPY backend/package.json backend/
 COPY frontend/package.json frontend/
 RUN npm ci --omit=dev && npm cache clean --force
-ENV MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev
+ENV MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev \
+    COUNTRY_ORIGIN=https://blockallisto-country.nunrib-df6.workers.dev
 COPY --from=build /app/backend/dist backend/dist
 COPY --from=build /app/backend/scripts/host.mjs backend/scripts/host.mjs
 COPY --from=build /app/frontend/dist frontend/dist
