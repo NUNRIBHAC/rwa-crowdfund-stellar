@@ -110,7 +110,7 @@ __setDepsForTests({
     if (appliedTxHashes.has(hash)) {
       if (replayBadSeq) {
         const e: any = new Error('expired replay');
-        e.response = { data: { extras: { result_codes: { transaction: 'tx_bad_seq' } } } };
+        e.response = { data: { extras: { result_codes: { transaction: replayCode } } } };
         throw e;
       }
       return { hash } as any;
