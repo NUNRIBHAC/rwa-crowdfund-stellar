@@ -7,8 +7,8 @@ The project remains testnet-only; no real funds or verified investment rights
 are represented here.
 
 The images are stored in the existing `blockallisto-media` B2 bucket under
-`public/architecture/` and served through the existing public media Worker.
-No credentials or signed download links are required. Open each full-size SVG
+`public/architecture/` and served through the static public Pages host.
+No credentials or signed download links are required. The app also supports an independent same-origin public reserve when its versioned directory is mounted read-only. Open each full-size SVG
 to zoom in on labels. Text below remains available if external media is blocked.
 
 ## Whole system
