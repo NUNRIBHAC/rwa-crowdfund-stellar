@@ -1,4 +1,5 @@
 import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
+let replayBadSeq = false;
 // Offline unit tests for the backend fix patch. All Stellar network calls are
 // replaced by fakes via __setDepsForTests; no testnet access needed.
 // The fake Horizon simulates a ledger: applied tx hashes are replayed on
@@ -105,7 +106,14 @@ __setDepsForTests({
     const hash = Buffer.from(tx.hash()).toString('hex');
     submitLog.push(tx.toXDR());
     // Horizon replays the original result for an already-applied transaction.
-    if (appliedTxHashes.has(hash)) return { hash } as any;
+    if (appliedTxHashes.has(hash)) {
+      if (replayBadSeq) {
+        const e: any = new Error('expired replay');
+        e.response = { data: { extras: { result_codes: { transaction: 'tx_bad_seq' } } } };
+        throw e;
+      }
+      return { hash } as any;
+    }
     if (injectedFailure) {
       const f = injectedFailure;
       if (f.times !== undefined) {
@@ -354,7 +362,11 @@ test('finalize: time gate, goal gate, crash-safe idempotent payout', async () =>
   const stored = readStore().campaigns.find((x: any) => x.id === c.id);
   assert.equal(stored.state, 'funding');
   assert.ok(stored.payoutXdr, 'payout intent persisted');
-  assert.equal(stored.payoutTx, undefined, 'payout not marked confirmed');
+  assert.equal(
+    stored.payoutTx,
+    Buffer.from(TransactionBuilder.fromXDR(stored.payoutXdr, Networks.TESTNET).hash()).toString('hex'),
+    'payout intent hash persisted before confirmation',
+  );
   const payouts = () => paymentLog.filter((p) => p.to === c.creatorPub && p.code === 'USDC');
   assert.equal(payouts().length, 1, 'payout was applied despite the lost response');
 
@@ -1139,4 +1151,29 @@ test('trustline submit: ambiguous broadcast resolves by exact hash; failure repo
   const expectedHash2 = Buffer.from(tx2.hash()).toString('hex');
   injectedFailure = { type: 'network', applyFirst: false };
   await assert.rejects(submitSignedTrustline({ investorPub: investor.publicKey(), xdr: tx2.toXDR() }), (e: any) => e.message.includes(expectedHash2));
+});
+
+test('payout restart recovery reconciles an applied XDR-only legacy intent after bad sequence', async () => {
+  resetState();
+  const investor = addDemoInvestor();
+  const c = await createCampaign({ name: 'payout restart', goalUsdc: GOAL, deadline: soonDeadline() });
+  await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 100 });
+  await sleep(1600);
+  injectedFailure = { type: 'network', applyFirst: true };
+  await assert.rejects(finalize(c.id), /submission uncertain/);
+  const store = readStore(),
+    row = store.campaigns.find((x: any) => x.id === c.id),
+    envelope = row.payoutXdr;
+  assert.ok(row.payoutTx, 'hash persisted before broadcast');
+  delete row.payoutTx;
+  fs.writeFileSync(storePath, JSON.stringify(store)); // old-version XDR-only file
+  replayBadSeq = true;
+  try {
+    const result = await finalize(c.id);
+    assert.equal(result.state, 'finalized');
+    assert.equal(result.payoutTx, Buffer.from(TransactionBuilder.fromXDR(envelope, Networks.TESTNET).hash()).toString('hex'));
+    assert.equal(paymentLog.filter((p) => p.to === c.creatorPub && p.code === 'USDC').length, 1);
+  } finally {
+    replayBadSeq = false;
+  }
 });
