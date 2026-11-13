@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { VISUAL_LOCALES } from './inventory';
 
 // Geometry regression for long localized CTA labels, not linguistic acceptance.

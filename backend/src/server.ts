@@ -71,9 +71,9 @@ app.use((req, res, next) => {
   // Sign In With Farcaster talks to the public Farcaster relay from the
   // browser; that origin is allowed ONLY when the feature is configured.
   const relayOrigin = process.env.FARCASTER_AUTH_DOMAIN?.trim() ? ' https://relay.farcaster.xyz' : '';
-  // Media origin (private B2 bucket fronted by the blockallisto-media
-  // Cloudflare Worker) serves migrated public images and self-hosted fonts.
-  // Scoped to the exact worker origin, only in img-src/font-src, and ONLY
+  // Public media origin (verified Pages primary, with a same-origin reserve)
+  // serves images and self-hosted fonts. Scoped to one exact origin,
+  // only in img-src/font-src, and ONLY
   // when configured - unset keeps the previous 'self'-only policy so dev and
   // un-migrated deploys are unchanged. connect-src stays closed: no XHR/
   // fetch of static assets exists (FontFace loading is governed by

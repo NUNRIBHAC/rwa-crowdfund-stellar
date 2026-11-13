@@ -6,12 +6,15 @@ import { I18nProvider, browserPreferences, storedLocale } from './i18n';
 import { initialLocale } from './i18n/locale-bootstrap';
 import { preferredLocale } from './i18n/locale-negotiation';
 import { initTheme } from './theme';
+import { installMediaFallback, installFontTimeout } from './media-fallback';
 import './styles.css';
 import './content-surfaces.css';
 import './tour-highlight.css';
 import './footer-layout-fix.css';
 
 initTheme();
+installMediaFallback();
+installFontTimeout();
 
 async function mount() {
   // Set only to the exact verified Worker origin at build time. An unconfigured

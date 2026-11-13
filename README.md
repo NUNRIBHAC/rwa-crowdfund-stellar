@@ -29,23 +29,23 @@ boundaries are described in the text below, without relabeling these images.
 
 ### Whole system - source045e042
 
-[![Whole system - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)
+[![Whole system - source045e042](https://blockallisto-public-media.pages.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)](https://blockallisto-public-media.pages.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)
 
 ### Accounts, community and safety - source045e042
 
-[![Accounts, community and safety - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)
+[![Accounts, community and safety - source045e042](https://blockallisto-public-media.pages.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)](https://blockallisto-public-media.pages.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)
 
 ### Transactions and durable evidence - source045e042
 
-[![Transactions and durable evidence - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)
+[![Transactions and durable evidence - source045e042](https://blockallisto-public-media.pages.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)](https://blockallisto-public-media.pages.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)
 
 ### Delivery, documentation and held code - source045e042
 
-[![Delivery, documentation and held code - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)
+[![Delivery, documentation and held code - source045e042](https://blockallisto-public-media.pages.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)](https://blockallisto-public-media.pages.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)
 
 ### Earlier whole-code overview - source177c8c1
 
-[![Earlier whole-code overview - source177c8c1](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)
+[![Earlier whole-code overview - source177c8c1](https://blockallisto-public-media.pages.dev/architecture/blockallisto-architecture-5997b399.svg)](https://blockallisto-public-media.pages.dev/architecture/blockallisto-architecture-5997b399.svg)
 
 ## Implemented behavior and boundaries
 
@@ -115,8 +115,9 @@ boundaries are described in the text below, without relabeling these images.
   an onboarding checklist are implemented. Full pages x locales x themes
   visual acceptance is not complete.
 - Fonts, logos, social icons, animations and architecture images are served
-  through the existing public Cloudflare Worker backed by B2, not bundled
-  in the app image. The frontend HTML has no Google Fonts links. External
+  through the static public Pages host, with an independent same-origin
+  reserve when mounted read-only. B2 remains the upstream archive; media
+  is not bundled in the app image. The frontend HTML has no Google Fonts links. External
   media remains subject to its service availability and request limits.
 - The footer links the Blockallisto social profiles. The block-fill
   illustration explains funding; it is not live funding activity.

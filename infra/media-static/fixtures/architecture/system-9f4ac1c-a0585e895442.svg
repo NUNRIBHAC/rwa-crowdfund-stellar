@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1170" viewBox="0 0 1440 1170" role="img" aria-labelledby="title desc" font-family="Arial, Helvetica, sans-serif">
+<title id="title">Whole system - source 9f4ac1c</title>
+<desc id="desc">Browser, server, records, testnet and external services. Source map only. Testnet prototype; no real funds, verified investment rights or production-readiness claim.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#688a78"/></marker></defs>
+<rect width="1440" height="1170" rx="16" fill="#f4f5f7"/>
+<text x="32" y="51" font-size="15" fill="#59636e" font-weight="700">BLOCKALLISTO / ARCHITECTURE / 13 NOV 2026</text>
+<text x="32" y="96" font-size="35" fill="#1f2328" font-weight="700">Whole system</text>
+<text x="32" y="130" font-size="19" fill="#59636e" font-weight="400">Browser, server, records, testnet and external services</text>
+<text x="1408" text-anchor="end" y="51" font-size="15" fill="#1f883d" font-weight="700">main 9f4ac1c</text>
+<text x="32" y="166" font-size="15" fill="#59636e" font-weight="700">APPLICATION REQUESTS</text>
+<rect x="32" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="219" font-size="22" fill="#1f2328" font-weight="700">Web app</text>
+<text x="51" y="253" font-size="17" fill="#59636e" font-weight="400">React + TypeScript / 11 locales</text>
+<text x="51" y="280" font-size="17" fill="#59636e" font-weight="400">Campaigns, account and issuer UI</text>
+<text x="51" y="323" font-size="13" fill="#59636e" font-weight="400">frontend/src</text>
+<path d="M470 267 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="380" font-size="13" fill="#59636e" font-weight="400">HTTPS / JSON</text>
+<rect x="502" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="219" font-size="22" fill="#1f2328" font-weight="700">Express API</text>
+<text x="521" y="253" font-size="17" fill="#59636e" font-weight="400">Node 24 / SPA + JSON API</text>
+<text x="521" y="280" font-size="17" fill="#59636e" font-weight="400">Bounded reads, localized errors</text>
+<text x="521" y="323" font-size="13" fill="#59636e" font-weight="400">backend/src/server.ts</text>
+<path d="M940 267 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="380" font-size="13" fill="#59636e" font-weight="400">read and write</text>
+<rect x="972" y="184" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="184" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="219" font-size="22" fill="#1f2328" font-weight="700">Community records</text>
+<text x="991" y="253" font-size="17" fill="#59636e" font-weight="400">PostgreSQL or explicit test files</text>
+<text x="991" y="280" font-size="17" fill="#59636e" font-weight="400">Accounts, content and applications</text>
+<text x="991" y="323" font-size="13" fill="#59636e" font-weight="400">backend/src/community-store.ts</text>
+<text x="32" y="391" font-size="15" fill="#59636e" font-weight="700">SIGNED TRANSACTIONS</text>
+<rect x="32" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="444" font-size="22" fill="#1f2328" font-weight="700">Freighter wallet</text>
+<text x="51" y="478" font-size="17" fill="#59636e" font-weight="400">User signs the exact envelope</text>
+<text x="51" y="505" font-size="17" fill="#59636e" font-weight="400">No wallet secret held by API</text>
+<text x="51" y="548" font-size="13" fill="#59636e" font-weight="400">frontend/src/App.tsx</text>
+<path d="M470 492 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="605" font-size="13" fill="#59636e" font-weight="400">signed XDR</text>
+<rect x="502" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="444" font-size="22" fill="#1f2328" font-weight="700">Soroban service</text>
+<text x="521" y="478" font-size="17" fill="#59636e" font-weight="400">Build, validate, persist, submit</text>
+<text x="521" y="505" font-size="17" fill="#59636e" font-weight="400">Shared in-flight submission guard</text>
+<text x="521" y="548" font-size="13" fill="#59636e" font-weight="400">backend/src/soroban.ts</text>
+<path d="M940 492 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="605" font-size="13" fill="#59636e" font-weight="400">submit / confirm</text>
+<rect x="972" y="409" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="409" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="444" font-size="22" fill="#1f2328" font-weight="700">Stellar testnet</text>
+<text x="991" y="478" font-size="17" fill="#59636e" font-weight="400">RPC / Horizon and crowdfund v1</text>
+<text x="991" y="505" font-size="17" fill="#59636e" font-weight="400">Contract controls caps and escrow</text>
+<text x="991" y="548" font-size="13" fill="#59636e" font-weight="400">contracts/crowdfund</text>
+<text x="32" y="616" font-size="15" fill="#59636e" font-weight="700">PUBLIC MEDIA</text>
+<rect x="32" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="669" font-size="22" fill="#1f2328" font-weight="700">Backblaze B2</text>
+<text x="51" y="703" font-size="17" fill="#59636e" font-weight="400">Existing private media bucket</text>
+<text x="51" y="730" font-size="17" fill="#59636e" font-weight="400">Public media namespace only</text>
+<text x="51" y="773" font-size="13" fill="#59636e" font-weight="400">infra/media-worker</text>
+<path d="M470 717 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="830" font-size="13" fill="#59636e" font-weight="400">authorized origin read</text>
+<rect x="502" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="669" font-size="22" fill="#1f2328" font-weight="700">Cloudflare Worker</text>
+<text x="521" y="703" font-size="17" fill="#59636e" font-weight="400">Public cached media responses</text>
+<text x="521" y="730" font-size="17" fill="#59636e" font-weight="400">Fonts, logos, images, architecture</text>
+<text x="521" y="773" font-size="13" fill="#59636e" font-weight="400">infra/media-worker/worker.js</text>
+<path d="M940 717 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="830" font-size="13" fill="#59636e" font-weight="400">HTTPS media</text>
+<rect x="972" y="634" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="634" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="669" font-size="22" fill="#1f2328" font-weight="700">Browser assets</text>
+<text x="991" y="703" font-size="17" fill="#59636e" font-weight="400">External media, not app bundles</text>
+<text x="991" y="730" font-size="17" fill="#59636e" font-weight="400">No Google Fonts HTML links</text>
+<text x="991" y="773" font-size="13" fill="#59636e" font-weight="400">frontend/index.html</text>
+<text x="32" y="841" font-size="15" fill="#59636e" font-weight="700">IDENTITY AND MAIL</text>
+<rect x="32" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="32" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="51" y="894" font-size="22" fill="#1f2328" font-weight="700">Account UI</text>
+<text x="51" y="928" font-size="17" fill="#59636e" font-weight="400">Email, wallet or social sign-in</text>
+<text x="51" y="955" font-size="17" fill="#59636e" font-weight="400">Telegram phone is explicit / gated</text>
+<text x="51" y="998" font-size="13" fill="#59636e" font-weight="400">frontend/src</text>
+<path d="M470 942 H500" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="485" text-anchor="middle" y="1055" font-size="13" fill="#59636e" font-weight="400">proof requests</text>
+<rect x="502" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="502" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="521" y="894" font-size="22" fill="#1f2328" font-weight="700">Account services</text>
+<text x="521" y="928" font-size="17" fill="#59636e" font-weight="400">Sessions, TOTP, identity proofs</text>
+<text x="521" y="955" font-size="17" fill="#59636e" font-weight="400">Atomic verification-send reservation</text>
+<text x="521" y="998" font-size="13" fill="#59636e" font-weight="400">backend/src/email-auth.ts</text>
+<path d="M940 942 H970" fill="none" stroke="#688a78" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="955" text-anchor="middle" y="1055" font-size="13" fill="#59636e" font-weight="400">verify / send</text>
+<rect x="972" y="859" width="436" height="166" rx="12" fill="white" stroke="#d1d9e0"/>
+<rect x="972" y="859" width="6" height="166" rx="3" fill="#688a78"/>
+<text x="991" y="894" font-size="22" fill="#1f2328" font-weight="700">Configured providers</text>
+<text x="991" y="928" font-size="17" fill="#59636e" font-weight="400">OAuth / OIDC, Brevo and abuse checks</text>
+<text x="991" y="955" font-size="17" fill="#59636e" font-weight="400">Configuration does not prove E2E</text>
+<text x="991" y="998" font-size="13" fill="#59636e" font-weight="400">backend/src/social-auth.ts</text>
+<path d="M32 1081 H1408" stroke="#d1d9e0"/>
+<text x="32" y="1114" font-size="16" fill="#1f2328" font-weight="400">Source map only. Testnet prototype; no real funds, verified investment rights or production-readiness claim.</text>
+<text x="32" y="1144" font-size="15" fill="#59636e" font-weight="400">Arrows describe the labeled source path. Enabled runtime state is stated separately; configuration and tests have limits.</text>
+</svg>
