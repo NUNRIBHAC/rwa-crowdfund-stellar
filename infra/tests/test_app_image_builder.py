@@ -9,7 +9,7 @@ SCRIPT = Path(__file__).resolve().parents[1] / 'build-app-image.sh'
 
 
 class AppBuilderTest(unittest.TestCase):
-    def invoke(self, args, *, free='9000000000', inspect_status=0, build_status=0, during_free=None):
+    def invoke(self, args, *, free='9000000000', inspect_status=0, build_status=0, during_free=None, post_free=None):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             commands = root / 'commands'
@@ -26,7 +26,7 @@ class AppBuilderTest(unittest.TestCase):
             )
             (binary / 'df').write_text(
                 '#!/usr/bin/env python3\n'
-                'import os,pathlib\np=pathlib.Path(os.environ["COMMANDS"]+".df")\nn=int(p.read_text()) if p.exists() else 0\np.write_text(str(n+1))\nprint("Avail")\nprint(os.environ.get("DURING_FREE") if n>=2 and os.environ.get("DURING_FREE") else os.environ["FREE"])\n'
+                'import os,pathlib\np=pathlib.Path(os.environ["COMMANDS"]+".df")\nn=int(p.read_text()) if p.exists() else 0\np.write_text(str(n+1))\nprint("Avail")\nprint(os.environ.get("POST_FREE") if n>=4 and os.environ.get("POST_FREE") else (os.environ.get("DURING_FREE") if n>=2 and os.environ.get("DURING_FREE") else os.environ["FREE"]))\n'
             )
             for file in binary.iterdir():
                 file.chmod(0o755)
@@ -38,6 +38,7 @@ class AppBuilderTest(unittest.TestCase):
                 'INSPECT_STATUS': str(inspect_status),
                 'BUILD_STATUS': str(build_status),
                 'DURING_FREE': during_free or '',
+                'POST_FREE': post_free or '',
             }
             result = subprocess.run(
                 ['bash', str(SCRIPT), '--context', str(root), *args],
@@ -83,6 +84,12 @@ class AppBuilderTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Build canceled', result.stderr)
         self.assertFalse(any('up' in call for call in calls))
+
+    def test_post_build_floor_fails_without_activation(self):
+        result, calls = self.invoke(['--tag', 'blockallisto-app:test'], post_free='3221225471')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Do not activate', result.stderr)
+        self.assertEqual(len(calls), 2)
 
     def test_invalid_options_and_non_app_tags_fail_closed(self):
         for args in [[], ['--tag', 'other:test'], ['--builder', 'unknown', '--tag', 'blockallisto-app:test'], ['--tag']]:

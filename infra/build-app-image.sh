@@ -39,6 +39,8 @@ stop_build() {
     # BuildKit receives cancellation through the client connection.
     for attempt in {1..30}; do kill -0 "$pid" 2>/dev/null || break; sleep 1; done
     if kill -0 "$pid" 2>/dev/null; then kill -TERM -- "-$pid" 2>/dev/null || true; fi
+    for attempt in {1..5}; do kill -0 "$pid" 2>/dev/null || break; sleep 1; done
+    if kill -0 "$pid" 2>/dev/null; then kill -KILL -- "-$pid" 2>/dev/null || true; fi
     wait "$pid" 2>/dev/null || true
   fi
 }
