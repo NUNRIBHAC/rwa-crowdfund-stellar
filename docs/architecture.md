@@ -1,85 +1,77 @@
 # Architecture guide
 
-All five views describe source `9f4ac1c2f1203b42b224037ec3094a3660a04fe5`
-(13 November 2026). Runtime notes below are a separate snapshot of the same date,
-not an assertion that every source path is enabled or deployed. This remains a
-testnet prototype, not a production-ready investment service.
+These diagrams map the source at commit `045e042ceccf406818a898bfc774c2fb12c11eed`
+(12 November 2026). They are a code-reading aid, not evidence that every path
+has passed live integration tests or that a service is production-ready.
+The project remains testnet-only; no real funds or verified investment rights
+are represented here.
 
-Images are linked from the existing public media Worker, backed by the existing
-`blockallisto-media` B2 bucket under `public/architecture/`. They are not bundled
-in the repository or app image. Click any image for its full-size SVG and readable
-labels. The text under each image remains available if external media is blocked.
+The images are stored in the existing `blockallisto-media` B2 bucket under
+`public/architecture/` and served through the existing public media Worker.
+No credentials or signed download links are required. Open each full-size SVG
+to zoom in on labels. Text below remains available if external media is blocked.
 
 ## Whole system
 
-Browser, server, records, testnet and external services.
+Browser, API, records, testnet contracts, identity, mail, media and delivery.
 
-[![Whole system - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-9f4ac1c-a0585e895442.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-9f4ac1c-a0585e895442.svg)
+[![Browser, API, records, testnet contracts, identity, mail, media and delivery.](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)
 
-[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-9f4ac1c-a0585e895442.svg). The browser signs through Freighter; the API validates and submits exact envelopes. Community records, identity, mail and public media remain separate services. Google Fonts HTML links are not part of the frontend entry point.
+[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg). The browser signs through Freighter. The API validates and submits signed transactions; it does not hold wallet private keys.
 
-## Accounts, community and document safety
+## Accounts, community and safety
 
-Shared process runtime, authenticated workflows and explicit storage gates.
+Sign-in, account sessions, TOTP, community requests and external proof services.
 
-[![Accounts, community and document safety - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-9f4ac1c-0ecb84387763.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-9f4ac1c-0ecb84387763.svg)
+[![Sign-in, account sessions, TOTP, community requests and external proof services.](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)
 
-[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-9f4ac1c-0ecb84387763.svg). The default community factory shares its in-flight initialization and resulting service across request and background callers in one process. Upload-mode discovery is authenticated and not cached. Only the owner's draft documents can be added, replaced or deleted; Submit freezes changes. Successful empty DELETE responses are accepted by the client. The OCI private workflow and finite cleanup worker require explicit gates; staging has both OFF and uses legacy-inline. Private-document retention remains an activation review item.
+[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg). Email remains the primary route. Telegram phone is an explicit, gated alternative, not a bot-message OTP flow.
 
 ## Transactions and durable evidence
 
-Exact envelopes, uncertainty preservation and historical contribution records.
+Wallet signing, transaction validation, reconciliation, queues, journals and event archives.
 
-[![Transactions and durable evidence - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-9f4ac1c-f47932caaba5.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-9f4ac1c-f47932caaba5.svg)
+[![Wallet signing, transaction validation, reconciliation, queues, journals and event archives.](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)
 
-[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-9f4ac1c-f47932caaba5.svg). The journal preserves exact signed envelopes before submission; ambiguous status is not failure or permission to create a replacement. The crowdfund v1 contract controls caps, escrow, withdrawal and refunds. Account contribution records survive a successful creator withdrawal and are not current escrow. The v2 offering/share-token source is a separate model. Queues and event archives are not a full disaster-recovery backup.
+[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg). The v1 contract moves testnet tokens. The v2 code provides offering and share-ledger primitives. An event archive is not a complete disaster-recovery backup.
 
 ## Delivery, documentation and held code
 
-Reviewed releases, app-only builds, translations and explicit QA limits.
+Builds, CI, translations, documentation, hosting and isolated QA.
 
-[![Delivery, documentation and held code - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-9f4ac1c-d6867bdbd508.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-9f4ac1c-d6867bdbd508.svg)
+[![Builds, CI, translations, documentation, hosting and isolated QA.](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)
 
-[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-9f4ac1c-d6867bdbd508.svg). The dedicated app-oled builder uses BuildKit 0.35.0 with its own OCI worker state on OLED. Final image loading still uses root storage. Builds do not activate apps. The approved release path builds explicitly and activates the selected environment with --no-build after gates. Staging runs source 9f4ac1c (PR #172); demo remains cd6eddc. Main does not automatically deploy either environment. Weblate supplies eleven locales. JavaScript/Rust/secret-scan checks do not replace real-wallet or complete visual acceptance; Argos upload is held at its plan quota.
+[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg). Classic write routes are disabled. Simulations and the infrastructure prototype are not live money-moving services.
 
-## Whole-code overview
+## Earlier whole-code overview
 
-Current source groups and their boundaries.
+This fifth diagram labels itself `main @ 177c8c1` (12 November 2026). It is
+retained for comparison, not presented as the newer `045e042` source map.
+Its smaller labels are best read in the full-size SVG.
 
-[![Whole-code overview - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/overview-9f4ac1c-9c17c73afe53.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/overview-9f4ac1c-9c17c73afe53.svg)
+[![Earlier whole-code overview - source177c8c1](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)
 
-[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/overview-9f4ac1c-9c17c73afe53.svg). This overview groups the current source into the SPA, server boundary, identity/community, document storage, transaction evidence, contract models, delivery and explicitly non-live code. Grouping is not a data-flow sequence. Classic write routes return HTTP 410; simulation and infrastructure-prototype code does not represent a live payout service.
-
-## Deployment snapshot
-
-| Environment | Source                                               | Running image ID                                                          |
-| ----------- | ---------------------------------------------------- | ------------------------------------------------------------------------- |
-| Staging     | `9f4ac1c2f1203b42b224037ec3094a3660a04fe5` (PR #172) | `sha256:bcb2f58abcf87bb88d34ed58c76e71b34394ca30dba41d4f7cc78167f1544486` |
-| Demo        | `cd6eddca22c1ac77c3fecf8ba1eb1682d5119315`           | `sha256:a8fb3da59930f974cd83250d56a506af73df0395c57c494e9af6be0dfbe5951f` |
-
-A merge is not an automatic deployment. Staging and demo are approved, verified
-releases on the Oracle VM. Their runtime source can differ from current main.
+[Open full-size SVG](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg).
 
 ## Reading limits and related code
 
-- A source path shows intended behavior, not end-to-end acceptance. Fake-provider
-  tests and in-memory Rust tests do not prove real-wallet behavior or live OCI
-  activation. Full pages x locales x themes visual QA remains incomplete.
-- Store and provider selection is configuration-dependent. A database or provider
-  box does not certify its availability, permissions, backups or legal compliance.
-- Private upload and cleanup are not activated by these diagrams. Their existing
-  enablement, storage-identity, cost and retention review gates still apply.
-- An event archive is not a full disaster-recovery backup. An unknown signed
-  transaction remains an unresolved intent, not a failed or absent transaction.
+- Record stores are selected by configuration. A database node does not prove
+  the state, backups, permissions or availability of a hosted database.
+- A source connection shows intended data flow, not an end-to-end acceptance
+  result. Deployment and QA nodes do not certify that a release passed its gates.
+- This is a versioned snapshot. Recheck the implementation before using a
+  diagram to make an operational or security decision.
 - [Community and account API](community-api.md)
-- [Private application runtime gates](private-application-runtime.md)
 - [Soroban flow and live-test gates](soroban-flow.md)
+- [Testnet deployment](testnet-deployment.md)
 - [Contract source and limits](../contracts/crowdfund/README.md)
-- [App-only OLED builder](app-oled-builder.md)
 
 ## Media provenance
 
-The five content-named SVGs total 50,268 bytes. Their
-source labels, public MIME type and byte hashes were checked on 13 November 2026.
-Public media uses the existing service and its request limits; this update does
-not change bucket visibility, access policy, account settings or app releases.
+All five SVGs above were read from B2 and checked byte-for-byte
+against their public responses on 12 November 2026. They are linked rather
+than copied into the repository or app images. Together they are 656,537 bytes;
+viewing this guide uses the existing media service and its request limits.
+
+The older overview is 568,021 bytes of that total. Its key and image bytes
+are unchanged. No image is copied into the repository or app build.
