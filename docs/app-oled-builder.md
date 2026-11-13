@@ -94,3 +94,20 @@ build and 4,334,985,216 bytes on OLED during the dedicated build. Both passed th
 bounds. They exclude final image loading into Docker. The two builders use
 different BuildKit versions; byte-identical output was not established. Test
 cache and generated OCI outputs were cleared after measurement.
+
+## Release image retention
+
+Apply independently to staging and demo, only after the newly activated release
+has passed verification:
+
+- Root keeps that environment's current release image.
+- OLED keeps verified archives of its immediately preceding release and the
+  rollback before that.
+- Other app release images can be removed only after those archives are checked
+  and free space on both filesystems is confirmed. Never remove the rollback
+  while the new release is still unverified.
+- The three explicitly protected, unknown-origin images are exceptions. Do not
+  remove them without separate owner approval.
+
+Do not interpret this policy as permission to prune Docker globally, remove
+non-app images, remove volumes, alter services or touch unrelated files.
