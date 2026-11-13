@@ -9,7 +9,7 @@ COPY backend/package.json backend/
 COPY frontend/package.json frontend/
 RUN npm ci
 COPY . .
-ARG VITE_PUBLIC_MEDIA_ORIGIN
+ARG VITE_PUBLIC_MEDIA_ORIGIN=https://blockallisto-media.nunrib-df6.workers.dev
 ENV VITE_PUBLIC_MEDIA_ORIGIN=$VITE_PUBLIC_MEDIA_ORIGIN
 RUN npm run build
 RUN node backend/scripts/check-reviewed-wasm.mjs
