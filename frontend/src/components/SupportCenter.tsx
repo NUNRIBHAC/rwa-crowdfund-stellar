@@ -1,7 +1,7 @@
 // Support and feedback tickets: a signed-in user files a ticket (kind
 // 'support' or 'feedback') and sees their own ticket list with status.
 // Tickets are private to the filing account; there is no public listing.
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import type { Ticket } from '../community/api';
 import { COMMUNITY_LIMITS, createTicket, fetchMyTickets } from '../community/api';
@@ -10,6 +10,12 @@ import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 
 export default function SupportCenter() {
+  const { account, token } = useCommunityAuth();
+  // Clear private records and drafts before rendering another actor/session.
+  return <SupportSession key={JSON.stringify([account?.publicKey ?? null, token])} />;
+}
+
+function SupportSession() {
   const { m, locale } = useI18n();
   const { account, token } = useCommunityAuth();
   const [tickets, setTickets] = useState<Ticket[] | null>(null);
@@ -18,13 +24,20 @@ export default function SupportCenter() {
   const [body, setBody] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const live = useRef(false);
+  useEffect(() => {
+    live.current = true;
+    return () => {
+      live.current = false;
+    };
+  }, []);
 
   const reload = useCallback(() => {
-    if (!token) return;
+    if (!account || !token) return;
     fetchMyTickets(token)
-      .then(({ tickets }) => setTickets(tickets))
-      .catch((e) => setError(e instanceof Error ? e.message : String(e)));
-  }, [token]);
+      .then(({ tickets }) => live.current && setTickets(tickets))
+      .catch((e) => live.current && setError(e instanceof Error ? e.message : String(e)));
+  }, [account, token]);
 
   useEffect(reload, [reload]);
 
@@ -32,18 +45,20 @@ export default function SupportCenter() {
 
   async function submit(e: FormEvent) {
     e.preventDefault();
+    if (!account || !token) return;
     setBusy(true);
     setError('');
     try {
       const { ticket } = await createTicket(token, { kind, subject: subject.trim(), body: body.trim() });
+      if (!live.current) return;
       notifyCommunityActivityChanged();
       setTickets((prev) => [ticket, ...(prev ?? [])]);
       setSubject('');
       setBody('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      if (live.current) setError(e instanceof Error ? e.message : String(e));
     } finally {
-      setBusy(false);
+      if (live.current) setBusy(false);
     }
   }
 
