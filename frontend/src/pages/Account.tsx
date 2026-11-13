@@ -89,7 +89,7 @@ export default function Account({ market }: { market: Market }) {
     productionEligible?: unknown;
   } | null>(null);
   const activity = !readActor ? null : activityRead?.actor === readActor ? activityRead.data : 'loading';
-  // Positions for the selected proven read actor: the same public /api/campaigns?actor= read the connected-wallet
+  // Contribution records for the selected proven read actor: the same public /api/campaigns?actor= read the connected-wallet
   // path uses, never fabricated rows. Transaction paths still require the
   // connected wallet - this feeds only the read-only portfolio/invested-news
   // sections.
@@ -162,6 +162,7 @@ export default function Account({ market }: { market: Market }) {
         })),
     [positionCampaigns],
   );
+  // balance_of survives successful creator withdrawal. Sum records, never infer current escrow.
   const total = rows.reduce((acc, r) => acc + BigInt(r.balance), 0n);
   const active = rows.filter((r) => r.status === 'pending' || r.status === 'paid').length;
   const shown = tab === 'all' ? rows : rows.filter((r) => r.status === tab);
