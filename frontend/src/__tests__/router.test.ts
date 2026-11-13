@@ -95,3 +95,13 @@ describe('legacy hash compatibility', () => {
     expect(routeFromHash('#/campaigns/demo-solar')).toEqual(routeFromPath(routeHash({ name: 'campaign', campaignId: 'demo-solar' })));
   });
 });
+
+describe('malformed campaign encoding', () => {
+  test.each(['%', '%2', '%GG', '%C3%28', '%E0%A4', '%ED%A0%80'])('bad id %s is not-found for path and legacy hash', (id) => {
+    expect(routeFromPath('/campaigns/' + id)).toEqual({ name: 'not-found' });
+    expect(routeFromHash('#/campaigns/' + id)).toEqual({ name: 'not-found' });
+  });
+  test.each(['space here', 'é', 'solar%project', 'a/b', '☀️'])('valid id %s still round-trips', (id) => {
+    expect(routeFromPath(routePath({ name: 'campaign', campaignId: id }))).toEqual({ name: 'campaign', campaignId: id });
+  });
+});
