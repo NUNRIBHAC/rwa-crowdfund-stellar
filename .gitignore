@@ -43,3 +43,6 @@ frontend/test-results/
 frontend/playwright-report/
 frontend/screenshots/
 data/community-store.json
+
+__pycache__/
+*.pyc
