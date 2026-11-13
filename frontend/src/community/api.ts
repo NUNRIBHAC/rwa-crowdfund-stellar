@@ -1,4 +1,4 @@
-import { localizedApiError, storedLocale } from '../i18n';
+import { localizedApiError, currentLocale } from '../i18n';
 // Community API client: wallet-authenticated accounts, comments, news,
 // support/feedback tickets, issuer applications and campaign metadata.
 // Matches backend/src/community-routes.ts + accounts.ts on
@@ -190,7 +190,7 @@ export const farcasterLinkProofNonce = (token: string) =>
 // address is new, unverified or already registered.
 // The UI locale travels with mail-triggering calls so the backend can send
 // the verification/reset email in the same language as the interface.
-const uiLocale = (): string | undefined => storedLocale();
+const uiLocale = (): string | undefined => currentLocale();
 
 export const emailRegister = (email: string, password: string, turnstileToken?: string) =>
   call<{ status: 'verification-sent' }>('/api/auth/email/register', { body: { email, password, locale: uiLocale(), turnstileToken } });

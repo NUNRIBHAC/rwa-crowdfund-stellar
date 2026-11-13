@@ -35,6 +35,7 @@ test('production host serves SPA, built assets and discovery without weakening A
         PORT: String(port),
         PUBLIC_MEDIA_DIR: dir,
         MEDIA_ORIGIN: 'https://blockallisto-public-media.pages.dev',
+        COUNTRY_ORIGIN: 'https://blockallisto-country.nunrib-df6.workers.dev',
         COMMUNITY_STORE_PATH: join(dir, 'store.json'),
         COMMUNITY_APPLICATION_UPLOAD_MODE: 'legacy-inline',
         COMMUNITY_PRIVATE_UPLOAD_ENABLED: '0',
@@ -72,7 +73,8 @@ test('production host serves SPA, built assets and discovery without weakening A
       const csp = response.headers.get('content-security-policy') ?? '';
       assert.match(csp, /img-src 'self' data: https:\/\/blockallisto-public-media\.pages\.dev;/);
       assert.match(csp, /font-src 'self' https:\/\/blockallisto-public-media\.pages\.dev;/);
-      assert.doesNotMatch(csp, /workers\.dev|connect-src[^;]*pages\.dev|script-src[^;]*pages\.dev/);
+      assert.match(csp, /connect-src 'self' https:\/\/challenges\.cloudflare\.com https:\/\/blockallisto-country\.nunrib-df6\.workers\.dev;/);
+      assert.doesNotMatch(csp, /connect-src[^;]*pages\.dev|(?:script-src|img-src|font-src)[^;]*country\.nunrib/);
       assert.match(response.headers.get('content-type') ?? '', /text\/html/, path);
       const body = await response.text();
       assert.match(body, /<div id="root">/, path);

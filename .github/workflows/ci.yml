@@ -21,6 +21,8 @@ jobs:
       - run: npm run format:check
       - name: Public media export and origin safety tests
         run: node --test infra/media-static/export.test.mjs
+      - name: Country-only Worker privacy and routing tests
+        run: node --test infra/country-worker/worker.test.mjs
       - run: npm test
       - name: i18n JSON projection is in sync (Weblate)
         run: npm run i18n:check --prefix frontend

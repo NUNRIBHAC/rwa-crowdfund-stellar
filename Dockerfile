@@ -10,7 +10,9 @@ COPY frontend/package.json frontend/
 RUN npm ci
 COPY . .
 ARG VITE_PUBLIC_MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev
-ENV VITE_PUBLIC_MEDIA_ORIGIN=$VITE_PUBLIC_MEDIA_ORIGIN
+ARG VITE_COUNTRY_ORIGIN=https://blockallisto-country.nunrib-df6.workers.dev
+ENV VITE_PUBLIC_MEDIA_ORIGIN=$VITE_PUBLIC_MEDIA_ORIGIN \
+    VITE_COUNTRY_ORIGIN=$VITE_COUNTRY_ORIGIN
 RUN npm run build
 RUN node backend/scripts/check-reviewed-wasm.mjs
 
@@ -18,7 +20,8 @@ FROM node:24-alpine AS runtime
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=4000 \
-    MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev
+    MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev \
+    COUNTRY_ORIGIN=https://blockallisto-country.nunrib-df6.workers.dev
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY backend/package.json backend/

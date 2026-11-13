@@ -36,3 +36,23 @@ Checks:
 node --test infra/country-worker/worker.test.mjs
 npm --prefix frontend exec -- vitest run src/i18n/locale-negotiation.test.ts src/i18n/locale-bootstrap.test.ts
 ```
+
+## Publication evidence
+
+Published 13 November 2026 at 20:21:06 UTC as `blockallisto-country` on the
+existing Free account. Public origin:
+<https://blockallisto-country.nunrib-df6.workers.dev/>. Endpoint: `/country`.
+Deployment ID `dc044f144eaa443ba68ef375918fb354`.
+Module SHA-256 `23833317d6bf140446b18092de00a493f8b75c5a3f957ff79b70e9f0ece4880f`.
+Downloaded deployed module was byte-identical to `worker.mjs`. Creation response
+and dashboard showed logs/traces disabled, no bindings, no logpush. Preview URLs
+are disabled. No custom domain or route was added.
+
+The first public request at 20:22:16 UTC returned HTTP 429, Cloudflare error
+1027, because the account's existing free daily quota was exhausted. This is
+not a verified live country response. The next check is after the daily UTC
+reset. No repeated requests or paid upgrade were made.
+
+Docker builds default to this exact origin; local/dev builds remain
+unconfigured unless explicitly supplied. These source changes do not activate
+or replace the existing staging or demo containers.
