@@ -68,7 +68,14 @@ export function routeFromPath(pathname: string): Route {
     case 'investments':
       return { name: 'investments' };
     case 'campaigns':
-      return parts[1] ? { name: 'campaign', campaignId: decodeURIComponent(parts[1]) } : { name: 'investments' };
+      if (!parts[1]) return { name: 'investments' };
+      try {
+        return { name: 'campaign', campaignId: decodeURIComponent(parts[1]) };
+      } catch {
+        // Invalid percent escapes and malformed UTF-8 are bad URLs, not a
+        // component failure. Reuse the existing localized not-found view.
+        return { name: 'not-found' };
+      }
     case 'how-it-works':
       return { name: 'how-it-works' };
     case 'learn':
