@@ -1405,6 +1405,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   );
 
   // --- Issuer applications ---
+  router.get(
+    '/api/issuer-applications/upload-mode',
+    authed(async (_req, res) => {
+      res.json({ mode: service.applicationDocumentUploadMode() });
+    }),
+  );
   router.post(
     '/api/issuer-applications/drafts',
     authed(async (req, res, account) => {

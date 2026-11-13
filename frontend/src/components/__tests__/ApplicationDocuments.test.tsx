@@ -5,6 +5,7 @@ import ApplicationDocuments from '../ApplicationDocuments';
 import type { IssuerApplication } from '../../community/api';
 const mocks = vi.hoisted(() => ({
   uploadApplicationDocument: vi.fn(),
+  fetchApplicationUploadMode: vi.fn(),
   readApplicationDocument: vi.fn(),
   linkApplicationCampaign: vi.fn(),
   deleteApplicationDocument: vi.fn(),
@@ -20,6 +21,7 @@ vi.mock('../../community/CommunityAuth', () => ({ useCommunityAuth: () => mocks.
 vi.mock('../../community/api', async (original) => ({ ...(await original<typeof import('../../community/api')>()), ...mocks }));
 beforeEach(() => {
   mocks.auth.token = 'synthetic-token';
+  mocks.fetchApplicationUploadMode.mockResolvedValue('oracle-private');
   mocks.uploadOperation.mockResolvedValue({ id: '00000000-0000-4000-8000-000000000001', complete: async () => {} });
 });
 afterEach(() => {
@@ -204,4 +206,36 @@ test('corrupt draft with submittedAt exposes neither upload nor delete', () => {
   );
   expect(document.querySelector('input[type=file]')).toBeNull();
   expect(screen.queryByRole('button', { name: 'Delete document: demo.txt' })).toBeNull();
+});
+
+test('default legacy mode uploads without a private operation or browser-storage dependency', async () => {
+  mocks.fetchApplicationUploadMode.mockResolvedValue('legacy-inline');
+  mocks.uploadOperation.mockRejectedValue(new Error('storage unavailable'));
+  mocks.uploadApplicationDocument.mockResolvedValue({ document: { id: 'legacy-doc' } });
+  render(
+    <I18nProvider>
+      <ApplicationDocuments application={{ ...application, status: 'draft', documents: [] }} />
+    </I18nProvider>,
+  );
+  const file = new File(['SYNTHETIC'], 'legacy.txt', { type: 'text/plain' });
+  Object.defineProperty(file, 'arrayBuffer', { value: async () => new TextEncoder().encode('SYNTHETIC').buffer });
+  fireEvent.change(document.querySelector('input[type=file]')!, { target: { files: [file] } });
+  fireEvent.click(screen.getByRole('button', { name: 'Save document' }));
+  await waitFor(() => expect(mocks.uploadApplicationDocument).toHaveBeenCalledWith('synthetic-token', 'app-demo', 'legacy.txt', 'SYNTHETIC'));
+  expect(mocks.uploadOperation).not.toHaveBeenCalled();
+});
+test('mode lookup failure never silently falls back to inline', async () => {
+  mocks.fetchApplicationUploadMode.mockRejectedValue(new Error('unavailable'));
+  render(
+    <I18nProvider>
+      <ApplicationDocuments application={{ ...application, status: 'draft', documents: [] }} />
+    </I18nProvider>,
+  );
+  const file = new File(['SYNTHETIC'], 'mode.txt', { type: 'text/plain' });
+  Object.defineProperty(file, 'arrayBuffer', { value: async () => new TextEncoder().encode('SYNTHETIC').buffer });
+  fireEvent.change(document.querySelector('input[type=file]')!, { target: { files: [file] } });
+  fireEvent.click(screen.getByRole('button', { name: 'Save document' }));
+  await screen.findByText('unavailable');
+  expect(mocks.uploadApplicationDocument).not.toHaveBeenCalled();
+  expect(mocks.uploadOperation).not.toHaveBeenCalled();
 });

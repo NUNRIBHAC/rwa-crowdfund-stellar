@@ -83,3 +83,24 @@ describe('backend error codes are localized at the API layer', () => {
     await expect(emailResend('a@b.c')).rejects.not.toThrow('amount required');
   });
 });
+
+describe('upload mode negotiation fails closed', () => {
+  afterEach(() => vi.unstubAllGlobals());
+  it('accepts only an explicitly supported server mode', async () => {
+    const { fetchApplicationUploadMode } = await import('../api');
+    for (const mode of ['legacy-inline', 'oracle-private']) {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => new Response(JSON.stringify({ mode }))),
+      );
+      await expect(fetchApplicationUploadMode('synthetic-token')).resolves.toBe(mode);
+    }
+    for (const payload of [{}, { mode: 'unknown' }, { mode: null }]) {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => new Response(JSON.stringify(payload))),
+      );
+      await expect(fetchApplicationUploadMode('synthetic-token')).rejects.toMatchObject({ code: 'API_UNAVAILABLE' });
+    }
+  });
+});
