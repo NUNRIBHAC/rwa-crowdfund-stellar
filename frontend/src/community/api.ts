@@ -141,7 +141,7 @@ export function saveCommunityToken(token: string) {
 export { ApiError } from '../http';
 import { ApiError, responseCall } from '../http';
 
-async function call<T>(url: string, opts: { method?: string; body?: unknown; token?: string } = {}): Promise<T> {
+async function call<T>(url: string, opts: { method?: string; body?: unknown; token?: string; allowNoContent?: boolean } = {}): Promise<T> {
   const headers: Record<string, string> = {};
   if (opts.body !== undefined) headers['Content-Type'] = 'application/json';
   if (opts.token) headers.Authorization = `Bearer ${opts.token}`;
@@ -153,6 +153,8 @@ async function call<T>(url: string, opts: { method?: string; body?: unknown; tok
       body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
     },
     async (response) => {
+      // Only endpoints whose contract explicitly returns 204 may omit JSON.
+      if (opts.allowNoContent && response.status === 204) return {} as T;
       const value: unknown = await response.json();
       if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('invalid API object');
       return value as T;
@@ -794,4 +796,5 @@ export const deleteApplicationDocument = (token: string, id: string, documentId:
   call<{ status?: 'deletion_pending' }>(`/api/issuer-applications/${encodeURIComponent(id)}/documents/${encodeURIComponent(documentId)}`, {
     token,
     method: 'DELETE',
+    allowNoContent: true,
   });
