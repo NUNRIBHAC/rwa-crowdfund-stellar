@@ -27,6 +27,25 @@ jobs:
         run: NODE_ENV=test node --import tsx --test backend/test/production-host.integration.ts
       - name: Dependency audit (fails on high/critical advisories)
         run: npm audit --audit-level=high
+  portal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+      - name: Install independently locked portal without dependency install scripts
+        run: npm ci --prefix portal --ignore-scripts
+      - name: Portal dependency policy regression tests
+        run: node --test portal/scripts/dependency-policy.test.mjs
+      - name: Audit portal dependencies (fails on high/critical advisories)
+        run: npm audit --prefix portal --audit-level=high
+      - name: Build public portal and reject private content
+        run: node portal/scripts/check-build-isolation.mjs public
+      - name: Build internal portal and verify private canary
+        run: node portal/scripts/check-build-isolation.mjs internal
   soroban:
     runs-on: ubuntu-latest
     defaults:

@@ -63,3 +63,11 @@ the existing Weblate workflow when wanted.
 Free local search (`@easyops-cn/docusaurus-search-local`) in both builds.
 Public upgrade path: Algolia DocSearch once the public portal is stable
 (free program; requires public production docs + Algolia logo).
+
+## Dependency security checks
+
+The portal has its own lockfile, outside the application workspaces. CI installs it with dependency install scripts disabled, audits it with `npm audit --prefix portal --audit-level=high`, and builds both audiences. A temporary private canary must be absent from every public HTML/JS/JSON/XML/text/source-map artifact and present in the internal page. Neither a successful root audit nor `--omit=dev` substitutes for the portal audit.
+
+Docusaurus 3.10.2 is retained as an aligned package set. Until upstream updates its ranges, exact portal-only overrides select `tinypool` 2.2.0 and `serialize-javascript` 7.1.4. These cross upstream major ranges, so clean install, serializer/worker compatibility tests and both audience builds are required; do not use `npm audit fix --force`. The overrides do not affect the app lockfile. Remove them only when upstream resolves patched versions without them and the same checks pass.
+
+This change removes the reviewed high/critical advisories, not every advisory. Low/moderate transitive findings remain (including `deepmerge` and `uuid`); audit severity can propagate to parent packages. No audit suppression or threshold reduction is used. A dependency advisory alone does not prove a reachable exploit in the static website.
