@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { poolMaxFromEnv } from './db-pool.js';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { Address } from '@stellar/stellar-sdk';
+import { Address, Networks } from '@stellar/stellar-sdk';
 import { topicSymbol, topicAddress, type BackfillClient, type BackfillCheckpoint, type BackfillGap } from './contributor-backfill.js';
 import { assertExplicitFileStorePath, assertPooledDatabaseUrlTestSafe, assertTestSafeDatabaseUrl } from './test-storage-guard.js';
 
@@ -26,6 +26,8 @@ export type ArchivedChainEvent = {
   // RPC event id - unique per event, the dedup key (RPC docs recommend
   // deduplicating on it).
   eventId: string;
+  // Absent on preserved v1 rows: never infer their chain identity.
+  identity?: ArchiveIdentity;
   campaignId: string;
   contractId: string;
   ledger: number;
@@ -42,10 +44,54 @@ export type ArchivedChainEvent = {
   archiveVersion: number;
 };
 
-export type EventArchiveCheckpoint = BackfillCheckpoint;
+export type ArchiveIdentity = { network: string; contract: string; epoch: string };
+export function archiveIdentity(contractId: string, networkPassphrase?: string, epoch?: string): ArchiveIdentity {
+  const configured = process.env.STELLAR_NETWORK ?? 'testnet';
+  if (!networkPassphrase && !['testnet', 'public'].includes(configured)) throw new Error('unknown archive network');
+  const network = networkPassphrase ?? (configured === 'public' ? Networks.PUBLIC : Networks.TESTNET);
+  const generation = epoch ?? process.env.EVENT_ARCHIVE_EPOCH ?? 'initial';
+  if (!network || !/^[a-zA-Z0-9_-]{1,64}$/.test(generation)) throw new Error('invalid archive network or epoch');
+  return { network: createHash('sha256').update(network).digest('hex'), contract: contractId, epoch: generation };
+}
+export const archiveIdentityKey = (identity: ArchiveIdentity): string => JSON.stringify([identity.network, identity.contract, identity.epoch]);
+export const archiveEventKey = (event: ArchivedChainEvent): string =>
+  event.identity ? JSON.stringify([event.campaignId, archiveIdentityKey(event.identity), event.eventId]) : event.eventId;
+const checkpointKey = (campaignId: string, identity?: ArchiveIdentity): string =>
+  identity ? JSON.stringify([campaignId, archiveIdentityKey(identity)]) : campaignId;
+export type EventArchiveCheckpoint = BackfillCheckpoint & { identity?: ArchiveIdentity; anchor?: { ledger: number; hash: string } };
+export type ArchiveClient = Omit<BackfillClient, 'getLatestLedger'> & {
+  getNetwork?(): Promise<{ passphrase: string }>;
+  getLatestLedger(): Promise<{ sequence: number; id?: string }>;
+  getLedgers?(params: { startLedger: number; pagination: { limit: number } }): Promise<{ ledgers: { sequence: number; hash: string }[] }>;
+};
+export async function verifyArchiveNetwork(client: Pick<ArchiveClient, 'getNetwork'>, identity: ArchiveIdentity): Promise<void> {
+  if (!client.getNetwork) throw new Error('archive RPC network verification unavailable');
+  const network = await client.getNetwork();
+  if (typeof network.passphrase !== 'string' || createHash('sha256').update(network.passphrase).digest('hex') !== identity.network)
+    throw new Error('archive RPC network does not match configured network');
+}
+export async function verifyArchiveAnchor(
+  client: Pick<ArchiveClient, 'getLatestLedger' | 'getLedgers' | 'getNetwork'>,
+  anchor: { ledger: number; hash: string },
+  identity?: ArchiveIdentity,
+): Promise<void> {
+  if (identity) await verifyArchiveNetwork(client, identity);
+  if (!Number.isSafeInteger(anchor.ledger) || anchor.ledger < 1 || !/^[a-f0-9]{64}$/.test(anchor.hash)) throw new Error('invalid archive chain anchor');
+  const head = await client.getLatestLedger();
+  if (head.sequence < anchor.ledger) throw new Error('archive chain ledger regression; choose a new epoch only after reset review');
+  let hash = head.sequence === anchor.ledger ? head.id : undefined;
+  if (head.sequence !== anchor.ledger) {
+    if (!client.getLedgers) throw new Error('archive chain anchor lookup unavailable');
+    const result = await client.getLedgers({ startLedger: anchor.ledger, pagination: { limit: 1 } });
+    const exact = result.ledgers.filter((row) => row.sequence === anchor.ledger);
+    if (exact.length !== 1) throw new Error('archive chain anchor outside available history');
+    hash = exact[0].hash;
+  }
+  if (hash !== anchor.hash) throw new Error('archive chain anchor mismatch; possible reset or wrong RPC, holding cursor');
+}
 export type { BackfillGap };
 
-export const ARCHIVE_VERSION = 1;
+export const ARCHIVE_VERSION = 2;
 
 export type EventArchiveStore = {
   put(events: ArchivedChainEvent[]): Promise<number>;
@@ -55,8 +101,8 @@ export type EventArchiveStore = {
   // this to catch contracts the registry cannot explain; a listing failure
   // must propagate (fail closed), never return a partial list as complete.
   campaigns(): Promise<string[]>;
-  readCheckpoint(campaignId: string): Promise<EventArchiveCheckpoint | undefined>;
-  writeCheckpoint(campaignId: string, cp: EventArchiveCheckpoint): Promise<void>;
+  readCheckpoint(campaignId: string, identity?: ArchiveIdentity): Promise<EventArchiveCheckpoint | undefined>;
+  writeCheckpoint(campaignId: string, cp: EventArchiveCheckpoint, identity?: ArchiveIdentity): Promise<void>;
 };
 
 // --- Verbatim serialization -------------------------------------------------
@@ -80,7 +126,9 @@ const DEFAULT_EVENT_LIMIT = 1000;
 // contributors. Durable checkpoint advances only after a fully processed
 // window. Idempotent: re-presented events dedup by event id.
 export async function archiveCampaignEvents(opts: {
-  client: BackfillClient;
+  client: ArchiveClient;
+  networkPassphrase?: string;
+  epoch?: string;
   campaignId: string;
   contractId: string;
   store: EventArchiveStore;
@@ -94,12 +142,27 @@ export async function archiveCampaignEvents(opts: {
   const now = opts.now ?? (() => Date.now());
   if (!Address.fromString(opts.contractId).toString().startsWith('C')) throw new Error('invalid contract id');
 
-  const { sequence: latest } = await client.getLatestLedger();
-  const stored = await store.readCheckpoint(campaignId);
+  const identity = archiveIdentity(opts.contractId, opts.networkPassphrase, opts.epoch);
+  await verifyArchiveNetwork(client, identity);
+  const head = await client.getLatestLedger();
+  const latest = head.sequence;
+  if (!Number.isSafeInteger(latest) || latest < 1 || !head.id || !/^[a-f0-9]{64}$/.test(head.id)) throw new Error('invalid archive chain head');
+  const anchor = { ledger: latest, hash: head.id };
+  const stored = await store.readCheckpoint(campaignId, identity);
+  if (stored && typeof stored.version === 'number' && stored.version > ARCHIVE_VERSION) throw new Error('newer archive checkpoint version; refusing downgrade');
   // A checkpoint written by an older archive version cannot be trusted to
   // have captured every event: discard it and re-scan (floor-clamped,
   // idempotent writes, gap re-derived honestly).
-  const prior = stored && stored.version === ARCHIVE_VERSION ? stored : undefined;
+  const prior =
+    stored && stored.version === ARCHIVE_VERSION && stored.identity && archiveIdentityKey(stored.identity) === archiveIdentityKey(identity)
+      ? stored
+      : undefined;
+  if (stored && (!stored.identity || archiveIdentityKey(stored.identity) !== archiveIdentityKey(identity)))
+    throw new Error('archive checkpoint identity mismatch; holding cursor');
+  if (prior) {
+    if (!prior.anchor) throw new Error('archive checkpoint has no chain anchor; holding cursor');
+    await verifyArchiveAnchor(client, prior.anchor);
+  }
 
   let gap: BackfillGap | undefined = prior?.gap;
   let floorLedger: number | undefined;
@@ -157,6 +220,7 @@ export async function archiveCampaignEvents(opts: {
       const contributor = topicAddress(topics[1]);
       batch.push({
         eventId,
+        identity,
         campaignId,
         contractId: opts.contractId,
         ledger,
@@ -170,21 +234,28 @@ export async function archiveCampaignEvents(opts: {
         archiveVersion: ARCHIVE_VERSION,
       });
     }
+    await verifyArchiveAnchor(client, anchor);
     const inserted = await store.put(batch);
     archived += inserted;
     duplicates += batch.length - inserted;
-    await store.writeCheckpoint(campaignId, {
-      version: ARCHIVE_VERSION,
-      processedThroughLedger: windowEnd,
-      ...(gap ? { gap } : {}),
-      ...(floorLedger !== undefined
-        ? { floorLedger, floorObservedAt }
-        : prior?.floorLedger !== undefined
-          ? { floorLedger: prior.floorLedger, ...(prior.floorObservedAt !== undefined ? { floorObservedAt: prior.floorObservedAt } : {}) }
-          : {}),
-      latestLedger: latest,
-      updatedAt: now(),
-    });
+    await store.writeCheckpoint(
+      campaignId,
+      {
+        version: ARCHIVE_VERSION,
+        identity,
+        anchor,
+        processedThroughLedger: windowEnd,
+        ...(gap ? { gap } : {}),
+        ...(floorLedger !== undefined
+          ? { floorLedger, floorObservedAt }
+          : prior?.floorLedger !== undefined
+            ? { floorLedger: prior.floorLedger, ...(prior.floorObservedAt !== undefined ? { floorObservedAt: prior.floorObservedAt } : {}) }
+            : {}),
+        latestLedger: latest,
+        updatedAt: now(),
+      },
+      identity,
+    );
     cursor = windowEnd + 1;
   }
   return { scanned, archived, duplicates, gap };
@@ -230,8 +301,9 @@ export class FileEventArchiveStore implements EventArchiveStore {
       const doc = await this.readDoc();
       let inserted = 0;
       for (const ev of events) {
-        if (doc.events[ev.eventId]) continue;
-        doc.events[ev.eventId] = ev;
+        const key = archiveEventKey(ev);
+        if (doc.events[key]) continue;
+        doc.events[key] = ev;
         inserted += 1;
       }
       if (inserted > 0) await this.writeDoc(doc);
@@ -242,7 +314,7 @@ export class FileEventArchiveStore implements EventArchiveStore {
     const doc = await this.readDoc();
     return Object.values(doc.events)
       .filter((e) => !campaignId || e.campaignId === campaignId)
-      .sort((a, b) => a.ledger - b.ledger || a.eventId.localeCompare(b.eventId));
+      .sort((a, b) => a.ledger - b.ledger || archiveEventKey(a).localeCompare(archiveEventKey(b)));
   }
   async count(campaignId?: string): Promise<number> {
     const doc = await this.readDoc();
@@ -252,13 +324,13 @@ export class FileEventArchiveStore implements EventArchiveStore {
     const doc = await this.readDoc();
     return [...new Set(Object.values(doc.events).map((e) => e.campaignId))].sort();
   }
-  async readCheckpoint(campaignId: string): Promise<EventArchiveCheckpoint | undefined> {
-    return (await this.readDoc()).checkpoints[campaignId];
+  async readCheckpoint(campaignId: string, identity?: ArchiveIdentity): Promise<EventArchiveCheckpoint | undefined> {
+    return (await this.readDoc()).checkpoints[checkpointKey(campaignId, identity)];
   }
-  async writeCheckpoint(campaignId: string, cp: EventArchiveCheckpoint): Promise<void> {
+  async writeCheckpoint(campaignId: string, cp: EventArchiveCheckpoint, identity?: ArchiveIdentity): Promise<void> {
     return this.enqueue(async () => {
       const doc = await this.readDoc();
-      doc.checkpoints[campaignId] = cp;
+      doc.checkpoints[checkpointKey(campaignId, identity)] = cp;
       await this.writeDoc(doc);
     });
   }
@@ -308,7 +380,7 @@ export class PostgresEventArchiveStore implements EventArchiveStore {
     for (const ev of events) {
       const r = await this.pool.query(
         'INSERT INTO event_archive (event_id, campaign_id, contract_id, ledger, doc) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (event_id) DO NOTHING',
-        [ev.eventId, ev.campaignId, ev.contractId, ev.ledger, JSON.stringify(ev)],
+        [archiveEventKey(ev), ev.campaignId, ev.contractId, ev.ledger, JSON.stringify(ev)],
       );
       inserted += r.rowCount ?? 0;
     }
@@ -333,16 +405,16 @@ export class PostgresEventArchiveStore implements EventArchiveStore {
     const r = await this.pool.query('SELECT DISTINCT campaign_id FROM event_archive ORDER BY campaign_id');
     return r.rows.map((row: { campaign_id: string }) => row.campaign_id);
   }
-  async readCheckpoint(campaignId: string): Promise<EventArchiveCheckpoint | undefined> {
+  async readCheckpoint(campaignId: string, identity?: ArchiveIdentity): Promise<EventArchiveCheckpoint | undefined> {
     await this.ensureReady();
-    const r = await this.pool.query('SELECT doc FROM event_archive_checkpoints WHERE campaign_id = $1', [campaignId]);
+    const r = await this.pool.query('SELECT doc FROM event_archive_checkpoints WHERE campaign_id = $1', [checkpointKey(campaignId, identity)]);
     return r.rows[0]?.doc;
   }
-  async writeCheckpoint(campaignId: string, cp: EventArchiveCheckpoint): Promise<void> {
+  async writeCheckpoint(campaignId: string, cp: EventArchiveCheckpoint, identity?: ArchiveIdentity): Promise<void> {
     await this.ensureReady();
     await this.pool.query(
       'INSERT INTO event_archive_checkpoints (campaign_id, doc, updated_at) VALUES ($1, $2, now()) ON CONFLICT (campaign_id) DO UPDATE SET doc = $2, updated_at = now()',
-      [campaignId, JSON.stringify(cp)],
+      [checkpointKey(campaignId, identity), JSON.stringify(cp)],
     );
   }
 }
@@ -395,6 +467,7 @@ const canonical = (ev: ArchivedChainEvent): string =>
     ev.value,
     ev.parsedKind,
     ev.parsedContributor,
+    ...(ev.identity ? [[ev.identity.network, ev.identity.contract, ev.identity.epoch]] : []),
   ]);
 
 export function archiveEventHash(ev: ArchivedChainEvent): string {
@@ -402,7 +475,7 @@ export function archiveEventHash(ev: ArchivedChainEvent): string {
 }
 
 export function archiveSnapshotJsonl(events: ArchivedChainEvent[]): string {
-  const sorted = [...events].sort((a, b) => a.ledger - b.ledger || a.eventId.localeCompare(b.eventId));
+  const sorted = [...events].sort((a, b) => a.ledger - b.ledger || archiveEventKey(a).localeCompare(archiveEventKey(b)));
   const header = JSON.stringify({
     type: 'event-archive-snapshot',
     version: ARCHIVE_VERSION,
@@ -440,7 +513,7 @@ function parseSnapshotHeader(lines: string[]): { header?: ArchiveSnapshotHeader;
   if (
     !h ||
     h.type !== 'event-archive-snapshot' ||
-    h.version !== ARCHIVE_VERSION ||
+    ![1, ARCHIVE_VERSION].includes(h.version as number) ||
     !Number.isSafeInteger(h.events) ||
     (h.events as number) < 0 ||
     typeof h.sha256 !== 'string' ||
@@ -464,7 +537,8 @@ function snapshotIntegrityErrors(lines: string[], header: ArchiveSnapshotHeader)
       const row: unknown = JSON.parse(line);
       const hash = (row as Partial<ArchiveSnapshotLine> | null)?.sha256;
       if (typeof hash !== 'string' || !/^[0-9a-f]{64}$/.test(hash)) throw new Error('invalid row hash');
-      const id = (row as Partial<ArchiveSnapshotLine>)?.event?.eventId;
+      const event = (row as Partial<ArchiveSnapshotLine>)?.event;
+      const id = event && typeof event.eventId === 'string' && event.eventId ? archiveEventKey(event) : undefined;
       if (typeof id !== 'string' || !id || ids.has(id)) {
         errors.push('snapshot has missing or duplicate event ids');
       } else ids.add(id);
@@ -529,13 +603,13 @@ export function verifyArchiveSnapshot(snapshotJsonl: string, live: ArchivedChain
         mismatches.push(`${parsed.event?.eventId ?? 'unknown'}: snapshot row hash does not match its content`);
         continue;
       }
-      snap.set(parsed.event.eventId, parsed);
+      snap.set(archiveEventKey(parsed.event), parsed);
     } catch {
       errors.push('a snapshot line is not parseable JSON');
     }
   }
   if (header && header.events !== snap.size + mismatches.length) errors.push('snapshot has duplicate or invalid event rows');
-  const liveById = new Map(live.map((e) => [e.eventId, e]));
+  const liveById = new Map(live.map((e) => [archiveEventKey(e), e]));
   for (const [id, line] of snap) {
     const liveEv = liveById.get(id);
     if (!liveEv) {

@@ -94,3 +94,28 @@ jobs:
           "$RUNNER_TEMP/gitleaks/gitleaks" version
       - name: Scan working tree and full git history
         run: '"$RUNNER_TEMP/gitleaks/gitleaks" git --redact --verbose .'
+
+  archive-postgres:
+    runs-on: ubuntu-latest
+    services:
+      archive-test-postgres:
+        image: postgres:17@sha256:846a7ddaa67a4b354ae1d21087b683901aa6113a4ed626d3787cfbf6c85e3e07
+        env:
+          POSTGRES_DB: archive_identity_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 127.0.0.1:5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d archive_identity_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Isolated Postgres archive identity integration
+        run: NODE_ENV=test node --import tsx --test backend/test/event-archive.postgres.integration.ts
+        env:
+          ARCHIVE_TEST_DATABASE_URL: postgresql://postgres@127.0.0.1:5432/archive_identity_test

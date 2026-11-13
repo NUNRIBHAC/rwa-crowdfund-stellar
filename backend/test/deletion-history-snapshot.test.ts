@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Address, Keypair, StrKey, xdr } from '@stellar/stellar-sdk';
-import { ARCHIVE_VERSION, type ArchivedChainEvent, type EventArchiveCheckpoint } from '../src/event-archive.js';
+import { Address, Keypair, StrKey, Networks, xdr } from '@stellar/stellar-sdk';
+import { ARCHIVE_VERSION, archiveIdentity, type ArchivedChainEvent, type EventArchiveCheckpoint } from '../src/event-archive.js';
 import {
   buildWalletHistorySnapshot,
   participantsFromArchivedEvents,
@@ -25,6 +25,7 @@ const amount = (n: number) => xdr.ScVal.scvI128(new xdr.Int128Parts({ hi: xdr.In
 let seq = 0;
 const makeEvent = (campaignId: string, contractId: string, ledger: number, topics: string[], value: string): ArchivedChainEvent => ({
   eventId: `evt-${++seq}`,
+  identity: archiveIdentity(contractId, NETWORK),
   campaignId,
   contractId,
   ledger,
@@ -56,6 +57,8 @@ const fakeArchive = (opts: FakeArchiveOpts) => ({
 });
 const checkpoint = (through: number, extra: Partial<EventArchiveCheckpoint> = {}): EventArchiveCheckpoint => ({
   version: ARCHIVE_VERSION,
+  identity: archiveIdentity(contractA, NETWORK),
+  anchor: { ledger: through, hash: 'a'.repeat(64) },
   processedThroughLedger: through,
   updatedAt: 1_700_000_000_000,
   ...extra,
@@ -81,7 +84,11 @@ const baseSources = (over: Partial<WalletHistorySources> = {}): WalletHistorySou
   registry: [{ id: 'demo-solar', name: 'Demo Solar', contractId: contractA }],
   archive: fakeArchive({ checkpoints: { 'demo-solar': checkpoint(1000) } }),
   manifest: fakeManifest([manifestRecord('demo-solar', contractA, 10)]),
-  client: { getLatestLedger: async () => ({ sequence: 1200 }) },
+  client: {
+    getNetwork: async () => ({ passphrase: NETWORK }),
+    getLatestLedger: async () => ({ sequence: 1200, id: 'a'.repeat(64) }),
+    getLedgers: async (q) => ({ ledgers: [{ sequence: q.startLedger, hash: 'a'.repeat(64) }] }),
+  },
   journal: { intents: [] },
   pending: [],
   communityCampaignIds: [],
@@ -123,7 +130,7 @@ test('events archived beyond the shared target ledger still count as participati
     ],
     archive: fakeArchive({
       events: [late],
-      checkpoints: { a: checkpoint(1000), b: checkpoint(800) }, // target = 800
+      checkpoints: { a: checkpoint(1000), b: checkpoint(800, { identity: archiveIdentity(contractB, NETWORK) }) }, // target = 800
     }),
     manifest: fakeManifest([manifestRecord('a', contractA, 10), manifestRecord('b', contractB, 10)]),
   });
@@ -173,9 +180,14 @@ test('unexplained campaign references anywhere mark the manifest incomplete', as
 
 test('v2 campaigns expand to token and offering rows, each needing coverage', async () => {
   const v2 = [{ id: 'v2camp', name: 'V2', contractSet: 'v2', tokenContractId: contractC, offeringContractId: contractD }];
-  const both = fakeArchive({ checkpoints: { 'v2camp:token': checkpoint(900), 'v2camp:offering': checkpoint(900) } });
+  const both = fakeArchive({
+    checkpoints: {
+      'v2camp:token': checkpoint(900, { identity: archiveIdentity(contractC, NETWORK) }),
+      'v2camp:offering': checkpoint(900, { identity: archiveIdentity(contractD, NETWORK) }),
+    },
+  });
   assert.equal(await walletDeletionEvidenceVerdict(stranger, baseSources({ registry: v2, archive: both, manifest: fakeManifest() })), 'clear');
-  const onlyToken = fakeArchive({ checkpoints: { 'v2camp:token': checkpoint(900) } });
+  const onlyToken = fakeArchive({ checkpoints: { 'v2camp:token': checkpoint(900, { identity: archiveIdentity(contractC, NETWORK) }) } });
   assert.equal(await walletDeletionEvidenceVerdict(stranger, baseSources({ registry: v2, archive: onlyToken, manifest: fakeManifest() })), 'unavailable');
 });
 
@@ -244,4 +256,32 @@ test('manifest record network or campaign mismatches fall back to the conservati
   assert.equal(snapshot.campaigns[0].createdLedger, 1); // mismatched grounding is not trusted
   const wrongCampaign = fakeManifest([manifestRecord('other-campaign', contractA, 500)]);
   assert.equal((await buildWalletHistorySnapshot(baseSources({ manifest: wrongCampaign }))).campaigns[0].createdLedger, 1);
+});
+
+test('F1 unbound, foreign-network and foreign-epoch coverage cannot authorize a clear history verdict', async () => {
+  for (const extra of [
+    { identity: undefined },
+    { identity: archiveIdentity(contractA, Networks.PUBLIC) },
+    { identity: archiveIdentity(contractA, NETWORK, 'old-reset') },
+    { anchor: undefined },
+  ]) {
+    const sources = baseSources({ archive: fakeArchive({ checkpoints: { 'demo-solar': checkpoint(1000, extra) } }) });
+    assert.equal(await walletDeletionEvidenceVerdict(stranger, sources), 'unavailable');
+  }
+  const sources = baseSources({
+    client: {
+      getNetwork: async () => ({ passphrase: NETWORK }),
+      getLatestLedger: async () => ({ sequence: 1200, id: 'b'.repeat(64) }),
+      getLedgers: async () => ({ ledgers: [{ sequence: 1000, hash: 'b'.repeat(64) }] }),
+    },
+  });
+  assert.equal(await walletDeletionEvidenceVerdict(stranger, sources), 'unavailable');
+  const oldEvent = { ...makeEvent('demo-solar', contractA, 500, [sym('x')], amount(1)), identity: undefined, archiveVersion: 1 };
+  assert.equal(
+    await walletDeletionEvidenceVerdict(
+      stranger,
+      baseSources({ archive: fakeArchive({ events: [oldEvent], checkpoints: { 'demo-solar': checkpoint(1000) } }) }),
+    ),
+    'unavailable',
+  );
 });

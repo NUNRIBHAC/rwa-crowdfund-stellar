@@ -1,5 +1,14 @@
 import { xdr, scValToNative } from '@stellar/stellar-sdk';
-import { ARCHIVE_VERSION, type ArchivedChainEvent, type EventArchiveStore } from './event-archive.js';
+import {
+  ARCHIVE_VERSION,
+  archiveIdentity,
+  archiveIdentityKey,
+  verifyArchiveAnchor,
+  type ArchiveClient,
+  type ArchiveIdentity,
+  type ArchivedChainEvent,
+  type EventArchiveStore,
+} from './event-archive.js';
 import type { DeletionHistoryCoverage, DeletionHistorySnapshot } from './deletion-history.js';
 import { walletDeletionHistory } from './deletion-history.js';
 import { walletDeletionRetention, type WalletDeletionRetentionEvidence } from './deletion-retention.js';
@@ -68,7 +77,7 @@ function scanSerializedField(field: unknown): { keys: string[]; readable: boolea
 // version count as unreadable: a mixed store is not evidence.
 export function participantsFromArchivedEvents(
   events: ArchivedChainEvent[],
-  expected: { campaignId: string; contractId: string },
+  expected: { campaignId: string; contractId: string; identity?: ArchiveIdentity },
 ): { participantKeys: string[]; unreadableEvents: boolean } {
   const keys = new Set<string>();
   let unreadable = false;
@@ -77,6 +86,8 @@ export function participantsFromArchivedEvents(
       ev.campaignId !== expected.campaignId ||
       ev.contractId !== expected.contractId ||
       ev.archiveVersion !== ARCHIVE_VERSION ||
+      !ev.identity ||
+      archiveIdentityKey(ev.identity) !== archiveIdentityKey(expected.identity ?? archiveIdentity(expected.contractId)) ||
       typeof ev.eventId !== 'string' ||
       ev.eventId.length === 0 ||
       !Number.isSafeInteger(ev.ledger) ||
@@ -102,7 +113,8 @@ export type WalletHistorySources = {
   registry: RegistryLikeEntry[];
   archive: EventArchiveStore;
   manifest: DeploymentManifestStore;
-  client: { getLatestLedger(): Promise<{ sequence: number }> };
+  client: Pick<ArchiveClient, 'getLatestLedger' | 'getLedgers' | 'getNetwork'>;
+  archiveEpoch?: string;
   journal: IntentStore;
   pending: PendingContribution[];
   // Campaign ids present in the community contributor registry
@@ -214,13 +226,18 @@ export async function buildWalletHistorySnapshot(sources: WalletHistorySources):
   let readsFailed = false;
   for (const row of rows) {
     try {
-      const checkpoint = await sources.archive.readCheckpoint(row.key);
+      const identity = archiveIdentity(row.contractId, network, sources.archiveEpoch);
+      const checkpoint = await sources.archive.readCheckpoint(row.key, identity);
       const ok =
         checkpoint !== undefined &&
         checkpoint.version === ARCHIVE_VERSION &&
+        checkpoint.identity !== undefined &&
+        archiveIdentityKey(checkpoint.identity) === archiveIdentityKey(identity) &&
+        checkpoint.anchor !== undefined &&
         checkpoint.gap === undefined &&
         Number.isSafeInteger(checkpoint.processedThroughLedger) &&
         checkpoint.processedThroughLedger > 0;
+      if (ok) await verifyArchiveAnchor(sources.client, checkpoint!.anchor!, identity);
       states.set(row.key, {
         checkpointOk: ok,
         processedThrough: ok ? checkpoint.processedThroughLedger : 0,
@@ -267,7 +284,11 @@ export async function buildWalletHistorySnapshot(sources: WalletHistorySources):
       // reverse). The not-yet-archived tail above every checkpoint is the
       // refresh hook's responsibility, documented on WalletHistorySources.
       const events = await sources.archive.list(row.key);
-      const parsed = participantsFromArchivedEvents(events, { campaignId: row.key, contractId: row.contractId });
+      const parsed = participantsFromArchivedEvents(events, {
+        campaignId: row.key,
+        contractId: row.contractId,
+        identity: archiveIdentity(row.contractId, network, sources.archiveEpoch),
+      });
       participantKeys = parsed.participantKeys;
       unreadableEvents = parsed.unreadableEvents;
     } catch {
