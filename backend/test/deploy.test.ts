@@ -518,8 +518,7 @@ test('v2 create fails closed when the journal does not retain the contract id', 
     );
     // It must never report confirmed or advance silently in this state.
     assert.equal(sendCount, sends + 1, 'only the original submission was sent');
-    const next = await buildCampaignDeployV2(v2Input());
-    assert.equal(next.step, 'create-token');
+    await assert.rejects(buildCampaignDeployV2(v2Input()), /reconcile the exact original hash/);
   } finally {
     resetJournalBackendForTests();
   }
@@ -537,8 +536,9 @@ test('v2 resubmitting a stranded successful create repairs the journal without a
   const signedXdr = signed(built.xdr);
   const first = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signedXdr, name: 'Solar V2' });
   assert.equal(first.confirmed, false);
-  const stuck = await buildCampaignDeployV2(v2Input());
-  assert.equal(stuck.step, 'create-token');
+  const before = fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8');
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /reconcile the exact original hash/);
+  assert.equal(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8'), before, 'no replacement intent is created');
   // Same-hash resubmission is terminal (no second sendTransaction) and heals
   // the journal once the id is extractable from the meta.
   createNoId = false;
@@ -548,4 +548,33 @@ test('v2 resubmitting a stranded successful create repairs the journal without a
   assert.equal(repaired.contractId, v2TokenContractId);
   const next = await buildCampaignDeployV2(v2Input());
   assert.equal(next.step, 'create-offering');
+});
+
+test('successful offering create without an id blocks replacement and recovers only the same hash', async () => {
+  reset();
+  v2TokenOnLedger = true;
+  v2OfferingOnLedger = true;
+  const token = await buildCampaignDeployV2(v2Input());
+  await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(token.xdr) });
+  const offering = await buildCampaignDeployV2(v2Input());
+  assert.equal(offering.step, 'create-offering');
+  createNoId = true;
+  const envelope = signed(offering.xdr),
+    sends = sendCount;
+  const outcome = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: envelope });
+  assert.equal(outcome.confirmed, false);
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /reconcile the exact original hash/);
+  assert.equal(sendCount, sends + 1);
+  v2TokenOnLedger = false;
+  v2OfferingOnLedger = false;
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /reconcile the exact original hash/);
+  createNoId = false;
+  createMetaOnly = true;
+  const recovered = await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: envelope });
+  assert.equal(recovered.confirmed, true);
+  assert.equal(sendCount, sends + 1);
+  v2TokenOnLedger = true;
+  v2OfferingOnLedger = true;
+  const next = await buildCampaignDeployV2(v2Input());
+  assert.equal(next.step, 'set-minter');
 });
