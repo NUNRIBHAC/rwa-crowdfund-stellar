@@ -1,7 +1,6 @@
+import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { Keypair } from '@stellar/stellar-sdk';
 
@@ -11,7 +10,7 @@ import { Keypair } from '@stellar/stellar-sdk';
 // json|csv, so the PDF fell through to the generic 404 on staging. These
 // tests pin the gate: all three share-register formats must DISPATCH (reach
 // the admin guard -> 401 anonymous), never fall through (-> 404).
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'community-dispatch-'));
+const tmp = createCommunityTestDirectory();
 process.env.STELLAR_NETWORK = 'testnet';
 process.env.USDC_ISSUER = Keypair.random().publicKey();
 process.env.SOROBAN_INTENTS_PATH = path.join(tmp, 'intents.json');

@@ -1,3 +1,6 @@
+import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
+import { join } from 'node:path';
+import { rmSync } from 'node:fs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { PostgresCommunityStore, emptyCommunityState } from '../src/community-store.js';
@@ -61,9 +64,11 @@ test('communityStoreFromEnv: fails closed when durable storage is required but u
     process.env.SOROBAN_JOURNAL_BACKEND = 'postgres';
     await assert.rejects(() => communityStoreFromEnv(), /refusing to fall back/);
     process.env.SOROBAN_JOURNAL_BACKEND = 'file';
-    process.env.COMMUNITY_STORE_PATH = '/tmp/community-env-test.json';
+    const dir = createCommunityTestDirectory();
+    process.env.COMMUNITY_STORE_PATH = join(dir, 'community.json');
     const store = await communityStoreFromEnv();
     assert.equal(store.constructor.name, 'FileCommunityStore');
+    rmSync(dir, { recursive: true, force: true });
   } finally {
     process.env = saved;
   }
