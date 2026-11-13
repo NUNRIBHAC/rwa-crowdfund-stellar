@@ -9,7 +9,7 @@
 // endpoints. Operators use the operator dashboard messaging tab instead, so
 // this panel renders nothing for them (a GET here would return every thread
 // of the campaign, not an own thread).
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { COMMUNITY_LIMITS, fetchIssuerMessages, postIssuerMessage } from '../community/api';
 import type { IssuerMessage } from '../community/api';
@@ -17,12 +17,27 @@ import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
 
 export default function IssuerMessages({ campaignId }: { campaignId: string }) {
+  const { account, token, isOperator } = useCommunityAuth();
+  // A thread's private state belongs to this exact actor/session/campaign.
+  // Remount before rendering a different context, not in a later effect.
+  const context = JSON.stringify([account?.publicKey ?? null, token, isOperator, campaignId]);
+  return <IssuerMessageThread key={context} campaignId={campaignId} />;
+}
+
+function IssuerMessageThread({ campaignId }: { campaignId: string }) {
   const { m, locale } = useI18n();
   const { account, token, isOperator } = useCommunityAuth();
   const [messages, setMessages] = useState<IssuerMessage[] | null>(null);
   const [error, setError] = useState('');
   const [body, setBody] = useState('');
   const [busy, setBusy] = useState(false);
+  const live = useRef(false);
+  useEffect(() => {
+    live.current = true;
+    return () => {
+      live.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     setMessages(null);
@@ -44,12 +59,13 @@ export default function IssuerMessages({ campaignId }: { campaignId: string }) {
     setError('');
     try {
       const message = await postIssuerMessage(token, campaignId, body.trim());
+      if (!live.current) return;
       setMessages((prev) => [...(prev ?? []), message]);
       setBody('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      if (live.current) setError(e instanceof Error ? e.message : String(e));
     } finally {
-      setBusy(false);
+      if (live.current) setBusy(false);
     }
   }
 
