@@ -1,6 +1,6 @@
 # Static public media and independent reserve
 
-Status: prepared, not deployed. Cloudflare project creation was approved separately on 2026-11-13. The actual Pages hostname must be read from the created project before setting any frontend or CSP configuration. Never guess it.
+Status: the static Pages snapshot was deployed on 2026-11-13. The app cutover and independent VM reserve are prepared, not deployed. The observed Pages origin is `https://blockallisto-public-media.pages.dev`. All 583 asset responses were HTTP 200 and SHA-256 matched the local export; the remote checksums file also matched its local hash. No Functions were uploaded.
 
 ## Public-only export
 
@@ -16,11 +16,13 @@ Create a **Pages Direct Upload** project, not a Worker or Pages Functions projec
 
 After creation, record its exact observed HTTPS host. Build with `VITE_PUBLIC_MEDIA_ORIGIN=https://ACTUAL_HOST` and set the backend's existing `MEDIA_ORIGIN` to that exact origin. The build applies this one base to TS/JS, CSS and HTML. CSP permits that exact origin only for images and fonts. Do not add wildcards, remote scripts or general `connect-src` permission. Confirm exported checksums through the created host before approving a site release.
 
-The source default remains the existing Worker until a real Pages host is supplied. That default is a compatibility mode, not proof of a Pages cutover.
+The frontend and Docker defaults now use the verified Pages origin. `VITE_PUBLIC_MEDIA_ORIGIN` still permits an explicit build override. Docker runtime `MEDIA_ORIGIN` defaults to Pages, but an existing environment file can override it: staging must explicitly replace its old Worker value at the approved release. The server outside Docker keeps its existing self-only CSP when the variable is unset. A prepared default is not proof of app cutover.
 
 ## Independent Oracle reserve
 
-With separate staging release approval, copy the verified export into a versioned directory under `/var/oled/public-media/`, retaining disk safety gates. Mount that directory read-only into the **staging** container at `/public-media` and set `PUBLIC_MEDIA_DIR=/public-media`. Do not bind a directory containing private documents, backups or secrets. The production host serves it at `/media/`; unknown paths and dotfiles do not fall through to SPA HTML. No media is copied into app images. Demo requires its own release approval.
+The verified export has 583 public assets plus the checksums file and `_headers`: 22,513,376 bytes of file content, 22,628,064 bytes (22.63 MB) including directory metadata in the prepared tree, and 23,945,216 allocated bytes on the preparation filesystem. Check actual allocation on the target filesystem rather than assuming that last number. With separate staging release approval, copy the verified export into a versioned directory under `/var/oled/public-media/`, retaining disk safety gates. Mount that directory read-only into the **staging** container at `/public-media` and set `PUBLIC_MEDIA_DIR=/public-media`. Do not bind a directory containing private documents, backups or secrets. The production host serves it at `/media/`; unknown paths and dotfiles do not fall through to SPA HTML. No media is copied into app images. Demo requires its own release approval.
+
+Release gates: re-read current staging identity and disk state; require at least 3 GiB free on both `/` and `/var/oled` before transfer, after extraction, before build/switch and after deployment. Stop if a gate fails, without extra cleanup or cache relocation. Verify every exported file checksum after copying, before binding it. Keep the reserve outside app images and private-data mounts. Build and test the integration with current main, then change only staging's exact `MEDIA_ORIGIN`, `PUBLIC_MEDIA_DIR` and read-only media mount. Verify the real SPA, API failures, assets, CSP, Pages-primary and forced-unavailable modes before completion. Preserve the current-only root image and immediately-previous archive retention rule. No demo deployment, DNS change, paid service or Cloudflare settings change belongs to that approval.
 
 Images retry the same path once against `/media/` on HTTP/network failure or after eight seconds. The capture-phase handler prevents an old component from selecting a second asset on the same failed host. A changed theme/source can receive a fresh retry. Lazy-image clocks start only when the image reaches the viewport. A second failure never loops back to Pages.
 

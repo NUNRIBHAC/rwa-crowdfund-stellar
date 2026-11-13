@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { installMediaFallback, installFontTimeout, reserveMediaUrl } from './media-fallback';
-const origin = 'https://blockallisto-media.nunrib-df6.workers.dev';
+const origin = 'https://blockallisto-public-media.pages.dev';
 let stop: (() => void) | undefined;
 afterEach(() => {
   stop?.();

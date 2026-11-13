@@ -34,6 +34,7 @@ test('production host serves SPA, built assets and discovery without weakening A
         HOST: '127.0.0.1',
         PORT: String(port),
         PUBLIC_MEDIA_DIR: dir,
+        MEDIA_ORIGIN: 'https://blockallisto-public-media.pages.dev',
         COMMUNITY_STORE_PATH: join(dir, 'store.json'),
         COMMUNITY_APPLICATION_UPLOAD_MODE: 'legacy-inline',
         COMMUNITY_PRIVATE_UPLOAD_ENABLED: '0',
@@ -68,6 +69,10 @@ test('production host serves SPA, built assets and discovery without weakening A
     for (const path of ['/', '/account', '/campaigns', '/campaigns/test-deep-link']) {
       const response = await fetch(base + path);
       assert.equal(response.status, 200, path);
+      const csp = response.headers.get('content-security-policy') ?? '';
+      assert.match(csp, /img-src 'self' data: https:\/\/blockallisto-public-media\.pages\.dev;/);
+      assert.match(csp, /font-src 'self' https:\/\/blockallisto-public-media\.pages\.dev;/);
+      assert.doesNotMatch(csp, /workers\.dev|connect-src[^;]*pages\.dev|script-src[^;]*pages\.dev/);
       assert.match(response.headers.get('content-type') ?? '', /text\/html/, path);
       const body = await response.text();
       assert.match(body, /<div id="root">/, path);

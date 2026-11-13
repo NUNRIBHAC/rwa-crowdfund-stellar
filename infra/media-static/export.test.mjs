@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { URL } from 'node:url';
 import { readFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -41,4 +42,37 @@ test('single exact origin, font secondary source, no widened origin syntax', () 
   assert.ok(output.includes(origin + '/fonts/inter-400.woff2'));
   assert.ok(output.includes("url('/media/fonts/inter-400.woff2')"));
   assert.ok(!output.includes('workers.dev'));
+});
+
+test('verified Pages is the build and Docker default, with matching exact runtime CSP origin', () => {
+  const origin = 'https://blockallisto-public-media.pages.dev';
+  assert.equal(mediaOrigin(), origin);
+  const docker = readFileSync(new URL('../../Dockerfile', import.meta.url), 'utf8');
+  assert.ok(docker.includes('ARG VITE_PUBLIC_MEDIA_ORIGIN=' + origin));
+  assert.ok(docker.includes('MEDIA_ORIGIN=' + origin));
+  const plugin = publicMediaPlugin(mediaOrigin());
+  for (const file of ['example.ts', 'styles.css']) {
+    const out = plugin.transform('https://blockallisto-media.nunrib-df6.workers.dev/logo/test.svg', '/repo/frontend/src/' + file).code;
+    assert.ok(out.includes(origin));
+    assert.ok(!out.includes('workers.dev'));
+  }
+  assert.equal(
+    plugin.transformIndexHtml.handler('<meta content="https://blockallisto-media.nunrib-df6.workers.dev/logo/test.svg">'),
+    '<meta content="' + origin + '/logo/test.svg">',
+  );
+});
+
+test('documentation retains the five original diagram paths on the verified host', () => {
+  const keys = [
+    'system-light-adcddcb9ea17417dab6b835f620e97d1.svg',
+    'accounts-community-light-48093798a83749750ec9c7fae14f781e.svg',
+    'transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg',
+    'supporting-light-16e7b084d8e674625bc0a0055360d776.svg',
+    'blockallisto-architecture-5997b399.svg',
+  ];
+  for (const file of ['README.md', 'docs/architecture.md']) {
+    const text = readFileSync(new URL('../../' + file, import.meta.url), 'utf8');
+    assert.ok(!text.includes('https://blockallisto-media.nunrib-df6.workers.dev/architecture/'));
+    for (const key of keys) assert.ok(text.includes('https://blockallisto-public-media.pages.dev/architecture/' + key), key);
+  }
 });

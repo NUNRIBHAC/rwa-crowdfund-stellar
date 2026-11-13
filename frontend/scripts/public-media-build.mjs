@@ -1,5 +1,6 @@
 export const LEGACY_MEDIA_ORIGIN = 'https://blockallisto-media.nunrib-df6.workers.dev';
-export function mediaOrigin(value = LEGACY_MEDIA_ORIGIN) {
+export const DEFAULT_MEDIA_ORIGIN = 'https://blockallisto-public-media.pages.dev';
+export function mediaOrigin(value = DEFAULT_MEDIA_ORIGIN) {
   if (!/^https:\/\/[a-z0-9][a-z0-9.-]*$/.test(value)) throw new Error('VITE_PUBLIC_MEDIA_ORIGIN must be an HTTPS origin without a path');
   return value;
 }

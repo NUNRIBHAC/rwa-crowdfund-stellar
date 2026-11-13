@@ -1,7 +1,7 @@
 // Images are retried once against the independent, read-only same-origin
 // mirror. Capture phase runs before component handlers; no retries or loops
 // after the mirror fails. A new source on the same element gets a fresh try.
-export const MEDIA_ORIGIN = import.meta.env.VITE_PUBLIC_MEDIA_ORIGIN || 'https://blockallisto-media.nunrib-df6.workers.dev';
+export const MEDIA_ORIGIN = import.meta.env.VITE_PUBLIC_MEDIA_ORIGIN || 'https://blockallisto-public-media.pages.dev';
 export const MEDIA_TIMEOUT_MS = 8000;
 
 export function reserveMediaUrl(value: string, origin = MEDIA_ORIGIN): string | null {
