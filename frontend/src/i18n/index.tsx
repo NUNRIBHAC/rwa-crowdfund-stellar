@@ -10,6 +10,7 @@ import { ja } from './locales/ja';
 import { ko } from './locales/ko';
 import { ar } from './locales/ar';
 import { hi } from './locales/hi';
+import { preferredLocale } from './locale-negotiation';
 
 export type Locale = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'zh-TW' | 'zh-CN' | 'ja' | 'ko' | 'ar' | 'hi';
 
@@ -168,24 +169,13 @@ export function requestFailedMessage(status: number): string {
   return MESSAGES[storedLocale() ?? detectLocale()].community.requestFailed.replace('{status}', String(status));
 }
 
+export function browserPreferences(): readonly string[] {
+  if (typeof navigator === 'undefined') return [];
+  return navigator.languages?.length ? navigator.languages : [navigator.language];
+}
+
 function detectLocale(): Locale {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (isLocale(saved)) return saved;
-  } catch {
-    // localStorage unavailable; fall through to browser language
-  }
-  const nav = (typeof navigator !== 'undefined' ? navigator.language : 'en').toLowerCase();
-  if (nav.startsWith('pt')) return 'pt';
-  if (nav.startsWith('es')) return 'es';
-  if (nav.startsWith('fr')) return 'fr';
-  if (nav.startsWith('de')) return 'de';
-  if (nav.startsWith('zh')) return nav.includes('tw') || nav.includes('hk') || nav.includes('hant') ? 'zh-TW' : 'zh-CN';
-  if (nav.startsWith('ja')) return 'ja';
-  if (nav.startsWith('ko')) return 'ko';
-  if (nav.startsWith('ar')) return 'ar';
-  if (nav.startsWith('hi')) return 'hi';
-  return 'en';
+  return preferredLocale(storedLocale(), browserPreferences());
 }
 
 export type I18n = {
@@ -198,8 +188,8 @@ export type I18n = {
 const defaultContext: I18n = { locale: 'en', setLocale: () => {}, m: en };
 const I18nContext = createContext<I18n>(defaultContext);
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(detectLocale);
+export function I18nProvider({ children, initialLocale }: { children: ReactNode; initialLocale?: Locale }) {
+  const [locale, setLocaleState] = useState<Locale>(() => storedLocale() ?? initialLocale ?? detectLocale());
   const m = MESSAGES[locale];
 
   useEffect(() => {
