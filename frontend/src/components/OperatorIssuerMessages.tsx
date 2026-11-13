@@ -4,7 +4,7 @@
 // go through the operator route naming the thread; a reply into a thread
 // that no longer exists is a server 404 shown as-is. Operator authorship is
 // labeled operator - never a verified issuer identity.
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { COMMUNITY_LIMITS, fetchIssuerMessages, replyIssuerMessage } from '../community/api';
 import type { IssuerMessage } from '../community/api';
@@ -15,9 +15,36 @@ import { shorten, tpl } from '../format';
 type Thread = { investorKey: string; messages: IssuerMessage[]; lastActivityAt: number };
 
 export default function OperatorIssuerMessages({ campaigns }: { campaigns: { id: string; name: string }[] }) {
+  const { account, token } = useCommunityAuth();
+  if (!account || !token) return null;
+  return <OperatorSession key={JSON.stringify([account?.publicKey ?? null, token])} campaigns={campaigns} />;
+}
+
+function OperatorSession({ campaigns }: { campaigns: { id: string; name: string }[] }) {
+  const [campaignId, setCampaignId] = useState('');
+  return <OperatorCampaign key={campaignId} campaigns={campaigns} campaignId={campaignId} setCampaignId={setCampaignId} />;
+}
+
+function OperatorCampaign({
+  campaigns,
+  campaignId,
+  setCampaignId,
+}: {
+  campaigns: { id: string; name: string }[];
+  campaignId: string;
+  setCampaignId: (value: string) => void;
+}) {
   const { m, locale } = useI18n();
   const { token } = useCommunityAuth();
-  const [campaignId, setCampaignId] = useState('');
+  // Each campaign/session owns its records and draft. An old completion must
+  // not write after its scope unmounts, including errors and busy state.
+  const live = useRef(false);
+  useEffect(() => {
+    live.current = true;
+    return () => {
+      live.current = false;
+    };
+  }, []);
   const [messages, setMessages] = useState<IssuerMessage[] | null>(null);
   const [investorKey, setInvestorKey] = useState('');
   const [error, setError] = useState('');
@@ -57,12 +84,13 @@ export default function OperatorIssuerMessages({ campaigns }: { campaigns: { id:
     setError('');
     try {
       const message = await replyIssuerMessage(token, campaignId, investorKey, body.trim());
+      if (!live.current) return;
       setMessages((prev) => [...(prev ?? []), message]);
       setBody('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      if (live.current) setError(e instanceof Error ? e.message : String(e));
     } finally {
-      setBusy(false);
+      if (live.current) setBusy(false);
     }
   }
 
