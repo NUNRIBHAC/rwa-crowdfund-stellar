@@ -164,7 +164,7 @@ test('positions read failure shows unavailable, not an empty success or zero bal
   show(market(''));
   await waitFor(() => expect(fetchCalls.some((u) => u.includes('/api/campaigns?actor='))).toBe(true));
   expect(screen.queryByText('Session Wallet Solar')).toBeNull();
-  expect(screen.getByText('Total contributed')).toBeTruthy();
+  expect(screen.getByText('Recorded contributions')).toBeTruthy();
   await waitFor(() => expect(screen.getAllByText(/The service is temporarily unavailable/).length).toBeGreaterThan(0));
 });
 
@@ -253,4 +253,15 @@ test('R8 legacy unbound intent is not attributed to a wallet', async () => {
   show(market(''));
   await waitFor(() => expect(screen.getAllByText('Session Wallet Solar').length).toBeGreaterThan(0));
   expect(screen.queryByText('unbound-campaign')).toBeNull();
+});
+
+test('R13 a withdrawn campaign remains a recorded contribution, never current escrow', async () => {
+  mockAccount = walletAccount(W1);
+  campaignsByActor[W1] = [{ ...C1, withdrawn: true, raised: '1000000000', config: { ...C1.config, goal: '1000000000' } }];
+  show(market(''));
+  await waitFor(() => expect(screen.getAllByText('Session Wallet Solar').length).toBeGreaterThan(0));
+  expect(screen.getByRole('heading', { name: 'Recorded contributions' })).toBeTruthy();
+  expect(screen.getByText('On-chain contribution records, not current escrow. Successful withdrawals keep these records; refunds clear them.')).toBeTruthy();
+  expect(screen.queryByRole('heading', { name: 'Total contributed' })).toBeNull();
+  expect(screen.getByText(/These testnet records give no holder right, dividend or payout claim/)).toBeTruthy();
 });

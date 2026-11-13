@@ -102,6 +102,10 @@ fn withdraw_after_deadline_when_goal_met() {
     assert_eq!(t.token.balance(&t.creator), 1_000);
     assert_eq!(t.token.balance(&t.contract), 0);
     assert!(t.client.is_withdrawn());
+    // These are contribution records, not the contract's remaining escrow.
+    // The account UI must not present them as funds still held by the contract.
+    assert_eq!(t.client.balance_of(&t.alice), 600);
+    assert_eq!(t.client.balance_of(&t.bob), 400);
     assert_eq!(t.client.try_withdraw(), Err(Ok(Error::AlreadyWithdrawn)));
 }
 
