@@ -696,6 +696,14 @@ export async function finalize(id: string): Promise<Campaign> {
       const creator = loadCreatorKp();
       await deps.ensureTrustline(creator, usdcAsset());
       const slot = { xdr: campaign.payoutXdr, hash: campaign.payoutTx || undefined };
+      if (slot.xdr && !slot.hash) {
+        // Recover older persisted XDR-only payout intents without rebuilding.
+        // The hash is deterministic for the exact signed envelope/network.
+        const prior = TransactionBuilder.fromXDR(slot.xdr, networkPassphrase);
+        slot.hash = Buffer.from(prior.hash()).toString('hex');
+        campaign.payoutTx = slot.hash;
+        saveStore(store);
+      }
       campaign.payoutTx = await executePayment(
         slot,
         async () => {
@@ -703,7 +711,8 @@ export async function finalize(id: string): Promise<Campaign> {
           return buildSignedPayment(account, plat, campaign.creatorPub, usdcAsset(), centsToAmountString(totalCents));
         },
         () => {
-          campaign.payoutXdr = slot.xdr; // intent only; payoutTx is set after confirmation
+          campaign.payoutXdr = slot.xdr;
+          campaign.payoutTx = slot.hash; // durable intent hash before broadcast, not proof of confirmation
           saveStore(store);
         },
       );
