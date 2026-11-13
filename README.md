@@ -6,36 +6,37 @@ contribution balances, all-or-nothing funding and atomic cap enforcement.
 Classic payment routes are disabled; historical balances and uncertain
 intents are preserved for separate reconciliation.
 
-This is testnet-only integration code, not a deployed or production-ready
-service. No real funds, no real identity verification, no investment advice.
+This is a deployed testnet prototype, not a production-ready service.
+No real funds, no real identity verification, no investment advice.
 The frontend says so explicitly on every page.
 
 ## Architecture
 
-Five views are available below and in the [architecture guide](docs/architecture.md).
-The first four describe source `045e042` (12 November 2026); the fifth is the
-earlier `177c8c1` overview. These are source snapshots, not a runtime or
-production-readiness audit. Open each image for readable labels.
+Five current-source views are available below and in the
+[architecture guide](docs/architecture.md). All describe `9f4ac1c`
+(13 November 2026). Runtime notes are labeled separately. These are source maps,
+not proof of production readiness or complete live acceptance. Click an image
+for its full-size SVG and readable labels.
 
-### Whole system - source045e042
+### Whole system
 
-[![Whole system - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-light-adcddcb9ea17417dab6b835f620e97d1.svg)
+[![Whole system - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-9f4ac1c-a0585e895442.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/system-9f4ac1c-a0585e895442.svg)
 
-### Accounts, community and safety - source045e042
+### Accounts, community and document safety
 
-[![Accounts, community and safety - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-light-48093798a83749750ec9c7fae14f781e.svg)
+[![Accounts, community and document safety - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-9f4ac1c-0ecb84387763.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/accounts-community-9f4ac1c-0ecb84387763.svg)
 
-### Transactions and durable evidence - source045e042
+### Transactions and durable evidence
 
-[![Transactions and durable evidence - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-light-5f4b99ab618b840f5ff9bca88a9dcc16.svg)
+[![Transactions and durable evidence - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-9f4ac1c-f47932caaba5.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/transactions-9f4ac1c-f47932caaba5.svg)
 
-### Delivery, documentation and held code - source045e042
+### Delivery, documentation and held code
 
-[![Delivery, documentation and held code - source045e042](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-light-16e7b084d8e674625bc0a0055360d776.svg)
+[![Delivery, documentation and held code - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-9f4ac1c-d6867bdbd508.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/supporting-9f4ac1c-d6867bdbd508.svg)
 
-### Earlier whole-code overview - source177c8c1
+### Whole-code overview
 
-[![Earlier whole-code overview - source177c8c1](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/blockallisto-architecture-5997b399.svg)
+[![Whole-code overview - source 9f4ac1c](https://blockallisto-media.nunrib-df6.workers.dev/architecture/overview-9f4ac1c-9c17c73afe53.svg)](https://blockallisto-media.nunrib-df6.workers.dev/architecture/overview-9f4ac1c-9c17c73afe53.svg)
 
 ## What is implemented
 
@@ -61,8 +62,10 @@ Community and accounts (docs/community-api.md):
 - Campaign news: admin-posted updates, labeled `platform-demo` while no
   verified issuer identity exists.
 - Support tickets and issuer applications: authenticated submission,
-  owner-only reads, admin list/close/status, 90-day retention with hard
-  delete. The For Businesses page (`/for-businesses`, also served at
+  owner-only reads and admin list/close/status. Standard retention is
+  90 days with hard delete; private references and unresolved cleanup jobs
+  are retained for separate review, not silently pruned. The For Businesses
+  page (`/for-businesses`, also served at
   `/financing`) carries the issuer application form behind community
   sign-in; the Account area lists the signed-in user's own
   applications, support tickets and comments.
@@ -96,13 +99,20 @@ Frontend:
 
 ## Current status and known limits
 
-- Staging: https://staging.92-5-187-71.sslip.io tracks the
-  `feature/community-platform` branch. The public demo at
-  https://demo.92-5-187-71.sslip.io tracks `main`; the
-  community/localization work reaches it after review and merge. Both
-  sites migrated from Render to an Oracle VM (November 2026); the
-  onrender.com services are suspended and `render.yaml` is retained for
-  reference only.
+- Release snapshot, 13 November 2026: staging at
+  https://staging.92-5-187-71.sslip.io runs source `9f4ac1c` (PR #172).
+  The public demo at https://demo.92-5-187-71.sslip.io runs source `cd6eddc`
+  with image ID `a8fb3da59930`. Both are hosted on the Oracle VM; merges do
+  not automatically deploy either environment. See the
+  [architecture guide](docs/architecture.md#deployment-snapshot) for exact
+  source and image IDs. `render.yaml` is reference-only.
+- In current source, the community runtime shares one store/service and
+  pruning timer per process, including concurrent initialization. Issuer document clients read
+  the authenticated upload mode before choosing a protocol. Staging uses
+  `legacy-inline`; OCI private upload and cleanup remain OFF behind explicit
+  activation gates. Draft-only document changes freeze after Submit.
+- Account contribution balances are historical records, not current escrow;
+  the crowdfund v1 contract preserves them after creator withdrawal.
 - Community sign-in, comment posting/rendering, tickets and applications
   have been exercised on staging with a simulated wallet. Real Freighter
   extension sign-in (including Ledger-backed wallets) is not yet verified
