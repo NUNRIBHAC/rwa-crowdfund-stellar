@@ -1132,6 +1132,10 @@ export class CommunityService {
     return new PrivateApplicationUploadWorkflow(repo, this.opts.privateApplicationObjects, () => this.now());
   }
 
+  applicationDocumentUploadMode(): 'legacy-inline' | 'oracle-private' {
+    return this.opts.applicationUploadMode === 'oracle-private' || this.opts.privateApplicationObjects ? 'oracle-private' : 'legacy-inline';
+  }
+
   async addApplicationDocument(account: Account, id: string, input: unknown) {
     if (
       this.opts.applicationUploadMode === 'oracle-private' ||

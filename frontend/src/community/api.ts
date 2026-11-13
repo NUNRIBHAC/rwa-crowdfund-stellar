@@ -737,6 +737,11 @@ export const fetchDemoOnboarding = (token: string) => call<DemoOnboardingRespons
 export const saveDemoOnboarding = (token: string, body: Pick<DemoOnboardingResponse['progress'], 'identity' | 'risksAcknowledged'>) =>
   call<DemoOnboardingResponse>('/api/auth/demo-onboarding', { token, method: 'PUT', body });
 
+export async function fetchApplicationUploadMode(token: string): Promise<'legacy-inline' | 'oracle-private'> {
+  const result = await call<{ mode?: unknown }>('/api/issuer-applications/upload-mode', { token });
+  if (result.mode !== 'legacy-inline' && result.mode !== 'oracle-private') throw new ApiError(localizedApiError('API_UNAVAILABLE'), 'API_UNAVAILABLE');
+  return result.mode;
+}
 export const uploadApplicationDocument = (token: string, id: string, filename: string, content: string, operationId?: string) =>
   call<{ document: { id: string; filename: string; sha256: string } }>(`/api/issuer-applications/${encodeURIComponent(id)}/documents`, {
     method: 'POST',

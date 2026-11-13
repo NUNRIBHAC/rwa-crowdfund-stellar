@@ -77,6 +77,8 @@ test('real server + env factory + fake OCI: private upload/read/delete/cleanup a
     const token = await login(owner),
       foreign = await login(outsider),
       admin = await login(operator);
+    assert.equal((await request('/api/issuer-applications/upload-mode')).status, 401);
+    assert.deepEqual(await (await request('/api/issuer-applications/upload-mode', token)).json(), { mode: 'oracle-private' });
     const payload = { projectName: 'Synthetic', country: 'PT', instrumentType: 'Test', targetAmount: '1', description: 'Synthetic only' };
     const application = (await (await request('/api/issuer-applications/drafts', token, payload)).json()).application;
     const root = `/api/issuer-applications/${application.id}`;

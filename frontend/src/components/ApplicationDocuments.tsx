@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   readApplicationDocument,
+  fetchApplicationUploadMode,
   uploadApplicationDocument,
   deleteApplicationDocument,
   submitIssuerApplicationDraft,
@@ -161,6 +162,15 @@ function ScopedDocuments({ application, operator = false, campaigns = [], onChan
                   text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
                 } catch {
                   throw new Error(t.uploadNote);
+                }
+                // Negotiate the actual server mode before choosing a storage protocol.
+                // Never fall back to inline after an unknown mode or private failure.
+                const mode = await fetchApplicationUploadMode(token);
+                if (!alive.current) return;
+                if (mode === 'legacy-inline') {
+                  await uploadApplicationDocument(token, application.id, file.name, text);
+                  if (alive.current) setFile(null);
+                  return;
                 }
                 let operation;
                 try {
