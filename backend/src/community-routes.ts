@@ -1890,22 +1890,49 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   return router;
 }
 
-// Boot helper for server.ts: builds store + service from env and prunes on a
-// slow interval (unref'd; never keeps the process alive).
-export async function communityServiceFromEnv(
-  dependencies: { store?: CommunityStore; transport?: typeof fetch; startTimers?: boolean } = {},
+type CommunityRuntimeDependencies = { store?: CommunityStore; transport?: typeof fetch; startTimers?: boolean };
+
+// A runtime belongs to one process, not to each request or reconciliation pass.
+// Memoize the in-flight promise too, so simultaneous startup calls cannot open
+// independent pools or install duplicate hourly pruning timers.
+export function createCommunityServiceFactory(storeFactory: () => Promise<CommunityStore> = communityStoreFromEnv) {
+  let instance: Promise<CommunityService> | undefined;
+  return (): Promise<CommunityService> => {
+    if (!instance) {
+      instance = initializeCommunityService({}, storeFactory).catch((error) => {
+        instance = undefined; // A transient startup failure must remain retryable.
+        throw error;
+      });
+    }
+    return instance;
+  };
+}
+const defaultCommunityService = createCommunityServiceFactory();
+export function communityServiceFromEnv(dependencies: CommunityRuntimeDependencies = {}): Promise<CommunityService> {
+  // Explicit test/integration dependencies deliberately get an isolated runtime.
+  if (dependencies.store || dependencies.transport || dependencies.startTimers !== undefined) return initializeCommunityService(dependencies);
+  return defaultCommunityService();
+}
+async function initializeCommunityService(
+  dependencies: CommunityRuntimeDependencies,
+  storeFactory: () => Promise<CommunityStore> = communityStoreFromEnv,
 ): Promise<CommunityService> {
   const uploadOptions = privateApplicationOptionsFromEnv(process.env, dependencies.transport);
-  const store = dependencies.store ?? (await communityStoreFromEnv());
-  const service = new CommunityService(store, {
-    retentionDays: Number(process.env.COMMUNITY_RETENTION_DAYS ?? 90),
-    ...uploadOptions,
-  });
-  await service.prune();
-  if (dependencies.startTimers !== false) {
-    const timer = setInterval(() => service.prune().catch(() => {}), 60 * 60 * 1000);
-    timer.unref();
-    if ('privateApplicationObjects' in uploadOptions) startPrivateApplicationCleanup(service);
+  const store = dependencies.store ?? (await storeFactory());
+  try {
+    const service = new CommunityService(store, {
+      retentionDays: Number(process.env.COMMUNITY_RETENTION_DAYS ?? 90),
+      ...uploadOptions,
+    });
+    await service.prune();
+    if (dependencies.startTimers !== false) {
+      const timer = setInterval(() => service.prune().catch(() => {}), 60 * 60 * 1000);
+      timer.unref();
+      if ('privateApplicationObjects' in uploadOptions) startPrivateApplicationCleanup(service);
+    }
+    return service;
+  } catch (error) {
+    if (!dependencies.store) await store.close?.().catch(() => {});
+    throw error;
   }
-  return service;
 }

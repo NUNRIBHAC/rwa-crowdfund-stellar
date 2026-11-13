@@ -586,6 +586,8 @@ function validate(state: any): CommunityState {
 export type SessionAccountSnapshot = { session?: Session; account?: Account };
 
 export interface CommunityStore {
+  // Only the creator owns disposal. Injected stores remain caller-owned.
+  close?(): Promise<void>;
   change<T>(fn: (state: CommunityState) => T): Promise<T>;
   read(): Promise<CommunityState>;
   // Optional minimal same-snapshot projection. No cache or write is allowed.
@@ -663,6 +665,9 @@ export class PostgresCommunityStore implements CommunityStore {
     assertTestSafeDatabaseUrl(url, 'COMMUNITY_DATABASE_URL');
     const { Pool } = (await import('pg')).default;
     return new PostgresCommunityStore(new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.COMMUNITY_POOL_MAX, 'COMMUNITY_POOL_MAX', 5) }));
+  }
+  async close(): Promise<void> {
+    await this.pool.end();
   }
   async read(): Promise<CommunityState> {
     await this.ready;
