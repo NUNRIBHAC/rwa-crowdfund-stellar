@@ -115,8 +115,9 @@ boundaries are described in the text below, without relabeling these images.
   an onboarding checklist are implemented. Full pages x locales x themes
   visual acceptance is not complete.
 - Fonts, logos, social icons, animations and architecture images are served
-  through the existing public Cloudflare Worker backed by B2, not bundled
-  in the app image. The frontend HTML has no Google Fonts links. External
+  through the static public Pages host, with an independent same-origin
+  reserve when mounted read-only. B2 remains the upstream archive; media
+  is not bundled in the app image. The frontend HTML has no Google Fonts links. External
   media remains subject to its service availability and request limits.
 - The footer links the Blockallisto social profiles. The block-fill
   illustration explains funding; it is not live funding activity.
