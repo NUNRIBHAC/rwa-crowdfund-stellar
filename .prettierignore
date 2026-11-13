@@ -11,3 +11,6 @@ frontend/i18n-json/ui/.whitespace-baseline.json
 infra/media-worker/worker.js
 infra/media-worker/worker-v2-rollback.js
 infra/media-worker/worker-v3-rollback.js
+
+# Exact public media source bytes; checked by SHA-256 before export.
+infra/media-static/fixtures/

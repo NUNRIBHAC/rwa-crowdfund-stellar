@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { createServer } from 'node:net';
@@ -11,6 +11,8 @@ import { once } from 'node:events';
 // integration runs after both builds in CI, matching Docker runtime ordering.
 test('production host serves SPA, built assets and discovery without weakening API JSON failures', { timeout: 30000 }, async () => {
   const dir = await mkdtemp(join(tmpdir(), 'production-host-'));
+  await writeFile(join(dir, 'test.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  await writeFile(join(dir, '.secret'), 'must not serve');
   const reserve = createServer();
   reserve.listen(0, '127.0.0.1');
   await once(reserve, 'listening');
@@ -31,6 +33,7 @@ test('production host serves SPA, built assets and discovery without weakening A
         NODE_ENV: 'test',
         HOST: '127.0.0.1',
         PORT: String(port),
+        PUBLIC_MEDIA_DIR: dir,
         COMMUNITY_STORE_PATH: join(dir, 'store.json'),
         COMMUNITY_APPLICATION_UPLOAD_MODE: 'legacy-inline',
         COMMUNITY_PRIVATE_UPLOAD_ENABLED: '0',
@@ -51,6 +54,15 @@ test('production host serves SPA, built assets and discovery without weakening A
       assert.equal(child.exitCode, null, 'production host exited before ready');
       assert.ok(Date.now() < deadline, 'production host readiness timeout');
       await new Promise((done) => setTimeout(done, 20));
+    }
+    const media = await fetch(base + '/media/test.svg');
+    assert.equal(media.status, 200);
+    assert.match(media.headers.get('content-type') ?? '', /image\/svg/);
+    assert.match(media.headers.get('cache-control') ?? '', /max-age=86400/);
+    for (const invalid of ['/media/not-present.svg', '/media/missing-path', '/media/.secret']) {
+      const response = await fetch(base + invalid);
+      assert.notEqual(response.status, 200, invalid);
+      assert.ok(!(await response.text()).includes('<div id="root">'), invalid);
     }
     let html = '';
     for (const path of ['/', '/account', '/campaigns', '/campaigns/test-deep-link']) {

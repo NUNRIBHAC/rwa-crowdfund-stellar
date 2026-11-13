@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 function contrast(foreground: string, background: string) {
   const luminance = (rgb: string) => {

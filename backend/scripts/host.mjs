@@ -14,6 +14,25 @@ app.get('/.well-known/stellar.toml', (req, res) => {
   res.type('text/plain');
   res.sendFile(path.join(dist, '.well-known', 'stellar.toml'), { dotfiles: 'allow' });
 });
+// Public-only static mirror, bind-mounted read-only from /var/oled. Never
+// point this at a bucket export containing private uploads or credentials.
+const mediaRoot = process.env.PUBLIC_MEDIA_DIR;
+if (mediaRoot) {
+  if (!path.isAbsolute(mediaRoot)) throw new Error('PUBLIC_MEDIA_DIR must be absolute');
+  app.use(
+    '/media',
+    express.static(mediaRoot, {
+      dotfiles: 'deny',
+      index: false,
+      fallthrough: false,
+      maxAge: '1d',
+      redirect: false,
+      setHeaders: (res) => res.setHeader('Cache-Control', 'public, max-age=86400'),
+    }),
+  );
+} else {
+  app.use('/media', (_req, res) => res.sendStatus(404));
+}
 app.use(express.static(dist));
 // SPA fallback for path routing: only extension-less GET page paths get
 // index.html (deep links like /campaigns/demo-solar). Asset-like paths

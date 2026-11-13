@@ -9,6 +9,8 @@ COPY backend/package.json backend/
 COPY frontend/package.json frontend/
 RUN npm ci
 COPY . .
+ARG VITE_PUBLIC_MEDIA_ORIGIN
+ENV VITE_PUBLIC_MEDIA_ORIGIN=$VITE_PUBLIC_MEDIA_ORIGIN
 RUN npm run build
 RUN node backend/scripts/check-reviewed-wasm.mjs
 
