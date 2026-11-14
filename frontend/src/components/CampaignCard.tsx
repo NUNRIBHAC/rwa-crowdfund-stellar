@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import type { Campaign } from '../types';
 import { deadlineInfo, deadlineState, formatAmount, percent, regionName, shorten, tpl } from '../format';
 import { fundingState, isValidUnits } from '../funding-math';
@@ -49,6 +50,7 @@ export default function CampaignCard({
   onPrepare,
 }: Props) {
   const { locale, m } = useI18n();
+  const amountErrorId = useId();
   const dl = deadlineInfo(c.config.deadline, m.time);
   const status = campaignStatus(c);
   const state = fundingState(c.raised, c.config.goal, 100);
@@ -238,9 +240,14 @@ export default function CampaignCard({
               placeholder="10.00"
               inputMode="decimal"
               aria-invalid={amountError ? true : undefined}
+              aria-describedby={amountError ? amountErrorId : undefined}
             />
           </label>
-          {amountError ? <p className="field-error">{amountError}</p> : null}
+          {amountError ? (
+            <p id={amountErrorId} className="field-error">
+              {amountError}
+            </p>
+          ) : null}
           {prepareError ? (
             <p className="field-error" role="alert">
               {prepareError}

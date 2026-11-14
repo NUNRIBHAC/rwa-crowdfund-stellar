@@ -53,13 +53,13 @@ describe('SignInPanel no-send verification entry', () => {
     const mock = auth({});
     renderPanel(mock);
 
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
     fireEvent.click(screen.getByRole('button', { name: 'I already have an account' }));
 
     // The entry button stays disabled until an email is typed.
     const haveToken = await screen.findByRole('button', { name: 'I already have a token' });
     expect((haveToken as HTMLButtonElement).disabled).toBe(true);
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: '  QA@Example.com ' } });
+    fireEvent.change(screen.getByLabelText('Email', { selector: 'input[type="email"]' }), { target: { value: '  QA@Example.com ' } });
     expect((haveToken as HTMLButtonElement).disabled).toBe(false);
 
     fireEvent.click(haveToken);
@@ -84,9 +84,9 @@ describe('SignInPanel no-send verification entry', () => {
     cleanup();
     const mock2 = auth({});
     renderPanel(mock2);
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
     fireEvent.click(screen.getByRole('button', { name: 'I already have an account' }));
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'qa@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email', { selector: 'input[type="email"]' }), { target: { value: 'qa@example.com' } });
     fireEvent.click(screen.getByRole('button', { name: 'I already have a token' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Back to sign in' }));
     expect(await screen.findByRole('button', { name: 'Sign in with email' })).toBeTruthy();
@@ -96,8 +96,8 @@ describe('SignInPanel no-send verification entry', () => {
   it('register success keeps the sent-token explainer', async () => {
     const mock = auth({ emailSignUp: vi.fn().mockResolvedValue(undefined) });
     renderPanel(mock);
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'qa@example.com' } });
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
+    fireEvent.change(screen.getByLabelText('Email', { selector: 'input[type="email"]' }), { target: { value: 'qa@example.com' } });
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'a long password' } });
     fireEvent.click(screen.getByRole('button', { name: 'Create account' }));
     expect(await screen.findByText(/A verification token was sent to qa@example\.com/)).toBeTruthy();
@@ -107,7 +107,7 @@ describe('SignInPanel no-send verification entry', () => {
   it('register mode does not show the no-send entry button', async () => {
     const mock = auth({});
     renderPanel(mock);
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
     expect(screen.queryByRole('button', { name: 'I already have a token' })).toBeNull();
   });
 });

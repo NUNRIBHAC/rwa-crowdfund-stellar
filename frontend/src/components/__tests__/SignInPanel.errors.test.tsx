@@ -27,8 +27,8 @@ async function renderAndSubmitEmail(body: unknown, status: number) {
       </CommunityAuthProvider>
     </I18nProvider>,
   );
-  fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
-  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'qa@example.com' } });
+  fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
+  fireEvent.change(screen.getByLabelText('Email', { selector: 'input[type="email"]' }), { target: { value: 'qa@example.com' } });
   fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'long-enough-password' } });
   fireEvent.click(screen.getByRole('button', { name: 'Create account' }));
 }
@@ -48,7 +48,7 @@ describe('SignInPanel error lifecycle', () => {
     expect(alert.textContent).not.toContain('bot check failed');
     // The stale-error regression: switching to wallet must clear it - wallet
     // sign-in never uses the bot check.
-    fireEvent.click(screen.getByRole('tab', { name: /Carteira|Wallet/ }));
+    fireEvent.click(screen.getByRole('radio', { name: /Carteira|Wallet/ }));
     await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
   });
 });
@@ -99,9 +99,9 @@ async function renderAndSubmitTotpCode(completeBody: unknown, completeStatus: nu
       </CommunityAuthProvider>
     </I18nProvider>,
   );
-  fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+  fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
   fireEvent.click(screen.getByRole('button', { name: 'I already have an account' }));
-  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'qa@example.com' } });
+  fireEvent.change(screen.getByLabelText('Email', { selector: 'input[type="email"]' }), { target: { value: 'qa@example.com' } });
   fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'long-enough-password' } });
   fireEvent.click(screen.getByRole('button', { name: 'Sign in with email' }));
   fireEvent.change(await screen.findByLabelText('Authenticator code'), { target: { value: '123456' } });

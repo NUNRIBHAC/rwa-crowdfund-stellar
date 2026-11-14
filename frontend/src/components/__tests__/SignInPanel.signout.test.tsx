@@ -52,8 +52,8 @@ describe('SignInPanel sign-out form hygiene', () => {
         <SignInPanel actor="investor" />
       </I18nProvider>,
     );
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'qa@example.com' } });
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
+    fireEvent.change(screen.getByLabelText('Email', { selector: 'input[type="email"]' }), { target: { value: 'qa@example.com' } });
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'long-enough-password' } });
     expect((screen.getByLabelText('Password') as HTMLInputElement).value).toBe('long-enough-password');
 
@@ -70,8 +70,8 @@ describe('SignInPanel sign-out form hygiene', () => {
         <SignInPanel actor="investor" />
       </I18nProvider>,
     );
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
-    expect((screen.getByLabelText('Email') as HTMLInputElement).value).toBe('');
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
+    expect((screen.getByLabelText('Email', { selector: 'input[type="email"]' }) as HTMLInputElement).value).toBe('');
     expect((screen.getByLabelText('Password') as HTMLInputElement).value).toBe('');
   });
 });

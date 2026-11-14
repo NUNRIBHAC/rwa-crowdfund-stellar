@@ -53,14 +53,14 @@ describe('SignInPanel forgot-password flow', () => {
     const mock = auth({});
     renderPanel(mock);
 
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
     fireEvent.click(screen.getByRole('button', { name: 'I already have an account' }));
 
     const forgot = await screen.findByRole('button', { name: 'Forgot password?' });
     fireEvent.click(forgot);
 
     // Request stage: explainer + email field, submit calls emailRequestReset.
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'qa@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email', { selector: 'input[type="email"]' }), { target: { value: 'qa@example.com' } });
     fireEvent.click(screen.getByRole('button', { name: 'Send reset token' }));
     expect((mock as any).emailRequestReset).toHaveBeenCalledWith('qa@example.com');
 
@@ -79,7 +79,7 @@ describe('SignInPanel forgot-password flow', () => {
   it('back buttons leave the reset flow without calling the API', async () => {
     const mock = auth({});
     renderPanel(mock);
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
     fireEvent.click(screen.getByRole('button', { name: 'I already have an account' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Forgot password?' }));
     fireEvent.click(screen.getByRole('button', { name: 'Back to sign in' }));
@@ -89,7 +89,7 @@ describe('SignInPanel forgot-password flow', () => {
 
   it('register mode never shows the forgot-password entry', async () => {
     renderPanel(auth({}));
-    fireEvent.click(await screen.findByRole('tab', { name: 'Email' }));
+    fireEvent.click(await screen.findByRole('radio', { name: 'Email' }));
     expect(screen.queryByRole('button', { name: 'Forgot password?' })).toBeNull();
   });
 });
