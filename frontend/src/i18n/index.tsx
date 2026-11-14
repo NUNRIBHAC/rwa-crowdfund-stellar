@@ -10,6 +10,7 @@ import { ja } from './locales/ja';
 import { ko } from './locales/ko';
 import { ar } from './locales/ar';
 import { hi } from './locales/hi';
+import { preferredLocale } from './locale-negotiation';
 
 export type Locale = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'zh-TW' | 'zh-CN' | 'ja' | 'ko' | 'ar' | 'hi';
 
@@ -83,6 +84,12 @@ const MESSAGES: Record<Locale, Messages> = {
 };
 
 const STORAGE_KEY = 'blockallisto-language';
+let activeLocale: Locale | undefined;
+
+/** Effective in-memory UI locale, including a country fallback. Never persisted. */
+export function currentLocale(): Locale {
+  return storedLocale() ?? activeLocale ?? detectLocale();
+}
 
 function isLocale(v: string | null): v is Locale {
   return ['en', 'pt', 'es', 'fr', 'de', 'zh-TW', 'zh-CN', 'ja', 'ko', 'ar', 'hi'].includes(v ?? '');
@@ -156,36 +163,25 @@ export const API_ERROR_MESSAGE_KEYS: Record<string, keyof Messages['community']>
 
 /** Only allowlisted localized text is shown. Unknown codes never expose server diagnostics. */
 export function localizedApiError(code: string | undefined): string {
-  if (code === 'API_UNCONFIRMED') return MESSAGES[storedLocale() ?? detectLocale()].errors.apiFailed;
-  if (code === 'API_UNAVAILABLE') return MESSAGES[storedLocale() ?? detectLocale()].errors.apiUnavailable;
+  if (code === 'API_UNCONFIRMED') return MESSAGES[currentLocale()].errors.apiFailed;
+  if (code === 'API_UNAVAILABLE') return MESSAGES[currentLocale()].errors.apiUnavailable;
   const key = code ? API_ERROR_MESSAGE_KEYS[code] : undefined;
-  const v = key ? MESSAGES[storedLocale() ?? detectLocale()].community[key] : undefined;
-  return typeof v === 'string' && v.trim() ? v : MESSAGES[storedLocale() ?? detectLocale()].errors.apiFailed;
+  const v = key ? MESSAGES[currentLocale()].community[key] : undefined;
+  return typeof v === 'string' && v.trim() ? v : MESSAGES[currentLocale()].errors.apiFailed;
 }
 
 /** Localized fallback for an HTTP failure that carried no server error text. */
 export function requestFailedMessage(status: number): string {
-  return MESSAGES[storedLocale() ?? detectLocale()].community.requestFailed.replace('{status}', String(status));
+  return MESSAGES[currentLocale()].community.requestFailed.replace('{status}', String(status));
+}
+
+export function browserPreferences(): readonly string[] {
+  if (typeof navigator === 'undefined') return [];
+  return navigator.languages?.length ? navigator.languages : [navigator.language];
 }
 
 function detectLocale(): Locale {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (isLocale(saved)) return saved;
-  } catch {
-    // localStorage unavailable; fall through to browser language
-  }
-  const nav = (typeof navigator !== 'undefined' ? navigator.language : 'en').toLowerCase();
-  if (nav.startsWith('pt')) return 'pt';
-  if (nav.startsWith('es')) return 'es';
-  if (nav.startsWith('fr')) return 'fr';
-  if (nav.startsWith('de')) return 'de';
-  if (nav.startsWith('zh')) return nav.includes('tw') || nav.includes('hk') || nav.includes('hant') ? 'zh-TW' : 'zh-CN';
-  if (nav.startsWith('ja')) return 'ja';
-  if (nav.startsWith('ko')) return 'ko';
-  if (nav.startsWith('ar')) return 'ar';
-  if (nav.startsWith('hi')) return 'hi';
-  return 'en';
+  return preferredLocale(storedLocale(), browserPreferences());
 }
 
 export type I18n = {
@@ -198,8 +194,12 @@ export type I18n = {
 const defaultContext: I18n = { locale: 'en', setLocale: () => {}, m: en };
 const I18nContext = createContext<I18n>(defaultContext);
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(detectLocale);
+export function I18nProvider({ children, initialLocale }: { children: ReactNode; initialLocale?: Locale }) {
+  const [locale, setLocaleState] = useState<Locale>(() => {
+    const value = storedLocale() ?? initialLocale ?? detectLocale();
+    activeLocale = value;
+    return value;
+  });
   const m = MESSAGES[locale];
 
   useEffect(() => {
@@ -209,7 +209,15 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     document.title = m.meta.title;
   }, [locale, m]);
 
+  useEffect(() => {
+    activeLocale = locale;
+    return () => {
+      if (activeLocale === locale) activeLocale = undefined;
+    };
+  }, [locale]);
+
   const setLocale = (l: Locale) => {
+    activeLocale = l;
     setLocaleState(l);
     try {
       localStorage.setItem(STORAGE_KEY, l);

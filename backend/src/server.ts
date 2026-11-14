@@ -78,13 +78,17 @@ app.use((req, res, next) => {
   // un-migrated deploys are unchanged. connect-src stays closed: no XHR/
   // fetch of static assets exists (FontFace loading is governed by
   // font-src). No wildcards.
+  // Country-only Worker XHR is an independent exact allowlisted origin.
+  const countryEnv = process.env.COUNTRY_ORIGIN?.trim() ?? '';
+  if (countryEnv && !/^https:\/\/[a-z0-9][a-z0-9.-]*$/.test(countryEnv)) throw new Error('COUNTRY_ORIGIN must be an HTTPS origin');
+  const countryOrigin = countryEnv ? ` ${countryEnv}` : '';
   const mediaEnv = process.env.MEDIA_ORIGIN?.trim() ?? '';
   // Strict shape: scheme + host only. Anything else (paths, whitespace,
   // quotes) would corrupt or widen the policy, so it is rejected to ''.
   const mediaOrigin = /^https:\/\/[a-z0-9][a-z0-9.-]*$/.test(mediaEnv) ? ` ${mediaEnv}` : '';
   res.setHeader(
     'Content-Security-Policy',
-    `default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:${mediaOrigin}; connect-src 'self' https://challenges.cloudflare.com${relayOrigin}; frame-src https://challenges.cloudflare.com; font-src 'self'${mediaOrigin}; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
+    `default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:${mediaOrigin}; connect-src 'self' https://challenges.cloudflare.com${relayOrigin}${countryOrigin}; frame-src https://challenges.cloudflare.com; font-src 'self'${mediaOrigin}; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
   );
   res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
   res.setHeader('X-Frame-Options', 'DENY');

@@ -32,6 +32,8 @@ jobs:
       - run: npm run format:check
       - name: Public media export and origin safety tests
         run: node --test infra/media-static/export.test.mjs
+      - name: Country-only Worker privacy and routing tests
+        run: node --test infra/country-worker/worker.test.mjs
       - name: Isolated Postgres rate-retention integration
         run: NODE_ENV=test node --import tsx --test backend/test/journal-rate.postgres.integration.ts
         env:

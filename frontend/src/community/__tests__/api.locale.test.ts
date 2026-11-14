@@ -1,6 +1,7 @@
 // The UI locale must travel with the three mail-triggering calls so the
 // backend can pick the mail template language the user is looking at.
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { currentLocale } from '../../i18n';
 import { emailRegister, emailResend, emailResetRequest } from '../api';
 
 function mockFetchCapture() {
@@ -31,12 +32,13 @@ describe('mail-triggering calls propagate the UI locale', () => {
     for (const body of bodies) expect(body.locale).toBe('ja');
   });
 
-  it('omits locale when the UI never stored one (backend falls back to English)', async () => {
+  it('sends the detected UI locale even when there is no saved manual choice', async () => {
     const bodies = mockFetchCapture();
     await emailRegister('a@b.c', 'correct horse battery');
     await emailResend('a@b.c');
     await emailResetRequest('a@b.c');
-    for (const body of bodies) expect('locale' in body).toBe(false);
+    for (const body of bodies) expect(body.locale).toBe(currentLocale());
+    expect(localStorage.getItem('blockallisto-language')).toBeNull();
   });
 });
 
