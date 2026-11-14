@@ -7,7 +7,11 @@ for the app build).
 
 Provenance: downloaded through the worker from B2 on 2026-11-07; every file
 sha1-verified against a fresh b2_list_file_names listing (543-key audit).
-SHA256SUMS.txt inside this directory is the B2 copy (sha256 of each woff2).
+SHA256SUMS.txt records SHA256 and byte count for 501 archived files, relative
+to assets/. It includes the eight CSS files, whose URLs were later made
+portable for Pages. It describes current repository bytes, not an unchanged
+copy of the original B2 manifest. Run `python3 scripts/check-font-archive.py`
+from the repository root; CI also checks this manifest and rejects drift.
 Fonts are open-source (OFL); upstream re-derivation: Google Fonts (Inter,
 Montserrat, Plus Jakarta Sans, Poppins, Noto families).
 
