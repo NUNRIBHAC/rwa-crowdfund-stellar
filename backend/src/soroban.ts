@@ -1121,11 +1121,14 @@ export async function submitCampaignDeploy(input: { actor: string; xdr: string; 
 // the repo toolchain - they pin exactly what was built and reviewed in-repo.
 // They are NOT an external security review: the v2 contracts are demo-grade
 // testnet scaffolds and the registry entry below says so.
-const V2_SHARE_TOKEN_WASM_HASH = '3fc3d4b74f69fcfb2e0b86878b5b0f3d89a73050e6a049da4dd789dd7a27eaa1';
+// New deployments use the SEP-41 token. Existing scaffold positions remain
+// readable only for the exact legacy hash; this is not a migration or upgrade.
+const LEGACY_V2_SHARE_TOKEN_WASM_HASH = '3fc3d4b74f69fcfb2e0b86878b5b0f3d89a73050e6a049da4dd789dd7a27eaa1';
+const V2_SHARE_TOKEN_WASM_HASH = '6010fc62cf08ee606a2687bd4877790c6d131cbd57936beb21e592d179b818e7';
 const V2_OFFERING_WASM_HASH = '84d254abbc46f5aaf8305734510d66123b4cc9d800992cd11c23da88eb1be622';
 const V2_WASMS: Record<string, { url: URL; hash: string; cache: Buffer | null }> = {
   token: {
-    url: new URL('../wasm/v2-share-token.wasm', import.meta.url),
+    url: new URL('../wasm/v2-share-token-sep41.wasm', import.meta.url),
     hash: V2_SHARE_TOKEN_WASM_HASH,
     cache: null,
   },
@@ -1179,7 +1182,7 @@ async function verifyV2Code(client: rpc.Server, e: V2Entry): Promise<void> {
     client.getContractWasmByContractId(e.tokenContractId),
     client.getContractWasmByContractId(e.offeringContractId),
   ]);
-  if (createHash('sha256').update(tokenWasm).digest('hex') !== V2_SHARE_TOKEN_WASM_HASH)
+  if (![V2_SHARE_TOKEN_WASM_HASH, LEGACY_V2_SHARE_TOKEN_WASM_HASH].includes(createHash('sha256').update(tokenWasm).digest('hex')))
     throw new Error('share-token contract code does not match the pinned v2 Wasm; refusing to read positions');
   if (createHash('sha256').update(offeringWasm).digest('hex') !== V2_OFFERING_WASM_HASH)
     throw new Error('offering contract code does not match the pinned v2 Wasm; refusing to read positions');

@@ -37,7 +37,7 @@ let addressAuth = false,
   txStatus = 'SUCCESS';
 // v2 harness: the fake RPC serves the real packaged v2 Wasms under their pin
 // hashes and hands out a distinct contract id per created instance kind.
-const v2TokenWasm = fs.readFileSync(new URL('../../backend/wasm/v2-share-token.wasm', import.meta.url));
+const v2TokenWasm = fs.readFileSync(new URL('../../backend/wasm/v2-share-token-sep41.wasm', import.meta.url));
 const v2OfferingWasm = fs.readFileSync(new URL('../../backend/wasm/v2-offering.wasm', import.meta.url));
 const v2TokenHash = createHash('sha256').update(v2TokenWasm).digest('hex');
 const v2OfferingHash = createHash('sha256').update(v2OfferingWasm).digest('hex');
