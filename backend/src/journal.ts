@@ -10,6 +10,11 @@ import { assertExplicitFileStorePath, assertPooledDatabaseUrlTestSafe, assertTes
 // developer) and Postgres (hosted deployments where the filesystem is
 // ephemeral). Backend selection is explicit; a configured Postgres backend
 // that cannot be reached fails closed, never silently falls back to a file.
+// All current production callers use 60 seconds. A fixed maximum lets global
+// retention remove abandoned keys without using another caller's shorter window.
+// Supporting windows beyond this bound requires raising retention first.
+export const MAX_JOURNAL_RATE_WINDOW_MS = 24 * 60 * 60 * 1000;
+
 export type Intent = {
   hash: string;
   campaign: string;
@@ -283,11 +288,13 @@ export class PostgresJournal implements Journal {
       at timestamptz NOT NULL DEFAULT now()
     )`;
     const rateIndex = 'CREATE INDEX IF NOT EXISTS soroban_rate_hits_key_at ON soroban_rate_hits (key, at)';
+    const rateExpiryIndex = 'CREATE INDEX IF NOT EXISTS soroban_rate_hits_at ON soroban_rate_hits (at)';
     const init = async (db: PgPoolLike) => {
       await db.query(ddl);
       await db.query(migrate);
       await db.query(rateDdl);
       await db.query(rateIndex);
+      await db.query(rateExpiryIndex);
     };
     const connector = (this.pool as any).connect?.bind(this.pool);
     this.ready = connector
@@ -490,11 +497,33 @@ export class PostgresJournal implements Journal {
   // a rolling deploy an old process still applies its own in-process window;
   // limits are then enforced per backend generation, never weaker than the
   // old behavior for the old process.
+  private lastRateSweepAt = -Infinity;
   async rateLimit(key: string, limit: number, windowMs: number): Promise<void> {
+    if (!Number.isSafeInteger(windowMs) || windowMs <= 0 || windowMs > MAX_JOURNAL_RATE_WINDOW_MS || !Number.isSafeInteger(limit) || limit <= 0)
+      throw new Error('invalid rate limit window or count');
     await this.ready;
     const connector = (this.pool as any).connect?.bind(this.pool);
     const db: PgPoolLike = connector ? await connector() : this.pool;
     try {
+      // At most one bounded sweep per second per instance, serialized across
+      // processes by a separate global lock. Cleanup never takes a per-key lock,
+      // so lock order cannot invert. SKIP LOCKED avoids waiting on a busy row.
+      // Idle databases need no timer: the next request resumes expiry. This
+      // bounds history to a 24h horizon plus any backlog, not an absolute row cap.
+      const now = Date.now();
+      if (now < this.lastRateSweepAt || now - this.lastRateSweepAt >= 1000) {
+        this.lastRateSweepAt = now;
+        await this.withSessionLock(db as any, 'soroban-rate-retention', async () => {
+          await db.query(
+            `DELETE FROM soroban_rate_hits WHERE seq IN (
+              SELECT seq FROM soroban_rate_hits
+              WHERE at < now() - ($1 * interval '1 millisecond')
+              ORDER BY at LIMIT 1000 FOR UPDATE SKIP LOCKED
+            )`,
+            [MAX_JOURNAL_RATE_WINDOW_MS],
+          );
+        });
+      }
       await this.withSessionLock(db as any, `soroban-rate-limit:${key}`, async () => {
         await db.query("DELETE FROM soroban_rate_hits WHERE key = $1 AND at < now() - ($2 * interval '1 millisecond')", [key, windowMs]);
         const count = Number((await db.query('SELECT count(*) AS n FROM soroban_rate_hits WHERE key = $1', [key])).rows[0]?.n ?? 0);
