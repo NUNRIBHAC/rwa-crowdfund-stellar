@@ -27,26 +27,22 @@ npm run build:public    # outputs build-public/
 npm run build:internal  # outputs build-internal/
 ```
 
-## Hosting (free, researched 2026-11-02)
+## Hosting
 
-- **Public portal**: Render static site on the existing account.
-  Build command: `cd portal && npm ci && npm run build:public`
-  Publish directory: `portal/build-public`
-  Auto-deploys from `main`; free TLS; hostname
-  `blockallisto-docs.onrender.com` (custom domain later).
-- **Private portal**: serve `build-internal/` from the existing Oracle Cloud
-  VM behind nginx basic auth (server-side enforcement, free, TLS via Let's
-  Encrypt - same pattern as the existing Weblate/Kuma services).
-  Deploy: pull the repo on the VM, build, and point the nginx vhost at
-  `portal/build-internal/` (or rsync the build output).
-  - Rejected: Render static sites have no built-in access control (feature
-    request still "planned", feedback.render.com) and PageCrypt-style
-    client-side password gates are bypassable with view-source.
-  - Alternative: Cloudflare Pages + Cloudflare Access (Zero Trust free plan,
-    up to 50 users, email OTP) - real server-side enforcement, but adds a
-    new vendor/account.
-  - Fallback: oauth2-proxy in front of a Render web service (adds a sleeping
-    free-tier hop).
+- **Public portal**: Oracle VM, served at
+  `https://pubdocs.92-5-187-71.sslip.io` by the `public-docs` nginx container.
+  Build with `cd portal && npm ci && npm run build:public`; publish the
+  `portal/build-public/` output. The old Render address
+  `blockallisto-docs.onrender.com` is suspended, not the active host.
+- **Private portal**: Oracle VM, served at
+  `https://docs.92-5-187-71.sslip.io` by the `private-docs` nginx container,
+  behind server-side basic auth. Build with
+  `cd portal && npm ci && npm run build:internal`; publish the
+  `portal/build-internal/` output. Keep credentials outside build output.
+- A merge does not itself publish either portal. CI builds both audiences
+  and checks separation; publication and private-route access checks are
+  separate release steps. No hosting or deployment settings are changed by
+  this README correction.
 
 ## Versioning
 
