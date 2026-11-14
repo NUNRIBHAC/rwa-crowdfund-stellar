@@ -16,11 +16,13 @@ const holderA = Keypair.random().publicKey();
 const holderB = Keypair.random().publicKey();
 const issuer = Keypair.random().publicKey();
 let badTokenWasm = false;
+let sep41TokenWasm = false;
+const newTokenWasm = fs.readFileSync(new URL('../wasm/v2-share-token-sep41.wasm', import.meta.url));
 const balances: Record<string, bigint> = { [holderA]: 42000000n, [holderB]: 0n };
 
 const client: any = {
   getContractWasmByContractId: async (id: string) => {
-    if (id === tokenId) return badTokenWasm ? Buffer.from('wrong') : tokenWasm;
+    if (id === tokenId) return badTokenWasm ? Buffer.from('wrong') : sep41TokenWasm ? newTokenWasm : tokenWasm;
     if (id === offeringId) return offeringWasm;
     throw new Error('unknown contract ' + id);
   },
@@ -122,4 +124,15 @@ test('holder reads are capped and the truncation is disclosed', async () => {
   const p = await readV2SharePositions('v2camp', many);
   assert.equal(p.holders.length, V2_HOLDER_READ_CAP);
   assert.equal(p.holdersTruncated, true);
+});
+
+test('new SEP-41 token and exact legacy token both retain read compatibility', async () => {
+  registry([v2Entry]);
+  sep41TokenWasm = true;
+  try {
+    const result = await readV2SharePositions('v2camp', [holderA]);
+    assert.equal(result.holders[0].balance, '42000000');
+  } finally {
+    sep41TokenWasm = false;
+  }
 });

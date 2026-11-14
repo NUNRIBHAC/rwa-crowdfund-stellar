@@ -10,7 +10,7 @@
 //! no real value, assigns no production roles, and grants no investor rights;
 //! issuance/legal meaning stay with the offering layer and remain unapproved.
 
-use soroban_sdk::{contract, contracterror, contractimpl, contracttype, Address, Env, String};
+use soroban_sdk::{contract, contracterror, contractevent, contractimpl, contracttype, symbol_short, Address, Env, MuxedAddress, String};
 
 const DAY_LEDGERS: u32 = 17280;
 const BUMP_THRESHOLD: u32 = 30 * DAY_LEDGERS;
@@ -27,6 +27,7 @@ pub enum Error {
     Paused = 5,
     NotMinter = 6,
     Overflow = 7,
+    InvalidExpiration = 8,
 }
 
 #[contracttype]
@@ -34,6 +35,56 @@ pub enum Error {
 pub struct AllowanceKey {
     pub from: Address,
     pub spender: Address,
+}
+
+// Same METADATA key and field shape as soroban-token-sdk 29.0.1.
+#[contracttype]
+#[derive(Clone)]
+pub struct TokenMetadata {
+    pub decimal: u32,
+    pub name: String,
+    pub symbol: String,
+}
+
+#[contracttype]
+#[derive(Clone)]
+pub struct AllowanceData {
+    pub amount: i128,
+    pub live_until_ledger: u32,
+}
+
+#[contractevent(data_format = "vec")]
+pub struct Approve {
+    #[topic]
+    pub from: Address,
+    #[topic]
+    pub spender: Address,
+    pub amount: i128,
+    pub live_until_ledger: u32,
+}
+
+#[contractevent]
+pub struct Transfer {
+    #[topic]
+    pub from: Address,
+    #[topic]
+    pub to: Address,
+    pub amount: i128,
+    pub to_muxed_id: Option<u64>,
+}
+
+#[contractevent(data_format = "single-value")]
+pub struct Burn {
+    #[topic]
+    pub from: Address,
+    pub amount: i128,
+}
+
+#[contractevent(data_format = "single-value")]
+pub struct Mint {
+    #[topic]
+    pub to: Address,
+    pub amount: i128,
 }
 
 #[contracttype]
@@ -47,7 +98,9 @@ pub enum DataKey {
     Decimals,
     TotalSupply,
     Balance(Address),
+    // Old indefinite persistent allowances are never revived or inferred.
     Allowance(AllowanceKey),
+    AllowanceV2(AllowanceKey),
 }
 
 fn read_admin(env: &Env) -> Address {
@@ -87,20 +140,48 @@ fn read_total(env: &Env) -> i128 {
     env.storage().instance().get(&DataKey::TotalSupply).unwrap_or(0)
 }
 
+fn read_allowance(env: &Env, from: &Address, spender: &Address) -> AllowanceData {
+    let key = DataKey::AllowanceV2(AllowanceKey { from: from.clone(), spender: spender.clone() });
+    let data: Option<AllowanceData> = env.storage().temporary().get(&key);
+    match data {
+        Some(data) if data.live_until_ledger >= env.ledger().sequence() => data,
+        _ => AllowanceData { amount: 0, live_until_ledger: 0 },
+    }
+}
+
 fn spend_allowance(env: &Env, from: &Address, spender: &Address, amount: i128) -> Result<(), Error> {
-    let key = DataKey::Allowance(AllowanceKey { from: from.clone(), spender: spender.clone() });
-    let current: i128 = env.storage().persistent().get(&key).unwrap_or(0);
-    if current < amount {
+    if amount < 0 {
+        return Err(Error::InvalidAmount);
+    }
+    let mut data = read_allowance(env, from, spender);
+    if data.amount < amount {
         return Err(Error::InsufficientAllowance);
     }
-    let next = current - amount;
-    env.storage().persistent().set(&key, &next);
-    env.storage().persistent().extend_ttl(&key, BUMP_THRESHOLD, BUMP_TO);
+    // Zero spending must not create or extend an expired allowance.
+    if amount > 0 {
+        data.amount -= amount;
+        let key = DataKey::AllowanceV2(AllowanceKey { from: from.clone(), spender: spender.clone() });
+        env.storage().temporary().set(&key, &data);
+    }
+    Ok(())
+}
+
+fn burn_value(env: &Env, from: &Address, amount: i128) -> Result<(), Error> {
+    if amount < 0 {
+        return Err(Error::InvalidAmount);
+    }
+    let bal = read_balance(env, from);
+    if bal < amount {
+        return Err(Error::InsufficientBalance);
+    }
+    write_balance(env, from, bal - amount);
+    write_total(env, read_total(env) - amount);
+    Burn { from: from.clone(), amount }.publish(env);
     Ok(())
 }
 
 fn move_value(env: &Env, from: &Address, to: &Address, amount: i128) -> Result<(), Error> {
-    if amount <= 0 {
+    if amount < 0 {
         return Err(Error::InvalidAmount);
     }
     let from_bal = read_balance(env, from);
@@ -130,6 +211,7 @@ impl ShareToken {
         let s = env.storage().instance();
         s.set(&DataKey::Admin, &admin);
         s.set(&DataKey::Paused, &false);
+        s.set(&symbol_short!("METADATA"), &TokenMetadata { decimal: decimals, name: name.clone(), symbol: symbol.clone() });
         s.set(&DataKey::Name, &name);
         s.set(&DataKey::Symbol, &symbol);
         s.set(&DataKey::Decimals, &decimals);
@@ -174,51 +256,62 @@ impl ShareToken {
     }
 
     pub fn allowance(env: &Env, from: Address, spender: Address) -> i128 {
-        env.storage()
-            .persistent()
-            .get(&DataKey::Allowance(AllowanceKey { from, spender }))
-            .unwrap_or(0)
+        read_allowance(env, &from, &spender).amount
     }
 
     // --- SEP-41 value movement ---
 
-    pub fn approve(env: &Env, from: Address, spender: Address, amount: i128) -> Result<(), Error> {
+    pub fn approve(env: &Env, from: Address, spender: Address, amount: i128, live_until_ledger: u32) -> Result<(), Error> {
         from.require_auth();
         if amount < 0 {
             return Err(Error::InvalidAmount);
         }
-        let key = DataKey::Allowance(AllowanceKey { from, spender });
-        env.storage().persistent().set(&key, &amount);
-        env.storage().persistent().extend_ttl(&key, BUMP_THRESHOLD, BUMP_TO);
+        let current = env.ledger().sequence();
+        let max_live = current.checked_add(env.storage().max_ttl() - 1).ok_or(Error::InvalidExpiration)?;
+        if amount > 0 && (live_until_ledger < current || live_until_ledger > max_live) {
+            return Err(Error::InvalidExpiration);
+        }
+        let key = DataKey::AllowanceV2(AllowanceKey { from: from.clone(), spender: spender.clone() });
+        if amount == 0 {
+            env.storage().temporary().remove(&key);
+        } else {
+            env.storage().temporary().set(&key, &AllowanceData { amount, live_until_ledger });
+            let ttl = live_until_ledger - current;
+            env.storage().temporary().extend_ttl(&key, ttl, ttl);
+        }
+        Approve { from, spender, amount, live_until_ledger }.publish(env);
         Ok(())
     }
 
-    pub fn transfer(env: &Env, from: Address, to: Address, amount: i128) -> Result<(), Error> {
+    pub fn transfer(env: &Env, from: Address, to: MuxedAddress, amount: i128) -> Result<(), Error> {
         from.require_auth();
         not_paused(env)?;
-        move_value(env, &from, &to, amount)
+        let recipient = to.address();
+        move_value(env, &from, &recipient, amount)?;
+        Transfer { from, to: recipient, amount, to_muxed_id: to.id() }.publish(env);
+        Ok(())
     }
 
     pub fn transfer_from(env: &Env, spender: Address, from: Address, to: Address, amount: i128) -> Result<(), Error> {
         spender.require_auth();
         not_paused(env)?;
         spend_allowance(env, &from, &spender, amount)?;
-        move_value(env, &from, &to, amount)
+        move_value(env, &from, &to, amount)?;
+        Transfer { from, to, amount, to_muxed_id: None }.publish(env);
+        Ok(())
     }
 
     pub fn burn(env: &Env, from: Address, amount: i128) -> Result<(), Error> {
         from.require_auth();
         not_paused(env)?;
-        if amount <= 0 {
-            return Err(Error::InvalidAmount);
-        }
-        let bal = read_balance(env, &from);
-        if bal < amount {
-            return Err(Error::InsufficientBalance);
-        }
-        write_balance(env, &from, bal - amount);
-        write_total(env, read_total(env) - amount);
-        Ok(())
+        burn_value(env, &from, amount)
+    }
+
+    pub fn burn_from(env: &Env, spender: Address, from: Address, amount: i128) -> Result<(), Error> {
+        spender.require_auth();
+        not_paused(env)?;
+        spend_allowance(env, &from, &spender, amount)?;
+        burn_value(env, &from, amount)
     }
 
     // --- Roles / ownership / pause primitives (admin-gated) ---
@@ -229,12 +322,13 @@ impl ShareToken {
         let minter = read_minter(env).ok_or(Error::NotMinter)?;
         minter.require_auth();
         not_paused(env)?;
-        if amount <= 0 {
+        if amount < 0 {
             return Err(Error::InvalidAmount);
         }
         let to_bal = read_balance(env, &to);
         write_balance(env, &to, to_bal.checked_add(amount).ok_or(Error::Overflow)?);
         write_total(env, read_total(env).checked_add(amount).ok_or(Error::Overflow)?);
+        Mint { to, amount }.publish(env);
         Ok(())
     }
 
@@ -247,7 +341,7 @@ impl ShareToken {
         Ok(())
     }
 
-    /// Pause all value movement (transfer, transfer_from, mint, burn).
+    /// Pause all value movement (transfer, transfer_from, mint, burn, burn_from).
     pub fn pause(env: &Env) -> Result<(), Error> {
         let admin = read_admin(env);
         admin.require_auth();

@@ -92,6 +92,10 @@ jobs:
           "$RUNNER_TEMP/stellar-cli/stellar" --version
           echo "$RUNNER_TEMP/stellar-cli" >> "$GITHUB_PATH"
       - run: stellar contract build
+      - name: Verify SEP-41 share-token artifact
+        run: |
+          echo '6010fc62cf08ee606a2687bd4877790c6d131cbd57936beb21e592d179b818e7  target/wasm32v1-none/release/share_token.wasm' | sha256sum -c -
+          cmp target/wasm32v1-none/release/share_token.wasm ../../backend/wasm/v2-share-token-sep41.wasm
       - name: Verify API-pinned Wasm fixture
         run: |
           echo '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564  target/wasm32v1-none/release/crowdfund.wasm' | sha256sum -c -

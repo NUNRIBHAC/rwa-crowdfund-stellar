@@ -91,6 +91,9 @@
                 },
                 {
                   "i128": "200"
+                },
+                {
+                  "u32": 1000
                 }
               ]
             }
@@ -205,7 +208,7 @@
               "key": {
                 "vec": [
                   {
-                    "symbol": "Allowance"
+                    "symbol": "AllowanceV2"
                   },
                   {
                     "map": [
@@ -229,15 +232,32 @@
                   }
                 ]
               },
-              "durability": "persistent",
+              "durability": "temporary",
               "val": {
-                "i128": "200"
+                "map": [
+                  {
+                    "key": {
+                      "symbol": "amount"
+                    },
+                    "val": {
+                      "i128": "200"
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "live_until_ledger"
+                    },
+                    "val": {
+                      "u32": 1000
+                    }
+                  }
+                ]
               }
             }
           },
           "ext": "v0"
         },
-        "live_until": 1036800
+        "live_until": 1000
       },
       {
         "entry": {
@@ -281,6 +301,39 @@
                     "wasm": "2a328055ea55cfba1e2fb7bd557ac5c7dc07d6bde588834cb02fc953a00ee8c2"
                   },
                   "storage": [
+                    {
+                      "key": {
+                        "symbol": "METADATA"
+                      },
+                      "val": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "decimal"
+                            },
+                            "val": {
+                              "u32": 7
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "name"
+                            },
+                            "val": {
+                              "string": "Demo Solar Share"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "symbol"
+                            },
+                            "val": {
+                              "string": "DSS"
+                            }
+                          }
+                        ]
+                      }
+                    },
                     {
                       "key": {
                         "vec": [
