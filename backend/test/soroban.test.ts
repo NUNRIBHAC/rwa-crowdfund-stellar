@@ -28,6 +28,8 @@ import {
   statusSoroban,
   recoverSoroban,
   confirmedContribution,
+  accountPayouts,
+  accountActivity,
   deriveContributionFromNetwork,
 } from '../src/soroban.js';
 const tmp = createCommunityTestDirectory();
@@ -52,6 +54,7 @@ let badWasm = false,
   restoreRequired = false,
   missingAccount = false;
 let lastEnvelope = '';
+let txEvents: unknown[] = [];
 let balanceUnits = 0n;
 const sends: string[] = [];
 const reviewedWasmHash = createHash('sha256').update(fs.readFileSync(wasmPath)).digest();
@@ -144,6 +147,7 @@ const client: any = {
     status: txStatus,
     ledger: 100,
     envelopeXdr: lastEnvelope,
+    events: { contractEventsXdr: [txEvents] },
   }),
 };
 sorobanDeps.client = () => client;
@@ -158,6 +162,7 @@ function reset() {
   txStatus = 'NOT_FOUND';
   wrongHash = false;
   lastEnvelope = '';
+  txEvents = [];
   badWasm = false;
   addressAuth = false;
   restoreRequired = false;
@@ -266,6 +271,7 @@ test('confirmedContribution derives the record from the network-confirmed envelo
   // journal-field guess.
   const saved = lastEnvelope;
   lastEnvelope = '';
+  txEvents = [];
   await assert.rejects(confirmedContribution(b.hash), /no transaction envelope/);
   lastEnvelope = saved;
   // Journal row fields are never trusted: even a tampered campaign field is
@@ -562,4 +568,74 @@ test('a failed coalesced submission releases its slot without changing the signe
   await submitSoroban('s1', { actor: actor.publicKey(), xdr: envelope });
   assert.equal(sendCount, 2);
   assert.equal(sends[0], sends[1]);
+});
+
+function withdrawalTransfer(units: bigint, recipient = actor.publicKey(), emitter = tokenId) {
+  return {
+    contractId: { value: StrKey.decodeContract(emitter) },
+    body: {
+      v0: {
+        topics: [
+          nativeToScVal('transfer', { type: 'symbol' }),
+          new Address(contractId).toScVal(),
+          new Address(recipient).toScVal(),
+          nativeToScVal('USDC', { type: 'string' }),
+        ],
+        data: nativeToScVal(units, { type: 'i128' }),
+      },
+    },
+  };
+}
+async function completedWithdrawal(events: unknown[]) {
+  const built = await buildSoroban('s1', { actor: actor.publicKey(), action: 'withdraw', amount: '987654321.1234567' });
+  const tx = TransactionBuilder.fromXDR(built.xdr, Networks.TESTNET) as Transaction;
+  assert.equal((tx.operations[0] as any).func.invokeContract.args.length, 0);
+  await submitSoroban('s1', { actor: actor.publicKey(), xdr: signed(built) });
+  txStatus = 'SUCCESS';
+  txEvents = events;
+  await statusSoroban(built.hash);
+  return built;
+}
+test('withdraw build never records or echoes a caller-invented amount', async () => {
+  reset();
+  const built = await buildSoroban('s1', { actor: actor.publicKey(), action: 'withdraw', amount: '987654321.1234567' });
+  assert.equal(built.amount, undefined);
+  const data = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8'));
+  assert.equal(data.intents.find((i: any) => i.hash === built.hash).amount, undefined);
+});
+test('withdraw payouts use the unique confirmed contract-to-creator transfer', async () => {
+  reset();
+  const built = await completedWithdrawal([withdrawalTransfer(25000000n)]);
+  assert.equal((await accountPayouts(actor.publicKey())).find((i) => i.hash === built.hash)?.amount, '2.5');
+});
+for (const type of ['missing', 'ambiguous', 'wrong recipient'] as const) {
+  test(`withdraw ${type} transfer amount stays unknown, never caller value`, async () => {
+    reset();
+    const events =
+      type === 'missing'
+        ? []
+        : type === 'ambiguous'
+          ? [withdrawalTransfer(1n), withdrawalTransfer(2n)]
+          : [withdrawalTransfer(1n, Keypair.random().publicKey())];
+    const built = await completedWithdrawal(events);
+    assert.equal((await accountPayouts(actor.publicKey())).find((i) => i.hash === built.hash)?.amount, null);
+  });
+}
+
+test('legacy successful withdrawal with only intended amount stays unknown without rewriting history', async () => {
+  reset();
+  const built = await completedWithdrawal([]);
+  const file = process.env.SOROBAN_INTENTS_PATH!;
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  data.intents.find((i: any) => i.hash === built.hash).amount = '987654321.1234567';
+  fs.writeFileSync(file, JSON.stringify(data));
+  assert.equal((await accountPayouts(actor.publicKey())).find((i) => i.hash === built.hash)?.amount, null);
+  assert.equal((await accountActivity(actor.publicKey())).find((i) => i.hash === built.hash)?.amount, null);
+  assert.equal(JSON.parse(fs.readFileSync(file, 'utf8')).intents.find((i: any) => i.hash === built.hash).amount, '987654321.1234567');
+});
+
+test('withdraw ignores a matching transfer emitted by another token contract', async () => {
+  reset();
+  const built = await completedWithdrawal([withdrawalTransfer(25000000n, actor.publicKey(), contractId)]);
+  assert.equal((await accountPayouts(actor.publicKey())).find((i) => i.hash === built.hash)?.amount, null);
 });

@@ -400,7 +400,7 @@ async function recordStatus(hash: string, status: string, confirmedAmount?: stri
     await save(store);
   });
 }
-export type ConfirmedTransfer = { from: string; to: string; asset: string; units: bigint };
+export type ConfirmedTransfer = { from: string; to: string; asset: string; units: bigint; emitter?: string };
 // Token transfer events (SEP-41 shape: topics [transfer, from, to, asset?],
 // data i128 amount) from a confirmed getTransaction result. Anything that is
 // not a well-formed transfer is ignored; no events means an empty list.
@@ -416,7 +416,9 @@ export function transferEventsFromResult(result: unknown): ConfirmedTransfer[] {
       if (topics[0] !== 'transfer' || typeof topics[1] !== 'string' || typeof topics[2] !== 'string') continue;
       const amount = scValToNative(v0.data as never);
       if (typeof amount !== 'bigint' || amount <= 0n) continue;
-      out.push({ from: topics[1], to: topics[2], asset: typeof topics[3] === 'string' ? topics[3] : '', units: amount });
+      const id = e?.contractId?.value;
+      const emitter = id instanceof Uint8Array && id.length === 32 ? StrKey.encodeContract(id) : undefined;
+      out.push({ emitter, from: topics[1], to: topics[2], asset: typeof topics[3] === 'string' ? topics[3] : '', units: amount });
     } catch {
       continue;
     }
@@ -425,13 +427,21 @@ export function transferEventsFromResult(result: unknown): ConfirmedTransfer[] {
 }
 // The amount the CONFIRMED transaction actually moved for this wallet: for a
 // contribute the transfer wallet -> campaign contract, for a refund the
-// transfer campaign contract -> wallet. Exactly one matching transfer is
+// transfer campaign contract -> wallet (also the creator's withdraw).
+// Withdraw additionally requires the configured token emitter. Exactly one matching transfer is
 // required; zero or several means undeterminable (undefined, i.e. UNKNOWN).
-export function confirmedAmountFromResult(result: unknown, action: string, actor: string, campaignContract: string): string | undefined {
-  if (action !== 'contribute' && action !== 'refund') return undefined;
-  const m = transferEventsFromResult(result).filter((t) =>
-    action === 'contribute' ? t.from === actor && t.to === campaignContract : t.from === campaignContract && t.to === actor,
-  );
+export function confirmedAmountFromResult(
+  result: unknown,
+  action: string,
+  actor: string,
+  campaignContract: string,
+  tokenContract?: string,
+): string | undefined {
+  if (action !== 'contribute' && action !== 'refund' && action !== 'withdraw') return undefined;
+  const m = transferEventsFromResult(result).filter((t) => {
+    if (action === 'withdraw' && (!tokenContract || t.emitter !== tokenContract)) return false;
+    return action === 'contribute' ? t.from === actor && t.to === campaignContract : t.from === campaignContract && t.to === actor;
+  });
   return m.length === 1 ? unitsToAmount(m[0].units) : undefined;
 }
 // Funding state for one registered campaign, for the post-funding report
@@ -623,7 +633,7 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
       campaign: id,
       actor: input.actor,
       action: input.action,
-      amount: input.action === 'refund' ? refundAmount : input.amount,
+      amount: input.action === 'withdraw' ? undefined : input.action === 'refund' ? refundAmount : input.amount,
       xdr: prepared.toXDR(),
       status: 'BUILT',
     });
@@ -634,7 +644,7 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     xdr: prepared.toXDR(),
     networkPassphrase: passphrase,
     action: input.action,
-    amount: input.amount,
+    amount: input.action === 'withdraw' ? undefined : input.amount,
     feeStroops: prepared.fee,
     contractId: e.contractId,
     testOnly: true,
@@ -750,7 +760,7 @@ export async function accountActivity(actor: string): Promise<any[]> {
       hash: i.hash,
       campaign: i.campaign,
       action: i.action,
-      amount: i.amount ?? null,
+      amount: (i.action === 'withdraw' ? i.confirmedAmount : i.amount) ?? null,
       status: i.status,
       createdAt: i.createdAt ?? null,
       updatedAt: i.updatedAt ?? null,
@@ -775,7 +785,7 @@ export async function accountPayouts(actor: string): Promise<any[]> {
       hash: i.hash,
       campaign: i.campaign,
       action: i.action,
-      amount: i.amount ?? null,
+      amount: (i.action === 'withdraw' ? i.confirmedAmount : i.amount) ?? null,
       status: i.status,
       createdAt: i.createdAt ?? null,
       updatedAt: i.updatedAt ?? null,
@@ -803,7 +813,7 @@ export async function statusSoroban(hash: string): Promise<any> {
   // confirmed transfer event shows (v1 campaigns; UNKNOWN when not exactly one).
   if (result.status === 'SUCCESS' || result.status === 'FAILED') {
     const v1 = result.status === 'SUCCESS' ? v1Entries().find((e) => e.id === intent.campaign) : undefined;
-    const confirmed = v1 ? confirmedAmountFromResult(result, intent.action, intent.actor, v1.contractId) : undefined;
+    const confirmed = v1 ? confirmedAmountFromResult(result, intent.action, intent.actor, v1.contractId, expectedToken()) : undefined;
     await recordStatus(hash, result.status, confirmed);
   }
   return { hash, status: result.status, confirmed: result.status === 'SUCCESS', held: result.status === 'NOT_FOUND' };
