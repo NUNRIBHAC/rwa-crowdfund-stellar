@@ -1,5 +1,6 @@
 import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 let replayBadSeq = false;
+let replayCode = 'tx_bad_seq';
 // Offline unit tests for the backend fix patch. All Stellar network calls are
 // replaced by fakes via __setDepsForTests; no testnet access needed.
 // The fake Horizon simulates a ledger: applied tx hashes are replayed on
@@ -109,7 +110,7 @@ __setDepsForTests({
     if (appliedTxHashes.has(hash)) {
       if (replayBadSeq) {
         const e: any = new Error('expired replay');
-        e.response = { data: { extras: { result_codes: { transaction: 'tx_bad_seq' } } } };
+        e.response = { data: { extras: { result_codes: { transaction: replayCode } } } };
         throw e;
       }
       return { hash } as any;
@@ -1175,5 +1176,214 @@ test('payout restart recovery reconciles an applied XDR-only legacy intent after
     assert.equal(paymentLog.filter((p) => p.to === c.creatorPub && p.code === 'USDC').length, 1);
   } finally {
     replayBadSeq = false;
+  }
+});
+
+// F5: exact-envelope legacy recovery must not mark an intended hash confirmed.
+test('F5 mint preserves intended hash separately and recovers an applied XDR-only restart', async () => {
+  resetState();
+  injectedFailure = { type: 'network', applyFirst: true };
+  await assert.rejects(createCampaign({ name: 'mint legacy hash', goalUsdc: GOAL }), /submission uncertain/);
+  const store = readStore();
+  const row = store.campaigns[0];
+  const envelope = row.mintXdr;
+  assert.ok(envelope);
+  assert.equal(row.mintTx, '', 'uncertain mint is not confirmed');
+  const expected = Buffer.from(TransactionBuilder.fromXDR(envelope, Networks.TESTNET).hash()).toString('hex');
+  assert.equal(row.mintIntentHash, expected, 'intended hash durably retained');
+  delete row.mintIntentHash;
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  replayBadSeq = true;
+  try {
+    const result = await retryPending(row.id);
+    assert.equal(result.mintTx, expected);
+    assert.equal(result.mintXdr, undefined);
+    assert.equal(paymentLog.length, 1);
+  } finally {
+    replayBadSeq = false;
+  }
+});
+
+test('F5 clawback preserves intended hash separately and recovers an applied XDR-only restart', async () => {
+  resetState();
+  const investor = addDemoInvestor();
+  const c = await createCampaign({ name: 'clawback legacy hash', goalUsdc: GOAL });
+  await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 25 });
+  let store = readStore();
+  store.campaigns[0].deadline = new Date(Date.now() - 1000).toISOString();
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  injectedFailure = { type: 'network', applyFirst: true };
+  await refund(c.id);
+  store = readStore();
+  const inv = store.campaigns[0].investments[0];
+  const envelope = inv.clawbackXdr;
+  assert.ok(envelope);
+  assert.equal(inv.clawbackTx, undefined, 'uncertain return is not confirmed');
+  const expected = Buffer.from(TransactionBuilder.fromXDR(envelope, Networks.TESTNET).hash()).toString('hex');
+  assert.equal(inv.clawbackIntentHash, expected);
+  delete inv.clawbackIntentHash;
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  replayBadSeq = true;
+  try {
+    const result = await refund(c.id);
+    assert.equal(result.investments[0].status, 'refunded');
+    assert.equal(result.investments[0].clawbackTx, expected);
+    assert.equal(paymentLog.filter((p) => p.code === 'USDC' && p.to === investor.publicKey()).length, 1);
+  } finally {
+    replayBadSeq = false;
+  }
+});
+
+test('F5 refund legacy exact applied envelope reconciles without a second payment', async () => {
+  resetState();
+  const investor = addDemoInvestor();
+  const c = await createCampaign({ name: 'refund legacy hash', goalUsdc: GOAL });
+  await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 25 });
+  let store = readStore();
+  store.campaigns[0].deadline = new Date(Date.now() - 1000).toISOString();
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  await refund(c.id);
+  const envelope = submitLog[submitLog.length - 1];
+  store = readStore();
+  const row = store.campaigns[0];
+  row.state = 'funding';
+  delete row.refundedAt;
+  const inv = row.investments[0];
+  inv.status = 'refund_pending';
+  inv.refundXdr = envelope;
+  delete inv.refundTx;
+  delete inv.refundIntentHash;
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  replayBadSeq = true;
+  try {
+    const result = await refund(c.id);
+    assert.equal(result.investments[0].status, 'refunded');
+    assert.equal(paymentLog.filter((p) => p.code === 'USDC' && p.to === investor.publicKey()).length, 1);
+  } finally {
+    replayBadSeq = false;
+  }
+});
+
+for (const damage of ['corrupt XDR', 'wrong network', 'hash mismatch'] as const) {
+  test(`F5 ${damage} legacy intent holds without broadcast or replacement`, async () => {
+    resetState();
+    injectedFailure = { type: 'network', applyFirst: false };
+    await assert.rejects(createCampaign({ name: 'damaged intent', goalUsdc: GOAL }), /submission uncertain/);
+    const store = readStore();
+    const row = store.campaigns[0];
+    delete row.mintIntentHash;
+    if (damage === 'corrupt XDR') row.mintXdr = 'not an envelope';
+    else if (damage === 'hash mismatch') row.mintIntentHash = 'f'.repeat(64);
+    else {
+      const old = TransactionBuilder.fromXDR(row.mintXdr, Networks.TESTNET) as Transaction;
+      const wrong = new TransactionBuilder(new Account(platformKp.publicKey(), old.sequence), { fee: '100', networkPassphrase: Networks.PUBLIC })
+        .addOperation(
+          Operation.payment({ destination: platformKp.publicKey(), asset: new Asset(row.code, platformKp.publicKey()), amount: String(row.supply) }),
+        )
+        .setTimeout(180)
+        .build();
+      wrong.sign(platformKp);
+      row.mintXdr = wrong.toXDR();
+    }
+    const before = row.mintXdr;
+    fs.writeFileSync(storePath, JSON.stringify(store));
+    const sends = submitLog.length;
+    await assert.rejects(retryPending(row.id), /holding without broadcast or rebuild/);
+    assert.equal(submitLog.length, sends);
+    const after = readStore().campaigns[0];
+    assert.equal(after.mintXdr, before);
+    assert.equal(after.mintTx, '');
+  });
+}
+
+test('F5 legacy mint unknown reconciliation retains exact hash and XDR across repeated retries', async () => {
+  resetState();
+  injectedFailure = { type: 'network', applyFirst: true };
+  await assert.rejects(createCampaign({ name: 'unknown legacy mint', goalUsdc: GOAL }), /submission uncertain/);
+  let store = readStore();
+  const row = store.campaigns[0];
+  const envelope = row.mintXdr;
+  delete row.mintIntentHash;
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  replayBadSeq = true;
+  forceLookupUnknown = true;
+  try {
+    for (let i = 0; i < 2; i++) await assert.rejects(retryPending(row.id), /inconclusive/);
+    store = readStore();
+    assert.equal(store.campaigns[0].mintXdr, envelope);
+    assert.equal(store.campaigns[0].mintTx, '');
+    assert.equal(store.campaigns[0].mintIntentHash, Buffer.from(TransactionBuilder.fromXDR(envelope, Networks.TESTNET).hash()).toString('hex'));
+    assert.equal(paymentLog.length, 1);
+    assert.equal(new Set(submitLog).size, 1);
+    forceLookupUnknown = false;
+    const result = await retryPending(row.id);
+    assert.ok(result.mintTx);
+    assert.equal(paymentLog.length, 1);
+  } finally {
+    replayBadSeq = false;
+    forceLookupUnknown = false;
+  }
+});
+
+test('F5 refund hash is durable before response loss and stays separate from confirmation', async () => {
+  resetState();
+  const investor = addDemoInvestor();
+  const c = await createCampaign({ name: 'refund durable hash', goalUsdc: GOAL });
+  await invest(c.id, { investorPub: investor.publicKey(), amountUsdc: 25 });
+  const store = readStore();
+  store.campaigns[0].deadline = new Date(Date.now() - 1000).toISOString();
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  const submit = campaigns.deps.submitTransaction;
+  let checked = false;
+  __setDepsForTests({
+    submitTransaction: async (tx: Transaction) => {
+      const payment = tx.operations[0] as any;
+      if (payment.asset.code === 'USDC' && payment.destination === investor.publicKey()) {
+        const inv = readStore().campaigns[0].investments[0];
+        assert.equal(inv.refundXdr, tx.toXDR());
+        assert.equal(inv.refundIntentHash, Buffer.from(tx.hash()).toString('hex'));
+        assert.equal(inv.refundTx, undefined);
+        checked = true;
+        injectedFailure = { type: 'network', applyFirst: true };
+      }
+      return submit(tx);
+    },
+  });
+  try {
+    const held = await refund(c.id);
+    assert.ok(checked);
+    assert.equal(held.investments[0].status, 'refund_pending');
+    assert.equal(held.investments[0].refundTx, undefined);
+  } finally {
+    __setDepsForTests({ submitTransaction: submit });
+  }
+  replayBadSeq = true;
+  try {
+    const done = await refund(c.id);
+    assert.equal(done.investments[0].status, 'refunded');
+    assert.equal(paymentLog.filter((p) => p.code === 'USDC' && p.to === investor.publicKey()).length, 1);
+  } finally {
+    replayBadSeq = false;
+  }
+});
+
+test('F5 XDR-only mint also reconciles an applied expired replay', async () => {
+  resetState();
+  injectedFailure = { type: 'network', applyFirst: true };
+  await assert.rejects(createCampaign({ name: 'expired mint', goalUsdc: GOAL }), /submission uncertain/);
+  const store = readStore();
+  const row = store.campaigns[0];
+  delete row.mintIntentHash;
+  fs.writeFileSync(storePath, JSON.stringify(store));
+  replayBadSeq = true;
+  replayCode = 'tx_too_late';
+  try {
+    const result = await retryPending(row.id);
+    assert.ok(result.mintTx);
+    assert.equal(result.mintXdr, undefined);
+    assert.equal(paymentLog.length, 1);
+  } finally {
+    replayBadSeq = false;
+    replayCode = 'tx_bad_seq';
   }
 });

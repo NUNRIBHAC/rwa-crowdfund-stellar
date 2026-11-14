@@ -39,10 +39,12 @@ export type Investment = {
   tokenXdr?: string;
   tokenTx: string;
   clawbackXdr?: string;
+  clawbackIntentHash?: string;
   clawbackTx?: string;
   returnedTokens?: string; // verified total observed; informational until full return
   tokenDeliveredAt?: string; // set when token delivery is confirmed (binds on-chain return verification)
   refundXdr?: string;
+  refundIntentHash?: string;
   refundTx?: string;
   status?: InvestmentStatus;
   error?: string;
@@ -59,6 +61,7 @@ export type Campaign = {
   state: 'funding' | 'finalized' | 'refunded';
   createdAt: string;
   mintXdr?: string;
+  mintIntentHash?: string;
   mintTx: string;
   consumedReturnOps?: string[]; // Horizon payment ids of investor token returns already allocated to refunds
   payoutXdr?: string;
@@ -320,6 +323,26 @@ async function executePayment(
       slot.hash = intent.hash;
       persist(); // durable intent before any network send
     }
+    // Old records can contain only an exact signed XDR. Recover its hash on
+    // the configured network before any broadcast, never from a rebuilt tx.
+    // A source signature binds the envelope to that network; parsing alone
+    // would silently produce a different hash after a network config change.
+    try {
+      const prior = TransactionBuilder.fromXDR(slot.xdr, networkPassphrase);
+      if (!(prior instanceof Transaction)) throw new Error('unsupported fee-bump intent');
+      if (prior.signatures.length !== 1 || !Keypair.fromPublicKey(prior.source).verify(prior.hash(), prior.signatures[0].signature))
+        throw new Error('source signature does not verify on configured network');
+      const exactHash = Buffer.from(prior.hash()).toString('hex');
+      if (slot.hash && slot.hash !== exactHash) throw new Error('persisted hash does not match exact envelope on configured network');
+      if (!slot.hash) {
+        slot.hash = exactHash;
+        persist();
+      }
+    } catch (e) {
+      slot.error = `invalid persisted payment intent: ${errMsg(e)}; holding without broadcast or rebuild`;
+      persist();
+      throw new Error(slot.error);
+    }
     try {
       const hash = await submitSignedXdr(slot.xdr);
       slot.error = undefined;
@@ -518,7 +541,8 @@ export async function createCampaign(input: { name: string; goalUsdc: number; de
         return buildSignedPayment(account, plat, plat.publicKey(), rwaAsset(code, plat.publicKey()), String(supply));
       },
       () => {
-        campaign.mintXdr = mintSlot.xdr; // intent only; mintTx is set after confirmation
+        campaign.mintXdr = mintSlot.xdr;
+        campaign.mintIntentHash = mintSlot.hash; // mintTx remains confirmation only
         saveStore(store);
       },
     );
@@ -696,14 +720,6 @@ export async function finalize(id: string): Promise<Campaign> {
       const creator = loadCreatorKp();
       await deps.ensureTrustline(creator, usdcAsset());
       const slot = { xdr: campaign.payoutXdr, hash: campaign.payoutTx || undefined };
-      if (slot.xdr && !slot.hash) {
-        // Recover older persisted XDR-only payout intents without rebuilding.
-        // The hash is deterministic for the exact signed envelope/network.
-        const prior = TransactionBuilder.fromXDR(slot.xdr, networkPassphrase);
-        slot.hash = Buffer.from(prior.hash()).toString('hex');
-        campaign.payoutTx = slot.hash;
-        saveStore(store);
-      }
       campaign.payoutTx = await executePayment(
         slot,
         async () => {
@@ -792,7 +808,7 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
         if (secret) {
           try {
             const kp = Keypair.fromSecret(secret);
-            const slot = { xdr: inv.clawbackXdr, hash: undefined as string | undefined };
+            const slot = { xdr: inv.clawbackXdr, hash: inv.clawbackIntentHash };
             inv.clawbackTx = await executePayment(
               slot,
               async () => {
@@ -801,6 +817,7 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
               },
               () => {
                 inv.clawbackXdr = slot.xdr;
+                inv.clawbackIntentHash = slot.hash;
                 saveStore(store);
               },
             );
@@ -841,7 +858,7 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
       // Per-investment idempotent refund, intent-first.
       inv.status = 'refund_pending';
       try {
-        const slot = { xdr: inv.refundXdr, hash: inv.refundTx || undefined };
+        const slot = { xdr: inv.refundXdr, hash: inv.refundIntentHash ?? (inv.refundTx || undefined) };
         inv.refundTx = await executePayment(
           slot,
           async () => {
@@ -849,7 +866,8 @@ export async function refund(id: string): Promise<Campaign & { refundBlocked?: s
             return buildSignedPayment(account, plat, inv.investorPub, usdcAsset(), centsToAmountString(toCents(inv.amountUsdc)));
           },
           () => {
-            inv.refundXdr = slot.xdr; // intent only; refundTx is set after confirmation
+            inv.refundXdr = slot.xdr;
+            inv.refundIntentHash = slot.hash; // refundTx remains confirmation only
             saveStore(store);
           },
         );
@@ -886,7 +904,7 @@ export async function retryPending(id: string): Promise<Campaign> {
 
     if (!campaign.mintTx && campaign.mintXdr) {
       const plat = deps.requirePlatform();
-      const slot = { xdr: campaign.mintXdr, hash: undefined as string | undefined };
+      const slot = { xdr: campaign.mintXdr, hash: campaign.mintIntentHash };
       campaign.mintTx = await executePayment(
         slot,
         async () => {
@@ -895,7 +913,7 @@ export async function retryPending(id: string): Promise<Campaign> {
         },
         () => {
           campaign.mintXdr = slot.xdr;
-          campaign.mintTx = slot.hash ?? campaign.mintTx;
+          campaign.mintIntentHash = slot.hash;
           saveStore(store);
         },
       );
