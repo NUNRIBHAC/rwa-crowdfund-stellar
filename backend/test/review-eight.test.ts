@@ -12,7 +12,14 @@ import { requestPasswordReset, EMAIL_RESEND_COOLDOWN_MS } from '../src/email-aut
 import { assertTestSafeDatabaseUrl, assertPooledDatabaseUrlTestSafe } from '../src/test-storage-guard.js';
 import { PostgresDeploymentManifestStore, deploymentManifestBackend, resetDeploymentManifestBackendForTests } from '../src/deployment-manifest.js';
 import { pendContribution, clearPending, readPending, drainPendingContributors } from '../src/pending-contributors.js';
-import { FileEventArchiveStore, archiveCampaignEvents, archiveSnapshotJsonl, restoreArchiveSnapshot, verifyArchiveSnapshot } from '../src/event-archive.js';
+import {
+  FileEventArchiveStore,
+  archiveCampaignEvents,
+  archiveIdentity,
+  archiveSnapshotJsonl,
+  restoreArchiveSnapshot,
+  verifyArchiveSnapshot,
+} from '../src/event-archive.js';
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'review-eight-'));
 let seq = 0;
@@ -187,17 +194,19 @@ const event = (id: string, ledger = 5) => ({ id, ledger, topic: [], value: 'xdr'
 test('R5 missing stable event identity stops the window before writes/checkpoint', async () => {
   const store = archive();
   const client = {
-    getLatestLedger: async () => ({ sequence: 10 }),
+    getNetwork: async () => ({ passphrase: 'Test SDF Network ; September 2015' }),
+    getLatestLedger: async () => ({ sequence: 10, id: 'a'.repeat(64) }),
     getEvents: async () => ({ events: [event('ok'), { ledger: 6, topic: [], value: 'xdr' }] }),
   };
   await assert.rejects(archiveCampaignEvents({ client, campaignId: 'qa', contractId: contract, store }), /stable id/);
   assert.equal(await store.count(), 0);
-  assert.equal(await store.readCheckpoint('qa'), undefined);
+  assert.equal(await store.readCheckpoint('qa', archiveIdentity(contract)), undefined);
 });
 test('R5 pagingToken fallback remains a stable id; future windows stay separate', async () => {
   const store = archive();
   const client = {
-    getLatestLedger: async () => ({ sequence: 10 }),
+    getNetwork: async () => ({ passphrase: 'Test SDF Network ; September 2015' }),
+    getLatestLedger: async () => ({ sequence: 10, id: 'a'.repeat(64) }),
     getEvents: async () => ({
       events: [
         { ledger: 5, pagingToken: 'stable', topic: [], value: 'xdr' },
@@ -207,7 +216,7 @@ test('R5 pagingToken fallback remains a stable id; future windows stay separate'
   };
   await archiveCampaignEvents({ client, campaignId: 'qa', contractId: contract, store });
   assert.equal((await store.list())[0].eventId, 'stable');
-  assert.equal((await store.readCheckpoint('qa'))!.processedThroughLedger, 10);
+  assert.equal((await store.readCheckpoint('qa', archiveIdentity(contract)))!.processedThroughLedger, 10);
 });
 test('R6 corrupt queue never becomes empty or gets overwritten by pend/clear/drain', async () => {
   const saved = process.env.PENDING_CONTRIBUTORS_PATH;
@@ -237,7 +246,11 @@ test('R6 corrupt queue never becomes empty or gets overwritten by pend/clear/dra
 async function snapshot() {
   const store = archive();
   await archiveCampaignEvents({
-    client: { getLatestLedger: async () => ({ sequence: 10 }), getEvents: async () => ({ events: [event('one'), event('two', 6)] }) },
+    client: {
+      getNetwork: async () => ({ passphrase: 'Test SDF Network ; September 2015' }),
+      getLatestLedger: async () => ({ sequence: 10, id: 'a'.repeat(64) }),
+      getEvents: async () => ({ events: [event('one'), event('two', 6)] }),
+    },
     campaignId: 'qa',
     contractId: contract,
     store,
@@ -298,19 +311,24 @@ test('R4 file manifest factory also refuses implicit working-directory defaults 
 test('R5 malformed ledger/response cannot produce a completed checkpoint', async () => {
   for (const events of [[{ ...event('bad'), ledger: 'bad' }], null]) {
     const store = archive();
-    const client = { getLatestLedger: async () => ({ sequence: 10 }), getEvents: async () => ({ events }) };
+    const client = {
+      getNetwork: async () => ({ passphrase: 'Test SDF Network ; September 2015' }),
+      getLatestLedger: async () => ({ sequence: 10, id: 'a'.repeat(64) }),
+      getEvents: async () => ({ events }),
+    };
     await assert.rejects(archiveCampaignEvents({ client, campaignId: 'qa', contractId: contract, store }), /refusing to advance checkpoint/);
-    assert.equal(await store.readCheckpoint('qa'), undefined);
+    assert.equal(await store.readCheckpoint('qa', archiveIdentity(contract)), undefined);
   }
 });
 test('R5 a bad second window preserves the last fully processed checkpoint', async () => {
   const store = archive();
   const client = {
-    getLatestLedger: async () => ({ sequence: 20 }),
+    getNetwork: async () => ({ passphrase: 'Test SDF Network ; September 2015' }),
+    getLatestLedger: async () => ({ sequence: 20, id: 'a'.repeat(64) }),
     getEvents: async (q: Record<string, unknown>) => ({ events: Number(q.startLedger) > 10 ? [{ ledger: 15, value: 'xdr' }] : [event('first')] }),
   };
   await assert.rejects(archiveCampaignEvents({ client, campaignId: 'qa', contractId: contract, store, windowLedgers: 10 }), /stable id/);
-  assert.equal((await store.readCheckpoint('qa'))!.processedThroughLedger, 10);
+  assert.equal((await store.readCheckpoint('qa', archiveIdentity(contract)))!.processedThroughLedger, 10);
   assert.equal(await store.count(), 1);
 });
 test('R6 filesystem read errors also stop writes, and missing file alone means empty', () => {

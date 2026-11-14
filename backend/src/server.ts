@@ -39,7 +39,7 @@ import { communityServiceFromEnv, createCommunityRouter } from './community-rout
 import { mailerFromEnv } from './mailer.js';
 import { buildShareRegister, type ShareRegisterPayload } from './share-register.js';
 import { buildCapTable, holdingFromCapTable, CORPORATE_ACTIONS_SEMANTICS } from './corporate-actions.js';
-import { archiveCampaignEvents, eventArchiveBackend, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
+import { archiveCampaignEvents, eventArchiveBackend, archiveIdentity, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
 
 import { apiNotFound, jsonErrors } from './json-errors.js';
 
@@ -438,7 +438,7 @@ const reconciliationPayload = async () => {
     const store = await eventArchiveBackend();
     eventArchive = {};
     for (const c of campaigns) {
-      eventArchive[c.id] = { events: await store.count(c.id), checkpoint: (await store.readCheckpoint(c.id)) ?? null };
+      eventArchive[c.id] = { events: await store.count(c.id), checkpoint: (await store.readCheckpoint(c.id, archiveIdentity(c.contractId))) ?? null };
     }
   } catch (err) {
     console.error('event archive coverage read failed:', err instanceof Error ? err.message : err);

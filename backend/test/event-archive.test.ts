@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { Keypair } from '@stellar/stellar-sdk';
+import { Keypair, Networks } from '@stellar/stellar-sdk';
 import {
   FileEventArchiveStore,
   PostgresEventArchiveStore,
@@ -13,6 +13,7 @@ import {
   verifyArchiveSnapshot,
   archiveEventHash,
   ARCHIVE_VERSION,
+  archiveIdentity,
 } from '../src/event-archive.js';
 
 const CONTRACT = 'CCUYSC424OJYEWFJHRCKMNBFQHRWWQQICXAZPRXJUM7PBTTYJFXN2Z73';
@@ -31,8 +32,11 @@ const ev = (id: string, ledger: number, kind = 'contributed') => ({
 });
 
 const client = (events: ReturnType<typeof ev>[], latest: number, rangeError?: string) => ({
+  async getNetwork() {
+    return { passphrase: Networks.TESTNET };
+  },
   async getLatestLedger() {
-    return { sequence: latest };
+    return { sequence: latest, id: 'a'.repeat(64) };
   },
   async getEvents(params: Record<string, unknown>) {
     if (rangeError && typeof params.startLedger === 'number' && params.startLedger < 100) throw { code: -32602, message: rangeError };
@@ -53,7 +57,7 @@ test('archives every contract event verbatim and dedups on re-run', async () => 
   assert.equal(list[0].parsedKind, 'contributed');
   assert.equal(list[0].parsedContributor, kp);
   assert.equal(list[1].parsedKind, 'refunded');
-  const cp = await store.readCheckpoint('qa');
+  const cp = await store.readCheckpoint('qa', archiveIdentity(CONTRACT));
   assert.equal(cp?.version, ARCHIVE_VERSION);
   assert.equal(cp?.processedThroughLedger, 10);
   const r2 = await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
@@ -66,7 +70,7 @@ test('idempotent re-archive of the same window counts duplicates, not rows', asy
   const c = client([ev('e1', 5)], 10);
   await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
   // Simulate a version-bump rescan: wipe the checkpoint, events stay.
-  await store.writeCheckpoint('qa', { version: 0, processedThroughLedger: 1, updatedAt: 0 });
+  await store.writeCheckpoint('qa', { version: 0, identity: archiveIdentity(CONTRACT), processedThroughLedger: 1, updatedAt: 0 }, archiveIdentity(CONTRACT));
   const r = await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
   assert.equal(r.archived, 0);
   assert.equal(r.duplicates, 1);
@@ -78,7 +82,7 @@ test('floor range error clamps the start and flags an honest gap', async () => {
   const c = client([ev('e1', 120)], 200, 'ledger range: 100 - 200');
   const r = await archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store });
   assert.equal(r.gap, 'start-before-floor');
-  const cp = await store.readCheckpoint('qa');
+  const cp = await store.readCheckpoint('qa', archiveIdentity(CONTRACT));
   assert.equal(cp?.gap, 'start-before-floor');
   assert.equal(cp?.floorLedger, 100);
   assert.equal(cp?.processedThroughLedger, 200);
@@ -89,22 +93,25 @@ test('a full page trips the truncation guard and moves nothing', async () => {
   const many = Array.from({ length: 3 }, (_, i) => ev(`e${i}`, 5));
   const c = client(many, 10);
   await assert.rejects(() => archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store, eventLimit: 3 }), /may be truncated/);
-  assert.equal(await store.readCheckpoint('qa'), undefined);
+  assert.equal(await store.readCheckpoint('qa', archiveIdentity(CONTRACT)), undefined);
 });
 
 test('events without a stable id refuse checkpoint advancement', async () => {
   const store = newStore();
   const noId = { ledger: 5, topic: [{ symbol: 'contributed' }], value: 'x' };
   const c = {
+    async getNetwork() {
+      return { passphrase: Networks.TESTNET };
+    },
     async getLatestLedger() {
-      return { sequence: 10 };
+      return { sequence: 10, id: 'a'.repeat(64) };
     },
     async getEvents() {
       return { events: [noId, ev('e1', 5)] };
     },
   };
   await assert.rejects(archiveCampaignEvents({ client: c, campaignId: 'qa', contractId: CONTRACT, store }), /no stable id/);
-  assert.equal(await store.readCheckpoint('qa'), undefined);
+  assert.equal(await store.readCheckpoint('qa', archiveIdentity(CONTRACT)), undefined);
   assert.equal(await store.count('qa'), 0);
 });
 
