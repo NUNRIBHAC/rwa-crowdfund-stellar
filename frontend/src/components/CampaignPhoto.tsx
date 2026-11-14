@@ -12,7 +12,13 @@ export default function CampaignPhoto({ campaignId, variant }: { campaignId: str
   const illustration = displayed.endsWith('.svg');
   return (
     <figure className={`${variant}-photo`}>
-      <img src={displayed} alt={illustration ? m.invest.illustrativeCover : m.card.photoAlt} loading="lazy" onError={() => setFailed(true)} />
+      <img
+        src={displayed}
+        alt={illustration ? m.invest.illustrativeCover : m.card.photoAlt}
+        loading={variant === 'card' ? 'lazy' : undefined}
+        fetchPriority={variant === 'campaign' ? 'high' : undefined}
+        onError={() => setFailed(true)}
+      />
       <figcaption>{illustration ? m.invest.illustrativeCover : m.card.photoCaption}</figcaption>
     </figure>
   );

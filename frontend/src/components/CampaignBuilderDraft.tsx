@@ -9,7 +9,7 @@
 // listed automatically: the returned registry entry must be added to
 // SOROBAN_CAMPAIGNS_JSON by hand. For everyone else the button stays
 // disabled; campaign creation is an operator decision, not an open form.
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { signTransaction } from '@stellar/freighter-api';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { useI18n } from '../i18n';
@@ -33,6 +33,9 @@ const TESTNET_USDC_SAC = 'CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDA
 
 export default function CampaignBuilderDraft() {
   const { m } = useI18n();
+  const formId = useId();
+  const [submitted, setSubmitted] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const t = m.builder;
   const { account, token, isOperator } = useCommunityAuth();
   const [name, setName] = useState('');
@@ -66,6 +69,39 @@ export default function CampaignBuilderDraft() {
     amountInvalid: t.v2AmountError,
     maxBelowMin: t.v2MaxBelowMinError,
   } as const;
+
+  // Reuse the existing required-field copy in every locale. Validation is
+  // visible after blur or submit, not before the visitor has interacted.
+  const required = m.community.applicationValidation.required;
+  const fieldErrors: Record<string, string | undefined> = {
+    name: name === '' ? required : errors.name && errorText[errors.name],
+    slug: slug === '' ? required : errors.slug && errorText[errors.slug],
+    goal: goal.trim() === '' ? required : errors.goal && errorText[errors.goal],
+    deadline: deadline === '' ? required : errors.deadline && errorText[errors.deadline],
+    ...(contractSet === 'v2'
+      ? Object.fromEntries(
+          Object.entries(v2).map(([key, value]) => [
+            key,
+            value.trim() === '' ? required : v2Errors[key as keyof V2BuilderInput] && v2ErrorText[v2Errors[key as keyof V2BuilderInput]!],
+          ]),
+        )
+      : {}),
+  };
+  const visibleError = (field: string) => (submitted || touched[field] ? fieldErrors[field] : undefined);
+  const fieldProps = (field: string) => ({
+    id: `${formId}-${field}`,
+    required: true,
+    onBlur: () => setTouched((old) => ({ ...old, [field]: true })),
+    'aria-invalid': visibleError(field) ? (true as const) : undefined,
+    'aria-describedby':
+      [field === 'deadline' ? `${formId}-deadline-note` : '', visibleError(field) ? `${formId}-${field}-error` : ''].filter(Boolean).join(' ') || undefined,
+  });
+  const fieldError = (field: string) =>
+    visibleError(field) ? (
+      <span id={`${formId}-${field}-error`} className="field-error">
+        {visibleError(field)}
+      </span>
+    ) : null;
 
   const complete = builderComplete(input, nowSeconds, account?.publicKey ?? null) && (contractSet === 'v1' || v2BuilderComplete(v2));
   const preview = useMemo(
@@ -144,16 +180,30 @@ export default function CampaignBuilderDraft() {
       <p>{t.intro}</p>
       {isOperator && <p className="community-note">{t.operatorNote}</p>}
       {!account && <p className="community-note">{t.connectNote}</p>}
-      <form className="issuer-form" onSubmit={(e) => e.preventDefault()}>
+      <form
+        id={formId}
+        className="issuer-form"
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault();
+          setSubmitted(true);
+          const invalid = Object.keys(fieldErrors).find((field) => fieldErrors[field]);
+          if (invalid) {
+            document.getElementById(`${formId}-${invalid}`)?.focus();
+            return;
+          }
+          void deploy();
+        }}
+      >
         <label>
           {t.nameLabel}
-          <input value={name} onChange={(e) => setName(e.target.value)} maxLength={BUILDER_NAME_MAX} aria-invalid={!!errors.name} />
-          {errors.name && <span className="field-error">{errorText[errors.name]}</span>}
+          <input value={name} onChange={(e) => setName(e.target.value)} maxLength={BUILDER_NAME_MAX} {...fieldProps('name')} />
+          {fieldError('name')}
         </label>
         <label>
           {t.slugLabel}
-          <input value={slug} onChange={(e) => setSlug(e.target.value)} aria-invalid={!!errors.slug} placeholder={t.slugPlaceholder} />
-          {errors.slug && <span className="field-error">{errorText[errors.slug]}</span>}
+          <input value={slug} onChange={(e) => setSlug(e.target.value)} {...fieldProps('slug')} placeholder={t.slugPlaceholder} />
+          {fieldError('slug')}
         </label>
         <label>
           {t.industryLabel}
@@ -167,14 +217,16 @@ export default function CampaignBuilderDraft() {
         </label>
         <label>
           {t.goalLabel}
-          <input value={goal} onChange={(e) => setGoal(e.target.value)} inputMode="decimal" aria-invalid={!!errors.goal} placeholder={t.goalPlaceholder} />
-          {errors.goal && <span className="field-error">{errorText[errors.goal]}</span>}
+          <input value={goal} onChange={(e) => setGoal(e.target.value)} inputMode="decimal" {...fieldProps('goal')} placeholder={t.goalPlaceholder} />
+          {fieldError('goal')}
         </label>
         <label>
           {t.deadlineLabel}
-          <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} aria-invalid={!!errors.deadline} />
-          <span className="community-note">{t.deadlineNote}</span>
-          {errors.deadline && <span className="field-error">{errorText[errors.deadline]}</span>}
+          <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} {...fieldProps('deadline')} />
+          <span id={`${formId}-deadline-note`} className="community-note">
+            {t.deadlineNote}
+          </span>
+          {fieldError('deadline')}
         </label>
         <label>
           {t.contractSetLabel}
@@ -195,13 +247,13 @@ export default function CampaignBuilderDraft() {
           <>
             <label>
               {t.v2SymbolLabel}
-              <input value={v2.symbol} onChange={(e) => setV2({ ...v2, symbol: e.target.value })} maxLength={12} aria-invalid={!!v2Errors.symbol} />
-              {v2Errors.symbol && <span className="field-error">{v2ErrorText[v2Errors.symbol]}</span>}
+              <input value={v2.symbol} onChange={(e) => setV2({ ...v2, symbol: e.target.value })} maxLength={12} {...fieldProps('symbol')} />
+              {fieldError('symbol')}
             </label>
             <label>
               {t.v2DecimalsLabel}
-              <input value={v2.decimals} onChange={(e) => setV2({ ...v2, decimals: e.target.value })} inputMode="numeric" aria-invalid={!!v2Errors.decimals} />
-              {v2Errors.decimals && <span className="field-error">{v2ErrorText[v2Errors.decimals]}</span>}
+              <input value={v2.decimals} onChange={(e) => setV2({ ...v2, decimals: e.target.value })} inputMode="numeric" {...fieldProps('decimals')} />
+              {fieldError('decimals')}
             </label>
             <label>
               {t.v2MinLabel}
@@ -209,9 +261,9 @@ export default function CampaignBuilderDraft() {
                 value={v2.minPerInvestor}
                 onChange={(e) => setV2({ ...v2, minPerInvestor: e.target.value })}
                 inputMode="decimal"
-                aria-invalid={!!v2Errors.minPerInvestor}
+                {...fieldProps('minPerInvestor')}
               />
-              {v2Errors.minPerInvestor && <span className="field-error">{v2ErrorText[v2Errors.minPerInvestor]}</span>}
+              {fieldError('minPerInvestor')}
             </label>
             <label>
               {t.v2MaxLabel}
@@ -219,9 +271,9 @@ export default function CampaignBuilderDraft() {
                 value={v2.maxPerInvestor}
                 onChange={(e) => setV2({ ...v2, maxPerInvestor: e.target.value })}
                 inputMode="decimal"
-                aria-invalid={!!v2Errors.maxPerInvestor}
+                {...fieldProps('maxPerInvestor')}
               />
-              {v2Errors.maxPerInvestor && <span className="field-error">{v2ErrorText[v2Errors.maxPerInvestor]}</span>}
+              {fieldError('maxPerInvestor')}
             </label>
           </>
         )}
@@ -263,7 +315,7 @@ export default function CampaignBuilderDraft() {
         </section>
       )}
       {deployResult && !deployResult.registryEntry && <p className="community-note">{deployResult.message ?? deployResult.status}</p>}
-      <button type="button" className={isOperator && complete ? '' : 'builder-deploy-disabled'} disabled={!isOperator || !complete || busy} onClick={deploy}>
+      <button type="submit" form={formId} className={isOperator ? '' : 'builder-deploy-disabled'} disabled={!isOperator || busy}>
         {busy ? t.deployBusy : isOperator ? t.deploy : t.deployDisabled}
       </button>
     </div>

@@ -6,7 +6,7 @@ import { socialProviderDisplayName } from '../community/social';
 import { COMMUNITY_LIMITS } from '../community/api';
 import { useI18n } from '../i18n';
 import { shorten, tpl } from '../format';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 const SOCIAL_SIGNIN_LABELS: Record<
   string,
@@ -21,6 +21,7 @@ const SOCIAL_SIGNIN_LABELS: Record<
 
 export default function SignInPanel({ actor }: { actor: string }) {
   const { m } = useI18n();
+  const methodName = useId();
   const {
     account,
     busy,
@@ -255,32 +256,25 @@ export default function SignInPanel({ actor }: { actor: string }) {
     return (
       <section className="community-section" aria-labelledby="community-signin">
         <h2 id="community-signin">{m.community.signInTitle}</h2>
-        <div className="signin-method-toggle" role="tablist" aria-label={m.community.signInMethodLabel}>
-          <button
-            role="tab"
-            aria-selected={method === 'wallet'}
-            className={method === 'wallet' ? 'btn btn-primary' : 'btn'}
-            onClick={() => {
-              // A Turnstile/email failure must not linger over wallet sign-in:
-              // the wallet flow never uses the bot check.
-              clearError();
-              setMethod('wallet');
-            }}
-          >
-            {m.community.signInMethodWallet}
-          </button>
-          <button
-            role="tab"
-            aria-selected={method === 'email'}
-            className={method === 'email' ? 'btn btn-primary' : 'btn'}
-            onClick={() => {
-              clearError();
-              setMethod('email');
-            }}
-          >
-            {m.community.signInMethodEmail}
-          </button>
-        </div>
+        <fieldset className="signin-method-toggle">
+          <legend className="sr-only">{m.community.signInMethodLabel}</legend>
+          {(['wallet', 'email'] as const).map((choice) => (
+            <label key={choice} className={method === choice ? 'btn btn-primary' : 'btn'}>
+              <input
+                type="radio"
+                name={methodName}
+                value={choice}
+                checked={method === choice}
+                onChange={() => {
+                  // A failure in one method must not linger over the other.
+                  clearError();
+                  setMethod(choice);
+                }}
+              />
+              {choice === 'wallet' ? m.community.signInMethodWallet : m.community.signInMethodEmail}
+            </label>
+          ))}
+        </fieldset>
         {socialValidationActive && (
           <p className="community-note" style={{ whiteSpace: 'normal', overflowWrap: 'anywhere' }}>
             {m.community.security.validationActive}{' '}

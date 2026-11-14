@@ -3305,9 +3305,23 @@ html.rtl-text .accordion summary > span:first-child {
 
 /* Sign-in method toggle (wallet / email) */
 .signin-method-toggle {
+  border: 0;
+  padding: 0;
+  min-inline-size: 0;
+  margin-inline: 0;
+  flex-wrap: wrap;
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
+}
+.signin-method-toggle label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.signin-method-toggle label:focus-within {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 .social-signin-btn {
   margin-bottom: 0.75rem;
