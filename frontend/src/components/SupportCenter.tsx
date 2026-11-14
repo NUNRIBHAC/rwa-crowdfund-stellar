@@ -25,6 +25,9 @@ function SupportSession() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const live = useRef(false);
+  const readSequence = useRef(0);
+  const writeSequence = useRef(0);
+  const confirmedCreates = useRef(new Map<string, { ticket: Ticket; sequence: number }>());
   useEffect(() => {
     live.current = true;
     return () => {
@@ -34,9 +37,22 @@ function SupportSession() {
 
   const reload = useCallback(() => {
     if (!account || !token) return;
+    const read = ++readSequence.current;
+    const writesAtStart = writeSequence.current;
     fetchMyTickets(token)
-      .then(({ tickets }) => live.current && setTickets(tickets))
-      .catch((e) => live.current && setError(e instanceof Error ? e.message : String(e)));
+      .then(({ tickets }) => {
+        if (!live.current || read !== readSequence.current) return;
+        // A GET snapshot can predate a POST that finished while it was pending.
+        // Only merge those later creates. A subsequent GET remains authoritative
+        // for status changes and removals after all earlier writes completed.
+        const byId = new Map(tickets.map((ticket) => [ticket.id, ticket]));
+        for (const [id, { ticket, sequence }] of confirmedCreates.current) {
+          if (sequence <= writesAtStart) confirmedCreates.current.delete(id);
+          else if (!byId.has(ticket.id)) byId.set(ticket.id, ticket);
+        }
+        setTickets([...byId.values()]);
+      })
+      .catch((e) => live.current && read === readSequence.current && setError(e instanceof Error ? e.message : String(e)));
   }, [account, token]);
 
   useEffect(reload, [reload]);
@@ -52,7 +68,8 @@ function SupportSession() {
       const { ticket } = await createTicket(token, { kind, subject: subject.trim(), body: body.trim() });
       if (!live.current) return;
       notifyCommunityActivityChanged();
-      setTickets((prev) => [ticket, ...(prev ?? [])]);
+      confirmedCreates.current.set(ticket.id, { ticket, sequence: ++writeSequence.current });
+      setTickets((prev) => [ticket, ...(prev ?? []).filter((existing) => existing.id !== ticket.id)]);
       setSubject('');
       setBody('');
     } catch (e) {

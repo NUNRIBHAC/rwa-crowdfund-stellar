@@ -110,3 +110,76 @@ it('keeps the new POST busy after the old context rejects and then accepts only 
   expect(await screen.findByText('B new ticket')).toBeTruthy();
   expect(api.notify).toHaveBeenCalledTimes(1);
 });
+it('keeps a confirmed new ticket when the earlier initial GET returns empty', async () => {
+  const old = deferred<{ tickets: ReturnType<typeof ticket>[] }>();
+  api.read.mockReturnValueOnce(old.promise);
+  api.create.mockResolvedValueOnce({ ticket: ticket('confirmed new ticket') });
+  render(panel());
+  fill('new ticket');
+  fireEvent.submit(screen.getByLabelText('Subject').closest('form')!);
+  await screen.findByText('confirmed new ticket');
+  await act(async () => old.resolve({ tickets: [] }));
+  expect(screen.getByText('confirmed new ticket')).toBeTruthy();
+});
+it('keeps confirmed creates during a later reload while accepting server status updates', async () => {
+  const old = deferred<{ tickets: ReturnType<typeof ticket>[] }>();
+  api.read.mockResolvedValueOnce({ tickets: [ticket('existing')] }).mockReturnValueOnce(old.promise);
+  api.create.mockResolvedValueOnce({ ticket: ticket('new during reload') });
+  const view = render(panel());
+  await screen.findByText('existing');
+  auth.account = { publicKey: 'actor-a' };
+  view.rerender(panel());
+  fill();
+  fireEvent.submit(screen.getByLabelText('Subject').closest('form')!);
+  await screen.findByText('new during reload');
+  await act(async () => old.resolve({ tickets: [{ ...ticket('existing'), status: 'closed' }] }));
+  expect(screen.getByText('new during reload')).toBeTruthy();
+  expect(screen.getByText('existing').closest('li')?.textContent).toContain('Closed');
+});
+it('ignores an older GET after a newer GET has supplied its complete snapshot', async () => {
+  const old = deferred<{ tickets: ReturnType<typeof ticket>[] }>();
+  api.read.mockReturnValueOnce(old.promise).mockResolvedValueOnce({ tickets: [ticket('newer snapshot')] });
+  const view = render(panel());
+  auth.account = { publicKey: 'actor-a' };
+  view.rerender(panel());
+  await screen.findByText('newer snapshot');
+  await act(async () => old.resolve({ tickets: [ticket('obsolete snapshot')] }));
+  expect(screen.queryByText('obsolete snapshot')).toBeNull();
+  expect(screen.getByText('newer snapshot')).toBeTruthy();
+});
+it('accepts authoritative removals on a GET started after the confirmed create', async () => {
+  api.create.mockResolvedValueOnce({ ticket: ticket('later removed') });
+  const view = render(panel());
+  fill();
+  fireEvent.submit(screen.getByLabelText('Subject').closest('form')!);
+  await screen.findByText('later removed');
+  auth.account = { publicKey: 'actor-a' };
+  await act(async () => view.rerender(panel()));
+  expect(screen.queryByText('later removed')).toBeNull();
+});
+it('ignores obsolete read errors after a newer successful read', async () => {
+  const old = deferred<{ tickets: ReturnType<typeof ticket>[] }>();
+  api.read.mockReturnValueOnce(old.promise).mockResolvedValueOnce({ tickets: [ticket('current snapshot')] });
+  const view = render(panel());
+  auth.account = { publicKey: 'actor-a' };
+  view.rerender(panel());
+  await screen.findByText('current snapshot');
+  await act(async () => old.reject(new Error('obsolete read error')));
+  expect(screen.queryByText('obsolete read error')).toBeNull();
+});
+it('keeps multiple out-of-order creates across a stale GET without duplicate ids', async () => {
+  const old = deferred<{ tickets: ReturnType<typeof ticket>[] }>();
+  const one = deferred<{ ticket: ReturnType<typeof ticket> }>();
+  const two = deferred<{ ticket: ReturnType<typeof ticket> }>();
+  api.read.mockReturnValueOnce(old.promise);
+  api.create.mockReturnValueOnce(one.promise).mockReturnValueOnce(two.promise);
+  render(panel());
+  fill();
+  fireEvent.submit(screen.getByLabelText('Subject').closest('form')!);
+  fireEvent.submit(screen.getByLabelText('Subject').closest('form')!);
+  await act(async () => two.resolve({ ticket: ticket('second response') }));
+  await act(async () => one.resolve({ ticket: ticket('first response') }));
+  await act(async () => old.resolve({ tickets: [ticket('first response')] }));
+  expect(screen.getAllByText('first response')).toHaveLength(1);
+  expect(screen.getAllByText('second response')).toHaveLength(1);
+});
