@@ -60,6 +60,17 @@ export default function HowItWorks() {
             className="btn"
             role="tab"
             aria-selected={journey === id}
+            tabIndex={journey === id ? 0 : -1}
+            onKeyDown={(event) => {
+              const rtl = document.documentElement.classList.contains('rtl-text');
+              const nextKey = rtl ? 'ArrowLeft' : 'ArrowRight';
+              const previousKey = rtl ? 'ArrowRight' : 'ArrowLeft';
+              if (![nextKey, previousKey, 'Home', 'End'].includes(event.key)) return;
+              event.preventDefault();
+              const next = event.key === 'Home' ? 'investor' : event.key === 'End' ? 'issuer' : id === 'investor' ? 'issuer' : 'investor';
+              setJourney(next);
+              document.getElementById(`journey-tab-${next}`)?.focus();
+            }}
             aria-controls="journey-panel"
             onClick={() => setJourney(id)}
           >

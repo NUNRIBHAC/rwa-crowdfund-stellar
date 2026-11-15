@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export type RouteName =
   | 'home'
@@ -214,5 +214,41 @@ export function useRoute(): Route {
       document.removeEventListener('click', onClick);
     };
   }, []);
+  const previousRoute = useRef(route);
+  useEffect(() => {
+    const navigation = previousRoute.current !== route;
+    previousRoute.current = route;
+    let pendingFocus = navigation;
+    let frame = 0;
+    let lastHeading: HTMLElement | null = null;
+    let ownedTabIndex = false;
+    const sync = () => {
+      const heading = document.querySelector<HTMLElement>('main h1, #main h1');
+      if (!heading) return;
+      const title = heading.textContent?.replace(/\s+/g, ' ').trim();
+      if (title) document.title = `${title} | Blockallisto`;
+      if (pendingFocus) {
+        pendingFocus = false;
+        lastHeading = heading;
+        ownedTabIndex = !heading.hasAttribute('tabindex');
+        if (ownedTabIndex) heading.setAttribute('tabindex', '-1');
+        heading.focus({ preventScroll: true });
+      }
+    };
+    const queue = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(sync);
+    };
+    // Localized and asynchronously loaded headings can arrive after the route
+    // commit. Update the title without stealing focus on later field edits.
+    const observer = new MutationObserver(queue);
+    observer.observe(document.getElementById('main') ?? document.body, { childList: true, subtree: true, characterData: true });
+    queue();
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      if (ownedTabIndex) lastHeading?.removeAttribute('tabindex');
+    };
+  }, [route]);
   return route;
 }

@@ -54,7 +54,7 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!subject.trim() || !body.trim()) return;
+    if (busy || !subject.trim() || !body.trim()) return;
     setBusy(true);
     setError('');
     createTicket(token, { kind: 'feedback', subject: subject.trim(), body: body.trim() })
@@ -110,7 +110,9 @@ export default function FeedbackTab({ actor, onConnect }: { actor: string; onCon
               )}
             </>
           ) : done ? (
-            <p className="community-note">{labels.feedbackSubmitted}</p>
+            <p className="community-note" role="status">
+              {labels.feedbackSubmitted}
+            </p>
           ) : (
             <form onSubmit={submit}>
               <label>

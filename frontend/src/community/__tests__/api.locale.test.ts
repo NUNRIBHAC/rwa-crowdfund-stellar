@@ -106,3 +106,33 @@ describe('upload mode negotiation fails closed', () => {
     }
   });
 });
+
+describe('operator build response is untrusted JSON', () => {
+  afterEach(() => vi.unstubAllGlobals());
+  const safe = { xdr: 'unsigned-test-xdr', step: 'create', testOnly: true, networkPassphrase: 'Test SDF Network ; September 2015' };
+  it('accepts the exact testnet response', async () => {
+    const { buildCampaignDeploy } = await import('../api');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify(safe))),
+    );
+    await expect(buildCampaignDeploy('synthetic-token', { id: 'p', name: 'P', goal: '1', deadline: 2000000000 })).resolves.toEqual(safe);
+  });
+  for (const payload of [
+    { ...safe, testOnly: false },
+    { ...safe, testOnly: 'true' },
+    { ...safe, testOnly: undefined },
+    { ...safe, networkPassphrase: undefined },
+    { ...safe, networkPassphrase: 'Public Global Stellar Network ; September 2015' },
+  ])
+    it('rejects unsafe deployment metadata at the API boundary', async () => {
+      const { buildCampaignDeploy } = await import('../api');
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => new Response(JSON.stringify(payload))),
+      );
+      await expect(buildCampaignDeploy('synthetic-token', { id: 'p', name: 'P', goal: '1', deadline: 2000000000 })).rejects.toThrow(
+        'invalid testnet deployment build response',
+      );
+    });
+});

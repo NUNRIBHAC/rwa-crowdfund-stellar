@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { I18nProvider } from '../../i18n';
 import CampaignBuilderDraft from '../CampaignBuilderDraft';
@@ -128,4 +128,28 @@ it('only the measured campaign hero is high-priority, listing cards stay lazy', 
   expect(images[0].getAttribute('fetchpriority')).toBe('high');
   expect(images[1].getAttribute('loading')).toBe('lazy');
   expect(images[1].hasAttribute('fetchpriority')).toBe(false);
+});
+
+describe('invalid deployment responses never call Freighter', () => {
+  const safe = { xdr: 'unsigned-test-xdr', step: 'create', networkPassphrase: 'Test SDF Network ; September 2015', testOnly: true };
+  for (const [label, response] of [
+    ['missing testOnly', { ...safe, testOnly: undefined }],
+    ['false testOnly', { ...safe, testOnly: false }],
+    ['string testOnly', { ...safe, testOnly: 'true' }],
+    ['missing network', { ...safe, networkPassphrase: undefined }],
+    ['wrong network', { ...safe, networkPassphrase: 'Public Global Stellar Network ; September 2015' }],
+    ['empty response', null],
+  ] as const)
+    it(label, async () => {
+      build.mockResolvedValueOnce(response);
+      const { container } = builder();
+      const fields = container.querySelectorAll('input[required]');
+      for (const [i, value] of ['Project', 'project', '100', '2099-01-01'].entries()) fireEvent.change(fields[i], { target: { value } });
+      fireEvent.submit(container.querySelector('form')!);
+      await waitFor(() => expect(build).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(container.textContent).toContain('unavailable'));
+      expect(sign).not.toHaveBeenCalled();
+      expect(submit).not.toHaveBeenCalled();
+      expect(container.textContent).not.toContain('invalid testnet deployment build response');
+    });
 });

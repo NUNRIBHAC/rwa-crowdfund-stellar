@@ -92,12 +92,20 @@ export default function SignInPanel({ actor }: { actor: string }) {
     setResetDone(false);
   }, [account]);
 
-  if (!restored) return <p className="community-loading">{m.community.loading}</p>;
+  if (!restored)
+    return (
+      <p className="community-loading" role="status">
+        {m.community.loading}
+      </p>
+    );
 
   if (!account) {
     if (farcasterLink) {
       return (
         <section className="community-section" aria-labelledby="community-farcaster-wait">
+          <span className="sr-only" role="status" aria-atomic="true">
+            {busy ? m.community.loading : ''}
+          </span>
           <h2 id="community-farcaster-wait">{m.community.farcasterWaitingTitle}</h2>
           <p className="community-note">{m.community.farcasterWaitingNote}</p>
           <a className="btn btn-primary" href={farcasterLink} target="_blank" rel="noopener noreferrer">
@@ -112,6 +120,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
     if (socialEmailPending) {
       return (
         <section className="community-section" aria-labelledby="community-social-email">
+          <span className="sr-only" role="status" aria-atomic="true">
+            {busy ? m.community.loading : ''}
+          </span>
           <h2 id="community-social-email">{m.community.socialEmailTitle}</h2>
           <p className="community-note">{m.community.socialEmailExplainer}</p>
           {error && (
@@ -123,6 +134,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
             className="display-name-form"
             onSubmit={(e) => {
               e.preventDefault();
+              if (busy || !e.currentTarget.reportValidity()) return;
               socialEmailRequest?.(socialEmail.trim())
                 .then(() => setSocialCodeSent(true))
                 .catch(() => undefined);
@@ -130,9 +142,17 @@ export default function SignInPanel({ actor }: { actor: string }) {
           >
             <label>
               {m.community.socialEmailEmailLabel}
-              <input type="email" value={socialEmail} onChange={(e) => setSocialEmail(e.target.value)} autoComplete="email" />
+              <input
+                type="email"
+                id={`${methodName}-social-email`}
+                name="social-email"
+                required
+                value={socialEmail}
+                onChange={(e) => setSocialEmail(e.target.value)}
+                autoComplete="email"
+              />
             </label>
-            <button className="btn btn-primary" disabled={busy || !socialEmail.trim()}>
+            <button className="btn btn-primary" disabled={busy}>
               {m.community.socialEmailSend}
             </button>
           </form>
@@ -143,12 +163,17 @@ export default function SignInPanel({ actor }: { actor: string }) {
                 className="display-name-form"
                 onSubmit={(e) => {
                   e.preventDefault();
+                  if (busy || !e.currentTarget.reportValidity()) return;
+                  if (!socialCode.trim()) return;
                   socialEmailConfirm?.(socialCode.trim());
                 }}
               >
                 <label>
                   {m.community.socialEmailCodeLabel}
                   <input
+                    id={`${methodName}-social-code`}
+                    name="social-code"
+                    required
                     value={socialCode}
                     onChange={(e) => setSocialCode(e.target.value)}
                     inputMode="numeric"
@@ -156,7 +181,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
                     placeholder="123456"
                   />
                 </label>
-                <button className="btn btn-primary" disabled={busy || !socialCode.trim()}>
+                <button className="btn btn-primary" disabled={busy}>
                   {m.community.socialEmailConfirm}
                 </button>
               </form>
@@ -168,6 +193,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
     if (totpPending) {
       return (
         <section className="community-section" aria-labelledby="community-totp">
+          <span className="sr-only" role="status" aria-atomic="true">
+            {busy ? m.community.loading : ''}
+          </span>
           <h2 id="community-totp">{m.community.totpTitle}</h2>
           <p className="community-note">{method === 'email' ? m.community.totpExplainerEmail : m.community.totpExplainer}</p>
           {error && (
@@ -179,14 +207,25 @@ export default function SignInPanel({ actor }: { actor: string }) {
             className="display-name-form"
             onSubmit={(e) => {
               e.preventDefault();
+              if (busy || !e.currentTarget.reportValidity()) return;
+              if (!totpCode.trim()) return;
               completeTotp(totpCode.trim());
             }}
           >
             <label>
               {m.community.totpCodeLabel}
-              <input value={totpCode} onChange={(e) => setTotpCode(e.target.value)} inputMode="numeric" autoComplete="one-time-code" placeholder="123456" />
+              <input
+                id={`${methodName}-totp-code`}
+                name="totp-code"
+                required
+                value={totpCode}
+                onChange={(e) => setTotpCode(e.target.value)}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                placeholder="123456"
+              />
             </label>
-            <button className="btn btn-primary" disabled={busy || !totpCode.trim()}>
+            <button className="btn btn-primary" disabled={busy}>
               {m.community.totpSubmit}
             </button>
           </form>
@@ -197,6 +236,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
     if (pendingVerifyEmail) {
       return (
         <section className="community-section" aria-labelledby="community-verify">
+          <span className="sr-only" role="status" aria-atomic="true">
+            {busy ? m.community.loading : ''}
+          </span>
           <h2 id="community-verify">{m.community.emailVerifyTitle}</h2>
           <p className="community-note">
             {(verifyManualEntry ? m.community.emailVerifyExplainerManual : m.community.emailVerifyExplainer).replace('{email}', pendingVerifyEmail)}
@@ -210,19 +252,37 @@ export default function SignInPanel({ actor }: { actor: string }) {
             className="display-name-form"
             onSubmit={(e) => {
               e.preventDefault();
+              if (busy || !e.currentTarget.reportValidity()) return;
+              if (!verifyToken.trim() || !password) return;
               emailCompleteVerification(pendingVerifyEmail, verifyToken.trim(), password).catch(() => undefined);
             }}
           >
             <label>
               {m.community.emailVerifyTokenLabel}
-              <input value={verifyToken} onChange={(e) => setVerifyToken(e.target.value)} autoComplete="one-time-code" placeholder="blv_..." />
+              <input
+                id={`${methodName}-verify-token`}
+                name="verify-token"
+                required
+                value={verifyToken}
+                onChange={(e) => setVerifyToken(e.target.value)}
+                autoComplete="one-time-code"
+                placeholder="blv_..."
+              />
             </label>
             <label>
               {m.community.passwordLabel}
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required />
+              <input
+                type="password"
+                id={`${methodName}-password`}
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+                required
+              />
             </label>
             <p className="community-note">{m.community.emailPasswordHint}</p>
-            <button className="btn btn-primary" disabled={busy || !verifyToken.trim() || !password}>
+            <button className="btn btn-primary" disabled={busy}>
               {m.community.emailVerifySubmit}
             </button>
           </form>
@@ -255,6 +315,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
     }
     return (
       <section className="community-section" aria-labelledby="community-signin">
+        <span className="sr-only" role="status" aria-atomic="true">
+          {busy ? m.community.loading : ''}
+        </span>
         <h2 id="community-signin">{m.community.signInTitle}</h2>
         <fieldset className="signin-method-toggle">
           <legend className="sr-only">{m.community.signInMethodLabel}</legend>
@@ -307,6 +370,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
               className="display-name-form"
               onSubmit={(e) => {
                 e.preventDefault();
+                if (busy || !e.currentTarget.reportValidity()) return;
                 emailRequestReset(email.trim())
                   .then(() => setResetStage('confirm'))
                   .catch(() => undefined);
@@ -314,9 +378,17 @@ export default function SignInPanel({ actor }: { actor: string }) {
             >
               <label>
                 {m.community.emailLabel}
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+                <input
+                  type="email"
+                  id={`${methodName}-email`}
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  required
+                />
               </label>
-              <button className="btn btn-primary" disabled={busy || !email.trim()}>
+              <button className="btn btn-primary" disabled={busy}>
                 {m.community.emailResetRequestSubmit}
               </button>
             </form>
@@ -331,6 +403,8 @@ export default function SignInPanel({ actor }: { actor: string }) {
               className="display-name-form"
               onSubmit={(e) => {
                 e.preventDefault();
+                if (busy || !e.currentTarget.reportValidity()) return;
+                if (!email.trim() || !resetToken.trim() || !password) return;
                 emailConfirmReset(email.trim(), resetToken.trim(), password)
                   .then(() => {
                     setResetStage(null);
@@ -344,14 +418,30 @@ export default function SignInPanel({ actor }: { actor: string }) {
             >
               <label>
                 {m.community.emailResetTokenLabel}
-                <input value={resetToken} onChange={(e) => setResetToken(e.target.value)} autoComplete="one-time-code" placeholder="blr_..." />
+                <input
+                  id={`${methodName}-reset-token`}
+                  name="reset-token"
+                  required
+                  value={resetToken}
+                  onChange={(e) => setResetToken(e.target.value)}
+                  autoComplete="one-time-code"
+                  placeholder="blr_..."
+                />
               </label>
               <label>
                 {m.community.emailResetNewPasswordLabel}
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required />
+                <input
+                  type="password"
+                  id={`${methodName}-password`}
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"
+                  required
+                />
               </label>
               <p className="community-note">{m.community.emailPasswordHint}</p>
-              <button className="btn btn-primary" disabled={busy || !resetToken.trim() || !password}>
+              <button className="btn btn-primary" disabled={busy}>
                 {m.community.emailResetConfirmSubmit}
               </button>
             </form>
@@ -374,7 +464,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
               className="display-name-form"
               onSubmit={(e) => {
                 e.preventDefault();
+                if (busy || !e.currentTarget.reportValidity()) return;
                 const addr = email.trim();
+                if (!addr || !password) return;
                 if (emailMode === 'register') {
                   emailSignUp(addr, password)
                     .then(() => {
@@ -391,12 +483,22 @@ export default function SignInPanel({ actor }: { actor: string }) {
             >
               <label>
                 {m.community.emailLabel}
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+                <input
+                  type="email"
+                  id={`${methodName}-email`}
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  required
+                />
               </label>
               <label>
                 {m.community.passwordLabel}
                 <input
                   type="password"
+                  id={`${methodName}-password`}
+                  name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete={emailMode === 'register' ? 'new-password' : 'current-password'}
@@ -404,7 +506,7 @@ export default function SignInPanel({ actor }: { actor: string }) {
                 />
               </label>
               {emailMode === 'register' && <p className="community-note">{m.community.emailPasswordHint}</p>}
-              <button className="btn btn-primary" disabled={busy || !email.trim() || !password}>
+              <button className="btn btn-primary" disabled={busy}>
                 {emailMode === 'register' ? m.community.emailRegisterButton : m.community.emailLoginButton}
               </button>
             </form>
@@ -463,6 +565,9 @@ export default function SignInPanel({ actor }: { actor: string }) {
 
   return (
     <section className="community-section" aria-labelledby="community-signed-in">
+      <span className="sr-only" role="status" aria-atomic="true">
+        {busy ? m.community.loading : ''}
+      </span>
       <h2 id="community-signed-in">{m.community.signedInTitle}</h2>
       <p>
         {m.community.signedInAs}{' '}
@@ -484,7 +589,14 @@ export default function SignInPanel({ actor }: { actor: string }) {
       >
         <label>
           {m.community.displayNameLabel}
-          <input value={name} onChange={(e) => setName(e.target.value)} maxLength={COMMUNITY_LIMITS.displayName} placeholder={account.displayName ?? ''} />
+          <input
+            id={`${methodName}-display-name`}
+            name="display-name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={COMMUNITY_LIMITS.displayName}
+            placeholder={account.displayName ?? ''}
+          />
         </label>
         <button className="btn" disabled={busy || !name.trim()}>
           {m.community.displayNameSave}

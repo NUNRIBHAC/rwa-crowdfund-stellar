@@ -100,7 +100,7 @@ describe('builderComplete and builderPreview', () => {
 
 describe('runBuilderDeploy', () => {
   const input = { name: 'Solar Nine', slug: 'solar-nine', goal: '250', deadline: 2000000000 };
-  const buildResult = (step: 'upload' | 'create') => ({ xdr: `xdr-${step}`, networkPassphrase: 'Test SDF Network ; September 2015', step });
+  const buildResult = (step: 'upload' | 'create') => ({ xdr: `xdr-${step}`, networkPassphrase: 'Test SDF Network ; September 2015', testOnly: true, step });
   it('runs upload then create, signing each envelope once', async () => {
     const signed: string[] = [];
     const steps: string[] = [];
@@ -222,7 +222,7 @@ describe('runBuilderDeploy v2 chain', () => {
         build: async () => {
           const step = queue[Math.min(buildCount, queue.length - 1)];
           buildCount++;
-          return { xdr: `xdr-${step}`, networkPassphrase: 'Test SDF Network ; September 2015', step };
+          return { xdr: `xdr-${step}`, networkPassphrase: 'Test SDF Network ; September 2015', testOnly: true, step };
         },
         sign: async (xdr: string) => {
           signed.push(xdr);
@@ -265,7 +265,7 @@ describe('runBuilderDeploy v2 chain', () => {
       runBuilderDeploy(
         input,
         {
-          build: async () => ({ xdr: 'xdr-upload-token', networkPassphrase: 'Test SDF Network ; September 2015', step: 'upload-token' }),
+          build: async () => ({ xdr: 'xdr-upload-token', networkPassphrase: 'Test SDF Network ; September 2015', testOnly: true, step: 'upload-token' }),
           sign: async (xdr: string) => `signed-${xdr}`,
           submit: async () => {
             submits++;
@@ -285,7 +285,7 @@ describe('runBuilderDeploy v2 chain', () => {
       {
         build: async () => {
           builds++;
-          return { xdr: 'xdr-create-token', networkPassphrase: 'Test SDF Network ; September 2015', step: 'create-token' };
+          return { xdr: 'xdr-create-token', networkPassphrase: 'Test SDF Network ; September 2015', testOnly: true, step: 'create-token' };
         },
         sign: async (xdr: string) => `signed-${xdr}`,
         submit: async () => ({ step: 'create-token', status: 'PENDING', confirmed: false, message: 'check the hash' }),
@@ -295,5 +295,67 @@ describe('runBuilderDeploy v2 chain', () => {
     );
     expect(result.confirmed).toBe(false);
     expect(builds).toBe(1);
+  });
+});
+
+describe('deployment signing runtime boundary', () => {
+  const input = { name: 'P', slug: 'p', goal: '1', deadline: 2000000000 };
+  const safe = { xdr: 'unsigned-test-envelope', networkPassphrase: 'Test SDF Network ; September 2015', testOnly: true, step: 'create' };
+  const invalid = [
+    null,
+    undefined,
+    [],
+    {},
+    { ...safe, testOnly: undefined },
+    { ...safe, testOnly: false },
+    { ...safe, testOnly: 'true' },
+    { ...safe, testOnly: 1 },
+    { ...safe, networkPassphrase: undefined },
+    { ...safe, networkPassphrase: 'Public Global Stellar Network ; September 2015' },
+    { ...safe, networkPassphrase: ' Test SDF Network ; September 2015' },
+    { ...safe, networkPassphrase: '' },
+    { ...safe, xdr: '' },
+    { ...safe, xdr: 1 },
+    { ...safe, step: null },
+  ];
+  for (const [i, response] of invalid.entries())
+    it(`invalid response ${i} never signs or submits`, async () => {
+      let signs = 0,
+        submits = 0;
+      await expect(
+        runBuilderDeploy(input, {
+          build: async () => response,
+          sign: async () => {
+            signs++;
+            return 'signed';
+          },
+          submit: async () => {
+            submits++;
+            return { step: 'create', status: 'SUCCESS', confirmed: true };
+          },
+        }),
+      ).rejects.toThrow('invalid testnet deployment build response');
+      expect(signs).toBe(0);
+      expect(submits).toBe(0);
+    });
+  it('revalidates a later build before requesting another signature', async () => {
+    let builds = 0,
+      signs = 0,
+      submits = 0;
+    await expect(
+      runBuilderDeploy(input, {
+        build: async () => (++builds === 1 ? { ...safe, step: 'upload' } : { ...safe, testOnly: false }),
+        sign: async () => {
+          signs++;
+          return 'signed';
+        },
+        submit: async () => {
+          submits++;
+          return { step: 'upload', status: 'SUCCESS', confirmed: true };
+        },
+      }),
+    ).rejects.toThrow('invalid testnet deployment build response');
+    expect(signs).toBe(1);
+    expect(submits).toBe(1);
   });
 });

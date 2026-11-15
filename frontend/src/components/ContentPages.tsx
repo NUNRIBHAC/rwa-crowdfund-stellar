@@ -29,7 +29,7 @@ export function EventsPage() {
   const t = m.contentPages;
   return (
     <PageShell title={t.eventsTitle} intro={t.eventsIntro} demoNote={t.eventsDemoNote}>
-      <div className="chip-row" role="tablist" aria-label={t.eventsTitle}>
+      <div className="chip-row" role="group" aria-label={t.eventsTitle}>
         <button className="chip chip-active" aria-pressed="true">
           {t.eventsLive}
         </button>

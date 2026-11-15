@@ -23,6 +23,7 @@ export default function CampaignTour() {
   const [index, setIndex] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   const restoreFocusRef = useRef<Element | null>(null);
+  const restoreInertRef = useRef<(() => void) | null>(null);
 
   const steps: Step[] = [
     { selector: '.fund-grid-wrap', title: t.tourStepFundingTitle, body: t.tourStepFundingBody },
@@ -56,6 +57,34 @@ export default function CampaignTour() {
     // The Repeat tour handler captures the invoker before it unmounts; only
     // fill in here when nothing was captured (auto-open: no invoker).
     if (restoreFocusRef.current == null) restoreFocusRef.current = document.activeElement;
+  }, [open]);
+
+  // Keep the card interactive while making every other branch inert. Walking
+  // ancestors avoids making the overlay inert along with its page container.
+  useEffect(() => {
+    if (!open) return;
+    const saved = new Map<HTMLElement, boolean>();
+    let branch: HTMLElement | null = cardRef.current?.parentElement ?? null;
+    while (branch && branch !== document.body) {
+      const parent: HTMLElement | null = branch.parentElement;
+      if (!parent) break;
+      for (const sibling of parent.children) {
+        if (sibling !== branch && sibling instanceof HTMLElement) {
+          saved.set(sibling, sibling.inert);
+          sibling.inert = true;
+        }
+      }
+      branch = parent;
+    }
+    const restore = () => {
+      for (const [element, inert] of saved) element.inert = inert;
+      saved.clear();
+    };
+    restoreInertRef.current = restore;
+    return () => {
+      restore();
+      restoreInertRef.current = null;
+    };
   }, [open]);
 
   // Dialog behavior: initial focus, focus trap, Escape. On step change, if the
@@ -100,6 +129,7 @@ export default function CampaignTour() {
     } catch {
       /* private mode: no persistence */
     }
+    restoreInertRef.current?.();
     const prev = restoreFocusRef.current;
     restoreFocusRef.current = null;
     if (prev instanceof HTMLElement && document.contains(prev)) prev.focus();
