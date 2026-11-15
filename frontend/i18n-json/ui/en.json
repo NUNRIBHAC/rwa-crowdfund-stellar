@@ -1444,7 +1444,7 @@
     "goalErrorInvalid": "Goal must be a positive amount with at most 7 decimal places (token rule).",
     "goalErrorRange": "Goal exceeds the maximum amount the contract can store (contract rule).",
     "deadlineLabel": "Deadline",
-    "deadlineNote": "The deadline is 00:00 UTC on the chosen date, so today is already too late.",
+    "deadlineNote": "The deadline is at the start of the selected date (00:00 UTC). Choose a future date.",
     "deadlineErrorPast": "Deadline must be in the future (contract rule).",
     "creatorLabel": "Creator wallet",
     "creatorPlaceholder": "Connect a wallet first",

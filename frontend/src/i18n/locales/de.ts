@@ -44,7 +44,6 @@ export const de: Messages = {
     operationUnavailable:
       'Eine sichere Kennung für erneute Versuche konnte nicht gespeichert werden. Keine Datei wurde hochgeladen. Aktiviere den Browserspeicher und versuche es erneut.',
     reconciliation: 'Dieser Vorgang muss abgeglichen werden. Erstelle keinen weiteren Upload, um ihn zu wiederholen.',
-
     uploadNote:
       'DEMO-Dokumente: nur synthetische .txt-Dateien, höchstens 16 KB je Datei, fünf Dateien. Keine persönlichen Daten oder Ausweisdokumente hochladen.',
     save: 'Dokument speichern',
@@ -1638,7 +1637,7 @@ export const de: Messages = {
     goalErrorInvalid: 'Das Ziel muss ein positiver Betrag mit höchstens 7 Dezimalstellen sein (Token-Regel).',
     goalErrorRange: 'Das Ziel überschreitet den Höchstbetrag, den der Vertrag speichern kann (Vertragsregel).',
     deadlineLabel: 'Frist',
-    deadlineNote: 'Die Frist ist 00:00 UTC am gewählten Datum; heute ist also bereits zu spät.',
+    deadlineNote: 'Die Frist endet zu Beginn des gewählten Datums (00:00 UTC). Wähle ein zukünftiges Datum.',
     deadlineErrorPast: 'Die Frist muss in der Zukunft liegen (Vertragsregel).',
     creatorLabel: 'Ersteller-Wallet',
     creatorPlaceholder: 'Verbinden Sie zuerst ein Wallet',

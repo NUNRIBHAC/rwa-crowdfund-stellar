@@ -1431,7 +1431,7 @@
     "goalErrorInvalid": "目標は小数点以下7桁までの正の金額である必要があります(トークンルール)。",
     "goalErrorRange": "目標がコントラクトに保存できる上限額を超えています(コントラクトルール)。",
     "deadlineLabel": "期限",
-    "deadlineNote": "期限は選択した日付の 00:00 UTC です。そのため、今日はすでに遅すぎます。",
+    "deadlineNote": "期限は選択した日付の開始時刻（00:00 UTC）です。将来の日付を選択してください。",
     "deadlineErrorPast": "期限は未来の日付である必要があります(コントラクトルール)。",
     "creatorLabel": "作成者ウォレット",
     "creatorPlaceholder": "先にウォレットを接続してください",

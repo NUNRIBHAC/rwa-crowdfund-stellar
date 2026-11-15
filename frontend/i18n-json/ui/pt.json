@@ -1471,7 +1471,7 @@
     "goalErrorInvalid": "O objetivo tem de ser um valor positivo com no máximo 7 casas decimais (regra do token).",
     "goalErrorRange": "O objetivo excede o valor máximo que o contrato consegue guardar (regra do contrato).",
     "deadlineLabel": "Prazo",
-    "deadlineNote": "O prazo é às 00:00 UTC da data escolhida, pelo que o dia de hoje já é demasiado tarde.",
+    "deadlineNote": "O prazo termina no início da data selecionada (00:00 UTC). Escolhe uma data futura.",
     "deadlineErrorPast": "O prazo tem de ser no futuro (regra do contrato).",
     "creatorLabel": "Carteira do criador",
     "creatorPlaceholder": "Ligue primeiro uma carteira",

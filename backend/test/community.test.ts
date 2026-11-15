@@ -1,3 +1,4 @@
+process.env.COMMUNITY_AUDIO_ORIGINS = 'https://audio.example.com,https://a.example.com';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

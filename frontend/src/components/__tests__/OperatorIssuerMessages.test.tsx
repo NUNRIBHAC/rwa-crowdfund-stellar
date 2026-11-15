@@ -131,7 +131,7 @@ describe('OperatorIssuerMessages', () => {
     expect(await screen.findByText('Follow-up answer.')).toBeTruthy();
     const post = f.mock.calls.find((c: unknown[]) => (c[1] as RequestInit | undefined)?.method === 'POST');
     expect(String(post?.[0])).toContain('/api/operator/campaigns/demo-solar/messages');
-    expect((post?.[1] as RequestInit).headers).toMatchObject({ Authorization: 'Bearer optok' });
+    expect((post?.[1] as RequestInit).headers).toMatchObject({ 'x-community-session': 'cookie', 'x-community-csrf': '' });
   });
 
   it('verified 200 with no messages renders the no-threads state', async () => {

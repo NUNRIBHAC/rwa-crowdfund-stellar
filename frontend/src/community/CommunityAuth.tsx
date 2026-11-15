@@ -183,7 +183,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     const restore = (stored: string) =>
       fetchMe(stored)
         .then(({ account, isOperator }) => {
-          setToken(stored);
+          setToken('cookie-session');
           setAccount(account);
           setIsOperator(isOperator === true);
           saveCommunityToken(stored);
@@ -541,17 +541,20 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
     setBusy(true);
     setError('');
     try {
-      if (token) await logout(token).catch(() => undefined);
-    } finally {
+      if (token) await logout(token);
+
       saveCommunityToken('');
       setToken('');
       setAccount(null);
       setIsOperator(false);
       setTotpPending(null);
       setSocialEmailPending(null);
+    } catch (error) {
+      setError(describeError(error, messages.community));
+    } finally {
       setBusy(false);
     }
-  }, [token]);
+  }, [token, messages]);
 
   const setName = useCallback(
     async (name: string) => {

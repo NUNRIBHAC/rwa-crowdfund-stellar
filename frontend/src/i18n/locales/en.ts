@@ -41,7 +41,6 @@ export const en = {
     deletionPending: 'Deletion requested. The document is no longer accessible, but cloud cleanup is still pending.',
     operationUnavailable: 'Cannot save a safe retry identifier. No file was uploaded. Enable browser storage and try again.',
     reconciliation: 'This operation needs reconciliation. Do not create another upload to retry it.',
-
     uploadNote: 'DEMO documents: synthetic .txt only, maximum 16 KB each, five files. Do not upload personal or identity documents.',
     save: 'Save document',
     view: 'View document',
@@ -1593,7 +1592,7 @@ export const en = {
     goalErrorInvalid: 'Goal must be a positive amount with at most 7 decimal places (token rule).',
     goalErrorRange: 'Goal exceeds the maximum amount the contract can store (contract rule).',
     deadlineLabel: 'Deadline',
-    deadlineNote: 'The deadline is 00:00 UTC on the chosen date, so today is already too late.',
+    deadlineNote: 'The deadline is at the start of the selected date (00:00 UTC). Choose a future date.',
     deadlineErrorPast: 'Deadline must be in the future (contract rule).',
     creatorLabel: 'Creator wallet',
     creatorPlaceholder: 'Connect a wallet first',

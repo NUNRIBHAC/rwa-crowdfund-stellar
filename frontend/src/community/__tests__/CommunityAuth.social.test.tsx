@@ -51,7 +51,7 @@ describe('CommunityAuthProvider social fragment', () => {
     await waitFor(() => expect(seen.current?.account?.publicKey).toBe(ACCOUNT.publicKey));
     expect(me).toHaveBeenCalled();
     expect(window.location.hash).toBe('');
-    expect(seen.current?.token).toBe('bls_fresh-token');
+    expect(seen.current?.token).toBe('cookie-session');
     await waitFor(() => expect(seen.current?.socialProviders).toEqual(['google']));
   });
 
@@ -196,7 +196,7 @@ describe('private social validation mode', () => {
     expect(seen.current?.socialProviders).toEqual([]);
     expect(proofHeader).toBe('');
     await act(() => seen.current!.enableSocialValidation!());
-    expect(proofHeader).toBe('Bearer bls_validation');
+    expect(proofHeader).toBe('Bearer cookie-session');
     expect(seen.current?.socialProviders).toEqual(['google']);
     expect(seen.current?.socialValidationActive).toBe(true);
     expect(sessionStorage.getItem('blockallisto-social-validation')).toBe('["google"]');

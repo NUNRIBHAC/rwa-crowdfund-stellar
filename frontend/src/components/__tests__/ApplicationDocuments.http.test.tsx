@@ -35,7 +35,10 @@ test('real DELETE decoder accepts 204 and the component removes the document', a
   expect(fetch).toHaveBeenCalledOnce();
   expect(fetch.mock.calls[0]).toEqual([
     '/api/issuer-applications/app-test/documents/doc-test',
-    expect.objectContaining({ method: 'DELETE', headers: { Authorization: 'Bearer synthetic-token' } }),
+    expect.objectContaining({
+      method: 'DELETE',
+      headers: { Authorization: 'Bearer synthetic-token', 'x-community-session': 'cookie', 'x-community-csrf': '' },
+    }),
   ]);
 });
 test('202 keeps the durable pending deletion status', async () => {

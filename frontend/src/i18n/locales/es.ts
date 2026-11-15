@@ -44,7 +44,6 @@ export const es: Messages = {
     operationUnavailable:
       'No se pudo guardar un identificador seguro para reintentar. No se ha subido ningún archivo. Activa el almacenamiento del navegador e inténtalo de nuevo.',
     reconciliation: 'Esta operación necesita conciliación. No crees otra subida para repetirla.',
-
     uploadNote: 'Documentos DEMO: solo .txt sintéticos, máximo 16 KB cada uno, cinco archivos. No suba datos personales ni documentos de identidad.',
     save: 'Guardar documento',
     view: 'Ver documento',
@@ -1649,7 +1648,7 @@ export const es: Messages = {
     goalErrorInvalid: 'El objetivo debe ser un importe positivo con un máximo de 7 decimales (regla del token).',
     goalErrorRange: 'El objetivo supera el importe máximo que el contrato puede almacenar (regla del contrato).',
     deadlineLabel: 'Fecha límite',
-    deadlineNote: 'La fecha límite es a las 00:00 UTC de la fecha elegida, por lo que hoy ya es demasiado tarde.',
+    deadlineNote: 'El plazo termina al inicio de la fecha seleccionada (00:00 UTC). Elige una fecha futura.',
     deadlineErrorPast: 'La fecha límite debe ser futura (regla del contrato).',
     creatorLabel: 'Monedero del creador',
     creatorPlaceholder: 'Conecta primero un monedero',

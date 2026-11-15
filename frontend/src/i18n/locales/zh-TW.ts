@@ -42,7 +42,6 @@ export const zhTW: Messages = {
     deletionPending: '已請求刪除。文件已無法存取，但雲端儲存中的刪除作業仍待完成。',
     operationUnavailable: '無法儲存安全重試識別碼。未上傳任何檔案。請啟用瀏覽器儲存後重試。',
     reconciliation: '此操作需要核對狀態。請勿為重試而建立新的上傳。',
-
     uploadNote: 'DEMO 文件：僅限合成 .txt，每個最多 16 KB，最多五個。請勿上傳個人或身分文件。',
     save: '儲存文件',
     view: '查看文件',
@@ -1533,7 +1532,7 @@ export const zhTW: Messages = {
     goalErrorInvalid: '目標必須為正數且最多 7 位小數(代幣規則)。',
     goalErrorRange: '目標超出合約可儲存的最大金額(合約規則)。',
     deadlineLabel: '截止日期',
-    deadlineNote: '截止日期為所選日期的 00:00 UTC,因此今天已經太晚。',
+    deadlineNote: '截止時間為所選日期的開始時刻（00:00 UTC）。請選擇未來的日期。',
     deadlineErrorPast: '截止日期必須在未來(合約規則)。',
     creatorLabel: '建立者錢包',
     creatorPlaceholder: '請先連接錢包',

@@ -23,15 +23,17 @@ const fail = (status: number, error: string) => ({ ok: false, status, json: () =
 describe('community api client', () => {
   beforeEach(() => {
     localStorage.clear();
+    saveCommunityToken('');
   });
   afterEach(() => {
     vi.unstubAllGlobals();
   });
 
-  it('stores and loads the session token', () => {
+  it('keeps only a cookie session marker and never stores a bearer', () => {
     expect(loadCommunityToken()).toBe('');
     saveCommunityToken('bls_abc');
-    expect(loadCommunityToken()).toBe('bls_abc');
+    expect(loadCommunityToken()).toBe('');
+    expect(localStorage.getItem('blockallisto-community-token')).toBeNull();
     saveCommunityToken('');
     expect(loadCommunityToken()).toBe('');
   });
@@ -46,12 +48,14 @@ describe('community api client', () => {
     await verifyChallenge('GABC', 'c2ln');
     expect(fetchMock).toHaveBeenNthCalledWith(1, '/api/auth/challenge', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', 'x-community-session': 'cookie', 'x-community-csrf': '' },
       body: JSON.stringify({ publicKey: 'GABC' }),
     });
     expect(fetchMock).toHaveBeenNthCalledWith(2, '/api/auth/verify', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', 'x-community-session': 'cookie', 'x-community-csrf': '' },
       body: JSON.stringify({ publicKey: 'GABC', signature: 'c2ln' }),
     });
   });
@@ -127,6 +131,7 @@ describe('community api client', () => {
     const { filename } = await downloadInvestmentDocument('private-token', 'doc/one', controller.signal);
     expect(filename).toBe('terms.txt');
     expect(fetchMock).toHaveBeenCalledWith('/api/investment-documents/doc%2Fone/download', {
+      credentials: 'same-origin',
       headers: { Authorization: 'Bearer private-token' },
       signal: expect.any(AbortSignal),
     });

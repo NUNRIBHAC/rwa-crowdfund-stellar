@@ -1,3 +1,4 @@
+import { audioUrlAllowed } from './audio-origins.js';
 import { PrivateApplicationUploadWorkflow, type PrivateTextObjects } from './private-application-upload-workflow.js';
 import { assertExplicitFileStorePath } from './test-storage-guard.js';
 import { createHash, randomBytes } from 'node:crypto';
@@ -649,6 +650,7 @@ export class CommunityService {
   // are refused by episodeInput, so no fake episodes can be published.
   async addEpisode(input: unknown, actor = 'admin-area'): Promise<PodcastEpisode> {
     const { title, description, audioUrl, campaignId } = episodeInput.parse(input ?? {});
+    if (!audioUrlAllowed(audioUrl)) throw new CommunityError(400, 'audio origin is not allowed', 'invalid_input');
     if (campaignId) requireCampaignId(campaignId);
     const episode: PodcastEpisode = {
       id: newId('ep'),

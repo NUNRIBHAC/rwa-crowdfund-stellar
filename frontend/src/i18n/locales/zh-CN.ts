@@ -42,7 +42,6 @@ export const zhCN: Messages = {
     deletionPending: '已请求删除。文件已无法访问，但云存储中的删除操作仍待完成。',
     operationUnavailable: '无法保存安全重试标识。未上传任何文件。请启用浏览器存储后重试。',
     reconciliation: '此操作需要核对状态。请勿为重试而创建新的上传。',
-
     uploadNote: 'DEMO 文件：仅限合成 .txt，每个最多 16 KB，最多五个。请勿上传个人或身份文件。',
     save: '保存文件',
     view: '查看文件',
@@ -1533,7 +1532,7 @@ export const zhCN: Messages = {
     goalErrorInvalid: '目标必须为正数且最多 7 位小数(代币规则)。',
     goalErrorRange: '目标超出合约可存储的最大金额(合约规则)。',
     deadlineLabel: '截止日期',
-    deadlineNote: '截止日期为所选日期的 00:00 UTC,因此今天已经太晚。',
+    deadlineNote: '截止时间为所选日期的开始时刻（00:00 UTC）。请选择未来的日期。',
     deadlineErrorPast: '截止日期必须在未来(合约规则)。',
     creatorLabel: '创建者钱包',
     creatorPlaceholder: '请先连接钱包',
