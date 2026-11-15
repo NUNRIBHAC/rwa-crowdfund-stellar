@@ -1764,3 +1764,27 @@ Source date(s): 2026-10-30
 AngelHub is SUSPENDED. Validus has LODGED NOTICE OF CESSATION. AIFC includes two pending commencement entries. Japan five-name source remains dated May2024 although still linked by current JSDA hub.
 
 Korea: CrowdNet official deregistered/dissolved intermediary page lists Opentrade (4 Aug 2025), Korea Asset Investment Securities (31 Jan 2024), WADIZ (18 Jan 2024), among others. Do not promote old government guide entries to active. https://www.crowdnet.or.kr/eng/funding_info_archive/revoked_brokers.jsp
+
+## Supplementary non-EU/non-US investment-platform references (2026-11-15)
+
+Checked on 2026-11-15. This appendix follows the file's exclusion of EU and US entries. Maclear belongs under Europe outside the EU (Switzerland); ADDX is in Singapore and PRYPCO Mint is in the UAE. Switzerland is geographically European, not an EU member, and is already within this file's existing country scope.
+
+These are supplementary research entries, not additions to the historical regulator extracts or their counts above. They include adjacent private-market and tokenized-asset models, not only crowdfunding portals. The providers DigiShares and Brickken are intentionally excluded. Existing rows are unchanged.
+
+Evidence levels: **R** = regulator/register or institutional regulatory form read; **F** = issuer/offer filing on SEC read; **D** = operator-only regulatory statement; **N** = current authorization not established. None is an endorsement, a return guarantee, proof of current offering availability, or permission to serve every jurisdiction.
+
+<!-- prettier-ignore-start -->
+
+| Brand | Legal entity | Status (as of source) | Type | ID | Website |
+| --- | --- | --- | --- | --- | --- |
+| ADDX | ADDX Pte. Ltd. | R: MAS directory lists a Capital Markets Services Licensee dealing in securities and collective investment schemes. | Singapore; Digital securities and private-market funds, equity, credit and real assets | MAS institution record 246926 | [Official site](https://addx.co/en/inside-addx/); [regulatory evidence or limits](https://eservices.mas.gov.sg/fid/institution/detail/246926-ADDX-PTE-LTD) |
+| PRYPCO Mint | Prypco FZE | R: VARA public register confirms a VASP license for specified issuance and broker-dealer activities, subject to detailed conditions. | Dubai, United Arab Emirates; Tokenized real estate and other real assets, including gold | VL/25/05/001; issued 2025-05-24 | [Official site](https://prypco.com/mint); [regulatory evidence or limits](https://www.vara.ae/en/licenses-and-register/public-register/prypco-fze/) |
+| Maclear | Maclear AG | D: operator claims PolyReg SRO membership under Swiss AML law; independent SRO membership verification not completed. | Switzerland (Europe, outside the EU); P2B crowdlending through assignment of loan claims | CHE-115.674.165 (company identifier, not a financial license) | [Official site](https://www.maclear.ch/terms-and-conditions); [regulatory evidence or limits](https://www.maclear.ch/faq/article/how-maclear-is-regulated) |
+
+<!-- prettier-ignore-end -->
+
+### Entry-level evidence and limits
+
+- **ADDX:** Non-US accredited/institutional investor focus per the operator. Do not extend the confirmed entity permission to all group entities or claim unrestricted retail access. Product scope: https://addx.co/en/why-private-markets/ .
+- **PRYPCO Mint:** Retail/qualified-investor permissions are conditional and product-specific. DLD partnership: https://dubailand.gov.ae/en/news-media/dld-launches-the-mena-s-first-tokenized-real-estate-project-through-the-prypco-mint-platform .
+- **Maclear:** The operator states it is not a bank and is not directly supervised by FINMA. SRO AML oversight is not a FINMA banking license or ECSPR authorization.
