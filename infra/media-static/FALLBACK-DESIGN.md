@@ -146,8 +146,10 @@ font faces, HTML icons, PWA icons, responsive picture fallback and all themes,
 
 Required approvals, separately:
 
-- Final gateway design and budget approved. Persistence location/provisioning
-  remains a release decision; missing or corrupt accounting fails closed.
+- Final gateway design and budget approved. Oracle Object Storage was selected
+  for persistent accounting, not a VM file. Conditional-write concurrency, IAM,
+  current free-tier headroom and provisioning still require review/approval.
+  Keep direct B2 disabled; missing or corrupt accounting fails closed.
 - Create a separate scoped B2 server key only if needed. No CORS/public change.
 - Deploy reviewed Worker alias/AVIF changes. Demo uses this Worker, so check
   its existing routes without changing demo's app/container.
@@ -172,7 +174,13 @@ baseline and needs no further content audit for this design.
 - https://developers.cloudflare.com/pages/functions/pricing/
 - https://www.backblaze.com/docs/cloud-storage-cross-origin-resource-sharing-rules
 
-## Candidate runtime configuration
+## Disabled reference runtime configuration
+
+Oracle Object Storage is the selected future accounting backend. The local-file
+ledger below is a tested reference, not an approved production configuration.
+Do not provision or enable these file-ledger paths on staging. Implement and
+review Object Storage conditional updates and scoped access before activating
+the final direct-B2 stage. Pages/Worker gateway stages can run without it.
 
 `backend/scripts/media-index.mjs` emits only key/byte-count/hash metadata into
 `backend/dist/public-media-index.json`. Docker builds it after app compilation
@@ -180,7 +188,7 @@ and copies gateway code, not media fixtures. The host fails startup on partial
 or relative direct-fallback file configuration. With no direct configuration,
 Pages/Worker gateway stages still work and the final stage fails closed.
 
-All three paths must be supplied by an approved staging release:
+The disabled reference implementation accepts these three paths:
 
 - `MEDIA_B2_KEY_ID_FILE`: secret-file path for a separate readFiles/shareFiles key.
 - `MEDIA_B2_KEY_FILE`: its secret-file path. Exact bucket/public-prefix scope
