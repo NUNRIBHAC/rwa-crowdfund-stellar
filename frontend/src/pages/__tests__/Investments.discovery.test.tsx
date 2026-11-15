@@ -123,3 +123,39 @@ test('industry taxonomy always exposes all 18 choices in the requested order, in
   expect(screen.getByText('No campaigns match the current search and filters.')).toBeTruthy();
   expect(screen.queryByText('QA Open Alpha')).toBeNull();
 });
+
+test('keeps the heading before the live loading/error region and reserves only pending space', () => {
+  const pending = { ...marketFor([]), loaded: false, fixtureMode: false };
+  const { container, rerender } = render(
+    <I18nProvider>
+      <Investments market={pending} loadStatus={<p role="status">Loading genuine campaigns</p>} />
+    </I18nProvider>,
+  );
+  const heading = screen.getByRole('heading', { level: 1 });
+  const space = container.querySelector('.registry-loading-space')!;
+  expect(heading.compareDocumentPosition(space) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(space.querySelector('[role="status"]')?.textContent).toBe('Loading genuine campaigns');
+  expect(container.querySelector('.card')).toBeNull();
+  rerender(
+    <I18nProvider>
+      <Investments
+        market={pending}
+        loadStatus={
+          <>
+            <p role="alert">Unavailable</p>
+            <button>Retry</button>
+          </>
+        }
+      />
+    </I18nProvider>,
+  );
+  expect(container.querySelector('.registry-loading-space')).not.toBeNull();
+  expect(screen.getByRole('button', { name: 'Retry' })).toBeTruthy();
+  rerender(
+    <I18nProvider>
+      <Investments market={{ ...pending, loaded: true }} />
+    </I18nProvider>,
+  );
+  expect(container.querySelector('.registry-loading-space')).toBeNull();
+  expect(screen.getByRole('heading', { level: 1 })).toBe(heading);
+});

@@ -1,5 +1,5 @@
 import { pluralText } from '../format';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { Market } from '../market';
 import CampaignCard, { campaignStatus, type CampaignStatus } from '../components/CampaignCard';
 import { compareCampaigns } from '../sort-campaigns';
@@ -8,7 +8,7 @@ import { profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
 
-export default function Investments({ market }: { market: Market }) {
+export default function Investments({ market, loadStatus }: { market: Market; loadStatus?: ReactNode }) {
   const { m } = useI18n();
   const { campaigns, loaded, fixtureMode } = market;
   const [query, setQuery] = useState('');
@@ -72,6 +72,7 @@ export default function Investments({ market }: { market: Market }) {
   const completed = catalog.filter((c) => campaignStatus(c) !== 'open');
   const showEmpty = loaded && !fixtureMode && campaigns.length === 0;
 
+  const firstVisibleId = active[0]?.id ?? testing[0]?.id ?? (statusFilter === 'ended' || statusFilter === 'funded' ? completed[0]?.id : undefined);
   const renderCard = (c: (typeof campaigns)[number]) => (
     <CampaignCard
       key={c.id}
@@ -82,6 +83,7 @@ export default function Investments({ market }: { market: Market }) {
       readOnly={fixtureMode}
       demo={fixtureMode}
       discoveryOnly
+      firstVisibleImage={c.id === firstVisibleId}
       amount={market.amounts[c.id] ?? ''}
       amountError={market.amountErrors[c.id]}
       prepareError={market.prepareErrors[c.id]}
@@ -100,117 +102,120 @@ export default function Investments({ market }: { market: Market }) {
         </button>
       </div>
 
-      {campaigns.length > 0 && (
-        <div className="discovery-bar registry-filter-panel">
-          <input
-            className="discovery-search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={m.invest.searchAria}
-            title={m.invest.searchPlaceholder}
-            aria-label={m.invest.searchAria}
-          />
-          <button
-            className="btn registry-filter-toggle"
-            aria-expanded={filtersOpen}
-            aria-controls="registry-filter-controls"
-            onClick={() => setFiltersOpen(!filtersOpen)}
-          >
-            {m.invest.filters}
-          </button>
-          <div id="registry-filter-controls" className="registry-filter-controls">
-            <div className="filter-chips" role="group" aria-label={m.invest.filterStatusAria}>
-              {(['all', 'open', 'funded', 'ended'] as const).map((f) => (
-                <button
-                  key={f}
-                  className={`chip ${statusFilter === f ? 'chip-active' : ''}`}
-                  aria-pressed={statusFilter === f}
-                  onClick={() => setStatusFilter(f)}
-                >
-                  {f === 'all' ? m.invest.all : f === 'open' ? m.invest.open : f === 'funded' ? m.invest.funded : m.invest.underfunded}
-                </button>
-              ))}
-            </div>
-            <label className="registry-industry-select">
-              <span>{m.invest.filterIndustryAria}</span>
-              <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label={m.invest.filterIndustryAria}>
-                <option value="all">{m.invest.allIndustries}</option>
-                {categories.map(([key, label]) => (
-                  <option key={key} value={key}>
-                    {label}
-                  </option>
+      <div className={!loaded && !fixtureMode ? 'registry-loading-space' : undefined}>
+        {loadStatus}
+        {campaigns.length > 0 && (
+          <div className="discovery-bar registry-filter-panel">
+            <input
+              className="discovery-search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={m.invest.searchAria}
+              title={m.invest.searchPlaceholder}
+              aria-label={m.invest.searchAria}
+            />
+            <button
+              className="btn registry-filter-toggle"
+              aria-expanded={filtersOpen}
+              aria-controls="registry-filter-controls"
+              onClick={() => setFiltersOpen(!filtersOpen)}
+            >
+              {m.invest.filters}
+            </button>
+            <div id="registry-filter-controls" className="registry-filter-controls">
+              <div className="filter-chips" role="group" aria-label={m.invest.filterStatusAria}>
+                {(['all', 'open', 'funded', 'ended'] as const).map((f) => (
+                  <button
+                    key={f}
+                    className={`chip ${statusFilter === f ? 'chip-active' : ''}`}
+                    aria-pressed={statusFilter === f}
+                    onClick={() => setStatusFilter(f)}
+                  >
+                    {f === 'all' ? m.invest.all : f === 'open' ? m.invest.open : f === 'funded' ? m.invest.funded : m.invest.underfunded}
+                  </button>
                 ))}
-              </select>
-            </label>
-            {/* Stable wrapper: browser automation layers and some extensions
+              </div>
+              <label className="registry-industry-select">
+                <span>{m.invest.filterIndustryAria}</span>
+                <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label={m.invest.filterIndustryAria}>
+                  <option value="all">{m.invest.allIndustries}</option>
+                  {categories.map(([key, label]) => (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {/* Stable wrapper: browser automation layers and some extensions
               wrap native selects in an injected container, moving the select
               out of its React parent; if React's sibling anchor is the select
               itself, the next conditional insertion (industry chips) throws
               NotFoundError and unmounts the page. The anchor must be a node
               only React manages. display:contents keeps the wrapper
               layout-neutral. */}
-            <div className="discovery-sort-slot">
-              <select
-                className="discovery-sort"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
-                aria-label={m.invest.sortAria}
-              >
-                <option value="deadline">{m.invest.sortDeadline}</option>
-                <option value="progress">{m.invest.sortProgress}</option>
-                <option value="name">{m.invest.sortName}</option>
-              </select>
-            </div>
-            <div className="filter-chips" role="group" aria-label={m.invest.viewAria}>
-              <button className={`chip ${view === 'grid' ? 'chip-active' : ''}`} aria-pressed={view === 'grid'} onClick={() => setView('grid')}>
-                {m.invest.grid}
-              </button>
-              <button className={`chip ${view === 'list' ? 'chip-active' : ''}`} aria-pressed={view === 'list'} onClick={() => setView('list')}>
-                {m.invest.list}
-              </button>
+              <div className="discovery-sort-slot">
+                <select
+                  className="discovery-sort"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as 'deadline' | 'progress' | 'name')}
+                  aria-label={m.invest.sortAria}
+                >
+                  <option value="deadline">{m.invest.sortDeadline}</option>
+                  <option value="progress">{m.invest.sortProgress}</option>
+                  <option value="name">{m.invest.sortName}</option>
+                </select>
+              </div>
+              <div className="filter-chips" role="group" aria-label={m.invest.viewAria}>
+                <button className={`chip ${view === 'grid' ? 'chip-active' : ''}`} aria-pressed={view === 'grid'} onClick={() => setView('grid')}>
+                  {m.invest.grid}
+                </button>
+                <button className={`chip ${view === 'list' ? 'chip-active' : ''}`} aria-pressed={view === 'list'} onClick={() => setView('list')}>
+                  {m.invest.list}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {campaigns.length > 0 && (
-        <p className={shown.length === 0 ? 'no-matches' : 'sr-only'} role="status">
-          {shown.length === 0 ? m.invest.noMatches : pluralText(m.invest.resultCount, shown.length)}
-        </p>
-      )}
+        {campaigns.length > 0 && (
+          <p className={shown.length === 0 ? 'no-matches' : 'sr-only'} role="status">
+            {shown.length === 0 ? m.invest.noMatches : pluralText(m.invest.resultCount, shown.length)}
+          </p>
+        )}
 
-      {showEmpty && <EmptyState fixtureMode={false} onToggleFixtures={market.onToggleFixtures} />}
-      {fixtureMode && <EmptyState fixtureMode onToggleFixtures={market.onToggleFixtures} />}
+        {showEmpty && <EmptyState fixtureMode={false} onToggleFixtures={market.onToggleFixtures} />}
+        {fixtureMode && <EmptyState fixtureMode onToggleFixtures={market.onToggleFixtures} />}
 
-      {active.length > 0 && (
-        <section className="registry-results" aria-label={m.invest.activeAria}>
-          <h2 className="section-title">{m.invest.activeTitle}</h2>
-          <div className={view === 'grid' ? `card-grid ${active.length > 2 ? 'registry-many' : ''}` : 'card-list'}>{active.map(renderCard)}</div>
-        </section>
-      )}
-      {testing.length > 0 && (
-        <section className="registry-results registry-testing" aria-label={m.invest.testingTitle}>
-          <h2 className="section-title">{m.invest.testingTitle}</h2>
-          <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{testing.map(renderCard)}</div>
-        </section>
-      )}
-      {completed.length > 0 && (
-        <section className="registry-results" aria-label={m.invest.completedAria}>
-          <details className="registry-closed" open={statusFilter === 'ended' || statusFilter === 'funded' || undefined}>
-            <summary>
-              {m.invest.closedTitle} ({completed.length})
-            </summary>
-            <div className={view === 'grid' ? 'card-grid' : 'card-list'}>
-              {completed.map((c) => (
-                <div key={c.id}>
-                  <p className="registry-outcome">{campaignStatus(c) === 'funded' ? m.hero.goalReached : m.hero.goalMissed}</p>
-                  {renderCard(c)}
-                </div>
-              ))}
-            </div>
-          </details>
-        </section>
-      )}
+        {active.length > 0 && (
+          <section className="registry-results" aria-label={m.invest.activeAria}>
+            <h2 className="section-title">{m.invest.activeTitle}</h2>
+            <div className={view === 'grid' ? `card-grid ${active.length > 2 ? 'registry-many' : ''}` : 'card-list'}>{active.map(renderCard)}</div>
+          </section>
+        )}
+        {testing.length > 0 && (
+          <section className="registry-results registry-testing" aria-label={m.invest.testingTitle}>
+            <h2 className="section-title">{m.invest.testingTitle}</h2>
+            <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{testing.map(renderCard)}</div>
+          </section>
+        )}
+        {completed.length > 0 && (
+          <section className="registry-results" aria-label={m.invest.completedAria}>
+            <details className="registry-closed" open={statusFilter === 'ended' || statusFilter === 'funded' || undefined}>
+              <summary>
+                {m.invest.closedTitle} ({completed.length})
+              </summary>
+              <div className={view === 'grid' ? 'card-grid' : 'card-list'}>
+                {completed.map((c) => (
+                  <div key={c.id}>
+                    <p className="registry-outcome">{campaignStatus(c) === 'funded' ? m.hero.goalReached : m.hero.goalMissed}</p>
+                    {renderCard(c)}
+                  </div>
+                ))}
+              </div>
+            </details>
+          </section>
+        )}
+      </div>
     </div>
   );
 }

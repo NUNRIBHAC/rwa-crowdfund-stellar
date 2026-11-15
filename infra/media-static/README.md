@@ -1,6 +1,11 @@
-# Static public media and independent reserve
+# Static public media and fallback migration
 
-Status: the static Pages snapshot was deployed on 2026-11-13. The app cutover and independent VM reserve are prepared, not deployed. The observed Pages origin is `https://blockallisto-public-media.pages.dev`. All 583 asset responses were HTTP 200 and SHA-256 matched the local export; the remote checksums file also matched its local hash. No Functions were uploaded.
+Status, 15 November 2026: Pages is the authoritative published copy. The current
+staging release still uses an old read-only VM reserve. The selected target is
+Pages -> Worker/private B2 -> server-side temporary B2 download authorization.
+It has no VM media copy and no public bucket or browser bearer token. The local
+[replacement design](./FALLBACK-DESIGN.md) is not deployed. Do not merge the
+performance release while its runtime fallback still reads the old directory.
 
 ## Public-only export
 
@@ -8,7 +13,12 @@ Status: the static Pages snapshot was deployed on 2026-11-13. The app cutover an
 
 Every source is verified before output. Unknown keys fail closed. The export contains no credentials, private uploads, `functions/` directory or `_worker.js`. Font CSS absolute Worker URLs become relative URLs so both hosts work without the Worker. `checksums.json` describes the exported bytes, including those deliberate CSS rewrites. `_headers` permits cross-origin reads of these already-public assets and sets a bounded 24-hour browser cache. The largest asset is below Pages' 25 MiB limit.
 
-Keep B2 unchanged as the upstream archive. When adding or replacing public media, update and review the source manifest and regenerate both static copies. No bucket deletion or private-bucket access change is part of this work.
+Pages is the correct published copy. Treat B2 as its private upstream, not the
+obsolete VM copy as a comparison baseline. New public media needs a separate
+approved B2 write followed by a reviewed Pages update. The six campaign image derivatives were published to B2 and then Pages on
+15 November 2026. All 589 live asset responses matched their reviewed hashes;
+the previous 583 assets were unchanged. No other media write is included. No bucket deletion or publicity/CORS change is
+part of the proposed server-side fallback.
 
 ## Pages primary
 
@@ -18,15 +28,33 @@ After creation, record its exact observed HTTPS host. Build with `VITE_PUBLIC_ME
 
 The frontend and Docker defaults now use the verified Pages origin. `VITE_PUBLIC_MEDIA_ORIGIN` still permits an explicit build override. Docker runtime `MEDIA_ORIGIN` defaults to Pages, but an existing environment file can override it: staging must explicitly replace its old Worker value at the approved release. The server outside Docker keeps its existing self-only CSP when the variable is unset. A prepared default is not proof of app cutover.
 
-## Independent Oracle reserve
+## Replace the obsolete VM reserve
 
-The verified export has 583 public assets plus the checksums file and `_headers`: 22,513,376 bytes of file content, 22,628,064 bytes (22.63 MB) including directory metadata in the prepared tree, and 23,945,216 allocated bytes on the preparation filesystem. Check actual allocation on the target filesystem rather than assuming that last number. With separate staging release approval, copy the verified export into a versioned directory under `/var/oled/public-media/`, retaining disk safety gates. Mount that directory read-only into the **staging** container at `/public-media` and set `PUBLIC_MEDIA_DIR=/public-media`. Do not bind a directory containing private documents, backups or secrets. The production host serves it at `/media/`; unknown paths and dotfiles do not fall through to SPA HTML. No media is copied into app images. Demo requires its own release approval.
+The deployed `/media/` route still reads a mounted directory. The local
+replacement now uses the bounded gateway in
+[FALLBACK-DESIGN.md](./FALLBACK-DESIGN.md), with production integration tests.
+Remove the old mount and `PUBLIC_MEDIA_DIR` only during an approved staging
+release. Keep the URL as a gateway, not a stored media copy. Font secondary
+sources, image timeout handlers, HTML favicons and PWA icons must all use the
+new chain. No media files belong in the runtime image.
 
-Release gates: re-read current staging identity and disk state; require at least 3 GiB free on both `/` and `/var/oled` before transfer, after extraction, before build/switch and after deployment. Stop if a gate fails, without extra cleanup or cache relocation. Verify every exported file checksum after copying, before binding it. Keep the reserve outside app images and private-data mounts. Build and test the integration with current main, then change only staging's exact `MEDIA_ORIGIN`, `PUBLIC_MEDIA_DIR` and read-only media mount. Verify the real SPA, API failures, assets, CSP, Pages-primary and forced-unavailable modes before completion. Preserve the current-only root image and immediately-previous archive retention rule. No demo deployment, DNS change, paid service or Cloudflare settings change belongs to that approval.
+The ten canonical social paths with spaces and three root PWA aliases require
+the exact reviewed mappings in the design. The Worker also needs AVIF support.
+Those are local code candidates only, not live Worker changes. The six media
+files are already present in B2 and Pages. Both app and Worker
+changes need their own release checks; the existing demo app must stay unchanged.
 
-Images retry the same path once against `/media/` on HTTP/network failure or after eight seconds. The capture-phase handler prevents an old component from selecting a second asset on the same failed host. A changed theme/source can receive a fresh retry. Lazy-image clocks start only when the image reaches the viewport. A second failure never loops back to Pages.
+Release gates: verify the final chain and Pages integrity, require at least
+3 GiB free on `/` and `/var/oled` and the approved build reserve before work,
+rerun full tests/CI, and exercise the real SPA with forced failures. Temporary
+B2 authorization covers a Worker outage/quota, never the B2 account caps.
+Keep $0 caps and fail closed at the approved durable direct-download budget.
+No new CORS rule is needed when the authorization stays server-side.
 
-Font CSS contains the local reserve as its second source. For a stalled primary, after eight seconds the app replaces app font-face sources and adds a generated same-origin reserve sheet with the same face descriptors. Loaded local faces render even if the browser retains old pending font requests in FontFaceSet bookkeeping. This does not retry the primary repeatedly. Favicons and PWA icons use the same-origin reserve directly because non-JavaScript consumers cannot run the image error handler. Social preview metadata uses the configured Pages host; remote crawlers cannot perform client failover.
+After the approved gateway is live, staging no longer uses its mount and the
+forced final leg works, delete only the explicitly approved obsolete media
+directory. No archive, extra copy, unrelated cleanup or demo deployment.
+Deletion is still held. The obsolete copy needs no further B2 content audit.
 
 ## Visual CI
 
@@ -39,3 +67,17 @@ Official references:
 - https://developers.cloudflare.com/pages/functions/pricing/
 - https://developers.cloudflare.com/pages/platform/limits/
 - https://developers.cloudflare.com/pages/get-started/direct-upload/
+
+## Media-only publication receipt, 15 November 2026
+
+Exactly six AVIF/WebP derivatives (480/800/1280) were added to B2 under
+`public/campaigns/`, then to Pages. No existing B2 key was overwritten.
+Pages deployment `ac01b8b4-5080-4c0d-a625-24ddaf34e511` is static, no Functions.
+All 589 assets were downloaded and verified, including all 583 previous assets
+unchanged. Existing `fonts/SHA256SUMS.txt` was preserved deliberately, not
+corrected as part of a six-image-only approval.
+
+- https://blockallisto-public-media.pages.dev/checksums.json
+- https://dash.cloudflare.com/df6a6c336a69b2f5f62d53e89bcefe22/pages/view/blockallisto-public-media/ac01b8b4-5080-4c0d-a625-24ddaf34e511
+
+This is a media publication, not an app/Worker deployment or VM deletion.

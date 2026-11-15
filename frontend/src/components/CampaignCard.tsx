@@ -31,6 +31,7 @@ type Props = {
   /** True when the campaign is sample fixture data; renders the DEMO badge and disclaimer. */
   demo?: boolean;
   discoveryOnly?: boolean;
+  firstVisibleImage?: boolean;
   onAmount: (v: string) => void;
   onPrepare: (action: 'contribute' | 'refund' | 'withdraw') => void;
 };
@@ -46,6 +47,7 @@ export default function CampaignCard({
   prepareError,
   demo,
   discoveryOnly,
+  firstVisibleImage,
   onAmount,
   onPrepare,
 }: Props) {
@@ -62,7 +64,7 @@ export default function CampaignCard({
   const deadlineTone = ended ? 'ended' : Number(c.config.deadline) * 1000 - Date.now() <= 7 * 86400000 ? 'soon' : 'open';
   return (
     <article className="card">
-      <CampaignPhoto campaignId={c.id} variant="card" />
+      <CampaignPhoto campaignId={c.id} variant="card" firstVisible={firstVisibleImage} />
       <div className="card-top">
         <div className="card-id">
           <svg className="card-mark" viewBox="0 0 240 240" aria-hidden="true">

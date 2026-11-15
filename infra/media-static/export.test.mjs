@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { createHash } from 'node:crypto';
 import { URL } from 'node:url';
 import { readFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -8,7 +9,54 @@ import { manifest, staticAsset, exportStatic } from './export.mjs';
 import { mediaOrigin, publicMediaPlugin } from '../../frontend/scripts/public-media-build.mjs';
 
 test('all public files verify, aliases match and unknown/private paths fail', () => {
-  assert.equal(manifest.length, 558);
+  assert.equal(manifest.length, 564);
+  const derivatives = [
+    {
+      key: 'campaigns/demo-solar-farm-1280.avif',
+      source: 'frontend/media-external/campaigns/demo-solar-farm-1280.avif',
+      bytes: 198954,
+      sha256: 'f899e08ae81cea4963906fbbd38e1882f3e3d3199b1ab8d4c727288242bfc2a2',
+    },
+    {
+      key: 'campaigns/demo-solar-farm-1280.webp',
+      source: 'frontend/media-external/campaigns/demo-solar-farm-1280.webp',
+      bytes: 215444,
+      sha256: '3c8641e3adbbeaf31b3a82de8301d494470b429fd7aad6b0fab831cdfc97a260',
+    },
+    {
+      key: 'campaigns/demo-solar-farm-480.avif',
+      source: 'frontend/media-external/campaigns/demo-solar-farm-480.avif',
+      bytes: 22944,
+      sha256: '68d0051b33afba727f19485091f0fb5f85a19388cf93f854b84a872649e450e5',
+    },
+    {
+      key: 'campaigns/demo-solar-farm-480.webp',
+      source: 'frontend/media-external/campaigns/demo-solar-farm-480.webp',
+      bytes: 23650,
+      sha256: '158ae64c3761830434918cdf07720a284f466257adaa7d4028c9b40d16933072',
+    },
+    {
+      key: 'campaigns/demo-solar-farm-800.avif',
+      source: 'frontend/media-external/campaigns/demo-solar-farm-800.avif',
+      bytes: 68125,
+      sha256: '1c5a5066e1537c4dd8185c4dbaf5f1bb79616bd33bfbe5703a705a2c42bcb498',
+    },
+    {
+      key: 'campaigns/demo-solar-farm-800.webp',
+      source: 'frontend/media-external/campaigns/demo-solar-farm-800.webp',
+      bytes: 76224,
+      sha256: '034983ba8f92516c1a9227a2ffe5b802e7c30076c777b8fa6ed17ebbf863d30b',
+    },
+  ];
+  const addedKeys = new Set(derivatives.map((item) => item.key));
+  assert.deepEqual(
+    manifest.filter((item) => addedKeys.has(item.key)),
+    derivatives,
+  );
+  const originals = manifest.filter((item) => !addedKeys.has(item.key));
+  assert.equal(originals.length, 558);
+  // Freeze every original key/source/byte-count/hash, not merely the total.
+  assert.equal(createHash('sha256').update(JSON.stringify(originals)).digest('hex'), 'b93b176ff77519abe5a7d5606e9e277ab44f27b869a872831b6e347062783d6e');
   for (const item of manifest) assert.ok(staticAsset(item.key).length > 0, item.key);
   assert.deepEqual(staticAsset('social/x.svg'), staticAsset('social icons/x.svg'));
   assert.deepEqual(staticAsset('blockallisto-lockup-horizontal.svg'), staticAsset('logo/blockallisto-lockup-horizontal.svg'));
@@ -40,7 +88,7 @@ test('single exact origin, font secondary source, no widened origin syntax', () 
   const code = "@font-face { src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/inter-400.woff2') format('woff2'); }";
   const output = plugin.transform(code, '/repo/frontend/src/styles.css').code;
   assert.ok(output.includes(origin + '/fonts/inter-400.woff2'));
-  assert.ok(output.includes("url('/media/fonts/inter-400.woff2')"));
+  assert.ok(output.includes("url('/media/fonts/inter-400.woff2?retry=1')"));
   assert.ok(!output.includes('workers.dev'));
 });
 

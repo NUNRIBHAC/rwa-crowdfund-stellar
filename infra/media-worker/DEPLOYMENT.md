@@ -2,12 +2,23 @@
 
 Updated 2026-11-07 00:25 WET. Covers the live v4 (cache + scoped CORS). Secrets live only in the Instinct vault and the Cloudflare worker secrets store; this document contains names, never values.
 
+## Pending fallback migration (not deployed)
+
+Pages is now the authoritative published copy. This Worker's current deployed
+behavior is not the complete replacement design. Local candidate changes add
+13 reviewed canonical/alias routes and AVIF support, with offline routing tests.
+See [the chain and release gates](../media-static/FALLBACK-DESIGN.md). The final
+fallback uses server-side temporary B2 authorization to cover the Worker free
+request limit, not the B2 account cap. Keep the bucket private. No CORS/settings
+change or key permission widening is authorized here. Worker deployment needs
+separate approval and demo-route checks because demo also uses this Worker.
+
 ## Architecture
 
 - Public origin: https://blockallisto-media.nunrib-df6.workers.dev/
 - URL mapping: `GET /<path>` -> B2 object `public/<path>` in PRIVATE bucket `blockallisto-media` (ID 435986d81e2ab338a91e071a, region EU Central 003, endpoint s3.eu-central-003.backblazeb2.com, B2 account 3968ea389e7a, console login blockallisto@gmail.com).
 - Cloudflare account df6a6c336a69b2f5f62d53e89bcefe22 (login nunrib@sapo.pt), worker script name `blockallisto-media`, workers.dev subdomain `nunrib-df6`.
-- The bucket is allPrivate; the ONLY public path is this worker. The worker authenticates to B2 with a read-only application key restricted to namePrefix public/.
+- The bucket is allPrivate; this Worker exposes the reviewed public prefix. Pages separately serves its verified static copy. The worker authenticates to B2 with a read-only application key restricted to namePrefix public/.
 
 ## Deployed versions (source files in this package)
 

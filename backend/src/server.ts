@@ -71,7 +71,7 @@ app.use((req, res, next) => {
   // Sign In With Farcaster talks to the public Farcaster relay from the
   // browser; that origin is allowed ONLY when the feature is configured.
   const relayOrigin = process.env.FARCASTER_AUTH_DOMAIN?.trim() ? ' https://relay.farcaster.xyz' : '';
-  // Public media origin (verified Pages primary, with a same-origin reserve)
+  // Public media origin (Pages primary, with a bounded same-origin gateway)
   // serves images and self-hosted fonts. Scoped to one exact origin,
   // only in img-src/font-src, and ONLY
   // when configured - unset keeps the previous 'self'-only policy so dev and

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
 import { en, type Messages } from './locales/en';
 import { pt } from './locales/pt';
 import { es } from './locales/es';
@@ -202,7 +202,7 @@ export function I18nProvider({ children, initialLocale }: { children: ReactNode;
   });
   const m = MESSAGES[locale];
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.lang = LANG_TAGS[locale];
     document.documentElement.dir = 'ltr';
     document.documentElement.classList.toggle('rtl-text', RTL_TEXT_LOCALES.has(locale));

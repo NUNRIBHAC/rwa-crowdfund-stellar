@@ -1,3 +1,4 @@
+import { preloadCampaignPhoto } from './campaign-photo-preload';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
@@ -12,6 +13,7 @@ import './content-surfaces.css';
 import './tour-highlight.css';
 import './footer-layout-fix.css';
 
+preloadCampaignPhoto(window.location.pathname);
 initTheme();
 installMediaFallback();
 installFontTimeout();
