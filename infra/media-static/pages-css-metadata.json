@@ -1,0 +1,42 @@
+[
+  {
+    "key": "fonts/css/noto-kufi-arabic.css",
+    "bytes": 4580,
+    "sha256": "50c46fb52dbdae1a92dc59227e47d31c96191b76da067f1f439d6cef282d5880"
+  },
+  {
+    "key": "fonts/css/noto-sans-arabic.css",
+    "bytes": 4779,
+    "sha256": "1c8e3f55985bfdef165cfabf75953bd4f73efb2fe36259c8c3950f31e2d043f8"
+  },
+  {
+    "key": "fonts/css/noto-sans-devanagari.css",
+    "bytes": 1375,
+    "sha256": "501223601f13443117d6311c4497e0778ece058fb6181bfb6126a6526c519e7c"
+  },
+  {
+    "key": "fonts/css/noto-sans-jp.css",
+    "bytes": 111213,
+    "sha256": "84d96ae600bbadb90fb5673c06272df2257b7f397c9719dd16acd71dc02c64a4"
+  },
+  {
+    "key": "fonts/css/noto-sans-kr.css",
+    "bytes": 91553,
+    "sha256": "7714640583f55b27c3da77501ca7ce70b39788c2ee0a47ae360b44dc97ac1a33"
+  },
+  {
+    "key": "fonts/css/noto-sans-sc.css",
+    "bytes": 110002,
+    "sha256": "91eb11f1341ab4aa0c11cbb6a05da3d347b99ac3b938e50f6101469212f3c7e3"
+  },
+  {
+    "key": "fonts/css/noto-sans-tc.css",
+    "bytes": 121883,
+    "sha256": "6a668825fc4dedd3de2f398d7673686d1a06f151a2d1e4c0491065c7ed609e51"
+  },
+  {
+    "key": "fonts/css/poppins.css",
+    "bytes": 5623,
+    "sha256": "b3c9e2a27b79b61a1161a827449bbe6523c914040c854d5cc2298918dabbb385"
+  }
+]
