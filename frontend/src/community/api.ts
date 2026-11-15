@@ -1,3 +1,4 @@
+import { assertTestnetDeployBuild } from '../campaign-builder';
 import { localizedApiError, currentLocale } from '../i18n';
 // Community API client: wallet-authenticated accounts, comments, news,
 // support/feedback tickets, issuer applications and campaign metadata.
@@ -618,10 +619,14 @@ export type CampaignDeploySubmit = {
   testOnly?: boolean;
 };
 export type CampaignDeployV2Params = { symbol: string; decimals: number; minPerInvestor: string; maxPerInvestor: string };
-export const buildCampaignDeploy = (
+export const buildCampaignDeploy = async (
   token: string,
   input: { id: string; name: string; goal: string; deadline: number; contractSet?: 'v1' | 'v2'; v2?: CampaignDeployV2Params },
-) => call<CampaignDeployBuild>('/api/operator/campaign-deploy/build', { method: 'POST', body: input, token });
+) => {
+  const built = await call<unknown>('/api/operator/campaign-deploy/build', { method: 'POST', body: input, token });
+  assertTestnetDeployBuild(built);
+  return built as CampaignDeployBuild;
+};
 export const submitCampaignDeploy = (token: string, input: { xdr: string; name?: string; contractSet?: 'v1' | 'v2' }) =>
   call<CampaignDeploySubmit>('/api/operator/campaign-deploy/submit', { method: 'POST', body: input, token });
 

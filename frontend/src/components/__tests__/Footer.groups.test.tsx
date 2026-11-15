@@ -29,23 +29,26 @@ describe('Footer navigation groups', () => {
   it('starts mobile groups closed and preserves every link in expandable sections', () => {
     viewport(true);
     const { container } = render(<Footer />);
-    const groups = [...container.querySelectorAll('details')];
+    const groups = [...container.querySelectorAll<HTMLElement>('.footer-nav-group')];
     expect(groups).toHaveLength(4);
-    expect(groups.every((g) => !g.open)).toBe(true);
+    expect(groups.every((g) => g.querySelector('button')?.getAttribute('aria-expanded') === 'false')).toBe(true);
+    expect(groups.every((g) => g.querySelector('div')?.hidden)).toBe(true);
     expect(groups.map((g) => g.querySelectorAll('a').length)).toEqual([3, 7, 5, 5]);
     const legal = groups[1];
-    legal.open = true;
-    fireEvent(legal, new Event('toggle'));
-    expect(legal.open).toBe(true);
-    expect(legal.querySelector('summary')?.tabIndex).toBe(0);
+    const toggle = legal.querySelector('button')!;
+    fireEvent.click(toggle);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    const panel = container.querySelector<HTMLElement>(`[id='${toggle.getAttribute('aria-controls')}']`)!;
+    expect(panel.hidden).toBe(false);
+    expect(legal.querySelector('h2 > button')).toBe(toggle);
   });
   it('keeps desktop groups expanded and out of the keyboard toggle order', () => {
     viewport(false);
     const { container } = render(<Footer />);
-    const groups = [...container.querySelectorAll('details')];
-    expect(groups.every((g) => g.open)).toBe(true);
-    expect(groups.every((g) => g.querySelector('summary')?.tabIndex === -1)).toBe(true);
-    fireEvent.click(groups[1].querySelector('summary')!);
-    expect(groups[1].open).toBe(true);
+    const groups = [...container.querySelectorAll<HTMLElement>('.footer-nav-group')];
+    expect(groups).toHaveLength(4);
+    expect(groups.every((g) => !g.querySelector('div')?.hidden)).toBe(true);
+    expect(groups.every((g) => !g.querySelector('button'))).toBe(true);
+    expect(groups.every((g) => g.querySelector('h2'))).toBe(true);
   });
 });

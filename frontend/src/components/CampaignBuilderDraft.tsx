@@ -12,9 +12,10 @@
 import { useId, useMemo, useState } from 'react';
 import { signTransaction } from '@stellar/freighter-api';
 import { useCommunityAuth } from '../community/CommunityAuth';
-import { useI18n } from '../i18n';
+import { useI18n, localizedApiError } from '../i18n';
 import {
   BUILDER_NAME_MAX,
+  InvalidDeployBuildError,
   builderComplete,
   builderPreview,
   deadlineToTimestamp,
@@ -36,6 +37,7 @@ export default function CampaignBuilderDraft() {
   const formId = useId();
   const [submitted, setSubmitted] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [blurAnnouncement, setBlurAnnouncement] = useState('');
   const t = m.builder;
   const { account, token, isOperator } = useCommunityAuth();
   const [name, setName] = useState('');
@@ -91,7 +93,11 @@ export default function CampaignBuilderDraft() {
   const fieldProps = (field: string) => ({
     id: `${formId}-${field}`,
     required: true,
-    onBlur: () => setTouched((old) => ({ ...old, [field]: true })),
+    onBlur: (event: React.FocusEvent<HTMLInputElement>) => {
+      setTouched((old) => ({ ...old, [field]: true }));
+      const label = event.currentTarget.closest('label')?.firstChild?.textContent?.trim() ?? '';
+      setBlurAnnouncement(fieldErrors[field] ? `${label}: ${fieldErrors[field]}` : '');
+    },
     'aria-invalid': visibleError(field) ? (true as const) : undefined,
     'aria-describedby':
       [field === 'deadline' ? `${formId}-deadline-note` : '', visibleError(field) ? `${formId}-${field}-error` : ''].filter(Boolean).join(' ') || undefined,
@@ -166,7 +172,7 @@ export default function CampaignBuilderDraft() {
       );
       setDeployResult(result);
     } catch (e) {
-      setDeployError(e instanceof Error ? e.message : String(e));
+      setDeployError(e instanceof InvalidDeployBuildError ? localizedApiError('API_UNAVAILABLE') : e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(false);
     }
@@ -178,6 +184,9 @@ export default function CampaignBuilderDraft() {
         {t.title} <span className="demo-badge">{t.badge}</span>
       </h1>
       <p>{t.intro}</p>
+      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {blurAnnouncement}
+      </span>
       {isOperator && <p className="community-note">{t.operatorNote}</p>}
       {!account && <p className="community-note">{t.connectNote}</p>}
       <form
@@ -302,6 +311,9 @@ export default function CampaignBuilderDraft() {
           {t.deployError} {deployError}
         </p>
       )}
+      <span className="sr-only" role="status" aria-atomic="true">
+        {busy ? t.deployBusy : ''}
+      </span>
       {stepNote && !deployResult && (
         <p className="community-note" role="status">
           {stepNote}

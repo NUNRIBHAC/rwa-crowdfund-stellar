@@ -1,10 +1,11 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useId, useState, type ReactNode } from 'react';
 import RiskBanner from './RiskBanner';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import { lockupFor, useTheme } from '../theme';
 
 function FooterGroup({ title, children }: { title: string; children: ReactNode }) {
+  const panelId = useId();
   const [mobile, setMobile] = useState(() => window.matchMedia?.('(max-width: 560px)').matches ?? false);
   const [open, setOpen] = useState(() => !mobile);
   useEffect(() => {
@@ -18,17 +19,20 @@ function FooterGroup({ title, children }: { title: string; children: ReactNode }
     return () => query.removeEventListener('change', update);
   }, []);
   return (
-    <details className="footer-nav-group" open={open} onToggle={(event) => setOpen(event.currentTarget.open)}>
-      <summary
-        tabIndex={mobile ? 0 : -1}
-        onClick={(event) => {
-          if (!mobile) event.preventDefault();
-        }}
-      >
-        <h2 className="footer-heading">{title}</h2>
-      </summary>
-      {children}
-    </details>
+    <section className="footer-nav-group" data-open={open || undefined}>
+      <h2 className="footer-heading">
+        {mobile ? (
+          <button className="footer-disclosure" type="button" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen((old) => !old)}>
+            {title}
+          </button>
+        ) : (
+          title
+        )}
+      </h2>
+      <div id={panelId} hidden={mobile && !open}>
+        {children}
+      </div>
+    </section>
   );
 }
 

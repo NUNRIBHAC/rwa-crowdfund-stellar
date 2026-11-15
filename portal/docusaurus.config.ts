@@ -15,7 +15,7 @@ const config: Config = {
   tagline: 'Real assets. Shared possibilities.',
   favicon: 'img/favicon.ico',
 
-  url: 'https://docs.92-5-187-71.sslip.io',
+  url: isInternal ? 'https://docs.92-5-187-71.sslip.io' : 'https://pubdocs.92-5-187-71.sslip.io',
   baseUrl: '/',
 
   organizationName: 'NUNRIBHAC',

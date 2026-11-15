@@ -33,7 +33,15 @@ if (mediaRoot) {
 } else {
   app.use('/media', (_req, res) => res.sendStatus(404));
 }
-app.use(express.static(dist));
+app.use(
+  express.static(dist, {
+    setHeaders: (res, file) => {
+      // Only content-fingerprinted public JS/CSS get a long-lived cache.
+      // HTML, manifests and personal/API responses remain no-store.
+      if (/[/\\]assets[/\\][^/\\]+-[A-Za-z0-9_-]{8,}\.(?:js|css)$/.test(file)) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    },
+  }),
+);
 // SPA fallback for path routing: only extension-less GET page paths get
 // index.html (deep links like /campaigns/demo-solar). Asset-like paths
 // (/assets/x.js, /og-image.png) 404 honestly instead of serving HTML with the

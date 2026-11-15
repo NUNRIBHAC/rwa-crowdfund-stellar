@@ -125,7 +125,30 @@ export function builderPreview(
 // signer callback is the ONLY place a wallet is asked to sign; the flow
 // never holds or sees a secret key. Dependencies are injected so the
 // sequence is testable without network or wallet.
-export type DeployBuildResult = { xdr: string; networkPassphrase: string; step: string };
+export const BUILDER_TESTNET_PASSPHRASE = 'Test SDF Network ; September 2015';
+export type DeployBuildResult = { xdr: string; networkPassphrase: string; step: string; testOnly: boolean };
+export class InvalidDeployBuildError extends Error {
+  constructor() {
+    super('invalid testnet deployment build response');
+    this.name = 'InvalidDeployBuildError';
+  }
+}
+
+/** Untrusted JSON is checked on every step immediately before the signer.
+ * A TypeScript declaration is not a runtime network-safety boundary. */
+export function assertTestnetDeployBuild(value: unknown): asserts value is DeployBuildResult {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new InvalidDeployBuildError();
+  const built = value as Record<string, unknown>;
+  if (
+    built.networkPassphrase !== BUILDER_TESTNET_PASSPHRASE ||
+    built.testOnly !== true ||
+    typeof built.xdr !== 'string' ||
+    !built.xdr.trim() ||
+    typeof built.step !== 'string' ||
+    !built.step.trim()
+  )
+    throw new InvalidDeployBuildError();
+}
 export type DeploySubmitResult = {
   step: string;
   status: string;
@@ -146,7 +169,7 @@ export type DeploySubmitResult = {
 export async function runBuilderDeploy(
   input: { name: string; slug: string; goal: string; deadline: number },
   deps: {
-    build: (input: { id: string; name: string; goal: string; deadline: number }) => Promise<DeployBuildResult>;
+    build: (input: { id: string; name: string; goal: string; deadline: number }) => Promise<unknown>;
     sign: (xdr: string, networkPassphrase: string) => Promise<string>;
     submit: (input: { xdr: string; name: string }) => Promise<DeploySubmitResult>;
   },
@@ -156,6 +179,7 @@ export async function runBuilderDeploy(
   const buildInput = () => ({ id: input.slug, name: input.name, goal: input.goal, deadline: input.deadline });
   let built = await deps.build(buildInput());
   for (let attempt = 0; attempt < maxBuilds; attempt++) {
+    assertTestnetDeployBuild(built);
     const signedXdr = await deps.sign(built.xdr, built.networkPassphrase);
     const result = await deps.submit({ xdr: signedXdr, name: input.name });
     if (result.status === 'SUCCESS' && result.confirmed && !result.registryEntry && !result.complete) {

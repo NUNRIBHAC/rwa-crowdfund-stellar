@@ -70,6 +70,7 @@ test('production host serves SPA, built assets and discovery without weakening A
     for (const path of ['/', '/account', '/campaigns', '/campaigns/test-deep-link']) {
       const response = await fetch(base + path);
       assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get('cache-control'), 'no-store', path);
       const csp = response.headers.get('content-security-policy') ?? '';
       assert.match(csp, /img-src 'self' data: https:\/\/blockallisto-public-media\.pages\.dev;/);
       assert.match(csp, /font-src 'self' https:\/\/blockallisto-public-media\.pages\.dev;/);
@@ -83,6 +84,7 @@ test('production host serves SPA, built assets and discovery without weakening A
     for (const asset of [...html.matchAll(/(?:src|href)="(\/assets\/[^"?#]+\.(?:js|css))"/g)].map((match) => match[1])) {
       const response = await fetch(base + asset);
       assert.equal(response.status, 200, asset);
+      assert.equal(response.headers.get('cache-control'), 'public, max-age=31536000, immutable', asset);
       assert.match(response.headers.get('content-type') ?? '', asset.endsWith('.css') ? /text\/css/ : /javascript/, asset);
     }
     assert.match(html, /\/assets\/[^" ]+\.js/);
@@ -97,6 +99,7 @@ test('production host serves SPA, built assets and discovery without weakening A
     for (const path of ['/api', '/api/missing-regression-test']) {
       const response = await fetch(base + path);
       assert.equal(response.status, 404);
+      assert.equal(response.headers.get('cache-control'), 'no-store');
       assert.equal((await response.json()).code, 'not_found');
     }
     const malformed = await fetch(base + '/api/auth/challenge', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{' });
