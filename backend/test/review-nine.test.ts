@@ -47,7 +47,9 @@ test('R4 failed write rolls back before releasing client', async () => {
   const pool = transactionalPool(true);
   const store = new PostgresCommunityStore(pool);
   await assert.rejects(
-    store.change(() => {}),
+    store.change((s) => {
+      s.accounts.GTEST = { publicKey: 'GTEST', displayName: null, createdAt: 1 };
+    }),
     /test write failed/,
   );
   assert.equal(pool.queries.at(-1), 'ROLLBACK');

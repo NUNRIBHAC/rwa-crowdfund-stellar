@@ -1,3 +1,5 @@
+import { retryingSingleFlight } from './background-task.js';
+import { trackDatabasePool } from './database-runtime.js';
 import fs from 'node:fs';
 import { poolMaxFromEnv } from './db-pool.js';
 import path from 'node:path';
@@ -634,7 +636,10 @@ export class FileCommunityStore implements CommunityStore {
 const PG_DOC_ID = 'main';
 
 export class PostgresCommunityStore implements CommunityStore {
-  private ready: Promise<void>;
+  private initialize: () => Promise<void>;
+  private get ready(): Promise<void> {
+    return this.initialize();
+  }
   constructor(private pool: PgPoolLike) {
     assertPooledDatabaseUrlTestSafe(pool);
     const ddl = `CREATE TABLE IF NOT EXISTS community_store (
@@ -643,28 +648,32 @@ export class PostgresCommunityStore implements CommunityStore {
       updated_at timestamptz NOT NULL DEFAULT now()
     )`;
     const connector = (this.pool as any).connect?.bind(this.pool);
-    this.ready = connector
-      ? connector().then(async (client: any) => {
-          try {
-            await client.query('BEGIN');
+    this.initialize = retryingSingleFlight(() =>
+      connector
+        ? connector().then(async (client: any) => {
             try {
-              await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', ['community_store_schema_init']);
-              await client.query(ddl);
-              await client.query('COMMIT');
-            } catch (err) {
-              await client.query('ROLLBACK').catch(() => {});
-              throw err;
+              await client.query('BEGIN');
+              try {
+                await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', ['community_store_schema_init']);
+                await client.query(ddl);
+                await client.query('COMMIT');
+              } catch (err) {
+                await client.query('ROLLBACK').catch(() => {});
+                throw err;
+              }
+            } finally {
+              client.release();
             }
-          } finally {
-            client.release();
-          }
-        })
-      : this.pool.query(ddl).then(() => {});
+          })
+        : this.pool.query(ddl).then(() => {}),
+    );
   }
   static async connect(url: string): Promise<PostgresCommunityStore> {
     assertTestSafeDatabaseUrl(url, 'COMMUNITY_DATABASE_URL');
     const { Pool } = (await import('pg')).default;
-    return new PostgresCommunityStore(new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.COMMUNITY_POOL_MAX, 'COMMUNITY_POOL_MAX', 5) }));
+    return new PostgresCommunityStore(
+      trackDatabasePool(new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.COMMUNITY_POOL_MAX, 'COMMUNITY_POOL_MAX', 5) }), url),
+    );
   }
   async close(): Promise<void> {
     await this.pool.end();
@@ -777,11 +786,17 @@ session,CASE WHEN jsonb_typeof(session->'publicKey')='string' THEN accounts->(se
         await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', ['community_store_change']);
         const { rows } = await client.query('SELECT doc FROM community_store WHERE id = $1', [PG_DOC_ID]);
         const state = rows.length === 0 ? emptyCommunityState() : validate(rows[0].doc);
+        const before = JSON.stringify(state);
         const result = fn(state);
-        await client.query(
-          'INSERT INTO community_store (id, doc, updated_at) VALUES ($1, $2, now()) ON CONFLICT (id) DO UPDATE SET doc = $2, updated_at = now()',
-          [PG_DOC_ID, JSON.stringify(state)],
-        );
+        const after = JSON.stringify(state);
+        // Keep the transaction and lock for correctness, but an idle prune or
+        // idempotent update must not rewrite an unchanged document.
+        if (rows.length === 0 || after !== before) {
+          await client.query(
+            'INSERT INTO community_store (id, doc, updated_at) VALUES ($1, $2, now()) ON CONFLICT (id) DO UPDATE SET doc = $2, updated_at = now()',
+            [PG_DOC_ID, after],
+          );
+        }
         await client.query('COMMIT');
         return result;
       } catch (err) {

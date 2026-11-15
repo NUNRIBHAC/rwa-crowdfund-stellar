@@ -1,3 +1,5 @@
+import { retryingSingleFlight } from './background-task.js';
+import { trackDatabasePool } from './database-runtime.js';
 import fs from 'node:fs';
 import { poolMaxFromEnv } from './db-pool.js';
 import path from 'node:path';
@@ -218,7 +220,10 @@ export interface PgPoolLike {
 }
 
 export class PostgresJournal implements Journal {
-  private ready: Promise<void>;
+  private initialize: () => Promise<void>;
+  private get ready(): Promise<void> {
+    return this.initialize();
+  }
   private quarantinedCount = 0;
   private summaryQuarantinedCount = 0;
   // Envelope parse verdicts keyed by exact-content fingerprint: the columns
@@ -297,17 +302,19 @@ export class PostgresJournal implements Journal {
       await db.query(rateExpiryIndex);
     };
     const connector = (this.pool as any).connect?.bind(this.pool);
-    this.ready = connector
-      ? connector().then(async (client: any) => {
-          try {
-            await this.withSessionLock(client, 'soroban_intents_schema_init', async () => {
-              await init(client);
-            });
-          } finally {
-            client.release();
-          }
-        })
-      : init(pool);
+    this.initialize = retryingSingleFlight(() =>
+      connector
+        ? connector().then(async (client: any) => {
+            try {
+              await this.withSessionLock(client, 'soroban_intents_schema_init', async () => {
+                await init(client);
+              });
+            } finally {
+              client.release();
+            }
+          })
+        : init(pool),
+    );
   }
   static async connect(url: string | undefined): Promise<PostgresJournal> {
     if (!url) throw new Error('SOROBAN_JOURNAL_BACKEND=postgres requires SOROBAN_JOURNAL_DATABASE_URL; refusing to fall back to a volatile file journal');
@@ -315,7 +322,9 @@ export class PostgresJournal implements Journal {
     const { Pool } = (await import('pg')).default;
     // Small pool: hosted providers cap direct connections per database and the demo is single-instance.
     // Override with SOROBAN_JOURNAL_POOL_MAX for tighter budgets (e.g. Prisma free: 5 usable direct).
-    return new PostgresJournal(new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.SOROBAN_JOURNAL_POOL_MAX, 'SOROBAN_JOURNAL_POOL_MAX', 5) }));
+    return new PostgresJournal(
+      trackDatabasePool(new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.SOROBAN_JOURNAL_POOL_MAX, 'SOROBAN_JOURNAL_POOL_MAX', 5) }), url),
+    );
   }
   // Session advisory lock with a backend-stability check. Session locks only
   // work when every query lands on the same Postgres backend; a transaction

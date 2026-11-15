@@ -6,7 +6,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-test('concurrent and later callers share one store, service and prune timer', async (t) => {
+test('concurrent and later callers share one store/service with no automatic test timers', async (t) => {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'community-singleton-'));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const store = new FileCommunityStore(path.join(dir, 'community.json'));
@@ -25,10 +25,11 @@ test('concurrent and later callers share one store, service and prune timer', as
   assert.ok(calls.every((service) => service === calls[0]));
   assert.equal(await factory(), calls[0]);
   assert.equal(creates, 1);
-  assert.equal(timers, 1);
+  assert.equal(timers, 0);
 });
 
-test('failed initialization closes its owned store and can retry without caching failure', async () => {
+test('failed initialization closes its owned store, backs off, and can recover', async () => {
+  let now = 1;
   let creates = 0;
   let closes = 0;
   const broken = {
@@ -39,11 +40,18 @@ test('failed initialization closes its owned store and can retry without caching
       closes++;
     },
   } as unknown as CommunityStore;
-  const factory = createCommunityServiceFactory(async () => {
-    creates++;
-    return broken;
-  });
+  const factory = createCommunityServiceFactory(
+    async () => {
+      creates++;
+      return broken;
+    },
+    { now: () => now, retryMs: 60_000 },
+  );
   await assert.rejects(factory(), /synthetic initialization failure/);
+  await assert.rejects(factory(), /synthetic initialization failure/);
+  assert.equal(creates, 1);
+  assert.equal(closes, 1);
+  now += 60_000;
   await assert.rejects(factory(), /synthetic initialization failure/);
   assert.equal(creates, 2);
   assert.equal(closes, 2);

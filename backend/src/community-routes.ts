@@ -1,3 +1,4 @@
+import { retryingSingleFlight, backgroundTask } from './background-task.js';
 import { browserSessionTransport, setBrowserSession, clearBrowserSession, COOKIE_SESSION } from './browser-session.js';
 import { privateApplicationOptionsFromEnv, startPrivateApplicationCleanup } from './private-application-runtime.js';
 import type { CommunityStore } from './community-store.js';
@@ -1911,17 +1912,11 @@ type CommunityRuntimeDependencies = { store?: CommunityStore; transport?: typeof
 // A runtime belongs to one process, not to each request or reconciliation pass.
 // Memoize the in-flight promise too, so simultaneous startup calls cannot open
 // independent pools or install duplicate hourly pruning timers.
-export function createCommunityServiceFactory(storeFactory: () => Promise<CommunityStore> = communityStoreFromEnv) {
-  let instance: Promise<CommunityService> | undefined;
-  return (): Promise<CommunityService> => {
-    if (!instance) {
-      instance = initializeCommunityService({}, storeFactory).catch((error) => {
-        instance = undefined; // A transient startup failure must remain retryable.
-        throw error;
-      });
-    }
-    return instance;
-  };
+export function createCommunityServiceFactory(
+  storeFactory: () => Promise<CommunityStore> = communityStoreFromEnv,
+  options: { now?: () => number; retryMs?: number } = {},
+) {
+  return retryingSingleFlight(() => initializeCommunityService({ startTimers: process.env.NODE_ENV !== 'test' }, storeFactory), options);
 }
 const defaultCommunityService = createCommunityServiceFactory();
 export function communityServiceFromEnv(dependencies: CommunityRuntimeDependencies = {}): Promise<CommunityService> {
@@ -1942,7 +1937,13 @@ async function initializeCommunityService(
     });
     await service.prune();
     if (dependencies.startTimers !== false) {
-      const timer = setInterval(() => service.prune().catch(() => {}), 60 * 60 * 1000);
+      const prune = backgroundTask(
+        async () => {
+          await service.prune();
+        },
+        () => {},
+      );
+      const timer = setInterval(() => void prune(), 60 * 60 * 1000);
       timer.unref();
       if ('privateApplicationObjects' in uploadOptions) startPrivateApplicationCleanup(service);
     }

@@ -1,3 +1,4 @@
+import { trackDatabasePool } from './database-runtime.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { assertTestSafeDatabaseUrl, assertPooledDatabaseUrlTestSafe, assertExplicitFileStorePath } from './test-storage-guard.js';
@@ -252,7 +253,7 @@ export async function deploymentManifestBackend(): Promise<DeploymentManifestSto
       );
     assertTestSafeDatabaseUrl(url, 'DEPLOYMENT_MANIFEST_DATABASE_URL/COMMUNITY_DATABASE_URL/SOROBAN_JOURNAL_DATABASE_URL');
     const { Pool } = await import('pg');
-    cached = new PostgresDeploymentManifestStore(new Pool({ connectionString: url }));
+    cached = new PostgresDeploymentManifestStore(trackDatabasePool(new Pool({ connectionString: url }), url));
     return cached;
   }
   assertExplicitFileStorePath(process.env.DEPLOYMENT_MANIFEST_PATH, 'DEPLOYMENT_MANIFEST_PATH');
