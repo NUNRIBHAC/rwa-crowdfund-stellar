@@ -1,3 +1,5 @@
+import { startBackgroundTask } from './background-task.js';
+import { databaseReadiness, databaseMetrics, refreshDatabaseReadiness } from './database-runtime.js';
 import { audioOrigins } from './audio-origins.js';
 import { publicFailure } from './public-errors.js';
 import { sorobanBuildLimiter, sorobanSubmitLimiter } from './soroban-build-limiter.js';
@@ -189,12 +191,22 @@ const reconcileContributorRegistry = async (): Promise<void> => {
     });
     if (drain.pending > 0) console.error('contributor pending queue not fully drained:', drain.pending);
     const journal = await readJournalSummary(await journalBackend());
+    const checked = new Set<string>();
     for (const i of journal.intents) {
       if (i.status !== 'SUCCESS' || i.action !== 'contribute') continue;
-      if (await service.hasContributed(i.campaign, i.actor)) continue;
+      const pair = JSON.stringify([i.campaign, i.actor]);
+      if (checked.has(pair)) continue;
+      if (await service.hasContributed(i.campaign, i.actor)) {
+        checked.add(pair);
+        continue;
+      }
       try {
         const confirmed = await confirmedContribution(i.hash);
-        if (confirmed) await service.recordContributor(confirmed.campaignId, confirmed.contributor);
+        if (confirmed) {
+          await service.recordContributor(confirmed.campaignId, confirmed.contributor);
+          // Journal fields are not authority for network-derived identities.
+          if (confirmed.campaignId === i.campaign && confirmed.contributor === i.actor) checked.add(pair);
+        }
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         console.error('contributor reconciliation deferred to pending queue:', i.hash, message);
@@ -205,9 +217,7 @@ const reconcileContributorRegistry = async (): Promise<void> => {
     console.error('contributor reconciliation failed:', err instanceof Error ? err.message : err);
   }
 };
-void reconcileContributorRegistry();
-const contributorReconcileTimer = setInterval(() => void reconcileContributorRegistry(), 30 * 60 * 1000);
-contributorReconcileTimer.unref();
+startBackgroundTask(reconcileContributorRegistry, 30 * 60 * 1000, () => console.error('contributor reconciliation unavailable'));
 
 // Chain-history backfill (contributor-backfill.ts): recovers registry
 // records from on-chain Contributed events for contributions that bypassed
@@ -265,61 +275,67 @@ const runContributorBackfill = async (): Promise<void> => {
   }
 };
 
-// Serialized entry point: a scan slower than the timer interval must never
-// overlap the next tick - concurrent runs race the archive store's
-// read-modify-write cycle and can lose events or advance a checkpoint past
-// rows the other run lost.
-let contributorBackfillInFlight = false;
-const backfillContributorRegistry = async (): Promise<void> => {
-  if (contributorBackfillInFlight) return;
-  contributorBackfillInFlight = true;
-  try {
-    await runContributorBackfill();
-  } finally {
-    contributorBackfillInFlight = false;
-  }
-};
-void backfillContributorRegistry();
-const contributorBackfillTimer = setInterval(() => void backfillContributorRegistry(), 30 * 60 * 1000);
-contributorBackfillTimer.unref();
+startBackgroundTask(runContributorBackfill, 30 * 60 * 1000, () => console.error('contributor backfill unavailable'));
+startBackgroundTask(
+  async () => {
+    // Register lazy stores without issuing schema/data queries on every tick.
+    // A failed community boot is retried through its own one-minute backoff.
+    await Promise.allSettled([readyCommunityRouter(), journalBackend(), eventArchiveBackend()]);
+    await refreshDatabaseReadiness();
+  },
+  60_000,
+  () => console.error('database readiness unavailable'),
+);
 
-const communityRouterReady = communityServiceFromEnv()
-  .then((service) =>
-    createCommunityRouter({
-      service,
-      requireAdmin,
-      mailer: mailerFromEnv(),
-      reconciliation: reconciliationPayload,
-      shareRegister: shareRegisterPayload,
-      fundingState: sorobanCampaignFundingState,
-      applicationCampaign: async (id) => {
-        const campaign = (await sorobanCampaigns()).find((c) => c.id === id);
-        return campaign ? { id: campaign.id, contractId: campaign.contractId, creator: campaign.config.creator, network: NETWORK } : null;
-      },
-      campaignDeploy: { build: buildCampaignDeploy, submit: submitCampaignDeploy, buildV2: buildCampaignDeployV2, submitV2: submitCampaignDeployV2 },
-      investorEntitlement: async (campaignId: string, publicKey: string) => {
-        // On-chain failure propagates so the route fails closed (503).
-        const chain = await sorobanInvestorEntitlement(campaignId, publicKey);
-        // Registry failure degrades to chain-only access (narrower, never wider).
-        let contributedBefore = false;
-        try {
-          contributedBefore = await service.hasContributed(campaignId, publicKey);
-        } catch (err) {
-          console.error('contributor registry read failed:', err instanceof Error ? err.message : err);
-        }
-        return { ...chain, contributedBefore };
-      },
-    }),
-  )
-  .catch((err) => {
-    console.error('community API disabled:', err instanceof Error ? err.message : err);
-    return null;
-  });
+let communityInitialized = false;
+let communityRouterReady: Promise<ReturnType<typeof createCommunityRouter> | null> | undefined;
+function readyCommunityRouter() {
+  return (communityRouterReady ??= communityServiceFromEnv()
+    .then((service) => {
+      const router = createCommunityRouter({
+        service,
+        requireAdmin,
+        mailer: mailerFromEnv(),
+        reconciliation: reconciliationPayload,
+        shareRegister: shareRegisterPayload,
+        fundingState: sorobanCampaignFundingState,
+        applicationCampaign: async (id) => {
+          const campaign = (await sorobanCampaigns()).find((c) => c.id === id);
+          return campaign ? { id: campaign.id, contractId: campaign.contractId, creator: campaign.config.creator, network: NETWORK } : null;
+        },
+        campaignDeploy: { build: buildCampaignDeploy, submit: submitCampaignDeploy, buildV2: buildCampaignDeployV2, submitV2: submitCampaignDeployV2 },
+        investorEntitlement: async (campaignId: string, publicKey: string) => {
+          // On-chain failure propagates so the route fails closed (503).
+          const chain = await sorobanInvestorEntitlement(campaignId, publicKey);
+          // Registry failure degrades to chain-only access (narrower, never wider).
+          let contributedBefore = false;
+          try {
+            contributedBefore = await service.hasContributed(campaignId, publicKey);
+          } catch (err) {
+            console.error('contributor registry read failed:', err instanceof Error ? err.message : err);
+          }
+          return { ...chain, contributedBefore };
+        },
+      });
+      communityInitialized = true;
+      return router;
+    })
+    .catch((err) => {
+      communityInitialized = false;
+      console.error('community API disabled:', err instanceof Error ? err.message : err);
+      communityRouterReady = undefined;
+      return null;
+    }));
+}
+if (process.env.NODE_ENV !== 'test') void readyCommunityRouter();
+app.get('/api/operator/database-usage', requireAdmin, (_req, res) =>
+  res.json({ databases: databaseMetrics(), scope: 'process-local SQL call attempts; not provider billing' }),
+);
 const COMMUNITY_PATH =
   /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast|reports|investment-documents|share-register\.(json|csv|pdf)|corporate-actions|messages)(\/|$|\?)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log|abuse-diagnostics)(\/|$)|^\/api\/operator(\/|$)|^\/api\/investment-documents(\/|$)/;
 app.use((req, res, next) => {
   if (!COMMUNITY_PATH.test(req.path)) return next();
-  communityRouterReady.then((router) => {
+  readyCommunityRouter().then((router) => {
     if (!router) {
       res.status(503).json({ error: 'community API unavailable', code: 'API_UNAVAILABLE' });
       return;
@@ -328,7 +344,11 @@ app.use((req, res, next) => {
   }, next);
 });
 app.get('/health', (_req, res) => {
-  res.json({ ok: true, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
+  const database = databaseReadiness();
+  const communityRequired =
+    !!process.env.COMMUNITY_DATABASE_URL || process.env.COMMUNITY_REQUIRE_POSTGRES === '1' || process.env.SOROBAN_JOURNAL_BACKEND === 'postgres';
+  const ready = database.ready && (!communityRequired || communityInitialized);
+  res.status(ready ? 200 : 503).json({ ok: ready, database, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
 });
 
 // Display cache for the LIST route only: 30s TTL + single-flight; expired

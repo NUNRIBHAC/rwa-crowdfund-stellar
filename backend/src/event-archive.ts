@@ -1,3 +1,4 @@
+import { trackDatabasePool } from './database-runtime.js';
 import fs from 'node:fs';
 import { poolMaxFromEnv } from './db-pool.js';
 import path from 'node:path';
@@ -437,7 +438,7 @@ export async function eventArchiveBackend(): Promise<EventArchiveStore> {
     const { Pool } = await import('pg');
     // Default 10 preserves the pg driver default; override with EVENT_ARCHIVE_POOL_MAX for tighter budgets.
     cached = new PostgresEventArchiveStore(
-      new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.EVENT_ARCHIVE_POOL_MAX, 'EVENT_ARCHIVE_POOL_MAX', 10) }),
+      trackDatabasePool(new Pool({ connectionString: url, max: poolMaxFromEnv(process.env.EVENT_ARCHIVE_POOL_MAX, 'EVENT_ARCHIVE_POOL_MAX', 10) }), url),
     );
     return cached;
   }
