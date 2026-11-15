@@ -112,6 +112,8 @@ export const API_ERROR_MESSAGE_KEYS: Record<string, keyof Messages['community']>
   password_short: 'errorPasswordShort',
   password_long: 'errorPasswordLong',
   token_invalid: 'errorTokenInvalid',
+  invalid_session: 'errorTokenExpired',
+  forbidden: 'errorFeatureRestricted',
   token_expired: 'errorTokenExpired',
   credentials_invalid: 'errorCredentialsInvalid',
   email_unverified: 'errorEmailUnverified',

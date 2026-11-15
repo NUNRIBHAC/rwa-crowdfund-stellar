@@ -43,7 +43,6 @@ export const ko: Messages = {
     deletionPending: '삭제를 요청했습니다. 문서에 더 이상 접근할 수 없지만 클라우드 저장소에서의 삭제는 아직 진행 중입니다.',
     operationUnavailable: '안전한 재시도 식별자를 저장하지 못했습니다. 파일은 업로드되지 않았습니다. 브라우저 저장소를 활성화한 뒤 다시 시도하세요.',
     reconciliation: '이 작업은 상태 확인이 필요합니다. 재시도를 위해 새 업로드를 만들지 마세요.',
-
     uploadNote: 'DEMO 문서: 합성 .txt만, 각 16 KB 이하, 최대 5개. 개인정보나 신분증을 업로드하지 마세요.',
     save: '문서 저장',
     view: '문서 보기',
@@ -1562,7 +1561,7 @@ export const ko: Messages = {
     goalErrorInvalid: '목표는 소수점 7자리까지의 양수 금액이어야 합니다(토큰 규칙).',
     goalErrorRange: '목표가 컨트랙트에 저장할 수 있는 최대 금액을 초과합니다(컨트랙트 규칙).',
     deadlineLabel: '마감일',
-    deadlineNote: '마감일은 선택한 날짜의 00:00 UTC입니다. 따라서 오늘은 이미 너무 늦습니다.',
+    deadlineNote: '마감 시각은 선택한 날짜가 시작되는 시각(00:00 UTC)입니다. 미래 날짜를 선택하세요.',
     deadlineErrorPast: '마감일은 미래여야 합니다(컨트랙트 규칙).',
     creatorLabel: '생성자 지갑',
     creatorPlaceholder: '먼저 지갑을 연결하세요',

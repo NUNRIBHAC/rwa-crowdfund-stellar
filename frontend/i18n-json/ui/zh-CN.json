@@ -1425,7 +1425,7 @@
     "goalErrorInvalid": "目标必须为正数且最多 7 位小数(代币规则)。",
     "goalErrorRange": "目标超出合约可存储的最大金额(合约规则)。",
     "deadlineLabel": "截止日期",
-    "deadlineNote": "截止日期为所选日期的 00:00 UTC,因此今天已经太晚。",
+    "deadlineNote": "截止时间为所选日期的开始时刻（00:00 UTC）。请选择未来的日期。",
     "deadlineErrorPast": "截止日期必须在未来(合约规则)。",
     "creatorLabel": "创建者钱包",
     "creatorPlaceholder": "请先连接钱包",

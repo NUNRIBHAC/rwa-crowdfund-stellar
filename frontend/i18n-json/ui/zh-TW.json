@@ -1425,7 +1425,7 @@
     "goalErrorInvalid": "目標必須為正數且最多 7 位小數(代幣規則)。",
     "goalErrorRange": "目標超出合約可儲存的最大金額(合約規則)。",
     "deadlineLabel": "截止日期",
-    "deadlineNote": "截止日期為所選日期的 00:00 UTC,因此今天已經太晚。",
+    "deadlineNote": "截止時間為所選日期的開始時刻（00:00 UTC）。請選擇未來的日期。",
     "deadlineErrorPast": "截止日期必須在未來(合約規則)。",
     "creatorLabel": "建立者錢包",
     "creatorPlaceholder": "請先連接錢包",

@@ -1425,7 +1425,7 @@
     "goalErrorInvalid": "목표는 소수점 7자리까지의 양수 금액이어야 합니다(토큰 규칙).",
     "goalErrorRange": "목표가 컨트랙트에 저장할 수 있는 최대 금액을 초과합니다(컨트랙트 규칙).",
     "deadlineLabel": "마감일",
-    "deadlineNote": "마감일은 선택한 날짜의 00:00 UTC입니다. 따라서 오늘은 이미 너무 늦습니다.",
+    "deadlineNote": "마감 시각은 선택한 날짜가 시작되는 시각(00:00 UTC)입니다. 미래 날짜를 선택하세요.",
     "deadlineErrorPast": "마감일은 미래여야 합니다(컨트랙트 규칙).",
     "creatorLabel": "생성자 지갑",
     "creatorPlaceholder": "먼저 지갑을 연결하세요",

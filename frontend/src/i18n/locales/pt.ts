@@ -44,7 +44,6 @@ export const pt: Messages = {
     operationUnavailable:
       'Não foi possível guardar um identificador para repetir em segurança. Nenhum ficheiro foi enviado. Ativa o armazenamento do navegador e tenta novamente.',
     reconciliation: 'Esta operação precisa de reconciliação. Não cries outro upload para a repetir.',
-
     uploadNote: 'Documentos DEMO: apenas .txt sintéticos, até 16 KB por ficheiro, cinco ficheiros. Não envie dados pessoais nem documentos de identidade.',
     save: 'Guardar documento',
     view: 'Ver documento',
@@ -1645,7 +1644,7 @@ export const pt: Messages = {
     goalErrorInvalid: 'O objetivo tem de ser um valor positivo com no máximo 7 casas decimais (regra do token).',
     goalErrorRange: 'O objetivo excede o valor máximo que o contrato consegue guardar (regra do contrato).',
     deadlineLabel: 'Prazo',
-    deadlineNote: 'O prazo é às 00:00 UTC da data escolhida, pelo que o dia de hoje já é demasiado tarde.',
+    deadlineNote: 'O prazo termina no início da data selecionada (00:00 UTC). Escolhe uma data futura.',
     deadlineErrorPast: 'O prazo tem de ser no futuro (regra do contrato).',
     creatorLabel: 'Carteira do criador',
     creatorPlaceholder: 'Ligue primeiro uma carteira',

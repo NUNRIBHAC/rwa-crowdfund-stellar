@@ -44,7 +44,6 @@ export const ja: Messages = {
     operationUnavailable:
       '安全な再試行用の識別子を保存できませんでした。ファイルはアップロードされていません。ブラウザーのストレージを有効にして再試行してください。',
     reconciliation: 'この操作には照合が必要です。再試行のために別のアップロードを作成しないでください。',
-
     uploadNote: 'DEMO文書：合成.txtのみ、各16 KBまで、最大5件。個人情報や本人確認書類を送信しないでください。',
     save: '文書を保存',
     view: '文書を見る',
@@ -1575,7 +1574,7 @@ export const ja: Messages = {
     goalErrorInvalid: '目標は小数点以下7桁までの正の金額である必要があります(トークンルール)。',
     goalErrorRange: '目標がコントラクトに保存できる上限額を超えています(コントラクトルール)。',
     deadlineLabel: '期限',
-    deadlineNote: '期限は選択した日付の 00:00 UTC です。そのため、今日はすでに遅すぎます。',
+    deadlineNote: '期限は選択した日付の開始時刻（00:00 UTC）です。将来の日付を選択してください。',
     deadlineErrorPast: '期限は未来の日付である必要があります(コントラクトルール)。',
     creatorLabel: '作成者ウォレット',
     creatorPlaceholder: '先にウォレットを接続してください',

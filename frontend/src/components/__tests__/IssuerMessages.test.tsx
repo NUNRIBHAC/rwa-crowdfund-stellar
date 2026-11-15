@@ -149,7 +149,7 @@ describe('IssuerMessages', () => {
     expect(await screen.findByText('When does the next report land?')).toBeTruthy();
     const post = f.mock.calls.find((c: unknown[]) => (c[1] as RequestInit | undefined)?.method === 'POST');
     expect(String(post?.[0])).toContain('/api/campaigns/demo-solar/messages');
-    expect((post?.[1] as RequestInit).headers).toMatchObject({ Authorization: 'Bearer tok' });
+    expect((post?.[1] as RequestInit).headers).toMatchObject({ 'x-community-session': 'cookie', 'x-community-csrf': '' });
     await waitFor(() => expect((box as HTMLTextAreaElement).value).toBe(''));
   });
 

@@ -1,3 +1,4 @@
+import { audioOrigins } from './audio-origins.js';
 import { publicFailure } from './public-errors.js';
 import { sorobanBuildLimiter, sorobanSubmitLimiter } from './soroban-build-limiter.js';
 import { readLimiter } from './read-limiter.js';
@@ -88,7 +89,9 @@ app.use((req, res, next) => {
   const mediaOrigin = /^https:\/\/[a-z0-9][a-z0-9.-]*$/.test(mediaEnv) ? ` ${mediaEnv}` : '';
   res.setHeader(
     'Content-Security-Policy',
-    `default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:${mediaOrigin}; connect-src 'self' https://challenges.cloudflare.com${relayOrigin}${countryOrigin}; frame-src https://challenges.cloudflare.com; font-src 'self'${mediaOrigin}; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
+    `default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:${mediaOrigin}; connect-src 'self' https://challenges.cloudflare.com${relayOrigin}${countryOrigin}; frame-src https://challenges.cloudflare.com; font-src 'self'${mediaOrigin}; media-src 'self'${audioOrigins()
+      .map((origin) => ' ' + origin)
+      .join('')}; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
   );
   res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
   res.setHeader('X-Frame-Options', 'DENY');

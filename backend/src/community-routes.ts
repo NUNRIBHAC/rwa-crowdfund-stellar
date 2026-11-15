@@ -1,3 +1,4 @@
+import { browserSessionTransport, setBrowserSession, clearBrowserSession, COOKIE_SESSION } from './browser-session.js';
 import { privateApplicationOptionsFromEnv, startPrivateApplicationCleanup } from './private-application-runtime.js';
 import type { CommunityStore } from './community-store.js';
 import { socialLinkPurpose } from './social-link-proof.js';
@@ -24,6 +25,7 @@ import {
   disableTotp,
   completeTotpLogin,
   authenticateWithSession,
+  SESSION_TTL_MS,
 } from './accounts.js';
 import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaignId } from './community.js';
 import { metadataFor } from './campaign-metadata.js';
@@ -163,6 +165,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   const { service, requireAdmin, reconciliation, fundingState, investorEntitlement, mailer, campaignDeploy } = deps;
   const store = service.store;
   const router = express.Router();
+  router.use(browserSessionTransport());
   // Private metadata and denial responses must never be shared-cacheable.
   router.use(['/api/issuer-applications', '/api/operator/issuer-applications', '/api/admin/issuer-applications'], (_req, res, next) => {
     res.set('Cache-Control', 'no-store').set('X-Content-Type-Options', 'nosniff');
@@ -547,7 +550,8 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (result.kind === 'link-proof') return res.redirect(302, `/account#link-proof=${result.proof}`);
       if (result.kind === 'deletion-proof') return res.redirect(302, `/account#deletion-proof=${result.proof}`);
       if (result.kind === 'linked') return res.redirect(302, `/account#social-linked=${provider}`);
-      return res.redirect(302, `/account#social-token=${result.token}`);
+      setBrowserSession(res, result.token, result.expiresAt);
+      return res.redirect(302, `/account#social-token=${COOKIE_SESSION}`);
     } catch (err) {
       const code = (err as { code?: string } | null)?.code;
       const status = (err as { status?: number } | null)?.status;
@@ -924,6 +928,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     '/api/auth/logout',
     authed(async (req, res) => {
       await logout(store, req.header('authorization'));
+      clearBrowserSession(res);
       res.json({ ok: true });
     }),
   );
@@ -992,7 +997,12 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   });
   router.get(
     '/api/auth/me',
-    authed(async (_req, res, account) => {
+    authed(async (req, res, account) => {
+      if (req.get('x-community-session') === 'cookie') {
+        const { sessionCreatedAt } = await authenticateWithSession(store, req.header('authorization'));
+        const bearer = req.header('authorization')?.slice(7) ?? '';
+        setBrowserSession(res, bearer, sessionCreatedAt + SESSION_TTL_MS);
+      }
       // isOperator lets the signed-in UI reveal the operator dashboard; it is
       // a display hint only - every /api/operator/* route re-checks the
       // allow-list server-side per request.

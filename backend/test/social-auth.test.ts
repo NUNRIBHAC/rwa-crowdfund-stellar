@@ -227,14 +227,14 @@ test('github oauth2: fail-closed registration gate uses the verified primary ema
   let res = await driveGithubFlow(app1.base, fake1.state);
   assert.equal(res.status, 302);
   const loc = res.headers.get('location')!;
-  assert.ok(loc.startsWith('/account#social-token=bls_'), loc);
+  assert.ok(loc.startsWith('/account#social-token=cookie-session'), loc);
   const state1 = await app1.store.read();
   assert.equal(Object.keys(state1.accounts).length, 1);
   assert.ok(state1.socialIdentities[`github:${GH_USER_ID}`], 'identity keyed on provider + numeric user id');
 
   // Sign-in again with the same identity -> same account, no duplicate.
   res = await driveGithubFlow(app1.base, fake1.state);
-  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=bls_'));
+  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=cookie-session'));
   assert.equal(Object.keys((await app1.store.read()).accounts).length, 1);
 
   // Case 2: GitHub has NOT verified the email -> refuse, nothing created.
@@ -314,8 +314,11 @@ async function driveLinkFlow(base: string, provider: string, token: string, chal
 
 function tokenFromRedirect(res: Response): string {
   const loc = res.headers.get('location')!;
-  assert.ok(loc.includes('#social-token=bls_'), loc);
-  return loc.split('#social-token=')[1];
+  assert.ok(loc === '/account#social-token=cookie-session', loc);
+  const cookie = res.headers.getSetCookie().find((item) => item.startsWith('__Host-blockallisto-session='));
+  assert.ok(cookie, 'session is in an httpOnly cookie, never the fragment');
+  assert.match(cookie, /; HttpOnly/);
+  return cookie.split(';')[0].slice('__Host-blockallisto-session='.length);
 }
 
 test('social linking: authenticated account binds its identity; link callback issues no session; start requires auth', async () => {
@@ -520,14 +523,14 @@ test('allowlisted verified registration creates a social account and a working s
   });
   assert.equal(cb.status, 302);
   const loc = cb.headers.get('location')!;
-  assert.ok(loc.startsWith('/account#social-token=bls_'), loc);
-  const token = loc.split('=bls_')[1];
+  assert.ok(loc.startsWith('/account#social-token=cookie-session'), loc);
+  const token = tokenFromRedirect(cb);
   // The session authenticates against the normal authed endpoints.
-  const sessions = await fetch(`${base}/api/auth/sessions`, { headers: { authorization: `Bearer bls_${token}` } });
+  const sessions = await fetch(`${base}/api/auth/sessions`, { headers: { authorization: `Bearer ${token}` } });
   assert.equal(sessions.status, 200);
   // /me serializes the real auth method (never 'wallet' for a social
   // account) and the owner's own provider-verified email.
-  const me = await (await fetch(`${base}/api/auth/me`, { headers: { authorization: `Bearer bls_${token}` } })).json();
+  const me = await (await fetch(`${base}/api/auth/me`, { headers: { authorization: `Bearer ${token}` } })).json();
   assert.equal(me.account.authMethod, 'social');
   assert.equal(me.account.email, 'nuno@example.com');
   // Account + identity keyed on (provider, subject); email is reference only.
@@ -606,7 +609,7 @@ test('linkedin completes a full allowlisted registration flow and issues a worki
   );
   const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'linkedin');
   const loc = cb.headers.get('location')!;
-  assert.ok(loc.startsWith('/account#social-token=bls_'), loc);
+  assert.ok(loc.startsWith('/account#social-token=cookie-session'), loc);
   const data = await store.read();
   assert.ok(data.socialIdentities['linkedin:linkedin-sub-123'], 'identity stored under linkedin:subject');
 });
@@ -675,7 +678,7 @@ test('telegram (identity only): pending ticket, allowlisted email proven by code
   assert.equal(r.status, 401);
   // The identity now signs in directly.
   const again = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram');
-  assert.ok(again.headers.get('location')!.startsWith('/account#social-token=bls_'));
+  assert.ok(again.headers.get('location')!.startsWith('/account#social-token=cookie-session'));
 });
 
 test('telegram pending: an email that already has an account is never linked from here', async () => {
@@ -1002,7 +1005,7 @@ test('dedicated social deletion HTTP ceremony returns proof only and requires a 
   const fake = await makeFakeProvider('google', { email: 'delete@example.com', emailVerified: true });
   const { base, store } = await startApp({ ...CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'delete@example.com' }, { socialFetch: fake.fetchImpl });
   const login = await driveFlow(base, fake.fetchImpl, fake.state);
-  const token = login.headers.get('location')!.split('social-token=')[1];
+  const token = tokenFromRedirect(login);
   assert.ok(token?.startsWith('bls_'));
   const headers = { authorization: `Bearer ${token}`, 'content-type': 'application/json' };
   assert.equal((await fetch(base + '/api/auth/account/deletion-providers')).status, 401);
@@ -1042,7 +1045,7 @@ test('Farcaster deletion foundation: dedicated signed URI, linked fid and origin
   const fake = await makeFakeProvider('google', { email: 'fcdelete@example.com', emailVerified: true });
   const { base, store } = await startApp({ ...CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'fcdelete@example.com' }, { socialFetch: fake.fetchImpl });
   const login = await driveFlow(base, fake.fetchImpl, fake.state);
-  const authorization = 'Bearer ' + login.headers.get('location')!.split('social-token=')[1];
+  const authorization = 'Bearer ' + tokenFromRedirect(login);
   const state = await store.read();
   const publicKey = Object.keys(state.accounts)[0];
   await store.change((s) => {
@@ -1140,7 +1143,7 @@ test('dedicated Farcaster deletion HTTP routes separate identity proof from logi
     { socialFetch: fake.fetchImpl, farcasterVerifier: defaultFarcasterVerifier({}, stubConnector(3357330n)) },
   );
   const login = await driveFlow(base, fake.fetchImpl, fake.state);
-  const token = login.headers.get('location')!.split('social-token=')[1];
+  const token = tokenFromRedirect(login);
   const state = await store.read();
   const publicKey = Object.keys(state.accounts)[0];
   await store.change((s) => {
@@ -1215,10 +1218,10 @@ test('discord oauth2: only verified === true plus allowlist can register; id is 
   const ok = makeFakeDiscord({ id: DC_ID, email: 'Someone@Example.com', verified: true });
   const app = await startApp({ ...DC_CONF, SOCIAL_REGISTRATION_ALLOWED_EMAILS: 'someone@example.com' }, { socialFetch: ok.fetchImpl });
   let res = await driveDiscordFlow(app.base, ok.state);
-  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=bls_'));
+  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=cookie-session'));
   assert.ok((await app.store.read()).socialIdentities[`discord:${DC_ID}`], 'keyed on provider + snowflake id');
   res = await driveDiscordFlow(app.base, ok.state);
-  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=bls_'));
+  assert.ok(res.headers.get('location')!.startsWith('/account#social-token=cookie-session'));
   assert.equal(Object.keys((await app.store.read()).accounts).length, 1);
 
   for (const user of [
@@ -1263,7 +1266,7 @@ test('telegram phone is an explicit alternative; default email remains primary a
     assert.ok(primary.headers.get('location')!.startsWith('/account#social-email=bsp_'), 'default stays email even for allowlisted phone');
     const cb = await driveFlow(base, fake.fetchImpl, fake.state, 'telegram', undefined, 'phone');
     const loc = cb.headers.get('location')!;
-    assert.ok(loc.startsWith(scenario.direct ? '/account#social-token=bls_' : '/account#social-error=social_registration_restricted'), loc);
+    assert.ok(loc.startsWith(scenario.direct ? '/account#social-token=cookie-session' : '/account#social-error=social_registration_restricted'), loc);
     const data = await store.read();
     assert.equal(Object.keys(data.accounts).length, scenario.direct ? 1 : 0);
     assert.ok(!JSON.stringify(data).includes('910000111'), 'phone claim not persisted');

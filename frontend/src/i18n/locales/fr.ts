@@ -44,7 +44,6 @@ export const fr: Messages = {
     operationUnavailable:
       "Impossible d'enregistrer un identifiant sûr pour réessayer. Aucun fichier n'a été importé. Activez le stockage du navigateur et réessayez.",
     reconciliation: 'Cette opération nécessite une réconciliation. Ne créez pas un autre import pour la répéter.',
-
     uploadNote: 'Documents DEMO : .txt synthétiques uniquement, 16 Ko chacun, cinq fichiers. Aucun document personnel ou d’identité.',
     save: 'Enregistrer le document',
     view: 'Voir le document',
@@ -1653,7 +1652,7 @@ export const fr: Messages = {
     goalErrorInvalid: "L'objectif doit être un montant positif avec au maximum 7 décimales (règle du jeton).",
     goalErrorRange: "L'objectif dépasse le montant maximal que le contrat peut stocker (règle du contrat).",
     deadlineLabel: 'Date limite',
-    deadlineNote: "La date limite est fixée à 00:00 UTC le jour choisi ; aujourd'hui est donc déjà trop tard.",
+    deadlineNote: 'La date limite est fixée au début du jour sélectionné (00:00 UTC). Choisissez une date future.',
     deadlineErrorPast: 'La date limite doit être dans le futur (règle du contrat).',
     creatorLabel: 'Portefeuille du créateur',
     creatorPlaceholder: 'Connectez d’abord un portefeuille',

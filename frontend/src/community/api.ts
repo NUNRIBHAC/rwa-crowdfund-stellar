@@ -4,7 +4,7 @@ import { localizedApiError, currentLocale } from '../i18n';
 // support/feedback tickets, issuer applications and campaign metadata.
 // Matches backend/src/community-routes.ts + accounts.ts on
 // feature/community-platform. Same-origin requests; the bearer token is kept
-// in localStorage (30-day server session) and never leaves this origin.
+// in an httpOnly host-only Secure cookie. JavaScript holds only a marker.
 
 export type CommunityAccount = {
   publicKey: string;
@@ -122,33 +122,43 @@ export const COMMUNITY_LIMITS = {
 
 const TOKEN_KEY = 'blockallisto-community-token';
 
+const COOKIE_SESSION = 'cookie-session';
 export function loadCommunityToken(): string {
+  if (document.cookie.split(';').some((item) => item.trim().startsWith('__Host-blockallisto-csrf='))) return COOKIE_SESSION;
+  // One-time migration only. Successful /me exchanges the old bearer for an
+  // httpOnly cookie; new sessions are never written to browser storage.
   try {
     return localStorage.getItem(TOKEN_KEY) ?? '';
   } catch {
     return '';
   }
 }
-
-export function saveCommunityToken(token: string) {
+export function saveCommunityToken(_token: string) {
   try {
-    if (token) localStorage.setItem(TOKEN_KEY, token);
-    else localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(TOKEN_KEY);
   } catch {
-    // Storage unavailable: the session lives in memory only.
+    /* storage is optional */
   }
+}
+function csrfHeader(): string {
+  const row = document.cookie
+    .split(';')
+    .map((item) => item.trim())
+    .find((item) => item.startsWith('__Host-blockallisto-csrf='));
+  return row?.slice('__Host-blockallisto-csrf='.length) ?? '';
 }
 
 export { ApiError } from '../http';
 import { ApiError, responseCall } from '../http';
 
 async function call<T>(url: string, opts: { method?: string; body?: unknown; token?: string; allowNoContent?: boolean } = {}): Promise<T> {
-  const headers: Record<string, string> = {};
+  const headers: Record<string, string> = { 'x-community-session': 'cookie', 'x-community-csrf': csrfHeader() };
   if (opts.body !== undefined) headers['Content-Type'] = 'application/json';
-  if (opts.token) headers.Authorization = `Bearer ${opts.token}`;
+  if (opts.token && opts.token !== COOKIE_SESSION) headers.Authorization = `Bearer ${opts.token}`;
   return responseCall(
     url,
     {
+      credentials: 'same-origin',
       method: opts.method ?? (opts.body !== undefined ? 'POST' : 'GET'),
       headers,
       body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
@@ -263,7 +273,7 @@ export const fetchInvestmentDocuments = (token: string, campaignId: string) =>
 export async function downloadInvestmentDocument(token: string, docId: string, signal?: AbortSignal): Promise<{ blob: Blob; filename: string }> {
   return responseCall(
     `/api/investment-documents/${encodeURIComponent(docId)}/download`,
-    { headers: { Authorization: `Bearer ${token}` }, signal },
+    { credentials: 'same-origin', headers: token === COOKIE_SESSION ? { 'x-community-session': 'cookie' } : { Authorization: `Bearer ${token}` }, signal },
     async (r) => {
       const dispo = r.headers.get('content-disposition') ?? '';
       const m = /filename="([^"]+)"/.exec(dispo);
