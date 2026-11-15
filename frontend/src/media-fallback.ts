@@ -30,6 +30,10 @@ export function installMediaFallback(root: Document = document, timeoutMs = MEDI
     if (!reserve || tried.get(img) === source) return;
     tried.set(img, source);
     img.removeAttribute('srcset');
+    img
+      .closest('picture')
+      ?.querySelectorAll('source')
+      .forEach((source) => source.removeAttribute('srcset'));
     img.src = reserve;
   }
   function watch(img: HTMLImageElement) {

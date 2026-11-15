@@ -291,7 +291,7 @@ export default function App() {
   // static content routes never surface the background campaign load.
   const CAMPAIGN_DATA_ROUTES = ['home', 'investments', 'campaign', 'account'];
   const campaignLoadStatus = !fixtureMode && ['home', 'investments', 'campaign'].includes(route.name) && !loaded && (
-    <section aria-live="polite">
+    <section className={route.name === 'campaign' ? 'campaign-load-status' : undefined} aria-live="polite">
       <p role={error?.campaignLoad ? 'alert' : 'status'}>{error?.campaignLoad ? m.errors.apiUnavailable : m.campaign.loading}</p>
       {error?.campaignLoad && (
         <button
@@ -334,7 +334,7 @@ export default function App() {
             </p>
           )}
 
-        {route.name !== 'home' && campaignLoadStatus}
+        {route.name !== 'home' && route.name !== 'investments' && campaignLoadStatus}
 
         {intent && (
           <IntentPanel
@@ -353,7 +353,7 @@ export default function App() {
         )}
 
         {route.name === 'home' && <Home market={market} loadStatus={campaignLoadStatus} />}
-        {route.name === 'investments' && <Investments market={market} />}
+        {route.name === 'investments' && <Investments market={market} loadStatus={campaignLoadStatus} />}
         {route.name === 'campaign' && <CampaignDetail market={market} campaignId={route.campaignId ?? ''} />}
         {route.name === 'how-it-works' && <HowItWorks />}
         {route.name === 'learn' && <Learn />}

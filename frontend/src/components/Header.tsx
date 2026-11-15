@@ -122,7 +122,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
       <div className="header-inner">
         <div className="header-main">
           <a className="brand" href={routeHash({ name: 'home' })} onClick={() => setMenuOpen(false)}>
-            <img className="brand-lockup" src={lockupFor(theme)} alt="Blockallisto" />
+            <img className="brand-lockup" width={518} height={146} src={lockupFor(theme)} alt="Blockallisto" />
           </a>
           <button
             className="mobile-menu-toggle"

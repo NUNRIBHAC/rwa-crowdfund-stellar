@@ -45,7 +45,7 @@ export default function Footer() {
         <div className="footer-brand-inner">
           <div className="footer-brand-word">
             <div className="footer-brand-lockup">
-              <img className="footer-brand-lockup-img" src={lockupFor(theme)} alt="Blockallisto" />
+              <img className="footer-brand-lockup-img" width={518} height={146} src={lockupFor(theme)} alt="Blockallisto" />
             </div>
             <p className="footer-tagline">{m.footer.tagline}</p>
             {/* Social icons link verified brand destinations, including the Facebook

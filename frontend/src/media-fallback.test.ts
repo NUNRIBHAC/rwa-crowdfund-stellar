@@ -31,6 +31,15 @@ describe('independent public media fallback', () => {
       img.dispatchEvent(new Event('error'));
       expect(img.getAttribute('src')).toBe('/media/logo/blockallisto-lockup-horizontal.svg');
     });
+  it('disables picture sources before using the independent JPEG reserve', async () => {
+    stop = installMediaFallback();
+    document.body.innerHTML = `<picture><source type="image/avif" srcset="${origin}/campaigns/demo-solar-farm-480.avif 480w"><source type="image/webp" srcset="${origin}/campaigns/demo-solar-farm-480.webp 480w"><img src="${origin}/campaigns/demo-solar-farm.jpg"></picture>`;
+    await tick();
+    const img = document.querySelector('img')!;
+    img.dispatchEvent(new Event('error'));
+    expect(img.getAttribute('src')).toBe('/media/campaigns/demo-solar-farm.jpg');
+    expect([...document.querySelectorAll('source')].every((source) => !source.hasAttribute('srcset'))).toBe(true);
+  });
   it('retries a stalled request after the bounded timeout', async () => {
     vi.useFakeTimers();
     stop = installMediaFallback(document, 80);

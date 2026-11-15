@@ -2619,11 +2619,16 @@ input[type='checkbox'] {
 .card-photo {
   margin: 0 0 14px;
 }
+.card-photo picture,
+.campaign-photo picture {
+  display: block;
+}
 .card-photo img,
 .campaign-photo img {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
+  height: auto;
   object-fit: cover;
   border-radius: 12px;
 }
@@ -4953,4 +4958,26 @@ html.rtl-text .accordion summary > span:first-child {
 }
 .site-header .header-theme-toggle {
   width: 44px;
+}
+/* Keep the footer below the first viewport while genuine campaign data loads.
+   The localized status/error stays visible; loaded content has no fixed height. */
+.campaign-load-status {
+  min-height: calc(100svh - var(--sticky-header-h, 76px));
+}
+
+/* Keep the registry heading fixed while real results replace load status. */
+.registry-loading-space {
+  min-height: 100svh;
+}
+/* Give translated navigation its own full-width row on compact desktops.
+   Its width must not depend on whether the unchanged web font has arrived. */
+@media (min-width: 1120px) and (max-width: 1439px) {
+  .site-header .site-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .site-header .header-side,
+  .site-header .brand {
+    grid-row: 1;
+  }
 }
