@@ -1,10 +1,9 @@
-// Images are retried once against the independent, read-only same-origin
-// mirror. Capture phase runs before component handlers; no retries or loops
-// after the mirror fails. A new source on the same element gets a fresh try.
+// Images are retried once against the bounded same-origin media gateway. Capture phase runs before component handlers; no retries or loops
+// after the gateway fails. A new source on the same element gets a fresh try.
 export const MEDIA_ORIGIN = import.meta.env.VITE_PUBLIC_MEDIA_ORIGIN || 'https://blockallisto-public-media.pages.dev';
 export const MEDIA_TIMEOUT_MS = 8000;
 
-export function reserveMediaUrl(value: string, origin = MEDIA_ORIGIN): string | null {
+export function gatewayMediaUrl(value: string, origin = MEDIA_ORIGIN): string | null {
   let url: URL;
   try {
     url = new URL(value, window.location.href);
@@ -12,7 +11,7 @@ export function reserveMediaUrl(value: string, origin = MEDIA_ORIGIN): string | 
     return null;
   }
   if (url.origin !== origin || !/^\/[A-Za-z0-9._/-]+$/.test(url.pathname) || url.pathname.includes('..') || url.pathname.includes('//')) return null;
-  return '/media' + url.pathname;
+  return '/media' + url.pathname + '?retry=1';
 }
 
 export function installMediaFallback(root: Document = document, timeoutMs = MEDIA_TIMEOUT_MS): () => void {
@@ -25,20 +24,20 @@ export function installMediaFallback(root: Document = document, timeoutMs = MEDI
   }
   function fallback(img: HTMLImageElement) {
     const source = img.getAttribute('src') || '';
-    const reserve = reserveMediaUrl(source);
+    const gateway = gatewayMediaUrl(source);
     clear(img);
-    if (!reserve || tried.get(img) === source) return;
+    if (!gateway || tried.get(img) === source) return;
     tried.set(img, source);
     img.removeAttribute('srcset');
     img
       .closest('picture')
       ?.querySelectorAll('source')
       .forEach((source) => source.removeAttribute('srcset'));
-    img.src = reserve;
+    img.src = gateway;
   }
   function watch(img: HTMLImageElement) {
     const source = img.getAttribute('src') || '';
-    if (!reserveMediaUrl(source)) {
+    if (!gatewayMediaUrl(source)) {
       clear(img);
       return;
     }
@@ -60,13 +59,13 @@ export function installMediaFallback(root: Document = document, timeoutMs = MEDI
               const img = entry.target as HTMLImageElement;
               intersection?.unobserve(img);
               const source = img.getAttribute('src') || '';
-              if (reserveMediaUrl(source) && !pending.has(img)) pending.set(img, { source, timer: setTimeout(() => fallback(img), timeoutMs) });
+              if (gatewayMediaUrl(source) && !pending.has(img)) pending.set(img, { source, timer: setTimeout(() => fallback(img), timeoutMs) });
             }
         });
   function error(event: Event) {
-    if (!(event.target instanceof HTMLImageElement) || !reserveMediaUrl(event.target.getAttribute('src') || '')) return;
+    if (!(event.target instanceof HTMLImageElement) || !gatewayMediaUrl(event.target.getAttribute('src') || '')) return;
     // Do not let an older component swap to another asset on the same failed
-    // host, defeating the independent retry.
+    // host, defeating the gateway retry.
     event.stopImmediatePropagation();
     fallback(event.target);
   }
@@ -96,9 +95,9 @@ export function installMediaFallback(root: Document = document, timeoutMs = MEDI
   };
 }
 
-// Native CSS src tries the local second URL on a failed font request. A
+// Native CSS src tries the gateway second URL on a failed font request. A
 // stalled request needs a separate bounded clock; the generated local sheet
-// has the same faces/descriptors and only same-origin sources.
+// has the same faces/descriptors and only same-origin gateway sources.
 export function installFontTimeout(root: Document = document, timeoutMs = MEDIA_TIMEOUT_MS): () => void {
   const fonts = root.fonts;
   if (!fonts) return () => {};
@@ -114,7 +113,7 @@ export function installFontTimeout(root: Document = document, timeoutMs = MEDIA_
       timer = undefined;
       if (fonts.status !== 'loading') return;
       activated = true;
-      // Replace our active face definitions so layout uses the local source.
+      // Replace active face definitions so layout uses the gateway source.
       // The browser may retain old pending requests in its font bookkeeping.
       for (const sheet of root.styleSheets) {
         try {
@@ -122,7 +121,10 @@ export function installFontTimeout(root: Document = document, timeoutMs = MEDIA_
             const rule = sheet.cssRules[index];
             if (!(rule instanceof CSSFontFaceRule)) continue;
             if (!rule.style.getPropertyValue('src').includes(MEDIA_ORIGIN + '/')) continue;
-            const replacement = rule.cssText.replaceAll(MEDIA_ORIGIN + '/', '/media/');
+            const replacement = rule.cssText.replace(/url\(['"]?(https:\/\/[^)'"\s]+)['"]?\)/g, (all, value) => {
+              const gateway = gatewayMediaUrl(value);
+              return gateway ? `url('${gateway}')` : all;
+            });
             sheet.deleteRule(index);
             sheet.insertRule(replacement, index);
           }
@@ -132,7 +134,7 @@ export function installFontTimeout(root: Document = document, timeoutMs = MEDIA_
       }
       const link = root.createElement('link');
       link.rel = 'stylesheet';
-      link.href = '/media-reserve-fonts.css';
+      link.href = '/media-gateway-fonts.css';
       root.head.append(link);
     }, timeoutMs);
   };

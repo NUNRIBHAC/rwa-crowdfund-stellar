@@ -1,7 +1,13 @@
 const BUCKET = "blockallisto-media";
 const PREFIX = "public/";
-const EXT = /\.(svg|png|jpe?g|webp|gif|ico|css|js|woff2?|html|json|txt)$/i;
+const EXT = /\.(svg|png|jpe?g|avif|webp|gif|ico|css|js|woff2?|html|json|txt)$/i;
 const SAFE = /^[A-Za-z0-9._\/-]+$/;
+// Pages also exports these exact canonical B2 paths. Do not permit spaces
+// generally: normalize only reviewed public social keys before validation.
+const SOCIAL_NAMES = new Set([
+  "discord.svg", "email.svg", "facebook.svg", "farcaster.svg", "instagram.svg",
+  "linkedin.png", "telegram.svg", "threads.svg", "x.svg", "youtube.svg",
+]);
 // Scoped CORS: ONLY these app origins may read cross-origin (needed by
 // @font-face woff2; images do not require it). Never reflect arbitrary
 // Origin values. Cache API ignores Vary, so the allowlisted Origin is
@@ -40,6 +46,9 @@ export default {
       return new Response(null, { status: 400 });
     }
     p = p.replace(/^\/+/, "");
+    if (p.startsWith("social icons/") && SOCIAL_NAMES.has(p.slice(13))) {
+      p = "social/" + p.slice(13);
+    }
     if (!p || !SAFE.test(p) || p.includes("..") || p.includes("//") || !EXT.test(p)) {
       return new Response(null, { status: 404 });
     }
@@ -52,7 +61,7 @@ export default {
       ? p
       : p.startsWith("social/")
       ? "social icons/" + p.slice("social/".length)
-      : /^(favicon\.ico|favicon\.svg|favicon-(48|32|16)\.png|apple-touch-icon\.png)$/.test(p)
+      : /^(favicon\.ico|favicon\.svg|favicon-(48|32|16)\.png|apple-touch-icon\.png|icon-192\.png|icon-512(?:-maskable)?\.png)$/.test(p)
         ? "icons/" + p
         : p === "og-image.png"
           ? "social/og-image.png"

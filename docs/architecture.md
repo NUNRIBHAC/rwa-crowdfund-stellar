@@ -8,7 +8,10 @@ are represented here.
 
 The images are stored in the existing `blockallisto-media` B2 bucket under
 `public/architecture/` and served through the static public Pages host.
-No credentials or signed download links are required. The app also supports an independent same-origin public reserve when its versioned directory is mounted read-only. Open each full-size SVG
+Pages links need no credentials or signed download links. The selected app
+fallback is Worker/private B2 followed by server-side temporary authorization,
+not a VM file copy. This replacement is not deployed yet; see the
+[fallback design](../infra/media-static/FALLBACK-DESIGN.md). Open each full-size SVG
 to zoom in on labels. Text below remains available if external media is blocked.
 
 ## Whole system
@@ -75,6 +78,8 @@ are unchanged. Together they are 656,537 bytes; the older overview accounts for
 
 This guide links to the static public Pages host, not the quota-limited media
 Worker. The repository now retains hash-verified public fixtures for the
-independent public export. On the app host the reserve is a separate read-only
-mount under `/var/oled`, not a copy in the runtime image. The frontend's media
-fallback does not run on GitHub's Markdown pages.
+static public export. The current staging app still has an obsolete read-only
+media mount. The approved target design replaces the file handler with a
+bounded server-side gateway and removes that copy after release checks, not
+before. No media belongs in the runtime image. The frontend's media fallback
+does not run on GitHub's Markdown pages.

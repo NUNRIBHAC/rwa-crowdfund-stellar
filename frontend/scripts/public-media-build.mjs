@@ -19,22 +19,27 @@ export function publicMediaPlugin(origin) {
       if (id.endsWith('.css')) {
         result = result.replace(/url\(['"]?(https:\/\/[^)'"\s]+)['"]?\)(\s+format\([^)]+\))/g, (all, url, format) => {
           if (!url.startsWith(origin + '/fonts/')) return all;
-          return `${all}, url('/media/${url.slice(origin.length + 1)}')${format}`;
+          return `${all}, url('/media/${url.slice(origin.length + 1)}?retry=1')${format}`;
         });
       }
       return { code: result, map: null };
     },
     transformIndexHtml: { order: 'pre', handler: replace },
     generateBundle(_options, bundle) {
-      const reserveFonts = [];
+      const gatewayFonts = [];
       for (const item of Object.values(bundle)) {
         if (item.type === 'asset' && typeof item.source === 'string') {
           item.source = replace(item.source);
           if (item.fileName.endsWith('.css'))
-            for (const face of item.source.matchAll(/@font-face\{[^}]+\}/g)) reserveFonts.push(face[0].replaceAll(origin + '/', '/media/'));
+            for (const face of item.source.matchAll(/@font-face\{[^}]+\}/g))
+              gatewayFonts.push(
+                face[0].replace(/url\(['"]?(https:\/\/[^)'"\s]+)['"]?\)/g, (all, url) =>
+                  url.startsWith(origin + '/') ? `url('/media/${url.slice(origin.length + 1)}?retry=1')` : all,
+                ),
+              );
         }
       }
-      this.emitFile({ type: 'asset', fileName: 'media-reserve-fonts.css', source: reserveFonts.join('\n') });
+      this.emitFile({ type: 'asset', fileName: 'media-gateway-fonts.css', source: gatewayFonts.join('\n') });
     },
   };
 }

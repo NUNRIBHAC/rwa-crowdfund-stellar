@@ -6,6 +6,8 @@ process.env.EMBEDDED_HOST = '1';
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readFile } from 'node:fs/promises';
+import { createMediaGateway } from './media-gateway.mjs';
 const { app } = await import('../dist/server.js');
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../frontend/dist');
 // SEP-1: stellar.toml must be fetchable cross-origin as text/plain.
@@ -14,25 +16,18 @@ app.get('/.well-known/stellar.toml', (req, res) => {
   res.type('text/plain');
   res.sendFile(path.join(dist, '.well-known', 'stellar.toml'), { dotfiles: 'allow' });
 });
-// Public-only static mirror, bind-mounted read-only from /var/oled. Never
-// point this at a bucket export containing private uploads or credentials.
-const mediaRoot = process.env.PUBLIC_MEDIA_DIR;
-if (mediaRoot) {
-  if (!path.isAbsolute(mediaRoot)) throw new Error('PUBLIC_MEDIA_DIR must be absolute');
-  app.use(
-    '/media',
-    express.static(mediaRoot, {
-      dotfiles: 'deny',
-      index: false,
-      fallthrough: false,
-      maxAge: '1d',
-      redirect: false,
-      setHeaders: (res) => res.setHeader('Cache-Control', 'public, max-age=86400'),
-    }),
-  );
-} else {
-  app.use('/media', (_req, res) => res.sendStatus(404));
-}
+// Metadata only. /media is a bounded public gateway, never a filesystem mount.
+// The final direct-B2 leg stays disabled unless all three secret/accounting
+// file paths are explicitly supplied by a separately approved release.
+const mediaIndex = JSON.parse(await readFile(new URL('../dist/public-media-index.json', import.meta.url), 'utf8'));
+const directPaths = [process.env.MEDIA_B2_KEY_ID_FILE, process.env.MEDIA_B2_KEY_FILE, process.env.MEDIA_B2_BUDGET_FILE];
+if (directPaths.some(Boolean) && (!directPaths.every(Boolean) || directPaths.some((p) => !path.isAbsolute(p))))
+  throw Error('Incomplete media gateway configuration');
+app.use(
+  '/media',
+  createMediaGateway({ index: mediaIndex, keyFiles: directPaths.every(Boolean) ? directPaths.slice(0, 2) : undefined, budgetFile: directPaths[2] }),
+);
+
 app.use(
   express.static(dist, {
     setHeaders: (res, file) => {

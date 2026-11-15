@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { createServer } from 'node:net';
 import { once } from 'node:events';
+import { staticAsset } from '../../infra/media-static/export.mjs';
 
 // Run the actual production entry point, not an Express facsimile. This dedicated
 // integration runs after both builds in CI, matching Docker runtime ordering.
@@ -19,12 +20,13 @@ test('production host serves SPA, built assets and discovery without weakening A
   const port = (reserve.address() as { port: number }).port;
   await new Promise<void>((done) => reserve.close(() => done()));
   const cwd = resolve(import.meta.dirname, '../..');
+  const mediaFixture = staticAsset('animations/faq-question.svg').toString('base64');
   const child = spawn(
     process.execPath,
     [
       '--input-type=module',
       '-e',
-      `const { createCommunityTestDirectory } = await import('./backend/dist/test-storage-guard.js'); const root = createCommunityTestDirectory(); process.env.COMMUNITY_STORE_PATH = root + '/store.json'; console.log('COMMUNITY_TEST_ROOT=' + root); await import('./backend/scripts/host.mjs');`,
+      `globalThis.fetch = async (url) => { if (String(url) === 'https://blockallisto-public-media.pages.dev/animations/faq-question.svg') return new Response(Buffer.from('${mediaFixture}', 'base64')); throw Error('Unexpected external request in production-host integration'); }; const { createCommunityTestDirectory } = await import('./backend/dist/test-storage-guard.js'); const root = createCommunityTestDirectory(); process.env.COMMUNITY_STORE_PATH = root + '/store.json'; console.log('COMMUNITY_TEST_ROOT=' + root); await import('./backend/scripts/host.mjs');`,
     ],
     {
       cwd,
@@ -57,11 +59,13 @@ test('production host serves SPA, built assets and discovery without weakening A
       assert.ok(Date.now() < deadline, 'production host readiness timeout');
       await new Promise((done) => setTimeout(done, 20));
     }
-    const media = await fetch(base + '/media/test.svg');
+    const media = await fetch(base + '/media/animations/faq-question.svg');
     assert.equal(media.status, 200);
     assert.match(media.headers.get('content-type') ?? '', /image\/svg/);
     assert.match(media.headers.get('cache-control') ?? '', /max-age=86400/);
-    for (const invalid of ['/media/not-present.svg', '/media/missing-path', '/media/.secret']) {
+    assert.equal(media.headers.get('x-media-stage'), 'pages');
+    assert.equal(await media.text(), staticAsset('animations/faq-question.svg').toString());
+    for (const invalid of ['/media/not-present.svg', '/media/missing-path', '/media/.secret', '/media/test.svg']) {
       const response = await fetch(base + invalid);
       assert.notEqual(response.status, 200, invalid);
       assert.ok(!(await response.text()).includes('<div id="root">'), invalid);

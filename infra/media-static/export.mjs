@@ -29,7 +29,7 @@ export function staticAsset(key) {
   if (!key.endsWith('.css')) return data;
   // CSS must not retain absolute Worker URLs, or the supposedly independent
   // font mirror would still depend on that Worker. Relative URLs work on both
-  // Pages /fonts/css and Oracle /media/fonts/css.
+  // Pages /fonts/css and an approved gateway /media/fonts/css.
   return Buffer.from(
     data
       .toString()

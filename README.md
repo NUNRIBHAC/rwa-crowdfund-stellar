@@ -115,9 +115,11 @@ boundaries are described in the text below, without relabeling these images.
   an onboarding checklist are implemented. Full pages x locales x themes
   visual acceptance is not complete.
 - Fonts, logos, social icons, animations and architecture images are served
-  through the static public Pages host, with an independent same-origin
-  reserve when mounted read-only. B2 remains the upstream archive; media
-  is not bundled in the app image. The frontend HTML has no Google Fonts links. External
+  through the static public Pages host. The selected replacement fallback is
+  Worker/private B2, then server-side temporary B2 authorization if the Worker
+  is unavailable. This migration is not yet deployed; the old VM media reserve
+  must be removed only after the replacement passes release checks. See
+  `infra/media-static/FALLBACK-DESIGN.md`. Media is not bundled in the app image. The frontend HTML has no Google Fonts links. External
   media remains subject to its service availability and request limits.
 - The footer links the Blockallisto social profiles. The block-fill
   illustration explains funding; it is not live funding activity.

@@ -88,7 +88,7 @@ test('single exact origin, font secondary source, no widened origin syntax', () 
   const code = "@font-face { src: url('https://blockallisto-media.nunrib-df6.workers.dev/fonts/inter-400.woff2') format('woff2'); }";
   const output = plugin.transform(code, '/repo/frontend/src/styles.css').code;
   assert.ok(output.includes(origin + '/fonts/inter-400.woff2'));
-  assert.ok(output.includes("url('/media/fonts/inter-400.woff2')"));
+  assert.ok(output.includes("url('/media/fonts/inter-400.woff2?retry=1')"));
   assert.ok(!output.includes('workers.dev'));
 });
 
