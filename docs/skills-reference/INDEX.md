@@ -177,11 +177,16 @@ Not include:
 | `scf-tranche-reporter` | Rights unclear | Useful later - direct fit for a Stellar Community Fund application. |
 ## Product and workflow (BMAD-style) (17 supplied)
 
+Include now (1):
+
+| Skill | Rights | Why |
+|---|---|---|
+| `skills/code-review` | Supplied by the project owner | Review checklist for pull requests: correctness, security, style, performance, testing and comment guidelines. Added 2026-11-16 at the owner's request. |
+
 Not include:
 
 | Skill | Rights | Reason |
 |---|---|---|
-| `code-review` | Rights unclear | Useful now. |
 | `advanced-elicitation` | Rights unclear | Useful later. |
 | `brainstorming` | Rights unclear | Useful later. |
 | `bri-tech-writer` | Rights unclear | Useful later. |
