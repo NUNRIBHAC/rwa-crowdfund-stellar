@@ -66,18 +66,14 @@ function isAllowed(vuln, highCriticalVulns, memo = new Map()) {
     return true;
   }
 
-  const depNames = vuln.via.filter(
-    (entry) => typeof entry === 'string' && highCriticalVulns[entry]
-  );
+  const depNames = vuln.via.filter((entry) => typeof entry === 'string' && highCriticalVulns[entry]);
 
   if (depNames.length === 0) {
     memo.set(vuln.name, false);
     return false;
   }
 
-  const allAllowed = depNames.every((name) =>
-    isAllowed(highCriticalVulns[name], highCriticalVulns, memo)
-  );
+  const allAllowed = depNames.every((name) => isAllowed(highCriticalVulns[name], highCriticalVulns, memo));
 
   memo.set(vuln.name, allAllowed);
   return allAllowed;
@@ -105,9 +101,7 @@ async function main() {
     .map(([name, info]) => ({ name, ...info }))
     .filter((v) => v.severity === 'high' || v.severity === 'critical');
 
-  const highCriticalVulns = Object.fromEntries(
-    highOrCritical.map((v) => [v.name, v])
-  );
+  const highCriticalVulns = Object.fromEntries(highOrCritical.map((v) => [v.name, v]));
 
   const allowed = [];
   const blocked = [];
@@ -122,14 +116,12 @@ async function main() {
 
   if (allowed.length > 0) {
     console.warn(
-      `::warning::Allowing ${allowed.length} known high/critical advisory package(s) because they only transitively depend on excepted advisories with no fix available: ${allowed.map((v) => v.name).join(', ')}`
+      `::warning::Allowing ${allowed.length} known high/critical advisory package(s) because they only transitively depend on excepted advisories with no fix available: ${allowed.map((v) => v.name).join(', ')}`,
     );
   }
 
   if (blocked.length > 0) {
-    console.error(
-      `Found ${blocked.length} blocking high/critical advisory package(s):`
-    );
+    console.error(`Found ${blocked.length} blocking high/critical advisory package(s):`);
     for (const v of blocked) {
       const urls = v.via
         .filter((e) => typeof e === 'object')
