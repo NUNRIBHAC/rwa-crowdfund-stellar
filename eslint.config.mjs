@@ -18,12 +18,14 @@ export default tseslint.config(
       'infra/media-worker/worker.js',
       'infra/media-worker/worker-v2-rollback.js',
       'infra/media-worker/worker-v3-rollback.js',
+      'portal/.docusaurus/',
+      'portal/build*/',
     ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['backend/**/*.ts', 'frontend/**/*.ts', 'frontend/**/*.tsx', '*.mjs', 'backend/**/*.mjs', 'frontend/**/*.mjs'],
+    files: ['backend/**/*.ts', 'frontend/**/*.ts', 'frontend/**/*.tsx', '*.mjs', 'backend/**/*.mjs', 'frontend/**/*.mjs', 'portal/**/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
