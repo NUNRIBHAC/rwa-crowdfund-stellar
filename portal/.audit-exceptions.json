@@ -1,0 +1,14 @@
+{
+  "comment": "Temporary exceptions for npm audit findings that have no released fix and are not exploitable in the portal's build-time/static-site usage. Each entry must include a removal trigger.",
+  "exceptions": [
+    {
+      "id": "GHSA-fc5q-39xc-vjpf",
+      "title": "picomatch vulnerable to ReDoS through single-branch repeated extglobs",
+      "severity": "high",
+      "package": "picomatch",
+      "affectedRange": "*",
+      "removalTrigger": "Upgrade @docusaurus/* to a release that no longer depends on a vulnerable picomatch range, or wait for a patched picomatch release and refresh package-lock.json.",
+      "reason": "The portal is a static Docusaurus docs site; picomatch is used only at build time with trusted, repository-controlled glob patterns. There is no user-supplied glob input and no runtime ReDoS attack surface."
+    }
+  ]
+}
