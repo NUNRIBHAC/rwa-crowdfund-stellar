@@ -8,6 +8,7 @@ type State = {
   streak: number;
   lastProbe: number;
   probes: Map<object, () => Promise<unknown>>;
+  pools: Set<object>;
   inFlight?: Promise<void>;
 };
 const states = new Map<string, State>();
@@ -36,7 +37,7 @@ export function trackDatabasePool<T extends object>(pool: T, url: string, clock 
   const key = databaseKey(url);
   let state = states.get(key);
   if (!state) {
-    state = { attempts: 0, failures: 0, lastSuccess: 0, retryAt: 0, streak: 0, lastProbe: 0, probes: new Map() };
+    state = { attempts: 0, failures: 0, lastSuccess: 0, retryAt: 0, streak: 0, lastProbe: 0, probes: new Map(), pools: new Set() };
     states.set(key, state);
   }
   const s = state;
@@ -67,11 +68,13 @@ export function trackDatabasePool<T extends object>(pool: T, url: string, clock 
     }
   };
   s.probes.set(pool, () => query(pool, ['SELECT 1']));
+  s.pools.add(pool);
   return new Proxy(pool, {
     get(target: any, property) {
       if (property === 'end')
         return async () => {
           s.probes.delete(pool);
+          s.pools.delete(pool);
           return target.end();
         };
       if (property === 'query') return (...args: unknown[]) => query(target, args);
@@ -169,6 +172,27 @@ export async function refreshDatabaseReadiness(now = Date.now()): Promise<void> 
 export function databaseMetrics() {
   return [...states.values()].map(({ attempts, failures, lastSuccess, retryAt }) => ({ attempts, failures, lastSuccess, retryAt }));
 }
+
+// Saturations: totalCount/idleCount/waitingCount are pg Pool properties.
+// We read them opportunistically; values are unavailable (0) until a real Pool
+// is tracked and the driver has populated them. No credentials or SQL are exposed.
+export function databasePoolMetrics(): Array<{ key: string; active: number; idle: number; waiting: number; max: number }> {
+  return [...states.entries()].map(([key, s]) => {
+    let active = 0;
+    let idle = 0;
+    let waiting = 0;
+    let max = 0;
+    for (const pool of s.pools) {
+      const p = pool as any;
+      active += Number(p.totalCount ?? 0);
+      idle += Number(p.idleCount ?? 0);
+      waiting += Number(p.waitingCount ?? 0);
+      max += Number(p.options?.max ?? p.max ?? 0);
+    }
+    return { key, active, idle, waiting, max };
+  });
+}
+
 export function resetDatabaseRuntimeForTests() {
   states.clear();
 }

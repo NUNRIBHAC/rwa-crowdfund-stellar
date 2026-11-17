@@ -1,5 +1,5 @@
 import { startBackgroundTask } from './background-task.js';
-import { databaseReadiness, databaseMetrics, refreshDatabaseReadiness } from './database-runtime.js';
+import { databaseReadiness, databaseMetrics, refreshDatabaseReadiness, databasePoolMetrics } from './database-runtime.js';
 import { audioOrigins } from './audio-origins.js';
 import { publicFailure } from './public-errors.js';
 import { sorobanBuildLimiter, sorobanSubmitLimiter } from './soroban-build-limiter.js';
@@ -45,6 +45,18 @@ import { buildCapTable, holdingFromCapTable, CORPORATE_ACTIONS_SEMANTICS } from 
 import { archiveCampaignEvents, eventArchiveBackend, archiveIdentity, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
 
 import { apiNotFound, jsonErrors } from './json-errors.js';
+import {
+  metrics,
+  httpRequestDuration,
+  httpRequestsTotal,
+  apiErrorsTotal,
+  dbPoolActiveConnections,
+  dbPoolIdleConnections,
+  dbPoolWaitingConnections,
+  dbPoolMaxConnections,
+  safeHttpMethod,
+  safeRoutePath,
+} from './metrics.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -109,6 +121,27 @@ app.use(
 );
 app.use(express.json({ limit: '64kb' }));
 app.use(readLimiter());
+
+// Request-level metrics. Routing has already run when the response finishes,
+// so req.route.path is available and used to avoid high path cardinality.
+// No request bodies, query strings, or wallet addresses are captured.
+app.use((req, res, next) => {
+  const start = process.hrtime.bigint();
+  const originalJson = res.json.bind(res);
+  res.json = function (body: unknown) {
+    if (res.statusCode >= 400 && body && typeof body === 'object' && 'code' in body && typeof (body as { code: unknown }).code === 'string') {
+      apiErrorsTotal.inc({ code: (body as { code: string }).code });
+    }
+    return originalJson(body);
+  } as typeof res.json;
+  res.on('finish', () => {
+    const durationSec = Number(process.hrtime.bigint() - start) / 1e9;
+    const labels = { method: safeHttpMethod(req.method), route: safeRoutePath(req), status_code: String(res.statusCode) };
+    httpRequestDuration.observe(labels, durationSec);
+    httpRequestsTotal.inc(labels);
+  });
+  next();
+});
 
 // Admin gate for operations that move money or spend platform/demo funds
 // (create, demo invest, finalize, refund, retry, seed). Demo-grade shared
@@ -331,6 +364,16 @@ if (process.env.NODE_ENV !== 'test') void readyCommunityRouter();
 app.get('/api/operator/database-usage', requireAdmin, (_req, res) =>
   res.json({ databases: databaseMetrics(), scope: 'process-local SQL call attempts; not provider billing' }),
 );
+app.get('/api/operator/metrics', requireAdmin, (_req, res) => {
+  for (const { key, active, idle, waiting, max } of databasePoolMetrics()) {
+    dbPoolActiveConnections.set({ db_hash: key }, active);
+    dbPoolIdleConnections.set({ db_hash: key }, idle);
+    dbPoolWaitingConnections.set({ db_hash: key }, waiting);
+    dbPoolMaxConnections.set({ db_hash: key }, max);
+  }
+  res.setHeader('Content-Type', 'text/plain; version=0.0.4; charset=utf-8');
+  res.end(metrics.serialize());
+});
 const COMMUNITY_PATH =
   /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast|reports|investment-documents|share-register\.(json|csv|pdf)|corporate-actions|messages)(\/|$|\?)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log|abuse-diagnostics)(\/|$)|^\/api\/operator(\/|$)|^\/api\/investment-documents(\/|$)/;
 app.use((req, res, next) => {
