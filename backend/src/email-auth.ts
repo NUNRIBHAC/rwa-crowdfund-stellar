@@ -28,7 +28,7 @@ import { createHash, randomBytes, scryptSync, timingSafeEqual } from 'node:crypt
 import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore, EmailCredential } from './community-store.js';
 import { normalizeMailLocale, resetEmail, verificationEmail } from './email-templates.js';
-import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS } from './accounts.js';
+import { AuthError, createSession, TOTP_TICKET_TTL_MS } from './accounts.js';
 import type { Mailer } from './mailer.js';
 
 export const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
@@ -440,15 +440,7 @@ export async function verifyEmailToken(
     credential.verifyExpiresAt = null;
     const account = state.accounts[credential.publicKey];
     if (!account) throw new AuthError(500, 'account record missing');
-    const token = `bls_${randomBytes(24).toString('hex')}`;
-    const session = {
-      tokenHash: hashToken(token),
-      publicKey: account.publicKey,
-      createdAt: now,
-      expiresAt: now + SESSION_TTL_MS,
-    };
-    state.sessions[session.tokenHash] = session;
-    return { token, expiresAt: session.expiresAt, account: { ...account } };
+    return createSession(state, account, now);
   });
   if (!result) throw new AuthError(401, 'invalid or expired verification token; request a new one', 'token_expired');
   return result;
@@ -489,15 +481,7 @@ export async function loginEmail(
       state.totpTickets[ticket] = { id: ticket, publicKey: account.publicKey, expiresAt };
       return { requiresTotp: true as const, ticket, expiresAt, account: { ...account } };
     }
-    const token = `bls_${randomBytes(24).toString('hex')}`;
-    const session = {
-      tokenHash: hashToken(token),
-      publicKey: account.publicKey,
-      createdAt: now,
-      expiresAt: now + SESSION_TTL_MS,
-    };
-    state.sessions[session.tokenHash] = session;
-    return { token, expiresAt: session.expiresAt, account: { ...account } };
+    return createSession(state, account, now);
   });
   if (!result) throw new AuthError(401, 'invalid email or password', 'credentials_invalid');
   return result;
