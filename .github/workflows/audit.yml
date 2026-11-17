@@ -1,0 +1,93 @@
+name: Dependency audit
+
+on:
+  push:
+    branches: [main, deploy/testnet-demo, hardening-and-infrastructure-prototype]
+    paths:
+      - package-lock.json
+      - portal/package-lock.json
+      - contracts/crowdfund/Cargo.lock
+  pull_request:
+    paths:
+      - package-lock.json
+      - portal/package-lock.json
+      - contracts/crowdfund/Cargo.lock
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  npm-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Audit root dependencies
+        run: npm audit --audit-level=high
+
+  portal-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+      - name: Install independently locked portal without dependency install scripts
+        run: npm ci --prefix portal --ignore-scripts
+      - name: Audit portal dependencies
+        run: npm audit --prefix portal --audit-level=high
+
+  cargo-audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts/crowdfund
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Cache Rust toolchain and cargo-audit
+        id: rust-cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.rustup
+            ~/.cargo/registry
+            ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-audit-${{ hashFiles('contracts/crowdfund/Cargo.lock') }}-${{ hashFiles('contracts/crowdfund/rust-toolchain.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-audit-${{ hashFiles('contracts/crowdfund/Cargo.lock') }}-
+            ${{ runner.os }}-cargo-audit-
+
+      - name: Check for pinned Rust toolchain
+        id: rust-toolchain-check
+        run: |
+          if rustup toolchain list | grep -q '^1\.99\.1'; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install pinned Rust toolchain
+        if: steps.rust-toolchain-check.outputs.present != 'true'
+        run: rustup toolchain install 1.99.1 --profile minimal
+
+      - name: Check for cargo-audit binary
+        id: cargo-audit-check
+        run: |
+          if [ -x ~/.cargo/bin/cargo-audit ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install pinned cargo-audit
+        if: steps.cargo-audit-check.outputs.present != 'true'
+        run: cargo install cargo-audit --locked --version 0.22.2
+
+      - name: Audit Rust dependencies against RustSec advisories
+        run: cargo audit
