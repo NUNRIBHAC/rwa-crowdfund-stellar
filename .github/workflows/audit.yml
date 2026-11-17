@@ -32,20 +32,6 @@ jobs:
       - name: Audit root dependencies
         run: npm audit --audit-level=high
 
-  portal-audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: portal/package-lock.json
-      - name: Install independently locked portal without dependency install scripts
-        run: npm ci --prefix portal --ignore-scripts
-      - name: Audit portal dependencies
-        run: npm audit --prefix portal --audit-level=high
-
   cargo-audit:
     runs-on: ubuntu-latest
     defaults:

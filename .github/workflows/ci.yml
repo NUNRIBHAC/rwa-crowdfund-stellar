@@ -77,6 +77,8 @@ jobs:
         run: npm ci --prefix portal --ignore-scripts
       - name: Portal dependency policy regression tests
         run: node --test portal/scripts/dependency-policy.test.mjs
+      - name: Audit portal dependencies (fails on high/critical advisories)
+        run: npm audit --prefix portal --audit-level=high
       - name: Build public portal and reject private content
         run: node portal/scripts/check-build-isolation.mjs public
       - name: Build internal portal and verify private canary
