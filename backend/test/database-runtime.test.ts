@@ -193,6 +193,97 @@ test('no-op prune avoids UPDATE but real edits retain transaction/lock/COMMIT an
   assert.equal(releases, 4); // init + three changes
 });
 
+test('no-op prune skips the locked change() path; real prune still deletes under lock', async () => {
+  const statements: string[] = [];
+  let row = emptyCommunityState();
+  const client = {
+    query: async (sql: string, args?: unknown[]) => {
+      statements.push(sql);
+      if (sql.startsWith('SELECT doc')) return { rows: [{ doc: structuredClone(row) }] };
+      if (sql.startsWith('INSERT')) row = JSON.parse(String(args?.[1]));
+      return { rows: [] };
+    },
+    release: () => {},
+  };
+  const store = new PostgresCommunityStore({ connect: async () => client, query: client.query, end: async () => {} } as any);
+  const { CommunityService } = await import('../src/community.js');
+  const service = new CommunityService(store, { retentionDays: 90 });
+  await store.change(() => {});
+  statements.length = 0;
+  assert.deepEqual(await service.prune(), { removed: 0 });
+  assert.ok(
+    statements.length === 1 && statements[0].startsWith('SELECT doc'),
+    'no-op prune uses a single read-only view() SELECT',
+  );
+  statements.length = 0;
+  // Insert an old ticket and prune it. The locked change() path must be used.
+  await store.change((state) => {
+    state.tickets['old'] = {
+      id: 'old',
+      kind: 'feedback',
+      publicKey: 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF',
+      subject: 'x',
+      body: 'x',
+      status: 'open',
+      createdAt: Date.now() - 91 * 86400000,
+      closedAt: null,
+    } as any;
+  });
+  statements.length = 0;
+  assert.deepEqual(await service.prune(), { removed: 1 });
+  assert.equal(statements.filter((s) => s === 'BEGIN').length, 1, 'real prune uses a transaction');
+  assert.ok(statements.some((s) => /advisory/.test(s)), 'real prune acquires the advisory lock');
+  assert.equal(statements.filter((s) => s.startsWith('INSERT')).length, 1, 'real prune writes the updated doc');
+  assert.ok(statements.at(-1)?.startsWith('COMMIT'), 'real prune commits');
+  // A following no-op prune is cheap again.
+  statements.length = 0;
+  assert.deepEqual(await service.prune(), { removed: 0 });
+  assert.ok(
+    statements.length === 1 && statements[0].startsWith('SELECT doc'),
+    'subsequent no-op prune is cheap again',
+  );
+});
+
+test('view() gives a read-only snapshot with one SELECT and no transaction/lock/COMMIT', async () => {
+  const statements: string[] = [];
+  let row = emptyCommunityState();
+  const client = {
+    query: async (sql: string, args?: unknown[]) => {
+      statements.push(sql);
+      if (sql.startsWith('SELECT doc')) return { rows: [{ doc: structuredClone(row) }] };
+      if (sql.startsWith('INSERT')) row = JSON.parse(String(args?.[1]));
+      return { rows: [] };
+    },
+    release: () => {},
+  };
+  const store = new PostgresCommunityStore({ connect: async () => client, query: client.query, end: async () => {} } as any);
+  // Schema init is shared with the first change, not view.
+  await store.change(() => {});
+  statements.length = 0;
+  let calls = 0;
+  for (let i = 0; i < 100; i++) {
+    const value = await store.view((state) => {
+      calls++;
+      return Object.keys(state.accounts).length;
+    });
+    assert.equal(value, 0);
+  }
+  assert.equal(calls, 100, 'callback runs once per view call');
+  assert.equal(statements.length, 100, 'one SELECT doc per view; no lock or transaction');
+  assert.ok(statements.every((s) => s.startsWith('SELECT doc')), 'only SELECT doc is issued');
+  assert.equal(statements.filter((s) => /advisory/.test(s)).length, 0, 'no advisory lock');
+  assert.equal(statements.filter((s) => s === 'BEGIN' || s === 'COMMIT' || s === 'ROLLBACK').length, 0, 'no transaction framing');
+  assert.equal(statements.filter((s) => s.startsWith('INSERT')).length, 0, 'no writes');
+  // Mutating inside view() is a caller bug; it must not persist.
+  statements.length = 0;
+  await store.view((state) => {
+    (state.notifications as any)['leak'] = { id: 'leak' };
+  });
+  const after = await store.view((state) => ('leak' in (state.notifications as any)));
+  assert.equal(after, false, 'view mutations are not persisted');
+  assert.equal(statements.filter((s) => s.startsWith('INSERT')).length, 0);
+});
+
 test('advisory unlock bypasses an open circuit, failed clients are destroyed and COMMIT failure degrades readiness', async () => {
   resetDatabaseRuntimeForTests();
   let now = 100;

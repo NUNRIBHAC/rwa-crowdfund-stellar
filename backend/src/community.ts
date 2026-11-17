@@ -7,6 +7,7 @@ import type {
   CompanyApplication,
   Account,
   Comment,
+  CommunityState,
   CommunityStore,
   IssuerApplication,
   NewsPost,
@@ -1473,10 +1474,45 @@ export class CommunityService {
 
   // Retention: hard-delete personal submitted content after its retention
   // window, hidden comments after 30 days, and expired auth artifacts.
+  private hasPrunableContent(state: CommunityState, now: number, retentionMs: number, hiddenCommentMs: number): boolean {
+    for (const t of Object.values(state.tickets)) {
+      if (now - t.createdAt > retentionMs) return true;
+    }
+    for (const [id, a] of Object.entries(state.applications)) {
+      if (now - a.createdAt > retentionMs) {
+        if (
+          a.documents?.some((d) => d.object) ||
+          Object.values(state.privateApplicationUploads?.intents ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted') ||
+          Object.values(state.privateApplicationDeletions ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted')
+        )
+          continue;
+        return true;
+      }
+    }
+    for (const n of Object.values(state.notifications)) {
+      if (now - n.createdAt > retentionMs) return true;
+    }
+    for (const c of Object.values(state.comments)) {
+      if (c.hiddenAt && now - c.hiddenAt > hiddenCommentMs) return true;
+    }
+    for (const ch of Object.values(state.challenges)) {
+      if (ch.expiresAt <= now) return true;
+    }
+    for (const s of Object.values(state.sessions)) {
+      if (s.expiresAt <= now) return true;
+    }
+    return false;
+  }
+
   async prune(): Promise<{ removed: number }> {
     const now = this.now();
     const retentionMs = this.opts.retentionDays * 24 * 60 * 60 * 1000;
     const hiddenCommentMs = 30 * 24 * 60 * 60 * 1000;
+    const needsWork = await this.store.view((state) => this.hasPrunableContent(state, now, retentionMs, hiddenCommentMs));
+    if (!needsWork) {
+      this.limiter.sweep(24 * 60 * 60 * 1000);
+      return { removed: 0 };
+    }
     let removed = 0;
     await this.store.change((state) => {
       for (const [id, t] of Object.entries(state.tickets)) {

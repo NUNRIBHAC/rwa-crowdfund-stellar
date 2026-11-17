@@ -57,3 +57,19 @@ The idle probe ceiling is 12 SQL calls/hour per distinct identity per process, o
 Regression tests cover a production-mode server subprocess pointed exclusively at an unreachable loopback database: startup survives and health stays 503 across 50 requests. Fake-pool tests cover quota/connection failure, recovery, idle errors, cross-pool identity, non-overlapping tasks, callback failures, probe throttling, transaction rollback and session-lock cleanup. A real Express health test checks pending -> healthy -> failed state without SQL per poll.
 
 No merge or deployment follows from opening this PR. Staging needs its own approval; demo is out of scope.
+
+## Follow-up: read-only prune fast path
+
+`CommunityStore.view(fn)` returns a validated snapshot with one `SELECT doc` and no transaction, advisory lock or write. `CommunityService.prune()` uses it to check whether any retention item is eligible before acquiring the locked `change()` path.
+
+| Scenario | SQL calls | Notes |
+| --- | --- | --- |
+| No-op prune (100 runs) | 100 | One `view()` `SELECT` each; no `BEGIN`/lock/`COMMIT`/write |
+| No-op `change()` (100 runs) | 400 | Baseline retained for mutating callers; `BEGIN`, lock, `SELECT`, `COMMIT` |
+| Real prune with deletions | 5 | `view()` `SELECT` + locked `change()` (`BEGIN`, lock, `SELECT`, `INSERT`, `COMMIT`) |
+
+Regression coverage:
+
+- `database-runtime.test.ts` asserts `view()` issues only `SELECT doc`, never `BEGIN`, `COMMIT`, `ROLLBACK`, advisory locks or writes, and that mutations inside the callback do not persist.
+- `database-runtime.test.ts` asserts a no-op prune uses a single `view()` `SELECT`, while a prune with deletions still uses the locked `change()` transaction.
+- Existing prune semantics are preserved: old tickets, applications, sessions, challenges, hidden comments and notifications are still deleted under the advisory lock.
