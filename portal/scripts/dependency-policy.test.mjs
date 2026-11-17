@@ -22,19 +22,24 @@ test('CI explicitly audits and builds the independently locked public/private po
   assert.match(workflow, /node portal\/scripts\/check-build-isolation.mjs/);
 });
 
-test('audit exception file is valid and every entry has a removal trigger', () => {
-  const raw = readFileSync(new URL('.audit-exceptions.json', root), 'utf8');
-  const parsed = JSON.parse(raw);
-  assert.ok(Array.isArray(parsed.exceptions));
+function assertExceptionShape(parsed, label) {
+  assert.ok(Array.isArray(parsed.exceptions), `${label}: exceptions array required`);
   for (const e of parsed.exceptions) {
-    assert.ok(typeof e.id === 'string' && e.id.length > 0, 'exception id required');
-    assert.ok(typeof e.title === 'string' && e.title.length > 0, 'exception title required');
-    assert.ok(typeof e.severity === 'string', 'exception severity required');
-    assert.ok(typeof e.package === 'string' && e.package.length > 0, 'exception package required');
-    assert.ok(typeof e.affectedRange === 'string', 'exception affectedRange required');
-    assert.ok(typeof e.removalTrigger === 'string' && e.removalTrigger.length > 0, 'exception removalTrigger required');
-    assert.ok(typeof e.reason === 'string' && e.reason.length > 0, 'exception reason required');
+    assert.ok(typeof e.id === 'string' && e.id.length > 0, `${label}: exception id required`);
+    assert.ok(typeof e.title === 'string' && e.title.length > 0, `${label}: exception title required`);
+    assert.ok(typeof e.severity === 'string', `${label}: exception severity required`);
+    assert.ok(typeof e.package === 'string' && e.package.length > 0, `${label}: exception package required`);
+    assert.ok(typeof e.affectedRange === 'string', `${label}: exception affectedRange required`);
+    assert.ok(typeof e.removalTrigger === 'string' && e.removalTrigger.length > 0, `${label}: exception removalTrigger required`);
+    assert.ok(typeof e.reason === 'string' && e.reason.length > 0, `${label}: exception reason required`);
   }
+}
+
+test('audit exception file is valid and every entry has a removal trigger', () => {
+  const portal = JSON.parse(readFileSync(new URL('.audit-exceptions.json', root), 'utf8'));
+  assertExceptionShape(portal, 'portal');
+  const workspace = JSON.parse(readFileSync(new URL('../.audit-exceptions.json', root), 'utf8'));
+  assertExceptionShape(workspace, 'workspace');
 });
 
 test('patched serializer and worker retain the portal call shapes', async () => {

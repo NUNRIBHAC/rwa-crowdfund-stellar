@@ -46,8 +46,8 @@ jobs:
       - run: npm run build && node backend/scripts/media-index.mjs
       - name: Production host integration (built API + SPA)
         run: NODE_ENV=test node --import tsx --test backend/test/production-host.integration.ts
-      - name: Dependency audit (fails on high/critical advisories)
-        run: npm audit --audit-level=high
+      - name: Dependency audit (fails on unhandled high/critical advisories)
+        run: node scripts/audit-with-exceptions.mjs
   portal:
     runs-on: ubuntu-latest
     steps:

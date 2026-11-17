@@ -1,0 +1,14 @@
+{
+  "comment": "Temporary exceptions for root-workspace npm audit findings that have no released fix and are not exploitable in our build/dev tooling. Each entry must include a removal trigger.",
+  "exceptions": [
+    {
+      "id": "GHSA-fc5q-39xc-vjpf",
+      "title": "picomatch vulnerable to ReDoS through single-branch repeated extglobs",
+      "severity": "high",
+      "package": "picomatch",
+      "affectedRange": "*",
+      "removalTrigger": "Upgrade Vite / typescript-eslint / vitest to releases that no longer depend on a vulnerable picomatch range, or wait for a patched picomatch release and refresh package-lock.json.",
+      "reason": "picomatch is used only by build-time and lint-time tooling (Vite, ESLint, vitest) with repository-controlled glob patterns. There is no user-supplied glob input and no runtime attack surface."
+    }
+  ]
+}
