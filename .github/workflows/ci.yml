@@ -47,7 +47,7 @@ jobs:
       - name: Production host integration (built API + SPA)
         run: NODE_ENV=test node --import tsx --test backend/test/production-host.integration.ts
       - name: Dependency audit (fails on high/critical advisories)
-        run: npm audit --audit-level=high
+        run: node backend/scripts/audit-filter.mjs
   portal:
     runs-on: ubuntu-latest
     steps:
@@ -62,7 +62,7 @@ jobs:
       - name: Portal dependency policy regression tests
         run: node --test portal/scripts/dependency-policy.test.mjs
       - name: Audit portal dependencies (fails on high/critical advisories)
-        run: npm audit --prefix portal --audit-level=high
+        run: node backend/scripts/audit-filter.mjs portal
       - name: Build public portal and reject private content
         run: node portal/scripts/check-build-isolation.mjs public
       - name: Build internal portal and verify private canary
