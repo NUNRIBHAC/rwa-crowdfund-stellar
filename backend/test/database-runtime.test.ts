@@ -211,10 +211,7 @@ test('no-op prune skips the locked change() path; real prune still deletes under
   await store.change(() => {});
   statements.length = 0;
   assert.deepEqual(await service.prune(), { removed: 0 });
-  assert.ok(
-    statements.length === 1 && statements[0].startsWith('SELECT doc'),
-    'no-op prune uses a single read-only view() SELECT',
-  );
+  assert.ok(statements.length === 1 && statements[0].startsWith('SELECT doc'), 'no-op prune uses a single read-only view() SELECT');
   statements.length = 0;
   // Insert an old ticket and prune it. The locked change() path must be used.
   await store.change((state) => {
@@ -232,16 +229,16 @@ test('no-op prune skips the locked change() path; real prune still deletes under
   statements.length = 0;
   assert.deepEqual(await service.prune(), { removed: 1 });
   assert.equal(statements.filter((s) => s === 'BEGIN').length, 1, 'real prune uses a transaction');
-  assert.ok(statements.some((s) => /advisory/.test(s)), 'real prune acquires the advisory lock');
+  assert.ok(
+    statements.some((s) => /advisory/.test(s)),
+    'real prune acquires the advisory lock',
+  );
   assert.equal(statements.filter((s) => s.startsWith('INSERT')).length, 1, 'real prune writes the updated doc');
   assert.ok(statements.at(-1)?.startsWith('COMMIT'), 'real prune commits');
   // A following no-op prune is cheap again.
   statements.length = 0;
   assert.deepEqual(await service.prune(), { removed: 0 });
-  assert.ok(
-    statements.length === 1 && statements[0].startsWith('SELECT doc'),
-    'subsequent no-op prune is cheap again',
-  );
+  assert.ok(statements.length === 1 && statements[0].startsWith('SELECT doc'), 'subsequent no-op prune is cheap again');
 });
 
 test('view() gives a read-only snapshot with one SELECT and no transaction/lock/COMMIT', async () => {
@@ -270,7 +267,10 @@ test('view() gives a read-only snapshot with one SELECT and no transaction/lock/
   }
   assert.equal(calls, 100, 'callback runs once per view call');
   assert.equal(statements.length, 100, 'one SELECT doc per view; no lock or transaction');
-  assert.ok(statements.every((s) => s.startsWith('SELECT doc')), 'only SELECT doc is issued');
+  assert.ok(
+    statements.every((s) => s.startsWith('SELECT doc')),
+    'only SELECT doc is issued',
+  );
   assert.equal(statements.filter((s) => /advisory/.test(s)).length, 0, 'no advisory lock');
   assert.equal(statements.filter((s) => s === 'BEGIN' || s === 'COMMIT' || s === 'ROLLBACK').length, 0, 'no transaction framing');
   assert.equal(statements.filter((s) => s.startsWith('INSERT')).length, 0, 'no writes');
@@ -279,7 +279,7 @@ test('view() gives a read-only snapshot with one SELECT and no transaction/lock/
   await store.view((state) => {
     (state.notifications as any)['leak'] = { id: 'leak' };
   });
-  const after = await store.view((state) => ('leak' in (state.notifications as any)));
+  const after = await store.view((state) => 'leak' in (state.notifications as any));
   assert.equal(after, false, 'view mutations are not persisted');
   assert.equal(statements.filter((s) => s.startsWith('INSERT')).length, 0);
 });

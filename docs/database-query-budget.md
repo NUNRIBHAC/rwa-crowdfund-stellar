@@ -62,11 +62,11 @@ No merge or deployment follows from opening this PR. Staging needs its own appro
 
 `CommunityStore.view(fn)` returns a validated snapshot with one `SELECT doc` and no transaction, advisory lock or write. `CommunityService.prune()` uses it to check whether any retention item is eligible before acquiring the locked `change()` path.
 
-| Scenario | SQL calls | Notes |
-| --- | --- | --- |
-| No-op prune (100 runs) | 100 | One `view()` `SELECT` each; no `BEGIN`/lock/`COMMIT`/write |
-| No-op `change()` (100 runs) | 400 | Baseline retained for mutating callers; `BEGIN`, lock, `SELECT`, `COMMIT` |
-| Real prune with deletions | 5 | `view()` `SELECT` + locked `change()` (`BEGIN`, lock, `SELECT`, `INSERT`, `COMMIT`) |
+| Scenario                    | SQL calls | Notes                                                                               |
+| --------------------------- | --------- | ----------------------------------------------------------------------------------- |
+| No-op prune (100 runs)      | 100       | One `view()` `SELECT` each; no `BEGIN`/lock/`COMMIT`/write                          |
+| No-op `change()` (100 runs) | 400       | Baseline retained for mutating callers; `BEGIN`, lock, `SELECT`, `COMMIT`           |
+| Real prune with deletions   | 5         | `view()` `SELECT` + locked `change()` (`BEGIN`, lock, `SELECT`, `INSERT`, `COMMIT`) |
 
 Regression coverage:
 
