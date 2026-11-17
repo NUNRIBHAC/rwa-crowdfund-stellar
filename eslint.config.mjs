@@ -15,6 +15,9 @@ export default tseslint.config(
       'contracts/',
       'docs/',
       'backend/test/fixtures/',
+      'portal/.docusaurus/',
+      'portal/build-public/',
+      'portal/build-internal/',
       'infra/media-worker/worker.js',
       'infra/media-worker/worker-v2-rollback.js',
       'infra/media-worker/worker-v3-rollback.js',
@@ -23,7 +26,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['backend/**/*.ts', 'frontend/**/*.ts', 'frontend/**/*.tsx', '*.mjs', 'backend/**/*.mjs', 'frontend/**/*.mjs'],
+    files: ['backend/**/*.ts', 'frontend/**/*.ts', 'frontend/**/*.tsx', '*.mjs', 'backend/**/*.mjs', 'frontend/**/*.mjs', 'load/**/*.mts'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
@@ -43,8 +46,8 @@ export default tseslint.config(
     },
   },
   {
-    files: ['load/**/*.js'],
-    languageOptions: { sourceType: 'module', globals: { __ENV: 'readonly' } },
+    files: ['load/**/*.js', 'load/**/*.mjs'],
+    languageOptions: { sourceType: 'module', globals: { __ENV: 'readonly', ...globals.node } },
   },
   {
     files: ['frontend/**/*.ts', 'frontend/**/*.tsx'],
