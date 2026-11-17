@@ -26,11 +26,7 @@ function loadExceptions() {
 
 function runAudit() {
   return new Promise((resolve, reject) => {
-    const proc = spawn(
-      'npm',
-      ['audit', '--json', '--audit-level=high'],
-      { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] },
-    );
+    const proc = spawn('npm', ['audit', '--json', '--audit-level=high'], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
     let stdout = '';
     let stderr = '';
     proc.stdout.on('data', (chunk) => {
@@ -77,35 +73,33 @@ async function main() {
   const { data } = await runAudit();
 
   const vulns = data.vulnerabilities || {};
-  const findings = Object.entries(vulns).filter(
-    ([, v]) => v.severity === 'high' || v.severity === 'critical',
-  );
+  const findings = Object.entries(vulns).filter(([, vuln]) => vuln.severity === 'high' || vuln.severity === 'critical');
 
   let unhandled = 0;
   for (const [name, v] of findings) {
     const match = matchedException(name, vulns, exceptions);
     if (match) {
-      console.log(
-        `[EXCEPTED ${v.severity.toUpperCase()}] ${name}: ${match.exception.title} (${match.exception.id})`,
-      );
+      console.log(`[EXCEPTED ${v.severity.toUpperCase()}] ${name}: ${match.exception.title} (${match.exception.id})`);
     } else {
       unhandled += 1;
       const roots = Array.from(rootAdvisories(name, vulns));
-      const urls = roots.map((a) => a.url).filter(Boolean).join(', ') || 'no advisory URL';
+      const urls =
+        roots
+          .map((a) => a.url)
+          .filter(Boolean)
+          .join(', ') || 'no advisory URL';
       console.log(`[UNHANDLED ${v.severity.toUpperCase()}] ${name}: ${urls}`);
     }
   }
 
   const matchedIds = new Set();
-  for (const [name, v] of findings) {
+  for (const [name] of findings) {
     const match = matchedException(name, vulns, exceptions);
     if (match) matchedIds.add(match.exception.id);
   }
   for (const e of exceptions) {
     if (!matchedIds.has(e.id)) {
-      console.log(
-        `[STALE EXCEPTION] ${e.id} no longer matches any high/critical finding; remove it from .audit-exceptions.json`,
-      );
+      console.log(`[STALE EXCEPTION] ${e.id} no longer matches any high/critical finding; remove it from .audit-exceptions.json`);
     }
   }
 

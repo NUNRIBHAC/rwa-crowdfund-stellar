@@ -1,4 +1,3 @@
-/* global process, structuredClone, console */
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 const root = path.resolve(process.argv[2]);

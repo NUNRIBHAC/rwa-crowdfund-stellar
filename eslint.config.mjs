@@ -26,7 +26,17 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['backend/**/*.ts', 'frontend/**/*.ts', 'frontend/**/*.tsx', '*.mjs', 'backend/**/*.mjs', 'frontend/**/*.mjs', 'load/**/*.mts'],
+    files: [
+      'backend/**/*.ts',
+      'frontend/**/*.ts',
+      'frontend/**/*.tsx',
+      '*.mjs',
+      'backend/**/*.mjs',
+      'frontend/**/*.mjs',
+      'portal/**/*.mjs',
+      'scripts/**/*.mjs',
+      'load/**/*.mts',
+    ],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
