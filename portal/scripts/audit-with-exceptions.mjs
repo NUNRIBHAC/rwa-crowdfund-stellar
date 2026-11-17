@@ -1,30 +1,36 @@
 #!/usr/bin/env node
 // Run `npm audit` and fail only on high/critical advisories that are not
-// documented, unfixable exceptions. This keeps the portal CI green when a
-// transitive dependency has a known advisory with no patched version available,
-// while still catching new high/critical issues.
+// documented, unfixable exceptions. This keeps CI green when a transitive
+// dependency has a known advisory with no patched version available, while still
+// catching new high/critical issues.
+//
+// Usage: node audit-with-exceptions.mjs [directory]
+//   directory  optional path to the package to audit (defaults to the parent
+//              directory of this script for backwards compatibility).
 
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { cwd } from 'node:process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const portalRoot = join(__dirname, '..');
+const targetDir = resolve(process.argv[2] || join(__dirname, '..'));
 
 // Known advisories with no fix available. Add an entry only when:
 //  - the vulnerability is in a transitive dependency,
 //  - no patched version exists on npm,
-//  - the team has reviewed the risk and accepts it for the docs portal.
+//  - the team has reviewed the risk and accepts it.
 const ALLOWED_ADVISORIES = new Set([
-  // picomatch ReDoS; all current versions (<=4.0.7) are flagged and Docusaurus
-  // depends on picomatch transitively. Tracked upstream at GHSA-fc5q-39xc-vjpf.
+  // picomatch ReDoS; all current versions (<=4.0.7) are flagged. Several
+  // dependencies (Docusaurus, micromatch, vitest/fast-glob) transitively depend
+  // on picomatch. Tracked upstream at GHSA-fc5q-39xc-vjpf.
   'GHSA-fc5q-39xc-vjpf',
 ]);
 
 function runAudit() {
   return new Promise((resolve, reject) => {
     const child = spawn('npm', ['audit', '--json'], {
-      cwd: portalRoot,
+      cwd: targetDir,
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 
@@ -47,36 +53,42 @@ function runAudit() {
   });
 }
 
-function hasAllowedAdvisoryObject(vuln) {
-  return vuln.via.some((entry) => {
-    if (typeof entry !== 'object') return false;
-    return ALLOWED_ADVISORIES.has(entry.url?.split('/').pop());
-  });
+function collectReachableAdvisories(startVuln, highCriticalVulns) {
+  const reachable = new Set();
+  const stack = [startVuln];
+  const visited = new Set();
+
+  while (stack.length > 0) {
+    const vuln = stack.pop();
+    if (visited.has(vuln.name)) continue;
+    visited.add(vuln.name);
+
+    for (const entry of vuln.via) {
+      if (typeof entry === 'object') {
+        reachable.add(entry.url?.split('/').pop());
+      } else if (typeof entry === 'string' && highCriticalVulns[entry]) {
+        stack.push(highCriticalVulns[entry]);
+      }
+    }
+  }
+
+  return reachable;
 }
 
-function isAllowed(vuln, highCriticalVulns, memo = new Map()) {
-  if (memo.has(vuln.name)) return memo.get(vuln.name);
+function isAllowed(vuln, highCriticalVulns) {
+  const reachableAdvisories = collectReachableAdvisories(vuln, highCriticalVulns);
 
-  // A vulnerability is allowed if it directly matches an allowed advisory,
-  // or if every high/critical dependency path that makes it vulnerable goes
-  // through only other allowed vulnerabilities. Moderate or low deps do not
-  // contribute to a high/critical severity, so we ignore them.
-  if (hasAllowedAdvisoryObject(vuln)) {
-    memo.set(vuln.name, true);
-    return true;
+  if (reachableAdvisories.size === 0) {
+    // A high/critical severity with no explicit advisory object means the
+    // package is flagged only because it depends on other flagged packages.
+    // If every dependency path leads to allowed advisories, treat it as
+    // allowed. If it has no high/critical deps at all, something unexpected
+    // happened; fail open (block) so we investigate.
+    const hasHighCriticalDeps = vuln.via.some((entry) => typeof entry === 'string' && highCriticalVulns[entry]);
+    return hasHighCriticalDeps;
   }
 
-  const depNames = vuln.via.filter((entry) => typeof entry === 'string' && highCriticalVulns[entry]);
-
-  if (depNames.length === 0) {
-    memo.set(vuln.name, false);
-    return false;
-  }
-
-  const allAllowed = depNames.every((name) => isAllowed(highCriticalVulns[name], highCriticalVulns, memo));
-
-  memo.set(vuln.name, allAllowed);
-  return allAllowed;
+  return [...reachableAdvisories].every((id) => ALLOWED_ADVISORIES.has(id));
 }
 
 async function main() {

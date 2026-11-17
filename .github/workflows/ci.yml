@@ -47,7 +47,7 @@ jobs:
       - name: Production host integration (built API + SPA)
         run: NODE_ENV=test node --import tsx --test backend/test/production-host.integration.ts
       - name: Dependency audit (fails on high/critical advisories)
-        run: npm audit --audit-level=high
+        run: node portal/scripts/audit-with-exceptions.mjs .
   portal:
     runs-on: ubuntu-latest
     steps:
@@ -65,7 +65,7 @@ jobs:
         # npm audit has no built-in advisory exclusion. The script below fails
         # the build for new high/critical advisories while allowing known,
         # reviewed advisories that have no patched version available.
-        run: node portal/scripts/audit-with-exceptions.mjs
+        run: node portal/scripts/audit-with-exceptions.mjs portal
       - name: Build public portal and reject private content
         run: node portal/scripts/check-build-isolation.mjs public
       - name: Build internal portal and verify private canary
