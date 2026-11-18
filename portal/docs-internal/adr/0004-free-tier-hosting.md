@@ -12,7 +12,9 @@ free tiers, with any paid upgrade brought to him first.
 
 - App hosting: Render free web services - a public demo environment and a
   separate staging environment, each auto-deploying from its own branch, each
-  with its own database.
+  with its own database. Superseded: both environments now run as containers on
+  one Oracle Cloud VM, and neither deploys automatically. See
+  `docs/oracle-hosting.md`.
 - Databases: Neon Postgres (demo and staging journals).
 - Self-hosted tooling on one Oracle Cloud Always Free VM (ARM, Frankfurt):
   Weblate (translations), Uptime Kuma (uptime checks), Bitwarden, the private

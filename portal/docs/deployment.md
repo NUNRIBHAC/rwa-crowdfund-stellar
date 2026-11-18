@@ -9,7 +9,8 @@
   contract, used for load testing and validating changes before they reach
   the demo.
 
-Both environments build and deploy automatically from the repository.
+Neither environment deploys automatically. A merge to `main` does not deploy
+either environment; release is a separate, reviewed operator step.
 
 ## Stack
 
