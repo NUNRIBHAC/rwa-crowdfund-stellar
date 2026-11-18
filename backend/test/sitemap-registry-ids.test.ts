@@ -2,6 +2,7 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { rmSync } from 'node:fs';
 import { join } from 'node:path';
+import { StrKey } from '@stellar/stellar-sdk';
 import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 import { sorobanDeps, sorobanCampaigns } from '../src/soroban.js';
 
@@ -16,10 +17,15 @@ import { sorobanDeps, sorobanCampaigns } from '../src/soroban.js';
 // Adapter evidence only: the RPC client is replaced by a counter that throws,
 // so a chain call is visible as a failure, never as a slow test.
 
-const ALPHA = 'CCBIMGPHIOUFN6IC6MYPFXOGJQIRJHHDXA2Y7LQDCYBSJOKHULICO6NY';
-const BETA = 'CAF673HYNQLEJJH5XNNZUMXAJQOBNN5FCAOQFBTPTCZZX45UG6PCF5WJ';
-const V2_TOKEN = 'CALB4COOJD7M7NO4UPUAWBNP5MUWSVHZKEJTXT57P7S5HFMZY2J3PAGZ';
-const V2_OFFERING = 'CCUYSC424OJYEWFJHRCKMNBFQHRWWQQICXAZPRXJUM7PBTTYJFXN2Z73';
+// Syntactically valid contract addresses, built from a repeated byte so the
+// fixture holds no copied address literal. The registry only validates the
+// StrKey shape, and these tests never reach the chain.
+const contractAddress = (fill: number): string => StrKey.encodeContract(Buffer.alloc(32, fill));
+
+const ALPHA = contractAddress(0x11);
+const BETA = contractAddress(0x22);
+const GAMMA_V2_TOKEN = contractAddress(0x33);
+const GAMMA_V2_OFFERING = contractAddress(0x44);
 
 let dir: string;
 let srv: ReturnType<import('express').Express['listen']>;
@@ -89,8 +95,8 @@ test('the sitemap publishes exactly the v1 registry ids', async () => {
       id: 'gamma-v2',
       name: 'Gamma (v2)',
       contractSet: 'v2',
-      tokenContractId: V2_TOKEN,
-      offeringContractId: V2_OFFERING,
+      tokenContractId: GAMMA_V2_TOKEN,
+      offeringContractId: GAMMA_V2_OFFERING,
     },
   ]);
 
