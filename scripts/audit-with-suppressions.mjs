@@ -20,15 +20,33 @@ const targetDir = process.argv[2] ? resolve(repoRoot, process.argv[2]) : repoRoo
 
 let audit;
 try {
-  const out = execSync('npm audit --json --audit-level=high', { cwd: targetDir, encoding: 'utf8' });
-  audit = JSON.parse(out);
+  audit = JSON.parse(execSync('npm audit --json --audit-level=high', { cwd: targetDir, encoding: 'utf8' }));
 } catch (err) {
-  try {
-    audit = JSON.parse(err.stdout);
-  } catch {
-    console.error('npm audit produced non-JSON output:', err.stdout?.slice(0, 500) ?? err.message);
+  const stdout = typeof err.stdout === 'string' ? err.stdout : '';
+  if (!stdout.trim()) {
+    console.error('npm audit failed without JSON output:', err.message);
     process.exit(1);
   }
+  try {
+    audit = JSON.parse(stdout);
+  } catch {
+    console.error('npm audit produced non-JSON output:', stdout.slice(0, 500));
+    process.exit(1);
+  }
+}
+
+// Fail closed when the audit did not actually report. An unreachable registry,
+// a broken mirror, or an unreadable lockfile makes npm audit exit non-zero
+// without a `vulnerabilities` object. Passing here would turn an infrastructure
+// failure into a green security gate, which the raw `npm audit --audit-level=high`
+// command this script replaces did not do.
+if (audit?.error) {
+  console.error('npm audit reported an error:', JSON.stringify(audit.error).slice(0, 500));
+  process.exit(1);
+}
+if (!audit || typeof audit.vulnerabilities !== 'object' || audit.vulnerabilities === null || Array.isArray(audit.vulnerabilities)) {
+  console.error('npm audit returned no vulnerability data; treating the audit as failed.');
+  process.exit(1);
 }
 
 // npm audit v11+ uses a `vulnerabilities` object keyed by package name.

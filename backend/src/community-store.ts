@@ -592,9 +592,10 @@ export interface CommunityStore {
   close?(): Promise<void>;
   change<T>(fn: (state: CommunityState) => T): Promise<T>;
   // Read-only snapshot: same validation and empty-document semantics as
-  // read(), but callers promise not to mutate state. Useful for best-effort
-  // scans that decide whether an expensive locked change() is needed.
-  view?<T>(fn: (state: CommunityState) => T): Promise<T>;
+  // read(), and the callback receives a readonly state so mutating the
+  // snapshot is a compile-time error. Useful for best-effort scans that
+  // decide whether an expensive locked change() is needed.
+  view?<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T>;
   read(): Promise<CommunityState>;
   // Optional minimal same-snapshot projection. No cache or write is allowed.
   readSessionAccount?(tokenHash: string): Promise<SessionAccountSnapshot>;
@@ -609,7 +610,7 @@ export class FileCommunityStore implements CommunityStore {
     if (!fs.existsSync(this.filename)) return Promise.resolve(emptyCommunityState());
     return Promise.resolve(validate(JSON.parse(fs.readFileSync(this.filename, 'utf8'))));
   }
-  view<T>(fn: (state: CommunityState) => T): Promise<T> {
+  view<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T> {
     return this.read().then((state) => fn(state));
   }
   change<T>(fn: (state: CommunityState) => T): Promise<T> {
@@ -691,7 +692,7 @@ export class PostgresCommunityStore implements CommunityStore {
     if (rows.length === 0) return emptyCommunityState();
     return validate(rows[0].doc);
   }
-  async view<T>(fn: (state: CommunityState) => T): Promise<T> {
+  async view<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T> {
     await this.ready;
     const { rows } = await this.pool.query('SELECT doc FROM community_store WHERE id = $1', [PG_DOC_ID]);
     const state = rows.length === 0 ? emptyCommunityState() : validate(rows[0].doc);
