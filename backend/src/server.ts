@@ -7,7 +7,7 @@ import { readLimiter } from './read-limiter.js';
 import express from 'express';
 import cors from 'cors';
 import { createHash, timingSafeEqual } from 'node:crypto';
-import { PORT, NETWORK } from './config.js';
+import { PORT, NETWORK, BUILD_COMMIT, BUILD_IMAGE } from './config.js';
 import { listCampaigns } from './campaigns.js';
 import { CampaignListCache, CAMPAIGN_LIST_CACHE_TTL_MS } from './campaign-list-cache.js';
 import { registerDiscoveryEndpoints } from './sitemap.js';
@@ -348,7 +348,17 @@ app.get('/health', (_req, res) => {
   const communityRequired =
     !!process.env.COMMUNITY_DATABASE_URL || process.env.COMMUNITY_REQUIRE_POSTGRES === '1' || process.env.SOROBAN_JOURNAL_BACKEND === 'postgres';
   const ready = database.ready && (!communityRequired || communityInitialized);
-  res.status(ready ? 200 : 503).json({ ok: ready, database, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
+  res.status(ready ? 200 : 503).json({
+    ok: ready,
+    database,
+    mode: 'soroban',
+    network: NETWORK,
+    productionEligible: false,
+    deploymentIncluded: false,
+    // Build identity for release detection. null means the value was not set at
+    // build time, so the running commit is unknown - do not infer one.
+    build: { commit: BUILD_COMMIT || null, image: BUILD_IMAGE || null },
+  });
 });
 
 // Display cache for the LIST route only: 30s TTL + single-flight; expired
