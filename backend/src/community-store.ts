@@ -615,6 +615,17 @@ export class FileCommunityStore implements CommunityStore {
   private fingerprint(stat: fs.Stats): string {
     return `${stat.dev}:${stat.ino}:${stat.size}:${stat.mtimeMs}:${stat.ctimeMs}`;
   }
+  // One definition of the file contract, shared by read and write: a missing
+  // file is an empty store, and a corrupt document throws rather than being
+  // silently replaced. validate() therefore runs on every miss.
+  private readFresh(): CommunityState {
+    try {
+      return validate(JSON.parse(fs.readFileSync(this.filename, 'utf8')));
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') return emptyCommunityState();
+      throw err;
+    }
+  }
   private load(): CommunityState {
     let stat: fs.Stats;
     try {
@@ -624,7 +635,10 @@ export class FileCommunityStore implements CommunityStore {
       // Other stat failures (EACCES, ELOOP, ENOTDIR) must still surface.
       if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
         this.cache = null;
-        return emptyCommunityState();
+        // Frozen for the same reason as a cached snapshot: every read result
+        // obeys one contract, so an attempted nested write fails loudly here
+        // too. It is a fresh object per call, so nothing is shared.
+        return deepFreeze(emptyCommunityState());
       }
       throw err;
     }
@@ -634,9 +648,7 @@ export class FileCommunityStore implements CommunityStore {
     // caller can mutate a nested record of it. ES modules are strict, so an
     // attempted write throws instead of silently corrupting other readers.
     if (this.cache?.fingerprint === fingerprint) return { ...this.cache.state };
-    // validate() still runs on every miss. A corrupt or hand-edited document
-    // throws here and is never cached, so reads keep failing until repaired.
-    const state = validate(JSON.parse(fs.readFileSync(this.filename, 'utf8')));
+    const state = this.readFresh();
     this.cache = { fingerprint, state: deepFreeze(state) };
     return { ...this.cache.state };
   }
@@ -647,19 +659,10 @@ export class FileCommunityStore implements CommunityStore {
     // Serialize writes within this process; one API process owns the file.
     const run = this.queue.then(async () => {
       // Never mutate or reuse the cached snapshot: other callers hold shallow
-      // copies of it. Invalidate first, then read a fresh parsed document, so
-      // the write starts from current on-disk state.
+      // copies of it. Invalidate first, then read and parse a fresh document,
+      // so the write starts from current on-disk state.
       this.cache = null;
-      let state: CommunityState;
-      try {
-        state = validate(JSON.parse(fs.readFileSync(this.filename, 'utf8')));
-      } catch (err) {
-        // Preserve the legacy contract: writing to a missing file creates the
-        // store from the empty state. A corrupt document still fails the
-        // change (never silently initialized with a skeleton store).
-        if ((err as NodeJS.ErrnoException).code === 'ENOENT') state = emptyCommunityState();
-        else throw err;
-      }
+      const state = this.readFresh();
       const result = fn(state);
       fs.mkdirSync(path.dirname(this.filename), { recursive: true });
       const tmp = `${this.filename}.tmp-${process.pid}`;

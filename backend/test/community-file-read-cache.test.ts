@@ -5,10 +5,10 @@ import os from 'node:os';
 import path from 'node:path';
 import { FileCommunityStore } from '../src/community-store.js';
 
-function tempStore(seed?: string) {
+function tempStore(seed?: string | object) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'community-read-cache-'));
   const file = path.join(dir, 'store.json');
-  if (seed !== undefined) fs.writeFileSync(file, seed);
+  if (seed !== undefined) fs.writeFileSync(file, typeof seed === 'string' ? seed : JSON.stringify(seed));
   return {
     file,
     store: new FileCommunityStore(file),
@@ -96,6 +96,11 @@ test('a missing file reads as empty; a later change creates the store', async ()
   try {
     const empty = await h.store.read();
     assert.deepEqual(empty.comments, {});
+    // The empty read obeys the same contract as a cached snapshot: it is
+    // frozen, so a nested write fails loudly instead of being silently lost.
+    assert.throws(() => {
+      (empty.comments as Record<string, unknown>).leak = {};
+    }, TypeError);
     await h.store.change((state) => {
       state.comments.c1 = {
         id: 'c1',
@@ -116,8 +121,6 @@ test('a missing file reads as empty; a later change creates the store', async ()
 
 test('normalizeRecord mutation on the service read path does not contaminate later reads', async () => {
   const { CommunityService } = await import('../src/community.js');
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'community-normalize-'));
-  const file = path.join(dir, 'store.json');
   const doc = JSON.parse(seededDoc('stable'));
   doc.appropriateness.GKEY = {
     publicKey: 'GKEY',
@@ -133,17 +136,16 @@ test('normalizeRecord mutation on the service read path does not contaminate lat
     reviewSimulationDueAt: null,
     warningAcknowledgedAt: null,
   };
-  fs.writeFileSync(file, JSON.stringify(doc));
-  const store = new FileCommunityStore(file);
-  const service = new CommunityService(store, { retentionDays: 90 });
+  const h = tempStore(doc);
+  const service = new CommunityService(h.store, { retentionDays: 90 });
   try {
     const first = await service.getAppropriateness({ publicKey: 'GKEY', displayName: null, createdAt: 1 });
     assert.equal(first?.outcome, 'knowledge_check_passed');
     // A second read must see the stored legacy value, not the normalized copy.
-    const raw = await store.read();
+    const raw = await h.store.read();
     assert.equal(raw.appropriateness.GKEY.outcome, 'appropriate');
   } finally {
-    fs.rmSync(dir, { recursive: true, force: true });
+    h.cleanup();
   }
 });
 
