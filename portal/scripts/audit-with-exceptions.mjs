@@ -11,7 +11,6 @@
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import { cwd } from 'node:process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const targetDir = resolve(process.argv[2] || join(__dirname, '..'));
