@@ -160,6 +160,11 @@ pub fn repayment_total(
 /// and accrue nothing; the last period carries the whole span. Callers that
 /// need one second or more per period must check the span themselves.
 ///
+/// The returned vector holds exactly `periods` entries, so the caller must
+/// bound `periods`. This crate exposes no entry point that forwards an
+/// unbounded count, and a future contract must validate the count it stores
+/// before calling here.
+///
 /// # Errors
 ///
 /// - [`DebtError::NegativePrincipal`] when `principal < 0`.
@@ -189,7 +194,9 @@ pub fn coupon_schedule(
     let period_count = i128::from(periods);
     let period_secs = span / period_count;
 
-    let mut schedule = Vec::with_capacity(periods as usize);
+    // Grow on demand: `periods` is caller-supplied, so reserving it up front
+    // would turn a large count into one large allocation before any work.
+    let mut schedule = Vec::new();
     let mut previous_cumulative = 0i128;
     let mut index = 1i128;
     while index <= period_count {

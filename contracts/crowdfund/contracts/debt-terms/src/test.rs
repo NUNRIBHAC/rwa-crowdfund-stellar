@@ -37,15 +37,21 @@ fn year_scale_constants_are_the_documented_day_count() {
 
 #[test]
 fn partial_period_rounds_down_and_never_over_credits() {
-    // 100 units at 10 % for one day: 273_972.60... base units floored to
-    // 273_972. The exact fractional remainder is not created.
+    // 100 units at 10 % for one day is 273_972.60... base units. The result
+    // must be the largest whole base-unit amount that does not exceed the exact
+    // value: never the ceiling, and never one base unit of unearned interest.
     let day = 86_400;
     let exact_numerator = 100 * UNIT * 1_000 * day;
-    let expected = exact_numerator / YEAR_SCALE;
-    assert_eq!(expected, 273_972);
-    assert_ne!(exact_numerator % YEAR_SCALE, 0, "case must be inexact");
-    assert_eq!(accrued_interest(100 * UNIT, 1_000, day), Ok(273_972));
-    assert!(273_972 < exact_numerator / YEAR_SCALE + 1);
+    let interest = accrued_interest(100 * UNIT, 1_000, day).unwrap();
+
+    assert_eq!(interest, 273_972);
+    // Not over-credited: the credited amount stays at or below the exact value.
+    assert!(interest * YEAR_SCALE <= exact_numerator);
+    // The case really is inexact, so the credited amount is strictly below it.
+    assert_ne!(exact_numerator % YEAR_SCALE, 0);
+    assert!(interest * YEAR_SCALE < exact_numerator);
+    // Maximal: one more base unit would overshoot the exact value.
+    assert!((interest + 1) * YEAR_SCALE > exact_numerator);
 }
 
 #[test]
