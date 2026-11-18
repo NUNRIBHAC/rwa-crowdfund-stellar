@@ -17,6 +17,10 @@ decision. In particular, none of the following is approved:
 - `i128` base units with 7 decimals;
 - floor rounding, so fractional base units are never created;
 - equal coupon periods with the last period absorbing the remainder seconds;
+- a per-coupon carry of at most one base unit: because each coupon is a
+  difference of floored cumulative amounts, one coupon can exceed the floor of
+  its own period's interest by one base unit when a fraction is carried from an
+  earlier period. The schedule total stays exact, so no value is created;
 - a `MAX_COUPON_PERIODS` cap of 1_000 coupons per schedule, which guards an
   unbounded allocation;
 - the error set in `DebtError`, including refusing an overflowing intermediate
