@@ -44,5 +44,10 @@ frontend/playwright-report/
 frontend/screenshots/
 data/community-store.json
 
+# Local machine-setup overrides: never commit these.
+# vite.config.preview.ts widens dev-server host binding for the local preview
+# proxy, so it must stay out of the repository.
+frontend/vite.config.preview.ts
+
 __pycache__/
 *.pyc
