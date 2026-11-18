@@ -594,7 +594,7 @@ export interface CommunityStore {
   // Read-only snapshot: same validation and empty-document semantics as
   // read(), but callers promise not to mutate state. Useful for best-effort
   // scans that decide whether an expensive locked change() is needed.
-  view<T>(fn: (state: CommunityState) => T): Promise<T>;
+  view?<T>(fn: (state: CommunityState) => T): Promise<T>;
   read(): Promise<CommunityState>;
   // Optional minimal same-snapshot projection. No cache or write is allowed.
   readSessionAccount?(tokenHash: string): Promise<SessionAccountSnapshot>;

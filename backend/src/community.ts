@@ -1508,7 +1508,7 @@ export class CommunityService {
     const now = this.now();
     const retentionMs = this.opts.retentionDays * 24 * 60 * 60 * 1000;
     const hiddenCommentMs = 30 * 24 * 60 * 60 * 1000;
-    const needsWork = await this.store.view((state) => this.hasPrunableContent(state, now, retentionMs, hiddenCommentMs));
+    const needsWork = this.store.view ? await this.store.view((state) => this.hasPrunableContent(state, now, retentionMs, hiddenCommentMs)) : true;
     if (!needsWork) {
       this.limiter.sweep(24 * 60 * 60 * 1000);
       return { removed: 0 };

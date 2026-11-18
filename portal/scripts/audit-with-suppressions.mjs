@@ -22,21 +22,64 @@ try {
   }
 }
 
-const advisories = Object.entries(audit.advisories ?? {});
-const remaining = advisories.filter(([id]) => !SUPPRESSED.has(id));
-const suppressed = advisories.filter(([id]) => SUPPRESSED.has(id));
+// npm audit v11+ uses a `vulnerabilities` object keyed by package name.
+// Each entry has a `severity` and a `via` array that may be package names or
+// advisory objects containing the GHSA URL. Because a single advisory can
+// surface on every package in the dependency tree, we suppress an entry when
+// every advisory reachable from it is in the suppression list.
+const vulnerabilities = audit.vulnerabilities ?? {};
+
+const advisoryUrlToId = (url) => {
+  for (const id of SUPPRESSED) {
+    if (url.includes(id)) return id;
+  }
+  return null;
+};
+
+const SEVERITIES = new Set(['high', 'critical']);
+
+const collectAdvisories = (name, seen = new Set()) => {
+  if (seen.has(name)) return [];
+  seen.add(name);
+  const info = vulnerabilities[name];
+  if (!info || !SEVERITIES.has(info.severity)) return [];
+  const urls = [];
+  for (const v of Array.isArray(info.via) ? info.via : []) {
+    if (v != null && typeof v === 'object' && typeof v.url === 'string') {
+      if (SEVERITIES.has(v.severity)) urls.push(v.url);
+    } else if (typeof v === 'string' && v !== name) {
+      urls.push(...collectAdvisories(v, seen));
+    }
+  }
+  return urls;
+};
+
+const remaining = [];
+const suppressed = [];
+
+for (const [name, info] of Object.entries(vulnerabilities)) {
+  if (info.severity !== 'high' && info.severity !== 'critical') continue;
+  const urls = collectAdvisories(name, new Set());
+  const ids = urls.map(advisoryUrlToId).filter(Boolean);
+  const isSuppressed = urls.length > 0 && ids.length === urls.length;
+  if (isSuppressed) {
+    suppressed.push({ name, title: info.title ?? ids[0] ?? name });
+  } else {
+    remaining.push({ name, severity: info.severity, title: info.title ?? name, urls });
+  }
+}
 
 if (suppressed.length) {
-  console.log(`Suppressed ${suppressed.length} known advisory with no upstream fix:`);
-  for (const [id, info] of suppressed) {
-    console.log(`  - ${id}: ${info.title ?? info.module_name ?? 'n/a'}`);
+  console.log(`Suppressed ${suppressed.length} known advisory/advisories with no upstream fix:`);
+  for (const { name, title } of suppressed) {
+    console.log(`  - ${name}: ${title}`);
   }
 }
 
 if (remaining.length) {
-  console.error(`\n${remaining.length} high/critical advisory(ies) remain:`);
-  for (const [id, info] of remaining) {
-    console.error(`  - ${id}: ${info.title ?? info.module_name ?? 'n/a'}`);
+  console.error(`\n${remaining.length} high/critical advisory/advisories remain:`);
+  for (const { name, severity, title } of remaining) {
+    console.error(`  - ${name} (${severity}): ${title}`);
   }
   process.exit(1);
 }
