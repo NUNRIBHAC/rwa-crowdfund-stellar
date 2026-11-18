@@ -82,11 +82,11 @@ pub enum DebtError {
     /// A coupon schedule asked for zero periods.
     PeriodsZero = 3,
     /// A coupon schedule asked for more than [`MAX_COUPON_PERIODS`] periods.
-    PeriodsTooMany = 6,
+    PeriodsTooMany = 4,
     /// A coupon schedule needs maturity strictly after start.
-    MaturityNotAfterStart = 4,
+    MaturityNotAfterStart = 5,
     /// An intermediate product did not fit `i128`.
-    Overflow = 5,
+    Overflow = 6,
 }
 
 /// Interest accrued on `principal` over `elapsed_secs`.
