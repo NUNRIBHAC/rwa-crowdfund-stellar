@@ -598,17 +598,68 @@ export interface CommunityStore {
   readOwnSessions?(publicKey: string): Promise<Session[]>;
 }
 
+function deepFreeze<T>(value: T): T {
+  if (value === null || typeof value !== 'object' || Object.isFrozen(value)) return value;
+  Object.freeze(value);
+  for (const key of Object.keys(value as Record<string, unknown>)) deepFreeze((value as Record<string, unknown>)[key]);
+  return value;
+}
+
 export class FileCommunityStore implements CommunityStore {
   private queue: Promise<unknown> = Promise.resolve();
+  // A validated snapshot keyed by the file identity+version fingerprint. The
+  // fingerprint is checked with one statSync on every read, so an external
+  // edit is visible on the next read without a TTL. No stale window exists.
+  private cache: { fingerprint: string; state: CommunityState } | null = null;
   constructor(public readonly filename: string) {}
+  private fingerprint(stat: fs.Stats): string {
+    return `${stat.dev}:${stat.ino}:${stat.size}:${stat.mtimeMs}:${stat.ctimeMs}`;
+  }
+  private load(): CommunityState {
+    let stat: fs.Stats;
+    try {
+      stat = fs.statSync(this.filename);
+    } catch (err) {
+      // Preserve the old contract: a missing file reads as an empty store.
+      // Other stat failures (EACCES, ELOOP, ENOTDIR) must still surface.
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+        this.cache = null;
+        return emptyCommunityState();
+      }
+      throw err;
+    }
+    if (!stat.isFile()) throw new Error('community store is not a regular file');
+    const fingerprint = this.fingerprint(stat);
+    // A shallow copy is enough because the snapshot below is deep-frozen: no
+    // caller can mutate a nested record of it. ES modules are strict, so an
+    // attempted write throws instead of silently corrupting other readers.
+    if (this.cache?.fingerprint === fingerprint) return { ...this.cache.state };
+    // validate() still runs on every miss. A corrupt or hand-edited document
+    // throws here and is never cached, so reads keep failing until repaired.
+    const state = validate(JSON.parse(fs.readFileSync(this.filename, 'utf8')));
+    this.cache = { fingerprint, state: deepFreeze(state) };
+    return { ...this.cache.state };
+  }
   read(): Promise<CommunityState> {
-    if (!fs.existsSync(this.filename)) return Promise.resolve(emptyCommunityState());
-    return Promise.resolve(validate(JSON.parse(fs.readFileSync(this.filename, 'utf8'))));
+    return Promise.resolve(this.load());
   }
   change<T>(fn: (state: CommunityState) => T): Promise<T> {
     // Serialize writes within this process; one API process owns the file.
     const run = this.queue.then(async () => {
-      const state = await this.read();
+      // Never mutate or reuse the cached snapshot: other callers hold shallow
+      // copies of it. Invalidate first, then read a fresh parsed document, so
+      // the write starts from current on-disk state.
+      this.cache = null;
+      let state: CommunityState;
+      try {
+        state = validate(JSON.parse(fs.readFileSync(this.filename, 'utf8')));
+      } catch (err) {
+        // Preserve the legacy contract: writing to a missing file creates the
+        // store from the empty state. A corrupt document still fails the
+        // change (never silently initialized with a skeleton store).
+        if ((err as NodeJS.ErrnoException).code === 'ENOENT') state = emptyCommunityState();
+        else throw err;
+      }
       const result = fn(state);
       fs.mkdirSync(path.dirname(this.filename), { recursive: true });
       const tmp = `${this.filename}.tmp-${process.pid}`;
