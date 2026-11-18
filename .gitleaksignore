@@ -11,3 +11,9 @@ ee3307f74b349e8de402de8b53974e3218168233:docs/soroban-flow.md:generic-api-key:32
 # PR 200: exact public SHA256 pins, verified against the two packaged Wasm files.
 0d2fee6dd512248ff2b54a17920d7100996a09c5:backend/src/soroban.ts:generic-api-key:1126
 0d2fee6dd512248ff2b54a17920d7100996a09c5:backend/src/soroban.ts:generic-api-key:1127
+# Test fixture: a public testnet contract address in a test-only registry
+# entry, no credential. The rule keys on the identifier ending in "TOKEN"
+# beside a high-entropy value. The next commit removes the literal and
+# derives the address with StrKey.encodeContract; this fingerprint covers
+# the commit that still contains it.
+0d848f47615f6587f9c9cca56f5380841758258f:backend/test/sitemap-registry-ids.test.ts:generic-api-key:21
