@@ -13,7 +13,7 @@ export default tseslint.config(
       '**/node_modules/',
       '**/coverage/',
       'portal/.docusaurus/',
-      'portal/build*/',
+      'portal/build/',
       'contracts/',
       'docs/',
       'backend/test/fixtures/',
