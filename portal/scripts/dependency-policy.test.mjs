@@ -21,7 +21,7 @@ test('CI explicitly audits and builds the independently locked public/private po
   assert.match(workflow, /node portal\/scripts\/check-build-isolation.mjs/);
   // The audit step runs a wrapper script that still executes npm audit but
   // can suppress known advisories that have no upstream fix.
-  assert.match(workflow, /node portal\/scripts\/audit-with-suppressions.mjs/);
+  assert.match(workflow, /node scripts\/audit-with-suppressions\.mjs portal/);
 });
 
 test('patched serializer and worker retain the portal call shapes', async () => {

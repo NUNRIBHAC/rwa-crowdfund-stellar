@@ -1,17 +1,26 @@
 // Run npm audit and suppress advisories that have no upstream fix.
 // This keeps the CI gate useful: any new high/critical advisory still fails.
 // Suppressed advisories must document the accepted risk and the tracking issue.
+//
+// Usage: node scripts/audit-with-suppressions.mjs [directory]
+// The directory defaults to the repository root. Pass "portal" to audit the
+// independently locked docs portal.
 import { execSync } from 'node:child_process';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // GHSA-fc5q-39xc-vjpf: picomatch ReDoS. Affects all current versions
-// (<= 4.0.7); no patched release exists yet. The portal is a static docs
-// build that does not evaluate untrusted glob patterns at runtime.
-// Tracking: upgrade picomatch once a fixed version (> 4.0.7) is released.
+// (<= 4.0.7); no patched release exists yet. The build tools only evaluate
+// repository-owned glob patterns, never untrusted input.
+// Tracking: remove this entry once a fixed version (> 4.0.7) is released.
 const SUPPRESSED = new Set(['GHSA-fc5q-39xc-vjpf']);
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const targetDir = process.argv[2] ? resolve(repoRoot, process.argv[2]) : repoRoot;
 
 let audit;
 try {
-  const out = execSync('npm audit --json --audit-level=high', { cwd: new URL('..', import.meta.url), encoding: 'utf8' });
+  const out = execSync('npm audit --json --audit-level=high', { cwd: targetDir, encoding: 'utf8' });
   audit = JSON.parse(out);
 } catch (err) {
   try {
@@ -28,6 +37,7 @@ try {
 // surface on every package in the dependency tree, we suppress an entry when
 // every advisory reachable from it is in the suppression list.
 const vulnerabilities = audit.vulnerabilities ?? {};
+const SEVERITIES = new Set(['high', 'critical']);
 
 const advisoryUrlToId = (url) => {
   for (const id of SUPPRESSED) {
@@ -35,8 +45,6 @@ const advisoryUrlToId = (url) => {
   }
   return null;
 };
-
-const SEVERITIES = new Set(['high', 'critical']);
 
 const collectAdvisories = (name, seen = new Set()) => {
   if (seen.has(name)) return [];
@@ -58,7 +66,7 @@ const remaining = [];
 const suppressed = [];
 
 for (const [name, info] of Object.entries(vulnerabilities)) {
-  if (info.severity !== 'high' && info.severity !== 'critical') continue;
+  if (!SEVERITIES.has(info.severity)) continue;
   const urls = collectAdvisories(name, new Set());
   const ids = urls.map(advisoryUrlToId).filter(Boolean);
   const isSuppressed = urls.length > 0 && ids.length === urls.length;
