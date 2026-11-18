@@ -140,9 +140,16 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
 };
 
 // Machine-readable discovery: sitemap.xml + robots.txt (see sitemap.ts).
-// Live campaign URLs come from the Soroban registry (same source as /api/campaigns),
-// not the legacy file store.
-registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCampaigns()).map((c) => c.id) });
+// Campaign URLs come from the Soroban registry (the same source /api/campaigns
+// lists from), not the legacy file store.
+//
+// The sitemap needs campaign IDS ONLY, so it reads the registry without any
+// chain call. Reading live chain state here cost one batched Soroban RPC round
+// trip per request (measured p50 23 ms in the sandbox) to obtain data that was
+// then discarded. A registry entry therefore appears in the sitemap even when
+// its contract state cannot be read; the page itself still fails closed,
+// because /api/campaigns keeps reading live chain state.
+registerDiscoveryEndpoints(app, { listCampaignIds: async () => sorobanRegisteredCampaigns().map((c) => c.id) });
 // Accounts, community, support, issuer applications and campaign metadata.
 // The router must be registered synchronously: Express matches in
 // registration order, and a router app.use()d only after the async store boot
