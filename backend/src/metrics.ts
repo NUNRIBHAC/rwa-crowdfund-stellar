@@ -173,12 +173,12 @@ export function safeHttpMethod(method: string | undefined): string {
 }
 
 export function safeRoutePath(req: Request): string {
+  // Use the matched Express route path, which already contains :param
+  // placeholders. Requests that end before routing (body-parse failures,
+  // limiter rejections, 404s) collapse to one coarse label so an attacker
+  // cannot create a time series per arbitrary path.
   const routePath = (req.route?.path as string | undefined) ?? '';
-  if (routePath) return routePath;
-  return req.path
-    .replace(/\/[0-9a-f]{64,}/gi, '/:hash')
-    .replace(/\/[0-9a-f]{32,}/gi, '/:id')
-    .replace(/\/\d+/g, '/:id');
+  return routePath || 'unmatched';
 }
 
 export function resetMetricsForTests() {

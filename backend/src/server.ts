@@ -119,12 +119,12 @@ app.use(
     allowedHeaders: ['Content-Type', 'x-admin-key', 'authorization'],
   }),
 );
-app.use(express.json({ limit: '64kb' }));
-app.use(readLimiter());
-
-// Request-level metrics. Routing has already run when the response finishes,
-// so req.route.path is available and used to avoid high path cardinality.
-// No request bodies, query strings, or wallet addresses are captured.
+// Request-level metrics. Registered before body parsing and the read limiter
+// so every response is recorded, including 400 body-parse failures and 429
+// limiter rejections. Routing has already run when the response finishes, so
+// req.route.path is available; requests that end before routing use
+// 'unmatched'. No request bodies, query strings, or wallet addresses are
+// captured.
 app.use((req, res, next) => {
   const start = process.hrtime.bigint();
   const originalJson = res.json.bind(res);
@@ -142,6 +142,9 @@ app.use((req, res, next) => {
   });
   next();
 });
+
+app.use(express.json({ limit: '64kb' }));
+app.use(readLimiter());
 
 // Admin gate for operations that move money or spend platform/demo funds
 // (create, demo invest, finalize, refund, retry, seed). Demo-grade shared

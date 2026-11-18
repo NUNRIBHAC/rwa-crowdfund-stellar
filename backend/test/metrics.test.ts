@@ -78,6 +78,85 @@ test('metrics endpoint exposes request counts, durations, error codes and db poo
   }
 });
 
+test('rate-limited 429 responses are counted even when the limiter rejects before routing', async () => {
+  withAdmin('test-admin-key');
+  const dir = createCommunityTestDirectory();
+  process.env.COMMUNITY_STORE_PATH = join(dir, 'fixture.json');
+  process.env.READ_LIMIT_PER_MIN = '1';
+  process.env.READ_LIMIT_WINDOW_MS = '60000';
+  process.env.TRUST_PROXY_DEPTH = '1';
+  resetMetricsForTests();
+  resetDatabaseRuntimeForTests();
+  const { app } = await import('../src/server.js');
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise<void>((resolve) => server.once('listening', resolve));
+  const address = server.address() as import('node:net').AddressInfo;
+  const base = `http://127.0.0.1:${address.port}`;
+  // A unique forwarded IP isolates this test from limiter state created by
+  // other tests in the same process.
+  const ip = '198.51.100.42';
+  try {
+    const first = await fetch(`${base}/api/news`, { headers: { 'x-forwarded-for': ip } });
+    assert.notEqual(first.status, 429, 'first request should pass the limiter');
+    const second = await fetch(`${base}/api/news`, { headers: { 'x-forwarded-for': ip } });
+    assert.equal(second.status, 429);
+
+    const metricsResponse = await fetch(`${base}/api/operator/metrics`, { headers: { 'x-admin-key': 'test-admin-key' } });
+    assert.equal(metricsResponse.status, 200);
+    const body = await metricsResponse.text();
+
+    // The limiter rejects before routing, so the route label is the coarse fallback.
+    assert.match(body, /http_requests_total\{method="GET",route="unmatched",status_code="429"\} 1/);
+    assert.match(body, /api_errors_total\{code="rate_limited"\} 1/);
+  } finally {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+    delete process.env.COMMUNITY_STORE_PATH;
+    delete process.env.READ_LIMIT_PER_MIN;
+    delete process.env.READ_LIMIT_WINDOW_MS;
+    delete process.env.TRUST_PROXY_DEPTH;
+    delete process.env.ADMIN_SECRET;
+    resetMetricsForTests();
+    resetDatabaseRuntimeForTests();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('malformed JSON 400 responses are counted before any route runs', async () => {
+  withAdmin('test-admin-key');
+  const dir = createCommunityTestDirectory();
+  process.env.COMMUNITY_STORE_PATH = join(dir, 'fixture.json');
+  resetMetricsForTests();
+  resetDatabaseRuntimeForTests();
+  const { app } = await import('../src/server.js');
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise<void>((resolve) => server.once('listening', resolve));
+  const address = server.address() as import('node:net').AddressInfo;
+  const base = `http://127.0.0.1:${address.port}`;
+  try {
+    const response = await fetch(`${base}/api/not-a-real-route`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{invalid',
+    });
+    assert.equal(response.status, 400);
+
+    const metricsResponse = await fetch(`${base}/api/operator/metrics`, { headers: { 'x-admin-key': 'test-admin-key' } });
+    assert.equal(metricsResponse.status, 200);
+    const body = await metricsResponse.text();
+
+    // Body parsing runs before routing, so the route label is the coarse fallback.
+    assert.match(body, /http_requests_total\{method="POST",route="unmatched",status_code="400"\} 1/);
+    assert.match(body, /api_errors_total\{code="invalid_input"\} 1/);
+  } finally {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+    delete process.env.COMMUNITY_STORE_PATH;
+    delete process.env.ADMIN_SECRET;
+    resetMetricsForTests();
+    resetDatabaseRuntimeForTests();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('metrics endpoint requires admin key', async () => {
   withAdmin('test-admin-key');
   const dir = createCommunityTestDirectory();
