@@ -34,9 +34,11 @@ const PICOMATCH_ADVISORY_PKG = 'picomatch';
 // are listed separately with string-only `via` chains (e.g. ["picomatch"] or
 // ["micromatch"]) and add no new advisory objects.
 //
-// The gate passes only when every advisory object in the whole document is
-// picomatch. If any other advisory object exists, or no advisory object can be
-// attributed, the gate fails closed.
+// The gate passes only when every advisory object in the whole document is the
+// single tolerated picomatch advisory (npm id 1247710). Any other advisory
+// object - including a different advisory on the picomatch package itself -
+// fails the gate, as does a document where no advisory object can be
+// attributed.
 export function classifyAudit(data) {
   if (data?.error) {
     const code = data.error.code || data.error.summary || 'audit error';
@@ -49,14 +51,28 @@ export function classifyAudit(data) {
   }
 
   const roots = collectRootAdvisories(highOrCritical);
-  if (roots.size === 0) {
+  if (roots.length === 0) {
     return {
       status: 'fail',
       reason: 'high/critical advisories present but their root cause could not be attributed',
     };
   }
 
-  const unrelated = [...roots.values()].filter((a) => a.name !== PICOMATCH_ADVISORY_PKG && a.source !== PICOMATCH_ADVISORY_ID);
+  // Tolerate one advisory id (1247710), not one package name. A picomatch
+  // object whose advisory id is unknown is tolerated only when it is the sole
+  // advisory object for that package; any second object for the same package
+  // fails closed, because its id cannot be confirmed.
+  const perPackage = new Map();
+  for (const advisory of roots) {
+    perPackage.set(advisory.name, (perPackage.get(advisory.name) || 0) + 1);
+  }
+  const tolerated = (a) => {
+    if (a.source === PICOMATCH_ADVISORY_ID) return true;
+    if (a.name !== PICOMATCH_ADVISORY_PKG) return false;
+    return a.source === undefined && perPackage.get(a.name) === 1;
+  };
+
+  const unrelated = roots.filter((a) => !tolerated(a));
   if (unrelated.length === 0) {
     return { status: 'pass', reason: undefined };
   }
@@ -69,18 +85,23 @@ export function classifyAudit(data) {
 }
 
 // Collect the distinct advisory objects (the root causes) named anywhere in
-// the `via` arrays of the given high/critical vulnerability entries.
+// the `via` arrays of the given high/critical vulnerability entries. Objects
+// are keyed by advisory id when present so that two different advisories on
+// the same package are both kept.
 function collectRootAdvisories(entries) {
   const roots = new Map();
   for (const entry of entries) {
     const via = Array.isArray(entry.via) ? entry.via : [];
     for (const hop of via) {
       if (typeof hop === 'object' && hop !== null && hop.name) {
-        roots.set(hop.name, { name: hop.name, source: hop.source, severity: hop.severity || entry.severity });
+        const key = hop.source !== undefined ? `id:${hop.source}` : `name:${hop.name}`;
+        if (!roots.has(key)) {
+          roots.set(key, { name: hop.name, source: hop.source, severity: hop.severity || entry.severity });
+        }
       }
     }
   }
-  return roots;
+  return [...roots.values()];
 }
 
 async function main() {
