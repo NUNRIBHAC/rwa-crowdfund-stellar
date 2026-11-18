@@ -57,6 +57,15 @@ pub const SECONDS_PER_YEAR: i128 = 365 * 86_400;
 /// Denominator that converts `principal * rate_bps * seconds` into base units.
 const YEAR_SCALE: i128 = BPS_DENOMINATOR * SECONDS_PER_YEAR;
 
+/// Largest coupon count [`coupon_schedule`] accepts.
+///
+/// This is a scaffolding guard against an unbounded allocation, not a ratified
+/// policy value. Without it a caller-supplied `u32` could ask for a vector of
+/// billions of coupons and exhaust memory. An approved debt-instrument
+/// specification must set the real maximum, and this placeholder must then
+/// change with it.
+pub const MAX_COUPON_PERIODS: u32 = 1_000;
+
 /// Reasons a debt-servicing computation is refused.
 ///
 /// This is a plain enum, not a `#[contracterror]`, because this crate has no
@@ -72,6 +81,8 @@ pub enum DebtError {
     NegativeRateOrTime = 2,
     /// A coupon schedule asked for zero periods.
     PeriodsZero = 3,
+    /// A coupon schedule asked for more than [`MAX_COUPON_PERIODS`] periods.
+    PeriodsTooMany = 6,
     /// A coupon schedule needs maturity strictly after start.
     MaturityNotAfterStart = 4,
     /// An intermediate product did not fit `i128`.
@@ -160,19 +171,26 @@ pub fn repayment_total(
 /// and accrue nothing; the last period carries the whole span. Callers that
 /// need one second or more per period must check the span themselves.
 ///
-/// The returned vector holds exactly `periods` entries, so the caller must
-/// bound `periods`. This crate exposes no entry point that forwards an
-/// unbounded count, and a future contract must validate the count it stores
-/// before calling here.
+/// The returned vector holds exactly `periods` entries. [`MAX_COUPON_PERIODS`]
+/// caps the count so a caller cannot ask for an unbounded allocation; that cap
+/// is a scaffolding placeholder, not a ratified policy value.
+///
+/// One coupon can exceed the floor of its own period's interest by at most one
+/// base unit, because a fraction carried from an earlier period is settled
+/// later. The schedule total stays exact, so no value is created overall.
 ///
 /// # Errors
 ///
-/// - [`DebtError::NegativePrincipal`] when `principal < 0`.
-/// - [`DebtError::NegativeRateOrTime`] when `rate_bps`, `start_ts`, or
-///   `maturity_ts` is negative.
-/// - [`DebtError::PeriodsZero`] when `periods == 0`.
-/// - [`DebtError::MaturityNotAfterStart`] when `maturity_ts <= start_ts`.
-/// - [`DebtError::Overflow`] when an intermediate product does not fit `i128`.
+/// Checks run in this order, so a value that is invalid in several ways gets
+/// the first error listed:
+///
+/// 1. [`DebtError::NegativePrincipal`] when `principal < 0`.
+/// 2. [`DebtError::NegativeRateOrTime`] when `rate_bps`, `start_ts`, or
+///    `maturity_ts` is negative.
+/// 3. [`DebtError::PeriodsZero`] when `periods == 0`.
+/// 4. [`DebtError::PeriodsTooMany`] when `periods > MAX_COUPON_PERIODS`.
+/// 5. [`DebtError::MaturityNotAfterStart`] when `maturity_ts <= start_ts`.
+/// 6. [`DebtError::Overflow`] when an intermediate product does not fit `i128`.
 pub fn coupon_schedule(
     principal: i128,
     rate_bps: i128,
@@ -181,11 +199,14 @@ pub fn coupon_schedule(
     periods: u32,
 ) -> Result<Vec<i128>, DebtError> {
     validate_terms(principal, rate_bps)?;
+    validate_time(start_ts)?;
+    validate_time(maturity_ts)?;
     if periods == 0 {
         return Err(DebtError::PeriodsZero);
     }
-    validate_time(start_ts)?;
-    validate_time(maturity_ts)?;
+    if periods > MAX_COUPON_PERIODS {
+        return Err(DebtError::PeriodsTooMany);
+    }
     if maturity_ts <= start_ts {
         return Err(DebtError::MaturityNotAfterStart);
     }

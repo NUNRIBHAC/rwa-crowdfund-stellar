@@ -17,6 +17,8 @@ decision. In particular, none of the following is approved:
 - `i128` base units with 7 decimals;
 - floor rounding, so fractional base units are never created;
 - equal coupon periods with the last period absorbing the remainder seconds;
+- a `MAX_COUPON_PERIODS` cap of 1_000 coupons per schedule, which guards an
+  unbounded allocation;
 - the error set in `DebtError`, including refusing an overflowing intermediate
   product rather than wrapping or saturating.
 

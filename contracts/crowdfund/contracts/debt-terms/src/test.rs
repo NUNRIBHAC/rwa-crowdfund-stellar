@@ -153,6 +153,45 @@ fn zero_periods_is_refused() {
 }
 
 #[test]
+fn period_count_is_capped_and_the_boundary_still_works() {
+    let start = 1_700_000_000;
+    let maturity = start + ONE_YEAR;
+
+    assert_eq!(
+        coupon_schedule(PRINCIPAL_1K, 500, start, maturity, MAX_COUPON_PERIODS + 1),
+        Err(DebtError::PeriodsTooMany)
+    );
+    assert_eq!(
+        coupon_schedule(PRINCIPAL_1K, 500, start, maturity, u32::MAX),
+        Err(DebtError::PeriodsTooMany)
+    );
+
+    // The documented maximum itself is accepted and returns that many coupons.
+    let schedule = coupon_schedule(PRINCIPAL_1K, 500, start, maturity, MAX_COUPON_PERIODS)
+        .expect("the cap boundary must work");
+    assert_eq!(schedule.len(), MAX_COUPON_PERIODS as usize);
+    let total: i128 = schedule.iter().sum();
+    assert_eq!(
+        total,
+        accrued_interest(PRINCIPAL_1K, 500, maturity - start).unwrap()
+    );
+}
+
+#[test]
+fn sign_errors_are_reported_before_structural_ones() {
+    // Both the timestamp and the period count are invalid; the sign check wins
+    // because the documentation promises that order.
+    assert_eq!(
+        coupon_schedule(PRINCIPAL_1K, 500, -1, 1_700_000_000, 0),
+        Err(DebtError::NegativeRateOrTime)
+    );
+    assert_eq!(
+        coupon_schedule(PRINCIPAL_1K, 500, 1_700_000_000, -1, 0),
+        Err(DebtError::NegativeRateOrTime)
+    );
+}
+
+#[test]
 fn coupon_amount_matches_accrued_interest_for_the_same_period() {
     let period = ONE_YEAR / 12;
     assert_eq!(
@@ -277,6 +316,20 @@ fn overflow_scale_inputs_return_overflow_instead_of_panicking() {
     // A repayment whose sum would exceed i128::MAX is refused too.
     assert_eq!(
         repayment_total(i128::MAX, 10_000, ONE_YEAR),
+        Err(DebtError::Overflow)
+    );
+}
+
+#[test]
+fn repayment_sum_overflow_is_refused() {
+    // The interest product fits, but principal + interest does not, so the
+    // failure must come from the checked addition.
+    let principal = i128::MAX - 1;
+    let interest = accrued_interest(principal, 1, 1).unwrap();
+    assert!(interest > 0, "the add path must actually be reached");
+    assert!(principal.checked_add(interest).is_none());
+    assert_eq!(
+        repayment_total(principal, 1, 1),
         Err(DebtError::Overflow)
     );
 }
