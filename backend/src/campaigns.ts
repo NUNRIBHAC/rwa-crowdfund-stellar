@@ -341,7 +341,7 @@ async function executePayment(
     } catch (e) {
       slot.error = `invalid persisted payment intent: ${errMsg(e)}; holding without broadcast or rebuild`;
       persist();
-      throw new Error(slot.error);
+      throw new Error(slot.error, { cause: e });
     }
     try {
       const hash = await submitSignedXdr(slot.xdr);
@@ -362,11 +362,11 @@ async function executePayment(
               ? `submission failed (${code}) and ${slot.hash} is recorded on the ledger as failed; holding the intent for manual reconciliation`
               : `submission failed (${code}) and ${slot.hash} is not on the ledger in queried history, which is not proof it cannot execute; holding the intent for manual reconciliation`;
         persist();
-        throw new Error(slot.error);
+        throw new Error(slot.error, { cause: e });
       }
       slot.error = `submission uncertain: ${errMsg(e)} (safe to retry: the identical signed tx is resubmitted)`;
       persist();
-      throw new Error(slot.error);
+      throw new Error(slot.error, { cause: e });
     }
   }
 }
