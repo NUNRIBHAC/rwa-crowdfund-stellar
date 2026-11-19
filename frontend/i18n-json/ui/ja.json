@@ -318,13 +318,13 @@
     "cancelUnsigned": "未署名のトランザクションをキャンセル",
     "clearConfirmed": "確定済みの記録をクリア",
     "statusLabels": {
-      "BUILT": "BUILT",
-      "SIGNED": "SIGNED",
-      "PENDING": "PENDING",
-      "SUCCESS": "SUCCESS",
-      "FAILED": "FAILED",
-      "NOT_FOUND": "NOT_FOUND",
-      "CANCELLED_UNSIGNED": "CANCELLED_UNSIGNED"
+      "BUILT": "準備済み",
+      "SIGNED": "署名済み",
+      "PENDING": "保留中",
+      "SUCCESS": "確定済み",
+      "FAILED": "失敗",
+      "NOT_FOUND": "未検出",
+      "CANCELLED_UNSIGNED": "未署名キャンセル"
     },
     "actionLabels": {
       "contribute": "出資",
