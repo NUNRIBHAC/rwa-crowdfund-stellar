@@ -1,12 +1,47 @@
 name: Tests and builds
+
 on:
   pull_request:
   push:
     branches: [main, deploy/testnet-demo, hardening-and-infrastructure-prototype]
+
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - name: App builder command safety tests
+        run: python3 -m unittest discover -s infra/tests -p 'test_*.py'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - name: Verify archived font digests and byte counts
+        run: python3 scripts/check-font-archive.py
+      - name: Public media export and origin safety tests
+        run: node --test infra/media-static/export.test.mjs infra/media-worker/worker.test.mjs backend/scripts/media-gateway.test.mjs backend/scripts/media-index.test.mjs
+      - name: Country-only Worker privacy and routing tests
+        run: node --test infra/country-worker/worker.test.mjs
+      - run: npm test
+      - name: i18n JSON projection is in sync (Weblate)
+        run: npm run i18n:check --prefix frontend
+      - run: npm run build && node backend/scripts/media-index.mjs
+      - name: Production host integration (built API + SPA)
+        run: NODE_ENV=test node --import tsx --test backend/test/production-host.integration.ts
+      - name: Dependency audit (fails on high/critical advisories)
+        run: npm audit --audit-level=high
+
+  rate-postgres:
     runs-on: ubuntu-latest
     services:
       rate-test-postgres:
@@ -25,29 +60,12 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-      - name: App builder command safety tests
-        run: python3 -m unittest discover -s infra/tests -p 'test_*.py'
       - run: npm ci
-      - run: npm run lint
-      - run: npm run format:check
-      - name: Verify archived font digests and byte counts
-        run: python3 scripts/check-font-archive.py
-      - name: Public media export and origin safety tests
-        run: node --test infra/media-static/export.test.mjs infra/media-worker/worker.test.mjs backend/scripts/media-gateway.test.mjs backend/scripts/media-index.test.mjs
-      - name: Country-only Worker privacy and routing tests
-        run: node --test infra/country-worker/worker.test.mjs
       - name: Isolated Postgres rate-retention integration
         run: NODE_ENV=test node --import tsx --test backend/test/journal-rate.postgres.integration.ts
         env:
           JOURNAL_RATE_TEST_DATABASE_URL: postgresql://postgres@127.0.0.1:5432/f2_test
-      - run: npm test
-      - name: i18n JSON projection is in sync (Weblate)
-        run: npm run i18n:check --prefix frontend
-      - run: npm run build && node backend/scripts/media-index.mjs
-      - name: Production host integration (built API + SPA)
-        run: NODE_ENV=test node --import tsx --test backend/test/production-host.integration.ts
-      - name: Dependency audit (fails on high/critical advisories)
-        run: npm audit --audit-level=high
+
   portal:
     runs-on: ubuntu-latest
     steps:
@@ -67,6 +85,7 @@ jobs:
         run: node portal/scripts/check-build-isolation.mjs public
       - name: Build internal portal and verify private canary
         run: node portal/scripts/check-build-isolation.mjs internal
+
   soroban:
     runs-on: ubuntu-latest
     defaults:
@@ -74,14 +93,48 @@ jobs:
         working-directory: contracts/crowdfund
     steps:
       - uses: actions/checkout@v7
-      - name: Install pinned Rust toolchain and target
-        run: rustup toolchain install 1.99.1 --profile minimal --target wasm32v1-none
+
+      - name: Cache Rust toolchain, dependencies, and build
+        id: rust-cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.rustup
+            ~/.cargo/registry
+            ~/.cargo/bin
+            contracts/crowdfund/target
+          key: ${{ runner.os }}-soroban-v2-${{ hashFiles('contracts/crowdfund/Cargo.lock') }}-${{ hashFiles('contracts/crowdfund/rust-toolchain.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-soroban-${{ hashFiles('contracts/crowdfund/Cargo.lock') }}-
+            ${{ runner.os }}-soroban-
+
+      - name: Ensure pinned Rust toolchain and Wasm target
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup target add --toolchain 1.99.1 wasm32v1-none
+          rustup target list --installed --toolchain 1.99.1 | grep -Fx wasm32v1-none
+
       - run: cargo test --locked
-      - name: Install pinned cargo-audit
-        run: cargo install cargo-audit --locked --version 0.22.2
+
+      - name: Ensure pinned cargo-audit
+        run: |
+          if ! cargo-audit --version 2>/dev/null | grep -Fx 'cargo-audit 0.22.2'; then
+            cargo install cargo-audit --locked --version 0.22.2 --force
+          fi
+          cargo-audit --version | grep -Fx 'cargo-audit 0.22.2'
+
       - name: Audit Rust dependencies against RustSec advisories
         run: cargo audit
-      - name: Install pinned Stellar CLI release binary
+
+      - name: Cache Stellar CLI
+        id: stellar-cache
+        uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/stellar-cli
+          key: ${{ runner.os }}-stellar-cli-28.1.0
+
+      - name: Download pinned Stellar CLI release binary
+        if: steps.stellar-cache.outputs.cache-hit != 'true'
         run: |
           curl --fail --location --retry 3 --proto '=https' --tlsv1.2 \
             https://github.com/stellar/stellar-cli/releases/download/v28.1.0/stellar-cli-28.1.0-x86_64-unknown-linux-gnu.tar.gz \
@@ -89,24 +142,40 @@ jobs:
           echo 'c1680deee94301d33ada7a17f98411e642a4248c727afbd2e43050d345746462  /tmp/stellar-cli.tar.gz' | sha256sum -c -
           mkdir -p "$RUNNER_TEMP/stellar-cli"
           tar -xzf /tmp/stellar-cli.tar.gz -C "$RUNNER_TEMP/stellar-cli"
+
+      - name: Add Stellar CLI to PATH
+        run: |
           "$RUNNER_TEMP/stellar-cli/stellar" --version
           echo "$RUNNER_TEMP/stellar-cli" >> "$GITHUB_PATH"
+
       - run: stellar contract build
+
       - name: Verify SEP-41 share-token artifact
         run: |
           echo '6010fc62cf08ee606a2687bd4877790c6d131cbd57936beb21e592d179b818e7  target/wasm32v1-none/release/share_token.wasm' | sha256sum -c -
           cmp target/wasm32v1-none/release/share_token.wasm ../../backend/wasm/v2-share-token-sep41.wasm
+
       - name: Verify API-pinned Wasm fixture
         run: |
           echo '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564  target/wasm32v1-none/release/crowdfund.wasm' | sha256sum -c -
           cmp target/wasm32v1-none/release/crowdfund.wasm ../../backend/test/fixtures/reviewed-crowdfund.wasm
+
   gitleaks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: Install pinned gitleaks binary
+
+      - name: Cache gitleaks
+        id: gitleaks-cache
+        uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/gitleaks
+          key: ${{ runner.os }}-gitleaks-8.30.1
+
+      - name: Download pinned gitleaks binary
+        if: steps.gitleaks-cache.outputs.cache-hit != 'true'
         run: |
           curl --fail --location --retry 3 --proto '=https' --tlsv1.2 \
             https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz \
@@ -114,7 +183,10 @@ jobs:
           echo '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  /tmp/gitleaks.tar.gz' | sha256sum -c -
           mkdir -p "$RUNNER_TEMP/gitleaks"
           tar -xzf /tmp/gitleaks.tar.gz -C "$RUNNER_TEMP/gitleaks"
-          "$RUNNER_TEMP/gitleaks/gitleaks" version
+
+      - name: Print gitleaks version
+        run: '"$RUNNER_TEMP/gitleaks/gitleaks" version'
+
       - name: Scan working tree and full git history
         run: '"$RUNNER_TEMP/gitleaks/gitleaks" git --redact --verbose .'
 
