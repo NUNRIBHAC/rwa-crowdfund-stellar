@@ -352,10 +352,14 @@ export async function sorobanCampaigns(actor?: string): Promise<any[]> {
   const balanceKeys = actor ? entries.map((e) => balanceLedgerKey(e.contractId, actor)) : [];
   const fetched = await ledgerEntriesByKey(client, [...instanceKeys, ...balanceKeys]);
   const indexByEntry = new Map(entries.map((e, i) => [e, i] as const));
+  // Derive the configured asset once per listing, not once per campaign.
+  // Keep this request-local and lazy: later reads still see issuer changes,
+  // and an empty registry does not start requiring a configured issuer.
+  let listingToken: string | undefined;
   return mapLimit(entries, 3, async (e) => {
     const i = indexByEntry.get(e)!;
     const { config, raised, withdrawn } = campaignInstanceFields(fetched.get(instanceKeys[i].toXDR('base64')));
-    if (config.token !== expectedToken()) throw new Error('campaign asset does not match configured testnet USDC');
+    if (config.token !== (listingToken ??= expectedToken())) throw new Error('campaign asset does not match configured testnet USDC');
     // A balance entry present in the response is live by definition and used
     // directly. A MISSING entry is ambiguous - never-contributed zero versus
     // archived state - so it falls back to the simulation, which still
