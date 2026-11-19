@@ -12,11 +12,14 @@ import { Keypair } from '@stellar/stellar-sdk';
 let dir: string;
 let base: string;
 let srv: ReturnType<import('express').Express['listen']>;
+let savedAdminSecret: string | undefined;
 
 before(async () => {
+  savedAdminSecret = process.env.ADMIN_SECRET;
   dir = createCommunityTestDirectory();
   process.env.COMMUNITY_STORE_PATH = join(dir, 'store.json');
   const { app } = await import('../src/server.js');
+  delete process.env.ADMIN_SECRET;
   await new Promise<void>((resolve) => {
     srv = app.listen(0, '127.0.0.1', () => resolve());
   });
@@ -28,6 +31,8 @@ after(async () => {
   await new Promise((resolve) => srv.close(resolve));
   rmSync(dir, { recursive: true, force: true });
   delete process.env.COMMUNITY_STORE_PATH;
+  if (savedAdminSecret === undefined) delete process.env.ADMIN_SECRET;
+  else process.env.ADMIN_SECRET = savedAdminSecret;
 });
 
 test('POST /api/auth/challenge reaches the community router through the real app (not the legacy 410 catch-all)', async () => {
