@@ -9,6 +9,7 @@
 // store, so a community-store outage never takes the proofs down with it.
 import { assertExplicitFileStorePath } from './test-storage-guard.js';
 import fs from 'node:fs';
+import fsp from 'node:fs/promises';
 import path from 'node:path';
 
 export type PendingContribution = {
@@ -120,4 +121,35 @@ export async function drainPendingContributors(deps: {
   }
   const rest = readPending();
   return { drained, pending: rest.length };
+}
+
+// Readiness probe for /health: prove the durable queue directory accepts a
+// write, a read-back and a delete. Only called when PENDING_CONTRIBUTORS_PATH
+// is explicitly configured (the hosted durable-volume setup); the caller
+// caches the result. Bounded by a timeout so a stuck filesystem degrades the
+// readiness answer instead of hanging the endpoint.
+export async function probePendingQueueWritable(timeoutMs = 2_000): Promise<boolean> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<boolean>((resolve) => {
+    timer = setTimeout(() => resolve(false), timeoutMs);
+    timer.unref?.();
+  });
+  const work = (async (): Promise<boolean> => {
+    try {
+      const file = storePath();
+      const probe = `${file}.probe-${process.pid}-${Date.now()}`;
+      await fsp.mkdir(path.dirname(file), { recursive: true });
+      await fsp.writeFile(probe, '[]', { mode: 0o600 });
+      const back = await fsp.readFile(probe, 'utf8');
+      await fsp.unlink(probe);
+      return back === '[]';
+    } catch {
+      return false;
+    }
+  })();
+  try {
+    return await Promise.race([work, timeout]);
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
 }
