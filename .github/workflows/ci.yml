@@ -103,7 +103,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/bin
             contracts/crowdfund/target
-          key: ${{ runner.os }}-soroban-${{ hashFiles('contracts/crowdfund/Cargo.lock') }}-${{ hashFiles('contracts/crowdfund/rust-toolchain.toml') }}
+          key: ${{ runner.os }}-soroban-v2-${{ hashFiles('contracts/crowdfund/Cargo.lock') }}-${{ hashFiles('contracts/crowdfund/rust-toolchain.toml') }}
           restore-keys: |
             ${{ runner.os }}-soroban-${{ hashFiles('contracts/crowdfund/Cargo.lock') }}-
             ${{ runner.os }}-soroban-
@@ -118,10 +118,10 @@ jobs:
 
       - name: Ensure pinned cargo-audit
         run: |
-          if ! cargo audit --version 2>/dev/null | grep -Fx 'cargo-audit 0.22.2'; then
+          if ! cargo-audit --version 2>/dev/null | grep -Fx 'cargo-audit 0.22.2'; then
             cargo install cargo-audit --locked --version 0.22.2 --force
           fi
-          cargo audit --version | grep -Fx 'cargo-audit 0.22.2'
+          cargo-audit --version | grep -Fx 'cargo-audit 0.22.2'
 
       - name: Audit Rust dependencies against RustSec advisories
         run: cargo audit
