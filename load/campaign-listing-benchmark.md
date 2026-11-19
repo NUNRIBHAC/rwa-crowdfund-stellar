@@ -10,12 +10,18 @@ It includes registry validation, ledger-key construction, fixture lookup, XDR de
 It does not start the real server or measure HTTP, database, network, or real RPC latency.
 It does not exercise the complete `k6-browse-journey.js` journey.
 
-Three initial baseline runs at `a0d08a9acdc0e3a907c2f2689873bb9d71e8a82e` used Node v24.22.2,
-100 campaigns, 100 warm-up operations, and 1,000 measured serial operations per process.
-The operation p50 was 3.469–3.489 ms, with zero errors and 100 token contract-ID derivations per fresh listing.
-A separate 500-operation CPU profile placed 529 of 2,940 samples under `contractId` (18.0%, including startup).
-The initial timing harness counted derivations during measurement. The final comparison counts them in a separate untimed probe.
-Do not compare those initial timings directly with the final comparison.
+The current comparison uses baseline `3737842f4cd7581e9847366a9f89da77a73163fb` and optimization source commit `12709c2` on local Node v22.23.4. This is below the repository's required Node 24 runtime, so these measurements are supporting local evidence, not a substitute for CI on Node 24. Sixty runs completed: five alternating AB/BA pairs for each size and fresh/warm mode. Every response matched and every run had zero errors.
+
+| Campaigns | Mode  | Baseline median p50 ms | Candidate median p50 ms |
+| --------- | ----- | ---------------------: | ----------------------: |
+| 3         | fresh |               0.264752 |                0.224846 |
+| 3         | warm  |               0.002802 |                0.002676 |
+| 25        | fresh |               1.180344 |                0.936972 |
+| 25        | warm  |               0.016380 |                0.016643 |
+| 100       | fresh |               5.020283 |                3.585831 |
+| 100       | warm  |               0.059390 |                0.060036 |
+
+Fresh-read p50 reductions were 15.1%, 20.6% and 28.6% for 3, 25 and 100 campaigns. Warm-hit differences are noise, not a gain attributable to this change. The untimed derivation probe reports one derivation per fresh candidate listing, versus one per campaign before it. Local raw evidence was retained with the review; rerun the committed harness to produce fresh host-specific output. These are neither hosted service measurements nor a CPU cost, capacity or invoice saving promise.
 
 The selected optimization derives the configured USDC contract ID once per listing instead of once per campaign.
 The value stays local to that invocation. Every campaign still checks its asset against that value.
@@ -29,7 +35,7 @@ From the repository root, run:
 
 ```sh
 node load/compare-campaign-listing.mjs \
-  a0d08a9acdc0e3a907c2f2689873bb9d71e8a82e \
+  3737842f4cd7581e9847366a9f89da77a73163fb \
   <optimization-commit> \
   /code/.generated_artifacts/browse-benchmark/comparison
 ```
