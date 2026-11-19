@@ -1133,29 +1133,6 @@ export async function submitSignedInvest(id: string, input: { investorPub: strin
   });
 }
 
-export async function buildTrustlineXdr(input: {
-  investorPub: string;
-  assetCode?: string;
-  assetIssuer?: string;
-}): Promise<{ xdr: string; networkPassphrase: string; assetCode: string }> {
-  const investorPub = (input.investorPub ?? '').trim();
-  if (!investorPub.startsWith('G')) throw new Error('invalid investorPub');
-
-  const code = (input.assetCode ?? USDC.code).trim();
-  const issuer = (input.assetIssuer ?? USDC.issuer).trim();
-
-  const account = await deps.loadAccount(investorPub);
-  const tx = new TransactionBuilder(account, {
-    fee: '100',
-    networkPassphrase,
-  })
-    .addOperation(Operation.changeTrust({ asset: new Asset(code, issuer) }))
-    .setTimeout(900)
-    .build();
-
-  return { xdr: tx.toXDR(), networkPassphrase, assetCode: code };
-}
-
 export async function submitSignedTrustline(input: { investorPub: string; xdr: string }): Promise<{ hash: string; assetCode: string }> {
   const investorPub = (input.investorPub ?? '').trim();
   if (!investorPub.startsWith('G')) throw new Error('invalid investorPub');

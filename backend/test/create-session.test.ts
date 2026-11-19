@@ -10,7 +10,7 @@ test('createSession issues a bearer token, stores only its SHA256 hash, and retu
   const now = 10000;
   const { token, expiresAt, account: returnedAccount } = createSession(state, account, now);
 
-  assert.equal(token.startsWith('bls_'), true);
+  assert.match(token, /^bls_[0-9a-f]{48}$/);
   assert.equal(token.length, 4 + 48);
   assert.equal(expiresAt, now + SESSION_TTL_MS);
   assert.deepEqual(returnedAccount, account);
@@ -23,6 +23,10 @@ test('createSession issues a bearer token, stores only its SHA256 hash, and retu
   assert.equal(stored.createdAt, now);
   assert.equal(stored.expiresAt, now + SESSION_TTL_MS);
   assert.equal(stored.tokenHash, createHash('sha256').update(token).digest('hex'));
+  assert.equal(JSON.stringify(state.sessions).includes(token), false);
+  returnedAccount.displayName = 'changed snapshot';
+  assert.equal(account.displayName, null);
+  assert.equal(stored.publicKey, account.publicKey);
 });
 
 test('createSession produces distinct tokens and hashes for each call', () => {
