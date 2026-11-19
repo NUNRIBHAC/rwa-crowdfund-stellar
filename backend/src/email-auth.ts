@@ -128,7 +128,17 @@ export async function sendBudgetedMail(
 export const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 export const EMAIL_RESEND_COOLDOWN_MS = 10 * 60 * 1000;
 export const EMAIL_MAX_FAILURES = 5;
+// Flat 5-minute lock kept for the account-deletion confirmation path.
 export const EMAIL_LOCK_MS = 5 * 60 * 1000;
+// Login lockout is progressive: the first lockout after EMAIL_MAX_FAILURES
+// wrong passwords is short (a targeted attacker then cannot bench the account
+// owner for long), and each consecutive lockout doubles up to a cap, so a
+// persistent brute-force run still faces rapidly growing delays.
+export const EMAIL_LOCK_BASE_MS = 60 * 1000;
+export const EMAIL_LOCK_MAX_MS = 30 * 60 * 1000;
+export function emailLockMs(lockStrikes: number): number {
+  return Math.min(EMAIL_LOCK_BASE_MS * 2 ** Math.max(0, lockStrikes - 1), EMAIL_LOCK_MAX_MS);
+}
 export const PASSWORD_MIN_LENGTH = 10;
 export const PASSWORD_MAX_LENGTH = 200;
 
@@ -395,6 +405,7 @@ export async function confirmPasswordReset(
     credential.resetTokenHash = null; // single-use
     credential.resetExpiresAt = null;
     credential.failedAttempts = 0;
+    credential.lockStrikes = 0;
     credential.lockUntil = null;
     for (const [id, session] of Object.entries(state.sessions)) {
       if (session.publicKey === credential.publicKey) delete state.sessions[id];
@@ -463,12 +474,14 @@ export async function loginEmail(
     if (!verifyPassword(input.password as string, credential.passwordRecord)) {
       credential.failedAttempts += 1;
       if (credential.failedAttempts >= EMAIL_MAX_FAILURES) {
-        credential.lockUntil = now + EMAIL_LOCK_MS;
+        credential.lockStrikes = (credential.lockStrikes ?? 0) + 1;
+        credential.lockUntil = now + emailLockMs(credential.lockStrikes);
         credential.failedAttempts = 0;
       }
       return null;
     }
     credential.failedAttempts = 0;
+    credential.lockStrikes = 0;
     credential.lockUntil = null;
     const account = state.accounts[credential.publicKey];
     if (!account) throw new AuthError(500, 'account record missing');
