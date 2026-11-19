@@ -35,7 +35,9 @@ test('entire synthetic business -> investor -> matching receipts persists withou
     assert.equal(result.investor.contribution?.campaignId, result.campaignId);
     assert.match(result.document!.sha256, /^[a-f0-9]{64}$/);
     assert.equal((await readDemoJourney(store, other)).id, null);
-    const after = await store.read();
+    // read() returns a frozen snapshot, so build the comparison copy instead
+    // of deleting the demo-journey field from the store object itself.
+    const after = structuredClone(await store.read());
     delete after.accounts[owner.publicKey].demoJourney;
     assert.deepEqual(after, before, 'no real application, assessment, campaign or contributor mutation');
   } finally {

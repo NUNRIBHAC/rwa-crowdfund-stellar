@@ -713,7 +713,9 @@ export class CommunityService {
   async getAppropriateness(account: Account): Promise<AppropriatenessRecord | null> {
     const state = await this.store.read();
     const rec = state.appropriateness[account.publicKey];
-    return rec ? normalizeRecord(rec) : null;
+    // normalizeRecord() rewrites legacy fields in place. The file store
+    // freezes its validated snapshot, so normalize a copy instead.
+    return rec ? normalizeRecord({ ...rec }) : null;
   }
 
   // Knowledge test + self-declared experience/objectives (Art. 21(1)-(2)).
