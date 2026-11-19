@@ -34,6 +34,7 @@
 // reputation, failure throttling, mail budgets) and the admin-keyed
 // /api/admin + /api/operator routes are intentionally NOT covered.
 import type express from 'express';
+import { timingSafeEqual } from 'node:crypto';
 import { RateLimiter } from './ratelimit.js';
 import { clientIp } from './client-ip.js';
 
@@ -62,6 +63,23 @@ const maxKeys = (): number => {
   return Number.isSafeInteger(raw) && raw >= 1 ? raw : 10_000;
 };
 
+// Three independent deployment gates keep this test capability off by default.
+// NODE_ENV cannot identify staging: both staging and production use production.
+// Keep the token out of URLs, logs and responses. Other auth/write limiters stay on.
+function hasStagingLoadTestBypass(req: express.Request): boolean {
+  if (process.env.DEPLOYMENT_ENV !== 'staging' || process.env.LOAD_TEST_BYPASS_ENABLED !== '1') return false;
+  const expected = process.env.LOAD_TEST_BYPASS_TOKEN;
+  if (!expected || !/^[A-Za-z0-9_-]{32,256}$/.test(expected)) return false;
+  const supplied = req.headers['x-load-test-bypass'];
+  if (typeof supplied !== 'string' || !/^[A-Za-z0-9_-]{32,256}$/.test(supplied) || supplied.length !== expected.length) return false;
+  // Reject duplicate headers even when an HTTP parser joins their values.
+  let count = 0;
+  for (let i = 0; i < req.rawHeaders.length; i += 2) {
+    if (req.rawHeaders[i].toLowerCase() === 'x-load-test-bypass') count++;
+  }
+  return count === 1 && timingSafeEqual(Buffer.from(supplied), Buffer.from(expected));
+}
+
 export function readLimiter(): express.RequestHandler {
   const limiter = new RateLimiter();
   // Bound memory: sweep idle IP keys on the window cadence; unref'd so the
@@ -70,6 +88,7 @@ export function readLimiter(): express.RequestHandler {
   sweeper.unref();
   return (req, res, next) => {
     if (req.method !== 'GET' || !COVERED.some((re) => re.test(req.path))) return next();
+    if (hasStagingLoadTestBypass(req)) return next();
     // Requests without a resolvable address share one fail-closed bucket.
     const key = `read:${clientIp(req) ?? 'unknown'}`;
     // Hard cardinality bound: while the key table is full, reject NEW keys

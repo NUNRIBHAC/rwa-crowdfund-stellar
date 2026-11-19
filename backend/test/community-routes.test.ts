@@ -33,11 +33,12 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
 
 let base = '';
 let server: ReturnType<express.Express['listen']>;
+let store: FileCommunityStore;
 
 before(async () => {
   const app = express();
   app.use(express.json({ limit: '64kb' }));
-  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  store = new FileCommunityStore(path.join(dir, 'store.json'));
   const service = new CommunityService(store);
   app.use(createCommunityRouter({ service, requireAdmin }));
   await new Promise<void>((resolve) => {
@@ -261,6 +262,75 @@ test('owner-scoped lists: applications and comments mine', async () => {
   assert.equal(ownComments.json.comments[0].body, 'First own comment');
   assert.equal(ownComments.json.comments[0].hidden, false);
   assert.equal((await api('GET', '/api/comments/mine')).status, 401);
+});
+
+test('appropriateness collection requires the exact opt-in and an allowlisted QA account', async () => {
+  const previousFlag = process.env.APPROPRIATENESS_COLLECT;
+  const previousAllowlist = process.env.APPROPRIATENESS_ALLOWLIST;
+  const kp = Keypair.random();
+  const token = await login(kp);
+  const endpoints = [
+    { method: 'GET', path: '/api/auth/appropriateness' },
+    {
+      method: 'POST',
+      path: '/api/auth/appropriateness/knowledge',
+      body: { experienceLevel: 'none', objective: 'income', answers: [1, 1, 1, 1, 1] },
+    },
+    { method: 'POST', path: '/api/auth/appropriateness/simulation-result', body: { netWorthEur: 80000, capacityEur: 8000 } },
+    { method: 'POST', path: '/api/auth/appropriateness/acknowledge-warning', body: {} },
+    {
+      method: 'POST',
+      path: '/api/auth/appropriateness/sophistication-request',
+      body: {
+        route: 'annex_ii_attestation',
+        personType: 'natural',
+        attestedCriteria: ['np_income_60k_or_portfolio_over_100k', 'np_financial_sector_1y_or_exec_12m'],
+        professionalClientProof: null,
+        awarenessStatementAccepted: true,
+        liabilityStatementAccepted: true,
+      },
+    },
+  ];
+  const before = await store.read();
+  try {
+    process.env.APPROPRIATENESS_ALLOWLIST = kp.publicKey();
+    for (const flag of [undefined, '', 'false', '0', 'true', 'yes', '2', ' 1', '1 ']) {
+      if (flag === undefined) delete process.env.APPROPRIATENESS_COLLECT;
+      else process.env.APPROPRIATENESS_COLLECT = flag;
+      for (const endpoint of endpoints) {
+        for (const authToken of [token, undefined]) {
+          const result = await api(endpoint.method, endpoint.path, { body: endpoint.body, token: authToken });
+          assert.equal(result.status, 503, `${endpoint.path}: flag=${JSON.stringify(flag)}, authenticated=${!!authToken}`);
+          assert.equal(result.json.code, 'feature_unavailable');
+        }
+      }
+    }
+
+    process.env.APPROPRIATENESS_COLLECT = '1';
+    for (const allowlist of [undefined, '', Keypair.random().publicKey()]) {
+      if (allowlist === undefined) delete process.env.APPROPRIATENESS_ALLOWLIST;
+      else process.env.APPROPRIATENESS_ALLOWLIST = allowlist;
+      for (const endpoint of endpoints) {
+        const result = await api(endpoint.method, endpoint.path, { body: endpoint.body, token });
+        assert.equal(result.status, 403, `${endpoint.path}: allowlist=${JSON.stringify(allowlist)}`);
+        assert.equal(result.json.code, 'feature_restricted');
+      }
+    }
+    const after = await store.read();
+    assert.deepEqual(after.appropriateness, before.appropriateness);
+    assert.deepEqual(after.audit, before.audit);
+
+    // Both gates are read per request, including closing an already-open router.
+    process.env.APPROPRIATENESS_ALLOWLIST = kp.publicKey();
+    assert.equal((await api('GET', '/api/auth/appropriateness', { token })).status, 200);
+    process.env.APPROPRIATENESS_COLLECT = 'false';
+    assert.equal((await api('GET', '/api/auth/appropriateness', { token })).status, 503);
+  } finally {
+    if (previousFlag === undefined) delete process.env.APPROPRIATENESS_COLLECT;
+    else process.env.APPROPRIATENESS_COLLECT = previousFlag;
+    if (previousAllowlist === undefined) delete process.env.APPROPRIATENESS_ALLOWLIST;
+    else process.env.APPROPRIATENESS_ALLOWLIST = previousAllowlist;
+  }
 });
 
 test('appropriateness endpoints require auth and run the full flow', async () => {

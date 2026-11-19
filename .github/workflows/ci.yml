@@ -38,6 +38,8 @@ jobs:
       - run: npm run build && node backend/scripts/media-index.mjs
       - name: Production host integration (built API + SPA)
         run: NODE_ENV=test node --import tsx --test backend/test/production-host.integration.ts
+      - name: Dependency audit (fails on high/critical advisories)
+        run: npm audit --audit-level=high
 
   rate-postgres:
     runs-on: ubuntu-latest
@@ -106,24 +108,29 @@ jobs:
             ${{ runner.os }}-soroban-${{ hashFiles('contracts/crowdfund/Cargo.lock') }}-
             ${{ runner.os }}-soroban-
 
-      - name: Check for pinned Rust toolchain
-        id: rust-toolchain-check
+      - name: Ensure pinned Rust toolchain and Wasm target
         run: |
-          if rustup toolchain list | grep -q '^1\.99\.1'; then
-            echo "present=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Install pinned Rust toolchain and target
-        if: steps.rust-toolchain-check.outputs.present != 'true'
-        run: rustup toolchain install 1.99.1 --profile minimal --target wasm32v1-none
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup target add --toolchain 1.99.1 wasm32v1-none
+          rustup target list --installed --toolchain 1.99.1 | grep -Fx wasm32v1-none
 
       - run: cargo test --locked
+
+      - name: Ensure pinned cargo-audit
+        run: |
+          if ! cargo audit --version 2>/dev/null | grep -Fx 'cargo-audit 0.22.2'; then
+            cargo install cargo-audit --locked --version 0.22.2 --force
+          fi
+          cargo audit --version | grep -Fx 'cargo-audit 0.22.2'
+
+      - name: Audit Rust dependencies against RustSec advisories
+        run: cargo audit
 
       - name: Cache Stellar CLI
         id: stellar-cache
         uses: actions/cache@v6
         with:
-          path: ${{ env.RUNNER_TEMP }}/stellar-cli
+          path: ${{ runner.temp }}/stellar-cli
           key: ${{ runner.os }}-stellar-cli-28.1.0
 
       - name: Download pinned Stellar CLI release binary
@@ -164,7 +171,7 @@ jobs:
         id: gitleaks-cache
         uses: actions/cache@v6
         with:
-          path: ${{ env.RUNNER_TEMP }}/gitleaks
+          path: ${{ runner.temp }}/gitleaks
           key: ${{ runner.os }}-gitleaks-8.30.1
 
       - name: Download pinned gitleaks binary
