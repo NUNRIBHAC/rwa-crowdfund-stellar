@@ -1126,7 +1126,10 @@ export async function submitCampaignDeploy(input: { actor: string; xdr: string; 
 const LEGACY_V2_SHARE_TOKEN_WASM_HASH = '3fc3d4b74f69fcfb2e0b86878b5b0f3d89a73050e6a049da4dd789dd7a27eaa1';
 const V2_SHARE_TOKEN_WASM_HASH = '6010fc62cf08ee606a2687bd4877790c6d131cbd57936beb21e592d179b818e7';
 const V2_OFFERING_WASM_HASH = '84d254abbc46f5aaf8305734510d66123b4cc9d800992cd11c23da88eb1be622';
-const V2_WASMS: Record<string, { url: URL; hash: string; cache: Buffer | null }> = {
+// The v2 scaffolds that are deployed as a wired set; V2_WASMS is keyed by
+// exactly this union, so a new member without a packaged Wasm is a type error.
+type V2Kind = 'token' | 'offering';
+const V2_WASMS: Record<V2Kind, { url: URL; hash: string; cache: Buffer | null }> = {
   token: {
     url: new URL('../wasm/v2-share-token-sep41.wasm', import.meta.url),
     hash: V2_SHARE_TOKEN_WASM_HASH,
@@ -1138,7 +1141,7 @@ const V2_WASMS: Record<string, { url: URL; hash: string; cache: Buffer | null }>
     cache: null,
   },
 };
-function loadV2Wasm(kind: 'token' | 'offering'): Buffer {
+function loadV2Wasm(kind: V2Kind): Buffer {
   const entry = V2_WASMS[kind];
   if (entry.cache) return entry.cache;
   let wasm: Buffer;
@@ -1152,7 +1155,7 @@ function loadV2Wasm(kind: 'token' | 'offering'): Buffer {
   entry.cache = wasm;
   return wasm;
 }
-async function v2WasmOnLedger(client: rpc.Server, kind: 'token' | 'offering'): Promise<boolean> {
+async function v2WasmOnLedger(client: rpc.Server, kind: V2Kind): Promise<boolean> {
   const entry = V2_WASMS[kind];
   try {
     const wasm = await client.getContractWasmByHash(Buffer.from(entry.hash, 'hex'));
