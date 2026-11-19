@@ -1,5 +1,8 @@
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
+import process from 'node:process';
+import console from 'node:console';
+import { deserialize, serialize } from 'node:v8';
 const root = path.resolve(process.argv[2]);
 const load = (p) => import(pathToFileURL(path.join(root, p)).href);
 const { PostgresCommunityStore, emptyCommunityState } = await load('backend/src/community-store.ts');
@@ -12,7 +15,7 @@ const client = {
   query: async (sql) => {
     calls++;
     if (sql.startsWith('INSERT')) writes++;
-    return { rows: sql.startsWith('SELECT doc') ? [{ doc: structuredClone(row) }] : [] };
+    return { rows: sql.startsWith('SELECT doc') ? [{ doc: deserialize(serialize(row)) }] : [] };
   },
   release() {},
 };

@@ -23,7 +23,7 @@ billing or availability. It runs on the existing Oracle Always Free VM
 
 `npm ci`, `npm run lint`, `npm run format:check`, `npm test`,
 `npm run i18n:check --prefix frontend`, `npm run build`,
-`node scripts/audit-with-suppressions.mjs`, `gitleaks git --redact .` (full history),
+`npm audit --audit-level=high`, `gitleaks git --redact .` (full history),
 `cargo test --locked` in `contracts/crowdfund`.
 
 Not run on the VM: `stellar contract build` and the pinned Wasm hash check (the

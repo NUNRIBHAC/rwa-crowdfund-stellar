@@ -66,7 +66,7 @@ No merge or deployment follows from opening this PR. Staging needs its own appro
 | --------------------------- | --------- | ----------------------------------------------------------------------------------- |
 | No-op prune (100 runs)      | 100       | One `view()` `SELECT` each; no `BEGIN`/lock/`COMMIT`/write                          |
 | No-op `change()` (100 runs) | 400       | Baseline retained for mutating callers; `BEGIN`, lock, `SELECT`, `COMMIT`           |
-| Real prune with deletions   | 5         | `view()` `SELECT` + locked `change()` (`BEGIN`, lock, `SELECT`, `INSERT`, `COMMIT`) |
+| Real prune with deletions   | 6         | `view()` `SELECT` + locked `change()` (`BEGIN`, lock, `SELECT`, `INSERT`, `COMMIT`) |
 
 Regression coverage:
 
