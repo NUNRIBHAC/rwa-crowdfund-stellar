@@ -1,5 +1,15 @@
 import { Keypair, TransactionBuilder, Networks } from '@stellar/stellar-sdk';
-const base = 'http://127.0.0.1:4000';
+import { assertAllowedTarget } from '../../load/target-guard.mjs';
+
+// This script prepares and SUBMITS a testnet contribution through a running
+// API. The target defaults to loopback; anything else needs the explicit
+// opt-in (E2E_ALLOW_REMOTE=1) and an allowlisted host (E2E_TARGET_ALLOWLIST).
+const base = process.env.BASE_URL ?? 'http://127.0.0.1:4000';
+assertAllowedTarget(base, { optIn: process.env.E2E_ALLOW_REMOTE, allowlist: process.env.E2E_TARGET_ALLOWLIST });
+if (process.env.E2E_SUBMIT_OPT_IN !== '1') {
+  console.error('Refusing to submit: set E2E_SUBMIT_OPT_IN=1 to confirm a testnet contribution against ' + base);
+  process.exit(2);
+}
 const actor = process.env.ACTOR;
 const kp = Keypair.fromSecret(process.env.SECRET);
 const post = (u, b) =>
