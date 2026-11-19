@@ -43,6 +43,7 @@ import { mailerFromEnv } from './mailer.js';
 import { buildShareRegister, type ShareRegisterPayload } from './share-register.js';
 import { buildCapTable, holdingFromCapTable, CORPORATE_ACTIONS_SEMANTICS } from './corporate-actions.js';
 import { archiveCampaignEvents, eventArchiveBackend, archiveIdentity, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
+import { deploymentManifestBackend } from './deployment-manifest.js';
 
 import { apiNotFound, jsonErrors } from './json-errors.js';
 
@@ -283,16 +284,26 @@ const runContributorBackfill = async (): Promise<void> => {
 };
 
 startBackgroundTask(runContributorBackfill, 30 * 60 * 1000, () => console.error('contributor backfill unavailable'));
-startBackgroundTask(
-  async () => {
-    // Register lazy stores without issuing schema/data queries on every tick.
-    // A failed community boot is retried through its own one-minute backoff.
-    await Promise.allSettled([readyCommunityRouter(), journalBackend(), eventArchiveBackend()]);
-    await refreshDatabaseReadiness();
-  },
-  60_000,
-  () => console.error('database readiness unavailable'),
-);
+// Startup warm-up shared with tests: construct the lazily created stores so
+// every configured readiness identity exists, then probe. Failures stay in the
+// existing allSettled + one-minute retry shape.
+export async function warmDatabaseReadiness(): Promise<void> {
+  // Register lazy stores without issuing schema/data queries on every tick.
+  // A failed community boot is retried through its own one-minute backoff.
+  const stores: Promise<unknown>[] = [readyCommunityRouter(), journalBackend(), eventArchiveBackend()];
+  // A dedicated DEPLOYMENT_MANIFEST_DATABASE_URL is a readiness identity of its
+  // own (databaseReadiness() counts it in `expected`). Only a constructed
+  // manifest store tracks that identity, and nothing else builds it at startup,
+  // so /health would report not-ready until an unrelated soroban record path
+  // happened to create it. Warm it only when that dedicated URL is configured:
+  // without the URL the manifest store falls back to another database whose
+  // identity the stores above already track.
+  if (process.env.DEPLOYMENT_MANIFEST_DATABASE_URL) stores.push(deploymentManifestBackend());
+  await Promise.allSettled(stores);
+  await refreshDatabaseReadiness();
+}
+
+startBackgroundTask(warmDatabaseReadiness, 60_000, () => console.error('database readiness unavailable'));
 
 let communityInitialized = false;
 let communityRouterReady: Promise<ReturnType<typeof createCommunityRouter> | null> | undefined;
