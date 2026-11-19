@@ -1,6 +1,7 @@
 # ADR 0004: Free-tier hosting: Render + Neon + one Oracle VM
 
-- Status: Accepted (prototype stage)
+- Status: Historical prototype decision, app hosting superseded
+- App hosting update verified: 2026-11-19
 - Date: 2026-11-02 (decision predates this record; recorded from current state)
 
 ## Context
@@ -8,13 +9,14 @@
 The prototype must be publicly reachable with zero budget. The owner prefers
 free tiers, with any paid upgrade brought to him first.
 
-## Decision
+## Historical decision (recorded 2 November 2026)
 
 - App hosting: Render free web services - a public demo environment and a
   separate staging environment, each auto-deploying from its own branch, each
   with its own database. Superseded: both environments now run as containers on
-  one Oracle Cloud VM, and neither deploys automatically. See
-  `docs/oracle-hosting.md`.
+  one Oracle Cloud VM, and neither deploys automatically. The app databases
+  are now separate local PostgreSQL databases. See
+  [environments.md](../environments.md) for the verified app state.
 - Databases: Neon Postgres (demo and staging journals).
 - Self-hosted tooling on one Oracle Cloud Always Free VM (ARM, Frankfurt):
   Weblate (translations), Uptime Kuma (uptime checks), Bitwarden, the private
@@ -22,7 +24,7 @@ free tiers, with any paid upgrade brought to him first.
 - Documentation portal: public build on a Render free static site; private
   build served from the Oracle VM behind basic auth.
 
-## Consequences
+## Historical consequences
 
 - Zero running cost; capacity limits are real and measured before adding
   services (the GlitchTip sizing check is the standing example).
@@ -35,7 +37,8 @@ free tiers, with any paid upgrade brought to him first.
 
 ## Verification anchors (observed state, 2 Nov 2026)
 
-Superseded by the November 2026 Oracle migration; see
+These anchors describe 2 November only, not current service or backup status.
+App hosting was superseded by the November 2026 Oracle migration; see
 [environments.md](../environments.md) for current hosts. Historical:
 
 - Public demo: blockallisto-demo.onrender.com; staging:

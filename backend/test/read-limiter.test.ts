@@ -6,7 +6,17 @@ import assert from 'node:assert/strict';
 import express from 'express';
 import { readLimiter } from '../src/read-limiter.js';
 
-const ENV_KEYS = ['READ_LIMIT_PER_MIN', 'READ_LIMIT_WINDOW_MS', 'READ_LIMIT_MAX_KEYS', 'TRUST_PROXY_DEPTH', 'TRUST_PROXY', 'XFF_DEBUG'] as const;
+const ENV_KEYS = [
+  'READ_LIMIT_PER_MIN',
+  'READ_LIMIT_WINDOW_MS',
+  'READ_LIMIT_MAX_KEYS',
+  'TRUST_PROXY_DEPTH',
+  'TRUST_PROXY',
+  'XFF_DEBUG',
+  'DEPLOYMENT_ENV',
+  'LOAD_TEST_BYPASS_ENABLED',
+  'LOAD_TEST_BYPASS_TOKEN',
+] as const;
 const savedEnv: Record<string, string | undefined> = Object.fromEntries(ENV_KEYS.map((k) => [k, process.env[k]]));
 
 after(() => {
@@ -201,6 +211,75 @@ test('invalid limit env falls back to defaults (fail closed, no crash)', async (
   try {
     // defaults are 240/60000: several reads pass
     for (let i = 0; i < 5; i++) assert.equal((await fetch(app.base + '/api/news')).status, 200);
+  } finally {
+    await app.close();
+  }
+});
+
+const testBypassToken = 'synthetic-read-limiter-test-only-value';
+const bypassEnv = {
+  READ_LIMIT_PER_MIN: '1',
+  READ_LIMIT_WINDOW_MS: '60000',
+  DEPLOYMENT_ENV: 'staging',
+  LOAD_TEST_BYPASS_ENABLED: '1',
+  LOAD_TEST_BYPASS_TOKEN: testBypassToken,
+};
+
+test('staging bypass requires exact independent deployment, enable and token gates', async () => {
+  for (const overrides of [
+    { DEPLOYMENT_ENV: '' },
+    { DEPLOYMENT_ENV: 'production' },
+    { DEPLOYMENT_ENV: 'demo' },
+    { DEPLOYMENT_ENV: ' staging' },
+    { LOAD_TEST_BYPASS_ENABLED: '' },
+    { LOAD_TEST_BYPASS_ENABLED: 'true' },
+    { LOAD_TEST_BYPASS_ENABLED: '0' },
+    { LOAD_TEST_BYPASS_TOKEN: '' },
+    { LOAD_TEST_BYPASS_TOKEN: 'short' },
+    { LOAD_TEST_BYPASS_TOKEN: ' '.repeat(32) },
+  ]) {
+    const app = await freshApp({ ...bypassEnv, ...overrides });
+    try {
+      const headers = { 'x-load-test-bypass': testBypassToken };
+      assert.equal((await fetch(app.base + '/api/news', { headers })).status, 200);
+      assert.equal((await fetch(app.base + '/api/news', { headers })).status, 429);
+    } finally {
+      await app.close();
+    }
+  }
+});
+
+test('only the exact staging test header bypasses; normal traffic stays limited', async () => {
+  const app = await freshApp(bypassEnv);
+  try {
+    assert.equal((await fetch(app.base + '/api/news')).status, 200);
+    for (const value of ['', 'wrong', testBypassToken + 'x', testBypassToken.toUpperCase(), 'é'.repeat(testBypassToken.length)]) {
+      assert.equal((await fetch(app.base + '/api/news', { headers: { 'x-load-test-bypass': value } })).status, 429);
+    }
+    for (let i = 0; i < 4; i++) assert.equal((await fetch(app.base + '/api/news', { headers: { 'x-load-test-bypass': testBypassToken } })).status, 200);
+    assert.equal((await fetch(app.base + '/api/news')).status, 429);
+    process.env.LOAD_TEST_BYPASS_ENABLED = '0';
+    assert.equal((await fetch(app.base + '/api/news', { headers: { 'x-load-test-bypass': testBypassToken } })).status, 429);
+  } finally {
+    await app.close();
+  }
+});
+
+test('duplicate bypass headers fail closed and do not reset the exhausted bucket', async () => {
+  const app = await freshApp(bypassEnv);
+  try {
+    await fetch(app.base + '/api/news');
+    const { request } = await import('node:http');
+    const status = await new Promise<number | undefined>((resolve, reject) => {
+      const req = request(app.base + '/api/news', { headers: { 'x-load-test-bypass': [testBypassToken, testBypassToken] } }, (res) => {
+        res.resume();
+        res.on('end', () => resolve(res.statusCode));
+      });
+      req.on('error', reject);
+      req.end();
+    });
+    assert.equal(status, 429);
+    assert.equal((await fetch(app.base + '/api/news')).status, 429);
   } finally {
     await app.close();
   }

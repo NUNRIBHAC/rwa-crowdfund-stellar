@@ -14,9 +14,10 @@ either environment; release is a separate, reviewed operator step.
 
 ## Stack
 
-The frontend and backend run on managed cloud hosting with a managed
-PostgreSQL database. The smart contract is deployed to the Stellar
-testnet.
+The frontend and backend run in separate demo and staging containers on an
+Oracle Cloud VM. Each environment uses its own local PostgreSQL database.
+The smart contract runs on the Stellar testnet. This hosting description was
+verified on 19 November 2026.
 
 :::note
 Infrastructure details, credentials and operational runbooks are maintained

@@ -4,6 +4,11 @@ import { AuthError, hashToken, TOTP_LOCK_MS, TOTP_MAX_FAILURES } from './account
 import { EMAIL_MAX_FAILURES, EMAIL_LOCK_MS, verifyPassword } from './email-auth.js';
 import { decryptSeed, verifyTotp } from './totp.js';
 
+// Failure outcomes of the serialized deletion change. The failure map below is
+// keyed by exactly this union, so a new return code from the change callback
+// becomes a compile error instead of a destructuring TypeError at request time.
+type DeletionFailure = 'unauthorized' | 'unsupported' | 'protected' | 'locked' | 'proof' | 'factor' | 'unavailable';
+
 // Verified email and dedicated linked-social proof are supported. Wallet
 // deletion additionally requires an injected retention adapter AND a final
 // mutation recheck, both absent from the hosted router. A login signature or
@@ -33,7 +38,7 @@ export async function deleteEmailAccount(
       walletRetention = 'unavailable';
     }
   }
-  const result = await store.change((state) => {
+  const result = await store.change((state): 'deleted' | DeletionFailure => {
     const session = state.sessions[hashToken(token)];
     const account = session && session.expiresAt > now ? state.accounts[session.publicKey] : undefined;
     if (!account) return 'unauthorized';
@@ -136,7 +141,7 @@ export async function deleteEmailAccount(
     return 'deleted';
   });
   if (result === 'deleted') return;
-  const failures: Record<string, [number, string, string]> = {
+  const failures: Record<DeletionFailure, [number, string, string]> = {
     unauthorized: [401, 'sign in again', 'unauthorized'],
     unsupported: [409, 'this account has no supported deletion identity; no request has been submitted', 'deletion_unsupported'],
     protected: [

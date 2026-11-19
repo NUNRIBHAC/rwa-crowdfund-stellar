@@ -3,8 +3,10 @@
 // Scope and invariants:
 // - Only the public list route reads through this cache. Every decision or
 //   operator path - reconciliationPayload, sorobanInvestorEntitlement,
-//   invest/refund XDR build+submit, discovery, community lookups - calls
+//   invest/refund XDR build+submit, community lookups - calls
 //   sorobanCampaigns directly and keeps reading live chain state.
+// - The sitemap is the one discovery path that reads the campaign IDs from
+//   the registry without any chain call (see the registration in server.ts).
 // - Within the TTL a hit is served from memory. Once the TTL expires the
 //   next read does a FRESH chain read and, on failure, fails exactly like
 //   the uncached route (503 API_UNAVAILABLE): no stale data is ever served
