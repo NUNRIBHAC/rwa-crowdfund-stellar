@@ -639,7 +639,7 @@ test('telegram (identity only): pending ticket, allowlisted email proven by code
   assert.deepEqual(await r.json(), { status: 'code-sent' });
   assert.equal(sent.length, 0);
   // Cooldown applies to the next request too (no signal difference).
-  r = await post(base, '/api/auth/social/email/request', { ticket, email: 'nuno@example.com' });
+  await post(base, '/api/auth/social/email/request', { ticket, email: 'nuno@example.com' });
   assert.equal(sent.length, 0, 'cooldown blocks an immediate retry');
   // Expire the cooldown, then the allowlisted email is mailed a code.
   await store.change((s) => {
