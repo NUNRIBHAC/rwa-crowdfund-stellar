@@ -591,6 +591,11 @@ export interface CommunityStore {
   // Only the creator owns disposal. Injected stores remain caller-owned.
   close?(): Promise<void>;
   change<T>(fn: (state: CommunityState) => T): Promise<T>;
+  // Read-only snapshot: same validation and empty-document semantics as
+  // read(). Readonly protects top-level fields only, not nested records.
+  // The detached snapshot is not persisted by view(). Useful for scans that
+  // decide whether an expensive locked change() is needed.
+  view?<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T>;
   read(): Promise<CommunityState>;
   // Optional minimal same-snapshot projection. No cache or write is allowed.
   readSessionAccount?(tokenHash: string): Promise<SessionAccountSnapshot>;
@@ -598,17 +603,81 @@ export interface CommunityStore {
   readOwnSessions?(publicKey: string): Promise<Session[]>;
 }
 
+function deepFreeze<T>(value: T): T {
+  // File JSON may contain deeply nested forward-compatible fields. An explicit
+  // worklist avoids turning valid JSON into a recursive call-stack failure.
+  const pending: unknown[] = [value];
+  while (pending.length) {
+    const current = pending.pop();
+    if (current === null || typeof current !== 'object' || Object.isFrozen(current)) continue;
+    Object.freeze(current);
+    for (const child of Object.values(current as Record<string, unknown>)) pending.push(child);
+  }
+  return value;
+}
+
 export class FileCommunityStore implements CommunityStore {
   private queue: Promise<unknown> = Promise.resolve();
+  // A validated snapshot keyed by the file identity+version fingerprint. The
+  // fingerprint is checked on every read, without a TTL. This is a metadata
+  // heuristic, not content identity: external edits preserving all metadata can
+  // be missed. The supported writer is this process using atomic rename.
+  private cache: { fingerprint: string; state: CommunityState } | null = null;
   constructor(public readonly filename: string) {}
+  private fingerprint(stat: fs.Stats): string {
+    return `${stat.dev}:${stat.ino}:${stat.size}:${stat.mtimeMs}:${stat.ctimeMs}`;
+  }
+  // One definition of the file contract, shared by read and write: a missing
+  // file is an empty store, and a corrupt document throws rather than being
+  // silently replaced. validate() therefore runs on every miss.
+  private readFresh(): CommunityState {
+    try {
+      return validate(JSON.parse(fs.readFileSync(this.filename, 'utf8')));
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') return emptyCommunityState();
+      throw err;
+    }
+  }
+  private load(): CommunityState {
+    let stat: fs.Stats;
+    try {
+      stat = fs.statSync(this.filename);
+    } catch (err) {
+      // Preserve the old contract: a missing file reads as an empty store.
+      // Other stat failures (EACCES, ELOOP, ENOTDIR) must still surface.
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+        this.cache = null;
+        // Frozen for the same reason as a cached snapshot: every read result
+        // obeys one contract, so an attempted nested write fails loudly here
+        // too. It is a fresh object per call, so nothing is shared.
+        return deepFreeze(emptyCommunityState());
+      }
+      throw err;
+    }
+    if (!stat.isFile()) throw new Error('community store is not a regular file');
+    const fingerprint = this.fingerprint(stat);
+    // A shallow copy is enough because the snapshot below is deep-frozen: no
+    // caller can mutate a nested record of it. ES modules are strict, so an
+    // attempted write throws instead of silently corrupting other readers.
+    if (this.cache?.fingerprint === fingerprint) return { ...this.cache.state };
+    const state = this.readFresh();
+    this.cache = { fingerprint, state: deepFreeze(state) };
+    return { ...this.cache.state };
+  }
   read(): Promise<CommunityState> {
-    if (!fs.existsSync(this.filename)) return Promise.resolve(emptyCommunityState());
-    return Promise.resolve(validate(JSON.parse(fs.readFileSync(this.filename, 'utf8'))));
+    return Promise.resolve(this.load());
+  }
+  view<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T> {
+    return this.read().then((state) => fn(state));
   }
   change<T>(fn: (state: CommunityState) => T): Promise<T> {
     // Serialize writes within this process; one API process owns the file.
     const run = this.queue.then(async () => {
-      const state = await this.read();
+      // Never mutate or reuse the cached snapshot: other callers hold shallow
+      // copies of it. Invalidate first, then read and parse a fresh document,
+      // so the write starts from current on-disk state.
+      this.cache = null;
+      const state = this.readFresh();
       const result = fn(state);
       fs.mkdirSync(path.dirname(this.filename), { recursive: true });
       const tmp = `${this.filename}.tmp-${process.pid}`;
@@ -683,6 +752,12 @@ export class PostgresCommunityStore implements CommunityStore {
     const { rows } = await this.pool.query('SELECT doc FROM community_store WHERE id = $1', [PG_DOC_ID]);
     if (rows.length === 0) return emptyCommunityState();
     return validate(rows[0].doc);
+  }
+  async view<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T> {
+    await this.ready;
+    const { rows } = await this.pool.query('SELECT doc FROM community_store WHERE id = $1', [PG_DOC_ID]);
+    const state = rows.length === 0 ? emptyCommunityState() : validate(rows[0].doc);
+    return fn(state);
   }
   async readSessionAccount(tokenHash: string): Promise<SessionAccountSnapshot> {
     // Keep arbitrary keys and raw bearer tokens away from this query contract.

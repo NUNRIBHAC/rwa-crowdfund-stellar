@@ -134,6 +134,46 @@ test('listing without actor makes no simulation calls and defaults match contrac
   assert.equal(out[0].balance, null);
 });
 
+test('listing derives its configured token once per read and never reuses it across reads', async () => {
+  const original = Asset.prototype.contractId;
+  let derivations = 0;
+  Asset.prototype.contractId = function (...args) {
+    derivations++;
+    return original.apply(this, args);
+  };
+  try {
+    const first = await sorobanCampaigns();
+    assert.equal(first.length, 2);
+    assert.equal(derivations, 1);
+    // A new request must validate against the current configured issuer,
+    // even when the registry and live campaign instances have not changed.
+    process.env.USDC_ISSUER = Keypair.random().publicKey();
+    await assert.rejects(sorobanCampaigns(), /does not match configured testnet USDC/);
+    process.env.USDC_ISSUER = issuer;
+    const before = derivations;
+    assert.deepEqual(await sorobanCampaigns(), first);
+    assert.equal(derivations, before + 1);
+    assert.equal(getLedgerCalls.length, 3);
+  } finally {
+    Asset.prototype.contractId = original;
+    process.env.USDC_ISSUER = issuer;
+  }
+});
+
+test('empty listing does not require an issuer and still enforces the network guard', async () => {
+  process.env.SOROBAN_CAMPAIGNS_JSON = '[]';
+  delete process.env.USDC_ISSUER;
+  try {
+    assert.deepEqual(await sorobanCampaigns(), []);
+    assert.equal(getLedgerCalls.length, 0);
+    process.env.STELLAR_NETWORK = 'public';
+    await assert.rejects(sorobanCampaigns(), /testnet-only/);
+  } finally {
+    process.env.USDC_ISSUER = issuer;
+    process.env.STELLAR_NETWORK = 'testnet';
+  }
+});
+
 test('missing Raised/Withdrawn default like the contract; present values win', async () => {
   const onlyConfig = {
     key: new Contract(campB.contractId).getFootprint(),

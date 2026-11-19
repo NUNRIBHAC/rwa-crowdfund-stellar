@@ -47,7 +47,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import * as client from 'openid-client';
 import { Keypair } from '@stellar/stellar-sdk';
 import type { Account, CommunityStore } from './community-store.js';
-import { AuthError, hashToken, SESSION_TTL_MS, TOTP_TICKET_TTL_MS, verifySignature } from './accounts.js';
+import { AuthError, createSession, hashToken, TOTP_TICKET_TTL_MS, verifySignature } from './accounts.js';
 import { normalizeEmail, sendBudgetedMail, verifyPassword } from './email-auth.js';
 import type { Mailer } from './mailer.js';
 
@@ -431,10 +431,8 @@ export async function finishSocialIdentity(
       s.totpTickets[ticket] = { id: ticket, publicKey: account.publicKey, expiresAt };
       return { kind: 'totp' as const, ticket, expiresAt, account: { ...account } };
     }
-    const token = `bls_${randomBytes(24).toString('hex')}`;
-    const session = { tokenHash: hashToken(token), publicKey: account.publicKey, createdAt: now, expiresAt: now + SESSION_TTL_MS };
-    s.sessions[session.tokenHash] = session;
-    return { kind: 'session' as const, token, expiresAt: session.expiresAt, account: { ...account } };
+    const { token, expiresAt } = createSession(s, account, now);
+    return { kind: 'session' as const, token, expiresAt, account: { ...account } };
   });
 }
 
@@ -662,12 +660,11 @@ export async function confirmSocialEmail(
       return { error: new AuthError(409, 'that email already has an account; sign in to it and link this provider from your account', 'social_email_in_use') };
     }
     const publicKey = Keypair.random().publicKey();
-    s.accounts[publicKey] = { publicKey, displayName: null, createdAt: now, authMethod: 'social', email: p.email } satisfies Account;
+    const account = { publicKey, displayName: null, createdAt: now, authMethod: 'social' as const, email: p.email } satisfies Account;
+    s.accounts[publicKey] = account;
     s.socialIdentities[identityKey] = { provider: p.provider, subject: p.subject, publicKey, email: p.email, createdAt: now, lastLoginAt: now };
-    const token = `bls_${randomBytes(24).toString('hex')}`;
-    const session = { tokenHash: hashToken(token), publicKey, createdAt: now, expiresAt: now + SESSION_TTL_MS };
-    s.sessions[session.tokenHash] = session;
-    return { ok: { kind: 'session' as const, token, expiresAt: session.expiresAt, account: { ...s.accounts[publicKey] } } };
+    const { token, expiresAt } = createSession(s, account, now);
+    return { ok: { kind: 'session' as const, token, expiresAt, account: { ...s.accounts[publicKey] } } };
   });
   if ('error' in outcome && outcome.error) throw outcome.error;
   return (outcome as { ok: SocialLoginResult }).ok;

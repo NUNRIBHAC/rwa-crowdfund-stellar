@@ -2,7 +2,7 @@ name: visual
 
 # Synthetic visual regression via Argos. Captures run against a locally served
 # production build with synthetic API data (no live/private data).
-# All 24 public routes x 11 locales x 3 widths = 792 screenshots per run.
+# Current capture suite: 917 tests, including route captures and journey checks.
 # Hobby has a hard free quota: uploads pause at its limit; never upgrade automatically.
 on:
   # One run per change: pushes to main fire `push`; while a PR is open its
@@ -36,30 +36,13 @@ jobs:
       - name: Capture screenshots
         working-directory: frontend
         run: npx playwright test
+      - name: Test Argos upload error handling
+        run: node --test scripts/argos-upload.test.mjs
       - name: Upload screenshots
         # No secret ever reaches PR-controlled tests. Only reviewed main can
         # upload, including manual main runs; branch dispatches stay tokenless.
-        # The Argos free plan has a hard screenshot quota; when it is exhausted
-        # the upload returns HTTP 402. We still want the capture step to run and
-        # to fail on real errors, so we warn and exit cleanly only for quota
-        # errors.
         if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         working-directory: frontend
         env:
           ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
-        run: |
-          node --input-type=module <<'NODE'
-          import { upload } from '@argos-ci/core';
-          try {
-            await upload({ root: 'screenshots', files: ['**/*.png'] });
-          } catch (err) {
-            const isQuotaError = err?.status === 402 ||
-              String(err?.data?.error).includes('Free Plan') ||
-              String(err?.message).includes('Free Plan');
-            if (isQuotaError) {
-              console.warn('::warning::Argos free-plan screenshot quota exhausted. Upload skipped; visual CI will not fail.');
-              process.exit(0);
-            }
-            throw err;
-          }
-          NODE
+        run: node ../scripts/argos-upload.mjs
