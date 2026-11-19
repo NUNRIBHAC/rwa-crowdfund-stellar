@@ -7,6 +7,7 @@ import type {
   CompanyApplication,
   Account,
   Comment,
+  CommunityState,
   CommunityStore,
   IssuerApplication,
   NewsPost,
@@ -713,7 +714,9 @@ export class CommunityService {
   async getAppropriateness(account: Account): Promise<AppropriatenessRecord | null> {
     const state = await this.store.read();
     const rec = state.appropriateness[account.publicKey];
-    return rec ? normalizeRecord(rec) : null;
+    // normalizeRecord() rewrites legacy fields in place. The file store
+    // freezes its validated snapshot, so normalize a copy instead.
+    return rec ? normalizeRecord({ ...rec }) : null;
   }
 
   // Knowledge test + self-declared experience/objectives (Art. 21(1)-(2)).
@@ -1473,53 +1476,112 @@ export class CommunityService {
 
   // Retention: hard-delete personal submitted content after its retention
   // window, hidden comments after 30 days, and expired auth artifacts.
+  //
+  // collectPrunableIds() is the single source of truth for what prune() may
+  // delete. It is shared by the read-only fast path (hasPrunableContent) and the
+  // locked change() deletion body, so the two cannot drift: a collection that
+  // prune() would delete always reports needsWork, and pruning never silently
+  // stops for that collection. Keep every predicate for a collection in one
+  // place here; do not special-case a collection in only one of the two paths.
+  // Application keep-condition: an application with retained owned objects
+  // (private documents, upload intents, or deletion intents) is kept until a
+  // separately reviewed retention policy clears every owned object.
+  private collectPrunableIds(
+    state: Readonly<CommunityState>,
+    now: number,
+    retentionMs: number,
+    hiddenCommentMs: number,
+  ): {
+    tickets: string[];
+    applications: string[];
+    notifications: string[];
+    comments: string[];
+    challenges: string[];
+    sessions: string[];
+  } {
+    const tickets: string[] = [];
+    const applications: string[] = [];
+    const notifications: string[] = [];
+    const comments: string[] = [];
+    const challenges: string[] = [];
+    const sessions: string[] = [];
+    for (const [id, t] of Object.entries(state.tickets)) {
+      if (now - t.createdAt > retentionMs) tickets.push(id);
+    }
+    for (const [id, a] of Object.entries(state.applications)) {
+      if (now - a.createdAt > retentionMs) {
+        if (
+          a.documents?.some((d) => d.object) ||
+          Object.values(state.privateApplicationUploads?.intents ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted') ||
+          Object.values(state.privateApplicationDeletions ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted')
+        )
+          continue; // Keep private applications with retained owned objects.
+        applications.push(id);
+      }
+    }
+    for (const [id, n] of Object.entries(state.notifications)) {
+      if (now - n.createdAt > retentionMs) notifications.push(id);
+    }
+    for (const [id, c] of Object.entries(state.comments)) {
+      if (c.hiddenAt && now - c.hiddenAt > hiddenCommentMs) comments.push(id);
+    }
+    for (const [id, ch] of Object.entries(state.challenges)) {
+      if (ch.expiresAt <= now) challenges.push(id);
+    }
+    for (const [id, s] of Object.entries(state.sessions)) {
+      if (s.expiresAt <= now) sessions.push(id);
+    }
+    return { tickets, applications, notifications, comments, challenges, sessions };
+  }
+
+  // Fast-path probe used by prune() with the read-only store view(). It must be
+  // exactly 'any collection below has at least one id to delete', which holds
+  // by construction because it reads the same collectPrunableIds() result the
+  // locked change() deletion body consumes.
+  private hasPrunableContent(state: Readonly<CommunityState>, now: number, retentionMs: number, hiddenCommentMs: number): boolean {
+    const { tickets, applications, notifications, comments, challenges, sessions } = this.collectPrunableIds(state, now, retentionMs, hiddenCommentMs);
+    return tickets.length > 0 || applications.length > 0 || notifications.length > 0 || comments.length > 0 || challenges.length > 0 || sessions.length > 0;
+  }
+
   async prune(): Promise<{ removed: number }> {
     const now = this.now();
     const retentionMs = this.opts.retentionDays * 24 * 60 * 60 * 1000;
     const hiddenCommentMs = 30 * 24 * 60 * 60 * 1000;
+    // view() reads a committed MVCC snapshot without a transaction or advisory
+    // lock. Racing a concurrent change() it may see the previous committed state
+    // and decide nothing needs work; that only defers the prune to the next run
+    // and is accepted to keep the common no-op path cheap.
+    const needsWork = this.store.view ? await this.store.view((state) => this.hasPrunableContent(state, now, retentionMs, hiddenCommentMs)) : true;
+    if (!needsWork) {
+      this.limiter.sweep(24 * 60 * 60 * 1000);
+      return { removed: 0 };
+    }
     let removed = 0;
     await this.store.change((state) => {
-      for (const [id, t] of Object.entries(state.tickets)) {
-        if (now - t.createdAt > retentionMs) {
-          delete state.tickets[id];
-          removed++;
-        }
+      const { tickets, applications, notifications, comments, challenges, sessions } = this.collectPrunableIds(state, now, retentionMs, hiddenCommentMs);
+      for (const id of tickets) {
+        delete state.tickets[id];
+        removed++;
       }
-      for (const [id, a] of Object.entries(state.applications)) {
-        if (now - a.createdAt > retentionMs) {
-          if (
-            a.documents?.some((d) => d.object) ||
-            Object.values(state.privateApplicationUploads?.intents ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted') ||
-            Object.values(state.privateApplicationDeletions ?? {}).some((i) => i.applicationId === id && i.status !== 'deleted')
-          )
-            continue; // Keep private applications until a separately reviewed retention policy clears every owned object.
-          delete state.applications[id];
-          removed++;
-        }
+      for (const id of applications) {
+        delete state.applications[id];
+        removed++;
       }
-      for (const [id, n] of Object.entries(state.notifications)) {
-        if (now - n.createdAt > retentionMs) {
-          delete state.notifications[id];
-          removed++;
-        }
+      for (const id of notifications) {
+        delete state.notifications[id];
+        removed++;
       }
-      for (const [id, c] of Object.entries(state.comments)) {
-        if (c.hiddenAt && now - c.hiddenAt > hiddenCommentMs) {
-          delete state.comments[id];
-          removed++;
-        }
+      for (const id of comments) {
+        delete state.comments[id];
+        removed++;
       }
-      for (const [id, ch] of Object.entries(state.challenges)) {
-        if (ch.expiresAt <= now) {
-          delete state.challenges[id];
-          removed++;
-        }
+      for (const id of challenges) {
+        delete state.challenges[id];
+        removed++;
       }
-      for (const [id, s] of Object.entries(state.sessions)) {
-        if (s.expiresAt <= now) {
-          delete state.sessions[id];
-          removed++;
-        }
+      for (const id of sessions) {
+        delete state.sessions[id];
+        removed++;
       }
     });
     this.limiter.sweep(24 * 60 * 60 * 1000);

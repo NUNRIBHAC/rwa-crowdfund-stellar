@@ -7,7 +7,7 @@ import { readLimiter } from './read-limiter.js';
 import express from 'express';
 import cors from 'cors';
 import { createHash, timingSafeEqual } from 'node:crypto';
-import { PORT, NETWORK } from './config.js';
+import { PORT, NETWORK, BUILD_COMMIT, BUILD_IMAGE } from './config.js';
 import { listCampaigns } from './campaigns.js';
 import { CampaignListCache, CAMPAIGN_LIST_CACHE_TTL_MS } from './campaign-list-cache.js';
 import { registerDiscoveryEndpoints } from './sitemap.js';
@@ -43,6 +43,7 @@ import { mailerFromEnv } from './mailer.js';
 import { buildShareRegister, type ShareRegisterPayload } from './share-register.js';
 import { buildCapTable, holdingFromCapTable, CORPORATE_ACTIONS_SEMANTICS } from './corporate-actions.js';
 import { archiveCampaignEvents, eventArchiveBackend, archiveIdentity, archiveSnapshotJsonl, verifyArchiveSnapshot } from './event-archive.js';
+import { deploymentManifestBackend } from './deployment-manifest.js';
 
 import { apiNotFound, jsonErrors } from './json-errors.js';
 import {
@@ -55,6 +56,7 @@ import {
   dbPoolWaitingConnections,
   dbPoolMaxConnections,
   safeHttpMethod,
+  safeErrorCode,
   safeRoutePath,
 } from './metrics.js';
 
@@ -130,7 +132,7 @@ app.use((req, res, next) => {
   const originalJson = res.json.bind(res);
   res.json = function (body: unknown) {
     if (res.statusCode >= 400 && body && typeof body === 'object' && 'code' in body && typeof (body as { code: unknown }).code === 'string') {
-      apiErrorsTotal.inc({ code: (body as { code: string }).code });
+      apiErrorsTotal.inc({ code: safeErrorCode((body as { code: string }).code) });
     }
     return originalJson(body);
   } as typeof res.json;
@@ -176,9 +178,16 @@ const requireAdmin: express.RequestHandler = (req, res, next) => {
 };
 
 // Machine-readable discovery: sitemap.xml + robots.txt (see sitemap.ts).
-// Live campaign URLs come from the Soroban registry (same source as /api/campaigns),
-// not the legacy file store.
-registerDiscoveryEndpoints(app, { listCampaignIds: async () => (await sorobanCampaigns()).map((c) => c.id) });
+// Campaign URLs come from the Soroban registry (the same source /api/campaigns
+// lists from), not the legacy file store.
+//
+// The sitemap needs campaign IDS ONLY, so it reads the registry without any
+// chain call. Reading live chain state here cost one batched Soroban RPC round
+// trip per request (measured p50 23 ms in the sandbox) to obtain data that was
+// then discarded. A registry entry therefore appears in the sitemap even when
+// its contract state cannot be read; the page itself still fails closed,
+// because /api/campaigns keeps reading live chain state.
+registerDiscoveryEndpoints(app, { listCampaignIds: async () => sorobanRegisteredCampaigns().map((c) => c.id) });
 // Accounts, community, support, issuer applications and campaign metadata.
 // The router must be registered synchronously: Express matches in
 // registration order, and a router app.use()d only after the async store boot
@@ -312,16 +321,26 @@ const runContributorBackfill = async (): Promise<void> => {
 };
 
 startBackgroundTask(runContributorBackfill, 30 * 60 * 1000, () => console.error('contributor backfill unavailable'));
-startBackgroundTask(
-  async () => {
-    // Register lazy stores without issuing schema/data queries on every tick.
-    // A failed community boot is retried through its own one-minute backoff.
-    await Promise.allSettled([readyCommunityRouter(), journalBackend(), eventArchiveBackend()]);
-    await refreshDatabaseReadiness();
-  },
-  60_000,
-  () => console.error('database readiness unavailable'),
-);
+// Startup warm-up shared with tests: construct the lazily created stores so
+// every configured readiness identity exists, then probe. Failures stay in the
+// existing allSettled + one-minute retry shape.
+export async function warmDatabaseReadiness(): Promise<void> {
+  // Register lazy stores without issuing schema/data queries on every tick.
+  // A failed community boot is retried through its own one-minute backoff.
+  const stores: Promise<unknown>[] = [readyCommunityRouter(), journalBackend(), eventArchiveBackend()];
+  // A dedicated DEPLOYMENT_MANIFEST_DATABASE_URL is a readiness identity of its
+  // own (databaseReadiness() counts it in `expected`). Only a constructed
+  // manifest store tracks that identity, and nothing else builds it at startup,
+  // so /health would report not-ready until an unrelated soroban record path
+  // happened to create it. Warm it only when that dedicated URL is configured:
+  // without the URL the manifest store falls back to another database whose
+  // identity the stores above already track.
+  if (process.env.DEPLOYMENT_MANIFEST_DATABASE_URL) stores.push(deploymentManifestBackend());
+  await Promise.allSettled(stores);
+  await refreshDatabaseReadiness();
+}
+
+startBackgroundTask(warmDatabaseReadiness, 60_000, () => console.error('database readiness unavailable'));
 
 let communityInitialized = false;
 let communityRouterReady: Promise<ReturnType<typeof createCommunityRouter> | null> | undefined;
@@ -394,7 +413,17 @@ app.get('/health', (_req, res) => {
   const communityRequired =
     !!process.env.COMMUNITY_DATABASE_URL || process.env.COMMUNITY_REQUIRE_POSTGRES === '1' || process.env.SOROBAN_JOURNAL_BACKEND === 'postgres';
   const ready = database.ready && (!communityRequired || communityInitialized);
-  res.status(ready ? 200 : 503).json({ ok: ready, database, mode: 'soroban', network: NETWORK, productionEligible: false, deploymentIncluded: false });
+  res.status(ready ? 200 : 503).json({
+    ok: ready,
+    database,
+    mode: 'soroban',
+    network: NETWORK,
+    productionEligible: false,
+    deploymentIncluded: false,
+    // Build identity for release detection. null means the value was not set at
+    // build time, so the running commit is unknown - do not infer one.
+    build: { commit: BUILD_COMMIT || null, image: BUILD_IMAGE || null },
+  });
 });
 
 // Display cache for the LIST route only: 30s TTL + single-flight; expired

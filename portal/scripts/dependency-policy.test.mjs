@@ -16,10 +16,7 @@ test('portal locks patched worker/serializer versions without hiding advisories'
 });
 test('CI explicitly audits and builds the independently locked public/private portal', () => {
   const workflow = readFileSync(new URL('../.github/workflows/ci.yml', root), 'utf8');
-  // The audit wrapper still runs npm audit for the portal tree and reports any
-  // non-allowlisted high/critical advisory. The exact command is allowed to
-  // change; the important invariant is that portal dependencies are audited.
-  assert.match(workflow, /portal.*audit|audit.*portal/i);
+  assert.match(workflow, /npm audit --prefix portal --audit-level=high/);
   assert.match(workflow, /npm ci --prefix portal --ignore-scripts/);
   assert.match(workflow, /node --test portal\/scripts\/dependency-policy.test.mjs/);
   assert.match(workflow, /node portal\/scripts\/check-build-isolation.mjs/);

@@ -766,20 +766,21 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
   // only the transmitted RESULT is stored. Paths sit under the gated
   // /api/auth prefix, so no COMMUNITY_PATH change is needed.
   // HOLD GATE (fail-closed): live collection is held until separately
-  // approved. APPROPRIATENESS_COLLECT must be set explicitly (staging QA
+  // approved. APPROPRIATENESS_COLLECT must equal '1' explicitly (staging QA
   // only); unset on demo/production, so real accounts have NO live
   // submission path - every appropriateness request answers 503, enforced
   // here, not by report caveat. Read at request time so tests can toggle.
   // Two-layer hold, both fail-closed, both read at request time:
-  //  1. APPROPRIATENESS_COLLECT must be set explicitly (staging QA only);
-  //     unset on demo/production, so real accounts have NO live submission
-  //     path - every appropriateness request answers 503.
+  //  1. APPROPRIATENESS_COLLECT must equal '1' (staging QA only);
+  //     every other value, including 'false' and '0', keeps collection held:
+  //     every appropriateness request answers 503.
   //  2. APPROPRIATENESS_ALLOWLIST (comma-separated Stellar public keys)
   //     restricts collection to designated synthetic QA wallets even where
   //     the flag is set; empty/absent allowlist collects from NOBODY (403),
   //     so enabling the flag can never open blanket collection.
+  const appropriatenessCollectionEnabled = () => process.env.APPROPRIATENESS_COLLECT === '1';
   const appropriatenessGate = (account: Account): CommunityError | null => {
-    if (!process.env.APPROPRIATENESS_COLLECT)
+    if (!appropriatenessCollectionEnabled())
       return new CommunityError(503, 'appropriateness collection is disabled on this deployment (held)', 'feature_unavailable');
     const allowed = (process.env.APPROPRIATENESS_ALLOWLIST ?? '')
       .split(',')
@@ -790,7 +791,7 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     return null;
   };
   const appropriatenessHeld: express.RequestHandler = (req, res, next) => {
-    if (!process.env.APPROPRIATENESS_COLLECT) {
+    if (!appropriatenessCollectionEnabled()) {
       res.status(503).json({ error: 'appropriateness collection is disabled on this deployment (held)', code: 'feature_unavailable' });
       return;
     }

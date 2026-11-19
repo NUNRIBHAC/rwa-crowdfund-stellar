@@ -97,6 +97,7 @@ function createRegistry() {
       for (const b of metric.buckets) {
         lines.push(`${name}_bucket${base}le=${JSON.stringify(String(b))}} ${buckets.get(b) ?? 0}`);
       }
+      lines.push(`${name}_bucket${base}le="+Inf"} ${count}`);
       lines.push(`${name}_count${labelStr} ${count}`);
       lines.push(`${name}_sum${labelStr} ${sum.toFixed(6)}`);
     }
@@ -178,9 +179,27 @@ export function safeRoutePath(req: Request): string {
   // limiter rejections, 404s) collapse to one coarse label so an attacker
   // cannot create a time series per arbitrary path.
   const routePath = (req.route?.path as string | undefined) ?? '';
-  return routePath || 'unmatched';
+  return typeof routePath === 'string' && routePath ? routePath : 'unmatched';
 }
 
 export function resetMetricsForTests() {
   metrics.resetForTests();
+}
+
+// Only a fixed vocabulary may become a label. Unknown public response codes
+// share one series rather than retaining arbitrary values in process memory.
+const ERROR_CODES = new Set([
+  'not_found',
+  'invalid_input',
+  'body_too_large',
+  'internal_error',
+  'rate_limited',
+  'API_UNAVAILABLE',
+  'unauthorized',
+  'forbidden',
+  'database_unavailable',
+  'service_unavailable',
+]);
+export function safeErrorCode(code: string): string {
+  return ERROR_CODES.has(code) ? code : 'other';
 }

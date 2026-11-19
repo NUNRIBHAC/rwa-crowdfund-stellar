@@ -1,6 +1,6 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { Keypair, StrKey } from '@stellar/stellar-sdk';
-import type { Account, CommunityStore } from './community-store.js';
+import type { Account, CommunityState, CommunityStore } from './community-store.js';
 import { generateSecret, encryptSeed, decryptSeed, verifyTotp, generateRecoveryCodes, hashRecoveryCode } from './totp.js';
 
 // Wallet-challenge authentication for the demo platform.
@@ -57,6 +57,21 @@ export function validateDisplayName(name: unknown): string | null {
 
 export function hashToken(token: string): string {
   return createHash('sha256').update(token).digest('hex');
+}
+
+// Centralise bearer-token creation so every authentication flow uses the same
+// token shape, hashing, and TTL. Callers still own their return envelope
+// (wallet challenge, TOTP completion, email verification, social login, ...).
+export function createSession(state: CommunityState, account: Account, now: number): { token: string; expiresAt: number; account: Account } {
+  const token = `bls_${randomBytes(24).toString('hex')}`;
+  const session = {
+    tokenHash: hashToken(token),
+    publicKey: account.publicKey,
+    createdAt: now,
+    expiresAt: now + SESSION_TTL_MS,
+  };
+  state.sessions[session.tokenHash] = session;
+  return { token, expiresAt: session.expiresAt, account: { ...account } };
 }
 
 export async function createChallenge(store: CommunityStore, publicKey: string, now = Date.now()): Promise<{ message: string; expiresAt: number }> {
@@ -119,18 +134,11 @@ export async function verifyChallenge(
       state.totpTickets[ticket] = { id: ticket, publicKey, expiresAt };
       return { requiresTotp: true as const, ticket, expiresAt, account: { ...account }, challenge };
     }
-    const token = `bls_${randomBytes(24).toString('hex')}`;
-    const session = {
-      tokenHash: hashToken(token),
-      publicKey,
-      createdAt: now,
-      expiresAt: now + SESSION_TTL_MS,
-    };
-    state.sessions[session.tokenHash] = session; // keyed by hash; the raw token is never stored
+    const { token, expiresAt, account: sessionAccount } = createSession(state, account, now);
     return {
       token,
-      expiresAt: session.expiresAt,
-      account: { ...account },
+      expiresAt,
+      account: sessionAccount,
       challenge,
     };
   });
@@ -278,15 +286,7 @@ export async function completeTotpLogin(
     enrollment.failedAttempts = 0;
     enrollment.lockUntil = null;
     delete state.totpTickets[ticket];
-    const token = `bls_${randomBytes(24).toString('hex')}`;
-    const session = {
-      tokenHash: hashToken(token),
-      publicKey: account.publicKey,
-      createdAt: now,
-      expiresAt: now + SESSION_TTL_MS,
-    };
-    state.sessions[session.tokenHash] = session;
-    return { token, expiresAt: session.expiresAt, account: { ...account } };
+    return createSession(state, account, now);
   });
   if (!found) throw new AuthError(401, 'invalid or expired ticket or wrong code; sign in again', 'totp_login_invalid');
   return found;

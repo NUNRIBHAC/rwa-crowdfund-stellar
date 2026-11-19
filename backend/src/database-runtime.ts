@@ -184,7 +184,7 @@ export function databasePoolMetrics(): Array<{ key: string; active: number; idle
     let max = 0;
     for (const pool of s.pools) {
       const p = pool as any;
-      active += Number(p.totalCount ?? 0);
+      active += Math.max(0, Number(p.totalCount ?? 0) - Number(p.idleCount ?? 0));
       idle += Number(p.idleCount ?? 0);
       waiting += Number(p.waitingCount ?? 0);
       max += Number(p.options?.max ?? p.max ?? 0);

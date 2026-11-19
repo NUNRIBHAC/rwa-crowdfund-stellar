@@ -5,7 +5,9 @@ import { rmSync } from 'node:fs';
 import { EventEmitter } from 'node:events';
 import { createCommunityTestDirectory } from '../src/test-storage-guard.js';
 import { trackDatabasePool, resetDatabaseRuntimeForTests, databaseKey } from '../src/database-runtime.js';
-import { resetMetricsForTests } from '../src/metrics.js';
+import { resetMetricsForTests, metrics, httpRequestDuration, apiErrorsTotal, safeRoutePath, safeHttpMethod, safeErrorCode } from '../src/metrics.js';
+import { databasePoolMetrics } from '../src/database-runtime.js';
+import type { Request } from 'express';
 
 // backend/test/*.test.ts files share one Node process, so every env value a
 // test sets must be restored, not just deleted: a dotenv load in another test
@@ -85,7 +87,7 @@ test('metrics endpoint exposes request counts, durations, error codes and db poo
 
     // Database pool saturation labelled by the same stable hash used internally.
     const key = databaseKey(url);
-    assert.match(body, new RegExp(`db_pool_active_connections\\{db_hash="${key}"\\} 2`));
+    assert.match(body, new RegExp(`db_pool_active_connections\\{db_hash="${key}"\\} 1`));
     assert.match(body, new RegExp(`db_pool_idle_connections\\{db_hash="${key}"\\} 1`));
     assert.match(body, new RegExp(`db_pool_waiting_connections\\{db_hash="${key}"\\} 3`));
     assert.match(body, new RegExp(`db_pool_max_connections\\{db_hash="${key}"\\} 5`));
@@ -194,5 +196,79 @@ test('metrics endpoint requires admin key', async () => {
     resetMetricsForTests();
     resetDatabaseRuntimeForTests();
     rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('histogram exports cumulative buckets and mandatory +Inf equal to count', () => {
+  resetMetricsForTests();
+  for (const duration of [0.001, 0.02, 11]) httpRequestDuration.observe({ route: '/fixture' }, duration);
+  const text = metrics.serialize();
+  assert.match(text, /_bucket\{route="\/fixture",le="0.005"\} 1/);
+  assert.match(text, /_bucket\{route="\/fixture",le="0.025"\} 2/);
+  assert.match(text, /_bucket\{route="\/fixture",le="10"\} 2/);
+  assert.match(text, /_bucket\{route="\/fixture",le="\+Inf"\} 3/);
+  assert.match(text, /_count\{route="\/fixture"\} 3/);
+  resetMetricsForTests();
+});
+
+test('pool gauges aggregate checked-out clients and remove closed pools without SQL', async () => {
+  resetDatabaseRuntimeForTests();
+  const url = 'postgres://fixture:fixture@127.0.0.1/fixture';
+  let queries = 0;
+  const makePool = (total: number, idle: number) =>
+    Object.assign(new EventEmitter(), {
+      totalCount: total,
+      idleCount: idle,
+      waitingCount: 2,
+      options: { max: 10 },
+      query: async () => {
+        queries++;
+        return { rows: [] };
+      },
+      end: async () => {},
+    });
+  const a = trackDatabasePool(makePool(5, 4), url);
+  const b = trackDatabasePool(makePool(3, 1), url);
+  assert.deepEqual(databasePoolMetrics(), [{ key: databaseKey(url), active: 3, idle: 5, waiting: 4, max: 20 }]);
+  await a.end();
+  assert.deepEqual(databasePoolMetrics(), [{ key: databaseKey(url), active: 2, idle: 1, waiting: 2, max: 10 }]);
+  await b.end();
+  assert.deepEqual(databasePoolMetrics(), [{ key: databaseKey(url), active: 0, idle: 0, waiting: 0, max: 0 }]);
+  assert.equal(queries, 0);
+  resetDatabaseRuntimeForTests();
+});
+
+test('untrusted paths, methods and error codes cannot create unbounded labels', () => {
+  resetMetricsForTests();
+  for (let i = 0; i < 1000; i++) {
+    const req = { route: { path: '/accounts/:id' }, originalUrl: `/accounts/private-${i}?token=secret` } as Request;
+    assert.equal(safeRoutePath(req), '/accounts/:id');
+    assert.equal(safeRoutePath({ originalUrl: `/missing-${i}` } as Request), 'unmatched');
+    assert.equal(safeHttpMethod(`CUSTOM-${i}`), 'UNKNOWN');
+    apiErrorsTotal.inc({ code: safeErrorCode(`private-${i}`) });
+  }
+  assert.equal(safeRoutePath({ route: { path: /private/ } } as unknown as Request), 'unmatched');
+  const text = metrics.serialize();
+  assert.match(text, /api_errors_total\{code="other"\} 1000/);
+  assert.doesNotMatch(text, /private|token|secret/);
+  resetMetricsForTests();
+});
+
+test('metrics disabled without admin secret and forbidden for a wrong key', async () => {
+  const saved = saveEnv();
+  const { app } = await import('../src/server.js');
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise<void>((resolve) => server.once('listening', resolve));
+  const address = server.address() as import('node:net').AddressInfo;
+  const url = `http://127.0.0.1:${address.port}/api/operator/metrics`;
+  try {
+    delete process.env.ADMIN_SECRET;
+    assert.equal((await fetch(url)).status, 503);
+    process.env.ADMIN_SECRET = 'fixture-admin';
+    assert.equal((await fetch(url, { headers: { 'x-admin-key': 'wrong-key' } })).status, 401);
+  } finally {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+    restoreEnv(saved);
+    resetMetricsForTests();
   }
 });
