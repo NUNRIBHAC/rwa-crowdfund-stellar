@@ -591,6 +591,11 @@ export interface CommunityStore {
   // Only the creator owns disposal. Injected stores remain caller-owned.
   close?(): Promise<void>;
   change<T>(fn: (state: CommunityState) => T): Promise<T>;
+  // Read-only snapshot: same validation and empty-document semantics as
+  // read(). Readonly protects top-level fields only, not nested records.
+  // The detached snapshot is not persisted by view(). Useful for scans that
+  // decide whether an expensive locked change() is needed.
+  view?<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T>;
   read(): Promise<CommunityState>;
   // Optional minimal same-snapshot projection. No cache or write is allowed.
   readSessionAccount?(tokenHash: string): Promise<SessionAccountSnapshot>;
@@ -661,6 +666,9 @@ export class FileCommunityStore implements CommunityStore {
   }
   read(): Promise<CommunityState> {
     return Promise.resolve(this.load());
+  }
+  view<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T> {
+    return this.read().then((state) => fn(state));
   }
   change<T>(fn: (state: CommunityState) => T): Promise<T> {
     // Serialize writes within this process; one API process owns the file.
@@ -744,6 +752,12 @@ export class PostgresCommunityStore implements CommunityStore {
     const { rows } = await this.pool.query('SELECT doc FROM community_store WHERE id = $1', [PG_DOC_ID]);
     if (rows.length === 0) return emptyCommunityState();
     return validate(rows[0].doc);
+  }
+  async view<T>(fn: (state: Readonly<CommunityState>) => T): Promise<T> {
+    await this.ready;
+    const { rows } = await this.pool.query('SELECT doc FROM community_store WHERE id = $1', [PG_DOC_ID]);
+    const state = rows.length === 0 ? emptyCommunityState() : validate(rows[0].doc);
+    return fn(state);
   }
   async readSessionAccount(tokenHash: string): Promise<SessionAccountSnapshot> {
     // Keep arbitrary keys and raw bearer tokens away from this query contract.

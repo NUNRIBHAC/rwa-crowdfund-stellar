@@ -29,6 +29,18 @@ test('wallet challenge login issues a session and authenticates', async () => {
   assert.equal(authed.publicKey, kp.publicKey());
 });
 
+test('FileCommunityStore.view() reads persisted state and mutations to its snapshot never persist', async () => {
+  const store = newStore();
+  const kp = Keypair.random();
+  await login(store, kp);
+  assert.equal(await store.view((state) => Object.keys(state.accounts).length), 1);
+  // The snapshot is caller-owned: mutating it must not reach the file.
+  await store.view((state) => {
+    (state as any).accounts = {};
+  });
+  assert.equal(await store.view((state) => Object.keys(state.accounts).length), 1);
+});
+
 test('challenge is single-use: replaying the same signature fails', async () => {
   const store = newStore();
   const kp = Keypair.random();
