@@ -4,7 +4,7 @@
       "notice": "Demo-Vorlage: Diese Seite ist ein illustratives Dokument für den Blockallisto-Prototyp, keine Rechtsberatung. Sie wurde nicht von einem Anwalt geprüft und ist kein Nachweis einer Firmenregistrierung oder behördlichen Genehmigung. Mit [DEMO] gekennzeichnete Unternehmensangaben sind fiktive Demonstrationsdaten."
     },
     "b01": {
-      "p": "<b>Zuletzt aktualisiert:</b> {v:lastUpdated}"
+      "p": "<b>Zuletzt aktualisiert:</b> 2026-11-20"
     },
     "b02": {
       "p": "Diese Nutzungsbedingungen (die \"Bedingungen\") regeln Ihre Nutzung der Blockallisto-Website und -Demoanwendung (der \"Service\"), eines Prototyp-Projekts, das von Blockallisto betrieben wird (\"wir\", \"uns\"). Die für Blockallisto in diesen Bedingungen angegebenen Unternehmensdaten sind fiktive Demonstrationsdaten - Rechtsform \"Lda.\" [DEMO], eingetragener Sitz \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], Registernummer \"000 000 000\" [DEMO]. Der eingetragene Firmenname, die Rechtsform, der Sitz und der Registrierungsstatus von Blockallisto wurden nicht verifiziert, und es wird keine Registrierung behauptet. Kontakt: {v:contactEmail}."
@@ -112,7 +112,7 @@
   },
   "privacyPolicy": {
     "b00": {
-      "notice": "Datenschutzhinweis zum Testnet-Prototyp, aktualisiert am 3. November 2026. Er beschreibt die tatsächliche Verarbeitung von Kontodaten; er ist weder Rechtsberatung noch ein Nachweis einer behördlichen Zulassung. Es sind keine Echtgeld-Vorgänge aktiviert."
+      "notice": "Datenschutzhinweis zum Testnet-Prototyp, aktualisiert am 20. November 2026. Er beschreibt die tatsächliche Verarbeitung von Kontodaten; er ist weder Rechtsberatung noch ein Nachweis einer behördlichen Zulassung. Es sind keine Echtgeld-Vorgänge aktiviert."
     },
     "b01": {
       "h2": "1. Verantwortlicher und Kontakt"
@@ -130,10 +130,10 @@
       "p": "Die Anmeldung per Wallet bleibt optional und nutzt eine einmal verwendbare, signierte Challenge mit fünf Minuten Gültigkeit. Wenn ein konfigurierter Anbieter für die Anmeldung über soziale Konten verfügbar ist, speichern wir dessen Namen, die stabile Subjekt-Kennung, die verifizierte E-Mail-Adresse, sofern sie zurückgegeben wird, und Anmeldezeitstempel; Konten werden nicht automatisch per E-Mail zusammengeführt. Die neue Registrierung über soziale Konten kann getrennt von der Registrierung per E-Mail und Passwort eingeschränkt bleiben. Ihre E-Mail-Adresse wird nicht als Autorenbezeichnung öffentlicher Kommentare verwendet."
     },
     "b06": {
-      "p": "Sitzungs-Tokens werden serverseitig gehasht; der Browser speichert das Sitzungs-Token im lokalen Speicher. Sitzungen dauern bis zu 30 Tage und können widerrufen werden. Wenn Sie einen zweiten Faktor per Authenticator-App aktivieren, wird dessen Seed serverseitig verschlüsselt und Wiederherstellungscodes werden als Hashes gespeichert. Ein Passwort-Reset widerruft Sitzungen und ausstehende Anmelde-Tickets des zweiten Faktors, entfernt aber keinen bereits eingerichteten zweiten Faktor."
+      "p": "Sitzungs-Tokens werden serverseitig gehasht. Der Browser sendet die Sitzung in einem auf den Host beschränkten HttpOnly-Cookie, mit Secure unter HTTPS; JavaScript hält nur eine Markierung. Alte Zugangsdaten im lokalen Speicher werden migriert und entfernt. Sitzungen gelten bis zu 30 Tage und sind widerrufbar. Authenticator-Geheimnisse sind verschlüsselt, Wiederherstellungscodes gehasht. Ein Passwort-Reset widerruft Sitzungen und ausstehende Zweitfaktor-Anfragen, entfernt aber keinen eingerichteten zweiten Faktor."
     },
     "b07": {
-      "p": "Für Kontodatensätze, E-Mail-Zugangsdaten und optionale Daten des zweiten Faktors gibt es derzeit keine automatische Frist zur Kontolöschung. Abgelaufene Tokens funktionieren nach Ablauf nicht mehr, doch der Ablauf garantiert nicht die sofortige Entfernung ihrer gespeicherten Datensätze. Ein Selbstbedienungs-Werkzeug zur Kontolöschung gibt es noch nicht. Schreiben Sie an blockallisto@gmail.com, um Auskunft, Berichtigung oder Löschung zu beantragen; Anträge werden anhand von Sicherheits- und Rechtspflichten geprüft. Protokolle und Backups der Anbieter können gesondert aufbewahrt werden."
+      "p": "Konten mit bestätigter E-Mail können im Kontoformular mit aktuellem Passwort, DELETE-Bestätigung und gegebenenfalls aktuellem Zweitfaktor-Code die Löschung beantragen. Verknüpfte Betriebsdaten und Betreiberkonten können die Löschung verhindern. Dies garantiert keine vollständige Löschung: Backups, separate Transaktionsjournale, Anbieterdaten und öffentliche Blockchain-Daten bleiben bestehen. Weitere Anfragen: blockallisto@gmail.com. Ablauf bedeutet keine sofortige Entfernung gespeicherter Einträge."
     },
     "b08": {
       "p": "Kommentare (Kennung des öffentlichen Schlüssels, optionaler Anzeigename, Text, Kampagne und Zeitstempel) sind öffentlich. Angezeigt werden die neuesten 100 pro Kampagne; ausgeblendete Kommentare werden nach 30 Tagen gelöscht. Support- und Feedback-Tickets, Emittentenanträge und Benachrichtigungen sind nur für das Konto und autorisierte Betreiberrollen sichtbar und werden nach den Bereinigungsregeln der Anwendung nach 90 Tagen gelöscht. Vermeiden Sie sensible personenbezogene Angaben in Freitextfeldern."
@@ -145,13 +145,13 @@
       "p": "Beim Verbinden einer Wallet oder Vorbereiten von Testbeiträgen werden im Sicherheitsjournal öffentliche Wallet-Schlüssel, Kampagnenkennungen, Beträge, Transaktionsumschläge, Hashes, Status und Zeitstempel erfasst. Unsignierte Vorbereitungen laufen nach 24 Stunden ab; abgeschlossene Transaktionen werden nach 30 Tagen bereinigt. Ungeklärte signierte Transaktionen bleiben bis zur Klärung bestehen, und signierte Umschläge werden nach der Finalität gelöscht. Öffentliche Stellar-Testnet-Einträge können wir nicht löschen. Geheime Wallet-Schlüssel bleiben in Ihrer Wallet."
     },
     "b11": {
-      "p": "Design, Sprache und Sitzungsauswahl nutzen den lokalen Speicher des Browsers. Hosting-Anbieter verarbeiten IP-Adressen und Anfragemetadaten. Die Ratenbegrenzung der Anwendung und das Zwischenspeichern der IP-Reputation verwenden IP-Adressen im flüchtigen Speicher; die Anwendungsdiagnose nutzt aggregierte Zähler statt Roh-IP-Protokolle. Infrastrukturprotokolle der Anbieter und die Aufbewahrung von Backups sind davon getrennt. Wir verwenden keine Werbe-Tracker und keine Newsletter-Verteiler."
+      "p": "Design- und Spracheinstellungen nutzen lokalen Speicher; das Sitzungsgeheimnis nutzt ein Cookie. Hostinganbieter verarbeiten IP-Adressen und Anfragemetadaten. Limits und IP-Reputationscache nutzen temporären Speicher. Anbieterprotokolle und Backups haben eigene Aufbewahrungsregeln. Keine Werbetracker oder Newsletterlisten werden verwendet."
     },
     "b12": {
       "h2": "4. Sicherheitsdienste und Empfänger"
     },
     "b13": {
-      "p": "Render hostet die Anwendung in Frankfurt und Neon hostet die Postgres-Daten. Brevo erhält die E-Mail-Adressen der Empfänger sowie den Inhalt der Verifizierungs- und Rücksetz-E-Mails und verarbeitet Zustellmetadaten. Cloudflare Turnstile verarbeitet Browser- und Gerätesignale sowie Challenge-Tokens für Bot-Prüfungen; die serverseitige Validierung kann die Client-IP einschließen. Nach einer erfolgreichen Bot-Prüfung erhält ipapi.is die Client-IP zur Bewertung der Missbrauchsreputation. Die Reputation dient zunächst nur der Beobachtung; VPN-, Proxy- oder Tor-Status allein ist kein Grund zur Sperrung. Anbieterfehler oder ein erschöpftes Abfragebudget können diese Ebene schwächen; CAPTCHA, Ratenbegrenzungen und E-Mail-Budgets sind davon getrennte Schutzmaßnahmen."
+      "p": "Website und API laufen auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten. Dieser gemeinsam genutzte Host garantiert keine Verfügbarkeit. Brevo erhält die E-Mail-Adressen der Empfänger sowie den Inhalt der Verifizierungs- und Rücksetz-E-Mails und verarbeitet Zustellmetadaten. Cloudflare Turnstile verarbeitet Browser- und Gerätesignale sowie Challenge-Tokens für Bot-Prüfungen; die serverseitige Validierung kann die Client-IP einschließen. Nach einer erfolgreichen Bot-Prüfung erhält ipapi.is die Client-IP zur Bewertung der Missbrauchsreputation. Die Reputation dient zunächst nur der Beobachtung; VPN-, Proxy- oder Tor-Status allein ist kein Grund zur Sperrung. Anbieterfehler oder ein erschöpftes Abfragebudget können diese Ebene schwächen; CAPTCHA, Ratenbegrenzungen und E-Mail-Budgets sind davon getrennte Schutzmaßnahmen."
     },
     "b14": {
       "p": "Wo die Anmeldung über soziale Konten aktiviert ist, verarbeitet der gewählte Identitätsanbieter diese Authentifizierung nach seinen eigenen Bedingungen. Das Stellar-Testnet ist öffentlich und global. GitHub hostet den Quellcode, nicht die Kontodatenbank. Sicherheits- und E-Mail-Anbieter können Daten außerhalb des EWR verarbeiten; gehen Sie nicht davon aus, dass jeder Auftragsverarbeiter nur in der EU sitzt. Ihre aktuellen Richtlinien und die geltenden Garantien regeln ihre eigene Verarbeitung: https://www.brevo.com/legal/privacypolicy/ ; https://www.cloudflare.com/privacypolicy/ ; https://ipapi.is/privacy.html ; https://ipapi.is/terms.html ."
@@ -171,7 +171,7 @@
       "notice": "Demo-Vorlage: Diese Seite ist ein illustratives Dokument für den Blockallisto-Prototyp, keine Rechtsberatung. Sie wurde nicht von einem Anwalt geprüft und ist kein Nachweis einer Firmenregistrierung oder behördlichen Genehmigung. Mit [DEMO] gekennzeichnete Unternehmensangaben sind fiktive Demonstrationsdaten."
     },
     "b01": {
-      "p": "<b>Zuletzt aktualisiert:</b> {v:lastUpdated}"
+      "p": "<b>Zuletzt aktualisiert:</b> 2026-11-20"
     },
     "b02": {
       "h2": "Zuerst lesen: An der heutigen Demo ist kein echtes Geld beteiligt"
@@ -233,7 +233,7 @@
       "notice": "Demo-Vorlage: Diese Seite ist ein illustratives Dokument für den Blockallisto-Prototyp, keine Rechtsberatung. Sie wurde nicht von einem Anwalt geprüft und ist kein Nachweis einer Firmenregistrierung oder behördlichen Genehmigung. Mit [DEMO] gekennzeichnete Unternehmensangaben sind fiktive Demonstrationsdaten."
     },
     "b01": {
-      "p": "<b>Zuletzt aktualisiert:</b> {v:lastUpdated}"
+      "p": "<b>Zuletzt aktualisiert:</b> 2026-11-20"
     },
     "b02": {
       "p": "Dieser Rechtliche Hinweis identifiziert den Betreiber der Blockallisto-Website und -Demoanwendung (der \"Service\"). Die unten gezeigten Unternehmensdaten sind fiktive Demonstrationsdaten: Rechtsform \"Lda.\" [DEMO], eingetragener Sitz \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], Registernummer \"000 000 000\" [DEMO], Stammkapital \"EUR 0\" [DEMO], Geschäftsführer \"Nome Demonstracao\" [DEMO]. Der eingetragene Firmenname, die Rechtsform, der Sitz und der Registrierungsstatus von Blockallisto wurden nicht verifiziert, und es wird keine Registrierung behauptet. Kontakt: {v:contactEmail}."
@@ -317,7 +317,7 @@
       "notice": "Demo-Vorlage: Diese Seite ist ein illustratives Dokument für den Blockallisto-Prototyp, keine Rechtsberatung. Sie wurde nicht von einem Anwalt geprüft und ist kein Nachweis einer Firmenregistrierung oder behördlichen Genehmigung. Mit [DEMO] gekennzeichnete Unternehmensangaben sind fiktive Demonstrationsdaten."
     },
     "b01": {
-      "p": "<b>Zuletzt aktualisiert:</b> {v:lastUpdated}"
+      "p": "<b>Zuletzt aktualisiert:</b> 2026-11-20"
     },
     "b02": {
       "p": "Diese Richtlinienvorlage beschreibt, wie Blockallisto Interessenkonflikte zu erkennen, zu verhindern, zu handhaben und offenzulegen beabsichtigt. Blockallisto ist heute eine Prototyp-Demonstration im Stellar-Testnet: Es gibt keine echten Investoren, Emittenten, Gelder oder Angebote, sodass heute kein tatsächlicher Konflikt entstehen kann. Dieses Dokument ist ein Design-Artefakt, das an den Compliance-Oberflächen etablierter EU-Crowdfunding-Plattformen ausgerichtet wurde, und <b>nicht</b> eine Beschreibung eines aktiven Compliance-Programms."
@@ -358,7 +358,7 @@
       "notice": "Demo-Vorlage: Diese Seite ist ein illustratives Dokument für den Blockallisto-Prototyp, keine Rechtsberatung. Sie wurde nicht von einem Anwalt geprüft und ist kein Nachweis einer Firmenregistrierung oder behördlichen Genehmigung. Mit [DEMO] gekennzeichnete Unternehmensangaben sind fiktive Demonstrationsdaten."
     },
     "b01": {
-      "p": "<b>Zuletzt aktualisiert:</b> {v:lastUpdated}"
+      "p": "<b>Zuletzt aktualisiert:</b> 2026-11-20"
     },
     "b02": {
       "p": "Diese Seite erklärt, wie Sie sich über den Blockallisto-Prototyp beschweren können und wie Beschwerden bearbeitet werden. Blockallisto ist heute eine Demo im Stellar-Testnet ohne echte Gelder; der unten beschriebene Bearbeitungsprozess ist für die Demo real, während der formale regulatorische Rahmen, den er abbildet, nur für eine autorisierte Plattform gilt."
@@ -404,7 +404,7 @@
       "notice": "Demo-Vorlage: Diese Seite ist ein illustratives Dokument für den Blockallisto-Prototyp, keine Rechtsberatung. Sie wurde nicht von einem Anwalt geprüft und ist kein Nachweis einer Firmenregistrierung oder behördlichen Genehmigung. Mit [DEMO] gekennzeichnete Unternehmensangaben sind fiktive Demonstrationsdaten."
     },
     "b01": {
-      "p": "<b>Zuletzt aktualisiert:</b> {v:lastUpdated}"
+      "p": "<b>Zuletzt aktualisiert:</b> 2026-11-20"
     },
     "b02": {
       "p": "Diese Seite beschreibt, was den Blockallisto-Prototyp verfügbar und wiederherstellbar hält, und welche Kontinuitätsplanung für eine künftige autorisierte Plattform beabsichtigt ist. Der erste Abschnitt ist sachlich zur laufenden Demo; der zweite ist Designabsicht, nicht gegenwärtige Praxis."
@@ -415,8 +415,8 @@
     "b04": {
       "ul": {
         "i00": "<b>Keine Kundenvermögen gefährdet:</b> Die Demo hält kein Geld, keine Kundengelder und keine Verwahrung. Beiträge sind Testnet-Token ohne Geldwert, abgewickelt über einen Soroban-Smart-Contract im öffentlichen Stellar-Testnet. Der Vertragszustand liegt im Testnet-Ledger, unabhängig von dieser Website.",
-        "i01": "<b>Hosting:</b> Website und API laufen im kostenlosen Tarif von Render; die Betriebsdaten (Transaktionsjournal, Community-Daten) liegen in einer Neon-Postgres-Datenbank im kostenlosen Tarif. Beides sind Dienste Dritter mit eigenen Verfügbarkeitseigenschaften; für die Demo wird keine Betriebszeit garantiert.",
-        "i02": "<b>Backups:</b> [Backup-Zeitplan und Aufbewahrung zu definieren - die kostenlosen Tarife bieten keine verwalteten Backups; der Testnet-Vertragszustand ist aus dem öffentlichen Ledger wiederherstellbar].",
+        "i01": "Website und API laufen auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten. Dieser gemeinsam genutzte Host garantiert keine Verfügbarkeit.",
+        "i02": "Ein verschlüsseltes externes Backup und ein isolierter Datenbank-Wiederherstellungstest waren am 20. November 2026 erfolgreich. Diese datierte Prüfung garantiert weder Wiederherstellungszeit noch automatische Aufbewahrung oder die Wiederherstellung aller externen Dienste.",
         "i03": "<b>Trennung der Umgebungen:</b> die nutzerseitige Demo, eine separate Staging-Umgebung und wegwerfbare Datenbankkopien werden getrennt gehalten, damit Tests die Demo nicht beschädigen können.",
         "i04": "<b>Wenn die Demo nicht verfügbar ist:</b> verliert kein Nutzer etwas von Wert. Der Kampagnenzustand bleibt auf öffentlichen Stellar-Testnet-Explorern lesbar, und Beiträge unterliegen weiterhin dem Vertrag, nicht dieser Website."
       }

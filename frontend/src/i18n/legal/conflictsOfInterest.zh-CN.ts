@@ -16,10 +16,7 @@ export const blocks: LegalBlock[] = [
       {
         b: ['最近更新:'],
       },
-      ' ',
-      {
-        v: 'lastUpdated',
-      },
+      ' 2026-11-20',
     ],
   },
   {

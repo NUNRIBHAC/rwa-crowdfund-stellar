@@ -16,10 +16,7 @@ export const blocks: LegalBlock[] = [
       {
         b: ['Zuletzt aktualisiert:'],
       },
-      ' ',
-      {
-        v: 'lastUpdated',
-      },
+      ' 2026-11-20',
     ],
   },
   {
@@ -42,16 +39,10 @@ export const blocks: LegalBlock[] = [
         ' Die Demo hält kein Geld, keine Kundengelder und keine Verwahrung. Beiträge sind Testnet-Token ohne Geldwert, abgewickelt über einen Soroban-Smart-Contract im öffentlichen Stellar-Testnet. Der Vertragszustand liegt im Testnet-Ledger, unabhängig von dieser Website.',
       ],
       [
-        {
-          b: ['Hosting:'],
-        },
-        ' Website und API laufen im kostenlosen Tarif von Render; die Betriebsdaten (Transaktionsjournal, Community-Daten) liegen in einer Neon-Postgres-Datenbank im kostenlosen Tarif. Beides sind Dienste Dritter mit eigenen Verfügbarkeitseigenschaften; für die Demo wird keine Betriebszeit garantiert.',
+        'Website und API laufen auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten. Dieser gemeinsam genutzte Host garantiert keine Verfügbarkeit.',
       ],
       [
-        {
-          b: ['Backups:'],
-        },
-        ' [Backup-Zeitplan und Aufbewahrung zu definieren - die kostenlosen Tarife bieten keine verwalteten Backups; der Testnet-Vertragszustand ist aus dem öffentlichen Ledger wiederherstellbar].',
+        'Ein verschlüsseltes externes Backup und ein isolierter Datenbank-Wiederherstellungstest waren am 20. November 2026 erfolgreich. Diese datierte Prüfung garantiert weder Wiederherstellungszeit noch automatische Aufbewahrung oder die Wiederherstellung aller externen Dienste.',
       ],
       [
         {
