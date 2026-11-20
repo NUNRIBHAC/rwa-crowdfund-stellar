@@ -32,7 +32,7 @@ function withSession(getResp: Response, postImpl?: (init?: RequestInit) => Respo
     if (url.includes('/api/auth/me')) return resp(200, me);
     if (url.includes('/api/campaigns/demo-solar/messages')) {
       if (init?.method === 'POST') return postImpl ? postImpl(init) : resp(500, {});
-      return getResp;
+      return getResp.clone();
     }
     return resp(404, {});
   });

@@ -23,7 +23,7 @@ test('campaign load failure offers retry without empty/not-found claim; retry se
       const url = String(input);
       if (url.startsWith('/api/campaigns') && !url.includes('/metadata')) {
         campaignCalls++;
-        if (campaignCalls === 1) return { ok: false, status: 503, json: async () => ({ code: 'API_UNAVAILABLE', error: 'upstream' }) };
+        if (campaignCalls <= 2) return { ok: false, status: 503, json: async () => ({ code: 'API_UNAVAILABLE', error: 'upstream' }) };
         return { ok: true, json: async () => ({ campaigns: [] }) };
       }
       return { ok: true, json: async () => ({ enabled: false, comments: [], episodes: [], news: [] }) };
@@ -40,7 +40,7 @@ test('campaign load failure offers retry without empty/not-found claim; retry se
   expect(screen.queryByText('Campaign not found')).toBeNull();
   fireEvent.click(retry);
   await waitFor(() => expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull());
-  expect(campaignCalls).toBeGreaterThan(1);
+  expect(campaignCalls).toBe(3);
 });
 
 test('an in-flight first load explains loading without offering a duplicate retry or claiming empty data', async () => {

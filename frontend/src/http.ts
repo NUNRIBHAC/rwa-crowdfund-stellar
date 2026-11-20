@@ -39,7 +39,7 @@ export async function responseCall<T>(url: string, init: RequestInit, decode: (r
       }
       if (read && !controller?.signal.aborted && [502, 503, 504].includes(response.status)) {
         // Release the first response body before retrying.
-        await response.body?.cancel().catch(() => undefined);
+        void response.body?.cancel().catch(() => undefined);
         response = await fetchOnce();
       }
       if (!response.ok) {

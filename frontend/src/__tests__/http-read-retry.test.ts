@@ -61,3 +61,13 @@ it('keeps the original 20-second overall deadline across retry', async () => {
   await result;
   expect(fetch).toHaveBeenCalledTimes(2);
 });
+it('does not wait for transport body cancellation before the one allowed retry', async () => {
+  const first = { status: 503, ok: false, body: { cancel: () => new Promise<void>(() => {}) } };
+  const fetch = vi
+    .fn()
+    .mockResolvedValueOnce(first)
+    .mockResolvedValueOnce(Response.json({ ok: true }));
+  vi.stubGlobal('fetch', fetch);
+  await expect(responseCall('/read', {}, decode)).resolves.toEqual({ ok: true });
+  expect(fetch).toHaveBeenCalledTimes(2);
+});
