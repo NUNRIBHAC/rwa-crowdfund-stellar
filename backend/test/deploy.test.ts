@@ -397,6 +397,22 @@ test('v2 deploy submit rejects a step made stale by a later in-progress step', a
   );
 });
 
+test('v2 deploy rejects changed parameters after the pipeline has started', async () => {
+  reset();
+  const built = await buildCampaignDeployV2(v2Input());
+  await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' });
+  v2TokenOnLedger = true; // upload-token is now SUCCESS on the ledger
+  // A resume with divergent constructor parameters must not start the next
+  // step: the fingerprint recorded by the first intent wins.
+  const changed = { ...v2Input(), v2: { ...v2Input().v2, maxPerInvestor: '2000' } };
+  await assert.rejects(buildCampaignDeployV2(changed), /deployment parameters changed between pipeline steps/);
+  const renamed = { ...v2Input(), name: 'Solar V2 renamed' };
+  await assert.rejects(buildCampaignDeployV2(renamed), /deployment parameters changed between pipeline steps/);
+  // The identical parameters resume normally.
+  const next = await buildCampaignDeployV2(v2Input());
+  assert.equal(next.step, 'upload-offering');
+});
+
 test('v2 deploy walks the full five-step chain and returns a wired registry entry', async () => {
   reset();
   const run = async () => {
@@ -489,7 +505,7 @@ function pgFakePool() {
       return { rows: row ? [{ signed_xdr: row.signed_xdr ?? null }] : [] };
     }
     if (/^INSERT INTO soroban_intents/.test(sql)) {
-      const [hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id] = params as any[];
+      const [hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id, , params_hash] = params as any[];
       const prior = rows.get(hash);
       // Mirror the upsert: a terminal stored status wins, and a stored
       // contract id is never erased by an id-less save.
@@ -505,6 +521,7 @@ function pgFakePool() {
         signed_xdr: status === 'SUCCESS' || status === 'FAILED' ? null : (prior?.signed_xdr ?? signed_xdr ?? null),
         status: terminal ? prior.status : status,
         contract_id: contract_id ?? prior?.contract_id ?? null,
+        params_hash: params_hash ?? prior?.params_hash ?? null,
       });
       return { rows: [] };
     }
