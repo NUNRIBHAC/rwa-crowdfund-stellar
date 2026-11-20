@@ -1,4 +1,4 @@
-> **Local implementation extension (29 October 2026):** Read [IMPLEMENTATION.md](IMPLEMENTATION.md) first. The new identity/valuation/governance/cash-out API is test-only and separate from the campaign API. It does not approve real investors or send fiat. The existing classic tokens and Soroban balance records do not by themselves establish economic rights, legal ownership, liquidity, regulatory permission or KYC enforcement. No live network tests, provider integrations, push or deployment are included.
+> **Local implementation extension (29 October 2026):** Read [IMPLEMENTATION.md](../IMPLEMENTATION.md) first. The new identity/valuation/governance/cash-out API is test-only and separate from the campaign API. It does not approve real investors or send fiat. The existing classic tokens and Soroban balance records do not by themselves establish economic rights, legal ownership, liquidity, regulatory permission or KYC enforcement. No live network tests, provider integrations, push or deployment are included.
 
 # RWA Crowdfund — Stellar
 
