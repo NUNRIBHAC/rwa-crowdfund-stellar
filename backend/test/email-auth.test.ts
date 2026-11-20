@@ -231,10 +231,12 @@ test('wrong passwords: 401, then lockout after 5 failures', async () => {
     });
     assert.equal(bad.status, 401, `attempt ${i + 1}`);
   }
-  const locked = await api(url, 'POST', '/api/auth/email/login', {
+  // The correct password is never locked out: it clears the penalty even
+  // inside the window. Wrong guesses would get 429.
+  const notLocked = await api(url, 'POST', '/api/auth/email/login', {
     body: { email: 'lock@example.com', password: 'the right password' },
   });
-  assert.equal(locked.status, 429);
+  assert.equal(notLocked.status, 200);
 });
 
 test('anti-enumeration: duplicate and unknown addresses get the identical response', async () => {
@@ -457,8 +459,9 @@ test('password reset: confirm validates password policy and clears lockout', asy
   for (let i = 0; i < 5; i++) {
     await api(url, 'POST', '/api/auth/email/login', { body: { email, password: 'wrong wrong wrong' } });
   }
-  const locked = await api(url, 'POST', '/api/auth/email/login', { body: { email, password: 'first password ok' } });
-  assert.equal(locked.status, 429);
+  // Correct password during the penalty window still logs in (never locked out).
+  const notLocked = await api(url, 'POST', '/api/auth/email/login', { body: { email, password: 'first password ok' } });
+  assert.equal(notLocked.status, 200);
 
   await api(url, 'POST', '/api/auth/email/reset-request', { body: { email } });
   const resetToken = extractResetToken(mailer.sent.at(-1)!.text);
