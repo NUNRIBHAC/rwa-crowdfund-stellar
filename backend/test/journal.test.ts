@@ -699,3 +699,26 @@ test('postgres journal readSummary: verdict cache is bounded and evicted entries
   assert.equal(s2.intents.length + (s2.quarantined?.length ?? 0), 2, 'no row silently dropped');
   for (const q of s2.quarantined ?? []) assert.match(q.reason, /revalidated next run/);
 });
+
+test('file journal: terminal rows are never regressed and envelopes never silently swapped', async () => {
+  process.env.SOROBAN_INTENTS_PATH = path.join(tmp, 'file-monotonic.json');
+  resetJournalBackendForTests();
+  const j = await journalBackend();
+  const h = 'b'.repeat(64);
+  const built: Intent = { ...sample, hash: h };
+  await j.save({ intents: [built] });
+  await j.save({ intents: [{ ...built, signedXdr: 'AAAAsigned1', status: 'SIGNED' }] });
+  // A non-terminal update of a non-terminal row applies normally.
+  await j.save({ intents: [{ ...built, signedXdr: 'AAAAsigned1', status: 'UNKNOWN' }] });
+  assert.equal((await j.read()).intents.find((i) => i.hash === h)?.status, 'UNKNOWN');
+  // A DIFFERENT envelope for the same hash is refused outright.
+  await assert.rejects(j.save({ intents: [{ ...built, signedXdr: 'AAAAdifferent', status: 'UNKNOWN' }] }), /conflicting signed envelope/);
+  await j.save({ intents: [{ ...built, signedXdr: 'AAAAsigned1', status: 'SUCCESS' }] });
+  // Sequential stale write: a delayed PENDING must not overwrite SUCCESS.
+  await j.save({ intents: [{ ...built, status: 'PENDING' }] });
+  assert.equal((await j.read()).intents.find((i) => i.hash === h)?.status, 'SUCCESS');
+  // Concurrent stale writes in either order still end terminal.
+  await Promise.all([j.save({ intents: [{ ...built, status: 'PENDING' }] }), j.save({ intents: [{ ...built, status: 'FAILED' }] })]);
+  const row = (await j.read()).intents.find((i) => i.hash === h);
+  assert.equal(row?.status, 'SUCCESS');
+});
