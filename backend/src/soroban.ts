@@ -927,6 +927,15 @@ export async function buildCampaignDeploy(input: { actor: string; id: string; na
     if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
     const open = openIntents(store, input.actor);
     if (open.length >= openIntentCap()) throw new Error(`too many open intents (${open.length}); resolve signed intents or let unsigned ones expire`);
+    // One in-flight reservation per (campaign, actor, step), inside the same
+    // lock as the insert - identical rule to the v2 pipeline.
+    const existing = store.intents.find(
+      (i) => i.campaign === input.id && i.actor === input.actor && i.action === `deploy-${step}` && !TERMINAL.includes(i.status),
+    );
+    if (existing)
+      throw new Error(
+        `deploy step deploy-${step} is already prepared (hash ${existing.hash}); sign and submit that exact transaction or wait for it to expire`,
+      );
     store.intents.push({ hash, campaign: input.id, actor: input.actor, action: `deploy-${step}`, xdr: prepared.toXDR(), status: 'BUILT' });
     await save(store);
   });
@@ -1050,6 +1059,14 @@ export async function submitCampaignDeploy(input: { actor: string; xdr: string; 
     if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
     const other = store.intents.find((i) => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
     if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
+    // Revalidate the step order inside the same lock: an upload transaction
+    // is stale once this campaign's create step is already in progress.
+    if (intent.action === 'deploy-upload') {
+      const later = store.intents.find(
+        (i) => i.campaign === intent.campaign && i.actor === input.actor && i.action === 'deploy-create' && !TERMINAL.includes(i.status),
+      );
+      if (later) throw new Error('the create step is already in progress for this campaign; this upload transaction is stale, do not submit it');
+    }
     if (!intent.signedXdr) {
       intent.signedXdr = input.xdr;
       intent.status = 'SIGNED';
@@ -1391,6 +1408,14 @@ export async function buildCampaignDeployV2(input: {
     if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
     const open = openIntents(store, input.actor);
     if (open.length >= openIntentCap()) throw new Error(`too many open intents (${open.length}); resolve signed intents or let unsigned ones expire`);
+    // One in-flight reservation per (campaign, actor, step), inside the same
+    // lock as the insert: two rapid retries must never create two prepared
+    // transactions for the same deploy step.
+    const existing = store.intents.find((i) => i.campaign === input.id && i.actor === input.actor && i.action === next.action && !TERMINAL.includes(i.status));
+    if (existing)
+      throw new Error(
+        `deploy step ${next.action} is already prepared (hash ${existing.hash}); sign and submit that exact transaction or wait for it to expire`,
+      );
     store.intents.push({ hash, campaign: input.id, actor: input.actor, action: next.action, xdr: prepared.toXDR(), status: 'BUILT' });
     await save(store);
   });
@@ -1422,6 +1447,14 @@ export async function submitCampaignDeployV2(input: { actor: string; xdr: string
     if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
     const other = store.intents.find((i) => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
     if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
+    // The signed transaction was prepared against an older pipeline state;
+    // revalidate the step order inside the same lock. A later step already
+    // prepared or submitted for this campaign makes this transaction stale.
+    const stepIndex = V2_ACTIONS.indexOf(intent.action);
+    const later = store.intents.find(
+      (i) => i.campaign === intent.campaign && i.actor === input.actor && V2_ACTIONS.indexOf(i.action) > stepIndex && !TERMINAL.includes(i.status),
+    );
+    if (later) throw new Error(`a later deploy step ${later.action} is already in progress for this campaign; this transaction is stale, do not submit it`);
     if (!intent.signedXdr) {
       intent.signedXdr = input.xdr;
       intent.status = 'SIGNED';

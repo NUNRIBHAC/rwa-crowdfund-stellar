@@ -341,6 +341,62 @@ test('v2 build validates the contract-set parameters', async () => {
   await assert.rejects(buildCampaignDeployV2({ ...v2Input(), id: 'taken' }), /already registered/);
 });
 
+test('v1 deploy reserves one prepared transaction per campaign/actor/step', async () => {
+  reset();
+  const first = await buildCampaignDeploy(input());
+  await assert.rejects(buildCampaignDeploy(input()), new RegExp(`deploy step deploy-upload is already prepared \\(hash ${first.hash}\\)`));
+});
+
+test('v1 deploy submit rejects an upload made stale by an in-progress create', async () => {
+  reset();
+  const built = await buildCampaignDeploy(input());
+  const store = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8'));
+  store.intents.push({ hash: 'ee'.repeat(32), campaign: 'solar-nine', actor: operator.publicKey(), action: 'deploy-create', xdr: built.xdr, status: 'BUILT' });
+  fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify(store));
+  await assert.rejects(submitCampaignDeploy({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar Nine' }), /this upload transaction is stale/);
+});
+
+test('two concurrent v2 deploy builds produce exactly one reservation', async () => {
+  reset();
+  const results = await Promise.allSettled([buildCampaignDeployV2(v2Input()), buildCampaignDeployV2(v2Input())]);
+  const ok = results.filter((r) => r.status === 'fulfilled');
+  const rejected = results.filter((r) => r.status === 'rejected');
+  assert.equal(ok.length, 1);
+  assert.equal(rejected.length, 1);
+  assert.match((rejected[0] as PromiseRejectedResult).reason.message, /already prepared/);
+  const store = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8'));
+  assert.equal(store.intents.filter((i: any) => i.campaign === 'solar-v2').length, 1);
+});
+
+test('v2 deploy reserves one prepared transaction per campaign/actor/step', async () => {
+  reset();
+  const first = await buildCampaignDeployV2(v2Input());
+  // A rapid retry of the same step must not create a second reservation: the
+  // caller signs and submits the SAME transaction, or lets it expire.
+  await assert.rejects(buildCampaignDeployV2(v2Input()), new RegExp(`already prepared \\(hash ${first.hash}\\)`));
+});
+
+test('v2 deploy submit rejects a step made stale by a later in-progress step', async () => {
+  reset();
+  const built = await buildCampaignDeployV2(v2Input());
+  // Simulate the pipeline having moved on while this transaction awaited a
+  // signature: a later step for the same campaign is already in progress.
+  const store = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8'));
+  store.intents.push({
+    hash: 'ff'.repeat(32),
+    campaign: 'solar-v2',
+    actor: operator.publicKey(),
+    action: 'deploy-v2-create-token',
+    xdr: built.xdr,
+    status: 'BUILT',
+  });
+  fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify(store));
+  await assert.rejects(
+    submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' }),
+    /later deploy step deploy-v2-create-token is already in progress/,
+  );
+});
+
 test('v2 deploy walks the full five-step chain and returns a wired registry entry', async () => {
   reset();
   const run = async () => {
