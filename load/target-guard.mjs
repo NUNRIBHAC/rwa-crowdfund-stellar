@@ -11,6 +11,9 @@ export function assertAllowedTarget(baseUrl, { optIn, allowlist = '' } = {}) {
   } catch {
     throw new Error(`target guard: unparseable BASE_URL ${JSON.stringify(baseUrl)}`);
   }
+  // Credentials in a target URL are never legitimate here; userinfo must
+  // never be mistaken for the destination host.
+  if (url.username || url.password) throw new Error('target guard: credentials in the target URL are not allowed; refusing to run.');
   if (LOOPBACK.has(url.hostname)) return url;
   if (optIn !== '1') {
     throw new Error(

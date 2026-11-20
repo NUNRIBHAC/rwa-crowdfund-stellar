@@ -7,20 +7,10 @@ import { check, sleep } from 'k6';
 // Target guard: these scripts POST and hammer endpoints, so the default
 // target is loopback only. A remote target needs BOTH K6_ALLOW_REMOTE=1 and
 // its host in K6_TARGET_ALLOWLIST (comma-separated) - an explicit opt-in,
-// never an ambient BASE_URL.
+// never an ambient BASE_URL. The shared module is also unit-tested from node.
+import { assertK6Target } from './target-guard-k6.js';
 const BASE = __ENV.BASE_URL || 'http://localhost:4000';
-(function assertTarget(base) {
-  const m = /^https?:\/\/([^/:]+)(:\d+)?/.exec(base);
-  const host = m && m[1];
-  if (['127.0.0.1', 'localhost', '::1', '[::1]'].includes(host)) return;
-  const allowed = (__ENV.K6_TARGET_ALLOWLIST || '')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
-  if (__ENV.K6_ALLOW_REMOTE !== '1' || (!allowed.includes(host) && !allowed.includes(host + (m[2] || '')))) {
-    throw new Error(`target guard: refusing non-loopback target ${base}; set K6_ALLOW_REMOTE=1 and add the host to K6_TARGET_ALLOWLIST to confirm it`);
-  }
-})(BASE);
+assertK6Target(BASE, __ENV);
 const PROFILES = {
   low: { vus: 10, duration: '30s' },
   medium: { vus: 50, duration: '2m' },

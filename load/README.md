@@ -38,7 +38,10 @@ Environment:
 
 ## Target guard (all scenarios)
 
-The default target is loopback (`http://localhost:4000`). The k6 scenarios and
+The default target is loopback (`http://localhost:4000`). Credentials in a
+target URL are refused outright (userinfo must never be mistaken for the
+destination host), and every allowlist entry is validated before the
+decision, so a malformed entry fails closed. The k6 scenarios and
 the e2e submit scripts refuse any other target unless BOTH are set:
 
 - `K6_ALLOW_REMOTE=1` (k6) or `E2E_ALLOW_REMOTE=1` (node e2e) - the explicit opt-in;
