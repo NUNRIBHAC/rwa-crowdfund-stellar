@@ -9,7 +9,6 @@ current scope and Node.js 24 local checks. The original v1 description is
 not a full specification of the later v2 deployment pipeline. Historical
 network results do not establish current contract state or wallet support.
 
-
 This replaces the active classic campaign API and frontend, not an optional mode. It is testnet-only integration code. It has not been deployed or tested with a real wallet against a deployed campaign. No real funds, rights token or KYC enforcement is included.
 
 ## Active interface
