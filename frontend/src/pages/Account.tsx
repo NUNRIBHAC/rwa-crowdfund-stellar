@@ -2,6 +2,7 @@ import ContributionRecordButton from '../components/ContributionRecordButton';
 import DemoJourney from '../components/DemoJourney';
 import { useCommunityAuth } from '../community/CommunityAuth';
 import { accountReadActor } from '../account-read-actor';
+import { api } from '../api';
 import { useEffect, useMemo, useState } from 'react';
 import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
@@ -105,8 +106,7 @@ export default function Account({ market }: { market: Market }) {
     }
     let live = true;
     setActivityRead({ actor: readActor, data: 'loading' });
-    fetch(`/api/account/activity?actor=${encodeURIComponent(readActor)}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    api(`/api/account/activity?actor=${encodeURIComponent(readActor)}`)
       .then((j) => {
         if (live)
           setActivityRead({
@@ -131,8 +131,7 @@ export default function Account({ market }: { market: Market }) {
     }
     let live = true;
     setPositionsRead({ actor: readActor, data: 'loading' });
-    fetch(`/api/campaigns?actor=${encodeURIComponent(readActor)}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    api(`/api/campaigns?actor=${encodeURIComponent(readActor)}`)
       .then((j) => {
         if (!Array.isArray(j.campaigns)) throw new Error('invalid campaign response');
         if (live) setPositionsRead({ actor: readActor, data: j.campaigns });

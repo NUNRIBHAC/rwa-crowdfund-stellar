@@ -171,6 +171,15 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
   }, []);
   const [socialNotice, setSocialNotice] = useState('');
 
+  // messages is recreated by the parent on every render; the restore effect
+  // must run ONCE on mount (re-running it would re-fetch the abuse config
+  // and re-restore the session each time). Read the catalog through a ref so
+  // the effect sees the current text without depending on the object.
+  const messagesRef = useRef(messages);
+  useEffect(() => {
+    messagesRef.current = messages;
+  });
+
   // A social sign-in returns here with its outcome in the URL fragment;
   // consume it before the stored-session restore so a fresh sign-in wins.
   useEffect(() => {
@@ -207,10 +216,10 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       return;
     }
     if (social?.kind === 'linked') {
-      setSocialNotice(tpl(messages.community?.socialLinkedSuccess ?? '', { provider: social.value }));
+      setSocialNotice(tpl(messagesRef.current.community?.socialLinkedSuccess ?? '', { provider: social.value }));
     }
     if (social?.kind === 'error') {
-      setError(describeError(new ApiError(social.value, social.value), messages.community));
+      setError(describeError(new ApiError(social.value, social.value), messagesRef.current.community));
     }
     // Restore a stored session once on mount; drop it if the server rejects it.
     const stored = loadCommunityToken();
@@ -219,7 +228,7 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
       return;
     }
     restore(stored);
-  }, [messages]);
+  }, []);
 
   const signIn = useCallback(
     async (address: string) => {
