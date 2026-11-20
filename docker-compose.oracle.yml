@@ -31,7 +31,7 @@ services:
     mem_limit: 512m
     cpus: 0.75
     networks:
-      - weblate_default
+      - blockallisto-staging-net
 
   demo:
     build: .
@@ -51,12 +51,25 @@ services:
     mem_limit: 512m
     cpus: 0.75
     networks:
-      - weblate_default
+      - blockallisto-demo-net
 
 volumes:
   blockallisto-queue-staging:
   blockallisto-queue-demo:
 
+# One dedicated network per environment: staging and demo no longer share the
+# weblate_default network with the whole weblate stack, and cannot reach each
+# other. External + fail-closed on purpose: `compose up` errors until the
+# one-time operator setup below is done, instead of silently misrouting.
+# One-time setup on the VM:
+#   docker network create blockallisto-staging-net
+#   docker network create blockallisto-demo-net
+#   docker network connect blockallisto-staging-net https-portal
+#   docker network connect blockallisto-demo-net https-portal
+# https-portal then routes <name>.sslip.io over these networks; the apps no
+# longer join weblate_default at all.
 networks:
-  weblate_default:
+  blockallisto-staging-net:
+    external: true
+  blockallisto-demo-net:
     external: true

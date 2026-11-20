@@ -36,7 +36,10 @@ relying on them later. This document fills the reference in
   volume `weblate_ssl-certs`; they survive container recreation and
   image/container pruning (volume pruning is never run).
 - Routing from https-portal to the staging and demo app containers is internal
-  on the Docker network; app ports are not published publicly.
+  on per-environment Docker networks (blockallisto-staging-net,
+  blockallisto-demo-net - https-portal joins both; the apps share no network
+  with each other or with the weblate stack); app ports are not published
+  publicly.
 - Cloudflare Turnstile operates independently at the application layer for
   form anti-abuse validation: the widget runs in the client AND the token is
   verified server-side by the app backend (community-routes Turnstile
