@@ -73,7 +73,10 @@ describe('AppropriatenessSection', () => {
 
   it('renders the held note when the deployment does not collect (503)', async () => {
     globalThis.__authMock = auth();
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(err(503, 'appropriateness collection is disabled on this deployment (held)')));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation(() => err(503, 'appropriateness collection is disabled on this deployment (held)')),
+    );
     render(
       <I18nProvider>
         <AppropriatenessSection />
@@ -117,11 +120,12 @@ describe('AppropriatenessSection', () => {
     globalThis.__authMock = auth();
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue(
-        new Response(JSON.stringify({ error: 'something else', code: 'feature_unavailable' }), {
-          status: 503,
-          headers: { 'Content-Type': 'application/json' },
-        }),
+      vi.fn().mockImplementation(
+        () =>
+          new Response(JSON.stringify({ error: 'something else', code: 'feature_unavailable' }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' },
+          }),
       ),
     );
     render(
@@ -318,8 +322,9 @@ it('localizes generic API_UNAVAILABLE failures in PT instead of showing a raw co
     'fetch',
     vi
       .fn()
-      .mockResolvedValue(
-        new Response(JSON.stringify({ error: 'API_UNAVAILABLE', code: 'API_UNAVAILABLE' }), { status: 503, headers: { 'Content-Type': 'application/json' } }),
+      .mockImplementation(
+        () =>
+          new Response(JSON.stringify({ error: 'API_UNAVAILABLE', code: 'API_UNAVAILABLE' }), { status: 503, headers: { 'Content-Type': 'application/json' } }),
       ),
   );
   render(

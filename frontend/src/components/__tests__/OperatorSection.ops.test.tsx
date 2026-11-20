@@ -386,8 +386,8 @@ test('synthetic loading state resolves and a failed independent read does not bl
       });
     if (u.includes('/comments')) {
       attempts++;
-      return new Response(JSON.stringify(attempts === 1 ? { error: 'Synthetic comments unavailable' } : { comments: [] }), {
-        status: attempts === 1 ? 503 : 200,
+      return new Response(JSON.stringify(attempts <= 2 ? { error: 'Synthetic comments unavailable' } : { comments: [] }), {
+        status: attempts <= 2 ? 503 : 200,
       });
     }
     return new Response(JSON.stringify(u.includes('/tickets') ? { tickets: [] } : u.includes('/reconciliation') ? RECON : { audit: [] }));
@@ -400,7 +400,7 @@ test('synthetic loading state resolves and a failed independent read does not bl
   expect(await screen.findByText('Synthetic project')).toBeTruthy();
   expect((await screen.findByRole('alert')).textContent).toContain('API request failed');
   fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
-  await waitFor(() => expect(attempts).toBe(2));
+  await waitFor(() => expect(attempts).toBe(3));
   fireEvent.click(screen.getByRole('button', { name: 'Comments' }));
   expect(await screen.findByText('No comments yet.')).toBeTruthy();
   expect(screen.queryByRole('alert')).toBeNull();
