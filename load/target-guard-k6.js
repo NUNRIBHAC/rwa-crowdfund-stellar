@@ -15,8 +15,8 @@ export function parseTargetAuthority(base) {
   if (!m) throw new Error(`target guard: unparseable target ${JSON.stringify(base)} (need http(s)://host[:port])`);
   const authority = m[2];
   if (authority.includes('@')) throw new Error('target guard: credentials in the target URL are not allowed; refusing to run');
-  let host = authority;
-  let port = '';
+  let host;
+  let port;
   if (authority.startsWith('[')) {
     const end = authority.indexOf(']');
     if (end === -1) throw new Error(`target guard: unparseable IPv6 authority in ${JSON.stringify(base)}`);

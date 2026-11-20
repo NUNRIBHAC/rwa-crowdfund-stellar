@@ -1,3 +1,4 @@
+import { URL } from 'node:url';
 // Shared target guard for the e2e/load scripts (review point: scripts that
 // POST or submit must never run against whatever URL happens to be in the
 // environment). Default target is loopback. Any other host needs BOTH the
