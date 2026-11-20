@@ -304,8 +304,17 @@ function publicComment(c: Comment): PublicComment {
   };
 }
 
+// Hard bound on the rate-limit key table (default 10_000, same pattern as
+// the read limiter's READ_LIMIT_MAX_KEYS): a flood of unique IPs/accounts
+// cannot grow the map without limit. prune() still sweeps keys idle for the
+// longest window in use (24 h).
+function communityRateMaxKeys(): number {
+  const raw = Number(process.env.COMMUNITY_RATE_MAX_KEYS ?? '');
+  return Number.isSafeInteger(raw) && raw >= 1 ? raw : 10_000;
+}
+
 export class CommunityService {
-  readonly limiter = new RateLimiter();
+  readonly limiter = new RateLimiter(() => Date.now(), communityRateMaxKeys());
   constructor(
     public readonly store: CommunityStore,
     private opts: {
