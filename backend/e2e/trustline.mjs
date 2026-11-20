@@ -1,5 +1,13 @@
 import { Asset, Horizon, Keypair, Networks, Operation, TransactionBuilder, BASE_FEE } from '@stellar/stellar-sdk';
-const server = new Horizon.Server('https://horizon-testnet.stellar.org');
+
+// This script SUBMITS trustline transactions to the Stellar testnet. Refuse
+// to run without the explicit opt-in confirming that exact target.
+const HORIZON_URL = 'https://horizon-testnet.stellar.org';
+if (process.env.E2E_SUBMIT_OPT_IN !== '1') {
+  console.error(`Refusing to submit: set E2E_SUBMIT_OPT_IN=1 to confirm the target ${HORIZON_URL} (testnet trustlines).`);
+  process.exit(2);
+}
+const server = new Horizon.Server(HORIZON_URL);
 const usdc = new Asset('USDC', 'GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5');
 for (const secret of [process.env.S1, process.env.S2, process.env.S3]) {
   const kp = Keypair.fromSecret(secret);
