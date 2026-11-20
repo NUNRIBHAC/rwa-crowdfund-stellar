@@ -6,6 +6,12 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+  # Docs portal (Docusaurus) keeps its own lockfile outside the npm workspaces.
+  - package-ecosystem: npm
+    directory: /portal
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
   # Soroban contract (pinned toolchain; CI verifies the built Wasm fixture).
   - package-ecosystem: cargo
     directory: /contracts/crowdfund

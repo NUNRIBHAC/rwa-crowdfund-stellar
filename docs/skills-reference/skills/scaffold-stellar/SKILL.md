@@ -17,7 +17,7 @@ Docs: https://stellarscaffold.org/docs
 
 ## Setup
 
-Prerequisites: Rust (with the `wasm32v1-none` target) and a C toolchain, the Stellar CLI (`stellar`), Node.js, and Docker (for the local network). On Linux, install the Stellar CLI with `curl -fsSL https://github.com/stellar/stellar-cli/raw/main/install.sh | sh -s -- --install-deps` to also get the system libraries Scaffold needs.
+Prerequisites: Rust (with the `wasm32v1-none` target) and a C toolchain, the Stellar CLI (`stellar`), Node.js, and Docker (for the local network). On Linux, install a pinned Stellar CLI release and verify its checksum instead of piping an unpinned `main` script into a shell: download `https://github.com/stellar/stellar-cli/releases/download/v28.1.0/stellar-cli-28.1.0-x86_64-unknown-linux-gnu.tar.gz`, verify it against SHA-256 `c1680deee94301d33ada7a17f98411e642a4248c727afbd2e43050d345746462` (the same pin this repository's CI uses), then unpack. Re-check the pin against the upstream release notes before upgrading.
 
 ```bash
 cargo binstall stellar-scaffold-cli   # pre-built; or: cargo install --locked stellar-scaffold-cli
