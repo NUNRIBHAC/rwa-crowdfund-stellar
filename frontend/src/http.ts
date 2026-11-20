@@ -20,7 +20,28 @@ export async function responseCall<T>(url: string, init: RequestInit, decode: (r
   if (signal?.aborted) abort();
   try {
     const work = (async () => {
-      const response = await fetch(url, { ...init, ...(controller ? { signal: controller.signal } : {}) });
+      // Only idempotent reads get one immediate retry. Keep both attempts
+      // inside the same 20s deadline; never replay a mutation or a 429.
+      const fetchOnce = () => fetch(url, { ...init, ...(controller ? { signal: controller.signal } : {}) });
+      let response: Response;
+      try {
+        response = await fetchOnce();
+      } catch (error) {
+        if (!read || controller?.signal.aborted || signal?.aborted) throw error;
+        response = await fetchOnce();
+        // The retry budget is spent, even if this response is transient too.
+        if (!response.ok) {
+          const payload: unknown = await response.json().catch(() => null);
+          const code = payload && typeof payload === 'object' && 'code' in payload && typeof payload.code === 'string' ? payload.code : undefined;
+          throw new ApiError(localizedApiError(code), code, response.status);
+        }
+        return decode(response);
+      }
+      if (read && !controller?.signal.aborted && [502, 503, 504].includes(response.status)) {
+        // Release the first response body before retrying.
+        await response.body?.cancel().catch(() => undefined);
+        response = await fetchOnce();
+      }
       if (!response.ok) {
         const payload: unknown = await response.json().catch(() => null);
         const code = payload && typeof payload === 'object' && 'code' in payload && typeof payload.code === 'string' ? payload.code : undefined;
