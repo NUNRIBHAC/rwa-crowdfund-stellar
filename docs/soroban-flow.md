@@ -1,4 +1,14 @@
-# Soroban campaign flow: review branch
+# Historical Soroban campaign integration review
+
+This is the original review-stage design record, retained for context.
+Statements below about no deployment, test counts and unverified live
+creator authorization describe that stage, not the current application.
+See [the dated testnet deployment record](testnet-deployment.md) for the
+later live authorization test, and [the root README](../README.md) for
+current scope and Node.js 24 local checks. The original v1 description is
+not a full specification of the later v2 deployment pipeline. Historical
+network results do not establish current contract state or wallet support.
+
 
 This replaces the active classic campaign API and frontend, not an optional mode. It is testnet-only integration code. It has not been deployed or tested with a real wallet against a deployed campaign. No real funds, rights token or KYC enforcement is included.
 

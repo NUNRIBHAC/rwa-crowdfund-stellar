@@ -1,15 +1,33 @@
 # Soroban all-or-nothing crowdfund - v1 prototype
 
-Prototype for review. Not audited, not deployed, no funds moved. Tests run only in the in-memory Soroban test environment. Separate from the starter repo.
+## Current source and local checks
 
-## Rebuild from this single text file
-This file holds every project file (README, toolchain pin, Cargo.lock, sources). Each starts with a line "=== FILE: path ===". Save it as bundle.txt and run:
+This workspace contains the v1 crowdfund and v2 contracts under `contracts/`.
+The text below describing v1 rules and test output is a historical review
+record, not a reconstruction bundle or proof of the current deployment.
+Use the checked-in source, Cargo.lock and rust-toolchain.toml directly:
 
-    awk '/^=== FILE: /{f=$3; system("mkdir -p $(dirname " f ")"); next} {print > f}' bundle.txt
-    cargo test --locked                # Rust 1.99.1 is pinned by rust-toolchain.toml
-    stellar contract build             # stellar-cli 28.1.0; plain cargo build is rejected by the SDK
+```sh
+cd contracts/crowdfund
+cargo test --locked
+stellar contract build
+```
 
-Versions: rustc 1.99.1, soroban-sdk 29.0.1, stellar-cli 28.1.0. Setup reference: https://developers.stellar.org/docs/build/smart-contracts/getting-started/setup
+Rust 1.99.1 and the wasm32v1-none target are pinned by rust-toolchain.toml;
+soroban-sdk 29.0.1 is declared in Cargo.toml. CI pins stellar-cli 28.1.0.
+The application requires Node.js 24 (root package.json); Node is not needed
+for the Rust-only tests. Run `npm ci`, `npm test` and `npm run build` from
+the repository root for application checks, in an isolated checkout.
+
+The prototype has a dated testnet deployment record in
+[docs/testnet-deployment.md](../../docs/testnet-deployment.md), including a
+negative creator-authorization test. That record is historical evidence,
+not a claim that its contract IDs, balances or test counts remain current.
+The [root README](../../README.md) describes current application scope.
+In-memory tests do not prove current network state, real-wallet behavior,
+or archive restoration. No audit or real-money approval is implied.
+
+## Historical v1 review record
 
 ## Rules (choices made by the owner)
 - All-or-nothing. One contract per campaign, funded in one Stellar asset (SEP-41 / Stellar asset contract).
