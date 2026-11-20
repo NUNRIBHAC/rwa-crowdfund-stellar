@@ -125,6 +125,9 @@ async function startApp(env: Record<string, string>, deps: Record<string, unknow
     'SOCIAL_REGISTRATION_ALLOWED_PHONES',
     'SOCIAL_VALIDATION_PROVIDERS',
     'FARCASTER_AUTH_DOMAIN',
+    'SOCIAL_START_IP_PER_HOUR',
+    'SOCIAL_START_GLOBAL_PER_HOUR',
+    'SOCIAL_FLOW_MAX_ACTIVE',
   ])
     delete process.env[k];
   Object.assign(process.env, env);
@@ -1317,4 +1320,39 @@ test('social linking proof HTTP routes reject bare bearer, unlinked provider, wr
   assert.equal(Object.keys((await store.read()).sessions).length, 2, 'proof callback issues no session');
   const { socialLinkPurpose } = await import('../src/social-link-proof.js');
   await assert.rejects(socialLinkPurpose(store, `Bearer ${firstToken}`, 'github'), (e: any) => e.code === 'social_stepup_required');
+});
+
+test('social start: a cap on active flows refuses new flows until some expire', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'social-cap-'));
+  const store = new FileCommunityStore(path.join(dir, 'store.json'));
+  const cfg = { clientId: CLIENT_ID, clientSecret: CLIENT_SECRET };
+  const now = Date.now();
+  // Cap of 1: the first start persists a flow, the second is refused.
+  await startSocialFlow(store, 'google', cfg, 'http://test/cb', now, undefined, undefined, undefined, undefined, undefined, undefined, 1);
+  await assert.rejects(
+    startSocialFlow(store, 'google', cfg, 'http://test/cb', now + 1, undefined, undefined, undefined, undefined, undefined, undefined, 1),
+    (err: unknown) => {
+      assert.equal((err as { code?: string }).code, 'social_flow_saturated');
+      return true;
+    },
+  );
+  // After the 10-minute TTL the stale flow is pruned and a new start fits.
+  await startSocialFlow(store, 'google', cfg, 'http://test/cb', now + 11 * 60 * 1000, undefined, undefined, undefined, undefined, undefined, undefined, 1);
+});
+
+test('social start: mandatory per-IP and global limits on /start', async () => {
+  const { base } = await startApp({ ...CONF, SOCIAL_START_IP_PER_HOUR: '2' });
+  const hit = () => fetch(`${base}/api/auth/social/google/start`, { redirect: 'manual' });
+  assert.equal((await hit()).status, 302);
+  assert.equal((await hit()).status, 302);
+  const limited = await hit();
+  assert.equal(limited.status, 429);
+  assert.equal((await limited.json()).code, 'rate_limited');
+});
+
+test('social start: the global limit binds independently of the per-IP limit', async () => {
+  const { base } = await startApp({ ...CONF, SOCIAL_START_GLOBAL_PER_HOUR: '1' });
+  const hit = () => fetch(`${base}/api/auth/social/google/start`, { redirect: 'manual' });
+  assert.equal((await hit()).status, 302);
+  assert.equal((await hit()).status, 429);
 });

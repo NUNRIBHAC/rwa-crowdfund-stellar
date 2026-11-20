@@ -162,6 +162,12 @@ const applicationMetadata = (application: import('./community-store.js').IssuerA
   documents: application.documents?.map(applicationDocumentMetadata),
 });
 
+// Social OAuth start limits (review: the start endpoint persisted one flow
+// per request with only optional defenses). Read per request so tests and
+// operators can tune without a rebuild.
+const socialStartIpPerHour = () => Number(process.env.SOCIAL_START_IP_PER_HOUR ?? 20);
+const socialStartGlobalPerHour = () => Number(process.env.SOCIAL_START_GLOBAL_PER_HOUR ?? 500);
+
 export function createCommunityRouter(deps: CommunityRouterDeps): express.Router {
   const { service, requireAdmin, reconciliation, fundingState, investorEntitlement, mailer, campaignDeploy } = deps;
   const store = service.store;
@@ -351,6 +357,11 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
       const cfg = socialConfigFromEnv(process.env, provider);
       if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
+      const socialIp = clientIp(req);
+      if (socialIp && !service.limiter.allow(`social-start-ip:${socialIp}`, socialStartIpPerHour(), 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      if (!service.limiter.allow('social-start-global', socialStartGlobalPerHour(), 60 * 60 * 1000))
+        throw new CommunityError(429, 'sign-in is busy; retry in a few minutes', 'rate_limited');
       await abuseGate(req);
       const { account, sessionCreatedAt } = await authenticateWithSession(store, req.header('authorization'));
       await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {}, Date.now(), req.header('authorization'));
@@ -371,6 +382,11 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       if (!isSocialProvider(provider)) throw new CommunityError(404, 'not found', 'not_found');
       const cfg = socialConfigFromEnv(process.env, provider);
       if (!cfg) throw new CommunityError(404, 'not found', 'not_found');
+      const socialIp = clientIp(req);
+      if (socialIp && !service.limiter.allow(`social-start-ip:${socialIp}`, socialStartIpPerHour(), 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      if (!service.limiter.allow('social-start-global', socialStartGlobalPerHour(), 60 * 60 * 1000))
+        throw new CommunityError(429, 'sign-in is busy; retry in a few minutes', 'rate_limited');
       await abuseGate(req);
       const bind = newBindSecret();
       const { url } = await startSocialFlow(
@@ -401,6 +417,11 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       const ip = clientIp(req);
       if (ip && !service.limiter.allow(`farcaster-nonce-ip:${ip}`, 30, 60 * 60 * 1000))
         throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      const socialIp = clientIp(req);
+      if (socialIp && !service.limiter.allow(`social-start-ip:${socialIp}`, socialStartIpPerHour(), 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      if (!service.limiter.allow('social-start-global', socialStartGlobalPerHour(), 60 * 60 * 1000))
+        throw new CommunityError(429, 'sign-in is busy; retry in a few minutes', 'rate_limited');
       await abuseGate(req);
       const bind = newBindSecret();
       const { nonce } = await issueFarcasterNonce(store, bind.hash);
@@ -422,6 +443,11 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     try {
       const domain = farcasterDomain(process.env);
       if (!domain) throw new CommunityError(404, 'not found', 'not_found');
+      const socialIp = clientIp(req);
+      if (socialIp && !service.limiter.allow(`social-start-ip:${socialIp}`, socialStartIpPerHour(), 60 * 60 * 1000))
+        throw new CommunityError(429, 'rate limit exceeded; slow down and retry later', 'rate_limited');
+      if (!service.limiter.allow('social-start-global', socialStartGlobalPerHour(), 60 * 60 * 1000))
+        throw new CommunityError(429, 'sign-in is busy; retry in a few minutes', 'rate_limited');
       await abuseGate(req);
       const { account, sessionCreatedAt } = await authenticateWithSession(store, req.header('authorization'));
       await requireSocialLinkStepUp(store, account, sessionCreatedAt, req.body ?? {}, Date.now(), req.header('authorization'));
