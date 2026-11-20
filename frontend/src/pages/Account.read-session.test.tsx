@@ -32,7 +32,7 @@ describe('account restored wallet records', () => {
       </I18nProvider>,
     );
     await waitFor(() => expect(fetcher).toHaveBeenCalledWith('/api/account/holdings?actor=wallet-session'));
-    expect(fetcher).toHaveBeenCalledWith('/api/account/activity?actor=wallet-session');
+    expect(fetcher).toHaveBeenCalledWith('/api/account/activity?actor=wallet-session', expect.objectContaining({ signal: expect.any(AbortSignal) }));
     // Read-only scope for a proven wallet session: account-record endpoints,
     // the session-token news feed, plus the same public campaign-catalog
     // balance read the connected-wallet path uses - always for the session's
