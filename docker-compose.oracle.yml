@@ -10,10 +10,11 @@ services:
     container_name: blockallisto-staging
     env_file: ./deploy/env/staging.env
     # Durable contributor-recovery queue: PENDING_CONTRIBUTORS_PATH in
-    # deploy/env/staging.env points here (/app is root-owned, the app runs as
-    # node/1000). Named volumes are created root-owned, so after the FIRST
-    # `compose up` of this change, chown the ACTUAL volume (compose prefixes
-    # the project name; confirm with `docker inspect <container> --format
+    # deploy/env/staging.env points here. The image creates /queue owned by
+    # node/1000, so FRESH named volumes inherit that ownership and need no
+    # manual step. A volume created by an older image is root-owned and needs
+    # a one-time chown (compose prefixes the project name; confirm with
+    # `docker inspect <container> --format
     # '{{range .Mounts}}{{.Name}}{{"\n"}}{{end}}'`), e.g.:
     #   docker run --rm -v <actual-volume>:/q alpine chown 1000:1000 /q
     # The volume survives container replacement (and any Neon rollback), which

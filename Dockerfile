@@ -31,6 +31,10 @@ COPY --from=build /app/backend/dist backend/dist
 COPY --from=build /app/backend/scripts/host.mjs /app/backend/scripts/media-gateway.mjs backend/scripts/
 COPY --from=build /app/frontend/dist frontend/dist
 COPY --from=build /app/backend/wasm backend/wasm
+# Durable contributor-recovery queue mountpoint. Docker initializes a fresh
+# named volume with the image mountpoint's ownership, so a node-owned /queue
+# here removes the manual chown after the first `compose up`.
+RUN mkdir -p /queue && chown node:node /queue
 USER node
 EXPOSE 4000
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --retries=3 \
