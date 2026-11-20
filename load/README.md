@@ -50,3 +50,10 @@ the e2e submit scripts refuse any other target unless BOTH are set:
 The scripts that submit testnet transactions (`backend/e2e/trustline.mjs`,
 `backend/e2e/api-live.mjs`) additionally require `E2E_SUBMIT_OPT_IN=1`,
 confirming the testnet target out loud before any submission.
+
+## Exit status
+
+Every scenario sets `checks: rate==1`. Any failed semantic check makes k6
+exit nonzero. Expected validation 400 responses are judged by explicit
+checks, not a global HTTP error-rate threshold. No latency or capacity SLO
+is implied by this correctness gate.

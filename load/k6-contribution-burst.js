@@ -15,7 +15,12 @@ const PROFILES = {
   low: { vus: 10, duration: '30s' },
   medium: { vus: 50, duration: '2m' },
 };
-export const options = PROFILES[__ENV.K6_PROFILE || 'low'];
+// A failed semantic check must fail the process, including expected 400 paths.
+// Do not gate http_req_failed globally: deliberate validation errors are 4xx.
+export const options = {
+  ...PROFILES[__ENV.K6_PROFILE || 'low'],
+  thresholds: { checks: ['rate==1'] },
+};
 
 export default function () {
   const list = http.get(`${BASE}/api/campaigns`);
