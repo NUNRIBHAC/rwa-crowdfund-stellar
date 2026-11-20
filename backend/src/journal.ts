@@ -37,6 +37,10 @@ export type Intent = {
   // deploy-create transaction whose deployed code matched its pinned Wasm
   // hash (soroban.ts v2 deployment chain). Never operator-supplied.
   contractId?: string;
+  // v2 deploy pipelines only: sha256 fingerprint of the constructor
+  // parameters, recorded by the campaign's first deploy intent; every later
+  // step must carry the identical value (soroban.ts buildCampaignDeployV2).
+  paramsHash?: string;
 };
 // A row that failed validation: excluded from every lookup and update, logged
 // and preserved verbatim in the backend (never silently deleted), and surfaced
@@ -284,7 +288,8 @@ export class PostgresJournal implements Journal {
       ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
       ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now(),
       ADD COLUMN IF NOT EXISTS contract_id text,
-      ADD COLUMN IF NOT EXISTS confirmed_amount text`;
+      ADD COLUMN IF NOT EXISTS confirmed_amount text,
+      ADD COLUMN IF NOT EXISTS params_hash text`;
     // Shared cross-process rate-limit state (sliding window). Additive only;
     // older code ignores the table, so the migration is backward compatible.
     const rateDdl = `CREATE TABLE IF NOT EXISTS soroban_rate_hits (
@@ -546,7 +551,7 @@ export class PostgresJournal implements Journal {
   async read(): Promise<IntentStore> {
     await this.ready;
     const r = await this.pool.query(
-      'SELECT hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id, confirmed_amount, created_at, updated_at FROM soroban_intents ORDER BY seq',
+      'SELECT hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id, confirmed_amount, params_hash, created_at, updated_at FROM soroban_intents ORDER BY seq',
     );
     const intents: Intent[] = [];
     const quarantined: QuarantinedIntent[] = [];
@@ -564,6 +569,7 @@ export class PostgresJournal implements Journal {
         ...(row.updated_at != null ? { updatedAt: new Date(row.updated_at).toISOString() } : {}),
         ...(row.contract_id != null ? { contractId: row.contract_id } : {}),
         ...(row.confirmed_amount != null ? { confirmedAmount: row.confirmed_amount } : {}),
+        ...(row.params_hash != null ? { paramsHash: row.params_hash } : {}),
       };
       // Semantic validation: schema constraints prove columns are present and
       // non-null, not that their contents mean anything (corrupt writes,
@@ -627,8 +633,8 @@ export class PostgresJournal implements Journal {
           throw new Error(`conflicting signed envelope for intent ${i.hash}; refusing to overwrite`);
         }
         await db.query(
-          `INSERT INTO soroban_intents (hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id, confirmed_amount)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+          `INSERT INTO soroban_intents (hash, campaign, actor, action, amount, xdr, signed_xdr, status, contract_id, confirmed_amount, params_hash)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
            ON CONFLICT (hash) DO UPDATE SET campaign = EXCLUDED.campaign, actor = EXCLUDED.actor, action = EXCLUDED.action,
              amount = EXCLUDED.amount, xdr = EXCLUDED.xdr,
              -- A journaled contract id is deployment progress: a later save of
@@ -636,6 +642,8 @@ export class PostgresJournal implements Journal {
              contract_id = COALESCE(EXCLUDED.contract_id, soroban_intents.contract_id),
              -- A captured confirmed amount is never erased by a later save without it.
              confirmed_amount = COALESCE(soroban_intents.confirmed_amount, EXCLUDED.confirmed_amount),
+             -- The constructor-params fingerprint is recorded once and never erased.
+             params_hash = COALESCE(soroban_intents.params_hash, EXCLUDED.params_hash),
              -- Never regress safety state on last-writer-wins: a stored signed
              -- envelope is never erased by an unsigned one, and a terminal
              -- (SUCCESS/FAILED) status is never overwritten by a stale save.
@@ -643,7 +651,19 @@ export class PostgresJournal implements Journal {
                ELSE COALESCE(soroban_intents.signed_xdr, EXCLUDED.signed_xdr) END,
              status = CASE WHEN soroban_intents.status IN ('SUCCESS','FAILED') THEN soroban_intents.status ELSE EXCLUDED.status END,
              updated_at = now()`,
-          [i.hash, i.campaign, i.actor, i.action, i.amount ?? null, i.xdr, i.signedXdr ?? null, i.status, i.contractId ?? null, i.confirmedAmount ?? null],
+          [
+            i.hash,
+            i.campaign,
+            i.actor,
+            i.action,
+            i.amount ?? null,
+            i.xdr,
+            i.signedXdr ?? null,
+            i.status,
+            i.contractId ?? null,
+            i.confirmedAmount ?? null,
+            i.paramsHash ?? null,
+          ],
         );
       }
       // Retention: prune only terminal intents past their retention window and

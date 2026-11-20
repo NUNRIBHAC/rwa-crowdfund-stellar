@@ -1291,6 +1291,24 @@ function v2NextStep(
   if (!ok('deploy-v2-set-minter')) return { action: 'deploy-v2-set-minter', tokenContractId, offeringContractId };
   return { action: 'complete', tokenContractId, offeringContractId };
 }
+// Fingerprint of every v2 deployment parameter that reaches a contract
+// constructor, recorded on the campaign's first deploy intent and required to
+// be identical for every later step: the frontend re-sends the parameters at
+// each build, so without this check a resumed pipeline could combine a token
+// and an offering created from divergent configs.
+export function v2DeployParamsFingerprint(input: { name: string; goal: string; deadline: number; v2: V2DeployParams }): string {
+  const canonical = {
+    name: input.name,
+    goalUnits: amountUnits(input.goal).toString(),
+    deadline: Math.floor(input.deadline),
+    symbol: input.v2.symbol,
+    decimals: input.v2.decimals,
+    minPerInvestorUnits: amountUnits(input.v2.minPerInvestor).toString(),
+    maxPerInvestorUnits: amountUnits(input.v2.maxPerInvestor).toString(),
+  };
+  return createHash('sha256').update(JSON.stringify(canonical)).digest('hex');
+}
+
 export async function buildCampaignDeployV2(input: {
   actor: string;
   id: string;
@@ -1312,6 +1330,7 @@ export async function buildCampaignDeployV2(input: {
   const deadline = Math.floor(input.deadline);
   if (!Number.isSafeInteger(deadline) || deadline <= Math.floor(Date.now() / 1000)) throw new Error('deadline must be in the future');
   validateV2Params(input.v2);
+  const paramsHash = v2DeployParamsFingerprint(input);
   await rateLimit('build', input.actor);
   const client = sorobanDeps.client();
   const [tokenOnLedger, offeringOnLedger] = await Promise.all([v2WasmOnLedger(client, 'token'), v2WasmOnLedger(client, 'offering')]);
@@ -1416,7 +1435,15 @@ export async function buildCampaignDeployV2(input: {
       throw new Error(
         `deploy step ${next.action} is already prepared (hash ${existing.hash}); sign and submit that exact transaction or wait for it to expire`,
       );
-    store.intents.push({ hash, campaign: input.id, actor: input.actor, action: next.action, xdr: prepared.toXDR(), status: 'BUILT' });
+    // Parameter continuity across steps, checked inside the same lock: every
+    // intent of this campaign's pipeline must carry the identical constructor
+    // fingerprint, recorded by its first intent.
+    const prior = store.intents.find((i) => i.campaign === input.id && i.action.startsWith('deploy-v2-'));
+    if (prior && (prior as { paramsHash?: string }).paramsHash !== paramsHash)
+      throw new Error('deployment parameters changed between pipeline steps; reconcile the journal or use a new campaign id, never mix configs');
+    store.intents.push({ hash, campaign: input.id, actor: input.actor, action: next.action, xdr: prepared.toXDR(), status: 'BUILT', paramsHash } as Intent & {
+      paramsHash: string;
+    });
     await save(store);
   });
   return {
