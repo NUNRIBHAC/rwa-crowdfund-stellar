@@ -7,7 +7,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'notice',
     text: [
-      'Datenschutzhinweis zum Testnet-Prototyp, aktualisiert am 3. November 2026. Er beschreibt die tatsächliche Verarbeitung von Kontodaten; er ist weder Rechtsberatung noch ein Nachweis einer behördlichen Zulassung. Es sind keine Echtgeld-Vorgänge aktiviert.',
+      'Datenschutzhinweis zum Testnet-Prototyp, aktualisiert am 20. November 2026. Er beschreibt die tatsächliche Verarbeitung von Kontodaten; er ist weder Rechtsberatung noch ein Nachweis einer behördlichen Zulassung. Es sind keine Echtgeld-Vorgänge aktiviert.',
     ],
   },
   {
@@ -39,13 +39,13 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Sitzungs-Tokens werden serverseitig gehasht; der Browser speichert das Sitzungs-Token im lokalen Speicher. Sitzungen dauern bis zu 30 Tage und können widerrufen werden. Wenn Sie einen zweiten Faktor per Authenticator-App aktivieren, wird dessen Seed serverseitig verschlüsselt und Wiederherstellungscodes werden als Hashes gespeichert. Ein Passwort-Reset widerruft Sitzungen und ausstehende Anmelde-Tickets des zweiten Faktors, entfernt aber keinen bereits eingerichteten zweiten Faktor.',
+      'Sitzungs-Tokens werden serverseitig gehasht. Der Browser sendet die Sitzung in einem auf den Host beschränkten HttpOnly-Cookie, mit Secure unter HTTPS; JavaScript hält nur eine Markierung. Alte Zugangsdaten im lokalen Speicher werden migriert und entfernt. Sitzungen gelten bis zu 30 Tage und sind widerrufbar. Authenticator-Geheimnisse sind verschlüsselt, Wiederherstellungscodes gehasht. Ein Passwort-Reset widerruft Sitzungen und ausstehende Zweitfaktor-Anfragen, entfernt aber keinen eingerichteten zweiten Faktor.',
     ],
   },
   {
     t: 'p',
     text: [
-      'Für Kontodatensätze, E-Mail-Zugangsdaten und optionale Daten des zweiten Faktors gibt es derzeit keine automatische Frist zur Kontolöschung. Abgelaufene Tokens funktionieren nach Ablauf nicht mehr, doch der Ablauf garantiert nicht die sofortige Entfernung ihrer gespeicherten Datensätze. Ein Selbstbedienungs-Werkzeug zur Kontolöschung gibt es noch nicht. Schreiben Sie an blockallisto@gmail.com, um Auskunft, Berichtigung oder Löschung zu beantragen; Anträge werden anhand von Sicherheits- und Rechtspflichten geprüft. Protokolle und Backups der Anbieter können gesondert aufbewahrt werden.',
+      'Konten mit bestätigter E-Mail können im Kontoformular mit aktuellem Passwort, DELETE-Bestätigung und gegebenenfalls aktuellem Zweitfaktor-Code die Löschung beantragen. Verknüpfte Betriebsdaten und Betreiberkonten können die Löschung verhindern. Dies garantiert keine vollständige Löschung: Backups, separate Transaktionsjournale, Anbieterdaten und öffentliche Blockchain-Daten bleiben bestehen. Weitere Anfragen: blockallisto@gmail.com. Ablauf bedeutet keine sofortige Entfernung gespeicherter Einträge.',
     ],
   },
   {
@@ -67,7 +67,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Design, Sprache und Sitzungsauswahl nutzen den lokalen Speicher des Browsers. Hosting-Anbieter verarbeiten IP-Adressen und Anfragemetadaten. Die Ratenbegrenzung der Anwendung und das Zwischenspeichern der IP-Reputation verwenden IP-Adressen im flüchtigen Speicher; die Anwendungsdiagnose nutzt aggregierte Zähler statt Roh-IP-Protokolle. Infrastrukturprotokolle der Anbieter und die Aufbewahrung von Backups sind davon getrennt. Wir verwenden keine Werbe-Tracker und keine Newsletter-Verteiler.',
+      'Design- und Spracheinstellungen nutzen lokalen Speicher; das Sitzungsgeheimnis nutzt ein Cookie. Hostinganbieter verarbeiten IP-Adressen und Anfragemetadaten. Limits und IP-Reputationscache nutzen temporären Speicher. Anbieterprotokolle und Backups haben eigene Aufbewahrungsregeln. Keine Werbetracker oder Newsletterlisten werden verwendet.',
     ],
   },
   {
@@ -77,7 +77,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Render hostet die Anwendung in Frankfurt und Neon hostet die Postgres-Daten. Brevo erhält die E-Mail-Adressen der Empfänger sowie den Inhalt der Verifizierungs- und Rücksetz-E-Mails und verarbeitet Zustellmetadaten. Cloudflare Turnstile verarbeitet Browser- und Gerätesignale sowie Challenge-Tokens für Bot-Prüfungen; die serverseitige Validierung kann die Client-IP einschließen. Nach einer erfolgreichen Bot-Prüfung erhält ipapi.is die Client-IP zur Bewertung der Missbrauchsreputation. Die Reputation dient zunächst nur der Beobachtung; VPN-, Proxy- oder Tor-Status allein ist kein Grund zur Sperrung. Anbieterfehler oder ein erschöpftes Abfragebudget können diese Ebene schwächen; CAPTCHA, Ratenbegrenzungen und E-Mail-Budgets sind davon getrennte Schutzmaßnahmen.',
+      'Website und API laufen auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten. Dieser gemeinsam genutzte Host garantiert keine Verfügbarkeit. Brevo erhält die E-Mail-Adressen der Empfänger sowie den Inhalt der Verifizierungs- und Rücksetz-E-Mails und verarbeitet Zustellmetadaten. Cloudflare Turnstile verarbeitet Browser- und Gerätesignale sowie Challenge-Tokens für Bot-Prüfungen; die serverseitige Validierung kann die Client-IP einschließen. Nach einer erfolgreichen Bot-Prüfung erhält ipapi.is die Client-IP zur Bewertung der Missbrauchsreputation. Die Reputation dient zunächst nur der Beobachtung; VPN-, Proxy- oder Tor-Status allein ist kein Grund zur Sperrung. Anbieterfehler oder ein erschöpftes Abfragebudget können diese Ebene schwächen; CAPTCHA, Ratenbegrenzungen und E-Mail-Budgets sind davon getrennte Schutzmaßnahmen.',
     ],
   },
   {

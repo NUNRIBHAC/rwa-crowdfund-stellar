@@ -16,10 +16,7 @@ export const blocks: LegalBlock[] = [
       {
         b: ['Última atualização:'],
       },
-      ' ',
-      {
-        v: 'lastUpdated',
-      },
+      ' 2026-11-20',
     ],
   },
   {
@@ -41,17 +38,9 @@ export const blocks: LegalBlock[] = [
         },
         ' a demonstração não detém dinheiro, fundos de clientes nem custódia. As contribuições são tokens da testnet sem valor monetário, liquidadas por um contrato inteligente Soroban na testnet pública da Stellar. O estado do contrato vive no ledger da testnet, independentemente deste website.',
       ],
+      ['O site e a API correm numa VM da Oracle Cloud com PostgreSQL 17 local para dados operacionais. Este host partilhado não garante disponibilidade.'],
       [
-        {
-          b: ['Alojamento:'],
-        },
-        ' o site e a API correm no nível gratuito da Render; os dados operacionais (diário de transações, dados da comunidade) vivem numa base de dados Postgres da Neon no seu nível gratuito. Ambos são serviços de terceiros com as respetivas propriedades de disponibilidade; não é garantido qualquer tempo de atividade para a demonstração.',
-      ],
-      [
-        {
-          b: ['Cópias de segurança:'],
-        },
-        ' [agendamento e retenção de cópias de segurança a definir - os níveis gratuitos não fornecem cópias geridas; o estado do contrato na testnet é recuperável a partir do ledger público].',
+        'Uma cópia externa cifrada e uma prova de restauro isolado das bases de dados tiveram sucesso em 20 de novembro de 2026. Esta verificação datada não garante prazo de recuperação, retenção automática nem restauro de todos os serviços externos.',
       ],
       [
         {

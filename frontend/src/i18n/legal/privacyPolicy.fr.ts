@@ -7,7 +7,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'notice',
     text: [
-      "Avis de confidentialité du prototype sur testnet, mis à jour le 3 novembre 2026. Il décrit le traitement réel des données de compte ; il ne constitue ni un conseil juridique ni une preuve d'autorisation réglementaire. Aucune opération en argent réel n'est activée.",
+      "Avis de confidentialité du prototype sur testnet, mis à jour le 20 novembre 2026. Il décrit le traitement réel des données de compte ; il ne constitue ni un conseil juridique ni une preuve d'autorisation réglementaire. Aucune opération en argent réel n'est activée.",
     ],
   },
   {
@@ -39,13 +39,13 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      "Les jetons de session sont hachés côté serveur ; le navigateur conserve le jeton de session dans le stockage local. Les sessions durent jusqu'à 30 jours et peuvent être révoquées. Si vous activez un second facteur par application d'authentification, sa graine est chiffrée côté serveur et les codes de récupération sont stockés sous forme de hachages. La réinitialisation du mot de passe révoque les sessions et les tickets de connexion à second facteur en attente, mais ne supprime pas un second facteur déjà enregistré.",
+      "Les jetons de session sont hachés sur le serveur. Le navigateur transmet la session dans un cookie HttpOnly limité à l'hôte et Secure sous HTTPS ; JavaScript ne garde qu'un marqueur. Les anciens identifiants du stockage local sont migrés puis supprimés. Les sessions durent jusqu'à 30 jours et sont révocables. Les secrets d'authentification sont chiffrés et les codes de récupération hachés. La réinitialisation du mot de passe révoque les sessions et demandes de second facteur en attente, sans supprimer le facteur inscrit.",
     ],
   },
   {
     t: 'p',
     text: [
-      "Les enregistrements de compte, les identifiants e-mail et les données facultatives du second facteur n'ont actuellement aucun délai automatique de suppression de compte. Les jetons expirés cessent de fonctionner à l'expiration, mais l'expiration ne garantit pas la suppression immédiate de leurs enregistrements. Il n'existe pas encore d'outil de suppression de compte en libre-service. Écrivez à blockallisto@gmail.com pour demander l'accès, la rectification ou la suppression ; les demandes sont examinées au regard des obligations de sécurité et légales. Les journaux et sauvegardes des fournisseurs peuvent avoir une conservation distincte.",
+      "Les comptes avec email vérifié peuvent demander leur suppression dans le formulaire du compte avec le mot de passe actuel, la confirmation DELETE et un code de second facteur actuel si activé. Les données opérationnelles liées et les comptes opérateur peuvent bloquer la suppression. Ce n'est pas une garantie d'effacement total : sauvegardes, journaux de transactions séparés, données des fournisseurs et blockchain publique restent conservés. Autres demandes : blockallisto@gmail.com. L'expiration ne garantit pas l'effacement immédiat des enregistrements.",
     ],
   },
   {
@@ -67,7 +67,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      "Le thème, la langue et les choix de session utilisent le stockage local du navigateur. Les hébergeurs traitent les adresses IP et les métadonnées de requête. La limitation de débit de l'application et la mise en cache de la réputation IP utilisent des adresses IP en mémoire transitoire ; les diagnostics de l'application utilisent des compteurs agrégés plutôt que des journaux d'IP brutes. Les journaux d'infrastructure des fournisseurs et la conservation des sauvegardes sont distincts. Nous n'utilisons ni traceurs publicitaires ni listes de diffusion de newsletters.",
+      "Le thème et la langue utilisent le stockage local ; le secret de session utilise un cookie. Les hébergeurs traitent les IP et métadonnées des requêtes. Les limites et le cache de réputation IP utilisent une mémoire temporaire. Les journaux des fournisseurs et sauvegardes ont une conservation distincte. Aucun traceur publicitaire ni liste de diffusion n'est utilisé.",
     ],
   },
   {
@@ -77,7 +77,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      "Render héberge l'application à Francfort et Neon héberge ses données Postgres. Brevo reçoit les adresses e-mail des destinataires et le contenu des e-mails de vérification et de réinitialisation, et traite des métadonnées de livraison. Cloudflare Turnstile traite des signaux du navigateur et de l'appareil ainsi que des jetons de défi pour les contrôles anti-robots ; la validation côté serveur peut inclure l'IP du client. Après un contrôle anti-robots réussi, ipapi.is reçoit l'IP du client pour évaluer sa réputation d'abus. La réputation est d'abord en simple observation ; le statut de VPN, de proxy ou de Tor ne suffit pas à justifier un blocage. Des erreurs des fournisseurs ou l'épuisement du budget de requêtes peuvent réduire cette couche ; le CAPTCHA, les limites de débit et les budgets d'e-mails sont des garde-fous distincts.",
+      "Le site et l'API fonctionnent sur une VM Oracle Cloud avec PostgreSQL 17 local pour les données opérationnelles. Cet hôte partagé ne garantit pas la disponibilité. Brevo reçoit les adresses e-mail des destinataires et le contenu des e-mails de vérification et de réinitialisation, et traite des métadonnées de livraison. Cloudflare Turnstile traite des signaux du navigateur et de l'appareil ainsi que des jetons de défi pour les contrôles anti-robots ; la validation côté serveur peut inclure l'IP du client. Après un contrôle anti-robots réussi, ipapi.is reçoit l'IP du client pour évaluer sa réputation d'abus. La réputation est d'abord en simple observation ; le statut de VPN, de proxy ou de Tor ne suffit pas à justifier un blocage. Des erreurs des fournisseurs ou l'épuisement du budget de requêtes peuvent réduire cette couche ; le CAPTCHA, les limites de débit et les budgets d'e-mails sont des garde-fous distincts.",
     ],
   },
   {
