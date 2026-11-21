@@ -2833,6 +2833,11 @@ export const fr: Messages = {
         caveat:
           "Participation illustrative dans une société à responsabilité limitée portugaise (Lda). Les droits et les restrictions de cession dépendent des statuts et du droit applicable. Cela pourrait être possible dans le cadre ECSPR si la CMVM l'autorise ; ce n'est pas confirmé au Portugal. Exemple éducatif uniquement, pas une offre réelle. Aucune part n'est émise, vendue ou transférée ici.",
       },
+      {
+        label: "Certificat d'actions / certificat de dépôt",
+        caveat:
+          "Un certificat peut représenter des actions sous-jacentes plutôt qu'une propriété directe inscrite. Les droits précis, le vote, les distributions et la cession dépendent de ses conditions. Cela pourrait être possible avec un partenaire agréé (banque ou entreprise d'investissement), sous réserve des exigences ECSPR ; non confirmé au Portugal. Cela n'établit pas de régime portugais de certificats de dépôt. Exemple éducatif uniquement, pas une offre réelle. Aucun certificat n'est émis, vendu, conservé ou transféré ici.",
+      },
     ],
     refundScenario: "Scénario de remboursement uniquement : remboursement fictif après échec de l'objectif, pas un droit général.",
     withdrawalScenario: "Retrait des fonds par le créateur, pas un rendement pour l'investisseur ni un paiement de redevances.",
@@ -2843,5 +2848,12 @@ export const fr: Messages = {
       'Participation illustrative dans une société à responsabilité limitée portugaise (Lda). Les droits et les restrictions de cession dépendent des statuts et du droit applicable.',
     caveat:
       "Cela pourrait être possible dans le cadre ECSPR si la CMVM l'autorise ; ce n'est pas confirmé au Portugal. Exemple éducatif uniquement, pas une offre réelle. Aucune part n'est émise, vendue ou transférée ici.",
+  },
+  shareCertificates: {
+    title: "Certificat d'actions / certificat de dépôt",
+    summary:
+      "Un certificat peut représenter des actions sous-jacentes plutôt qu'une propriété directe inscrite. Les droits précis, le vote, les distributions et la cession dépendent de ses conditions.",
+    caveat:
+      "Cela pourrait être possible avec un partenaire agréé (banque ou entreprise d'investissement), sous réserve des exigences ECSPR ; non confirmé au Portugal. Cela n'établit pas de régime portugais de certificats de dépôt. Exemple éducatif uniquement, pas une offre réelle. Aucun certificat n'est émis, vendu, conservé ou transféré ici.",
   },
 };

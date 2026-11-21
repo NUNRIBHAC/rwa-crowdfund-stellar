@@ -2818,6 +2818,11 @@ export const pt: Messages = {
         caveat:
           'Participação ilustrativa numa sociedade por quotas portuguesa (Lda). Os direitos e as restrições à transmissão dependem dos estatutos e da lei aplicável. Pode ser possível na ECSPR se a CMVM autorizar; não está confirmado em Portugal. Apenas uma amostra educativa, não é uma oferta real. Não são emitidas, vendidas ou transmitidas quotas aqui.',
       },
+      {
+        label: 'Certificado de ações / certificado de depósito',
+        caveat:
+          'Um certificado pode representar ações subjacentes, em vez de titularidade direta registada. O direito concreto, voto, distribuições e transmissão dependem dos seus termos. Pode ser possível com parceiro autorizado (banco ou empresa de investimento), sujeito aos requisitos da ECSPR; não confirmado em Portugal. Isto não estabelece um regime português de certificados de depósito. Apenas amostra educativa, não é oferta real. Não são emitidos, vendidos, guardados em custódia ou transmitidos certificados aqui.',
+      },
     ],
     refundScenario: 'Apenas cenário de reembolso: devolução fictícia por meta não atingida, não um direito geral a reembolso.',
     withdrawalScenario: 'Levantamento de fundos pelo criador, não retorno ao investidor nem pagamento de royalties.',
@@ -2828,5 +2833,12 @@ export const pt: Messages = {
       'Participação ilustrativa numa sociedade por quotas portuguesa (Lda). Os direitos e as restrições à transmissão dependem dos estatutos e da lei aplicável.',
     caveat:
       'Pode ser possível na ECSPR se a CMVM autorizar; não está confirmado em Portugal. Apenas uma amostra educativa, não é uma oferta real. Não são emitidas, vendidas ou transmitidas quotas aqui.',
+  },
+  shareCertificates: {
+    title: 'Certificado de ações / certificado de depósito',
+    summary:
+      'Um certificado pode representar ações subjacentes, em vez de titularidade direta registada. O direito concreto, voto, distribuições e transmissão dependem dos seus termos.',
+    caveat:
+      'Pode ser possível com parceiro autorizado (banco ou empresa de investimento), sujeito aos requisitos da ECSPR; não confirmado em Portugal. Isto não estabelece um regime português de certificados de depósito. Apenas amostra educativa, não é oferta real. Não são emitidos, vendidos, guardados em custódia ou transmitidos certificados aqui.',
   },
 };

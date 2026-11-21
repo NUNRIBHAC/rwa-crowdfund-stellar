@@ -2529,6 +2529,10 @@
       {
         "label": "Participaciones en una Lda portuguesa",
         "caveat": "Participación ilustrativa en una sociedad de responsabilidad limitada portuguesa (Lda). Los derechos y las restricciones a la transmisión dependen de los estatutos y de la ley aplicable. Podría ser posible bajo ECSPR si la CMVM lo autoriza; no está confirmado en Portugal. Solo una muestra educativa, no una oferta real. Aquí no se emiten, venden ni transmiten participaciones."
+      },
+      {
+        "label": "Certificado de acciones / recibo de depósito",
+        "caveat": "Un certificado puede representar acciones subyacentes, en lugar de titularidad directa registrada. El derecho concreto, voto, distribuciones y transmisión dependen de sus condiciones. Podría ser posible con un socio autorizado (banco o empresa de inversión), sujeto a los requisitos ECSPR; no confirmado en Portugal. Esto no establece un régimen portugués de recibos de depósito. Solo un ejemplo educativo, no una oferta real. Aquí no se emiten, venden, custodian ni transmiten certificados."
       }
     ],
     "refundScenario": "Solo escenario de reembolso: devolución ficticia por objetivo no alcanzado, no un derecho general.",
@@ -2538,5 +2542,10 @@
     "title": "Participaciones en una Lda portuguesa",
     "summary": "Participación ilustrativa en una sociedad de responsabilidad limitada portuguesa (Lda). Los derechos y las restricciones a la transmisión dependen de los estatutos y de la ley aplicable.",
     "caveat": "Podría ser posible bajo ECSPR si la CMVM lo autoriza; no está confirmado en Portugal. Solo una muestra educativa, no una oferta real. Aquí no se emiten, venden ni transmiten participaciones."
+  },
+  "shareCertificates": {
+    "title": "Certificado de acciones / recibo de depósito",
+    "summary": "Un certificado puede representar acciones subyacentes, en lugar de titularidad directa registrada. El derecho concreto, voto, distribuciones y transmisión dependen de sus condiciones.",
+    "caveat": "Podría ser posible con un socio autorizado (banco o empresa de inversión), sujeto a los requisitos ECSPR; no confirmado en Portugal. Esto no establece un régimen portugués de recibos de depósito. Solo un ejemplo educativo, no una oferta real. Aquí no se emiten, venden, custodian ni transmiten certificados."
   }
 }

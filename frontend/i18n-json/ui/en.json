@@ -2501,6 +2501,10 @@
       {
         "label": "Quotas in a Portuguese Lda",
         "caveat": "An illustrative participation in a Portuguese private limited company (Lda). Rights and transfer restrictions depend on its articles and applicable law. Possible under ECSPR if the CMVM authorizes it; not confirmed in Portugal. Educational sample only, not a real offer. No quotas are issued, sold or transferred here."
+      },
+      {
+        "label": "Share certificate / depositary receipt",
+        "caveat": "A certificate may represent underlying shares rather than direct registered ownership. The exact claim, voting, distributions and transfer depend on its terms. Potentially possible with an authorized partner (a bank or investment firm), subject to ECSPR requirements; not confirmed in Portugal. This does not establish a Portuguese depositary-receipt regime. Educational sample only, not a real offer. No certificates are issued, sold, held in custody or transferred here."
       }
     ],
     "refundScenario": "Refund scenario only: a fictional failed-goal refund, not a general refund right.",
@@ -2510,5 +2514,10 @@
     "title": "Quotas in a Portuguese Lda",
     "summary": "An illustrative participation in a Portuguese private limited company (Lda). Rights and transfer restrictions depend on its articles and applicable law.",
     "caveat": "Possible under ECSPR if the CMVM authorizes it; not confirmed in Portugal. Educational sample only, not a real offer. No quotas are issued, sold or transferred here."
+  },
+  "shareCertificates": {
+    "title": "Share certificate / depositary receipt",
+    "summary": "A certificate may represent underlying shares rather than direct registered ownership. The exact claim, voting, distributions and transfer depend on its terms.",
+    "caveat": "Potentially possible with an authorized partner (a bank or investment firm), subject to ECSPR requirements; not confirmed in Portugal. This does not establish a Portuguese depositary-receipt regime. Educational sample only, not a real offer. No certificates are issued, sold, held in custody or transferred here."
   }
 }

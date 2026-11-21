@@ -17,6 +17,7 @@ export default function Learn() {
             </a>
           ))}
           <a href="#learn-overlays">{m.learn.overlaysTitle}</a>
+          <a href="#learn-share-certificates">{m.shareCertificates.title}</a>
           <a href="#learn-lda-quotas">{m.ldaQuotas.title}</a>
           <a href="#learn-qualifiers">{m.learn.qualifiersTitle}</a>
         </nav>
@@ -78,6 +79,14 @@ export default function Learn() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section id="learn-share-certificates" aria-label={m.shareCertificates.title}>
+          <h2 className="section-title">{m.shareCertificates.title}</h2>
+          <article className="instrument-card">
+            <p>{m.shareCertificates.summary}</p>
+            <p className="community-note">{m.shareCertificates.caveat}</p>
+          </article>
         </section>
 
         <section id="learn-lda-quotas" aria-label={m.ldaQuotas.title}>

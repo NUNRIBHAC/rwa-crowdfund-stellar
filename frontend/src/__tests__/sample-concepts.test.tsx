@@ -42,10 +42,10 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-test('nine distinct concepts do not extend campaign fixtures, real profiles or executable instrument classes', () => {
-  expect(SAMPLE_CONCEPTS).toHaveLength(9);
+test('ten distinct concepts do not extend campaign fixtures, real profiles or executable instrument classes', () => {
+  expect(SAMPLE_CONCEPTS).toHaveLength(10);
   expect(FIXTURE_CAMPAIGNS).toHaveLength(12);
-  expect(new Set([...SAMPLE_CONCEPTS.map((c) => c.id), ...FIXTURE_CAMPAIGNS.map((c) => c.id)]).size).toBe(21);
+  expect(new Set([...SAMPLE_CONCEPTS.map((c) => c.id), ...FIXTURE_CAMPAIGNS.map((c) => c.id)]).size).toBe(22);
   expect(en.profiles.list).toHaveLength(12);
   expect(en.instruments.classes).toHaveLength(7);
   expect(SAMPLE_CONCEPTS.filter((c) => c.nonFinancial).map((c) => c.subtype)).toEqual(['donation', 'reward', 'pre-sale']);
@@ -62,7 +62,7 @@ test('nine distinct concepts do not extend campaign fixtures, real profiles or e
 
 for (const [locale, messages] of Object.entries(locales)) {
   test(`${locale}: concepts have complete localized labels, caveats and the same sample disclaimer`, () => {
-    expect(messages.sampleConcepts.list).toHaveLength(9);
+    expect(messages.sampleConcepts.list).toHaveLength(10);
     for (const item of messages.sampleConcepts.list) {
       expect(item.label.trim()).not.toBe('');
       expect(item.caveat.length).toBeGreaterThan(30);
@@ -77,7 +77,7 @@ for (const [locale, messages] of Object.entries(locales)) {
         <SampleConceptsSection />
       </I18nProvider>,
     );
-    expect(screen.getAllByText(messages.sampleLifecycle.notice)).toHaveLength(9);
+    expect(screen.getAllByText(messages.sampleLifecycle.notice)).toHaveLength(10);
     for (const concept of SAMPLE_CONCEPTS)
       expect(screen.getAllByText(messages.sampleConcepts.unavailable + ': ' + messages.sampleConcepts.states[concept.sampleState])).toHaveLength(
         SAMPLE_CONCEPTS.filter((c) => c.sampleState === concept.sampleState).length,
@@ -125,9 +125,9 @@ test('sample-mode count includes concepts in a separate section, live data stays
     </I18nProvider>,
   );
   const concepts = screen.getByRole('region', { name: en.sampleConcepts.title });
-  expect(within(concepts).getAllByRole('article')).toHaveLength(9);
+  expect(within(concepts).getAllByRole('article')).toHaveLength(10);
   expect(container.querySelectorAll('.card')).toHaveLength(12);
-  expect(screen.getByRole('status').textContent).toBe('21 campaigns shown');
+  expect(screen.getByRole('status').textContent).toBe('22 campaigns shown');
 });
 
 test('live registry never shows the concept section', () => {
@@ -153,7 +153,7 @@ test('critical distinctions remain explicit and no positive financial guarantees
 
 test('all five concept scenarios remain without giving SAFE a refund right', () => {
   for (const state of ['open', 'funded', 'unsuccessful', 'refunded', 'withdrawn'])
-    expect(SAMPLE_CONCEPTS.filter((c) => c.sampleState === state)).toHaveLength(state === 'unsuccessful' ? 1 : 2);
+    expect(SAMPLE_CONCEPTS.filter((c) => c.sampleState === state)).toHaveLength(2);
   expect(SAMPLE_CONCEPTS.find((c) => c.subtype === 'safe')?.sampleState).toBe('open');
   expect(SAMPLE_CONCEPTS.filter((c) => c.sampleState === 'refunded').map((c) => c.subtype)).toEqual(['donation', 'pre-sale']);
 });
@@ -171,8 +171,8 @@ test('sample status filters include concept scenarios but real mode excludes eve
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(4);
   expect(screen.getByRole('status').textContent).toBe('7 campaigns shown');
   fireEvent.click(screen.getByRole('button', { name: en.invest.underfunded }));
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(3);
-  expect(screen.getByRole('status').textContent).toBe('6 campaigns shown');
+  expect(document.querySelectorAll('[data-concept]')).toHaveLength(4);
+  expect(screen.getByRole('status').textContent).toBe('7 campaigns shown');
 });
 
 test('sample concepts participate in text and industry filters only in sample mode', () => {
@@ -182,8 +182,8 @@ test('sample concepts participate in text and industry filters only in sample mo
     </I18nProvider>,
   );
   fireEvent.change(screen.getByRole('combobox', { name: en.invest.filterIndustryAria }), { target: { value: 'financial-services' } });
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(1);
-  expect(screen.getByRole('status').textContent).toBe('1 campaign shown');
+  expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
+  expect(screen.getByRole('status').textContent).toBe('2 campaigns shown');
   fireEvent.change(screen.getByRole('textbox', { name: en.invest.searchAria }), { target: { value: 'Tagus' } });
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(1);
 });
@@ -214,9 +214,9 @@ test('sample refund and withdrawal filters show exact three identities and count
   expect(screen.getByRole('status').textContent).toBe('1 campaign shown');
 });
 
-test('removed certificate and LLC examples are absent; Lda is educational only', () => {
+test('LLC stays absent; certificate and Lda examples remain educational only', () => {
   const ids = SAMPLE_CONCEPTS.map((c) => String(c.id));
-  expect(ids).not.toContain('concept-share-certificate');
+  expect(ids).toContain('concept-share-certificate');
   expect(ids).not.toContain('concept-llc-holding');
   expect(ids).toContain('concept-lda-quotas');
   expect(en.ldaQuotas.caveat).toContain('if the CMVM authorizes');
@@ -240,3 +240,25 @@ for (const [locale, messages] of Object.entries(locales)) {
     expect(messages.ldaQuotas.caveat).toContain('ECSPR');
   });
 }
+
+for (const [locale, messages] of Object.entries(locales)) {
+  test(`${locale}: certificate Learn note is conditional and sample-only`, () => {
+    localStorage.setItem('blockallisto-language', locale);
+    render(
+      <I18nProvider>
+        <Learn />
+      </I18nProvider>,
+    );
+    expect(screen.getByRole('heading', { name: messages.shareCertificates.title })).toBeTruthy();
+    expect(screen.getByText(messages.shareCertificates.caveat)).toBeTruthy();
+    expect(messages.shareCertificates.caveat).toContain('ECSPR');
+    expect(messages.shareCertificates.caveat).not.toBe(messages.ldaQuotas.caveat);
+  });
+}
+test('certificate caveat makes no Portuguese regime, offer or issuance claim', () => {
+  expect(en.shareCertificates.caveat).toContain('not confirmed in Portugal');
+  expect(en.shareCertificates.caveat).toContain('bank or investment firm');
+  expect(en.shareCertificates.caveat).toContain('does not establish a Portuguese');
+  expect(en.shareCertificates.caveat).toContain('not a real offer');
+  expect(en.shareCertificates.caveat).toContain('No certificates are issued');
+});

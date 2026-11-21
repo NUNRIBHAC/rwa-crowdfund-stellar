@@ -2813,6 +2813,11 @@ export const de: Messages = {
         caveat:
           'Beispielhafte Beteiligung an einer portugiesischen Gesellschaft mit beschränkter Haftung (Lda). Rechte und Übertragungsbeschränkungen richten sich nach der Satzung und dem geltenden Recht. Unter ECSPR möglicherweise zulässig, wenn die CMVM dies genehmigt; in Portugal nicht bestätigt. Nur ein Lehrbeispiel, kein echtes Angebot. Hier werden keine Anteile ausgegeben, verkauft oder übertragen.',
       },
+      {
+        label: 'Aktienzertifikat / Hinterlegungsschein',
+        caveat:
+          'Ein Zertifikat kann zugrunde liegende Aktien statt direkt eingetragenem Eigentum repräsentieren. Anspruch, Stimmrecht, Ausschüttungen und Übertragung richten sich nach seinen Bedingungen. Mit einem zugelassenen Partner (Bank oder Wertpapierfirma) unter den ECSPR-Anforderungen möglicherweise zulässig; in Portugal nicht bestätigt. Dies begründet kein portugiesisches Hinterlegungsschein-Regime. Nur ein Lehrbeispiel, kein echtes Angebot. Hier werden keine Zertifikate ausgegeben, verkauft, verwahrt oder übertragen.',
+      },
     ],
     refundScenario: 'Nur Rückzahlungsszenario: fiktive Rückzahlung bei verfehltem Ziel, kein allgemeiner Anspruch.',
     withdrawalScenario: 'Abruf der Finanzierung durch den Initiator, kein Anlegerertrag oder Lizenzgebührenzahlung.',
@@ -2823,5 +2828,12 @@ export const de: Messages = {
       'Beispielhafte Beteiligung an einer portugiesischen Gesellschaft mit beschränkter Haftung (Lda). Rechte und Übertragungsbeschränkungen richten sich nach der Satzung und dem geltenden Recht.',
     caveat:
       'Unter ECSPR möglicherweise zulässig, wenn die CMVM dies genehmigt; in Portugal nicht bestätigt. Nur ein Lehrbeispiel, kein echtes Angebot. Hier werden keine Anteile ausgegeben, verkauft oder übertragen.',
+  },
+  shareCertificates: {
+    title: 'Aktienzertifikat / Hinterlegungsschein',
+    summary:
+      'Ein Zertifikat kann zugrunde liegende Aktien statt direkt eingetragenem Eigentum repräsentieren. Anspruch, Stimmrecht, Ausschüttungen und Übertragung richten sich nach seinen Bedingungen.',
+    caveat:
+      'Mit einem zugelassenen Partner (Bank oder Wertpapierfirma) unter den ECSPR-Anforderungen möglicherweise zulässig; in Portugal nicht bestätigt. Dies begründet kein portugiesisches Hinterlegungsschein-Regime. Nur ein Lehrbeispiel, kein echtes Angebot. Hier werden keine Zertifikate ausgegeben, verkauft, verwahrt oder übertragen.',
   },
 };

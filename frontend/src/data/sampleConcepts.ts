@@ -45,6 +45,14 @@ export const SAMPLE_CONCEPTS = [
     sampleState: 'funded',
     nonFinancial: false,
   },
+  {
+    id: 'concept-share-certificate',
+    name: 'Bridge Share Certificate',
+    subtype: 'share-certificate',
+    industry: 'financial-services',
+    sampleState: 'unsuccessful',
+    nonFinancial: false,
+  },
 ] as const;
 
 export function sampleConceptIndex(id: string): number {
