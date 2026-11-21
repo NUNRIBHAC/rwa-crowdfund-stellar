@@ -60,7 +60,6 @@ export const SAMPLE_CATALOG = [
     overlays: [],
     state: 'withdrawn',
     indirect: true,
-    holdingStructure: 'depositary-receipt',
   },
   {
     id: 'fixture-meadow-partnership',
@@ -134,11 +133,4 @@ export function isSampleCampaign(campaignId: string): boolean {
 
 export function sampleState(campaignId: string) {
   return SAMPLE_CATALOG.find((sample) => sample.id === campaignId)?.state;
-}
-
-// Only samples that illustrate an indirect holding declare a structure; the
-// value is a presentation descriptor, never a contract or custody claim.
-export function sampleHoldingStructure(campaignId: string): string | undefined {
-  const sample = SAMPLE_CATALOG.find((s) => s.id === campaignId);
-  return sample && 'holdingStructure' in sample ? sample.holdingStructure : undefined;
 }

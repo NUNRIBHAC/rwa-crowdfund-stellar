@@ -17,8 +17,9 @@ export default function Learn() {
             </a>
           ))}
           <a href="#learn-overlays">{m.learn.overlaysTitle}</a>
+          <a href="#learn-share-certificates">{m.shareCertificates.title}</a>
+          <a href="#learn-lda-quotas">{m.ldaQuotas.title}</a>
           <a href="#learn-qualifiers">{m.learn.qualifiersTitle}</a>
-          <a href="#learn-holding">{m.instruments.holding.title}</a>
         </nav>
       </details>
       <div className="learn-content">
@@ -80,18 +81,20 @@ export default function Learn() {
           </div>
         </section>
 
-        <section id="learn-holding" aria-label={m.instruments.holding.aria}>
-          <h2 className="section-title">{m.instruments.holding.title}</h2>
-          <p>{m.instruments.holding.intro}</p>
-          <div className="instrument-grid">
-            {m.instruments.holding.items.map((h) => (
-              <article key={h.id} className="instrument-card">
-                <h3>{h.label}</h3>
-                <p>{h.summary}</p>
-              </article>
-            ))}
-          </div>
-          <p className="community-note">{m.instruments.holding.disclaimer}</p>
+        <section id="learn-share-certificates" aria-label={m.shareCertificates.title}>
+          <h2 className="section-title">{m.shareCertificates.title}</h2>
+          <article className="instrument-card">
+            <p>{m.shareCertificates.summary}</p>
+            <p className="community-note">{m.shareCertificates.caveat}</p>
+          </article>
+        </section>
+
+        <section id="learn-lda-quotas" aria-label={m.ldaQuotas.title}>
+          <h2 className="section-title">{m.ldaQuotas.title}</h2>
+          <article className="instrument-card">
+            <p>{m.ldaQuotas.summary}</p>
+            <p className="community-note">{m.ldaQuotas.caveat}</p>
+          </article>
         </section>
 
         <section id="learn-qualifiers" aria-label={m.learn.qualifiersAria}>

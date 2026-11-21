@@ -361,7 +361,6 @@ export const es: Messages = {
     issuerMissing:
       'La identidad del emisor y las condiciones off-chain no están disponibles en este prototipo; los datos siguientes provienen del contrato on-chain.',
     assetClass: 'Clase de activo',
-    holdingStructureLabel: 'Estructura de titularidad',
     escrowTestnet: 'Escrow por contrato (testnet)',
     interestRate: 'Tipo de interés',
     noInterest: 'Ninguno - solo escrow de contribuciones',
@@ -985,50 +984,6 @@ export const es: Messages = {
     chipSubordinated: 'Subordinada',
     chipUnspecifiedSuffix: '(senioridad no especificada)',
     chipCompose: 'space-lower',
-    holding: {
-      aria: 'Estructuras de titularidad',
-      title: 'Estructuras de titularidad',
-      intro:
-        'Cómo posee el inversor una participación: directamente o a través de un certificado, vehículo o forma societaria. La estructura de titularidad califica el instrumento subyacente; nunca es un instrumento separado y no cambia la economía por sí misma.',
-      disclaimer:
-        'Blockallisto no tiene sociedad constituida ni licencia ECSPR, no emite certificados ni presta ningún servicio de depósito o custodia. Que una estructura pueda ofrecerse realmente depende del instrumento, del emisor, de la jurisdicción y de la ley aplicable; cada estructura mostrada aquí es descriptiva y espera análisis jurídico antes de cualquier oferta real. Cualquier encaje en el ECSPR es una hipótesis que depende de la estructura concreta, nunca un hecho establecido. El registro de un token en Stellar no crea por sí mismo propiedad ni derechos de inversión.',
-      notSpecified: 'No especificado',
-      items: [
-        {
-          id: 'direct',
-          label: 'Titularidad directa',
-          summary: 'El inversor posee la acción o participación a su nombre, sin vehículo ni fiduciario intermedio.',
-        },
-        {
-          id: 'depositary-receipt',
-          label: 'Certificado representativo de acciones',
-          summary:
-            'Certificado de una entidad depositaria o administrativa que representa acciones que esa entidad posee. El certificado y la acción subyacente no son lo mismo: voto, dividendos y transmisión dependen de los términos del propio certificado.',
-        },
-        {
-          id: 'llp',
-          label: 'Participación en LLP',
-          summary: 'Participación en una sociedad colectiva de responsabilidad limitada (LLP), con derechos y pagos definidos por el contrato social.',
-        },
-        {
-          id: 'scp',
-          label: 'Sociedade em conta de participação (SCP)',
-          summary:
-            'Sociedad portuguesa no registrada en la que un socio ejerce la actividad y el socio participante comparte los resultados. No tiene personalidad jurídica propia.',
-        },
-        {
-          id: 'lda-quotas',
-          label: 'Participaciones (quotas) en una Lda',
-          summary:
-            'Participaciones de una sociedad limitada portuguesa (sociedade por quotas, Lda) que posee el activo, con derechos definidos por los estatutos y el código de sociedades portugués.',
-        },
-        {
-          id: 'anonymous-partnership',
-          label: 'Sociedad anónima japonesa (tokumei kumiai)',
-          summary: 'Contrato japonés por el que el inversor aporta al negocio de un operador y comparte sus beneficios sin convertirse en socio registrado.',
-        },
-      ],
-    },
   },
   glossary: [
     {
@@ -2497,9 +2452,6 @@ export const es: Messages = {
       projectName: 'Nombre del proyecto',
       country: 'País',
       instrumentType: 'Tipo de instrumento (p. ej. bono, capital, participación en ingresos)',
-      holdingStructure: 'Estructura de titularidad (opcional)',
-      holdingStructureHelp:
-        'Cómo poseerían los inversores la participación si el proyecto se listara (por ejemplo directamente o mediante un certificado representativo de acciones). Solo descriptivo: seleccionar una opción no es una aprobación, un listado ni una clasificación jurídica.',
       targetAmount: 'Importe objetivo',
       description: 'Descripción del proyecto',
       contactEmail: 'Email de contacto (opcional)',
@@ -2842,16 +2794,6 @@ export const es: Messages = {
           'Derecho contractual ilustrativo de uso de equipos, no su propiedad. Alcance, mantenimiento, plazo y transmisión dependen del acuerdo; un token no transfiere el título.',
       },
       {
-        label: 'Certificado representativo de acciones',
-        caveat:
-          'Un certificado puede representar acciones subyacentes sin titularidad registral directa. Deben definirse derecho exacto, custodio, voto y distribuciones; aquí no se emiten acciones.',
-      },
-      {
-        label: 'Estructura de tenencia LLC',
-        caveat:
-          'Participación a través de un vehículo tipo LLC. Contrato y jurisdicción determinan propiedad, responsabilidad, voto y distribuciones; no implica propiedad directa de los activos.',
-      },
-      {
         label: 'Participación en ingresos',
         caveat:
           'Pago ilustrativo ligado a ingresos brutos definidos. Ingresos no son beneficios; deducciones, información y límites dependen del contrato. Sin rentabilidad ni reembolso garantizados.',
@@ -2876,8 +2818,32 @@ export const es: Messages = {
         caveat:
           'Pedido anticipado ilustrativo de bienes, no inversión ni derecho a tokens futuros. Sin retorno financiero. Precio, entrega, cancelación y derechos del consumidor se definen aparte.',
       },
+      {
+        label: 'Participaciones en una Lda portuguesa',
+        caveat:
+          'Participación ilustrativa en una sociedad de responsabilidad limitada portuguesa (Lda). Los derechos y las restricciones a la transmisión dependen de los estatutos y de la ley aplicable. Podría ser posible bajo ECSPR si la CMVM lo autoriza; no está confirmado en Portugal. Solo una muestra educativa, no una oferta real. Aquí no se emiten, venden ni transmiten participaciones.',
+      },
+      {
+        label: 'Certificado de acciones / recibo de depósito',
+        caveat:
+          'Un certificado puede representar acciones subyacentes, en lugar de titularidad directa registrada. El derecho concreto, voto, distribuciones y transmisión dependen de sus condiciones. Podría ser posible con un socio autorizado (banco o empresa de inversión), sujeto a los requisitos ECSPR; no confirmado en Portugal. Esto no establece un régimen portugués de recibos de depósito. Solo un ejemplo educativo, no una oferta real. Aquí no se emiten, venden, custodian ni transmiten certificados.',
+      },
     ],
     refundScenario: 'Solo escenario de reembolso: devolución ficticia por objetivo no alcanzado, no un derecho general.',
     withdrawalScenario: 'Retirada de fondos por el creador, no retorno al inversor ni pago de regalías.',
+  },
+  ldaQuotas: {
+    title: 'Participaciones en una Lda portuguesa',
+    summary:
+      'Participación ilustrativa en una sociedad de responsabilidad limitada portuguesa (Lda). Los derechos y las restricciones a la transmisión dependen de los estatutos y de la ley aplicable.',
+    caveat:
+      'Podría ser posible bajo ECSPR si la CMVM lo autoriza; no está confirmado en Portugal. Solo una muestra educativa, no una oferta real. Aquí no se emiten, venden ni transmiten participaciones.',
+  },
+  shareCertificates: {
+    title: 'Certificado de acciones / recibo de depósito',
+    summary:
+      'Un certificado puede representar acciones subyacentes, en lugar de titularidad directa registrada. El derecho concreto, voto, distribuciones y transmisión dependen de sus condiciones.',
+    caveat:
+      'Podría ser posible con un socio autorizado (banco o empresa de inversión), sujeto a los requisitos ECSPR; no confirmado en Portugal. Esto no establece un régimen portugués de recibos de depósito. Solo un ejemplo educativo, no una oferta real. Aquí no se emiten, venden, custodian ni transmiten certificados.',
   },
 };

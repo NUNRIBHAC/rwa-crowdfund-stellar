@@ -347,7 +347,6 @@ export const zhTW: Messages = {
     backToAll: '返回全部投資',
     issuerMissing: '本原型不提供發行方身份和鏈下條款；以下數據來自鏈上合約。',
     assetClass: '資產類別',
-    holdingStructureLabel: '持有結構',
     escrowTestnet: '合約託管（測試網）',
     interestRate: '利率',
     noInterest: '無 - 僅出資託管',
@@ -895,46 +894,6 @@ export const zhTW: Messages = {
     chipSubordinated: '次級',
     chipUnspecifiedSuffix: '（未指定優先級）',
     chipCompose: 'concat',
-    holding: {
-      aria: '持有結構',
-      title: '持有結構',
-      intro: '投資者如何持有參與權益：直接持有，或透過憑證、載體或合夥形式持有。持有結構用於限定底層工具；它本身絕不是獨立的工具，也不會單獨改變經濟實質。',
-      disclaimer:
-        'Blockallisto 沒有註冊公司，也沒有 ECSPR 牌照；不發行任何憑證，也不提供任何存管或託管服務。某種結構能否真正發售，取決於工具、發行人、司法管轄區和適用法律；此處展示的每種結構均為描述性內容，在任何真實發售之前仍需法律分析。任何關於 ECSPR 的定性都只是取決於具體結構的假設，絕非既定事實。在 Stellar 上登記代幣本身並不產生所有權或投資者權利。',
-      notSpecified: '未指定',
-      items: [
-        {
-          id: 'direct',
-          label: '直接持有',
-          summary: '投資者以自己名義持有股份或權益，中間沒有載體或受託人。',
-        },
-        {
-          id: 'depositary-receipt',
-          label: '存託憑證（股票憑證）',
-          summary: '由存管或管理機構出具的憑證，代表該機構持有的股票。憑證與底層股票不是同一事物：投票權、股息和轉讓取決於憑證自身的條款。',
-        },
-        {
-          id: 'llp',
-          label: 'LLP 權益',
-          summary: '有限責任合夥（LLP）的權益，權利和分配由合夥協議規定。',
-        },
-        {
-          id: 'scp',
-          label: 'Sociedade em conta de participação（SCP）',
-          summary: '葡萄牙未登記的合夥形式，由一名合夥人開展業務，參與合夥人分享經營成果。不具有獨立法人資格。',
-        },
-        {
-          id: 'lda-quotas',
-          label: 'Lda 的配額（quotas）',
-          summary: '持有資產的葡萄牙有限責任公司（sociedade por quotas，Lda）的配額，權利由公司章程和葡萄牙公司法規定。',
-        },
-        {
-          id: 'anonymous-partnership',
-          label: '匿名合夥（tokumei kumiai）',
-          summary: '日本合同形式：投資者向經營者的業務出資並分享利潤，但不成為登記合夥人。',
-        },
-      ],
-    },
   },
   glossary: [
     {
@@ -2339,8 +2298,6 @@ export const zhTW: Messages = {
       projectName: '專案名稱',
       country: '國家',
       instrumentType: '工具類型(例如:債券、股權、收益分潤)',
-      holdingStructure: '持有結構（可選）',
-      holdingStructureHelp: '如果專案上線，投資者將如何持有參與權益（例如直接持有或透過股票憑證）。僅供描述：選擇一項不構成批准、上線或法律定性。',
       targetAmount: '目標金額',
       description: '專案說明',
       contactEmail: '聯絡電子郵件(選填)',
@@ -2663,14 +2620,6 @@ export const zhTW: Messages = {
         caveat: '設備合約使用權示例，並非設備所有權。範圍、維護、期限及轉讓由協議決定；代幣不轉移產權。',
       },
       {
-        label: '股份憑證 / 存託憑證',
-        caveat: '憑證可能代表基礎股份，不等於直接登記持股。須明確具體權利、保管人、表決及分配安排；此處不發行股份。',
-      },
-      {
-        label: 'LLC 持有結構',
-        caveat: '透過 LLC 類載體持有的權益。所有權、責任、表決及分配由協議與司法管轄區決定，不自動等於直接持有基礎資產。',
-      },
-      {
         label: '收入分成',
         caveat: '與約定總收入掛鉤的支付示例。收入並非利潤；扣除、揭露及支付上限取決於合約。不保證報酬或償還。',
       },
@@ -2690,8 +2639,29 @@ export const zhTW: Messages = {
         label: '預售',
         caveat: '商品提前訂購示例，並非投資或未來代幣權利。不提供金融報酬。價格、交付、取消及消費者權利須另行規定。',
       },
+      {
+        label: '葡萄牙 Lda 公司份額',
+        caveat:
+          '葡萄牙有限責任公司（Lda）的示例性份額。權利及轉讓限制取決於公司章程和適用法律。 如果 CMVM 授權，則可能適用 ECSPR；在葡萄牙尚未確認。僅為教育示例，並非真實要約。此處不發行、出售或轉讓任何份額。',
+      },
+      {
+        label: '股份憑證 / 存託憑證',
+        caveat:
+          '憑證可能代表基礎股份，而非直接登記的所有權。具體權利、投票、分配及轉讓取決於其條款。 在滿足 ECSPR 要求的情況下，與獲授權的合作夥伴（銀行或投資公司）合作可能可行；在葡萄牙尚未確認。這不表示葡萄牙已存在存託憑證制度。僅為教育示例，並非真實要約。此處不發行、出售、託管或轉讓任何憑證。',
+      },
     ],
     refundScenario: '僅為退款情境：未達目標後的虛構退款，並非一般退款權利。',
     withdrawalScenario: '發起人提領募資款，並非投資人報酬或權利金支付。',
+  },
+  ldaQuotas: {
+    title: '葡萄牙 Lda 公司份額',
+    summary: '葡萄牙有限責任公司（Lda）的示例性份額。權利及轉讓限制取決於公司章程和適用法律。',
+    caveat: '如果 CMVM 授權，則可能適用 ECSPR；在葡萄牙尚未確認。僅為教育示例，並非真實要約。此處不發行、出售或轉讓任何份額。',
+  },
+  shareCertificates: {
+    title: '股份憑證 / 存託憑證',
+    summary: '憑證可能代表基礎股份，而非直接登記的所有權。具體權利、投票、分配及轉讓取決於其條款。',
+    caveat:
+      '在滿足 ECSPR 要求的情況下，與獲授權的合作夥伴（銀行或投資公司）合作可能可行；在葡萄牙尚未確認。這不表示葡萄牙已存在存託憑證制度。僅為教育示例，並非真實要約。此處不發行、出售、託管或轉讓任何憑證。',
   },
 };

@@ -19,22 +19,6 @@ export const SAMPLE_CONCEPTS = [
     nonFinancial: false,
   },
   {
-    id: 'concept-share-certificate',
-    name: 'Bridge Share Certificate',
-    subtype: 'share-certificate',
-    industry: 'financial-services',
-    sampleState: 'funded',
-    nonFinancial: false,
-  },
-  {
-    id: 'concept-llc-holding',
-    name: 'Juniper LLC Holding',
-    subtype: 'llc-holding',
-    industry: 'financial-services',
-    sampleState: 'unsuccessful',
-    nonFinancial: false,
-  },
-  {
     id: 'concept-revenue-share',
     name: 'Brook Revenue Share',
     subtype: 'revenue-share',
@@ -53,6 +37,22 @@ export const SAMPLE_CONCEPTS = [
   },
   { id: 'concept-reward', name: 'Makers Reward', subtype: 'reward', industry: 'industrial-manufacturing', sampleState: 'withdrawn', nonFinancial: true },
   { id: 'concept-pre-sale', name: 'Workshop Lamp Pre-sale', subtype: 'pre-sale', industry: 'consumer-retail', sampleState: 'refunded', nonFinancial: true },
+  {
+    id: 'concept-lda-quotas',
+    name: 'Tagus Workshop Lda Quotas',
+    subtype: 'lda-quotas',
+    industry: 'financial-services',
+    sampleState: 'funded',
+    nonFinancial: false,
+  },
+  {
+    id: 'concept-share-certificate',
+    name: 'Bridge Share Certificate',
+    subtype: 'share-certificate',
+    industry: 'financial-services',
+    sampleState: 'unsuccessful',
+    nonFinancial: false,
+  },
 ] as const;
 
 export function sampleConceptIndex(id: string): number {

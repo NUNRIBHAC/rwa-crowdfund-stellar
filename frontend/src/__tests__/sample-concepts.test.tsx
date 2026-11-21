@@ -6,6 +6,7 @@ import { I18nProvider } from '../i18n';
 import { SampleConceptsSection } from '../components/SampleConcepts';
 import CampaignDetail from '../pages/CampaignDetail';
 import Investments from '../pages/Investments';
+import Learn from '../pages/Learn';
 import type { Market } from '../market';
 import { en } from '../i18n/locales/en';
 import { pt } from '../i18n/locales/pt';
@@ -78,7 +79,9 @@ for (const [locale, messages] of Object.entries(locales)) {
     );
     expect(screen.getAllByText(messages.sampleLifecycle.notice)).toHaveLength(10);
     for (const concept of SAMPLE_CONCEPTS)
-      expect(screen.getAllByText(messages.sampleConcepts.unavailable + ': ' + messages.sampleConcepts.states[concept.sampleState])).toHaveLength(2);
+      expect(screen.getAllByText(messages.sampleConcepts.unavailable + ': ' + messages.sampleConcepts.states[concept.sampleState])).toHaveLength(
+        SAMPLE_CONCEPTS.filter((c) => c.sampleState === concept.sampleState).length,
+      );
     expect(screen.getAllByText(messages.sampleConcepts.nonFinancialNotice)).toHaveLength(3);
     for (const concept of SAMPLE_CONCEPTS) {
       expect(screen.getByRole('link', { name: concept.name }).getAttribute('href')).toBe(`/campaigns/${concept.id}?fixtures=1`);
@@ -142,14 +145,13 @@ test('critical distinctions remain explicit and no positive financial guarantees
   expect(text[0]).toContain('not automatically an issued share or a loan');
   expect(text[1]).toContain('token does not transfer title');
   expect(text[2]).toContain('not ownership');
-  expect(text[3]).toContain('exact claim');
-  expect(text[4]).toContain('jurisdiction');
-  expect(text[5]).toContain('Revenue is not profit');
-  expect(text[6]).toContain('Royalties are not profit');
-  for (const i of [7, 8, 9]) expect(text[i]).toContain('financial return');
+  expect(text[3]).toContain('Revenue is not profit');
+  expect(text[4]).toContain('Royalties are not profit');
+  expect(text[8]).toContain('not confirmed in Portugal');
+  for (const i of [5, 6, 7]) expect(text[i]).toContain('financial return');
 });
 
-test('all five concept scenarios appear twice without giving SAFE a refund right', () => {
+test('all five concept scenarios remain without giving SAFE a refund right', () => {
   for (const state of ['open', 'funded', 'unsuccessful', 'refunded', 'withdrawn'])
     expect(SAMPLE_CONCEPTS.filter((c) => c.sampleState === state)).toHaveLength(2);
   expect(SAMPLE_CONCEPTS.find((c) => c.subtype === 'safe')?.sampleState).toBe('open');
@@ -182,7 +184,7 @@ test('sample concepts participate in text and industry filters only in sample mo
   fireEvent.change(screen.getByRole('combobox', { name: en.invest.filterIndustryAria }), { target: { value: 'financial-services' } });
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
   expect(screen.getByRole('status').textContent).toBe('2 campaigns shown');
-  fireEvent.change(screen.getByRole('textbox', { name: en.invest.searchAria }), { target: { value: 'Juniper' } });
+  fireEvent.change(screen.getByRole('textbox', { name: en.invest.searchAria }), { target: { value: 'Tagus' } });
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(1);
 });
 
@@ -210,4 +212,53 @@ test('sample refund and withdrawal filters show exact three identities and count
   expect(screen.queryByRole('button', { name: en.sampleConcepts.filterRefund })).toBeNull();
   expect(screen.queryByRole('button', { name: en.sampleConcepts.filterWithdrawal })).toBeNull();
   expect(screen.getByRole('status').textContent).toBe('1 campaign shown');
+});
+
+test('LLC stays absent; certificate and Lda examples remain educational only', () => {
+  const ids = SAMPLE_CONCEPTS.map((c) => String(c.id));
+  expect(ids).toContain('concept-share-certificate');
+  expect(ids).not.toContain('concept-llc-holding');
+  expect(ids).toContain('concept-lda-quotas');
+  expect(en.ldaQuotas.caveat).toContain('if the CMVM authorizes');
+  expect(en.ldaQuotas.caveat).toContain('not confirmed in Portugal');
+  expect(en.ldaQuotas.caveat).toContain('not a real offer');
+  expect(en.ldaQuotas.caveat).toContain('No quotas are issued');
+});
+
+for (const [locale, messages] of Object.entries(locales)) {
+  test(`${locale}: Learn shows the conditional Lda note without the reverted holding section`, () => {
+    localStorage.setItem('blockallisto-language', locale);
+    const { container } = render(
+      <I18nProvider>
+        <Learn />
+      </I18nProvider>,
+    );
+    expect(screen.getByRole('heading', { name: messages.ldaQuotas.title })).toBeTruthy();
+    expect(screen.getByText(messages.ldaQuotas.caveat)).toBeTruthy();
+    expect(container.querySelector('#learn-holding')).toBeNull();
+    expect(messages.ldaQuotas.caveat).toContain('CMVM');
+    expect(messages.ldaQuotas.caveat).toContain('ECSPR');
+  });
+}
+
+for (const [locale, messages] of Object.entries(locales)) {
+  test(`${locale}: certificate Learn note is conditional and sample-only`, () => {
+    localStorage.setItem('blockallisto-language', locale);
+    render(
+      <I18nProvider>
+        <Learn />
+      </I18nProvider>,
+    );
+    expect(screen.getByRole('heading', { name: messages.shareCertificates.title })).toBeTruthy();
+    expect(screen.getByText(messages.shareCertificates.caveat)).toBeTruthy();
+    expect(messages.shareCertificates.caveat).toContain('ECSPR');
+    expect(messages.shareCertificates.caveat).not.toBe(messages.ldaQuotas.caveat);
+  });
+}
+test('certificate caveat makes no Portuguese regime, offer or issuance claim', () => {
+  expect(en.shareCertificates.caveat).toContain('not confirmed in Portugal');
+  expect(en.shareCertificates.caveat).toContain('bank or investment firm');
+  expect(en.shareCertificates.caveat).toContain('does not establish a Portuguese');
+  expect(en.shareCertificates.caveat).toContain('not a real offer');
+  expect(en.shareCertificates.caveat).toContain('No certificates are issued');
 });
