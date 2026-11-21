@@ -2693,9 +2693,16 @@ export const en = {
     notice: 'Sample data. No contribution, withdrawal or refund occurred.',
   },
   sampleConcepts: {
+    states: {
+      open: 'Open',
+      funded: 'Funded',
+      unsuccessful: 'Ended - goal missed',
+      refunded: 'Contributor refund completed',
+      withdrawn: 'Creator withdrawal completed',
+    },
     title: 'Educational sample formats',
     notice: 'These examples do not establish platform support, an offer or ECSPR eligibility. Each format requires its own legal and regulatory assessment.',
-    unavailable: 'Not offered - sample only',
+    unavailable: 'Sample state',
     nonFinancialNotice: 'Non-financial sample - no investment return.',
     list: [
       {
@@ -2749,6 +2756,8 @@ export const en = {
           'An illustrative advance order for goods, not an investment or future-token right. No financial return is offered. Price, delivery, cancellation and consumer rights would need separate definition.',
       },
     ],
+    refundScenario: 'Refund scenario only: a fictional failed-goal refund, not a general refund right.',
+    withdrawalScenario: 'Creator withdrawal of funding proceeds, not an investor return or royalty payment.',
   },
 };
 

@@ -2433,9 +2433,16 @@
     "notice": "示例数据。未发生出资、提取或退款。"
   },
   "sampleConcepts": {
+    "states": {
+      "open": "开放中",
+      "funded": "已筹足",
+      "unsuccessful": "已结束 - 未达目标",
+      "refunded": "出资人退款已完成",
+      "withdrawn": "发起人提取已完成"
+    },
     "title": "教学示例形式",
     "notice": "这些示例不表示平台支持、产品要约或 ECSPR 资格。各形式均需独立法律及监管评估。",
-    "unavailable": "不提供，仅为示例",
+    "unavailable": "示例状态",
     "nonFinancialNotice": "非金融示例，无投资回报。",
     "list": [
       {
@@ -2478,6 +2485,8 @@
         "label": "预售",
         "caveat": "商品提前订购示例，并非投资或未来代币权利。不提供金融回报。价格、交付、取消及消费者权利须另行规定。"
       }
-    ]
+    ],
+    "refundScenario": "仅为退款情境：未达目标后的虚构退款，并非一般退款权利。",
+    "withdrawalScenario": "发起人提取筹资款，并非投资者回报或特许权使用费支付。"
   }
 }

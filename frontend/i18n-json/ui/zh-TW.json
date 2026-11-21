@@ -2433,9 +2433,16 @@
     "notice": "範例資料。未發生出資、提領或退款。"
   },
   "sampleConcepts": {
+    "states": {
+      "open": "開放中",
+      "funded": "已籌足",
+      "unsuccessful": "已結束 - 未達目標",
+      "refunded": "出資人退款已完成",
+      "withdrawn": "發起人提領已完成"
+    },
     "title": "教學示例形式",
     "notice": "這些示例不表示平台支援、產品要約或 ECSPR 資格。各形式均需獨立法律及監管評估。",
-    "unavailable": "不提供，僅為示例",
+    "unavailable": "示例狀態",
     "nonFinancialNotice": "非金融示例，無投資報酬。",
     "list": [
       {
@@ -2478,6 +2485,8 @@
         "label": "預售",
         "caveat": "商品提前訂購示例，並非投資或未來代幣權利。不提供金融報酬。價格、交付、取消及消費者權利須另行規定。"
       }
-    ]
+    ],
+    "refundScenario": "僅為退款情境：未達目標後的虛構退款，並非一般退款權利。",
+    "withdrawalScenario": "發起人提領募資款，並非投資人報酬或權利金支付。"
   }
 }

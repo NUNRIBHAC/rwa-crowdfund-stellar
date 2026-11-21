@@ -2646,9 +2646,16 @@ export const ko: Messages = {
     notice: '샘플 데이터입니다. 출자, 인출 또는 환불은 발생하지 않았습니다.',
   },
   sampleConcepts: {
+    states: {
+      open: '진행 중',
+      funded: '목표 금액 달성',
+      unsuccessful: '종료 - 목표 미달',
+      refunded: '기여자 환불 완료',
+      withdrawn: '개설자 인출 완료',
+    },
     title: '교육용 샘플 형식',
     notice: '이 예시는 플랫폼 지원, 청약 또는 ECSPR 적격성을 뜻하지 않습니다. 각 형식에는 별도의 법률 및 규제 검토가 필요합니다.',
-    unavailable: '제공되지 않음, 샘플 전용',
+    unavailable: '샘플 상태',
     nonFinancialNotice: '비금융 샘플, 투자 수익 없음.',
     list: [
       {
@@ -2696,5 +2703,7 @@ export const ko: Messages = {
         caveat: '상품의 사전 주문 예시이며 투자나 미래 토큰 권리가 아닙니다. 금융 수익은 없습니다. 가격, 배송, 취소 및 소비자 권리는 별도로 정해야 합니다.',
       },
     ],
+    refundScenario: '환불 시나리오일 뿐입니다. 목표 미달 후의 가상 환불이며 일반적인 환불 권리가 아닙니다.',
+    withdrawalScenario: '개설자의 조달 자금 인출이며 투자자 수익이나 로열티 지급이 아닙니다.',
   },
 };

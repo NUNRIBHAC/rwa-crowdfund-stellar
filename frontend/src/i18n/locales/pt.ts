@@ -2759,9 +2759,16 @@ export const pt: Messages = {
     notice: 'Dados de exemplo. Não ocorreu contribuição, levantamento nem reembolso.',
   },
   sampleConcepts: {
+    states: {
+      open: 'Aberta',
+      funded: 'Financiada',
+      unsuccessful: 'Terminada - meta não atingida',
+      refunded: 'Reembolso ao contribuinte concluído',
+      withdrawn: 'Levantamento pelo criador concluído',
+    },
     title: 'Formatos educativos de exemplo',
     notice: 'Estes exemplos não comprovam suporte da plataforma, oferta ou elegibilidade ECSPR. Cada formato exige análise jurídica e regulatória própria.',
-    unavailable: 'Não disponibilizado - apenas exemplo',
+    unavailable: 'Estado de exemplo',
     nonFinancialNotice: 'Exemplo não financeiro - sem retorno de investimento.',
     list: [
       {
@@ -2815,5 +2822,7 @@ export const pt: Messages = {
           'Encomenda antecipada ilustrativa de bens, não investimento nem direito a tokens futuros. Sem retorno financeiro. Preço, entrega, cancelamento e direitos do consumidor exigem definição separada.',
       },
     ],
+    refundScenario: 'Apenas cenário de reembolso: devolução fictícia por meta não atingida, não um direito geral a reembolso.',
+    withdrawalScenario: 'Levantamento de fundos pelo criador, não retorno ao investidor nem pagamento de royalties.',
   },
 };

@@ -2482,9 +2482,16 @@
     "notice": "Données d'exemple. Aucun apport, retrait ni remboursement n'a eu lieu."
   },
   "sampleConcepts": {
+    "states": {
+      "open": "Ouverte",
+      "funded": "Financée",
+      "unsuccessful": "Terminée - objectif non atteint",
+      "refunded": "Remboursement du contributeur terminé",
+      "withdrawn": "Retrait du créateur terminé"
+    },
     "title": "Formats éducatifs d'exemple",
     "notice": "Ces exemples n'établissent ni prise en charge par la plateforme, ni offre, ni éligibilité ECSPR. Chaque format nécessite sa propre analyse juridique et réglementaire.",
-    "unavailable": "Non proposé - exemple uniquement",
+    "unavailable": "État d'exemple",
     "nonFinancialNotice": "Exemple non financier - aucun rendement d'investissement.",
     "list": [
       {
@@ -2527,6 +2534,8 @@
         "label": "Prévente",
         "caveat": "Commande anticipée illustrative de biens, pas un investissement ni un droit à des tokens futurs. Aucun rendement financier. Prix, livraison, annulation et droits du consommateur à définir séparément."
       }
-    ]
+    ],
+    "refundScenario": "Scénario de remboursement uniquement : remboursement fictif après échec de l'objectif, pas un droit général.",
+    "withdrawalScenario": "Retrait des fonds par le créateur, pas un rendement pour l'investisseur ni un paiement de redevances."
   }
 }

@@ -8,6 +8,7 @@ import { profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
 import { sampleIndustry } from '../data/sampleCatalog';
+import { SAMPLE_CONCEPTS, sampleConceptStatus } from '../data/sampleConcepts';
 import { SampleConceptsSection } from '../components/SampleConcepts';
 
 export default function Investments({ market, loadStatus }: { market: Market; loadStatus?: ReactNode }) {
@@ -62,6 +63,12 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
     .filter((c) => statusFilter === 'all' || campaignStatus(c) === statusFilter)
     .filter((c) => category === 'all' || categoryOf(c) === category)
     .sort(compareCampaigns(sortBy));
+  const shownConcepts = fixtureMode
+    ? SAMPLE_CONCEPTS.filter((c) => !q || c.name.toLowerCase().includes(q))
+        .filter((c) => statusFilter === 'all' || sampleConceptStatus(c) === statusFilter)
+        .filter((c) => category === 'all' || c.industry === category)
+    : [];
+  const sampleResultCount = shown.length + shownConcepts.length;
   // Exact checked-in staging fixture identity, never inferred from campaign names.
   const testing = shown.filter((c) => c.id === 'staging-load');
   const catalog = shown.filter((c) => c.id !== 'staging-load');
@@ -175,8 +182,8 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
         )}
 
         {campaigns.length > 0 && (
-          <p className={shown.length === 0 ? 'no-matches' : 'sr-only'} role="status">
-            {shown.length === 0 ? m.invest.noMatches : pluralText(m.invest.resultCount, shown.length)}
+          <p className={sampleResultCount === 0 ? 'no-matches' : 'sr-only'} role="status">
+            {sampleResultCount === 0 ? m.invest.noMatches : pluralText(m.invest.resultCount, sampleResultCount)}
           </p>
         )}
 
@@ -212,7 +219,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
             </details>
           </section>
         )}
-        {fixtureMode && <SampleConceptsSection />}
+        {fixtureMode && shownConcepts.length > 0 && <SampleConceptsSection concepts={shownConcepts} />}
       </div>
     </div>
   );

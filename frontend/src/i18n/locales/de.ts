@@ -2753,10 +2753,17 @@ export const de: Messages = {
     notice: 'Beispieldaten. Es gab keine Einzahlung, Auszahlung oder Rückzahlung.',
   },
   sampleConcepts: {
+    states: {
+      open: 'Offen',
+      funded: 'Finanziert',
+      unsuccessful: 'Beendet - Ziel verfehlt',
+      refunded: 'Rückzahlung an Unterstützer abgeschlossen',
+      withdrawn: 'Abruf durch Initiator abgeschlossen',
+    },
     title: 'Lehrhafte Beispielformate',
     notice:
       'Diese Beispiele bestätigen weder Plattformunterstützung, Angebot noch ECSPR-Eignung. Jedes Format braucht eine eigene rechtliche und regulatorische Prüfung.',
-    unavailable: 'Nicht angeboten - nur Beispiel',
+    unavailable: 'Beispielstatus',
     nonFinancialNotice: 'Nichtfinanzielles Beispiel - kein Anlageertrag.',
     list: [
       {
@@ -2810,5 +2817,7 @@ export const de: Messages = {
           'Beispiel einer Warenvorbestellung, keine Anlage oder Recht auf künftige Token. Kein finanzieller Ertrag. Preis, Lieferung, Widerruf und Verbraucherrechte separat festzulegen.',
       },
     ],
+    refundScenario: 'Nur Rückzahlungsszenario: fiktive Rückzahlung bei verfehltem Ziel, kein allgemeiner Anspruch.',
+    withdrawalScenario: 'Abruf der Finanzierung durch den Initiator, kein Anlegerertrag oder Lizenzgebührenzahlung.',
   },
 };
