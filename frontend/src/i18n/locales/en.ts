@@ -2735,17 +2735,17 @@ export const en = {
       {
         label: 'Donation / social funding',
         caveat:
-          'A non-financial contribution to a social cause. No ownership, interest, repayment or other financial return is offered. No donation is collected and no tax deduction is promised.',
+          'A contribution without ownership, interest, repayment or financial return. Real campaigns can be possible under the Portuguese national donation/reward crowdfunding regime, outside ECSPR. The platform operator must be a legal entity or EIRL and give prior notice to the DGE at least 30 days before starting activity. Educational example here: no money is collected and no tax deduction is promised. Delivery, cancellation and consumer terms would need separate definition.',
       },
       {
         label: 'Reward funding',
         caveat:
-          'Non-financial funding in exchange for an illustrative reward. This is not an investment: no interest, ownership or financial return. Delivery, cancellation and consumer terms would need separate definition.',
+          'Funding in exchange for a non-financial reward or the financed product or service. No financial return is offered. Real campaigns can be possible under the Portuguese national donation/reward crowdfunding regime, outside ECSPR. The platform operator must be a legal entity or EIRL and give prior notice to the DGE at least 30 days before starting activity. Educational example here: no money is collected and no tax deduction is promised. Delivery, cancellation and consumer terms would need separate definition.',
       },
       {
         label: 'Pre-sale',
         caveat:
-          'An illustrative advance order for goods, not an investment or future-token right. No financial return is offered. Price, delivery, cancellation and consumer rights would need separate definition.',
+          'An advance order for the financed product or service, structured as reward crowdfunding, not an investment or future-token right. No financial return is offered. Real campaigns can be possible under the Portuguese national donation/reward crowdfunding regime, outside ECSPR. The platform operator must be a legal entity or EIRL and give prior notice to the DGE at least 30 days before starting activity. Educational example here: no money is collected and no tax deduction is promised. Delivery, cancellation and consumer terms would need separate definition.',
       },
       {
         label: 'Quotas in a Portuguese Lda',
@@ -2774,6 +2774,30 @@ export const en = {
       'A certificate may represent underlying shares rather than direct registered ownership. The exact claim, voting, distributions and transfer depend on its terms.',
     caveat:
       'Potentially possible with an authorized partner (a bank or investment firm), subject to ECSPR requirements; not confirmed in Portugal. This does not establish a Portuguese depositary-receipt regime. Educational sample only, not a real offer. No certificates are issued, sold, held in custody or transferred here.',
+  },
+  nationalFunding: {
+    title: 'Non-financial crowdfunding',
+    items: [
+      {
+        id: 'donation',
+        title: 'Donation funding',
+        summary: 'A contribution without ownership, interest, repayment or financial return.',
+      },
+      {
+        id: 'reward',
+        title: 'Reward funding',
+        summary: 'Funding in exchange for a non-financial reward or the financed product or service. No financial return is offered.',
+      },
+      {
+        id: 'pre-sale',
+        title: 'Pre-sale crowdfunding',
+        summary:
+          'An advance order for the financed product or service, structured as reward crowdfunding, not an investment or future-token right. No financial return is offered.',
+      },
+    ],
+    caveat:
+      'Real campaigns can be possible under the Portuguese national donation/reward crowdfunding regime, outside ECSPR. The platform operator must be a legal entity or EIRL and give prior notice to the DGE at least 30 days before starting activity. Educational example here: no money is collected and no tax deduction is promised. Delivery, cancellation and consumer terms would need separate definition.',
+    ecsprNote: 'Real loan and S.A. share offers through crowdfunding require ECSPR authorization (CMVM in Portugal).',
   },
 };
 

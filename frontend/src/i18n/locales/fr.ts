@@ -2816,17 +2816,17 @@ export const fr: Messages = {
       {
         label: 'Don / financement social',
         caveat:
-          'Contribution non financière à une cause sociale. Ni propriété, intérêts, remboursement ou rendement financier. Aucun don collecté ni déduction fiscale promise.',
+          "Contribution sans propriété, intérêts, remboursement ni rendement financier. Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
       },
       {
         label: 'Financement avec récompense',
         caveat:
-          "Financement non financier contre une récompense illustrative. Ce n'est pas un investissement : ni intérêts, propriété ou rendement financier. Livraison, annulation et conditions de consommation à définir séparément.",
+          "Financement en échange d'une récompense non financière ou du produit ou service financé. Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
       },
       {
         label: 'Prévente',
         caveat:
-          'Commande anticipée illustrative de biens, pas un investissement ni un droit à des tokens futurs. Aucun rendement financier. Prix, livraison, annulation et droits du consommateur à définir séparément.',
+          "Commande anticipée du produit ou service financé, structurée en financement avec récompense, pas en investissement ni en droit à un futur jeton. Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
       },
       {
         label: 'Parts dans une Lda portugaise',
@@ -2855,5 +2855,29 @@ export const fr: Messages = {
       "Un certificat peut représenter des actions sous-jacentes plutôt qu'une propriété directe inscrite. Les droits précis, le vote, les distributions et la cession dépendent de ses conditions.",
     caveat:
       "Cela pourrait être possible avec un partenaire agréé (banque ou entreprise d'investissement), sous réserve des exigences ECSPR ; non confirmé au Portugal. Cela n'établit pas de régime portugais de certificats de dépôt. Exemple éducatif uniquement, pas une offre réelle. Aucun certificat n'est émis, vendu, conservé ou transféré ici.",
+  },
+  nationalFunding: {
+    title: 'Financement participatif non financier',
+    items: [
+      {
+        id: 'donation',
+        title: 'Financement par don',
+        summary: 'Contribution sans propriété, intérêts, remboursement ni rendement financier.',
+      },
+      {
+        id: 'reward',
+        title: 'Financement avec récompense',
+        summary: "Financement en échange d'une récompense non financière ou du produit ou service financé.",
+      },
+      {
+        id: 'pre-sale',
+        title: 'Financement par prévente',
+        summary:
+          'Commande anticipée du produit ou service financé, structurée en financement avec récompense, pas en investissement ni en droit à un futur jeton.',
+      },
+    ],
+    caveat:
+      "Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
+    ecsprNote: "Les offres réelles de prêts et d'actions de S.A. via le financement participatif exigent une autorisation ECSPR (CMVM au Portugal).",
   },
 };

@@ -2796,17 +2796,17 @@ export const de: Messages = {
       {
         label: 'Spende / soziale Finanzierung',
         caveat:
-          'Nichtfinanzieller Beitrag für einen sozialen Zweck. Kein Eigentum, Zins, Rückzahlungsanspruch oder finanzieller Ertrag. Keine Spende erhoben und kein Steuerabzug zugesagt.',
+          'Beitrag ohne Eigentum, Zinsen, Rückzahlung oder finanzielle Rendite. Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden.',
       },
       {
         label: 'Finanzierung mit Gegenleistung',
         caveat:
-          'Nichtfinanzielle Finanzierung für eine beispielhafte Gegenleistung. Keine Anlage: kein Zins, Eigentum oder finanzieller Ertrag. Lieferung, Widerruf und Verbraucherbedingungen separat festzulegen.',
+          'Finanzierung gegen eine nichtfinanzielle Gegenleistung oder das finanzierte Produkt bzw. die Dienstleistung. Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden.',
       },
       {
         label: 'Vorverkauf',
         caveat:
-          'Beispiel einer Warenvorbestellung, keine Anlage oder Recht auf künftige Token. Kein finanzieller Ertrag. Preis, Lieferung, Widerruf und Verbraucherrechte separat festzulegen.',
+          'Vorbestellung des finanzierten Produkts oder der Dienstleistung als Crowdfunding mit Gegenleistung, keine Investition und kein Anspruch auf einen künftigen Token. Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden.',
       },
       {
         label: 'Anteile an einer portugiesischen Lda',
@@ -2835,5 +2835,29 @@ export const de: Messages = {
       'Ein Zertifikat kann zugrunde liegende Aktien statt direkt eingetragenem Eigentum repräsentieren. Anspruch, Stimmrecht, Ausschüttungen und Übertragung richten sich nach seinen Bedingungen.',
     caveat:
       'Mit einem zugelassenen Partner (Bank oder Wertpapierfirma) unter den ECSPR-Anforderungen möglicherweise zulässig; in Portugal nicht bestätigt. Dies begründet kein portugiesisches Hinterlegungsschein-Regime. Nur ein Lehrbeispiel, kein echtes Angebot. Hier werden keine Zertifikate ausgegeben, verkauft, verwahrt oder übertragen.',
+  },
+  nationalFunding: {
+    title: 'Nichtfinanzielles Crowdfunding',
+    items: [
+      {
+        id: 'donation',
+        title: 'Spendenfinanzierung',
+        summary: 'Beitrag ohne Eigentum, Zinsen, Rückzahlung oder finanzielle Rendite.',
+      },
+      {
+        id: 'reward',
+        title: 'Finanzierung mit Gegenleistung',
+        summary: 'Finanzierung gegen eine nichtfinanzielle Gegenleistung oder das finanzierte Produkt bzw. die Dienstleistung.',
+      },
+      {
+        id: 'pre-sale',
+        title: 'Vorverkaufs-Crowdfunding',
+        summary:
+          'Vorbestellung des finanzierten Produkts oder der Dienstleistung als Crowdfunding mit Gegenleistung, keine Investition und kein Anspruch auf einen künftigen Token.',
+      },
+    ],
+    caveat:
+      'Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden.',
+    ecsprNote: 'Reale Kredit- und S.A.-Aktienangebote über Crowdfunding erfordern eine ECSPR-Zulassung (CMVM in Portugal).',
   },
 };
