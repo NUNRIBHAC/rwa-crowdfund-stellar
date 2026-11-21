@@ -7,6 +7,7 @@ import EmptyState from '../components/EmptyState';
 import { profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
+import { sampleIndustry } from '../data/sampleCatalog';
 
 export default function Investments({ market, loadStatus }: { market: Market; loadStatus?: ReactNode }) {
   const { m } = useI18n();
@@ -50,12 +51,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
 
   const categoryOf = (c: (typeof campaigns)[number]): string | undefined => {
     if (!fixtureMode) return industries[c.id]?.key;
-    // Explicit fixture profile identities, not guesses from campaign names.
-    const sampleCategory = profileFor(c, fixtureMode, m.profiles.list)?.category;
-    if (sampleCategory === m.profiles.list[0]?.category) return 'real-estate';
-    if (sampleCategory === m.profiles.list[1]?.category) return 'energy-utilities';
-    if (sampleCategory === m.profiles.list[2]?.category) return 'transport-logistics';
-    return undefined;
+    return sampleIndustry(c.id);
   };
   const categories = Object.entries(m.invest.industryLabels);
 

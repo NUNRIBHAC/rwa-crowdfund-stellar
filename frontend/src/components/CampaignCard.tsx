@@ -8,6 +8,7 @@ import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
 import CampaignPhoto from './CampaignPhoto';
 import { useI18n } from '../i18n';
+import SampleLifecycle from './SampleLifecycle';
 
 export type CampaignStatus = 'open' | 'funded' | 'ended';
 
@@ -79,7 +80,7 @@ export default function CampaignCard({
           </svg>
           <div>
             <h3 className="card-title">
-              <a href={routeHash({ name: 'campaign', campaignId: c.id })}>{c.name}</a>
+              <a href={routeHash({ name: 'campaign', campaignId: c.id }) + (demo ? '?fixtures=1' : '')}>{c.name}</a>
             </h3>
             {profile && <p className="card-location">{regionName(profile.country, locale)}</p>}
           </div>
@@ -97,6 +98,8 @@ export default function CampaignCard({
           {c.withdrawn && <span className="status-chip status-withdrawn">{m.card.withdrawn}</span>}
         </div>
       </div>
+
+      {demo && <SampleLifecycle campaignId={c.id} />}
 
       <div className="card-purpose">
         <p className="card-teaser">{profile ? profile.teaser : m.card.purposeUnavailable}</p>
@@ -186,7 +189,7 @@ export default function CampaignCard({
       )}
 
       <p className="card-details-link">
-        <a className={discoveryOnly ? 'btn btn-primary' : undefined} href={routeHash({ name: 'campaign', campaignId: c.id })}>
+        <a className={discoveryOnly ? 'btn btn-primary' : undefined} href={routeHash({ name: 'campaign', campaignId: c.id }) + (demo ? '?fixtures=1' : '')}>
           {discoveryOnly ? m.home.viewCampaign : m.card.viewDetails}
         </a>
       </p>

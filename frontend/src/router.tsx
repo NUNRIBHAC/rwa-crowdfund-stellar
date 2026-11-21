@@ -158,7 +158,7 @@ function isKnownPath(pathname: string): boolean {
 function currentRoute(): Route {
   if (window.location.hash.startsWith('#/')) {
     const route = routeFromHash(window.location.hash);
-    window.history.replaceState(null, '', routePath(route));
+    window.history.replaceState(null, '', routePath(route) + window.location.search);
     return route;
   }
   const route = routeFromPath(window.location.pathname);
@@ -194,7 +194,7 @@ export function useRoute(): Route {
         // Legacy hash link rendered by an older bundle or typed by hand.
         event.preventDefault();
         const target = routeFromHash(url.hash);
-        window.history.pushState(null, '', routePath(target));
+        window.history.pushState(null, '', routePath(target) + url.search);
         setRoute(target);
         window.scrollTo(0, 0);
         return;
@@ -203,7 +203,7 @@ export function useRoute(): Route {
       if (!isKnownPath(url.pathname)) return; // assets, api, unknown paths
       event.preventDefault();
       const target = routeFromPath(url.pathname);
-      window.history.pushState(null, '', routePath(target));
+      window.history.pushState(null, '', routePath(target) + url.search);
       setRoute(target);
       window.scrollTo(0, 0);
     };
