@@ -2789,16 +2789,6 @@ export const pt: Messages = {
           'Exemplo de direito contratual de uso de equipamentos, não da sua propriedade. Âmbito, manutenção, prazo e transmissão dependem do acordo; um token não transfere o título.',
       },
       {
-        label: 'Certificado representativo de ações',
-        caveat:
-          'Um certificado pode representar ações subjacentes, sem titularidade direta no registo. É necessário definir direito exato, custodiante, votos e distribuições; aqui não são emitidas ações.',
-      },
-      {
-        label: 'Estrutura de detenção LLC',
-        caveat:
-          'Participação detida através de um veículo do tipo LLC. Contrato e jurisdição determinam propriedade, responsabilidade, votos e distribuições; não há automaticamente propriedade direta dos ativos.',
-      },
-      {
         label: 'Participação em receitas',
         caveat:
           'Pagamento ilustrativo ligado a receitas brutas definidas. Receitas não são lucros; deduções, prestação de contas e limites dependem do contrato. Não existe retorno ou reembolso garantido.',
@@ -2823,8 +2813,20 @@ export const pt: Messages = {
         caveat:
           'Encomenda antecipada ilustrativa de bens, não investimento nem direito a tokens futuros. Sem retorno financeiro. Preço, entrega, cancelamento e direitos do consumidor exigem definição separada.',
       },
+      {
+        label: 'Quotas numa Lda portuguesa',
+        caveat:
+          'Participação ilustrativa numa sociedade por quotas portuguesa (Lda). Os direitos e as restrições à transmissão dependem dos estatutos e da lei aplicável. Pode ser possível na ECSPR se a CMVM autorizar; não está confirmado em Portugal. Apenas uma amostra educativa, não é uma oferta real. Não são emitidas, vendidas ou transmitidas quotas aqui.',
+      },
     ],
     refundScenario: 'Apenas cenário de reembolso: devolução fictícia por meta não atingida, não um direito geral a reembolso.',
     withdrawalScenario: 'Levantamento de fundos pelo criador, não retorno ao investidor nem pagamento de royalties.',
+  },
+  ldaQuotas: {
+    title: 'Quotas numa Lda portuguesa',
+    summary:
+      'Participação ilustrativa numa sociedade por quotas portuguesa (Lda). Os direitos e as restrições à transmissão dependem dos estatutos e da lei aplicável.',
+    caveat:
+      'Pode ser possível na ECSPR se a CMVM autorizar; não está confirmado em Portugal. Apenas uma amostra educativa, não é uma oferta real. Não são emitidas, vendidas ou transmitidas quotas aqui.',
   },
 };

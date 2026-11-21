@@ -2723,16 +2723,6 @@ export const en = {
           'An illustrative contractual right to use equipment, not ownership of the equipment. Scope, maintenance, expiry and transfer depend on the agreement; a token does not transfer title.',
       },
       {
-        label: 'Share certificate / depositary receipt',
-        caveat:
-          'A certificate or receipt may represent underlying shares, not direct registered ownership. The exact claim, custodian, voting and distribution rights must be specified; no shares are issued here.',
-      },
-      {
-        label: 'LLC holding structure',
-        caveat:
-          'An interest held through an LLC-type vehicle. The vehicle agreement and jurisdiction decide ownership, liability, voting and distributions; it is not automatically direct ownership of the underlying assets.',
-      },
-      {
         label: 'Revenue share',
         caveat:
           'An illustrative payment linked to defined gross revenue. Revenue is not profit; deductions, reporting and payment limits depend on the contract. No return or repayment is guaranteed.',
@@ -2757,9 +2747,21 @@ export const en = {
         caveat:
           'An illustrative advance order for goods, not an investment or future-token right. No financial return is offered. Price, delivery, cancellation and consumer rights would need separate definition.',
       },
+      {
+        label: 'Quotas in a Portuguese Lda',
+        caveat:
+          'An illustrative participation in a Portuguese private limited company (Lda). Rights and transfer restrictions depend on its articles and applicable law. Possible under ECSPR if the CMVM authorizes it; not confirmed in Portugal. Educational sample only, not a real offer. No quotas are issued, sold or transferred here.',
+      },
     ],
     refundScenario: 'Refund scenario only: a fictional failed-goal refund, not a general refund right.',
     withdrawalScenario: 'Creator withdrawal of funding proceeds, not an investor return or royalty payment.',
+  },
+  ldaQuotas: {
+    title: 'Quotas in a Portuguese Lda',
+    summary:
+      'An illustrative participation in a Portuguese private limited company (Lda). Rights and transfer restrictions depend on its articles and applicable law.',
+    caveat:
+      'Possible under ECSPR if the CMVM authorizes it; not confirmed in Portugal. Educational sample only, not a real offer. No quotas are issued, sold or transferred here.',
   },
 };
 

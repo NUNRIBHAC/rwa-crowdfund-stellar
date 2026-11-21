@@ -2794,16 +2794,6 @@ export const es: Messages = {
           'Derecho contractual ilustrativo de uso de equipos, no su propiedad. Alcance, mantenimiento, plazo y transmisión dependen del acuerdo; un token no transfiere el título.',
       },
       {
-        label: 'Certificado representativo de acciones',
-        caveat:
-          'Un certificado puede representar acciones subyacentes sin titularidad registral directa. Deben definirse derecho exacto, custodio, voto y distribuciones; aquí no se emiten acciones.',
-      },
-      {
-        label: 'Estructura de tenencia LLC',
-        caveat:
-          'Participación a través de un vehículo tipo LLC. Contrato y jurisdicción determinan propiedad, responsabilidad, voto y distribuciones; no implica propiedad directa de los activos.',
-      },
-      {
         label: 'Participación en ingresos',
         caveat:
           'Pago ilustrativo ligado a ingresos brutos definidos. Ingresos no son beneficios; deducciones, información y límites dependen del contrato. Sin rentabilidad ni reembolso garantizados.',
@@ -2828,8 +2818,20 @@ export const es: Messages = {
         caveat:
           'Pedido anticipado ilustrativo de bienes, no inversión ni derecho a tokens futuros. Sin retorno financiero. Precio, entrega, cancelación y derechos del consumidor se definen aparte.',
       },
+      {
+        label: 'Participaciones en una Lda portuguesa',
+        caveat:
+          'Participación ilustrativa en una sociedad de responsabilidad limitada portuguesa (Lda). Los derechos y las restricciones a la transmisión dependen de los estatutos y de la ley aplicable. Podría ser posible bajo ECSPR si la CMVM lo autoriza; no está confirmado en Portugal. Solo una muestra educativa, no una oferta real. Aquí no se emiten, venden ni transmiten participaciones.',
+      },
     ],
     refundScenario: 'Solo escenario de reembolso: devolución ficticia por objetivo no alcanzado, no un derecho general.',
     withdrawalScenario: 'Retirada de fondos por el creador, no retorno al inversor ni pago de regalías.',
+  },
+  ldaQuotas: {
+    title: 'Participaciones en una Lda portuguesa',
+    summary:
+      'Participación ilustrativa en una sociedad de responsabilidad limitada portuguesa (Lda). Los derechos y las restricciones a la transmisión dependen de los estatutos y de la ley aplicable.',
+    caveat:
+      'Podría ser posible bajo ECSPR si la CMVM lo autoriza; no está confirmado en Portugal. Solo una muestra educativa, no una oferta real. Aquí no se emiten, venden ni transmiten participaciones.',
   },
 };

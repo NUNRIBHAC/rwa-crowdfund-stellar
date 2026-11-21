@@ -17,6 +17,7 @@ export default function Learn() {
             </a>
           ))}
           <a href="#learn-overlays">{m.learn.overlaysTitle}</a>
+          <a href="#learn-lda-quotas">{m.ldaQuotas.title}</a>
           <a href="#learn-qualifiers">{m.learn.qualifiersTitle}</a>
         </nav>
       </details>
@@ -77,6 +78,14 @@ export default function Learn() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section id="learn-lda-quotas" aria-label={m.ldaQuotas.title}>
+          <h2 className="section-title">{m.ldaQuotas.title}</h2>
+          <article className="instrument-card">
+            <p>{m.ldaQuotas.summary}</p>
+            <p className="community-note">{m.ldaQuotas.caveat}</p>
+          </article>
         </section>
 
         <section id="learn-qualifiers" aria-label={m.learn.qualifiersAria}>

@@ -2498,14 +2498,6 @@
         "caveat": "Beispiel eines vertraglichen Gerätenutzungsrechts, nicht des Eigentums. Umfang, Wartung, Laufzeit und Übertragung hängen vom Vertrag ab; ein Token überträgt keinen Titel."
       },
       {
-        "label": "Aktienzertifikat / Hinterlegungsschein",
-        "caveat": "Ein Zertifikat kann zugrunde liegende Aktien ohne direkt eingetragenes Eigentum repräsentieren. Anspruch, Verwahrer, Stimmrechte und Ausschüttungen sind genau festzulegen; hier werden keine Aktien ausgegeben."
-      },
-      {
-        "label": "LLC-Haltestruktur",
-        "caveat": "Beteiligung über ein LLC-artiges Vehikel. Vertrag und Rechtsordnung bestimmen Eigentum, Haftung, Stimmen und Ausschüttungen; kein automatisches direktes Eigentum an den Vermögenswerten."
-      },
-      {
         "label": "Umsatzbeteiligung",
         "caveat": "Beispiel einer Zahlung nach definiertem Bruttoumsatz. Umsatz ist kein Gewinn; Abzüge, Berichte und Grenzen sind vertraglich. Keine garantierte Rendite oder Rückzahlung."
       },
@@ -2524,9 +2516,18 @@
       {
         "label": "Vorverkauf",
         "caveat": "Beispiel einer Warenvorbestellung, keine Anlage oder Recht auf künftige Token. Kein finanzieller Ertrag. Preis, Lieferung, Widerruf und Verbraucherrechte separat festzulegen."
+      },
+      {
+        "label": "Anteile an einer portugiesischen Lda",
+        "caveat": "Beispielhafte Beteiligung an einer portugiesischen Gesellschaft mit beschränkter Haftung (Lda). Rechte und Übertragungsbeschränkungen richten sich nach der Satzung und dem geltenden Recht. Unter ECSPR möglicherweise zulässig, wenn die CMVM dies genehmigt; in Portugal nicht bestätigt. Nur ein Lehrbeispiel, kein echtes Angebot. Hier werden keine Anteile ausgegeben, verkauft oder übertragen."
       }
     ],
     "refundScenario": "Nur Rückzahlungsszenario: fiktive Rückzahlung bei verfehltem Ziel, kein allgemeiner Anspruch.",
     "withdrawalScenario": "Abruf der Finanzierung durch den Initiator, kein Anlegerertrag oder Lizenzgebührenzahlung."
+  },
+  "ldaQuotas": {
+    "title": "Anteile an einer portugiesischen Lda",
+    "summary": "Beispielhafte Beteiligung an einer portugiesischen Gesellschaft mit beschränkter Haftung (Lda). Rechte und Übertragungsbeschränkungen richten sich nach der Satzung und dem geltenden Recht.",
+    "caveat": "Unter ECSPR möglicherweise zulässig, wenn die CMVM dies genehmigt; in Portugal nicht bestätigt. Nur ein Lehrbeispiel, kein echtes Angebot. Hier werden keine Anteile ausgegeben, verkauft oder übertragen."
   }
 }
