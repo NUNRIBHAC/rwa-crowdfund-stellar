@@ -2450,5 +2450,53 @@
     "unsuccessful": "Unsuccessful - target not reached",
     "refunded": "Unsuccessful - investor refund completed",
     "notice": "Sample data. No contribution, withdrawal or refund occurred."
+  },
+  "sampleConcepts": {
+    "title": "Educational sample formats",
+    "notice": "These examples do not establish platform support, an offer or ECSPR eligibility. Each format requires its own legal and regulatory assessment.",
+    "unavailable": "Not offered - sample only",
+    "nonFinancialNotice": "Non-financial sample - no investment return.",
+    "list": [
+      {
+        "label": "SAFE / future-equity contract",
+        "caveat": "A contractual right to possible future equity under stated conversion conditions. A SAFE is not automatically an issued share or a loan. Conversion, dilution and loss depend on the contract."
+      },
+      {
+        "label": "Direct co-ownership",
+        "caveat": "An illustrative direct interest in jointly owned property. Legal title requires the applicable deed, register and formalities; a token does not transfer title by itself."
+      },
+      {
+        "label": "Equipment use rights",
+        "caveat": "An illustrative contractual right to use equipment, not ownership of the equipment. Scope, maintenance, expiry and transfer depend on the agreement; a token does not transfer title."
+      },
+      {
+        "label": "Share certificate / depositary receipt",
+        "caveat": "A certificate or receipt may represent underlying shares, not direct registered ownership. The exact claim, custodian, voting and distribution rights must be specified; no shares are issued here."
+      },
+      {
+        "label": "LLC holding structure",
+        "caveat": "An interest held through an LLC-type vehicle. The vehicle agreement and jurisdiction decide ownership, liability, voting and distributions; it is not automatically direct ownership of the underlying assets."
+      },
+      {
+        "label": "Revenue share",
+        "caveat": "An illustrative payment linked to defined gross revenue. Revenue is not profit; deductions, reporting and payment limits depend on the contract. No return or repayment is guaranteed."
+      },
+      {
+        "label": "Royalty rights",
+        "caveat": "An illustrative royalty claim linked to licensed use of intellectual property. Royalties are not profit; ownership of the underlying IP is not transferred. No return or repayment is guaranteed."
+      },
+      {
+        "label": "Donation / social funding",
+        "caveat": "A non-financial contribution to a social cause. No ownership, interest, repayment or other financial return is offered. No donation is collected and no tax deduction is promised."
+      },
+      {
+        "label": "Reward funding",
+        "caveat": "Non-financial funding in exchange for an illustrative reward. This is not an investment: no interest, ownership or financial return. Delivery, cancellation and consumer terms would need separate definition."
+      },
+      {
+        "label": "Pre-sale",
+        "caveat": "An illustrative advance order for goods, not an investment or future-token right. No financial return is offered. Price, delivery, cancellation and consumer rights would need separate definition."
+      }
+    ]
   }
 }

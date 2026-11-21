@@ -2480,5 +2480,53 @@
     "unsuccessful": "Échec - objectif non atteint",
     "refunded": "Échec - remboursement de l'investisseur terminé",
     "notice": "Données d'exemple. Aucun apport, retrait ni remboursement n'a eu lieu."
+  },
+  "sampleConcepts": {
+    "title": "Formats éducatifs d'exemple",
+    "notice": "Ces exemples n'établissent ni prise en charge par la plateforme, ni offre, ni éligibilité ECSPR. Chaque format nécessite sa propre analyse juridique et réglementaire.",
+    "unavailable": "Non proposé - exemple uniquement",
+    "nonFinancialNotice": "Exemple non financier - aucun rendement d'investissement.",
+    "list": [
+      {
+        "label": "SAFE / contrat de capital futur",
+        "caveat": "Droit contractuel à un éventuel capital futur selon des conditions de conversion. Un SAFE n'est automatiquement ni une action émise ni un prêt. Conversion, dilution et perte dépendent du contrat."
+      },
+      {
+        "label": "Copropriété directe",
+        "caveat": "Exemple de participation directe à un bien commun. Le titre exige acte, registre et formalités applicables ; un token ne transfère pas à lui seul la propriété."
+      },
+      {
+        "label": "Droits d'usage d'équipements",
+        "caveat": "Droit contractuel illustratif d'utiliser un équipement, sans le posséder. Étendue, entretien, durée et cession dépendent du contrat ; un token ne transfère pas le titre."
+      },
+      {
+        "label": "Certificat représentatif d'actions",
+        "caveat": "Un certificat peut représenter des actions sous-jacentes sans propriété inscrite directe. Créance exacte, dépositaire, vote et distributions doivent être définis ; aucune action n'est émise ici."
+      },
+      {
+        "label": "Structure de détention LLC",
+        "caveat": "Participation détenue via un véhicule de type LLC. Contrat et juridiction fixent propriété, responsabilité, vote et distributions ; ce n'est pas automatiquement la propriété directe des actifs."
+      },
+      {
+        "label": "Participation aux revenus",
+        "caveat": "Paiement illustratif lié à des revenus bruts définis. Les revenus ne sont pas le bénéfice ; déductions, rapports et plafonds dépendent du contrat. Aucun rendement ni remboursement garanti."
+      },
+      {
+        "label": "Droits de redevances",
+        "caveat": "Droit illustratif aux redevances d'utilisation sous licence d'une propriété intellectuelle. Les redevances ne sont pas le bénéfice et ne transfèrent pas la propriété intellectuelle. Aucun rendement ni remboursement garanti."
+      },
+      {
+        "label": "Don / financement social",
+        "caveat": "Contribution non financière à une cause sociale. Ni propriété, intérêts, remboursement ou rendement financier. Aucun don collecté ni déduction fiscale promise."
+      },
+      {
+        "label": "Financement avec récompense",
+        "caveat": "Financement non financier contre une récompense illustrative. Ce n'est pas un investissement : ni intérêts, propriété ou rendement financier. Livraison, annulation et conditions de consommation à définir séparément."
+      },
+      {
+        "label": "Prévente",
+        "caveat": "Commande anticipée illustrative de biens, pas un investissement ni un droit à des tokens futurs. Aucun rendement financier. Prix, livraison, annulation et droits du consommateur à définir séparément."
+      }
+    ]
   }
 }

@@ -2469,5 +2469,53 @@
     "unsuccessful": "Nicht erfolgreich - Ziel nicht erreicht",
     "refunded": "Nicht erfolgreich - Rückzahlung an Anleger abgeschlossen",
     "notice": "Beispieldaten. Es gab keine Einzahlung, Auszahlung oder Rückzahlung."
+  },
+  "sampleConcepts": {
+    "title": "Lehrhafte Beispielformate",
+    "notice": "Diese Beispiele bestätigen weder Plattformunterstützung, Angebot noch ECSPR-Eignung. Jedes Format braucht eine eigene rechtliche und regulatorische Prüfung.",
+    "unavailable": "Nicht angeboten - nur Beispiel",
+    "nonFinancialNotice": "Nichtfinanzielles Beispiel - kein Anlageertrag.",
+    "list": [
+      {
+        "label": "SAFE / Vertrag über künftiges Eigenkapital",
+        "caveat": "Vertragliches Recht auf mögliches künftiges Eigenkapital unter Wandlungsbedingungen. Ein SAFE ist nicht automatisch eine ausgegebene Aktie oder ein Darlehen. Wandlung, Verwässerung und Verlust hängen vom Vertrag ab."
+      },
+      {
+        "label": "Direktes Miteigentum",
+        "caveat": "Beispiel eines direkten Anteils an gemeinsamem Eigentum. Eigentum erfordert geltende Urkunden, Register und Formalitäten; ein Token allein überträgt keinen Titel."
+      },
+      {
+        "label": "Nutzungsrechte an Geräten",
+        "caveat": "Beispiel eines vertraglichen Gerätenutzungsrechts, nicht des Eigentums. Umfang, Wartung, Laufzeit und Übertragung hängen vom Vertrag ab; ein Token überträgt keinen Titel."
+      },
+      {
+        "label": "Aktienzertifikat / Hinterlegungsschein",
+        "caveat": "Ein Zertifikat kann zugrunde liegende Aktien ohne direkt eingetragenes Eigentum repräsentieren. Anspruch, Verwahrer, Stimmrechte und Ausschüttungen sind genau festzulegen; hier werden keine Aktien ausgegeben."
+      },
+      {
+        "label": "LLC-Haltestruktur",
+        "caveat": "Beteiligung über ein LLC-artiges Vehikel. Vertrag und Rechtsordnung bestimmen Eigentum, Haftung, Stimmen und Ausschüttungen; kein automatisches direktes Eigentum an den Vermögenswerten."
+      },
+      {
+        "label": "Umsatzbeteiligung",
+        "caveat": "Beispiel einer Zahlung nach definiertem Bruttoumsatz. Umsatz ist kein Gewinn; Abzüge, Berichte und Grenzen sind vertraglich. Keine garantierte Rendite oder Rückzahlung."
+      },
+      {
+        "label": "Lizenzgebührenrechte",
+        "caveat": "Beispiel eines Anspruchs auf Lizenzgebühren aus geistigem Eigentum. Lizenzgebühren sind kein Gewinn und übertragen kein geistiges Eigentum. Keine garantierte Rendite oder Rückzahlung."
+      },
+      {
+        "label": "Spende / soziale Finanzierung",
+        "caveat": "Nichtfinanzieller Beitrag für einen sozialen Zweck. Kein Eigentum, Zins, Rückzahlungsanspruch oder finanzieller Ertrag. Keine Spende erhoben und kein Steuerabzug zugesagt."
+      },
+      {
+        "label": "Finanzierung mit Gegenleistung",
+        "caveat": "Nichtfinanzielle Finanzierung für eine beispielhafte Gegenleistung. Keine Anlage: kein Zins, Eigentum oder finanzieller Ertrag. Lieferung, Widerruf und Verbraucherbedingungen separat festzulegen."
+      },
+      {
+        "label": "Vorverkauf",
+        "caveat": "Beispiel einer Warenvorbestellung, keine Anlage oder Recht auf künftige Token. Kein finanzieller Ertrag. Preis, Lieferung, Widerruf und Verbraucherrechte separat festzulegen."
+      }
+    ]
   }
 }

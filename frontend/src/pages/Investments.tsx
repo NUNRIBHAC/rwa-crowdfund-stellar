@@ -8,6 +8,7 @@ import { profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
 import { sampleIndustry } from '../data/sampleCatalog';
+import { SampleConceptsSection } from '../components/SampleConcepts';
 
 export default function Investments({ market, loadStatus }: { market: Market; loadStatus?: ReactNode }) {
   const { m } = useI18n();
@@ -211,6 +212,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
             </details>
           </section>
         )}
+        {fixtureMode && <SampleConceptsSection />}
       </div>
     </div>
   );

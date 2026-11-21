@@ -2758,4 +2758,62 @@ export const pt: Messages = {
     refunded: 'Insucesso - reembolso ao investidor concluído',
     notice: 'Dados de exemplo. Não ocorreu contribuição, levantamento nem reembolso.',
   },
+  sampleConcepts: {
+    title: 'Formatos educativos de exemplo',
+    notice: 'Estes exemplos não comprovam suporte da plataforma, oferta ou elegibilidade ECSPR. Cada formato exige análise jurídica e regulatória própria.',
+    unavailable: 'Não disponibilizado - apenas exemplo',
+    nonFinancialNotice: 'Exemplo não financeiro - sem retorno de investimento.',
+    list: [
+      {
+        label: 'SAFE / contrato de capital futuro',
+        caveat:
+          'Direito contratual a eventual capital futuro, sujeito a condições de conversão. Um SAFE não é automaticamente uma ação emitida nem um empréstimo. Conversão, diluição e perda dependem do contrato.',
+      },
+      {
+        label: 'Copropriedade direta',
+        caveat:
+          'Exemplo de participação direta em propriedade comum. O título legal exige escritura, registo e formalidades aplicáveis; um token não transfere a propriedade por si só.',
+      },
+      {
+        label: 'Direitos de uso de equipamentos',
+        caveat:
+          'Exemplo de direito contratual de uso de equipamentos, não da sua propriedade. Âmbito, manutenção, prazo e transmissão dependem do acordo; um token não transfere o título.',
+      },
+      {
+        label: 'Certificado representativo de ações',
+        caveat:
+          'Um certificado pode representar ações subjacentes, sem titularidade direta no registo. É necessário definir direito exato, custodiante, votos e distribuições; aqui não são emitidas ações.',
+      },
+      {
+        label: 'Estrutura de detenção LLC',
+        caveat:
+          'Participação detida através de um veículo do tipo LLC. Contrato e jurisdição determinam propriedade, responsabilidade, votos e distribuições; não há automaticamente propriedade direta dos ativos.',
+      },
+      {
+        label: 'Participação em receitas',
+        caveat:
+          'Pagamento ilustrativo ligado a receitas brutas definidas. Receitas não são lucros; deduções, prestação de contas e limites dependem do contrato. Não existe retorno ou reembolso garantido.',
+      },
+      {
+        label: 'Direitos de royalties',
+        caveat:
+          'Direito ilustrativo a royalties pelo uso licenciado de propriedade intelectual. Royalties não são lucros e a propriedade intelectual não é transmitida. Não existe retorno ou reembolso garantido.',
+      },
+      {
+        label: 'Doação / financiamento social',
+        caveat:
+          'Contribuição não financeira para uma causa social. Sem propriedade, juros, reembolso ou outro retorno financeiro. Não é recolhida doação nem prometida dedução fiscal.',
+      },
+      {
+        label: 'Financiamento com recompensa',
+        caveat:
+          'Financiamento não financeiro em troca de recompensa ilustrativa. Não é investimento: sem juros, propriedade ou retorno financeiro. Entrega, cancelamento e termos de consumo exigem definição separada.',
+      },
+      {
+        label: 'Pré-venda',
+        caveat:
+          'Encomenda antecipada ilustrativa de bens, não investimento nem direito a tokens futuros. Sem retorno financeiro. Preço, entrega, cancelamento e direitos do consumidor exigem definição separada.',
+      },
+    ],
+  },
 };
