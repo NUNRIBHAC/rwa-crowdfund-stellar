@@ -1003,18 +1003,6 @@ export const pt: Messages = {
             'Certificado de uma entidade depositária ou administrativa que representa ações detidas por essa entidade. O certificado e a ação subjacente não são a mesma coisa: voto, dividendos e transmissão dependem dos termos do próprio certificado.',
         },
         {
-          id: 'llc',
-          label: 'Participação em LLC',
-          summary:
-            'Participação numa sociedade de responsabilidade limitada (LLC) que detém o ativo, com direitos definidos pelo acordo operativo. Forma dos EUA, apresentada para comparação; não se presume aplicável em Portugal.',
-        },
-        {
-          id: 'series-llc',
-          label: 'Participação em Series LLC',
-          summary:
-            'Participação numa série segregada de uma Series LLC, em que cada série detém um ativo separado. Forma dos EUA, apresentada apenas para comparação.',
-        },
-        {
           id: 'llp',
           label: 'Participação em LLP',
           summary: 'Participação numa parceria de responsabilidade limitada (LLP), com direitos e pagamentos definidos pelo contrato de parceria.',

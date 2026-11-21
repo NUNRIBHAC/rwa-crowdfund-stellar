@@ -959,17 +959,6 @@ export const en = {
             "A certificate from a custodian or administrative office representing shares that the office holds. The certificate and the underlying share are not the same thing: voting, dividends and transfer depend on the certificate's own terms.",
         },
         {
-          id: 'llc',
-          label: 'LLC membership interest',
-          summary:
-            'An interest in a limited liability company that owns the asset, with rights set by the operating agreement. A US form, shown for comparison; it is not assumed to apply in Portugal.',
-        },
-        {
-          id: 'series-llc',
-          label: 'Series LLC interest',
-          summary: 'An interest in one segregated series of a Series LLC, where each series holds a separate asset. A US form, shown for comparison only.',
-        },
-        {
           id: 'llp',
           label: 'LLP interest',
           summary: 'An interest in a limited liability partnership, with rights and payouts set by the partnership agreement.',

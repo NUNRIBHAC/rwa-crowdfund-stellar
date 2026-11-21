@@ -243,6 +243,8 @@ test('issuer applications: holding structure is optional, validated and stored',
   // Unknown identifiers are rejected by input validation before any write.
   await assert.rejects(() => service.submitApplication(account, { ...base, holdingStructure: 'investment-fund' }));
   await assert.rejects(() => service.submitApplication(account, { ...base, holdingStructure: 'SAFE' }));
+  await assert.rejects(() => service.submitApplication(account, { ...base, holdingStructure: 'llc' }));
+  await assert.rejects(() => service.submitApplication(account, { ...base, holdingStructure: 'series-llc' }));
 });
 
 test('news: admin posts are labeled platform-demo and listed publicly', async () => {

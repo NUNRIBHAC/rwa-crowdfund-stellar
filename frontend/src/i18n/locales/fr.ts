@@ -1009,18 +1009,6 @@ export const fr: Messages = {
             "Certificat d'un dépositaire ou d'un office administratif représentant des actions que cet office détient. Le certificat et l'action sous-jacente ne sont pas la même chose : vote, dividendes et transmission dépendent des termes propres du certificat.",
         },
         {
-          id: 'llc',
-          label: 'Part de LLC',
-          summary:
-            "Participation dans une société à responsabilité limitée (LLC) qui détient l'actif, avec des droits définis par l'operating agreement. Forme américaine, présentée à titre comparatif ; elle n'est pas présumée applicable au Portugal.",
-        },
-        {
-          id: 'series-llc',
-          label: 'Part de Series LLC',
-          summary:
-            "Participation dans une série séparée d'une Series LLC, chaque série détenant un actif distinct. Forme américaine, présentée uniquement à titre comparatif.",
-        },
-        {
           id: 'llp',
           label: 'Part de LLP',
           summary: 'Participation dans une limited liability partnership (LLP), avec des droits et des versements définis par le contrat de société.',

@@ -914,16 +914,6 @@ export const zhCN: Messages = {
           summary: '由存管或管理机构出具的凭证，代表该机构持有的股票。凭证与底层股票不是同一事物：投票权、股息和转让取决于凭证自身的条款。',
         },
         {
-          id: 'llc',
-          label: 'LLC 成员权益',
-          summary: '持有资产的有限责任公司（LLC）的权益，权利由经营协议规定。这是美国形式，仅供比较；不假定其适用于葡萄牙。',
-        },
-        {
-          id: 'series-llc',
-          label: 'Series LLC 权益',
-          summary: 'Series LLC 中一个独立系列的权益，每个系列持有独立资产。美国形式，仅供比较。',
-        },
-        {
           id: 'llp',
           label: 'LLP 权益',
           summary: '有限责任合伙（LLP）的权益，权利和分配由合伙协议规定。',

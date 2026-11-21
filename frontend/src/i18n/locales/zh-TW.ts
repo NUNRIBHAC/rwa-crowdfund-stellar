@@ -914,16 +914,6 @@ export const zhTW: Messages = {
           summary: '由存管或管理機構出具的憑證，代表該機構持有的股票。憑證與底層股票不是同一事物：投票權、股息和轉讓取決於憑證自身的條款。',
         },
         {
-          id: 'llc',
-          label: 'LLC 成員權益',
-          summary: '持有資產的有限責任公司（LLC）的權益，權利由營運協議規定。這是美國形式，僅供比較；不假定其適用於葡萄牙。',
-        },
-        {
-          id: 'series-llc',
-          label: 'Series LLC 權益',
-          summary: 'Series LLC 中一個獨立系列的權益，每個系列持有獨立資產。美國形式，僅供比較。',
-        },
-        {
           id: 'llp',
           label: 'LLP 權益',
           summary: '有限責任合夥（LLP）的權益，權利和分配由合夥協議規定。',

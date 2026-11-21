@@ -996,18 +996,6 @@ export const de: Messages = {
             'Schein einer Verwahr- oder Verwaltungsstelle, der Aktien repräsentiert, die diese Stelle hält. Der Schein und die zugrunde liegende Aktie sind nicht dasselbe: Stimmrecht, Dividenden und Übertragung richten sich nach den eigenen Bedingungen des Scheins.',
         },
         {
-          id: 'llc',
-          label: 'LLC-Geschäftsanteil',
-          summary:
-            'Beteiligung an einer Limited Liability Company (LLC), die den Vermögenswert hält, mit Rechten aus dem Operating Agreement. Eine US-Form, zum Vergleich gezeigt; sie wird nicht als in Portugal anwendbar angenommen.',
-        },
-        {
-          id: 'series-llc',
-          label: 'Series-LLC-Anteil',
-          summary:
-            'Beteiligung an einer abgeteilten Serie einer Series LLC, wobei jede Serie einen separaten Vermögenswert hält. Eine US-Form, nur zum Vergleich gezeigt.',
-        },
-        {
           id: 'llp',
           label: 'LLP-Anteil',
           summary: 'Beteiligung an einer Limited Liability Partnership (LLP), mit Rechten und Auszahlungen nach dem Partnerschaftsvertrag.',

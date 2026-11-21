@@ -16,14 +16,14 @@ import { zhCN } from '../i18n/locales/zh-CN';
 import { zhTW } from '../i18n/locales/zh-TW';
 
 const locales = { en, pt, es, fr, de, ar, hi, ja, ko, 'zh-CN': zhCN, 'zh-TW': zhTW };
-const HOLDING_IDS = ['direct', 'depositary-receipt', 'llc', 'series-llc', 'llp', 'scp', 'lda-quotas', 'anonymous-partnership'];
+const HOLDING_IDS = ['direct', 'depositary-receipt', 'llp', 'scp', 'lda-quotas', 'anonymous-partnership'];
 
 afterEach(() => {
   cleanup();
   localStorage.clear();
 });
 
-test('every locale carries the same eight holding structures with labels and summaries', () => {
+test('every locale carries the same six holding structures with labels and summaries', () => {
   expect(en.instruments.holding.items.map((h) => h.id)).toEqual(HOLDING_IDS);
   for (const [name, m] of Object.entries(locales)) {
     expect(
