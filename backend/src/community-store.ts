@@ -397,9 +397,6 @@ export type IssuerApplication = {
   projectName: string;
   country: string;
   instrumentType: string;
-  // Optional holding-structure descriptor; absent on applications stored
-  // before holding structures were introduced. Descriptive only.
-  holdingStructure?: import('./holding-structures.js').HoldingStructureId | null;
   targetAmount: string;
   description: string;
   contactEmail: string | null;

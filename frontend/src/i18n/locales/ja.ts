@@ -357,7 +357,6 @@ export const ja: Messages = {
     backToAll: 'すべての投資に戻る',
     issuerMissing: '発行者の身元とオフチェーン条件はこのプロトタイプでは利用できません。以下のデータはオンチェーンコントラクトからのものです。',
     assetClass: '資産クラス',
-    holdingStructureLabel: '保有ストラクチャー',
     escrowTestnet: 'コントラクトエスクロー（テストネット）',
     interestRate: '利率',
     noInterest: 'なし - 出資エスクローのみ',
@@ -921,47 +920,6 @@ export const ja: Messages = {
     chipSubordinated: '劣後',
     chipUnspecifiedSuffix: '（優先順位未指定）',
     chipCompose: 'concat',
-    holding: {
-      aria: '保有ストラクチャー',
-      title: '保有ストラクチャー',
-      intro:
-        '投資家が参加権益をどのように保有するか：直接、または証書・ビークル・パートナーシップ形式を通じて保有します。保有ストラクチャーは基礎となるインスツルメントを修飾するものであり、それ自体は独立したインスツルメントではなく、経済実質を単独で変えるものでもありません。',
-      disclaimer:
-        'Blockallisto は登記会社を持たず、ECSPR ライセンスもありません。証書の発行や、デポジタリー・カストディのいかなるサービスも提供しません。あるストラクチャーを実際に提供できるかどうかは、インスツルメント、発行体、法域、適用法に依存します。ここに示す各ストラクチャーは説明用であり、実際の募集の前に法的分析を要します。ECSPR への該当性は、具体的なストラクチャーに依存する仮説であり、確定した事実ではありません。Stellar 上のトークン記録は、それだけでは所有権や投資家の権利を生じさせません。',
-      notSpecified: '未指定',
-      items: [
-        {
-          id: 'direct',
-          label: '直接保有',
-          summary: '投資家が自己名義で株式または権益を保有し、間にビークルや受託者を挟みません。',
-        },
-        {
-          id: 'depositary-receipt',
-          label: '預託証書（株式証書）',
-          summary: '保管・管理機関が保有する株式を表示する証書。証書と原株式は同一ではありません。議決権、配当、譲渡は証書自体の条件に従います。',
-        },
-        {
-          id: 'llp',
-          label: 'LLP 持分',
-          summary: '有限責任パートナーシップ（LLP）の持分で、権利と分配はパートナーシップ契約により定められます。',
-        },
-        {
-          id: 'scp',
-          label: 'Sociedade em conta de participação（SCP）',
-          summary: 'ポルトガルの非登記パートナーシップで、1 名のパートナーが事業を行い、参加パートナーが成果の分配を受けます。独立した法人格はありません。',
-        },
-        {
-          id: 'lda-quotas',
-          label: 'Lda の持分（クオータ）',
-          summary: '資産を保有するポルトガルの有限責任会社（sociedade por quotas、Lda）の持分で、権利は定款とポルトガル会社法により定められます。',
-        },
-        {
-          id: 'anonymous-partnership',
-          label: '匿名組合（tokumei kumiai）',
-          summary: '日本の契約形式で、投資家が営業者の事業に出資し、登記されたパートナーになることなく利益の分配を受けます。',
-        },
-      ],
-    },
   },
   glossary: [
     {
@@ -2409,9 +2367,6 @@ export const ja: Messages = {
       projectName: 'プロジェクト名',
       country: '国',
       instrumentType: '商品タイプ(例: 債券、エクイティ、レベニューシェア)',
-      holdingStructure: '保有ストラクチャー（任意）',
-      holdingStructureHelp:
-        'プロジェクトが上場された場合に投資家が参加権益をどのように保有するか（例：直接、または株式証書を通じて）。説明のみを目的とし、選択することは承認・上場・法的分類のいずれでもありません。',
       targetAmount: '目標金額',
       description: 'プロジェクトの説明',
       contactEmail: '連絡先メール(任意)',

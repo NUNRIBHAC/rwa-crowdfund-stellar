@@ -74,7 +74,6 @@ export type IssuerApplication = {
   projectName: string;
   country: string;
   instrumentType: string;
-  holdingStructure?: string | null;
   targetAmount: string;
   description: string;
   contactEmail: string | null;
@@ -585,7 +584,6 @@ export const submitIssuerApplication = (
     projectName: string;
     country: string;
     instrumentType: string;
-    holdingStructure?: string;
     targetAmount: string;
     description: string;
     contactEmail?: string;

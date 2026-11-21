@@ -1,5 +1,4 @@
 import { tpl } from '../format';
-import { holdingStructureLabel } from '../data/holdingStructures';
 import ApplicationDocuments from './ApplicationDocuments';
 // Operator dashboard (demo admin surface): issuer application triage, comment
 // moderation, ticket closure, campaign news and podcast episode publishing
@@ -241,10 +240,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
                         <ApplicationDocuments application={a} operator campaigns={campaigns} onChange={load} />
                       </td>
                       <td>{a.country}</td>
-                      <td>
-                        {a.instrumentType}
-                        {a.holdingStructure && <span className="doc-note">{holdingStructureLabel(m, a.holdingStructure)}</span>}
-                      </td>
+                      <td>{a.instrumentType}</td>
                       <td>{a.targetAmount}</td>
                       <td className="cell-nowrap">{fmt(a.createdAt)}</td>
                       <td>

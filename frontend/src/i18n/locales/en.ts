@@ -355,7 +355,6 @@ export const en = {
     backToAll: 'Back to all investments',
     issuerMissing: 'Issuer identity and off-chain terms are not available in this prototype; the data below comes from the on-chain contract.',
     assetClass: 'Asset class',
-    holdingStructureLabel: 'Holding structure',
     escrowTestnet: 'Contract escrow (testnet)',
     interestRate: 'Interest rate',
     noInterest: 'None - contribution escrow only',
@@ -938,51 +937,6 @@ export const en = {
     chipSubordinated: 'Subordinated',
     chipUnspecifiedSuffix: '(seniority unspecified)',
     chipCompose: 'space-lower',
-    holding: {
-      aria: 'Holding structures',
-      title: 'Holding structures',
-      intro:
-        'How an investor holds a participation: directly, or through a certificate, vehicle or partnership form. A holding structure qualifies the underlying instrument; it is never a separate instrument and does not change the economics by itself.',
-      disclaimer:
-        'Blockallisto has no registered company and no ECSPR licence, and it does not issue certificates or provide any depositary or custody service. Whether a structure can actually be offered depends on the instrument, the issuer, the jurisdiction and the applicable law; every structure shown here is descriptive and awaits legal analysis before any real offer. Any ECSPR qualification is a hypothesis that depends on the concrete structure, never an established fact. A token record on Stellar does not by itself create ownership or investor rights.',
-      notSpecified: 'Not specified',
-      items: [
-        {
-          id: 'direct',
-          label: 'Direct holding',
-          summary: 'The investor holds the share or interest in their own name, with no vehicle or trustee in between.',
-        },
-        {
-          id: 'depositary-receipt',
-          label: 'Depositary receipt (share certificate)',
-          summary:
-            "A certificate from a custodian or administrative office representing shares that the office holds. The certificate and the underlying share are not the same thing: voting, dividends and transfer depend on the certificate's own terms.",
-        },
-        {
-          id: 'llp',
-          label: 'LLP interest',
-          summary: 'An interest in a limited liability partnership, with rights and payouts set by the partnership agreement.',
-        },
-        {
-          id: 'scp',
-          label: 'Sociedade em conta de participação (SCP)',
-          summary:
-            'A Portuguese unregistered partnership in which one partner runs the activity and the participating partner shares in the results. It has no separate legal personality.',
-        },
-        {
-          id: 'lda-quotas',
-          label: 'Quotas in a Lda',
-          summary:
-            'Quotas (participations) in a Portuguese private limited company (sociedade por quotas, Lda) that owns the asset, with rights set by the articles and the Portuguese companies code.',
-        },
-        {
-          id: 'anonymous-partnership',
-          label: 'Anonymous partnership (tokumei kumiai)',
-          summary:
-            "A Japanese contract under which the investor contributes to an operator's business and shares in its profits without becoming a registered partner.",
-        },
-      ],
-    },
   },
   glossary: [
     {
@@ -2433,9 +2387,6 @@ export const en = {
       projectName: 'Project name',
       country: 'Country',
       instrumentType: 'Instrument type (e.g. bond, equity, revenue share)',
-      holdingStructure: 'Holding structure (optional)',
-      holdingStructureHelp:
-        'How investors would hold the participation if the project were listed (for example directly or through a share certificate). Descriptive only: selecting one is not an approval, a listing or a legal classification.',
       targetAmount: 'Target amount',
       description: 'Project description',
       contactEmail: 'Contact email (optional)',

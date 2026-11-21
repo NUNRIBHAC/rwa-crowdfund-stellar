@@ -362,7 +362,6 @@ export const de: Messages = {
     issuerMissing:
       'Die Identität des Emittenten und die Off-Chain-Bedingungen sind in diesem Prototyp nicht verfügbar; die Daten unten stammen aus dem On-Chain-Vertrag.',
     assetClass: 'Anlageklasse',
-    holdingStructureLabel: 'Holdingstruktur',
     escrowTestnet: 'Vertrags-Escrow (Testnet)',
     interestRate: 'Zinssatz',
     noInterest: 'Keiner - nur Beitrags-Escrow',
@@ -975,51 +974,6 @@ export const de: Messages = {
     chipSubordinated: 'Nachrangig',
     chipUnspecifiedSuffix: '(Rangfolge nicht angegeben)',
     chipCompose: 'space-lower',
-    holding: {
-      aria: 'Holdingstrukturen',
-      title: 'Holdingstrukturen',
-      intro:
-        'Wie ein Anleger eine Beteiligung hält: direkt oder über ein Zertifikat, ein Vehikel oder eine Gesellschaftsform. Die Holdingstruktur qualifiziert das zugrunde liegende Instrument; sie ist nie ein eigenes Instrument und ändert die Wirtschaftlichkeit nicht für sich allein.',
-      disclaimer:
-        'Blockallisto hat keine eingetragene Gesellschaft und keine ECSPR-Lizenz, gibt keine Zertifikate aus und erbringt keine Depot- oder Verwahrungsdienstleistungen. Ob eine Struktur tatsächlich angeboten werden kann, hängt vom Instrument, vom Emittenten, von der Jurisdiktion und vom anwendbaren Recht ab; jede hier gezeigte Struktur ist beschreibend und wartet vor einem echten Angebot auf eine rechtliche Prüfung. Jede ECSPR-Einordnung ist eine Hypothese, die von der konkreten Struktur abhängt, niemals eine feststehende Tatsache. Ein Token-Eintrag auf Stellar schafft für sich allein weder Eigentum noch Anlegerrechte.',
-      notSpecified: 'Nicht angegeben',
-      items: [
-        {
-          id: 'direct',
-          label: 'Direkthaltung',
-          summary: 'Der Anleger hält die Aktie oder Beteiligung auf eigenen Namen, ohne Vehikel oder Treuhänder dazwischen.',
-        },
-        {
-          id: 'depositary-receipt',
-          label: 'Hinterlegungsschein (Aktienzertifikat)',
-          summary:
-            'Schein einer Verwahr- oder Verwaltungsstelle, der Aktien repräsentiert, die diese Stelle hält. Der Schein und die zugrunde liegende Aktie sind nicht dasselbe: Stimmrecht, Dividenden und Übertragung richten sich nach den eigenen Bedingungen des Scheins.',
-        },
-        {
-          id: 'llp',
-          label: 'LLP-Anteil',
-          summary: 'Beteiligung an einer Limited Liability Partnership (LLP), mit Rechten und Auszahlungen nach dem Partnerschaftsvertrag.',
-        },
-        {
-          id: 'scp',
-          label: 'Sociedade em conta de participação (SCP)',
-          summary:
-            'Portugiesische nicht eingetragene Gesellschaft, in der ein Gesellschafter die Tätigkeit ausübt und der beteiligte Gesellschafter an den Ergebnissen teilhat. Sie hat keine eigene Rechtspersönlichkeit.',
-        },
-        {
-          id: 'lda-quotas',
-          label: 'Quoten einer Lda',
-          summary:
-            'Quoten (Anteile) einer portugiesischen Gesellschaft mit beschränkter Haftung (sociedade por quotas, Lda), die den Vermögenswert hält, mit Rechten nach den Statuten und dem portugiesischen Gesellschaftsrecht.',
-        },
-        {
-          id: 'anonymous-partnership',
-          label: 'Anonyme Partnerschaft (tokumei kumiai)',
-          summary:
-            'Japanischer Vertrag, bei dem der Anleger in das Geschäft eines Betreibers einzahlt und an dessen Gewinnen teilhat, ohne eingetragener Partner zu werden.',
-        },
-      ],
-    },
   },
   glossary: [
     {
@@ -2488,9 +2442,6 @@ export const de: Messages = {
       projectName: 'Projektname',
       country: 'Land',
       instrumentType: 'Instrumententyp (z. B. Anleihe, Eigenkapital, Umsatzbeteiligung)',
-      holdingStructure: 'Holdingstruktur (optional)',
-      holdingStructureHelp:
-        'Wie Anleger die Beteiligung halten würden, falls das Projekt gelistet würde (zum Beispiel direkt oder über ein Aktienzertifikat). Nur beschreibend: Eine Auswahl ist keine Genehmigung, kein Listing und keine rechtliche Einordnung.',
       targetAmount: 'Zielbetrag',
       description: 'Projektbeschreibung',
       contactEmail: 'Kontakt-E-Mail (optional)',

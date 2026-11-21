@@ -18,7 +18,6 @@ export default function Learn() {
           ))}
           <a href="#learn-overlays">{m.learn.overlaysTitle}</a>
           <a href="#learn-qualifiers">{m.learn.qualifiersTitle}</a>
-          <a href="#learn-holding">{m.instruments.holding.title}</a>
         </nav>
       </details>
       <div className="learn-content">
@@ -78,20 +77,6 @@ export default function Learn() {
               </article>
             ))}
           </div>
-        </section>
-
-        <section id="learn-holding" aria-label={m.instruments.holding.aria}>
-          <h2 className="section-title">{m.instruments.holding.title}</h2>
-          <p>{m.instruments.holding.intro}</p>
-          <div className="instrument-grid">
-            {m.instruments.holding.items.map((h) => (
-              <article key={h.id} className="instrument-card">
-                <h3>{h.label}</h3>
-                <p>{h.summary}</p>
-              </article>
-            ))}
-          </div>
-          <p className="community-note">{m.instruments.holding.disclaimer}</p>
         </section>
 
         <section id="learn-qualifiers" aria-label={m.learn.qualifiersAria}>

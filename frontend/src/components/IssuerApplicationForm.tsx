@@ -28,7 +28,6 @@ function ScopedIssuerApplicationForm() {
   const [projectName, setProjectName] = useState('');
   const [country, setCountry] = useState('');
   const [instrumentType, setInstrumentType] = useState('');
-  const [holdingStructure, setHoldingStructure] = useState('');
   const [targetAmount, setTargetAmount] = useState('');
   const [description, setDescription] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -89,7 +88,6 @@ function ScopedIssuerApplicationForm() {
         projectName: projectName.trim(),
         country: country.trim(),
         instrumentType: instrumentType.trim(),
-        ...(holdingStructure ? { holdingStructure } : {}),
         targetAmount: targetAmount.trim(),
         description: description.trim(),
         contactEmail: contactEmail.trim(),
@@ -158,18 +156,6 @@ function ScopedIssuerApplicationForm() {
               {...fieldProps('instrumentType')}
             />
             {fieldMessage('instrumentType')}
-          </label>
-          <label>
-            {m.community.applicationFields.holdingStructure}
-            <select value={holdingStructure} onChange={(e) => setHoldingStructure(e.target.value)} name="holdingStructure">
-              <option value="">{m.instruments.holding.notSpecified}</option>
-              {m.instruments.holding.items.map((h) => (
-                <option key={h.id} value={h.id}>
-                  {h.label}
-                </option>
-              ))}
-            </select>
-            <span className="field-help">{m.community.applicationFields.holdingStructureHelp}</span>
           </label>
           <label>
             {m.community.applicationFields.targetAmount}
