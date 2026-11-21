@@ -340,6 +340,7 @@
     "backToAll": "Voltar a todos os investimentos",
     "issuerMissing": "A identidade do emitente e as condições off-chain não estão disponíveis neste protótipo; os dados abaixo vêm do contrato on-chain.",
     "assetClass": "Classe de ativo",
+    "holdingStructureLabel": "Estrutura de detenção",
     "escrowTestnet": "Escrow por contrato (testnet)",
     "interestRate": "Taxa de juro",
     "noInterest": "Nenhuma - apenas escrow de contribuições",
@@ -883,7 +884,48 @@
     "chipSenior": "Sénior",
     "chipSubordinated": "Subordinada",
     "chipUnspecifiedSuffix": "(senioridade não especificada)",
-    "chipCompose": "space-lower"
+    "chipCompose": "space-lower",
+    "holding": {
+      "aria": "Estruturas de detenção",
+      "title": "Estruturas de detenção",
+      "intro": "Como o investidor detém uma participação: diretamente ou através de um certificado, veículo ou forma societária. A estrutura de detenção qualifica o instrumento subjacente; nunca é um instrumento separado e não altera a economia por si só.",
+      "disclaimer": "A Blockallisto não tem sociedade constituída nem licença ECSPR, não emite certificados e não presta qualquer serviço de depósito ou custódia. Se uma estrutura pode ser efetivamente oferecida depende do instrumento, do emitente, da jurisdição e da lei aplicável; cada estrutura aqui apresentada é descritiva e aguarda análise jurídica antes de qualquer oferta real. Qualquer enquadramento ECSPR é uma hipótese que depende da estrutura concreta, nunca um facto estabelecido. O registo de um token na Stellar não cria, por si, propriedade ou direitos de investimento.",
+      "notSpecified": "Não especificado",
+      "items": [
+        {
+          "label": "Detenção direta",
+          "summary": "O investidor detém a ação ou participação em nome próprio, sem veículo ou fiduciário intermédio."
+        },
+        {
+          "label": "Certificado representativo de ações",
+          "summary": "Certificado de uma entidade depositária ou administrativa que representa ações detidas por essa entidade. O certificado e a ação subjacente não são a mesma coisa: voto, dividendos e transmissão dependem dos termos do próprio certificado."
+        },
+        {
+          "label": "Participação em LLC",
+          "summary": "Participação numa sociedade de responsabilidade limitada (LLC) que detém o ativo, com direitos definidos pelo acordo operativo. Forma dos EUA, apresentada para comparação; não se presume aplicável em Portugal."
+        },
+        {
+          "label": "Participação em Series LLC",
+          "summary": "Participação numa série segregada de uma Series LLC, em que cada série detém um ativo separado. Forma dos EUA, apresentada apenas para comparação."
+        },
+        {
+          "label": "Participação em LLP",
+          "summary": "Participação numa parceria de responsabilidade limitada (LLP), com direitos e pagamentos definidos pelo contrato de parceria."
+        },
+        {
+          "label": "Sociedade em conta de participação (SCP)",
+          "summary": "Sociedade portuguesa não registada em que um sócio exerce a atividade e o sócio participante partilha os resultados. Não tem personalidade jurídica própria."
+        },
+        {
+          "label": "Quotas numa Lda",
+          "summary": "Quotas de uma sociedade por quotas portuguesa (Lda) que detém o ativo, com direitos definidos pelos estatutos e pelo Código das Sociedades Comerciais."
+        },
+        {
+          "label": "Parceria anónima (tokumei kumiai)",
+          "summary": "Contrato japonês em que o investidor contribui para o negócio de um operador e partilha os lucros, sem se tornar sócio registado."
+        }
+      ]
+    }
   },
   "glossary": [
     {
@@ -2185,6 +2227,8 @@
       "projectName": "Nome do projeto",
       "country": "País",
       "instrumentType": "Tipo de instrumento (ex.: obrigação, capital, partilha de receitas)",
+      "holdingStructure": "Estrutura de detenção (opcional)",
+      "holdingStructureHelp": "Como os investidores deteriam a participação se o projeto fosse listado (por exemplo diretamente ou através de um certificado representativo de ações). Apenas descritivo: selecionar uma opção não é uma aprovação, listagem ou classificação jurídica.",
       "targetAmount": "Montante alvo",
       "description": "Descrição do projeto",
       "contactEmail": "Email de contacto (opcional)"

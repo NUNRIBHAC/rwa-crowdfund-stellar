@@ -1,4 +1,5 @@
 import { audioUrlAllowed } from './audio-origins.js';
+import { HOLDING_STRUCTURE_IDS } from './holding-structures.js';
 import { PrivateApplicationUploadWorkflow, type PrivateTextObjects } from './private-application-upload-workflow.js';
 import { assertExplicitFileStorePath } from './test-storage-guard.js';
 import { createHash, randomBytes } from 'node:crypto';
@@ -89,6 +90,10 @@ const applicationInput = z.object({
   projectName: z.string().trim().min(1).max(LIMITS.applicationField),
   country: z.string().trim().min(1).max(LIMITS.applicationField),
   instrumentType: z.string().trim().min(1).max(LIMITS.applicationField),
+  // Optional, strictly validated holding-structure descriptor (see
+  // holding-structures.ts). Descriptive metadata only; never an offer, an
+  // approval or a regulatory classification.
+  holdingStructure: z.enum(HOLDING_STRUCTURE_IDS).optional(),
   targetAmount: z.string().trim().min(1).max(LIMITS.applicationField),
   description: z.string().trim().min(1).max(LIMITS.applicationDescription),
   contactEmail: z.union([z.literal(''), z.string().trim().email().max(LIMITS.applicationField)]).optional(),
@@ -916,6 +921,7 @@ export class CommunityService {
       projectName: parsed.projectName,
       country: parsed.country,
       instrumentType: parsed.instrumentType,
+      holdingStructure: parsed.holdingStructure ?? null,
       targetAmount: parsed.targetAmount,
       description: parsed.description,
       contactEmail: parsed.contactEmail ? parsed.contactEmail : null,

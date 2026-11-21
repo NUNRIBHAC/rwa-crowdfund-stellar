@@ -30,6 +30,10 @@ export default function IssuerApplicationPreview() {
           <input disabled placeholder={placeholder} />
         </label>
         <label>
+          {f.holdingStructure}
+          <input disabled placeholder={placeholder} />
+        </label>
+        <label>
           {f.targetAmount}
           <input disabled placeholder={placeholder} />
         </label>

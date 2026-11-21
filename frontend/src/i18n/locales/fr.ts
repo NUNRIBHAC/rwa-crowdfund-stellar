@@ -361,6 +361,7 @@ export const fr: Messages = {
     issuerMissing:
       "L'identité de l'émetteur et les conditions off-chain ne sont pas disponibles dans ce prototype ; les données ci-dessous proviennent du contrat on-chain.",
     assetClass: "Classe d'actif",
+    holdingStructureLabel: 'Structure de détention',
     escrowTestnet: 'Séquestre par contrat (testnet)',
     interestRate: "Taux d'intérêt",
     noInterest: 'Aucun - uniquement séquestre de contributions',
@@ -987,6 +988,63 @@ export const fr: Messages = {
     chipSubordinated: 'Subordonnée',
     chipUnspecifiedSuffix: '(seniorité non spécifiée)',
     chipCompose: 'space-lower',
+    holding: {
+      aria: 'Structures de détention',
+      title: 'Structures de détention',
+      intro:
+        "Comment l'investisseur détient une participation : directement ou par l'intermédiaire d'un certificat, d'un véhicule ou d'une forme sociétaire. La structure de détention qualifie l'instrument sous-jacent ; elle n'est jamais un instrument séparé et ne change pas l'économie à elle seule.",
+      disclaimer:
+        "Blockallisto n'a ni société constituée ni licence ECSPR, n'émet aucun certificat et ne fournit aucun service de dépôt ou de conservation. La possibilité d'offrir réellement une structure dépend de l'instrument, de l'émetteur, de la juridiction et du droit applicable ; chaque structure présentée ici est descriptive et attend une analyse juridique avant toute offre réelle. Toute qualification ECSPR est une hypothèse qui dépend de la structure concrète, jamais un fait établi. L'enregistrement d'un token sur Stellar ne crée pas à lui seul une propriété ni des droits d'investissement.",
+      notSpecified: 'Non précisé',
+      items: [
+        {
+          id: 'direct',
+          label: 'Détention directe',
+          summary: "L'investisseur détient l'action ou la participation en son nom propre, sans véhicule ni fiduciaire intermédiaire.",
+        },
+        {
+          id: 'depositary-receipt',
+          label: "Certificat représentatif d'actions",
+          summary:
+            "Certificat d'un dépositaire ou d'un office administratif représentant des actions que cet office détient. Le certificat et l'action sous-jacente ne sont pas la même chose : vote, dividendes et transmission dépendent des termes propres du certificat.",
+        },
+        {
+          id: 'llc',
+          label: 'Part de LLC',
+          summary:
+            "Participation dans une société à responsabilité limitée (LLC) qui détient l'actif, avec des droits définis par l'operating agreement. Forme américaine, présentée à titre comparatif ; elle n'est pas présumée applicable au Portugal.",
+        },
+        {
+          id: 'series-llc',
+          label: 'Part de Series LLC',
+          summary:
+            "Participation dans une série séparée d'une Series LLC, chaque série détenant un actif distinct. Forme américaine, présentée uniquement à titre comparatif.",
+        },
+        {
+          id: 'llp',
+          label: 'Part de LLP',
+          summary: 'Participation dans une limited liability partnership (LLP), avec des droits et des versements définis par le contrat de société.',
+        },
+        {
+          id: 'scp',
+          label: 'Sociedade em conta de participação (SCP)',
+          summary:
+            "Société portugaise non immatriculée dans laquelle un associé exerce l'activité et l'associé participant partage les résultats. Elle n'a pas de personnalité juridique propre.",
+        },
+        {
+          id: 'lda-quotas',
+          label: "Parts (quotas) d'une Lda",
+          summary:
+            "Parts (quotas) d'une société à responsabilité limitée portugaise (sociedade por quotas, Lda) qui détient l'actif, avec des droits définis par les statuts et le code des sociétés portugais.",
+        },
+        {
+          id: 'anonymous-partnership',
+          label: 'Société anonyme japonaise (tokumei kumiai)',
+          summary:
+            "Contrat japonais par lequel l'investisseur contribue à l'activité d'un exploitant et partage ses bénéfices sans devenir associé enregistré.",
+        },
+      ],
+    },
   },
   glossary: [
     {
@@ -2457,6 +2515,9 @@ export const fr: Messages = {
       projectName: 'Nom du projet',
       country: 'Pays',
       instrumentType: "Type d'instrument (p. ex. obligation, actions, partage de revenus)",
+      holdingStructure: 'Structure de détention (facultatif)',
+      holdingStructureHelp:
+        "Comment les investisseurs détiendraient la participation si le projet était coté (par exemple directement ou via un certificat représentatif d'actions). Descriptif uniquement : sélectionner une option n'est ni une approbation, ni une cotation, ni une classification juridique.",
       targetAmount: 'Montant cible',
       description: 'Description du projet',
       contactEmail: 'Email de contact (optionnel)',
