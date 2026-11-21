@@ -2528,6 +2528,12 @@ textarea[aria-invalid='true']:focus-visible {
   font-size: 0.8125rem;
   margin: 4px 0 0;
 }
+.field-help {
+  color: var(--text-muted, var(--muted, inherit));
+  font-size: 0.8125rem;
+  margin: 4px 0 0;
+  font-weight: 400;
+}
 input[type='checkbox'] {
   width: 18px;
   height: 18px;

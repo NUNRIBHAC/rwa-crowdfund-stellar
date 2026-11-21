@@ -347,6 +347,7 @@ export const zhCN: Messages = {
     backToAll: '返回全部投资',
     issuerMissing: '本原型不提供发行方身份和链下条款；以下数据来自链上合约。',
     assetClass: '资产类别',
+    holdingStructureLabel: '持有结构',
     escrowTestnet: '合约托管（测试网）',
     interestRate: '利率',
     noInterest: '无 - 仅出资托管',
@@ -894,6 +895,46 @@ export const zhCN: Messages = {
     chipSubordinated: '次级',
     chipUnspecifiedSuffix: '（未指定优先级）',
     chipCompose: 'concat',
+    holding: {
+      aria: '持有结构',
+      title: '持有结构',
+      intro: '投资者如何持有参与权益：直接持有，或通过凭证、载体或合伙形式持有。持有结构用于限定底层工具；它本身绝不是独立的工具，也不会单独改变经济实质。',
+      disclaimer:
+        'Blockallisto 没有注册公司，也没有 ECSPR 牌照；不发行任何凭证，也不提供任何存管或托管服务。某种结构能否真正发售，取决于工具、发行人、司法管辖区和适用法律；此处展示的每种结构均为描述性内容，在任何真实发售之前仍需法律分析。任何关于 ECSPR 的定性都只是取决于具体结构的假设，绝非既定事实。在 Stellar 上登记代币本身并不产生所有权或投资者权利。',
+      notSpecified: '未指定',
+      items: [
+        {
+          id: 'direct',
+          label: '直接持有',
+          summary: '投资者以自己名义持有股份或权益，中间没有载体或受托人。',
+        },
+        {
+          id: 'depositary-receipt',
+          label: '存托凭证（股票凭证）',
+          summary: '由存管或管理机构出具的凭证，代表该机构持有的股票。凭证与底层股票不是同一事物：投票权、股息和转让取决于凭证自身的条款。',
+        },
+        {
+          id: 'llp',
+          label: 'LLP 权益',
+          summary: '有限责任合伙（LLP）的权益，权利和分配由合伙协议规定。',
+        },
+        {
+          id: 'scp',
+          label: 'Sociedade em conta de participação（SCP）',
+          summary: '葡萄牙未登记的合伙形式，由一名合伙人开展业务，参与合伙人分享经营成果。不具有独立法人资格。',
+        },
+        {
+          id: 'lda-quotas',
+          label: 'Lda 的配额（quotas）',
+          summary: '持有资产的葡萄牙有限责任公司（sociedade por quotas，Lda）的配额，权利由公司章程和葡萄牙公司法规定。',
+        },
+        {
+          id: 'anonymous-partnership',
+          label: '匿名合伙（tokumei kumiai）',
+          summary: '日本合同形式：投资者向经营者的业务出资并分享利润，但不成为登记合伙人。',
+        },
+      ],
+    },
   },
   glossary: [
     {
@@ -2298,6 +2339,8 @@ export const zhCN: Messages = {
       projectName: '项目名称',
       country: '国家',
       instrumentType: '工具类型(例如:债券、股权、收益分成)',
+      holdingStructure: '持有结构（可选）',
+      holdingStructureHelp: '如果项目上线，投资者将如何持有参与权益（例如直接持有或通过股票凭证）。仅供描述：选择一项不构成批准、上线或法律定性。',
       targetAmount: '目标金额',
       description: '项目说明',
       contactEmail: '联系邮箱(选填)',

@@ -4,6 +4,8 @@ import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
 import { deadlineInfo, formatAmount, regionName, shorten } from '../format';
 import { profileFor, type CampaignProfile } from '../data/profiles';
+import { sampleHoldingStructure } from '../data/sampleCatalog';
+import { holdingStructureLabel } from '../data/holdingStructures';
 import { composeInstrumentLabel } from '../data/instruments';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
@@ -56,6 +58,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
   }
 
   const profile = profileFor(campaign, market.fixtureMode, m.profiles.list);
+  const sampleHolding = market.fixtureMode ? sampleHoldingStructure(campaign.id) : undefined;
   const dl = deadlineInfo(campaign.config.deadline, m.time);
   const status = campaignStatus(campaign);
   const fundedNow = status === 'funded';
@@ -121,6 +124,12 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
             <h2 className="section-title">{m.campaign.additionalInfo}</h2>
             {profile ? (
               <dl className="info-grid">
+                {sampleHolding && (
+                  <div>
+                    <dt>{m.campaign.holdingStructureLabel}</dt>
+                    <dd>{holdingStructureLabel(m, sampleHolding)}</dd>
+                  </div>
+                )}
                 {profile.additionalInfo.map((f) => (
                   <div key={f.label}>
                     <dt>{f.label}</dt>

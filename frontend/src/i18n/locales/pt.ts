@@ -360,6 +360,7 @@ export const pt: Messages = {
     backToAll: 'Voltar a todos os investimentos',
     issuerMissing: 'A identidade do emitente e as condições off-chain não estão disponíveis neste protótipo; os dados abaixo vêm do contrato on-chain.',
     assetClass: 'Classe de ativo',
+    holdingStructureLabel: 'Estrutura de detenção',
     escrowTestnet: 'Escrow por contrato (testnet)',
     interestRate: 'Taxa de juro',
     noInterest: 'Nenhuma - apenas escrow de contribuições',
@@ -981,6 +982,50 @@ export const pt: Messages = {
     chipSubordinated: 'Subordinada',
     chipUnspecifiedSuffix: '(senioridade não especificada)',
     chipCompose: 'space-lower',
+    holding: {
+      aria: 'Estruturas de detenção',
+      title: 'Estruturas de detenção',
+      intro:
+        'Como o investidor detém uma participação: diretamente ou através de um certificado, veículo ou forma societária. A estrutura de detenção qualifica o instrumento subjacente; nunca é um instrumento separado e não altera a economia por si só.',
+      disclaimer:
+        'A Blockallisto não tem sociedade constituída nem licença ECSPR, não emite certificados e não presta qualquer serviço de depósito ou custódia. Se uma estrutura pode ser efetivamente oferecida depende do instrumento, do emitente, da jurisdição e da lei aplicável; cada estrutura aqui apresentada é descritiva e aguarda análise jurídica antes de qualquer oferta real. Qualquer enquadramento ECSPR é uma hipótese que depende da estrutura concreta, nunca um facto estabelecido. O registo de um token na Stellar não cria, por si, propriedade ou direitos de investimento.',
+      notSpecified: 'Não especificado',
+      items: [
+        {
+          id: 'direct',
+          label: 'Detenção direta',
+          summary: 'O investidor detém a ação ou participação em nome próprio, sem veículo ou fiduciário intermédio.',
+        },
+        {
+          id: 'depositary-receipt',
+          label: 'Certificado representativo de ações',
+          summary:
+            'Certificado de uma entidade depositária ou administrativa que representa ações detidas por essa entidade. O certificado e a ação subjacente não são a mesma coisa: voto, dividendos e transmissão dependem dos termos do próprio certificado.',
+        },
+        {
+          id: 'llp',
+          label: 'Participação em LLP',
+          summary: 'Participação numa parceria de responsabilidade limitada (LLP), com direitos e pagamentos definidos pelo contrato de parceria.',
+        },
+        {
+          id: 'scp',
+          label: 'Sociedade em conta de participação (SCP)',
+          summary:
+            'Sociedade portuguesa não registada em que um sócio exerce a atividade e o sócio participante partilha os resultados. Não tem personalidade jurídica própria.',
+        },
+        {
+          id: 'lda-quotas',
+          label: 'Quotas numa Lda',
+          summary:
+            'Quotas de uma sociedade por quotas portuguesa (Lda) que detém o ativo, com direitos definidos pelos estatutos e pelo Código das Sociedades Comerciais.',
+        },
+        {
+          id: 'anonymous-partnership',
+          label: 'Parceria anónima (tokumei kumiai)',
+          summary: 'Contrato japonês em que o investidor contribui para o negócio de um operador e partilha os lucros, sem se tornar sócio registado.',
+        },
+      ],
+    },
   },
   glossary: [
     {
@@ -2447,6 +2492,9 @@ export const pt: Messages = {
       projectName: 'Nome do projeto',
       country: 'País',
       instrumentType: 'Tipo de instrumento (ex.: obrigação, capital, partilha de receitas)',
+      holdingStructure: 'Estrutura de detenção (opcional)',
+      holdingStructureHelp:
+        'Como os investidores deteriam a participação se o projeto fosse listado (por exemplo diretamente ou através de um certificado representativo de ações). Apenas descritivo: selecionar uma opção não é uma aprovação, listagem ou classificação jurídica.',
       targetAmount: 'Montante alvo',
       description: 'Descrição do projeto',
       contactEmail: 'Email de contacto (opcional)',

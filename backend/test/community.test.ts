@@ -218,6 +218,35 @@ test('issuer applications: validation, rate limit, admin status flow', async () 
   assert.equal(rejected?.reviewNote, 'Demo: incomplete instrument description.');
 });
 
+test('issuer applications: holding structure is optional, validated and stored', async () => {
+  const store = newStore();
+  const service = new CommunityService(store);
+  const kp = Keypair.random();
+  const { account } = await login(store, kp);
+  const base = {
+    projectName: 'Ponte Certificado',
+    country: 'PT',
+    instrumentType: 'share',
+    targetAmount: '250000 EUR',
+    description: 'Fictional demo application for a share certificate structure.',
+  };
+  // Absent: stored as null, no behaviour change.
+  const without = await service.submitApplication(account, base);
+  assert.equal(without.holdingStructure, null);
+  // A known identifier is accepted and persisted verbatim.
+  const withStructure = await service.submitApplication(account, { ...base, holdingStructure: 'depositary-receipt' });
+  assert.equal(withStructure.holdingStructure, 'depositary-receipt');
+  const reloaded = (await service.listOwnApplications(account)).find((a) => a.id === withStructure.id);
+  assert.equal(reloaded?.holdingStructure, 'depositary-receipt');
+  const scp = await service.submitApplication(account, { ...base, holdingStructure: 'scp' });
+  assert.equal(scp.holdingStructure, 'scp');
+  // Unknown identifiers are rejected by input validation before any write.
+  await assert.rejects(() => service.submitApplication(account, { ...base, holdingStructure: 'investment-fund' }));
+  await assert.rejects(() => service.submitApplication(account, { ...base, holdingStructure: 'SAFE' }));
+  await assert.rejects(() => service.submitApplication(account, { ...base, holdingStructure: 'llc' }));
+  await assert.rejects(() => service.submitApplication(account, { ...base, holdingStructure: 'series-llc' }));
+});
+
 test('news: admin posts are labeled platform-demo and listed publicly', async () => {
   const store = newStore();
   const service = new CommunityService(store);
