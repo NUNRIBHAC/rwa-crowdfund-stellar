@@ -19,6 +19,9 @@ import CampaignTour from '../components/CampaignTour';
 import CampaignPhoto from '../components/CampaignPhoto';
 import ContributionPreview from '../components/ContributionPreview';
 import ContributionTerms from '../components/ContributionTerms';
+import SampleLifecycle from '../components/SampleLifecycle';
+import { SampleConceptDetail } from '../components/SampleConcepts';
+import { sampleConceptIndex } from '../data/sampleConcepts';
 
 const TAB_IDS = ['overview', 'details', 'documents', 'news', 'podcast'] as const;
 
@@ -26,6 +29,8 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
   const { locale, m } = useI18n();
   const [tab, setTab] = useState<(typeof TAB_IDS)[number]>('overview');
   const campaign = market.campaigns.find((c) => c.id === campaignId);
+
+  if (market.fixtureMode && sampleConceptIndex(campaignId) >= 0) return <SampleConceptDetail conceptId={campaignId} />;
 
   if (!campaign) {
     if (!market.loaded) {
@@ -44,7 +49,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           {market.fixtureMode ? m.campaign.notFoundFixtureSuffix : ''}.
         </p>
         <p>
-          <a href={routeHash({ name: 'investments' })}>{m.campaign.backToAll}</a>
+          <a href={routeHash({ name: 'investments' }) + (market.fixtureMode ? '?fixtures=1' : '')}>{m.campaign.backToAll}</a>
         </p>
       </section>
     );
@@ -60,7 +65,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
   return (
     <article className="campaign-page">
       <p className="breadcrumb">
-        <a href={routeHash({ name: 'investments' })}>{m.campaign.backToAll}</a> / {campaign.name}
+        <a href={routeHash({ name: 'investments' }) + (market.fixtureMode ? '?fixtures=1' : '')}>{m.campaign.backToAll}</a> / {campaign.name}
       </p>
 
       <header className="campaign-head">
@@ -77,6 +82,8 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
         <h1 className="page-title">{campaign.name}</h1>
         {profile ? <p className="campaign-issuer">{profile.issuer}</p> : <p className="campaign-issuer">{m.campaign.issuerMissing}</p>}
       </header>
+
+      {market.fixtureMode && <SampleLifecycle campaignId={campaign.id} />}
 
       <div className="campaign-columns">
         <div className="campaign-main">
@@ -266,7 +273,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
           )}
         </aside>
         <aside id="campaign-contribution" className="invest-widget campaign-contribution-form" aria-label={m.contributionPreview.title}>
-          {status === 'open' && (
+          {!market.fixtureMode && status === 'open' && (
             <ContributionPreview
               raised={campaign.raised}
               goal={campaign.config.goal}

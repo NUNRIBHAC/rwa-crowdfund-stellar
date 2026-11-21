@@ -1,3 +1,5 @@
+import { isSampleCampaign } from './sampleCatalog';
+
 // Original prototype illustrations. None is evidence of the actual project.
 // Canonical demo photo retains its permanent illustrative-photo caption.
 export const CAMPAIGN_PHOTOS: Record<string, string> = {
@@ -8,6 +10,7 @@ export const CAMPAIGN_PHOTOS: Record<string, string> = {
 // User requested photo-style covers. This local photo is illustrative for every campaign.
 // Real issuer media needs its own source/rights record before replacing it.
 export function campaignPhoto(campaignId: string): string {
+  if (isSampleCampaign(campaignId)) return '/illustrative-covers/sample-campaign.svg';
   if (CAMPAIGN_PHOTOS[campaignId]) return CAMPAIGN_PHOTOS[campaignId];
   return 'https://blockallisto-media.nunrib-df6.workers.dev/campaigns/demo-solar-farm.jpg';
 }

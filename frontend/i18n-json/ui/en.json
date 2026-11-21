@@ -1339,6 +1339,279 @@
             "text": "This campaign closed successfully in the fixture data. Post-funding issuer events would be tracked separately."
           }
         ]
+      },
+      {
+        "issuer": "Atlas Workshop Participation (Sample data - not a live offer)",
+        "category": "Industrial technology and manufacturing",
+        "teaser": "A right (often securitised as a participation certificate) to a profit share and to repayment of the nominal value, without the full governance rights of a shareholder. Sample data - not a live offer",
+        "interestRate": "No fixed return (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Participation right / certificate · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A right (often securitised as a participation certificate) to a profit share and to repayment of the nominal value, without the full governance rights of a shareholder.",
+          "Profit share depends entirely on issuer performance",
+          "Can rank behind ordinary creditors",
+          "Usually illiquid until maturity"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Cedar Asset Participation (Sample data - not a live offer)",
+        "category": "Real estate",
+        "teaser": "A participation right linked to the issuer's asset base (\"substance\") rather than only its annual profit. Structuring and eligible issuers vary by jurisdiction and statute. Sample data - not a live offer",
+        "interestRate": "No fixed return (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Substanzgenussrecht · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Unsuccessful - target not reached"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A participation right linked to the issuer's asset base (\"substance\") rather than only its annual profit. Structuring and eligible issuers vary by jurisdiction and statute.",
+          "Legal form and investor protection differ strongly by jurisdiction",
+          "May involve a trustee or vehicle between investor and issuer",
+          "Usually illiquid"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Orbit Circular Materials (Sample data - not a live offer)",
+        "category": "Industrial technology and manufacturing",
+        "teaser": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing. Sample data - not a live offer",
+        "interestRate": "No fixed return (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Share · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Successful - creator withdrawn"
+          },
+          {
+            "label": "Indirect participation",
+            "value": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing."
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.",
+          "No fixed repayment claim; dividends are not guaranteed",
+          "Total loss possible",
+          "Crowdfunding shares are usually not tradable on an exchange",
+          "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Meadow Partnership (Sample data - not a live offer)",
+        "category": "Agriculture, environment and recycling",
+        "teaser": "An interest as limited partner in a partnership: profit and loss participation per the partnership agreement, liability limited to the contribution. Sample data - not a live offer",
+        "interestRate": "No fixed return (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Limited partnership interest · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Unsuccessful - target not reached"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "An interest as limited partner in a partnership: profit and loss participation per the partnership agreement, liability limited to the contribution.",
+          "Loss participation can reduce or wipe out the interest",
+          "Exit often restricted by the partnership agreement",
+          "Tax and reporting duties can be more involved"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Harbor Equipment Loan (Sample data - not a live offer)",
+        "category": "Transport and logistics",
+        "teaser": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified. Sample data - not a live offer",
+        "interestRate": "5.0% p.a. (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Funded - deadline not reached"
+          },
+          {
+            "label": "Loan",
+            "value": "Senior (non-subordinated)"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Grove Community Energy Loan (Sample data - not a live offer)",
+        "category": "Energy and utilities",
+        "teaser": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified. Sample data - not a live offer",
+        "interestRate": "5.0% p.a. (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Subordinated (ranks behind senior creditors in insolvency)"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Mosaic Workshop Loan (Sample data - not a live offer)",
+        "category": "Industrial technology and manufacturing",
+        "teaser": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified. Sample data - not a live offer",
+        "interestRate": "5.0% p.a. (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Closing soon - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Beacon Mobility Bond (Sample data - not a live offer)",
+        "category": "Transport and logistics",
+        "teaser": "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified. Sample data - not a live offer",
+        "interestRate": "5.0% p.a. (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Bond · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Unsuccessful - target not reached"
+          },
+          {
+            "label": "Bond",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
+          "Subordination raises loss severity in insolvency",
+          "Still unsecured unless collateral is stated",
+          "No participation in company growth"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Horizon Zero-Coupon Bond (Sample data - not a live offer)",
+        "category": "Energy and utilities",
+        "teaser": "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified. Sample data - not a live offer",
+        "interestRate": "No periodic coupon (sample)",
+        "term": "Illustrative terms only",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Bond · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Bond",
+            "value": "Senior (non-subordinated)"
+          },
+          {
+            "label": "Zero-coupon (Zero Bond)",
+            "value": "A coupon structure on a loan or bond, not a seniority: no periodic interest; the return comes from issuance below nominal value and repayment at par. Combines with a debt parent, never stands alone."
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
+          "Subordination raises loss severity in insolvency",
+          "Still unsecured unless collateral is stated",
+          "No participation in company growth",
+          "A coupon structure on a loan or bond, not a seniority: no periodic interest; the return comes from issuance below nominal value and repayment at par. Combines with a debt parent, never stands alone."
+        ],
+        "documents": [],
+        "news": []
       }
     ]
   },
@@ -2167,5 +2440,74 @@
     "replyLabel": "Reply to this investor",
     "reply": "Send reply",
     "noCampaigns": "No campaigns available."
+  },
+  "sampleLifecycle": {
+    "open": "Open - below target",
+    "closing": "Closing soon - below target",
+    "funded": "Funded - deadline not reached",
+    "successful": "Successful - awaiting creator withdrawal",
+    "withdrawn": "Successful - creator withdrawn",
+    "unsuccessful": "Unsuccessful - target not reached",
+    "refunded": "Unsuccessful - investor refund completed",
+    "notice": "Sample data. No contribution, withdrawal or refund occurred."
+  },
+  "sampleConcepts": {
+    "filterRefund": "Refund",
+    "filterWithdrawal": "Withdrawal",
+    "states": {
+      "open": "Open",
+      "funded": "Funded",
+      "unsuccessful": "Ended - goal missed",
+      "refunded": "Contributor refund completed",
+      "withdrawn": "Creator withdrawal completed"
+    },
+    "title": "Educational sample formats",
+    "notice": "These examples do not establish platform support, an offer or ECSPR eligibility. Each format requires its own legal and regulatory assessment.",
+    "unavailable": "Sample state",
+    "nonFinancialNotice": "Non-financial sample - no investment return.",
+    "list": [
+      {
+        "label": "SAFE / future-equity contract",
+        "caveat": "A contractual right to possible future equity under stated conversion conditions. A SAFE is not automatically an issued share or a loan. Conversion, dilution and loss depend on the contract."
+      },
+      {
+        "label": "Direct co-ownership",
+        "caveat": "An illustrative direct interest in jointly owned property. Legal title requires the applicable deed, register and formalities; a token does not transfer title by itself."
+      },
+      {
+        "label": "Equipment use rights",
+        "caveat": "An illustrative contractual right to use equipment, not ownership of the equipment. Scope, maintenance, expiry and transfer depend on the agreement; a token does not transfer title."
+      },
+      {
+        "label": "Share certificate / depositary receipt",
+        "caveat": "A certificate or receipt may represent underlying shares, not direct registered ownership. The exact claim, custodian, voting and distribution rights must be specified; no shares are issued here."
+      },
+      {
+        "label": "LLC holding structure",
+        "caveat": "An interest held through an LLC-type vehicle. The vehicle agreement and jurisdiction decide ownership, liability, voting and distributions; it is not automatically direct ownership of the underlying assets."
+      },
+      {
+        "label": "Revenue share",
+        "caveat": "An illustrative payment linked to defined gross revenue. Revenue is not profit; deductions, reporting and payment limits depend on the contract. No return or repayment is guaranteed."
+      },
+      {
+        "label": "Royalty rights",
+        "caveat": "An illustrative royalty claim linked to licensed use of intellectual property. Royalties are not profit; ownership of the underlying IP is not transferred. No return or repayment is guaranteed."
+      },
+      {
+        "label": "Donation / social funding",
+        "caveat": "A non-financial contribution to a social cause. No ownership, interest, repayment or other financial return is offered. No donation is collected and no tax deduction is promised."
+      },
+      {
+        "label": "Reward funding",
+        "caveat": "Non-financial funding in exchange for an illustrative reward. This is not an investment: no interest, ownership or financial return. Delivery, cancellation and consumer terms would need separate definition."
+      },
+      {
+        "label": "Pre-sale",
+        "caveat": "An illustrative advance order for goods, not an investment or future-token right. No financial return is offered. Price, delivery, cancellation and consumer rights would need separate definition."
+      }
+    ],
+    "refundScenario": "Refund scenario only: a fictional failed-goal refund, not a general refund right.",
+    "withdrawalScenario": "Creator withdrawal of funding proceeds, not an investor return or royalty payment."
   }
 }

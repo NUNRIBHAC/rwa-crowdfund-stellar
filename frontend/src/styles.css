@@ -4981,3 +4981,59 @@ html.rtl-text .accordion summary > span:first-child {
     grid-row: 1;
   }
 }
+
+/* Sample lifecycle is presentation data, distinct from on-chain status chips. */
+.sample-lifecycle {
+  padding: 12px 16px;
+  border-inline-start: 3px solid var(--accent, #4b4fe2);
+  background: var(--bg);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.sample-lifecycle p {
+  margin: 0 0 4px;
+  font-weight: 650;
+}
+.sample-lifecycle small {
+  display: block;
+  line-height: 1.5;
+}
+.campaign-page > .sample-lifecycle {
+  margin-block-end: 20px;
+}
+
+/* Educational concepts are separate from the operational campaign registry. */
+.sample-concepts {
+  margin-block: 3rem 2rem;
+  padding-block-start: 1.5rem;
+  border-block-start: 2px solid var(--accent);
+}
+.sample-concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 1.25rem;
+}
+.sample-concept-card,
+.sample-concept-detail {
+  padding: 1.5rem;
+  border: 1px dashed var(--accent);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.sample-concept-card h3 {
+  margin-block: 0.5rem;
+}
+.sample-concept-format {
+  color: var(--ink-soft);
+}
+.sample-concept-state {
+  font-weight: 700;
+}
+.sample-concept-caveat {
+  border-inline-start: 3px solid var(--accent);
+  padding-inline-start: 1rem;
+}
+.sample-concept-detail {
+  max-width: 850px;
+  margin-inline: auto;
+}

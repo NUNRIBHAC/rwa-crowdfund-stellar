@@ -1358,6 +1358,279 @@
             "text": "Diese Kampagne ist in den Fixture-Daten erfolgreich geschlossen. Emittentenereignisse nach der Finanzierung würden separat verfolgt."
           }
         ]
+      },
+      {
+        "issuer": "Atlas Workshop Participation (Beispieldaten - kein echtes Angebot)",
+        "category": "Industrietechnik und Fertigung",
+        "teaser": "Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs. Beispieldaten - kein echtes Angebot",
+        "interestRate": "Keine feste Rendite (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Beteiligungsrecht / -zertifikat · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs.",
+          "Der Gewinnanteil hängt vollständig von der Leistung des Emittenten ab",
+          "Kann hinter gewöhnlichen Gläubigern stehen",
+          "Meist illiquide bis zur Fälligkeit"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Cedar Asset Participation (Beispieldaten - kein echtes Angebot)",
+        "category": "Immobilien",
+        "teaser": "Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung. Beispieldaten - kein echtes Angebot",
+        "interestRate": "Keine feste Rendite (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Substanzgenussrecht · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Nicht erfolgreich - Ziel nicht erreicht"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung.",
+          "Rechtsform und Anlegerschutz unterscheiden sich je nach Jurisdiktion stark",
+          "Kann einen Treuhänder oder ein Vehikel zwischen Anleger und Emittent einschieben",
+          "Meist illiquide"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Orbit Circular Materials (Beispieldaten - kein echtes Angebot)",
+        "category": "Industrietechnik und Fertigung",
+        "teaser": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung. Beispieldaten - kein echtes Angebot",
+        "interestRate": "Keine feste Rendite (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Aktie · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Erfolgreich - Initiator hat Mittel abgerufen"
+          },
+          {
+            "label": "Indirekte Beteiligung",
+            "value": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung."
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
+          "Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert",
+          "Totalverlust möglich",
+          "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
+          "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Meadow Partnership (Beispieldaten - kein echtes Angebot)",
+        "category": "Landwirtschaft, Umwelt und Recycling",
+        "teaser": "Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage. Beispieldaten - kein echtes Angebot",
+        "interestRate": "Keine feste Rendite (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Kommanditbeteiligung · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Nicht erfolgreich - Ziel nicht erreicht"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage.",
+          "Die Verlustbeteiligung kann die Beteiligung schmälern oder auslöschen",
+          "Der Ausstieg ist oft durch den Gesellschaftsvertrag beschränkt",
+          "Steuer- und Meldepflichten können aufwendiger sein"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Harbor Equipment Loan (Beispieldaten - kein echtes Angebot)",
+        "category": "Transport und Logistik",
+        "teaser": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen. Beispieldaten - kein echtes Angebot",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Finanziert - Frist noch nicht abgelaufen"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Senior (nicht nachrangig)"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Grove Community Energy Loan (Beispieldaten - kein echtes Angebot)",
+        "category": "Energie und Versorgungswirtschaft",
+        "teaser": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen. Beispieldaten - kein echtes Angebot",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Nachrangig (steht im Insolvenzfall hinter den vorrangigen Gläubigern)"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Mosaic Workshop Loan (Beispieldaten - kein echtes Angebot)",
+        "category": "Industrietechnik und Fertigung",
+        "teaser": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen. Beispieldaten - kein echtes Angebot",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Endet bald - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Beacon Mobility Bond (Beispieldaten - kein echtes Angebot)",
+        "category": "Transport und Logistik",
+        "teaser": "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge. Beispieldaten - kein echtes Angebot",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Anleihe · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Nicht erfolgreich - Ziel nicht erreicht"
+          },
+          {
+            "label": "Anleihe",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
+          "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
+          "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
+          "Keine Beteiligung am Unternehmenswachstum"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Horizon Zero-Coupon Bond (Beispieldaten - kein echtes Angebot)",
+        "category": "Energie und Versorgungswirtschaft",
+        "teaser": "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge. Beispieldaten - kein echtes Angebot",
+        "interestRate": "Kein laufender Kupon (Beispiel)",
+        "term": "Nur beispielhafte Bedingungen",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Anleihe · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Anleihe",
+            "value": "Senior (nicht nachrangig)"
+          },
+          {
+            "label": "Nullkupon (Zero Bond)",
+            "value": "Eine Kupon-Struktur auf einem Darlehen oder einer Anleihe, keine Rangfolge: keine periodischen Zinsen; die Rendite kommt aus der Emission unter dem Nennwert und der Rückzahlung zum Pari. Kombiniert mit einer Fremdkapital-Mutterkategorie, steht nie allein."
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
+          "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
+          "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
+          "Keine Beteiligung am Unternehmenswachstum",
+          "Eine Kupon-Struktur auf einem Darlehen oder einer Anleihe, keine Rangfolge: keine periodischen Zinsen; die Rendite kommt aus der Emission unter dem Nennwert und der Rückzahlung zum Pari. Kombiniert mit einer Fremdkapital-Mutterkategorie, steht nie allein."
+        ],
+        "documents": [],
+        "news": []
       }
     ]
   },
@@ -2186,5 +2459,74 @@
     "replyLabel": "Diesem Investor antworten",
     "reply": "Antwort senden",
     "noCampaigns": "Keine Kampagnen verfügbar."
+  },
+  "sampleLifecycle": {
+    "open": "Offen - unter dem Ziel",
+    "closing": "Endet bald - unter dem Ziel",
+    "funded": "Finanziert - Frist noch nicht abgelaufen",
+    "successful": "Erfolgreich - Auszahlung an Initiator ausstehend",
+    "withdrawn": "Erfolgreich - Initiator hat Mittel abgerufen",
+    "unsuccessful": "Nicht erfolgreich - Ziel nicht erreicht",
+    "refunded": "Nicht erfolgreich - Rückzahlung an Anleger abgeschlossen",
+    "notice": "Beispieldaten. Es gab keine Einzahlung, Auszahlung oder Rückzahlung."
+  },
+  "sampleConcepts": {
+    "filterRefund": "Rückzahlung",
+    "filterWithdrawal": "Abruf",
+    "states": {
+      "open": "Offen",
+      "funded": "Finanziert",
+      "unsuccessful": "Beendet - Ziel verfehlt",
+      "refunded": "Rückzahlung an Unterstützer abgeschlossen",
+      "withdrawn": "Abruf durch Initiator abgeschlossen"
+    },
+    "title": "Lehrhafte Beispielformate",
+    "notice": "Diese Beispiele bestätigen weder Plattformunterstützung, Angebot noch ECSPR-Eignung. Jedes Format braucht eine eigene rechtliche und regulatorische Prüfung.",
+    "unavailable": "Beispielstatus",
+    "nonFinancialNotice": "Nichtfinanzielles Beispiel - kein Anlageertrag.",
+    "list": [
+      {
+        "label": "SAFE / Vertrag über künftiges Eigenkapital",
+        "caveat": "Vertragliches Recht auf mögliches künftiges Eigenkapital unter Wandlungsbedingungen. Ein SAFE ist nicht automatisch eine ausgegebene Aktie oder ein Darlehen. Wandlung, Verwässerung und Verlust hängen vom Vertrag ab."
+      },
+      {
+        "label": "Direktes Miteigentum",
+        "caveat": "Beispiel eines direkten Anteils an gemeinsamem Eigentum. Eigentum erfordert geltende Urkunden, Register und Formalitäten; ein Token allein überträgt keinen Titel."
+      },
+      {
+        "label": "Nutzungsrechte an Geräten",
+        "caveat": "Beispiel eines vertraglichen Gerätenutzungsrechts, nicht des Eigentums. Umfang, Wartung, Laufzeit und Übertragung hängen vom Vertrag ab; ein Token überträgt keinen Titel."
+      },
+      {
+        "label": "Aktienzertifikat / Hinterlegungsschein",
+        "caveat": "Ein Zertifikat kann zugrunde liegende Aktien ohne direkt eingetragenes Eigentum repräsentieren. Anspruch, Verwahrer, Stimmrechte und Ausschüttungen sind genau festzulegen; hier werden keine Aktien ausgegeben."
+      },
+      {
+        "label": "LLC-Haltestruktur",
+        "caveat": "Beteiligung über ein LLC-artiges Vehikel. Vertrag und Rechtsordnung bestimmen Eigentum, Haftung, Stimmen und Ausschüttungen; kein automatisches direktes Eigentum an den Vermögenswerten."
+      },
+      {
+        "label": "Umsatzbeteiligung",
+        "caveat": "Beispiel einer Zahlung nach definiertem Bruttoumsatz. Umsatz ist kein Gewinn; Abzüge, Berichte und Grenzen sind vertraglich. Keine garantierte Rendite oder Rückzahlung."
+      },
+      {
+        "label": "Lizenzgebührenrechte",
+        "caveat": "Beispiel eines Anspruchs auf Lizenzgebühren aus geistigem Eigentum. Lizenzgebühren sind kein Gewinn und übertragen kein geistiges Eigentum. Keine garantierte Rendite oder Rückzahlung."
+      },
+      {
+        "label": "Spende / soziale Finanzierung",
+        "caveat": "Nichtfinanzieller Beitrag für einen sozialen Zweck. Kein Eigentum, Zins, Rückzahlungsanspruch oder finanzieller Ertrag. Keine Spende erhoben und kein Steuerabzug zugesagt."
+      },
+      {
+        "label": "Finanzierung mit Gegenleistung",
+        "caveat": "Nichtfinanzielle Finanzierung für eine beispielhafte Gegenleistung. Keine Anlage: kein Zins, Eigentum oder finanzieller Ertrag. Lieferung, Widerruf und Verbraucherbedingungen separat festzulegen."
+      },
+      {
+        "label": "Vorverkauf",
+        "caveat": "Beispiel einer Warenvorbestellung, keine Anlage oder Recht auf künftige Token. Kein finanzieller Ertrag. Preis, Lieferung, Widerruf und Verbraucherrechte separat festzulegen."
+      }
+    ],
+    "refundScenario": "Nur Rückzahlungsszenario: fiktive Rückzahlung bei verfehltem Ziel, kein allgemeiner Anspruch.",
+    "withdrawalScenario": "Abruf der Finanzierung durch den Initiator, kein Anlegerertrag oder Lizenzgebührenzahlung."
   }
 }

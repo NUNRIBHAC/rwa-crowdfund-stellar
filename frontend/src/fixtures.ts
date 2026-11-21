@@ -1,4 +1,5 @@
 import type { Campaign } from './types';
+import { SAMPLE_CATALOG } from './data/sampleCatalog';
 
 // Client-only sample data so the marketplace layout can be previewed while the
 // real registry is empty. This is NOT a deployed campaign, NOT live data and
@@ -32,7 +33,7 @@ export const FIXTURE_CAMPAIGNS: Campaign[] = [
       creator: 'GCREATOR00000000000000000000000000000000000000000000000000001',
       token: 'CUSDC0000000000000000000000000000000000000000000000000000001',
       goal: units(900000),
-      deadline: inDays(41),
+      deadline: inDays(1),
     },
   },
   {
@@ -49,4 +50,19 @@ export const FIXTURE_CAMPAIGNS: Campaign[] = [
       deadline: inDays(-2),
     },
   },
+  ...SAMPLE_CATALOG.slice(3).map((sample, index): Campaign => ({
+    id: sample.id,
+    name: sample.name,
+    // Deliberately invalid network identifiers: presentation, never a contract.
+    contractId: `SAMPLE-NOT-A-CONTRACT-${sample.id}`,
+    raised: units(sample.state === 'funded' || sample.state === 'withdrawn' ? 100000 + index * 10000 : 10000 + index * 2500),
+    balance: null,
+    withdrawn: sample.state === 'withdrawn',
+    config: {
+      creator: 'SAMPLE-NOT-A-WALLET',
+      token: 'SAMPLE-NOT-AN-ASSET',
+      goal: units(100000 + index * 10000),
+      deadline: inDays(['unsuccessful', 'refunded', 'withdrawn'].includes(sample.state) ? -3 : sample.state === 'closing' ? 1 : 28 + index),
+    },
+  })),
 ];

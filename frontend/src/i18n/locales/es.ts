@@ -1535,6 +1535,335 @@ export const es: Messages = {
           },
         ],
       },
+      {
+        campaignId: 'fixture-atlas-participation',
+        issuer: 'Atlas Workshop Participation (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Tecnología industrial y fabricación',
+        teaser:
+          'Un derecho (a menudo titulizado como certificado participativo) a una parte de los beneficios y al reembolso del valor nominal, sin los derechos de gobierno plenos de un accionista. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'participation-certificate',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Sin rentabilidad fija (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Derecho / certificado participativo · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Abierta - por debajo del objetivo',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Un derecho (a menudo titulizado como certificado participativo) a una parte de los beneficios y al reembolso del valor nominal, sin los derechos de gobierno plenos de un accionista.',
+          'La parte de los beneficios depende por completo del rendimiento del emisor',
+          'Puede quedar por detrás de los acreedores ordinarios',
+          'Normalmente ilíquido hasta el vencimiento',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-cedar-substance',
+        issuer: 'Cedar Asset Participation (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Sector inmobiliario',
+        teaser:
+          'Un derecho participativo ligado a la base de activos ("sustancia") del emisor y no solo a su beneficio anual. La estructuración y los emisores elegibles varían según la jurisdicción y los estatutos. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'substanzgenussrecht',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Sin rentabilidad fija (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Substanzgenussrecht · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Sin éxito - objetivo no alcanzado',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Un derecho participativo ligado a la base de activos ("sustancia") del emisor y no solo a su beneficio anual. La estructuración y los emisores elegibles varían según la jurisdicción y los estatutos.',
+          'La forma jurídica y la protección del inversor varían mucho según la jurisdicción',
+          'Puede implicar un fiduciario o vehículo entre el inversor y el emisor',
+          'Normalmente ilíquido',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-orbit-shares',
+        issuer: 'Orbit Circular Materials (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Tecnología industrial y fabricación',
+        teaser:
+          'Los inversores participan indirectamente en una inversión en una PYME - por ejemplo a través de un vehículo o fiduciario - con tramitación simplificada. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'share',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Sin rentabilidad fija (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Acción · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Éxito - fondos retirados por el promotor',
+          },
+          {
+            label: 'Participación indirecta',
+            value:
+              'Los inversores participan indirectamente en una inversión en una PYME - por ejemplo a través de un vehículo o fiduciario - con tramitación simplificada.',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Los inversores participan indirectamente en una inversión en una PYME - por ejemplo a través de un vehículo o fiduciario - con tramitación simplificada.',
+          'Sin derecho fijo de reembolso; los dividendos no están garantizados',
+          'Pérdida total posible',
+          'Las acciones de crowdfunding normalmente no son negociables en bolsa',
+          'Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-meadow-partnership',
+        issuer: 'Meadow Partnership (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Agricultura, medio ambiente y reciclaje',
+        teaser:
+          'Una participación como socio comanditario en una sociedad: participación en beneficios y pérdidas según el contrato social, con responsabilidad limitada a la aportación. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'limited-partnership',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Sin rentabilidad fija (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Participación en sociedad comanditaria · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Sin éxito - objetivo no alcanzado',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Una participación como socio comanditario en una sociedad: participación en beneficios y pérdidas según el contrato social, con responsabilidad limitada a la aportación.',
+          'La participación en pérdidas puede reducir o anular la participación',
+          'La salida suele estar restringida por el contrato social',
+          'Las obligaciones fiscales y de información pueden ser más exigentes',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-harbor-senior-loan',
+        issuer: 'Harbor Equipment Loan (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Transporte y logística',
+        teaser:
+          'Un préstamo directo al emisor con tipo de interés y calendario de reembolso definidos. La misma categoría madre de préstamo puede ser sénior, subordinada (incluidas variantes participativas en beneficios) o dejar la senioridad sin especificar. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'loan',
+        instrumentSeniority: 'senior',
+        instrumentOverlays: [],
+        interestRate: '5,0% anual (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Préstamo · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Financiada - plazo aún vigente',
+          },
+          {
+            label: 'Préstamo',
+            value: 'Sénior (no subordinada)',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Un préstamo directo al emisor con tipo de interés y calendario de reembolso definidos. La misma categoría madre de préstamo puede ser sénior, subordinada (incluidas variantes participativas en beneficios) o dejar la senioridad sin especificar.',
+          'El impago del emisor puede significar pérdida total',
+          'Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia',
+          'Sin garantía de depósitos',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-grove-subordinated-loan',
+        issuer: 'Grove Community Energy Loan (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Energía y servicios públicos',
+        teaser:
+          'Un préstamo directo al emisor con tipo de interés y calendario de reembolso definidos. La misma categoría madre de préstamo puede ser sénior, subordinada (incluidas variantes participativas en beneficios) o dejar la senioridad sin especificar. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'loan',
+        instrumentSeniority: 'subordinated',
+        instrumentOverlays: [],
+        interestRate: '5,0% anual (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Préstamo · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Abierta - por debajo del objetivo',
+          },
+          {
+            label: 'Préstamo',
+            value: 'Subordinada (queda por detrás de los acreedores sénior en caso de insolvencia)',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Un préstamo directo al emisor con tipo de interés y calendario de reembolso definidos. La misma categoría madre de préstamo puede ser sénior, subordinada (incluidas variantes participativas en beneficios) o dejar la senioridad sin especificar.',
+          'El impago del emisor puede significar pérdida total',
+          'Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia',
+          'Sin garantía de depósitos',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-mosaic-loan',
+        issuer: 'Mosaic Workshop Loan (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Tecnología industrial y fabricación',
+        teaser:
+          'Un préstamo directo al emisor con tipo de interés y calendario de reembolso definidos. La misma categoría madre de préstamo puede ser sénior, subordinada (incluidas variantes participativas en beneficios) o dejar la senioridad sin especificar. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'loan',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: '5,0% anual (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Préstamo · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Cierre próximo - por debajo del objetivo',
+          },
+          {
+            label: 'Préstamo',
+            value: 'Senioridad no especificada en las condiciones',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Un préstamo directo al emisor con tipo de interés y calendario de reembolso definidos. La misma categoría madre de préstamo puede ser sénior, subordinada (incluidas variantes participativas en beneficios) o dejar la senioridad sin especificar.',
+          'El impago del emisor puede significar pérdida total',
+          'Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia',
+          'Sin garantía de depósitos',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-beacon-bond',
+        issuer: 'Beacon Mobility Bond (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Transporte y logística',
+        teaser:
+          'Un instrumento de deuda titulizado con cupón y plazo definidos. Emitido como sénior (no subordinado), subordinado (incluidos bonos cualificados explícitamente subordinados y Mini Bonds subordinados) o con senioridad no especificada. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'bond',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: '5,0% anual (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Bono · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Sin éxito - objetivo no alcanzado',
+          },
+          {
+            label: 'Bono',
+            value: 'Senioridad no especificada en las condiciones',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Un instrumento de deuda titulizado con cupón y plazo definidos. Emitido como sénior (no subordinado), subordinado (incluidos bonos cualificados explícitamente subordinados y Mini Bonds subordinados) o con senioridad no especificada.',
+          'La subordinación aumenta la gravedad de la pérdida en caso de insolvencia',
+          'Sigue sin garantías salvo indicación de colateral',
+          'Sin participación en el crecimiento de la empresa',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-horizon-zero-coupon',
+        issuer: 'Horizon Zero-Coupon Bond (Datos de ejemplo - no es una oferta real)',
+        country: 'PT',
+        category: 'Energía y servicios públicos',
+        teaser:
+          'Un instrumento de deuda titulizado con cupón y plazo definidos. Emitido como sénior (no subordinado), subordinado (incluidos bonos cualificados explícitamente subordinados y Mini Bonds subordinados) o con senioridad no especificada. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'bond',
+        instrumentSeniority: 'senior',
+        instrumentOverlays: ['zero-coupon'],
+        interestRate: 'Sin cupón periódico (ejemplo)',
+        term: 'Solo condiciones ilustrativas',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Bono · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Abierta - por debajo del objetivo',
+          },
+          {
+            label: 'Bono',
+            value: 'Sénior (no subordinada)',
+          },
+          {
+            label: 'Cupón cero (Zero Bond)',
+            value:
+              'Una estructura de cupón en un préstamo o bono, no una senioridad: sin intereses periódicos; el rendimiento proviene de la emisión por debajo del valor nominal y del reembolso a la par. Se combina con una categoría madre de deuda, nunca existe sola.',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Un instrumento de deuda titulizado con cupón y plazo definidos. Emitido como sénior (no subordinado), subordinado (incluidos bonos cualificados explícitamente subordinados y Mini Bonds subordinados) o con senioridad no especificada.',
+          'La subordinación aumenta la gravedad de la pérdida en caso de insolvencia',
+          'Sigue sin garantías salvo indicación de colateral',
+          'Sin participación en el crecimiento de la empresa',
+          'Una estructura de cupón en un préstamo o bono, no una senioridad: sin intereses periódicos; el rendimiento proviene de la emisión por debajo del valor nominal y del reembolso a la par. Se combina con una categoría madre de deuda, nunca existe sola.',
+        ],
+        documents: [],
+        news: [],
+      },
     ],
   },
   contentPages: {
@@ -2422,5 +2751,85 @@ export const es: Messages = {
     replyLabel: 'Responder a este inversor',
     reply: 'Enviar respuesta',
     noCampaigns: 'No hay campañas disponibles.',
+  },
+  sampleLifecycle: {
+    open: 'Abierta - por debajo del objetivo',
+    closing: 'Cierre próximo - por debajo del objetivo',
+    funded: 'Financiada - plazo aún vigente',
+    successful: 'Éxito - pendiente de retirada del promotor',
+    withdrawn: 'Éxito - fondos retirados por el promotor',
+    unsuccessful: 'Sin éxito - objetivo no alcanzado',
+    refunded: 'Sin éxito - reembolso al inversor completado',
+    notice: 'Datos de ejemplo. No hubo aportación, retirada ni reembolso.',
+  },
+  sampleConcepts: {
+    filterRefund: 'Reembolso',
+    filterWithdrawal: 'Retirada',
+    states: {
+      open: 'Abierta',
+      funded: 'Financiada',
+      unsuccessful: 'Terminada - objetivo no alcanzado',
+      refunded: 'Reembolso al contribuyente completado',
+      withdrawn: 'Retirada del creador completada',
+    },
+    title: 'Formatos educativos de ejemplo',
+    notice:
+      'Estos ejemplos no acreditan soporte de la plataforma, oferta ni elegibilidad ECSPR. Cada formato exige su propia evaluación jurídica y regulatoria.',
+    unavailable: 'Estado de ejemplo',
+    nonFinancialNotice: 'Ejemplo no financiero - sin retorno de inversión.',
+    list: [
+      {
+        label: 'SAFE / contrato de capital futuro',
+        caveat:
+          'Derecho contractual a posible capital futuro bajo condiciones de conversión. Un SAFE no es automáticamente una acción emitida ni un préstamo. Conversión, dilución y pérdida dependen del contrato.',
+      },
+      {
+        label: 'Copropiedad directa',
+        caveat:
+          'Ejemplo de participación directa en propiedad común. El título exige escritura, registro y formalidades aplicables; un token no transfiere la propiedad por sí solo.',
+      },
+      {
+        label: 'Derechos de uso de equipos',
+        caveat:
+          'Derecho contractual ilustrativo de uso de equipos, no su propiedad. Alcance, mantenimiento, plazo y transmisión dependen del acuerdo; un token no transfiere el título.',
+      },
+      {
+        label: 'Certificado representativo de acciones',
+        caveat:
+          'Un certificado puede representar acciones subyacentes sin titularidad registral directa. Deben definirse derecho exacto, custodio, voto y distribuciones; aquí no se emiten acciones.',
+      },
+      {
+        label: 'Estructura de tenencia LLC',
+        caveat:
+          'Participación a través de un vehículo tipo LLC. Contrato y jurisdicción determinan propiedad, responsabilidad, voto y distribuciones; no implica propiedad directa de los activos.',
+      },
+      {
+        label: 'Participación en ingresos',
+        caveat:
+          'Pago ilustrativo ligado a ingresos brutos definidos. Ingresos no son beneficios; deducciones, información y límites dependen del contrato. Sin rentabilidad ni reembolso garantizados.',
+      },
+      {
+        label: 'Derechos de regalías',
+        caveat:
+          'Derecho ilustrativo a regalías por uso autorizado de propiedad intelectual. Las regalías no son beneficios ni transfieren la propiedad intelectual. Sin rentabilidad ni reembolso garantizados.',
+      },
+      {
+        label: 'Donación / financiación social',
+        caveat:
+          'Aportación no financiera a una causa social. Sin propiedad, intereses, reembolso ni retorno financiero. No se cobra donación ni se promete deducción fiscal.',
+      },
+      {
+        label: 'Financiación con recompensa',
+        caveat:
+          'Financiación no financiera por recompensa ilustrativa. No es inversión: sin intereses, propiedad ni retorno financiero. Entrega, cancelación y condiciones de consumo se definen aparte.',
+      },
+      {
+        label: 'Preventa',
+        caveat:
+          'Pedido anticipado ilustrativo de bienes, no inversión ni derecho a tokens futuros. Sin retorno financiero. Precio, entrega, cancelación y derechos del consumidor se definen aparte.',
+      },
+    ],
+    refundScenario: 'Solo escenario de reembolso: devolución ficticia por objetivo no alcanzado, no un derecho general.',
+    withdrawalScenario: 'Retirada de fondos por el creador, no retorno al inversor ni pago de regalías.',
   },
 };

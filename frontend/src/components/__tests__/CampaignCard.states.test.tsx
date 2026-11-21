@@ -73,12 +73,10 @@ test('canonical demo keeps its illustrative photo and caption', () => {
   expect(screen.getByText('Illustrative photo - not the actual project.')).toBeTruthy();
 });
 
-test('new campaigns use a clearly labelled illustrative photo', () => {
+test('sample campaigns use a neutral clearly labelled illustration rather than a project photograph', () => {
   setup(openUnfunded);
-  expect(screen.getByAltText('Aerial photograph of a solar farm (illustrative)').getAttribute('src')).toBe(
-    'https://blockallisto-media.nunrib-df6.workers.dev/campaigns/demo-solar-farm.jpg',
-  );
-  expect(screen.getByText(/Illustrative photo/)).toBeTruthy();
+  expect(screen.getByAltText('Illustrative cover - not the actual project.').getAttribute('src')).toBe('/illustrative-covers/sample-campaign.svg');
+  expect(screen.getByText('Illustrative cover - not the actual project.')).toBeTruthy();
 });
 
 test.each([
