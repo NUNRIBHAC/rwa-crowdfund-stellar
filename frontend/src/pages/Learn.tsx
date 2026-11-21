@@ -16,6 +16,7 @@ export default function Learn() {
               {g.title}
             </a>
           ))}
+          <a href="#learn-national-funding">{m.nationalFunding.title}</a>
           <a href="#learn-overlays">{m.learn.overlaysTitle}</a>
           <a href="#learn-share-certificates">{m.shareCertificates.title}</a>
           <a href="#learn-lda-quotas">{m.ldaQuotas.title}</a>
@@ -36,6 +37,11 @@ export default function Learn() {
                     {c.subtypeOf && <p className="instrument-sub">{c.subtypeOf}</p>}
                     {c.note && <p className="instrument-sub">{c.note}</p>}
                     <p>{c.summary}</p>
+                    {(c.id === 'loan' || c.id === 'share') && (
+                      <p className="community-note" data-ecspr-note>
+                        {m.nationalFunding.ecsprNote}
+                      </p>
+                    )}
                     {c.seniorityStates.length > 0 && (
                       <p className="instrument-seniority">
                         <strong>{m.learn.seniorityStatesLabel}</strong> {c.seniorityStates.map((s) => seniorityLabel(s)).join(' · ')}
@@ -67,6 +73,19 @@ export default function Learn() {
             </div>
           </section>
         ))}
+
+        <section id="learn-national-funding" aria-label={m.nationalFunding.title}>
+          <h2 className="section-title">{m.nationalFunding.title}</h2>
+          <div className="instrument-grid">
+            {m.nationalFunding.items.map((item) => (
+              <article key={item.id} className="instrument-card" data-national-funding={item.id}>
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
+                <p className="community-note">{m.nationalFunding.caveat}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <section id="learn-overlays" aria-label={m.learn.overlaysAria}>
           <h2 className="section-title">{m.learn.overlaysTitle}</h2>

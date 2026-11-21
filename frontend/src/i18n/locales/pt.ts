@@ -2801,17 +2801,17 @@ export const pt: Messages = {
       {
         label: 'Doação / financiamento social',
         caveat:
-          'Contribuição não financeira para uma causa social. Sem propriedade, juros, reembolso ou outro retorno financeiro. Não é recolhida doação nem prometida dedução fiscal.',
+          'Contribuição sem propriedade, juros, reembolso ou retorno financeiro. Campanhas reais podem ser possíveis no regime nacional português de financiamento colaborativo por donativo/recompensa, fora da ECSPR. O operador da plataforma tem de ser pessoa coletiva ou EIRL e comunicar previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Aqui é exemplo educativo: não se recolhe dinheiro nem se promete dedução fiscal. Entrega, cancelamento e direitos do consumidor exigiriam definição própria.',
       },
       {
         label: 'Financiamento com recompensa',
         caveat:
-          'Financiamento não financeiro em troca de recompensa ilustrativa. Não é investimento: sem juros, propriedade ou retorno financeiro. Entrega, cancelamento e termos de consumo exigem definição separada.',
+          'Financiamento em troca de uma recompensa não financeira ou do produto ou serviço financiado. Campanhas reais podem ser possíveis no regime nacional português de financiamento colaborativo por donativo/recompensa, fora da ECSPR. O operador da plataforma tem de ser pessoa coletiva ou EIRL e comunicar previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Aqui é exemplo educativo: não se recolhe dinheiro nem se promete dedução fiscal. Entrega, cancelamento e direitos do consumidor exigiriam definição própria.',
       },
       {
         label: 'Pré-venda',
         caveat:
-          'Encomenda antecipada ilustrativa de bens, não investimento nem direito a tokens futuros. Sem retorno financeiro. Preço, entrega, cancelamento e direitos do consumidor exigem definição separada.',
+          'Encomenda antecipada do produto ou serviço financiado, estruturada como financiamento com recompensa, não como investimento ou direito a um token futuro. Campanhas reais podem ser possíveis no regime nacional português de financiamento colaborativo por donativo/recompensa, fora da ECSPR. O operador da plataforma tem de ser pessoa coletiva ou EIRL e comunicar previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Aqui é exemplo educativo: não se recolhe dinheiro nem se promete dedução fiscal. Entrega, cancelamento e direitos do consumidor exigiriam definição própria.',
       },
       {
         label: 'Quotas numa Lda portuguesa',
@@ -2840,5 +2840,29 @@ export const pt: Messages = {
       'Um certificado pode representar ações subjacentes, em vez de titularidade direta registada. O direito concreto, voto, distribuições e transmissão dependem dos seus termos.',
     caveat:
       'Pode ser possível com parceiro autorizado (banco ou empresa de investimento), sujeito aos requisitos da ECSPR; não confirmado em Portugal. Isto não estabelece um regime português de certificados de depósito. Apenas amostra educativa, não é oferta real. Não são emitidos, vendidos, guardados em custódia ou transmitidos certificados aqui.',
+  },
+  nationalFunding: {
+    title: 'Financiamento colaborativo não financeiro',
+    items: [
+      {
+        id: 'donation',
+        title: 'Financiamento por donativo',
+        summary: 'Contribuição sem propriedade, juros, reembolso ou retorno financeiro.',
+      },
+      {
+        id: 'reward',
+        title: 'Financiamento com recompensa',
+        summary: 'Financiamento em troca de uma recompensa não financeira ou do produto ou serviço financiado.',
+      },
+      {
+        id: 'pre-sale',
+        title: 'Financiamento por pré-venda',
+        summary:
+          'Encomenda antecipada do produto ou serviço financiado, estruturada como financiamento com recompensa, não como investimento ou direito a um token futuro.',
+      },
+    ],
+    caveat:
+      'Campanhas reais podem ser possíveis no regime nacional português de financiamento colaborativo por donativo/recompensa, fora da ECSPR. O operador da plataforma tem de ser pessoa coletiva ou EIRL e comunicar previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Aqui é exemplo educativo: não se recolhe dinheiro nem se promete dedução fiscal. Entrega, cancelamento e direitos do consumidor exigiriam definição própria.',
+    ecsprNote: 'Ofertas reais de empréstimos e ações de S.A. através de financiamento colaborativo exigem autorização ECSPR (CMVM em Portugal).',
   },
 };

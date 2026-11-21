@@ -2806,17 +2806,17 @@ export const es: Messages = {
       {
         label: 'Donación / financiación social',
         caveat:
-          'Aportación no financiera a una causa social. Sin propiedad, intereses, reembolso ni retorno financiero. No se cobra donación ni se promete deducción fiscal.',
+          'Aportación sin propiedad, intereses, reembolso ni rendimiento financiero. Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.',
       },
       {
         label: 'Financiación con recompensa',
         caveat:
-          'Financiación no financiera por recompensa ilustrativa. No es inversión: sin intereses, propiedad ni retorno financiero. Entrega, cancelación y condiciones de consumo se definen aparte.',
+          'Financiación a cambio de una recompensa no financiera o del producto o servicio financiado. Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.',
       },
       {
         label: 'Preventa',
         caveat:
-          'Pedido anticipado ilustrativo de bienes, no inversión ni derecho a tokens futuros. Sin retorno financiero. Precio, entrega, cancelación y derechos del consumidor se definen aparte.',
+          'Pedido anticipado del producto o servicio financiado, como financiación con recompensa, no como inversión ni derecho a un token futuro. Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.',
       },
       {
         label: 'Participaciones en una Lda portuguesa',
@@ -2845,5 +2845,28 @@ export const es: Messages = {
       'Un certificado puede representar acciones subyacentes, en lugar de titularidad directa registrada. El derecho concreto, voto, distribuciones y transmisión dependen de sus condiciones.',
     caveat:
       'Podría ser posible con un socio autorizado (banco o empresa de inversión), sujeto a los requisitos ECSPR; no confirmado en Portugal. Esto no establece un régimen portugués de recibos de depósito. Solo un ejemplo educativo, no una oferta real. Aquí no se emiten, venden, custodian ni transmiten certificados.',
+  },
+  nationalFunding: {
+    title: 'Financiación colaborativa no financiera',
+    items: [
+      {
+        id: 'donation',
+        title: 'Financiación por donación',
+        summary: 'Aportación sin propiedad, intereses, reembolso ni rendimiento financiero.',
+      },
+      {
+        id: 'reward',
+        title: 'Financiación con recompensa',
+        summary: 'Financiación a cambio de una recompensa no financiera o del producto o servicio financiado.',
+      },
+      {
+        id: 'pre-sale',
+        title: 'Financiación por preventa',
+        summary: 'Pedido anticipado del producto o servicio financiado, como financiación con recompensa, no como inversión ni derecho a un token futuro.',
+      },
+    ],
+    caveat:
+      'Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.',
+    ecsprNote: 'Las ofertas reales de préstamos y acciones de S.A. mediante financiación colaborativa requieren autorización ECSPR (CMVM en Portugal).',
   },
 };
