@@ -26,7 +26,10 @@ afterEach(() => {
 test('every locale carries the same eight holding structures with labels and summaries', () => {
   expect(en.instruments.holding.items.map((h) => h.id)).toEqual(HOLDING_IDS);
   for (const [name, m] of Object.entries(locales)) {
-    expect(m.instruments.holding.items.map((h) => h.id), name).toEqual(HOLDING_IDS);
+    expect(
+      m.instruments.holding.items.map((h) => h.id),
+      name,
+    ).toEqual(HOLDING_IDS);
     for (const item of m.instruments.holding.items) {
       expect(item.label.trim().length, `${name}:${item.id}`).toBeGreaterThan(0);
       expect(item.summary.trim().length, `${name}:${item.id}`).toBeGreaterThan(0);

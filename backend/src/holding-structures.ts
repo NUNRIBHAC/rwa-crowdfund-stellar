@@ -9,16 +9,7 @@
 // structure awaits legal analysis before any real offer. The display strings
 // live in the frontend i18n dictionaries (frontend/src/i18n/locales/*); keep
 // the id lists in sync.
-export const HOLDING_STRUCTURE_IDS = [
-  'direct',
-  'depositary-receipt',
-  'llc',
-  'series-llc',
-  'llp',
-  'scp',
-  'lda-quotas',
-  'anonymous-partnership',
-] as const;
+export const HOLDING_STRUCTURE_IDS = ['direct', 'depositary-receipt', 'llc', 'series-llc', 'llp', 'scp', 'lda-quotas', 'anonymous-partnership'] as const;
 
 export type HoldingStructureId = (typeof HOLDING_STRUCTURE_IDS)[number];
 
