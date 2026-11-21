@@ -3729,6 +3729,23 @@ html.rtl-text .accordion summary > span:first-child {
     aspect-ratio: 4 / 3;
   }
 }
+/* Arabic mirrors the campaign detail columns (user decision 2026-11-21):
+   on desktop the main/hero column moves to the end side and the funding
+   summary + contribution widget to the start side. LTR locales and the
+   stacked mobile layout are unchanged; text-level RTL rules are untouched. */
+@media (min-width: 901px) {
+  html.rtl-text .campaign-columns {
+    grid-template-columns: 340px 1fr;
+  }
+  html.rtl-text .campaign-columns .campaign-main {
+    grid-column: 2;
+  }
+  html.rtl-text .campaign-columns .campaign-funding-summary,
+  html.rtl-text .campaign-columns .campaign-contribution-form {
+    grid-column: 1;
+  }
+}
+
 @media (max-width: 900px) {
   .campaign-columns .campaign-main {
     grid-column: 1;

@@ -1,6 +1,22 @@
 // Educational concepts are deliberately NOT Campaigns, contracts or supported instrument classes.
+// Donation, reward and pre-sale moved out of this list: they are verified under the
+// Portuguese national crowdfunding regime (Lei 102/2015) and now appear as sample
+// campaigns in SAMPLE_CATALOG, alongside loans and shares.
 // Their IDs are never included in FIXTURE_CAMPAIGNS or any live-mode state/filter count. Sample-mode filters include their scenario metadata.
-export const SAMPLE_CONCEPTS = [
+type SampleConceptState = 'open' | 'funded' | 'unsuccessful' | 'refunded' | 'withdrawn';
+
+export type SampleConcept = {
+  id: string;
+  name: string;
+  subtype: string;
+  industry: string;
+  sampleState: SampleConceptState;
+  nonFinancial: boolean;
+};
+
+// Explicit state union: every state stays representable even when no current
+// concept uses it (scenarios rotate as formats move to the sample catalog).
+export const SAMPLE_CONCEPTS: SampleConcept[] = [
   { id: 'concept-safe', name: 'Lumen Future Equity', subtype: 'safe', industry: 'information-technology', sampleState: 'open', nonFinancial: false },
   {
     id: 'concept-co-ownership',
@@ -28,16 +44,6 @@ export const SAMPLE_CONCEPTS = [
   },
   { id: 'concept-royalty', name: 'Aurora Studio Royalties', subtype: 'royalty', industry: 'sports-leisure', sampleState: 'withdrawn', nonFinancial: false },
   {
-    id: 'concept-donation',
-    name: 'Neighbourhood Library Donation',
-    subtype: 'donation',
-    industry: 'education-aviation',
-    sampleState: 'refunded',
-    nonFinancial: true,
-  },
-  { id: 'concept-reward', name: 'Makers Reward', subtype: 'reward', industry: 'industrial-manufacturing', sampleState: 'withdrawn', nonFinancial: true },
-  { id: 'concept-pre-sale', name: 'Workshop Lamp Pre-sale', subtype: 'pre-sale', industry: 'consumer-retail', sampleState: 'refunded', nonFinancial: true },
-  {
     id: 'concept-lda-quotas',
     name: 'Tagus Workshop Lda Quotas',
     subtype: 'lda-quotas',
@@ -53,7 +59,7 @@ export const SAMPLE_CONCEPTS = [
     sampleState: 'unsuccessful',
     nonFinancial: false,
   },
-] as const;
+];
 
 export function sampleConceptIndex(id: string): number {
   return SAMPLE_CONCEPTS.findIndex((concept) => concept.id === id);

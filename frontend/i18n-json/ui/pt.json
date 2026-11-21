@@ -232,6 +232,8 @@
       "unclear": "Não definido"
     },
     "allIndustries": "Todos os setores",
+    "filterTypeAria": "Filtrar por tipo de instrumento ou formato",
+    "allTypes": "Todos os tipos",
     "sortAria": "Ordenar campanhas",
     "sortDeadline": "Prazo mais próximo",
     "sortProgress": "Mais financiadas",
@@ -1639,6 +1641,108 @@
         ],
         "documents": [],
         "news": []
+      },
+      {
+        "issuer": "Neighbourhood Library Association (emitente de exemplo)",
+        "category": "Educação e formação aeronáutica",
+        "teaser": "Uma biblioteca de bairro a recolher donativos para livros novos e sessões de leitura. Contribuição sem propriedade, juros, reembolso ou retorno financeiro. Dados de exemplo - não é uma oferta real",
+        "interestRate": "Nenhum - donativo sem retorno financeiro (exemplo)",
+        "term": "Sem prazo de reembolso (exemplo)",
+        "minInvestment": "Qualquer montante (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Formato",
+            "value": "Financiamento por donativo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Insucesso - reembolso ao investidor concluído"
+          },
+          {
+            "label": "Enquadramento legal",
+            "value": "Regime nacional português de financiamento colaborativo por donativo/recompensa (Lei 102/2015), fora da ECSPR (enquadramento de exemplo)"
+          },
+          {
+            "label": "Requisito do operador",
+            "value": "Pessoa coletiva ou EIRL com comunicação prévia à DGE pelo menos 30 dias antes de iniciar a atividade (exemplo)"
+          }
+        ],
+        "overview": [
+          "Dados de exemplo - não é uma oferta real",
+          "Contribuição sem propriedade, juros, reembolso ou retorno financeiro.",
+          "Não se promete dedução fiscal.",
+          "Cenário de exemplo tudo-ou-nada: a meta não foi atingida e as contribuições foram devolvidas."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Makers Workshop Collective (emitente de exemplo)",
+        "category": "Tecnologia industrial e produção",
+        "teaser": "Um makerspace comunitário a financiar novas ferramentas; os apoiantes recebem recompensas não financeiras, como tempo de oficina. Não é oferecido retorno financeiro. Dados de exemplo - não é uma oferta real",
+        "interestRate": "Nenhum - recompensa não financeira (exemplo)",
+        "term": "Entrega da recompensa após o financiamento (exemplo)",
+        "minInvestment": "Qualquer montante (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Formato",
+            "value": "Financiamento com recompensa · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Sucesso - promotor levantou os fundos"
+          },
+          {
+            "label": "Enquadramento legal",
+            "value": "Regime nacional português de financiamento colaborativo por donativo/recompensa (Lei 102/2015), fora da ECSPR (enquadramento de exemplo)"
+          },
+          {
+            "label": "Requisito do operador",
+            "value": "Pessoa coletiva ou EIRL com comunicação prévia à DGE pelo menos 30 dias antes de iniciar a atividade (exemplo)"
+          }
+        ],
+        "overview": [
+          "Dados de exemplo - não é uma oferta real",
+          "Financiamento em troca de uma recompensa não financeira ou do produto ou serviço financiado. Não é oferecido retorno financeiro.",
+          "Entrega, cancelamento e direitos do consumidor seriam definidos por oferta.",
+          "Cenário de exemplo com sucesso: a meta foi atingida e o promotor levantou os fundos."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Workshop Lamp Studio (emitente de exemplo)",
+        "category": "Produtos de consumo, moda, vestuário e retalho",
+        "teaser": "Pré-venda de um candeeiro de oficina artesanal: os apoiantes encomendam antecipadamente o produto financiado. Estruturado como financiamento com recompensa, não como investimento ou direito a um token futuro. Dados de exemplo - não é uma oferta real",
+        "interestRate": "Nenhum - pré-venda de produto (exemplo)",
+        "term": "Entrega do produto pré-vendido (exemplo)",
+        "minInvestment": "Qualquer montante (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Formato",
+            "value": "Pré-venda (financiamento com recompensa) · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Insucesso - reembolso ao investidor concluído"
+          },
+          {
+            "label": "Enquadramento legal",
+            "value": "Regime nacional português de financiamento colaborativo por donativo/recompensa (Lei 102/2015), fora da ECSPR (enquadramento de exemplo)"
+          },
+          {
+            "label": "Requisito do operador",
+            "value": "Pessoa coletiva ou EIRL com comunicação prévia à DGE pelo menos 30 dias antes de iniciar a atividade (exemplo)"
+          }
+        ],
+        "overview": [
+          "Dados de exemplo - não é uma oferta real",
+          "Encomenda antecipada do produto ou serviço financiado, estruturada como financiamento com recompensa, não como investimento ou direito a um token futuro. Não é oferecido retorno financeiro.",
+          "Entrega, cancelamento e direitos do consumidor seriam definidos por oferta.",
+          "Cenário de exemplo tudo-ou-nada: a meta não foi atingida e as contribuições foram devolvidas."
+        ],
+        "documents": [],
+        "news": []
       }
     ]
   },
@@ -2514,18 +2618,6 @@
         "caveat": "Direito ilustrativo a royalties pelo uso licenciado de propriedade intelectual. Royalties não são lucros e a propriedade intelectual não é transmitida. Não existe retorno ou reembolso garantido."
       },
       {
-        "label": "Doação / financiamento social",
-        "caveat": "Contribuição sem propriedade, juros, reembolso ou retorno financeiro. Campanhas reais podem ser possíveis no regime nacional português de financiamento colaborativo por donativo/recompensa, fora da ECSPR. O operador da plataforma tem de ser pessoa coletiva ou EIRL e comunicar previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Aqui é exemplo educativo: não se recolhe dinheiro nem se promete dedução fiscal. Entrega, cancelamento e direitos do consumidor exigiriam definição própria."
-      },
-      {
-        "label": "Financiamento com recompensa",
-        "caveat": "Financiamento em troca de uma recompensa não financeira ou do produto ou serviço financiado. Campanhas reais podem ser possíveis no regime nacional português de financiamento colaborativo por donativo/recompensa, fora da ECSPR. O operador da plataforma tem de ser pessoa coletiva ou EIRL e comunicar previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Aqui é exemplo educativo: não se recolhe dinheiro nem se promete dedução fiscal. Entrega, cancelamento e direitos do consumidor exigiriam definição própria."
-      },
-      {
-        "label": "Pré-venda",
-        "caveat": "Encomenda antecipada do produto ou serviço financiado, estruturada como financiamento com recompensa, não como investimento ou direito a um token futuro. Campanhas reais podem ser possíveis no regime nacional português de financiamento colaborativo por donativo/recompensa, fora da ECSPR. O operador da plataforma tem de ser pessoa coletiva ou EIRL e comunicar previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Aqui é exemplo educativo: não se recolhe dinheiro nem se promete dedução fiscal. Entrega, cancelamento e direitos do consumidor exigiriam definição própria."
-      },
-      {
         "label": "Quotas numa Lda portuguesa",
         "caveat": "Participação ilustrativa numa sociedade por quotas portuguesa (Lda). Os direitos e as restrições à transmissão dependem dos estatutos e da lei aplicável. Pode ser possível na ECSPR se a CMVM autorizar; não está confirmado em Portugal. Apenas uma amostra educativa, não é uma oferta real. Não são emitidas, vendidas ou transmitidas quotas aqui."
       },
@@ -2564,6 +2656,7 @@
       }
     ],
     "caveat": "Campanhas reais podem ser possíveis no regime nacional português de financiamento colaborativo por donativo/recompensa, fora da ECSPR. O operador da plataforma tem de ser pessoa coletiva ou EIRL e comunicar previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Aqui é exemplo educativo: não se recolhe dinheiro nem se promete dedução fiscal. Entrega, cancelamento e direitos do consumidor exigiriam definição própria.",
+    "sampleNote": "Amostra de um formato suportado: o financiamento colaborativo por donativo, recompensa e pré-venda está abrangido pelo regime jurídico nacional português (Lei 102/2015), fora da ECSPR. Uma oferta real exige que o operador seja pessoa coletiva ou EIRL e comunique previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Esta página mostra dados ilustrativos de exemplo: não se recolhe dinheiro nem se promete dedução fiscal. Não é oferecido qualquer retorno financeiro.",
     "ecsprNote": "Ofertas reais de empréstimos e ações de S.A. através de financiamento colaborativo exigem autorização ECSPR (CMVM em Portugal)."
   }
 }

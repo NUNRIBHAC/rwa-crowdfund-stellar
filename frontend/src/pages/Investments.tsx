@@ -3,12 +3,13 @@ import { useEffect, useState, type ReactNode } from 'react';
 import type { Market } from '../market';
 import CampaignCard, { campaignStatus, type CampaignStatus } from '../components/CampaignCard';
 import { compareCampaigns } from '../sort-campaigns';
+import { instrumentLabel } from '../data/instruments';
 import EmptyState from '../components/EmptyState';
 import { profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
-import { sampleIndustry, sampleState } from '../data/sampleCatalog';
-import { SAMPLE_CONCEPTS, sampleConceptStatus } from '../data/sampleConcepts';
+import { sampleIndustry, sampleInstrument, sampleState } from '../data/sampleCatalog';
+import { SAMPLE_CONCEPTS, sampleConceptIndex, sampleConceptStatus } from '../data/sampleConcepts';
 import { SampleConceptsSection } from '../components/SampleConcepts';
 
 export default function Investments({ market, loadStatus }: { market: Market; loadStatus?: ReactNode }) {
@@ -17,6 +18,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | CampaignStatus | 'refunded' | 'withdrawn'>('all');
   const [category, setCategory] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
   const [sortBy, setSortBy] = useState<'deadline' | 'progress' | 'name'>('deadline');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -55,9 +57,33 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
     if (!fixtureMode) return industries[c.id]?.key;
     return sampleIndustry(c.id);
   };
+  // Instrument/format type: sample campaigns carry a catalog instrument and
+  // sample concepts a format subtype. Live campaigns have no instrument
+  // metadata, so the type filter only exists in fixture mode - nothing is
+  // invented for real contracts.
+  const typeOf = (c: (typeof campaigns)[number]): string | undefined => (fixtureMode ? sampleInstrument(c.id) : undefined);
+  const typeOptions: { value: string; label: string }[] = [];
+  if (fixtureMode) {
+    const seen = new Set<string>();
+    for (const instrument of campaigns.map((c) => sampleInstrument(c.id))) {
+      if (instrument && !seen.has(instrument)) {
+        seen.add(instrument);
+        typeOptions.push({ value: instrument, label: instrumentLabel(m, instrument) });
+      }
+    }
+    for (const concept of SAMPLE_CONCEPTS) {
+      if (!seen.has(concept.subtype)) {
+        seen.add(concept.subtype);
+        typeOptions.push({ value: concept.subtype, label: m.sampleConcepts.list[sampleConceptIndex(concept.id)]?.label ?? concept.subtype });
+      }
+    }
+  }
   const categories = Object.entries(m.invest.industryLabels);
   useEffect(() => {
-    if (!fixtureMode) setStatusFilter((f) => (f === 'refunded' || f === 'withdrawn' ? 'all' : f));
+    if (!fixtureMode) {
+      setStatusFilter((f) => (f === 'refunded' || f === 'withdrawn' ? 'all' : f));
+      setTypeFilter('all');
+    }
   }, [fixtureMode]);
   const filterKeys = fixtureMode ? (['all', 'open', 'funded', 'ended', 'refunded', 'withdrawn'] as const) : (['all', 'open', 'funded', 'ended'] as const);
   const matchesStatus = (filter: string, status: CampaignStatus, scenario?: string) =>
@@ -68,11 +94,13 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
     .filter((c) => !q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q))
     .filter((c) => matchesStatus(statusFilter, campaignStatus(c), sampleState(c.id)))
     .filter((c) => category === 'all' || categoryOf(c) === category)
+    .filter((c) => typeFilter === 'all' || typeOf(c) === typeFilter)
     .sort(compareCampaigns(sortBy));
   const shownConcepts = fixtureMode
     ? SAMPLE_CONCEPTS.filter((c) => !q || c.name.toLowerCase().includes(q))
         .filter((c) => matchesStatus(statusFilter, sampleConceptStatus(c), c.sampleState))
         .filter((c) => category === 'all' || c.industry === category)
+        .filter((c) => typeFilter === 'all' || c.subtype === typeFilter)
     : [];
   const sampleResultCount = shown.length + shownConcepts.length;
   const sampleFilterCount = (filter: string) =>
@@ -80,6 +108,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
       (c) =>
         (!q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q)) &&
         (category === 'all' || categoryOf(c) === category) &&
+        (typeFilter === 'all' || typeOf(c) === typeFilter) &&
         matchesStatus(filter, campaignStatus(c), sampleState(c.id)),
     ).length +
     (fixtureMode
@@ -87,6 +116,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
           (c) =>
             (!q || c.name.toLowerCase().includes(q)) &&
             (category === 'all' || c.industry === category) &&
+            (typeFilter === 'all' || c.subtype === typeFilter) &&
             matchesStatus(filter, sampleConceptStatus(c), c.sampleState),
         ).length
       : 0);
@@ -190,6 +220,19 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
               NotFoundError and unmounts the page. The anchor must be a node
               only React manages. display:contents keeps the wrapper
               layout-neutral. */}
+              {fixtureMode && (
+                <label className="registry-industry-select registry-type-select">
+                  <span>{m.invest.filterTypeAria}</span>
+                  <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} aria-label={m.invest.filterTypeAria}>
+                    <option value="all">{m.invest.allTypes}</option>
+                    {typeOptions.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
               <div className="discovery-sort-slot">
                 <select
                   className="discovery-sort"

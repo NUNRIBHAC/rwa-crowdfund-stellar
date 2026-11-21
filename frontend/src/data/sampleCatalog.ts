@@ -121,7 +121,51 @@ export const SAMPLE_CATALOG = [
     state: 'open',
     indirect: false,
   },
+  {
+    id: 'fixture-library-donation',
+    name: 'Neighbourhood Library Donation',
+    industry: 'education-aviation',
+    instrument: 'donation',
+    seniority: '',
+    overlays: [],
+    state: 'refunded',
+    indirect: false,
+  },
+  {
+    id: 'fixture-makers-reward',
+    name: 'Makers Reward',
+    industry: 'industrial-manufacturing',
+    instrument: 'reward',
+    seniority: '',
+    overlays: [],
+    state: 'withdrawn',
+    indirect: false,
+  },
+  {
+    id: 'fixture-lamp-pre-sale',
+    name: 'Workshop Lamp Pre-sale',
+    industry: 'consumer-retail',
+    instrument: 'pre-sale',
+    seniority: '',
+    overlays: [],
+    state: 'refunded',
+    indirect: false,
+  },
 ] as const;
+
+export function sampleInstrument(campaignId: string): string | undefined {
+  return SAMPLE_CATALOG.find((sample) => sample.id === campaignId)?.instrument;
+}
+
+// Instruments verified for Portugal under the national crowdfunding regime
+// (Lei 102/2015, outside ECSPR): the only non-financial formats presented as
+// platform sample offers rather than educational concepts.
+export const NATIONAL_SAMPLE_INSTRUMENTS = ['donation', 'reward', 'pre-sale'] as const;
+
+export function isNationalRegimeSample(campaignId: string): boolean {
+  const instrument = sampleInstrument(campaignId);
+  return instrument !== undefined && (NATIONAL_SAMPLE_INSTRUMENTS as readonly string[]).includes(instrument);
+}
 
 export function sampleIndustry(campaignId: string): string | undefined {
   return SAMPLE_CATALOG.find((sample) => sample.id === campaignId)?.industry;
