@@ -185,3 +185,29 @@ test('sample concepts participate in text and industry filters only in sample mo
   fireEvent.change(screen.getByRole('textbox', { name: en.invest.searchAria }), { target: { value: 'Juniper' } });
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(1);
 });
+
+test('sample refund and withdrawal filters show exact three identities and counts, never live controls', () => {
+  const { rerender, container } = render(
+    <I18nProvider>
+      <Investments market={market} />
+    </I18nProvider>,
+  );
+  expect(screen.getByRole('button', { name: en.sampleConcepts.filterRefund }).textContent).toBe('Refund (3)');
+  expect(screen.getByRole('button', { name: en.sampleConcepts.filterWithdrawal }).textContent).toBe('Withdrawal (3)');
+  fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterRefund }));
+  expect(screen.getByRole('status').textContent).toBe('3 campaigns shown');
+  expect([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent)).toEqual(['Meadow Partnership']);
+  expect([...container.querySelectorAll('[data-concept]')].map((a) => a.getAttribute('data-concept'))).toEqual(['concept-donation', 'concept-pre-sale']);
+  fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterWithdrawal }));
+  expect(screen.getByRole('status').textContent).toBe('3 campaigns shown');
+  expect([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent)).toEqual(['Orbit Circular Materials']);
+  expect([...container.querySelectorAll('[data-concept]')].map((a) => a.getAttribute('data-concept'))).toEqual(['concept-royalty', 'concept-reward']);
+  rerender(
+    <I18nProvider>
+      <Investments market={{ ...market, fixtureMode: false, campaigns: [FIXTURE_CAMPAIGNS[0]] }} />
+    </I18nProvider>,
+  );
+  expect(screen.queryByRole('button', { name: en.sampleConcepts.filterRefund })).toBeNull();
+  expect(screen.queryByRole('button', { name: en.sampleConcepts.filterWithdrawal })).toBeNull();
+  expect(screen.getByRole('status').textContent).toBe('1 campaign shown');
+});

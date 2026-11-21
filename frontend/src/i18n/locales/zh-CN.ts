@@ -2593,6 +2593,8 @@ export const zhCN: Messages = {
     notice: '示例数据。未发生出资、提取或退款。',
   },
   sampleConcepts: {
+    filterRefund: '退款',
+    filterWithdrawal: '提取',
     states: {
       open: '开放中',
       funded: '已筹足',

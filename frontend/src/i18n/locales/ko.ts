@@ -2646,6 +2646,8 @@ export const ko: Messages = {
     notice: '샘플 데이터입니다. 출자, 인출 또는 환불은 발생하지 않았습니다.',
   },
   sampleConcepts: {
+    filterRefund: '환불',
+    filterWithdrawal: '인출',
     states: {
       open: '진행 중',
       funded: '목표 금액 달성',

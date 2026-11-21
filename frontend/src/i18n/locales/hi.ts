@@ -2693,6 +2693,8 @@ export const hi: Messages = {
     notice: 'नमूना डेटा। कोई योगदान, निकासी या धन-वापसी नहीं हुई।',
   },
   sampleConcepts: {
+    filterRefund: 'धन-वापसी',
+    filterWithdrawal: 'निकासी',
     states: {
       open: 'खुला',
       funded: 'वित्तपोषित',

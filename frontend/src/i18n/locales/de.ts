@@ -2753,6 +2753,8 @@ export const de: Messages = {
     notice: 'Beispieldaten. Es gab keine Einzahlung, Auszahlung oder Rückzahlung.',
   },
   sampleConcepts: {
+    filterRefund: 'Rückzahlung',
+    filterWithdrawal: 'Abruf',
     states: {
       open: 'Offen',
       funded: 'Finanziert',

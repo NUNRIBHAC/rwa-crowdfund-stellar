@@ -2773,6 +2773,8 @@ export const fr: Messages = {
     notice: "Données d'exemple. Aucun apport, retrait ni remboursement n'a eu lieu.",
   },
   sampleConcepts: {
+    filterRefund: 'Remboursement',
+    filterWithdrawal: 'Retrait',
     states: {
       open: 'Ouverte',
       funded: 'Financée',

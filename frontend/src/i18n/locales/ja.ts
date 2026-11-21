@@ -2670,6 +2670,8 @@ export const ja: Messages = {
     notice: 'サンプルデータ。出資、引き出し、返金は発生していません。',
   },
   sampleConcepts: {
+    filterRefund: '返金',
+    filterWithdrawal: '引き出し',
     states: {
       open: '受付中',
       funded: '資金調達済み',

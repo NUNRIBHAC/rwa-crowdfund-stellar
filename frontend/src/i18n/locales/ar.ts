@@ -2651,6 +2651,8 @@ export const ar: Messages = {
     notice: 'بيانات تجريبية. لم تحدث أي مساهمة أو سحب أو استرداد للأموال.',
   },
   sampleConcepts: {
+    filterRefund: 'استرداد',
+    filterWithdrawal: 'سحب',
     states: {
       open: 'مفتوحة',
       funded: 'مموّلة',

@@ -7,7 +7,7 @@ import EmptyState from '../components/EmptyState';
 import { profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
-import { sampleIndustry } from '../data/sampleCatalog';
+import { sampleIndustry, sampleState } from '../data/sampleCatalog';
 import { SAMPLE_CONCEPTS, sampleConceptStatus } from '../data/sampleConcepts';
 import { SampleConceptsSection } from '../components/SampleConcepts';
 
@@ -15,7 +15,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
   const { m } = useI18n();
   const { campaigns, loaded, fixtureMode } = market;
   const [query, setQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | CampaignStatus>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | CampaignStatus | 'refunded' | 'withdrawn'>('all');
   const [category, setCategory] = useState('all');
   const [sortBy, setSortBy] = useState<'deadline' | 'progress' | 'name'>('deadline');
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -56,19 +56,41 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
     return sampleIndustry(c.id);
   };
   const categories = Object.entries(m.invest.industryLabels);
+  useEffect(() => {
+    if (!fixtureMode) setStatusFilter((f) => (f === 'refunded' || f === 'withdrawn' ? 'all' : f));
+  }, [fixtureMode]);
+  const filterKeys = fixtureMode ? (['all', 'open', 'funded', 'ended', 'refunded', 'withdrawn'] as const) : (['all', 'open', 'funded', 'ended'] as const);
+  const matchesStatus = (filter: string, status: CampaignStatus, scenario?: string) =>
+    filter === 'all' || (filter === 'refunded' || filter === 'withdrawn' ? fixtureMode && scenario === filter : status === filter);
 
   const q = query.trim().toLowerCase();
   const shown = campaigns
     .filter((c) => !q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q))
-    .filter((c) => statusFilter === 'all' || campaignStatus(c) === statusFilter)
+    .filter((c) => matchesStatus(statusFilter, campaignStatus(c), sampleState(c.id)))
     .filter((c) => category === 'all' || categoryOf(c) === category)
     .sort(compareCampaigns(sortBy));
   const shownConcepts = fixtureMode
     ? SAMPLE_CONCEPTS.filter((c) => !q || c.name.toLowerCase().includes(q))
-        .filter((c) => statusFilter === 'all' || sampleConceptStatus(c) === statusFilter)
+        .filter((c) => matchesStatus(statusFilter, sampleConceptStatus(c), c.sampleState))
         .filter((c) => category === 'all' || c.industry === category)
     : [];
   const sampleResultCount = shown.length + shownConcepts.length;
+  const sampleFilterCount = (filter: string) =>
+    campaigns.filter(
+      (c) =>
+        (!q || c.name.toLowerCase().includes(q) || c.contractId.toLowerCase().includes(q)) &&
+        (category === 'all' || categoryOf(c) === category) &&
+        matchesStatus(filter, campaignStatus(c), sampleState(c.id)),
+    ).length +
+    (fixtureMode
+      ? SAMPLE_CONCEPTS.filter(
+          (c) =>
+            (!q || c.name.toLowerCase().includes(q)) &&
+            (category === 'all' || c.industry === category) &&
+            matchesStatus(filter, sampleConceptStatus(c), c.sampleState),
+        ).length
+      : 0);
+
   // Exact checked-in staging fixture identity, never inferred from campaign names.
   const testing = shown.filter((c) => c.id === 'staging-load');
   const catalog = shown.filter((c) => c.id !== 'staging-load');
@@ -128,14 +150,25 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
             </button>
             <div id="registry-filter-controls" className="registry-filter-controls">
               <div className="filter-chips" role="group" aria-label={m.invest.filterStatusAria}>
-                {(['all', 'open', 'funded', 'ended'] as const).map((f) => (
+                {filterKeys.map((f) => (
                   <button
                     key={f}
                     className={`chip ${statusFilter === f ? 'chip-active' : ''}`}
                     aria-pressed={statusFilter === f}
                     onClick={() => setStatusFilter(f)}
                   >
-                    {f === 'all' ? m.invest.all : f === 'open' ? m.invest.open : f === 'funded' ? m.invest.funded : m.invest.underfunded}
+                    {f === 'all'
+                      ? m.invest.all
+                      : f === 'open'
+                        ? m.invest.open
+                        : f === 'funded'
+                          ? m.invest.funded
+                          : f === 'refunded'
+                            ? m.sampleConcepts.filterRefund
+                            : f === 'withdrawn'
+                              ? m.sampleConcepts.filterWithdrawal
+                              : m.invest.underfunded}
+                    {fixtureMode && <span aria-hidden="true"> ({sampleFilterCount(f)})</span>}
                   </button>
                 ))}
               </div>
@@ -204,7 +237,10 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
         )}
         {completed.length > 0 && (
           <section className="registry-results" aria-label={m.invest.completedAria}>
-            <details className="registry-closed" open={statusFilter === 'ended' || statusFilter === 'funded' || undefined}>
+            <details
+              className="registry-closed"
+              open={statusFilter === 'ended' || statusFilter === 'funded' || statusFilter === 'refunded' || statusFilter === 'withdrawn' || undefined}
+            >
               <summary>
                 {m.invest.closedTitle} ({completed.length})
               </summary>

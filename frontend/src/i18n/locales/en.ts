@@ -2693,6 +2693,8 @@ export const en = {
     notice: 'Sample data. No contribution, withdrawal or refund occurred.',
   },
   sampleConcepts: {
+    filterRefund: 'Refund',
+    filterWithdrawal: 'Withdrawal',
     states: {
       open: 'Open',
       funded: 'Funded',

@@ -2759,6 +2759,8 @@ export const pt: Messages = {
     notice: 'Dados de exemplo. Não ocorreu contribuição, levantamento nem reembolso.',
   },
   sampleConcepts: {
+    filterRefund: 'Reembolso',
+    filterWithdrawal: 'Levantamento',
     states: {
       open: 'Aberta',
       funded: 'Financiada',

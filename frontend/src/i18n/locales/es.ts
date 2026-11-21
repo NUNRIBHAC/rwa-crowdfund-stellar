@@ -2763,6 +2763,8 @@ export const es: Messages = {
     notice: 'Datos de ejemplo. No hubo aportación, retirada ni reembolso.',
   },
   sampleConcepts: {
+    filterRefund: 'Reembolso',
+    filterWithdrawal: 'Retirada',
     states: {
       open: 'Abierta',
       funded: 'Financiada',

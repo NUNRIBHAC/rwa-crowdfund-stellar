@@ -2593,6 +2593,8 @@ export const zhTW: Messages = {
     notice: '範例資料。未發生出資、提領或退款。',
   },
   sampleConcepts: {
+    filterRefund: '退款',
+    filterWithdrawal: '提領',
     states: {
       open: '開放中',
       funded: '已籌足',
