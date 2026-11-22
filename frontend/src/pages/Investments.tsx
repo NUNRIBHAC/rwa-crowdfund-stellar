@@ -96,6 +96,19 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
         matchesStatus(filter, campaignStatus(c), sampleState(c.id)),
     ).length;
 
+  const filteredHeading =
+    statusFilter === 'open'
+      ? m.invest.activeTitle
+      : statusFilter === 'funded'
+        ? m.invest.funded
+        : statusFilter === 'ended'
+          ? m.invest.underfunded
+          : statusFilter === 'refunded'
+            ? m.sampleConcepts.filterRefund
+            : statusFilter === 'withdrawn'
+              ? m.sampleConcepts.filterWithdrawal
+              : undefined;
+
   // Exact checked-in staging fixture identity, never inferred from campaign names.
   const testing = shown.filter((c) => c.id === 'staging-load');
   const catalog = shown.filter((c) => c.id !== 'staging-load');
@@ -133,8 +146,9 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
         </button>
       </div>
 
-      {loadStatus}
+      {campaigns.length > 0 && loadStatus}
       <div className={`registry-content-layout${!loaded && !fixtureMode ? ' registry-loading-space' : ''}${campaigns.length ? ' has-filters' : ''}`}>
+        {campaigns.length === 0 && loadStatus}
         {campaigns.length > 0 && (
           <aside className="discovery-bar registry-filter-panel" aria-label={m.invest.filters}>
             <input
@@ -249,8 +263,9 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
             </section>
           )}
           {testing.length > 0 && (
-            <section className="registry-results registry-testing" aria-label={m.invest.testingTitle}>
-              <h2 className="section-title">{m.invest.testingTitle}</h2>
+            <section className="registry-results registry-testing" aria-label={filteredHeading ?? m.invest.testingTitle}>
+              <h2 className="section-title">{filteredHeading ?? m.invest.testingTitle}</h2>
+              {filteredHeading && <p className="community-note">{m.invest.testingTitle}</p>}
               <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{testing.map(renderCard)}</div>
             </section>
           )}
@@ -261,7 +276,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
                 open={statusFilter === 'ended' || statusFilter === 'funded' || statusFilter === 'refunded' || statusFilter === 'withdrawn' || undefined}
               >
                 <summary>
-                  {m.invest.closedTitle} ({completed.length})
+                  {filteredHeading ?? m.invest.closedTitle} ({completed.length})
                 </summary>
                 <div className={view === 'grid' ? 'card-grid' : 'card-list'}>
                   {completed.map((c) => (

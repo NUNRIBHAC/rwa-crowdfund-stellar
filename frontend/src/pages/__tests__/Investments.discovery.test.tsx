@@ -1,7 +1,9 @@
 import { test, expect, afterEach } from 'vitest';
 import { render, screen, cleanup, fireEvent, within } from '@testing-library/react';
 import Investments from '../Investments';
-import { I18nProvider } from '../../i18n';
+import { I18nProvider, LOCALES } from '../../i18n';
+import type { Messages } from '../../i18n/locales/en';
+const localeModules = import.meta.glob('../../i18n/locales/*.ts', { eager: true }) as Record<string, Record<string, Messages>>;
 import { FIXTURE_CAMPAIGNS } from '../../fixtures';
 import type { Market } from '../../market';
 import type { Campaign } from '../../types';
@@ -159,3 +161,32 @@ test('keeps the heading before the live loading/error region and reserves only p
   expect(container.querySelector('.registry-loading-space')).toBeNull();
   expect(screen.getByRole('heading', { level: 1 })).toBe(heading);
 });
+
+for (const { id: locale } of LOCALES) {
+  test(`${locale}: explicit status filters title the testing results by status and keep the test note`, () => {
+    for (const index of [1, 2, 3]) {
+      localStorage.setItem('blockallisto-language', locale);
+      const campaign = {
+        ...openCampaign,
+        id: 'staging-load',
+        raised: index === 2 ? openCampaign.config.goal : '0',
+        config: { ...openCampaign.config, deadline: index === 3 ? past : String(Math.floor(Date.now() / 1000) + 86400) },
+      };
+      const { container } = render(
+        <I18nProvider>
+          <Investments market={{ ...marketFor([campaign]), fixtureMode: false }} />
+        </I18nProvider>,
+      );
+      const filters = container.querySelectorAll('#registry-filter-controls .filter-chips:first-child button');
+      const messages = Object.values(localeModules[`../../i18n/locales/${locale}.ts`])[0];
+      const label = [messages.invest.all, messages.invest.activeTitle, messages.invest.funded, messages.invest.underfunded][index];
+      fireEvent.click(filters[index]);
+      const group = container.querySelector('.registry-testing')!;
+      expect(group).toBeTruthy();
+      expect(group.querySelector('h2')?.textContent).toContain(label);
+      expect(group.querySelector('.community-note')?.textContent?.trim()).toBeTruthy();
+      cleanup();
+    }
+    localStorage.removeItem('blockallisto-language');
+  });
+}
