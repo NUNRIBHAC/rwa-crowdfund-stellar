@@ -250,6 +250,8 @@ export const es: Messages = {
       unclear: 'Sin definir',
     } as Record<string, string>,
     allIndustries: 'Todos los sectores',
+    filterTypeAria: 'Filtrar por tipo de instrumento o formato',
+    allTypes: 'Todos los tipos',
     sortAria: 'Ordenar campañas',
     sortDeadline: 'Plazo más próximo',
     sortProgress: 'Más financiadas',
@@ -1864,6 +1866,126 @@ export const es: Messages = {
         documents: [],
         news: [],
       },
+      {
+        campaignId: 'fixture-library-donation',
+        issuer: 'Neighbourhood Library Association (emisor de ejemplo)',
+        country: 'PT',
+        category: 'Educación y formación aeronáutica',
+        teaser:
+          'Una biblioteca de barrio que recauda donativos para libros nuevos y sesiones de lectura. Contribución sin propiedad, intereses, reembolso ni rendimiento financiero. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'donation',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Ninguno - donación sin rendimiento financiero (ejemplo)',
+        term: 'Sin plazo de reembolso (ejemplo)',
+        minInvestment: 'Cualquier importe (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Formato',
+            value: 'Crowdfunding de donación · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Sin éxito - reembolso al inversor completado',
+          },
+          {
+            label: 'Marco legal',
+            value: 'Régimen nacional portugués de crowdfunding de donación/recompensa (Lei 102/2015), fuera del ECSPR (marco de ejemplo)',
+          },
+          {
+            label: 'Requisito del operador',
+            value: 'Persona jurídica o EIRL con comunicación previa a la DGE al menos 30 días antes de iniciar la actividad (ejemplo)',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Contribución sin propiedad, intereses, reembolso ni rendimiento financiero.',
+          'No se promete deducción fiscal.',
+          'Escenario de ejemplo de todo o nada: no se alcanzó la meta y las contribuciones fueron devueltas.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-makers-reward',
+        issuer: 'Makers Workshop Collective (emisor de ejemplo)',
+        country: 'PT',
+        category: 'Tecnología industrial y fabricación',
+        teaser:
+          'Un makerspace comunitario que financia nuevas herramientas; los mecenas reciben recompensas no financieras, como tiempo de taller. No se ofrece rendimiento financiero. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'reward',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Ninguno - recompensa no financiera (ejemplo)',
+        term: 'Entrega de la recompensa tras la financiación (ejemplo)',
+        minInvestment: 'Cualquier importe (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Formato',
+            value: 'Crowdfunding de recompensa · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Éxito - fondos retirados por el promotor',
+          },
+          {
+            label: 'Marco legal',
+            value: 'Régimen nacional portugués de crowdfunding de donación/recompensa (Lei 102/2015), fuera del ECSPR (marco de ejemplo)',
+          },
+          {
+            label: 'Requisito del operador',
+            value: 'Persona jurídica o EIRL con comunicación previa a la DGE al menos 30 días antes de iniciar la actividad (ejemplo)',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Financiación a cambio de una recompensa no financiera o del producto o servicio financiado. No se ofrece rendimiento financiero.',
+          'La entrega, la cancelación y los derechos del consumidor se definirían por oferta.',
+          'Escenario de ejemplo con éxito: se alcanzó la meta y el promotor retiró los fondos.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-lamp-pre-sale',
+        issuer: 'Workshop Lamp Studio (emisor de ejemplo)',
+        country: 'PT',
+        category: 'Productos de consumo, moda, ropa y comercio minorista',
+        teaser:
+          'Preventa de una lámpara de taller artesanal: los mecenas piden por adelantado el producto financiado. Estructurado como crowdfunding de recompensa, no como inversión ni derecho a un token futuro. Datos de ejemplo - no es una oferta real',
+        instrumentClass: 'pre-sale',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Ninguno - preventa de producto (ejemplo)',
+        term: 'Entrega del producto prevendido (ejemplo)',
+        minInvestment: 'Cualquier importe (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Formato',
+            value: 'Preventa (crowdfunding de recompensa) · Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Estado',
+            value: 'Sin éxito - reembolso al inversor completado',
+          },
+          {
+            label: 'Marco legal',
+            value: 'Régimen nacional portugués de crowdfunding de donación/recompensa (Lei 102/2015), fuera del ECSPR (marco de ejemplo)',
+          },
+          {
+            label: 'Requisito del operador',
+            value: 'Persona jurídica o EIRL con comunicación previa a la DGE al menos 30 días antes de iniciar la actividad (ejemplo)',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'Pedido anticipado del producto o servicio financiado, estructurado como crowdfunding de recompensa, no como inversión ni derecho a un token futuro. No se ofrece rendimiento financiero.',
+          'La entrega, la cancelación y los derechos del consumidor se definirían por oferta.',
+          'Escenario de ejemplo de todo o nada: no se alcanzó la meta y las contribuciones fueron devueltas.',
+        ],
+        documents: [],
+        news: [],
+      },
     ],
   },
   contentPages: {
@@ -2804,21 +2926,6 @@ export const es: Messages = {
           'Derecho ilustrativo a regalías por uso autorizado de propiedad intelectual. Las regalías no son beneficios ni transfieren la propiedad intelectual. Sin rentabilidad ni reembolso garantizados.',
       },
       {
-        label: 'Donación / financiación social',
-        caveat:
-          'Aportación sin propiedad, intereses, reembolso ni rendimiento financiero. Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.',
-      },
-      {
-        label: 'Financiación con recompensa',
-        caveat:
-          'Financiación a cambio de una recompensa no financiera o del producto o servicio financiado. Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.',
-      },
-      {
-        label: 'Preventa',
-        caveat:
-          'Pedido anticipado del producto o servicio financiado, como financiación con recompensa, no como inversión ni derecho a un token futuro. Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.',
-      },
-      {
         label: 'Participaciones en una Lda portuguesa',
         caveat:
           'Participación ilustrativa en una sociedad de responsabilidad limitada portuguesa (Lda). Los derechos y las restricciones a la transmisión dependen de los estatutos y de la ley aplicable. Podría ser posible bajo ECSPR si la CMVM lo autoriza; no está confirmado en Portugal. Solo una muestra educativa, no una oferta real. Aquí no se emiten, venden ni transmiten participaciones.',
@@ -2867,6 +2974,8 @@ export const es: Messages = {
     ],
     caveat:
       'Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.',
+    sampleNote:
+      'Muestra de un formato admitido: el crowdfunding de donación, recompensa y preventa está cubierto por el régimen nacional portugués de financiación colectiva (Lei 102/2015), fuera del ECSPR. Una oferta real exige que el operador sea una persona jurídica o EIRL y lo comunique previamente a la DGE al menos 30 días antes de iniciar la actividad. Esta página muestra datos ilustrativos de ejemplo: no se recauda dinero ni se promete deducción fiscal. No se ofrece ningún rendimiento financiero.',
     ecsprNote: 'Las ofertas reales de préstamos y acciones de S.A. mediante financiación colaborativa requieren autorización ECSPR (CMVM en Portugal).',
   },
 };

@@ -250,6 +250,8 @@ export const fr: Messages = {
       unclear: 'Non défini',
     } as Record<string, string>,
     allIndustries: 'Tous les secteurs',
+    filterTypeAria: "Filtrer par type d'instrument ou de format",
+    allTypes: 'Tous les types',
     sortAria: 'Trier les campagnes',
     sortDeadline: 'Échéance la plus proche',
     sortProgress: 'Les plus financées',
@@ -1868,6 +1870,126 @@ export const fr: Messages = {
         documents: [],
         news: [],
       },
+      {
+        campaignId: 'fixture-library-donation',
+        issuer: "Neighbourhood Library Association (émetteur d'exemple)",
+        country: 'PT',
+        category: 'Éducation et formation aéronautique',
+        teaser:
+          "Une bibliothèque de quartier collecte des dons pour de nouveaux livres et des séances de lecture. Contribution sans propriété, intérêts, remboursement ni rendement financier. Données d'exemple - pas une offre réelle",
+        instrumentClass: 'donation',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Aucun - don sans rendement financier (exemple)',
+        term: 'Aucune échéance de remboursement (exemple)',
+        minInvestment: 'Tout montant (exemple)',
+        additionalInfo: [
+          {
+            label: 'Format',
+            value: "Financement participatif par don · Données d'exemple - pas une offre réelle",
+          },
+          {
+            label: 'État',
+            value: 'Remboursement du contributeur terminé',
+          },
+          {
+            label: 'Cadre juridique',
+            value: "Régime national portugais du financement participatif par don/récompense (Lei 102/2015), hors ECSPR (cadre d'exemple)",
+          },
+          {
+            label: "Obligation de l'exploitant",
+            value: "Personne morale ou EIRL avec notification préalable à la DGE au moins 30 jours avant le début de l'activité (exemple)",
+          },
+        ],
+        overview: [
+          "Données d'exemple - pas une offre réelle",
+          'Contribution sans propriété, intérêts, remboursement ni rendement financier.',
+          "Aucune déduction fiscale n'est promise.",
+          "Scénario d'exemple du tout ou rien : l'objectif n'a pas été atteint et les contributions ont été remboursées.",
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-makers-reward',
+        issuer: "Makers Workshop Collective (émetteur d'exemple)",
+        country: 'PT',
+        category: 'Technologie industrielle et fabrication',
+        teaser:
+          "Un makerspace communautaire finance de nouveaux outils ; les contributeurs reçoivent des récompenses non financières, comme du temps d'atelier. Aucun rendement financier n'est offert. Données d'exemple - pas une offre réelle",
+        instrumentClass: 'reward',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Aucun - récompense non financière (exemple)',
+        term: 'Livraison de la récompense après le financement (exemple)',
+        minInvestment: 'Tout montant (exemple)',
+        additionalInfo: [
+          {
+            label: 'Format',
+            value: "Financement participatif par récompense · Données d'exemple - pas une offre réelle",
+          },
+          {
+            label: 'État',
+            value: 'Réussite - fonds retirés par le porteur',
+          },
+          {
+            label: 'Cadre juridique',
+            value: "Régime national portugais du financement participatif par don/récompense (Lei 102/2015), hors ECSPR (cadre d'exemple)",
+          },
+          {
+            label: "Obligation de l'exploitant",
+            value: "Personne morale ou EIRL avec notification préalable à la DGE au moins 30 jours avant le début de l'activité (exemple)",
+          },
+        ],
+        overview: [
+          "Données d'exemple - pas une offre réelle",
+          "Financement en échange d'une récompense non financière ou du produit ou service financé. Aucun rendement financier n'est offert.",
+          "La livraison, l'annulation et les droits du consommateur seraient définis par offre.",
+          "Scénario d'exemple réussi : l'objectif a été atteint et le porteur a retiré les fonds.",
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-lamp-pre-sale',
+        issuer: "Workshop Lamp Studio (émetteur d'exemple)",
+        country: 'PT',
+        category: 'Produits de consommation, mode, habillement et commerce de détail',
+        teaser:
+          "Prévente d'une lampe d'atelier artisanale : les contributeurs commandent à l'avance le produit financé. Structuré comme un financement participatif par récompense, et non comme un investissement ou un droit à un jeton futur. Données d'exemple - pas une offre réelle",
+        instrumentClass: 'pre-sale',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'Aucun - prévente de produit (exemple)',
+        term: 'Livraison du produit prévendu (exemple)',
+        minInvestment: 'Tout montant (exemple)',
+        additionalInfo: [
+          {
+            label: 'Format',
+            value: "Prévente (financement par récompense) · Données d'exemple - pas une offre réelle",
+          },
+          {
+            label: 'État',
+            value: 'Remboursement du contributeur terminé',
+          },
+          {
+            label: 'Cadre juridique',
+            value: "Régime national portugais du financement participatif par don/récompense (Lei 102/2015), hors ECSPR (cadre d'exemple)",
+          },
+          {
+            label: "Obligation de l'exploitant",
+            value: "Personne morale ou EIRL avec notification préalable à la DGE au moins 30 jours avant le début de l'activité (exemple)",
+          },
+        ],
+        overview: [
+          "Données d'exemple - pas une offre réelle",
+          "Commande anticipée du produit ou service financé, structurée comme un financement participatif par récompense, et non comme un investissement ou un droit à un jeton futur. Aucun rendement financier n'est offert.",
+          "La livraison, l'annulation et les droits du consommateur seraient définis par offre.",
+          "Scénario d'exemple du tout ou rien : l'objectif n'a pas été atteint et les contributions ont été remboursées.",
+        ],
+        documents: [],
+        news: [],
+      },
     ],
   },
   contentPages: {
@@ -2814,21 +2936,6 @@ export const fr: Messages = {
           "Droit illustratif aux redevances d'utilisation sous licence d'une propriété intellectuelle. Les redevances ne sont pas le bénéfice et ne transfèrent pas la propriété intellectuelle. Aucun rendement ni remboursement garanti.",
       },
       {
-        label: 'Don / financement social',
-        caveat:
-          "Contribution sans propriété, intérêts, remboursement ni rendement financier. Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
-      },
-      {
-        label: 'Financement avec récompense',
-        caveat:
-          "Financement en échange d'une récompense non financière ou du produit ou service financé. Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
-      },
-      {
-        label: 'Prévente',
-        caveat:
-          "Commande anticipée du produit ou service financé, structurée en financement avec récompense, pas en investissement ni en droit à un futur jeton. Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
-      },
-      {
         label: 'Parts dans une Lda portugaise',
         caveat:
           "Participation illustrative dans une société à responsabilité limitée portugaise (Lda). Les droits et les restrictions de cession dépendent des statuts et du droit applicable. Cela pourrait être possible dans le cadre ECSPR si la CMVM l'autorise ; ce n'est pas confirmé au Portugal. Exemple éducatif uniquement, pas une offre réelle. Aucune part n'est émise, vendue ou transférée ici.",
@@ -2878,6 +2985,8 @@ export const fr: Messages = {
     ],
     caveat:
       "Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
+    sampleNote:
+      "Exemple d'un format pris en charge : le financement participatif par don, par récompense et par prévente est couvert par le régime juridique national portugais (Lei 102/2015), hors ECSPR. Une offre réelle exige que l'exploitant soit une personne morale ou une EIRL et qu'il en informe préalablement la DGE au moins 30 jours avant le début de l'activité. Cette page présente des données illustratives d'exemple : aucun argent n'est collecté et aucune déduction fiscale n'est promise. Aucun rendement financier n'est offert.",
     ecsprNote: "Les offres réelles de prêts et d'actions de S.A. via le financement participatif exigent une autorisation ECSPR (CMVM au Portugal).",
   },
 };

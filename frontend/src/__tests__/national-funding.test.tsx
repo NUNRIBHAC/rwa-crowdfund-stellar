@@ -37,17 +37,24 @@ for (const [locale, m] of Object.entries(locales)) {
     expect(m.nationalFunding.caveat).toContain('30');
     expect(m.nationalFunding.caveat).toContain('ECSPR');
     expect(m.nationalFunding.ecsprNote).toContain('CMVM');
-    for (const id of ['concept-donation', 'concept-reward', 'concept-pre-sale']) {
-      const i = SAMPLE_CONCEPTS.findIndex((c) => c.id === id);
-      expect(m.sampleConcepts.list[i].caveat).toContain(m.nationalFunding.caveat);
-    }
+    expect(m.nationalFunding.sampleNote).toContain('DGE');
+    expect(m.nationalFunding.sampleNote).toContain('EIRL');
+    expect(m.nationalFunding.sampleNote).toContain('30');
+    expect(m.nationalFunding.sampleNote).toContain('ECSPR');
+    expect(m.nationalFunding.sampleNote).not.toContain('3/2018');
+    expect(m.nationalFunding.sampleNote).not.toContain('DG Consumidor');
     expect(m.nationalFunding.caveat).not.toContain('3/2018');
     expect(m.nationalFunding.caveat).not.toContain('DG Consumidor');
   });
 }
-test('framing changes neither sample identities nor supported instrument classes', () => {
-  expect(SAMPLE_CATALOG).toHaveLength(12);
-  expect(SAMPLE_CONCEPTS).toHaveLength(10);
+test('the national formats moved to the sample catalog without changing instrument classes', () => {
+  expect(SAMPLE_CATALOG).toHaveLength(15);
+  expect(SAMPLE_CONCEPTS).toHaveLength(7);
+  expect(SAMPLE_CATALOG.filter((c) => ['donation', 'reward', 'pre-sale'].includes(String(c.instrument))).map((c) => c.id)).toEqual([
+    'fixture-library-donation',
+    'fixture-makers-reward',
+    'fixture-lamp-pre-sale',
+  ]);
   expect(en.instruments.classes).toHaveLength(7);
   expect(en.nationalFunding.caveat).toContain('outside ECSPR');
   expect(en.nationalFunding.caveat).toContain('no money is collected');

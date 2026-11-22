@@ -245,6 +245,8 @@ export const en = {
       unclear: 'Unclear',
     } as Record<string, string>,
     allIndustries: 'All industries',
+    filterTypeAria: 'Filter by instrument or format type',
+    allTypes: 'All types',
     sortAria: 'Sort campaigns',
     sortDeadline: 'Deadline soonest',
     sortProgress: 'Most funded',
@@ -1810,6 +1812,126 @@ export const en = {
         documents: [],
         news: [],
       },
+      {
+        campaignId: 'fixture-library-donation',
+        issuer: 'Neighbourhood Library Association (sample issuer)',
+        country: 'PT',
+        category: 'Education and aviation training',
+        teaser:
+          'A neighbourhood library collecting donations for new books and reading sessions. A contribution without ownership, interest, repayment or financial return. Sample data - not a live offer',
+        instrumentClass: 'donation',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'None - donation without financial return (sample)',
+        term: 'No repayment term (sample)',
+        minInvestment: 'Any amount (sample)',
+        additionalInfo: [
+          {
+            label: 'Format',
+            value: 'Donation crowdfunding · Sample data - not a live offer',
+          },
+          {
+            label: 'Status',
+            value: 'Unsuccessful - investor refund completed',
+          },
+          {
+            label: 'Legal framing',
+            value: 'Portuguese national donation/reward crowdfunding regime (Lei 102/2015), outside ECSPR (sample framing)',
+          },
+          {
+            label: 'Operator requirement',
+            value: 'Legal entity or EIRL with prior notice to the DGE at least 30 days before starting activity (sample)',
+          },
+        ],
+        overview: [
+          'Sample data - not a live offer',
+          'A contribution without ownership, interest, repayment or financial return.',
+          'No tax deduction is promised.',
+          'All-or-nothing sample scenario: the goal was missed and contributions were returned.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-makers-reward',
+        issuer: 'Makers Workshop Collective (sample issuer)',
+        country: 'PT',
+        category: 'Industrial technology and manufacturing',
+        teaser:
+          'A community makerspace funding new tools; backers receive non-financial rewards such as workshop time. No financial return is offered. Sample data - not a live offer',
+        instrumentClass: 'reward',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'None - non-financial reward (sample)',
+        term: 'Reward delivery after funding (sample)',
+        minInvestment: 'Any amount (sample)',
+        additionalInfo: [
+          {
+            label: 'Format',
+            value: 'Reward crowdfunding · Sample data - not a live offer',
+          },
+          {
+            label: 'Status',
+            value: 'Successful - creator withdrawn',
+          },
+          {
+            label: 'Legal framing',
+            value: 'Portuguese national donation/reward crowdfunding regime (Lei 102/2015), outside ECSPR (sample framing)',
+          },
+          {
+            label: 'Operator requirement',
+            value: 'Legal entity or EIRL with prior notice to the DGE at least 30 days before starting activity (sample)',
+          },
+        ],
+        overview: [
+          'Sample data - not a live offer',
+          'Funding in exchange for a non-financial reward or the financed product or service. No financial return is offered.',
+          'Delivery, cancellation and consumer terms would be defined per offer.',
+          'Successful sample scenario: the goal was reached and the creator withdrew the funds.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-lamp-pre-sale',
+        issuer: 'Workshop Lamp Studio (sample issuer)',
+        country: 'PT',
+        category: 'Consumer products, fashion, apparel and retail',
+        teaser:
+          'Pre-sale of a handcrafted workshop lamp: backers order the financed product in advance. Structured as reward crowdfunding, not an investment or future-token right. Sample data - not a live offer',
+        instrumentClass: 'pre-sale',
+        instrumentSeniority: '',
+        instrumentOverlays: [],
+        interestRate: 'None - product pre-sale (sample)',
+        term: 'Delivery of the pre-sold product (sample)',
+        minInvestment: 'Any amount (sample)',
+        additionalInfo: [
+          {
+            label: 'Format',
+            value: 'Pre-sale (reward crowdfunding) · Sample data - not a live offer',
+          },
+          {
+            label: 'Status',
+            value: 'Unsuccessful - investor refund completed',
+          },
+          {
+            label: 'Legal framing',
+            value: 'Portuguese national donation/reward crowdfunding regime (Lei 102/2015), outside ECSPR (sample framing)',
+          },
+          {
+            label: 'Operator requirement',
+            value: 'Legal entity or EIRL with prior notice to the DGE at least 30 days before starting activity (sample)',
+          },
+        ],
+        overview: [
+          'Sample data - not a live offer',
+          'An advance order for the financed product or service, structured as reward crowdfunding, not an investment or future-token right. No financial return is offered.',
+          'Delivery, cancellation and consumer terms would be defined per offer.',
+          'All-or-nothing sample scenario: the goal was missed and contributions were returned.',
+        ],
+        documents: [],
+        news: [],
+      },
     ],
   },
   contentPages: {
@@ -2733,21 +2855,6 @@ export const en = {
           'An illustrative royalty claim linked to licensed use of intellectual property. Royalties are not profit; ownership of the underlying IP is not transferred. No return or repayment is guaranteed.',
       },
       {
-        label: 'Donation / social funding',
-        caveat:
-          'A contribution without ownership, interest, repayment or financial return. Real campaigns can be possible under the Portuguese national donation/reward crowdfunding regime, outside ECSPR. The platform operator must be a legal entity or EIRL and give prior notice to the DGE at least 30 days before starting activity. Educational example here: no money is collected and no tax deduction is promised. Delivery, cancellation and consumer terms would need separate definition.',
-      },
-      {
-        label: 'Reward funding',
-        caveat:
-          'Funding in exchange for a non-financial reward or the financed product or service. No financial return is offered. Real campaigns can be possible under the Portuguese national donation/reward crowdfunding regime, outside ECSPR. The platform operator must be a legal entity or EIRL and give prior notice to the DGE at least 30 days before starting activity. Educational example here: no money is collected and no tax deduction is promised. Delivery, cancellation and consumer terms would need separate definition.',
-      },
-      {
-        label: 'Pre-sale',
-        caveat:
-          'An advance order for the financed product or service, structured as reward crowdfunding, not an investment or future-token right. No financial return is offered. Real campaigns can be possible under the Portuguese national donation/reward crowdfunding regime, outside ECSPR. The platform operator must be a legal entity or EIRL and give prior notice to the DGE at least 30 days before starting activity. Educational example here: no money is collected and no tax deduction is promised. Delivery, cancellation and consumer terms would need separate definition.',
-      },
-      {
         label: 'Quotas in a Portuguese Lda',
         caveat:
           'An illustrative participation in a Portuguese private limited company (Lda). Rights and transfer restrictions depend on its articles and applicable law. Possible under ECSPR if the CMVM authorizes it; not confirmed in Portugal. Educational sample only, not a real offer. No quotas are issued, sold or transferred here.',
@@ -2797,6 +2904,8 @@ export const en = {
     ],
     caveat:
       'Real campaigns can be possible under the Portuguese national donation/reward crowdfunding regime, outside ECSPR. The platform operator must be a legal entity or EIRL and give prior notice to the DGE at least 30 days before starting activity. Educational example here: no money is collected and no tax deduction is promised. Delivery, cancellation and consumer terms would need separate definition.',
+    sampleNote:
+      'Sample of a supported format: donation, reward and pre-sale crowdfunding are covered by the Portuguese national crowdfunding regime (Lei 102/2015), outside ECSPR. A live offer requires the operator to be a legal entity or EIRL and to give prior notice to the DGE at least 30 days before starting activity. This page shows illustrative sample data: no money is collected and no tax deduction is promised. No financial return is offered.',
     ecsprNote: 'Real loan and S.A. share offers through crowdfunding require ECSPR authorization (CMVM in Portugal).',
   },
 };

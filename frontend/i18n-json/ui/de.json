@@ -232,6 +232,8 @@
       "unclear": "Unklar"
     },
     "allIndustries": "Alle Branchen",
+    "filterTypeAria": "Nach Instrumenten- oder Formattyp filtern",
+    "allTypes": "Alle Typen",
     "sortAria": "Kampagnen sortieren",
     "sortDeadline": "Nächste Frist",
     "sortProgress": "Am meisten finanziert",
@@ -1631,6 +1633,108 @@
         ],
         "documents": [],
         "news": []
+      },
+      {
+        "issuer": "Neighbourhood Library Association (Beispiel-Emittent)",
+        "category": "Bildung und Luftfahrtausbildung",
+        "teaser": "Eine Stadtteilbibliothek sammelt Spenden für neue Bücher und Lesestunden. Ein Beitrag ohne Eigentum, Zinsen, Rückzahlung oder finanzielle Rendite. Beispieldaten - kein echtes Angebot",
+        "interestRate": "Keine - Spende ohne finanzielle Rendite (Beispiel)",
+        "term": "Keine Rückzahlungsfrist (Beispiel)",
+        "minInvestment": "Beliebiger Betrag (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Format",
+            "value": "Spenden-Crowdfunding · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Nicht erfolgreich - Rückzahlung an Anleger abgeschlossen"
+          },
+          {
+            "label": "Rechtlicher Rahmen",
+            "value": "Portugiesisches nationales Spenden-/Prämien-Crowdfunding-Regime (Lei 102/2015), außerhalb der ECSPR (Beispielrahmen)"
+          },
+          {
+            "label": "Betreibervoraussetzung",
+            "value": "Juristische Person oder EIRL mit Vorabanzeige an die DGE mindestens 30 Tage vor Aufnahme der Tätigkeit (Beispiel)"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Ein Beitrag ohne Eigentum, Zinsen, Rückzahlung oder finanzielle Rendite.",
+          "Es wird keine Steuerbegünstigung versprochen.",
+          "Alles-oder-nichts-Beispielszenario: Das Ziel wurde verfehlt und die Beiträge wurden zurückerstattet."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Makers Workshop Collective (Beispiel-Emittent)",
+        "category": "Industrietechnik und Fertigung",
+        "teaser": "Ein Gemeinschafts-Makerspace finanziert neue Werkzeuge; Unterstützer erhalten nicht-finanzielle Prämien wie Werkstattzeit. Es wird keine finanzielle Rendite angeboten. Beispieldaten - kein echtes Angebot",
+        "interestRate": "Keine - nicht-finanzielle Prämie (Beispiel)",
+        "term": "Lieferung der Prämie nach der Finanzierung (Beispiel)",
+        "minInvestment": "Beliebiger Betrag (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Format",
+            "value": "Prämien-Crowdfunding · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Erfolgreich - Initiator hat Mittel abgerufen"
+          },
+          {
+            "label": "Rechtlicher Rahmen",
+            "value": "Portugiesisches nationales Spenden-/Prämien-Crowdfunding-Regime (Lei 102/2015), außerhalb der ECSPR (Beispielrahmen)"
+          },
+          {
+            "label": "Betreibervoraussetzung",
+            "value": "Juristische Person oder EIRL mit Vorabanzeige an die DGE mindestens 30 Tage vor Aufnahme der Tätigkeit (Beispiel)"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Finanzierung gegen eine nicht-finanzielle Prämie oder das finanzierte Produkt oder die Dienstleistung. Es wird keine finanzielle Rendite angeboten.",
+          "Lieferung, Widerruf und Verbraucherrechte würden je Angebot festgelegt.",
+          "Erfolgreiches Beispielszenario: Das Ziel wurde erreicht und der Ersteller hat die Mittel abgehoben."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Workshop Lamp Studio (Beispiel-Emittent)",
+        "category": "Konsumgüter, Mode, Bekleidung und Einzelhandel",
+        "teaser": "Vorverkauf einer handgefertigten Werkstattlampe: Unterstützer bestellen das finanzierte Produkt im Voraus. Als Prämien-Crowdfunding strukturiert, nicht als Investition oder Anspruch auf einen künftigen Token. Beispieldaten - kein echtes Angebot",
+        "interestRate": "Keine - Produkt-Vorverkauf (Beispiel)",
+        "term": "Lieferung des vorverkauften Produkts (Beispiel)",
+        "minInvestment": "Beliebiger Betrag (Beispiel)",
+        "additionalInfo": [
+          {
+            "label": "Format",
+            "value": "Vorverkauf (Prämien-Crowdfunding) · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Nicht erfolgreich - Rückzahlung an Anleger abgeschlossen"
+          },
+          {
+            "label": "Rechtlicher Rahmen",
+            "value": "Portugiesisches nationales Spenden-/Prämien-Crowdfunding-Regime (Lei 102/2015), außerhalb der ECSPR (Beispielrahmen)"
+          },
+          {
+            "label": "Betreibervoraussetzung",
+            "value": "Juristische Person oder EIRL mit Vorabanzeige an die DGE mindestens 30 Tage vor Aufnahme der Tätigkeit (Beispiel)"
+          }
+        ],
+        "overview": [
+          "Beispieldaten - kein echtes Angebot",
+          "Vorausbestellung des finanzierten Produkts oder der Dienstleistung, strukturiert als Prämien-Crowdfunding, nicht als Investition oder Anspruch auf einen künftigen Token. Es wird keine finanzielle Rendite angeboten.",
+          "Lieferung, Widerruf und Verbraucherrechte würden je Angebot festgelegt.",
+          "Alles-oder-nichts-Beispielszenario: Das Ziel wurde verfehlt und die Beiträge wurden zurückerstattet."
+        ],
+        "documents": [],
+        "news": []
       }
     ]
   },
@@ -2506,18 +2610,6 @@
         "caveat": "Beispiel eines Anspruchs auf Lizenzgebühren aus geistigem Eigentum. Lizenzgebühren sind kein Gewinn und übertragen kein geistiges Eigentum. Keine garantierte Rendite oder Rückzahlung."
       },
       {
-        "label": "Spende / soziale Finanzierung",
-        "caveat": "Beitrag ohne Eigentum, Zinsen, Rückzahlung oder finanzielle Rendite. Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden."
-      },
-      {
-        "label": "Finanzierung mit Gegenleistung",
-        "caveat": "Finanzierung gegen eine nichtfinanzielle Gegenleistung oder das finanzierte Produkt bzw. die Dienstleistung. Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden."
-      },
-      {
-        "label": "Vorverkauf",
-        "caveat": "Vorbestellung des finanzierten Produkts oder der Dienstleistung als Crowdfunding mit Gegenleistung, keine Investition und kein Anspruch auf einen künftigen Token. Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden."
-      },
-      {
         "label": "Anteile an einer portugiesischen Lda",
         "caveat": "Beispielhafte Beteiligung an einer portugiesischen Gesellschaft mit beschränkter Haftung (Lda). Rechte und Übertragungsbeschränkungen richten sich nach der Satzung und dem geltenden Recht. Unter ECSPR möglicherweise zulässig, wenn die CMVM dies genehmigt; in Portugal nicht bestätigt. Nur ein Lehrbeispiel, kein echtes Angebot. Hier werden keine Anteile ausgegeben, verkauft oder übertragen."
       },
@@ -2556,6 +2648,7 @@
       }
     ],
     "caveat": "Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden.",
+    "sampleNote": "Beispiel eines unterstützten Formats: Spenden-, Prämien- und Vorverkaufs-Crowdfunding fallen unter das portugiesische nationale Crowdfunding-Regime (Lei 102/2015), außerhalb der ECSPR. Ein echtes Angebot setzt voraus, dass der Betreiber eine juristische Person oder EIRL ist und dies der DGE mindestens 30 Tage vor Aufnahme der Tätigkeit vorab meldet. Diese Seite zeigt illustrative Beispieldaten: Es wird kein Geld eingesammelt und keine Steuerbegünstigung versprochen. Es wird keine finanzielle Rendite angeboten.",
     "ecsprNote": "Reale Kredit- und S.A.-Aktienangebote über Crowdfunding erfordern eine ECSPR-Zulassung (CMVM in Portugal)."
   }
 }

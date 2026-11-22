@@ -20,6 +20,7 @@ import CampaignPhoto from '../components/CampaignPhoto';
 import ContributionPreview from '../components/ContributionPreview';
 import ContributionTerms from '../components/ContributionTerms';
 import SampleLifecycle from '../components/SampleLifecycle';
+import { isNationalRegimeSample } from '../data/sampleCatalog';
 import { SampleConceptDetail } from '../components/SampleConcepts';
 import { sampleConceptIndex } from '../data/sampleConcepts';
 
@@ -84,6 +85,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
       </header>
 
       {market.fixtureMode && <SampleLifecycle campaignId={campaign.id} />}
+      {market.fixtureMode && isNationalRegimeSample(campaign.id) && <p className="sample-regime-note">{m.nationalFunding.sampleNote}</p>}
 
       <div className="campaign-columns">
         <div className="campaign-main">

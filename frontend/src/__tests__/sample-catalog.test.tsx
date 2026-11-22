@@ -53,12 +53,12 @@ const market: Market = {
   onToggleFixtures: vi.fn(),
 };
 
-test('twelve unique client-only fixtures cover all instrument families without treating structures as instruments', () => {
-  expect(FIXTURE_CAMPAIGNS).toHaveLength(12);
-  expect(new Set(FIXTURE_CAMPAIGNS.map((c) => c.id)).size).toBe(12);
+test('fifteen unique client-only fixtures cover all instrument families without treating structures as instruments', () => {
+  expect(FIXTURE_CAMPAIGNS).toHaveLength(15);
+  expect(new Set(FIXTURE_CAMPAIGNS.map((c) => c.id)).size).toBe(15);
   expect(FIXTURE_CAMPAIGNS.map((c) => c.id)).toEqual(SAMPLE_CATALOG.map((c) => c.id));
   expect(new Set(SAMPLE_CATALOG.map((c) => c.instrument))).toEqual(
-    new Set(['bond', 'loan', 'share', 'participation-certificate', 'substanzgenussrecht', 'limited-partnership']),
+    new Set(['bond', 'loan', 'share', 'participation-certificate', 'substanzgenussrecht', 'limited-partnership', 'donation', 'reward', 'pre-sale']),
   );
   expect(SAMPLE_CATALOG.find((c) => c.indirect)?.instrument).toBe('share');
   for (const instrument of ['loan', 'bond']) {
@@ -97,7 +97,11 @@ test('all actual campaign states and settlement flags have coherent examples wit
   expect(FIXTURE_CAMPAIGNS.some((c) => campaignStatus(c) === 'funded' && Number(c.config.deadline) > now && !c.withdrawn)).toBe(true);
   expect(FIXTURE_CAMPAIGNS.some((c) => campaignStatus(c) === 'funded' && Number(c.config.deadline) < now && !c.withdrawn)).toBe(true);
   expect(FIXTURE_CAMPAIGNS.some((c) => campaignStatus(c) === 'funded' && c.withdrawn && Number(c.config.deadline) < now)).toBe(true);
-  expect(SAMPLE_CATALOG.filter((s) => String(s.state) === 'refunded').map((s) => s.id)).toEqual(['fixture-meadow-partnership']);
+  expect(SAMPLE_CATALOG.filter((s) => String(s.state) === 'refunded').map((s) => s.id)).toEqual([
+    'fixture-meadow-partnership',
+    'fixture-library-donation',
+    'fixture-lamp-pre-sale',
+  ]);
   expect(en.sampleLifecycle.refunded).toBe('Unsuccessful - investor refund completed');
   expect(campaignStatus(FIXTURE_CAMPAIGNS.find((c) => c.id === 'fixture-meadow-partnership')!)).toBe('ended');
   expect(FIXTURE_CAMPAIGNS.every((c) => c.balance === null)).toBe(true); // No invented investor or zero-balance inference.

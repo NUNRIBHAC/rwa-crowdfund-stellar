@@ -12,7 +12,13 @@ export type StructureOverlay = Messages['instruments']['overlays'][number];
 export type LabelQualifier = Messages['instruments']['qualifiers'][number];
 
 export function instrumentLabel(m: Messages, id: string): string {
-  return m.instruments.classes.find((c) => c.id === id)?.label ?? id;
+  return (
+    m.instruments.classes.find((c) => c.id === id)?.label ??
+    // National-regime formats (donation, reward, pre-sale) are not financial
+    // instrument classes; their labels live with the national funding content.
+    m.nationalFunding.items.find((i) => i.id === id)?.title ??
+    id
+  );
 }
 
 export function seniorityLabel(m: Messages, state: SeniorityState): string {

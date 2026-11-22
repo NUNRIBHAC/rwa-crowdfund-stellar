@@ -42,13 +42,16 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-test('ten distinct concepts do not extend campaign fixtures, real profiles or executable instrument classes', () => {
-  expect(SAMPLE_CONCEPTS).toHaveLength(10);
-  expect(FIXTURE_CAMPAIGNS).toHaveLength(12);
+test('seven distinct concepts do not extend campaign fixtures, real profiles or executable instrument classes', () => {
+  expect(SAMPLE_CONCEPTS).toHaveLength(7);
+  expect(FIXTURE_CAMPAIGNS).toHaveLength(15);
   expect(new Set([...SAMPLE_CONCEPTS.map((c) => c.id), ...FIXTURE_CAMPAIGNS.map((c) => c.id)]).size).toBe(22);
-  expect(en.profiles.list).toHaveLength(12);
+  expect(en.profiles.list).toHaveLength(15);
   expect(en.instruments.classes).toHaveLength(7);
-  expect(SAMPLE_CONCEPTS.filter((c) => c.nonFinancial).map((c) => c.subtype)).toEqual(['donation', 'reward', 'pre-sale']);
+  expect(SAMPLE_CONCEPTS.filter((c) => c.nonFinancial).map((c) => c.subtype)).toEqual([]);
+  expect(SAMPLE_CONCEPTS.map((c) => c.subtype)).not.toContain('donation');
+  expect(SAMPLE_CONCEPTS.map((c) => c.subtype)).not.toContain('reward');
+  expect(SAMPLE_CONCEPTS.map((c) => c.subtype)).not.toContain('pre-sale');
   for (const concept of SAMPLE_CONCEPTS) {
     expect(concept).not.toHaveProperty('config');
     expect(concept).not.toHaveProperty('contractId');
@@ -62,7 +65,7 @@ test('ten distinct concepts do not extend campaign fixtures, real profiles or ex
 
 for (const [locale, messages] of Object.entries(locales)) {
   test(`${locale}: concepts have complete localized labels, caveats and the same sample disclaimer`, () => {
-    expect(messages.sampleConcepts.list).toHaveLength(10);
+    expect(messages.sampleConcepts.list).toHaveLength(7);
     for (const item of messages.sampleConcepts.list) {
       expect(item.label.trim()).not.toBe('');
       expect(item.caveat.length).toBeGreaterThan(30);
@@ -77,12 +80,12 @@ for (const [locale, messages] of Object.entries(locales)) {
         <SampleConceptsSection />
       </I18nProvider>,
     );
-    expect(screen.getAllByText(messages.sampleLifecycle.notice)).toHaveLength(10);
+    expect(screen.getAllByText(messages.sampleLifecycle.notice)).toHaveLength(7);
     for (const concept of SAMPLE_CONCEPTS)
       expect(screen.getAllByText(messages.sampleConcepts.unavailable + ': ' + messages.sampleConcepts.states[concept.sampleState])).toHaveLength(
         SAMPLE_CONCEPTS.filter((c) => c.sampleState === concept.sampleState).length,
       );
-    expect(screen.getAllByText(messages.sampleConcepts.nonFinancialNotice)).toHaveLength(3);
+    expect(screen.queryAllByText(messages.sampleConcepts.nonFinancialNotice)).toHaveLength(0);
     for (const concept of SAMPLE_CONCEPTS) {
       expect(screen.getByRole('link', { name: concept.name }).getAttribute('href')).toBe(`/campaigns/${concept.id}?fixtures=1`);
     }
@@ -125,8 +128,8 @@ test('sample-mode count includes concepts in a separate section, live data stays
     </I18nProvider>,
   );
   const concepts = screen.getByRole('region', { name: en.sampleConcepts.title });
-  expect(within(concepts).getAllByRole('article')).toHaveLength(10);
-  expect(container.querySelectorAll('.card')).toHaveLength(12);
+  expect(within(concepts).getAllByRole('article')).toHaveLength(7);
+  expect(container.querySelectorAll('.card')).toHaveLength(15);
   expect(screen.getByRole('status').textContent).toBe('22 campaigns shown');
 });
 
@@ -147,15 +150,18 @@ test('critical distinctions remain explicit and no positive financial guarantees
   expect(text[2]).toContain('not ownership');
   expect(text[3]).toContain('Revenue is not profit');
   expect(text[4]).toContain('Royalties are not profit');
-  expect(text[8]).toContain('not confirmed in Portugal');
-  for (const i of [5, 6, 7]) expect(text[i]).toContain('financial return');
+  expect(text[5]).toContain('not confirmed in Portugal');
+  expect(text[6]).toContain('not confirmed in Portugal');
 });
 
-test('all five concept scenarios remain without giving SAFE a refund right', () => {
-  for (const state of ['open', 'funded', 'unsuccessful', 'refunded', 'withdrawn'])
-    expect(SAMPLE_CONCEPTS.filter((c) => c.sampleState === state)).toHaveLength(2);
+test('concept scenarios remain after the national formats moved to the sample catalog', () => {
+  const count = (state: string) => SAMPLE_CONCEPTS.filter((c) => c.sampleState === state).length;
+  expect(count('open')).toBe(2);
+  expect(count('funded')).toBe(2);
+  expect(count('unsuccessful')).toBe(2);
+  expect(count('withdrawn')).toBe(1);
+  expect(count('refunded')).toBe(0);
   expect(SAMPLE_CONCEPTS.find((c) => c.subtype === 'safe')?.sampleState).toBe('open');
-  expect(SAMPLE_CONCEPTS.filter((c) => c.sampleState === 'refunded').map((c) => c.subtype)).toEqual(['donation', 'pre-sale']);
 });
 
 test('sample status filters include concept scenarios but real mode excludes every concept', () => {
@@ -168,10 +174,10 @@ test('sample status filters include concept scenarios but real mode excludes eve
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
   expect(screen.getByRole('status').textContent).toBe('8 campaigns shown');
   fireEvent.click(screen.getByRole('button', { name: en.invest.funded }));
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(4);
+  expect(document.querySelectorAll('[data-concept]')).toHaveLength(3);
   expect(screen.getByRole('status').textContent).toBe('7 campaigns shown');
   fireEvent.click(screen.getByRole('button', { name: en.invest.underfunded }));
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(4);
+  expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
   expect(screen.getByRole('status').textContent).toBe('7 campaigns shown');
 });
 
@@ -198,12 +204,14 @@ test('sample refund and withdrawal filters show exact three identities and count
   expect(screen.getByRole('button', { name: en.sampleConcepts.filterWithdrawal }).textContent).toBe('Withdrawal (3)');
   fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterRefund }));
   expect(screen.getByRole('status').textContent).toBe('3 campaigns shown');
-  expect([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent)).toEqual(['Meadow Partnership']);
-  expect([...container.querySelectorAll('[data-concept]')].map((a) => a.getAttribute('data-concept'))).toEqual(['concept-donation', 'concept-pre-sale']);
+  expect(new Set([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent))).toEqual(
+    new Set(['Meadow Partnership', 'Neighbourhood Library Donation', 'Workshop Lamp Pre-sale']),
+  );
+  expect([...container.querySelectorAll('[data-concept]')]).toHaveLength(0);
   fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterWithdrawal }));
   expect(screen.getByRole('status').textContent).toBe('3 campaigns shown');
-  expect([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent)).toEqual(['Orbit Circular Materials']);
-  expect([...container.querySelectorAll('[data-concept]')].map((a) => a.getAttribute('data-concept'))).toEqual(['concept-royalty', 'concept-reward']);
+  expect(new Set([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent))).toEqual(new Set(['Orbit Circular Materials', 'Makers Reward']));
+  expect([...container.querySelectorAll('[data-concept]')].map((a) => a.getAttribute('data-concept'))).toEqual(['concept-royalty']);
   rerender(
     <I18nProvider>
       <Investments market={{ ...market, fixtureMode: false, campaigns: [FIXTURE_CAMPAIGNS[0]] }} />
