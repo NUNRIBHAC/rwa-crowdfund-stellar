@@ -727,7 +727,6 @@
     "aboutProject": "Über dieses Projekt",
     "status": "Status",
     "statusText": "Testnet-Prototyp. Keine automatische Bereitstellung oder Umwandlung alter Guthaben. Bestehende klassische Intents und Guthaben bleiben erhalten, werden nicht gelöscht. Die separate Identitäts-/Bewertungsinfrastruktur bleibt nur simuliert.",
-    "legalPre": "Marktkontext: Die EU reguliert Crowdfunding nach der ECSPR; zugelassene Anbieter sind im",
     "tagline": "Reale Vermögenswerte. Geteilte Möglichkeiten."
   },
   "time": {
