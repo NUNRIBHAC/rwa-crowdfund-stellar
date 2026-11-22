@@ -728,7 +728,6 @@
     "status": "Statut",
     "statusText": "Prototype de testnet. Aucun déploiement automatique ni conversion de soldes hérités. Les intents et soldes classiques existants sont préservés, pas effacés. L'infrastructure séparée d'identité/valorisation reste uniquement simulée.",
     "legalPre": "Contexte de marché : l'UE régule le crowdfunding sous le régime ECSPR ; les prestataires agréés figurent dans le",
-    "legalLink": "registre de l'AEMF",
     "legalPost": ". Cette application n'est pas un prestataire de services de crowdfunding agréé et ne liste aucune offre réelle.",
     "tagline": "Des actifs réels. Des possibilités partagées."
   },
