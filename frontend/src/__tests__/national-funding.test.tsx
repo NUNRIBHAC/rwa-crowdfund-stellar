@@ -48,14 +48,14 @@ for (const [locale, m] of Object.entries(locales)) {
   });
 }
 test('the national formats moved to the sample catalog without changing instrument classes', () => {
-  expect(SAMPLE_CATALOG).toHaveLength(19);
+  expect(SAMPLE_CATALOG).toHaveLength(20);
   expect(SAMPLE_CONCEPTS).toHaveLength(7);
   expect(SAMPLE_CATALOG.filter((c) => ['donation', 'reward', 'pre-sale'].includes(String(c.instrument))).map((c) => c.id)).toEqual([
     'fixture-library-donation',
     'fixture-makers-reward',
     'fixture-lamp-pre-sale',
   ]);
-  expect(en.instruments.classes).toHaveLength(11);
+  expect(en.instruments.classes).toHaveLength(12);
   expect(en.nationalFunding.caveat).toContain('outside ECSPR');
   expect(en.nationalFunding.caveat).toContain('no money is collected');
   expect(en.nationalFunding.caveat).toContain('no tax deduction is promised');

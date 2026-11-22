@@ -928,6 +928,19 @@ export const ko: Messages = {
         risks: ['수익 부진기에는 이자가 낮은 수준으로 하락 가능', '상환은 무조건이지만 발행인의 채무불이행 가능', '만기까지 유동성이 낮은 것이 일반적'],
         suitableFor: '발행인 수익에 연동된 상승 여력이 있는 대출 익스포저를 원하고 채무불이행 위험을 감수하는 투자자.',
       },
+      {
+        id: 'debt-depositary-receipt',
+        label: '채무예탁증서(DR)',
+        subtypeOf: '',
+        note: 'MiFID II 양도가능증권 정의(제4조 제1항 제44호 (b))에는 부합하고 ECSPR 제10조 커스터디도 가능하지만, ECSPR상 모집은 프로젝트 소유자나 SPV가 발행하는 증권을 대상으로 하고 예탁증서는 커스터디언이 발행합니다. ESMA·CMVM의 확인이 없습니다. 입증되지 않음. 포르투갈에는 예탁증서에 관한 자체 국내 제도가 없으며, Decreto-Lei 372/91의 "certificado de depósito"는 은행 예금증서로 별개의 상품입니다.',
+        group: 'debt',
+        seniorityStates: ['unspecified'],
+        summary:
+          '커스터디언이 발행하여 발행인의 채권 또는 기타 증권화된 채무를 표창하는 증서입니다. 보유자는 기초채권에 대한 경제적 권리를 가지고, 증권 자체는 커스터디언이 보유합니다.',
+        opportunities: ['양도 가능한 증서로 채무 익스포저 확보', '분배금은 기초채권에 연동'],
+        risks: ['발행인 채무불이행 위험에 커스터디언 위험 추가', '양도권·정보청구권은 증서 조건에 따라 결정', '기초채권의 유동성이 낮을 수 있음'],
+        suitableFor: '보관 수반 증서를 통해 채무 익스포저를 원하고 채무불이행 위험과 보관 위험을 모두 감수하는 투자자.',
+      },
     ],
     overlays: [
       {
@@ -2110,6 +2123,47 @@ export const ko: Messages = {
           '이자는 발행인 수익에 따라 변동합니다. 기일도래분이 수익이 있을 때만 지급된다면 조건부 상품이 되어 더 이상 ECSPR 대출이 아닙니다.',
           '구체적 계약의 수익연동 금리는 CMVM 실무로 확인되지 않았습니다.',
           '전액 손실 가능. 대출은 만기까지 유동성이 낮은 것이 일반적입니다.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-mondego-debt-dr',
+        issuer: 'Mondego Wind S.A.(샘플 발행인)',
+        country: 'PT',
+        category: '에너지 및 공공 서비스',
+        teaser:
+          '포르투갈 풍력발전 사업자의 채권을 대상으로 하는 예탁증서 샘플 모집입니다. 기초채권은 커스터디언이 보유합니다. 이 페이지의 모든 조건은 샘플 데이터입니다.',
+        instrumentClass: 'debt-depositary-receipt',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: '분배금은 기초채권에 연동(샘플)',
+        term: '기초채권의 만기를 따름(샘플)',
+        minInvestment: '250 USDC 테스트넷(샘플)',
+        additionalInfo: [
+          {
+            label: '투자 상품',
+            value: '채권을 대상으로 하는 예탁증서(증권화된 채무, MiFID II 제4조 제1항 제44호 (b)). 샘플 데이터 - 실제 모집이 아님',
+          },
+          {
+            label: '기초자산',
+            value: 'Mondego Wind S.A. 채권(샘플)',
+          },
+          {
+            label: '보관',
+            value: '기초채권은 CRD 신용기관, MiFID II 투자회사 또는 이에 상응하는 발행인 등록 방식이 보유해야 합니다',
+          },
+          {
+            label: '포르투갈 제도',
+            value: '포르투갈에는 예탁증서에 관한 자체 국내 제도가 없으며, Decreto-Lei 372/91의 "certificado de depósito"는 은행 예금증서로 별개의 상품입니다',
+          },
+        ],
+        overview: [
+          '샘플 데이터 - 실제 모집이 아님',
+          '이 증서는 커스터디언이 보유하는 기초채권을 표창합니다. 보유자는 경제적 권리를 가지며, 양도는 증서 조건을 따릅니다.',
+          'ECSPR상 모집은 입증되지 않았습니다. 예탁증서는 프로젝트 소유자나 SPV가 아닌 커스터디언이 발행하며, ESMA와 CMVM 모두 확인하지 않았습니다.',
+          '보관에는 인가된 은행 또는 투자회사(CRD / MiFID II)나 이에 상응하는 발행인 등록 방식이 필요합니다.',
+          '발행인이 채무불이행하면 전액 손실 가능. 기초채권의 유동성이 낮을 수 있습니다.',
         ],
         documents: [],
         news: [],

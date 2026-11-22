@@ -905,6 +905,18 @@
           "Généralement illiquide jusqu'à l'échéance"
         ],
         "suitableFor": "Investisseurs qui veulent une exposition obligataire avec un potentiel lié aux revenus de l'émetteur et acceptent le risque de défaut."
+      },
+      {
+        "label": "Certificat de dépôt sur dette",
+        "note": "Correspond à la définition de titre négociable de MiFID II (art. 4(1)(44)(b)) et la conservation de l'art. 10 de l'ECSPR est faisable, mais le placement sous l'ECSPR couvre les titres émis par le porteur de projet ou un SPV, et un certificat de dépôt est émis par le dépositaire: sans confirmation de l'ESMA ou de la CMVM. Non prouvé. Le Portugal n'a pas de régime national propre aux certificats de dépôt; le \"certificado de depósito\" du Decreto-Lei 372/91 est un dépôt bancaire, un instrument différent.",
+        "summary": "Un certificat émis par un dépositaire représentant des obligations ou d'autres dettes titrisées de l'émetteur: le titulaire détient le droit économique sur les titres de dette sous-jacents pendant que le dépositaire détient les titres.",
+        "opportunities": ["Exposition à la dette sous forme de certificat négociable", "Les distributions suivent les titres de dette sous-jacents"],
+        "risks": [
+          "Ajoute un risque de dépositaire au risque de défaut de l'émetteur",
+          "Les droits de transfert et d'information dépendent des conditions du certificat",
+          "Les titres de dette sous-jacents peuvent être illiquides"
+        ],
+        "suitableFor": "Investisseurs qui veulent une exposition à la dette via un certificat conservé et acceptent le risque de défaut et le risque de conservation."
       }
     ],
     "overlays": [
@@ -1931,6 +1943,41 @@
           "L'intérêt varie avec les revenus de l'émetteur; si les montants dus n'étaient payables qu'en présence de revenus, l'instrument serait conditionnel et ne serait plus un prêt ECSPR.",
           "Un taux indexé sur les revenus dans un contrat concret n'est pas confirmé par la pratique de la CMVM.",
           "Perte totale possible; les prêts sont généralement illiquides jusqu'à l'échéance."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Mondego Wind S.A. (émetteur exemple)",
+        "category": "Énergie et services publics",
+        "teaser": "Offre exemple de certificats de dépôt sur obligations d'un exploitant éolien portugais, les obligations sous-jacentes étant détenues par un dépositaire. Toutes les conditions de cette page sont des données exemple.",
+        "interestRate": "Les distributions suivent les obligations sous-jacentes (exemple)",
+        "term": "Suit l'échéance des obligations sous-jacentes (exemple)",
+        "minInvestment": "250 USDC testnet (exemple)",
+        "additionalInfo": [
+          {
+            "label": "Produit d'investissement",
+            "value": "Certificat de dépôt sur obligations (dette titrisée, art. 4(1)(44)(b) de MiFID II). Données exemple - pas une offre réelle"
+          },
+          {
+            "label": "Sous-jacent",
+            "value": "Obligations de Mondego Wind S.A. (exemple)"
+          },
+          {
+            "label": "Conservation",
+            "value": "Les obligations sous-jacentes doivent être détenues par un établissement de crédit (CRD), une entreprise d'investissement (MiFID II) ou un régime équivalent de registre de l'émetteur"
+          },
+          {
+            "label": "Régime portugais",
+            "value": "Le Portugal n'a pas de régime national propre aux certificats de dépôt; le \"certificado de depósito\" du Decreto-Lei 372/91 est un dépôt bancaire, un instrument différent"
+          }
+        ],
+        "overview": [
+          "Données exemple - pas une offre réelle",
+          "Le certificat représente des obligations sous-jacentes détenues par un dépositaire; le titulaire détient le droit économique, et le transfert suit les conditions du certificat.",
+          "Le placement sous l'ECSPR n'est pas prouvé: un certificat de dépôt est émis par le dépositaire, non par le porteur de projet ou un SPV, et ni l'ESMA ni la CMVM ne l'ont confirmé.",
+          "La conservation exige une banque ou une entreprise d'investissement agréée (CRD / MiFID II) ou un régime équivalent de registre de l'émetteur.",
+          "Perte totale possible en cas de défaut de l'émetteur; les obligations sous-jacentes peuvent être illiquides."
         ],
         "documents": [],
         "news": []

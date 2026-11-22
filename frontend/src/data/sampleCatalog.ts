@@ -191,6 +191,16 @@ export const SAMPLE_CATALOG = [
     state: 'open',
     indirect: false,
   },
+  {
+    id: 'fixture-mondego-debt-dr',
+    name: 'Mondego Wind Debt Depositary Receipts',
+    industry: 'energy-utilities',
+    instrument: 'debt-depositary-receipt',
+    seniority: 'unspecified',
+    overlays: [],
+    state: 'open',
+    indirect: true,
+  },
 ] as const;
 
 export function sampleInstrument(campaignId: string): string | undefined {

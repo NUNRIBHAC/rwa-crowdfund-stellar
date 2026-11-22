@@ -1014,6 +1014,23 @@ export const es: Messages = {
         ],
         suitableFor: 'Inversores que quieren exposición a préstamos con revalorización ligada a los ingresos del emisor y aceptan el riesgo de impago.',
       },
+      {
+        id: 'debt-depositary-receipt',
+        label: 'Certificado de depósito sobre deuda',
+        subtypeOf: '',
+        note: 'Encaja en la definición de valor transmisible de MiFID II (art. 4(1)(44)(b)) y la custodia del art. 10 del ECSPR es viable, pero la colocación bajo el ECSPR cubre valores emitidos por el propietario del proyecto o un SPV, y un certificado de depósito lo emite el custodio: sin confirmación de ESMA ni de la CMVM. No probado. Portugal no tiene un régimen nacional propio para certificados de depósito; el "certificado de depósito" del Decreto-Lei 372/91 es un depósito bancario, un instrumento distinto.',
+        group: 'debt',
+        seniorityStates: ['unspecified'],
+        summary:
+          'Un certificado emitido por un custodio que representa bonos u otra deuda titulizada del emisor: el titular tiene el derecho económico sobre los valores de deuda subyacentes mientras el custodio mantiene los valores.',
+        opportunities: ['Exposición a deuda en un certificado transmisible', 'Las distribuciones reflejan los valores de deuda subyacentes'],
+        risks: [
+          'Añade riesgo de custodia al riesgo de impago del emisor',
+          'Los derechos de transmisión y de información dependen de las condiciones del certificado',
+          'Los valores de deuda subyacentes pueden ser ilíquidos',
+        ],
+        suitableFor: 'Inversores que quieren exposición a deuda a través de un certificado custodiado y aceptan el riesgo de impago y de custodia.',
+      },
     ],
     overlays: [
       {
@@ -2218,6 +2235,49 @@ export const es: Messages = {
           'El interés varía con los ingresos del emisor; si los importes vencidos solo se pagaran cuando existieran ingresos, el instrumento sería condicional y dejaría de ser un préstamo ECSPR.',
           'Un tipo vinculado a los ingresos en un contrato concreto no está confirmado por la práctica de la CMVM.',
           'Pérdida total posible; los préstamos suelen ser ilíquidos hasta el vencimiento.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-mondego-debt-dr',
+        issuer: 'Mondego Wind S.A. (emisor de ejemplo)',
+        country: 'PT',
+        category: 'Energía y servicios públicos',
+        teaser:
+          'Oferta de ejemplo de certificados de depósito sobre bonos de un operador eólico portugués, con los bonos subyacentes mantenidos por un custodio. Todas las condiciones de esta página son datos de ejemplo.',
+        instrumentClass: 'debt-depositary-receipt',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Las distribuciones reflejan los bonos subyacentes (ejemplo)',
+        term: 'Refleja el vencimiento de los bonos subyacentes (ejemplo)',
+        minInvestment: '250 USDC de testnet (ejemplo)',
+        additionalInfo: [
+          {
+            label: 'Producto de inversión',
+            value: 'Certificado de depósito sobre bonos (deuda titulizada, art. 4(1)(44)(b) de MiFID II). Datos de ejemplo - no es una oferta real',
+          },
+          {
+            label: 'Subyacente',
+            value: 'Bonos de Mondego Wind S.A. (ejemplo)',
+          },
+          {
+            label: 'Custodia',
+            value:
+              'Los bonos subyacentes deben estar mantenidos por una entidad de crédito (CRD), una empresa de inversión (MiFID II) o un régimen equivalente de registro del emisor',
+          },
+          {
+            label: 'Régimen portugués',
+            value:
+              'Portugal no tiene un régimen nacional propio para certificados de depósito; el "certificado de depósito" del Decreto-Lei 372/91 es un depósito bancario, un instrumento distinto',
+          },
+        ],
+        overview: [
+          'Datos de ejemplo - no es una oferta real',
+          'El certificado representa bonos subyacentes mantenidos por un custodio; el titular tiene el derecho económico, y la transmisión sigue las condiciones del certificado.',
+          'La colocación bajo el ECSPR no está probada: un certificado de depósito lo emite el custodio, no el propietario del proyecto ni un SPV, y ni ESMA ni la CMVM lo han confirmado.',
+          'La custodia exige un banco o una empresa de inversión autorizada (CRD / MiFID II) o un régimen equivalente de registro del emisor.',
+          'Pérdida total posible si el emisor incumple; los bonos subyacentes pueden ser ilíquidos.',
         ],
         documents: [],
         news: [],

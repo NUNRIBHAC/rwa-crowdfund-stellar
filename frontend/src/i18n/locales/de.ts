@@ -1004,6 +1004,23 @@ export const de: Messages = {
         ],
         suitableFor: 'Anleger, die Fremdkapitalengagement mit an Emittentenumsätze gekoppeltem Aufwärtspotenzial wünschen und das Ausfallrisiko akzeptieren.',
       },
+      {
+        id: 'debt-depositary-receipt',
+        label: 'Schuld-Hinterlegungsschein',
+        subtypeOf: '',
+        note: 'Entspricht der Definition übertragbarer Wertpapiere der MiFID II (Art. 4(1)(44)(b)), und die Verwahrung nach Art. 10 ECSPR ist machbar, aber das Placement unter der ECSPR umfasst Wertpapiere, die vom Projektträger oder einer SPV emittiert werden, und ein Hinterlegungsschein wird vom Verwahrer emittiert: keine ESMA- oder CMVM-Bestätigung. Nicht belegt. Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; das "certificado de depósito" des Decreto-Lei 372/91 ist eine Bankeinlage, ein anderes Instrument.',
+        group: 'debt',
+        seniorityStates: ['unspecified'],
+        summary:
+          'Ein von einem Verwahrer ausgegebener Schein, der Anleihen oder andere verbriefte Schulden des Emittenten verbrieft: Der Inhaber trägt den wirtschaftlichen Anspruch auf die zugrunde liegenden Schuldtitle, während der Verwahrer die Titel selbst hält.',
+        opportunities: ['Schuldengagement in einem übertragbaren Schein', 'Ausschüttungen folgen den zugrunde liegenden Schuldtiteln'],
+        risks: [
+          'Fügt zum Ausfallrisiko des Emittenten ein Verwahrerrisiko hinzu',
+          'Übertragungs- und Informationsrechte hängen von den Bedingungen des Scheins ab',
+          'Die zugrunde liegenden Schuldtitel können illiquide sein',
+        ],
+        suitableFor: 'Anleger, die Schuldengagement über einen verwahrten Schein wünschen und Ausfall- wie Verwahrrisiko akzeptieren.',
+      },
     ],
     overlays: [
       {
@@ -2207,6 +2224,49 @@ export const de: Messages = {
           'Der Zins variiert mit den Umsätzen des Emittenten; wären fällige Beträge nur bei vorhandenen Umsätzen zahlbar, wäre das Instrument bedingt und kein ECSPR-Darlehen mehr.',
           'Ein umsatzgebundener Zinssatz in einem konkreten Vertrag ist durch die CMVM-Praxis nicht bestätigt.',
           'Totalverlust möglich; Darlehen sind meist bis zur Fälligkeit illiquide.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-mondego-debt-dr',
+        issuer: 'Mondego Wind S.A. (Beispiel-Emittent)',
+        country: 'PT',
+        category: 'Energie und Versorgungswirtschaft',
+        teaser:
+          'Beispielangebot von Hinterlegungsscheinen über Anleihen eines portugiesischen Windparkbetreibers, wobei die zugrunde liegenden Anleihen von einem Verwahrer gehalten werden. Alle Konditionen auf dieser Seite sind Beispieldaten.',
+        instrumentClass: 'debt-depositary-receipt',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Ausschüttungen folgen den zugrunde liegenden Anleihen (Beispiel)',
+        term: 'Folgt der Laufzeit der zugrunde liegenden Anleihen (Beispiel)',
+        minInvestment: '250 Testnet-USDC (Beispiel)',
+        additionalInfo: [
+          {
+            label: 'Anlageprodukt',
+            value: 'Hinterlegungsschein über Anleihen (verbriefte Schulden, Art. 4(1)(44)(b) MiFID II). Beispieldaten - kein echtes Angebot',
+          },
+          {
+            label: 'Basiswert',
+            value: 'Anleihen der Mondego Wind S.A. (Beispiel)',
+          },
+          {
+            label: 'Verwahrung',
+            value:
+              'Die zugrunde liegenden Anleihen müssen von einem CRD-Kreditinstitut, einem MiFID-II-Wertpapierunternehmen oder einer gleichwertigen Emittentenregister-Lösung gehalten werden',
+          },
+          {
+            label: 'Portugiesisches Regime',
+            value:
+              'Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; das "certificado de depósito" des Decreto-Lei 372/91 ist eine Bankeinlage, ein anderes Instrument',
+          },
+        ],
+        overview: [
+          'Beispieldaten - kein echtes Angebot',
+          'Der Schein verbrieft zugrunde liegende Anleihen, die ein Verwahrer hält; der Inhaber trägt den wirtschaftlichen Anspruch, die Übertragung folgt den Bedingungen des Scheins.',
+          'Das Placement unter der ECSPR ist nicht belegt: Ein Hinterlegungsschein wird vom Verwahrer emittiert, nicht vom Projektträger oder einer SPV, und weder ESMA noch CMVM haben dies bestätigt.',
+          'Die Verwahrung erfordert eine zugelassene Bank oder ein Wertpapierunternehmen (CRD / MiFID II) oder eine gleichwertige Emittentenregister-Lösung.',
+          'Totalverlust bei Ausfall des Emittenten möglich; die zugrunde liegenden Anleihen können illiquide sein.',
         ],
         documents: [],
         news: [],

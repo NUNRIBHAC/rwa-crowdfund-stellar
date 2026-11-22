@@ -873,6 +873,18 @@
           "Usually illiquid until maturity"
         ],
         "suitableFor": "Investors who want loan exposure with upside linked to issuer revenues and accept default risk."
+      },
+      {
+        "label": "Debt depositary receipt",
+        "note": "Fits the MiFID II transferable-securities definition (Art. 4(1)(44)(b)) and ECSPR Art. 10 custody is feasible, but ECSPR placement covers securities issued by the project owner or an SPV, and a depositary receipt is issued by the depositary: no ESMA or CMVM confirmation. Not proven. Portugal has no dedicated domestic depositary-receipt regime; the \"certificado de depósito\" of Decreto-Lei 372/91 is a bank deposit certificate, a different instrument.",
+        "summary": "A certificate issued by a custodian representing bonds or other securitised debt of the issuer: the holder carries the economic claim on the underlying debt securities while the custodian holds the securities themselves.",
+        "opportunities": ["Debt exposure in a transferable certificate", "Distributions mirror the underlying debt securities"],
+        "risks": [
+          "Adds custodian risk on top of issuer default risk",
+          "Transfer and information rights depend on the certificate terms",
+          "Underlying debt securities may be illiquid"
+        ],
+        "suitableFor": "Investors who want debt exposure through a custodied certificate and accept both default and custody risk."
       }
     ],
     "overlays": [
@@ -1897,6 +1909,41 @@
           "Interest varies with the revenues of the issuer; if due amounts were payable only when revenue exists, the instrument would be conditional and no longer an ECSPR loan.",
           "A revenue-linked rate in a concrete contract is not confirmed by CMVM practice.",
           "Total loss possible; loans are usually illiquid until maturity."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Mondego Wind S.A. (sample issuer)",
+        "category": "Energy and utilities",
+        "teaser": "Sample offer of depositary receipts over bonds of a Portuguese wind farm operator, with the underlying bonds held by a custodian. All terms on this page are sample data.",
+        "interestRate": "Distributions mirror the underlying bonds (sample)",
+        "term": "Mirrors the underlying bond maturity (sample)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Depositary receipt over bonds (securitised debt, MiFID II Art. 4(1)(44)(b)). Sample data - not a live offer"
+          },
+          {
+            "label": "Underlying",
+            "value": "Bonds of Mondego Wind S.A. (sample)"
+          },
+          {
+            "label": "Custody",
+            "value": "Underlying bonds must be held by a CRD credit institution, a MiFID II investment firm, or an equivalent issuer-registry arrangement"
+          },
+          {
+            "label": "Portuguese regime",
+            "value": "Portugal has no dedicated domestic depositary-receipt regime; the \"certificado de depósito\" of Decreto-Lei 372/91 is a bank deposit certificate, a different instrument"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "The certificate represents underlying bonds held by a custodian; the holder carries the economic claim, and transfer follows the certificate terms.",
+          "ECSPR placement is not proven: a depositary receipt is issued by the depositary, not by the project owner or an SPV, and neither ESMA nor the CMVM has confirmed it.",
+          "Custody requires an authorized bank or investment firm (CRD / MiFID II) or an equivalent issuer-registry arrangement.",
+          "Total loss possible if the issuer defaults; underlying bonds may be illiquid."
         ],
         "documents": [],
         "news": []

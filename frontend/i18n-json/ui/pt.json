@@ -902,6 +902,18 @@
           "Normalmente ilíquido até à maturidade"
         ],
         "suitableFor": "Investidores que querem exposição a empréstimos com valorização ligada às receitas do emitente e aceitam o risco de incumprimento."
+      },
+      {
+        "label": "Certificado de depósito sobre dívida",
+        "note": "Enquadra-se na definição de valor mobiliário transmissível da MiFID II (art. 4.º/1/44(b)) e a custódia ao abrigo do art. 10.º do ECSPR é viável, mas a colocação ao abrigo do ECSPR cobre valores mobiliários emitidos pelo dono do projeto ou por um SPV, e um certificado de depósito é emitido pelo custodiante: sem confirmação da ESMA ou da CMVM. Não provado. Portugal não tem um regime nacional próprio para certificados de depósito; o \"certificado de depósito\" do Decreto-Lei 372/91 é um depósito bancário, um instrumento diferente.",
+        "summary": "Um certificado emitido por um custodiante que representa obrigações ou outra dívida titularizada do emitente: o titular detém o direito económico sobre os títulos de dívida subjacentes enquanto o custodiante detém os títulos.",
+        "opportunities": ["Exposição a dívida num certificado transmissível", "As distribuições acompanham os títulos de dívida subjacentes"],
+        "risks": [
+          "Acrescenta risco de custódia ao risco de incumprimento do emitente",
+          "Direitos de transmissão e de informação dependem das condições do certificado",
+          "Os títulos de dívida subjacentes podem ser ilíquidos"
+        ],
+        "suitableFor": "Investidores que querem exposição a dívida através de um certificado custodiado e aceitam o risco de incumprimento e de custódia."
       }
     ],
     "overlays": [
@@ -1928,6 +1940,41 @@
           "O juro varia com as receitas do emitente; se os montantes vencidos só fossem pagos quando existissem receitas, o instrumento seria condicional e deixaria de ser um empréstimo ECSPR.",
           "Uma taxa indexada às receitas num contrato concreto não está confirmada pela prática da CMVM.",
           "Perda total possível; os empréstimos são normalmente ilíquidos até à maturidade."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Mondego Wind S.A. (emitente de exemplo)",
+        "category": "Energia e serviços públicos",
+        "teaser": "Oferta de exemplo de certificados de depósito sobre obrigações de um operador eólico português, com as obrigações subjacentes detidas por um custodiante. Todas as condições desta página são dados de exemplo.",
+        "interestRate": "Distribuições acompanham as obrigações subjacentes (exemplo)",
+        "term": "Acompanha a maturidade das obrigações subjacentes (exemplo)",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Certificado de depósito sobre obrigações (dívida titularizada, art. 4.º/1/44(b) da MiFID II). Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Subjacente",
+            "value": "Obrigações da Mondego Wind S.A. (exemplo)"
+          },
+          {
+            "label": "Custódia",
+            "value": "As obrigações subjacentes têm de ser detidas por uma instituição de crédito (CRD), uma empresa de investimento (MiFID II) ou um regime equivalente de registo do emitente"
+          },
+          {
+            "label": "Regime português",
+            "value": "Portugal não tem um regime nacional próprio para certificados de depósito; o \"certificado de depósito\" do Decreto-Lei 372/91 é um depósito bancário, um instrumento diferente"
+          }
+        ],
+        "overview": [
+          "Dados de exemplo - não é uma oferta real",
+          "O certificado representa obrigações subjacentes detidas por um custodiante; o titular detém o direito económico, e a transmissão segue as condições do certificado.",
+          "A colocação ao abrigo do ECSPR não está provada: um certificado de depósito é emitido pelo custodiante, não pelo dono do projeto ou por um SPV, e nem a ESMA nem a CMVM o confirmaram.",
+          "A custódia exige um banco ou empresa de investimento autorizado (CRD / MiFID II) ou um regime equivalente de registo do emitente.",
+          "Perda total possível em caso de incumprimento do emitente; as obrigações subjacentes podem ser ilíquidas."
         ],
         "documents": [],
         "news": []

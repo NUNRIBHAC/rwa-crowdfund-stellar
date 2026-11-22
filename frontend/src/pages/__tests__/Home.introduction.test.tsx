@@ -40,7 +40,7 @@ test('home introduces funding, preserves the slogan and sends contribution actio
   expect(container.querySelectorAll('.hero-cubes .editorial-cube-motion')).toHaveLength(6);
   expect(container.querySelectorAll('.hero-cubes .editorial-cube-grounded')).toHaveLength(0);
   expect(container.querySelector('.home-contract .funding-illustration')).toBeTruthy();
-  expect(container.querySelectorAll('.home-funding-rules .instrument-card')).toHaveLength(11);
+  expect(container.querySelectorAll('.home-funding-rules .instrument-card')).toHaveLength(12);
   expect(container.querySelectorAll('.home-funding-rules details')).toHaveLength(4);
   const missed = screen.getByRole('button', { name: 'Goal missed' });
   fireEvent.click(missed);
