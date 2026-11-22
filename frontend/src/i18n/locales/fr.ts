@@ -48,6 +48,7 @@ export const fr: Messages = {
       'Centimes entiers, arrondis vers le bas. Intérêts simples ACT/365 sur le capital initial restant dû, sans capitalisation. Une garantie est une estimation, pas un recouvrement.',
     formula: 'Perte attendue = PD × LGD × EAD. Perte réalisée = capital en défaut moins les recouvrements simulés de capital. Intérêts et frais séparés.',
     legal: 'Les événements sont des décisions fictives explicites, pas une preuve de dette ni une qualification juridique déduite du temps écoulé.',
+    concentrationNote: 'Le scénario sévère suppose que les trois prêts dépendent du promoteur P1. Il modifie la concentration fictive, pas un prêt réel.',
   },
   demoJourney: {
     title: 'Parcours complet - simulation',

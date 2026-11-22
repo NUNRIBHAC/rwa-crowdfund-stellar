@@ -41,7 +41,8 @@
     "notice": "Nur synthetische Daten. EUR ist eine illustrative Einheit: kein echtes Geld, keine Wallet, Zahlungen oder Saldoänderungen.",
     "convention": "Ganze Cent, abgerundet. Einfache ACT/365-Zinsen auf den anfänglichen offenen Betrag, ohne Zinseszins. Sicherheiten sind Bewertungen, keine Rückzahlungen.",
     "formula": "Erwarteter Verlust = PD × LGD × EAD. Realisierter Verlust = ausgefallenes offenes Kapital minus simulierte Kapitalrückgewinnung. Zinsen und Kosten bleiben getrennt.",
-    "legal": "Ereignisse sind ausdrückliche fiktive Entscheidungen, kein Schuldnachweis und keine zeitgesteuerte rechtliche Einstufung."
+    "legal": "Ereignisse sind ausdrückliche fiktive Entscheidungen, kein Schuldnachweis und keine zeitgesteuerte rechtliche Einstufung.",
+    "concentrationNote": "Im schweren Szenario gehören alle drei Darlehen zum Projektträger P1. Dies ändert die fiktive Konzentration, kein echtes Darlehen."
   },
   "demoJourney": {
     "title": "Vollständiger Ablauf - Simulation",

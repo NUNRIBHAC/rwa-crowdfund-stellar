@@ -47,6 +47,7 @@ export const en = {
     formula:
       'Expected loss = PD × LGD × EAD. Realized loss = defaulted outstanding capital minus actual simulated capital recoveries. Interest and costs stay separate.',
     legal: 'Events are explicit fictional decisions, not legal debt evidence or classifications inferred from a timer.',
+    concentrationNote: 'The severe scenario assumes all three loans share promoter P1. This changes the fictional concentration, not any real loan.',
   },
   demoJourney: {
     title: 'Complete sandbox journey - simulation',

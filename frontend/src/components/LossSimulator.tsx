@@ -21,6 +21,7 @@ export default function LossSimulator() {
       <h2 id="loss-simulator-title">{t.title}</h2>
       <p className="risk-note">{t.notice}</p>
       <p>{t.convention}</p>
+      <p>{t.concentrationNote}</p>
       <label htmlFor="loss-scenario">{t.scenario}</label>{' '}
       <select id="loss-scenario" value={scenario} onChange={(e) => setScenario(e.target.value as ScenarioId)}>
         {(['base', 'adverse', 'severe'] as const).map((id) => (
@@ -126,7 +127,9 @@ export default function LossSimulator() {
             <div>
               <dt>PD / LGD</dt>
               <dd>
-                {bp(r.pdBps)} / {bp(10000n - r.recoveryBps)}
+                <bdi dir="ltr">
+                  {bp(r.pdBps)} / {bp(10000n - r.recoveryBps)}
+                </bdi>
               </dd>
             </div>
             <div>
@@ -134,6 +137,14 @@ export default function LossSimulator() {
               <dd>{r.days.toString()}</dd>
             </div>
           </dl>
+          <h4>{t.received}</h4>
+          <ul>
+            {r.loan.payments.map((s) => (
+              <li key={s.received}>
+                <time dateTime={s.received}>{s.received}</time>: {money(s.principal)}
+              </li>
+            ))}
+          </ul>
           <h4>{t.schedule}</h4>
           <ul>
             {r.loan.schedule.map((s) => (

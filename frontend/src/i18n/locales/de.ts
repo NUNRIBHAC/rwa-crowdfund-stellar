@@ -49,6 +49,7 @@ export const de: Messages = {
     formula:
       'Erwarteter Verlust = PD × LGD × EAD. Realisierter Verlust = ausgefallenes offenes Kapital minus simulierte Kapitalrückgewinnung. Zinsen und Kosten bleiben getrennt.',
     legal: 'Ereignisse sind ausdrückliche fiktive Entscheidungen, kein Schuldnachweis und keine zeitgesteuerte rechtliche Einstufung.',
+    concentrationNote: 'Im schweren Szenario gehören alle drei Darlehen zum Projektträger P1. Dies ändert die fiktive Konzentration, kein echtes Darlehen.',
   },
   demoJourney: {
     title: 'Vollständiger Ablauf - Simulation',

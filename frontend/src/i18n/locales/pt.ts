@@ -49,6 +49,7 @@ export const pt: Messages = {
     formula:
       'Perda esperada = PD × LGD × EAD. Perda realizada = capital em dívida incumprido menos recuperações de capital simuladas. Juros e custos separados.',
     legal: 'Eventos são decisões fictícias explícitas, não prova de dívida nem classificações jurídicas inferidas de um temporizador.',
+    concentrationNote: 'O cenário severo assume que os três empréstimos pertencem ao promotor P1. Muda a concentração fictícia, não qualquer empréstimo real.',
   },
   demoJourney: {
     title: 'Percurso completo - simulação',

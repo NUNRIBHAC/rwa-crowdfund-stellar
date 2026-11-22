@@ -22,6 +22,7 @@ test.each(LOCALES.map((l) => l.id))('all three synthetic scenarios have translat
   }
   expect(container.querySelectorAll('input')).toHaveLength(0);
   expect(container.querySelectorAll('form')).toHaveLength(0);
+  expect(container.querySelectorAll('bdi[dir="ltr"]')).toHaveLength(3);
   expect(container.querySelectorAll('a')).toHaveLength(0);
   expect(localStorage.getItem('loss-simulator')).toBeNull();
 });

@@ -41,7 +41,8 @@
     "notice": "Apenas dados sintéticos. EUR é uma unidade ilustrativa: sem dinheiro real, carteira, pagamentos ou alterações de saldo.",
     "convention": "Cêntimos inteiros, arredondados por defeito. Juros simples ACT/365 sobre o capital inicial em dívida, sem capitalização. Garantias são avaliações, não recuperações.",
     "formula": "Perda esperada = PD × LGD × EAD. Perda realizada = capital em dívida incumprido menos recuperações de capital simuladas. Juros e custos separados.",
-    "legal": "Eventos são decisões fictícias explícitas, não prova de dívida nem classificações jurídicas inferidas de um temporizador."
+    "legal": "Eventos são decisões fictícias explícitas, não prova de dívida nem classificações jurídicas inferidas de um temporizador.",
+    "concentrationNote": "O cenário severo assume que os três empréstimos pertencem ao promotor P1. Muda a concentração fictícia, não qualquer empréstimo real."
   },
   "demoJourney": {
     "title": "Percurso completo - simulação",

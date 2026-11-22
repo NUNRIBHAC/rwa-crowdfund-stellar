@@ -23,6 +23,19 @@ describe('isolated synthetic loss scenarios', () => {
     }
     expect(r.platformOperatingLoss).toBe(0n);
   });
+  it('varies fictional promoter concentration explicitly in the severe scenario', () => {
+    expect(Object.keys(simulate('base').promoters)).toEqual(['P1', 'P2']);
+    const severe = simulate('severe');
+    expect(Object.keys(severe.promoters)).toEqual(['P1']);
+    expect(severe.promoters.P1.ead).toBe(severe.totals.ead);
+    expect(SYNTHETIC_LOANS[2].promoter).toBe('P2');
+  });
+  it('reconciles every dated historical payment with the opening paid principal', () => {
+    for (const loan of SYNTHETIC_LOANS) {
+      expect(loan.payments.reduce((n, p) => n + p.principal, 0n)).toBe(loan.principalReceived);
+      expect(loan.payments.every((p) => /^2026-/.test(p.received))).toBe(true);
+    }
+  });
   it('does not turn elapsed days into a default classification', () => {
     const r = simulate('adverse').rows[2];
     expect(r.days).toBe(60n);
@@ -59,6 +72,45 @@ describe('isolated synthetic loss scenarios', () => {
       { id: 'A', amount: 0n },
       { id: 'B', amount: 1n },
     ]);
+  });
+  it('keeps each investor reconciled when fractional cent allocations differ', () => {
+    const loans = SYNTHETIC_LOANS.map((l) => ({
+      ...l,
+      principal: 4n,
+      principalReceived: 0n,
+      schedule: [{ due: '2026-12-01', principal: 4n }],
+      payments: [],
+      investors: [
+        { id: 'A', shareBps: 3333n },
+        { id: 'B', shareBps: 6667n },
+      ],
+    }));
+    for (const id of ['base', 'adverse', 'severe'] as const) {
+      for (const r of simulate(id, loans).rows) {
+        r.positions.forEach((p, i) => {
+          expect(r.recoveries[i].amount).toBeLessThanOrEqual(p.amount);
+          expect(r.investorLoss[i].amount + r.recoveries[i].amount).toBe(r.defaultEvent ? p.amount : 0n);
+        });
+        expect(r.investorLoss.reduce((n, p) => n + p.amount, 0n)).toBe(r.realized);
+      }
+    }
+  });
+  it('caps synthetic recovery by each allocated holding, including zero-share residual cases', () => {
+    const loans = SYNTHETIC_LOANS.map((l) => ({
+      ...l,
+      principal: 2n,
+      principalReceived: 0n,
+      schedule: [{ due: '2026-12-01', principal: 2n }],
+      payments: [],
+      investors: [
+        { id: 'A', shareBps: 5000n },
+        { id: 'B', shareBps: 5000n },
+        { id: 'C', shareBps: 0n },
+      ],
+    }));
+    for (const r of simulate('severe', loans).rows) {
+      r.positions.forEach((p, i) => expect(r.recoveries[i].amount + r.investorLoss[i].amount).toBe(p.amount));
+    }
   });
   it('rejects impossible amounts and ownership rather than silently repairing them', () => {
     expect(() => capitalLoss(1n, 2n)).toThrow();

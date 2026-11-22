@@ -48,6 +48,7 @@ export const es: Messages = {
       'Céntimos enteros, redondeo hacia abajo. Interés simple ACT/365 sobre el saldo inicial, sin capitalización. La garantía es una valoración, no un cobro.',
     formula: 'Pérdida esperada = PD × LGD × EAD. Pérdida realizada = capital impagado menos recuperaciones simuladas de capital. Intereses y costes separados.',
     legal: 'Los eventos son decisiones ficticias explícitas, no pruebas de deuda ni clasificaciones jurídicas por temporizador.',
+    concentrationNote: 'El escenario severo supone que los tres préstamos comparten el promotor P1. Cambia la concentración ficticia, no un préstamo real.',
   },
   demoJourney: {
     title: 'Recorrido completo - simulación',

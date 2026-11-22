@@ -47,6 +47,7 @@ export const zhCN: Messages = {
     convention: '整数分，向下取整。期初未偿本金采用 ACT/365 单利，不计复利。担保品估值不是回收款。',
     formula: '预期损失 = PD × LGD × EAD。已实现损失 = 违约未偿本金减模拟本金回收。利息与成本分开。',
     legal: '事件是明确的虚构决定，不是债务证明，也不依计时器推断法律分类。',
+    concentrationNote: '严重情景假设三笔贷款均属发起人 P1。仅改变虚构集中度，不变更真实贷款。',
   },
   demoJourney: {
     title: '完整流程 - 模拟',
