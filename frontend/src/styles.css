@@ -5066,6 +5066,7 @@ html.rtl-text .accordion summary > span:first-child {
   margin-block: 2rem;
 }
 .investors-resources .step-card {
+  row-gap: 1rem;
   display: flex;
   flex-direction: column;
   min-width: 0;
