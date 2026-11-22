@@ -725,7 +725,6 @@
     "glossary": "Glossar",
     "faq": "FAQ",
     "aboutProject": "Über dieses Projekt",
-    "statusText": "Testnet-Prototyp. Keine automatische Bereitstellung oder Umwandlung alter Guthaben. Bestehende klassische Intents und Guthaben bleiben erhalten, werden nicht gelöscht. Die separate Identitäts-/Bewertungsinfrastruktur bleibt nur simuliert.",
     "tagline": "Reale Vermögenswerte. Geteilte Möglichkeiten."
   },
   "time": {
