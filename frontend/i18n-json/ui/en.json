@@ -242,10 +242,10 @@
     "viewAria": "View mode",
     "grid": "Grid",
     "list": "List",
-    "noMatches": "No campaigns match the current search and filters.",
+    "noMatches": "No results match the current search and filters.",
     "resultCount": {
-      "one": "{n} campaign shown",
-      "other": "{n} campaigns shown"
+      "one": "{n} result shown",
+      "other": "{n} results shown"
     },
     "activeAria": "Open campaigns",
     "activeTitle": "Open campaigns",
@@ -884,7 +884,10 @@
         "label": "Warrant",
         "note": "Exercise creates new shares and dilutes existing holders. Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months.",
         "summary": "A transferable security giving the right, but not the obligation, to subscribe new shares of the issuer at a set price during a window or on a set date (transferable security under MiFID II Art. 4(1)(44)(c)).",
-        "opportunities": ["Upside if the share price rises above the exercise price", "Exercise price and window are fixed in advance"],
+        "opportunities": [
+          "Upside if the share price rises above the exercise price",
+          "Exercise price and window are fixed in advance"
+        ],
         "risks": [
           "Can expire worthless if the share price stays below the exercise price",
           "Exercise dilutes existing shareholders",
@@ -896,7 +899,10 @@
         "label": "Share depositary receipt",
         "note": "Fits the MiFID II transferable-securities definition (Art. 4(1)(44)(a)) and ECSPR Art. 10 custody is feasible, but ECSPR placement covers securities issued by the project owner or an SPV, and a depositary receipt is issued by the depositary: no ESMA or CMVM confirmation. Not proven. Portugal has no dedicated domestic depositary-receipt regime.",
         "summary": "A certificate issued by a custodian representing shares of the company (shares of an S.A. and depositary receipts over shares): the holder carries the economic claim on the underlying shares while the custodian holds the shares themselves.",
-        "opportunities": ["Share exposure in a transferable certificate", "Distributions mirror the underlying shares"],
+        "opportunities": [
+          "Share exposure in a transferable certificate",
+          "Distributions mirror the underlying shares"
+        ],
         "risks": [
           "Adds custodian risk on top of share risk",
           "Voting and transfer rights depend on the certificate terms",
@@ -908,15 +914,25 @@
         "label": "Commercial paper",
         "note": "Also a money-market instrument. No CMVM practice for retail crowdfunding of commercial paper was found: a retail offer needs a rating, a guarantee or a sufficient financial-autonomy ratio, a CMVM information note with a 10-business-day non-objection period, and a sponsor when the issuer has no statutory audit. ECSPR caps offers at 5,000,000 EUR per issuer over 12 months.",
         "summary": "Short-term debt under one year: a transferable security under DL 69/2004 (as amended by DL 102/2026) and MiFID II Art. 4(1)(44)(b), and at the same time a money-market instrument.",
-        "opportunities": ["Short maturity with a defined repayment date", "Yield for financing issuer working capital"],
-        "risks": ["Unsecured: loss if the issuer cannot repay or refinance", "Short maturity does not mean low risk", "Usually illiquid until maturity"],
+        "opportunities": [
+          "Short maturity with a defined repayment date",
+          "Yield for financing issuer working capital"
+        ],
+        "risks": [
+          "Unsecured: loss if the issuer cannot repay or refinance",
+          "Short maturity does not mean low risk",
+          "Usually illiquid until maturity"
+        ],
         "suitableFor": "Investors who want short-dated debt exposure and accept issuer default risk."
       },
       {
         "label": "Loan with revenue-linked remuneration",
         "note": "Variable interest linked to revenue fits ECSPR in the abstract (Delegated Regulation (EU) 2022/2118 Art. 8(3)(b) and 10(1)(g); Delegated Regulation (EU) 2022/2119 Annex). If capital or instalments already due were paid only when there is revenue, repayment would be conditional and it would no longer be an ECSPR loan. A revenue-linked rate in a concrete contract is not confirmed by CMVM practice.",
         "summary": "A loan with unconditional repayment of capital at an agreed term and a payment plan, whose interest varies with the revenues of the issuer.",
-        "opportunities": ["Interest rises when issuer revenues rise", "Repayment of capital does not depend on revenues"],
+        "opportunities": [
+          "Interest rises when issuer revenues rise",
+          "Repayment of capital does not depend on revenues"
+        ],
         "risks": [
           "Interest can fall to low levels in weak revenue periods",
           "Repayment is unconditional but the issuer can still default",
@@ -928,7 +944,10 @@
         "label": "Debt depositary receipt",
         "note": "Fits the MiFID II transferable-securities definition (Art. 4(1)(44)(b)) and ECSPR Art. 10 custody is feasible, but ECSPR placement covers securities issued by the project owner or an SPV, and a depositary receipt is issued by the depositary: no ESMA or CMVM confirmation. Not proven. Portugal has no dedicated domestic depositary-receipt regime; the \"certificado de depósito\" of Decreto-Lei 372/91 is a bank deposit certificate, a different instrument.",
         "summary": "A certificate issued by a custodian representing bonds or other securitised debt of the issuer: the holder carries the economic claim on the underlying debt securities while the custodian holds the securities themselves.",
-        "opportunities": ["Debt exposure in a transferable certificate", "Distributions mirror the underlying debt securities"],
+        "opportunities": [
+          "Debt exposure in a transferable certificate",
+          "Distributions mirror the underlying debt securities"
+        ],
         "risks": [
           "Adds custodian risk on top of issuer default risk",
           "Transfer and information rights depend on the certificate terms",
@@ -1244,9 +1263,9 @@
     "sampleMarker": "Sample data - not a live offer",
     "list": [
       {
-        "issuer": "Riverside Development Lda (sample issuer)",
-        "category": "Construction",
-        "teaser": "Refurbishment of a riverside apartment block in Lisbon, financed through a fixed-rate senior bond. All terms on this page are sample data.",
+        "issuer": "Reabilitação Ribeirinha (Sample data - not a live offer)",
+        "category": "Real estate",
+        "teaser": "Energy-efficient apartment refurbishment in Lisbon. Sample data - not a live offer",
         "interestRate": "6.5% p.a. (sample)",
         "term": "Until 2030-12-31 (sample)",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1297,6 +1316,7 @@
           }
         ],
         "overview": [
+          "Energy-efficient apartment refurbishment in Lisbon.",
           "This panel demonstrates how issuer-provided marketing content is separated from platform facts by the divider above.",
           "Sample data - not a live offer. The issuer description, team, business model and financials shown on a real platform would be issuer-supplied and clearly attributed."
         ],
@@ -1322,9 +1342,9 @@
         ]
       },
       {
-        "issuer": "Alentejo Solar Cooperative (sample issuer)",
+        "issuer": "Sol do Montado (Sample data - not a live offer)",
         "category": "Energy and utilities",
-        "teaser": "Community solar installation in the Alentejo, financed through a subordinated bond with a cash interest variant. All terms on this page are sample data.",
+        "teaser": "Shared solar generation in the Alentejo. Sample data - not a live offer",
         "interestRate": "7.0% p.a. cash (sample)",
         "term": "Until 2032-06-30 (sample)",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1371,6 +1391,7 @@
           }
         ],
         "overview": [
+          "Shared solar generation in the Alentejo.",
           "Sample data - not a live offer. A real campaign page would carry the issuer's own description of the cooperative, the site and the energy off-take."
         ],
         "documents": [
@@ -1385,9 +1406,9 @@
         ]
       },
       {
-        "issuer": "Porto Logistics Hub SA (sample issuer)",
-        "category": "Transportation and logistics",
-        "teaser": "Tokenization study for a logistics hub near Porto, structured as a convertible bond. This fixture shows a completed campaign. All terms are sample data.",
+        "issuer": "Cais Norte (Sample data - not a live offer)",
+        "category": "Transport and logistics",
+        "teaser": "Last-mile logistics hub in Porto. Sample data - not a live offer",
         "interestRate": "8.0% p.a. until conversion (sample)",
         "term": "Until 2031-12-31 (sample)",
         "minInvestment": "500 USDC testnet (sample)",
@@ -1434,6 +1455,7 @@
           }
         ],
         "overview": [
+          "Last-mile logistics hub in Porto.",
           "Sample data - not a live offer. Completed campaigns stay visible with their final funding status, like this one."
         ],
         "documents": [
@@ -1450,9 +1472,9 @@
         ]
       },
       {
-        "issuer": "Atlas Workshop Participation (Sample data - not a live offer)",
+        "issuer": "Metal Atlântico (Sample data - not a live offer)",
         "category": "Industrial technology and manufacturing",
-        "teaser": "A right (often securitised as a participation certificate) to a profit share and to repayment of the nominal value, without the full governance rights of a shareholder. Sample data - not a live offer",
+        "teaser": "Precision metalworking for local manufacturers. Sample data - not a live offer",
         "interestRate": "No fixed return (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1467,19 +1489,18 @@
           }
         ],
         "overview": [
+          "Precision metalworking for local manufacturers.",
           "Sample data - not a live offer",
           "A right (often securitised as a participation certificate) to a profit share and to repayment of the nominal value, without the full governance rights of a shareholder.",
           "Profit share depends entirely on issuer performance",
           "Can rank behind ordinary creditors",
           "Usually illiquid until maturity"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Cedar Asset Participation (Sample data - not a live offer)",
+        "issuer": "Pátio do Cedro (Sample data - not a live offer)",
         "category": "Real estate",
-        "teaser": "A participation right linked to the issuer's asset base (\"substance\") rather than only its annual profit. Structuring and eligible issuers vary by jurisdiction and statute. Sample data - not a live offer",
+        "teaser": "Renovation of urban homes and small shops. Sample data - not a live offer",
         "interestRate": "No fixed return (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1494,19 +1515,18 @@
           }
         ],
         "overview": [
+          "Renovation of urban homes and small shops.",
           "Sample data - not a live offer",
           "A participation right linked to the issuer's asset base (\"substance\") rather than only its annual profit. Structuring and eligible issuers vary by jurisdiction and statute.",
           "Legal form and investor protection differ strongly by jurisdiction",
           "May involve a trustee or vehicle between investor and issuer",
           "Usually illiquid"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Orbit Circular Materials (Sample data - not a live offer)",
+        "issuer": "Ciclo Mineral (Sample data - not a live offer)",
         "category": "Industrial technology and manufacturing",
-        "teaser": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing. Sample data - not a live offer",
+        "teaser": "Recovery and resale of construction materials. Sample data - not a live offer",
         "interestRate": "No fixed return (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1525,20 +1545,19 @@
           }
         ],
         "overview": [
+          "Recovery and resale of construction materials.",
           "Sample data - not a live offer",
           "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.",
           "No fixed repayment claim; dividends are not guaranteed",
           "Total loss possible",
           "Crowdfunding shares are usually not tradable on an exchange",
           "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Meadow Partnership (Sample data - not a live offer)",
+        "issuer": "Prado Vivo (Sample data - not a live offer)",
         "category": "Agriculture, environment and recycling",
-        "teaser": "An interest as limited partner in a partnership: profit and loss participation per the partnership agreement, liability limited to the contribution. Sample data - not a live offer",
+        "teaser": "Regenerative vegetables for neighbourhood markets. Sample data - not a live offer",
         "interestRate": "No fixed return (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1549,23 +1568,22 @@
           },
           {
             "label": "Status",
-            "value": "Unsuccessful - target not reached"
+            "value": "Unsuccessful - investor refund completed"
           }
         ],
         "overview": [
+          "Regenerative vegetables for neighbourhood markets.",
           "Sample data - not a live offer",
           "An interest as limited partner in a partnership: profit and loss participation per the partnership agreement, liability limited to the contribution.",
           "Loss participation can reduce or wipe out the interest",
           "Exit often restricted by the partnership agreement",
           "Tax and reporting duties can be more involved"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Harbor Equipment Loan (Sample data - not a live offer)",
+        "issuer": "Frio do Porto (Sample data - not a live offer)",
         "category": "Transport and logistics",
-        "teaser": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified. Sample data - not a live offer",
+        "teaser": "Chilled storage and local food distribution. Sample data - not a live offer",
         "interestRate": "5.0% p.a. (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1584,19 +1602,18 @@
           }
         ],
         "overview": [
+          "Chilled storage and local food distribution.",
           "Sample data - not a live offer",
           "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Grove Community Energy Loan (Sample data - not a live offer)",
+        "issuer": "Bosque Solar (Sample data - not a live offer)",
         "category": "Energy and utilities",
-        "teaser": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified. Sample data - not a live offer",
+        "teaser": "Shared rooftop solar for local businesses. Sample data - not a live offer",
         "interestRate": "5.0% p.a. (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1615,19 +1632,18 @@
           }
         ],
         "overview": [
+          "Shared rooftop solar for local businesses.",
           "Sample data - not a live offer",
           "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Mosaic Workshop Loan (Sample data - not a live offer)",
+        "issuer": "Mosaico Oficina (Sample data - not a live offer)",
         "category": "Industrial technology and manufacturing",
-        "teaser": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified. Sample data - not a live offer",
+        "teaser": "Made-to-measure furniture from a local workshop. Sample data - not a live offer",
         "interestRate": "5.0% p.a. (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1646,19 +1662,18 @@
           }
         ],
         "overview": [
+          "Made-to-measure furniture from a local workshop.",
           "Sample data - not a live offer",
           "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Beacon Mobility Bond (Sample data - not a live offer)",
+        "issuer": "Rota Clara (Sample data - not a live offer)",
         "category": "Transport and logistics",
-        "teaser": "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified. Sample data - not a live offer",
+        "teaser": "Electric minibuses for community transport. Sample data - not a live offer",
         "interestRate": "5.0% p.a. (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1677,19 +1692,18 @@
           }
         ],
         "overview": [
+          "Electric minibuses for community transport.",
           "Sample data - not a live offer",
           "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
           "Subordination raises loss severity in insolvency",
           "Still unsecured unless collateral is stated",
           "No participation in company growth"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Horizon Zero-Coupon Bond (Sample data - not a live offer)",
+        "issuer": "Linha Solar (Sample data - not a live offer)",
         "category": "Energy and utilities",
-        "teaser": "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified. Sample data - not a live offer",
+        "teaser": "Solar rooftops for commercial buildings. Sample data - not a live offer",
         "interestRate": "No periodic coupon (sample)",
         "term": "Illustrative terms only",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1712,20 +1726,19 @@
           }
         ],
         "overview": [
+          "Solar rooftops for commercial buildings.",
           "Sample data - not a live offer",
           "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
           "Subordination raises loss severity in insolvency",
           "Still unsecured unless collateral is stated",
           "No participation in company growth",
           "A coupon structure on a loan or bond, not a seniority: no periodic interest; the return comes from issuance below nominal value and repayment at par. Combines with a debt parent, never stands alone."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Neighbourhood Library Association (sample issuer)",
+        "issuer": "Livros à Esquina (Sample data - not a live offer)",
         "category": "Education and aviation training",
-        "teaser": "A neighbourhood library collecting donations for new books and reading sessions. A contribution without ownership, interest, repayment or financial return. Sample data - not a live offer",
+        "teaser": "Neighbourhood library and shared reading space. Sample data - not a live offer",
         "interestRate": "None - donation without financial return (sample)",
         "term": "No repayment term (sample)",
         "minInvestment": "Any amount (sample)",
@@ -1748,18 +1761,17 @@
           }
         ],
         "overview": [
+          "Neighbourhood library and shared reading space.",
           "Sample data - not a live offer",
           "A contribution without ownership, interest, repayment or financial return.",
           "No tax deduction is promised.",
           "All-or-nothing sample scenario: the goal was missed and contributions were returned."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Makers Workshop Collective (sample issuer)",
+        "issuer": "Barro Vivo (Sample data - not a live offer)",
         "category": "Industrial technology and manufacturing",
-        "teaser": "A community makerspace funding new tools; backers receive non-financial rewards such as workshop time. No financial return is offered. Sample data - not a live offer",
+        "teaser": "A community kiln for local ceramic makers. Sample data - not a live offer",
         "interestRate": "None - non-financial reward (sample)",
         "term": "Reward delivery after funding (sample)",
         "minInvestment": "Any amount (sample)",
@@ -1782,18 +1794,17 @@
           }
         ],
         "overview": [
+          "A community kiln for local ceramic makers.",
           "Sample data - not a live offer",
           "Funding in exchange for a non-financial reward or the financed product or service. No financial return is offered.",
           "Delivery, cancellation and consumer terms would be defined per offer.",
           "Successful sample scenario: the goal was reached and the creator withdrew the funds."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Workshop Lamp Studio (sample issuer)",
+        "issuer": "Luz de Oficina (Sample data - not a live offer)",
         "category": "Consumer products, fashion, apparel and retail",
-        "teaser": "Pre-sale of a handcrafted workshop lamp: backers order the financed product in advance. Structured as reward crowdfunding, not an investment or future-token right. Sample data - not a live offer",
+        "teaser": "Handmade lamps from a small design workshop. Sample data - not a live offer",
         "interestRate": "None - product pre-sale (sample)",
         "term": "Delivery of the pre-sold product (sample)",
         "minInvestment": "Any amount (sample)",
@@ -1816,18 +1827,17 @@
           }
         ],
         "overview": [
+          "Handmade lamps from a small design workshop.",
           "Sample data - not a live offer",
           "An advance order for the financed product or service, structured as reward crowdfunding, not an investment or future-token right. No financial return is offered.",
           "Delivery, cancellation and consumer terms would be defined per offer.",
           "All-or-nothing sample scenario: the goal was missed and contributions were returned."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Atlas Mobility S.A. (sample issuer)",
+        "issuer": "Pedal Leve (Sample data - not a live offer)",
         "category": "E-bikes and light mobility",
-        "teaser": "Sample offer of warrants over new shares of a Portuguese light-mobility operator. All terms on this page are sample data.",
+        "teaser": "Assembly of cargo bicycles for urban deliveries. Sample data - not a live offer",
         "interestRate": "No coupon - upside through exercise only (sample)",
         "term": "Exercise window until 2029-06-30 (sample)",
         "minInvestment": "100 USDC testnet (sample)",
@@ -1838,7 +1848,7 @@
           },
           {
             "label": "Exercise price",
-            "value": "4.20 per new share (sample)"
+            "value": "Open - below target"
           },
           {
             "label": "Exercise and dilution",
@@ -1850,19 +1860,18 @@
           }
         ],
         "overview": [
+          "Assembly of cargo bicycles for urban deliveries.",
           "Sample data - not a live offer",
           "A warrant gives the right, not the obligation, to subscribe new shares at the exercise price during the exercise window.",
           "If the share price never exceeds the exercise price, the warrant can expire worthless; total loss of the amount paid is possible.",
           "Exercise issues new shares and dilutes existing shareholders.",
           "Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Douro Textiles S.A. (sample issuer)",
+        "issuer": "Fio do Douro (Sample data - not a live offer)",
         "category": "Industrial technology and manufacturing",
-        "teaser": "Sample offer of depositary receipts over shares of a Portuguese textile exporter, with the underlying shares held by a custodian. All terms on this page are sample data.",
+        "teaser": "Circular weaving using recovered textile fibres. Sample data - not a live offer",
         "interestRate": "Distributions mirror the underlying shares (sample)",
         "term": "No fixed maturity (sample)",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1873,7 +1882,7 @@
           },
           {
             "label": "Underlying",
-            "value": "Ordinary shares of Douro Textiles S.A. (sample)"
+            "value": "Funded - deadline not reached"
           },
           {
             "label": "Custody",
@@ -1885,19 +1894,18 @@
           }
         ],
         "overview": [
+          "Circular weaving using recovered textile fibres.",
           "Sample data - not a live offer",
           "The certificate represents underlying shares held by a custodian; the holder carries the economic claim, voting and transfer follow the certificate terms.",
           "Custody requires an authorized bank or investment firm (CRD / MiFID II) or an equivalent issuer-registry arrangement.",
           "Portugal has no dedicated domestic depositary-receipt regime; this sample does not establish one.",
           "Total loss possible; underlying shares may be illiquid."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Tejo Packaging Lda (sample issuer)",
+        "issuer": "Folha Nova (Sample data - not a live offer)",
         "category": "Consumer products, fashion, apparel and retail",
-        "teaser": "Sample offer of nine-month commercial paper issued by a Portuguese packaging supplier. All terms on this page are sample data.",
+        "teaser": "Fibre-based packaging for local producers. Sample data - not a live offer",
         "interestRate": "4.1% p.a. implied yield (sample)",
         "term": "9 months (sample)",
         "minInvestment": "500 USDC testnet (sample)",
@@ -1908,7 +1916,7 @@
           },
           {
             "label": "Retail conditions",
-            "value": "Rating, guarantee or sufficient financial-autonomy ratio required (sample note)"
+            "value": "Open - below target"
           },
           {
             "label": "CMVM process",
@@ -1920,19 +1928,18 @@
           }
         ],
         "overview": [
+          "Fibre-based packaging for local producers.",
           "Sample data - not a live offer",
           "Short-term unsecured debt under one year, transferable as a security and treated as a money-market instrument.",
           "Unsecured: if the issuer cannot repay or refinance at maturity, investors can lose the full amount.",
           "No CMVM practice for retail crowdfunding of commercial paper was found; the retail conditions listed are required before any real offer.",
           "Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Costa Restaurants Lda (sample issuer)",
+        "issuer": "Mesa da Costa (Sample data - not a live offer)",
         "category": "Restaurants and gastronomy",
-        "teaser": "Sample offer of a loan to a Portuguese restaurant group whose interest varies with revenues, with unconditional capital repayment. All terms on this page are sample data.",
+        "teaser": "Seasonal cooking in a neighbourhood restaurant. Sample data - not a live offer",
         "interestRate": "Variable, linked to revenues (sample)",
         "term": "48 months (sample)",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1943,7 +1950,7 @@
           },
           {
             "label": "Capital repayment",
-            "value": "Unconditional, at the agreed term and payment plan - due amounts are payable whether or not there is revenue (sample terms)"
+            "value": "Open - below target"
           },
           {
             "label": "Interest",
@@ -1955,19 +1962,18 @@
           }
         ],
         "overview": [
+          "Seasonal cooking in a neighbourhood restaurant.",
           "Sample data - not a live offer",
           "A loan: capital repayment is unconditional, with an agreed term and payment plan.",
           "Interest varies with the revenues of the issuer; if due amounts were payable only when revenue exists, the instrument would be conditional and no longer an ECSPR loan.",
           "A revenue-linked rate in a concrete contract is not confirmed by CMVM practice.",
           "Total loss possible; loans are usually illiquid until maturity."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Mondego Wind S.A. (sample issuer)",
+        "issuer": "Vento do Mondego (Sample data - not a live offer)",
         "category": "Energy and utilities",
-        "teaser": "Sample offer of depositary receipts over bonds of a Portuguese wind farm operator, with the underlying bonds held by a custodian. All terms on this page are sample data.",
+        "teaser": "Local wind generation for a shared energy project. Sample data - not a live offer",
         "interestRate": "Distributions mirror the underlying bonds (sample)",
         "term": "Mirrors the underlying bond maturity (sample)",
         "minInvestment": "250 USDC testnet (sample)",
@@ -1978,7 +1984,7 @@
           },
           {
             "label": "Underlying",
-            "value": "Bonds of Mondego Wind S.A. (sample)"
+            "value": "Open - below target"
           },
           {
             "label": "Custody",
@@ -1990,14 +1996,737 @@
           }
         ],
         "overview": [
+          "Local wind generation for a shared energy project.",
           "Sample data - not a live offer",
           "The certificate represents underlying bonds held by a custodian; the holder carries the economic claim, and transfer follows the certificate terms.",
           "ECSPR placement is not proven: a depositary receipt is issued by the depositary, not by the project owner or an SPV, and neither ESMA nor the CMVM has confirmed it.",
           "Custody requires an authorized bank or investment firm (CRD / MiFID II) or an equivalent issuer-registry arrangement.",
           "Total loss possible if the issuer defaults; underlying bonds may be illiquid."
+        ]
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Senior (non-subordinated)"
+          }
         ],
-        "documents": [],
-        "news": []
+        "category": "Agriculture, environment and recycling",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Raiz Vertical (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Microgreens grown for local kitchens.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Microgreens grown for local kitchens. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Agriculture, environment and recycling",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Tronco Vivo (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Gourmet mushroom cultivation on a small scale.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Gourmet mushroom cultivation on a small scale. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Senior (non-subordinated)"
+          }
+        ],
+        "category": "Food and beverage products",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Massa Lenta (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Long-fermentation bread for the neighbourhood.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Long-fermentation bread for the neighbourhood. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Consumer products, fashion, apparel and retail",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Terra de Forno (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Handmade functional pottery for everyday use.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Handmade functional pottery for everyday use. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Share · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Indirect participation",
+            "value": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing."
+          }
+        ],
+        "category": "Agriculture, environment and recycling",
+        "interestRate": "No fixed return (sample)",
+        "issuer": "Mar em Terra (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Edible seaweed cultivation for food producers.",
+          "Sample data - not a live offer",
+          "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.",
+          "No fixed repayment claim; dividends are not guaranteed",
+          "Total loss possible",
+          "Crowdfunding shares are usually not tradable on an exchange",
+          "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
+        ],
+        "teaser": "Edible seaweed cultivation for food producers. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Bond · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Bond",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Industrial technology and manufacturing",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Água de Volta (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Reuse of water from industrial processes.",
+          "Sample data - not a live offer",
+          "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
+          "Subordination raises loss severity in insolvency",
+          "Still unsecured unless collateral is stated",
+          "No participation in company growth"
+        ],
+        "teaser": "Reuse of water from industrial processes. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Senior (non-subordinated)"
+          }
+        ],
+        "category": "Health, wellness and medtech",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Passo Certo (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Made-to-measure orthopaedic devices.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Made-to-measure orthopaedic devices. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Consumer products, fashion, apparel and retail",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Lente Circular (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Repair and reuse of optical equipment.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Repair and reuse of optical equipment. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Senior (non-subordinated)"
+          }
+        ],
+        "category": "Food and beverage products",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Polpa Fresca (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Processing local fruit into pulp and juice.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Processing local fruit into pulp and juice. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Industrial technology and manufacturing",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Som de Madeira (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Handcrafted string instruments and repairs.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Handcrafted string instruments and repairs. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Share · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Indirect participation",
+            "value": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing."
+          }
+        ],
+        "category": "Agriculture, environment and recycling",
+        "interestRate": "No fixed return (sample)",
+        "issuer": "Olho do Mar (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Water-quality sensors for aquaculture.",
+          "Sample data - not a live offer",
+          "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.",
+          "No fixed repayment claim; dividends are not guaranteed",
+          "Total loss possible",
+          "Crowdfunding shares are usually not tradable on an exchange",
+          "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
+        ],
+        "teaser": "Water-quality sensors for aquaculture. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Building products and prefab housing",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Traço Recuperado (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Restoration of architectural tiles and mosaics.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Restoration of architectural tiles and mosaics. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Agriculture, environment and recycling",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Solo de Novo (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Neighbourhood composting of organic waste.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Neighbourhood composting of organic waste. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Senior (non-subordinated)"
+          }
+        ],
+        "category": "Food and beverage products",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Torra de Bairro (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Specialty coffee roasting for local cafés.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Specialty coffee roasting for local cafés. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Share · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Indirect participation",
+            "value": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing."
+          }
+        ],
+        "category": "Education and aviation training",
+        "interestRate": "No fixed return (sample)",
+        "issuer": "Oficina Curiosa (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Hands-on science kits for learning by doing.",
+          "Sample data - not a live offer",
+          "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.",
+          "No fixed repayment claim; dividends are not guaranteed",
+          "Total loss possible",
+          "Crowdfunding shares are usually not tradable on an exchange",
+          "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
+        ],
+        "teaser": "Hands-on science kits for learning by doing. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Industrial technology and manufacturing",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Letra Viva (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Letterpress printing in a local workshop.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Letterpress printing in a local workshop. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Subordinated (ranks behind senior creditors in insolvency)"
+          }
+        ],
+        "category": "Building products and prefab housing",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Lã da Serra (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Insulation made from natural sheep's wool.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Insulation made from natural sheep's wool. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Share · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Indirect participation",
+            "value": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing."
+          }
+        ],
+        "category": "Information Technology, software and digital platforms",
+        "interestRate": "No fixed return (sample)",
+        "issuer": "Rota Digital (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Route-planning software for local deliveries.",
+          "Sample data - not a live offer",
+          "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.",
+          "No fixed repayment claim; dividends are not guaranteed",
+          "Total loss possible",
+          "Crowdfunding shares are usually not tradable on an exchange",
+          "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
+        ],
+        "teaser": "Route-planning software for local deliveries. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Bond · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Bond",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Energy and utilities",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Segundo Ciclo (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Battery diagnostics and second-life applications.",
+          "Sample data - not a live offer",
+          "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
+          "Subordination raises loss severity in insolvency",
+          "Still unsecured unless collateral is stated",
+          "No participation in company growth"
+        ],
+        "teaser": "Battery diagnostics and second-life applications. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Senior (non-subordinated)"
+          }
+        ],
+        "category": "Food and beverage products",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Lagar Novo (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Olive-oil production for small local growers.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Olive-oil production for small local growers. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Agriculture, environment and recycling",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Colmeia Viva (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Local honey and crop-pollination services.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Local honey and crop-pollination services. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Senior (non-subordinated)"
+          }
+        ],
+        "category": "Consumer products, fashion, apparel and retail",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Pata Serena (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Small-batch pet food made for local households.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Small-batch pet food made for local households. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Loan",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Hotels, hospitality and tourism",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Rotas Abertas (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Accessible local tours and small-group visits.",
+          "Sample data - not a live offer",
+          "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
+        "teaser": "Accessible local tours and small-group visits. Sample data - not a live offer",
+        "term": "Illustrative terms only"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Bond · Sample data - not a live offer"
+          },
+          {
+            "label": "Status",
+            "value": "Open - below target"
+          },
+          {
+            "label": "Bond",
+            "value": "Seniority unspecified in the terms"
+          }
+        ],
+        "category": "Building products and prefab housing",
+        "interestRate": "5.0% p.a. (sample)",
+        "issuer": "Casa em Peças (Sample data - not a live offer)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "overview": [
+          "Modular timber buildings assembled in sections.",
+          "Sample data - not a live offer",
+          "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
+          "Subordination raises loss severity in insolvency",
+          "Still unsecured unless collateral is stated",
+          "No participation in company growth"
+        ],
+        "teaser": "Modular timber buildings assembled in sections. Sample data - not a live offer",
+        "term": "Illustrative terms only"
       }
     ]
   },
