@@ -815,16 +815,6 @@ section[id],
 }
 
 /* Hero unavailable strip */
-.hero-unavailable {
-  margin-top: 12px;
-  background: #fef3f2;
-  border: 1px solid #fecdca;
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: var(--red);
-  font-size: 0.8125rem;
-  max-width: 760px;
-}
 
 /* Card details */
 .card-details {

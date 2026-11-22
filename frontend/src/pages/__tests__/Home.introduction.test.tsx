@@ -50,3 +50,28 @@ test('home introduces funding, preserves the slogan and sends contribution actio
   expect(headings).toEqual(['Latest campaigns', 'How funding works', 'Funding rules and limitations']);
   expect(container.querySelectorAll('.funding-illustration .fund-grid-tile')).toHaveLength(100);
 });
+
+test('the removed unavailable callout is absent without deleting the remaining funding details', () => {
+  const market: Market = {
+    campaigns: [],
+    loaded: true,
+    fixtureMode: false,
+    actor: '',
+    busy: false,
+    amounts: {},
+    amountErrors: {},
+    prepareErrors: {},
+    onAmount: () => {},
+    onPrepare: () => {},
+    onRefresh: () => {},
+    onToggleFixtures: () => {},
+  };
+  const { container } = render(
+    <I18nProvider>
+      <Home market={market} />
+    </I18nProvider>,
+  );
+  expect(container.querySelector('.hero-unavailable')).toBeNull();
+  expect(container.textContent).not.toContain('Not available in this prototype:');
+  expect(container.querySelectorAll('.home-funding-rules details')).toHaveLength(4);
+});

@@ -204,8 +204,6 @@ export const pt: Messages = {
     noteSample:
       'Cenários fictícios com contratos testnet separados. Valores ilustrativos, não o estado on-chain. Sem auditoria e sem preparação para produção.',
     noteUnknown: 'Não auditado, não pronto para produção.',
-    unavailable:
-      'Não disponível neste protótipo: registo com identidade/KYC, negociação em mercado secundário, tokens de ativos ou de recibos transferíveis, pagamentos em moeda fiduciária, ofertas de investimento reais. Os registos de contribuição são intransmissíveis - isto é crowdfunding, não uma bolsa de investimento.',
     fundingBlockAria: 'Ilustração: pequenos blocos púrpura deslizam um a um e preenchem o contorno de um ativo partilhado, token a token',
   },
   emptyState: {

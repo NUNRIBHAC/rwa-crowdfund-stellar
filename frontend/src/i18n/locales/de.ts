@@ -204,8 +204,6 @@ export const de: Messages = {
       'Jede Kampagne unten ist ein echter Soroban-Vertrag im Stellar-Testnet. Nicht geprüft, nicht produktionsreif. Auf einem kostenlosen Tarif gehostet: Die erste Anfrage nach Inaktivität kann bis zu einer Minute dauern, während die Instanz aufwacht.',
     noteSample: 'Fiktive Szenarien mit separaten Testnet-Verträgen. Beispielzahlen, kein On-Chain-Zustand. Nicht geprüft, nicht produktionsreif.',
     noteUnknown: 'Nicht geprüft, nicht produktionsreif.',
-    unavailable:
-      'In diesem Prototyp nicht verfügbar: Registrierung mit Identität/KYC, Handel auf einem Sekundärmarkt, übertragbare Vermögens- oder Quittungs-Token, Zahlungen in Fiatwährung, echte Investitionsangebote. Beitragsregister sind nicht übertragbar - dies ist Crowdfunding, keine Investmentbörse.',
     fundingBlockAria: 'Illustration: Kleine violette Blöcke gleiten nacheinander herein und füllen den Umriss eines geteilten Vermögenswerts, Token für Token',
   },
   emptyState: {

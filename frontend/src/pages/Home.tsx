@@ -68,7 +68,6 @@ export default function Home({ market, loadStatus }: { market: Market; loadStatu
 
       <section className="home-funding-rules" aria-label={m.home.rulesTitle}>
         <h2 className="section-title">{m.home.rulesTitle}</h2>
-        <p className="hero-unavailable">{m.hero.unavailable}</p>
         <details className="hero-technical">
           <summary>{m.home.instrumentsTitle}</summary>
           <p>{m.home.instrumentsIntro}</p>

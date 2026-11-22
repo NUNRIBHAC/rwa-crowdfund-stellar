@@ -203,8 +203,6 @@ export const es: Messages = {
     noteSample:
       'Escenarios ficticios con contratos testnet separados. Cifras ilustrativas, no el estado on-chain. Sin auditoría y no preparados para producción.',
     noteUnknown: 'No auditado, no listo para producción.',
-    unavailable:
-      'No disponible en este prototipo: registro con identidad/KYC, negociación en mercado secundario, tokens de activos o de recibos transferibles, pagos en moneda fiduciaria, ofertas de inversión reales. Los registros de contribución son intransferibles - esto es crowdfunding, no una bolsa de inversión.',
     fundingBlockAria: 'Ilustración: pequeños bloques púrpura se deslizan uno a uno y completan el contorno de un activo compartido, token a token',
   },
   emptyState: {

@@ -199,8 +199,6 @@ export const en = {
       'Every campaign below is a live Soroban contract on Stellar testnet. Not audited, not production-ready. Hosted on a free tier: the first request after idle can take up to a minute while the instance wakes.',
     noteSample: 'Fictional scenarios with separate testnet contracts. Illustrative figures, not on-chain state. Not audited, not production-ready.',
     noteUnknown: 'Not audited, not production-ready.',
-    unavailable:
-      'Not available in this prototype: identity/KYC onboarding, secondary-market trading, transferable asset or receipt tokens, fiat payments, live investment offers. Contribution records are nontransferable - this is crowdfunding, not an investment exchange.',
     fundingBlockAria: 'Illustration: small purple blocks slide in one by one and fill a shared asset outline, token by token',
   },
   emptyState: {
