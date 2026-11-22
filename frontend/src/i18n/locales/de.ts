@@ -936,6 +936,91 @@ export const de: Messages = {
         ],
         suitableFor: 'Renditeorientierte Anleger, die einen Totalverlust tragen können und das Geld nicht vorzeitig benötigen.',
       },
+      {
+        id: 'warrant',
+        label: 'Optionsschein (Warrant)',
+        subtypeOf: '',
+        note: 'Die Ausübung schafft neue Aktien und verwässert bestehende Inhaber. Angebote von Wertpapieren nach der ECSPR sind auf 5.000.000 EUR pro Emittent in 12 Monaten begrenzt.',
+        group: 'participation',
+        seniorityStates: [],
+        summary:
+          'Ein übertragbares Wertpapier, das das Recht, aber nicht die Pflicht verleiht, neue Aktien des Emittenten zu einem festgelegten Preis während eines Fensters oder zu einem festen Termin zu beziehen (übertragbares Wertpapier im Sinne von MiFID II Art. 4(1)(44)(c)).',
+        opportunities: ['Wertsteigerung, wenn der Aktienkurs über den Ausübungspreis steigt', 'Ausübungspreis und -fenster stehen im Voraus fest'],
+        risks: [
+          'Kann wertlos verfallen, wenn der Aktienkurs unter dem Ausübungspreis bleibt',
+          'Die Ausübung verwässert bestehende Aktionäre',
+          'Der Wert hängt von der zugrunde liegenden Aktie ab, die illiquide sein kann',
+        ],
+        suitableFor: 'Anleger, die gehebeltes Aktienengagement verstehen und den Verlust des gesamten gezahlten Betrags akzeptieren.',
+      },
+      {
+        id: 'share-depositary-receipt',
+        label: 'Aktien-Hinterlegungsschein',
+        subtypeOf: '',
+        note: 'Entspricht der Definition übertragbarer Wertpapiere der MiFID II (Art. 4(1)(44)(a)), und die Verwahrung nach Art. 10 ECSPR ist machbar, aber das Placement unter der ECSPR umfasst Wertpapiere, die vom Projektträger oder einer SPV emittiert werden, und ein Hinterlegungsschein wird vom Verwahrer emittiert: keine ESMA- oder CMVM-Bestätigung. Nicht belegt. Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime.',
+        group: 'participation',
+        seniorityStates: [],
+        summary:
+          'Ein von einem Verwahrer ausgegebener Schein, der Aktien der Gesellschaft verbrieft (Aktien einer S.A. und Hinterlegungsscheine über Aktien): Der Inhaber trägt den wirtschaftlichen Anspruch auf die zugrunde liegenden Aktien, während der Verwahrer die Aktien selbst hält.',
+        opportunities: ['Aktienengagement in einem übertragbaren Schein', 'Ausschüttungen folgen den zugrunde liegenden Aktien'],
+        risks: [
+          'Fügt zum Aktienrisiko ein Verwahrerrisiko hinzu',
+          'Stimm- und Übertragungsrechte hängen von den Bedingungen des Scheins ab',
+          'Die zugrunde liegenden Aktien können illiquide sein',
+        ],
+        suitableFor: 'Anleger, die Aktienengagement über einen verwahrten Schein wünschen und Aktien- wie Verwahrrisiko akzeptieren.',
+      },
+      {
+        id: 'commercial-paper',
+        label: 'Commercial Paper',
+        subtypeOf: '',
+        note: 'Es ist zugleich ein Geldmarktinstrument. Es wurde keine CMVM-Praxis für Commercial Paper im Privatkunden-Crowdfunding gefunden: Ein Privatkundenangebot erfordert ein Rating, eine Garantie oder eine ausreichende Finanzautonomiequote, eine CMVM-Informationsnotiz mit einer 10-Werktage-Nichtbeanstandungsfrist und einen Sponsor, wenn der Emittent keine gesetzliche Abschlussprüfung hat. Die ECSPR begrenzt Angebote auf 5.000.000 EUR pro Emittent in 12 Monaten.',
+        group: 'debt',
+        seniorityStates: ['unspecified'],
+        summary:
+          'Kurzfristige Fremdfinanzierung unter einem Jahr: ein übertragbares Wertpapier nach DL 69/2004 (geändert durch DL 102/2026) und MiFID II Art. 4(1)(44)(b) und zugleich ein Geldmarktinstrument.',
+        opportunities: ['Kurze Laufzeit mit festem Rückzahlungstermin', 'Rendite für die Finanzierung des Working Capital des Emittenten'],
+        risks: [
+          'Unbesichert: Verlust, wenn der Emittent nicht zahlt oder refinanziert',
+          'Kurze Laufzeit bedeutet nicht geringes Risiko',
+          'Meist illiquide bis zur Fälligkeit',
+        ],
+        suitableFor: 'Anleger, die kurzfristiges Fremdkapitalengagement wünschen und das Ausfallrisiko des Emittenten akzeptieren.',
+      },
+      {
+        id: 'revenue-linked-loan',
+        label: 'Darlehen mit umsatzgebundener Vergütung',
+        subtypeOf: '',
+        note: 'Ein umsatzgebundener variabler Zins passt abstrakt in die ECSPR (Delegierte Verordnung (EU) 2022/2118 Art. 8(3)(b) und 10(1)(g); Delegierte Verordnung (EU) 2022/2119 Anhang). Werden fälliges Kapital oder fällige Raten nur bei vorhandenen Umsätzen gezahlt, ist die Rückzahlung bedingt und es ist kein ECSPR-Darlehen mehr. Ein umsatzgebundener Zinssatz in einem konkreten Vertrag ist durch die CMVM-Praxis nicht bestätigt.',
+        group: 'debt',
+        seniorityStates: ['unspecified'],
+        summary:
+          'Ein Darlehen mit unbedingter Kapitalrückzahlung zu einer vereinbarten Laufzeit und einem Zahlungsplan, dessen Zins mit den Umsätzen des Emittenten variiert.',
+        opportunities: ['Der Zins steigt, wenn die Umsätze des Emittenten steigen', 'Die Kapitalrückzahlung hängt nicht von den Umsätzen ab'],
+        risks: [
+          'Der Zins kann in schwachen Umsatzphasen auf niedrige Werte fallen',
+          'Die Rückzahlung ist unbedingt, aber der Emittent kann dennoch ausfallen',
+          'Meist illiquide bis zur Fälligkeit',
+        ],
+        suitableFor: 'Anleger, die Fremdkapitalengagement mit an Emittentenumsätze gekoppeltem Aufwärtspotenzial wünschen und das Ausfallrisiko akzeptieren.',
+      },
+      {
+        id: 'debt-depositary-receipt',
+        label: 'Schuld-Hinterlegungsschein',
+        subtypeOf: '',
+        note: 'Entspricht der Definition übertragbarer Wertpapiere der MiFID II (Art. 4(1)(44)(b)), und die Verwahrung nach Art. 10 ECSPR ist machbar, aber das Placement unter der ECSPR umfasst Wertpapiere, die vom Projektträger oder einer SPV emittiert werden, und ein Hinterlegungsschein wird vom Verwahrer emittiert: keine ESMA- oder CMVM-Bestätigung. Nicht belegt. Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; das "certificado de depósito" des Decreto-Lei 372/91 ist eine Bankeinlage, ein anderes Instrument.',
+        group: 'debt',
+        seniorityStates: ['unspecified'],
+        summary:
+          'Ein von einem Verwahrer ausgegebener Schein, der Anleihen oder andere verbriefte Schulden des Emittenten verbrieft: Der Inhaber trägt den wirtschaftlichen Anspruch auf die zugrunde liegenden Schuldtitle, während der Verwahrer die Titel selbst hält.',
+        opportunities: ['Schuldengagement in einem übertragbaren Schein', 'Ausschüttungen folgen den zugrunde liegenden Schuldtiteln'],
+        risks: [
+          'Fügt zum Ausfallrisiko des Emittenten ein Verwahrerrisiko hinzu',
+          'Übertragungs- und Informationsrechte hängen von den Bedingungen des Scheins ab',
+          'Die zugrunde liegenden Schuldtitel können illiquide sein',
+        ],
+        suitableFor: 'Anleger, die Schuldengagement über einen verwahrten Schein wünschen und Ausfall- wie Verwahrrisiko akzeptieren.',
+      },
     ],
     overlays: [
       {
@@ -1970,6 +2055,218 @@ export const de: Messages = {
           'Vorausbestellung des finanzierten Produkts oder der Dienstleistung, strukturiert als Prämien-Crowdfunding, nicht als Investition oder Anspruch auf einen künftigen Token. Es wird keine finanzielle Rendite angeboten.',
           'Lieferung, Widerruf und Verbraucherrechte würden je Angebot festgelegt.',
           'Alles-oder-nichts-Beispielszenario: Das Ziel wurde verfehlt und die Beiträge wurden zurückerstattet.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-atlas-warrants',
+        issuer: 'Atlas Mobility S.A. (Beispiel-Emittent)',
+        country: 'PT',
+        category: 'E-Bikes und leichte Mobilität',
+        teaser:
+          'Beispielangebot von Optionsscheinen auf neue Aktien eines portugiesischen Leichtmobilitätsbetreibers. Alle Konditionen auf dieser Seite sind Beispieldaten.',
+        instrumentClass: 'warrant',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Kein Kupon - Wertsteigerung nur durch Ausübung (Beispiel)',
+        term: 'Ausübungsfenster bis 2029-06-30 (Beispiel)',
+        minInvestment: '100 Testnet-USDC (Beispiel)',
+        additionalInfo: [
+          {
+            label: 'Anlageprodukt',
+            value: 'Optionsschein auf neue Stammaktien. Beispieldaten - kein echtes Angebot',
+          },
+          {
+            label: 'Ausübungspreis',
+            value: '4,20 je neuer Aktie (Beispiel)',
+          },
+          {
+            label: 'Ausübung und Verwässerung',
+            value: 'Die Ausübung schafft neue Aktien und verwässert bestehende Inhaber (Beispielkonditionen)',
+          },
+          {
+            label: 'Angebotsgrenze',
+            value: 'ECSPR: höchstens 5.000.000 EUR pro Emittent in 12 Monaten',
+          },
+        ],
+        overview: [
+          'Beispieldaten - kein echtes Angebot',
+          'Ein Optionsschein verleiht das Recht, nicht die Pflicht, neue Aktien zum Ausübungspreis während des Ausübungsfensters zu beziehen.',
+          'Übersteigt der Aktienkurs nie den Ausübungspreis, kann der Schein wertlos verfallen; ein Totalverlust des gezahlten Betrags ist möglich.',
+          'Die Ausübung emittiert neue Aktien und verwässert bestehende Aktionäre.',
+          'Angebote von Wertpapieren nach der ECSPR sind auf 5.000.000 EUR pro Emittent in 12 Monaten begrenzt.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-douro-share-dr',
+        issuer: 'Douro Textiles S.A. (Beispiel-Emittent)',
+        country: 'PT',
+        category: 'Industrietechnik und Fertigung',
+        teaser:
+          'Beispielangebot von Hinterlegungsscheinen über Aktien eines portugiesischen Textilexporteurs, wobei die zugrunde liegenden Aktien von einem Verwahrer gehalten werden. Alle Konditionen auf dieser Seite sind Beispieldaten.',
+        instrumentClass: 'share-depositary-receipt',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Ausschüttungen folgen den zugrunde liegenden Aktien (Beispiel)',
+        term: 'Keine feste Laufzeit (Beispiel)',
+        minInvestment: '250 Testnet-USDC (Beispiel)',
+        additionalInfo: [
+          {
+            label: 'Anlageprodukt',
+            value: 'Hinterlegungsschein über S.A.-Aktien. Beispieldaten - kein echtes Angebot',
+          },
+          {
+            label: 'Basiswert',
+            value: 'Stammaktien der Douro Textiles S.A. (Beispiel)',
+          },
+          {
+            label: 'Verwahrung',
+            value:
+              'Die zugrunde liegenden Aktien müssen von einem CRD-Kreditinstitut, einem MiFID-II-Wertpapierunternehmen oder einer gleichwertigen Emittentenregister-Lösung gehalten werden',
+          },
+          {
+            label: 'Portugiesisches Regime',
+            value: 'Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; die Rechte folgen den Bedingungen des Scheins',
+          },
+        ],
+        overview: [
+          'Beispieldaten - kein echtes Angebot',
+          'Der Schein verbrieft zugrunde liegende Aktien, die ein Verwahrer hält; der Inhaber trägt den wirtschaftlichen Anspruch, Stimmrecht und Übertragung folgen den Bedingungen des Scheins.',
+          'Die Verwahrung erfordert eine zugelassene Bank oder ein Wertpapierunternehmen (CRD / MiFID II) oder eine gleichwertige Emittentenregister-Lösung.',
+          'Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; dieses Beispiel begründet keines.',
+          'Totalverlust möglich; die zugrunde liegenden Aktien können illiquide sein.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-tejo-commercial-paper',
+        issuer: 'Tejo Packaging Lda (Beispiel-Emittent)',
+        country: 'PT',
+        category: 'Konsumgüter, Mode, Bekleidung und Einzelhandel',
+        teaser:
+          'Beispielangebot von neunmonatigem Commercial Paper eines portugiesischen Verpackungslieferanten. Alle Konditionen auf dieser Seite sind Beispieldaten.',
+        instrumentClass: 'commercial-paper',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: '4,1% p.a. implizite Rendite (Beispiel)',
+        term: '9 Monate (Beispiel)',
+        minInvestment: '500 Testnet-USDC (Beispiel)',
+        additionalInfo: [
+          {
+            label: 'Anlageprodukt',
+            value:
+              'Commercial Paper - übertragbares Wertpapier nach DL 69/2004 (geändert durch DL 102/2026), MiFID II Art. 4(1)(44)(b); zugleich Geldmarktinstrument. Beispieldaten - kein echtes Angebot',
+          },
+          {
+            label: 'Privatkundenbedingungen',
+            value: 'Rating, Garantie oder ausreichende Finanzautonomiequote erforderlich (Beispielhinweis)',
+          },
+          {
+            label: 'CMVM-Verfahren',
+            value:
+              'Informationsnotiz mit 10-Werktage-Nichtbeanstandungsfrist; Sponsor erforderlich ohne gesetzliche Abschlussprüfung; keine CMVM-Praxis für Commercial Paper im Privatkunden-Crowdfunding gefunden',
+          },
+          {
+            label: 'Angebotsgrenze',
+            value: 'ECSPR: höchstens 5.000.000 EUR pro Emittent in 12 Monaten',
+          },
+        ],
+        overview: [
+          'Beispieldaten - kein echtes Angebot',
+          'Kurzfristige unbesicherte Fremdfinanzierung unter einem Jahr, als Wertpapier übertragbar und als Geldmarktinstrument behandelt.',
+          'Unbesichert: Zahlt oder refinanziert der Emittent bei Fälligkeit nicht, können Anleger alles verlieren.',
+          'Es wurde keine CMVM-Praxis für Commercial Paper im Privatkunden-Crowdfunding gefunden; die genannten Privatkundenbedingungen sind vor jedem echten Angebot erforderlich.',
+          'Angebote von Wertpapieren nach der ECSPR sind auf 5.000.000 EUR pro Emittent in 12 Monaten begrenzt.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-costa-revenue-loan',
+        issuer: 'Costa Restaurants Lda (Beispiel-Emittent)',
+        country: 'PT',
+        category: 'Restaurants und Gastronomie',
+        teaser:
+          'Beispielangebot eines Darlehens an eine portugiesische Restaurantgruppe, dessen Zins mit den Umsätzen variiert, mit unbedingter Kapitalrückzahlung. Alle Konditionen auf dieser Seite sind Beispieldaten.',
+        instrumentClass: 'revenue-linked-loan',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Variabel, umsatzgebunden (Beispiel)',
+        term: '48 Monate (Beispiel)',
+        minInvestment: '250 Testnet-USDC (Beispiel)',
+        additionalInfo: [
+          {
+            label: 'Anlageprodukt',
+            value: 'Darlehen mit umsatzgebundenem variablem Zins. Beispieldaten - kein echtes Angebot',
+          },
+          {
+            label: 'Kapitalrückzahlung',
+            value:
+              'Unbedingt, zur vereinbarten Laufzeit und nach Zahlungsplan - fällige Beträge sind zu zahlen, ob Umsätze vorliegen oder nicht (Beispielkonditionen)',
+          },
+          {
+            label: 'Zins',
+            value: 'Variabel, an die Umsätze des Emittenten gebunden (Beispiel)',
+          },
+          {
+            label: 'Regulatorische Einordnung',
+            value:
+              'Ein variabler Zins passt abstrakt in die ECSPR (Delegierte Verordnung (EU) 2022/2118 Art. 8(3)(b), 10(1)(g); Delegierte Verordnung (EU) 2022/2119 Anhang); eine bedingte Rückzahlung wäre kein ECSPR-Darlehen mehr; ein umsatzgebundener Zinssatz in einem konkreten Vertrag ist durch die CMVM-Praxis nicht bestätigt',
+          },
+        ],
+        overview: [
+          'Beispieldaten - kein echtes Angebot',
+          'Ein Darlehen: Die Kapitalrückzahlung ist unbedingt, mit vereinbarter Laufzeit und Zahlungsplan.',
+          'Der Zins variiert mit den Umsätzen des Emittenten; wären fällige Beträge nur bei vorhandenen Umsätzen zahlbar, wäre das Instrument bedingt und kein ECSPR-Darlehen mehr.',
+          'Ein umsatzgebundener Zinssatz in einem konkreten Vertrag ist durch die CMVM-Praxis nicht bestätigt.',
+          'Totalverlust möglich; Darlehen sind meist bis zur Fälligkeit illiquide.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-mondego-debt-dr',
+        issuer: 'Mondego Wind S.A. (Beispiel-Emittent)',
+        country: 'PT',
+        category: 'Energie und Versorgungswirtschaft',
+        teaser:
+          'Beispielangebot von Hinterlegungsscheinen über Anleihen eines portugiesischen Windparkbetreibers, wobei die zugrunde liegenden Anleihen von einem Verwahrer gehalten werden. Alle Konditionen auf dieser Seite sind Beispieldaten.',
+        instrumentClass: 'debt-depositary-receipt',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Ausschüttungen folgen den zugrunde liegenden Anleihen (Beispiel)',
+        term: 'Folgt der Laufzeit der zugrunde liegenden Anleihen (Beispiel)',
+        minInvestment: '250 Testnet-USDC (Beispiel)',
+        additionalInfo: [
+          {
+            label: 'Anlageprodukt',
+            value: 'Hinterlegungsschein über Anleihen (verbriefte Schulden, Art. 4(1)(44)(b) MiFID II). Beispieldaten - kein echtes Angebot',
+          },
+          {
+            label: 'Basiswert',
+            value: 'Anleihen der Mondego Wind S.A. (Beispiel)',
+          },
+          {
+            label: 'Verwahrung',
+            value:
+              'Die zugrunde liegenden Anleihen müssen von einem CRD-Kreditinstitut, einem MiFID-II-Wertpapierunternehmen oder einer gleichwertigen Emittentenregister-Lösung gehalten werden',
+          },
+          {
+            label: 'Portugiesisches Regime',
+            value:
+              'Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; das "certificado de depósito" des Decreto-Lei 372/91 ist eine Bankeinlage, ein anderes Instrument',
+          },
+        ],
+        overview: [
+          'Beispieldaten - kein echtes Angebot',
+          'Der Schein verbrieft zugrunde liegende Anleihen, die ein Verwahrer hält; der Inhaber trägt den wirtschaftlichen Anspruch, die Übertragung folgt den Bedingungen des Scheins.',
+          'Das Placement unter der ECSPR ist nicht belegt: Ein Hinterlegungsschein wird vom Verwahrer emittiert, nicht vom Projektträger oder einer SPV, und weder ESMA noch CMVM haben dies bestätigt.',
+          'Die Verwahrung erfordert eine zugelassene Bank oder ein Wertpapierunternehmen (CRD / MiFID II) oder eine gleichwertige Emittentenregister-Lösung.',
+          'Totalverlust bei Ausfall des Emittenten möglich; die zugrunde liegenden Anleihen können illiquide sein.',
         ],
         documents: [],
         news: [],
