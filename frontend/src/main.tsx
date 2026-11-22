@@ -9,6 +9,7 @@ import { preferredLocale } from './i18n/locale-negotiation';
 import { initTheme } from './theme';
 import { installMediaFallback, installFontTimeout } from './media-fallback';
 import './styles.css';
+import './fonts-l10n.css';
 import './content-surfaces.css';
 import './tour-highlight.css';
 import './footer-layout-fix.css';
