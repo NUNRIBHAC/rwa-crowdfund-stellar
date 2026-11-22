@@ -1,1 +1,4 @@
 assets/fonts export-ignore
+
+# New campaign photo bytes stay out of release archives and VM build contexts.
+frontend/media-external/campaigns/businesses-20261122 export-ignore

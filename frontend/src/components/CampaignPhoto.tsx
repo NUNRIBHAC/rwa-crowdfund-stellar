@@ -2,6 +2,7 @@ import { ILLUSTRATIVE_PHOTO, CAMPAIGN_PHOTO_SIZES, CARD_PHOTO_SIZES, campaignPho
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n';
 import { campaignPhoto } from '../data/campaignPhotos';
+import { sampleCampaignPhotoBase } from '../data/sampleCampaignPhotos';
 
 /** Every listing has a photo. All current assets are illustrative, never
  * evidence of the funded project, ownership, valuation or verification. */
@@ -38,28 +39,30 @@ export default function CampaignPhoto({
     observer.observe(img);
     return () => observer.disconnect();
   }, [firstVisible, variant]);
-  const [failed, setFailed] = useState(false);
+  const [failedSource, setFailedSource] = useState<string | null>(null);
   const src = campaignPhoto(campaignId);
+  const failed = failedSource === src;
   const displayed = failed ? 'https://blockallisto-media.nunrib-df6.workers.dev/illustrative-covers/blocks-0.svg' : src;
   const illustration = displayed.endsWith('.svg');
-  // Only the existing shared illustrative photo has these exact derivatives.
+  // Only known reviewed photos have these exact derivatives.
   // A future issuer photo must not inherit unrelated responsive sources.
-  const responsive = displayed === ILLUSTRATIVE_PHOTO;
+  const sample = !!sampleCampaignPhotoBase(campaignId);
+  const responsive = !failed && (sample || displayed === ILLUSTRATIVE_PHOTO);
   const sizes = variant === 'campaign' ? CAMPAIGN_PHOTO_SIZES : CARD_PHOTO_SIZES;
   return (
     <figure className={`${variant}-photo`}>
       <picture>
-        {responsive && <source type="image/avif" srcSet={campaignPhotoSources('avif')} sizes={sizes} />}
-        {responsive && <source type="image/webp" srcSet={campaignPhotoSources('webp')} sizes={sizes} />}
+        {responsive && <source type="image/avif" srcSet={campaignPhotoSources('avif', campaignId)} sizes={sizes} />}
+        {responsive && <source type="image/webp" srcSet={campaignPhotoSources('webp', campaignId)} sizes={sizes} />}
         <img
           ref={imageRef}
           src={displayed}
           width={responsive ? 1280 : undefined}
-          height={responsive ? 960 : undefined}
-          alt={illustration ? m.invest.illustrativeCover : m.card.photoAlt}
+          height={responsive ? (sample ? 720 : 960) : undefined}
+          alt={illustration ? m.invest.illustrativeCover : sample ? m.card.photoCaption : m.card.photoAlt}
           loading={variant === 'card' && !visiblePriority ? 'lazy' : variant === 'card' ? 'eager' : undefined}
           fetchPriority={variant === 'campaign' || visiblePriority ? 'high' : undefined}
-          onError={() => setFailed(true)}
+          onError={() => setFailedSource(src)}
         />
       </picture>
       <figcaption>{illustration ? m.invest.illustrativeCover : m.card.photoCaption}</figcaption>

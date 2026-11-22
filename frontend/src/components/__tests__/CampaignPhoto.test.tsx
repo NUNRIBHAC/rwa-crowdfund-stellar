@@ -117,3 +117,86 @@ test('a first candidate below the viewport stays lazy', () => {
     HTMLElement.prototype.getBoundingClientRect = original;
   }
 });
+
+test('each of the forty-four fictional businesses uses only its own matching responsive derivatives', async () => {
+  const { SAMPLE_CAMPAIGN_PHOTO_BASES } = await import('../../data/sampleCampaignPhotos');
+  expect(Object.keys(SAMPLE_CAMPAIGN_PHOTO_BASES)).toHaveLength(44);
+  expect(new Set(Object.values(SAMPLE_CAMPAIGN_PHOTO_BASES)).size).toBe(44);
+  for (const [campaignId, base] of Object.entries(SAMPLE_CAMPAIGN_PHOTO_BASES)) {
+    for (const variant of ['card', 'campaign'] as const) {
+      const { container, unmount } = render(
+        <I18nProvider>
+          <CampaignPhoto campaignId={campaignId} variant={variant} />
+        </I18nProvider>,
+      );
+      const img = screen.getByRole('img');
+      expect(img.getAttribute('src')).toContain(base + '.jpg');
+      expect(img.getAttribute('alt')).toBe('Illustrative photo - not the actual project.');
+      expect(img.getAttribute('width')).toBe('1280');
+      expect(img.getAttribute('height')).toBe('720');
+      const sources = [...container.querySelectorAll('source')];
+      expect(sources.map((source) => source.type)).toEqual(['image/avif', 'image/webp']);
+      for (const source of sources)
+        for (const width of [480, 800, 1280]) expect(source.srcset).toContain(`${base}-${width}.${source.type.split('/')[1]} ${width}w`);
+      expect(screen.getByText(/Illustrative photo/)).toBeTruthy();
+      unmount();
+    }
+  }
+});
+
+test('a failed image does not poison a different business reusing the component', () => {
+  const { rerender } = render(
+    <I18nProvider>
+      <CampaignPhoto campaignId="fixture-alentejo-solar" variant="card" />
+    </I18nProvider>,
+  );
+  fireEvent.error(screen.getByRole('img'));
+  expect(screen.getByText(/Illustrative cover/)).toBeTruthy();
+  rerender(
+    <I18nProvider>
+      <CampaignPhoto campaignId="fixture-porto-logistics" variant="card" />
+    </I18nProvider>,
+  );
+  expect(screen.getByRole('img').getAttribute('src')).toBe(campaignPhoto('fixture-porto-logistics'));
+  expect(screen.getByText(/Illustrative photo/)).toBeTruthy();
+});
+
+test('object prototype properties are not campaign photos', () => {
+  for (const id of ['__proto__', 'constructor', 'toString']) expect(campaignPhoto(id)).toBe(campaignPhoto('future-unlisted-project'));
+});
+
+test('a sample photo tries the existing same-origin gateway before the final honest cover', async () => {
+  const { installMediaFallback, gatewayMediaUrl } = await import('../../media-fallback');
+  const stop = installMediaFallback(document, 60000);
+  try {
+    const { container } = render(
+      <I18nProvider>
+        <CampaignPhoto campaignId="fixture-alentejo-solar" variant="campaign" />
+      </I18nProvider>,
+    );
+    const img = screen.getByRole('img');
+    fireEvent.error(img);
+    expect(img.getAttribute('src')).toBe(gatewayMediaUrl(campaignPhoto('fixture-alentejo-solar')));
+    expect(screen.getByText(/Illustrative photo/)).toBeTruthy();
+    expect([...container.querySelectorAll('source')].every((source) => !source.hasAttribute('srcset'))).toBe(true);
+    fireEvent.error(img);
+    expect(screen.getByText(/Illustrative cover/)).toBeTruthy();
+    expect(container.querySelectorAll('source')).toHaveLength(0);
+  } finally {
+    stop();
+  }
+});
+
+test('all eleven locales give sample photos the translated generic illustrative alt, never the old solar-only description', () => {
+  for (const locale of ['en', 'pt', 'es', 'fr', 'de', 'zh-TW', 'zh-CN', 'ja', 'ko', 'ar', 'hi'] as const) {
+    const { container, unmount } = render(
+      <I18nProvider initialLocale={locale}>
+        <CampaignPhoto campaignId="fixture-lisbon-riverside" variant="card" />
+      </I18nProvider>,
+    );
+    const caption = container.querySelector('figcaption')!.textContent;
+    expect(caption!.length).toBeGreaterThan(10);
+    expect(screen.getByRole('img').getAttribute('alt')).toBe(caption);
+    unmount();
+  }
+});

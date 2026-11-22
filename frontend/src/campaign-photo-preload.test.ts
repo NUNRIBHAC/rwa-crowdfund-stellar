@@ -22,3 +22,14 @@ test('list, unknown routes, malformed identifiers and future custom media never 
     delete CAMPAIGN_PHOTOS['qa-postclose'];
   }
 });
+
+test('all forty-four sample hints match their business and reuse one current resource hint', async () => {
+  const { SAMPLE_CAMPAIGN_PHOTO_BASES } = await import('./data/sampleCampaignPhotos');
+  for (const [id, base] of Object.entries(SAMPLE_CAMPAIGN_PHOTO_BASES)) {
+    const link = preloadCampaignPhoto('/campaigns/' + id)!;
+    expect(link.href).toContain(base + '-800.avif');
+    expect(link.imageSrcset).toBe(campaignPhotoSources('avif', id));
+    expect(document.querySelectorAll('link[data-campaign-photo]')).toHaveLength(1);
+  }
+  for (const id of ['__proto__', 'constructor', 'toString']) expect(preloadCampaignPhoto('/campaigns/' + id)).toBeNull();
+});

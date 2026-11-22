@@ -1,5 +1,6 @@
 import { test, expect, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
+import { campaignPhoto } from '../../data/campaignPhotos';
 import CampaignCard from '../CampaignCard';
 import { I18nProvider } from '../../i18n';
 import { FIXTURE_CAMPAIGNS } from '../../fixtures';
@@ -73,10 +74,10 @@ test('canonical demo keeps its illustrative photo and caption', () => {
   expect(screen.getByText('Illustrative photo - not the actual project.')).toBeTruthy();
 });
 
-test('sample campaigns use a neutral clearly labelled illustration rather than a project photograph', () => {
+test('sample campaigns use a clearly labelled stock photograph, never a claimed project photograph', () => {
   setup(openUnfunded);
-  expect(screen.getByAltText('Illustrative cover - not the actual project.').getAttribute('src')).toBe('/illustrative-covers/sample-campaign.svg');
-  expect(screen.getByText('Illustrative cover - not the actual project.')).toBeTruthy();
+  expect(screen.getByAltText('Illustrative photo - not the actual project.').getAttribute('src')).toBe(campaignPhoto(openUnfunded.id));
+  expect(screen.getByText('Illustrative photo - not the actual project.')).toBeTruthy();
 });
 
 test.each([

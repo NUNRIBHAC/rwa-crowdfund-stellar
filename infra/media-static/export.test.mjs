@@ -9,7 +9,15 @@ import { manifest, staticAsset, exportStatic } from './export.mjs';
 import { mediaOrigin, publicMediaPlugin } from '../../frontend/scripts/public-media-build.mjs';
 
 test('all public files verify, aliases match and unknown/private paths fail', () => {
-  assert.equal(manifest.length, 564);
+  assert.equal(manifest.length, 872);
+  const business = JSON.parse(readFileSync(new URL('./business-photo-provenance.json', import.meta.url), 'utf8')).flatMap((row) => row.assets);
+  assert.equal(business.length, 308);
+  const businessKeys = new Set(business.map((row) => row.key));
+  assert.equal(businessKeys.size, 308);
+  assert.deepEqual(
+    manifest.filter((row) => businessKeys.has(row.key)),
+    business,
+  );
   const derivatives = [
     {
       key: 'campaigns/demo-solar-farm-1280.avif',
@@ -53,7 +61,7 @@ test('all public files verify, aliases match and unknown/private paths fail', ()
     manifest.filter((item) => addedKeys.has(item.key)),
     derivatives,
   );
-  const originals = manifest.filter((item) => !addedKeys.has(item.key));
+  const originals = manifest.filter((item) => !addedKeys.has(item.key) && !businessKeys.has(item.key));
   assert.equal(originals.length, 558);
   // Freeze every original key/source/byte-count/hash, not merely the total.
   assert.equal(createHash('sha256').update(JSON.stringify(originals)).digest('hex'), 'b93b176ff77519abe5a7d5606e9e277ab44f27b869a872831b6e347062783d6e');

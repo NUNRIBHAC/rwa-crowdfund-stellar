@@ -3382,5 +3382,1853 @@
     "source": "infra/media-static/fixtures/architecture/transactions-9f4ac1c-f47932caaba5.svg",
     "bytes": 10222,
     "sha256": "f47932caaba57d5017bc1e0150d60f0b8dc56b36c81949c9c5409909a36e2118"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-480.avif",
+    "bytes": 8447,
+    "sha256": "9a3f9c04a48cac80a6e752c8eb70de35febc01c06754b0d8f19ee348a3cddb80"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-480.webp",
+    "bytes": 9624,
+    "sha256": "043e542ee61d7925bf110078ac8b3a0656a1b33c7fbacc6fd2f6e95e79877021"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-800.avif",
+    "bytes": 17899,
+    "sha256": "f777b90a09631e77c02b59b437ea3225935466aa3c2c07382f9df4c50a1d9555"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-800.webp",
+    "bytes": 19088,
+    "sha256": "9d971ee933beb1254c04dcccd5bc411d7182dd7a6b6869efba0d2035148f9d13"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-1280.avif",
+    "bytes": 35842,
+    "sha256": "8a8719e8e0613b4f83f16c8795ae7abd202d1f097186a6bc1efb0878870141ec"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55-1280.webp",
+    "bytes": 35248,
+    "sha256": "52d80190e4931cd3ca3d81069b0ccc71a1e80de16362858401775d53df8b649a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lisbon-riverside-567091ce7d55.jpg",
+    "bytes": 89322,
+    "sha256": "797be3995def74659be603ef447162caa57c856c9e50c87de3ade790800d3228"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-480.avif",
+    "bytes": 21637,
+    "sha256": "cc313d7ede0b53777ed976fb4bfbd9cb3024c133aedd2e22438e4a642b62eb93"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-480.webp",
+    "bytes": 26640,
+    "sha256": "3731fdfbd15ce8cd28d51585e26d22b92675c4855d8a2695347a28e1778e4cc9"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-800.avif",
+    "bytes": 59693,
+    "sha256": "6ccece10e858dbd62ef709d58f546493507296c4360c5726741993bd2e619bc6"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-800.webp",
+    "bytes": 76218,
+    "sha256": "086c793d04f78bcdb12cf1630032188112c88039fcf6787b195849b6474ff107"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-1280.avif",
+    "bytes": 148250,
+    "sha256": "74e6a3cd011ca37bf9082e97a83d670957870576cf8985eb48e4770f05a1c351"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3-1280.webp",
+    "bytes": 190914,
+    "sha256": "2a2317eabac587da56f9bb269ab44981029d47cf228bcdf1982141dc47786d44"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-alentejo-solar-3365c05d3cb3.jpg",
+    "bytes": 240793,
+    "sha256": "e58d449565d6ccd33bdd95cb4afcd0e28c3cdc3e5267e12faaea15a768614fcd"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-480.avif",
+    "bytes": 22498,
+    "sha256": "3395e922179968c0d76e08a6f8fce63392ee104a71c66f991db20d8ac37bc180"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-480.webp",
+    "bytes": 30336,
+    "sha256": "d7c6c7f5e591b62ffa745d6d438313d509a8b55008758dae4cdc7ff2c8687681"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-800.avif",
+    "bytes": 47360,
+    "sha256": "25813583013c24d108035ff0f7cc7d7bf3ba2ff400004ec71a32d89bc8b6b603"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-800.webp",
+    "bytes": 61228,
+    "sha256": "c3274677bca11b8724c54bc64fc78fa4509c6a0413d9cc42d501409734889bee"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-1280.avif",
+    "bytes": 86245,
+    "sha256": "d4bf346a8f8b4991607a8cbf9724e3a04646f5c086236c55332c22d103d84039"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b-1280.webp",
+    "bytes": 103594,
+    "sha256": "8dcb223ea05e2e10b2239ae043faca2e16f36378615036c9de35e81a227cad39"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-porto-logistics-7858a6b92a6b.jpg",
+    "bytes": 177783,
+    "sha256": "7e17feff1f1a3c66607c73ebed7e0e339799fcd4b82b7436ded6857a6b818242"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-480.avif",
+    "bytes": 8035,
+    "sha256": "2f2c4c24a9327473a19d4e810146084ff7e396da491abdf337e07dea9ceb3ada"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-480.webp",
+    "bytes": 9444,
+    "sha256": "6be8cd1a1d3adf3dc3c043bf047b9c811e6f9ea920293a58dccbee00fb35ebf5"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-800.avif",
+    "bytes": 16311,
+    "sha256": "2ca70ccac530f3e00ef0f00abea62d10ee6f97de57447ebc1b17d0a6a65be124"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-800.webp",
+    "bytes": 18028,
+    "sha256": "49f17b86ef666517518af1ec69a45f593ef63db9b261ab4532137b4dd37d4250"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-1280.avif",
+    "bytes": 32420,
+    "sha256": "112be1db0ce5cfec7e5615fbc2e1000f929b3fd0b1f8b90e46ea701011beeb41"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2-1280.webp",
+    "bytes": 31432,
+    "sha256": "c3666f99a6f8a3135e429f6eee17419b88a015870a457b28020c3968223a40ad"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-participation-aebc78bf14f2.jpg",
+    "bytes": 88590,
+    "sha256": "4ebfb7c2f3af50f95cb397c88bb6232e698e44c4b91b0ac9dd1f502584331801"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-480.avif",
+    "bytes": 8447,
+    "sha256": "9a3f9c04a48cac80a6e752c8eb70de35febc01c06754b0d8f19ee348a3cddb80"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-480.webp",
+    "bytes": 9624,
+    "sha256": "043e542ee61d7925bf110078ac8b3a0656a1b33c7fbacc6fd2f6e95e79877021"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-800.avif",
+    "bytes": 17899,
+    "sha256": "f777b90a09631e77c02b59b437ea3225935466aa3c2c07382f9df4c50a1d9555"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-800.webp",
+    "bytes": 19088,
+    "sha256": "9d971ee933beb1254c04dcccd5bc411d7182dd7a6b6869efba0d2035148f9d13"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-1280.avif",
+    "bytes": 35842,
+    "sha256": "8a8719e8e0613b4f83f16c8795ae7abd202d1f097186a6bc1efb0878870141ec"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55-1280.webp",
+    "bytes": 35248,
+    "sha256": "52d80190e4931cd3ca3d81069b0ccc71a1e80de16362858401775d53df8b649a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-cedar-substance-567091ce7d55.jpg",
+    "bytes": 89322,
+    "sha256": "797be3995def74659be603ef447162caa57c856c9e50c87de3ade790800d3228"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-480.avif",
+    "bytes": 15750,
+    "sha256": "58642c6e92f0beb033eaaf03fd7c452a3435187b189d70fc676fb3bd98559e59"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-480.webp",
+    "bytes": 21810,
+    "sha256": "2782f3ed733dc6a2f42d32604d1e604871cd625acf5795dc028213b9f55bf9ee"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-800.avif",
+    "bytes": 38498,
+    "sha256": "8445aa6b8277be5c7b353b714567f0558239b78fe630799ca874b007bb67a959"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-800.webp",
+    "bytes": 45796,
+    "sha256": "de74f37d6d12377be2f198266587908347b34f3a61b813e362daa4efaa2fd638"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-1280.avif",
+    "bytes": 81725,
+    "sha256": "8905d1fdd14c0f411ab04fd25e976f5f363ec1c4243bb2bad4cca283ffd917e6"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5-1280.webp",
+    "bytes": 86108,
+    "sha256": "1668da006359caa55d42870a214d2c09fe75e63612ed9de2e41648dbba7619f5"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-orbit-shares-2f49c5584af5.jpg",
+    "bytes": 183240,
+    "sha256": "a19bab6ca637af7418ca7de4d0243eff2223950aeff065ba23de50591575a4d1"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-480.avif",
+    "bytes": 33284,
+    "sha256": "6ca5119288dffbadf760757c079c22db1bdf89e4a6062411ee2c2c65a04ad289"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-480.webp",
+    "bytes": 50738,
+    "sha256": "5d85c4c6421a72e97ff908b3e77a1a054286de2704ce719b61370bac959eb90a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-800.avif",
+    "bytes": 95715,
+    "sha256": "c76cfa84feb01bc7af2591db1a2c9caae4a10a36e7d33e5e3b6f45621d165859"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-800.webp",
+    "bytes": 146932,
+    "sha256": "ece1217d8623810de09f81f2450ebcd1a3f2636c9dc0d862f6d40330a9ac6bde"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-1280.avif",
+    "bytes": 243311,
+    "sha256": "02f6b6cb0ad6eeb71d27c76750ac148d96c8016c2c8a9c6fbf0577d51a6b5f5a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34-1280.webp",
+    "bytes": 358738,
+    "sha256": "790db4fde4b15d70268c2077d4f4d78c05c6451e1f29c7863c37ed848ab0f5da"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-meadow-partnership-f16936d4eb34.jpg",
+    "bytes": 393177,
+    "sha256": "9a3e3eb484f17acf1c5cc822766390d1f5862a458bc2abce3c92a491108ce28f"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-480.avif",
+    "bytes": 12507,
+    "sha256": "362ec2ce9bfa16246a5bcb54c6559703bd08d3bff9949cc5bbcbc0a1312c67ce"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-480.webp",
+    "bytes": 14342,
+    "sha256": "990b9e9bf67880e9d5322a3db561b40b9445cc76fc3dd8595d6cdd58708f6889"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-800.avif",
+    "bytes": 28879,
+    "sha256": "cd83063b2f94c6ac28e9562a6b2b7ebaa684cb03eae36f41ae9d66babaaeb3b3"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-800.webp",
+    "bytes": 33332,
+    "sha256": "d5b672a97a1849d696c78e56954c2443f4364f1752c3c64338f5fe14e57e9b5e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-1280.avif",
+    "bytes": 62009,
+    "sha256": "06fda15529e1a9b5d2319366ac4047065d54c21d3106e38849df2912f8586fd7"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b-1280.webp",
+    "bytes": 71024,
+    "sha256": "1c9661a0a420bf8bb4d43520007ae2ddf2c4d62572b716d51c76cbcdc2fcbcac"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-harbor-senior-loan-33ea3f4ee03b.jpg",
+    "bytes": 130869,
+    "sha256": "83123344dcbebc974c26922d6e9048e8725f49e638e1b3e28f2247727592103e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-480.avif",
+    "bytes": 12491,
+    "sha256": "6286cecbd6193984137c15c279f45b36cacb739eb55e7d28c98797818dc7ab28"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-480.webp",
+    "bytes": 16296,
+    "sha256": "dfaa51c67f853198394ccdbde3f67ca6211dc4c4e2950f20e8fcfa11adc578c1"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-800.avif",
+    "bytes": 31027,
+    "sha256": "182b19c8c3b6398d9543dd405b5080a6f98c93f8c18621edf7eabd5dd789f26d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-800.webp",
+    "bytes": 40212,
+    "sha256": "09162fd97ad2c2c6906adeae08a5ac9e90f69ffa693f981d529df3721b6fd7b2"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-1280.avif",
+    "bytes": 64796,
+    "sha256": "4c8746ca78ff6ec09e37a4037ffb85b3e8841ecea26ac3f2f070f58691cf7382"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2-1280.webp",
+    "bytes": 74966,
+    "sha256": "bfc4885d0a8f85beb909f58ae721054f7b74ffa8cc182dce9d64b76521b57096"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-grove-subordinated-loan-c768660238f2.jpg",
+    "bytes": 133234,
+    "sha256": "f23413fe17076095307cf11b156d71563de67f59c686ba61b960d40a318f153d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-480.avif",
+    "bytes": 18859,
+    "sha256": "b954be99dacf436a523c69390bc3a62abdd988719ef13242f306d77f854ac41c"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-480.webp",
+    "bytes": 24192,
+    "sha256": "ca8eede64d115d0e759082fb384f5ba33e0c0fce8c3c002eea85d901cccf76e2"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-800.avif",
+    "bytes": 40656,
+    "sha256": "ccaad552a24ea9f629c5eea123d0ae51201b2536a10ca854336cf21070df4fc8"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-800.webp",
+    "bytes": 50200,
+    "sha256": "0266b1be1081eec3708314b0a8f7eb92449b8d70ee03882ac8c154d9b6c22da2"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-1280.avif",
+    "bytes": 76609,
+    "sha256": "a3128b02edc9d4842b76bb0b3ee41a2e51cb273c331fdca3ed448624949e62f2"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0-1280.webp",
+    "bytes": 89548,
+    "sha256": "b5437eb3ce08ab352d78d6930226c00a3334a4f56ff7a407745d050bb42da128"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mosaic-loan-e113885275d0.jpg",
+    "bytes": 156514,
+    "sha256": "d0452c0142e51fc32609c8923fb40d761c01bac809c06d6812d1f510571d4702"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-480.avif",
+    "bytes": 17948,
+    "sha256": "d499cbb57b7eaf3c55487880b8af39fe4b743594d25f8e138d58e463ee2da078"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-480.webp",
+    "bytes": 23486,
+    "sha256": "9940dff6fe0d27057a3ba9128327754d054b586b7040799e57e1a3facb040040"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-800.avif",
+    "bytes": 39846,
+    "sha256": "25415a05dfb0901219600ef4499ee78723bc02b557ba0cc0265eecf72f437289"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-800.webp",
+    "bytes": 52616,
+    "sha256": "a8a029c0acaea7b2ab8477e9ed3f0e10fbc4695809a2d824d1fa027f85efa64d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-1280.avif",
+    "bytes": 77148,
+    "sha256": "25dd6b251a3c3f865a43671dcf45354dbd39ae4e22e5cd322f5d0376ebda8b8e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6-1280.webp",
+    "bytes": 98168,
+    "sha256": "be9886da61e1aab1705fb72e9f797e99c3dd4bd9a19e786746cc464cdaca0f43"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-beacon-bond-29788992e9b6.jpg",
+    "bytes": 174377,
+    "sha256": "9ab2f6b56edd659227ba1364ace1a9ec08cc7232350bff966732712b809e032f"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-480.avif",
+    "bytes": 8129,
+    "sha256": "e87f9da6d5e76bd569f104185679d3ea2bcd1dc4c342fa03a73f7d4749704260"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-480.webp",
+    "bytes": 10146,
+    "sha256": "6ba302271b754c4608456a67e26ef795fbe8065cae66dfc9c60dfd089154488c"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-800.avif",
+    "bytes": 22809,
+    "sha256": "8d5f6c35d2eeacc5a39c380df2ac5b0c47ffc1c14e36fe22845132167323a386"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-800.webp",
+    "bytes": 30552,
+    "sha256": "fcd901200fb4bf21fb946b5fa192e1575ed4f7194e66ef0872cb9fb2cbea777b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-1280.avif",
+    "bytes": 56754,
+    "sha256": "0471b3018e8a00119188ac9e8f59ffa1875573ee77c26d087562dc35b8599f76"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f-1280.webp",
+    "bytes": 71586,
+    "sha256": "fba197d2fc977bbab15869dff03b8cab8b4c41d1572c1e54c57b58d54797a132"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-horizon-zero-coupon-a3470bfacc9f.jpg",
+    "bytes": 112277,
+    "sha256": "47dd46961e10df6eba365957c994219488cf253bb80bfbd62961c14edbdbc6b4"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-480.avif",
+    "bytes": 3725,
+    "sha256": "e3214c55c72d00016cb0800312301bca602982bfbe5bd08d4cb053658c9d1e1d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-480.webp",
+    "bytes": 3980,
+    "sha256": "da92aae58332a4bf38bd7ac48837fbe1f8ee83c179e91ddbfbb006a2498e4031"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-800.avif",
+    "bytes": 8136,
+    "sha256": "4102875fdbb4dfbdecea37fa43e6026daca3df9e928530a50cc24c9adaa1348e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-800.webp",
+    "bytes": 8536,
+    "sha256": "02e4c345e5b85e3799189da3ff4db8f0f728cf9774cdb831311bc6ce77d9e760"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-1280.avif",
+    "bytes": 16554,
+    "sha256": "5a718ce593f90fb4f45465f446828977d04f183b91a2161f8b2acf82531bf975"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897-1280.webp",
+    "bytes": 17670,
+    "sha256": "5e79141cce1abe7c4e2edc7170e74340db4ed9aff3f1f7c5a8e791b9a056d98e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-library-donation-01d8bf91b897.jpg",
+    "bytes": 53569,
+    "sha256": "e9beaa94b8420008ace49086583ea533e8ffdc7eb614125b92bd15eb1f8a588d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-480.avif",
+    "bytes": 8582,
+    "sha256": "778a535367f258a964d3de28cb7d4fe64c724911b1c36271b7bd4339e24f8e17"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-480.webp",
+    "bytes": 8032,
+    "sha256": "7f552b7e5bafab299eb7b645c4d25bc735d2cca5e5d6c22e2b46a0d918db9a6c"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-800.avif",
+    "bytes": 18884,
+    "sha256": "63b6406309540460893d777a56b31558e9407979b456ddcd9c25feebc541de40"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-800.webp",
+    "bytes": 18498,
+    "sha256": "26b954fdf4ced9c55bf6ec16e246185e0d8c5dfd21dc50a0445baa9e3d891dac"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-1280.avif",
+    "bytes": 37885,
+    "sha256": "3dc2eb6e9451da30b3d9e683c8cf9426e3dc1dfbb4eec74bbe6348c645c94e16"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e-1280.webp",
+    "bytes": 35660,
+    "sha256": "b977d72f9baf078f6eddbe230a77a6c7d2ef1daf845e6bed927c09c985b11270"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-makers-reward-a5b88da0eb2e.jpg",
+    "bytes": 84997,
+    "sha256": "961f1983d3ab81650595d87119531d330880229385c25c9f462ced855784d43a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-480.avif",
+    "bytes": 10176,
+    "sha256": "1011df961436dc9e090321631687fbd5edf56dc518d78e4124dfd3a1226d1f4b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-480.webp",
+    "bytes": 11566,
+    "sha256": "7d47069156f8d71fc425e2d3141fa7787e407445df7f17fd48f0e72c7bd28d32"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-800.avif",
+    "bytes": 19445,
+    "sha256": "794938b7f90befea7a872a7c1bbdd95953b569e5fdffd1776c6742aac0e3819b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-800.webp",
+    "bytes": 20620,
+    "sha256": "64b690c87bc676c6b8c8125299e3be0c5033435a38ac93d2f66bc213283450e2"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-1280.avif",
+    "bytes": 36457,
+    "sha256": "9e5a233c20f71b34506c8d5e830efc0a416aa5f8dbcb2fe4352e6ff5f6a8ea36"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3-1280.webp",
+    "bytes": 36292,
+    "sha256": "bef9b98435af6aa136beb6bcd359871a25a6c789969f9d573d642e356c56a5db"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lamp-pre-sale-05a88bac63d3.jpg",
+    "bytes": 85493,
+    "sha256": "272247c4434644436b24860290d3bf7ec933d78f9e9b3bf079cfc767877f3171"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-480.avif",
+    "bytes": 15697,
+    "sha256": "9f25c7682401f5e1a65d619d561dc66a93c3fa71e459670b75ccb6f3309f9b90"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-480.webp",
+    "bytes": 18196,
+    "sha256": "7f3c759b32c670b95bfe9d358514d88b65974814ddbaf3c2cd28137b41db913e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-800.avif",
+    "bytes": 37784,
+    "sha256": "8dcd3b14e338aaa3bf261dca15936725c910cfc6517909c7e4a6057205ed8521"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-800.webp",
+    "bytes": 41726,
+    "sha256": "530f390d6c07d855318c39560bf485560f138a83c76c6070736e4711c8482715"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-1280.avif",
+    "bytes": 77042,
+    "sha256": "58a93e6b333533f20ff017f23a182ba760570bde35b66280443c11b7d4d02f41"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd-1280.webp",
+    "bytes": 81442,
+    "sha256": "e97c74513ef6206c4d7911fbd5b71d3825108193f30f3f5978e59ae1f358f48d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-atlas-warrants-1f5ef41d35cd.jpg",
+    "bytes": 152217,
+    "sha256": "2d62c4d7a9221d93077fe863a8c6f27188dad1631263e8b8d28ca72bb5463031"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-480.avif",
+    "bytes": 5944,
+    "sha256": "63e055d05d67405a0f62c164b393e41a03a4d30aa0d3bb944157bac530e0eb8e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-480.webp",
+    "bytes": 6384,
+    "sha256": "49217069b791afeedac763d7bb823db9cc735cdae210be5301504dc3235da370"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-800.avif",
+    "bytes": 13460,
+    "sha256": "55073afac0a71c151a2e92868f84db8df57d80b1d78be718f03c993558423659"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-800.webp",
+    "bytes": 13006,
+    "sha256": "b6e79c7464ecffbffdff05a55a6b00cbfb9ae4866a724d5ddc9172b77c4c1dab"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-1280.avif",
+    "bytes": 40212,
+    "sha256": "3198bdb0799f23f028bff024564c3f1560fbf23a56dda9d4376040701c2c507e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504-1280.webp",
+    "bytes": 35956,
+    "sha256": "7f4c7c551706034ee3f03096f1c16bed91ada1189a06bdb63c2875aa6d92c6a5"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-douro-share-dr-a160e9f90504.jpg",
+    "bytes": 95650,
+    "sha256": "22a3099dc8db7558d15a2f8fa4aadca2df1c01be5d616570e082d8846ca2d251"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-480.avif",
+    "bytes": 16895,
+    "sha256": "5afd801484cf2a740b75b71b94a1296bab510a2152a615ee96217e61f5b6f973"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-480.webp",
+    "bytes": 19910,
+    "sha256": "e3c9ea51fc8824f2915bdb9a5acefd7a1ea3e4732535a99a9187e46f6ba9ae67"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-800.avif",
+    "bytes": 46629,
+    "sha256": "3dd12a7b02610305e16a7afd564b70b45df938f341e16b0c6041665a69de5bfd"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-800.webp",
+    "bytes": 53434,
+    "sha256": "9a5dc023b8a68ba09311cf5b2ce81a0cdc6a2e991bb3da30dea31e1a3d7e32f4"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-1280.avif",
+    "bytes": 106322,
+    "sha256": "0c3a53ee5d5c7d6fa41ea2a31920e24301b26d493c9c428565b35820ca91b73e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9-1280.webp",
+    "bytes": 110330,
+    "sha256": "785a56b8613b3d9383d4537148d2f95985a11a20f18e8541048e64ecec09cbcd"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tejo-commercial-paper-cf214b74b3c9.jpg",
+    "bytes": 181052,
+    "sha256": "ef32ee55724f9aaed07dc12c75c18734048a19d0e7b6f9f68cf1c9e84746bbef"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-480.avif",
+    "bytes": 12566,
+    "sha256": "2a3d6c83841e87172945aba0654a1f2bef1a161a4f5dfab1db11d6dde69e61ac"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-480.webp",
+    "bytes": 15276,
+    "sha256": "e492ff18b9af16ba490b2356f2b00f4d555688792fdb51860289fb56f282043a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-800.avif",
+    "bytes": 25718,
+    "sha256": "f1c9e696539949fb9a117fda3058c8a63dedfca0c32860334fec3b52982b8f48"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-800.webp",
+    "bytes": 28720,
+    "sha256": "3c4e1352f7ad53ac5b6fa71ef59d94eec911737978d7471533552a5348dd4650"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-1280.avif",
+    "bytes": 48519,
+    "sha256": "48774efce4f9e8cbc9c573745e84f45da6a3f860b2b62457252ca5de641c2ed8"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837-1280.webp",
+    "bytes": 50808,
+    "sha256": "b8770a2f153cab35ad30718cfc65832d87b8291b6bf713d1372f3056a5691da6"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-costa-revenue-loan-ce4593cc3837.jpg",
+    "bytes": 109593,
+    "sha256": "ff34f7ba8c387d213966582d90e78258c776552beb38859179adb93a2043f096"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-480.avif",
+    "bytes": 14625,
+    "sha256": "ce1290b36eba61fc2fe29d9840dfe443ec5b205fb35884eaa1ce70ebdd475cf1"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-480.webp",
+    "bytes": 16832,
+    "sha256": "6103109b4640f53fcd63014fa1431eaf1d4d87b6494cc48d5a822e8bf45f7c21"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-800.avif",
+    "bytes": 35868,
+    "sha256": "2e460be0c4504a7e0b00d5650a495ae1210177cec0dfdc5b42836d59f795da49"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-800.webp",
+    "bytes": 39608,
+    "sha256": "b6de6ac424414e5eb15369275836e10e4e220ca8ed2a944abd8b99a09445b43a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-1280.avif",
+    "bytes": 76019,
+    "sha256": "baeb61fe6025275ca5285b8243132e2c56ece904f3c116eac4b9c94a6c9788fb"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8-1280.webp",
+    "bytes": 78480,
+    "sha256": "37ab6884cf11503f38ad30a097613b11da7900df32608d81f203dc34f6db9965"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mondego-debt-dr-6489f7a405a8.jpg",
+    "bytes": 136089,
+    "sha256": "d50e0f61685da9cad1189633104f5b032c47649fcce145e9d11a367cd5cb5d00"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-480.avif",
+    "bytes": 23564,
+    "sha256": "64777343be766796166cc3f156dd301d8c54123703c11ed19104f20e7fcb3409"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-480.webp",
+    "bytes": 31194,
+    "sha256": "9c03564bfbb3005b6d1e2d9e10c481817060857e6d6c9313d75a035e48ea5005"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-800.avif",
+    "bytes": 53365,
+    "sha256": "37f57bb73d45bc54219cf843d4e4f94c7697194117dc18e923eeea0de4254b4a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-800.webp",
+    "bytes": 71640,
+    "sha256": "ce72c67c7711889feecc33527bb936821271f714c231598a6895e3ba82b7b661"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-1280.avif",
+    "bytes": 105879,
+    "sha256": "cd6e25939a51b624fba18c0cde94d4b5c8ade1e08738530797337406367f1cfb"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f-1280.webp",
+    "bytes": 137150,
+    "sha256": "5da6e6868f4df0ed201c22a9534c42a3a646d3afd27f87c1644c89a1a0c1bf96"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-raiz-vertical-8eaa11c6939f.jpg",
+    "bytes": 206553,
+    "sha256": "979dbc6128063395b7918bf3c42dbae4438554f530f9f02ab8c5840a220f941a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-480.avif",
+    "bytes": 14533,
+    "sha256": "1c78ac6e583aa4ab676e0b573977454663fc1f224dbd37816b43914336410928"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-480.webp",
+    "bytes": 18626,
+    "sha256": "47650b2355bcfdcc47c7f362b7d4261dabb316ae8ee894602754f842374eae2d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-800.avif",
+    "bytes": 31670,
+    "sha256": "18fe9340d28d2d835b818524293d9e5ff953b7c52072002de38340f51e9f644b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-800.webp",
+    "bytes": 36986,
+    "sha256": "102df92d1035e22b86c5b6adedd488096ef419284cc119310eac3d7d569ba54c"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-1280.avif",
+    "bytes": 72107,
+    "sha256": "7eb30ea72f58f1776cf6325162070a6c1db37a5320049e34150908f2aee4ac43"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28-1280.webp",
+    "bytes": 75452,
+    "sha256": "c6d148423304898624e7bd9e94243e6eace124af13ab778b728a49a2023bf9d3"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-tronco-vivo-6a5256270f28.jpg",
+    "bytes": 150003,
+    "sha256": "2528e666c29f7a35cccc727b0d41043faf552873dd81a913c957810599961eca"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-480.avif",
+    "bytes": 18611,
+    "sha256": "6f93a773e54c612194e2effb721ff8e35030c54527f5062a36f9e29669896503"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-480.webp",
+    "bytes": 24108,
+    "sha256": "51fc4274534f5fa175e060fca74772a38f78eceb6369f38145848efa65ef5174"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-800.avif",
+    "bytes": 41201,
+    "sha256": "bddb24e3aa6ea18e7d8c67f1d77e3439569c3d294bc6575592ed57f5063b7c56"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-800.webp",
+    "bytes": 52846,
+    "sha256": "eb0fb526d16db39c57e0a4b58818f04b62b5e078545b36abeca60dd33f2bb442"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-1280.avif",
+    "bytes": 83972,
+    "sha256": "780e2b42b51e9af7532ac9f1b03f6c997efcccd7ed2cd74c713332de4befc3bf"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6-1280.webp",
+    "bytes": 102736,
+    "sha256": "941581e426a19b527023598621525a19895653e2f7c15a6342617ffd50f370da"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-massa-lenta-64ab7330f4b6.jpg",
+    "bytes": 161751,
+    "sha256": "430ac12aca4ba1023a084a583d99f3c0c2c570e72f9fd967709231a6e677a381"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-480.avif",
+    "bytes": 8374,
+    "sha256": "247c62c168ca80ec2fa6c20198b0447a33ad992443cccdd1d8e880da18b2632b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-480.webp",
+    "bytes": 7940,
+    "sha256": "6623d0f58e5bbadd8cc5af9f019269f9b8416924a388dfde66fc2ed61c120fee"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-800.avif",
+    "bytes": 18509,
+    "sha256": "c0ea4c55ac2f63ddf2ee6bd380eb6866315335dc894a1d60c612124404bd124e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-800.webp",
+    "bytes": 17576,
+    "sha256": "2be755806edb320803adcfc957d2ff302c4405c794c75280cfd1719bfde9d9bb"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-1280.avif",
+    "bytes": 36847,
+    "sha256": "2d6f27a5641cfc2bcc78e99cc1484e049ce738cc673ae1cf4cd902effeffeba7"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd-1280.webp",
+    "bytes": 34936,
+    "sha256": "5a9d4d7d8330cd43d1731171a82560a7f2e6de099a5b9b91209dc8d4b66cf33d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-terra-forno-2d2ddb767dbd.jpg",
+    "bytes": 83776,
+    "sha256": "35cb7429ec2085c48c32f589c14eaeb57f82434a1ac6bb05c9f7c73650ca0e23"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-480.avif",
+    "bytes": 17600,
+    "sha256": "88280b476a37e182cf5816cb4aa308370bca2cae06658469e4d29c6a83397e42"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-480.webp",
+    "bytes": 20248,
+    "sha256": "0df7e7d416757f541170e4dd5eac56c0f9c5a2288c1bbe45662f52ca7e36f378"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-800.avif",
+    "bytes": 35361,
+    "sha256": "f1085a2f8dfae7679eab91508f824869eb7eb89eacb297079ce9020f5c3bd970"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-800.webp",
+    "bytes": 38964,
+    "sha256": "4ea0e5fba927495e077af46f8c1c285a6803edf3bf8ad795637be00b3713a30d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-1280.avif",
+    "bytes": 65047,
+    "sha256": "a80a095cf76b1eb62e024f4d09a4eb42381407c281970af7876271941c2faa5e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40-1280.webp",
+    "bytes": 66220,
+    "sha256": "b6edef7bce422810dc5dd092a6a67dbc64cf1c4020dce2586c2fd0489d2afffb"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-mar-terra-8548ec5dcd40.jpg",
+    "bytes": 133048,
+    "sha256": "6e3e13e0e7716e5b9adad0894a216ce292768a08101618b5889d3dd48f2d4664"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-480.avif",
+    "bytes": 35263,
+    "sha256": "207e60d563ad7d5bf871b1ae851917ccd3143246d10b6852924f5c9844701114"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-480.webp",
+    "bytes": 52856,
+    "sha256": "86214f795321606ef608e8e6ba39d4250f49b66d27cb781db66d3d56d4e736a4"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-800.avif",
+    "bytes": 96751,
+    "sha256": "2f40f6d23f4bd62b2c53160be232bf577b804c020115eff00da948c77e4f6832"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-800.webp",
+    "bytes": 144354,
+    "sha256": "b869bd9437b1accf66dfd712a37314bb4401069d35f287d6726c6bffa122d23c"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-1280.avif",
+    "bytes": 235917,
+    "sha256": "efd3776b021cd75937776cd0d37f7784548903f67aed1ec05c1d9deefc41fe58"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168-1280.webp",
+    "bytes": 355946,
+    "sha256": "a2fcb57e62a7ad5edda656aa6da2beaca0923fd85d08e9df3a79eb2b9c51d779"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-agua-volta-bc82ce7fb168.jpg",
+    "bytes": 385593,
+    "sha256": "be7ee8cc84a2ed0879b3fbff6ac1e8d5dec777e0ceea9cdf467f50635cb54444"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-480.avif",
+    "bytes": 10123,
+    "sha256": "5e924d7d64a975df7a3b5f0458aa305253ab11ed01295222fba92d2541735eff"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-480.webp",
+    "bytes": 11628,
+    "sha256": "c1e766152e90f79519daef2ad77ebc4759bb8e5b67f14b6dd64da0f9a78faa4f"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-800.avif",
+    "bytes": 20810,
+    "sha256": "33c429f4a71baebae729f1dedc8f5459d6ad2f8620eabe36155c496e6241b5a1"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-800.webp",
+    "bytes": 23080,
+    "sha256": "876eb61d5ef2943b408deed4e13d2fd2ddd0eaf04fd49c3daa72292d2b52c308"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-1280.avif",
+    "bytes": 43098,
+    "sha256": "052a4c51a602ad303b8a28cad174be99d30d5e528443a14099e6ca8bfb481784"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d-1280.webp",
+    "bytes": 44458,
+    "sha256": "a088ec3cd97fd3c4e665fccf580661b75e1383de5681a22cc5a623ea90e5aef5"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-passo-certo-c8bc0d076c3d.jpg",
+    "bytes": 92943,
+    "sha256": "38d33995093f4b81457e05a425fbd7a1110bba4875bd05356123ef25ed1c7996"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-480.avif",
+    "bytes": 25197,
+    "sha256": "db7d11c10052468037d4a5f6b46f5cc5cdd7b8c2f8d7058ffdf5bd8837888b69"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-480.webp",
+    "bytes": 33672,
+    "sha256": "6a673daf182444367148a9fae44c6aea4a14711ad8a07ada726e6cfb0cf1c348"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-800.avif",
+    "bytes": 64256,
+    "sha256": "e59d353c8c63a255496629e775c955d18557f11bb5763a21e71ab9cc58fa6c62"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-800.webp",
+    "bytes": 86332,
+    "sha256": "fb679dfbd9e0ac5991127b8e2351248d184f087544e14237abcbe0e9b9719a21"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-1280.avif",
+    "bytes": 141675,
+    "sha256": "3634a7a1d43094fa862f56ddc68e307d268a75fbb819e01247b8f333f0c15e23"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b-1280.webp",
+    "bytes": 186734,
+    "sha256": "1bac28a20b4571f193e49891f4732288788726c7d8ddee6410825e37dc183092"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lente-circular-a14f1b6b192b.jpg",
+    "bytes": 251367,
+    "sha256": "2ffe2a7880615566328ebf8927285d6ca8227291db5efd5343d47c3ce95ee5c8"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-480.avif",
+    "bytes": 8634,
+    "sha256": "854168e5a89d294f16342a572da5b0dcc80218c656318fcce800362e1bc78336"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-480.webp",
+    "bytes": 8992,
+    "sha256": "66f09b30730aca23743d9a3ffd5c3db2049175c27f7f2b783193cc68dea99299"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-800.avif",
+    "bytes": 17272,
+    "sha256": "6775bae2254d9fbdaa8586918ee64bbdf6730693be81277d1aa66067f07eeff2"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-800.webp",
+    "bytes": 17494,
+    "sha256": "f2c88b9172fadb0f0b24265cda94c79fdb15e3679dbd99ad33fef482db105b52"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-1280.avif",
+    "bytes": 33542,
+    "sha256": "171bc5d37c468e643f60b6df96247f4d66a242cc808022d43e04031ec8ee0f0c"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df-1280.webp",
+    "bytes": 31290,
+    "sha256": "e34b74ce91fc34f66a7e14d9f3fd52b9e91b963de465769ec745b452c849b2ad"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-polpa-fresca-fb0c0bb516df.jpg",
+    "bytes": 78936,
+    "sha256": "6c052bc423a31824fabbf00e1b6ef14ed5136224beca57bb189e205c1c909910"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-480.avif",
+    "bytes": 13286,
+    "sha256": "a6d143fe47ce3cd97dae17c97cadcf74e430e4ecade3e9d601da6f979bee3be7"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-480.webp",
+    "bytes": 15716,
+    "sha256": "8e906d865931c6ebc1ae0d9fce7b306c567a69b0b1c8d5f8315752d43d10ac04"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-800.avif",
+    "bytes": 39929,
+    "sha256": "bd513b5e0116f30cb37a36ce3dc13f46b2b2da34c559523459499ff65f499e6d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-800.webp",
+    "bytes": 50518,
+    "sha256": "19a30736b4e32cc162ebb416a3dcd037359f536d7f6db79f68f2933ffbf82102"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-1280.avif",
+    "bytes": 128229,
+    "sha256": "93739d308780ffd38a2d66d757f76794182995059728d222ce624df918cc18d4"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8-1280.webp",
+    "bytes": 170962,
+    "sha256": "4d0d4093ce1caff1f480a1ee42b3988c65e7292926bb9f7f0643fcb07be8f473"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-som-madeira-76cc82bc90f8.jpg",
+    "bytes": 211464,
+    "sha256": "89f0a5eb7b7c9aa5804143b0f988979619cc2c8e3aef8583bd0e575fbc657177"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-480.avif",
+    "bytes": 22252,
+    "sha256": "d885991ae8ab669c55a6f8d56bd6a872a3c230c81a7e20a744b7b8565494f9e7"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-480.webp",
+    "bytes": 31302,
+    "sha256": "eeaf04222106320a91127402b5bbfdfa5f56a12a7342b64729aed187ba1a93a2"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-800.avif",
+    "bytes": 46700,
+    "sha256": "db9953787e77a4db775309320bda1b341d158fe264aa002ee3131835500c1106"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-800.webp",
+    "bytes": 60960,
+    "sha256": "590a118a49c0f6bf539613909fdc9f24aa272da6c038d001bfcb326447668e23"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-1280.avif",
+    "bytes": 86001,
+    "sha256": "6c0df6e18b8b5f322799993a64693a7060c7b4b6493005b2bbb300f144b87861"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676-1280.webp",
+    "bytes": 103260,
+    "sha256": "3abf9a7a274cef542a5d1e55c93c293800fb5a03ea81d983ff57f49a1ef4742a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-olho-mar-bdea3f22a676.jpg",
+    "bytes": 175813,
+    "sha256": "ebbc238143bcfeb3d92376fdfd1757e55dacf8a2ef153ae5e06451395acd9954"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-480.avif",
+    "bytes": 26230,
+    "sha256": "5554d73e542d3258fbda58e93ec7452ce2f00fd5d65d3444b9f60a95e28f7728"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-480.webp",
+    "bytes": 36076,
+    "sha256": "3303a546dc136b3e56ecdb25f0c9f9619c6f2d5aeb8332cf471315d908184cc3"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-800.avif",
+    "bytes": 64421,
+    "sha256": "0317b3f9edec1304562df1aaad04a0c42f7ef68665d2413a934b2712fe0fab97"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-800.webp",
+    "bytes": 85810,
+    "sha256": "d0a1fdf8b503a13420203ec2c1b4972eecb997ebc9eac09233cd68cdd35c06ef"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-1280.avif",
+    "bytes": 145611,
+    "sha256": "8496599e36517832dfcb0e70d0afec8a51b693e6381cc320d4fe0c575b6f323b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869-1280.webp",
+    "bytes": 188048,
+    "sha256": "0cf2e24fce00ac6a22424d01ab51c033c4845f654d50e565041e5cc0a361396f"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-traco-recuperado-75552ca9f869.jpg",
+    "bytes": 258676,
+    "sha256": "6a6f18cc9665fba3f1ffc324efc93213733a6bdd0c83bbbdf30f15b16c7d48e7"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-480.avif",
+    "bytes": 9036,
+    "sha256": "b192ecf50d2bc22933b8ed9efa77a95fe305fce235473054f9b1689d79ef795e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-480.webp",
+    "bytes": 10266,
+    "sha256": "1bbd308be46a76c34e97b0f39aa784a71697f4154fcdf18510aa1960df2735cd"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-800.avif",
+    "bytes": 18988,
+    "sha256": "bc30624d4e28379f0b8274b838647e221e39212c1c2f1ce77a675ada17ad464d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-800.webp",
+    "bytes": 20136,
+    "sha256": "213ce4882d4e64b447371e7f27fe6558663ce664d8d4d7e79be43f7aa20136c3"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-1280.avif",
+    "bytes": 36900,
+    "sha256": "688c9227aa1df1161d91366bcca598eaa3348a74e358c9c7693b1c81c169cd9d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285-1280.webp",
+    "bytes": 35938,
+    "sha256": "48eea91a9633da25ec852630f09f4b54b76dd613874c042a361c74d3d502d1b6"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-solo-novo-4b0d55657285.jpg",
+    "bytes": 83439,
+    "sha256": "7689627fce5101bb8b541118b94b866970ab552e903fc4bf3616c5d8da60a22d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-480.avif",
+    "bytes": 26632,
+    "sha256": "596b30b7acff9c0f6d0418402ab83e293d15299f2e3c46b142bb7ceafbfd09fe"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-480.webp",
+    "bytes": 37252,
+    "sha256": "c0a7a9d5accdab953b91da040e58beca9b12d70341295fb918856b3d967415fa"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-800.avif",
+    "bytes": 54104,
+    "sha256": "bd6984f715d3c0ff5ae4c8dfa60055df1c73f592d7448455a37db43c65b255bc"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-800.webp",
+    "bytes": 72052,
+    "sha256": "fff01d4118c5fb8f0a148d70589ab19ea071dd40db3c1bbb0cf95050de30d298"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-1280.avif",
+    "bytes": 96755,
+    "sha256": "0aa27db71f62b42e66704cb8dac0bbbac72057ead9b6defb278076e65fca648b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5-1280.webp",
+    "bytes": 119346,
+    "sha256": "868c9211dbbe6b3c02f9ef90747abc0bbde1974d6bdbf27fcdc601be35914447"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-torra-bairro-be7a96a5ffd5.jpg",
+    "bytes": 189644,
+    "sha256": "1d39572e3eee8e860d846cf6e5baf77bcc5c0ac4a7b58110550d3123554230d2"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-480.avif",
+    "bytes": 16302,
+    "sha256": "fcfcf999eb36357e7199f7d53c02407dc6ce2a5dbc6741cead5e63b713568b88"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-480.webp",
+    "bytes": 20886,
+    "sha256": "194bc89e965f0b7ebfa8843f28458b70fcd1ad6b3355627d46cb932da55b4f4b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-800.avif",
+    "bytes": 34197,
+    "sha256": "7ab5f74676866834771e25d9a09c062769edb3ffef7a13e48220ffaaab8b9ecf"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-800.webp",
+    "bytes": 41350,
+    "sha256": "3413a7fe3eb8df246b959fdf0287ee8a4f5a53def6e967b3a7fa4ea7c5138050"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-1280.avif",
+    "bytes": 76297,
+    "sha256": "9a369ab87a03a117946ebd23762c684c42324169e0292eb204fd3660a1b4c2fb"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630-1280.webp",
+    "bytes": 85854,
+    "sha256": "a43c7477c32ab36e0e048c9b9d341de852f654643ff0c77e2698b691f151381f"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-oficina-curiosa-478de6b6e630.jpg",
+    "bytes": 152625,
+    "sha256": "94c859b365649675eb74eb3aca381ecededf3658c9d1f5a24e32ea6795f2aaac"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-480.avif",
+    "bytes": 27607,
+    "sha256": "55353627891ce558b2807df94ca13765487abe6a1d8c674098e1de4959df8ad1"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-480.webp",
+    "bytes": 41712,
+    "sha256": "a4e0719801c8250ccf5793c5baac7f3f5d9950bdcccc5888b187c128466127a7"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-800.avif",
+    "bytes": 60689,
+    "sha256": "261cf0be4960d5dd4f1397b6803a913030e708b00d9975fa162918796036d2f9"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-800.webp",
+    "bytes": 90792,
+    "sha256": "e1d551e3cd446b42ff74c2d12c012e5a26c962c1b99ebdcf05ee6afef8fa0ed3"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-1280.avif",
+    "bytes": 132398,
+    "sha256": "e3a162201fd1c377c854b4be6c30a564cd1c75bc29581a1043c88bba8208a7d3"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc-1280.webp",
+    "bytes": 178862,
+    "sha256": "aec0b6addebb60843ab6d8e44af76c9139c8a57fa75b255e7654e2845796b1d7"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-letra-viva-8c7945c2bebc.jpg",
+    "bytes": 263280,
+    "sha256": "eb1bba2f1518c7955835a439c0f0cbd6b979e305ce2ac49f51f6800bfb22ba9c"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-480.avif",
+    "bytes": 28343,
+    "sha256": "a920b5eccca7af8a864ec4a813c6b4f5f75663d4b50c754f9d220fe732dea364"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-480.webp",
+    "bytes": 41196,
+    "sha256": "da60cf5b8434c7677d135cf366d32d55c4965cf756c147cce66df3bd9a9a705e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-800.avif",
+    "bytes": 72035,
+    "sha256": "265209a98e70cf631803fc6b991ff215fe6ef7c8815d3c112b2a7a2be44d3e50"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-800.webp",
+    "bytes": 104230,
+    "sha256": "b5fd4491565839d509892af58680ef00293d19af3c16104450127c449e95f00f"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-1280.avif",
+    "bytes": 164036,
+    "sha256": "fe16424b0a165fc650926bcc7753ab89e3b2bdbe84997d3ca68dc86b50568c85"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06-1280.webp",
+    "bytes": 232558,
+    "sha256": "cf154d28993c78e944aad3de16d0eebea8948584b20d6457d1eb25f745d490d4"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-la-serra-f614d3fdad06.jpg",
+    "bytes": 280570,
+    "sha256": "54a85129550345744df0e939db54248c0a0d41d7bf63cf357623afe5b9d0315d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-480.avif",
+    "bytes": 12387,
+    "sha256": "85a98328a393a946341254546a12ce39d39da17a02e512efaa323588b8b62e50"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-480.webp",
+    "bytes": 13736,
+    "sha256": "fe7466c1a3bb703eb958cfa890f58f21a84de94c2c831ebfccc2fca8a2dcf537"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-800.avif",
+    "bytes": 28288,
+    "sha256": "14d8315d903a9d4d80787a93b438ac728cb979873eba50f09ffd295a32cc0be1"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-800.webp",
+    "bytes": 31258,
+    "sha256": "bc168312ad08d37f527990bdeb157055a9ade96d27452d74ecf4405af3996cdf"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-1280.avif",
+    "bytes": 59682,
+    "sha256": "377952c318cbd3ec779465ff28b2a1189548b79ed322456e23420dce6c3a8f04"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c-1280.webp",
+    "bytes": 62098,
+    "sha256": "03891c390b628da97c379a82c71b2d2f9f94454f2abd24a243e62555ebc5c1af"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rota-digital-101e1d42b08c.jpg",
+    "bytes": 129260,
+    "sha256": "e4d8009cbe76176786740ee3a047a750459fe6c1c1a3d4c31c547415a2d9a234"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-480.avif",
+    "bytes": 16681,
+    "sha256": "28d442fd2a17119738878ba9740c96268c41323f186814b255af98bd3bcb0b70"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-480.webp",
+    "bytes": 21516,
+    "sha256": "70a3365b9de9b7911d9c970141f1c7aa612a93cb44ecb7941a075370d05f002d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-800.avif",
+    "bytes": 35073,
+    "sha256": "3f019a6d9caf5b5c7b75a18c95074c56aea66bf45bd5b7da6986ae87763b1530"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-800.webp",
+    "bytes": 42496,
+    "sha256": "1d2f1dc41c3fa66f9667c7700782f5fb4905bc1eb23bb19935fa09ce626d4698"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-1280.avif",
+    "bytes": 77293,
+    "sha256": "b5a8ea4c298514cd88f63d6779caa00a51c4de7f5451db4f5e9ba9d3aa1bfc8b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797-1280.webp",
+    "bytes": 87326,
+    "sha256": "39967e22ba788f7683ca91b5c49d298a10d16ee8d069c5c45873309b1c824531"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-segundo-ciclo-d2ca14532797.jpg",
+    "bytes": 154662,
+    "sha256": "e574025f6c965a164a8bd16e03d8c05f00940cfc83ce05238d5cd5f143ad0e38"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-480.avif",
+    "bytes": 21109,
+    "sha256": "bd9fae0107f6f492f566acf947068893a8c2f261230c5aac2843cb2d92779ad1"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-480.webp",
+    "bytes": 29306,
+    "sha256": "8177c93d5c3e963e1c49157f44c441f791c6371be66ce7e657f53280b873cade"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-800.avif",
+    "bytes": 44591,
+    "sha256": "4119c1ae8afea959360cb602c00ddd83bdb0705209afe87a9ee1992ecaaf036c"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-800.webp",
+    "bytes": 55514,
+    "sha256": "d1ca401a8c2298e5c4112efc734c06d4d99765d693392fba5eb5ac258505bad9"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-1280.avif",
+    "bytes": 86928,
+    "sha256": "d267ed09b038a4f7cdb199b9efe36cc5f42ef388b6efaf1a47df58e5ed055b3f"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a-1280.webp",
+    "bytes": 94694,
+    "sha256": "55feeae2d29ea7bb0f6b7f127ce2203beaec62fdca3f8df2ca3d0bcc2f66903d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-lagar-novo-5fe218c3f03a.jpg",
+    "bytes": 170144,
+    "sha256": "badfa79408dd61c13c82a56384c08e9ada4161ac2f0c476fdcd887441e2ef6d6"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-480.avif",
+    "bytes": 27556,
+    "sha256": "85c84663ec2e414ce805b31f3aeb4ce0d9932fb7cd5f4cc28e94498ba8800a1b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-480.webp",
+    "bytes": 38546,
+    "sha256": "dd7cc793680967713ceda2bc2fa057a6ffad50ca1bdd545693f72d71b2b97d01"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-800.avif",
+    "bytes": 66672,
+    "sha256": "96613da59975309db0b523dc477b7bbc3d902ebad0bf9aa225ae53355fa1b68b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-800.webp",
+    "bytes": 91308,
+    "sha256": "4f50a6f82915cfe764dbc5f0fb5dbf95d08cf5d6d85d0707a1b0caca389cb1fa"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-1280.avif",
+    "bytes": 137339,
+    "sha256": "d3c4976d6fc559309a9d602a1a6246c987d61c2255ba9379bdf76e7ad56652f0"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8-1280.webp",
+    "bytes": 182900,
+    "sha256": "ea32bd0ae564fb1006b016c057491dd2096bb54fc98074dd0f85b60e6d90392a"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-colmeia-viva-f194aa3fc0f8.jpg",
+    "bytes": 243788,
+    "sha256": "8b7ddf9d5cc6dcfa592be89ee68a7090c0a31e943c7b30860c90d88305b1fdc3"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-480.avif",
+    "bytes": 17891,
+    "sha256": "aa77a684e2c07d9fe5dcdb588059053f9771a0cd2320d92fa6c391e325bda457"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-480.webp",
+    "bytes": 23746,
+    "sha256": "d58af1393dadb7b6a35adee52bd62d5a5e240a1555f3c9677d038af4d3577deb"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-800.avif",
+    "bytes": 45174,
+    "sha256": "9e4c842c4ea11debb3af4190eef0fa5c85e09426f467e59cafb4bac7b11683f6"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-800.webp",
+    "bytes": 57638,
+    "sha256": "868e838eb6cb7697fadc36fa451eadbf12acc6ccc4192296422a76e46c7a2de5"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-1280.avif",
+    "bytes": 100825,
+    "sha256": "191206e6732d097019f3b7d44b6718394a252bb8abc012208c580d275e9c7560"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152-1280.webp",
+    "bytes": 116094,
+    "sha256": "5ba7c6a9d51b27e1dade90fd4735063578fb6b14e7272d2b6e09d31d84f7551e"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-pata-serena-9bfe4e985152.jpg",
+    "bytes": 186329,
+    "sha256": "7f8e8936efc632497a39ee4329856028f9e37d00aeb5aa8abca448f184233fdf"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-480.avif",
+    "bytes": 25556,
+    "sha256": "48ea77ed2a861cf9341209ddd562cbc1e30c04b0689666eec325410a7362175b"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-480.webp",
+    "bytes": 34880,
+    "sha256": "4353d6d1fbc71c04f1fecd502a05e9c9af5a2be8a95a41d2abaf4b9c3af72a12"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-800.avif",
+    "bytes": 65837,
+    "sha256": "c0d28bf0f67668b29f9529842487371da032aa473ed26c5a60bbd6a134220571"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-800.webp",
+    "bytes": 86966,
+    "sha256": "3d1e46d289bf49141cf20f920cb5cd128143cebb6e57fc3c982b0d4a34c93f67"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-1280.avif",
+    "bytes": 147461,
+    "sha256": "7faef77ed94ead116ef038346f9873ea9aed660b9c56ff892037046e4df56ed9"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756-1280.webp",
+    "bytes": 190264,
+    "sha256": "c4a5a7a6a6f0b276791793c4a8b4af30850e77113f88eab3c5f6eb38b0cb6ca4"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-rotas-abertas-7e65ae1ab756.jpg",
+    "bytes": 249973,
+    "sha256": "cbd41248cfaab10aa7301a74ff8d024d04e08f9edc8cd9be17d8a83846ca069d"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-480.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-480.avif",
+    "bytes": 24127,
+    "sha256": "c8a59ab5bff6ff585d55aa4431ecd9a23c6c89718ec0c5d57645fe8cbabb9168"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-480.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-480.webp",
+    "bytes": 33548,
+    "sha256": "84fd6f9c9f7843673a8518cbea6207110263a70553c204ee6ff0b4d823e13c33"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-800.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-800.avif",
+    "bytes": 54014,
+    "sha256": "afa2fc3a1d4c2346819959cef1fd804442d1054839585bfb59459243f672bffb"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-800.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-800.webp",
+    "bytes": 73834,
+    "sha256": "c092ea1994a13fdb23552d159e0b56ecad155280b05b81f5b4d819691c20b56f"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-1280.avif",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-1280.avif",
+    "bytes": 110135,
+    "sha256": "fff93d2ecc5ca19f6a286e76492abc535730135fd823ce4b6cd076b2fd5037f9"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-1280.webp",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba-1280.webp",
+    "bytes": 145070,
+    "sha256": "38d0fd877a944fa5f1f15358b72a69e06e028099db2ac13eef94d89ec4e735bc"
+  },
+  {
+    "key": "campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba.jpg",
+    "source": "frontend/media-external/campaigns/businesses-20261122/fixture-casa-pecas-3dbbc8a574ba.jpg",
+    "bytes": 224923,
+    "sha256": "1d25134e1b61af643ca8063732ee7894a3155b7bd40a21992ed43a8aa5c6e95a"
   }
 ]
