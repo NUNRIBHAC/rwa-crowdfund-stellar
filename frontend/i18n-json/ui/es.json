@@ -725,7 +725,6 @@
     "glossary": "Glosario",
     "faq": "FAQ",
     "aboutProject": "Sobre este proyecto",
-    "statusText": "Prototipo de testnet. Sin despliegue automático ni conversión de saldos heredados. Los intents y saldos clásicos existentes se conservan, no se borran. La infraestructura separada de identidad/valoración sigue siendo solo simulada.",
     "tagline": "Activos reales. Posibilidades compartidas."
   },
   "time": {
