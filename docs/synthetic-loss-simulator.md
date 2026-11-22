@@ -33,4 +33,4 @@ Requested worked example: L1 begins with 100,000 principal and 30,000 principal 
 
 ## Release boundaries
 
-Draft is based on the local Investors navigation branch, which itself has not been merged. No production, demo, staging, database or contract changes were made. Publish only after parent review and the owner's per-PR merge/deploy phrase. Do not reuse another PR's device authorization.
+Draft is based on the local Investors navigation branch, which itself has not been merged. No production, demo, staging, database or contract changes were made. Publication requires review and explicit approval for this change. No release is included in this branch.
