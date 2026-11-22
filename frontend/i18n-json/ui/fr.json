@@ -725,7 +725,6 @@
     "glossary": "Glossaire",
     "faq": "FAQ",
     "aboutProject": "À propos de ce projet",
-    "status": "Statut",
     "statusText": "Prototype de testnet. Aucun déploiement automatique ni conversion de soldes hérités. Les intents et soldes classiques existants sont préservés, pas effacés. L'infrastructure séparée d'identité/valorisation reste uniquement simulée.",
     "tagline": "Des actifs réels. Des possibilités partagées."
   },
