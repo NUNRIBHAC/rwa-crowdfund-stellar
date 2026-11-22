@@ -10,7 +10,7 @@ const units = (n: number) => String(BigInt(n) * 10000000n);
 export const FIXTURE_CAMPAIGNS: Campaign[] = [
   {
     id: 'fixture-lisbon-riverside',
-    name: 'Lisbon Riverside Apartments - Series A',
+    name: SAMPLE_CATALOG[0].name,
     contractId: 'CFIXTURE000000000000000000000000000000000000000000000000000001',
     raised: units(155400),
     balance: null,
@@ -24,7 +24,7 @@ export const FIXTURE_CAMPAIGNS: Campaign[] = [
   },
   {
     id: 'fixture-alentejo-solar',
-    name: 'Alentejo Solar Cooperative',
+    name: SAMPLE_CATALOG[1].name,
     contractId: 'CFIXTURE000000000000000000000000000000000000000000000000000002',
     raised: units(342000),
     balance: null,
@@ -38,7 +38,7 @@ export const FIXTURE_CAMPAIGNS: Campaign[] = [
   },
   {
     id: 'fixture-porto-logistics',
-    name: 'Porto Logistics Hub Tokenization',
+    name: SAMPLE_CATALOG[2].name,
     contractId: 'CFIXTURE000000000000000000000000000000000000000000000000000003',
     raised: units(500000),
     balance: null,

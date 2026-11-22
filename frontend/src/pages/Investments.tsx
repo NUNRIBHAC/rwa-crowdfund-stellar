@@ -9,8 +9,6 @@ import { profileFor } from '../data/profiles';
 import { fetchCampaignMetadata } from '../community/api';
 import { useI18n } from '../i18n';
 import { sampleIndustry, sampleInstrument, sampleState } from '../data/sampleCatalog';
-import { SAMPLE_CONCEPTS, sampleConceptIndex, sampleConceptStatus } from '../data/sampleConcepts';
-import { SampleConceptsSection } from '../components/SampleConcepts';
 
 export default function Investments({ market, loadStatus }: { market: Market; loadStatus?: ReactNode }) {
   const { m } = useI18n();
@@ -57,10 +55,8 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
     if (!fixtureMode) return industries[c.id]?.key;
     return sampleIndustry(c.id);
   };
-  // Instrument/format type: sample campaigns carry a catalog instrument and
-  // sample concepts a format subtype. Live campaigns have no instrument
-  // metadata, so the type filter only exists in fixture mode - nothing is
-  // invented for real contracts.
+  // Types describe the 44 fictional business examples. Educational concepts
+  // belong to Learn and never become catalog options or result counts.
   const typeOf = (c: (typeof campaigns)[number]): string | undefined => (fixtureMode ? sampleInstrument(c.id) : undefined);
   const typeOptions: { value: string; label: string }[] = [];
   if (fixtureMode) {
@@ -69,12 +65,6 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
       if (instrument && !seen.has(instrument)) {
         seen.add(instrument);
         typeOptions.push({ value: instrument, label: instrumentLabel(m, instrument) });
-      }
-    }
-    for (const concept of SAMPLE_CONCEPTS) {
-      if (!seen.has(concept.subtype)) {
-        seen.add(concept.subtype);
-        typeOptions.push({ value: concept.subtype, label: m.sampleConcepts.list[sampleConceptIndex(concept.id)]?.label ?? concept.subtype });
       }
     }
   }
@@ -96,13 +86,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
     .filter((c) => category === 'all' || categoryOf(c) === category)
     .filter((c) => typeFilter === 'all' || typeOf(c) === typeFilter)
     .sort(compareCampaigns(sortBy));
-  const shownConcepts = fixtureMode
-    ? SAMPLE_CONCEPTS.filter((c) => !q || c.name.toLowerCase().includes(q))
-        .filter((c) => matchesStatus(statusFilter, sampleConceptStatus(c), c.sampleState))
-        .filter((c) => category === 'all' || c.industry === category)
-        .filter((c) => typeFilter === 'all' || c.subtype === typeFilter)
-    : [];
-  const sampleResultCount = shown.length + shownConcepts.length;
+  const sampleResultCount = shown.length;
   const sampleFilterCount = (filter: string) =>
     campaigns.filter(
       (c) =>
@@ -110,16 +94,7 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
         (category === 'all' || categoryOf(c) === category) &&
         (typeFilter === 'all' || typeOf(c) === typeFilter) &&
         matchesStatus(filter, campaignStatus(c), sampleState(c.id)),
-    ).length +
-    (fixtureMode
-      ? SAMPLE_CONCEPTS.filter(
-          (c) =>
-            (!q || c.name.toLowerCase().includes(q)) &&
-            (category === 'all' || c.industry === category) &&
-            (typeFilter === 'all' || c.subtype === typeFilter) &&
-            matchesStatus(filter, sampleConceptStatus(c), c.sampleState),
-        ).length
-      : 0);
+    ).length;
 
   // Exact checked-in staging fixture identity, never inferred from campaign names.
   const testing = shown.filter((c) => c.id === 'staging-load');
@@ -298,7 +273,6 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
             </details>
           </section>
         )}
-        {fixtureMode && shownConcepts.length > 0 && <SampleConceptsSection concepts={shownConcepts} />}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { sampleConceptIndex } from './data/sampleConcepts';
 
 export type RouteName =
   | 'home'
@@ -72,7 +73,8 @@ export function routeFromPath(pathname: string): Route {
     case 'campaigns':
       if (!parts[1]) return { name: 'investments' };
       try {
-        return { name: 'campaign', campaignId: decodeURIComponent(parts[1]) };
+        const campaignId = decodeURIComponent(parts[1]);
+        return sampleConceptIndex(campaignId) >= 0 ? { name: 'learn' } : { name: 'campaign', campaignId };
       } catch {
         // Invalid percent escapes and malformed UTF-8 are bad URLs, not a
         // component failure. Reuse the existing localized not-found view.
@@ -166,6 +168,10 @@ function currentRoute(): Route {
     return route;
   }
   const route = routeFromPath(window.location.pathname);
+  if (route.name === 'learn' && window.location.pathname.startsWith('/campaigns/')) {
+    const legacyId = decodeURIComponent(window.location.pathname.split('/')[2]);
+    window.history.replaceState(null, '', '/learn#learn-' + legacyId);
+  }
   if (/^\/(investments|financing)\/?$/.test(window.location.pathname)) {
     window.history.replaceState(null, '', routePath(route) + window.location.search + window.location.hash);
   }

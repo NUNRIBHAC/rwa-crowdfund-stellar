@@ -46,7 +46,7 @@
   },
   "contributionTerms": {
     "title": "O que significa uma contribuição",
-    "fixture": "Apenas pré-visualização de exemplo. Esta campanha não é um contrato publicado e não aceita contribuições. O emitente, o instrumento e os documentos de exemplo não criam direitos de investimento.",
+    "fixture": "Apenas uma pré-visualização fictícia. Os valores e o ciclo de vida são ilustrativos, não o estado real do contrato testnet associado. Esta pré-visualização não aceita contribuições. O emitente, o instrumento e os documentos de exemplo não criam direitos de investimento.",
     "record": "Uma contribuição confirmada neste depósito em garantia na testnet cria um registo de saldo não transferível para a carteira contribuinte no contrato da campanha. Não emite um token de recibo, ações, um empréstimo ou uma recompensa.",
     "rights": "O contrato de depósito em garantia não cria juros, calendário de reembolso, direitos de voto ou direitos de propriedade. Um registo de contribuição não comprova propriedade legal nem um direito a rendimentos de investimento.",
     "missingTitle": "Informação não verificada ou publicada",
@@ -140,14 +140,14 @@
     "ctaBrowse": "Explorar campanhas",
     "ctaHow": "Como funciona",
     "noteLive": "Cada campanha abaixo é um contrato Soroban real na testnet Stellar. Não auditado, não pronto para produção. Alojado num plano gratuito: o primeiro pedido após inatividade pode demorar até um minuto enquanto a instância acorda.",
-    "noteSample": "As campanhas abaixo são exemplos (fixtures), não contratos implementados. Não auditado, não pronto para produção.",
+    "noteSample": "Cenários fictícios com contratos testnet separados. Valores ilustrativos, não o estado on-chain. Sem auditoria e sem preparação para produção.",
     "noteUnknown": "Não auditado, não pronto para produção.",
     "unavailable": "Não disponível neste protótipo: registo com identidade/KYC, negociação em mercado secundário, tokens de ativos ou de recibos transferíveis, pagamentos em moeda fiduciária, ofertas de investimento reais. Os registos de contribuição são intransmissíveis - isto é crowdfunding, não uma bolsa de investimento.",
     "fundingBlockAria": "Ilustração: pequenos blocos púrpura deslizam um a um e preenchem o contorno de um ativo partilhado, token a token"
   },
   "emptyState": {
     "fixtureStrong": "Pré-visualização de exemplo ativa.",
-    "fixtureText": "As campanhas abaixo são exemplos para mostrar o layout. Não são contratos implementados, não são ofertas reais e não podem aceitar contribuições.",
+    "fixtureText": "Cenários fictícios para mostrar o layout, com contratos testnet separados. Os valores apresentados são ilustrativos, não o estado real dos contratos. Estas pré-visualizações não são ofertas em curso e não aceitam contribuições.",
     "fixtureBack": "Voltar ao registo real",
     "emptyTitle": "Nenhuma campanha implementada configurada",
     "emptyText": "Um operador tem de implementar e verificar o contrato revisto separadamente e depois definir SOROBAN_CAMPAIGNS_JSON. A implementação e a migração não são feitas aqui. As campanhas antigas são apenas de leitura e exigem reconciliação.",
@@ -201,7 +201,7 @@
     "filters": "Filtros",
     "closedTitle": "Campanhas encerradas",
     "title": "Todos os investimentos",
-    "noteFixture": "As campanhas de exemplo demonstram o layout. Não são contratos implementados e não podem aceitar contribuições.",
+    "noteFixture": "Cenários fictícios com contratos testnet separados. Valores ilustrativos, não o estado real dos contratos. Estas pré-visualizações não aceitam contribuições.",
     "noteLive": "As campanhas reais são contratos Soroban na testnet Stellar. Os ativos de testnet não têm valor.",
     "refresh": "Atualizar estado do contrato",
     "searchPlaceholder": "Pesquisar campanhas",
@@ -242,10 +242,10 @@
     "viewAria": "Modo de visualização",
     "grid": "Grelha",
     "list": "Lista",
-    "noMatches": "Nenhuma campanha corresponde à pesquisa e aos filtros atuais.",
+    "noMatches": "Nenhum resultado corresponde à pesquisa e aos filtros atuais.",
     "resultCount": {
-      "one": "{n} campanha visível",
-      "other": "{n} campanhas visíveis"
+      "one": "{n} resultado apresentado",
+      "other": "{n} resultados apresentados"
     },
     "activeAria": "Campanhas abertas",
     "activeTitle": "Campanhas abertas",
@@ -378,7 +378,7 @@
     "viewContributionForm": "Ver formulário de contribuição",
     "widgetContribute": "Contribuir",
     "widgetOverview": "Resumo do investimento",
-    "widgetFixture": "Pré-visualização de exemplo. Esta campanha é um exemplo (fixture), não um contrato implementado, e não pode aceitar contribuições.",
+    "widgetFixture": "Pré-visualização fictícia. Os valores e o ciclo de vida são ilustrativos, não o estado real do contrato testnet associado. Esta pré-visualização não aceita contribuições.",
     "widgetFundedOpen": "A meta de financiamento foi atingida e esta campanha está totalmente subscrita. Não são aceites mais contribuições; após o prazo, o criador pode levantar os fundos angariados ao abrigo da regra de tudo-ou-nada.",
     "widgetEndedFunded": "Esta campanha terminou após atingir a meta. Ao abrigo da regra de tudo-ou-nada, o criador pode agora levantar os fundos angariados.",
     "widgetEndedWithdrawn": "Esta campanha terminou após atingir a meta e o criador levantou os fundos angariados.",
@@ -1225,9 +1225,9 @@
     "sampleMarker": "Dados de exemplo - não é uma oferta real",
     "list": [
       {
-        "issuer": "Riverside Development Lda (emitente de exemplo)",
-        "category": "Construção",
-        "teaser": "Reabilitação de um prédio de apartamentos ribeirinho em Lisboa, financiada através de uma obrigação sénior de taxa fixa. Todas as condições nesta página são dados de exemplo.",
+        "issuer": "Reabilitação Ribeirinha (Dados de exemplo - não é uma oferta real)",
+        "category": "Imobiliário",
+        "teaser": "Reabilitação de apartamentos eficientes em Lisboa. Dados de exemplo - não é uma oferta real",
         "interestRate": "6,5% a.a. (exemplo)",
         "term": "Até 2030-12-31 (exemplo)",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1278,6 +1278,7 @@
           }
         ],
         "overview": [
+          "Reabilitação de apartamentos eficientes em Lisboa.",
           "Este painel demonstra como o conteúdo de marketing fornecido pelo emitente é separado dos factos da plataforma pelo separador acima.",
           "Dados de exemplo - não é uma oferta real. A descrição do emitente, a equipa, o modelo de negócio e as finanças mostrados numa plataforma real seriam fornecidos pelo emitente e claramente atribuídos."
         ],
@@ -1303,9 +1304,9 @@
         ]
       },
       {
-        "issuer": "Alentejo Solar Cooperative (emitente de exemplo)",
-        "category": "Energia e utilities",
-        "teaser": "Instalação solar comunitária no Alentejo, financiada através de uma obrigação subordinada com variante de juros em numerário. Todas as condições nesta página são dados de exemplo.",
+        "issuer": "Sol do Montado (Dados de exemplo - não é uma oferta real)",
+        "category": "Energia e serviços públicos",
+        "teaser": "Produção solar partilhada no Alentejo. Dados de exemplo - não é uma oferta real",
         "interestRate": "7,0% a.a. em numerário (exemplo)",
         "term": "Até 2032-06-30 (exemplo)",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1352,6 +1353,7 @@
           }
         ],
         "overview": [
+          "Produção solar partilhada no Alentejo.",
           "Dados de exemplo - não é uma oferta real. Uma página de campanha real traria a descrição da cooperativa, do local e da venda de energia pelo próprio emitente."
         ],
         "documents": [
@@ -1367,9 +1369,9 @@
         "news": []
       },
       {
-        "issuer": "Porto Logistics Hub SA (emitente de exemplo)",
+        "issuer": "Cais Norte (Dados de exemplo - não é uma oferta real)",
         "category": "Transportes e logística",
-        "teaser": "Estudo de tokenização para um hub logístico perto do Porto, estruturado como obrigação convertível. Este exemplo mostra uma campanha concluída. Todas as condições são dados de exemplo.",
+        "teaser": "Centro de logística de última milha no Porto. Dados de exemplo - não é uma oferta real",
         "interestRate": "8,0% a.a. até à conversão (exemplo)",
         "term": "Até 2031-12-31 (exemplo)",
         "minInvestment": "500 USDC de testnet (exemplo)",
@@ -1416,6 +1418,7 @@
           }
         ],
         "overview": [
+          "Centro de logística de última milha no Porto.",
           "Dados de exemplo - não é uma oferta real. As campanhas concluídas permanecem visíveis com o seu estado final de financiamento, como esta."
         ],
         "documents": [
@@ -1432,9 +1435,9 @@
         ]
       },
       {
-        "issuer": "Atlas Workshop Participation (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Metal Atlântico (Dados de exemplo - não é uma oferta real)",
         "category": "Tecnologia industrial e produção",
-        "teaser": "Um direito (frequentemente titularizado como certificado participativo) a uma parcela dos lucros e ao reembolso do valor nominal, sem os direitos de governo plenos de um acionista. Dados de exemplo - não é uma oferta real",
+        "teaser": "Metalomecânica de precisão para fabricantes locais. Dados de exemplo - não é uma oferta real",
         "interestRate": "Sem retorno fixo (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1449,6 +1452,7 @@
           }
         ],
         "overview": [
+          "Metalomecânica de precisão para fabricantes locais.",
           "Dados de exemplo - não é uma oferta real",
           "Um direito (frequentemente titularizado como certificado participativo) a uma parcela dos lucros e ao reembolso do valor nominal, sem os direitos de governo plenos de um acionista.",
           "A parcela dos lucros depende inteiramente do desempenho do emitente",
@@ -1459,9 +1463,9 @@
         "news": []
       },
       {
-        "issuer": "Cedar Asset Participation (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Pátio do Cedro (Dados de exemplo - não é uma oferta real)",
         "category": "Imobiliário",
-        "teaser": "Um direito participativo ligado à base de ativos (\"substância\") do emitente e não apenas ao seu lucro anual. A estruturação e os emitentes elegíveis variam consoante a jurisdição e os estatutos. Dados de exemplo - não é uma oferta real",
+        "teaser": "Reabilitação de habitações e pequenas lojas urbanas. Dados de exemplo - não é uma oferta real",
         "interestRate": "Sem retorno fixo (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1476,6 +1480,7 @@
           }
         ],
         "overview": [
+          "Reabilitação de habitações e pequenas lojas urbanas.",
           "Dados de exemplo - não é uma oferta real",
           "Um direito participativo ligado à base de ativos (\"substância\") do emitente e não apenas ao seu lucro anual. A estruturação e os emitentes elegíveis variam consoante a jurisdição e os estatutos.",
           "A forma jurídica e a proteção do investidor variam fortemente consoante a jurisdição",
@@ -1486,9 +1491,9 @@
         "news": []
       },
       {
-        "issuer": "Orbit Circular Materials (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Ciclo Mineral (Dados de exemplo - não é uma oferta real)",
         "category": "Tecnologia industrial e produção",
-        "teaser": "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado. Dados de exemplo - não é uma oferta real",
+        "teaser": "Recuperação e revenda de materiais de construção. Dados de exemplo - não é uma oferta real",
         "interestRate": "Sem retorno fixo (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1507,6 +1512,7 @@
           }
         ],
         "overview": [
+          "Recuperação e revenda de materiais de construção.",
           "Dados de exemplo - não é uma oferta real",
           "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado.",
           "Sem direito fixo de reembolso; os dividendos não são garantidos",
@@ -1518,9 +1524,9 @@
         "news": []
       },
       {
-        "issuer": "Meadow Partnership (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Prado Vivo (Dados de exemplo - não é uma oferta real)",
         "category": "Agricultura, ambiente e reciclagem",
-        "teaser": "Uma participação como sócio comanditário numa sociedade: participação nos lucros e perdas segundo o contrato de sociedade, com responsabilidade limitada à entrada. Dados de exemplo - não é uma oferta real",
+        "teaser": "Horticultura regenerativa para mercados de bairro. Dados de exemplo - não é uma oferta real",
         "interestRate": "Sem retorno fixo (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1531,10 +1537,11 @@
           },
           {
             "label": "Estado",
-            "value": "Insucesso - meta não atingida"
+            "value": "Insucesso - reembolso ao investidor concluído"
           }
         ],
         "overview": [
+          "Horticultura regenerativa para mercados de bairro.",
           "Dados de exemplo - não é uma oferta real",
           "Uma participação como sócio comanditário numa sociedade: participação nos lucros e perdas segundo o contrato de sociedade, com responsabilidade limitada à entrada.",
           "A participação nas perdas pode reduzir ou anular a participação",
@@ -1545,9 +1552,9 @@
         "news": []
       },
       {
-        "issuer": "Harbor Equipment Loan (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Frio do Porto (Dados de exemplo - não é uma oferta real)",
         "category": "Transportes e logística",
-        "teaser": "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar. Dados de exemplo - não é uma oferta real",
+        "teaser": "Armazenamento refrigerado e distribuição alimentar local. Dados de exemplo - não é uma oferta real",
         "interestRate": "5,0% ao ano (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1566,6 +1573,7 @@
           }
         ],
         "overview": [
+          "Armazenamento refrigerado e distribuição alimentar local.",
           "Dados de exemplo - não é uma oferta real",
           "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
           "O incumprimento do emitente pode significar perda total",
@@ -1576,9 +1584,9 @@
         "news": []
       },
       {
-        "issuer": "Grove Community Energy Loan (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Bosque Solar (Dados de exemplo - não é uma oferta real)",
         "category": "Energia e serviços públicos",
-        "teaser": "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar. Dados de exemplo - não é uma oferta real",
+        "teaser": "Autoconsumo solar partilhado em coberturas de empresas. Dados de exemplo - não é uma oferta real",
         "interestRate": "5,0% ao ano (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1597,6 +1605,7 @@
           }
         ],
         "overview": [
+          "Autoconsumo solar partilhado em coberturas de empresas.",
           "Dados de exemplo - não é uma oferta real",
           "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
           "O incumprimento do emitente pode significar perda total",
@@ -1607,9 +1616,9 @@
         "news": []
       },
       {
-        "issuer": "Mosaic Workshop Loan (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Mosaico Oficina (Dados de exemplo - não é uma oferta real)",
         "category": "Tecnologia industrial e produção",
-        "teaser": "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar. Dados de exemplo - não é uma oferta real",
+        "teaser": "Mobiliário por medida numa oficina local. Dados de exemplo - não é uma oferta real",
         "interestRate": "5,0% ao ano (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1628,6 +1637,7 @@
           }
         ],
         "overview": [
+          "Mobiliário por medida numa oficina local.",
           "Dados de exemplo - não é uma oferta real",
           "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
           "O incumprimento do emitente pode significar perda total",
@@ -1638,9 +1648,9 @@
         "news": []
       },
       {
-        "issuer": "Beacon Mobility Bond (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Rota Clara (Dados de exemplo - não é uma oferta real)",
         "category": "Transportes e logística",
-        "teaser": "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada. Dados de exemplo - não é uma oferta real",
+        "teaser": "Miniautocarros elétricos para transporte comunitário. Dados de exemplo - não é uma oferta real",
         "interestRate": "5,0% ao ano (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1659,6 +1669,7 @@
           }
         ],
         "overview": [
+          "Miniautocarros elétricos para transporte comunitário.",
           "Dados de exemplo - não é uma oferta real",
           "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada.",
           "A subordinação aumenta a gravidade da perda em caso de insolvência",
@@ -1669,9 +1680,9 @@
         "news": []
       },
       {
-        "issuer": "Horizon Zero-Coupon Bond (Dados de exemplo - não é uma oferta real)",
+        "issuer": "Linha Solar (Dados de exemplo - não é uma oferta real)",
         "category": "Energia e serviços públicos",
-        "teaser": "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada. Dados de exemplo - não é uma oferta real",
+        "teaser": "Coberturas solares para edifícios comerciais. Dados de exemplo - não é uma oferta real",
         "interestRate": "Sem cupão periódico (amostra)",
         "term": "Apenas termos ilustrativos",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1694,6 +1705,7 @@
           }
         ],
         "overview": [
+          "Coberturas solares para edifícios comerciais.",
           "Dados de exemplo - não é uma oferta real",
           "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada.",
           "A subordinação aumenta a gravidade da perda em caso de insolvência",
@@ -1705,9 +1717,9 @@
         "news": []
       },
       {
-        "issuer": "Neighbourhood Library Association (emitente de exemplo)",
+        "issuer": "Livros à Esquina (Dados de exemplo - não é uma oferta real)",
         "category": "Educação e formação aeronáutica",
-        "teaser": "Uma biblioteca de bairro a recolher donativos para livros novos e sessões de leitura. Contribuição sem propriedade, juros, reembolso ou retorno financeiro. Dados de exemplo - não é uma oferta real",
+        "teaser": "Biblioteca de bairro e espaço de leitura partilhado. Dados de exemplo - não é uma oferta real",
         "interestRate": "Nenhum - donativo sem retorno financeiro (exemplo)",
         "term": "Sem prazo de reembolso (exemplo)",
         "minInvestment": "Qualquer montante (exemplo)",
@@ -1730,6 +1742,7 @@
           }
         ],
         "overview": [
+          "Biblioteca de bairro e espaço de leitura partilhado.",
           "Dados de exemplo - não é uma oferta real",
           "Contribuição sem propriedade, juros, reembolso ou retorno financeiro.",
           "Não se promete dedução fiscal.",
@@ -1739,9 +1752,9 @@
         "news": []
       },
       {
-        "issuer": "Makers Workshop Collective (emitente de exemplo)",
+        "issuer": "Barro Vivo (Dados de exemplo - não é uma oferta real)",
         "category": "Tecnologia industrial e produção",
-        "teaser": "Um makerspace comunitário a financiar novas ferramentas; os apoiantes recebem recompensas não financeiras, como tempo de oficina. Não é oferecido retorno financeiro. Dados de exemplo - não é uma oferta real",
+        "teaser": "Forno comunitário para ceramistas locais. Dados de exemplo - não é uma oferta real",
         "interestRate": "Nenhum - recompensa não financeira (exemplo)",
         "term": "Entrega da recompensa após o financiamento (exemplo)",
         "minInvestment": "Qualquer montante (exemplo)",
@@ -1764,6 +1777,7 @@
           }
         ],
         "overview": [
+          "Forno comunitário para ceramistas locais.",
           "Dados de exemplo - não é uma oferta real",
           "Financiamento em troca de uma recompensa não financeira ou do produto ou serviço financiado. Não é oferecido retorno financeiro.",
           "Entrega, cancelamento e direitos do consumidor seriam definidos por oferta.",
@@ -1773,9 +1787,9 @@
         "news": []
       },
       {
-        "issuer": "Workshop Lamp Studio (emitente de exemplo)",
+        "issuer": "Luz de Oficina (Dados de exemplo - não é uma oferta real)",
         "category": "Produtos de consumo, moda, vestuário e retalho",
-        "teaser": "Pré-venda de um candeeiro de oficina artesanal: os apoiantes encomendam antecipadamente o produto financiado. Estruturado como financiamento com recompensa, não como investimento ou direito a um token futuro. Dados de exemplo - não é uma oferta real",
+        "teaser": "Candeeiros artesanais de uma pequena oficina de design. Dados de exemplo - não é uma oferta real",
         "interestRate": "Nenhum - pré-venda de produto (exemplo)",
         "term": "Entrega do produto pré-vendido (exemplo)",
         "minInvestment": "Qualquer montante (exemplo)",
@@ -1798,6 +1812,7 @@
           }
         ],
         "overview": [
+          "Candeeiros artesanais de uma pequena oficina de design.",
           "Dados de exemplo - não é uma oferta real",
           "Encomenda antecipada do produto ou serviço financiado, estruturada como financiamento com recompensa, não como investimento ou direito a um token futuro. Não é oferecido retorno financeiro.",
           "Entrega, cancelamento e direitos do consumidor seriam definidos por oferta.",
@@ -1807,9 +1822,9 @@
         "news": []
       },
       {
-        "issuer": "Atlas Mobility S.A. (emitente de exemplo)",
+        "issuer": "Pedal Leve (Dados de exemplo - não é uma oferta real)",
         "category": "Bicicletas elétricas e mobilidade ligeira",
-        "teaser": "Oferta de exemplo de warrants sobre novas ações de um operador português de mobilidade ligeira. Todas as condições desta página são dados de exemplo.",
+        "teaser": "Montagem de bicicletas de carga para entregas urbanas. Dados de exemplo - não é uma oferta real",
         "interestRate": "Sem cupão - valorização apenas pelo exercício (exemplo)",
         "term": "Janela de exercício até 2029-06-30 (exemplo)",
         "minInvestment": "100 USDC de testnet (exemplo)",
@@ -1820,7 +1835,7 @@
           },
           {
             "label": "Preço de exercício",
-            "value": "4,20 por nova ação (exemplo)"
+            "value": "Aberta - abaixo da meta"
           },
           {
             "label": "Exercício e diluição",
@@ -1832,6 +1847,7 @@
           }
         ],
         "overview": [
+          "Montagem de bicicletas de carga para entregas urbanas.",
           "Dados de exemplo - não é uma oferta real",
           "Um warrant dá o direito, não a obrigação, de subscrever novas ações ao preço de exercício durante a janela de exercício.",
           "Se o preço da ação nunca superar o preço de exercício, o warrant pode expirar sem valor; é possível a perda total do montante pago.",
@@ -1842,9 +1858,9 @@
         "news": []
       },
       {
-        "issuer": "Douro Textiles S.A. (emitente de exemplo)",
+        "issuer": "Fio do Douro (Dados de exemplo - não é uma oferta real)",
         "category": "Tecnologia industrial e produção",
-        "teaser": "Oferta de exemplo de certificados de depósito sobre ações de uma exportadora têxtil portuguesa, com as ações subjacentes detidas por um custodiante. Todas as condições desta página são dados de exemplo.",
+        "teaser": "Tecelagem circular com fibras têxteis recuperadas. Dados de exemplo - não é uma oferta real",
         "interestRate": "Distribuições acompanham as ações subjacentes (exemplo)",
         "term": "Sem maturidade fixa (exemplo)",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1855,7 +1871,7 @@
           },
           {
             "label": "Subjacente",
-            "value": "Ações ordinárias da Douro Textiles S.A. (exemplo)"
+            "value": "Financiada - prazo ainda não terminou"
           },
           {
             "label": "Custódia",
@@ -1867,6 +1883,7 @@
           }
         ],
         "overview": [
+          "Tecelagem circular com fibras têxteis recuperadas.",
           "Dados de exemplo - não é uma oferta real",
           "O certificado representa ações subjacentes detidas por um custodiante; o titular detém o direito económico, e voto e transmissão seguem as condições do certificado.",
           "A custódia exige um banco ou empresa de investimento autorizado (CRD / MiFID II) ou um regime equivalente de registo do emitente.",
@@ -1877,9 +1894,9 @@
         "news": []
       },
       {
-        "issuer": "Tejo Packaging Lda (emitente de exemplo)",
+        "issuer": "Folha Nova (Dados de exemplo - não é uma oferta real)",
         "category": "Produtos de consumo, moda, vestuário e retalho",
-        "teaser": "Oferta de exemplo de papel comercial a nove meses emitido por um fornecedor português de embalagens. Todas as condições desta página são dados de exemplo.",
+        "teaser": "Embalagens de fibra para produtores locais. Dados de exemplo - não é uma oferta real",
         "interestRate": "4,1% a.a. de rendibilidade implícita (exemplo)",
         "term": "9 meses (exemplo)",
         "minInvestment": "500 USDC de testnet (exemplo)",
@@ -1890,7 +1907,7 @@
           },
           {
             "label": "Condições de retalho",
-            "value": "Exige rating, garantia ou rácio de autonomia financeira suficiente (nota de exemplo)"
+            "value": "Aberta - abaixo da meta"
           },
           {
             "label": "Processo CMVM",
@@ -1902,6 +1919,7 @@
           }
         ],
         "overview": [
+          "Embalagens de fibra para produtores locais.",
           "Dados de exemplo - não é uma oferta real",
           "Dívida de curto prazo sem garantia real, inferior a um ano, transmissível como valor mobiliário e tratada como instrumento do mercado monetário.",
           "Sem garantia real: se o emitente não pagar nem refinanciar na maturidade, os investidores podem perder a totalidade.",
@@ -1912,9 +1930,9 @@
         "news": []
       },
       {
-        "issuer": "Costa Restaurants Lda (emitente de exemplo)",
+        "issuer": "Mesa da Costa (Dados de exemplo - não é uma oferta real)",
         "category": "Restaurantes e gastronomia",
-        "teaser": "Oferta de exemplo de um empréstimo a um grupo português de restauração com juro variável indexado às receitas e reembolso incondicional do capital. Todas as condições desta página são dados de exemplo.",
+        "teaser": "Cozinha sazonal num restaurante de bairro. Dados de exemplo - não é uma oferta real",
         "interestRate": "Variável, indexado às receitas (exemplo)",
         "term": "48 meses (exemplo)",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1925,7 +1943,7 @@
           },
           {
             "label": "Reembolso do capital",
-            "value": "Incondicional, no prazo e plano de pagamentos acordados - os montantes vencidos são pagos haja ou não receitas (condições de exemplo)"
+            "value": "Aberta - abaixo da meta"
           },
           {
             "label": "Juro",
@@ -1937,6 +1955,7 @@
           }
         ],
         "overview": [
+          "Cozinha sazonal num restaurante de bairro.",
           "Dados de exemplo - não é uma oferta real",
           "Um empréstimo: o reembolso do capital é incondicional, com prazo e plano de pagamentos acordados.",
           "O juro varia com as receitas do emitente; se os montantes vencidos só fossem pagos quando existissem receitas, o instrumento seria condicional e deixaria de ser um empréstimo ECSPR.",
@@ -1947,9 +1966,9 @@
         "news": []
       },
       {
-        "issuer": "Mondego Wind S.A. (emitente de exemplo)",
+        "issuer": "Vento do Mondego (Dados de exemplo - não é uma oferta real)",
         "category": "Energia e serviços públicos",
-        "teaser": "Oferta de exemplo de certificados de depósito sobre obrigações de um operador eólico português, com as obrigações subjacentes detidas por um custodiante. Todas as condições desta página são dados de exemplo.",
+        "teaser": "Produção eólica local num projeto de energia partilhada. Dados de exemplo - não é uma oferta real",
         "interestRate": "Distribuições acompanham as obrigações subjacentes (exemplo)",
         "term": "Acompanha a maturidade das obrigações subjacentes (exemplo)",
         "minInvestment": "250 USDC de testnet (exemplo)",
@@ -1960,7 +1979,7 @@
           },
           {
             "label": "Subjacente",
-            "value": "Obrigações da Mondego Wind S.A. (exemplo)"
+            "value": "Aberta - abaixo da meta"
           },
           {
             "label": "Custódia",
@@ -1972,11 +1991,784 @@
           }
         ],
         "overview": [
+          "Produção eólica local num projeto de energia partilhada.",
           "Dados de exemplo - não é uma oferta real",
           "O certificado representa obrigações subjacentes detidas por um custodiante; o titular detém o direito económico, e a transmissão segue as condições do certificado.",
           "A colocação ao abrigo do ECSPR não está provada: um certificado de depósito é emitido pelo custodiante, não pelo dono do projeto ou por um SPV, e nem a ESMA nem a CMVM o confirmaram.",
           "A custódia exige um banco ou empresa de investimento autorizado (CRD / MiFID II) ou um regime equivalente de registo do emitente.",
           "Perda total possível em caso de incumprimento do emitente; as obrigações subjacentes podem ser ilíquidas."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Raiz Vertical (Dados de exemplo - não é uma oferta real)",
+        "category": "Agricultura, ambiente e reciclagem",
+        "teaser": "Microvegetais cultivados para cozinhas locais. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Sénior (não subordinada)"
+          }
+        ],
+        "overview": [
+          "Microvegetais cultivados para cozinhas locais.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Tronco Vivo (Dados de exemplo - não é uma oferta real)",
+        "category": "Agricultura, ambiente e reciclagem",
+        "teaser": "Cultivo de cogumelos gourmet em pequena escala. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Cultivo de cogumelos gourmet em pequena escala.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Massa Lenta (Dados de exemplo - não é uma oferta real)",
+        "category": "Produtos alimentares e bebidas",
+        "teaser": "Pão de fermentação lenta para o bairro. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Sénior (não subordinada)"
+          }
+        ],
+        "overview": [
+          "Pão de fermentação lenta para o bairro.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Terra de Forno (Dados de exemplo - não é uma oferta real)",
+        "category": "Produtos de consumo, moda, vestuário e retalho",
+        "teaser": "Cerâmica utilitária artesanal para o dia a dia. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Cerâmica utilitária artesanal para o dia a dia.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Mar em Terra (Dados de exemplo - não é uma oferta real)",
+        "category": "Agricultura, ambiente e reciclagem",
+        "teaser": "Cultivo de algas comestíveis para produtores alimentares. Dados de exemplo - não é uma oferta real",
+        "interestRate": "Sem retorno fixo (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Ação · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Participação indireta",
+            "value": "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado."
+          }
+        ],
+        "overview": [
+          "Cultivo de algas comestíveis para produtores alimentares.",
+          "Dados de exemplo - não é uma oferta real",
+          "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado.",
+          "Sem direito fixo de reembolso; os dividendos não são garantidos",
+          "Perda total possível",
+          "As ações de crowdfunding normalmente não são negociáveis em bolsa",
+          "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Água de Volta (Dados de exemplo - não é uma oferta real)",
+        "category": "Tecnologia industrial e produção",
+        "teaser": "Reutilização de água de processos industriais. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Obrigação · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Obrigação",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Reutilização de água de processos industriais.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada.",
+          "A subordinação aumenta a gravidade da perda em caso de insolvência",
+          "Continua sem garantias salvo indicação de colateral",
+          "Sem participação no crescimento da empresa"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Passo Certo (Dados de exemplo - não é uma oferta real)",
+        "category": "Saúde, bem-estar e tecnologia médica",
+        "teaser": "Dispositivos ortopédicos por medida. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Sénior (não subordinada)"
+          }
+        ],
+        "overview": [
+          "Dispositivos ortopédicos por medida.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Lente Circular (Dados de exemplo - não é uma oferta real)",
+        "category": "Produtos de consumo, moda, vestuário e retalho",
+        "teaser": "Reparação e reutilização de equipamento ótico. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Reparação e reutilização de equipamento ótico.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Polpa Fresca (Dados de exemplo - não é uma oferta real)",
+        "category": "Produtos alimentares e bebidas",
+        "teaser": "Transformação de fruta local em polpa e sumo. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Sénior (não subordinada)"
+          }
+        ],
+        "overview": [
+          "Transformação de fruta local em polpa e sumo.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Som de Madeira (Dados de exemplo - não é uma oferta real)",
+        "category": "Tecnologia industrial e produção",
+        "teaser": "Construção artesanal e reparação de instrumentos de cordas. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Construção artesanal e reparação de instrumentos de cordas.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Olho do Mar (Dados de exemplo - não é uma oferta real)",
+        "category": "Agricultura, ambiente e reciclagem",
+        "teaser": "Sensores de qualidade da água para aquicultura. Dados de exemplo - não é uma oferta real",
+        "interestRate": "Sem retorno fixo (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Ação · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Participação indireta",
+            "value": "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado."
+          }
+        ],
+        "overview": [
+          "Sensores de qualidade da água para aquicultura.",
+          "Dados de exemplo - não é uma oferta real",
+          "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado.",
+          "Sem direito fixo de reembolso; os dividendos não são garantidos",
+          "Perda total possível",
+          "As ações de crowdfunding normalmente não são negociáveis em bolsa",
+          "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Traço Recuperado (Dados de exemplo - não é uma oferta real)",
+        "category": "Materiais de construção e habitação pré-fabricada",
+        "teaser": "Restauro de azulejos e mosaicos arquitetónicos. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Restauro de azulejos e mosaicos arquitetónicos.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Solo de Novo (Dados de exemplo - não é uma oferta real)",
+        "category": "Agricultura, ambiente e reciclagem",
+        "teaser": "Compostagem de resíduos orgânicos no bairro. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Compostagem de resíduos orgânicos no bairro.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Torra de Bairro (Dados de exemplo - não é uma oferta real)",
+        "category": "Produtos alimentares e bebidas",
+        "teaser": "Torrefação de café de especialidade para cafés locais. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Sénior (não subordinada)"
+          }
+        ],
+        "overview": [
+          "Torrefação de café de especialidade para cafés locais.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Oficina Curiosa (Dados de exemplo - não é uma oferta real)",
+        "category": "Educação e formação aeronáutica",
+        "teaser": "Kits de ciência prática para aprender fazendo. Dados de exemplo - não é uma oferta real",
+        "interestRate": "Sem retorno fixo (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Ação · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Participação indireta",
+            "value": "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado."
+          }
+        ],
+        "overview": [
+          "Kits de ciência prática para aprender fazendo.",
+          "Dados de exemplo - não é uma oferta real",
+          "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado.",
+          "Sem direito fixo de reembolso; os dividendos não são garantidos",
+          "Perda total possível",
+          "As ações de crowdfunding normalmente não são negociáveis em bolsa",
+          "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Letra Viva (Dados de exemplo - não é uma oferta real)",
+        "category": "Tecnologia industrial e produção",
+        "teaser": "Impressão tipográfica numa oficina local. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Impressão tipográfica numa oficina local.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Lã da Serra (Dados de exemplo - não é uma oferta real)",
+        "category": "Materiais de construção e habitação pré-fabricada",
+        "teaser": "Isolamento produzido com lã natural de ovelha. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Subordinada (fica atrás dos credores seniores em caso de insolvência)"
+          }
+        ],
+        "overview": [
+          "Isolamento produzido com lã natural de ovelha.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Rota Digital (Dados de exemplo - não é uma oferta real)",
+        "category": "Tecnologias da informação, software e plataformas digitais",
+        "teaser": "Software de planeamento de rotas para entregas locais. Dados de exemplo - não é uma oferta real",
+        "interestRate": "Sem retorno fixo (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Ação · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Participação indireta",
+            "value": "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado."
+          }
+        ],
+        "overview": [
+          "Software de planeamento de rotas para entregas locais.",
+          "Dados de exemplo - não é uma oferta real",
+          "Os investidores participam indiretamente num investimento numa PME - por exemplo através de um veículo ou fiduciário - com processamento simplificado.",
+          "Sem direito fixo de reembolso; os dividendos não são garantidos",
+          "Perda total possível",
+          "As ações de crowdfunding normalmente não são negociáveis em bolsa",
+          "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Segundo Ciclo (Dados de exemplo - não é uma oferta real)",
+        "category": "Energia e serviços públicos",
+        "teaser": "Diagnóstico de baterias e aplicações de segunda vida. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Obrigação · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Obrigação",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Diagnóstico de baterias e aplicações de segunda vida.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada.",
+          "A subordinação aumenta a gravidade da perda em caso de insolvência",
+          "Continua sem garantias salvo indicação de colateral",
+          "Sem participação no crescimento da empresa"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Lagar Novo (Dados de exemplo - não é uma oferta real)",
+        "category": "Produtos alimentares e bebidas",
+        "teaser": "Produção de azeite para pequenos olivicultores locais. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Sénior (não subordinada)"
+          }
+        ],
+        "overview": [
+          "Produção de azeite para pequenos olivicultores locais.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Colmeia Viva (Dados de exemplo - não é uma oferta real)",
+        "category": "Agricultura, ambiente e reciclagem",
+        "teaser": "Mel local e serviços de polinização agrícola. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Mel local e serviços de polinização agrícola.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Pata Serena (Dados de exemplo - não é uma oferta real)",
+        "category": "Produtos de consumo, moda, vestuário e retalho",
+        "teaser": "Alimentação animal em pequenos lotes para famílias locais. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Sénior (não subordinada)"
+          }
+        ],
+        "overview": [
+          "Alimentação animal em pequenos lotes para famílias locais.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Rotas Abertas (Dados de exemplo - não é uma oferta real)",
+        "category": "Hotéis, hotelaria e turismo",
+        "teaser": "Turismo local acessível e visitas em pequenos grupos. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Empréstimo · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Empréstimo",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Turismo local acessível e visitas em pequenos grupos.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um empréstimo direto ao emitente com taxa de juro e plano de reembolso definidos. A mesma categoria-mãe de empréstimo pode ser sénior, subordinada (incluindo variantes participativas nos lucros) ou deixar a senioridade por especificar.",
+          "O incumprimento do emitente pode significar perda total",
+          "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
+          "Sem garantia de depósitos"
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Casa em Peças (Dados de exemplo - não é uma oferta real)",
+        "category": "Materiais de construção e habitação pré-fabricada",
+        "teaser": "Construção modular em madeira montada por secções. Dados de exemplo - não é uma oferta real",
+        "interestRate": "5,0% ao ano (amostra)",
+        "term": "Apenas termos ilustrativos",
+        "minInvestment": "250 USDC de testnet (exemplo)",
+        "additionalInfo": [
+          {
+            "label": "Produto de investimento",
+            "value": "Obrigação · Dados de exemplo - não é uma oferta real"
+          },
+          {
+            "label": "Estado",
+            "value": "Aberta - abaixo da meta"
+          },
+          {
+            "label": "Obrigação",
+            "value": "Senioridade não especificada nas condições"
+          }
+        ],
+        "overview": [
+          "Construção modular em madeira montada por secções.",
+          "Dados de exemplo - não é uma oferta real",
+          "Um instrumento de dívida titularizado com cupão e prazo definidos. Emitida como sénior (não subordinada), subordinada (incluindo obrigações qualificadas explicitamente subordinadas e Mini Bonds subordinados) ou com senioridade não especificada.",
+          "A subordinação aumenta a gravidade da perda em caso de insolvência",
+          "Continua sem garantias salvo indicação de colateral",
+          "Sem participação no crescimento da empresa"
         ],
         "documents": [],
         "news": []

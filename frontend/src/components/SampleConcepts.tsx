@@ -7,7 +7,7 @@ export function SampleConceptsSection({ concepts = SAMPLE_CONCEPTS }: { concepts
   const { m } = useI18n();
   const t = m.sampleConcepts;
   return (
-    <section className="sample-concepts" aria-labelledby="sample-concepts-title" data-sample-concepts>
+    <section id="learn-educational-concepts" className="sample-concepts" aria-labelledby="sample-concepts-title" data-sample-concepts>
       <h2 id="sample-concepts-title" className="section-title">
         {t.title}
       </h2>
@@ -16,12 +16,16 @@ export function SampleConceptsSection({ concepts = SAMPLE_CONCEPTS }: { concepts
         {concepts.map((concept) => {
           const index = sampleConceptIndex(concept.id);
           return (
-            <article key={concept.id} className="sample-concept-card" data-concept={concept.id} data-concept-state={concept.sampleState}>
+            <article
+              id={`learn-${concept.id}`}
+              key={concept.id}
+              className="sample-concept-card"
+              data-concept={concept.id}
+              data-concept-state={concept.sampleState}
+            >
               <span className="status-chip chip-demo">{m.card.demo}</span>
               <p className="sample-concept-format">{t.list[index].label}</p>
-              <h3>
-                <a href={routeHash({ name: 'campaign', campaignId: concept.id }) + '?fixtures=1'}>{concept.name}</a>
-              </h3>
+              <h3>{concept.name}</h3>
               <p className="sample-concept-state">
                 {t.unavailable}: {t.states[concept.sampleState]}
               </p>

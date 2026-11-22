@@ -21,8 +21,7 @@ import ContributionPreview from '../components/ContributionPreview';
 import ContributionTerms from '../components/ContributionTerms';
 import SampleLifecycle from '../components/SampleLifecycle';
 import { isNationalRegimeSample } from '../data/sampleCatalog';
-import { SampleConceptDetail } from '../components/SampleConcepts';
-import { sampleConceptIndex } from '../data/sampleConcepts';
+import SampleContractLink from '../components/SampleContractLink';
 
 const TAB_IDS = ['overview', 'details', 'documents', 'news', 'podcast'] as const;
 
@@ -30,8 +29,6 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
   const { locale, m } = useI18n();
   const [tab, setTab] = useState<(typeof TAB_IDS)[number]>('overview');
   const campaign = market.campaigns.find((c) => c.id === campaignId);
-
-  if (market.fixtureMode && sampleConceptIndex(campaignId) >= 0) return <SampleConceptDetail conceptId={campaignId} />;
 
   if (!campaign) {
     if (!market.loaded) {
@@ -85,6 +82,7 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
       </header>
 
       {market.fixtureMode && <SampleLifecycle campaignId={campaign.id} />}
+      {market.fixtureMode && <SampleContractLink campaignId={campaign.id} />}
       {market.fixtureMode && isNationalRegimeSample(campaign.id) && <p className="sample-regime-note">{m.nationalFunding.sampleNote}</p>}
 
       <div className="campaign-columns">

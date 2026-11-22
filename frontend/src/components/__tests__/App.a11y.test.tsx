@@ -32,7 +32,8 @@ describe('site chrome accessibility semantics', () => {
 
   test('risk banner is present on every page as a note', async () => {
     render(<App />);
-    const banner = screen.getByRole('note', { name: '' });
+    const banner = screen.getByText(/Crowdfunding investments carry a risk of total loss/);
+    expect(banner.getAttribute('role')).toBe('note');
     expect(banner.textContent).toMatch(/risk of total loss/);
   });
 
@@ -63,7 +64,7 @@ describe('discovery accessibility semantics', () => {
     fireEvent.change(search, { target: { value: 'zzz-no-match' } });
     await waitFor(() => {
       const status = screen.getByRole('status');
-      expect(status.textContent).toMatch(/No campaigns match/);
+      expect(status.textContent).toMatch(/No results match/);
     });
   });
 });

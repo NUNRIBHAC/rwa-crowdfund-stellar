@@ -1,0 +1,178 @@
+[
+  {
+    "id": "fixture-lisbon-riverside",
+    "contractId": "CAINBTXKKIYUWVHOCJWTQRQDJTVCYTGKAEVAUBR65WBTCIHQGE74FTVP"
+  },
+  {
+    "id": "fixture-alentejo-solar",
+    "contractId": "CCNLNICW22KXEAHWBIKU7BJRIDHFQ7VB2VHT5OD52CJKMCQW2BATSADR"
+  },
+  {
+    "id": "fixture-porto-logistics",
+    "contractId": "CAK4R7ZXGG5KRDKQVPL7YSBK73DAEFL3KZTU6WKBIPLSXIHCSAIIHPTB"
+  },
+  {
+    "id": "fixture-atlas-participation",
+    "contractId": "CB4Q2LGAEWC4JXRSGFNTUL5GIHFJZ47ZRHLMBSDPHZXENSZI4C22O7OI"
+  },
+  {
+    "id": "fixture-cedar-substance",
+    "contractId": "CA6L7O5PDRKALDJYW7TP7WQMEPXC7ZPMCJJEDBJMO2DI3ZYCU7JN42NM"
+  },
+  {
+    "id": "fixture-orbit-shares",
+    "contractId": "CBJCBQGPMKCXM4PF7PURH7HSTYG7TEUQQU55HPQDTWP3SDQT7VYXS2E2"
+  },
+  {
+    "id": "fixture-meadow-partnership",
+    "contractId": "CC5JX3P4KS7JL3LWBHEUEMTPJUMDKTKHXOENZXQO7WX7Z76KVEMPTASS"
+  },
+  {
+    "id": "fixture-harbor-senior-loan",
+    "contractId": "CAIMXW5UPOGETM3EUUXMOSM7OXAMBJ3O344HCUSH4VGPQO7SHQFQNDTL"
+  },
+  {
+    "id": "fixture-grove-subordinated-loan",
+    "contractId": "CB74VQOUD6ILV7PAIOUQEENJ63IHFBXMHYVXSKROCOLQ5ZH6HSNISX5S"
+  },
+  {
+    "id": "fixture-mosaic-loan",
+    "contractId": "CA4W5NKCE2D4NHFBYVPDELTUT2TPXCJBYXV2FXJMLBOXS5SDIDLGWEST"
+  },
+  {
+    "id": "fixture-beacon-bond",
+    "contractId": "CDKKZSBWD2G4QMPWJOOCQLJ4ZFYT2NK55TVCTEF6UOCVGNREAY2NNDPC"
+  },
+  {
+    "id": "fixture-horizon-zero-coupon",
+    "contractId": "CCU4MK7AGQT6GYRGUTULZYKIWZIUBJWGKQHTALAYLWS4AJJBPH7XOJ2B"
+  },
+  {
+    "id": "fixture-library-donation",
+    "contractId": "CC5A756QRGKEVK5LW6N23KQJ4YPH4UGLZNK5HH5EHIFIWS6TQZVMVYUO"
+  },
+  {
+    "id": "fixture-makers-reward",
+    "contractId": "CC5MJBNSZDL3YGPJD2FMSQYW2DJ4UT7K3A4HMXG4DYNSQR43G5HEH3DF"
+  },
+  {
+    "id": "fixture-lamp-pre-sale",
+    "contractId": "CCGTYQZXRHBBWQGGSWEMFDY4ZAPENOBQUUCQLSYEXZYR7PPUVJ6Q2CQJ"
+  },
+  {
+    "id": "fixture-atlas-warrants",
+    "contractId": "CCQEBL6LEJGTR7HVSCCJG3OZ4556GDOWKNNKHMZ5BTK6BV335K2IJVPU"
+  },
+  {
+    "id": "fixture-douro-share-dr",
+    "contractId": "CDDYJQS7LUVZDV5LCAVMTXEN2AZWGWJTPFKSSZ344R44PMKTCGYEUH7Y"
+  },
+  {
+    "id": "fixture-tejo-commercial-paper",
+    "contractId": "CCXMKUX4ASHC5Z4BR4DM7PSVEA2XFGQKO75XO777673Y6OAOVC5JMWO7"
+  },
+  {
+    "id": "fixture-costa-revenue-loan",
+    "contractId": "CCVZVZ5S453W64NEORX47XBCUQS6JOSNRQDVCFNDTO4RPMG5TQBL2GO3"
+  },
+  {
+    "id": "fixture-mondego-debt-dr",
+    "contractId": "CBAKG64LZWIU3XPEMGZCZTQ3TOSYHULACHU4CX2LE4J2X3DGZJAPAVMM"
+  },
+  {
+    "id": "fixture-raiz-vertical",
+    "contractId": "CDALJO2QX6FJEJOY2DL6GSUL7HC7IOBR6CIFQ76J5NF6OCIB3VCFQE7W"
+  },
+  {
+    "id": "fixture-tronco-vivo",
+    "contractId": "CCRST4CBPT7AISFUQ4XR7S3LDX3SZ2OCTHRFIQBBDTWHPUWD6I2JZDRR"
+  },
+  {
+    "id": "fixture-massa-lenta",
+    "contractId": "CBP5G2WH4DZIX222ZQ4RFOWZGKG2XLEKPAQSLOO7UZ7J6WBTLNWB6WO3"
+  },
+  {
+    "id": "fixture-terra-forno",
+    "contractId": "CATOGMYSWDHEH7H43GZ55QRJI5UICLHXMB3T7CTTACEZWX72FE2MOX6F"
+  },
+  {
+    "id": "fixture-mar-terra",
+    "contractId": "CC3PGGISYWM2ZP3QMQRMQLKVUFRMBEP6P6VSIOO5AGFYN552XUHZ5SZG"
+  },
+  {
+    "id": "fixture-agua-volta",
+    "contractId": "CBWX7XZGFYDCRJ6ZVRLWDQQXJMDXHUG55WWW2KI6EWSOVEBLINIFL5CJ"
+  },
+  {
+    "id": "fixture-passo-certo",
+    "contractId": "CBQ2M4AFCHMCH7NF3D3OQJQPUVIMTVXJCJMD6LURTTID6QFATMWHMVMJ"
+  },
+  {
+    "id": "fixture-lente-circular",
+    "contractId": "CAO3JDHJD5UU3MZCMDYO5Q44LJYUEXVFNG2LJHK34XLVN4N6NWWKRLL7"
+  },
+  {
+    "id": "fixture-polpa-fresca",
+    "contractId": "CAW72AOGVEBR62GLHT75RBUN6UFXX4IFL2UHWEVWOF5YDUC62WTGLMMF"
+  },
+  {
+    "id": "fixture-som-madeira",
+    "contractId": "CARILM35E2OMTAK27QXWYBQP64SQIICXZ6VVVZQV6FUDDFLLHC3GDAEJ"
+  },
+  {
+    "id": "fixture-olho-mar",
+    "contractId": "CANKWW5FGLLFHNDAEZ4IDHJNOO73PNFDL6T2CV6TPYYRD6FR2VXKBYBM"
+  },
+  {
+    "id": "fixture-traco-recuperado",
+    "contractId": "CBPOLLSC7HRDFSHNM3R7IOYUR4XPQ5XRRQOXEJXOAEJXPANGBG5M2W2L"
+  },
+  {
+    "id": "fixture-solo-novo",
+    "contractId": "CAGSVEUEWFRP3NEANNPTC44UHN4TUW4S3NRCSNONG24GGNFYWB5WGDOO"
+  },
+  {
+    "id": "fixture-torra-bairro",
+    "contractId": "CAVVKURDAAQ7DHX6XPCH6MHPIXZ5MFGOMLQRTL7VRZNJYASQ5ZXFBOX5"
+  },
+  {
+    "id": "fixture-oficina-curiosa",
+    "contractId": "CCEQKZH4KSUF5HKAWXFOGIVVORUPAFQMRIYF22F3XOCWLBSY46TNCBO2"
+  },
+  {
+    "id": "fixture-letra-viva",
+    "contractId": "CDUUTDKAKPTHXUJ2EW4JOIMXGESLKO7H5OXXMMN7HRPWDVAUNJKGJT25"
+  },
+  {
+    "id": "fixture-la-serra",
+    "contractId": "CAH4FSHP4L227MDCZGYD4TTOF3VXRY5GWIR5BHFJZF5O2DVXEKUP3W3F"
+  },
+  {
+    "id": "fixture-rota-digital",
+    "contractId": "CD65X4DBFXQKSEKAM45FVZBASBVMOVI7YXBW4KVCJBA277ZLOPGXBSIH"
+  },
+  {
+    "id": "fixture-segundo-ciclo",
+    "contractId": "CAWAD3RSW6SOHXNPXCLWPKU3GBXSFOQ4EACGXPHZR7ABV6NEHVHARGNJ"
+  },
+  {
+    "id": "fixture-lagar-novo",
+    "contractId": "CANG4OKFFTUIVLETN5VS64PNONOIY5C4P2RMGW5YMOMHPMRRYGSQRK2K"
+  },
+  {
+    "id": "fixture-colmeia-viva",
+    "contractId": "CALYDXJIK5J6KUKJIFBSHA4MJB72PIEEAISPHHNRDYGDWRM3OBRIYDVK"
+  },
+  {
+    "id": "fixture-pata-serena",
+    "contractId": "CB6NBU6B7CP2YSQ7ZPTJNUB6ZMVZCYGW56IPLU6XLZTDTVH2LCQHIPLD"
+  },
+  {
+    "id": "fixture-rotas-abertas",
+    "contractId": "CBBFKFA2W6QFASGWHT2AX54I66CDI4L3AZMEZJJQ6BQJOCUDHSLTAANS"
+  },
+  {
+    "id": "fixture-casa-pecas",
+    "contractId": "CAEW2Q4XU3O3HMYYJBB23DGPHHU563XP2FMUFVLX5CC7PHD2PP577KUQ"
+  }
+]

@@ -4,13 +4,14 @@ import Hero from '../components/Hero';
 import CampaignCard from '../components/CampaignCard';
 import { profileFor } from '../data/profiles';
 import { routeHash } from '../router';
+import { selectHomeCampaigns } from '../home-campaigns';
 import { useI18n } from '../i18n';
 
 export default function Home({ market, loadStatus }: { market: Market; loadStatus?: ReactNode }) {
   const { m } = useI18n();
   const { campaigns, loaded, fixtureMode } = market;
   const mode = fixtureMode ? 'sample' : loaded && campaigns.length > 0 ? 'live' : 'unknown';
-  const latest = [...campaigns].sort((a, b) => Number(a.config.deadline) - Number(b.config.deadline)).slice(0, 3);
+  const latest = selectHomeCampaigns(campaigns);
 
   return (
     <div className="home-introduction">

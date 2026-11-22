@@ -55,9 +55,9 @@ const market: Market = {
   onToggleFixtures: vi.fn(),
 };
 
-test('twenty unique client-only fixtures cover all instrument families without treating structures as instruments', () => {
-  expect(FIXTURE_CAMPAIGNS).toHaveLength(20);
-  expect(new Set(FIXTURE_CAMPAIGNS.map((c) => c.id)).size).toBe(20);
+test('forty-four unique client-only fixtures cover all instrument families without treating structures as instruments', () => {
+  expect(FIXTURE_CAMPAIGNS).toHaveLength(44);
+  expect(new Set(FIXTURE_CAMPAIGNS.map((c) => c.id)).size).toBe(44);
   expect(FIXTURE_CAMPAIGNS.map((c) => c.id)).toEqual(SAMPLE_CATALOG.map((c) => c.id));
   expect(new Set(SAMPLE_CATALOG.map((c) => c.instrument))).toEqual(
     new Set([
@@ -85,6 +85,10 @@ test('twenty unique client-only fixtures cover all instrument families without t
   }
   expect(SAMPLE_CATALOG.some((c) => c.overlays.includes('zero-coupon' as never) && c.instrument === 'bond')).toBe(true);
   expect(SAMPLE_CATALOG.some((c) => c.overlays.includes('convertible' as never) && c.instrument === 'bond')).toBe(true);
+  expect(SAMPLE_CATALOG.filter((c) => ['open', 'closing'].includes(c.state))).toHaveLength(34);
+  expect(new Set(SAMPLE_CATALOG.map((c) => c.name)).size).toBe(44);
+  expect(FIXTURE_CAMPAIGNS.map((c) => c.name)).toEqual(SAMPLE_CATALOG.map((c) => c.name));
+  expect(SAMPLE_CATALOG.every((c) => !/demo|fixture|sample|series|tokenization/i.test(c.name))).toBe(true);
 });
 
 for (const [locale, messages] of Object.entries(locales)) {
@@ -97,6 +101,9 @@ for (const [locale, messages] of Object.entries(locales)) {
       expect(profile.instrumentSeniority).toBe(sample.seniority);
       expect(profile.instrumentOverlays).toEqual(sample.overlays);
       expect(profile.teaser.trim().length).toBeGreaterThan(20);
+      expect(profile.issuer).toContain(sample.name);
+      expect(profile.teaser).toContain(messages.profiles.sampleMarker);
+      expect(profile.category).toBe(messages.invest.industryLabels[sample.industry]);
       expect(profile.overview.length).toBeGreaterThan(0);
       expect(composeInstrumentLabel(messages, sample.instrument, sample.seniority, [...sample.overlays])).not.toBe(sample.instrument);
       expect(sampleIndustry(sample.id)).toBe(sample.industry);

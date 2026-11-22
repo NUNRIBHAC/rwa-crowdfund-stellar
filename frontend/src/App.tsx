@@ -6,6 +6,7 @@ import { api } from './api';
 import { contributionError, formatAmount, tpl } from './format';
 import type { ContributionError } from './format';
 import { FIXTURE_CAMPAIGNS } from './fixtures';
+import { fixturePreference, sampleModeFor } from './sample-mode';
 import type { Market } from './market';
 import { useRoute } from './router';
 import Header from './components/Header';
@@ -104,8 +105,10 @@ export default function App() {
   // as the top banner. '' clears the slot.
   const [amountErrorCodes, setAmountErrorCodes] = useState<Record<string, ContributionError | ''>>({});
   const [prepareErrorCodes, setPrepareErrorCodes] = useState<Record<string, string>>({});
-  const [loaded, setLoaded] = useState(false);
-  const [fixtureMode, setFixtureMode] = useState(false);
+  const [networkLoaded, setNetworkLoaded] = useState(false);
+  const [fixtureOverride, setFixtureMode] = useState(() => fixturePreference(window.location.search));
+  const fixtureMode = sampleModeFor(route, fixtureOverride);
+  const loaded = fixtureMode || networkLoaded;
   const [intent, setIntent] = useState<Intent | null>(() => {
     try {
       return JSON.parse(localStorage.getItem(INTENT_KEY) ?? 'null');
@@ -126,16 +129,12 @@ export default function App() {
   async function refresh(address = actor) {
     const data = await api(`/api/campaigns${address ? `?actor=${encodeURIComponent(address)}` : ''}`);
     setCampaigns(data.campaigns);
-    setLoaded(true);
+    setNetworkLoaded(true);
   }
 
   useEffect(() => {
     localStorage.removeItem('rwa-admin-key');
-    // ?fixtures=1 shows the clearly labeled sample-data preview on load.
-    if (new URLSearchParams(window.location.search).get('fixtures') === '1') {
-      setFixtureMode(true);
-      setLoaded(true);
-    }
+    // Real campaign data stays available when leaving the sample catalog.
     refresh().catch((e) => setError({ ...bannerError(e), campaignLoad: true }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -251,7 +250,6 @@ export default function App() {
       run(() => refresh());
     } else {
       setFixtureMode(true);
-      setLoaded(true);
     }
   }
 

@@ -120,7 +120,7 @@ test('industry taxonomy always exposes all 18 choices in the requested order, in
   expect(select.options[2].textContent).toBe('Information Technology, software and digital platforms');
   expect(select.options[18].textContent).toBe('Unclear');
   fireEvent.change(select, { target: { value: 'food-beverage' } });
-  expect(screen.getByText('No campaigns match the current search and filters.')).toBeTruthy();
+  expect(screen.getByText('No results match the current search and filters.')).toBeTruthy();
   expect(screen.queryByText('QA Open Alpha')).toBeNull();
 });
 
