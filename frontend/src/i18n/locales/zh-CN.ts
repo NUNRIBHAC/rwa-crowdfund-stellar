@@ -173,7 +173,6 @@ export const zhCN: Messages = {
     themeToLight: '切换到浅色主题',
     themeToDark: '切换到深色主题',
   },
-  riskBanner: '众筹投资存在全部损失的风险。这是 Stellar 测试网原型：无真实发行、无真实资金、无投资建议。',
   hero: {
     introTitle: '共同为项目筹资。',
     intro: '探索募资活动，为共同目标出资。截止日期后，结果将决定下一步。',
@@ -193,7 +192,6 @@ export const zhCN: Messages = {
     noteLive: '下方每个项目都是 Stellar 测试网上的真实 Soroban 合约。未经审计，非生产环境。托管于免费套餐：闲置后的首个请求可能需要长达一分钟等待实例唤醒。',
     noteSample: '关联独立测试网合约的虚构场景。数值仅供说明，并非链上状态。未经审计，不可用于生产。',
     noteUnknown: '未经审计，非生产环境。',
-    unavailable: '本原型不提供：身份/KYC 开户、二级市场交易、可转让的资产或凭证代币、法币支付、真实投资发行。出资记录不可转让——这是众筹，不是投资交易所。',
     fundingBlockAria: '示意图：紫色小方块逐一滑入，逐个代币地填满共享资产的轮廓',
   },
   emptyState: {
@@ -767,11 +765,6 @@ export const zhCN: Messages = {
     glossary: '术语表',
     faq: '常见问题',
     aboutProject: '关于本项目',
-    status: '状态',
-    statusText: '测试网原型。不进行自动部署或旧余额转换。现有的传统意向和余额予以保留，不会清除。独立的身份/估值基础设施仍仅为模拟。',
-    legalPre: '市场背景：欧盟依据 ECSPR 监管众筹；持牌服务提供商列于',
-    legalLink: 'ESMA 登记册',
-    legalPost: '。本应用不是持牌众筹服务提供商，不列出任何真实发行。',
     tagline: '真实资产，共享可能。',
   },
   time: {

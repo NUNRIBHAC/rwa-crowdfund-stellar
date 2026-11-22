@@ -180,8 +180,6 @@ export const es: Messages = {
     themeToLight: 'Cambiar al tema claro',
     themeToDark: 'Cambiar al tema oscuro',
   },
-  riskBanner:
-    'Las inversiones en crowdfunding conllevan riesgo de pérdida total. Esto es un prototipo en la testnet de Stellar: sin ofertas reales, sin fondos reales, sin asesoramiento de inversión.',
   hero: {
     introTitle: 'Financiar un proyecto juntos.',
     intro: 'Explora campañas de financiación. Contribuye a un objetivo compartido. Tras el plazo, el resultado decide qué ocurre después.',
@@ -203,8 +201,6 @@ export const es: Messages = {
     noteSample:
       'Escenarios ficticios con contratos testnet separados. Cifras ilustrativas, no el estado on-chain. Sin auditoría y no preparados para producción.',
     noteUnknown: 'No auditado, no listo para producción.',
-    unavailable:
-      'No disponible en este prototipo: registro con identidad/KYC, negociación en mercado secundario, tokens de activos o de recibos transferibles, pagos en moneda fiduciaria, ofertas de inversión reales. Los registros de contribución son intransferibles - esto es crowdfunding, no una bolsa de inversión.',
     fundingBlockAria: 'Ilustración: pequeños bloques púrpura se deslizan uno a uno y completan el contorno de un activo compartido, token a token',
   },
   emptyState: {
@@ -807,12 +803,6 @@ export const es: Messages = {
     glossary: 'Glosario',
     faq: 'FAQ',
     aboutProject: 'Sobre este proyecto',
-    status: 'Estado',
-    statusText:
-      'Prototipo de testnet. Sin despliegue automático ni conversión de saldos heredados. Los intents y saldos clásicos existentes se conservan, no se borran. La infraestructura separada de identidad/valoración sigue siendo solo simulada.',
-    legalPre: 'Contexto de mercado: la UE regula el crowdfunding bajo el ECSPR; los proveedores autorizados figuran en el',
-    legalLink: 'registro de la ESMA',
-    legalPost: '. Esta aplicación no es un proveedor de servicios de crowdfunding autorizado y no lista ofertas reales.',
     tagline: 'Activos reales. Posibilidades compartidas.',
   },
   time: {

@@ -26,6 +26,15 @@ function viewport(mobile: boolean) {
 }
 afterEach(() => vi.unstubAllGlobals());
 describe('Footer navigation groups', () => {
+  it('keeps the legal risk link and all four link groups without the removed text column', () => {
+    viewport(false);
+    const { container } = render(<Footer />);
+    expect(container.querySelector('.footer-context')).toBeNull();
+    expect(container.querySelector('.risk-banner')).toBeNull();
+    expect(container.querySelector('a[href="/risk-disclosure"]')).not.toBeNull();
+    expect(container.querySelectorAll('.footer-grid > .footer-nav-group')).toHaveLength(4);
+    expect(container.querySelectorAll('.footer-social a')).toHaveLength(10);
+  });
   it('starts mobile groups closed and preserves every link in expandable sections', () => {
     viewport(true);
     const { container } = render(<Footer />);

@@ -182,8 +182,6 @@ export const de: Messages = {
     themeToLight: 'Zum hellen Design wechseln',
     themeToDark: 'Zum dunklen Design wechseln',
   },
-  riskBanner:
-    'Crowdfunding-Investitionen bergen ein Totalverlustrisiko. Dies ist ein Prototyp im Stellar-Testnet: keine echten Angebote, keine echten Gelder, keine Anlageberatung.',
   hero: {
     introTitle: 'Gemeinsam ein Projekt finanzieren.',
     intro: 'Entdecke Finanzierungskampagnen. Trage zu einem gemeinsamen Ziel bei. Nach Ablauf der Frist entscheidet das Ergebnis, wie es weitergeht.',
@@ -204,8 +202,6 @@ export const de: Messages = {
       'Jede Kampagne unten ist ein echter Soroban-Vertrag im Stellar-Testnet. Nicht geprüft, nicht produktionsreif. Auf einem kostenlosen Tarif gehostet: Die erste Anfrage nach Inaktivität kann bis zu einer Minute dauern, während die Instanz aufwacht.',
     noteSample: 'Fiktive Szenarien mit separaten Testnet-Verträgen. Beispielzahlen, kein On-Chain-Zustand. Nicht geprüft, nicht produktionsreif.',
     noteUnknown: 'Nicht geprüft, nicht produktionsreif.',
-    unavailable:
-      'In diesem Prototyp nicht verfügbar: Registrierung mit Identität/KYC, Handel auf einem Sekundärmarkt, übertragbare Vermögens- oder Quittungs-Token, Zahlungen in Fiatwährung, echte Investitionsangebote. Beitragsregister sind nicht übertragbar - dies ist Crowdfunding, keine Investmentbörse.',
     fundingBlockAria: 'Illustration: Kleine violette Blöcke gleiten nacheinander herein und füllen den Umriss eines geteilten Vermögenswerts, Token für Token',
   },
   emptyState: {
@@ -809,12 +805,6 @@ export const de: Messages = {
     glossary: 'Glossar',
     faq: 'FAQ',
     aboutProject: 'Über dieses Projekt',
-    status: 'Status',
-    statusText:
-      'Testnet-Prototyp. Keine automatische Bereitstellung oder Umwandlung alter Guthaben. Bestehende klassische Intents und Guthaben bleiben erhalten, werden nicht gelöscht. Die separate Identitäts-/Bewertungsinfrastruktur bleibt nur simuliert.',
-    legalPre: 'Marktkontext: Die EU reguliert Crowdfunding nach der ECSPR; zugelassene Anbieter sind im',
-    legalLink: 'ESMA-Register',
-    legalPost: ' gelistet. Diese App ist kein zugelassener Crowdfunding-Dienstleister und listet keine echten Angebote.',
     tagline: 'Reale Vermögenswerte. Geteilte Möglichkeiten.',
   },
   time: {

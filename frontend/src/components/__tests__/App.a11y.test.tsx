@@ -30,13 +30,6 @@ describe('site chrome accessibility semantics', () => {
     expect(document.getElementById('main')?.tagName).toBe('MAIN');
   });
 
-  test('risk banner is present on every page as a note', async () => {
-    render(<App />);
-    const banner = screen.getByText(/Crowdfunding investments carry a risk of total loss/);
-    expect(banner.getAttribute('role')).toBe('note');
-    expect(banner.textContent).toMatch(/risk of total loss/);
-  });
-
   test('main navigation exposes current page', async () => {
     render(<App />);
     await screen.findByRole('button', { name: 'All' });

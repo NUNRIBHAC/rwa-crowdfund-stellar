@@ -815,16 +815,6 @@ section[id],
 }
 
 /* Hero unavailable strip */
-.hero-unavailable {
-  margin-top: 12px;
-  background: #fef3f2;
-  border: 1px solid #fecdca;
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: var(--red);
-  font-size: 0.8125rem;
-  max-width: 760px;
-}
 
 /* Card details */
 .card-details {
@@ -882,17 +872,6 @@ section[id],
 }
 
 /* Risk banner (persistent, every page) */
-.risk-banner {
-  background: var(--navy);
-  color: #ffd9d4;
-  border-bottom: 2px solid var(--red);
-  text-align: center;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.45;
-  padding: 12px 52px;
-  position: relative;
-}
 /* Theme toggle at the banner's inline end (user target, 2026-10-31). The
    symmetric banner padding keeps the text centred and clear of the button. */
 .risk-theme-toggle {
@@ -2679,10 +2658,6 @@ input[type='checkbox'] {
 
 /* Light theme: the whole chrome (risk banner, header, footer band) goes light.
    Pages are already light; the navy surfaces and their contents flip. */
-[data-theme='light'] .risk-banner {
-  background: #fdecea;
-  color: #8c1d18;
-}
 /* Testnet badge in light theme: #fbbf24 text on the 15%-amber tint over
    white measures ~1.5:1. Reuse the light amber text token (same pattern as
    .status-pending) at 4.83:1 on the tinted chip; dark theme keeps #fbbf24. */
@@ -4842,14 +4817,6 @@ html.rtl-text .accordion summary > span:first-child {
     font-weight: 400;
   }
 }
-.site-footer .risk-banner {
-  background: transparent;
-  border: 0;
-  color: inherit;
-  padding: 12px 0 0;
-  text-align: start;
-  font-weight: 400;
-}
 .site-header .nav-more-toggle {
   display: inline-flex;
   align-items: center;
@@ -5154,4 +5121,62 @@ html.rtl-text .accordion summary > span:first-child {
 .loss-simulator th {
   overflow-wrap: normal;
   word-break: normal;
+}
+
+/* The filter column is physically LEFT in every locale, by owner request.
+   Individual Arabic labels retain their existing RTL reading direction. */
+.registry-content-layout {
+  min-width: 0;
+}
+.registry-main-content {
+  min-width: 0;
+}
+.registry-discovery-v2 .registry-filter-panel {
+  margin-block-start: 0;
+}
+.registry-discovery-v2 .registry-filter-controls {
+  align-items: stretch;
+}
+.registry-discovery-v2 .registry-filter-controls > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.registry-discovery-v2 .registry-filter-controls select {
+  width: 100%;
+  min-width: 0;
+}
+@media (min-width: 1001px) {
+  .registry-content-layout.has-filters {
+    display: grid;
+    grid-template-columns: minmax(210px, 250px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    direction: ltr;
+  }
+  .registry-content-layout > .registry-filter-panel {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: calc(var(--sticky-header-h, 90px) + 12px);
+    max-height: calc(100vh - var(--sticky-header-h, 90px) - 24px);
+    overflow-y: auto;
+  }
+  .registry-content-layout > .registry-main-content {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .registry-discovery-v2 .registry-filter-controls {
+    flex-direction: column;
+  }
+  .registry-discovery-v2 .card-grid.registry-many {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1000px) {
+  .registry-content-layout {
+    display: block;
+  }
+  .registry-discovery-v2 .registry-filter-controls {
+    flex-direction: column;
+  }
 }

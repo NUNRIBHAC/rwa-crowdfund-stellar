@@ -96,6 +96,19 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
         matchesStatus(filter, campaignStatus(c), sampleState(c.id)),
     ).length;
 
+  const filteredHeading =
+    statusFilter === 'open'
+      ? m.invest.activeTitle
+      : statusFilter === 'funded'
+        ? m.invest.funded
+        : statusFilter === 'ended'
+          ? m.invest.underfunded
+          : statusFilter === 'refunded'
+            ? m.sampleConcepts.filterRefund
+            : statusFilter === 'withdrawn'
+              ? m.sampleConcepts.filterWithdrawal
+              : undefined;
+
   // Exact checked-in staging fixture identity, never inferred from campaign names.
   const testing = shown.filter((c) => c.id === 'staging-load');
   const catalog = shown.filter((c) => c.id !== 'staging-load');
@@ -133,10 +146,11 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
         </button>
       </div>
 
-      <div className={!loaded && !fixtureMode ? 'registry-loading-space' : undefined}>
-        {loadStatus}
+      {campaigns.length > 0 && loadStatus}
+      <div className={`registry-content-layout${!loaded && !fixtureMode ? ' registry-loading-space' : ''}${campaigns.length ? ' has-filters' : ''}`}>
+        {campaigns.length === 0 && loadStatus}
         {campaigns.length > 0 && (
-          <div className="discovery-bar registry-filter-panel">
+          <aside className="discovery-bar registry-filter-panel" aria-label={m.invest.filters}>
             <input
               className="discovery-search"
               value={query}
@@ -229,50 +243,53 @@ export default function Investments({ market, loadStatus }: { market: Market; lo
                 </button>
               </div>
             </div>
-          </div>
+          </aside>
         )}
 
-        {campaigns.length > 0 && (
-          <p className={sampleResultCount === 0 ? 'no-matches' : 'sr-only'} role="status">
-            {sampleResultCount === 0 ? m.invest.noMatches : pluralText(m.invest.resultCount, sampleResultCount)}
-          </p>
-        )}
+        <div className="registry-main-content">
+          {campaigns.length > 0 && (
+            <p className={sampleResultCount === 0 ? 'no-matches' : 'sr-only'} role="status">
+              {sampleResultCount === 0 ? m.invest.noMatches : pluralText(m.invest.resultCount, sampleResultCount)}
+            </p>
+          )}
 
-        {showEmpty && <EmptyState fixtureMode={false} onToggleFixtures={market.onToggleFixtures} />}
-        {fixtureMode && <EmptyState fixtureMode onToggleFixtures={market.onToggleFixtures} />}
+          {showEmpty && <EmptyState fixtureMode={false} onToggleFixtures={market.onToggleFixtures} />}
+          {fixtureMode && <EmptyState fixtureMode onToggleFixtures={market.onToggleFixtures} />}
 
-        {active.length > 0 && (
-          <section className="registry-results" aria-label={m.invest.activeAria}>
-            <h2 className="section-title">{m.invest.activeTitle}</h2>
-            <div className={view === 'grid' ? `card-grid ${active.length > 2 ? 'registry-many' : ''}` : 'card-list'}>{active.map(renderCard)}</div>
-          </section>
-        )}
-        {testing.length > 0 && (
-          <section className="registry-results registry-testing" aria-label={m.invest.testingTitle}>
-            <h2 className="section-title">{m.invest.testingTitle}</h2>
-            <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{testing.map(renderCard)}</div>
-          </section>
-        )}
-        {completed.length > 0 && (
-          <section className="registry-results" aria-label={m.invest.completedAria}>
-            <details
-              className="registry-closed"
-              open={statusFilter === 'ended' || statusFilter === 'funded' || statusFilter === 'refunded' || statusFilter === 'withdrawn' || undefined}
-            >
-              <summary>
-                {m.invest.closedTitle} ({completed.length})
-              </summary>
-              <div className={view === 'grid' ? 'card-grid' : 'card-list'}>
-                {completed.map((c) => (
-                  <div key={c.id}>
-                    <p className="registry-outcome">{campaignStatus(c) === 'funded' ? m.hero.goalReached : m.hero.goalMissed}</p>
-                    {renderCard(c)}
-                  </div>
-                ))}
-              </div>
-            </details>
-          </section>
-        )}
+          {active.length > 0 && (
+            <section className="registry-results" aria-label={m.invest.activeAria}>
+              <h2 className="section-title">{m.invest.activeTitle}</h2>
+              <div className={view === 'grid' ? `card-grid ${active.length > 2 ? 'registry-many' : ''}` : 'card-list'}>{active.map(renderCard)}</div>
+            </section>
+          )}
+          {testing.length > 0 && (
+            <section className="registry-results registry-testing" aria-label={filteredHeading ?? m.invest.testingTitle}>
+              <h2 className="section-title">{filteredHeading ?? m.invest.testingTitle}</h2>
+              {filteredHeading && <p className="community-note">{m.invest.testingTitle}</p>}
+              <div className={view === 'grid' ? 'card-grid' : 'card-list'}>{testing.map(renderCard)}</div>
+            </section>
+          )}
+          {completed.length > 0 && (
+            <section className="registry-results" aria-label={m.invest.completedAria}>
+              <details
+                className="registry-closed"
+                open={statusFilter === 'ended' || statusFilter === 'funded' || statusFilter === 'refunded' || statusFilter === 'withdrawn' || undefined}
+              >
+                <summary>
+                  {filteredHeading ?? m.invest.closedTitle} ({completed.length})
+                </summary>
+                <div className={view === 'grid' ? 'card-grid' : 'card-list'}>
+                  {completed.map((c) => (
+                    <div key={c.id}>
+                      <p className="registry-outcome">{campaignStatus(c) === 'funded' ? m.hero.goalReached : m.hero.goalMissed}</p>
+                      {renderCard(c)}
+                    </div>
+                  ))}
+                </div>
+              </details>
+            </section>
+          )}
+        </div>
       </div>
     </div>
   );
