@@ -725,7 +725,6 @@
     "glossary": "Glossário",
     "faq": "FAQ",
     "aboutProject": "Sobre este projeto",
-    "status": "Estado",
     "statusText": "Protótipo de testnet. Sem implementação automática nem conversão de saldos legados. Os intents e saldos clássicos existentes são preservados, não limpos. A infraestrutura separada de identidade/avaliação continua apenas simulada.",
     "tagline": "Ativos reais. Possibilidades partilhadas."
   },
