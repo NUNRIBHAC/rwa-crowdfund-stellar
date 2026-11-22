@@ -943,6 +943,74 @@ export const pt: Messages = {
         ],
         suitableFor: 'Investidores orientados para o rendimento que suportam uma perda total e não precisam do dinheiro antes do vencimento.',
       },
+      {
+        id: 'warrant',
+        label: 'Warrant',
+        subtypeOf: '',
+        note: 'O exercício cria novas ações e dilui os detentores existentes. As ofertas de valores mobiliários ao abrigo do ECSPR estão limitadas a 5.000.000 EUR por emitente em 12 meses.',
+        group: 'participation',
+        seniorityStates: [],
+        summary:
+          'Um valor mobiliário transmissível que dá o direito, mas não a obrigação, de subscrever novas ações do emitente a um preço fixado durante uma janela ou numa data definida (valor mobiliário nos termos do art. 4.º/1/44(c) da MiFID II).',
+        opportunities: ['Valorização se o preço da ação subir acima do preço de exercício', 'Preço e janela de exercício fixados antecipadamente'],
+        risks: [
+          'Pode expirar sem valor se o preço da ação ficar abaixo do preço de exercício',
+          'O exercício dilui os acionistas existentes',
+          'O valor depende da ação subjacente, que pode ser ilíquida',
+        ],
+        suitableFor: 'Investidores que compreendem exposição alavancada a ações e aceitam perder a totalidade do montante pago.',
+      },
+      {
+        id: 'share-depositary-receipt',
+        label: 'Certificado de depósito sobre ações',
+        subtypeOf: '',
+        note: 'Enquadra-se na definição de valor mobiliário transmissível da MiFID II (art. 4.º/1/44(a)) e a custódia ao abrigo do art. 10.º do ECSPR é viável, mas a colocação ao abrigo do ECSPR cobre valores mobiliários emitidos pelo dono do projeto ou por um SPV, e um certificado de depósito é emitido pelo custodiante: sem confirmação da ESMA ou da CMVM. Não provado. Portugal não tem um regime nacional próprio para certificados de depósito.',
+        group: 'participation',
+        seniorityStates: [],
+        summary:
+          'Um certificado emitido por um custodiante que representa ações da sociedade (ações de S.A. e certificados de depósito sobre ações): o titular detém o direito económico sobre as ações subjacentes enquanto o custodiante detém as ações.',
+        opportunities: ['Exposição a ações num certificado transmissível', 'As distribuições acompanham as ações subjacentes'],
+        risks: [
+          'Acrescenta risco de custódia ao risco da ação',
+          'Direitos de voto e de transmissão dependem das condições do certificado',
+          'As ações subjacentes podem ser ilíquidas',
+        ],
+        suitableFor: 'Investidores que querem exposição a ações através de um certificado custodiado e aceitam o risco de capital e de custódia.',
+      },
+      {
+        id: 'commercial-paper',
+        label: 'Papel comercial',
+        subtypeOf: '',
+        note: 'É também um instrumento do mercado monetário. Não foi encontrada prática da CMVM para papel comercial de retalho em crowdfunding: uma oferta a retalho exige rating, garantia ou rácio de autonomia financeira suficiente, nota informativa à CMVM com período de não oposição de 10 dias úteis e patrocinador quando o emitente não tem revisão legal de contas. O ECSPR limita as ofertas a 5.000.000 EUR por emitente em 12 meses.',
+        group: 'debt',
+        seniorityStates: ['unspecified'],
+        summary:
+          'Dívida de curto prazo inferior a um ano: valor mobiliário transmissível nos termos do DL 69/2004 (na redação do DL 102/2026) e do art. 4.º/1/44(b) da MiFID II, e simultaneamente um instrumento do mercado monetário.',
+        opportunities: ['Prazo curto com data de reembolso definida', 'Rendibilidade por financiar o fundo de maneio do emitente'],
+        risks: [
+          'Sem garantia real: perda se o emitente não pagar nem refinanciar',
+          'Prazo curto não significa risco baixo',
+          'Normalmente ilíquido até à maturidade',
+        ],
+        suitableFor: 'Investidores que querem exposição a dívida de curto prazo e aceitam o risco de incumprimento do emitente.',
+      },
+      {
+        id: 'revenue-linked-loan',
+        label: 'Empréstimo com remuneração indexada às receitas',
+        subtypeOf: '',
+        note: 'O juro variável indexado às receitas enquadra-se no ECSPR em abstrato (Reg. Delegado (UE) 2022/2118, art. 8.º/3/b e 10.º/1/g; Reg. Delegado (UE) 2022/2119, anexo). Se o capital ou as prestações já vencidas só forem pagos quando houver receitas, o reembolso é condicional e deixa de ser um empréstimo ECSPR. Uma taxa indexada às receitas num contrato concreto não está confirmada pela prática da CMVM.',
+        group: 'debt',
+        seniorityStates: ['unspecified'],
+        summary:
+          'Um empréstimo com reembolso incondicional do capital num prazo acordado e com plano de pagamentos, cujo juro varia com as receitas do emitente.',
+        opportunities: ['O juro sobe quando as receitas do emitente sobem', 'O reembolso do capital não depende das receitas'],
+        risks: [
+          'O juro pode cair para níveis baixos em períodos de receitas fracas',
+          'O reembolso é incondicional, mas o emitente pode mesmo assim incumprir',
+          'Normalmente ilíquido até à maturidade',
+        ],
+        suitableFor: 'Investidores que querem exposição a empréstimos com valorização ligada às receitas do emitente e aceitam o risco de incumprimento.',
+      },
     ],
     overlays: [
       {
@@ -1978,6 +2046,174 @@ export const pt: Messages = {
           'Encomenda antecipada do produto ou serviço financiado, estruturada como financiamento com recompensa, não como investimento ou direito a um token futuro. Não é oferecido retorno financeiro.',
           'Entrega, cancelamento e direitos do consumidor seriam definidos por oferta.',
           'Cenário de exemplo tudo-ou-nada: a meta não foi atingida e as contribuições foram devolvidas.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-atlas-warrants',
+        issuer: 'Atlas Mobility S.A. (emitente de exemplo)',
+        country: 'PT',
+        category: 'Bicicletas elétricas e mobilidade ligeira',
+        teaser:
+          'Oferta de exemplo de warrants sobre novas ações de um operador português de mobilidade ligeira. Todas as condições desta página são dados de exemplo.',
+        instrumentClass: 'warrant',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Sem cupão - valorização apenas pelo exercício (exemplo)',
+        term: 'Janela de exercício até 2029-06-30 (exemplo)',
+        minInvestment: '100 USDC de testnet (exemplo)',
+        additionalInfo: [
+          {
+            label: 'Produto de investimento',
+            value: 'Warrant sobre novas ações ordinárias. Dados de exemplo - não é uma oferta real',
+          },
+          {
+            label: 'Preço de exercício',
+            value: '4,20 por nova ação (exemplo)',
+          },
+          {
+            label: 'Exercício e diluição',
+            value: 'O exercício cria novas ações e dilui os detentores existentes (condições de exemplo)',
+          },
+          {
+            label: 'Limite da oferta',
+            value: 'ECSPR: no máximo 5.000.000 EUR por emitente em 12 meses',
+          },
+        ],
+        overview: [
+          'Dados de exemplo - não é uma oferta real',
+          'Um warrant dá o direito, não a obrigação, de subscrever novas ações ao preço de exercício durante a janela de exercício.',
+          'Se o preço da ação nunca superar o preço de exercício, o warrant pode expirar sem valor; é possível a perda total do montante pago.',
+          'O exercício emite novas ações e dilui os acionistas existentes.',
+          'As ofertas de valores mobiliários ao abrigo do ECSPR estão limitadas a 5.000.000 EUR por emitente em 12 meses.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-douro-share-dr',
+        issuer: 'Douro Textiles S.A. (emitente de exemplo)',
+        country: 'PT',
+        category: 'Tecnologia industrial e produção',
+        teaser:
+          'Oferta de exemplo de certificados de depósito sobre ações de uma exportadora têxtil portuguesa, com as ações subjacentes detidas por um custodiante. Todas as condições desta página são dados de exemplo.',
+        instrumentClass: 'share-depositary-receipt',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Distribuições acompanham as ações subjacentes (exemplo)',
+        term: 'Sem maturidade fixa (exemplo)',
+        minInvestment: '250 USDC de testnet (exemplo)',
+        additionalInfo: [
+          {
+            label: 'Produto de investimento',
+            value: 'Certificado de depósito sobre ações de S.A. Dados de exemplo - não é uma oferta real',
+          },
+          {
+            label: 'Subjacente',
+            value: 'Ações ordinárias da Douro Textiles S.A. (exemplo)',
+          },
+          {
+            label: 'Custódia',
+            value:
+              'As ações subjacentes têm de ser detidas por uma instituição de crédito (CRD), uma empresa de investimento (MiFID II) ou um regime equivalente de registo do emitente',
+          },
+          {
+            label: 'Regime português',
+            value: 'Portugal não tem um regime nacional próprio para certificados de depósito; os direitos decorrem das condições do certificado',
+          },
+        ],
+        overview: [
+          'Dados de exemplo - não é uma oferta real',
+          'O certificado representa ações subjacentes detidas por um custodiante; o titular detém o direito económico, e voto e transmissão seguem as condições do certificado.',
+          'A custódia exige um banco ou empresa de investimento autorizado (CRD / MiFID II) ou um regime equivalente de registo do emitente.',
+          'Portugal não tem um regime nacional próprio para certificados de depósito; este exemplo não o estabelece.',
+          'Perda total possível; as ações subjacentes podem ser ilíquidas.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-tejo-commercial-paper',
+        issuer: 'Tejo Packaging Lda (emitente de exemplo)',
+        country: 'PT',
+        category: 'Produtos de consumo, moda, vestuário e retalho',
+        teaser:
+          'Oferta de exemplo de papel comercial a nove meses emitido por um fornecedor português de embalagens. Todas as condições desta página são dados de exemplo.',
+        instrumentClass: 'commercial-paper',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: '4,1% a.a. de rendibilidade implícita (exemplo)',
+        term: '9 meses (exemplo)',
+        minInvestment: '500 USDC de testnet (exemplo)',
+        additionalInfo: [
+          {
+            label: 'Produto de investimento',
+            value:
+              'Papel comercial - valor mobiliário transmissível nos termos do DL 69/2004 (na redação do DL 102/2026), art. 4.º/1/44(b) da MiFID II; também instrumento do mercado monetário. Dados de exemplo - não é uma oferta real',
+          },
+          {
+            label: 'Condições de retalho',
+            value: 'Exige rating, garantia ou rácio de autonomia financeira suficiente (nota de exemplo)',
+          },
+          {
+            label: 'Processo CMVM',
+            value:
+              'Nota informativa com período de não oposição de 10 dias úteis; patrocinador exigido sem revisão legal de contas; não foi encontrada prática da CMVM para papel comercial de retalho em crowdfunding',
+          },
+          {
+            label: 'Limite da oferta',
+            value: 'ECSPR: no máximo 5.000.000 EUR por emitente em 12 meses',
+          },
+        ],
+        overview: [
+          'Dados de exemplo - não é uma oferta real',
+          'Dívida de curto prazo sem garantia real, inferior a um ano, transmissível como valor mobiliário e tratada como instrumento do mercado monetário.',
+          'Sem garantia real: se o emitente não pagar nem refinanciar na maturidade, os investidores podem perder a totalidade.',
+          'Não foi encontrada prática da CMVM para papel comercial de retalho em crowdfunding; as condições de retalho listadas são exigidas antes de qualquer oferta real.',
+          'As ofertas de valores mobiliários ao abrigo do ECSPR estão limitadas a 5.000.000 EUR por emitente em 12 meses.',
+        ],
+        documents: [],
+        news: [],
+      },
+      {
+        campaignId: 'fixture-costa-revenue-loan',
+        issuer: 'Costa Restaurants Lda (emitente de exemplo)',
+        country: 'PT',
+        category: 'Restaurantes e gastronomia',
+        teaser:
+          'Oferta de exemplo de um empréstimo a um grupo português de restauração com juro variável indexado às receitas e reembolso incondicional do capital. Todas as condições desta página são dados de exemplo.',
+        instrumentClass: 'revenue-linked-loan',
+        instrumentSeniority: 'unspecified',
+        instrumentOverlays: [],
+        interestRate: 'Variável, indexado às receitas (exemplo)',
+        term: '48 meses (exemplo)',
+        minInvestment: '250 USDC de testnet (exemplo)',
+        additionalInfo: [
+          {
+            label: 'Produto de investimento',
+            value: 'Empréstimo com juro variável indexado às receitas. Dados de exemplo - não é uma oferta real',
+          },
+          {
+            label: 'Reembolso do capital',
+            value: 'Incondicional, no prazo e plano de pagamentos acordados - os montantes vencidos são pagos haja ou não receitas (condições de exemplo)',
+          },
+          {
+            label: 'Juro',
+            value: 'Variável, indexado às receitas do emitente (exemplo)',
+          },
+          {
+            label: 'Enquadramento',
+            value:
+              'O juro variável enquadra-se no ECSPR em abstrato (Reg. Delegado (UE) 2022/2118, art. 8.º/3/b, 10.º/1/g; Reg. Delegado (UE) 2022/2119, anexo); o reembolso condicional deixaria de ser um empréstimo ECSPR; uma taxa indexada às receitas num contrato concreto não está confirmada pela prática da CMVM',
+          },
+        ],
+        overview: [
+          'Dados de exemplo - não é uma oferta real',
+          'Um empréstimo: o reembolso do capital é incondicional, com prazo e plano de pagamentos acordados.',
+          'O juro varia com as receitas do emitente; se os montantes vencidos só fossem pagos quando existissem receitas, o instrumento seria condicional e deixaria de ser um empréstimo ECSPR.',
+          'Uma taxa indexada às receitas num contrato concreto não está confirmada pela prática da CMVM.',
+          'Perda total possível; os empréstimos são normalmente ilíquidos até à maturidade.',
         ],
         documents: [],
         news: [],

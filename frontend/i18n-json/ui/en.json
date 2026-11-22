@@ -829,6 +829,50 @@
         "opportunities": ["Defined coupon and repayment calendar", "Senior issues rank ahead of subordinated capital and equity in insolvency"],
         "risks": ["Subordination raises loss severity in insolvency", "Still unsecured unless collateral is stated", "No participation in company growth"],
         "suitableFor": "Yield-oriented investors who can bear a total loss and do not need the money back early."
+      },
+      {
+        "label": "Warrant",
+        "note": "Exercise creates new shares and dilutes existing holders. Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months.",
+        "summary": "A transferable security giving the right, but not the obligation, to subscribe new shares of the issuer at a set price during a window or on a set date (transferable security under MiFID II Art. 4(1)(44)(c)).",
+        "opportunities": ["Upside if the share price rises above the exercise price", "Exercise price and window are fixed in advance"],
+        "risks": [
+          "Can expire worthless if the share price stays below the exercise price",
+          "Exercise dilutes existing shareholders",
+          "Value depends on the underlying share, which may be illiquid"
+        ],
+        "suitableFor": "Investors who understand leveraged equity exposure and accept losing the full amount paid."
+      },
+      {
+        "label": "Share depositary receipt",
+        "note": "Fits the MiFID II transferable-securities definition (Art. 4(1)(44)(a)) and ECSPR Art. 10 custody is feasible, but ECSPR placement covers securities issued by the project owner or an SPV, and a depositary receipt is issued by the depositary: no ESMA or CMVM confirmation. Not proven. Portugal has no dedicated domestic depositary-receipt regime.",
+        "summary": "A certificate issued by a custodian representing shares of the company (shares of an S.A. and depositary receipts over shares): the holder carries the economic claim on the underlying shares while the custodian holds the shares themselves.",
+        "opportunities": ["Share exposure in a transferable certificate", "Distributions mirror the underlying shares"],
+        "risks": [
+          "Adds custodian risk on top of share risk",
+          "Voting and transfer rights depend on the certificate terms",
+          "Underlying shares may be illiquid"
+        ],
+        "suitableFor": "Investors who want share exposure through a custodied certificate and accept both equity and custody risk."
+      },
+      {
+        "label": "Commercial paper",
+        "note": "Also a money-market instrument. No CMVM practice for retail crowdfunding of commercial paper was found: a retail offer needs a rating, a guarantee or a sufficient financial-autonomy ratio, a CMVM information note with a 10-business-day non-objection period, and a sponsor when the issuer has no statutory audit. ECSPR caps offers at 5,000,000 EUR per issuer over 12 months.",
+        "summary": "Short-term debt under one year: a transferable security under DL 69/2004 (as amended by DL 102/2026) and MiFID II Art. 4(1)(44)(b), and at the same time a money-market instrument.",
+        "opportunities": ["Short maturity with a defined repayment date", "Yield for financing issuer working capital"],
+        "risks": ["Unsecured: loss if the issuer cannot repay or refinance", "Short maturity does not mean low risk", "Usually illiquid until maturity"],
+        "suitableFor": "Investors who want short-dated debt exposure and accept issuer default risk."
+      },
+      {
+        "label": "Loan with revenue-linked remuneration",
+        "note": "Variable interest linked to revenue fits ECSPR in the abstract (Delegated Regulation (EU) 2022/2118 Art. 8(3)(b) and 10(1)(g); Delegated Regulation (EU) 2022/2119 Annex). If capital or instalments already due were paid only when there is revenue, repayment would be conditional and it would no longer be an ECSPR loan. A revenue-linked rate in a concrete contract is not confirmed by CMVM practice.",
+        "summary": "A loan with unconditional repayment of capital at an agreed term and a payment plan, whose interest varies with the revenues of the issuer.",
+        "opportunities": ["Interest rises when issuer revenues rise", "Repayment of capital does not depend on revenues"],
+        "risks": [
+          "Interest can fall to low levels in weak revenue periods",
+          "Repayment is unconditional but the issuer can still default",
+          "Usually illiquid until maturity"
+        ],
+        "suitableFor": "Investors who want loan exposure with upside linked to issuer revenues and accept default risk."
       }
     ],
     "overlays": [
@@ -1713,6 +1757,146 @@
           "An advance order for the financed product or service, structured as reward crowdfunding, not an investment or future-token right. No financial return is offered.",
           "Delivery, cancellation and consumer terms would be defined per offer.",
           "All-or-nothing sample scenario: the goal was missed and contributions were returned."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Atlas Mobility S.A. (sample issuer)",
+        "category": "E-bikes and light mobility",
+        "teaser": "Sample offer of warrants over new shares of a Portuguese light-mobility operator. All terms on this page are sample data.",
+        "interestRate": "No coupon - upside through exercise only (sample)",
+        "term": "Exercise window until 2029-06-30 (sample)",
+        "minInvestment": "100 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Warrant over new ordinary shares. Sample data - not a live offer"
+          },
+          {
+            "label": "Exercise price",
+            "value": "4.20 per new share (sample)"
+          },
+          {
+            "label": "Exercise and dilution",
+            "value": "Exercise creates new shares and dilutes existing holders (sample terms)"
+          },
+          {
+            "label": "Offer cap",
+            "value": "ECSPR: at most 5,000,000 EUR per issuer over 12 months"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A warrant gives the right, not the obligation, to subscribe new shares at the exercise price during the exercise window.",
+          "If the share price never exceeds the exercise price, the warrant can expire worthless; total loss of the amount paid is possible.",
+          "Exercise issues new shares and dilutes existing shareholders.",
+          "Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Douro Textiles S.A. (sample issuer)",
+        "category": "Industrial technology and manufacturing",
+        "teaser": "Sample offer of depositary receipts over shares of a Portuguese textile exporter, with the underlying shares held by a custodian. All terms on this page are sample data.",
+        "interestRate": "Distributions mirror the underlying shares (sample)",
+        "term": "No fixed maturity (sample)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Depositary receipt over S.A. shares. Sample data - not a live offer"
+          },
+          {
+            "label": "Underlying",
+            "value": "Ordinary shares of Douro Textiles S.A. (sample)"
+          },
+          {
+            "label": "Custody",
+            "value": "Underlying shares must be held by a CRD credit institution, a MiFID II investment firm, or an equivalent issuer-registry arrangement"
+          },
+          {
+            "label": "Portuguese regime",
+            "value": "Portugal has no dedicated domestic depositary-receipt regime; rights follow the certificate terms"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "The certificate represents underlying shares held by a custodian; the holder carries the economic claim, voting and transfer follow the certificate terms.",
+          "Custody requires an authorized bank or investment firm (CRD / MiFID II) or an equivalent issuer-registry arrangement.",
+          "Portugal has no dedicated domestic depositary-receipt regime; this sample does not establish one.",
+          "Total loss possible; underlying shares may be illiquid."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Tejo Packaging Lda (sample issuer)",
+        "category": "Consumer products, fashion, apparel and retail",
+        "teaser": "Sample offer of nine-month commercial paper issued by a Portuguese packaging supplier. All terms on this page are sample data.",
+        "interestRate": "4.1% p.a. implied yield (sample)",
+        "term": "9 months (sample)",
+        "minInvestment": "500 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Commercial paper - transferable security under DL 69/2004 (as amended by DL 102/2026), MiFID II Art. 4(1)(44)(b); also a money-market instrument. Sample data - not a live offer"
+          },
+          {
+            "label": "Retail conditions",
+            "value": "Rating, guarantee or sufficient financial-autonomy ratio required (sample note)"
+          },
+          {
+            "label": "CMVM process",
+            "value": "Information note with a 10-business-day non-objection period; sponsor required when the issuer has no statutory audit; no CMVM practice found for retail crowdfunding of commercial paper"
+          },
+          {
+            "label": "Offer cap",
+            "value": "ECSPR: at most 5,000,000 EUR per issuer over 12 months"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "Short-term unsecured debt under one year, transferable as a security and treated as a money-market instrument.",
+          "Unsecured: if the issuer cannot repay or refinance at maturity, investors can lose the full amount.",
+          "No CMVM practice for retail crowdfunding of commercial paper was found; the retail conditions listed are required before any real offer.",
+          "Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Costa Restaurants Lda (sample issuer)",
+        "category": "Restaurants and gastronomy",
+        "teaser": "Sample offer of a loan to a Portuguese restaurant group whose interest varies with revenues, with unconditional capital repayment. All terms on this page are sample data.",
+        "interestRate": "Variable, linked to revenues (sample)",
+        "term": "48 months (sample)",
+        "minInvestment": "250 USDC testnet (sample)",
+        "additionalInfo": [
+          {
+            "label": "Investment product",
+            "value": "Loan with revenue-linked variable interest. Sample data - not a live offer"
+          },
+          {
+            "label": "Capital repayment",
+            "value": "Unconditional, at the agreed term and payment plan - due amounts are payable whether or not there is revenue (sample terms)"
+          },
+          {
+            "label": "Interest",
+            "value": "Variable, linked to issuer revenues (sample)"
+          },
+          {
+            "label": "Regulatory fit",
+            "value": "Variable interest fits ECSPR in the abstract (Del. Reg. (EU) 2022/2118 Art. 8(3)(b), 10(1)(g); Del. Reg. (EU) 2022/2119 Annex); conditional repayment would no longer be an ECSPR loan; a revenue-linked rate in a concrete contract is not confirmed by CMVM practice"
+          }
+        ],
+        "overview": [
+          "Sample data - not a live offer",
+          "A loan: capital repayment is unconditional, with an agreed term and payment plan.",
+          "Interest varies with the revenues of the issuer; if due amounts were payable only when revenue exists, the instrument would be conditional and no longer an ECSPR loan.",
+          "A revenue-linked rate in a concrete contract is not confirmed by CMVM practice.",
+          "Total loss possible; loans are usually illiquid until maturity."
         ],
         "documents": [],
         "news": []

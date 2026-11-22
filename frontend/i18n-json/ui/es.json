@@ -857,6 +857,54 @@
           "Sin participación en el crecimiento de la empresa"
         ],
         "suitableFor": "Inversores orientados al rendimiento que soportan una pérdida total y no necesitan el dinero antes del vencimiento."
+      },
+      {
+        "label": "Warrant",
+        "note": "El ejercicio crea nuevas acciones y diluye a los titulares existentes. Las ofertas de valores bajo el ECSPR están limitadas a 5.000.000 EUR por emisor en 12 meses.",
+        "summary": "Un valor transmisible que da el derecho, pero no la obligación, de suscribir nuevas acciones del emisor a un precio fijado durante una ventana o en una fecha definida (valor transmisible según el art. 4(1)(44)(c) de MiFID II).",
+        "opportunities": ["Revalorización si el precio de la acción supera el precio de ejercicio", "Precio y ventana de ejercicio fijados de antemano"],
+        "risks": [
+          "Puede expirar sin valor si el precio de la acción queda por debajo del precio de ejercicio",
+          "El ejercicio diluye a los accionistas existentes",
+          "El valor depende de la acción subyacente, que puede ser ilíquida"
+        ],
+        "suitableFor": "Inversores que comprenden la exposición apalancada a renta variable y aceptan perder la totalidad del importe pagado."
+      },
+      {
+        "label": "Certificado de depósito sobre acciones",
+        "note": "Encaja en la definición de valor transmisible de MiFID II (art. 4(1)(44)(a)) y la custodia del art. 10 del ECSPR es viable, pero la colocación bajo el ECSPR cubre valores emitidos por el propietario del proyecto o un SPV, y un certificado de depósito lo emite el custodio: sin confirmación de ESMA ni de la CMVM. No probado. Portugal no tiene un régimen nacional propio para certificados de depósito.",
+        "summary": "Un certificado emitido por un custodio que representa acciones de la sociedad (acciones de S.A. y certificados de depósito sobre acciones): el titular tiene el derecho económico sobre las acciones subyacentes mientras el custodio mantiene las acciones.",
+        "opportunities": ["Exposición a acciones en un certificado transmisible", "Las distribuciones reflejan las acciones subyacentes"],
+        "risks": [
+          "Añade riesgo de custodia al riesgo de la acción",
+          "Los derechos de voto y de transmisión dependen de las condiciones del certificado",
+          "Las acciones subyacentes pueden ser ilíquidas"
+        ],
+        "suitableFor": "Inversores que quieren exposición a acciones a través de un certificado custodiado y aceptan el riesgo de capital y de custodia."
+      },
+      {
+        "label": "Pagaré comercial",
+        "note": "Es también un instrumento del mercado monetario. No se ha encontrado práctica de la CMVM para pagarés comerciales minoristas en crowdfunding: una oferta minorista exige rating, garantía o un ratio de autonomía financiera suficiente, nota informativa a la CMVM con un período de no oposición de 10 días hábiles y patrocinador cuando el emisor no tiene auditoría legal. El ECSPR limita las ofertas a 5.000.000 EUR por emisor en 12 meses.",
+        "summary": "Deuda a corto plazo inferior a un año: valor transmisible según el DL 69/2004 (modificado por el DL 102/2026) y el art. 4(1)(44)(b) de MiFID II, y a la vez un instrumento del mercado monetario.",
+        "opportunities": ["Vencimiento corto con fecha de reembolso definida", "Rentabilidad por financiar el capital circulante del emisor"],
+        "risks": [
+          "Sin garantía real: pérdida si el emisor no paga ni refinancia",
+          "Vencimiento corto no significa riesgo bajo",
+          "Normalmente ilíquido hasta el vencimiento"
+        ],
+        "suitableFor": "Inversores que quieren exposición a deuda a corto plazo y aceptan el riesgo de impago del emisor."
+      },
+      {
+        "label": "Préstamo con remuneración vinculada a los ingresos",
+        "note": "El interés variable vinculado a los ingresos encaja en el ECSPR en abstracto (Reg. Delegado (UE) 2022/2118, art. 8(3)(b) y 10(1)(g); Reg. Delegado (UE) 2022/2119, anexo). Si el capital o las cuotas ya vencidas solo se pagan cuando hay ingresos, el reembolso es condicional y deja de ser un préstamo ECSPR. Un tipo vinculado a los ingresos en un contrato concreto no está confirmado por la práctica de la CMVM.",
+        "summary": "Un préstamo con reembolso incondicional del capital en un plazo acordado y con plan de pagos, cuyo interés varía con los ingresos del emisor.",
+        "opportunities": ["El interés sube cuando suben los ingresos del emisor", "El reembolso del capital no depende de los ingresos"],
+        "risks": [
+          "El interés puede caer a niveles bajos en períodos de ingresos débiles",
+          "El reembolso es incondicional, pero el emisor puede igualmente incumplir",
+          "Normalmente ilíquido hasta el vencimiento"
+        ],
+        "suitableFor": "Inversores que quieren exposición a préstamos con revalorización ligada a los ingresos del emisor y aceptan el riesgo de impago."
       }
     ],
     "overlays": [
@@ -1741,6 +1789,146 @@
           "Pedido anticipado del producto o servicio financiado, estructurado como crowdfunding de recompensa, no como inversión ni derecho a un token futuro. No se ofrece rendimiento financiero.",
           "La entrega, la cancelación y los derechos del consumidor se definirían por oferta.",
           "Escenario de ejemplo de todo o nada: no se alcanzó la meta y las contribuciones fueron devueltas."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Atlas Mobility S.A. (emisor de ejemplo)",
+        "category": "Bicicletas eléctricas y movilidad ligera",
+        "teaser": "Oferta de ejemplo de warrants sobre nuevas acciones de un operador portugués de movilidad ligera. Todas las condiciones de esta página son datos de ejemplo.",
+        "interestRate": "Sin cupón - revalorización solo por ejercicio (ejemplo)",
+        "term": "Ventana de ejercicio hasta 2029-06-30 (ejemplo)",
+        "minInvestment": "100 USDC de testnet (ejemplo)",
+        "additionalInfo": [
+          {
+            "label": "Producto de inversión",
+            "value": "Warrant sobre nuevas acciones ordinarias. Datos de ejemplo - no es una oferta real"
+          },
+          {
+            "label": "Precio de ejercicio",
+            "value": "4,20 por nueva acción (ejemplo)"
+          },
+          {
+            "label": "Ejercicio y dilución",
+            "value": "El ejercicio crea nuevas acciones y diluye a los titulares existentes (condiciones de ejemplo)"
+          },
+          {
+            "label": "Límite de la oferta",
+            "value": "ECSPR: como máximo 5.000.000 EUR por emisor en 12 meses"
+          }
+        ],
+        "overview": [
+          "Datos de ejemplo - no es una oferta real",
+          "Un warrant da el derecho, no la obligación, de suscribir nuevas acciones al precio de ejercicio durante la ventana de ejercicio.",
+          "Si el precio de la acción nunca supera el precio de ejercicio, el warrant puede expirar sin valor; es posible la pérdida total del importe pagado.",
+          "El ejercicio emite nuevas acciones y diluye a los accionistas existentes.",
+          "Las ofertas de valores bajo el ECSPR están limitadas a 5.000.000 EUR por emisor en 12 meses."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Douro Textiles S.A. (emisor de ejemplo)",
+        "category": "Tecnología industrial y fabricación",
+        "teaser": "Oferta de ejemplo de certificados de depósito sobre acciones de una exportadora textil portuguesa, con las acciones subyacentes mantenidas por un custodio. Todas las condiciones de esta página son datos de ejemplo.",
+        "interestRate": "Las distribuciones reflejan las acciones subyacentes (ejemplo)",
+        "term": "Sin vencimiento fijo (ejemplo)",
+        "minInvestment": "250 USDC de testnet (ejemplo)",
+        "additionalInfo": [
+          {
+            "label": "Producto de inversión",
+            "value": "Certificado de depósito sobre acciones de S.A. Datos de ejemplo - no es una oferta real"
+          },
+          {
+            "label": "Subyacente",
+            "value": "Acciones ordinarias de Douro Textiles S.A. (ejemplo)"
+          },
+          {
+            "label": "Custodia",
+            "value": "Las acciones subyacentes deben estar mantenidas por una entidad de crédito (CRD), una empresa de inversión (MiFID II) o un régimen equivalente de registro del emisor"
+          },
+          {
+            "label": "Régimen portugués",
+            "value": "Portugal no tiene un régimen nacional propio para certificados de depósito; los derechos se derivan de las condiciones del certificado"
+          }
+        ],
+        "overview": [
+          "Datos de ejemplo - no es una oferta real",
+          "El certificado representa acciones subyacentes mantenidas por un custodio; el titular tiene el derecho económico, y el voto y la transmisión siguen las condiciones del certificado.",
+          "La custodia exige un banco o una empresa de inversión autorizada (CRD / MiFID II) o un régimen equivalente de registro del emisor.",
+          "Portugal no tiene un régimen nacional propio para certificados de depósito; este ejemplo no lo establece.",
+          "Pérdida total posible; las acciones subyacentes pueden ser ilíquidas."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Tejo Packaging Lda (emisor de ejemplo)",
+        "category": "Productos de consumo, moda, ropa y comercio minorista",
+        "teaser": "Oferta de ejemplo de un pagaré comercial a nueve meses emitido por un proveedor portugués de embalajes. Todas las condiciones de esta página son datos de ejemplo.",
+        "interestRate": "4,1% anual de rentabilidad implícita (ejemplo)",
+        "term": "9 meses (ejemplo)",
+        "minInvestment": "500 USDC de testnet (ejemplo)",
+        "additionalInfo": [
+          {
+            "label": "Producto de inversión",
+            "value": "Pagaré comercial - valor transmisible según el DL 69/2004 (modificado por el DL 102/2026), art. 4(1)(44)(b) de MiFID II; también instrumento del mercado monetario. Datos de ejemplo - no es una oferta real"
+          },
+          {
+            "label": "Condiciones minoristas",
+            "value": "Exige rating, garantía o ratio de autonomía financiera suficiente (nota de ejemplo)"
+          },
+          {
+            "label": "Proceso CMVM",
+            "value": "Nota informativa con período de no oposición de 10 días hábiles; patrocinador exigido sin auditoría legal; no se ha encontrado práctica de la CMVM para pagarés comerciales minoristas en crowdfunding"
+          },
+          {
+            "label": "Límite de la oferta",
+            "value": "ECSPR: como máximo 5.000.000 EUR por emisor en 12 meses"
+          }
+        ],
+        "overview": [
+          "Datos de ejemplo - no es una oferta real",
+          "Deuda a corto plazo sin garantía real, inferior a un año, transmisible como valor y tratada como instrumento del mercado monetario.",
+          "Sin garantía real: si el emisor no paga ni refinancia al vencimiento, los inversores pueden perder la totalidad.",
+          "No se ha encontrado práctica de la CMVM para pagarés comerciales minoristas en crowdfunding; las condiciones minoristas enumeradas son exigidas antes de cualquier oferta real.",
+          "Las ofertas de valores bajo el ECSPR están limitadas a 5.000.000 EUR por emisor en 12 meses."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Costa Restaurants Lda (emisor de ejemplo)",
+        "category": "Restaurantes y gastronomía",
+        "teaser": "Oferta de ejemplo de un préstamo a un grupo portugués de restauración con interés variable vinculado a los ingresos y reembolso incondicional del capital. Todas las condiciones de esta página son datos de ejemplo.",
+        "interestRate": "Variable, vinculado a los ingresos (ejemplo)",
+        "term": "48 meses (ejemplo)",
+        "minInvestment": "250 USDC de testnet (ejemplo)",
+        "additionalInfo": [
+          {
+            "label": "Producto de inversión",
+            "value": "Préstamo con interés variable vinculado a los ingresos. Datos de ejemplo - no es una oferta real"
+          },
+          {
+            "label": "Reembolso del capital",
+            "value": "Incondicional, en el plazo y plan de pagos acordados - los importes vencidos se pagan haya o no ingresos (condiciones de ejemplo)"
+          },
+          {
+            "label": "Interés",
+            "value": "Variable, vinculado a los ingresos del emisor (ejemplo)"
+          },
+          {
+            "label": "Encaje regulatorio",
+            "value": "El interés variable encaja en el ECSPR en abstracto (Reg. Delegado (UE) 2022/2118, art. 8(3)(b), 10(1)(g); Reg. Delegado (UE) 2022/2119, anexo); el reembolso condicional dejaría de ser un préstamo ECSPR; un tipo vinculado a los ingresos en un contrato concreto no está confirmado por la práctica de la CMVM"
+          }
+        ],
+        "overview": [
+          "Datos de ejemplo - no es una oferta real",
+          "Un préstamo: el reembolso del capital es incondicional, con plazo y plan de pagos acordados.",
+          "El interés varía con los ingresos del emisor; si los importes vencidos solo se pagaran cuando existieran ingresos, el instrumento sería condicional y dejaría de ser un préstamo ECSPR.",
+          "Un tipo vinculado a los ingresos en un contrato concreto no está confirmado por la práctica de la CMVM.",
+          "Pérdida total posible; los préstamos suelen ser ilíquidos hasta el vencimiento."
         ],
         "documents": [],
         "news": []

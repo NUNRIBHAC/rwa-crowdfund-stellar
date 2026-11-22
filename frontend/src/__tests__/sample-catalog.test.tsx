@@ -53,12 +53,26 @@ const market: Market = {
   onToggleFixtures: vi.fn(),
 };
 
-test('fifteen unique client-only fixtures cover all instrument families without treating structures as instruments', () => {
-  expect(FIXTURE_CAMPAIGNS).toHaveLength(15);
-  expect(new Set(FIXTURE_CAMPAIGNS.map((c) => c.id)).size).toBe(15);
+test('nineteen unique client-only fixtures cover all instrument families without treating structures as instruments', () => {
+  expect(FIXTURE_CAMPAIGNS).toHaveLength(19);
+  expect(new Set(FIXTURE_CAMPAIGNS.map((c) => c.id)).size).toBe(19);
   expect(FIXTURE_CAMPAIGNS.map((c) => c.id)).toEqual(SAMPLE_CATALOG.map((c) => c.id));
   expect(new Set(SAMPLE_CATALOG.map((c) => c.instrument))).toEqual(
-    new Set(['bond', 'loan', 'share', 'participation-certificate', 'substanzgenussrecht', 'limited-partnership', 'donation', 'reward', 'pre-sale']),
+    new Set([
+      'bond',
+      'loan',
+      'share',
+      'participation-certificate',
+      'substanzgenussrecht',
+      'limited-partnership',
+      'donation',
+      'reward',
+      'pre-sale',
+      'warrant',
+      'share-depositary-receipt',
+      'commercial-paper',
+      'revenue-linked-loan',
+    ]),
   );
   expect(SAMPLE_CATALOG.find((c) => c.indirect)?.instrument).toBe('share');
   for (const instrument of ['loan', 'bond']) {

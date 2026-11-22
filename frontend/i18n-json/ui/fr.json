@@ -857,6 +857,54 @@
           "Pas de participation à la croissance de l'entreprise"
         ],
         "suitableFor": "Investisseurs orientés rendement qui supportent une perte totale et n'ont pas besoin du capital avant l'échéance."
+      },
+      {
+        "label": "Warrant",
+        "note": "L'exercice crée de nouvelles actions et dilue les détenteurs existants. Les offres de titres relevant de l'ECSPR sont plafonnées à 5.000.000 EUR par émetteur sur 12 mois.",
+        "summary": "Un titre négociable donnant le droit, mais non l'obligation, de souscrire de nouvelles actions de l'émetteur à un prix fixé pendant une fenêtre ou à une date définie (titre au sens de l'art. 4(1)(44)(c) de MiFID II).",
+        "opportunities": ["Plus-value si le cours de l'action dépasse le prix d'exercice", "Prix et fenêtre d'exercice fixés à l'avance"],
+        "risks": [
+          "Peut expirer sans valeur si le cours reste sous le prix d'exercice",
+          "L'exercice dilue les actionnaires existants",
+          "La valeur dépend de l'action sous-jacente, qui peut être illiquide"
+        ],
+        "suitableFor": "Investisseurs qui comprennent une exposition à effet de levier sur actions et acceptent de perdre la totalité du montant payé."
+      },
+      {
+        "label": "Certificat de dépôt sur actions",
+        "note": "Correspond à la définition de titre négociable de MiFID II (art. 4(1)(44)(a)) et la conservation de l'art. 10 de l'ECSPR est faisable, mais le placement sous l'ECSPR couvre les titres émis par le porteur de projet ou un SPV, et un certificat de dépôt est émis par le dépositaire: sans confirmation de l'ESMA ou de la CMVM. Non prouvé. Le Portugal n'a pas de régime national propre aux certificats de dépôt.",
+        "summary": "Un certificat émis par un dépositaire représentant des actions de la société (actions de S.A. et certificats de dépôt sur actions): le titulaire détient le droit économique sur les actions sous-jacentes pendant que le dépositaire détient les actions.",
+        "opportunities": ["Exposition aux actions sous forme de certificat négociable", "Les distributions suivent les actions sous-jacentes"],
+        "risks": [
+          "Ajoute un risque de dépositaire au risque de l'action",
+          "Les droits de vote et de transfert dépendent des conditions du certificat",
+          "Les actions sous-jacentes peuvent être illiquides"
+        ],
+        "suitableFor": "Investisseurs qui veulent une exposition aux actions via un certificat conservé et acceptent le risque actions et le risque de conservation."
+      },
+      {
+        "label": "Papier commercial",
+        "note": "C'est aussi un instrument du marché monétaire. Aucune pratique de la CMVM n'a été trouvée pour le papier commercial de détail en crowdfunding: une offre de détail exige une notation, une garantie ou un ratio d'autonomie financière suffisant, une note d'information à la CMVM avec un délai de non-opposition de 10 jours ouvrables et un sponsor lorsque l'émetteur n'a pas d'audit légal. L'ECSPR plafonne les offres à 5.000.000 EUR par émetteur sur 12 mois.",
+        "summary": "Dette à court terme inférieure à un an: titre négociable au sens du DL 69/2004 (modifié par le DL 102/2026) et de l'art. 4(1)(44)(b) de MiFID II, et en même temps un instrument du marché monétaire.",
+        "opportunities": ["Échéance courte avec date de remboursement définie", "Rendement pour financer le fonds de roulement de l'émetteur"],
+        "risks": [
+          "Sans sûreté réelle: perte si l'émetteur ne paie ni ne refinance",
+          "Une échéance courte ne signifie pas un risque faible",
+          "Généralement illiquide jusqu'à l'échéance"
+        ],
+        "suitableFor": "Investisseurs qui veulent une exposition à la dette à court terme et acceptent le risque de défaut de l'émetteur."
+      },
+      {
+        "label": "Prêt à rémunération indexée sur les revenus",
+        "note": "L'intérêt variable indexé sur les revenus relève de l'ECSPR en abstrait (règl. délégué (UE) 2022/2118, art. 8(3)(b) et 10(1)(g); règl. délégué (UE) 2022/2119, annexe). Si le capital ou les échéances déjà dues ne sont payés qu'en présence de revenus, le remboursement est conditionnel et ce n'est plus un prêt ECSPR. Un taux indexé sur les revenus dans un contrat concret n'est pas confirmé par la pratique de la CMVM.",
+        "summary": "Un prêt avec remboursement inconditionnel du capital à un terme convenu et selon un plan de paiements, dont l'intérêt varie avec les revenus de l'émetteur.",
+        "opportunities": ["L'intérêt augmente quand les revenus de l'émetteur augmentent", "Le remboursement du capital ne dépend pas des revenus"],
+        "risks": [
+          "L'intérêt peut tomber à des niveaux faibles en période de revenus médiocres",
+          "Le remboursement est inconditionnel, mais l'émetteur peut néanmoins faire défaut",
+          "Généralement illiquide jusqu'à l'échéance"
+        ],
+        "suitableFor": "Investisseurs qui veulent une exposition obligataire avec un potentiel lié aux revenus de l'émetteur et acceptent le risque de défaut."
       }
     ],
     "overlays": [
@@ -1743,6 +1791,146 @@
           "Commande anticipée du produit ou service financé, structurée comme un financement participatif par récompense, et non comme un investissement ou un droit à un jeton futur. Aucun rendement financier n'est offert.",
           "La livraison, l'annulation et les droits du consommateur seraient définis par offre.",
           "Scénario d'exemple du tout ou rien : l'objectif n'a pas été atteint et les contributions ont été remboursées."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Atlas Mobility S.A. (émetteur exemple)",
+        "category": "Vélos électriques et mobilité légère",
+        "teaser": "Offre exemple de warrants sur de nouvelles actions d'un opérateur portugais de mobilité légère. Toutes les conditions de cette page sont des données exemple.",
+        "interestRate": "Pas de coupon - plus-value uniquement par exercice (exemple)",
+        "term": "Fenêtre d'exercice jusqu'au 2029-06-30 (exemple)",
+        "minInvestment": "100 USDC testnet (exemple)",
+        "additionalInfo": [
+          {
+            "label": "Produit d'investissement",
+            "value": "Warrant sur de nouvelles actions ordinaires. Données exemple - pas une offre réelle"
+          },
+          {
+            "label": "Prix d'exercice",
+            "value": "4,20 par nouvelle action (exemple)"
+          },
+          {
+            "label": "Exercice et dilution",
+            "value": "L'exercice crée de nouvelles actions et dilue les détenteurs existants (conditions exemple)"
+          },
+          {
+            "label": "Plafond de l'offre",
+            "value": "ECSPR: au plus 5.000.000 EUR par émetteur sur 12 mois"
+          }
+        ],
+        "overview": [
+          "Données exemple - pas une offre réelle",
+          "Un warrant donne le droit, non l'obligation, de souscrire de nouvelles actions au prix d'exercice pendant la fenêtre d'exercice.",
+          "Si le cours de l'action ne dépasse jamais le prix d'exercice, le warrant peut expirer sans valeur; la perte totale du montant payé est possible.",
+          "L'exercice émet de nouvelles actions et dilue les actionnaires existants.",
+          "Les offres de titres relevant de l'ECSPR sont plafonnées à 5.000.000 EUR par émetteur sur 12 mois."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Douro Textiles S.A. (émetteur exemple)",
+        "category": "Technologie industrielle et fabrication",
+        "teaser": "Offre exemple de certificats de dépôt sur actions d'un exportateur textile portugais, les actions sous-jacentes étant détenues par un dépositaire. Toutes les conditions de cette page sont des données exemple.",
+        "interestRate": "Les distributions suivent les actions sous-jacentes (exemple)",
+        "term": "Sans échéance fixe (exemple)",
+        "minInvestment": "250 USDC testnet (exemple)",
+        "additionalInfo": [
+          {
+            "label": "Produit d'investissement",
+            "value": "Certificat de dépôt sur actions de S.A. Données exemple - pas une offre réelle"
+          },
+          {
+            "label": "Sous-jacent",
+            "value": "Actions ordinaires de Douro Textiles S.A. (exemple)"
+          },
+          {
+            "label": "Conservation",
+            "value": "Les actions sous-jacentes doivent être détenues par un établissement de crédit (CRD), une entreprise d'investissement (MiFID II) ou un régime équivalent de registre de l'émetteur"
+          },
+          {
+            "label": "Régime portugais",
+            "value": "Le Portugal n'a pas de régime national propre aux certificats de dépôt; les droits découlent des conditions du certificat"
+          }
+        ],
+        "overview": [
+          "Données exemple - pas une offre réelle",
+          "Le certificat représente des actions sous-jacentes détenues par un dépositaire; le titulaire détient le droit économique, et le vote et le transfert suivent les conditions du certificat.",
+          "La conservation exige une banque ou une entreprise d'investissement agréée (CRD / MiFID II) ou un régime équivalent de registre de l'émetteur.",
+          "Le Portugal n'a pas de régime national propre aux certificats de dépôt; cet exemple ne l'établit pas.",
+          "Perte totale possible; les actions sous-jacentes peuvent être illiquides."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Tejo Packaging Lda (émetteur exemple)",
+        "category": "Produits de consommation, mode, habillement et commerce de détail",
+        "teaser": "Offre exemple de papier commercial à neuf mois émis par un fournisseur portugais d'emballages. Toutes les conditions de cette page sont des données exemple.",
+        "interestRate": "4,1% l'an de rendement implicite (exemple)",
+        "term": "9 mois (exemple)",
+        "minInvestment": "500 USDC testnet (exemple)",
+        "additionalInfo": [
+          {
+            "label": "Produit d'investissement",
+            "value": "Papier commercial - titre négociable au sens du DL 69/2004 (modifié par le DL 102/2026), art. 4(1)(44)(b) de MiFID II; aussi instrument du marché monétaire. Données exemple - pas une offre réelle"
+          },
+          {
+            "label": "Conditions de détail",
+            "value": "Notation, garantie ou ratio d'autonomie financière suffisant exigé (note exemple)"
+          },
+          {
+            "label": "Processus CMVM",
+            "value": "Note d'information avec délai de non-opposition de 10 jours ouvrables; sponsor exigé sans audit légal; aucune pratique de la CMVM trouvée pour le papier commercial de détail en crowdfunding"
+          },
+          {
+            "label": "Plafond de l'offre",
+            "value": "ECSPR: au plus 5.000.000 EUR par émetteur sur 12 mois"
+          }
+        ],
+        "overview": [
+          "Données exemple - pas une offre réelle",
+          "Dette à court terme sans sûreté réelle, inférieure à un an, négociable comme titre et traitée comme instrument du marché monétaire.",
+          "Sans sûreté réelle: si l'émetteur ne paie ni ne refinance à l'échéance, les investisseurs peuvent tout perdre.",
+          "Aucune pratique de la CMVM n'a été trouvée pour le papier commercial de détail en crowdfunding; les conditions de détail listées sont requises avant toute offre réelle.",
+          "Les offres de titres relevant de l'ECSPR sont plafonnées à 5.000.000 EUR par émetteur sur 12 mois."
+        ],
+        "documents": [],
+        "news": []
+      },
+      {
+        "issuer": "Costa Restaurants Lda (émetteur exemple)",
+        "category": "Restaurants et gastronomie",
+        "teaser": "Offre exemple d'un prêt à un groupe portugais de restauration dont l'intérêt varie avec les revenus, avec remboursement inconditionnel du capital. Toutes les conditions de cette page sont des données exemple.",
+        "interestRate": "Variable, indexé sur les revenus (exemple)",
+        "term": "48 mois (exemple)",
+        "minInvestment": "250 USDC testnet (exemple)",
+        "additionalInfo": [
+          {
+            "label": "Produit d'investissement",
+            "value": "Prêt à intérêt variable indexé sur les revenus. Données exemple - pas une offre réelle"
+          },
+          {
+            "label": "Remboursement du capital",
+            "value": "Inconditionnel, au terme et selon le plan de paiements convenus - les montants dus sont payables qu'il y ait ou non des revenus (conditions exemple)"
+          },
+          {
+            "label": "Intérêt",
+            "value": "Variable, indexé sur les revenus de l'émetteur (exemple)"
+          },
+          {
+            "label": "Cadre réglementaire",
+            "value": "L'intérêt variable relève de l'ECSPR en abstrait (règl. délégué (UE) 2022/2118, art. 8(3)(b), 10(1)(g); règl. délégué (UE) 2022/2119, annexe); un remboursement conditionnel ne serait plus un prêt ECSPR; un taux indexé sur les revenus dans un contrat concret n'est pas confirmé par la pratique de la CMVM"
+          }
+        ],
+        "overview": [
+          "Données exemple - pas une offre réelle",
+          "Un prêt: le remboursement du capital est inconditionnel, avec un terme et un plan de paiements convenus.",
+          "L'intérêt varie avec les revenus de l'émetteur; si les montants dus n'étaient payables qu'en présence de revenus, l'instrument serait conditionnel et ne serait plus un prêt ECSPR.",
+          "Un taux indexé sur les revenus dans un contrat concret n'est pas confirmé par la pratique de la CMVM.",
+          "Perte totale possible; les prêts sont généralement illiquides jusqu'à l'échéance."
         ],
         "documents": [],
         "news": []
