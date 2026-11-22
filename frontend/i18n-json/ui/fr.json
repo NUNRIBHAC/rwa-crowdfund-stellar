@@ -727,7 +727,6 @@
     "aboutProject": "À propos de ce projet",
     "status": "Statut",
     "statusText": "Prototype de testnet. Aucun déploiement automatique ni conversion de soldes hérités. Les intents et soldes classiques existants sont préservés, pas effacés. L'infrastructure séparée d'identité/valorisation reste uniquement simulée.",
-    "legalPre": "Contexte de marché : l'UE régule le crowdfunding sous le régime ECSPR ; les prestataires agréés figurent dans le",
     "tagline": "Des actifs réels. Des possibilités partagées."
   },
   "time": {
