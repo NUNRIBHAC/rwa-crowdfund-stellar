@@ -122,7 +122,6 @@
     "themeToLight": "Mudar para o tema claro",
     "themeToDark": "Mudar para o tema escuro"
   },
-  "riskBanner": "Os investimentos em crowdfunding comportam um risco de perda total. Isto é um protótipo na testnet Stellar: sem ofertas reais, sem fundos reais, sem aconselhamento de investimento.",
   "hero": {
     "introTitle": "Financiar um projeto em conjunto.",
     "intro": "Explora campanhas de financiamento. Contribui para um objetivo comum. Após o prazo, o resultado decide o que acontece a seguir.",
