@@ -251,24 +251,26 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
               )}
 
               {actor ? (
-                <>
-                  <span className="wallet-chip" title={actor}>
-                    <span className="wallet-chip-prefix">{m.header.connectedPrefix}:</span> {shorten(actor)}
-                  </span>
-                  <button
-                    className="btn btn-disconnect"
-                    disabled={busy}
-                    onClick={() => {
-                      // Clears this browser's app connection and community
-                      // session only; wallet-side site permissions and other
-                      // browsers' sessions are untouched.
-                      void signOut();
-                      onDisconnect();
-                    }}
-                  >
-                    {m.header.disconnect}
-                  </button>
-                </>
+                current !== 'home' && (
+                  <>
+                    <span className="wallet-chip" title={actor}>
+                      <span className="wallet-chip-prefix">{m.header.connectedPrefix}:</span> {shorten(actor)}
+                    </span>
+                    <button
+                      className="btn btn-disconnect"
+                      disabled={busy}
+                      onClick={() => {
+                        // Clears this browser's app connection and community
+                        // session only; wallet-side site permissions and other
+                        // browsers' sessions are untouched.
+                        void signOut();
+                        onDisconnect();
+                      }}
+                    >
+                      {m.header.disconnect}
+                    </button>
+                  </>
+                )
               ) : (
                 <button className={`btn ${current === 'home' ? 'btn-outline' : 'btn-primary'}`} disabled={busy} onClick={onConnect}>
                   {m.header.connectWallet}
