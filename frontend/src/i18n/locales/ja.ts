@@ -109,6 +109,7 @@ export const ja: Messages = {
     skipLink: 'メインコンテンツへスキップ',
   },
   nav: {
+    forInvestors: '投資家向け',
     menu: 'メニュー',
     ariaMain: 'メイン',
     home: 'ホーム',

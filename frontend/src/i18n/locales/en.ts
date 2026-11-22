@@ -108,6 +108,7 @@ export const en = {
     skipLink: 'Skip to main content',
   },
   nav: {
+    forInvestors: 'For investors',
     menu: 'Menu',
     ariaMain: 'Main',
     home: 'Home',

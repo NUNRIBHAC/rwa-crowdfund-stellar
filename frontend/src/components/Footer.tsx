@@ -137,13 +137,13 @@ export default function Footer() {
             <FooterGroup title={m.footer.learn}>
               <ul>
                 <li>
-                  <a href={routeHash({ name: 'learn' })}>{m.footer.instrumentHub}</a>
-                </li>
-                <li>
                   <a href={routeHash({ name: 'risk-warnings' })}>{m.footer.riskWarnings}</a>
                 </li>
                 <li>
                   <a href={routeHash({ name: 'glossary' })}>{m.footer.glossary}</a>
+                </li>
+                <li>
+                  <a href={routeHash({ name: 'learn' })}>{m.nav.learn}</a>
                 </li>
                 <li>
                   <a href={routeHash({ name: 'faq' })}>{m.footer.faq}</a>

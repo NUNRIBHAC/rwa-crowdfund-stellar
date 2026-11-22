@@ -10,7 +10,7 @@ function NavIcon({ name }: { name: string }) {
     home: 'M3 11 12 3l9 8M5 10v11h14V10',
     investments: 'M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h6v6h-6z',
     'how-it-works': 'M9 8a3 3 0 0 1 6 0c0 2-3 2-3 5M12 17h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',
-    learn: 'M12 5c-3-2-6-2-10 0v15c4-2 7-2 10 0 3-2 6-2 10 0V5c-4-2-7-2-10 0ZM12 5v15',
+    'for-investors': 'M12 5c-3-2-6-2-10 0v15c4-2 7-2 10 0 3-2 6-2 10 0V5c-4-2-7-2-10 0ZM12 5v15',
     financing: 'M3 7h18v14H3zM8 7V3h8v4M3 12c6 3 12 3 18 0M10 13h4',
     about: 'M12 11v6M12 7h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',
     faq: 'M7 18 3 22l1-7a9 9 0 1 1 3 3M8 11h.01M12 11h.01M16 11h.01',
@@ -87,7 +87,7 @@ export default function Header({ actor, busy, onConnect, onDisconnect, current }
     { route: 'home', label: m.nav.home },
     { route: 'investments', label: m.home.campaignsNav },
     { route: 'how-it-works', label: m.nav.howItWorks },
-    { route: 'learn', label: m.nav.learn },
+    { route: 'for-investors', label: m.nav.forInvestors },
     { route: 'financing', label: m.home.forBusinesses },
   ];
   return (

@@ -8,6 +8,7 @@ describe('routeFromPath', () => {
   test.each([
     ['/investments', 'investments'],
     ['/how-it-works', 'how-it-works'],
+    ['/for-investors', 'for-investors'],
     ['/learn', 'learn'],
     ['/glossary', 'glossary'],
     ['/risk-warnings', 'risk-warnings'],
@@ -64,6 +65,7 @@ describe('routePath', () => {
       'home',
       'investments',
       'how-it-works',
+      'for-investors',
       'learn',
       'glossary',
       'risk-warnings',

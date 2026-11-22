@@ -7,6 +7,7 @@ const PUBLIC_PATHS = [
   '/',
   '/campaigns',
   '/how-it-works',
+  '/for-investors',
   '/learn',
   '/glossary',
   '/risk-warnings',

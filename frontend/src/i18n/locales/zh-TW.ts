@@ -105,6 +105,7 @@ export const zhTW: Messages = {
     skipLink: '跳至主要內容',
   },
   nav: {
+    forInvestors: '投資者專區',
     menu: '選單',
     ariaMain: '主導航',
     home: '首頁',

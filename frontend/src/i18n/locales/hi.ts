@@ -110,6 +110,7 @@ export const hi: Messages = {
     skipLink: 'मुख्य सामग्री पर जाएं',
   },
   nav: {
+    forInvestors: 'निवेशकों के लिए',
     menu: 'मेनू',
     ariaMain: 'मुख्य',
     home: 'होम',

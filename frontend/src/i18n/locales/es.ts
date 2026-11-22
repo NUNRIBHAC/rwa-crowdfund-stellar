@@ -111,6 +111,7 @@ export const es: Messages = {
     skipLink: 'Saltar al contenido principal',
   },
   nav: {
+    forInvestors: 'Para inversores',
     menu: 'Menú',
     ariaMain: 'Principal',
     home: 'Inicio',

@@ -105,6 +105,7 @@ export const zhCN: Messages = {
     skipLink: '跳至主要内容',
   },
   nav: {
+    forInvestors: '投资者专区',
     menu: '菜单',
     ariaMain: '主导航',
     home: '首页',

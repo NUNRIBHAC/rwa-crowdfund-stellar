@@ -107,6 +107,7 @@ export const ko: Messages = {
     skipLink: '본문으로 건너뛰기',
   },
   nav: {
+    forInvestors: '투자자 안내',
     menu: '메뉴',
     ariaMain: '메인',
     home: '홈',

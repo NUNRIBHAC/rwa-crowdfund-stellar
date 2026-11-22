@@ -188,13 +188,17 @@ code {
    only applies before the first measurement. */
 h1[id],
 h2[id],
-section[id] {
+section[id],
+#investor-holdings,
+#investor-documents {
   scroll-margin-top: var(--sticky-header-h, 96px);
 }
 @media (max-width: 640px) {
   h1[id],
   h2[id],
-  section[id] {
+  section[id],
+  #investor-holdings,
+  #investor-documents {
     scroll-margin-top: var(--sticky-header-h, 132px);
   }
 }
@@ -5049,4 +5053,37 @@ html.rtl-text .accordion summary > span:first-child {
 .sample-concept-detail {
   max-width: 850px;
   margin-inline: auto;
+}
+
+/* Public investor entry point, logical spacing keeps Arabic mirrored. */
+.investors-intro {
+  max-width: 76ch;
+}
+.investors-resources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-block: 2rem;
+}
+.investors-resources .step-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.investors-resources .step-card .btn {
+  align-self: flex-start;
+  margin-block-start: auto;
+  white-space: normal;
+  text-align: start;
+}
+.investors-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block: 2rem;
+}
+@media (max-width: 700px) {
+  .investors-resources {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

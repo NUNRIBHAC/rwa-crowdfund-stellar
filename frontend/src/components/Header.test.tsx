@@ -59,3 +59,14 @@ test('no session sign out is shown while signed out', () => {
   render(<Header actor="" busy={false} current="home" onConnect={vi.fn()} onDisconnect={vi.fn()} />);
   expect(screen.queryByRole('button', { name: 'Sign out' })).toBeNull();
 });
+
+test('Investors replaces Learn in shared desktop/mobile navigation', () => {
+  render(<Header actor="" busy={false} current="for-investors" onConnect={vi.fn()} onDisconnect={vi.fn()} />);
+  const links = screen.getAllByRole('link', { name: en.nav.forInvestors });
+  expect(links.length).toBeGreaterThan(0);
+  for (const link of links) {
+    expect(link.getAttribute('href')).toBe('/for-investors');
+    expect(link.getAttribute('aria-current')).toBe('page');
+  }
+  expect(document.querySelector('header a[href="/learn"]')).toBeNull();
+});

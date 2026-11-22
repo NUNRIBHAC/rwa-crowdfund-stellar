@@ -34,6 +34,7 @@ test('sitemap.xml lists every public page path plus live campaign URLs', async (
       `${origin}/`,
       `${origin}/campaigns`,
       `${origin}/how-it-works`,
+      `${origin}/for-investors`,
       `${origin}/learn`,
       `${origin}/glossary`,
       `${origin}/risk-warnings`,

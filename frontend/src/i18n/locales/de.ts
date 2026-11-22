@@ -112,6 +112,7 @@ export const de: Messages = {
     skipLink: 'Zum Hauptinhalt springen',
   },
   nav: {
+    forInvestors: 'Für Anleger',
     menu: 'Menü',
     ariaMain: 'Hauptnavigation',
     home: 'Start',

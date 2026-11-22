@@ -13,6 +13,7 @@ export const PUBLIC_PAGES = [
   '/events',
   '/faq',
   '/for-businesses',
+  '/for-investors',
   '/glossary',
   '/how-it-works',
   '/campaigns',

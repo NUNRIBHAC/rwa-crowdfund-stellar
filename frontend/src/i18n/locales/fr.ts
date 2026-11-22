@@ -111,6 +111,7 @@ export const fr: Messages = {
     skipLink: 'Aller au contenu principal',
   },
   nav: {
+    forInvestors: 'Pour les investisseurs',
     menu: 'Menu',
     ariaMain: 'Principal',
     home: 'Accueil',

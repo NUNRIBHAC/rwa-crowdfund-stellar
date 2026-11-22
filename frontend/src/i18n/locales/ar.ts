@@ -107,6 +107,7 @@ export const ar: Messages = {
     skipLink: 'انتقل إلى المحتوى الرئيسي',
   },
   nav: {
+    forInvestors: 'للمستثمرين',
     menu: 'القائمة',
     ariaMain: 'التنقل الرئيسي',
     home: 'الرئيسية',
