@@ -5155,3 +5155,61 @@ html.rtl-text .accordion summary > span:first-child {
   overflow-wrap: normal;
   word-break: normal;
 }
+
+/* The filter column is physically LEFT in every locale, by owner request.
+   Individual Arabic labels retain their existing RTL reading direction. */
+.registry-content-layout {
+  min-width: 0;
+}
+.registry-main-content {
+  min-width: 0;
+}
+.registry-discovery-v2 .registry-filter-panel {
+  margin-block-start: 0;
+}
+.registry-discovery-v2 .registry-filter-controls {
+  align-items: stretch;
+}
+.registry-discovery-v2 .registry-filter-controls > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.registry-discovery-v2 .registry-filter-controls select {
+  width: 100%;
+  min-width: 0;
+}
+@media (min-width: 1001px) {
+  .registry-content-layout.has-filters {
+    display: grid;
+    grid-template-columns: minmax(210px, 250px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    direction: ltr;
+  }
+  .registry-content-layout > .registry-filter-panel {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: calc(var(--sticky-header-h, 90px) + 12px);
+    max-height: calc(100vh - var(--sticky-header-h, 90px) - 24px);
+    overflow-y: auto;
+  }
+  .registry-content-layout > .registry-main-content {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .registry-discovery-v2 .registry-filter-controls {
+    flex-direction: column;
+  }
+  .registry-discovery-v2 .card-grid.registry-many {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1000px) {
+  .registry-content-layout {
+    display: block;
+  }
+  .registry-discovery-v2 .registry-filter-controls {
+    flex-direction: column;
+  }
+}

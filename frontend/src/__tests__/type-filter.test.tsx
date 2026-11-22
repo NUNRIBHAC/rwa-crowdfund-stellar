@@ -95,3 +95,24 @@ test('live mode hides educational types and national preview examples stay read-
     cleanup();
   }
 });
+
+test('filter controls are in a separate sidebar before the results, with an accessible mobile toggle', () => {
+  const { container } = render(
+    <I18nProvider>
+      <Investments market={market} />
+    </I18nProvider>,
+  );
+  const layout = container.querySelector('.registry-content-layout')!;
+  const sidebar = layout.querySelector('aside.registry-filter-panel')!;
+  const main = layout.querySelector('.registry-main-content')!;
+  expect(sidebar.parentElement).toBe(layout);
+  expect(main.parentElement).toBe(layout);
+  expect(Boolean(sidebar.compareDocumentPosition(main) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(true);
+  const toggle = sidebar.querySelector('button[aria-controls="registry-filter-controls"]')!;
+  expect(toggle.getAttribute('aria-expanded')).toBe('false');
+  fireEvent.click(toggle);
+  expect(toggle.getAttribute('aria-expanded')).toBe('true');
+  expect(container.querySelector('.filters-open')).toBeTruthy();
+  fireEvent.click(toggle);
+  expect(toggle.getAttribute('aria-expanded')).toBe('false');
+});
