@@ -242,10 +242,10 @@
     "viewAria": "Ansichtsmodus",
     "grid": "Raster",
     "list": "Liste",
-    "noMatches": "Keine Kampagne entspricht der aktuellen Suche und den Filtern.",
+    "noMatches": "Keine Ergebnisse entsprechen der aktuellen Suche und den Filtern.",
     "resultCount": {
-      "one": "{n} Kampagne angezeigt",
-      "other": "{n} Kampagnen angezeigt"
+      "one": "{n} Ergebnis angezeigt",
+      "other": "{n} Ergebnisse angezeigt"
     },
     "activeAria": "Offene Kampagnen",
     "activeTitle": "Offene Kampagnen",
@@ -884,7 +884,10 @@
         "label": "Optionsschein (Warrant)",
         "note": "Die Ausübung schafft neue Aktien und verwässert bestehende Inhaber. Angebote von Wertpapieren nach der ECSPR sind auf 5.000.000 EUR pro Emittent in 12 Monaten begrenzt.",
         "summary": "Ein übertragbares Wertpapier, das das Recht, aber nicht die Pflicht verleiht, neue Aktien des Emittenten zu einem festgelegten Preis während eines Fensters oder zu einem festen Termin zu beziehen (übertragbares Wertpapier im Sinne von MiFID II Art. 4(1)(44)(c)).",
-        "opportunities": ["Wertsteigerung, wenn der Aktienkurs über den Ausübungspreis steigt", "Ausübungspreis und -fenster stehen im Voraus fest"],
+        "opportunities": [
+          "Wertsteigerung, wenn der Aktienkurs über den Ausübungspreis steigt",
+          "Ausübungspreis und -fenster stehen im Voraus fest"
+        ],
         "risks": [
           "Kann wertlos verfallen, wenn der Aktienkurs unter dem Ausübungspreis bleibt",
           "Die Ausübung verwässert bestehende Aktionäre",
@@ -896,7 +899,10 @@
         "label": "Aktien-Hinterlegungsschein",
         "note": "Entspricht der Definition übertragbarer Wertpapiere der MiFID II (Art. 4(1)(44)(a)), und die Verwahrung nach Art. 10 ECSPR ist machbar, aber das Placement unter der ECSPR umfasst Wertpapiere, die vom Projektträger oder einer SPV emittiert werden, und ein Hinterlegungsschein wird vom Verwahrer emittiert: keine ESMA- oder CMVM-Bestätigung. Nicht belegt. Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime.",
         "summary": "Ein von einem Verwahrer ausgegebener Schein, der Aktien der Gesellschaft verbrieft (Aktien einer S.A. und Hinterlegungsscheine über Aktien): Der Inhaber trägt den wirtschaftlichen Anspruch auf die zugrunde liegenden Aktien, während der Verwahrer die Aktien selbst hält.",
-        "opportunities": ["Aktienengagement in einem übertragbaren Schein", "Ausschüttungen folgen den zugrunde liegenden Aktien"],
+        "opportunities": [
+          "Aktienengagement in einem übertragbaren Schein",
+          "Ausschüttungen folgen den zugrunde liegenden Aktien"
+        ],
         "risks": [
           "Fügt zum Aktienrisiko ein Verwahrerrisiko hinzu",
           "Stimm- und Übertragungsrechte hängen von den Bedingungen des Scheins ab",
@@ -908,7 +914,10 @@
         "label": "Commercial Paper",
         "note": "Es ist zugleich ein Geldmarktinstrument. Es wurde keine CMVM-Praxis für Commercial Paper im Privatkunden-Crowdfunding gefunden: Ein Privatkundenangebot erfordert ein Rating, eine Garantie oder eine ausreichende Finanzautonomiequote, eine CMVM-Informationsnotiz mit einer 10-Werktage-Nichtbeanstandungsfrist und einen Sponsor, wenn der Emittent keine gesetzliche Abschlussprüfung hat. Die ECSPR begrenzt Angebote auf 5.000.000 EUR pro Emittent in 12 Monaten.",
         "summary": "Kurzfristige Fremdfinanzierung unter einem Jahr: ein übertragbares Wertpapier nach DL 69/2004 (geändert durch DL 102/2026) und MiFID II Art. 4(1)(44)(b) und zugleich ein Geldmarktinstrument.",
-        "opportunities": ["Kurze Laufzeit mit festem Rückzahlungstermin", "Rendite für die Finanzierung des Working Capital des Emittenten"],
+        "opportunities": [
+          "Kurze Laufzeit mit festem Rückzahlungstermin",
+          "Rendite für die Finanzierung des Working Capital des Emittenten"
+        ],
         "risks": [
           "Unbesichert: Verlust, wenn der Emittent nicht zahlt oder refinanziert",
           "Kurze Laufzeit bedeutet nicht geringes Risiko",
@@ -920,7 +929,10 @@
         "label": "Darlehen mit umsatzgebundener Vergütung",
         "note": "Ein umsatzgebundener variabler Zins passt abstrakt in die ECSPR (Delegierte Verordnung (EU) 2022/2118 Art. 8(3)(b) und 10(1)(g); Delegierte Verordnung (EU) 2022/2119 Anhang). Werden fälliges Kapital oder fällige Raten nur bei vorhandenen Umsätzen gezahlt, ist die Rückzahlung bedingt und es ist kein ECSPR-Darlehen mehr. Ein umsatzgebundener Zinssatz in einem konkreten Vertrag ist durch die CMVM-Praxis nicht bestätigt.",
         "summary": "Ein Darlehen mit unbedingter Kapitalrückzahlung zu einer vereinbarten Laufzeit und einem Zahlungsplan, dessen Zins mit den Umsätzen des Emittenten variiert.",
-        "opportunities": ["Der Zins steigt, wenn die Umsätze des Emittenten steigen", "Die Kapitalrückzahlung hängt nicht von den Umsätzen ab"],
+        "opportunities": [
+          "Der Zins steigt, wenn die Umsätze des Emittenten steigen",
+          "Die Kapitalrückzahlung hängt nicht von den Umsätzen ab"
+        ],
         "risks": [
           "Der Zins kann in schwachen Umsatzphasen auf niedrige Werte fallen",
           "Die Rückzahlung ist unbedingt, aber der Emittent kann dennoch ausfallen",
@@ -932,7 +944,10 @@
         "label": "Schuld-Hinterlegungsschein",
         "note": "Entspricht der Definition übertragbarer Wertpapiere der MiFID II (Art. 4(1)(44)(b)), und die Verwahrung nach Art. 10 ECSPR ist machbar, aber das Placement unter der ECSPR umfasst Wertpapiere, die vom Projektträger oder einer SPV emittiert werden, und ein Hinterlegungsschein wird vom Verwahrer emittiert: keine ESMA- oder CMVM-Bestätigung. Nicht belegt. Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; das \"certificado de depósito\" des Decreto-Lei 372/91 ist eine Bankeinlage, ein anderes Instrument.",
         "summary": "Ein von einem Verwahrer ausgegebener Schein, der Anleihen oder andere verbriefte Schulden des Emittenten verbrieft: Der Inhaber trägt den wirtschaftlichen Anspruch auf die zugrunde liegenden Schuldtitle, während der Verwahrer die Titel selbst hält.",
-        "opportunities": ["Schuldengagement in einem übertragbaren Schein", "Ausschüttungen folgen den zugrunde liegenden Schuldtiteln"],
+        "opportunities": [
+          "Schuldengagement in einem übertragbaren Schein",
+          "Ausschüttungen folgen den zugrunde liegenden Schuldtiteln"
+        ],
         "risks": [
           "Fügt zum Ausfallrisiko des Emittenten ein Verwahrerrisiko hinzu",
           "Übertragungs- und Informationsrechte hängen von den Bedingungen des Scheins ab",
@@ -1248,9 +1263,9 @@
     "sampleMarker": "Beispieldaten - kein echtes Angebot",
     "list": [
       {
-        "issuer": "Riverside Development Lda (Beispiel-Emittent)",
-        "category": "Bauwesen",
-        "teaser": "Sanierung eines Flussufer-Apartmentgebäudes in Lissabon, finanziert über eine Senioranleihe mit festem Zinssatz. Alle Bedingungen auf dieser Seite sind Beispieldaten.",
+        "issuer": "Reabilitação Ribeirinha (Beispieldaten - kein echtes Angebot)",
+        "category": "Immobilien",
+        "teaser": "Energieeffiziente Wohnungssanierung in Lissabon. Beispieldaten - kein echtes Angebot",
         "interestRate": "6,5% p.a. (Beispiel)",
         "term": "Bis 2030-12-31 (Beispiel)",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1301,6 +1316,7 @@
           }
         ],
         "overview": [
+          "Energieeffiziente Wohnungssanierung in Lissabon.",
           "Dieses Panel zeigt, wie vom Emittenten bereitgestellte Marketinginhalte durch die Trennlinie oben von den Plattform-Fakten getrennt werden.",
           "Beispieldaten - kein echtes Angebot. Die Emittentenbeschreibung, das Team, das Geschäftsmodell und die Finanzen auf einer echten Plattform würden vom Emittenten stammen und klar zugeordnet sein."
         ],
@@ -1326,9 +1342,9 @@
         ]
       },
       {
-        "issuer": "Alentejo Solar Cooperative (Beispiel-Emittent)",
-        "category": "Energie und Versorgung",
-        "teaser": "Gemeinschafts-Solaranlage im Alentejo, finanziert über eine nachrangige Anleihe mit Barzins-Variante. Alle Bedingungen auf dieser Seite sind Beispieldaten.",
+        "issuer": "Sol do Montado (Beispieldaten - kein echtes Angebot)",
+        "category": "Energie und Versorgungswirtschaft",
+        "teaser": "Gemeinschaftliche Solarstromerzeugung im Alentejo. Beispieldaten - kein echtes Angebot",
         "interestRate": "7,0% p.a. in bar (Beispiel)",
         "term": "Bis 2032-06-30 (Beispiel)",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1375,6 +1391,7 @@
           }
         ],
         "overview": [
+          "Gemeinschaftliche Solarstromerzeugung im Alentejo.",
           "Beispieldaten - kein echtes Angebot. Eine echte Kampagnenseite würde die Beschreibung der Genossenschaft, des Standorts und der Energieabnahme vom Emittenten selbst tragen."
         ],
         "documents": [
@@ -1389,9 +1406,9 @@
         ]
       },
       {
-        "issuer": "Porto Logistics Hub SA (Beispiel-Emittent)",
+        "issuer": "Cais Norte (Beispieldaten - kein echtes Angebot)",
         "category": "Transport und Logistik",
-        "teaser": "Tokenisierungsstudie für einen Logistik-Hub bei Porto, strukturiert als Wandelanleihe. Dieses Fixture zeigt eine abgeschlossene Kampagne. Alle Bedingungen sind Beispieldaten.",
+        "teaser": "Logistikzentrum für die letzte Meile in Porto. Beispieldaten - kein echtes Angebot",
         "interestRate": "8,0% p.a. bis zur Wandlung (Beispiel)",
         "term": "Bis 2031-12-31 (Beispiel)",
         "minInvestment": "500 Testnet-USDC (Beispiel)",
@@ -1438,6 +1455,7 @@
           }
         ],
         "overview": [
+          "Logistikzentrum für die letzte Meile in Porto.",
           "Beispieldaten - kein echtes Angebot. Abgeschlossene Kampagnen bleiben mit ihrem endgültigen Finanzierungsstatus sichtbar, wie diese."
         ],
         "documents": [
@@ -1454,9 +1472,9 @@
         ]
       },
       {
-        "issuer": "Atlas Workshop Participation (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Metal Atlântico (Beispieldaten - kein echtes Angebot)",
         "category": "Industrietechnik und Fertigung",
-        "teaser": "Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs. Beispieldaten - kein echtes Angebot",
+        "teaser": "Präzisionsmetallverarbeitung für lokale Hersteller. Beispieldaten - kein echtes Angebot",
         "interestRate": "Keine feste Rendite (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1471,19 +1489,18 @@
           }
         ],
         "overview": [
+          "Präzisionsmetallverarbeitung für lokale Hersteller.",
           "Beispieldaten - kein echtes Angebot",
           "Ein Recht (oft als Beteiligungszertifikat verbrieft) auf einen Gewinnanteil und auf Rückzahlung des Nennwerts, ohne die vollen Mitschwererechte eines Aktionärs.",
           "Der Gewinnanteil hängt vollständig von der Leistung des Emittenten ab",
           "Kann hinter gewöhnlichen Gläubigern stehen",
           "Meist illiquide bis zur Fälligkeit"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Cedar Asset Participation (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Pátio do Cedro (Beispieldaten - kein echtes Angebot)",
         "category": "Immobilien",
-        "teaser": "Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung. Beispieldaten - kein echtes Angebot",
+        "teaser": "Sanierung städtischer Wohnungen und kleiner Läden. Beispieldaten - kein echtes Angebot",
         "interestRate": "Keine feste Rendite (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1498,19 +1515,18 @@
           }
         ],
         "overview": [
+          "Sanierung städtischer Wohnungen und kleiner Läden.",
           "Beispieldaten - kein echtes Angebot",
           "Ein Beteiligungsrecht, das an die Substanz (Vermögensbasis) des Emittenten gebunden ist und nicht nur an seinen Jahresgewinn. Strukturierung und zulässige Emittenten variieren je nach Jurisdiktion und Satzung.",
           "Rechtsform und Anlegerschutz unterscheiden sich je nach Jurisdiktion stark",
           "Kann einen Treuhänder oder ein Vehikel zwischen Anleger und Emittent einschieben",
           "Meist illiquide"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Orbit Circular Materials (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Ciclo Mineral (Beispieldaten - kein echtes Angebot)",
         "category": "Industrietechnik und Fertigung",
-        "teaser": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung. Beispieldaten - kein echtes Angebot",
+        "teaser": "Rückgewinnung und Wiederverkauf von Baustoffen. Beispieldaten - kein echtes Angebot",
         "interestRate": "Keine feste Rendite (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1529,20 +1545,19 @@
           }
         ],
         "overview": [
+          "Rückgewinnung und Wiederverkauf von Baustoffen.",
           "Beispieldaten - kein echtes Angebot",
           "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
           "Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert",
           "Totalverlust möglich",
           "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
           "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Meadow Partnership (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Prado Vivo (Beispieldaten - kein echtes Angebot)",
         "category": "Landwirtschaft, Umwelt und Recycling",
-        "teaser": "Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage. Beispieldaten - kein echtes Angebot",
+        "teaser": "Regenerativer Gemüseanbau für Nachbarschaftsmärkte. Beispieldaten - kein echtes Angebot",
         "interestRate": "Keine feste Rendite (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1553,23 +1568,22 @@
           },
           {
             "label": "Status",
-            "value": "Nicht erfolgreich - Ziel nicht erreicht"
+            "value": "Nicht erfolgreich - Rückzahlung an Anleger abgeschlossen"
           }
         ],
         "overview": [
+          "Regenerativer Gemüseanbau für Nachbarschaftsmärkte.",
           "Beispieldaten - kein echtes Angebot",
           "Eine Beteiligung als Kommanditist an einer Personengesellschaft: Gewinn- und Verlustbeteiligung nach Gesellschaftsvertrag, Haftung beschränkt auf die Einlage.",
           "Die Verlustbeteiligung kann die Beteiligung schmälern oder auslöschen",
           "Der Ausstieg ist oft durch den Gesellschaftsvertrag beschränkt",
           "Steuer- und Meldepflichten können aufwendiger sein"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Harbor Equipment Loan (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Frio do Porto (Beispieldaten - kein echtes Angebot)",
         "category": "Transport und Logistik",
-        "teaser": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen. Beispieldaten - kein echtes Angebot",
+        "teaser": "Kühllagerung und lokale Lebensmittelverteilung. Beispieldaten - kein echtes Angebot",
         "interestRate": "5,0 % p. a. (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1588,19 +1602,18 @@
           }
         ],
         "overview": [
+          "Kühllagerung und lokale Lebensmittelverteilung.",
           "Beispieldaten - kein echtes Angebot",
           "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Grove Community Energy Loan (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Bosque Solar (Beispieldaten - kein echtes Angebot)",
         "category": "Energie und Versorgungswirtschaft",
-        "teaser": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen. Beispieldaten - kein echtes Angebot",
+        "teaser": "Gemeinschaftliche Dachsolaranlagen für lokale Betriebe. Beispieldaten - kein echtes Angebot",
         "interestRate": "5,0 % p. a. (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1619,19 +1632,18 @@
           }
         ],
         "overview": [
+          "Gemeinschaftliche Dachsolaranlagen für lokale Betriebe.",
           "Beispieldaten - kein echtes Angebot",
           "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Mosaic Workshop Loan (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Mosaico Oficina (Beispieldaten - kein echtes Angebot)",
         "category": "Industrietechnik und Fertigung",
-        "teaser": "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen. Beispieldaten - kein echtes Angebot",
+        "teaser": "Maßmöbel aus einer lokalen Werkstatt. Beispieldaten - kein echtes Angebot",
         "interestRate": "5,0 % p. a. (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1650,19 +1662,18 @@
           }
         ],
         "overview": [
+          "Maßmöbel aus einer lokalen Werkstatt.",
           "Beispieldaten - kein echtes Angebot",
           "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Beacon Mobility Bond (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Rota Clara (Beispieldaten - kein echtes Angebot)",
         "category": "Transport und Logistik",
-        "teaser": "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge. Beispieldaten - kein echtes Angebot",
+        "teaser": "Elektrische Kleinbusse für den Nahverkehr. Beispieldaten - kein echtes Angebot",
         "interestRate": "5,0 % p. a. (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1681,19 +1692,18 @@
           }
         ],
         "overview": [
+          "Elektrische Kleinbusse für den Nahverkehr.",
           "Beispieldaten - kein echtes Angebot",
           "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
           "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
           "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
           "Keine Beteiligung am Unternehmenswachstum"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Horizon Zero-Coupon Bond (Beispieldaten - kein echtes Angebot)",
+        "issuer": "Linha Solar (Beispieldaten - kein echtes Angebot)",
         "category": "Energie und Versorgungswirtschaft",
-        "teaser": "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge. Beispieldaten - kein echtes Angebot",
+        "teaser": "Solardächer für Gewerbegebäude. Beispieldaten - kein echtes Angebot",
         "interestRate": "Kein laufender Kupon (Beispiel)",
         "term": "Nur beispielhafte Bedingungen",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1716,20 +1726,19 @@
           }
         ],
         "overview": [
+          "Solardächer für Gewerbegebäude.",
           "Beispieldaten - kein echtes Angebot",
           "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
           "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
           "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
           "Keine Beteiligung am Unternehmenswachstum",
           "Eine Kupon-Struktur auf einem Darlehen oder einer Anleihe, keine Rangfolge: keine periodischen Zinsen; die Rendite kommt aus der Emission unter dem Nennwert und der Rückzahlung zum Pari. Kombiniert mit einer Fremdkapital-Mutterkategorie, steht nie allein."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Neighbourhood Library Association (Beispiel-Emittent)",
+        "issuer": "Livros à Esquina (Beispieldaten - kein echtes Angebot)",
         "category": "Bildung und Luftfahrtausbildung",
-        "teaser": "Eine Stadtteilbibliothek sammelt Spenden für neue Bücher und Lesestunden. Ein Beitrag ohne Eigentum, Zinsen, Rückzahlung oder finanzielle Rendite. Beispieldaten - kein echtes Angebot",
+        "teaser": "Nachbarschaftsbibliothek mit gemeinsamem Leseraum. Beispieldaten - kein echtes Angebot",
         "interestRate": "Keine - Spende ohne finanzielle Rendite (Beispiel)",
         "term": "Keine Rückzahlungsfrist (Beispiel)",
         "minInvestment": "Beliebiger Betrag (Beispiel)",
@@ -1752,18 +1761,17 @@
           }
         ],
         "overview": [
+          "Nachbarschaftsbibliothek mit gemeinsamem Leseraum.",
           "Beispieldaten - kein echtes Angebot",
           "Ein Beitrag ohne Eigentum, Zinsen, Rückzahlung oder finanzielle Rendite.",
           "Es wird keine Steuerbegünstigung versprochen.",
           "Alles-oder-nichts-Beispielszenario: Das Ziel wurde verfehlt und die Beiträge wurden zurückerstattet."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Makers Workshop Collective (Beispiel-Emittent)",
+        "issuer": "Barro Vivo (Beispieldaten - kein echtes Angebot)",
         "category": "Industrietechnik und Fertigung",
-        "teaser": "Ein Gemeinschafts-Makerspace finanziert neue Werkzeuge; Unterstützer erhalten nicht-finanzielle Prämien wie Werkstattzeit. Es wird keine finanzielle Rendite angeboten. Beispieldaten - kein echtes Angebot",
+        "teaser": "Gemeinschaftsofen für lokale Keramikschaffende. Beispieldaten - kein echtes Angebot",
         "interestRate": "Keine - nicht-finanzielle Prämie (Beispiel)",
         "term": "Lieferung der Prämie nach der Finanzierung (Beispiel)",
         "minInvestment": "Beliebiger Betrag (Beispiel)",
@@ -1786,18 +1794,17 @@
           }
         ],
         "overview": [
+          "Gemeinschaftsofen für lokale Keramikschaffende.",
           "Beispieldaten - kein echtes Angebot",
           "Finanzierung gegen eine nicht-finanzielle Prämie oder das finanzierte Produkt oder die Dienstleistung. Es wird keine finanzielle Rendite angeboten.",
           "Lieferung, Widerruf und Verbraucherrechte würden je Angebot festgelegt.",
           "Erfolgreiches Beispielszenario: Das Ziel wurde erreicht und der Ersteller hat die Mittel abgehoben."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Workshop Lamp Studio (Beispiel-Emittent)",
+        "issuer": "Luz de Oficina (Beispieldaten - kein echtes Angebot)",
         "category": "Konsumgüter, Mode, Bekleidung und Einzelhandel",
-        "teaser": "Vorverkauf einer handgefertigten Werkstattlampe: Unterstützer bestellen das finanzierte Produkt im Voraus. Als Prämien-Crowdfunding strukturiert, nicht als Investition oder Anspruch auf einen künftigen Token. Beispieldaten - kein echtes Angebot",
+        "teaser": "Handgefertigte Leuchten aus einer kleinen Designwerkstatt. Beispieldaten - kein echtes Angebot",
         "interestRate": "Keine - Produkt-Vorverkauf (Beispiel)",
         "term": "Lieferung des vorverkauften Produkts (Beispiel)",
         "minInvestment": "Beliebiger Betrag (Beispiel)",
@@ -1820,18 +1827,17 @@
           }
         ],
         "overview": [
+          "Handgefertigte Leuchten aus einer kleinen Designwerkstatt.",
           "Beispieldaten - kein echtes Angebot",
           "Vorausbestellung des finanzierten Produkts oder der Dienstleistung, strukturiert als Prämien-Crowdfunding, nicht als Investition oder Anspruch auf einen künftigen Token. Es wird keine finanzielle Rendite angeboten.",
           "Lieferung, Widerruf und Verbraucherrechte würden je Angebot festgelegt.",
           "Alles-oder-nichts-Beispielszenario: Das Ziel wurde verfehlt und die Beiträge wurden zurückerstattet."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Atlas Mobility S.A. (Beispiel-Emittent)",
+        "issuer": "Pedal Leve (Beispieldaten - kein echtes Angebot)",
         "category": "E-Bikes und leichte Mobilität",
-        "teaser": "Beispielangebot von Optionsscheinen auf neue Aktien eines portugiesischen Leichtmobilitätsbetreibers. Alle Konditionen auf dieser Seite sind Beispieldaten.",
+        "teaser": "Montage von Lastenrädern für Stadtlieferungen. Beispieldaten - kein echtes Angebot",
         "interestRate": "Kein Kupon - Wertsteigerung nur durch Ausübung (Beispiel)",
         "term": "Ausübungsfenster bis 2029-06-30 (Beispiel)",
         "minInvestment": "100 Testnet-USDC (Beispiel)",
@@ -1842,7 +1848,7 @@
           },
           {
             "label": "Ausübungspreis",
-            "value": "4,20 je neuer Aktie (Beispiel)"
+            "value": "Offen - unter dem Ziel"
           },
           {
             "label": "Ausübung und Verwässerung",
@@ -1854,19 +1860,18 @@
           }
         ],
         "overview": [
+          "Montage von Lastenrädern für Stadtlieferungen.",
           "Beispieldaten - kein echtes Angebot",
           "Ein Optionsschein verleiht das Recht, nicht die Pflicht, neue Aktien zum Ausübungspreis während des Ausübungsfensters zu beziehen.",
           "Übersteigt der Aktienkurs nie den Ausübungspreis, kann der Schein wertlos verfallen; ein Totalverlust des gezahlten Betrags ist möglich.",
           "Die Ausübung emittiert neue Aktien und verwässert bestehende Aktionäre.",
           "Angebote von Wertpapieren nach der ECSPR sind auf 5.000.000 EUR pro Emittent in 12 Monaten begrenzt."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Douro Textiles S.A. (Beispiel-Emittent)",
+        "issuer": "Fio do Douro (Beispieldaten - kein echtes Angebot)",
         "category": "Industrietechnik und Fertigung",
-        "teaser": "Beispielangebot von Hinterlegungsscheinen über Aktien eines portugiesischen Textilexporteurs, wobei die zugrunde liegenden Aktien von einem Verwahrer gehalten werden. Alle Konditionen auf dieser Seite sind Beispieldaten.",
+        "teaser": "Kreislauforientierte Weberei mit zurückgewonnenen Textilfasern. Beispieldaten - kein echtes Angebot",
         "interestRate": "Ausschüttungen folgen den zugrunde liegenden Aktien (Beispiel)",
         "term": "Keine feste Laufzeit (Beispiel)",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1877,7 +1882,7 @@
           },
           {
             "label": "Basiswert",
-            "value": "Stammaktien der Douro Textiles S.A. (Beispiel)"
+            "value": "Finanziert - Frist noch nicht abgelaufen"
           },
           {
             "label": "Verwahrung",
@@ -1889,19 +1894,18 @@
           }
         ],
         "overview": [
+          "Kreislauforientierte Weberei mit zurückgewonnenen Textilfasern.",
           "Beispieldaten - kein echtes Angebot",
           "Der Schein verbrieft zugrunde liegende Aktien, die ein Verwahrer hält; der Inhaber trägt den wirtschaftlichen Anspruch, Stimmrecht und Übertragung folgen den Bedingungen des Scheins.",
           "Die Verwahrung erfordert eine zugelassene Bank oder ein Wertpapierunternehmen (CRD / MiFID II) oder eine gleichwertige Emittentenregister-Lösung.",
           "Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; dieses Beispiel begründet keines.",
           "Totalverlust möglich; die zugrunde liegenden Aktien können illiquide sein."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Tejo Packaging Lda (Beispiel-Emittent)",
+        "issuer": "Folha Nova (Beispieldaten - kein echtes Angebot)",
         "category": "Konsumgüter, Mode, Bekleidung und Einzelhandel",
-        "teaser": "Beispielangebot von neunmonatigem Commercial Paper eines portugiesischen Verpackungslieferanten. Alle Konditionen auf dieser Seite sind Beispieldaten.",
+        "teaser": "Faserbasierte Verpackungen für lokale Erzeuger. Beispieldaten - kein echtes Angebot",
         "interestRate": "4,1% p.a. implizite Rendite (Beispiel)",
         "term": "9 Monate (Beispiel)",
         "minInvestment": "500 Testnet-USDC (Beispiel)",
@@ -1912,7 +1916,7 @@
           },
           {
             "label": "Privatkundenbedingungen",
-            "value": "Rating, Garantie oder ausreichende Finanzautonomiequote erforderlich (Beispielhinweis)"
+            "value": "Offen - unter dem Ziel"
           },
           {
             "label": "CMVM-Verfahren",
@@ -1924,19 +1928,18 @@
           }
         ],
         "overview": [
+          "Faserbasierte Verpackungen für lokale Erzeuger.",
           "Beispieldaten - kein echtes Angebot",
           "Kurzfristige unbesicherte Fremdfinanzierung unter einem Jahr, als Wertpapier übertragbar und als Geldmarktinstrument behandelt.",
           "Unbesichert: Zahlt oder refinanziert der Emittent bei Fälligkeit nicht, können Anleger alles verlieren.",
           "Es wurde keine CMVM-Praxis für Commercial Paper im Privatkunden-Crowdfunding gefunden; die genannten Privatkundenbedingungen sind vor jedem echten Angebot erforderlich.",
           "Angebote von Wertpapieren nach der ECSPR sind auf 5.000.000 EUR pro Emittent in 12 Monaten begrenzt."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Costa Restaurants Lda (Beispiel-Emittent)",
+        "issuer": "Mesa da Costa (Beispieldaten - kein echtes Angebot)",
         "category": "Restaurants und Gastronomie",
-        "teaser": "Beispielangebot eines Darlehens an eine portugiesische Restaurantgruppe, dessen Zins mit den Umsätzen variiert, mit unbedingter Kapitalrückzahlung. Alle Konditionen auf dieser Seite sind Beispieldaten.",
+        "teaser": "Saisonale Küche in einem Nachbarschaftsrestaurant. Beispieldaten - kein echtes Angebot",
         "interestRate": "Variabel, umsatzgebunden (Beispiel)",
         "term": "48 Monate (Beispiel)",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1947,7 +1950,7 @@
           },
           {
             "label": "Kapitalrückzahlung",
-            "value": "Unbedingt, zur vereinbarten Laufzeit und nach Zahlungsplan - fällige Beträge sind zu zahlen, ob Umsätze vorliegen oder nicht (Beispielkonditionen)"
+            "value": "Offen - unter dem Ziel"
           },
           {
             "label": "Zins",
@@ -1959,19 +1962,18 @@
           }
         ],
         "overview": [
+          "Saisonale Küche in einem Nachbarschaftsrestaurant.",
           "Beispieldaten - kein echtes Angebot",
           "Ein Darlehen: Die Kapitalrückzahlung ist unbedingt, mit vereinbarter Laufzeit und Zahlungsplan.",
           "Der Zins variiert mit den Umsätzen des Emittenten; wären fällige Beträge nur bei vorhandenen Umsätzen zahlbar, wäre das Instrument bedingt und kein ECSPR-Darlehen mehr.",
           "Ein umsatzgebundener Zinssatz in einem konkreten Vertrag ist durch die CMVM-Praxis nicht bestätigt.",
           "Totalverlust möglich; Darlehen sind meist bis zur Fälligkeit illiquide."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
-        "issuer": "Mondego Wind S.A. (Beispiel-Emittent)",
+        "issuer": "Vento do Mondego (Beispieldaten - kein echtes Angebot)",
         "category": "Energie und Versorgungswirtschaft",
-        "teaser": "Beispielangebot von Hinterlegungsscheinen über Anleihen eines portugiesischen Windparkbetreibers, wobei die zugrunde liegenden Anleihen von einem Verwahrer gehalten werden. Alle Konditionen auf dieser Seite sind Beispieldaten.",
+        "teaser": "Lokale Windstromerzeugung für ein gemeinschaftliches Energieprojekt. Beispieldaten - kein echtes Angebot",
         "interestRate": "Ausschüttungen folgen den zugrunde liegenden Anleihen (Beispiel)",
         "term": "Folgt der Laufzeit der zugrunde liegenden Anleihen (Beispiel)",
         "minInvestment": "250 Testnet-USDC (Beispiel)",
@@ -1982,7 +1984,7 @@
           },
           {
             "label": "Basiswert",
-            "value": "Anleihen der Mondego Wind S.A. (Beispiel)"
+            "value": "Offen - unter dem Ziel"
           },
           {
             "label": "Verwahrung",
@@ -1994,14 +1996,737 @@
           }
         ],
         "overview": [
+          "Lokale Windstromerzeugung für ein gemeinschaftliches Energieprojekt.",
           "Beispieldaten - kein echtes Angebot",
           "Der Schein verbrieft zugrunde liegende Anleihen, die ein Verwahrer hält; der Inhaber trägt den wirtschaftlichen Anspruch, die Übertragung folgt den Bedingungen des Scheins.",
           "Das Placement unter der ECSPR ist nicht belegt: Ein Hinterlegungsschein wird vom Verwahrer emittiert, nicht vom Projektträger oder einer SPV, und weder ESMA noch CMVM haben dies bestätigt.",
           "Die Verwahrung erfordert eine zugelassene Bank oder ein Wertpapierunternehmen (CRD / MiFID II) oder eine gleichwertige Emittentenregister-Lösung.",
           "Totalverlust bei Ausfall des Emittenten möglich; die zugrunde liegenden Anleihen können illiquide sein."
+        ]
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Senior (nicht nachrangig)"
+          }
         ],
-        "documents": [],
-        "news": []
+        "category": "Landwirtschaft, Umwelt und Recycling",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Raiz Vertical (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Microgreens für lokale Küchen.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Microgreens für lokale Küchen. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Landwirtschaft, Umwelt und Recycling",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Tronco Vivo (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Anbau von Speisepilzen in kleinem Maßstab.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Anbau von Speisepilzen in kleinem Maßstab. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Senior (nicht nachrangig)"
+          }
+        ],
+        "category": "Lebensmittel und Getränke",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Massa Lenta (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Langzeitgeführtes Brot für die Nachbarschaft.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Langzeitgeführtes Brot für die Nachbarschaft. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Konsumgüter, Mode, Bekleidung und Einzelhandel",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Terra de Forno (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Handgefertigte Gebrauchskeramik für den Alltag.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Handgefertigte Gebrauchskeramik für den Alltag. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Aktie · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Indirekte Beteiligung",
+            "value": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung."
+          }
+        ],
+        "category": "Landwirtschaft, Umwelt und Recycling",
+        "interestRate": "Keine feste Rendite (Beispiel)",
+        "issuer": "Mar em Terra (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Anbau essbarer Algen für Lebensmittelhersteller.",
+          "Beispieldaten - kein echtes Angebot",
+          "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
+          "Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert",
+          "Totalverlust möglich",
+          "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
+          "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
+        ],
+        "teaser": "Anbau essbarer Algen für Lebensmittelhersteller. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Anleihe · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Anleihe",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Industrietechnik und Fertigung",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Água de Volta (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Wiederverwendung von industriellem Prozesswasser.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
+          "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
+          "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
+          "Keine Beteiligung am Unternehmenswachstum"
+        ],
+        "teaser": "Wiederverwendung von industriellem Prozesswasser. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Senior (nicht nachrangig)"
+          }
+        ],
+        "category": "Gesundheit, Wellness und Medizintechnik",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Passo Certo (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Maßgefertigte orthopädische Hilfsmittel.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Maßgefertigte orthopädische Hilfsmittel. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Konsumgüter, Mode, Bekleidung und Einzelhandel",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Lente Circular (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Reparatur und Wiederverwendung optischer Geräte.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Reparatur und Wiederverwendung optischer Geräte. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Senior (nicht nachrangig)"
+          }
+        ],
+        "category": "Lebensmittel und Getränke",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Polpa Fresca (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Verarbeitung lokaler Früchte zu Fruchtmark und Saft.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Verarbeitung lokaler Früchte zu Fruchtmark und Saft. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Industrietechnik und Fertigung",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Som de Madeira (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Handgefertigte Saiteninstrumente und Reparaturen.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Handgefertigte Saiteninstrumente und Reparaturen. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Aktie · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Indirekte Beteiligung",
+            "value": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung."
+          }
+        ],
+        "category": "Landwirtschaft, Umwelt und Recycling",
+        "interestRate": "Keine feste Rendite (Beispiel)",
+        "issuer": "Olho do Mar (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Wasserqualitätssensoren für die Aquakultur.",
+          "Beispieldaten - kein echtes Angebot",
+          "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
+          "Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert",
+          "Totalverlust möglich",
+          "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
+          "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
+        ],
+        "teaser": "Wasserqualitätssensoren für die Aquakultur. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Bauprodukte und Fertighäuser",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Traço Recuperado (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Restaurierung historischer Baufliesen und Mosaike.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Restaurierung historischer Baufliesen und Mosaike. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Landwirtschaft, Umwelt und Recycling",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Solo de Novo (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Kompostierung organischer Abfälle im Stadtviertel.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Kompostierung organischer Abfälle im Stadtviertel. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Senior (nicht nachrangig)"
+          }
+        ],
+        "category": "Lebensmittel und Getränke",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Torra de Bairro (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Röstung von Spezialitätenkaffee für lokale Cafés.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Röstung von Spezialitätenkaffee für lokale Cafés. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Aktie · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Indirekte Beteiligung",
+            "value": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung."
+          }
+        ],
+        "category": "Bildung und Luftfahrtausbildung",
+        "interestRate": "Keine feste Rendite (Beispiel)",
+        "issuer": "Oficina Curiosa (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Experimentierkästen für praktisches Lernen.",
+          "Beispieldaten - kein echtes Angebot",
+          "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
+          "Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert",
+          "Totalverlust möglich",
+          "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
+          "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
+        ],
+        "teaser": "Experimentierkästen für praktisches Lernen. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Industrietechnik und Fertigung",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Letra Viva (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Buchdruck in einer lokalen Werkstatt.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Buchdruck in einer lokalen Werkstatt. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Nachrangig (steht im Insolvenzfall hinter den vorrangigen Gläubigern)"
+          }
+        ],
+        "category": "Bauprodukte und Fertighäuser",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Lã da Serra (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Dämmstoffe aus natürlicher Schafwolle.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Dämmstoffe aus natürlicher Schafwolle. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Aktie · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Indirekte Beteiligung",
+            "value": "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung."
+          }
+        ],
+        "category": "Informationstechnologie, Software und digitale Plattformen",
+        "interestRate": "Keine feste Rendite (Beispiel)",
+        "issuer": "Rota Digital (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Routenplanungssoftware für lokale Lieferungen.",
+          "Beispieldaten - kein echtes Angebot",
+          "Anleger beteiligen sich indirekt an einer KMU-Investition - etwa über ein Vehikel oder einen Treuhänder - mit vereinfachter Abwicklung.",
+          "Kein fester Rückzahlungsanspruch; Dividenden sind nicht garantiert",
+          "Totalverlust möglich",
+          "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
+          "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
+        ],
+        "teaser": "Routenplanungssoftware für lokale Lieferungen. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Anleihe · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Anleihe",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Energie und Versorgungswirtschaft",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Segundo Ciclo (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Batteriediagnostik und Zweitnutzung.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
+          "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
+          "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
+          "Keine Beteiligung am Unternehmenswachstum"
+        ],
+        "teaser": "Batteriediagnostik und Zweitnutzung. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Senior (nicht nachrangig)"
+          }
+        ],
+        "category": "Lebensmittel und Getränke",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Lagar Novo (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Olivenölproduktion für kleine lokale Anbaubetriebe.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Olivenölproduktion für kleine lokale Anbaubetriebe. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Landwirtschaft, Umwelt und Recycling",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Colmeia Viva (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Lokaler Honig und Bestäubungsdienste für die Landwirtschaft.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Lokaler Honig und Bestäubungsdienste für die Landwirtschaft. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Senior (nicht nachrangig)"
+          }
+        ],
+        "category": "Konsumgüter, Mode, Bekleidung und Einzelhandel",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Pata Serena (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Tierfutter in kleinen Chargen für lokale Haushalte.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Tierfutter in kleinen Chargen für lokale Haushalte. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Darlehen · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Darlehen",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Hotels, Gastgewerbe und Tourismus",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Rotas Abertas (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Barrierefreie lokale Touren und Besuche in Kleingruppen.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein direktes Darlehen an den Emittenten mit definiertem Zinssatz und Tilgungsplan. Dieselbe Darlehens-Mutterkategorie kann senior, nachrangig (einschließlich gewinnpartizipierender Varianten) sein oder die Rangfolge offen lassen.",
+          "Der Ausfall des Emittenten kann Totalverlust bedeuten",
+          "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
+          "Keine Einlagensicherung"
+        ],
+        "teaser": "Barrierefreie lokale Touren und Besuche in Kleingruppen. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
+      },
+      {
+        "additionalInfo": [
+          {
+            "label": "Anlageprodukt",
+            "value": "Anleihe · Beispieldaten - kein echtes Angebot"
+          },
+          {
+            "label": "Status",
+            "value": "Offen - unter dem Ziel"
+          },
+          {
+            "label": "Anleihe",
+            "value": "Rangfolge in den Bedingungen nicht angegeben"
+          }
+        ],
+        "category": "Bauprodukte und Fertighäuser",
+        "interestRate": "5,0 % p. a. (Beispiel)",
+        "issuer": "Casa em Peças (Beispieldaten - kein echtes Angebot)",
+        "minInvestment": "250 Testnet-USDC (Beispiel)",
+        "overview": [
+          "Modulare Holzbauten aus vorgefertigten Abschnitten.",
+          "Beispieldaten - kein echtes Angebot",
+          "Ein verbrieftes Fremdkapitalinstrument mit definiertem Kupon und Laufzeit. Begeben als senior (nicht nachrangig), nachrangig (einschließlich ausdrücklich nachrangiger qualifizierter Anleihen und nachrangiger Mini Bonds) oder mit nicht angegebener Rangfolge.",
+          "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
+          "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
+          "Keine Beteiligung am Unternehmenswachstum"
+        ],
+        "teaser": "Modulare Holzbauten aus vorgefertigten Abschnitten. Beispieldaten - kein echtes Angebot",
+        "term": "Nur beispielhafte Bedingungen"
       }
     ]
   },
