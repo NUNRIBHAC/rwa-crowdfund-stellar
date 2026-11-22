@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, expect, test, vi } from 'vitest';
 import Header from './Header';
 import { en } from '../i18n/locales/en';
+import type { RouteName } from '../router';
 vi.mock('../i18n', () => ({
   LOCALES: [{ id: 'en', label: 'English', accessibleLabel: 'English' }],
   useI18n: () => ({ locale: 'en', setLocale: vi.fn(), m: en }),
@@ -34,7 +35,7 @@ test('wallet wording preserves original connect and disconnect callbacks', () =>
   const { rerender } = render(<Header actor="" busy={false} current="home" onConnect={connect} onDisconnect={disconnect} />);
   fireEvent.click(screen.getByRole('button', { name: 'Connect wallet' }));
   expect(connect).toHaveBeenCalledOnce();
-  rerender(<Header actor={'G' + 'A'.repeat(55)} busy={false} current="home" onConnect={connect} onDisconnect={disconnect} />);
+  rerender(<Header actor={'G' + 'A'.repeat(55)} busy={false} current="account" onConnect={connect} onDisconnect={disconnect} />);
   fireEvent.click(screen.getByRole('button', { name: 'Disconnect' }));
   expect(disconnect).toHaveBeenCalledOnce();
 });
@@ -55,6 +56,62 @@ test('session and wallet controls remain separate with a connected wallet', () =
   expect(screen.getByRole('button', { name: 'Sign out' }).hasAttribute('disabled')).toBe(true);
   expect(screen.getByRole('button', { name: 'Disconnect' })).toBeTruthy();
 });
+test('connected Home hides wallet details without signing out or disconnecting', () => {
+  const actor = 'G' + 'A'.repeat(55);
+  const disconnect = vi.fn();
+  auth.account = { publicKey: 'email-account' };
+  const { container, rerender } = render(<Header actor={actor} busy={false} current="home" onConnect={vi.fn()} onDisconnect={disconnect} />);
+  expect(container.querySelector('.wallet-chip')).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Disconnect' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Connect wallet' })).toBeNull();
+  expect(screen.getByRole('button', { name: 'Sign out' })).toBeTruthy();
+  expect(disconnect).not.toHaveBeenCalled();
+  expect(auth.signOut).not.toHaveBeenCalled();
+  rerender(<Header actor={actor} busy={false} current="account" onConnect={vi.fn()} onDisconnect={disconnect} />);
+  expect(container.querySelector('.wallet-chip')?.getAttribute('title')).toBe(actor);
+  expect(screen.getByRole('button', { name: 'Disconnect' })).toBeTruthy();
+  rerender(<Header actor={actor} busy={false} current="home" onConnect={vi.fn()} onDisconnect={disconnect} />);
+  fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
+  expect(auth.signOut).toHaveBeenCalledOnce();
+  expect(disconnect).not.toHaveBeenCalled();
+});
+
+const nonHomeRoutes: RouteName[] = [
+  'investments',
+  'campaign',
+  'how-it-works',
+  'learn',
+  'glossary',
+  'risk-warnings',
+  'faq',
+  'financing',
+  'about',
+  'account',
+  'terms-of-service',
+  'privacy-policy',
+  'risk-disclosure',
+  'legal-notice',
+  'conflicts-of-interest',
+  'complaints-management',
+  'business-continuity',
+  'events',
+  'blog',
+  'press',
+  'jobs',
+  'podcast',
+  'campaign-builder',
+  'not-found',
+];
+test.each(nonHomeRoutes)('connected wallet remains usable on %s', (current) => {
+  const actor = 'G' + 'A'.repeat(55);
+  const disconnect = vi.fn();
+  const { container } = render(<Header actor={actor} busy={false} current={current} onConnect={vi.fn()} onDisconnect={disconnect} />);
+  expect(container.querySelector('.wallet-chip')?.getAttribute('title')).toBe(actor);
+  fireEvent.click(screen.getByRole('button', { name: 'Disconnect' }));
+  expect(auth.signOut).toHaveBeenCalledOnce();
+  expect(disconnect).toHaveBeenCalledOnce();
+});
+
 test('no session sign out is shown while signed out', () => {
   render(<Header actor="" busy={false} current="home" onConnect={vi.fn()} onDisconnect={vi.fn()} />);
   expect(screen.queryByRole('button', { name: 'Sign out' })).toBeNull();
