@@ -2,6 +2,52 @@
 // Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
 
 export const en = {
+  lossSimulator: {
+    title: 'Default and recovery simulator',
+    scenario: 'Scenario',
+    base: 'Base',
+    adverse: 'Adverse',
+    severe: 'Severe',
+    portfolio: 'Portfolio',
+    ead: 'Capital exposed (EAD)',
+    recovered: 'Capital recovered',
+    realized: 'Realized capital loss',
+    expected: 'Expected loss',
+    unresolved: 'Capital unresolved',
+    interest: 'Accrued interest',
+    costs: 'Collection costs',
+    platform: 'Platform operating loss',
+    platformNote: 'Assumed zero, separate from investor losses.',
+    loans: 'Loans',
+    loan: 'Loan / campaign / promoter',
+    stateLabel: 'State',
+    campaigns: 'Campaigns',
+    promoters: 'Promoters',
+    investors: 'Investors',
+    register: 'Synthetic register',
+    principal: 'Original principal',
+    received: 'Principal already received',
+    collateral: 'Collateral valuation',
+    rate: 'Annual rate',
+    days: 'Scenario delay (days)',
+    schedule: 'Principal schedule',
+    events: 'Simulation events',
+    states: {
+      current: 'Current',
+      late: 'Late',
+      collection: 'In collection',
+      restructured: 'Restructured',
+      defaulted: 'Defaulted',
+      closedLoss: 'Final loss',
+      partialRecovery: 'Partial recovery',
+    },
+    notice: 'Synthetic data only. EUR is an illustrative unit: no real money, wallet, payments or balance changes.',
+    convention:
+      'Integer cents, rounded down. Simple ACT/365 interest on opening outstanding capital; no capitalization. Collateral is a valuation, not a recovery.',
+    formula:
+      'Expected loss = PD × LGD × EAD. Realized loss = defaulted outstanding capital minus actual simulated capital recoveries. Interest and costs stay separate.',
+    legal: 'Events are explicit fictional decisions, not legal debt evidence or classifications inferred from a timer.',
+  },
   demoJourney: {
     title: 'Complete sandbox journey - simulation',
     notice:
