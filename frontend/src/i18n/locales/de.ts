@@ -340,6 +340,7 @@ export const de: Messages = {
     signSubmit: 'Signieren und senden',
     checkLedger: 'Ergebnis im Ledger prüfen',
     cancelUnsigned: 'Nicht signierte Transaktion abbrechen',
+    viewProof: 'Nachweis im Netzwerk ansehen',
     clearConfirmed: 'Bestätigten Eintrag löschen',
     statusLabels: {
       BUILT: 'VORBEREITET',

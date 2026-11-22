@@ -326,6 +326,7 @@ export const zhTW: Messages = {
     signSubmit: '簽署並提交',
     checkLedger: '查詢賬本結果',
     cancelUnsigned: '取消未簽名的交易',
+    viewProof: '查看網路憑證',
     clearConfirmed: '清除已確認的記錄',
     statusLabels: {
       BUILT: '已準備',

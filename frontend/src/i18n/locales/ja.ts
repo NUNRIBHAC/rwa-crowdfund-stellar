@@ -336,6 +336,7 @@ export const ja: Messages = {
     signSubmit: '署名して送信',
     checkLedger: '台帳の結果を確認',
     cancelUnsigned: '未署名のトランザクションをキャンセル',
+    viewProof: 'ネットワーク上の証拠を確認',
     clearConfirmed: '確定済みの記録をクリア',
     statusLabels: {
       BUILT: 'BUILT',

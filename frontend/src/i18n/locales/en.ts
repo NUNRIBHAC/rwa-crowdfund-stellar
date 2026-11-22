@@ -334,6 +334,7 @@ export const en = {
     signSubmit: 'Sign and submit',
     checkLedger: 'Check ledger result',
     cancelUnsigned: 'Cancel unsigned transaction',
+    viewProof: 'View network proof',
     clearConfirmed: 'Clear confirmed record',
     statusLabels: {
       BUILT: 'BUILT',

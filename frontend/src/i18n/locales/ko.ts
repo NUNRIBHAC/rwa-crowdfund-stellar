@@ -333,6 +333,7 @@ export const ko: Messages = {
     signSubmit: '서명 후 제출',
     checkLedger: '원장 결과 확인',
     cancelUnsigned: '서명되지 않은 트랜잭션 취소',
+    viewProof: '네트워크 증명 보기',
     clearConfirmed: '확정된 기록 지우기',
     statusLabels: {
       BUILT: 'BUILT',

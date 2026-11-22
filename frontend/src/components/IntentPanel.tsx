@@ -84,6 +84,11 @@ export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel,
       {intent.status === 'NOT_FOUND' && <p className="intent-warning intent-notfound">{m.intent.notFound}</p>}
 
       <div className="btn-row">
+        {intent.status === 'SUCCESS' && intent.action === 'contribute' && /^[0-9a-f]{64}$/i.test(intent.hash) && (
+          <a className="btn" href={`https://stellar.expert/explorer/testnet/tx/${intent.hash}`} target="_blank" rel="noopener noreferrer">
+            {m.intent.viewProof}
+          </a>
+        )}
         {!terminal && (
           <button className="btn btn-primary" disabled={busy} onClick={onSubmit}>
             {intent.signedXdr ? m.intent.retry : m.intent.signSubmit}

@@ -337,6 +337,7 @@ export const hi: Messages = {
     signSubmit: 'साइन करें और सबमिट करें',
     checkLedger: 'लेजर परिणाम जांचें',
     cancelUnsigned: 'असाइन किया लेनदेन रद्द करें',
+    viewProof: 'नेटवर्क पर प्रमाण देखें',
     clearConfirmed: 'पुष्टि किया रिकॉर्ड साफ़ करें',
     statusLabels: {
       BUILT: 'BUILT',

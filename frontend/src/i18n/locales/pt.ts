@@ -339,6 +339,7 @@ export const pt: Messages = {
     signSubmit: 'Assinar e submeter',
     checkLedger: 'Verificar resultado no ledger',
     cancelUnsigned: 'Cancelar transação não assinada',
+    viewProof: 'Ver prova na rede',
     clearConfirmed: 'Limpar registo confirmado',
     statusLabels: {
       BUILT: 'PREPARADA',
