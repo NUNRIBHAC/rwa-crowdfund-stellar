@@ -5093,3 +5093,65 @@ html.rtl-text .accordion summary > span:first-child {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.loss-simulator {
+  margin-block: 40px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  min-width: 0;
+}
+.loss-summary dl,
+.loss-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.loss-simulator dt {
+  font-weight: 600;
+}
+.loss-simulator dd {
+  margin: 4px 0 12px;
+  font-variant-numeric: tabular-nums;
+}
+.loss-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.loss-simulator table {
+  min-width: 1000px;
+  border-collapse: collapse;
+}
+.loss-simulator th,
+.loss-simulator td {
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: start;
+}
+.loss-simulator details {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.loss-simulator summary {
+  cursor: pointer;
+  min-height: 44px;
+}
+.loss-simulator select {
+  min-height: 44px;
+  max-width: 100%;
+}
+@media (max-width: 560px) {
+  .loss-simulator {
+    padding: 16px;
+  }
+}
+
+.loss-simulator td,
+.loss-simulator th[scope='row'] {
+  white-space: nowrap;
+}
+.loss-simulator th {
+  overflow-wrap: normal;
+  word-break: normal;
+}
