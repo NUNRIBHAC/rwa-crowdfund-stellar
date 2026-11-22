@@ -44,10 +44,10 @@ afterEach(() => {
 
 test('seven distinct concepts do not extend campaign fixtures, real profiles or executable instrument classes', () => {
   expect(SAMPLE_CONCEPTS).toHaveLength(7);
-  expect(FIXTURE_CAMPAIGNS).toHaveLength(15);
-  expect(new Set([...SAMPLE_CONCEPTS.map((c) => c.id), ...FIXTURE_CAMPAIGNS.map((c) => c.id)]).size).toBe(22);
-  expect(en.profiles.list).toHaveLength(15);
-  expect(en.instruments.classes).toHaveLength(7);
+  expect(FIXTURE_CAMPAIGNS).toHaveLength(20);
+  expect(new Set([...SAMPLE_CONCEPTS.map((c) => c.id), ...FIXTURE_CAMPAIGNS.map((c) => c.id)]).size).toBe(27);
+  expect(en.profiles.list).toHaveLength(20);
+  expect(en.instruments.classes).toHaveLength(12);
   expect(SAMPLE_CONCEPTS.filter((c) => c.nonFinancial).map((c) => c.subtype)).toEqual([]);
   expect(SAMPLE_CONCEPTS.map((c) => c.subtype)).not.toContain('donation');
   expect(SAMPLE_CONCEPTS.map((c) => c.subtype)).not.toContain('reward');
@@ -129,8 +129,8 @@ test('sample-mode count includes concepts in a separate section, live data stays
   );
   const concepts = screen.getByRole('region', { name: en.sampleConcepts.title });
   expect(within(concepts).getAllByRole('article')).toHaveLength(7);
-  expect(container.querySelectorAll('.card')).toHaveLength(15);
-  expect(screen.getByRole('status').textContent).toBe('22 campaigns shown');
+  expect(container.querySelectorAll('.card')).toHaveLength(20);
+  expect(screen.getByRole('status').textContent).toBe('27 campaigns shown');
 });
 
 test('live registry never shows the concept section', () => {
@@ -172,10 +172,10 @@ test('sample status filters include concept scenarios but real mode excludes eve
   );
   fireEvent.click(screen.getByRole('button', { name: en.invest.open }));
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
-  expect(screen.getByRole('status').textContent).toBe('8 campaigns shown');
+  expect(screen.getByRole('status').textContent).toBe('12 campaigns shown');
   fireEvent.click(screen.getByRole('button', { name: en.invest.funded }));
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(3);
-  expect(screen.getByRole('status').textContent).toBe('7 campaigns shown');
+  expect(screen.getByRole('status').textContent).toBe('8 campaigns shown');
   fireEvent.click(screen.getByRole('button', { name: en.invest.underfunded }));
   expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
   expect(screen.getByRole('status').textContent).toBe('7 campaigns shown');

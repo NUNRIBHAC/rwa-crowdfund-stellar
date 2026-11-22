@@ -49,19 +49,33 @@ test('type filter lists every sample instrument and concept format with exact co
   const instruments = [...new Set(SAMPLE_CATALOG.map((c) => String(c.instrument)))];
   const subtypes = [...new Set(SAMPLE_CONCEPTS.map((c) => c.subtype))];
   expect(values).toEqual(['all', ...instruments, ...subtypes]);
-  expect(values).toHaveLength(17);
+  expect(values).toHaveLength(22);
 
   const shown = () => container.querySelectorAll('.card h3 a').length + container.querySelectorAll('[data-concept]').length;
   fireEvent.change(select, { target: { value: 'bond' } });
   expect(shown()).toBe(5);
   fireEvent.change(select, { target: { value: 'loan' } });
   expect(shown()).toBe(3);
-  for (const type of ['share', 'participation-certificate', 'substanzgenussrecht', 'limited-partnership', 'donation', 'reward', 'pre-sale', ...subtypes]) {
+  for (const type of [
+    'share',
+    'participation-certificate',
+    'substanzgenussrecht',
+    'limited-partnership',
+    'donation',
+    'reward',
+    'pre-sale',
+    'warrant',
+    'share-depositary-receipt',
+    'commercial-paper',
+    'revenue-linked-loan',
+    'debt-depositary-receipt',
+    ...subtypes,
+  ]) {
     fireEvent.change(select, { target: { value: type } });
     expect(shown()).toBe(1);
   }
   fireEvent.change(select, { target: { value: 'all' } });
-  expect(shown()).toBe(22);
+  expect(shown()).toBe(27);
 });
 
 test('type filter composes with the status filter and uses localized labels', () => {
