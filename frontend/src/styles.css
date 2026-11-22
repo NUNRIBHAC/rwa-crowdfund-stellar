@@ -190,7 +190,8 @@ h1[id],
 h2[id],
 section[id],
 #investor-holdings,
-#investor-documents {
+#investor-documents,
+#investor-assessment {
   scroll-margin-top: var(--sticky-header-h, 96px);
 }
 @media (max-width: 640px) {
@@ -198,7 +199,8 @@ section[id],
   h2[id],
   section[id],
   #investor-holdings,
-  #investor-documents {
+  #investor-documents,
+  #investor-assessment {
     scroll-margin-top: var(--sticky-header-h, 132px);
   }
 }
