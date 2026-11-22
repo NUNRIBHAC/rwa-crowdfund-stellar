@@ -105,6 +105,7 @@ export const zhCN: Messages = {
     skipLink: '跳至主要内容',
   },
   nav: {
+    forInvestors: '投资者专区',
     menu: '菜单',
     ariaMain: '主导航',
     home: '首页',
@@ -325,6 +326,7 @@ export const zhCN: Messages = {
     signSubmit: '签署并提交',
     checkLedger: '查询账本结果',
     cancelUnsigned: '取消未签名的交易',
+    viewProof: '查看网络凭证',
     clearConfirmed: '清除已确认的记录',
     statusLabels: {
       BUILT: '已准备',

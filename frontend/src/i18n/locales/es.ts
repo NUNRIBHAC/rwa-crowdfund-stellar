@@ -111,6 +111,7 @@ export const es: Messages = {
     skipLink: 'Saltar al contenido principal',
   },
   nav: {
+    forInvestors: 'Para inversores',
     menu: 'Menú',
     ariaMain: 'Principal',
     home: 'Inicio',
@@ -338,6 +339,7 @@ export const es: Messages = {
     signSubmit: 'Firmar y enviar',
     checkLedger: 'Comprobar resultado en el ledger',
     cancelUnsigned: 'Cancelar transacción sin firmar',
+    viewProof: 'Ver prueba en la red',
     clearConfirmed: 'Borrar registro confirmado',
     statusLabels: {
       BUILT: 'PREPARADA',

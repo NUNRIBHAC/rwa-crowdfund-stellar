@@ -241,20 +241,22 @@ export default function Account({ market }: { market: Market }) {
 
       {readActor && <AccountPayoutsSection key={`payouts:${readActor}`} actor={readActor} />}
 
-      {readActor && <AccountHoldingsSection key={`holdings:${readActor}`} actor={readActor} />}
+      <div id="investor-holdings">{readActor && <AccountHoldingsSection key={`holdings:${readActor}`} actor={readActor} />}</div>
 
-      {hasPositions && rows.length > 0 && (
-        <section aria-label={m.account.documentsAria}>
-          <h2 className="section-title">{m.account.documentsTitle}</h2>
-          {rows.map((r) => (
-            <div key={`${readActor}:${account?.publicKey ?? ''}:${r.id}`}>
-              <h3>{r.name}</h3>
-              <DocumentsList campaignId={r.id} fallback={<p className="empty-state">{m.account.documentsEmpty}</p>} />
-              <AccountInvestmentDocuments campaignId={r.id} token={token} />
-            </div>
-          ))}
-        </section>
-      )}
+      <div id="investor-documents">
+        {hasPositions && rows.length > 0 && (
+          <section aria-label={m.account.documentsAria}>
+            <h2 className="section-title">{m.account.documentsTitle}</h2>
+            {rows.map((r) => (
+              <div key={`${readActor}:${account?.publicKey ?? ''}:${r.id}`}>
+                <h3>{r.name}</h3>
+                <DocumentsList campaignId={r.id} fallback={<p className="empty-state">{m.account.documentsEmpty}</p>} />
+                <AccountInvestmentDocuments campaignId={r.id} token={token} />
+              </div>
+            ))}
+          </section>
+        )}
+      </div>
 
       <section aria-label={m.account.activityAria}>
         <h2 className="section-title">{m.account.recentActivity}</h2>

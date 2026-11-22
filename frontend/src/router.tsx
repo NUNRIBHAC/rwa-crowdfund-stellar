@@ -5,6 +5,7 @@ export type RouteName =
   | 'investments'
   | 'campaign'
   | 'how-it-works'
+  | 'for-investors'
   | 'learn'
   | 'glossary'
   | 'risk-warnings'
@@ -33,6 +34,7 @@ const KNOWN_SEGMENTS = new Set([
   'investments',
   'campaigns',
   'how-it-works',
+  'for-investors',
   'learn',
   'glossary',
   'risk-warnings',
@@ -78,6 +80,8 @@ export function routeFromPath(pathname: string): Route {
       }
     case 'how-it-works':
       return { name: 'how-it-works' };
+    case 'for-investors':
+      return { name: 'for-investors' };
     case 'learn':
       return { name: 'learn' };
     case 'glossary':

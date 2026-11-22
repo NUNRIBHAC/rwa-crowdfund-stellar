@@ -107,6 +107,7 @@ export const ar: Messages = {
     skipLink: 'انتقل إلى المحتوى الرئيسي',
   },
   nav: {
+    forInvestors: 'للمستثمرين',
     menu: 'القائمة',
     ariaMain: 'التنقل الرئيسي',
     home: 'الرئيسية',
@@ -333,6 +334,7 @@ export const ar: Messages = {
     signSubmit: 'وقّع وأرسل',
     checkLedger: 'تحقق من نتيجة السجل',
     cancelUnsigned: 'إلغاء المعاملة غير الموقعة',
+    viewProof: 'عرض الإثبات على الشبكة',
     clearConfirmed: 'مسح السجل المؤكد',
     statusLabels: {
       BUILT: 'مُعدَّة',

@@ -108,6 +108,7 @@ export const en = {
     skipLink: 'Skip to main content',
   },
   nav: {
+    forInvestors: 'For investors',
     menu: 'Menu',
     ariaMain: 'Main',
     home: 'Home',
@@ -333,6 +334,7 @@ export const en = {
     signSubmit: 'Sign and submit',
     checkLedger: 'Check ledger result',
     cancelUnsigned: 'Cancel unsigned transaction',
+    viewProof: 'View network proof',
     clearConfirmed: 'Clear confirmed record',
     statusLabels: {
       BUILT: 'BUILT',

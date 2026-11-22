@@ -112,6 +112,7 @@ export const de: Messages = {
     skipLink: 'Zum Hauptinhalt springen',
   },
   nav: {
+    forInvestors: 'Für Anleger',
     menu: 'Menü',
     ariaMain: 'Hauptnavigation',
     home: 'Start',
@@ -339,6 +340,7 @@ export const de: Messages = {
     signSubmit: 'Signieren und senden',
     checkLedger: 'Ergebnis im Ledger prüfen',
     cancelUnsigned: 'Nicht signierte Transaktion abbrechen',
+    viewProof: 'Nachweis im Netzwerk ansehen',
     clearConfirmed: 'Bestätigten Eintrag löschen',
     statusLabels: {
       BUILT: 'VORBEREITET',

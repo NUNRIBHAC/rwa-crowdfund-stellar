@@ -111,6 +111,7 @@ export const pt: Messages = {
     skipLink: 'Saltar para o conteúdo principal',
   },
   nav: {
+    forInvestors: 'Para investidores',
     menu: 'Menu',
     ariaMain: 'Principal',
     home: 'Início',
@@ -338,6 +339,7 @@ export const pt: Messages = {
     signSubmit: 'Assinar e submeter',
     checkLedger: 'Verificar resultado no ledger',
     cancelUnsigned: 'Cancelar transação não assinada',
+    viewProof: 'Ver prova na rede',
     clearConfirmed: 'Limpar registo confirmado',
     statusLabels: {
       BUILT: 'PREPARADA',

@@ -2,6 +2,7 @@ import { describe, test, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import IntentPanel from '../IntentPanel';
 import type { Intent } from '../../types';
+import { I18nProvider, LOCALES } from '../../i18n';
 
 afterEach(cleanup);
 
@@ -43,13 +44,52 @@ describe('IntentPanel state transitions', () => {
     expect(screen.getByText(/Uncertain outcome retained/)).toBeTruthy();
   });
 
-  test('SUCCESS is terminal: only the clear action remains, with finality copy', () => {
+  test('SUCCESS is terminal: only the clear transaction action remains, with finality copy', () => {
     const props = setup({ ...base, status: 'SUCCESS', signedXdr: 'SIGNED' });
     expect(screen.queryByText('Retry identical transaction')).toBeNull();
     expect(screen.queryByText('Check ledger result')).toBeNull();
     expect(screen.getByText(/Confirmed on Stellar testnet/)).toBeTruthy();
     fireEvent.click(screen.getByText('Clear confirmed record'));
     expect(props.onClear).toHaveBeenCalledOnce();
+  });
+
+  test.each(LOCALES)('$id: confirmed contribution has a localized testnet proof link without transaction actions', ({ id }) => {
+    const props = {
+      intent: { ...base, status: 'SUCCESS', signedXdr: 'SIGNED' },
+      busy: false,
+      onSubmit: vi.fn(),
+      onCheck: vi.fn(),
+      onCancel: vi.fn(),
+      onClear: vi.fn(),
+    };
+    const { container } = render(
+      <I18nProvider initialLocale={id}>
+        <IntentPanel {...props} />
+      </I18nProvider>,
+    );
+    const link = screen.getByRole('link');
+    expect(link.getAttribute('href')).toBe(`https://stellar.expert/explorer/testnet/tx/${base.hash}`);
+    expect(link.getAttribute('target')).toBe('_blank');
+    expect(link.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(link.textContent?.trim()).toBeTruthy();
+    if (id === 'pt') expect(link.textContent).toBe('Ver prova na rede');
+    expect(container.querySelectorAll('button')).toHaveLength(1);
+    for (const callback of [props.onSubmit, props.onCheck, props.onCancel, props.onClear]) expect(callback).not.toHaveBeenCalled();
+  });
+
+  test.each(['BUILT', 'SIGNED', 'PENDING', 'NOT_FOUND', 'FAILED', 'CANCELLED_UNSIGNED'])('%s is not presented as confirmed network proof', (status) => {
+    setup({ ...base, status });
+    expect(screen.queryByRole('link')).toBeNull();
+  });
+
+  test.each(['refund', 'withdraw'])('does not widen the requested contribution link to %s', (action) => {
+    setup({ ...base, action, status: 'SUCCESS' });
+    expect(screen.queryByRole('link')).toBeNull();
+  });
+
+  test.each(['', 'bad-hash', 'g'.repeat(64)])('does not create a proof destination for malformed hash %s', (hash) => {
+    setup({ ...base, hash, status: 'SUCCESS' });
+    expect(screen.queryByRole('link')).toBeNull();
   });
 
   test('FAILED is terminal and clearable; busy disables every action', () => {
