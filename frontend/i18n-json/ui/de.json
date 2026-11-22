@@ -728,7 +728,6 @@
     "status": "Status",
     "statusText": "Testnet-Prototyp. Keine automatische Bereitstellung oder Umwandlung alter Guthaben. Bestehende klassische Intents und Guthaben bleiben erhalten, werden nicht gelöscht. Die separate Identitäts-/Bewertungsinfrastruktur bleibt nur simuliert.",
     "legalPre": "Marktkontext: Die EU reguliert Crowdfunding nach der ECSPR; zugelassene Anbieter sind im",
-    "legalPost": " gelistet. Diese App ist kein zugelassener Crowdfunding-Dienstleister und listet keine echten Angebote.",
     "tagline": "Reale Vermögenswerte. Geteilte Möglichkeiten."
   },
   "time": {
