@@ -17,12 +17,10 @@ vi.mock('../components/PodcastList', () => ({ default: () => null }));
 vi.mock('../components/ReportsList', () => ({ default: () => null }));
 vi.mock('../components/DocumentsList', () => ({ default: () => null }));
 vi.mock('../components/RewardsList', () => ({ default: () => null }));
-
 afterEach(() => {
   cleanup();
   localStorage.clear();
 });
-
 const market: Market = {
   campaigns: FIXTURE_CAMPAIGNS,
   loaded: true,
@@ -38,47 +36,30 @@ const market: Market = {
   onToggleFixtures: vi.fn(),
 };
 
-test('type filter lists every sample instrument and concept format with exact counts', () => {
+test('types cover all 44 businesses and exclude every Learn-only concept', () => {
   const { container } = render(
     <I18nProvider>
       <Investments market={market} />
     </I18nProvider>,
   );
   const select = screen.getByRole('combobox', { name: en.invest.filterTypeAria });
-  const values = [...select.querySelectorAll('option')].map((o) => o.getAttribute('value'));
+  const values = [...select.querySelectorAll('option')].map((o) => o.value);
   const instruments = [...new Set(SAMPLE_CATALOG.map((c) => String(c.instrument)))];
-  const subtypes = [...new Set(SAMPLE_CONCEPTS.map((c) => c.subtype))];
-  expect(values).toEqual(['all', ...instruments, ...subtypes]);
-  expect(values).toHaveLength(22);
-
-  const shown = () => container.querySelectorAll('.card h3 a').length + container.querySelectorAll('[data-concept]').length;
-  fireEvent.change(select, { target: { value: 'bond' } });
-  expect(shown()).toBe(5);
-  fireEvent.change(select, { target: { value: 'loan' } });
-  expect(shown()).toBe(3);
-  for (const type of [
-    'share',
-    'participation-certificate',
-    'substanzgenussrecht',
-    'limited-partnership',
-    'donation',
-    'reward',
-    'pre-sale',
-    'warrant',
-    'share-depositary-receipt',
-    'commercial-paper',
-    'revenue-linked-loan',
-    'debt-depositary-receipt',
-    ...subtypes,
-  ]) {
-    fireEvent.change(select, { target: { value: type } });
-    expect(shown()).toBe(1);
+  expect(values).toEqual(['all', ...instruments]);
+  expect(values).toHaveLength(15);
+  for (const concept of SAMPLE_CONCEPTS) expect(values).not.toContain(concept.subtype);
+  const expected: Record<string, number> = { bond: 8, loan: 20, share: 5 };
+  for (const instrument of instruments) {
+    fireEvent.change(select, { target: { value: instrument } });
+    expect(container.querySelectorAll('.card h3 a')).toHaveLength(expected[instrument] ?? 1);
+    expect(container.querySelectorAll('[data-concept]')).toHaveLength(0);
   }
   fireEvent.change(select, { target: { value: 'all' } });
-  expect(shown()).toBe(27);
+  expect(container.querySelectorAll('.card h3 a')).toHaveLength(44);
+  expect(screen.getByRole('status').textContent).toBe('44 results shown');
 });
 
-test('type filter composes with the status filter and uses localized labels', () => {
+test('types compose with sample status filters and use localized labels', () => {
   const { container } = render(
     <I18nProvider>
       <Investments market={market} />
@@ -88,13 +69,13 @@ test('type filter composes with the status filter and uses localized labels', ()
   expect([...select.querySelectorAll('option')].some((o) => o.textContent === en.nationalFunding.items[0].title)).toBe(true);
   fireEvent.change(select, { target: { value: 'donation' } });
   fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterRefund }));
-  expect(screen.getByRole('status').textContent).toBe('1 campaign shown');
-  expect(container.querySelector('.card h3 a')?.textContent).toBe('Neighbourhood Library Donation');
-  fireEvent.change(select, { target: { value: 'lda-quotas' } });
+  expect(screen.getByRole('status').textContent).toBe('1 result shown');
+  expect(container.querySelector('.card h3 a')?.textContent).toBe('Livros à Esquina');
+  fireEvent.change(select, { target: { value: 'share' } });
   expect(screen.getByRole('status').textContent).toBe(en.invest.noMatches);
 });
 
-test('live mode hides the type filter and national samples carry the regime note read-only', () => {
+test('live mode hides educational types and national preview examples stay read-only', () => {
   render(
     <I18nProvider>
       <Investments market={{ ...market, fixtureMode: false, campaigns: [FIXTURE_CAMPAIGNS[0]] }} />

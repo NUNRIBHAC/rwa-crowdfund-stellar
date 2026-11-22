@@ -7,6 +7,7 @@ import { SampleConceptsSection } from '../components/SampleConcepts';
 import CampaignDetail from '../pages/CampaignDetail';
 import Investments from '../pages/Investments';
 import Learn from '../pages/Learn';
+import { routeFromPath } from '../router';
 import type { Market } from '../market';
 import { en } from '../i18n/locales/en';
 import { pt } from '../i18n/locales/pt';
@@ -42,108 +43,124 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-test('seven distinct concepts do not extend campaign fixtures, real profiles or executable instrument classes', () => {
+test('seven educational concepts remain distinct from 44 campaign examples and executable instruments', () => {
   expect(SAMPLE_CONCEPTS).toHaveLength(7);
-  expect(FIXTURE_CAMPAIGNS).toHaveLength(20);
-  expect(new Set([...SAMPLE_CONCEPTS.map((c) => c.id), ...FIXTURE_CAMPAIGNS.map((c) => c.id)]).size).toBe(27);
-  expect(en.profiles.list).toHaveLength(20);
+  expect(FIXTURE_CAMPAIGNS).toHaveLength(44);
+  expect(new Set([...SAMPLE_CONCEPTS.map((c) => c.id), ...FIXTURE_CAMPAIGNS.map((c) => c.id)]).size).toBe(51);
+  expect(en.profiles.list).toHaveLength(44);
   expect(en.instruments.classes).toHaveLength(12);
-  expect(SAMPLE_CONCEPTS.filter((c) => c.nonFinancial).map((c) => c.subtype)).toEqual([]);
-  expect(SAMPLE_CONCEPTS.map((c) => c.subtype)).not.toContain('donation');
-  expect(SAMPLE_CONCEPTS.map((c) => c.subtype)).not.toContain('reward');
-  expect(SAMPLE_CONCEPTS.map((c) => c.subtype)).not.toContain('pre-sale');
   for (const concept of SAMPLE_CONCEPTS) {
-    expect(concept).not.toHaveProperty('config');
-    expect(concept).not.toHaveProperty('contractId');
-    expect(concept).not.toHaveProperty('state');
+    for (const field of ['config', 'contractId', 'raised', 'balance', 'token', 'state']) expect(concept).not.toHaveProperty(field);
     expect(concept).toHaveProperty('sampleState');
-    expect(concept).not.toHaveProperty('raised');
-    expect(concept).not.toHaveProperty('balance');
-    expect(concept).not.toHaveProperty('token');
+    expect(['donation', 'reward', 'pre-sale']).not.toContain(concept.subtype);
   }
 });
 
 for (const [locale, messages] of Object.entries(locales)) {
-  test(`${locale}: concepts have complete localized labels, caveats and the same sample disclaimer`, () => {
+  test(`${locale}: Learn contains all seven complete, non-executable concepts`, () => {
     expect(messages.sampleConcepts.list).toHaveLength(7);
-    for (const item of messages.sampleConcepts.list) {
-      expect(item.label.trim()).not.toBe('');
-      expect(item.caveat.length).toBeGreaterThan(30);
-    }
-    if (locale !== 'en') {
-      expect(messages.sampleConcepts.notice).not.toBe(en.sampleConcepts.notice);
-      expect(messages.sampleConcepts.list.every((c, i) => c.caveat !== en.sampleConcepts.list[i].caveat)).toBe(true);
-    }
+    if (locale !== 'en') expect(messages.sampleConcepts.notice).not.toBe(en.sampleConcepts.notice);
     localStorage.setItem('blockallisto-language', locale);
-    render(
-      <I18nProvider>
-        <SampleConceptsSection />
-      </I18nProvider>,
-    );
-    expect(screen.getAllByText(messages.sampleLifecycle.notice)).toHaveLength(7);
-    for (const concept of SAMPLE_CONCEPTS)
-      expect(screen.getAllByText(messages.sampleConcepts.unavailable + ': ' + messages.sampleConcepts.states[concept.sampleState])).toHaveLength(
-        SAMPLE_CONCEPTS.filter((c) => c.sampleState === concept.sampleState).length,
-      );
-    expect(screen.queryAllByText(messages.sampleConcepts.nonFinancialNotice)).toHaveLength(0);
-    for (const concept of SAMPLE_CONCEPTS) {
-      expect(screen.getByRole('link', { name: concept.name }).getAttribute('href')).toBe(`/campaigns/${concept.id}?fixtures=1`);
-    }
-  });
-}
-
-for (const [index, concept] of SAMPLE_CONCEPTS.entries()) {
-  test(`${concept.id}: direct sample detail has no finance, wallet, API-backed panels or action handlers`, () => {
     const { container } = render(
       <I18nProvider>
-        <CampaignDetail market={market} campaignId={concept.id} />
+        <Learn />
       </I18nProvider>,
     );
-    expect(screen.getByRole('heading', { level: 1, name: concept.name })).toBeTruthy();
-    expect(screen.getByText(en.sampleConcepts.list[index].caveat)).toBeTruthy();
-    expect(screen.getByText(en.sampleLifecycle.notice)).toBeTruthy();
-    expect(screen.getByText(en.sampleConcepts.unavailable + ': ' + en.sampleConcepts.states[concept.sampleState])).toBeTruthy();
-    expect(container.querySelector('.invest-widget,.funding-grid,[data-sample-lifecycle]')).toBeNull();
-    expect(screen.queryAllByRole('button')).toHaveLength(0);
-    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
-    expect(screen.queryAllByRole('spinbutton')).toHaveLength(0);
-    expect(prepare).not.toHaveBeenCalled();
-  });
-  test(`${concept.id}: live mode cannot resolve the educational URL`, () => {
-    render(
-      <I18nProvider>
-        <CampaignDetail market={{ ...market, fixtureMode: false }} campaignId={concept.id} />
-      </I18nProvider>,
-    );
-    expect(screen.getByText(en.campaign.notFound)).toBeTruthy();
-    expect(screen.queryByText(en.sampleConcepts.list[index].caveat)).toBeNull();
+    const concepts = screen.getByRole('region', { name: messages.sampleConcepts.title });
+    expect(within(concepts).getAllByRole('article')).toHaveLength(7);
+    expect(within(concepts).getAllByText(messages.sampleLifecycle.notice)).toHaveLength(7);
+    for (const [i, concept] of SAMPLE_CONCEPTS.entries()) {
+      const item = messages.sampleConcepts.list[i];
+      expect(item.label.trim()).not.toBe('');
+      expect(item.caveat.length).toBeGreaterThan(30);
+      if (locale !== 'en') expect(item.caveat).not.toBe(en.sampleConcepts.list[i].caveat);
+      expect(within(concepts).getByRole('heading', { name: concept.name })).toBeTruthy();
+      expect(within(concepts).getByText(item.caveat)).toBeTruthy();
+      expect(container.querySelector(`#learn-${concept.id}`)).toBeTruthy();
+    }
+    expect(concepts.querySelector('a[href*="/campaigns/"],button,input,.funding-grid,.invest-widget')).toBeNull();
     expect(prepare).not.toHaveBeenCalled();
   });
 }
 
-test('sample-mode count includes concepts in a separate section, live data stays unchanged', () => {
+for (const concept of SAMPLE_CONCEPTS) {
+  test(`${concept.id}: old campaign URL resolves to Learn, not a campaign`, () => {
+    expect(routeFromPath(`/campaigns/${concept.id}`)).toEqual({ name: 'learn' });
+    expect(routeFromPath(`/campaigns/${encodeURIComponent(concept.id)}`)).toEqual({ name: 'learn' });
+  });
+  for (const fixtureMode of [true, false])
+    test(`${concept.id}: direct campaign rendering cannot expose a concept or finance controls (${fixtureMode})`, () => {
+      const { container } = render(
+        <I18nProvider>
+          <CampaignDetail market={{ ...market, fixtureMode }} campaignId={concept.id} />
+        </I18nProvider>,
+      );
+      expect(screen.getByText(en.campaign.notFound)).toBeTruthy();
+      expect(container.querySelector('[data-concept],.invest-widget,.funding-grid,input,button')).toBeNull();
+      expect(prepare).not.toHaveBeenCalled();
+    });
+}
+
+test('catalog counts and status filters include only campaign examples', () => {
   const { container } = render(
     <I18nProvider>
       <Investments market={market} />
     </I18nProvider>,
   );
-  const concepts = screen.getByRole('region', { name: en.sampleConcepts.title });
-  expect(within(concepts).getAllByRole('article')).toHaveLength(7);
-  expect(container.querySelectorAll('.card')).toHaveLength(20);
-  expect(screen.getByRole('status').textContent).toBe('27 campaigns shown');
+  expect(container.querySelectorAll('.card')).toHaveLength(44);
+  expect(screen.getByRole('status').textContent).toBe('44 results shown');
+  expect(container.querySelector('[data-concept]')).toBeNull();
+  for (const [label, count] of [
+    [en.invest.open, 34],
+    [en.invest.funded, 5],
+    [en.invest.underfunded, 5],
+  ] as const) {
+    fireEvent.click(screen.getByRole('button', { name: label }));
+    expect(screen.getByRole('status').textContent).toBe(`${count} results shown`);
+    expect(container.querySelector('[data-concept]')).toBeNull();
+  }
 });
 
-test('live registry never shows the concept section', () => {
-  render(
+test('concept searches and industry filters cannot add Learn concepts back into the catalog', () => {
+  const { container } = render(
     <I18nProvider>
-      <Investments market={{ ...market, campaigns: [FIXTURE_CAMPAIGNS[0]], fixtureMode: false }} />
+      <Investments market={market} />
     </I18nProvider>,
   );
-  expect(screen.queryByRole('region', { name: en.sampleConcepts.title })).toBeNull();
-  expect(screen.getByRole('status').textContent).toBe('1 campaign shown');
+  fireEvent.change(screen.getByRole('combobox', { name: en.invest.filterIndustryAria }), { target: { value: 'financial-services' } });
+  expect(screen.getByRole('status').textContent).toBe(en.invest.noMatches);
+  fireEvent.change(screen.getByRole('textbox', { name: en.invest.searchAria }), { target: { value: 'Tagus' } });
+  expect(screen.getByRole('status').textContent).toBe(en.invest.noMatches);
+  expect(container.querySelector('[data-concept]')).toBeNull();
 });
 
-test('critical distinctions remain explicit and no positive financial guarantees are invented', () => {
+test('refund and withdrawal examples retain exact identities without concept scenarios', () => {
+  const { container, rerender } = render(
+    <I18nProvider>
+      <Investments market={market} />
+    </I18nProvider>,
+  );
+  expect(screen.getByRole('button', { name: en.sampleConcepts.filterRefund }).textContent).toBe('Refund (3)');
+  expect(screen.getByRole('button', { name: en.sampleConcepts.filterWithdrawal }).textContent).toBe('Withdrawal (2)');
+  fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterRefund }));
+  expect(new Set([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent))).toEqual(
+    new Set(['Prado Vivo', 'Livros à Esquina', 'Luz de Oficina']),
+  );
+  fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterWithdrawal }));
+  expect(screen.getByRole('status').textContent).toBe('2 results shown');
+  expect(new Set([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent))).toEqual(new Set(['Ciclo Mineral', 'Barro Vivo']));
+  expect(container.querySelector('[data-concept]')).toBeNull();
+  rerender(
+    <I18nProvider>
+      <Investments market={{ ...market, fixtureMode: false, campaigns: [FIXTURE_CAMPAIGNS[0]] }} />
+    </I18nProvider>,
+  );
+  expect(screen.queryByRole('button', { name: en.sampleConcepts.filterRefund })).toBeNull();
+  expect(screen.queryByRole('button', { name: en.sampleConcepts.filterWithdrawal })).toBeNull();
+  expect(screen.getByRole('status').textContent).toBe('1 result shown');
+});
+
+test('concept caveats retain their legal distinctions without positive guarantees', () => {
   const text = en.sampleConcepts.list.map((c) => c.caveat);
   expect(text[0]).toContain('not automatically an issued share or a loan');
   expect(text[1]).toContain('token does not transfer title');
@@ -152,121 +169,16 @@ test('critical distinctions remain explicit and no positive financial guarantees
   expect(text[4]).toContain('Royalties are not profit');
   expect(text[5]).toContain('not confirmed in Portugal');
   expect(text[6]).toContain('not confirmed in Portugal');
-});
-
-test('concept scenarios remain after the national formats moved to the sample catalog', () => {
-  const count = (state: string) => SAMPLE_CONCEPTS.filter((c) => c.sampleState === state).length;
-  expect(count('open')).toBe(2);
-  expect(count('funded')).toBe(2);
-  expect(count('unsuccessful')).toBe(2);
-  expect(count('withdrawn')).toBe(1);
-  expect(count('refunded')).toBe(0);
-  expect(SAMPLE_CONCEPTS.find((c) => c.subtype === 'safe')?.sampleState).toBe('open');
-});
-
-test('sample status filters include concept scenarios but real mode excludes every concept', () => {
-  render(
-    <I18nProvider>
-      <Investments market={market} />
-    </I18nProvider>,
-  );
-  fireEvent.click(screen.getByRole('button', { name: en.invest.open }));
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
-  expect(screen.getByRole('status').textContent).toBe('12 campaigns shown');
-  fireEvent.click(screen.getByRole('button', { name: en.invest.funded }));
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(3);
-  expect(screen.getByRole('status').textContent).toBe('8 campaigns shown');
-  fireEvent.click(screen.getByRole('button', { name: en.invest.underfunded }));
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
-  expect(screen.getByRole('status').textContent).toBe('7 campaigns shown');
-});
-
-test('sample concepts participate in text and industry filters only in sample mode', () => {
-  render(
-    <I18nProvider>
-      <Investments market={market} />
-    </I18nProvider>,
-  );
-  fireEvent.change(screen.getByRole('combobox', { name: en.invest.filterIndustryAria }), { target: { value: 'financial-services' } });
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(2);
-  expect(screen.getByRole('status').textContent).toBe('2 campaigns shown');
-  fireEvent.change(screen.getByRole('textbox', { name: en.invest.searchAria }), { target: { value: 'Tagus' } });
-  expect(document.querySelectorAll('[data-concept]')).toHaveLength(1);
-});
-
-test('sample refund and withdrawal filters show exact three identities and counts, never live controls', () => {
-  const { rerender, container } = render(
-    <I18nProvider>
-      <Investments market={market} />
-    </I18nProvider>,
-  );
-  expect(screen.getByRole('button', { name: en.sampleConcepts.filterRefund }).textContent).toBe('Refund (3)');
-  expect(screen.getByRole('button', { name: en.sampleConcepts.filterWithdrawal }).textContent).toBe('Withdrawal (3)');
-  fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterRefund }));
-  expect(screen.getByRole('status').textContent).toBe('3 campaigns shown');
-  expect(new Set([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent))).toEqual(
-    new Set(['Meadow Partnership', 'Neighbourhood Library Donation', 'Workshop Lamp Pre-sale']),
-  );
-  expect([...container.querySelectorAll('[data-concept]')]).toHaveLength(0);
-  fireEvent.click(screen.getByRole('button', { name: en.sampleConcepts.filterWithdrawal }));
-  expect(screen.getByRole('status').textContent).toBe('3 campaigns shown');
-  expect(new Set([...container.querySelectorAll('.card h3 a')].map((a) => a.textContent))).toEqual(new Set(['Orbit Circular Materials', 'Makers Reward']));
-  expect([...container.querySelectorAll('[data-concept]')].map((a) => a.getAttribute('data-concept'))).toEqual(['concept-royalty']);
-  rerender(
-    <I18nProvider>
-      <Investments market={{ ...market, fixtureMode: false, campaigns: [FIXTURE_CAMPAIGNS[0]] }} />
-    </I18nProvider>,
-  );
-  expect(screen.queryByRole('button', { name: en.sampleConcepts.filterRefund })).toBeNull();
-  expect(screen.queryByRole('button', { name: en.sampleConcepts.filterWithdrawal })).toBeNull();
-  expect(screen.getByRole('status').textContent).toBe('1 campaign shown');
-});
-
-test('LLC stays absent; certificate and Lda examples remain educational only', () => {
-  const ids = SAMPLE_CONCEPTS.map((c) => String(c.id));
-  expect(ids).toContain('concept-share-certificate');
-  expect(ids).not.toContain('concept-llc-holding');
-  expect(ids).toContain('concept-lda-quotas');
+  expect(SAMPLE_CONCEPTS.map((c) => c.id)).not.toContain('concept-llc-holding');
   expect(en.ldaQuotas.caveat).toContain('if the CMVM authorizes');
-  expect(en.ldaQuotas.caveat).toContain('not confirmed in Portugal');
-  expect(en.ldaQuotas.caveat).toContain('not a real offer');
-  expect(en.ldaQuotas.caveat).toContain('No quotas are issued');
 });
 
-for (const [locale, messages] of Object.entries(locales)) {
-  test(`${locale}: Learn shows the conditional Lda note without the reverted holding section`, () => {
-    localStorage.setItem('blockallisto-language', locale);
-    const { container } = render(
-      <I18nProvider>
-        <Learn />
-      </I18nProvider>,
-    );
-    expect(screen.getByRole('heading', { name: messages.ldaQuotas.title })).toBeTruthy();
-    expect(screen.getByText(messages.ldaQuotas.caveat)).toBeTruthy();
-    expect(container.querySelector('#learn-holding')).toBeNull();
-    expect(messages.ldaQuotas.caveat).toContain('CMVM');
-    expect(messages.ldaQuotas.caveat).toContain('ECSPR');
-  });
-}
-
-for (const [locale, messages] of Object.entries(locales)) {
-  test(`${locale}: certificate Learn note is conditional and sample-only`, () => {
-    localStorage.setItem('blockallisto-language', locale);
-    render(
-      <I18nProvider>
-        <Learn />
-      </I18nProvider>,
-    );
-    expect(screen.getByRole('heading', { name: messages.shareCertificates.title })).toBeTruthy();
-    expect(screen.getByText(messages.shareCertificates.caveat)).toBeTruthy();
-    expect(messages.shareCertificates.caveat).toContain('ECSPR');
-    expect(messages.shareCertificates.caveat).not.toBe(messages.ldaQuotas.caveat);
-  });
-}
-test('certificate caveat makes no Portuguese regime, offer or issuance claim', () => {
-  expect(en.shareCertificates.caveat).toContain('not confirmed in Portugal');
-  expect(en.shareCertificates.caveat).toContain('bank or investment firm');
-  expect(en.shareCertificates.caveat).toContain('does not establish a Portuguese');
-  expect(en.shareCertificates.caveat).toContain('not a real offer');
-  expect(en.shareCertificates.caveat).toContain('No certificates are issued');
+test('standalone educational section has no campaign links or transaction handlers', () => {
+  const { container } = render(
+    <I18nProvider>
+      <SampleConceptsSection />
+    </I18nProvider>,
+  );
+  expect(container.querySelectorAll('[data-concept]')).toHaveLength(7);
+  expect(container.querySelector('a[href*="/campaigns/"],button,input')).toBeNull();
 });

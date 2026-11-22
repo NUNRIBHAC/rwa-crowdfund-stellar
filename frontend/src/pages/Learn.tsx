@@ -1,4 +1,5 @@
 import { useI18n } from '../i18n';
+import { SampleConceptsSection } from '../components/SampleConcepts';
 
 export default function Learn() {
   const { m } = useI18n();
@@ -20,6 +21,7 @@ export default function Learn() {
           <a href="#learn-overlays">{m.learn.overlaysTitle}</a>
           <a href="#learn-share-certificates">{m.shareCertificates.title}</a>
           <a href="#learn-lda-quotas">{m.ldaQuotas.title}</a>
+          <a href="#learn-educational-concepts">{m.sampleConcepts.title}</a>
           <a href="#learn-qualifiers">{m.learn.qualifiersTitle}</a>
         </nav>
       </details>
@@ -128,6 +130,7 @@ export default function Learn() {
             ))}
           </div>
         </section>
+        <SampleConceptsSection />
       </div>
     </div>
   );

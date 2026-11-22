@@ -189,6 +189,7 @@ code {
 h1[id],
 h2[id],
 section[id],
+.sample-concept-card[id],
 #investor-holdings,
 #investor-documents,
 #investor-assessment {
@@ -198,6 +199,7 @@ section[id],
   h1[id],
   h2[id],
   section[id],
+  .sample-concept-card[id],
   #investor-holdings,
   #investor-documents,
   #investor-assessment {

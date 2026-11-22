@@ -9,6 +9,7 @@ import { routeHash } from '../router';
 import CampaignPhoto from './CampaignPhoto';
 import { useI18n } from '../i18n';
 import SampleLifecycle from './SampleLifecycle';
+import SampleContractLink from './SampleContractLink';
 
 export type CampaignStatus = 'open' | 'funded' | 'ended';
 
@@ -195,6 +196,7 @@ export default function CampaignCard({
       </p>
 
       {demo && <p className="card-demo-note">{m.card.demoNote}</p>}
+      {demo && <SampleContractLink campaignId={c.id} />}
 
       {!discoveryOnly && (
         <details className="card-details">

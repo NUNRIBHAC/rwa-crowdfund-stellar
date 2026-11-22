@@ -1,5 +1,5 @@
 // Integration-like app read failure/retry test, without wallet or write calls.
-import { test, expect, vi, afterEach } from 'vitest';
+import { test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import App from '../../App';
 import { I18nProvider } from '../../i18n';
@@ -9,6 +9,7 @@ vi.mock('@stellar/freighter-api', () => ({
   requestAccess: vi.fn(),
   signTransaction: vi.fn(),
 }));
+beforeEach(() => window.history.replaceState(null, '', '/?fixtures=0'));
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
@@ -116,7 +117,7 @@ test('mount campaign-load failure keeps an honest banner on the account consumer
 });
 
 test('an action error during the first load keeps its own message, not the load slot', async () => {
-  window.history.replaceState(null, '', '/');
+  window.history.replaceState(null, '', '/?fixtures=0');
   vi.stubGlobal(
     'fetch',
     vi.fn((input) => {

@@ -48,7 +48,7 @@ for (const [locale, m] of Object.entries(locales)) {
   });
 }
 test('the national formats moved to the sample catalog without changing instrument classes', () => {
-  expect(SAMPLE_CATALOG).toHaveLength(20);
+  expect(SAMPLE_CATALOG).toHaveLength(44);
   expect(SAMPLE_CONCEPTS).toHaveLength(7);
   expect(SAMPLE_CATALOG.filter((c) => ['donation', 'reward', 'pre-sale'].includes(String(c.instrument))).map((c) => c.id)).toEqual([
     'fixture-library-donation',
