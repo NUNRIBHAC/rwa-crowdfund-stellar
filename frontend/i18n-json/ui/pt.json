@@ -728,7 +728,6 @@
     "status": "Estado",
     "statusText": "Protótipo de testnet. Sem implementação automática nem conversão de saldos legados. Os intents e saldos clássicos existentes são preservados, não limpos. A infraestrutura separada de identidade/avaliação continua apenas simulada.",
     "legalPre": "Enquadramento de mercado: a UE regula o crowdfunding ao abrigo do ECSPR; os prestadores autorizados estão listados no",
-    "legalPost": ". Esta aplicação não é um prestador de serviços de crowdfunding autorizado e não lista ofertas reais.",
     "tagline": "Ativos reais. Possibilidades partilhadas."
   },
   "time": {
