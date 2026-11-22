@@ -1,5 +1,4 @@
 import { useEffect, useId, useState, type ReactNode } from 'react';
-import RiskBanner from './RiskBanner';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
 import { lockupFor, useTheme } from '../theme';
@@ -172,20 +171,6 @@ export default function Footer() {
                 </li>
               </ul>
             </FooterGroup>
-            <div className="footer-context">
-              <p className="footer-legal">
-                {m.footer.legalPre}{' '}
-                <a href="https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_upreg" target="_blank" rel="noreferrer">
-                  {m.footer.legalLink}
-                </a>
-                {m.footer.legalPost}
-              </p>
-              <div className="footer-status">
-                <h2 className="footer-heading">{m.footer.status}</h2>
-                <p>{m.footer.statusText}</p>
-                <RiskBanner />
-              </div>
-            </div>
           </div>
           <div className="footer-tiles" aria-hidden="true">
             {/* Each shape is its own svg whose box has slack around the rotated

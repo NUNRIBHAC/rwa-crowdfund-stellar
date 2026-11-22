@@ -181,8 +181,6 @@ export const pt: Messages = {
     themeToLight: 'Mudar para o tema claro',
     themeToDark: 'Mudar para o tema escuro',
   },
-  riskBanner:
-    'Os investimentos em crowdfunding comportam um risco de perda total. Isto é um protótipo na testnet Stellar: sem ofertas reais, sem fundos reais, sem aconselhamento de investimento.',
   hero: {
     introTitle: 'Financiar um projeto em conjunto.',
     intro: 'Explora campanhas de financiamento. Contribui para um objetivo comum. Após o prazo, o resultado decide o que acontece a seguir.',
@@ -805,12 +803,6 @@ export const pt: Messages = {
     glossary: 'Glossário',
     faq: 'FAQ',
     aboutProject: 'Sobre este projeto',
-    status: 'Estado',
-    statusText:
-      'Protótipo de testnet. Sem implementação automática nem conversão de saldos legados. Os intents e saldos clássicos existentes são preservados, não limpos. A infraestrutura separada de identidade/avaliação continua apenas simulada.',
-    legalPre: 'Enquadramento de mercado: a UE regula o crowdfunding ao abrigo do ECSPR; os prestadores autorizados estão listados no',
-    legalLink: 'registo da ESMA',
-    legalPost: '. Esta aplicação não é um prestador de serviços de crowdfunding autorizado e não lista ofertas reais.',
     tagline: 'Ativos reais. Possibilidades partilhadas.',
   },
   time: {

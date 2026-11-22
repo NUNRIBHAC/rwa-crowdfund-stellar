@@ -167,7 +167,6 @@
     "themeToLight": "Passer au thème clair",
     "themeToDark": "Passer au thème sombre"
   },
-  "riskBanner": "Les investissements en crowdfunding comportent un risque de perte totale. Ceci est un prototype sur le testnet Stellar : aucune offre réelle, aucun fonds réel, aucun conseil en investissement.",
   "hero": {
     "introTitle": "Financer un projet ensemble.",
     "intro": "Explorez les campagnes de financement. Contribuez à un objectif commun. Après la date limite, le résultat décide de la suite.",
@@ -758,11 +757,6 @@
     "glossary": "Glossaire",
     "faq": "FAQ",
     "aboutProject": "À propos de ce projet",
-    "status": "Statut",
-    "statusText": "Prototype de testnet. Aucun déploiement automatique ni conversion de soldes hérités. Les intents et soldes classiques existants sont préservés, pas effacés. L'infrastructure séparée d'identité/valorisation reste uniquement simulée.",
-    "legalPre": "Contexte de marché : l'UE régule le crowdfunding sous le régime ECSPR ; les prestataires agréés figurent dans le",
-    "legalLink": "registre de l'AEMF",
-    "legalPost": ". Cette application n'est pas un prestataire de services de crowdfunding agréé et ne liste aucune offre réelle.",
     "tagline": "Des actifs réels. Des possibilités partagées."
   },
   "time": {

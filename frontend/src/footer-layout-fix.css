@@ -483,3 +483,68 @@
     padding-bottom: 4px;
   }
 }
+
+/* Footer without the former market/status/risk text column. */
+@media (min-width: 1151px) {
+  .footer-brand-inner .footer-grid,
+  html[lang='de'] .footer-brand-inner .footer-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+}
+
+/* Tablets use all available text width rather than reserving half for tiles. */
+@media (min-width: 561px) and (max-width: 1150px) {
+  .footer-brand-inner {
+    padding: 24px 16px 124px;
+    gap: 24px;
+  }
+  .footer-brand-inner .footer-grid,
+  html[lang='de'] .footer-brand-inner .footer-grid {
+    flex-basis: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 20px;
+  }
+  .footer-tiles {
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+  }
+  .footer-tiles .ft {
+    top: 16px;
+    animation: none;
+  }
+  .footer-tiles .ft-1 {
+    left: 4%;
+  }
+  .footer-tiles .ft-2 {
+    left: 20%;
+  }
+  .footer-tiles .ft-3 {
+    left: 34%;
+  }
+  .footer-tiles .ft-4 {
+    left: 50%;
+  }
+  .footer-tiles .ft-5 {
+    left: 65%;
+  }
+  .footer-tiles .ft-6 {
+    left: 78%;
+  }
+  .footer-tiles .ft-7 {
+    left: 90%;
+  }
+}
+
+.footer-nav-group {
+  min-width: 0;
+}
+.footer-nav-group li > a {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+html.rtl-text .footer-nav-group > .footer-heading {
+  text-align: right;
+}

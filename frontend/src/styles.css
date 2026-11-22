@@ -872,17 +872,6 @@ section[id],
 }
 
 /* Risk banner (persistent, every page) */
-.risk-banner {
-  background: var(--navy);
-  color: #ffd9d4;
-  border-bottom: 2px solid var(--red);
-  text-align: center;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.45;
-  padding: 12px 52px;
-  position: relative;
-}
 /* Theme toggle at the banner's inline end (user target, 2026-10-31). The
    symmetric banner padding keeps the text centred and clear of the button. */
 .risk-theme-toggle {
@@ -2669,10 +2658,6 @@ input[type='checkbox'] {
 
 /* Light theme: the whole chrome (risk banner, header, footer band) goes light.
    Pages are already light; the navy surfaces and their contents flip. */
-[data-theme='light'] .risk-banner {
-  background: #fdecea;
-  color: #8c1d18;
-}
 /* Testnet badge in light theme: #fbbf24 text on the 15%-amber tint over
    white measures ~1.5:1. Reuse the light amber text token (same pattern as
    .status-pending) at 4.83:1 on the tinted chip; dark theme keeps #fbbf24. */
@@ -4831,14 +4816,6 @@ html.rtl-text .accordion summary > span:first-child {
     font-size: 1rem;
     font-weight: 400;
   }
-}
-.site-footer .risk-banner {
-  background: transparent;
-  border: 0;
-  color: inherit;
-  padding: 12px 0 0;
-  text-align: start;
-  font-weight: 400;
 }
 .site-header .nav-more-toggle {
   display: inline-flex;

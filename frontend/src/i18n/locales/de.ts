@@ -182,8 +182,6 @@ export const de: Messages = {
     themeToLight: 'Zum hellen Design wechseln',
     themeToDark: 'Zum dunklen Design wechseln',
   },
-  riskBanner:
-    'Crowdfunding-Investitionen bergen ein Totalverlustrisiko. Dies ist ein Prototyp im Stellar-Testnet: keine echten Angebote, keine echten Gelder, keine Anlageberatung.',
   hero: {
     introTitle: 'Gemeinsam ein Projekt finanzieren.',
     intro: 'Entdecke Finanzierungskampagnen. Trage zu einem gemeinsamen Ziel bei. Nach Ablauf der Frist entscheidet das Ergebnis, wie es weitergeht.',
@@ -807,12 +805,6 @@ export const de: Messages = {
     glossary: 'Glossar',
     faq: 'FAQ',
     aboutProject: 'Über dieses Projekt',
-    status: 'Status',
-    statusText:
-      'Testnet-Prototyp. Keine automatische Bereitstellung oder Umwandlung alter Guthaben. Bestehende klassische Intents und Guthaben bleiben erhalten, werden nicht gelöscht. Die separate Identitäts-/Bewertungsinfrastruktur bleibt nur simuliert.',
-    legalPre: 'Marktkontext: Die EU reguliert Crowdfunding nach der ECSPR; zugelassene Anbieter sind im',
-    legalLink: 'ESMA-Register',
-    legalPost: ' gelistet. Diese App ist kein zugelassener Crowdfunding-Dienstleister und listet keine echten Angebote.',
     tagline: 'Reale Vermögenswerte. Geteilte Möglichkeiten.',
   },
   time: {

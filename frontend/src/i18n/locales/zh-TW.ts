@@ -173,7 +173,6 @@ export const zhTW: Messages = {
     themeToLight: '切換到淺色主題',
     themeToDark: '切換到深色主題',
   },
-  riskBanner: '眾籌投資存在全部損失的風險。這是 Stellar 測試網原型：無真實發行、無真實資金、無投資建議。',
   hero: {
     introTitle: '共同為專案籌資。',
     intro: '探索募資活動，為共同目標出資。截止日期後，結果將決定下一步。',
@@ -766,11 +765,6 @@ export const zhTW: Messages = {
     glossary: '術語表',
     faq: '常見問題',
     aboutProject: '關於本項目',
-    status: '狀態',
-    statusText: '測試網原型。不進行自動部署或舊餘額轉換。現有的傳統意向和餘額予以保留，不會清除。獨立的身份/估值基礎設施仍僅為模擬。',
-    legalPre: '市場背景：歐盟依據 ECSPR 監管眾籌；持牌服務提供商列於',
-    legalLink: 'ESMA 登記冊',
-    legalPost: '。本應用不是持牌眾籌服務提供商，不列出任何真實發行。',
     tagline: '真實資產，共享可能。',
   },
   time: {
