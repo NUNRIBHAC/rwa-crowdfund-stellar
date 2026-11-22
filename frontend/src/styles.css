@@ -394,7 +394,8 @@ section[id],
 }
 .card-actions,
 .card-details,
-.card-details-link {
+.card-details-link,
+.card .sample-contract-link {
   position: relative;
   z-index: 1;
 }
