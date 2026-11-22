@@ -725,7 +725,6 @@
     "glossary": "Glossary",
     "faq": "FAQ",
     "aboutProject": "About this project",
-    "status": "Status",
     "statusText": "Testnet prototype. No automatic deployment or legacy balance conversion. Existing classic intents and balances are preserved, not cleared. The separate identity/valuation infrastructure remains mock-only.",
     "tagline": "Real assets. Shared possibilities."
   },
