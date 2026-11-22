@@ -12,10 +12,10 @@ Orders 5, 9, 10, 11. Staging candidate only. No contract or database changes.
 
 ## Validation
 
-- Production build and i18n projection/whitespace guard passed, 21,967 translation units.
-- Frontend tests run in bounded groups. All 104 files and 842 tests passed after removing the obsolete banner assertion. The first components run exposed that obsolete assertion; its focused rerun passed. This is not a claim of a coverage-threshold run.
-- 11 locales x 5 campaign widths, 242 instrument selections, no horizontal overflow or page JavaScript errors.
-- 11 locales x 2 themes x 5 footer widths = 110 checks. All four groups, 10 social links, risk-disclosure link, missing removed blocks, mobile toggles, and home callout absence checked.
-- Screenshots inspected: all-locale footer sheets at desktop/tablet/mobile; Arabic desktop footer and left sidebar at 1280.
+- Production build, lint (zero errors, four existing warnings), whole-tree format and i18n projection/whitespace guard pass. All 27,456 translation units across 11 languages match the Weblate JSON round trip. Only JSON was imported, not Weblate history. The 77 retired units are absent.
+- All 976 frontend tests in 111 disjoint files pass. Combined coverage passes the unchanged global thresholds: 81.99% lines, 74.64% functions and 76.38% branches.
+- Campaign checks cover 11 locales x 2 themes x 5 widths (320, 390, 820, 1280, 1600), all 44 live-contract link targets per context (4,840 pointer checks), and all 15 instrument selections per locale/theme (330 selections). No Learn-only concept cards return to the catalog.
+- Footer checks cover the same 110 contexts: four link groups, 10 social links, Risk Disclosure link, absence of the retired blocks, mobile disclosures, and Home callout removal. Desktop checks also require brand and navigation to share one row, with four equal-width columns in every locale. Zero page errors, unexpected requests or horizontal overflow.
+- Pixel review found an intrinsic-width-dependent desktop wrap and corrected it using a zero flex basis and min-width: 0, without changing translations or links. The full 242-row visual matrix was rerun after that correction. All-locale light/navy sheets and selected full-size mobile/tablet/desktop screenshots were inspected.
 
-No deployment. Merge and staging release need the owner's phrase for the specific PR number.
+Staging-only release candidate. No contract, registry, database, demo or infrastructure changes. CI, exact archived-image validation and actual-host checks are separate release gates.

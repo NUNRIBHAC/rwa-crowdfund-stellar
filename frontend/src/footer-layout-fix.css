@@ -488,6 +488,10 @@
 @media (min-width: 1151px) {
   .footer-brand-inner .footer-grid,
   html[lang='de'] .footer-brand-inner .footer-grid {
+    /* A zero flex basis keeps every locale beside the brand. Intrinsic
+       label widths must not decide whether the whole grid wraps below it. */
+    flex: 1 1 0;
+    min-width: 0;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     column-gap: 24px;
   }
