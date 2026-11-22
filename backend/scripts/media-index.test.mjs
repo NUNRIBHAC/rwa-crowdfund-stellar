@@ -34,6 +34,11 @@ test('release git archive builds identical media index without any font source d
     mkdirSync(target);
     execFileSync('tar', ['-xf', archive, '-C', target]);
     assert.equal(existsSync(join(target, 'assets/fonts')), false, 'keep font export-ignore');
+    assert.equal(
+      existsSync(join(target, 'frontend/media-external/campaigns/businesses-20261122')),
+      false,
+      'campaign photo bytes stay outside VM build archives',
+    );
     mkdirSync(join(target, 'backend/dist'), { recursive: true });
     execFileSync(process.execPath, ['backend/scripts/media-index.mjs'], { cwd: target });
     const rows = JSON.parse(readFileSync(join(target, 'backend/dist/public-media-index.json'), 'utf8'));

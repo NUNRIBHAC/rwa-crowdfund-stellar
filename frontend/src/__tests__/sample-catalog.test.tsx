@@ -7,6 +7,8 @@ import CampaignCard from '../components/CampaignCard';
 import CampaignDetail from '../pages/CampaignDetail';
 import Investments from '../pages/Investments';
 import { campaignPhoto } from '../data/campaignPhotos';
+import { SAMPLE_CAMPAIGN_PHOTO_BASES } from '../data/sampleCampaignPhotos';
+import { MEDIA_ORIGIN } from '../media-fallback';
 import { profileFor } from '../data/profiles';
 import { composeInstrumentLabel } from '../data/instruments';
 import { I18nProvider } from '../i18n';
@@ -99,7 +101,8 @@ for (const [locale, messages] of Object.entries(locales)) {
       expect(composeInstrumentLabel(messages, sample.instrument, sample.seniority, [...sample.overlays])).not.toBe(sample.instrument);
       expect(sampleIndustry(sample.id)).toBe(sample.industry);
       expect(messages.invest.industryLabels[sample.industry]).toBeTruthy();
-      expect(campaignPhoto(sample.id)).toBe('/illustrative-covers/sample-campaign.svg');
+      expect(campaignPhoto(sample.id)).toBe(MEDIA_ORIGIN + SAMPLE_CAMPAIGN_PHOTO_BASES[sample.id] + '.jpg');
+      expect(SAMPLE_CAMPAIGN_PHOTO_BASES[sample.id]).toMatch(new RegExp('/' + sample.id + '-[a-f0-9]{12}$'));
       expect(profileFor(campaign, false, messages.profiles.list)).toBeUndefined();
     }
     for (const text of Object.values(messages.sampleLifecycle)) expect(text.trim()).not.toBe('');

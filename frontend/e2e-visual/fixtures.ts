@@ -5,6 +5,8 @@ const types: Record<string, string> = {
   svg: 'image/svg+xml',
   png: 'image/png',
   jpg: 'image/jpeg',
+  avif: 'image/avif',
+  webp: 'image/webp',
   jpeg: 'image/jpeg',
   ico: 'image/x-icon',
   woff2: 'font/woff2',
