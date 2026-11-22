@@ -59,7 +59,7 @@ export default function CampaignPhoto({
           src={displayed}
           width={responsive ? 1280 : undefined}
           height={responsive ? (sample ? 720 : 960) : undefined}
-          alt={illustration ? m.invest.illustrativeCover : m.card.photoAlt}
+          alt={illustration ? m.invest.illustrativeCover : sample ? m.card.photoCaption : m.card.photoAlt}
           loading={variant === 'card' && !visiblePriority ? 'lazy' : variant === 'card' ? 'eager' : undefined}
           fetchPriority={variant === 'campaign' || visiblePriority ? 'high' : undefined}
           onError={() => setFailedSource(src)}

@@ -131,6 +131,7 @@ test('each of the forty-four fictional businesses uses only its own matching res
       );
       const img = screen.getByRole('img');
       expect(img.getAttribute('src')).toContain(base + '.jpg');
+      expect(img.getAttribute('alt')).toBe('Illustrative photo - not the actual project.');
       expect(img.getAttribute('width')).toBe('1280');
       expect(img.getAttribute('height')).toBe('720');
       const sources = [...container.querySelectorAll('source')];
@@ -183,5 +184,19 @@ test('a sample photo tries the existing same-origin gateway before the final hon
     expect(container.querySelectorAll('source')).toHaveLength(0);
   } finally {
     stop();
+  }
+});
+
+test('all eleven locales give sample photos the translated generic illustrative alt, never the old solar-only description', () => {
+  for (const locale of ['en', 'pt', 'es', 'fr', 'de', 'zh-TW', 'zh-CN', 'ja', 'ko', 'ar', 'hi'] as const) {
+    const { container, unmount } = render(
+      <I18nProvider initialLocale={locale}>
+        <CampaignPhoto campaignId="fixture-lisbon-riverside" variant="card" />
+      </I18nProvider>,
+    );
+    const caption = container.querySelector('figcaption')!.textContent;
+    expect(caption!.length).toBeGreaterThan(10);
+    expect(screen.getByRole('img').getAttribute('alt')).toBe(caption);
+    unmount();
   }
 });
