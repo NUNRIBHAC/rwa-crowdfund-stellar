@@ -25,12 +25,12 @@ Requested worked example: L1 begins with 100,000 principal and 30,000 principal 
 
 ## Validation
 
-- Frontend suite covered in bounded groups: 107 distinct files, 869 distinct tests passed. Component/community group: 58 files and 345 tests; pages/general group: 24 files and 232 tests; final root/i18n/scripts group: 36 files and 468 tests, including 11 overlapping files. Counts are a deduplicated union, not a sum of overlapping group logs. This is not a coverage-threshold run.
-- Focused rerun after Arabic bidi isolation and cent-allocation review: 26 tests passed. PD/LGD are explicitly LTR-isolated so their order does not reverse in Arabic.
-- Production build and i18n projection/whitespace guard pass, 22,506 translation units including the inherited Investors page additions.
+- Rebased release candidate: all 963 frontend tests in 111 disjoint files passed. Combined unchanged coverage gates passed: 81.99% lines, 74.66% functions, 76.26% branches. Full clean GitHub CI remains the release gate.
+- All 11 languages round-tripped through Weblate: 41 added units per language, 451 total, with no changed or removed existing translation units. All 27,533 UI units match the database export. Translated state is not an independent linguistic review.
+- Production build, i18n projection/whitespace guard, lint and format checks passed. Focused simulator and Investors tests passed.
 - Visual checks: 11 locales x 2 themes x 4 widths x 3 scenarios = 264 checks. Scroll is contained within the loan table on mobile. Register history, schedule, assumptions and event sequence are expandable. Existing theme scope is retained, with light content cards in both chrome themes.
-- Screenshots inspect actual rendered output, including Portuguese desktop and Arabic/Hindi mobile register.
+- Selected screenshots were inspected, including Portuguese desktop, Arabic mobile and Hindi mobile register. This is not manual inspection of every screenshot.
 
 ## Release boundaries
 
-Draft is based on the local Investors navigation branch, which itself has not been merged. No production, demo, staging, database or contract changes were made. Publication requires review and explicit approval for this change. No release is included in this branch.
+The release candidate is based on current main after the catalog contract-link fix. It contains only the isolated synthetic simulator and its translations, tests and documentation. Staging activation follows clean CI and exact-image checks. No production, demo, database, wallet or contract changes are included.

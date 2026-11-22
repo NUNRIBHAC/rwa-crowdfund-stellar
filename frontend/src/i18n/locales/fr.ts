@@ -43,7 +43,7 @@ export const fr: Messages = {
       closedLoss: 'Perte finale',
       partialRecovery: 'Recouvrement partiel',
     },
-    notice: 'Données synthétiques uniquement. EUR est une unité illustrative : aucun argent réel, portefeuille, paiement ou changement de solde.',
+    notice: 'Données synthétiques uniquement. EUR est une unité illustrative : aucun argent réel, portefeuille, paiement ou changement de solde.',
     convention:
       'Centimes entiers, arrondis vers le bas. Intérêts simples ACT/365 sur le capital initial restant dû, sans capitalisation. Une garantie est une estimation, pas un recouvrement.',
     formula: 'Perte attendue = PD × LGD × EAD. Perte réalisée = capital en défaut moins les recouvrements simulés de capital. Intérêts et frais séparés.',
