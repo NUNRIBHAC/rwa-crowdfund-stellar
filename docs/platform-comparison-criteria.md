@@ -11,6 +11,7 @@ This document does not include a "present / partial / missing" column: the Block
 ## The 13 criteria groups
 
 ### 1. Regulation and identity
+
 - Operating entity, identification and group structure.
 - Licence type and scope, regulator, number, date and countries covered.
 - Match between the licensed entity and the entity providing the service.
@@ -20,6 +21,7 @@ This document does not include a "present / partial / missing" column: the Block
 Source: earlier CrowdIndex and p2pinvestitor research; regime distinctions also in [S]. Licence claims need confirmation in the official register before use as a compliance badge.
 
 ### 2. Investor protection
+
 - Investor classification and eligibility.
 - Knowledge test, simulation of the ability to bear losses and applicable warnings/consents.
 - Key investment information sheet and pre-contractual documentation.
@@ -29,6 +31,7 @@ Source: earlier CrowdIndex and p2pinvestitor research; regime distinctions also 
 Source: earlier research and Crowdcube's own warnings [Q]. Legal thresholds and requirements were not audited again in this supplement.
 
 ### 3. Track record and performance
+
 - Years operating, capital financed and number of investors/projects.
 - Defaults, arrears, recoveries, losses and recovery times.
 - Realised net return versus advertised return.
@@ -38,6 +41,7 @@ Source: earlier research and Crowdcube's own warnings [Q]. Legal thresholds and 
 Source: earlier research; reporting and recovery in [T].
 
 ### 4. Owners, conflicts and concentration
+
 - Shareholders, team, originators and project owners.
 - Related parties and relationships between operator, financier and project.
 - Concentration by originator, country, sector and project.
@@ -46,6 +50,7 @@ Source: earlier research; reporting and recovery in [T].
 Source: earlier research; originators and economic participation presented in [L].
 
 ### 5. Collateral, guarantees and recovery
+
 - Existence, nature and valuation of collateral; LTV where applicable.
 - Priority and enforcement of security, guarantor and its financial capacity.
 - Buyback: responsible party, conditions and risk of that party itself defaulting.
@@ -55,6 +60,7 @@ Source: earlier research; originators and economic participation presented in [L
 Source: earlier research; [T,L]. A guarantee does not mean capital is safe.
 
 ### 6. Liquidity, costs and terms
+
 - Minimum investment, term, maturity and payment schedule.
 - Manual, automated or managed investment and diversification/reinvestment rules.
 - Distinguish private transfers, sale windows, secondary markets, conditional early redemption and maturity.
@@ -66,6 +72,7 @@ Source: earlier research; [T,L]. A guarantee does not mean capital is safe.
 Source: earlier research; new detail in [G,F,I,N,K,T,L]. Automation, management and exit mechanisms require validation of the regulatory framework before implementation.
 
 ### 7. Transparency and public information
+
 - Audited accounts, timely publication and auditor qualifications.
 - Portfolio statistics, recoveries and material management changes.
 - Offer status: open, funded, in progress, overdue, in recovery or closed.
@@ -75,6 +82,7 @@ Source: earlier research; new detail in [G,F,I,N,K,T,L]. Automation, management 
 Source: earlier research; expansion in [S,T,E].
 
 ### 8. Operations, accessibility and continuity
+
 - Languages, customer support, contact channels and mobile/app presence.
 - Frequency of new offers and operational specialisation.
 - Deposit and withdrawal methods, times and entity holding/processing funds.
@@ -85,6 +93,7 @@ Source: earlier research; expansion in [S,T,E].
 Source: earlier research; [T,L,R,K,C].
 
 ### 9. Red flags
+
 - Guaranteed-return promises without explanation of risks.
 - Sales pressure, artificial urgency and misleading countdowns.
 - Unreachable contacts, hidden costs and contradictory information.
@@ -93,6 +102,7 @@ Source: earlier research; [T,L,R,K,C].
 Source: earlier research. These are control criteria, not findings about Blockallisto.
 
 ### 10. Catalogue and suitability, new
+
 - Legal instrument and specific economic rights.
 - Sector/asset, country, company stage and project stage.
 - Eligible profile and geographical or access restrictions.
@@ -101,6 +111,7 @@ Source: earlier research. These are control criteria, not findings about Blockal
 Source: [R,S,E].
 
 ### 11. Equity investor rights, new
+
 - Direct ownership or ownership through a nominee and identification of legal/beneficial holder.
 - Share class, voting and collective decision rules.
 - Pre-emption in new rounds, follow-on and dilution risk.
@@ -110,6 +121,7 @@ Source: [R,S,E].
 Source: [N,R]. Do not assume every investment gives the same rights or copy a UK structure into Portugal.
 
 ### 12. Support for fundraising companies, new
+
 - Size and profile of the investor community.
 - Private/public campaigns and access to the platform's investor base.
 - Marketing, public relations, CRM and community tools.
@@ -119,6 +131,7 @@ Source: [N,R]. Do not assume every investment gives the same rights or copy a UK
 Source: [H,F,D]. Shark Ponds provides editorial criteria, mainly from the US; its statistics were not treated as certified facts.
 
 ### 13. Relationships and post-investment support, new
+
 - Questions to project owners and information requests.
 - Videos, presentations, business plans and forecasts, with access rules.
 - Company updates, portfolio and communications about new rounds.
@@ -144,20 +157,20 @@ UK tax benefits, FCA rules, US SEC regimes, nominee structures or trading/manage
 
 Seventeen public pages were read on November 23, 2026: three comparison pages and 14 pages from the eight operators.
 
-| Site/operator | Pages read |
-| --- | ---: |
-| Good Money Guide | 1 |
-| Shark Ponds | 1 |
-| Raise Sonar | 1 |
-| EstateGuru | 1 |
-| Lendermarket | 1 |
-| Debitum | 1 |
-| Republic Europe, formerly Seedrs | 2 |
-| Crowdcube, including help | 5 |
-| Crowdestate | 1 |
-| Exporo | 1 |
-| Brickstarter | 2 |
-| **Total** | **17** |
+| Site/operator                    | Pages read |
+| -------------------------------- | ---------: |
+| Good Money Guide                 |          1 |
+| Shark Ponds                      |          1 |
+| Raise Sonar                      |          1 |
+| EstateGuru                       |          1 |
+| Lendermarket                     |          1 |
+| Debitum                          |          1 |
+| Republic Europe, formerly Seedrs |          2 |
+| Crowdcube, including help        |          5 |
+| Crowdestate                      |          1 |
+| Exporo                           |          1 |
+| Brickstarter                     |          2 |
+| **Total**                        |     **17** |
 
 This is an initial targeted reading, not a full audit of the eight sites. There was no login, account creation, investment testing, reading of every offer or reading of all FAQs, fees and terms. Detailed site coverage is being expanded separately.
 
@@ -197,23 +210,22 @@ The first nine groups came from earlier research, referenced in [A1-A4]; those f
 - [A3] CrowdIndex, European guide: https://crowdindex.org/pt/guides/european-crowdfunding-platforms/
 - [A4] p2pinvestitor, comparison: https://p2pinvestitor.eu/en/p2p-platform-comparison.html
 
-
 ## Supplement: deeper targeted reading of the eight operators
 
 Update of November 23, 2026, after the initial version. Another 24 public pages were consulted. Cumulative total: 41 pages, including the three comparison sites. On long pages, reading targeted relevant sections, rather than a full legal review of every clause.
 
-| Operator | Cumulative page total |
-| --- | ---: |
-| EstateGuru | 5 |
-| Lendermarket | 4 |
-| Debitum | 2 |
-| Republic Europe | 5 |
-| Crowdcube | 8 |
-| Crowdestate | 3 |
-| Exporo | 5 |
-| Brickstarter | 6 |
-| Initial comparison sites | 3 |
-| **Total** | **41** |
+| Operator                 | Cumulative page total |
+| ------------------------ | --------------------: |
+| EstateGuru               |                     5 |
+| Lendermarket             |                     4 |
+| Debitum                  |                     2 |
+| Republic Europe          |                     5 |
+| Crowdcube                |                     8 |
+| Crowdestate              |                     3 |
+| Exporo                   |                     5 |
+| Brickstarter             |                     6 |
+| Initial comparison sites |                     3 |
+| **Total**                |                **41** |
 
 ### New checklist details, integrated into the existing groups
 
@@ -237,40 +249,48 @@ Update of November 23, 2026, after the initial version. Another 24 public pages 
 ### The 24 additional pages
 
 EstateGuru:
+
 - https://estateguru.co/price-list/
 - https://estateguru.co/auto-invest/
 - https://estateguru.co/investor-risk-statement/
 - https://estateguru.co/user-terms/
 
 Lendermarket:
+
 - https://lendermarket.com/help-centre
 - https://lendermarket.com/fees
 - https://lendermarket.com/buyback-guarantee-extensions
 
 Debitum, scope only:
+
 - https://debitum.investments/faq/articles/13002806-is-debitum-a-regulated-platform
 
 Republic Europe:
+
 - https://europe.republic.com/invest/marketplace/how-it-works
 - https://europe.republic.com/investors-site/how-to-invest-2/
 - https://europe.republic.com/pages/secondary-market-terms
 
 Crowdcube:
+
 - https://help.crowdcube.com/hc/en-us/articles/206517044-What-happens-after-I-ve-invested
 - https://help.crowdcube.com/hc/en-us/articles/360001536980-When-is-payment-for-my-investment-collected
 - https://help.crowdcube.com/hc/en-us/articles/9005279352732-How-to-invest-with-Crowdcube
 
 Crowdestate:
+
 - https://crowdestate.eu/reports
 - https://blog.crowdestate.eu/en/crowdestate-is-shutting-down/
 
 Exporo:
+
 - https://exporo.de/hilfe
 - https://exporo.de/risikohinweise
 - https://exporo.de/kundeninformationen
 - https://exporo.de/zinsberechnung
 
 Brickstarter:
+
 - https://brickstarter.com/en/legal-terms
 - https://brickstarter.com/en/faq?tipo=5
 - https://brickstarter.com/en/faq?tipo=2
@@ -279,7 +299,6 @@ Brickstarter:
 ## Next authorised expansion
 
 The inventory from the five comparison sites contains 80 unique names listed in tables/lists and six names only mentioned in Shark Ponds text. Including Crowdestate, Exporo and Brickstarter, already requested initially, there are 89 names to investigate, not 89 active or ECSPR competitors. The following section records the initial pass through the remaining names, separately from this phase's 41 pages.
-
 
 ## Expansion: regional inventory of comparison-site names
 
@@ -290,6 +309,7 @@ These are **89 name records**, not 89 independent, active or ECSPR operators. Th
 Regime labels are for triage. Where scope could not be confirmed on an own-site page, the comparison site's classification was retained, explicitly pending verification. Regulatory registers were not audited for every entity. "Relevante" means useful for studying criteria in an ECSPR context, not that every group service fits that licence.
 
 **ECSPR scope:**
+
 - **Direct, subject to validation:** European crowdfunding described as ECSPR/ECSP; separate products of other entities/regimes.
 - **Generic:** interface, information or operations may inspire criteria; do not import products or regulatory frameworks.
 - **Historical:** study continuity and disclosure, not a new active offer.
@@ -297,109 +317,112 @@ Regime labels are for triage. Where scope could not be confirmed on an own-site 
 
 ### Europe and United Kingdom (66 records)
 
-| Name | Regime / caveat | ECSPR relevance | Status and coverage | Own-site source consulted |
-| --- | --- | --- | --- | --- |
-| Afranga | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://help.afranga.com/hc/en-us/articles/33199675372817-What-is-Afranga |
-| Angel Investment Network | UK/international network / connecting investors and companies; scope pending confirmation | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.angelinvestmentnetwork.co.uk/investors-home |
-| AngelsDen | UK/Europe / angel network; regulatory scope pending confirmation | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.angelsden.com/ |
-| BienPreter | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.bienpreter.com/ |
-| Bondora | Go & Grow: assignment of receivables; site says it is not a regulated investment service | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://goandgrow.eu/en/ |
-| Brickstarter | Own real estate model; ECSPR licence not confirmed | Generic; do not copy custody/intermediation | Public page consulted; functions and availability not tested | https://brickstarter.com/en |
-| Capital Cell | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://capitalcell.com/en/ |
-| Capitalia | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.capitalia.com/en |
-| Civislend | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.civislend.com/ |
-| ClubFunding | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.clubfunding.eu/ |
-| Companisto | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.companisto.com/en/crowdinvesting |
-| CONDA | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://support.conda-capital.com/portal/en/kb/articles/what-is-conda-capital-market-and-how-does-the-platform-differ-from-a-bank |
-| Crowdberry | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.crowdberry.eu/en |
-| Crowdcube | UK/EU: FCA and ECSPR indicated; distinguish entity and offer | Direct only for the applicable EU operation; otherwise generic | Public page consulted; functions and availability not tested | https://www.crowdcube.com/ |
-| Crowdestate | No own marketplace; infrastructure and payment institution status stated | Historical/infrastructure; not a new ECSPR offer | Marketplace closure confirmed; earlier liquidation announcement and current new focus both retained | https://www.crowdestate.eu/en/ |
-| CrowdFundMe | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.crowdfundme.it/ |
-| Crowdpear | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://crowdpear.com/ |
-| Debitum | MiFID II / investment firm, do not equate with ECSPR | Excluded as a source of MiFID/Notes/ABS/Flow products; corroborated generic criteria only | Public page consulted; functions and availability not tested | https://debitum.investments/ |
-| Dozen | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://dozeninvestments.com/ |
-| Emiteo | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://emiteo.pl/ |
-| Ener2Crowd | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.ener2crowd.com/en/home |
-| Esketit | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://esketit.com/ |
-| EstateGuru | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://estateguru.co/ |
-| EvenFi | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://evenfi.com/ |
-| Exporo | Group with ECSPR and other services/instruments; distinguish offers | Direct only in the ECSPR segment; otherwise generic | Public page consulted; functions and availability not tested | https://exporo.de/investieren |
-| FunderNation | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.fundernation.eu/ |
-| Funding Circle | UK / SME financing and institutional market; do not equate with ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.fundingcircle.com/global/capitalmarkets/ |
-| GoParity | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://goparity.com/ |
-| Hive5 | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://hive5.com/ |
-| Homunity | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.homunity.com/ |
-| Housers | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.crowpire.com/ |
-| Income Marketplace | Own FAQ states no financial supervision | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://getincome.com/invest |
-| Indemo | MiFID II / investment firm, do not equate with ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.indemo.eu/ |
-| InRento | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://inrento.com/ |
-| InSoil | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://finance.insoil.com/ |
-| Invesdor | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.invesdor.com/ |
-| Iuvo | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://iuvo-group.com/en/invest-with-iuvo-p2p/ |
-| La Premiere Brique | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.lapremierebrique.fr/ |
-| Lande | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://lande.finance/ |
-| Lendermarket | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://lendermarket.com/ |
-| Loanch | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://loanch.com/ |
-| Maclear | Switzerland / SRO-AML according to comparison site; not equivalent to ECSPR licence | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.maclear.ch/ |
-| Mamacrowd | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://mamacrowd.com/ |
-| Mintos | MiFID II / investment firm, do not equate with ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.mintos.com/en/ |
-| Nectaro | MiFID II / investment firm, do not equate with ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://nectaro.eu/ |
-| October | Financial scope not confirmed in this reading; do not presume ECSPR | Historical; not an active independent operator for new offers in this inventory | No new loans since 2024; migration to EvenFi confirmed in own FAQ | https://october.eu/boost-your-savings-with-october/ |
-| Opstart | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.opstart.it/it/home |
-| PeerBerry | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://peerberry.com/ |
-| Profitus | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.profitus.com/ |
-| Raize | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.raize.pt/ |
-| Re-Lender | Financial scope not confirmed in this reading; do not presume ECSPR | Historical; not an active independent operator for new offers in this inventory | Voluntary liquidation/run-off and end of new campaigns confirmed on own-site page | https://www.relender.eu/ |
-| Recrowd | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Conflict: comparison site says suspended; own site presents authorisation. Current status unresolved | https://www.recrowd.com/ |
-| Reinvest24 | Financial scope not confirmed in this reading; do not presume ECSPR | Historical; not an active independent operator for new offers in this inventory | No new offers/investments, confirmed in own FAQ | https://www.reinvest24.com/en |
-| Republic Europe | UK/EU: FCA and ECSPR indicated; distinguish entity and offer | Direct only for the applicable EU operation; otherwise generic | Public page consulted; functions and availability not tested | https://europe.republic.com/investors-site/ |
-| Robocash | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://robo.cash/ |
-| Scramble | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://scrambleup.com/ |
-| SeedBlink | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://seedblink.com/ |
-| Spreds | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.spreds.com/en |
-| Swaper | Financial scope not confirmed in this reading; do not presume ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://swaper.com/en/about |
-| SyndicateRoom | UK / EIS-SEIS funds; specific authorisation not audited | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.syndicateroom.com/ |
-| Trusters | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.trusters.it/ |
-| Twino | MiFID II / investment firm, do not equate with ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.twino.eu/en/ |
-| Urbanitae | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://urbanitae.com/es/ |
-| VIAINVEST | MiFID II / investment firm, do not equate with ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://viainvest.com/en |
-| Walliance | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Public page consulted; functions and availability not tested | https://www.walliance.eu/ |
-| WiSEED | ECSPR/ECSP, stated by operator or comparison site; official register not audited | Direct, subject to product and entity validation | Comparison site flags difficulties/restructuring; not confirmed here in a regulatory source | https://www.wiseed.com/ |
+| Name                     | Regime / caveat                                                                           | ECSPR relevance                                                                           | Status and coverage                                                                                  | Own-site source consulted                                                                                                         |
+| ------------------------ | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Afranga                  | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://help.afranga.com/hc/en-us/articles/33199675372817-What-is-Afranga                                                         |
+| Angel Investment Network | UK/international network / connecting investors and companies; scope pending confirmation | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.angelinvestmentnetwork.co.uk/investors-home                                                                           |
+| AngelsDen                | UK/Europe / angel network; regulatory scope pending confirmation                          | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.angelsden.com/                                                                                                        |
+| BienPreter               | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.bienpreter.com/                                                                                                       |
+| Bondora                  | Go & Grow: assignment of receivables; site says it is not a regulated investment service  | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://goandgrow.eu/en/                                                                                                          |
+| Brickstarter             | Own real estate model; ECSPR licence not confirmed                                        | Generic; do not copy custody/intermediation                                               | Public page consulted; functions and availability not tested                                         | https://brickstarter.com/en                                                                                                       |
+| Capital Cell             | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://capitalcell.com/en/                                                                                                       |
+| Capitalia                | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.capitalia.com/en                                                                                                      |
+| Civislend                | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.civislend.com/                                                                                                        |
+| ClubFunding              | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.clubfunding.eu/                                                                                                       |
+| Companisto               | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.companisto.com/en/crowdinvesting                                                                                      |
+| CONDA                    | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://support.conda-capital.com/portal/en/kb/articles/what-is-conda-capital-market-and-how-does-the-platform-differ-from-a-bank |
+| Crowdberry               | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.crowdberry.eu/en                                                                                                      |
+| Crowdcube                | UK/EU: FCA and ECSPR indicated; distinguish entity and offer                              | Direct only for the applicable EU operation; otherwise generic                            | Public page consulted; functions and availability not tested                                         | https://www.crowdcube.com/                                                                                                        |
+| Crowdestate              | No own marketplace; infrastructure and payment institution status stated                  | Historical/infrastructure; not a new ECSPR offer                                          | Marketplace closure confirmed; earlier liquidation announcement and current new focus both retained  | https://www.crowdestate.eu/en/                                                                                                    |
+| CrowdFundMe              | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.crowdfundme.it/                                                                                                       |
+| Crowdpear                | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://crowdpear.com/                                                                                                            |
+| Debitum                  | MiFID II / investment firm, do not equate with ECSPR                                      | Excluded as a source of MiFID/Notes/ABS/Flow products; corroborated generic criteria only | Public page consulted; functions and availability not tested                                         | https://debitum.investments/                                                                                                      |
+| Dozen                    | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://dozeninvestments.com/                                                                                                     |
+| Emiteo                   | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://emiteo.pl/                                                                                                                |
+| Ener2Crowd               | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.ener2crowd.com/en/home                                                                                                |
+| Esketit                  | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://esketit.com/                                                                                                              |
+| EstateGuru               | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://estateguru.co/                                                                                                            |
+| EvenFi                   | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://evenfi.com/                                                                                                               |
+| Exporo                   | Group with ECSPR and other services/instruments; distinguish offers                       | Direct only in the ECSPR segment; otherwise generic                                       | Public page consulted; functions and availability not tested                                         | https://exporo.de/investieren                                                                                                     |
+| FunderNation             | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.fundernation.eu/                                                                                                      |
+| Funding Circle           | UK / SME financing and institutional market; do not equate with ECSPR                     | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.fundingcircle.com/global/capitalmarkets/                                                                              |
+| GoParity                 | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://goparity.com/                                                                                                             |
+| Hive5                    | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://hive5.com/                                                                                                                |
+| Homunity                 | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.homunity.com/                                                                                                         |
+| Housers                  | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.crowpire.com/                                                                                                         |
+| Income Marketplace       | Own FAQ states no financial supervision                                                   | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://getincome.com/invest                                                                                                      |
+| Indemo                   | MiFID II / investment firm, do not equate with ECSPR                                      | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.indemo.eu/                                                                                                            |
+| InRento                  | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://inrento.com/                                                                                                              |
+| InSoil                   | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://finance.insoil.com/                                                                                                       |
+| Invesdor                 | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.invesdor.com/                                                                                                         |
+| Iuvo                     | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://iuvo-group.com/en/invest-with-iuvo-p2p/                                                                                   |
+| La Premiere Brique       | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.lapremierebrique.fr/                                                                                                  |
+| Lande                    | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://lande.finance/                                                                                                            |
+| Lendermarket             | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://lendermarket.com/                                                                                                         |
+| Loanch                   | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://loanch.com/                                                                                                               |
+| Maclear                  | Switzerland / SRO-AML according to comparison site; not equivalent to ECSPR licence       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.maclear.ch/                                                                                                           |
+| Mamacrowd                | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://mamacrowd.com/                                                                                                            |
+| Mintos                   | MiFID II / investment firm, do not equate with ECSPR                                      | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.mintos.com/en/                                                                                                        |
+| Nectaro                  | MiFID II / investment firm, do not equate with ECSPR                                      | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://nectaro.eu/                                                                                                               |
+| October                  | Financial scope not confirmed in this reading; do not presume ECSPR                       | Historical; not an active independent operator for new offers in this inventory           | No new loans since 2024; migration to EvenFi confirmed in own FAQ                                    | https://october.eu/boost-your-savings-with-october/                                                                               |
+| Opstart                  | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.opstart.it/it/home                                                                                                    |
+| PeerBerry                | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://peerberry.com/                                                                                                            |
+| Profitus                 | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.profitus.com/                                                                                                         |
+| Raize                    | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.raize.pt/                                                                                                             |
+| Re-Lender                | Financial scope not confirmed in this reading; do not presume ECSPR                       | Historical; not an active independent operator for new offers in this inventory           | Voluntary liquidation/run-off and end of new campaigns confirmed on own-site page                    | https://www.relender.eu/                                                                                                          |
+| Recrowd                  | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Conflict: comparison site says suspended; own site presents authorisation. Current status unresolved | https://www.recrowd.com/                                                                                                          |
+| Reinvest24               | Financial scope not confirmed in this reading; do not presume ECSPR                       | Historical; not an active independent operator for new offers in this inventory           | No new offers/investments, confirmed in own FAQ                                                      | https://www.reinvest24.com/en                                                                                                     |
+| Republic Europe          | UK/EU: FCA and ECSPR indicated; distinguish entity and offer                              | Direct only for the applicable EU operation; otherwise generic                            | Public page consulted; functions and availability not tested                                         | https://europe.republic.com/investors-site/                                                                                       |
+| Robocash                 | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://robo.cash/                                                                                                                |
+| Scramble                 | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://scrambleup.com/                                                                                                           |
+| SeedBlink                | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://seedblink.com/                                                                                                            |
+| Spreds                   | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.spreds.com/en                                                                                                         |
+| Swaper                   | Financial scope not confirmed in this reading; do not presume ECSPR                       | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://swaper.com/en/about                                                                                                       |
+| SyndicateRoom            | UK / EIS-SEIS funds; specific authorisation not audited                                   | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.syndicateroom.com/                                                                                                    |
+| Trusters                 | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.trusters.it/                                                                                                          |
+| Twino                    | MiFID II / investment firm, do not equate with ECSPR                                      | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://www.twino.eu/en/                                                                                                          |
+| Urbanitae                | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://urbanitae.com/es/                                                                                                         |
+| VIAINVEST                | MiFID II / investment firm, do not equate with ECSPR                                      | Generic; products outside the ECSPR scope of this research                                | Public page consulted; functions and availability not tested                                         | https://viainvest.com/en                                                                                                          |
+| Walliance                | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Public page consulted; functions and availability not tested                                         | https://www.walliance.eu/                                                                                                         |
+| WiSEED                   | ECSPR/ECSP, stated by operator or comparison site; official register not audited          | Direct, subject to product and entity validation                                          | Comparison site flags difficulties/restructuring; not confirmed here in a regulatory source          | https://www.wiseed.com/                                                                                                           |
+
 ### United States (14 records)
 
-| Name | Regime / caveat | ECSPR relevance | Status and coverage | Own-site source consulted |
-| --- | --- | --- | --- | --- |
-| CircleUp | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Contact page only; current activity and offer pending confirmation | https://www.circleup.com/ |
-| DealMaker | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.dealmaker.tech/ |
-| EquiFund | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://equifund.com/ |
-| GigaStar Market | US / stated Reg CF offers and/or other SEC regimes; not ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://gigastarmarket.io/ |
-| Highlander | US / stated Reg CF offers and/or other SEC regimes; not ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.highlander.ai/ |
-| MicroVentures | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://microventures.com/ |
-| Netcapital | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://netcapital.com/ |
-| NextSeed | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Readable business page; current catalogue not confirmed | https://www.nextseed.com/offerings |
-| Republic | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://republic.com/ |
-| SeedInvest | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Historical; not an active independent operator for new offers in this inventory | Assets acquired by StartEngine; historical entry, not an independent operator | https://www.startengine.com/seedinvest |
-| Silicon Prairie | US / stated Reg CF offers and/or other SEC regimes; not ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://sphi.io/ |
-| StartEngine | US / stated Reg CF offers and/or other SEC regimes; not ECSPR | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.startengine.com/ |
-| Vicinity Ventures | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://vicinityventures.co/ |
-| Wefunder | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://wefunder.com/ |
+| Name              | Regime / caveat                                                                     | ECSPR relevance                                                                 | Status and coverage                                                           | Own-site source consulted              |
+| ----------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------- |
+| CircleUp          | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Contact page only; current activity and offer pending confirmation            | https://www.circleup.com/              |
+| DealMaker         | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://www.dealmaker.tech/            |
+| EquiFund          | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://equifund.com/                  |
+| GigaStar Market   | US / stated Reg CF offers and/or other SEC regimes; not ECSPR                       | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://gigastarmarket.io/             |
+| Highlander        | US / stated Reg CF offers and/or other SEC regimes; not ECSPR                       | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://www.highlander.ai/             |
+| MicroVentures     | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://microventures.com/             |
+| Netcapital        | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://netcapital.com/                |
+| NextSeed          | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Readable business page; current catalogue not confirmed                       | https://www.nextseed.com/offerings     |
+| Republic          | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://republic.com/                  |
+| SeedInvest        | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Historical; not an active independent operator for new offers in this inventory | Assets acquired by StartEngine; historical entry, not an independent operator | https://www.startengine.com/seedinvest |
+| Silicon Prairie   | US / stated Reg CF offers and/or other SEC regimes; not ECSPR                       | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://sphi.io/                       |
+| StartEngine       | US / stated Reg CF offers and/or other SEC regimes; not ECSPR                       | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://www.startengine.com/           |
+| Vicinity Ventures | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://vicinityventures.co/           |
+| Wefunder          | US / Reg CF, Reg A+ or other services depending on the offer; not audited by entity | Generic; products outside the ECSPR scope of this research                      | Public page consulted; functions and availability not tested                  | https://wefunder.com/                  |
+
 ### Rest of the world, outside Europe and the US (8 records)
 
-| Name | Regime / caveat | ECSPR relevance | Status and coverage | Own-site source consulted |
-| --- | --- | --- | --- | --- |
-| Birchal | Australia / CSF (comparison site) | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.birchal.com/ |
-| CapTable | Brazil / CVM, different products and regimes | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://captable.com.br/entenda-mais |
-| Equivesto | Canada / placement exemptions, exact scope pending confirmation | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://equivesto.com/ |
-| FrontFundr | Canada / NI 45-110 (comparison site; insufficient own-site content) | Generic; products outside the ECSPR scope of this research | Extraction and browser without substantive content; not audited | https://www.frontfundr.com/ |
-| Kria | Brazil / stated CVM regulation | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.kria.vc/ |
-| OnMarket | Australia / CSF (comparison site) | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.onmarket.com.au/ |
-| pitchIN | Malaysia / ECF and local digital products, scope pending confirmation | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://www.pitchin.my/ |
-| PledgeMe | New Zealand / FMC Act (comparison site) | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested | https://pledgeme.co.nz/ |
+| Name       | Regime / caveat                                                       | ECSPR relevance                                            | Status and coverage                                             | Own-site source consulted            |
+| ---------- | --------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------ |
+| Birchal    | Australia / CSF (comparison site)                                     | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested    | https://www.birchal.com/             |
+| CapTable   | Brazil / CVM, different products and regimes                          | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested    | https://captable.com.br/entenda-mais |
+| Equivesto  | Canada / placement exemptions, exact scope pending confirmation       | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested    | https://equivesto.com/               |
+| FrontFundr | Canada / NI 45-110 (comparison site; insufficient own-site content)   | Generic; products outside the ECSPR scope of this research | Extraction and browser without substantive content; not audited | https://www.frontfundr.com/          |
+| Kria       | Brazil / stated CVM regulation                                        | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested    | https://www.kria.vc/                 |
+| OnMarket   | Australia / CSF (comparison site)                                     | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested    | https://www.onmarket.com.au/         |
+| pitchIN    | Malaysia / ECF and local digital products, scope pending confirmation | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested    | https://www.pitchin.my/              |
+| PledgeMe   | New Zealand / FMC Act (comparison site)                               | Generic; products outside the ECSPR scope of this research | Public page consulted; functions and availability not tested    | https://pledgeme.co.nz/              |
+
 ### Unconfirmed identity and region (1 record)
 
-| Name | Regime / caveat | ECSPR relevance | Status and coverage | Own-site source consulted |
-| --- | --- | --- | --- | --- |
-| Growfunding | Not confirmed | Excluded because identity is unresolved | Shark Ponds says Japan; Belgian result not bound. Identity unresolved | No own-site URL bound to the comparison-site name |
+| Name        | Regime / caveat | ECSPR relevance                         | Status and coverage                                                   | Own-site source consulted                         |
+| ----------- | --------------- | --------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------- |
+| Growfunding | Not confirmed   | Excluded because identity is unresolved | Shark Ponds says Japan; Belgian result not bound. Identity unresolved | No own-site URL bound to the comparison-site name |
 
 ### New criteria found in the wider reading
 
@@ -424,7 +447,6 @@ The 13 groups remain; these details fit within them:
 - Recrowd: the comparison site flags suspension, but the own-site page presents authorisation. Current status requires an official check and is marked unresolved, not confirmed suspension.
 - There was no login, account creation, paid sourcing or investment testing. Private portfolios, individual contracts, restricted documents and non-public features remain unverified. "Página lida" does not mean a tested product or licence confirmation.
 - This expansion does not cover every link, subpage and internal article on the five comparison sites. The population was closed on the five identified comparison pages, not an unlimited search through all their archives.
-
 
 ### Attempt count for this expansion
 
