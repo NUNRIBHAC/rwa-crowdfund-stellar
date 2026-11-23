@@ -9,6 +9,7 @@ import type { Campaign } from '../types';
 import { formatAmount, shorten } from '../format';
 import { routeHash } from '../router';
 import { useI18n } from '../i18n';
+import { intentStatusLabel } from '../intent-status-label';
 import AccountNewsSection from '../components/AccountNewsSection';
 import DocumentsList from '../components/DocumentsList';
 import AccountPayoutsSection from '../components/AccountPayoutsSection';
@@ -276,7 +277,7 @@ export default function Account({ market }: { market: Market }) {
             {activity.map((a) => (
               <li key={a.hash}>
                 {m.intent.actionLabels[a.action] ?? a.action}
-                {a.amount ? ` ${a.amount} USDC` : ''} - <code>{a.campaign}</code> - <strong>{m.intent.statusLabels[a.status] ?? a.status}</strong>
+                {a.amount ? ` ${a.amount} USDC` : ''} - <code>{a.campaign}</code> - <strong>{intentStatusLabel(a.status, m)}</strong>
                 {a.createdAt ? ` - ${new Date(a.createdAt).toLocaleString(locale)}` : ''} (
                 <a href={`https://stellar.expert/explorer/testnet/tx/${a.hash}`} target="_blank" rel="noreferrer">
                   tx
@@ -288,8 +289,8 @@ export default function Account({ market }: { market: Market }) {
         ) : intent ? (
           <p>
             {m.account.savedTxPre} {m.intent.actionLabels[intent.action ?? ''] ?? intent.action ?? 'action'} {m.account.savedTxOn}{' '}
-            <code>{intent.campaign ?? m.account.savedTxUnknown}</code> - {m.account.savedTxStatus}{' '}
-            <strong>{m.intent.statusLabels[intent.status ?? ''] ?? intent.status ?? m.account.savedTxUnknown}</strong>. {m.account.savedTxPost}
+            <code>{intent.campaign ?? m.account.savedTxUnknown}</code> - {m.account.savedTxStatus} <strong>{intentStatusLabel(intent.status, m)}</strong>.{' '}
+            {m.account.savedTxPost}
           </p>
         ) : (
           <p>{m.account.noActivity}</p>

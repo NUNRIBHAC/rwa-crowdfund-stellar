@@ -2,6 +2,7 @@ import type { Intent } from '../types';
 import { isTerminal } from '../types';
 import { formatAmount, shorten } from '../format';
 import { useI18n } from '../i18n';
+import { intentStatusLabel } from '../intent-status-label';
 
 type Props = {
   intent: Intent;
@@ -28,7 +29,7 @@ function stepClass(intent: Intent, step: number): string {
 export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel, onClear }: Props) {
   const { locale, m } = useI18n();
   const terminal = isTerminal(intent.status);
-  const statusLabel = m.intent.statusLabels[intent.status] ?? intent.status;
+  const statusLabel = intentStatusLabel(intent.status, m);
   const actionLabel = m.intent.actionLabels[intent.action] ?? intent.action;
   return (
     <section className="intent-panel" aria-live="polite">
