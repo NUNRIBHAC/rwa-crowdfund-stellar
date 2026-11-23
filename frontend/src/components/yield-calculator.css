@@ -1,7 +1,9 @@
 .yield-calculator {
   margin-block: 2rem;
   padding: clamp(1rem, 3vw, 2rem);
-  border: 1px solid currentColor;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
   border-radius: 1rem;
   min-width: 0;
   overflow-wrap: anywhere;
@@ -119,4 +121,12 @@
 }
 .yield-results th {
   min-width: 5rem;
+}
+
+.yield-selected-copy {
+  display: block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--ink-soft);
+  font-size: 0.875em;
 }

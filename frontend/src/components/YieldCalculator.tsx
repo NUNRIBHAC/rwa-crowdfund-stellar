@@ -186,8 +186,14 @@ export default function YieldCalculator({ copy: t }: { copy: YieldCalculatorCopy
       <p>{t.sample}</p>
       <div className="yield-controls">
         <label htmlFor="yield-campaign">
-          {t.campaign}
-          <select id="yield-campaign" value={campaignId} onChange={(e) => selectCampaign(e.target.value)}>
+          <span id="yield-campaign-label">{t.campaign}</span>
+          <select
+            id="yield-campaign"
+            aria-labelledby="yield-campaign-label"
+            aria-describedby="yield-campaign-full"
+            value={campaignId}
+            onChange={(e) => selectCampaign(e.target.value)}
+          >
             <option value="manual">{t.manual}</option>
             {SAMPLE_CATALOG.map((c) => (
               <option key={c.id} value={c.id}>
@@ -195,6 +201,11 @@ export default function YieldCalculator({ copy: t }: { copy: YieldCalculatorCopy
               </option>
             ))}
           </select>
+          <span id="yield-campaign-full" className="yield-selected-copy">
+            {campaignId === 'manual'
+              ? t.manual
+              : `${SAMPLE_CATALOG.find((c) => c.id === campaignId)?.name} · ${instrumentLabel(m, SAMPLE_CATALOG.find((c) => c.id === campaignId)!.instrument)}`}
+          </span>
         </label>
         {terms?.couponModel === 'conditional' && <p className="risk-note">{t.conditionalWarning}</p>}
         {unsupported && <p role="status">{t.variableWarning}</p>}
@@ -202,11 +213,20 @@ export default function YieldCalculator({ copy: t }: { copy: YieldCalculatorCopy
         {numberInput('rate', t.rate, rate, setRate, reference ? -99.99 : 0, 100, 0.1)}
         {numberInput('months', t.months, months, setMonths, 1, 1200, 1)}
         <label htmlFor="yield-strategy">
-          {t.strategy}
-          <select id="yield-strategy" value={strategy} onChange={(e) => setStrategy(e.target.value as YieldStrategy)}>
+          <span id="yield-strategy-label">{t.strategy}</span>
+          <select
+            id="yield-strategy"
+            aria-labelledby="yield-strategy-label"
+            aria-describedby="yield-strategy-full"
+            value={strategy}
+            onChange={(e) => setStrategy(e.target.value as YieldStrategy)}
+          >
             <option value="reinvest">{t.reinvest}</option>
             <option value="withdraw">{t.withdraw}</option>
           </select>
+          <span id="yield-strategy-full" className="yield-selected-copy">
+            {strategy === 'reinvest' ? t.reinvest : t.withdraw}
+          </span>
         </label>
         {reference && (
           <label htmlFor="yield-scenario">
