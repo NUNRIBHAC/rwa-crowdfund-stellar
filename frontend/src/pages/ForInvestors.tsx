@@ -1,4 +1,5 @@
 import LossSimulator from '../components/LossSimulator';
+import YieldCalculator from '../components/YieldCalculator';
 import { useI18n } from '../i18n';
 import { routeHash } from '../router';
 
@@ -27,6 +28,7 @@ export default function ForInvestors() {
           </section>
         ))}
       </div>
+      <YieldCalculator copy={m.yieldCalculator} />
       <LossSimulator />
       <nav className="investors-context" aria-label={m.nav.forInvestors}>
         <a className="btn" href={routeHash({ name: 'how-it-works' })}>

@@ -1,0 +1,122 @@
+.yield-calculator {
+  margin-block: 2rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid currentColor;
+  border-radius: 1rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.yield-controls,
+.yield-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  direction: ltr;
+}
+.yield-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.yield-controls input,
+.yield-controls select {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  font: inherit;
+}
+.yield-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 44px;
+  margin-block: 0.65rem;
+  direction: ltr;
+}
+.yield-checkbox input {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+}
+.yield-calculator summary {
+  cursor: pointer;
+  padding-block: 0.75rem;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+.yield-total {
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-block: 0.5rem 1.5rem;
+}
+.yield-summary div {
+  min-width: 0;
+}
+.yield-summary dd {
+  margin-inline: 0;
+  font-weight: 650;
+}
+.yield-results table {
+  width: 100%;
+}
+.yield-results th,
+.yield-results td {
+  padding: 0.65rem;
+}
+.yield-reference {
+  border-block: 1px solid currentColor;
+}
+@media (max-width: 640px) {
+  .yield-controls,
+  .yield-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.yield-calculator .loss-table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.yield-calculator table {
+  border-collapse: collapse;
+}
+.yield-calculator th,
+.yield-calculator td {
+  text-align: start;
+}
+
+.yield-chart {
+  margin: 1.5rem 0;
+}
+.yield-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: inherit;
+}
+.yield-chart text {
+  fill: currentColor;
+  font-size: 15px;
+}
+.yield-chart figcaption {
+  font-size: 0.9em;
+}
+.yield-results table {
+  min-width: 960px;
+  table-layout: auto;
+}
+.yield-results th,
+.yield-results td {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.yield-results td {
+  white-space: nowrap;
+}
+.yield-results th {
+  min-width: 5rem;
+}
