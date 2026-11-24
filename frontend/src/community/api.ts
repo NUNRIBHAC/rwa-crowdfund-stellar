@@ -818,3 +818,10 @@ export const deleteApplicationDocument = (token: string, id: string, documentId:
     method: 'DELETE',
     allowNoContent: true,
   });
+
+export const fetchAccountActivity = (token: string) =>
+  call<{
+    activity: { hash: string; campaign: string; action: string; amount: string | null; status: string; createdAt: string | null; updatedAt?: string | null }[];
+    network: string;
+    productionEligible: boolean;
+  }>('/api/account/activity', { token });
