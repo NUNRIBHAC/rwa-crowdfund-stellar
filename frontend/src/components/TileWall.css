@@ -8,9 +8,9 @@
 .tile-wall-grid {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: clamp(0.35rem, 1.2vw, 0.8rem);
-  padding: 1.25rem;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  gap: clamp(0.1rem, 0.45vw, 0.4rem);
+  padding: clamp(0.3rem, 1vw, 1.25rem);
   margin-block: 1.5rem;
   overflow: hidden;
   direction: ltr;
@@ -40,7 +40,7 @@
 }
 .is-refunding .wall-tile {
   animation: wall-burst 1.2s ease-out both;
-  animation-delay: calc(var(--tile-index) * 15ms);
+  animation-delay: calc(var(--tile-index) * 3ms);
 }
 .tile-wall-controls {
   display: flex;
@@ -107,7 +107,7 @@
   color: #f3f2ff;
   font-weight: 700;
   opacity: 0;
-  animation: wall-complete 1.905s step-end forwards;
+  animation: wall-complete 1.95s step-end forwards;
 }
 @keyframes wall-complete {
   to {

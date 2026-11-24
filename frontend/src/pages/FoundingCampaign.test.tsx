@@ -24,7 +24,7 @@ test.each(LOCALES.map((l) => l.id))('all campaign copy, tile controls and footer
   const { container } = setup(locale);
   expect(container.querySelectorAll('[data-approved-paragraph]')).toHaveLength(11);
   expect(container.querySelectorAll('.founding-campaign>section:not(.tile-wall-demo)')).toHaveLength(8);
-  expect(container.querySelectorAll('.wall-tile')).toHaveLength(48);
+  expect(container.querySelectorAll('.wall-tile')).toHaveLength(240);
   const future = container.querySelectorAll('.founding-future');
   expect(future).toHaveLength(1);
   expect(future[0].previousElementSibling?.hasAttribute('data-approved-paragraph')).toBe(true);
@@ -32,6 +32,11 @@ test.each(LOCALES.map((l) => l.id))('all campaign copy, tile controls and footer
   expect(future[0].parentElement?.tagName).toBe('SECTION');
   expect(container.querySelector('footer a[href="/tile-wall"]')?.textContent?.trim()).toBeTruthy();
   expect(container.textContent).not.toMatch(/undefined|\[object Object\]/);
+  const slider = container.querySelector<HTMLInputElement>('input[type=range]')!;
+  for (const value of ['0', '100', '60']) {
+    fireEvent.change(slider, { target: { value } });
+    expect(container.querySelector('.tile-wall-controls output')?.textContent).toBe(value + '%');
+  }
   const buttons = container.querySelectorAll<HTMLButtonElement>('.tile-wall-controls button');
   fireEvent.click(buttons[0]);
   expect(container.querySelector('.is-refunding')).not.toBeNull();
