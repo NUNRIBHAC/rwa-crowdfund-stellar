@@ -24,9 +24,9 @@ export default function FoundingCampaign() {
               {paragraph}
             </p>
           ))}
+          {section.id === 'azulejo' && <p className="founding-future">{m.tileWall.futureDoor}</p>}
         </section>
       ))}
-      <p className="founding-future">{m.tileWall.futureDoor}</p>
       <aside className="founding-funds" role="note">
         <p>{campaign.fundsDecision}</p>
       </aside>

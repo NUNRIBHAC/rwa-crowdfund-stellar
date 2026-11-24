@@ -25,6 +25,11 @@ test.each(LOCALES.map((l) => l.id))('all campaign copy, tile controls and footer
   expect(container.querySelectorAll('[data-approved-paragraph]')).toHaveLength(11);
   expect(container.querySelectorAll('.founding-campaign>section:not(.tile-wall-demo)')).toHaveLength(8);
   expect(container.querySelectorAll('.wall-tile')).toHaveLength(48);
+  const future = container.querySelectorAll('.founding-future');
+  expect(future).toHaveLength(1);
+  expect(future[0].previousElementSibling?.hasAttribute('data-approved-paragraph')).toBe(true);
+  expect(future[0].parentElement?.getAttribute('aria-labelledby')).toBe('founding-azulejo');
+  expect(future[0].parentElement?.tagName).toBe('SECTION');
   expect(container.querySelector('footer a[href="/tile-wall"]')?.textContent?.trim()).toBeTruthy();
   expect(container.textContent).not.toMatch(/undefined|\[object Object\]/);
   const buttons = container.querySelectorAll<HTMLButtonElement>('.tile-wall-controls button');

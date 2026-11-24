@@ -4242,7 +4242,8 @@ export const en = {
     },
     via: {
       heading: 'Another way',
-      paragraph1: 'Blockallisto was born to open another way: crowdfunding and crowdlending, with technology visible to everyone.',
+      paragraph1:
+        'It is through this crowdfunding campaign that Blockallisto will come to life, opening another way: crowdfunding and crowdlending, with technology visible to everyone.',
       paragraph2:
         'Blockallisto is a business, not an association. We want to build a platform that sustains itself and creates value, and we believe this also helps projects reach capital they cannot find today.',
     },

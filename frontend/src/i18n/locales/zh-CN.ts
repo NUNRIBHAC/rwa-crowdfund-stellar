@@ -4109,7 +4109,7 @@ export const zhCN: Messages = {
     },
     via: {
       heading: '另一条路',
-      paragraph1: 'Blockallisto的诞生是为了开辟另一条路：众筹和众贷，让所有人都能看见其中的技术。',
+      paragraph1: 'Blockallisto将通过这次众筹活动诞生，开辟另一条路：众筹和众贷，让所有人都能看见其中的技术。',
       paragraph2: 'Blockallisto是一项商业事业，不是协会。我们希望建设一个能够自我维持并创造价值的平台，也相信这能帮助项目获得它们如今找不到的资金。',
     },
     construir: {
