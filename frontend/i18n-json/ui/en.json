@@ -3817,5 +3817,15 @@
     "campaignState": "Simulated campaign in progress",
     "futureDoor": "In the future, the company may study other forms of participation with legal advice. None of this is promised or forms part of this support.",
     "refundComplete": "All contributions returned (simulation)"
+  },
+  "automaticRefund": {
+    "title": "Automatic refund",
+    "testnetOnly": "Testnet only. No real money is moved.",
+    "pending": "Refund pending. No payment has been confirmed.",
+    "submitted": "Refund submitted. Confirmation is still pending.",
+    "paid": "Refund confirmed to the original wallet.",
+    "blocked": "The refund needs review. No payment is confirmed here.",
+    "manualFallback": "Open the manual refund option",
+    "unavailable": "Refund status is temporarily unavailable."
   }
 }
