@@ -35,7 +35,7 @@ import {
   readV2SharePositions,
 } from './soroban.js';
 import { journalBackend, readJournalSummary } from './journal.js';
-import { drainPendingContributors, pendContribution, readPending } from './pending-contributors.js';
+import { drainPendingContributors, pendContribution, probePendingQueueWritable, readPending } from './pending-contributors.js';
 import { reconcileCampaigns, RECONCILIATION_SEMANTICS } from './reconciliation.js';
 import { backfillCampaignContributors } from './contributor-backfill.js';
 import { communityServiceFromEnv, createCommunityRouter } from './community-routes.js';
@@ -408,14 +408,34 @@ app.use((req, res, next) => {
     router(req, res, next);
   }, next);
 });
-app.get('/health', (_req, res) => {
+// Liveness: the process answers. No dependency checks - a database or queue
+// outage is a readiness fact, never a reason to restart the process.
+app.get('/livez', (_req, res) => {
+  res.status(200).json({ ok: true });
+});
+
+// The queue probe result is cached per configured path for 30s so /health
+// polls never hammer the filesystem.
+let queueProbeCache: { path: string; at: number; ok: boolean } | null = null;
+async function pendingQueueReadiness(now: number): Promise<{ configured: boolean; ok: boolean | null }> {
+  const configuredPath = process.env.PENDING_CONTRIBUTORS_PATH;
+  if (!configuredPath) return { configured: false, ok: null };
+  if (!queueProbeCache || queueProbeCache.path !== configuredPath || now - queueProbeCache.at > 30_000) {
+    queueProbeCache = { path: configuredPath, at: now, ok: await probePendingQueueWritable() };
+  }
+  return { configured: true, ok: queueProbeCache.ok };
+}
+
+app.get('/health', async (_req, res) => {
   const database = databaseReadiness();
   const communityRequired =
     !!process.env.COMMUNITY_DATABASE_URL || process.env.COMMUNITY_REQUIRE_POSTGRES === '1' || process.env.SOROBAN_JOURNAL_BACKEND === 'postgres';
-  const ready = database.ready && (!communityRequired || communityInitialized);
+  const queue = await pendingQueueReadiness(Date.now());
+  const ready = database.ready && (!communityRequired || communityInitialized) && (!queue.configured || queue.ok === true);
   res.status(ready ? 200 : 503).json({
     ok: ready,
     database,
+    queue,
     mode: 'soroban',
     network: NETWORK,
     productionEligible: false,
