@@ -2,7 +2,7 @@
 
 Factual prototype revision: 20 November 2026. Not legal advice or a regulatory approval.
 
-Testnet prototype privacy notice, updated 20 November 2026. This describes actual account processing; it is not legal advice or evidence of regulatory authorisation. No real-money operations are enabled.
+Testnet prototype privacy notice, updated 24 November 2026. This describes actual account processing; it is not legal advice or evidence of regulatory authorisation. No real-money operations are enabled.
 
 ## 1. Responsible person and contact
 
@@ -28,7 +28,7 @@ Theme and language preferences use browser local storage; the session secret use
 
 ## 4. Security services and recipients
 
-The site and API run on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This shared host is not an availability guarantee. Brevo receives recipient email addresses and verification/reset email content and processes delivery metadata. Cloudflare Turnstile processes browser/device signals and challenge tokens for bot checks; server validation may include the client IP. After a successful bot check, ipapi.is receives the client IP for abuse-reputation assessment. Reputation is initially observation-only; VPN, proxy or Tor status alone is not a blocking reason. Provider errors or lookup-budget exhaustion may reduce this layer; CAPTCHA, rate limits and mail budgets are separate safeguards.
+On 19 November 2026, the site and API were verified on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This dated configuration check does not prove the current hosting state or availability. Brevo receives recipient email addresses and verification/reset email content and processes delivery metadata. Cloudflare Turnstile processes browser/device signals and challenge tokens for bot checks; server validation may include the client IP. After a successful bot check, ipapi.is receives the client IP for abuse-reputation assessment. Reputation is initially observation-only; VPN, proxy or Tor status alone is not a blocking reason. Provider errors or lookup-budget exhaustion may reduce this layer; CAPTCHA, rate limits and mail budgets are separate safeguards.
 
 Where social sign-in is enabled, the chosen identity provider processes that authentication under its own terms. Stellar testnet is public and global. GitHub hosts source code, not the account database. Security and email providers may process data outside the EEA; do not assume every processor is EU-only. Their current policies and applicable safeguards govern their own processing: https://www.brevo.com/legal/privacypolicy/ ; https://www.cloudflare.com/privacypolicy/ ; https://ipapi.is/privacy.html ; https://ipapi.is/terms.html .
 

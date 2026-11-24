@@ -4,15 +4,15 @@ Factual prototype revision: 20 November 2026. Not legal advice or a regulatory a
 
 Demo template: this page is an illustrative document for the Blockallisto prototype, not legal advice. It has not been reviewed by a lawyer and it is not evidence of any company registration or regulatory authorisation. Company particulars marked [DEMO] are fictional demonstration data.
 
-**Last updated:** 2026-11-20
+**Last updated:** 2026-11-24
 
 This page describes what keeps the Blockallisto prototype available and recoverable, and what continuity planning is intended for a future authorised platform. The first section is factual about the running demo; the second is design intent, not current practice.
 
 ## 1. Prototype continuity posture (current)
 
 - **No client assets at risk:** the demo holds no money, no client funds and no custody. Contributions are testnet tokens with no monetary value, settled by a Soroban smart contract on the public Stellar testnet. Contract state lives on the testnet ledger, independent of this website.
-- The site and API run on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This shared host is not an availability guarantee.
-- An encrypted external backup and isolated database restore proof succeeded on 20 November 2026. This dated check is not a recovery-time guarantee, an automatic retention promise or proof that every external service can be restored.
+- On 19 November 2026, the site and API were verified on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This dated configuration check does not prove the current hosting state or availability.
+- An encrypted external backup and isolated restore proof for the demo and staging databases succeeded on 20 November 2026. This dated check is not proof of a later successful backup, a recovery-time guarantee, an automatic retention promise or proof that every external service can be restored.
 - **Staging separation:** user-facing demo, a separate staging environment, and disposable database copies are kept apart so testing cannot corrupt the demo.
 - **If the demo is unavailable:** no user loses anything of value. Campaign state remains readable on public Stellar testnet explorers, and contributions remain governed by the contract, not by this site.
 

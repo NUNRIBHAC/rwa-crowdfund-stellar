@@ -16,7 +16,7 @@ export const blocks: LegalBlock[] = [
       {
         b: ['Last updated:'],
       },
-      ' 2026-11-20',
+      ' 2026-11-24',
     ],
   },
   {
@@ -38,9 +38,11 @@ export const blocks: LegalBlock[] = [
         },
         ' the demo holds no money, no client funds and no custody. Contributions are testnet tokens with no monetary value, settled by a Soroban smart contract on the public Stellar testnet. Contract state lives on the testnet ledger, independent of this website.',
       ],
-      ['The site and API run on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This shared host is not an availability guarantee.'],
       [
-        'An encrypted external backup and isolated database restore proof succeeded on 20 November 2026. This dated check is not a recovery-time guarantee, an automatic retention promise or proof that every external service can be restored.',
+        'On 19 November 2026, the site and API were verified on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This dated configuration check does not prove the current hosting state or availability.',
+      ],
+      [
+        'An encrypted external backup and isolated restore proof for the demo and staging databases succeeded on 20 November 2026. This dated check is not proof of a later successful backup, a recovery-time guarantee, an automatic retention promise or proof that every external service can be restored.',
       ],
       [
         {
