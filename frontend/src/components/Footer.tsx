@@ -98,6 +98,9 @@ export default function Footer() {
             <FooterGroup title={m.footer.platform}>
               <ul>
                 <li>
+                  <a href={routeHash({ name: 'tile-wall' })}>{m.tileWall.footerLabel}</a>
+                </li>
+                <li>
                   <a href={routeHash({ name: 'investments' })}>{m.footer.invest}</a>
                 </li>
                 <li>

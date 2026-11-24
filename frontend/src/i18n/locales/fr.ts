@@ -4324,4 +4324,68 @@ export const fr: Messages = {
       "Exemple d'un format pris en charge : le financement participatif par don, par récompense et par prévente est couvert par le régime juridique national portugais (Lei 102/2015), hors ECSPR. Une offre réelle exige que l'exploitant soit une personne morale ou une EIRL et qu'il en informe préalablement la DGE au moins 30 jours avant le début de l'activité. Cette page présente des données illustratives d'exemple : aucun argent n'est collecté et aucune déduction fiscale n'est promise. Aucun rendement financier n'est offert.",
     ecsprNote: "Les offres réelles de prêts et d'actions de S.A. via le financement participatif exigent une autorisation ECSPR (CMVM au Portugal).",
   },
+  foundingCampaign: {
+    title: 'Aidez à construire Blockallisto',
+    previewNotice: "Aperçu local, uniquement avec de l'argent de test. Il n'accepte aucun soutien financier et n'effectue aucun paiement.",
+    fundsDecision:
+      "Décision de conception : l'argent reste conservé jusqu'à l'obtention d'une licence. La conservation des fonds et les remboursements doivent encore être mis en œuvre et validés sur les plans juridique et opérationnel.",
+    origem: {
+      heading: 'Le premier soutien',
+      paragraph1:
+        "Certains projets prometteurs ne voient jamais le jour. Non par manque d'idée, mais faute d'un premier capital que le financement traditionnel ne fournit pas.",
+      paragraph2:
+        "Une idée ne fait ses preuves que lorsque quelqu'un y croit. Mais celui qui a l'idée n'a pas toujours le capital, et celui qui a le capital ne sait pas toujours si l'idée vaut le risque. Nous ouvrons la voie à de nombreux petits soutiens : chacun est une petite preuve que l'idée compte.",
+    },
+    via: {
+      heading: 'Une autre voie',
+      paragraph1: 'Blockallisto est née pour ouvrir une autre voie : le crowdfunding et le crowdlending, avec une technologie visible de tous.',
+      paragraph2:
+        "Blockallisto est une entreprise, pas une association. Nous voulons construire une plateforme qui assure sa pérennité et crée de la valeur, et nous pensons que cela aide aussi les projets à accéder au capital qu'ils ne trouvent pas aujourd'hui.",
+    },
+    construir: {
+      heading: 'Nous commençons par notre plateforme',
+      paragraph1:
+        "Avant d'inviter d'autres porteurs de projets, nous devons construire la plateforme. Et nous rencontrons le même problème qu'eux : transformer une idée en réalité coûte de l'argent. Nous commençons donc par notre propre campagne. Nous présentons l'idée, montrons le plan et demandons à la foule de l'aider à naître.",
+    },
+    meta: {
+      heading: '25 000 € pour atteindre le lancement',
+      paragraph1:
+        "Nous avons besoin de 25 000 € pour trois choses : construire et protéger la plateforme, traiter les autorisations et la conformité en tant que plateforme de crowdfunding, et fonctionner jusqu'au lancement. Chaque euro a une destination, et nous montrerons comment il est utilisé.",
+    },
+    azulejo: {
+      heading: "Votre place sur le mur d'azulejos",
+      paragraph1:
+        "Chaque soutien trouve sa place sur un mur d'azulejos. Chaque carreau est votre place dans l'histoire. C'est une préréservation et un soutien, pas un investissement, sans promesse d'intérêt ni de rendement. Vous pouvez choisir si votre nom apparaît ; nous conservons le nom hors de la blockchain. Le carreau et les événements associés sont enregistrés de manière vérifiable à l'aide d'un identifiant.",
+    },
+    reembolso: {
+      heading: 'Quand nous remboursons les soutiens',
+      paragraph1:
+        "Nous remboursons tous les soutiens si l'objectif n'est pas atteint ou si Blockallisto n'obtient pas l'autorisation ECSP nécessaire pour exercer comme plateforme de crowdfunding. Les soutiens et les remboursements seront effectués en euros, par l'intermédiaire de prestataires autorisés. Il s'agit de notre intention de conception, soumise à validation juridique et opérationnelle.",
+    },
+    tecnologia: {
+      heading: 'Une technologie transparente',
+      paragraph1:
+        "Nous sommes Web3 et nous le disons sans détour. Nous ne promettons pas que la blockchain élimine le risque. La confiance vient de droits clairs, de règles solides et de la transparence sur l'argent. La blockchain intervient là où elle apporte de la valeur : un seul contrat conserve le mur et les événements importants sont enregistrés de manière vérifiable.",
+    },
+    futuro: {
+      heading: 'Le premier pas',
+      paragraph1:
+        "Cette campagne est le premier pas vers un objectif plus vaste : construire une plateforme où des actifs réels peuvent être financés par de nombreuses personnes. Ce que vous soutenez aujourd'hui, c'est la construction de cette plateforme, et votre carreau en est la reconnaissance.",
+      paragraph2:
+        'Si nous croyons que la foule peut financer de bons projets, nous devons commencer par le nôtre. Aidez-nous à ouvrir cette voie. Parce que cela peut aussi être votre voie.',
+    },
+  },
+  tileWall: {
+    futureDoor:
+      "À l'avenir, l'entreprise pourra étudier d'autres formes de participation avec un conseil juridique. Rien de cela n'est promis ni ne fait partie de ce soutien.",
+    footerLabel: "Mur d'azulejos",
+    wallTitle: 'Un carreau pour chaque soutien',
+    wallNote: 'Chaque carreau représente un soutien déjà apporté. Il ne promet aucun paiement supplémentaire.',
+    demoNote: "Simulation visuelle : elle n'enregistre aucun soutien, ne déplace pas d'argent et ne déclenche aucun remboursement.",
+    progressLabel: 'Progression de la campagne (simulation)',
+    refundButton: 'Simuler la phase de remboursement',
+    resetButton: 'Réinitialiser la simulation',
+    refundState: 'Phase de remboursement simulée',
+    campaignState: 'Campagne simulée en cours',
+  },
 };

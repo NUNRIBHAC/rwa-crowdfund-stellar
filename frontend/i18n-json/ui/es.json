@@ -3812,5 +3812,57 @@
     "caveat": "Las campañas reales podrían ser posibles bajo el régimen nacional portugués de financiación colaborativa por donación/recompensa, fuera de ECSPR. El operador debe ser persona jurídica o EIRL y comunicar el inicio a la DGE con al menos 30 días de antelación. Aquí es un ejemplo educativo: no se recauda dinero ni se promete deducción fiscal. Entrega, cancelación y derechos del consumidor requieren definición propia.",
     "sampleNote": "Muestra de un formato admitido: el crowdfunding de donación, recompensa y preventa está cubierto por el régimen nacional portugués de financiación colectiva (Lei 102/2015), fuera del ECSPR. Una oferta real exige que el operador sea una persona jurídica o EIRL y lo comunique previamente a la DGE al menos 30 días antes de iniciar la actividad. Esta página muestra datos ilustrativos de ejemplo: no se recauda dinero ni se promete deducción fiscal. No se ofrece ningún rendimiento financiero.",
     "ecsprNote": "Las ofertas reales de préstamos y acciones de S.A. mediante financiación colaborativa requieren autorización ECSPR (CMVM en Portugal)."
+  },
+  "foundingCampaign": {
+    "title": "Ayuda a construir Blockallisto",
+    "previewNotice": "Vista previa local, solo con dinero de prueba. No acepta aportaciones ni realiza pagos.",
+    "fundsDecision": "Decisión de diseño: el dinero permanece guardado hasta obtener la licencia. La custodia y los reembolsos aún requieren implementación y validación jurídica y operativa.",
+    "origem": {
+      "heading": "El primer apoyo",
+      "paragraph1": "Hay proyectos con potencial que nunca llegan a existir. No por falta de una idea, sino por falta del primer capital que la financiación tradicional no proporciona.",
+      "paragraph2": "Una idea solo se demuestra cuando alguien cree en ella. Pero quien tiene la idea no siempre tiene el capital, y quien tiene el capital no siempre sabe si la idea merece el riesgo. Abrimos el camino a muchas pequeñas aportaciones: cada una es una pequeña prueba de que la idea importa."
+    },
+    "via": {
+      "heading": "Otra vía",
+      "paragraph1": "Blockallisto nació para abrir otra vía: crowdfunding y crowdlending, con la tecnología a la vista de todos.",
+      "paragraph2": "Blockallisto es un negocio, no una asociación. Queremos construir una plataforma que se sostenga y genere valor, y creemos que eso también ayuda a los proyectos a acceder al capital que hoy no encuentran."
+    },
+    "construir": {
+      "heading": "Empezamos por nuestra plataforma",
+      "paragraph1": "Antes de invitar a otros promotores, tenemos que construir la plataforma. Y nos enfrentamos al mismo problema que ellos: convertir una idea en algo real cuesta dinero. Por eso empezamos por nuestra propia campaña. Presentamos la idea, mostramos el plan y pedimos a la multitud que la ayude a nacer."
+    },
+    "meta": {
+      "heading": "25.000 € para llegar al lanzamiento",
+      "paragraph1": "Necesitamos 25.000 € para tres cosas: construir y proteger la plataforma, tramitar las licencias y el cumplimiento como plataforma de crowdfunding, y operar hasta el lanzamiento. Cada euro tiene un destino, y mostraremos cómo se utiliza."
+    },
+    "azulejo": {
+      "heading": "Tu lugar en el muro de azulejos",
+      "paragraph1": "Cada aportación tiene su lugar en un muro de azulejos. Cada azulejo es tu lugar en la historia. Es una prerreserva y un apoyo, no una inversión, y no promete intereses ni rentabilidad. Puedes elegir si quieres que aparezca tu nombre; lo guardamos fuera de la blockchain. El azulejo y los eventos asociados quedan registrados de forma verificable mediante un identificador."
+    },
+    "reembolso": {
+      "heading": "Cuándo devolvemos las aportaciones",
+      "paragraph1": "Devolvemos todas las aportaciones si no se alcanza el objetivo o si Blockallisto no obtiene la autorización ECSP necesaria para operar como plataforma de crowdfunding. Las aportaciones y los reembolsos se realizarán en euros, a través de proveedores autorizados. Esta es nuestra intención de diseño, sujeta a validación jurídica y operativa."
+    },
+    "tecnologia": {
+      "heading": "Tecnología con transparencia",
+      "paragraph1": "Somos Web3 y lo decimos sin rodeos. No prometemos que la blockchain elimine el riesgo. La confianza viene de derechos claros, reglas sólidas y transparencia sobre el dinero. La blockchain se utiliza donde aporta valor: un solo contrato guarda el muro y los eventos importantes quedan registrados de forma verificable."
+    },
+    "futuro": {
+      "heading": "El primer paso",
+      "paragraph1": "Esta campaña es el primer paso de un objetivo mayor: construir una plataforma donde los bienes reales puedan ser financiados por muchas personas. Lo que apoyas hoy es la construcción de esta plataforma, y tu azulejo es el reconocimiento de ello.",
+      "paragraph2": "Si creemos que la multitud puede financiar buenos proyectos, tenemos que empezar por el nuestro. Ayúdanos a abrir esta vía. Porque también puede ser tu vía."
+    }
+  },
+  "tileWall": {
+    "futureDoor": "En el futuro, la empresa podrá estudiar otras formas de participación con asesoramiento jurídico. Nada de esto se promete ni forma parte de este apoyo.",
+    "footerLabel": "Muro de azulejos",
+    "wallTitle": "Un azulejo por cada apoyo",
+    "wallNote": "Cada azulejo representa un apoyo ya dado. No promete ningún pago adicional.",
+    "demoNote": "Simulación visual: no registra aportaciones, no mueve dinero ni inicia reembolsos.",
+    "progressLabel": "Progreso de la campaña (simulación)",
+    "refundButton": "Simular fase de reembolso",
+    "resetButton": "Reiniciar simulación",
+    "refundState": "Fase de reembolso simulada",
+    "campaignState": "Campaña simulada en curso"
   }
 }

@@ -13,6 +13,7 @@ import Header from './components/Header';
 import IntentPanel from './components/IntentPanel';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import FoundingCampaign from './pages/FoundingCampaign';
 import Investments from './pages/Investments';
 import CampaignDetail from './pages/CampaignDetail';
 import HowItWorks from './pages/HowItWorks';
@@ -352,6 +353,7 @@ export default function App() {
         )}
 
         {route.name === 'home' && <Home market={market} loadStatus={campaignLoadStatus} />}
+        {route.name === 'tile-wall' && <FoundingCampaign />}
         {route.name === 'investments' && <Investments market={market} loadStatus={campaignLoadStatus} />}
         {route.name === 'campaign' && <CampaignDetail market={market} campaignId={route.campaignId ?? ''} />}
         {route.name === 'how-it-works' && <HowItWorks />}
