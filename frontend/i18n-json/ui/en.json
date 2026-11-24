@@ -3804,5 +3804,17 @@
       "paragraph1": "This campaign is the first step towards a larger goal: building a platform where real assets can be financed by many people. What you support today is the construction of this platform, and your tile recognises that.",
       "paragraph2": "If we believe the crowd can finance good projects, we have to start with our own. Help us open this way."
     }
+  },
+  "tileWall": {
+    "footerLabel": "Tile wall",
+    "wallTitle": "One tile for each contribution",
+    "wallNote": "Each tile represents support already given. It does not promise any additional payment.",
+    "demoNote": "Visual simulation: it does not record contributions, move money or start refunds.",
+    "progressLabel": "Campaign progress (simulation)",
+    "refundButton": "Simulate refund phase",
+    "resetButton": "Reset simulation",
+    "refundState": "Simulated refund phase",
+    "campaignState": "Simulated campaign in progress",
+    "futureDoor": "In the future, the company may study other forms of participation with legal advice. None of this is promised or forms part of this support."
   }
 }
