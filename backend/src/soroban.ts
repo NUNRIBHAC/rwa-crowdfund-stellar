@@ -1273,9 +1273,10 @@ function v2NextStep(
 function deploymentRows(store: Awaited<ReturnType<typeof readStore>>, campaign: string, actor: string) {
   return store.intents.filter((i) => i.campaign === campaign && i.actor === actor && i.action.startsWith('deploy-v2-'));
 }
-function assertNoOpenDeployment(rows: ReturnType<typeof deploymentRows>) {
+function assertNoOpenDeployment(rows: ReturnType<typeof deploymentRows>, reusableHash?: string) {
   for (const row of rows) {
     if (TERMINAL.includes(row.status)) continue;
+    if (row.hash === reusableHash && row.status === 'BUILT' && !row.signedXdr) continue;
     if (row.signedXdr || row.status !== 'BUILT') throw new Error('prior deployment intent unresolved; reconcile exact hash');
     let tx: Transaction;
     try {
@@ -1321,8 +1322,36 @@ export async function buildCampaignDeployV2(input: {
     const store = await readStore();
     quarantineHold(store);
     const rows = deploymentRows(store, input.id, input.actor);
-    assertNoOpenDeployment(rows);
-    return { rows, pins: v2DeploymentPins(rows), fingerprint: JSON.stringify(rows) };
+    const pins = v2DeploymentPins(rows);
+    const context = JSON.stringify([
+      input.actor,
+      input.id,
+      input.name,
+      input.goal,
+      deadline,
+      input.v2.symbol,
+      input.v2.decimals,
+      input.v2.minPerInvestor,
+      input.v2.maxPerInvestor,
+      pins,
+    ]);
+    const live = rows.filter((i) => !TERMINAL.includes(i.status));
+    const candidate = live.find((i) => i.status === 'BUILT' && !i.signedXdr && i.deploymentContext === context);
+    let reuse: Transaction | undefined;
+    if (candidate) {
+      const parsed = TransactionBuilder.fromXDR(candidate.xdr, passphrase);
+      if (
+        parsed instanceof Transaction &&
+        Number(parsed.timeBounds?.maxTime) > Math.floor(Date.now() / 1000) + 120 &&
+        parsed.source === input.actor &&
+        Buffer.from(parsed.hash()).toString('hex') === candidate.hash
+      )
+        reuse = parsed;
+    }
+    assertNoOpenDeployment(rows, reuse ? candidate?.hash : undefined);
+    const globalUnresolved = store.intents.find((i) => i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
+    if (globalUnresolved) throw new Error('prior signed intent unresolved');
+    return { reuse, candidate, context, rows, pins: v2DeploymentPins(rows), fingerprint: JSON.stringify(rows) };
   });
   const mine = snapshot.rows;
   const pins = snapshot.pins;
@@ -1338,6 +1367,36 @@ export async function buildCampaignDeployV2(input: {
       offeringContractId: next.offeringContractId,
       testOnly: true,
     };
+  if (snapshot.reuse && snapshot.candidate) {
+    if (snapshot.candidate.action !== next.action) throw new Error('deployment step changed; reconcile exact history');
+    const original = snapshot.reuse;
+    if (next.action !== 'deploy-v2-set-minter') {
+      const family = next.action.endsWith('token') ? 'token' : 'offering';
+      if (journaledDeploymentHash(original, next.action, family) !== pins[family]) throw new Error('reusable envelope generation mismatch');
+    }
+
+    await guarded(async () => {
+      const store = await readStore();
+      quarantineHold(store);
+      const rows = deploymentRows(store, input.id, input.actor);
+      if (Number(original.timeBounds?.maxTime) <= Math.floor(Date.now() / 1000) + 120) throw new Error('reusable envelope too near expiry');
+      assertNoOpenDeployment(rows, snapshot.candidate!.hash);
+      if (JSON.stringify(rows) !== snapshot.fingerprint || store.intents.some((i) => i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status)))
+        throw new Error('deployment state changed during reuse');
+    });
+    return {
+      hash: snapshot.candidate.hash,
+      xdr: original.toXDR(),
+      networkPassphrase: passphrase,
+      action: 'deploy',
+      contractSet: 'v2',
+      step: next.action.replace(/^deploy-v2-/, ''),
+      id: input.id,
+      name: input.name,
+      feeStroops: original.fee,
+      testOnly: true,
+    };
+  }
   const account = await client.getAccount(input.actor).catch((e: unknown) => {
     if (/account not found/i.test(e instanceof Error ? e.message : String(e))) {
       const err = new Error('Transaction preparation failed: wallet account does not exist on testnet.');
@@ -1423,7 +1482,16 @@ export async function buildCampaignDeployV2(input: {
     const currentPins = v2DeploymentPins(current);
     if (JSON.stringify(current) !== snapshot.fingerprint || currentPins.token !== pins.token || currentPins.offering !== pins.offering)
       throw new Error('deployment state changed during preparation; reread exact state');
-    store.intents.push({ hash, campaign: input.id, actor: input.actor, action: next.action, xdr: prepared.toXDR(), status: 'BUILT' });
+    if (store.intents.some((i) => i.hash === hash)) throw new Error('transaction hash already belongs to another build');
+    store.intents.push({
+      hash,
+      campaign: input.id,
+      actor: input.actor,
+      action: next.action,
+      xdr: prepared.toXDR(),
+      status: 'BUILT',
+      deploymentContext: snapshot.context,
+    });
     await save(store);
   });
   return {

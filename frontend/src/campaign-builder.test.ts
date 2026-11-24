@@ -359,3 +359,36 @@ describe('deployment signing runtime boundary', () => {
     expect(submits).toBe(1);
   });
 });
+
+describe('wallet cancellation and exact-envelope retry', () => {
+  it('retry requests build again and signs only the exact returned envelope', async () => {
+    const input = { name: 'Solar', slug: 'solar', goal: '250', deadline: 2000000000 };
+    const built = { xdr: 'same-live-envelope', networkPassphrase: 'Test SDF Network ; September 2015', testOnly: true, step: 'upload-token' };
+    let builds = 0,
+      signs = 0,
+      submits = 0;
+    const seen: string[] = [];
+    const deps = {
+      build: async () => {
+        builds++;
+        return built;
+      },
+      sign: async (xdr: string) => {
+        seen.push(xdr);
+        signs++;
+        if (signs === 1) throw new Error('wallet cancelled');
+        return 'signed-original';
+      },
+      submit: async () => {
+        submits++;
+        return { step: 'upload-token', status: 'PENDING', confirmed: false };
+      },
+    };
+    await expect(runBuilderDeploy(input, deps, undefined, 6)).rejects.toThrow('wallet cancelled');
+    expect(submits).toBe(0);
+    await runBuilderDeploy(input, deps, undefined, 6);
+    expect(builds).toBe(2);
+    expect(seen).toEqual(['same-live-envelope', 'same-live-envelope']);
+    expect(submits).toBe(1);
+  });
+});

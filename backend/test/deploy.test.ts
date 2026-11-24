@@ -61,6 +61,7 @@ let v2TokenOnLedger = false,
   v2LastCreateWasToken = false,
   lastCreateWasV2 = false,
   sendCount = 0;
+let duringLookup: (() => void) | null = null;
 let duringSimulation: (() => void) | null = null;
 const client: any = {
   getAccount: async (pub: string) => {
@@ -68,6 +69,11 @@ const client: any = {
     return new Account(pub, '1');
   },
   getContractWasmByHash: async (hash: Buffer) => {
+    if (duringLookup) {
+      const hook = duringLookup;
+      duringLookup = null;
+      hook();
+    }
     const hex = Buffer.from(hash).toString('hex');
     if (hex === v2TokenHash) {
       if (!v2TokenOnLedger) throw new Error('not found');
@@ -799,4 +805,112 @@ test('legacy pre-SEP41 successful token cannot silently become a new generation'
   fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify({ intents: [row] }));
   await assert.rejects(buildCampaignDeployV2(v2Input()), /mixed deployment artifact generations/);
   assert.equal(sendCount, 0);
+});
+
+test('unsigned BUILT expiry equality, infinite and malformed envelopes all fail closed', async () => {
+  const originalNow = Date.now;
+  const now = Math.floor(Date.now() / 1000);
+  Date.now = () => now * 1000;
+  try {
+    for (const mode of ['equality', 'infinite', 'malformed']) {
+      reset();
+      const row = oldUploadRow('BUILT');
+      if (mode === 'malformed') row.xdr = 'invalid-xdr';
+      else {
+        const tx = new TransactionBuilder(new Account(operator.publicKey(), '1'), { fee: '100', networkPassphrase: Networks.TESTNET })
+          .addOperation(Operation.uploadContractWasm({ wasm: v2TokenWasm }))
+          .setTimebounds(0, mode === 'equality' ? now : 0)
+          .build();
+        row.xdr = tx.toXDR();
+        row.hash = Buffer.from(tx.hash()).toString('hex');
+      }
+      fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify({ intents: [row] }));
+      await assert.rejects(buildCampaignDeployV2(v2Input()), /still live|invalid prior deployment envelope/);
+      assert.equal(sendCount, 0);
+    }
+  } finally {
+    Date.now = originalNow;
+  }
+});
+test('repeat unsigned v2 build blocks without storing a second envelope', async () => {
+  reset();
+  const built = await buildCampaignDeployV2(v2Input());
+  const retry = await buildCampaignDeployV2(v2Input());
+  assert.equal(retry.hash, built.hash);
+  assert.equal(retry.xdr, built.xdr);
+  const rows = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents;
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].hash, built.hash);
+  assert.equal(sendCount, 0);
+});
+
+test('unsigned reuse requires exact actor campaign parameters and step generation', async () => {
+  const initial = v2Input();
+  for (const change of [
+    { name: initial.name + '2' },
+    { goal: '251' },
+    { deadline: initial.deadline + 1 },
+    { v2: { ...initial.v2, symbol: 'DIFF' } },
+    { v2: { ...initial.v2, decimals: 6 } },
+    { v2: { ...initial.v2, minPerInvestor: '2' } },
+    { v2: { ...initial.v2, maxPerInvestor: '999' } },
+  ]) {
+    reset();
+    await buildCampaignDeployV2(initial);
+    await assert.rejects(buildCampaignDeployV2({ ...initial, ...change }), /still live/);
+    assert.equal(sendCount, 0);
+  }
+  reset();
+  const built = await buildCampaignDeployV2(initial);
+  await assert.rejects(buildCampaignDeployV2({ ...initial, id: 'other-campaign' }), /hash already belongs/);
+  assert.equal(JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents[0].hash, built.hash);
+  reset();
+  await buildCampaignDeployV2(initial);
+  const file = process.env.SOROBAN_INTENTS_PATH!;
+  const store = JSON.parse(fs.readFileSync(file, 'utf8'));
+  store.intents[0].action = 'deploy-v2-upload-offering';
+  fs.writeFileSync(file, JSON.stringify(store));
+  await assert.rejects(buildCampaignDeployV2(initial), /step changed/);
+});
+
+test('reuse refuses near expiry, other actor and changed generation envelope', async () => {
+  reset();
+  let b = await buildCampaignDeployV2(v2Input());
+  const originalNow = Date.now;
+  try {
+    const parsed = TransactionBuilder.fromXDR(b.xdr, Networks.TESTNET) as Transaction;
+    Date.now = () => (Number(parsed.timeBounds!.maxTime) - 120) * 1000;
+    await assert.rejects(buildCampaignDeployV2(v2Input()), /still live/);
+  } finally {
+    Date.now = originalNow;
+  }
+  reset();
+  b = await buildCampaignDeployV2(v2Input());
+  const other = Keypair.random().publicKey();
+  const otherBuild = await buildCampaignDeployV2({ ...v2Input(), actor: other });
+  assert.notEqual(otherBuild.hash, b.hash);
+  reset();
+  await buildCampaignDeployV2(v2Input());
+  const file = process.env.SOROBAN_INTENTS_PATH!;
+  const store = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const row = oldUploadRow('BUILT');
+  Object.assign(store.intents[0], { xdr: row.xdr, hash: row.hash });
+  fs.writeFileSync(file, JSON.stringify(store));
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /generation mismatch/);
+});
+
+test('reuse aborts if journal changes during ledger lookup and does not save', async () => {
+  reset();
+  const built = await buildCampaignDeployV2(v2Input());
+  const file = process.env.SOROBAN_INTENTS_PATH!;
+  duringLookup = () => {
+    const store = JSON.parse(fs.readFileSync(file, 'utf8'));
+    store.intents[0].status = 'UNKNOWN';
+    fs.writeFileSync(file, JSON.stringify(store));
+  };
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /unresolved|state changed/);
+  const rows = JSON.parse(fs.readFileSync(file, 'utf8')).intents;
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].hash, built.hash);
+  assert.equal(rows[0].status, 'UNKNOWN');
 });
