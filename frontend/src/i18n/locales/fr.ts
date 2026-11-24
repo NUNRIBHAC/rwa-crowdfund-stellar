@@ -4338,7 +4338,8 @@ export const fr: Messages = {
     },
     via: {
       heading: 'Une autre voie',
-      paragraph1: 'Blockallisto est née pour ouvrir une autre voie : le crowdfunding et le crowdlending, avec une technologie visible de tous.',
+      paragraph1:
+        "C'est grâce à cette campagne de crowdfunding que Blockallisto verra le jour, pour ouvrir une autre voie : le crowdfunding et le crowdlending, avec une technologie visible de tous.",
       paragraph2:
         "Blockallisto est une entreprise, pas une association. Nous voulons construire une plateforme qui assure sa pérennité et crée de la valeur, et nous pensons que cela aide aussi les projets à accéder au capital qu'ils ne trouvent pas aujourd'hui.",
     },

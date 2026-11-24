@@ -4325,7 +4325,8 @@ export const es: Messages = {
     },
     via: {
       heading: 'Otra vía',
-      paragraph1: 'Blockallisto nació para abrir otra vía: crowdfunding y crowdlending, con la tecnología a la vista de todos.',
+      paragraph1:
+        'Es a través de esta campaña de crowdfunding como nacerá Blockallisto, para abrir otra vía: crowdfunding y crowdlending, con la tecnología a la vista de todos.',
       paragraph2:
         'Blockallisto es un negocio, no una asociación. Queremos construir una plataforma que se sostenga y genere valor, y creemos que eso también ayuda a los proyectos a acceder al capital que hoy no encuentran.',
     },

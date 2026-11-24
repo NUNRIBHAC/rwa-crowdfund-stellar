@@ -4109,7 +4109,7 @@ export const zhTW: Messages = {
     },
     via: {
       heading: '另一條路',
-      paragraph1: 'Blockallisto的誕生是為了開闢另一條路：群眾募資和群眾借貸，讓所有人都能看見其中的技術。',
+      paragraph1: 'Blockallisto將透過這次群眾募資活動誕生，開闢另一條路：群眾募資和群眾借貸，讓所有人都能看見其中的技術。',
       paragraph2: 'Blockallisto是一項商業事業，不是協會。我們希望建設一個能夠自我維持並創造價值的平台，也相信這能幫助專案獲得它們如今找不到的資金。',
     },
     construir: {
