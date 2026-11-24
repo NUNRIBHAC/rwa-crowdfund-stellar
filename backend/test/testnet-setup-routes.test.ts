@@ -156,3 +156,51 @@ test('adapter rejects malformed account data', async () => {
     globalThis.fetch = original;
   }
 });
+
+test('global budget bounds distinct client cardinality and releases every expired slot', async () => {
+  const previousDepth = process.env.TRUST_PROXY_DEPTH;
+  process.env.TRUST_PROXY_DEPTH = '1';
+  const originalNow = Date.now;
+  let now = originalNow();
+  Date.now = () => now;
+  let reads = 0;
+  const app = express();
+  app.use(express.json());
+  app.use(
+    '/setup',
+    testnetSetupRouter(config, {
+      ...ports,
+      loadAccount: async () => {
+        reads++;
+        return { sequence: '4', balances: [] };
+      },
+    }),
+  );
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise<void>((resolve) => server.once('listening', resolve));
+  const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}/setup/status`;
+  const post = (ip: string) =>
+    fetch(base, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-forwarded-for': ip }, body: JSON.stringify({ actor: address }) });
+  try {
+    for (let i = 0; i < 120; i++) assert.equal((await post(`198.51.100.${i}`)).status, 200);
+    assert.equal(reads, 120);
+    const denied = await post('203.0.113.1');
+    assert.equal(denied.status, 429);
+    assert.equal(denied.headers.get('retry-after'), '60');
+    assert.equal(reads, 120);
+    now += 59999;
+    assert.equal((await post('203.0.113.2')).status, 429);
+    now += 1;
+    // Exact cutoff removes all old per-IP and global entries. A fresh set can enter.
+    for (let i = 0; i < 120; i++) assert.equal((await post(`192.0.2.${i}`)).status, 200);
+    assert.equal(reads, 240);
+    assert.equal((await post('203.0.113.3')).status, 429);
+    now += 60000;
+    assert.equal((await post('198.51.100.0')).status, 200);
+  } finally {
+    Date.now = originalNow;
+    if (previousDepth === undefined) delete process.env.TRUST_PROXY_DEPTH;
+    else process.env.TRUST_PROXY_DEPTH = previousDepth;
+    await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
+  }
+});

@@ -45,7 +45,7 @@ The router is mounted before the API catch-all and is disabled by default. A rea
 
 ## Validation on current main (2026-11-24)
 
-Integrated on main 73c5c895. Complete backend regression: 807 tests across 96 files in six bounded groups, zero failures, skips or cancellations. All groups collected V8 coverage into one directory. The merged source-only report is 94.23% lines, 87.44% branches and 95.93% functions, above the 91/80/80 gates. Two monolithic attempts exceeded the execution window and are not counted as successful runs.
+Integrated on main 73c5c895. Complete backend regression: 808 tests across 96 files in six bounded groups, zero failures, skips or cancellations. All groups collected V8 coverage into one directory. The final router test adds deterministic proof of the 120-request global ceiling across distinct clients, rejection before upstream I/O, the 59,999ms boundary and complete expiry at 60,000ms. The 10,000-key ceiling is unreachable under that stricter global window and is not claimed as a separate 10,000-request integration exercise. The merged source-only report is 94.23% lines, 87.44% branches and 95.93% functions, above the 91/80/80 gates. Two monolithic attempts exceeded the execution window and are not counted as successful runs.
 
 Complete frontend regression: 1,165 tests across 117 files in five groups. Combined coverage: 83.32% lines, 77.62% branches and 75.83% functions. UI-kit: 14 passing tests. Backend/frontend builds, i18n parity and whitespace checks, formatting and lint pass. Lint retains four pre-existing unused-directive warnings.
 
@@ -53,6 +53,6 @@ The isolated component harness records 352 unique cases: 11 languages, two theme
 
 ## Remaining acceptance limits
 
-A live Freighter signature and official faucet outcome remain unproven. Account creation/selection remains inside the wallet, not automatic. The Circle faucet opens separately and no fixed funding amount or cooldown is promised. No automatic contribution, old contribution deletion, campaign reset or existing-campaign mutation is implemented.
+A live Freighter signature and official faucet outcome remain unproven. The new translation units are locally synchronized in all 11 languages; Weblate remote round-trip and translations-branch evidence for these units must still be recovered or completed before release. Account creation/selection remains inside the wallet, not automatic. The Circle faucet opens separately and no fixed funding amount or cooldown is promised. No automatic contribution, old contribution deletion, campaign reset or existing-campaign mutation is implemented.
 
 The feature flag remains disabled by default. This local preparation does not enable it on staging, merge a PR, deploy or change a live account. The temporary preview harness stays outside committed source. Release authority must be checked against the final reviewed change.
