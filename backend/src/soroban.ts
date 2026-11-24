@@ -1270,6 +1270,30 @@ function v2NextStep(
   if (!ok('deploy-v2-set-minter')) return { action: 'deploy-v2-set-minter', tokenContractId, offeringContractId };
   return { action: 'complete', tokenContractId, offeringContractId };
 }
+function deploymentRows(store: Awaited<ReturnType<typeof readStore>>, campaign: string, actor: string) {
+  return store.intents.filter((i) => i.campaign === campaign && i.actor === actor && i.action.startsWith('deploy-v2-'));
+}
+function assertNoOpenDeployment(rows: ReturnType<typeof deploymentRows>) {
+  for (const row of rows) {
+    if (TERMINAL.includes(row.status)) continue;
+    if (row.signedXdr || row.status !== 'BUILT') throw new Error('prior deployment intent unresolved; reconcile exact hash');
+    let tx: Transaction;
+    try {
+      const parsed = TransactionBuilder.fromXDR(row.xdr, passphrase);
+      if (!(parsed instanceof Transaction)) throw new Error();
+      tx = parsed;
+    } catch {
+      throw new Error('invalid prior deployment envelope');
+    }
+    if (
+      !tx.timeBounds ||
+      !Number.isSafeInteger(Number(tx.timeBounds.maxTime)) ||
+      Number(tx.timeBounds.maxTime) <= 0 ||
+      Number(tx.timeBounds.maxTime) >= Math.floor(Date.now() / 1000)
+    )
+      throw new Error('prior unsigned deployment intent is still live; wait for expiry or submit exact hash');
+  }
+}
 export async function buildCampaignDeployV2(input: {
   actor: string;
   id: string;
@@ -1293,9 +1317,15 @@ export async function buildCampaignDeployV2(input: {
   validateV2Params(input.v2);
   await rateLimit('build', input.actor);
   const client = sorobanDeps.client();
-  const store0 = await readStore();
-  const mine = store0.intents.filter((i) => i.campaign === input.id && i.actor === input.actor && i.action.startsWith('deploy-v2-'));
-  const pins = v2DeploymentPins(mine);
+  const snapshot = await guarded(async () => {
+    const store = await readStore();
+    quarantineHold(store);
+    const rows = deploymentRows(store, input.id, input.actor);
+    assertNoOpenDeployment(rows);
+    return { rows, pins: v2DeploymentPins(rows), fingerprint: JSON.stringify(rows) };
+  });
+  const mine = snapshot.rows;
+  const pins = snapshot.pins;
   const [tokenOnLedger, offeringOnLedger] = await Promise.all([v2WasmOnLedger(client, 'token', pins), v2WasmOnLedger(client, 'offering', pins)]);
   const next = v2NextStep(mine, tokenOnLedger, offeringOnLedger);
   if (next.action === 'complete')
@@ -1388,6 +1418,11 @@ export async function buildCampaignDeployV2(input: {
     if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
     const open = openIntents(store, input.actor);
     if (open.length >= openIntentCap()) throw new Error(`too many open intents (${open.length}); resolve signed intents or let unsigned ones expire`);
+    const current = deploymentRows(store, input.id, input.actor);
+    assertNoOpenDeployment(current);
+    const currentPins = v2DeploymentPins(current);
+    if (JSON.stringify(current) !== snapshot.fingerprint || currentPins.token !== pins.token || currentPins.offering !== pins.offering)
+      throw new Error('deployment state changed during preparation; reread exact state');
     store.intents.push({ hash, campaign: input.id, actor: input.actor, action: next.action, xdr: prepared.toXDR(), status: 'BUILT' });
     await save(store);
   });

@@ -61,6 +61,7 @@ let v2TokenOnLedger = false,
   v2LastCreateWasToken = false,
   lastCreateWasV2 = false,
   sendCount = 0;
+let duringSimulation: (() => void) | null = null;
 const client: any = {
   getAccount: async (pub: string) => {
     if (missingAccount) throw new Error('Account not found');
@@ -80,6 +81,11 @@ const client: any = {
     return wasm;
   },
   simulateTransaction: async (tx: Transaction) => {
+    if (duringSimulation) {
+      const hook = duringSimulation;
+      duringSimulation = null;
+      hook();
+    }
     if (simError) return { _parsed: true, latestLedger: 1, error: 'simulation exploded' };
     assert.equal(tx.operations.length, 1, 'deploy steps are single-operation transactions');
     const func = (tx.operations[0] as any).func;
@@ -704,4 +710,93 @@ test('mixed successful v2 generations fail before building or sending a replacem
   const count = sendCount;
   await assert.rejects(buildCampaignDeployV2(v2Input()), /mixed deployment artifact generations/);
   assert.equal(sendCount, count);
+});
+
+function oldUploadRow(status: string, signedRow = false, expired = false) {
+  const tx = new TransactionBuilder(new Account(operator.publicKey(), '1'), { fee: '100', networkPassphrase: Networks.TESTNET })
+    .addOperation(Operation.uploadContractWasm({ wasm: fs.readFileSync(new URL('../wasm/v2-share-token-sep41.wasm', import.meta.url)) }))
+    .setTimebounds(0, Math.floor(Date.now() / 1000) + (expired ? -60 : 900))
+    .build();
+  const unsigned = tx.toXDR();
+  tx.sign(operator);
+  return {
+    hash: Buffer.from(tx.hash()).toString('hex'),
+    campaign: v2Input().id,
+    actor: operator.publicKey(),
+    action: 'deploy-v2-upload-token',
+    xdr: unsigned,
+    ...(signedRow ? { signedXdr: tx.toXDR() } : {}),
+    status,
+  };
+}
+test('old signed and ambiguous v2 intents block replacements; live unsigned blocks until expired', async () => {
+  for (const [status, signedRow] of [
+    ['SIGNED', true],
+    ['PENDING', true],
+    ['UNKNOWN', true],
+    ['UNKNOWN', false],
+    ['BUILT', false],
+  ] as const) {
+    reset();
+    const row = oldUploadRow(status, signedRow);
+    fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify({ intents: [row] }));
+    await assert.rejects(buildCampaignDeployV2(v2Input()), /deployment intent.*(unresolved|still live)/);
+    assert.equal(sendCount, 0);
+    assert.equal(JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents.length, 1);
+  }
+  reset();
+  fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify({ intents: [oldUploadRow('BUILT', false, true)] }));
+  const built = await buildCampaignDeployV2(v2Input());
+  assert.equal(built.step, 'upload-token');
+  const tx = TransactionBuilder.fromXDR(built.xdr, Networks.TESTNET) as Transaction;
+  assert.equal(
+    createHash('sha256')
+      .update(Buffer.from((tx.operations[0] as any).func.value))
+      .digest('hex'),
+    v2TokenHash,
+  );
+});
+test('v1 old successful upload leads to explicit SDK30 upload then current create', async () => {
+  reset();
+  const oldTx = new TransactionBuilder(new Account(operator.publicKey(), '1'), { fee: '100', networkPassphrase: Networks.TESTNET })
+    .addOperation(Operation.uploadContractWasm({ wasm: fs.readFileSync(new URL('../wasm/reviewed-crowdfund.wasm', import.meta.url)) }))
+    .setTimeout(900)
+    .build();
+  const row = {
+    hash: Buffer.from(oldTx.hash()).toString('hex'),
+    campaign: input().id,
+    actor: operator.publicKey(),
+    action: 'deploy-upload',
+    xdr: oldTx.toXDR(),
+    status: 'SUCCESS',
+  };
+  fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify({ intents: [row] }));
+  const built = await buildCampaignDeploy(input());
+  assert.equal(built.step, 'upload');
+  await submitCampaignDeploy({ actor: operator.publicKey(), xdr: signed(built.xdr) });
+  wasmOnLedger = true;
+  const create = await buildCampaignDeploy(input());
+  assert.equal(create.step, 'create');
+  const tx = TransactionBuilder.fromXDR(create.xdr, Networks.TESTNET) as Transaction;
+  assert.equal(Buffer.from((tx.operations[0] as any).func.value.executable.wasmHash.value).toString('hex'), createHash('sha256').update(wasm).digest('hex'));
+});
+
+test('fresh locked reread refuses a generation change during preparation', async () => {
+  reset();
+  duringSimulation = () => fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify({ intents: [oldUploadRow('SUCCESS')] }));
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /deployment state changed/);
+  assert.equal(JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents.length, 1);
+  assert.equal(sendCount, 0);
+});
+test('legacy pre-SEP41 successful token cannot silently become a new generation', async () => {
+  reset();
+  const legacy = fs.readFileSync(new URL('../wasm/v2-share-token.wasm', import.meta.url));
+  const tx = new TransactionBuilder(new Account(operator.publicKey(), '1'), { fee: '100', networkPassphrase: Networks.TESTNET })
+    .addOperation(Operation.uploadContractWasm({ wasm: legacy }))
+    .setTimeout(900)
+    .build();
+  const row = { ...oldUploadRow('SUCCESS'), hash: Buffer.from(tx.hash()).toString('hex'), xdr: tx.toXDR() };
+  fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify({ intents: [row] }));
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /mixed deployment artifact generations/);
+  assert.equal(sendCount, 0);
 });
