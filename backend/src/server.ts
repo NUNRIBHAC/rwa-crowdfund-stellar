@@ -1,3 +1,5 @@
+import { testnetSetupRouter, testnetSetupPorts } from './testnet-setup-routes.js';
+import { HORIZON_URL, USDC } from './config.js';
 import { startBackgroundTask } from './background-task.js';
 import { databaseReadiness, databaseMetrics, refreshDatabaseReadiness, databasePoolMetrics } from './database-runtime.js';
 import { audioOrigins } from './audio-origins.js';
@@ -409,6 +411,10 @@ app.use((req, res, next) => {
     router(req, res, next);
   }, next);
 });
+app.use(
+  '/api/testnet-setup',
+  testnetSetupRouter({ enabled: process.env.TESTNET_SETUP_ENABLED === '1', network: NETWORK, horizon: HORIZON_URL, issuer: USDC.issuer }, testnetSetupPorts()),
+);
 app.get('/health', (_req, res) => {
   const database = databaseReadiness();
   const communityRequired =
