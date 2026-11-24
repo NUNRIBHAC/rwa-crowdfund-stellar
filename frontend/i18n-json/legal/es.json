@@ -112,7 +112,7 @@
   },
   "privacyPolicy": {
     "b00": {
-      "notice": "Aviso de privacidad del prototipo en testnet, actualizado el 3 de noviembre de 2026. Describe el tratamiento real de los datos de cuenta; no es asesoramiento jurídico ni prueba de autorización regulatoria. No hay operaciones con dinero real activadas."
+      "notice": "Aviso de privacidad del prototipo en testnet, actualizado el 24 de noviembre de 2026. Describe el tratamiento real de los datos de cuenta; no es asesoramiento jurídico ni prueba de autorización regulatoria. No hay operaciones con dinero real activadas."
     },
     "b01": {
       "h2": "1. Responsable y contacto"
@@ -130,10 +130,10 @@
       "p": "El inicio de sesión con cartera sigue siendo opcional y usa un desafío firmado de un solo uso válido durante cinco minutos. Cuando hay un proveedor de inicio de sesión social configurado, guardamos el nombre del proveedor, el identificador estable del sujeto, el correo verificado si se devuelve y las marcas de tiempo de acceso; no fusionamos cuentas automáticamente por correo. El nuevo registro social puede seguir restringido por separado del registro con correo y contraseña. Su correo no se usa como etiqueta de autor en comentarios públicos."
     },
     "b06": {
-      "p": "Los tokens de sesión se guardan con hash en el servidor; el navegador conserva el token de sesión en el almacenamiento local. Las sesiones duran hasta 30 días y pueden revocarse. Si activa un segundo factor con aplicación de autenticación, su semilla se cifra en el servidor y los códigos de recuperación se guardan como hashes. Restablecer la contraseña revoca las sesiones y los tickets de inicio de sesión de segundo factor pendientes, pero no elimina un segundo factor ya registrado."
+      "p": "Los tokens de sesión se guardan como hashes en el servidor. El navegador envía la sesión en una cookie HttpOnly, limitada al host y Secure en HTTPS; JavaScript solo guarda un marcador. Las credenciales antiguas en almacenamiento local se migran y eliminan. Las sesiones duran hasta 30 días y pueden revocarse. Las semillas del autenticador se cifran y los códigos de recuperación se guardan como hashes. Restablecer la contraseña revoca sesiones y solicitudes pendientes del segundo factor, sin eliminar el factor inscrito."
     },
     "b07": {
-      "p": "Los registros de cuenta, las credenciales de correo y los datos opcionales del segundo factor no tienen actualmente un plazo automático de eliminación de la cuenta. Los tokens caducados dejan de funcionar al caducar, pero la caducidad no garantiza la eliminación inmediata de sus registros. Todavía no hay una herramienta de eliminación de cuenta de autoservicio. Escriba a blockallisto@gmail.com para solicitar acceso, rectificación o supresión; las solicitudes se revisan frente a obligaciones de seguridad y legales. Los registros y copias de seguridad de los proveedores pueden tener una conservación distinta."
+      "p": "Las cuentas de correo verificado pueden solicitar la eliminación en el formulario de la cuenta con la contraseña actual, confirmación DELETE y código actual del segundo factor si está activo. Los registros operativos vinculados y las cuentas de operador pueden bloquearla. No se garantiza borrar todos los datos: no se eliminan copias de seguridad, diarios de transacciones separados, registros de proveedores ni datos públicos de blockchain. Otras solicitudes: blockallisto@gmail.com. La caducidad no garantiza la eliminación inmediata de registros."
     },
     "b08": {
       "p": "Los comentarios (identificador de clave pública, nombre visible opcional, texto, campaña y marca de tiempo) son públicos. Se muestran los últimos 100 por campaña; los comentarios ocultos se eliminan a los 30 días. Los tickets de soporte y comentarios, las solicitudes de emisores y las notificaciones son privados para la cuenta y los roles de operador autorizados, y se eliminan a los 90 días según las reglas de limpieza de la aplicación. Evite incluir información personal sensible en los campos de texto libre."
@@ -145,13 +145,13 @@
       "p": "Conectar una cartera o preparar contribuciones de prueba registra en el diario de seguridad claves públicas de cartera, identificadores de campaña, importes, sobres de transacción, hashes, estado y marcas de tiempo. Las preparaciones sin firmar caducan a las 24 horas; las transacciones finales se eliminan a los 30 días. Las transacciones firmadas sin resolver se conservan hasta resolverse y los sobres firmados se borran tras la finalidad. No podemos borrar los registros públicos de la testnet de Stellar. Las claves secretas de la cartera permanecen en su cartera."
     },
     "b11": {
-      "p": "El tema, el idioma y las opciones de sesión usan el almacenamiento local del navegador. Los proveedores de alojamiento tratan direcciones IP y metadatos de las solicitudes. La limitación de frecuencia de la aplicación y la caché de reputación de IP usan direcciones IP en memoria transitoria; los diagnósticos de la aplicación usan contadores agregados y no registros con IP sin procesar. Los registros de infraestructura de los proveedores y la conservación de copias de seguridad son independientes. No usamos rastreadores publicitarios ni listas de correo de boletines."
+      "p": "Las preferencias de tema e idioma usan almacenamiento local; el secreto de sesión usa una cookie. Los proveedores de alojamiento procesan IP y metadatos de solicitudes. Los límites y la caché de reputación IP usan memoria temporal. Los registros de proveedores y las copias tienen retención separada. No usamos rastreadores publicitarios ni listas de boletines."
     },
     "b12": {
       "h2": "4. Servicios de seguridad y destinatarios"
     },
     "b13": {
-      "p": "Render aloja la aplicación en Fráncfort y Neon aloja sus datos Postgres. Brevo recibe las direcciones de correo de los destinatarios y el contenido de los correos de verificación y restablecimiento, y trata metadatos de entrega. Cloudflare Turnstile trata señales del navegador y del dispositivo y tokens de desafío para las comprobaciones antibot; la validación en el servidor puede incluir la IP del cliente. Tras una comprobación antibot correcta, ipapi.is recibe la IP del cliente para evaluar su reputación de abuso. La reputación es inicialmente solo de observación; el uso de VPN, proxy o Tor no es por sí solo un motivo de bloqueo. Los errores de los proveedores o el agotamiento del presupuesto de consultas pueden reducir esta capa; el CAPTCHA, los límites de frecuencia y los presupuestos de correo son salvaguardas independientes."
+      "p": "El 19 de noviembre de 2026 se verificaron el sitio y la API en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Esta comprobación fechada no demuestra el estado actual del alojamiento ni su disponibilidad. Brevo recibe las direcciones de correo de los destinatarios y el contenido de los correos de verificación y restablecimiento, y trata metadatos de entrega. Cloudflare Turnstile trata señales del navegador y del dispositivo y tokens de desafío para las comprobaciones antibot; la validación en el servidor puede incluir la IP del cliente. Tras una comprobación antibot correcta, ipapi.is recibe la IP del cliente para evaluar su reputación de abuso. La reputación es inicialmente solo de observación; el uso de VPN, proxy o Tor no es por sí solo un motivo de bloqueo. Los errores de los proveedores o el agotamiento del presupuesto de consultas pueden reducir esta capa; el CAPTCHA, los límites de frecuencia y los presupuestos de correo son salvaguardas independientes."
     },
     "b14": {
       "p": "Cuando el inicio de sesión social está activado, el proveedor de identidad elegido trata esa autenticación según sus propios términos. La testnet de Stellar es pública y global. GitHub aloja el código fuente, no la base de datos de cuentas. Los proveedores de seguridad y de correo pueden tratar datos fuera del EEE; no suponga que todos los encargados son solo de la UE. Sus políticas vigentes y las garantías aplicables rigen su propio tratamiento: https://www.brevo.com/legal/privacypolicy/ ; https://www.cloudflare.com/privacypolicy/ ; https://ipapi.is/privacy.html ; https://ipapi.is/terms.html ."
@@ -404,7 +404,7 @@
       "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
     "b01": {
-      "p": "<b>Última actualización:</b> {v:lastUpdated}"
+      "p": "<b>Última actualización:</b> 2026-11-24"
     },
     "b02": {
       "p": "Esta página describe qué mantiene el prototipo de Blockallisto disponible y recuperable, y qué planificación de continuidad se pretende para una futura plataforma autorizada. La primera sección es factual sobre la demostración en ejecución; la segunda es intención de diseño, no práctica actual."
@@ -415,8 +415,8 @@
     "b04": {
       "ul": {
         "i00": "<b>Sin activos de clientes en riesgo:</b> la demostración no retiene dinero, fondos de clientes ni custodia. Las contribuciones son tokens de la testnet sin valor monetario, liquidadas por un contrato inteligente de Soroban en la testnet pública de Stellar. El estado del contrato vive en el ledger de la testnet, independientemente de este sitio web.",
-        "i01": "<b>Alojamiento:</b> el sitio y la API funcionan en el nivel gratuito de Render; los datos operativos (diario de transacciones, datos de la comunidad) viven en una base de datos Postgres de Neon en su nivel gratuito. Ambos son servicios de terceros con sus propias propiedades de disponibilidad; no se garantiza ningún tiempo de actividad para la demostración.",
-        "i02": "<b>Copias de seguridad:</b> [programación y retención de copias de seguridad por definir - los niveles gratuitos no ofrecen copias gestionadas; el estado del contrato en la testnet es recuperable desde el ledger público].",
+        "i01": "El 19 de noviembre de 2026 se verificaron el sitio y la API en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Esta comprobación fechada no demuestra el estado actual del alojamiento ni su disponibilidad.",
+        "i02": "Una copia externa cifrada y una prueba de restauración aislada de las bases de datos demo y staging finalizaron correctamente el 20 de noviembre de 2026. Esta comprobación fechada no demuestra una copia posterior correcta, no garantiza el tiempo de recuperación ni la retención automática y no demuestra que todos los servicios externos puedan restaurarse.",
         "i03": "<b>Separación de entornos:</b> la demostración de cara al usuario, un entorno de staging separado y copias desechables de la base de datos se mantienen aparte para que las pruebas no puedan corromper la demostración.",
         "i04": "<b>Si la demostración no está disponible:</b> ningún usuario pierde nada de valor. El estado de la campaña sigue siendo legible en exploradores públicos de la testnet de Stellar, y las contribuciones siguen rigiéndose por el contrato, no por este sitio."
       }
