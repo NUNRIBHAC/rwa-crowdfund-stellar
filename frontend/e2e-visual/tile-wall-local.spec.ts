@@ -40,6 +40,7 @@ for (const locale of VISUAL_LOCALES)
         await page.locator('.tile-wall-controls button').first().click();
         await expect(page.locator('.is-refunding')).toHaveCount(1);
         await page.waitForTimeout(2100);
+        await expect(page.locator('.tile-wall-refund-complete')).toHaveCSS('opacity', '1');
         await page.screenshot({ path: `test-results/tile-wall/wall-${locale}-${width}-${theme}-refund.png`, fullPage: true });
         await page.emulateMedia({ reducedMotion: 'reduce' });
         expect(

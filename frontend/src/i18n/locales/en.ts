@@ -4279,6 +4279,7 @@ export const en = {
     },
   },
   tileWall: {
+    refundComplete: 'All contributions returned (simulation)',
     futureDoor: 'In the future, the company may study other forms of participation with legal advice. None of this is promised or forms part of this support.',
     footerLabel: 'Tile wall',
     wallTitle: 'One tile for each contribution',

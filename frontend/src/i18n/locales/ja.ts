@@ -4230,6 +4230,7 @@ export const ja: Messages = {
     },
   },
   tileWall: {
+    refundComplete: 'すべての支援金を返金済み（シミュレーション）',
     futureDoor: '将来、会社は法的助言を受けて、ほかの参加形態を検討する可能性があります。そのいずれも約束するものではなく、今回の支援の一部ではありません。',
     footerLabel: 'タイルの壁',
     wallTitle: '支援ごとに一枚のタイル',

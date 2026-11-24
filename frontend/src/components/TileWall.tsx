@@ -16,12 +16,12 @@ export default function TileWall() {
       <p className="tile-wall-note">{copy.demoNote}</p>
       <div
         className={`tile-wall-grid ${refund ? 'is-refunding' : 'is-growing'}`}
-        aria-hidden="true"
         style={{ '--tile-scale': String(0.65 + progress * 0.0035) } as React.CSSProperties}
       >
         {Array.from({ length: 48 }, (_, i) => (
-          <span key={i} className={`wall-tile tile-pattern-${i % 4}`} style={{ '--tile-index': i } as React.CSSProperties} />
+          <span aria-hidden="true" key={i} className={`wall-tile tile-pattern-${i % 4}`} style={{ '--tile-index': i } as React.CSSProperties} />
         ))}
+        {refund && <p className="tile-wall-refund-complete">{copy.refundComplete}</p>}
       </div>
       <div className="tile-wall-controls">
         <label htmlFor="tile-wall-progress">{copy.progressLabel}</label>

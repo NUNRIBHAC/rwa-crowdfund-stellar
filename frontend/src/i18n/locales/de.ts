@@ -4350,6 +4350,7 @@ export const de: Messages = {
     },
   },
   tileWall: {
+    refundComplete: 'Alle Unterstützungsbeiträge zurückerstattet (Simulation)',
     futureDoor:
       'In Zukunft kann das Unternehmen mit rechtlicher Beratung andere Beteiligungsformen prüfen. Nichts davon wird versprochen oder ist Teil dieser Unterstützung.',
     footerLabel: 'Kachelwand',

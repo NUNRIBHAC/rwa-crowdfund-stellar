@@ -3783,6 +3783,7 @@
     }
   },
   "tileWall": {
+    "refundComplete": "所有支持款项已退还（模拟）",
     "futureDoor": "未来，公司可能在法律建议下研究其他参与形式。这些都不是承诺，也不属于本次支持的一部分。",
     "footerLabel": "瓷砖墙",
     "wallTitle": "每份支持，一块瓷砖",

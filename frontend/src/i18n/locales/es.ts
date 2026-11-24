@@ -4363,6 +4363,7 @@ export const es: Messages = {
     },
   },
   tileWall: {
+    refundComplete: 'Todas las aportaciones devueltas (simulación)',
     futureDoor:
       'En el futuro, la empresa podrá estudiar otras formas de participación con asesoramiento jurídico. Nada de esto se promete ni forma parte de este apoyo.',
     footerLabel: 'Muro de azulejos',

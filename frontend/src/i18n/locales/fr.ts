@@ -4376,6 +4376,7 @@ export const fr: Messages = {
     },
   },
   tileWall: {
+    refundComplete: 'Toutes les contributions remboursées (simulation)',
     futureDoor:
       "À l'avenir, l'entreprise pourra étudier d'autres formes de participation avec un conseil juridique. Rien de cela n'est promis ni ne fait partie de ce soutien.",
     footerLabel: "Mur d'azulejos",

@@ -30,9 +30,11 @@ test.each(LOCALES.map((l) => l.id))('all campaign copy, tile controls and footer
   const buttons = container.querySelectorAll<HTMLButtonElement>('.tile-wall-controls button');
   fireEvent.click(buttons[0]);
   expect(container.querySelector('.is-refunding')).not.toBeNull();
+  expect(container.querySelector('.tile-wall-refund-complete')?.textContent?.trim()).toBeTruthy();
   expect(buttons[0].disabled).toBe(true);
   fireEvent.click(buttons[1]);
   expect(container.querySelector('.is-growing')).not.toBeNull();
+  expect(container.querySelector('.tile-wall-refund-complete')).toBeNull();
   expect(container.querySelector<HTMLInputElement>('input[type=range]')?.value).toBe('40');
   expect(container.querySelectorAll('.founding-campaign form,.founding-campaign iframe,.founding-campaign a')).toHaveLength(0);
 });

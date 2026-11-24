@@ -4143,6 +4143,7 @@ export const zhTW: Messages = {
     },
   },
   tileWall: {
+    refundComplete: '所有支持款項已退還（模擬）',
     futureDoor: '未來，公司可能在法律建議下研究其他參與形式。這些都不是承諾，也不屬於本次支持的一部分。',
     footerLabel: '磁磚牆',
     wallTitle: '每份支持，一塊磁磚',
