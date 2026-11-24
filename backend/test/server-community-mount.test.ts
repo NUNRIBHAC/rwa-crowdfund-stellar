@@ -150,3 +150,12 @@ test('GET /api/operator/companies passes the community path gate (401 without to
   const res = await fetch(`${base}/api/operator/companies`);
   assert.equal(res.status, 401);
 });
+
+test('private activity reaches auth before accepting any actor query through the actual server', async () => {
+  for (const suffix of ['', '?actor=' + Keypair.random().publicKey()]) {
+    const res = await fetch(base + '/api/account/activity' + suffix);
+    assert.equal(res.status, 401);
+    assert.equal(res.headers.get('cache-control'), 'no-store');
+    assert.equal('activity' in (await res.json()), false);
+  }
+});
