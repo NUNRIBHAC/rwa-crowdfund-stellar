@@ -7,7 +7,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'notice',
     text: [
-      'Aviso de privacidad del prototipo en testnet, actualizado el 20 de noviembre de 2026. Describe el tratamiento real de los datos de cuenta; no es asesoramiento jurídico ni prueba de autorización regulatoria. No hay operaciones con dinero real activadas.',
+      'Aviso de privacidad del prototipo en testnet, actualizado el 24 de noviembre de 2026. Describe el tratamiento real de los datos de cuenta; no es asesoramiento jurídico ni prueba de autorización regulatoria. No hay operaciones con dinero real activadas.',
     ],
   },
   {
@@ -77,7 +77,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'El sitio y la API funcionan en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Este host compartido no garantiza disponibilidad. Brevo recibe las direcciones de correo de los destinatarios y el contenido de los correos de verificación y restablecimiento, y trata metadatos de entrega. Cloudflare Turnstile trata señales del navegador y del dispositivo y tokens de desafío para las comprobaciones antibot; la validación en el servidor puede incluir la IP del cliente. Tras una comprobación antibot correcta, ipapi.is recibe la IP del cliente para evaluar su reputación de abuso. La reputación es inicialmente solo de observación; el uso de VPN, proxy o Tor no es por sí solo un motivo de bloqueo. Los errores de los proveedores o el agotamiento del presupuesto de consultas pueden reducir esta capa; el CAPTCHA, los límites de frecuencia y los presupuestos de correo son salvaguardas independientes.',
+      'El 19 de noviembre de 2026 se verificaron el sitio y la API en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Esta comprobación fechada no demuestra el estado actual del alojamiento ni su disponibilidad. Brevo recibe las direcciones de correo de los destinatarios y el contenido de los correos de verificación y restablecimiento, y trata metadatos de entrega. Cloudflare Turnstile trata señales del navegador y del dispositivo y tokens de desafío para las comprobaciones antibot; la validación en el servidor puede incluir la IP del cliente. Tras una comprobación antibot correcta, ipapi.is recibe la IP del cliente para evaluar su reputación de abuso. La reputación es inicialmente solo de observación; el uso de VPN, proxy o Tor no es por sí solo un motivo de bloqueo. Los errores de los proveedores o el agotamiento del presupuesto de consultas pueden reducir esta capa; el CAPTCHA, los límites de frecuencia y los presupuestos de correo son salvaguardas independientes.',
     ],
   },
   {

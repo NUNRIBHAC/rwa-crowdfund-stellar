@@ -16,7 +16,7 @@ export const blocks: LegalBlock[] = [
       {
         b: ['Zuletzt aktualisiert:'],
       },
-      ' 2026-11-20',
+      ' 2026-11-24',
     ],
   },
   {
@@ -39,10 +39,10 @@ export const blocks: LegalBlock[] = [
         ' Die Demo hält kein Geld, keine Kundengelder und keine Verwahrung. Beiträge sind Testnet-Token ohne Geldwert, abgewickelt über einen Soroban-Smart-Contract im öffentlichen Stellar-Testnet. Der Vertragszustand liegt im Testnet-Ledger, unabhängig von dieser Website.',
       ],
       [
-        'Website und API laufen auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten. Dieser gemeinsam genutzte Host garantiert keine Verfügbarkeit.',
+        'Am 19. November 2026 wurden Website und API auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten überprüft. Diese datierte Prüfung belegt weder den aktuellen Hosting-Zustand noch die Verfügbarkeit.',
       ],
       [
-        'Ein verschlüsseltes externes Backup und ein isolierter Datenbank-Wiederherstellungstest waren am 20. November 2026 erfolgreich. Diese datierte Prüfung garantiert weder Wiederherstellungszeit noch automatische Aufbewahrung oder die Wiederherstellung aller externen Dienste.',
+        'Eine verschlüsselte externe Sicherung und ein isolierter Wiederherstellungstest der Datenbanken demo und staging waren am 20. November 2026 erfolgreich. Diese datierte Prüfung belegt keine spätere erfolgreiche Sicherung, garantiert weder Wiederherstellungszeit noch automatische Aufbewahrung und belegt nicht, dass alle externen Dienste wiederhergestellt werden können.',
       ],
       [
         {

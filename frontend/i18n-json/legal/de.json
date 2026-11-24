@@ -112,7 +112,7 @@
   },
   "privacyPolicy": {
     "b00": {
-      "notice": "Datenschutzhinweis zum Testnet-Prototyp, aktualisiert am 20. November 2026. Er beschreibt die tatsächliche Verarbeitung von Kontodaten; er ist weder Rechtsberatung noch ein Nachweis einer behördlichen Zulassung. Es sind keine Echtgeld-Vorgänge aktiviert."
+      "notice": "Datenschutzhinweis zum Testnet-Prototyp, aktualisiert am 24. November 2026. Er beschreibt die tatsächliche Verarbeitung von Kontodaten; er ist weder Rechtsberatung noch ein Nachweis einer behördlichen Zulassung. Es sind keine Echtgeld-Vorgänge aktiviert."
     },
     "b01": {
       "h2": "1. Verantwortlicher und Kontakt"
@@ -151,7 +151,7 @@
       "h2": "4. Sicherheitsdienste und Empfänger"
     },
     "b13": {
-      "p": "Website und API laufen auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten. Dieser gemeinsam genutzte Host garantiert keine Verfügbarkeit. Brevo erhält die E-Mail-Adressen der Empfänger sowie den Inhalt der Verifizierungs- und Rücksetz-E-Mails und verarbeitet Zustellmetadaten. Cloudflare Turnstile verarbeitet Browser- und Gerätesignale sowie Challenge-Tokens für Bot-Prüfungen; die serverseitige Validierung kann die Client-IP einschließen. Nach einer erfolgreichen Bot-Prüfung erhält ipapi.is die Client-IP zur Bewertung der Missbrauchsreputation. Die Reputation dient zunächst nur der Beobachtung; VPN-, Proxy- oder Tor-Status allein ist kein Grund zur Sperrung. Anbieterfehler oder ein erschöpftes Abfragebudget können diese Ebene schwächen; CAPTCHA, Ratenbegrenzungen und E-Mail-Budgets sind davon getrennte Schutzmaßnahmen."
+      "p": "Am 19. November 2026 wurden Website und API auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten überprüft. Diese datierte Prüfung belegt weder den aktuellen Hosting-Zustand noch die Verfügbarkeit. Brevo erhält die E-Mail-Adressen der Empfänger sowie den Inhalt der Verifizierungs- und Rücksetz-E-Mails und verarbeitet Zustellmetadaten. Cloudflare Turnstile verarbeitet Browser- und Gerätesignale sowie Challenge-Tokens für Bot-Prüfungen; die serverseitige Validierung kann die Client-IP einschließen. Nach einer erfolgreichen Bot-Prüfung erhält ipapi.is die Client-IP zur Bewertung der Missbrauchsreputation. Die Reputation dient zunächst nur der Beobachtung; VPN-, Proxy- oder Tor-Status allein ist kein Grund zur Sperrung. Anbieterfehler oder ein erschöpftes Abfragebudget können diese Ebene schwächen; CAPTCHA, Ratenbegrenzungen und E-Mail-Budgets sind davon getrennte Schutzmaßnahmen."
     },
     "b14": {
       "p": "Wo die Anmeldung über soziale Konten aktiviert ist, verarbeitet der gewählte Identitätsanbieter diese Authentifizierung nach seinen eigenen Bedingungen. Das Stellar-Testnet ist öffentlich und global. GitHub hostet den Quellcode, nicht die Kontodatenbank. Sicherheits- und E-Mail-Anbieter können Daten außerhalb des EWR verarbeiten; gehen Sie nicht davon aus, dass jeder Auftragsverarbeiter nur in der EU sitzt. Ihre aktuellen Richtlinien und die geltenden Garantien regeln ihre eigene Verarbeitung: https://www.brevo.com/legal/privacypolicy/ ; https://www.cloudflare.com/privacypolicy/ ; https://ipapi.is/privacy.html ; https://ipapi.is/terms.html ."
@@ -404,7 +404,7 @@
       "notice": "Demo-Vorlage: Diese Seite ist ein illustratives Dokument für den Blockallisto-Prototyp, keine Rechtsberatung. Sie wurde nicht von einem Anwalt geprüft und ist kein Nachweis einer Firmenregistrierung oder behördlichen Genehmigung. Mit [DEMO] gekennzeichnete Unternehmensangaben sind fiktive Demonstrationsdaten."
     },
     "b01": {
-      "p": "<b>Zuletzt aktualisiert:</b> 2026-11-20"
+      "p": "<b>Zuletzt aktualisiert:</b> 2026-11-24"
     },
     "b02": {
       "p": "Diese Seite beschreibt, was den Blockallisto-Prototyp verfügbar und wiederherstellbar hält, und welche Kontinuitätsplanung für eine künftige autorisierte Plattform beabsichtigt ist. Der erste Abschnitt ist sachlich zur laufenden Demo; der zweite ist Designabsicht, nicht gegenwärtige Praxis."
@@ -415,8 +415,8 @@
     "b04": {
       "ul": {
         "i00": "<b>Keine Kundenvermögen gefährdet:</b> Die Demo hält kein Geld, keine Kundengelder und keine Verwahrung. Beiträge sind Testnet-Token ohne Geldwert, abgewickelt über einen Soroban-Smart-Contract im öffentlichen Stellar-Testnet. Der Vertragszustand liegt im Testnet-Ledger, unabhängig von dieser Website.",
-        "i01": "Website und API laufen auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten. Dieser gemeinsam genutzte Host garantiert keine Verfügbarkeit.",
-        "i02": "Ein verschlüsseltes externes Backup und ein isolierter Datenbank-Wiederherstellungstest waren am 20. November 2026 erfolgreich. Diese datierte Prüfung garantiert weder Wiederherstellungszeit noch automatische Aufbewahrung oder die Wiederherstellung aller externen Dienste.",
+        "i01": "Am 19. November 2026 wurden Website und API auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten überprüft. Diese datierte Prüfung belegt weder den aktuellen Hosting-Zustand noch die Verfügbarkeit.",
+        "i02": "Eine verschlüsselte externe Sicherung und ein isolierter Wiederherstellungstest der Datenbanken demo und staging waren am 20. November 2026 erfolgreich. Diese datierte Prüfung belegt keine spätere erfolgreiche Sicherung, garantiert weder Wiederherstellungszeit noch automatische Aufbewahrung und belegt nicht, dass alle externen Dienste wiederhergestellt werden können.",
         "i03": "<b>Trennung der Umgebungen:</b> die nutzerseitige Demo, eine separate Staging-Umgebung und wegwerfbare Datenbankkopien werden getrennt gehalten, damit Tests die Demo nicht beschädigen können.",
         "i04": "<b>Wenn die Demo nicht verfügbar ist:</b> verliert kein Nutzer etwas von Wert. Der Kampagnenzustand bleibt auf öffentlichen Stellar-Testnet-Explorern lesbar, und Beiträge unterliegen weiterhin dem Vertrag, nicht dieser Website."
       }

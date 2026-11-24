@@ -7,7 +7,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'notice',
     text: [
-      'Datenschutzhinweis zum Testnet-Prototyp, aktualisiert am 20. November 2026. Er beschreibt die tatsächliche Verarbeitung von Kontodaten; er ist weder Rechtsberatung noch ein Nachweis einer behördlichen Zulassung. Es sind keine Echtgeld-Vorgänge aktiviert.',
+      'Datenschutzhinweis zum Testnet-Prototyp, aktualisiert am 24. November 2026. Er beschreibt die tatsächliche Verarbeitung von Kontodaten; er ist weder Rechtsberatung noch ein Nachweis einer behördlichen Zulassung. Es sind keine Echtgeld-Vorgänge aktiviert.',
     ],
   },
   {
@@ -77,7 +77,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Website und API laufen auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten. Dieser gemeinsam genutzte Host garantiert keine Verfügbarkeit. Brevo erhält die E-Mail-Adressen der Empfänger sowie den Inhalt der Verifizierungs- und Rücksetz-E-Mails und verarbeitet Zustellmetadaten. Cloudflare Turnstile verarbeitet Browser- und Gerätesignale sowie Challenge-Tokens für Bot-Prüfungen; die serverseitige Validierung kann die Client-IP einschließen. Nach einer erfolgreichen Bot-Prüfung erhält ipapi.is die Client-IP zur Bewertung der Missbrauchsreputation. Die Reputation dient zunächst nur der Beobachtung; VPN-, Proxy- oder Tor-Status allein ist kein Grund zur Sperrung. Anbieterfehler oder ein erschöpftes Abfragebudget können diese Ebene schwächen; CAPTCHA, Ratenbegrenzungen und E-Mail-Budgets sind davon getrennte Schutzmaßnahmen.',
+      'Am 19. November 2026 wurden Website und API auf einer Oracle-Cloud-VM mit lokalem PostgreSQL 17 für Betriebsdaten überprüft. Diese datierte Prüfung belegt weder den aktuellen Hosting-Zustand noch die Verfügbarkeit. Brevo erhält die E-Mail-Adressen der Empfänger sowie den Inhalt der Verifizierungs- und Rücksetz-E-Mails und verarbeitet Zustellmetadaten. Cloudflare Turnstile verarbeitet Browser- und Gerätesignale sowie Challenge-Tokens für Bot-Prüfungen; die serverseitige Validierung kann die Client-IP einschließen. Nach einer erfolgreichen Bot-Prüfung erhält ipapi.is die Client-IP zur Bewertung der Missbrauchsreputation. Die Reputation dient zunächst nur der Beobachtung; VPN-, Proxy- oder Tor-Status allein ist kein Grund zur Sperrung. Anbieterfehler oder ein erschöpftes Abfragebudget können diese Ebene schwächen; CAPTCHA, Ratenbegrenzungen und E-Mail-Budgets sind davon getrennte Schutzmaßnahmen.',
     ],
   },
   {

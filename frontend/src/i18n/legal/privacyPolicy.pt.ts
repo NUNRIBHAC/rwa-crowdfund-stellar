@@ -7,7 +7,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'notice',
     text: [
-      'Aviso de privacidade do protótipo de testnet, atualizado em 20 de novembro de 2026. Descreve o tratamento real dos dados de conta; não é aconselhamento jurídico nem prova de autorização regulatória. Não estão ativas operações com dinheiro real.',
+      'Aviso de privacidade do protótipo de testnet, atualizado em 24 de novembro de 2026. Descreve o tratamento real dos dados de conta; não é aconselhamento jurídico nem prova de autorização regulatória. Não estão ativas operações com dinheiro real.',
     ],
   },
   {
@@ -77,7 +77,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'O site e a API correm numa VM da Oracle Cloud com PostgreSQL 17 local para dados operacionais. Este host partilhado não garante disponibilidade. Brevo recebe emails de destinatários e o conteúdo das mensagens de verificação/recuperação e trata metadados de entrega. O Cloudflare Turnstile trata sinais do navegador/dispositivo e tokens para controlo de bots; a validação no servidor pode incluir o IP do cliente. Após um controlo de bots bem-sucedido, a ipapi.is recebe o IP para avaliação de abuso. A reputação é inicialmente apenas observação; usar VPN, proxy ou Tor, por si só, não provoca bloqueio. Falhas ou esgotamento do orçamento de consultas podem reduzir esta camada; CAPTCHA, limites de pedidos e orçamentos de email são proteções separadas.',
+      'Em 19 de novembro de 2026, o site e a API foram verificados numa VM Oracle Cloud com PostgreSQL 17 local para os dados operacionais. Esta verificação datada não prova o estado atual do alojamento nem a disponibilidade. Brevo recebe emails de destinatários e o conteúdo das mensagens de verificação/recuperação e trata metadados de entrega. O Cloudflare Turnstile trata sinais do navegador/dispositivo e tokens para controlo de bots; a validação no servidor pode incluir o IP do cliente. Após um controlo de bots bem-sucedido, a ipapi.is recebe o IP para avaliação de abuso. A reputação é inicialmente apenas observação; usar VPN, proxy ou Tor, por si só, não provoca bloqueio. Falhas ou esgotamento do orçamento de consultas podem reduzir esta camada; CAPTCHA, limites de pedidos e orçamentos de email são proteções separadas.',
     ],
   },
   {

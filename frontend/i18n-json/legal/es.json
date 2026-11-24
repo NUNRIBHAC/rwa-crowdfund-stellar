@@ -112,7 +112,7 @@
   },
   "privacyPolicy": {
     "b00": {
-      "notice": "Aviso de privacidad del prototipo en testnet, actualizado el 20 de noviembre de 2026. Describe el tratamiento real de los datos de cuenta; no es asesoramiento jurídico ni prueba de autorización regulatoria. No hay operaciones con dinero real activadas."
+      "notice": "Aviso de privacidad del prototipo en testnet, actualizado el 24 de noviembre de 2026. Describe el tratamiento real de los datos de cuenta; no es asesoramiento jurídico ni prueba de autorización regulatoria. No hay operaciones con dinero real activadas."
     },
     "b01": {
       "h2": "1. Responsable y contacto"
@@ -151,7 +151,7 @@
       "h2": "4. Servicios de seguridad y destinatarios"
     },
     "b13": {
-      "p": "El sitio y la API funcionan en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Este host compartido no garantiza disponibilidad. Brevo recibe las direcciones de correo de los destinatarios y el contenido de los correos de verificación y restablecimiento, y trata metadatos de entrega. Cloudflare Turnstile trata señales del navegador y del dispositivo y tokens de desafío para las comprobaciones antibot; la validación en el servidor puede incluir la IP del cliente. Tras una comprobación antibot correcta, ipapi.is recibe la IP del cliente para evaluar su reputación de abuso. La reputación es inicialmente solo de observación; el uso de VPN, proxy o Tor no es por sí solo un motivo de bloqueo. Los errores de los proveedores o el agotamiento del presupuesto de consultas pueden reducir esta capa; el CAPTCHA, los límites de frecuencia y los presupuestos de correo son salvaguardas independientes."
+      "p": "El 19 de noviembre de 2026 se verificaron el sitio y la API en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Esta comprobación fechada no demuestra el estado actual del alojamiento ni su disponibilidad. Brevo recibe las direcciones de correo de los destinatarios y el contenido de los correos de verificación y restablecimiento, y trata metadatos de entrega. Cloudflare Turnstile trata señales del navegador y del dispositivo y tokens de desafío para las comprobaciones antibot; la validación en el servidor puede incluir la IP del cliente. Tras una comprobación antibot correcta, ipapi.is recibe la IP del cliente para evaluar su reputación de abuso. La reputación es inicialmente solo de observación; el uso de VPN, proxy o Tor no es por sí solo un motivo de bloqueo. Los errores de los proveedores o el agotamiento del presupuesto de consultas pueden reducir esta capa; el CAPTCHA, los límites de frecuencia y los presupuestos de correo son salvaguardas independientes."
     },
     "b14": {
       "p": "Cuando el inicio de sesión social está activado, el proveedor de identidad elegido trata esa autenticación según sus propios términos. La testnet de Stellar es pública y global. GitHub aloja el código fuente, no la base de datos de cuentas. Los proveedores de seguridad y de correo pueden tratar datos fuera del EEE; no suponga que todos los encargados son solo de la UE. Sus políticas vigentes y las garantías aplicables rigen su propio tratamiento: https://www.brevo.com/legal/privacypolicy/ ; https://www.cloudflare.com/privacypolicy/ ; https://ipapi.is/privacy.html ; https://ipapi.is/terms.html ."
@@ -404,7 +404,7 @@
       "notice": "Plantilla de demostración: esta página es un documento ilustrativo para el prototipo de Blockallisto, no asesoramiento jurídico. No ha sido revisada por un abogado y no constituye prueba de ningún registro mercantil ni autorización regulatoria. Los datos societarios marcados como [DEMO] son datos ficticios de demostración."
     },
     "b01": {
-      "p": "<b>Última actualización:</b> 2026-11-20"
+      "p": "<b>Última actualización:</b> 2026-11-24"
     },
     "b02": {
       "p": "Esta página describe qué mantiene el prototipo de Blockallisto disponible y recuperable, y qué planificación de continuidad se pretende para una futura plataforma autorizada. La primera sección es factual sobre la demostración en ejecución; la segunda es intención de diseño, no práctica actual."
@@ -415,8 +415,8 @@
     "b04": {
       "ul": {
         "i00": "<b>Sin activos de clientes en riesgo:</b> la demostración no retiene dinero, fondos de clientes ni custodia. Las contribuciones son tokens de la testnet sin valor monetario, liquidadas por un contrato inteligente de Soroban en la testnet pública de Stellar. El estado del contrato vive en el ledger de la testnet, independientemente de este sitio web.",
-        "i01": "El sitio y la API funcionan en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Este host compartido no garantiza disponibilidad.",
-        "i02": "Una copia externa cifrada y una prueba aislada de restauración de bases de datos finalizaron correctamente el 20 de noviembre de 2026. Esta comprobación fechada no garantiza plazos de recuperación, retención automática ni restauración de todos los servicios externos.",
+        "i01": "El 19 de noviembre de 2026 se verificaron el sitio y la API en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Esta comprobación fechada no demuestra el estado actual del alojamiento ni su disponibilidad.",
+        "i02": "Una copia externa cifrada y una prueba de restauración aislada de las bases de datos demo y staging finalizaron correctamente el 20 de noviembre de 2026. Esta comprobación fechada no demuestra una copia posterior correcta, no garantiza el tiempo de recuperación ni la retención automática y no demuestra que todos los servicios externos puedan restaurarse.",
         "i03": "<b>Separación de entornos:</b> la demostración de cara al usuario, un entorno de staging separado y copias desechables de la base de datos se mantienen aparte para que las pruebas no puedan corromper la demostración.",
         "i04": "<b>Si la demostración no está disponible:</b> ningún usuario pierde nada de valor. El estado de la campaña sigue siendo legible en exploradores públicos de la testnet de Stellar, y las contribuciones siguen rigiéndose por el contrato, no por este sitio."
       }
