@@ -22,7 +22,12 @@ for (const locale of VISUAL_LOCALES)
         );
         await page.goto('/tile-wall');
         await expect(page.locator('[data-approved-paragraph]')).toHaveCount(11);
-        await expect(page.locator('.wall-tile')).toHaveCount(48);
+        await expect(page.locator('.wall-tile')).toHaveCount(240);
+        const geometry = await page.locator('.tile-wall-grid').evaluate((e) => ({
+          columns: getComputedStyle(e).gridTemplateColumns.split(' ').length,
+          rows: new Set(Array.from(e.querySelectorAll<HTMLElement>('.wall-tile'), (tile) => tile.offsetTop)).size,
+        }));
+        expect(geometry).toEqual({ columns: 20, rows: 12 });
         await expect(page.locator('footer a[href="/tile-wall"]')).toHaveCount(1);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
         if (locale === 'ar') {
@@ -39,7 +44,7 @@ for (const locale of VISUAL_LOCALES)
         await expect(page.locator('.tile-wall-controls output')).toHaveText('90%');
         await page.locator('.tile-wall-controls button').first().click();
         await expect(page.locator('.is-refunding')).toHaveCount(1);
-        await page.waitForTimeout(2100);
+        await expect(page.locator('.wall-tile').last()).toHaveCSS('opacity', '0');
         await expect(page.locator('.tile-wall-refund-complete')).toHaveCSS('opacity', '1');
         await page.screenshot({ path: `test-results/tile-wall/wall-${locale}-${width}-${theme}-refund.png`, fullPage: true });
         await page.emulateMedia({ reducedMotion: 'reduce' });
