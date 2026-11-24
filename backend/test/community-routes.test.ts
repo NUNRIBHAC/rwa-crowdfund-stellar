@@ -545,3 +545,26 @@ test('unexpected community failures log only allowlisted metadata and return a s
     await new Promise<void>((resolve) => instance.close(() => resolve()));
   }
 });
+
+test('public evidence read is cache-disabled, unknown by default and never leaks malformed configuration', async () => {
+  const original = process.env.ISSUER_EVIDENCE_JSON;
+  try {
+    delete process.env.ISSUER_EVIDENCE_JSON;
+    const res = await fetch(base + '/api/campaigns/demo-solar/evidence');
+    assert.equal(res.status, 200);
+    assert.equal(res.headers.get('cache-control'), 'no-store');
+    const data = (await res.json()) as { evidence: { state: string; claims: unknown[]; unknownAreas: string[] } };
+    assert.equal(data.evidence.state, 'not_provided');
+    assert.deepEqual(data.evidence.claims, []);
+    assert.equal(data.evidence.unknownAreas.length, 6);
+    process.env.ISSUER_EVIDENCE_JSON = '{private-candidate-do-not-publish';
+    const invalid = await fetch(base + '/api/campaigns/demo-solar/evidence');
+    const text = await invalid.text();
+    assert.equal(invalid.status, 200);
+    assert.equal(JSON.parse(text).evidence.state, 'unavailable');
+    assert.ok(!text.includes('private-candidate'));
+  } finally {
+    if (original === undefined) delete process.env.ISSUER_EVIDENCE_JSON;
+    else process.env.ISSUER_EVIDENCE_JSON = original;
+  }
+});

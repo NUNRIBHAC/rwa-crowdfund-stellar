@@ -30,6 +30,7 @@ import {
 } from './accounts.js';
 import { CommunityError, CommunityService, communityStoreFromEnv, requireCampaignId } from './community.js';
 import { metadataFor } from './campaign-metadata.js';
+import { issuerEvidenceFor } from './issuer-evidence.js';
 import type { Account } from './community-store.js';
 import { shareRegisterCsv, type ShareRegisterPayload } from './share-register.js';
 import { buildShareRegisterPdf } from './share-register-pdf.js';
@@ -1025,6 +1026,18 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     try {
       const id = requireCampaignId(req.params.id);
       res.json({ metadata: metadataFor(id) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
+  // Public, operator-curated evidence only. No private application store or
+  // outbound fetch is reachable from this read-only endpoint.
+  router.get('/api/campaigns/:id/evidence', (req, res) => {
+    try {
+      const id = requireCampaignId(req.params.id);
+      res.setHeader('Cache-Control', 'no-store');
+      res.json({ evidence: issuerEvidenceFor(id) });
     } catch (err) {
       sendError(res, err);
     }
