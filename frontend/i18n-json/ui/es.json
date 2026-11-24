@@ -430,7 +430,12 @@
   },
   "intent": {
     "title": "Transacción guardada",
-    "steps": ["Preparada", "Firmada", "Enviada", "Confirmada"],
+    "steps": [
+      "Preparada",
+      "Firmada",
+      "Enviada",
+      "Confirmada"
+    ],
     "action": "Acción",
     "campaign": "Campaña",
     "contract": "Contrato",
@@ -491,7 +496,13 @@
     "interestIsinDocsNote": "No disponible - este prototipo solo registra contribuciones y no emite valores",
     "marketingDivider": "Contenido proporcionado por el emisor a continuación - no verificado por la plataforma",
     "marketingDividerAria": "Contenido de marketing a continuación",
-    "tabs": ["Resumen", "Detalles", "Documentos", "Noticias", "Podcast"],
+    "tabs": [
+      "Resumen",
+      "Detalles",
+      "Documentos",
+      "Noticias",
+      "Podcast"
+    ],
     "tabsAria": "Secciones de la campaña",
     "overviewMissing": "El contenido de marketing del emisor no está disponible en este prototipo. En una plataforma en producción, esta zona mostraría la descripción, el equipo y el modelo de negocio del propio emisor, claramente separados de los hechos de la plataforma por el separador anterior.",
     "detailsPre": "El modelo de negocio, el mercado, las finanzas y los hitos aparecerían aquí como secciones proporcionadas por el emisor.",
@@ -923,7 +934,10 @@
         "label": "Acción",
         "note": "Una ampliación de capital es la operación societaria que crea nuevas acciones; no es un instrumento separado.",
         "summary": "Capital propio directo de la empresa emisora: derecho a dividendos y participación en el valor de la empresa, con derechos fijados por los estatutos. Las nuevas acciones llegan a los inversores mediante una ampliación de capital.",
-        "opportunities": ["Participación plena en el crecimiento de la empresa", "Derechos de voto o de información según la clase de acciones"],
+        "opportunities": [
+          "Participación plena en el crecimiento de la empresa",
+          "Derechos de voto o de información según la clase de acciones"
+        ],
         "risks": [
           "Sin derecho fijo de reembolso; los dividendos no están garantizados",
           "Pérdida total posible",
@@ -935,7 +949,10 @@
         "label": "Participación indirecta",
         "note": "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía.",
         "summary": "Los inversores participan indirectamente en una inversión en una PYME - por ejemplo a través de un vehículo o fiduciario - con tramitación simplificada.",
-        "opportunities": ["Acceso a operaciones difíciles de mantener directamente", "Administración simplificada a través de la estructura intermediaria"],
+        "opportunities": [
+          "Acceso a operaciones difíciles de mantener directamente",
+          "Administración simplificada a través de la estructura intermediaria"
+        ],
         "risks": [
           "Hay una capa adicional entre el inversor y el emisor",
           "El rendimiento depende del desempeño del emisor",
@@ -946,7 +963,10 @@
       {
         "label": "Participación en sociedad comanditaria",
         "summary": "Una participación como socio comanditario en una sociedad: participación en beneficios y pérdidas según el contrato social, con responsabilidad limitada a la aportación.",
-        "opportunities": ["Traslado directo de los resultados de la sociedad", "Responsabilidad limitada a la aportación"],
+        "opportunities": [
+          "Traslado directo de los resultados de la sociedad",
+          "Responsabilidad limitada a la aportación"
+        ],
         "risks": [
           "La participación en pérdidas puede reducir o anular la participación",
           "La salida suele estar restringida por el contrato social",
@@ -986,7 +1006,10 @@
         "label": "Warrant",
         "note": "El ejercicio crea nuevas acciones y diluye a los titulares existentes. Las ofertas de valores bajo el ECSPR están limitadas a 5.000.000 EUR por emisor en 12 meses.",
         "summary": "Un valor transmisible que da el derecho, pero no la obligación, de suscribir nuevas acciones del emisor a un precio fijado durante una ventana o en una fecha definida (valor transmisible según el art. 4(1)(44)(c) de MiFID II).",
-        "opportunities": ["Revalorización si el precio de la acción supera el precio de ejercicio", "Precio y ventana de ejercicio fijados de antemano"],
+        "opportunities": [
+          "Revalorización si el precio de la acción supera el precio de ejercicio",
+          "Precio y ventana de ejercicio fijados de antemano"
+        ],
         "risks": [
           "Puede expirar sin valor si el precio de la acción queda por debajo del precio de ejercicio",
           "El ejercicio diluye a los accionistas existentes",
@@ -998,7 +1021,10 @@
         "label": "Certificado de depósito sobre acciones",
         "note": "Encaja en la definición de valor transmisible de MiFID II (art. 4(1)(44)(a)) y la custodia del art. 10 del ECSPR es viable, pero la colocación bajo el ECSPR cubre valores emitidos por el propietario del proyecto o un SPV, y un certificado de depósito lo emite el custodio: sin confirmación de ESMA ni de la CMVM. No probado. Portugal no tiene un régimen nacional propio para certificados de depósito.",
         "summary": "Un certificado emitido por un custodio que representa acciones de la sociedad (acciones de S.A. y certificados de depósito sobre acciones): el titular tiene el derecho económico sobre las acciones subyacentes mientras el custodio mantiene las acciones.",
-        "opportunities": ["Exposición a acciones en un certificado transmisible", "Las distribuciones reflejan las acciones subyacentes"],
+        "opportunities": [
+          "Exposición a acciones en un certificado transmisible",
+          "Las distribuciones reflejan las acciones subyacentes"
+        ],
         "risks": [
           "Añade riesgo de custodia al riesgo de la acción",
           "Los derechos de voto y de transmisión dependen de las condiciones del certificado",
@@ -1010,7 +1036,10 @@
         "label": "Pagaré comercial",
         "note": "Es también un instrumento del mercado monetario. No se ha encontrado práctica de la CMVM para pagarés comerciales minoristas en crowdfunding: una oferta minorista exige rating, garantía o un ratio de autonomía financiera suficiente, nota informativa a la CMVM con un período de no oposición de 10 días hábiles y patrocinador cuando el emisor no tiene auditoría legal. El ECSPR limita las ofertas a 5.000.000 EUR por emisor en 12 meses.",
         "summary": "Deuda a corto plazo inferior a un año: valor transmisible según el DL 69/2004 (modificado por el DL 102/2026) y el art. 4(1)(44)(b) de MiFID II, y a la vez un instrumento del mercado monetario.",
-        "opportunities": ["Vencimiento corto con fecha de reembolso definida", "Rentabilidad por financiar el capital circulante del emisor"],
+        "opportunities": [
+          "Vencimiento corto con fecha de reembolso definida",
+          "Rentabilidad por financiar el capital circulante del emisor"
+        ],
         "risks": [
           "Sin garantía real: pérdida si el emisor no paga ni refinancia",
           "Vencimiento corto no significa riesgo bajo",
@@ -1022,7 +1051,10 @@
         "label": "Préstamo con remuneración vinculada a los ingresos",
         "note": "El interés variable vinculado a los ingresos encaja en el ECSPR en abstracto (Reg. Delegado (UE) 2022/2118, art. 8(3)(b) y 10(1)(g); Reg. Delegado (UE) 2022/2119, anexo). Si el capital o las cuotas ya vencidas solo se pagan cuando hay ingresos, el reembolso es condicional y deja de ser un préstamo ECSPR. Un tipo vinculado a los ingresos en un contrato concreto no está confirmado por la práctica de la CMVM.",
         "summary": "Un préstamo con reembolso incondicional del capital en un plazo acordado y con plan de pagos, cuyo interés varía con los ingresos del emisor.",
-        "opportunities": ["El interés sube cuando suben los ingresos del emisor", "El reembolso del capital no depende de los ingresos"],
+        "opportunities": [
+          "El interés sube cuando suben los ingresos del emisor",
+          "El reembolso del capital no depende de los ingresos"
+        ],
         "risks": [
           "El interés puede caer a niveles bajos en períodos de ingresos débiles",
           "El reembolso es incondicional, pero el emisor puede igualmente incumplir",
@@ -1034,7 +1066,10 @@
         "label": "Certificado de depósito sobre deuda",
         "note": "Encaja en la definición de valor transmisible de MiFID II (art. 4(1)(44)(b)) y la custodia del art. 10 del ECSPR es viable, pero la colocación bajo el ECSPR cubre valores emitidos por el propietario del proyecto o un SPV, y un certificado de depósito lo emite el custodio: sin confirmación de ESMA ni de la CMVM. No probado. Portugal no tiene un régimen nacional propio para certificados de depósito; el \"certificado de depósito\" del Decreto-Lei 372/91 es un depósito bancario, un instrumento distinto.",
         "summary": "Un certificado emitido por un custodio que representa bonos u otra deuda titulizada del emisor: el titular tiene el derecho económico sobre los valores de deuda subyacentes mientras el custodio mantiene los valores.",
-        "opportunities": ["Exposición a deuda en un certificado transmisible", "Las distribuciones reflejan los valores de deuda subyacentes"],
+        "opportunities": [
+          "Exposición a deuda en un certificado transmisible",
+          "Las distribuciones reflejan los valores de deuda subyacentes"
+        ],
         "risks": [
           "Añade riesgo de custodia al riesgo de impago del emisor",
           "Los derechos de transmisión y de información dependen de las condiciones del certificado",
@@ -3854,8 +3889,6 @@
     }
   },
   "tileWall": {
-    "refundComplete": "Todas las aportaciones devueltas (simulación)",
-    "futureDoor": "En el futuro, la empresa podrá estudiar otras formas de participación con asesoramiento jurídico. Nada de esto se promete ni forma parte de este apoyo.",
     "footerLabel": "Muro de azulejos",
     "wallTitle": "Un azulejo por cada apoyo",
     "wallNote": "Cada azulejo representa un apoyo ya dado. No promete ningún pago adicional.",
@@ -3864,6 +3897,18 @@
     "refundButton": "Simular fase de reembolso",
     "resetButton": "Reiniciar simulación",
     "refundState": "Fase de reembolso simulada",
-    "campaignState": "Campaña simulada en curso"
+    "campaignState": "Campaña simulada en curso",
+    "futureDoor": "En el futuro, la empresa podrá estudiar otras formas de participación con asesoramiento jurídico. Nada de esto se promete ni forma parte de este apoyo.",
+    "refundComplete": "Todas las aportaciones devueltas (simulación)"
+  },
+  "automaticRefund": {
+    "title": "Reembolso automático",
+    "testnetOnly": "Solo en la red de pruebas. No se mueve dinero real.",
+    "pending": "Reembolso pendiente. No se ha confirmado ningún pago.",
+    "submitted": "Reembolso enviado. La confirmación sigue pendiente.",
+    "paid": "Reembolso confirmado a la cartera original.",
+    "blocked": "El reembolso requiere revisión. Aquí no se confirma ningún pago.",
+    "manualFallback": "Abrir la opción de reembolso manual",
+    "unavailable": "El estado del reembolso no está disponible temporalmente."
   }
 }
