@@ -1334,9 +1334,14 @@ export async function buildCampaignDeployV2(input: {
       input.v2.minPerInvestor,
       input.v2.maxPerInvestor,
       pins,
+      passphrase,
+      process.env.RPC_URL ?? 'https://soroban-testnet.stellar.org',
+      expectedToken(),
     ]);
     const live = rows.filter((i) => !TERMINAL.includes(i.status));
-    const candidate = live.find((i) => i.status === 'BUILT' && !i.signedXdr && i.deploymentContext === context);
+    const candidates = live.filter((i) => i.status === 'BUILT' && !i.signedXdr && i.deploymentContext === context);
+    if (candidates.length > 1) throw new Error('multiple unsigned deployment candidates; reconcile exact hashes');
+    const candidate = candidates[0];
     let reuse: Transaction | undefined;
     if (candidate) {
       const parsed = TransactionBuilder.fromXDR(candidate.xdr, passphrase);
@@ -1375,6 +1380,14 @@ export async function buildCampaignDeployV2(input: {
       if (journaledDeploymentHash(original, next.action, family) !== pins[family]) throw new Error('reusable envelope generation mismatch');
     }
 
+    const liveAccount = await client.getAccount(input.actor);
+    if (BigInt(liveAccount.sequenceNumber()) + 1n !== BigInt(original.sequence))
+      throw new Error('original envelope account sequence changed; wait for expiry, do not replace');
+    const freshSimulation = await client.simulateTransaction(original);
+    if (rpc.Api.isSimulationError(freshSimulation) || rpc.Api.isSimulationRestore(freshSimulation))
+      throw new Error('original envelope simulation is stale; wait for expiry, do not replace');
+    if (rpc.assembleTransaction(original, freshSimulation).build().toXDR() !== original.toXDR())
+      throw new Error('original envelope resources changed; wait for expiry, do not replace');
     await guarded(async () => {
       const store = await readStore();
       quarantineHold(store);

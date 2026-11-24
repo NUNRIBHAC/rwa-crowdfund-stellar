@@ -61,12 +61,13 @@ let v2TokenOnLedger = false,
   v2LastCreateWasToken = false,
   lastCreateWasV2 = false,
   sendCount = 0;
+let accountSequence = '1';
 let duringLookup: (() => void) | null = null;
 let duringSimulation: (() => void) | null = null;
 const client: any = {
   getAccount: async (pub: string) => {
     if (missingAccount) throw new Error('Account not found');
-    return new Account(pub, '1');
+    return new Account(pub, accountSequence);
   },
   getContractWasmByHash: async (hash: Buffer) => {
     if (duringLookup) {
@@ -189,6 +190,7 @@ const metaWithCreatedContract = (contractId: string): string => {
   ).toXDR('base64');
 };
 function reset() {
+  accountSequence = '1';
   fs.rmSync(process.env.SOROBAN_INTENTS_PATH!, { force: true });
   process.env.SOROBAN_CAMPAIGNS_JSON = JSON.stringify([{ id: 'taken', name: 'Existing', contractId: StrKey.encodeContract(Buffer.alloc(32, 3)) }]);
   process.env.STELLAR_NETWORK = 'testnet';
@@ -913,4 +915,50 @@ test('reuse aborts if journal changes during ledger lookup and does not save', a
   assert.equal(rows.length, 1);
   assert.equal(rows[0].hash, built.hash);
   assert.equal(rows[0].status, 'UNKNOWN');
+});
+
+test('reuse freshness rejects changed sequence, simulation and environment without replacing', async () => {
+  for (const mode of ['sequence', 'simulation', 'rpc']) {
+    reset();
+    const b = await buildCampaignDeployV2(v2Input());
+    const oldRpc = process.env.RPC_URL;
+    try {
+      if (mode === 'sequence') accountSequence = '2';
+      if (mode === 'simulation') simError = true;
+      if (mode === 'rpc') process.env.RPC_URL = 'https://changed.invalid';
+      await assert.rejects(buildCampaignDeployV2(v2Input()), /sequence changed|simulation is stale|still live/);
+      const rows = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents;
+      assert.equal(rows.length, 1);
+      assert.equal(rows[0].hash, b.hash);
+      assert.equal(sendCount, 0);
+    } finally {
+      if (oldRpc === undefined) delete process.env.RPC_URL;
+      else process.env.RPC_URL = oldRpc;
+    }
+  }
+});
+test('reuse rejects duplicate matches and newly signed state, preserving actor ownership', async () => {
+  reset();
+  const b = await buildCampaignDeployV2(v2Input());
+  const file = process.env.SOROBAN_INTENTS_PATH!;
+  let store = JSON.parse(fs.readFileSync(file, 'utf8'));
+  store.intents.push({ ...store.intents[0], hash: 'f'.repeat(64) });
+  fs.writeFileSync(file, JSON.stringify(store));
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /multiple unsigned/);
+  reset();
+  await buildCampaignDeployV2(v2Input());
+  duringLookup = () => {
+    store = JSON.parse(fs.readFileSync(file, 'utf8'));
+    store.intents[0].signedXdr = signed(store.intents[0].xdr);
+    store.intents[0].status = 'SIGNED';
+    fs.writeFileSync(file, JSON.stringify(store));
+  };
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /unresolved|state changed/);
+  reset();
+  const original = await buildCampaignDeployV2(v2Input());
+  await buildCampaignDeployV2({ ...v2Input(), actor: Keypair.random().publicKey() });
+  const rows = JSON.parse(fs.readFileSync(file, 'utf8')).intents;
+  assert.equal(rows.find((i: any) => i.hash === original.hash).actor, operator.publicKey());
+  assert.equal(rows.find((i: any) => i.hash === original.hash).xdr, original.xdr);
+  assert.equal(b.hash.length, 64);
 });
