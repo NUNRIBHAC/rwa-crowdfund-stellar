@@ -260,3 +260,14 @@ test('registries beyond one chunk page the batched read deterministically', asyn
   assert.equal(getLedgerCalls[0].length, 100);
   assert.equal(getLedgerCalls[1].length, 1);
 });
+
+test('SDK30 crowdfund listing keeps historical entries readable in the same batch', async () => {
+  entries.set(
+    ik(campB.contractId),
+    instanceEntry(campB.contractId, { wasmHash: Buffer.from('79e4d2122a8ebee77eaea1dc7bf9aa082f1b594062844422879320858cf043b8', 'hex') }),
+  );
+  const out = await sorobanCampaigns(actor);
+  assert.equal(out.length, 2);
+  assert.equal(out.find((c: any) => c.id === 'camp-a').raised, '1234567');
+  assert.equal(out.find((c: any) => c.id === 'camp-b').raised, '1234567');
+});

@@ -4,7 +4,19 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { Account, Address, Keypair, Networks, StrKey, Transaction, TransactionBuilder, nativeToScVal, SorobanDataBuilder, xdr } from '@stellar/stellar-sdk';
+import {
+  Account,
+  Address,
+  Keypair,
+  Networks,
+  StrKey,
+  Transaction,
+  TransactionBuilder,
+  nativeToScVal,
+  SorobanDataBuilder,
+  Operation,
+  xdr,
+} from '@stellar/stellar-sdk';
 import { sorobanDeps, buildCampaignDeploy, submitCampaignDeploy, buildCampaignDeployV2, submitCampaignDeployV2 } from '../src/soroban.js';
 import { PostgresJournal, injectJournalBackendForTests, resetJournalBackendForTests, journalBackend, type IntentStore } from '../src/journal.js';
 
@@ -21,8 +33,9 @@ process.env.SOROBAN_INTENTS_PATH = path.join(tmp, 'intents.json');
 process.env.SOROBAN_BUILD_RATE_PER_MIN = '1000';
 process.env.SOROBAN_DEPLOY_POLL_MS = '1';
 process.env.DEPLOYMENT_MANIFEST_PATH = path.join(tmp, 'deployment-manifest.json');
-const wasmPath = new URL('./fixtures/reviewed-crowdfund.wasm', import.meta.url);
+const wasmPath = new URL('../wasm/sdk30-crowdfund.wasm', import.meta.url);
 const wasm = fs.readFileSync(wasmPath);
+let historicalDeployedWasm: Buffer | null = null;
 
 let addressAuth = false,
   restoreRequired = false,
@@ -37,8 +50,8 @@ let addressAuth = false,
   txStatus = 'SUCCESS';
 // v2 harness: the fake RPC serves the real packaged v2 Wasms under their pin
 // hashes and hands out a distinct contract id per created instance kind.
-const v2TokenWasm = fs.readFileSync(new URL('../../backend/wasm/v2-share-token-sep41.wasm', import.meta.url));
-const v2OfferingWasm = fs.readFileSync(new URL('../../backend/wasm/v2-offering.wasm', import.meta.url));
+const v2TokenWasm = fs.readFileSync(new URL('../../backend/wasm/sdk30-share-token.wasm', import.meta.url));
+const v2OfferingWasm = fs.readFileSync(new URL('../../backend/wasm/sdk30-offering.wasm', import.meta.url));
 const v2TokenHash = createHash('sha256').update(v2TokenWasm).digest('hex');
 const v2OfferingHash = createHash('sha256').update(v2OfferingWasm).digest('hex');
 const v2TokenContractId = StrKey.encodeContract(Buffer.alloc(32, 7));
@@ -126,6 +139,7 @@ const client: any = {
   }),
   getContractWasmByContractId: async (id: string) => {
     if (badDeployedWasm) return Buffer.from('wrong');
+    if (historicalDeployedWasm) return historicalDeployedWasm;
     if (id === v2TokenContractId) return v2TokenWasm;
     if (id === v2OfferingContractId) return v2OfferingWasm;
     return wasm;
@@ -577,4 +591,117 @@ test('successful offering create without an id blocks replacement and recovers o
   v2OfferingOnLedger = true;
   const next = await buildCampaignDeployV2(v2Input());
   assert.equal(next.step, 'set-minter');
+});
+
+// Simulate an exact persisted pre-upgrade create, not permission to prepare
+// historical code in the new builder. Only the original signed hash recovers.
+function historicalCreate(built: any, file: string): string {
+  const tx = TransactionBuilder.fromXDR(built.xdr, Networks.TESTNET) as Transaction;
+  const fn = (tx.operations[0] as any).func.value;
+  const bytes = fs.readFileSync(new URL('../wasm/' + file, import.meta.url));
+  const old = TransactionBuilder.cloneFrom(tx)
+    .clearOperations()
+    .addOperation(
+      Operation.createCustomContract({
+        address: Address.fromString(operator.publicKey()),
+        wasmHash: createHash('sha256').update(bytes).digest(),
+        salt: Buffer.alloc(32, 4),
+        constructorArgs: fn.constructorArgs,
+      }),
+    )
+    .build();
+  const store = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8'));
+  const row = store.intents.find((i: any) => i.hash === built.hash);
+  row.hash = Buffer.from(old.hash()).toString('hex');
+  row.xdr = old.toXDR();
+  fs.writeFileSync(process.env.SOROBAN_INTENTS_PATH!, JSON.stringify(store));
+  old.sign(operator);
+  return old.toXDR();
+}
+test('pre-upgrade journaled v1 create recovers exact historical code, never another reviewed version', async () => {
+  reset();
+  wasmOnLedger = true;
+  let built = await buildCampaignDeploy(input());
+  const signedOld = historicalCreate(built, 'reviewed-crowdfund.wasm');
+  historicalDeployedWasm = fs.readFileSync(new URL('../wasm/reviewed-crowdfund.wasm', import.meta.url));
+  try {
+    assert.equal((await submitCampaignDeploy({ actor: operator.publicKey(), xdr: signedOld })).confirmed, true);
+  } finally {
+    historicalDeployedWasm = null;
+  }
+  reset();
+  wasmOnLedger = true;
+  built = await buildCampaignDeploy(input());
+  const wrong = historicalCreate(built, 'reviewed-crowdfund.wasm');
+  await assert.rejects(submitCampaignDeploy({ actor: operator.publicKey(), xdr: wrong }), /does not match the reviewed/);
+});
+test('pre-upgrade journaled v2 token/offering creates recover exact historical code', async () => {
+  for (const [kind, file] of [
+    ['token', 'v2-share-token-sep41.wasm'],
+    ['offering', 'v2-offering.wasm'],
+  ] as const) {
+    reset();
+    v2TokenOnLedger = true;
+    v2OfferingOnLedger = true;
+    if (kind === 'offering') {
+      const b = await buildCampaignDeployV2(v2Input());
+      await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(b.xdr) });
+    }
+    const built = await buildCampaignDeployV2(v2Input());
+    assert.equal(built.step, 'create-' + kind);
+    const old = historicalCreate(built, file);
+    historicalDeployedWasm = fs.readFileSync(new URL('../wasm/' + file, import.meta.url));
+    try {
+      assert.equal((await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: old })).confirmed, true);
+    } finally {
+      historicalDeployedWasm = null;
+    }
+  }
+});
+
+test('successful historical upload pins the remaining v2 chain to its historical generation', async () => {
+  reset();
+  const old = fs.readFileSync(new URL('../wasm/v2-share-token-sep41.wasm', import.meta.url));
+  const upload = new TransactionBuilder(new Account(operator.publicKey(), '1'), { fee: '100', networkPassphrase: Networks.TESTNET })
+    .addOperation(Operation.uploadContractWasm({ wasm: old }))
+    .setTimeout(900)
+    .build();
+  fs.writeFileSync(
+    process.env.SOROBAN_INTENTS_PATH!,
+    JSON.stringify({
+      intents: [
+        {
+          hash: Buffer.from(upload.hash()).toString('hex'),
+          campaign: v2Input().id,
+          actor: operator.publicKey(),
+          action: 'deploy-v2-upload-token',
+          xdr: upload.toXDR(),
+          status: 'SUCCESS',
+        },
+      ],
+    }),
+  );
+  const built = await buildCampaignDeployV2(v2Input());
+  assert.equal(built.step, 'upload-offering');
+  const tx = TransactionBuilder.fromXDR(built.xdr, Networks.TESTNET) as Transaction;
+  const bytes = Buffer.from((tx.operations[0] as any).func.value);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), '84d254abbc46f5aaf8305734510d66123b4cc9d800992cd11c23da88eb1be622');
+});
+
+test('mixed successful v2 generations fail before building or sending a replacement', async () => {
+  reset();
+  const make = (file: string, action: string) => {
+    const tx = new TransactionBuilder(new Account(operator.publicKey(), '1'), { fee: '100', networkPassphrase: Networks.TESTNET })
+      .addOperation(Operation.uploadContractWasm({ wasm: fs.readFileSync(new URL('../wasm/' + file, import.meta.url)) }))
+      .setTimeout(900)
+      .build();
+    return { hash: Buffer.from(tx.hash()).toString('hex'), campaign: v2Input().id, actor: operator.publicKey(), action, xdr: tx.toXDR(), status: 'SUCCESS' };
+  };
+  fs.writeFileSync(
+    process.env.SOROBAN_INTENTS_PATH!,
+    JSON.stringify({ intents: [make('v2-share-token-sep41.wasm', 'deploy-v2-upload-token'), make('sdk30-offering.wasm', 'deploy-v2-upload-offering')] }),
+  );
+  const count = sendCount;
+  await assert.rejects(buildCampaignDeployV2(v2Input()), /mixed deployment artifact generations/);
+  assert.equal(sendCount, count);
 });

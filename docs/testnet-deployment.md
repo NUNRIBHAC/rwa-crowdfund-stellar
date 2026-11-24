@@ -2,9 +2,11 @@
 
 First live deployment of the reviewed crowdfund contract on Stellar testnet. No real funds anywhere. All accounts below are throwaway testnet accounts funded by Friendbot and the Sozu USDC faucet.
 
-## Verified gates (previously unverified in repo docs)
+Current SDK30 source builds different, separately pinned artifacts. The record below is historical evidence, not a claim that SDK30 reproduces protocol29 bytes. See [SDK30 compatibility](sdk30-artifact-compatibility.md).
 
-- Source reproduces the pinned Wasm byte-identical: sha256 `202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564` (rustc 1.99.1, stellar-cli 28.1.0, `cmp` against `backend/test/fixtures/reviewed-crowdfund.wasm`).
+## Verified historical gates (previously unverified in repo docs)
+
+- Historical protocol29 source/toolchain reproduced the retained Wasm byte-identical: sha256 `202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564` (rustc 1.99.1, stellar-cli 28.1.0, `cmp` against `backend/test/fixtures/reviewed-crowdfund.wasm`).
 - 20/20 Rust tests, 74/74 JS tests pass.
 - Deploy-time creator authorization verified live: deploying from an unrelated account fails with `Error(Auth, InvalidAction)` (constructor `require_auth` not tied to root invocation). This closes the explicit gate in `contracts/crowdfund/README.md`.
 
