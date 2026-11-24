@@ -4228,6 +4228,69 @@ export const en = {
       'Sample of a supported format: donation, reward and pre-sale crowdfunding are covered by the Portuguese national crowdfunding regime (Lei 102/2015), outside ECSPR. A live offer requires the operator to be a legal entity or EIRL and to give prior notice to the DGE at least 30 days before starting activity. This page shows illustrative sample data: no money is collected and no tax deduction is promised. No financial return is offered.',
     ecsprNote: 'Real loan and S.A. share offers through crowdfunding require ECSPR authorization (CMVM in Portugal).',
   },
+  foundingCampaign: {
+    title: 'Help build Blockallisto',
+    previewNotice: 'Local preview, with test money only. It does not accept support or make payments.',
+    fundsDecision:
+      'Design decision: the money stays held until a licence is obtained. Holding the funds and refunds still need implementation and legal and operational validation.',
+    origem: {
+      heading: 'The first support',
+      paragraph1:
+        'Some projects with potential never come into being. Not for lack of an idea, but for lack of the first capital that traditional finance does not provide.',
+      paragraph2:
+        'An idea is only proven when someone believes in it. But the person with the idea does not always have the capital, and the person with the capital does not always know whether the idea is worth the risk. We open the way to many small contributions: each is a small sign that the idea matters.',
+    },
+    via: {
+      heading: 'Another way',
+      paragraph1: 'Blockallisto was born to open another way: crowdfunding and crowdlending, with technology visible to everyone.',
+      paragraph2:
+        'Blockallisto is a business, not an association. We want to build a platform that sustains itself and creates value, and we believe this also helps projects reach capital they cannot find today.',
+    },
+    construir: {
+      heading: 'We start with our own platform',
+      paragraph1:
+        'Before inviting other project owners, we have to build the platform. And we face the same problem they do: turning an idea into something real costs money. So we start with our own campaign. We present the idea, show the plan and ask the crowd to help bring it to life.',
+    },
+    meta: {
+      heading: '€25,000 to reach launch',
+      paragraph1:
+        'We need €25,000 for three things: building and protecting the platform, handling licensing and compliance as a crowdfunding platform, and operating until launch. Every euro has a purpose, and we will show how it is used.',
+    },
+    azulejo: {
+      heading: 'Your place on the tile wall',
+      paragraph1:
+        'Each contribution has a place on a wall of tiles. Each tile is your place in the story. It is a pre-reservation and support, not an investment, and it promises neither interest nor returns. You can choose whether your name appears; we keep the name off the blockchain. The tile and associated events are recorded verifiably through an identifier.',
+    },
+    reembolso: {
+      heading: 'When we refund contributions',
+      paragraph1:
+        'We refund all contributions if the target is not reached or if Blockallisto does not obtain the ECSP authorisation needed to operate as a crowdfunding platform. Contributions and refunds will be made in euros through authorised providers. This is our design intent, subject to legal and operational validation.',
+    },
+    tecnologia: {
+      heading: 'Technology with transparency',
+      paragraph1:
+        'We are Web3 and say so plainly. We do not promise that blockchain eliminates risk. Trust comes from clear rights, sound rules and transparency about money. Blockchain is used where it adds value: a single contract holds the wall and important events are recorded verifiably.',
+    },
+    futuro: {
+      heading: 'The first step',
+      paragraph1:
+        'This campaign is the first step towards a larger goal: building a platform where real assets can be financed by many people. What you support today is the construction of this platform, and your tile recognises that.',
+      paragraph2: 'If we believe the crowd can finance good projects, we have to start with our own. Help us open this way. Because it can be your way too.',
+    },
+  },
+  tileWall: {
+    refundComplete: 'All contributions returned (simulation)',
+    futureDoor: 'In the future, the company may study other forms of participation with legal advice. None of this is promised or forms part of this support.',
+    footerLabel: 'Tile wall',
+    wallTitle: 'One tile for each contribution',
+    wallNote: 'Each tile represents support already given. It does not promise any additional payment.',
+    demoNote: 'Visual simulation: it does not record contributions, move money or start refunds.',
+    progressLabel: 'Campaign progress (simulation)',
+    refundButton: 'Simulate refund phase',
+    resetButton: 'Reset simulation',
+    refundState: 'Simulated refund phase',
+    campaignState: 'Simulated campaign in progress',
+  },
 };
 
 export type Messages = typeof en;

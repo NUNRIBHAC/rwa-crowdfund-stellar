@@ -1,0 +1,122 @@
+.tile-wall-demo {
+  margin: 2rem 0;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+.tile-wall-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: clamp(0.35rem, 1.2vw, 0.8rem);
+  padding: 1.25rem;
+  margin-block: 1.5rem;
+  overflow: hidden;
+  direction: ltr;
+  border-radius: var(--radius);
+  background: var(--navy);
+}
+.wall-tile {
+  aspect-ratio: 1;
+  display: block;
+  border-radius: 12%;
+  border: 1px solid #c7c8ff;
+  background: #9497ff;
+  transform: scale(var(--tile-scale));
+}
+.tile-pattern-1 {
+  background: linear-gradient(45deg, #f3f2ff 25%, #4b4fe2 25%, #4b4fe2 50%, #f3f2ff 50%, #f3f2ff 75%, #4b4fe2 75%);
+}
+.tile-pattern-2 {
+  background: radial-gradient(circle, #f3f2ff 23%, #6569eb 25%, #6569eb 48%, #f3f2ff 50%, #f3f2ff 65%, #6569eb 67%);
+}
+.tile-pattern-3 {
+  background: conic-gradient(#f3f2ff 25%, #4b4fe2 0 50%, #f3f2ff 0 75%, #4b4fe2 0);
+}
+.is-growing .wall-tile {
+  animation: wall-pulse 4s ease-in-out infinite;
+  animation-delay: calc(var(--tile-index) * 40ms);
+}
+.is-refunding .wall-tile {
+  animation: wall-burst 1.2s ease-out both;
+  animation-delay: calc(var(--tile-index) * 15ms);
+}
+.tile-wall-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.tile-wall-controls label {
+  flex-basis: 100%;
+}
+.tile-wall-controls input {
+  min-width: 0;
+  width: min(100%, 16rem);
+}
+.tile-wall-controls button {
+  white-space: normal;
+}
+.tile-wall-note {
+  color: var(--ink-soft);
+}
+@keyframes wall-pulse {
+  0%,
+  100% {
+    transform: scale(var(--tile-scale));
+  }
+  50% {
+    transform: scale(calc(var(--tile-scale) * 0.95));
+  }
+}
+@keyframes wall-burst {
+  0% {
+    transform: scale(var(--tile-scale));
+    opacity: 1;
+  }
+  55% {
+    transform: scale(1.12) rotate(10deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.05) rotate(55deg);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-growing .wall-tile,
+  .is-refunding .wall-tile {
+    animation: none;
+  }
+  .is-refunding .wall-tile {
+    opacity: 0.25;
+    transform: scale(0.75);
+  }
+}
+
+.tile-wall-refund-complete {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+  padding: 1.5rem;
+  color: #f3f2ff;
+  font-weight: 700;
+  opacity: 0;
+  animation: wall-complete 1.905s step-end forwards;
+}
+@keyframes wall-complete {
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile-wall-refund-complete {
+    animation: none;
+    opacity: 1;
+  }
+}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { sampleConceptIndex } from './data/sampleConcepts';
 
 export type RouteName =
+  | 'tile-wall'
   | 'home'
   | 'investments'
   | 'campaign'
@@ -32,6 +33,7 @@ export type RouteName =
 export type Route = { name: RouteName; campaignId?: string };
 
 const KNOWN_SEGMENTS = new Set([
+  'tile-wall',
   'investments',
   'campaigns',
   'how-it-works',
@@ -68,6 +70,8 @@ const KNOWN_SEGMENTS = new Set([
 export function routeFromPath(pathname: string): Route {
   const parts = pathname.replace(/^\//, '').split('/').filter(Boolean);
   switch (parts[0]) {
+    case 'tile-wall':
+      return { name: 'tile-wall' };
     case 'investments':
       return { name: 'investments' };
     case 'campaigns':

@@ -3,6 +3,7 @@
 export const PUBLIC_PAGES = [
   '/',
   '/about',
+  '/tile-wall',
   '/account',
   '/blog',
   '/business-continuity',

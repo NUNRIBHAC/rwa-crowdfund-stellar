@@ -3803,5 +3803,58 @@
     "caveat": "Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden.",
     "sampleNote": "Beispiel eines unterstützten Formats: Spenden-, Prämien- und Vorverkaufs-Crowdfunding fallen unter das portugiesische nationale Crowdfunding-Regime (Lei 102/2015), außerhalb der ECSPR. Ein echtes Angebot setzt voraus, dass der Betreiber eine juristische Person oder EIRL ist und dies der DGE mindestens 30 Tage vor Aufnahme der Tätigkeit vorab meldet. Diese Seite zeigt illustrative Beispieldaten: Es wird kein Geld eingesammelt und keine Steuerbegünstigung versprochen. Es wird keine finanzielle Rendite angeboten.",
     "ecsprNote": "Reale Kredit- und S.A.-Aktienangebote über Crowdfunding erfordern eine ECSPR-Zulassung (CMVM in Portugal)."
+  },
+  "foundingCampaign": {
+    "title": "Hilf mit, Blockallisto aufzubauen",
+    "previewNotice": "Lokale Vorschau, nur mit Testgeld. Sie nimmt keine Unterstützungsbeiträge an und führt keine Zahlungen aus.",
+    "fundsDecision": "Entwurfsentscheidung: Das Geld bleibt verwahrt, bis eine Zulassung vorliegt. Verwahrung und Rückerstattungen müssen noch umgesetzt und rechtlich sowie operativ geprüft werden.",
+    "origem": {
+      "heading": "Die erste Unterstützung",
+      "paragraph1": "Manche Projekte mit Potenzial werden nie Wirklichkeit. Nicht, weil die Idee fehlt, sondern weil das erste Kapital fehlt, das die traditionelle Finanzierung nicht bereitstellt.",
+      "paragraph2": "Eine Idee bewährt sich erst, wenn jemand an sie glaubt. Doch wer die Idee hat, hat nicht immer das Kapital, und wer das Kapital hat, weiß nicht immer, ob die Idee das Risiko wert ist. Wir öffnen den Weg für viele kleine Beiträge: Jeder ist ein kleines Zeichen dafür, dass die Idee zählt."
+    },
+    "via": {
+      "heading": "Ein anderer Weg",
+      "paragraph1": "Blockallisto wurde gegründet, um einen anderen Weg zu öffnen: Crowdfunding und Crowdlending, mit einer für alle sichtbaren Technologie.",
+      "paragraph2": "Blockallisto ist ein Unternehmen, kein Verein. Wir wollen eine Plattform aufbauen, die sich selbst trägt und Wert schafft. Wir glauben, dass dies auch Projekten hilft, Kapital zu erreichen, das sie heute nicht finden."
+    },
+    "construir": {
+      "heading": "Wir beginnen mit unserer Plattform",
+      "paragraph1": "Bevor wir andere Projektträger einladen, müssen wir die Plattform aufbauen. Dabei stehen wir vor demselben Problem wie sie: Eine Idee in etwas Reales zu verwandeln, kostet Geld. Deshalb beginnen wir mit unserer eigenen Kampagne. Wir stellen die Idee vor, zeigen den Plan und bitten die Gemeinschaft, ihr zum Leben zu verhelfen."
+    },
+    "meta": {
+      "heading": "25.000 € bis zum Start",
+      "paragraph1": "Wir brauchen 25.000 € für drei Dinge: den Aufbau und Schutz der Plattform, die Zulassung und Compliance als Crowdfunding-Plattform sowie den Betrieb bis zum Start. Jeder Euro hat einen Zweck, und wir werden zeigen, wie er verwendet wird."
+    },
+    "azulejo": {
+      "heading": "Dein Platz an der Kachelwand",
+      "paragraph1": "Jeder Beitrag erhält einen Platz an einer Kachelwand. Jede Kachel ist dein Platz in der Geschichte. Sie ist eine Vorreservierung und Unterstützung, keine Investition, und verspricht weder Zinsen noch Rendite. Du kannst wählen, ob dein Name erscheint; wir speichern den Namen außerhalb der Blockchain. Die Kachel und die zugehörigen Ereignisse werden über eine Kennung überprüfbar erfasst."
+    },
+    "reembolso": {
+      "heading": "Wann wir Beiträge zurückzahlen",
+      "paragraph1": "Wir erstatten alle Beiträge, wenn das Ziel nicht erreicht wird oder Blockallisto nicht die erforderliche ECSP-Zulassung für den Betrieb als Crowdfunding-Plattform erhält. Beiträge und Rückerstattungen erfolgen in Euro über zugelassene Dienstleister. Dies ist unsere Entwurfsabsicht, vorbehaltlich rechtlicher und operativer Prüfung."
+    },
+    "tecnologia": {
+      "heading": "Technologie mit Transparenz",
+      "paragraph1": "Wir sind Web3 und sagen das offen. Wir versprechen nicht, dass die Blockchain Risiken beseitigt. Vertrauen entsteht durch klare Rechte, solide Regeln und Transparenz im Umgang mit Geld. Die Blockchain wird dort eingesetzt, wo sie einen Wert schafft: Ein einziger Vertrag hält die Wand, und wichtige Ereignisse werden überprüfbar erfasst."
+    },
+    "futuro": {
+      "heading": "Der erste Schritt",
+      "paragraph1": "Diese Kampagne ist der erste Schritt zu einem größeren Ziel: eine Plattform aufzubauen, auf der reale Vermögenswerte von vielen Menschen finanziert werden können. Was du heute unterstützt, ist der Aufbau dieser Plattform. Deine Kachel ist die Anerkennung dafür.",
+      "paragraph2": "Wenn wir glauben, dass die Gemeinschaft gute Projekte finanzieren kann, müssen wir mit unserem eigenen beginnen. Hilf uns, diesen Weg zu öffnen. Denn es kann auch dein Weg sein."
+    }
+  },
+  "tileWall": {
+    "refundComplete": "Alle Unterstützungsbeiträge zurückerstattet (Simulation)",
+    "futureDoor": "In Zukunft kann das Unternehmen mit rechtlicher Beratung andere Beteiligungsformen prüfen. Nichts davon wird versprochen oder ist Teil dieser Unterstützung.",
+    "footerLabel": "Kachelwand",
+    "wallTitle": "Eine Kachel für jeden Beitrag",
+    "wallNote": "Jede Kachel steht für eine bereits geleistete Unterstützung. Sie verspricht keine zusätzliche Zahlung.",
+    "demoNote": "Visuelle Simulation: Sie erfasst keine Beiträge, bewegt kein Geld und löst keine Rückerstattungen aus.",
+    "progressLabel": "Kampagnenfortschritt (Simulation)",
+    "refundButton": "Rückerstattungsphase simulieren",
+    "resetButton": "Simulation zurücksetzen",
+    "refundState": "Simulierte Rückerstattungsphase",
+    "campaignState": "Simulierte Kampagne läuft"
   }
 }
