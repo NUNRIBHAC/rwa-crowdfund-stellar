@@ -1525,8 +1525,7 @@
             "label": "Condições de emissão (entrada de exemplo)",
             "note": "Nenhum ficheiro alojado neste protótipo"
           }
-        ],
-        "news": []
+        ]
       },
       {
         "issuer": "Cais Norte (Dados de exemplo - não é uma oferta real)",
@@ -1618,9 +1617,7 @@
           "A parcela dos lucros depende inteiramente do desempenho do emitente",
           "Pode ficar atrás dos credores ordinários",
           "Normalmente ilíquido até ao vencimento"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pátio do Cedro (Dados de exemplo - não é uma oferta real)",
@@ -1646,9 +1643,7 @@
           "A forma jurídica e a proteção do investidor variam fortemente consoante a jurisdição",
           "Pode envolver um fiduciário ou veículo entre o investidor e o emitente",
           "Normalmente ilíquido"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Ciclo Mineral (Dados de exemplo - não é uma oferta real)",
@@ -1679,9 +1674,7 @@
           "Perda total possível",
           "As ações de crowdfunding normalmente não são negociáveis em bolsa",
           "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Prado Vivo (Dados de exemplo - não é uma oferta real)",
@@ -1707,9 +1700,7 @@
           "A participação nas perdas pode reduzir ou anular a participação",
           "A saída é frequentemente restringida pelo contrato de sociedade",
           "Os deveres fiscais e de reporte podem ser mais exigentes"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Frio do Porto (Dados de exemplo - não é uma oferta real)",
@@ -1739,9 +1730,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Bosque Solar (Dados de exemplo - não é uma oferta real)",
@@ -1771,9 +1760,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mosaico Oficina (Dados de exemplo - não é uma oferta real)",
@@ -1803,9 +1790,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rota Clara (Dados de exemplo - não é uma oferta real)",
@@ -1835,9 +1820,7 @@
           "A subordinação aumenta a gravidade da perda em caso de insolvência",
           "Continua sem garantias salvo indicação de colateral",
           "Sem participação no crescimento da empresa"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Linha Solar (Dados de exemplo - não é uma oferta real)",
@@ -1872,9 +1855,7 @@
           "Continua sem garantias salvo indicação de colateral",
           "Sem participação no crescimento da empresa",
           "Uma estrutura de cupão num empréstimo ou obrigação, não uma senioridade: sem juros periódicos; o retorno vem da emissão abaixo do valor nominal e do reembolso ao par. Combina com uma categoria-mãe de dívida, nunca existe sozinha."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Livros à Esquina (Dados de exemplo - não é uma oferta real)",
@@ -1907,9 +1888,7 @@
           "Contribuição sem propriedade, juros, reembolso ou retorno financeiro.",
           "Não se promete dedução fiscal.",
           "Cenário de exemplo tudo-ou-nada: a meta não foi atingida e as contribuições foram devolvidas."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Barro Vivo (Dados de exemplo - não é uma oferta real)",
@@ -1942,9 +1921,7 @@
           "Financiamento em troca de uma recompensa não financeira ou do produto ou serviço financiado. Não é oferecido retorno financeiro.",
           "Entrega, cancelamento e direitos do consumidor seriam definidos por oferta.",
           "Cenário de exemplo com sucesso: a meta foi atingida e o promotor levantou os fundos."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Luz de Oficina (Dados de exemplo - não é uma oferta real)",
@@ -1977,9 +1954,7 @@
           "Encomenda antecipada do produto ou serviço financiado, estruturada como financiamento com recompensa, não como investimento ou direito a um token futuro. Não é oferecido retorno financeiro.",
           "Entrega, cancelamento e direitos do consumidor seriam definidos por oferta.",
           "Cenário de exemplo tudo-ou-nada: a meta não foi atingida e as contribuições foram devolvidas."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pedal Leve (Dados de exemplo - não é uma oferta real)",
@@ -2013,9 +1988,7 @@
           "Se o preço da ação nunca superar o preço de exercício, o warrant pode expirar sem valor; é possível a perda total do montante pago.",
           "O exercício emite novas ações e dilui os acionistas existentes.",
           "As ofertas de valores mobiliários ao abrigo do ECSPR estão limitadas a 5.000.000 EUR por emitente em 12 meses."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Fio do Douro (Dados de exemplo - não é uma oferta real)",
@@ -2049,9 +2022,7 @@
           "A custódia exige um banco ou empresa de investimento autorizado (CRD / MiFID II) ou um regime equivalente de registo do emitente.",
           "Portugal não tem um regime nacional próprio para certificados de depósito; este exemplo não o estabelece.",
           "Perda total possível; as ações subjacentes podem ser ilíquidas."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Folha Nova (Dados de exemplo - não é uma oferta real)",
@@ -2085,9 +2056,7 @@
           "Sem garantia real: se o emitente não pagar nem refinanciar na maturidade, os investidores podem perder a totalidade.",
           "Não foi encontrada prática da CMVM para papel comercial de retalho em crowdfunding; as condições de retalho listadas são exigidas antes de qualquer oferta real.",
           "As ofertas de valores mobiliários ao abrigo do ECSPR estão limitadas a 5.000.000 EUR por emitente em 12 meses."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mesa da Costa (Dados de exemplo - não é uma oferta real)",
@@ -2121,9 +2090,7 @@
           "O juro varia com as receitas do emitente; se os montantes vencidos só fossem pagos quando existissem receitas, o instrumento seria condicional e deixaria de ser um empréstimo ECSPR.",
           "Uma taxa indexada às receitas num contrato concreto não está confirmada pela prática da CMVM.",
           "Perda total possível; os empréstimos são normalmente ilíquidos até à maturidade."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Vento do Mondego (Dados de exemplo - não é uma oferta real)",
@@ -2157,9 +2124,7 @@
           "A colocação ao abrigo do ECSPR não está provada: um certificado de depósito é emitido pelo custodiante, não pelo dono do projeto ou por um SPV, e nem a ESMA nem a CMVM o confirmaram.",
           "A custódia exige um banco ou empresa de investimento autorizado (CRD / MiFID II) ou um regime equivalente de registo do emitente.",
           "Perda total possível em caso de incumprimento do emitente; as obrigações subjacentes podem ser ilíquidas."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Raiz Vertical (Dados de exemplo - não é uma oferta real)",
@@ -2189,9 +2154,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Tronco Vivo (Dados de exemplo - não é uma oferta real)",
@@ -2221,9 +2184,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Massa Lenta (Dados de exemplo - não é uma oferta real)",
@@ -2253,9 +2214,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Terra de Forno (Dados de exemplo - não é uma oferta real)",
@@ -2285,9 +2244,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mar em Terra (Dados de exemplo - não é uma oferta real)",
@@ -2318,9 +2275,7 @@
           "Perda total possível",
           "As ações de crowdfunding normalmente não são negociáveis em bolsa",
           "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Água de Volta (Dados de exemplo - não é uma oferta real)",
@@ -2350,9 +2305,7 @@
           "A subordinação aumenta a gravidade da perda em caso de insolvência",
           "Continua sem garantias salvo indicação de colateral",
           "Sem participação no crescimento da empresa"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Passo Certo (Dados de exemplo - não é uma oferta real)",
@@ -2382,9 +2335,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lente Circular (Dados de exemplo - não é uma oferta real)",
@@ -2414,9 +2365,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Polpa Fresca (Dados de exemplo - não é uma oferta real)",
@@ -2446,9 +2395,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Som de Madeira (Dados de exemplo - não é uma oferta real)",
@@ -2478,9 +2425,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Olho do Mar (Dados de exemplo - não é uma oferta real)",
@@ -2511,9 +2456,7 @@
           "Perda total possível",
           "As ações de crowdfunding normalmente não são negociáveis em bolsa",
           "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Traço Recuperado (Dados de exemplo - não é uma oferta real)",
@@ -2543,9 +2486,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Solo de Novo (Dados de exemplo - não é uma oferta real)",
@@ -2575,9 +2516,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Torra de Bairro (Dados de exemplo - não é uma oferta real)",
@@ -2607,9 +2546,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Oficina Curiosa (Dados de exemplo - não é uma oferta real)",
@@ -2640,9 +2577,7 @@
           "Perda total possível",
           "As ações de crowdfunding normalmente não são negociáveis em bolsa",
           "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Letra Viva (Dados de exemplo - não é uma oferta real)",
@@ -2672,9 +2607,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lã da Serra (Dados de exemplo - não é uma oferta real)",
@@ -2704,9 +2637,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rota Digital (Dados de exemplo - não é uma oferta real)",
@@ -2737,9 +2668,7 @@
           "Perda total possível",
           "As ações de crowdfunding normalmente não são negociáveis em bolsa",
           "Uma estrutura de titularidade, não um instrumento distinto: o investidor detém a participação subjacente através de um veículo ou fiduciário, e o interesse subjacente decide a economia."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Segundo Ciclo (Dados de exemplo - não é uma oferta real)",
@@ -2769,9 +2698,7 @@
           "A subordinação aumenta a gravidade da perda em caso de insolvência",
           "Continua sem garantias salvo indicação de colateral",
           "Sem participação no crescimento da empresa"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lagar Novo (Dados de exemplo - não é uma oferta real)",
@@ -2801,9 +2728,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Colmeia Viva (Dados de exemplo - não é uma oferta real)",
@@ -2833,9 +2758,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pata Serena (Dados de exemplo - não é uma oferta real)",
@@ -2865,9 +2788,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rotas Abertas (Dados de exemplo - não é uma oferta real)",
@@ -2897,9 +2818,7 @@
           "O incumprimento do emitente pode significar perda total",
           "Os créditos subordinados só são pagos depois dos credores seniores em caso de insolvência",
           "Sem garantia de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Casa em Peças (Dados de exemplo - não é uma oferta real)",
@@ -2929,9 +2848,7 @@
           "A subordinação aumenta a gravidade da perda em caso de insolvência",
           "Continua sem garantias salvo indicação de colateral",
           "Sem participação no crescimento da empresa"
-        ],
-        "documents": [],
-        "news": []
+        ]
       }
     ]
   },
@@ -3859,7 +3776,7 @@
     },
     "via": {
       "heading": "Uma nova via",
-      "paragraph1": "A Blockallisto nasceu para abrir outra via: crowdfunding e crowdlending, com a tecnologia à vista de todos.",
+      "paragraph1": "É através desta campanha de crowdfunding que a Blockallisto vai nascer, para abrir outra via: crowdfunding e crowdlending, com a tecnologia à vista de todos.",
       "paragraph2": "A Blockallisto é um negócio, não uma associação. Queremos construir uma plataforma que se sustente e gere valor, e acreditamos que isso também ajuda projetos a chegar ao capital que hoje não encontram."
     },
     "construir": {
