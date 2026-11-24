@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { contract } from '@stellar/stellar-sdk';
+import { contract, xdr } from '@stellar/stellar-sdk';
 import { CONTRACT_ARTIFACTS, DEPLOY_ARTIFACTS, isReviewedContractHash, loadDeployArtifact } from '../src/contract-artifacts.js';
 
 test('all seven current/historical artifacts retain exact pins, with family-only recognition', () => {
@@ -33,6 +33,13 @@ test('SDK JS parses every historical/new spec and preserves names, inputs and er
       b.funcs().map((f) => f.name.toString()),
     );
     assert.deepEqual(a.errorCases(), b.errorCases());
-    for (const f of a.funcs()) assert.deepEqual(f.inputs, b.getFunc(f.name.toString()).inputs);
+    for (const f of a.funcs()) {
+      const name = f.name.toString();
+      assert.deepEqual(f.inputs, b.getFunc(name).inputs);
+      if (f.outputs[0]?.type === 'scSpecTypeResult') {
+        const err = xdr.ScVal.scvError(xdr.ScError.sceContract(3));
+        assert.deepEqual(a.funcResToNative(name, err), b.funcResToNative(name, err));
+      }
+    }
   }
 });

@@ -10,7 +10,7 @@ A stored pre-upgrade signed deployment is reconciled against the exact artifact 
 
 ## ABI qualification
 
-All function names, inputs, and error enum entries are unchanged. The 21 spec differences are Result error type declarations changing from generic error to the Error UDT: five crowdfund, six offering, ten share-token. SDK JS parses both generations. This is adapter/spec evidence, not an independent audit or live protocol execution proof.
+All function names, inputs, and error enum entries are unchanged. The 21 spec differences are Result error type declarations changing from generic error to the Error UDT: five crowdfund, six offering, ten share-token. SDK JS parses both generations. The compiled historical and SDK30 WASM for all three families also execute in the protocol30 host offline: crowdfunding contribution/refund/error, share-token mint/transfer/burn/error, and offering limits/error. Constructor authorization is explicitly mocked with non-root auth allowed for offline registration; this does not prove wallet authorization, deployment security, or live network behavior. These checks are not an independent audit.
 
 The generated metadata targets protocol30. Current mainnet/testnet Horizon both reported protocol30 on November24,2026. No deployment to either network was performed.
 
