@@ -3815,6 +3815,7 @@
     "resetButton": "Reset simulation",
     "refundState": "Simulated refund phase",
     "campaignState": "Simulated campaign in progress",
-    "futureDoor": "In the future, the company may study other forms of participation with legal advice. None of this is promised or forms part of this support."
+    "futureDoor": "In the future, the company may study other forms of participation with legal advice. None of this is promised or forms part of this support.",
+    "refundComplete": "All contributions returned (simulation)"
   }
 }
