@@ -173,6 +173,11 @@ export default function Account({ market }: { market: Market }) {
   return (
     <>
       <h1 className="page-title">{m.account.title}</h1>
+      <p>
+        <a className="btn" href={routeHash({ name: 'testnet-setup' })}>
+          {m.testnetSetup.title}
+        </a>
+      </p>
       <p className="account-note" role="note">
         {m.account.note}
       </p>

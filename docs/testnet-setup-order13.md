@@ -1,6 +1,6 @@
 # Order 13: guided testnet setup and repeat test
 
-Status: local foundation only. Not connected to the running server or UI. No deployment or network transaction has been performed.
+Status: local implementation in progress. The setup page, account-page entry point and API router are wired locally. The API remains disabled unless TESTNET_SETUP_ENABLED=1. Nothing has been deployed and no live wallet or network transaction has been performed.
 
 ## Scope and limits
 
@@ -28,9 +28,9 @@ The latter documents the wallet SDK's new name. This change does not authorize a
 - API router has no-store responses, request allowlists, a per-IP/global bounded request budget and stable error codes without upstream diagnostics.
 - Ports use fixed official testnet origins, no redirects and15-second read/funding deadlines.
 
-The router is deliberately not mounted. There is no feature flag wired into the server yet. Synthetic signing tests use public deterministic seeds and never contact a network or create a user account.
+The router is mounted before the API catch-all and is disabled by default. A real-server integration test checks all four endpoints return the disabled response without upstream I/O. Synthetic signing tests use public deterministic seeds and never contact a network or create a user account.
 
-## Required before completion
+## Acceptance requirements
 
 1. Add localized UI strings through the established translation workflow for all11languages, including every error and pending/uncertain state. No raw upstream text or English fallback.
 2. Add account-page entry point or a clearly identified setup route. Keep this separate from a loss simulator and from synthetic sample campaigns.
@@ -42,3 +42,17 @@ The router is deliberately not mounted. There is no feature flag wired into the 
 8. Add router integration and adapter tests, then mount behind an explicit disabled-by-default testnet setup flag. Add rate-limit tests for global/cardinality expiry and router behavior.
 9. Run full backend/frontend/UI-kit suites, builds, formatting, lint and i18n checks. Inspect all11languages, both themes and required widths, including Arabic. Synthetic tests do not prove a live wallet accepts the flow.
 10. Keep local until review and separately approved release steps. No production/staging effects are included in this work.
+
+## Validation on current main (2026-11-24)
+
+Integrated on main 73c5c895. Complete backend regression: 807 tests across 96 files in six bounded groups, zero failures, skips or cancellations. All groups collected V8 coverage into one directory. The merged source-only report is 94.23% lines, 87.44% branches and 95.93% functions, above the 91/80/80 gates. Two monolithic attempts exceeded the execution window and are not counted as successful runs.
+
+Complete frontend regression: 1,165 tests across 117 files in five groups. Combined coverage: 83.32% lines, 77.62% branches and 75.83% functions. UI-kit: 14 passing tests. Backend/frontend builds, i18n parity and whitespace checks, formatting and lint pass. Lint retains four pre-existing unused-directive warnings.
+
+The isolated component harness records 352 unique cases: 11 languages, two themes, four widths and four setup states. The real App route/account entry harness records 44 unique sequences: 11 languages, two themes and two widths, including deep-link reload. API and wallet responses are synthetic; no signature or external transaction occurred. Full mobile state contact sheets for all 11 languages and App route contact sheets were visually inspected. These do not constitute individual pixel inspection of every desktop/tablet case. Arabic list geometry was corrected to keep actions on the same physical side as English while text remains RTL.
+
+## Remaining acceptance limits
+
+A live Freighter signature and official faucet outcome remain unproven. Account creation/selection remains inside the wallet, not automatic. The Circle faucet opens separately and no fixed funding amount or cooldown is promised. No automatic contribution, old contribution deletion, campaign reset or existing-campaign mutation is implemented.
+
+The feature flag remains disabled by default. This local preparation does not enable it on staging, merge a PR, deploy or change a live account. The temporary preview harness stays outside committed source. Release authority must be checked against the final reviewed change.

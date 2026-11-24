@@ -15,6 +15,7 @@ export type RouteName =
   | 'financing'
   | 'about'
   | 'account'
+  | 'testnet-setup'
   | 'terms-of-service'
   | 'privacy-policy'
   | 'risk-disclosure'
@@ -47,6 +48,7 @@ const KNOWN_SEGMENTS = new Set([
   'campaign-builder',
   'about',
   'account',
+  'testnet-setup',
   'terms-of-service',
   'privacy-policy',
   'risk-disclosure',
@@ -103,6 +105,8 @@ export function routeFromPath(pathname: string): Route {
       return { name: 'campaign-builder' };
     case 'about':
       return { name: 'about' };
+    case 'testnet-setup':
+      return { name: 'testnet-setup' };
     case 'account':
       return { name: 'account' };
     case 'terms-of-service':

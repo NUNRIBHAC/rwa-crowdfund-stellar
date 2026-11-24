@@ -60,10 +60,12 @@ export function testnetSetupRouter(config: TestnetSetupConfig, ports: SetupPorts
   return router;
 }
 
-// Kept separate from server wiring until the page and route tests are complete.
+// Used by the server only through the disabled-by-default setup feature gate.
 // No environment-controlled upstream URLs and no redirect following.
 export function testnetSetupPorts(): SetupPorts {
   const server = new Horizon.Server(TESTNET_HORIZON);
+  server.httpClient.defaults.timeout = 15000;
+  server.httpClient.defaults.maxRedirects = 0;
   return {
     async loadAccount(address) {
       const response = await fetch(`${TESTNET_HORIZON}/accounts/${encodeURIComponent(address)}`, { redirect: 'error', signal: AbortSignal.timeout(15000) });
