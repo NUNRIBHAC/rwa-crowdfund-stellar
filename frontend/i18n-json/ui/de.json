@@ -1525,8 +1525,7 @@
             "label": "Emissionsbedingungen (Beispieleintrag)",
             "note": "Keine Datei in diesem Prototyp gehostet"
           }
-        ],
-        "news": []
+        ]
       },
       {
         "issuer": "Cais Norte (Beispieldaten - kein echtes Angebot)",
@@ -1618,9 +1617,7 @@
           "Der Gewinnanteil hängt vollständig von der Leistung des Emittenten ab",
           "Kann hinter gewöhnlichen Gläubigern stehen",
           "Meist illiquide bis zur Fälligkeit"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pátio do Cedro (Beispieldaten - kein echtes Angebot)",
@@ -1646,9 +1643,7 @@
           "Rechtsform und Anlegerschutz unterscheiden sich je nach Jurisdiktion stark",
           "Kann einen Treuhänder oder ein Vehikel zwischen Anleger und Emittent einschieben",
           "Meist illiquide"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Ciclo Mineral (Beispieldaten - kein echtes Angebot)",
@@ -1679,9 +1674,7 @@
           "Totalverlust möglich",
           "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
           "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Prado Vivo (Beispieldaten - kein echtes Angebot)",
@@ -1707,9 +1700,7 @@
           "Die Verlustbeteiligung kann die Beteiligung schmälern oder auslöschen",
           "Der Ausstieg ist oft durch den Gesellschaftsvertrag beschränkt",
           "Steuer- und Meldepflichten können aufwendiger sein"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Frio do Porto (Beispieldaten - kein echtes Angebot)",
@@ -1739,9 +1730,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Bosque Solar (Beispieldaten - kein echtes Angebot)",
@@ -1771,9 +1760,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mosaico Oficina (Beispieldaten - kein echtes Angebot)",
@@ -1803,9 +1790,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rota Clara (Beispieldaten - kein echtes Angebot)",
@@ -1835,9 +1820,7 @@
           "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
           "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
           "Keine Beteiligung am Unternehmenswachstum"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Linha Solar (Beispieldaten - kein echtes Angebot)",
@@ -1872,9 +1855,7 @@
           "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
           "Keine Beteiligung am Unternehmenswachstum",
           "Eine Kupon-Struktur auf einem Darlehen oder einer Anleihe, keine Rangfolge: keine periodischen Zinsen; die Rendite kommt aus der Emission unter dem Nennwert und der Rückzahlung zum Pari. Kombiniert mit einer Fremdkapital-Mutterkategorie, steht nie allein."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Livros à Esquina (Beispieldaten - kein echtes Angebot)",
@@ -1907,9 +1888,7 @@
           "Ein Beitrag ohne Eigentum, Zinsen, Rückzahlung oder finanzielle Rendite.",
           "Es wird keine Steuerbegünstigung versprochen.",
           "Alles-oder-nichts-Beispielszenario: Das Ziel wurde verfehlt und die Beiträge wurden zurückerstattet."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Barro Vivo (Beispieldaten - kein echtes Angebot)",
@@ -1942,9 +1921,7 @@
           "Finanzierung gegen eine nicht-finanzielle Prämie oder das finanzierte Produkt oder die Dienstleistung. Es wird keine finanzielle Rendite angeboten.",
           "Lieferung, Widerruf und Verbraucherrechte würden je Angebot festgelegt.",
           "Erfolgreiches Beispielszenario: Das Ziel wurde erreicht und der Ersteller hat die Mittel abgehoben."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Luz de Oficina (Beispieldaten - kein echtes Angebot)",
@@ -1977,9 +1954,7 @@
           "Vorausbestellung des finanzierten Produkts oder der Dienstleistung, strukturiert als Prämien-Crowdfunding, nicht als Investition oder Anspruch auf einen künftigen Token. Es wird keine finanzielle Rendite angeboten.",
           "Lieferung, Widerruf und Verbraucherrechte würden je Angebot festgelegt.",
           "Alles-oder-nichts-Beispielszenario: Das Ziel wurde verfehlt und die Beiträge wurden zurückerstattet."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pedal Leve (Beispieldaten - kein echtes Angebot)",
@@ -2013,9 +1988,7 @@
           "Übersteigt der Aktienkurs nie den Ausübungspreis, kann der Schein wertlos verfallen; ein Totalverlust des gezahlten Betrags ist möglich.",
           "Die Ausübung emittiert neue Aktien und verwässert bestehende Aktionäre.",
           "Angebote von Wertpapieren nach der ECSPR sind auf 5.000.000 EUR pro Emittent in 12 Monaten begrenzt."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Fio do Douro (Beispieldaten - kein echtes Angebot)",
@@ -2049,9 +2022,7 @@
           "Die Verwahrung erfordert eine zugelassene Bank oder ein Wertpapierunternehmen (CRD / MiFID II) oder eine gleichwertige Emittentenregister-Lösung.",
           "Portugal kennt kein eigenes inländisches Hinterlegungsschein-Regime; dieses Beispiel begründet keines.",
           "Totalverlust möglich; die zugrunde liegenden Aktien können illiquide sein."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Folha Nova (Beispieldaten - kein echtes Angebot)",
@@ -2085,9 +2056,7 @@
           "Unbesichert: Zahlt oder refinanziert der Emittent bei Fälligkeit nicht, können Anleger alles verlieren.",
           "Es wurde keine CMVM-Praxis für Commercial Paper im Privatkunden-Crowdfunding gefunden; die genannten Privatkundenbedingungen sind vor jedem echten Angebot erforderlich.",
           "Angebote von Wertpapieren nach der ECSPR sind auf 5.000.000 EUR pro Emittent in 12 Monaten begrenzt."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mesa da Costa (Beispieldaten - kein echtes Angebot)",
@@ -2121,9 +2090,7 @@
           "Der Zins variiert mit den Umsätzen des Emittenten; wären fällige Beträge nur bei vorhandenen Umsätzen zahlbar, wäre das Instrument bedingt und kein ECSPR-Darlehen mehr.",
           "Ein umsatzgebundener Zinssatz in einem konkreten Vertrag ist durch die CMVM-Praxis nicht bestätigt.",
           "Totalverlust möglich; Darlehen sind meist bis zur Fälligkeit illiquide."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Vento do Mondego (Beispieldaten - kein echtes Angebot)",
@@ -2157,9 +2124,7 @@
           "Das Placement unter der ECSPR ist nicht belegt: Ein Hinterlegungsschein wird vom Verwahrer emittiert, nicht vom Projektträger oder einer SPV, und weder ESMA noch CMVM haben dies bestätigt.",
           "Die Verwahrung erfordert eine zugelassene Bank oder ein Wertpapierunternehmen (CRD / MiFID II) oder eine gleichwertige Emittentenregister-Lösung.",
           "Totalverlust bei Ausfall des Emittenten möglich; die zugrunde liegenden Anleihen können illiquide sein."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Raiz Vertical (Beispieldaten - kein echtes Angebot)",
@@ -2189,9 +2154,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Tronco Vivo (Beispieldaten - kein echtes Angebot)",
@@ -2221,9 +2184,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Massa Lenta (Beispieldaten - kein echtes Angebot)",
@@ -2253,9 +2214,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Terra de Forno (Beispieldaten - kein echtes Angebot)",
@@ -2285,9 +2244,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mar em Terra (Beispieldaten - kein echtes Angebot)",
@@ -2318,9 +2275,7 @@
           "Totalverlust möglich",
           "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
           "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Água de Volta (Beispieldaten - kein echtes Angebot)",
@@ -2350,9 +2305,7 @@
           "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
           "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
           "Keine Beteiligung am Unternehmenswachstum"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Passo Certo (Beispieldaten - kein echtes Angebot)",
@@ -2382,9 +2335,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lente Circular (Beispieldaten - kein echtes Angebot)",
@@ -2414,9 +2365,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Polpa Fresca (Beispieldaten - kein echtes Angebot)",
@@ -2446,9 +2395,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Som de Madeira (Beispieldaten - kein echtes Angebot)",
@@ -2478,9 +2425,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Olho do Mar (Beispieldaten - kein echtes Angebot)",
@@ -2511,9 +2456,7 @@
           "Totalverlust möglich",
           "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
           "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Traço Recuperado (Beispieldaten - kein echtes Angebot)",
@@ -2543,9 +2486,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Solo de Novo (Beispieldaten - kein echtes Angebot)",
@@ -2575,9 +2516,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Torra de Bairro (Beispieldaten - kein echtes Angebot)",
@@ -2607,9 +2546,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Oficina Curiosa (Beispieldaten - kein echtes Angebot)",
@@ -2640,9 +2577,7 @@
           "Totalverlust möglich",
           "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
           "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Letra Viva (Beispieldaten - kein echtes Angebot)",
@@ -2672,9 +2607,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lã da Serra (Beispieldaten - kein echtes Angebot)",
@@ -2704,9 +2637,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rota Digital (Beispieldaten - kein echtes Angebot)",
@@ -2737,9 +2668,7 @@
           "Totalverlust möglich",
           "Crowdfunding-Aktien sind meist nicht börsenhandelbar",
           "Eine Haltestruktur, kein eigenes Instrument: Der Anleger hält die zugrunde liegende Beteiligung über ein Vehikel oder einen Treuhänder, und das zugrunde liegende Interesse bestimmt die Ökonomie."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Segundo Ciclo (Beispieldaten - kein echtes Angebot)",
@@ -2769,9 +2698,7 @@
           "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
           "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
           "Keine Beteiligung am Unternehmenswachstum"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lagar Novo (Beispieldaten - kein echtes Angebot)",
@@ -2801,9 +2728,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Colmeia Viva (Beispieldaten - kein echtes Angebot)",
@@ -2833,9 +2758,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pata Serena (Beispieldaten - kein echtes Angebot)",
@@ -2865,9 +2788,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rotas Abertas (Beispieldaten - kein echtes Angebot)",
@@ -2897,9 +2818,7 @@
           "Der Ausfall des Emittenten kann Totalverlust bedeuten",
           "Nachrangige Forderungen werden im Insolvenzfall erst nach den vorrangigen Gläubigern bedient",
           "Keine Einlagensicherung"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Casa em Peças (Beispieldaten - kein echtes Angebot)",
@@ -2929,9 +2848,7 @@
           "Die Nachrangigkeit erhöht die Verlusthöhe im Insolvenzfall",
           "Weiterhin unbesichert, sofern keine Sicherheiten angegeben sind",
           "Keine Beteiligung am Unternehmenswachstum"
-        ],
-        "documents": [],
-        "news": []
+        ]
       }
     ]
   },
@@ -3900,5 +3817,15 @@
     "campaignState": "Simulierte Kampagne läuft",
     "futureDoor": "In Zukunft kann das Unternehmen mit rechtlicher Beratung andere Beteiligungsformen prüfen. Nichts davon wird versprochen oder ist Teil dieser Unterstützung.",
     "refundComplete": "Alle Unterstützungsbeiträge zurückerstattet (Simulation)"
+  },
+  "automaticRefund": {
+    "title": "Automatische Rückerstattung",
+    "testnetOnly": "Nur im Testnetz. Es wird kein echtes Geld bewegt.",
+    "pending": "Rückerstattung ausstehend. Es wurde noch keine Zahlung bestätigt.",
+    "submitted": "Rückerstattung gesendet. Die Bestätigung steht noch aus.",
+    "paid": "Rückerstattung an die ursprüngliche Wallet bestätigt.",
+    "blocked": "Die Rückerstattung muss geprüft werden. Hier ist keine Zahlung bestätigt.",
+    "manualFallback": "Manuelle Rückerstattung öffnen",
+    "unavailable": "Der Status der Rückerstattung ist vorübergehend nicht verfügbar."
   }
 }
