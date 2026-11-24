@@ -209,6 +209,7 @@ export async function startSocialFlow(
   deletionPurpose?: import('./deletion-proof.js').SocialDeletionPurpose,
   registrationMethod?: 'phone',
   linkPurpose?: import('./social-link-proof.js').SocialLinkPurpose,
+  maxActive: number = Number(process.env.SOCIAL_FLOW_MAX_ACTIVE ?? 1_000),
 ): Promise<{ url: string }> {
   const state = client.randomState();
   const nonce = client.randomNonce();
@@ -216,6 +217,11 @@ export async function startSocialFlow(
   const codeChallenge = await client.calculatePKCECodeChallenge(codeVerifier);
   await store.change((s) => {
     for (const [k, f] of Object.entries(s.socialFlows)) if (f.expiresAt <= now) delete s.socialFlows[k];
+    // Cap on live flows: every /start persists one row, and expired rows are
+    // pruned only here - without a ceiling a flood of starts grows the store
+    // unbounded between TTL expiries.
+    if (Object.keys(s.socialFlows).length >= maxActive)
+      throw new AuthError(503, 'too many sign-in flows in progress; retry in a few minutes', 'social_flow_saturated');
     s.socialFlows[flowKey(state)] = {
       provider,
       nonce,
