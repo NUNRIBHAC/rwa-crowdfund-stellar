@@ -3865,6 +3865,16 @@
     "failureError": "The step could not be verified. Check the network and balances before trying again.",
     "uncertain": "The last request has an uncertain outcome. Use the balance check before any new funding or signature. There is no automatic retry."
   },
+  "automaticRefund": {
+    "title": "Automatic refund",
+    "testnetOnly": "Testnet only. No real money is moved.",
+    "pending": "Refund pending. No payment has been confirmed.",
+    "submitted": "Refund submitted. Confirmation is still pending.",
+    "paid": "Refund confirmed to the original wallet.",
+    "blocked": "The refund needs review. No payment is confirmed here.",
+    "manualFallback": "Open the manual refund option",
+    "unavailable": "Refund status is temporarily unavailable."
+  },
   "issuerEvidence": {
     "title": "Issuer evidence dossier",
     "note": "This dossier separates issuer claims, human review assertions and unknown information. A review is not a guarantee, legal approval or investment recommendation.",

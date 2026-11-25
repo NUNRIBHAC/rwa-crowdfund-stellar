@@ -3888,6 +3888,16 @@
     "failureError": "Der Schritt konnte nicht bestätigt werden. Prüfe Netzwerk und Guthaben vor einem neuen Versuch.",
     "uncertain": "Das Ergebnis der letzten Anfrage ist unklar. Prüfe das Guthaben vor weiterer Finanzierung oder Signatur. Es gibt keinen automatischen Neuversuch."
   },
+  "automaticRefund": {
+    "title": "Automatische Rückerstattung",
+    "testnetOnly": "Nur im Testnetz. Es wird kein echtes Geld bewegt.",
+    "pending": "Rückerstattung ausstehend. Es wurde noch keine Zahlung bestätigt.",
+    "submitted": "Rückerstattung gesendet. Die Bestätigung steht noch aus.",
+    "paid": "Rückerstattung an die ursprüngliche Wallet bestätigt.",
+    "blocked": "Die Rückerstattung muss geprüft werden. Hier ist keine Zahlung bestätigt.",
+    "manualFallback": "Manuelle Rückerstattung öffnen",
+    "unavailable": "Der Status der Rückerstattung ist vorübergehend nicht verfügbar."
+  },
   "issuerEvidence": {
     "title": "Nachweisdossier des Emittenten",
     "note": "Dieses Dossier trennt Angaben des Emittenten, Aussagen zur menschlichen Prüfung und unbekannte Informationen. Eine Prüfung ist weder eine Garantie noch eine rechtliche Genehmigung oder Anlageempfehlung.",
