@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { z } from 'zod';
 
 // Curated public evidence only. Never copy private application documents into
@@ -48,6 +49,10 @@ const claim = z
     area: z.enum(EVIDENCE_AREAS),
     text: z.string().trim().min(1).max(2000),
     status: z.enum(['issuer_claim', 'checked_fact']),
+    supersedes: z
+      .string()
+      .regex(/^[a-z0-9-]{1,80}$/)
+      .optional(),
     sourceIds: z.array(z.string()).min(1).max(10),
     // An explicit human review assertion, never inferred from the URL or GitHub.
     review: z
@@ -118,6 +123,22 @@ export function parseIssuerEvidence(input: unknown, today = new Date().toISOStri
       }
     }
     for (const item of record.claims) {
+      if (item.supersedes) {
+        const prior = record.claims.find((entry) => entry.id === item.supersedes);
+        if (
+          !prior ||
+          prior === item ||
+          prior.supersedes === item.id ||
+          prior.area !== item.area ||
+          item.status !== 'checked_fact' ||
+          !item.review ||
+          !corrections.some((entry) => entry.claimId === prior.id) ||
+          corrections.some((entry) => entry.claimId === prior.id && entry.correctedOn > item.review!.checkedOn) ||
+          record.claims.findIndex((entry) => entry.id === prior.id) >= record.claims.indexOf(item)
+        ) {
+          throw new Error('invalid reviewed replacement');
+        }
+      }
       if (new Set(item.sourceIds).size !== item.sourceIds.length || item.sourceIds.some((id) => !sources.has(id))) throw new Error('missing evidence source');
       if (item.status === 'checked_fact') {
         if (
@@ -158,4 +179,68 @@ export function issuerEvidenceFor(campaignId: string, raw = process.env.ISSUER_E
     // Never show partly validated facts or parser contents in public errors.
     return { ...empty, state: 'unavailable' };
   }
+}
+
+// The operator workflow appends immutable snapshots. The digest fences both
+// concurrent operator edits and changes to the configured seed dossier.
+export function evidenceRevision(value: EvidenceDossierResult): string {
+  return createHash('sha256').update(JSON.stringify(value)).digest('hex');
+}
+export type StoredEvidenceRevision = { dossier: IssuerEvidenceDossier; actor: string; at: number; revision: string };
+export const evidenceActionInput = z
+  .object({
+    revision: z.string().regex(/^[a-f0-9]{64}$/),
+    requestId: z.string().regex(/^[a-z0-9-]{8,80}$/),
+    action: z.enum(['correction', 'review']),
+    claimId: z.string().regex(/^[a-z0-9-]{1,80}$/),
+    note: z.string().trim().min(1).max(1000),
+    sourceIds: z.array(z.string()).min(1).max(10),
+    text: z.string().trim().min(1).max(2000).optional(),
+    humanReviewed: z.literal(true).optional(),
+    newSource: source.optional(),
+  })
+  .strict();
+
+export function appendEvidenceAction(current: EvidenceDossierResult, input: z.infer<typeof evidenceActionInput>, today: string): IssuerEvidenceDossier {
+  const target = current.claims.find((entry) => entry.id === input.claimId);
+  if (current.state !== 'available' || !target) throw new Error('evidence claim unavailable');
+  const next: IssuerEvidenceDossier = {
+    campaignId: current.campaignId,
+    revisedOn: today,
+    sources: structuredClone(current.sources),
+    claims: structuredClone(current.claims),
+    corrections: structuredClone(current.corrections),
+  };
+  if (input.newSource) {
+    if (
+      next.sources.some((entry) => entry.id === input.newSource!.id) ||
+      input.newSource.retrievedOn !== today ||
+      !input.sourceIds.includes(input.newSource.id)
+    )
+      throw new Error('invalid new public source');
+    next.sources.push(structuredClone(input.newSource));
+  }
+  if (current.claims.some((entry) => entry.supersedes === target.id)) throw new Error('correct the latest reviewed replacement');
+  if (input.action === 'correction') {
+    if (input.text !== undefined || input.humanReviewed !== undefined) throw new Error('unexpected correction fields');
+    next.corrections!.push({ id: input.requestId, claimId: target.id, correctedOn: today, note: input.note, sourceIds: input.sourceIds });
+  } else {
+    if (
+      !input.humanReviewed ||
+      !input.text ||
+      !current.corrections.some((entry) => entry.claimId === target.id) ||
+      current.claims.some((entry) => entry.supersedes === target.id)
+    )
+      throw new Error('explicit review of corrected claim required');
+    next.claims.push({
+      id: input.requestId,
+      area: target.area,
+      text: input.text,
+      status: 'checked_fact',
+      supersedes: target.id,
+      sourceIds: input.sourceIds,
+      review: { checkedOn: today, note: input.note },
+    });
+  }
+  return parseIssuerEvidence([next], today)[0];
 }

@@ -90,7 +90,19 @@ for (const locale of VISUAL_LOCALES)
           if (state !== 'unavailable') await expect(section.locator('h3').last()).toBeVisible();
           if (state === 'corrected') await expect(section.locator('article section')).toHaveCount(1);
           expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-          if (locale === 'ar') expect(await section.locator('h2').evaluate((element) => getComputedStyle(element).direction)).toBe('rtl');
+          if (locale === 'ar') {
+            expect(await section.locator('h2').evaluate((element) => getComputedStyle(element).direction)).toBe('rtl');
+            for (const list of await section.locator('ul').all()) {
+              const geometry = await list.evaluate((element) => {
+                const css = getComputedStyle(element);
+                return { direction: css.direction, left: parseFloat(css.paddingLeft), right: parseFloat(css.paddingRight) };
+              });
+              expect(geometry.direction).toBe('ltr');
+              expect(geometry.left).toBeGreaterThanOrEqual(24);
+              expect(geometry.right).toBe(0);
+            }
+          }
+          await section.screenshot({ path: `test-results/evidence-section/${locale}-${width}-${theme}-${state}.png` });
           await page.evaluate(() => scrollTo(0, 0));
           await page.screenshot({ fullPage: true, path: `test-results/evidence/${locale}-${width}-${theme}-${state}.png` });
         });

@@ -46,7 +46,10 @@ before(async () => {
   });
   base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
 });
-after(() => server.close());
+after(async () => {
+  await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
+  fs.rmSync(dir, { recursive: true, force: true });
+});
 
 async function api(method: string, path: string, opts: { token?: string; admin?: boolean; body?: unknown } = {}) {
   const res = await fetch(base + path, {
@@ -566,5 +569,99 @@ test('public evidence read is cache-disabled, unknown by default and never leaks
   } finally {
     if (original === undefined) delete process.env.ISSUER_EVIDENCE_JSON;
     else process.env.ISSUER_EVIDENCE_JSON = original;
+  }
+});
+
+test('evidence writes fail closed for anonymous, nonoperator, unset allowlist and absent registry', async () => {
+  const kp = Keypair.random();
+  const token = await login(kp);
+  const original = process.env.OPERATOR_WALLETS;
+  try {
+    delete process.env.OPERATOR_WALLETS;
+    assert.equal((await api('POST', '/api/operator/campaigns/demo-solar/evidence', { body: {} })).status, 401);
+    assert.equal((await api('POST', '/api/operator/campaigns/demo-solar/evidence', { token, body: {} })).status, 503);
+    process.env.OPERATOR_WALLETS = Keypair.random().publicKey();
+    assert.equal((await api('POST', '/api/operator/campaigns/demo-solar/evidence', { token, body: {} })).status, 403);
+    process.env.OPERATOR_WALLETS = kp.publicKey();
+    assert.equal((await api('POST', '/api/operator/campaigns/demo-solar/evidence', { token, body: {} })).status, 503);
+    assert.equal(Object.keys((await store.read()).evidenceRevisions ?? {}).length, 0);
+  } finally {
+    if (original === undefined) delete process.env.OPERATOR_WALLETS;
+    else process.env.OPERATOR_WALLETS = original;
+  }
+});
+
+test('registered campaign operator correction survives HTTP reload and idempotent retry', async () => {
+  const kp = Keypair.random();
+  const token = await login(kp);
+  const priorWallets = process.env.OPERATOR_WALLETS;
+  const priorEvidence = process.env.ISSUER_EVIDENCE_JSON;
+  const seed = {
+    campaignId: 'synthetic-only',
+    revisedOn: '2026-11-23',
+    sources: [{ id: 'registry', title: 'Synthetic public registry', url: 'https://example.org/fact', publisher: 'independent', retrievedOn: '2026-11-23' }],
+    claims: [
+      {
+        id: 'claim',
+        area: 'issuer',
+        text: 'Synthetic test only',
+        status: 'checked_fact',
+        sourceIds: ['registry'],
+        review: { checkedOn: '2026-11-23', note: 'Synthetic review only' },
+      },
+    ],
+  };
+  process.env.OPERATOR_WALLETS = kp.publicKey();
+  process.env.ISSUER_EVIDENCE_JSON = JSON.stringify([seed]);
+  const app = express();
+  app.use(express.json());
+  app.use(
+    createCommunityRouter({
+      service: new CommunityService(store),
+      requireAdmin,
+      applicationCampaign: async (id) =>
+        id === seed.campaignId ? { id, contractId: 'synthetic-contract', creator: kp.publicKey(), network: 'testnet' } : null,
+    }),
+  );
+  const instance = app.listen(0, '127.0.0.1');
+  await new Promise<void>((resolve) => instance.once('listening', resolve));
+  const url = `http://127.0.0.1:${(instance.address() as AddressInfo).port}`;
+  try {
+    const first = (await fetch(url + '/api/campaigns/synthetic-only/evidence').then((r) => r.json())) as any;
+    const body = {
+      revision: first.evidence.revision,
+      requestId: 'http-correction-1',
+      claimId: 'claim',
+      action: 'correction',
+      note: 'Synthetic correction',
+      sourceIds: ['registry'],
+    };
+    const write = (id: string, value: unknown) =>
+      fetch(url + '/api/operator/campaigns/' + id + '/evidence', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', authorization: 'Bearer ' + token },
+        body: JSON.stringify(value),
+      });
+    assert.equal((await write('missing', body)).status, 404);
+    assert.equal((await write(seed.campaignId, { ...body, extra: 'rejected' })).status, 400);
+    const result = await write(seed.campaignId, body);
+    assert.equal(result.status, 200);
+    assert.equal(result.headers.get('cache-control'), 'no-store');
+    const saved = await result.json();
+    assert.deepEqual(await (await write(seed.campaignId, body)).json(), saved);
+    assert.equal((await write(seed.campaignId, { ...body, requestId: 'http-correction-2' })).status, 409);
+    const publicRead = (await fetch(url + '/api/campaigns/synthetic-only/evidence').then((r) => r.json())) as any;
+    assert.equal(publicRead.evidence.corrections.length, 1);
+    assert.equal(publicRead.evidence.claims[0].text, seed.claims[0].text);
+    assert.ok(publicRead.evidence.unknownAreas.includes('issuer'));
+    assert.equal(publicRead.evidence.actor, undefined);
+    const reopened = new CommunityService(new FileCommunityStore(path.join(dir, 'store.json')));
+    assert.equal((await reopened.readIssuerEvidence(seed.campaignId)).revision, publicRead.evidence.revision);
+  } finally {
+    await new Promise<void>((resolve) => instance.close(() => resolve()));
+    if (priorWallets === undefined) delete process.env.OPERATOR_WALLETS;
+    else process.env.OPERATOR_WALLETS = priorWallets;
+    if (priorEvidence === undefined) delete process.env.ISSUER_EVIDENCE_JSON;
+    else process.env.ISSUER_EVIDENCE_JSON = priorEvidence;
   }
 });

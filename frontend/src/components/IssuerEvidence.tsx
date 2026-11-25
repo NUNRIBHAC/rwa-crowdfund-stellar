@@ -1,3 +1,4 @@
+import { useId } from 'react';
 export type EvidenceArea = 'issuer' | 'team' | 'track_record' | 'financials' | 'offer_documents' | 'milestones';
 export type EvidenceDossier = {
   campaignId: string;
@@ -9,6 +10,7 @@ export type EvidenceDossier = {
     area: EvidenceArea;
     text: string;
     status: 'issuer_claim' | 'checked_fact';
+    supersedes?: string;
     sourceIds: string[];
     review?: { checkedOn: string; note: string };
   }[];
@@ -67,24 +69,30 @@ export default function IssuerEvidence({ evidence, copy, loading = false }: { ev
       return source && href ? (
         <li key={id}>
           <a href={href} target="_blank" rel="noopener noreferrer">
-            {source.title}
+            <bdi dir="auto">{source.title}</bdi>
           </a>
           <p>
             {source.publisher === 'issuer' ? copy.issuerSource : copy.independentSource} · {copy.retrievedOn}:{' '}
-            <time dateTime={source.retrievedOn}>{source.retrievedOn}</time>
+            <time dir="ltr" dateTime={source.retrievedOn}>
+              {source.retrievedOn}
+            </time>
             {source.publishedOn && (
               <>
                 {' '}
-                · {copy.publishedOn}: <time dateTime={source.publishedOn}>{source.publishedOn}</time>
+                · {copy.publishedOn}:{' '}
+                <time dir="ltr" dateTime={source.publishedOn}>
+                  {source.publishedOn}
+                </time>
               </>
             )}
           </p>
         </li>
       ) : null;
     });
+  const headingId = useId();
   return (
-    <section className="issuer-evidence" aria-labelledby="issuer-evidence-title">
-      <h2 id="issuer-evidence-title">{copy.title}</h2>
+    <section className="issuer-evidence" aria-labelledby={headingId}>
+      <h2 id={headingId}>{copy.title}</h2>
       <p>{copy.note}</p>
       {loading ? (
         <p role="status">{copy.loading}</p>
@@ -96,7 +104,10 @@ export default function IssuerEvidence({ evidence, copy, loading = false }: { ev
         <>
           {evidence.revisedOn && (
             <p>
-              {copy.revisedOn}: <time dateTime={evidence.revisedOn}>{evidence.revisedOn}</time>
+              {copy.revisedOn}:{' '}
+              <time dir="ltr" dateTime={evidence.revisedOn}>
+                {evidence.revisedOn}
+              </time>
             </p>
           )}
           {evidence.claims.map((claim) => {
@@ -105,10 +116,16 @@ export default function IssuerEvidence({ evidence, copy, loading = false }: { ev
               <article key={claim.id}>
                 <h3>{copy.areas[claim.area]}</h3>
                 <p className="status-chip">{corrections.length ? copy.corrected : claim.status === 'issuer_claim' ? copy.issuerClaim : copy.checkedFact}</p>
-                <p>{claim.text}</p>
+                <p>
+                  <bdi dir="auto">{claim.text}</bdi>
+                </p>
                 {claim.review && (
                   <p>
-                    {copy.reviewedOn}: <time dateTime={claim.review.checkedOn}>{claim.review.checkedOn}</time>. {claim.review.note}
+                    {copy.reviewedOn}:{' '}
+                    <time dir="ltr" dateTime={claim.review.checkedOn}>
+                      {claim.review.checkedOn}
+                    </time>
+                    . <bdi dir="auto">{claim.review.note}</bdi>
                   </p>
                 )}
                 <h4>{copy.sources}</h4>
@@ -119,7 +136,10 @@ export default function IssuerEvidence({ evidence, copy, loading = false }: { ev
                     {corrections.map((item) => (
                       <div key={item.id}>
                         <p>
-                          <time dateTime={item.correctedOn}>{item.correctedOn}</time>: {item.note}
+                          <time dir="ltr" dateTime={item.correctedOn}>
+                            {item.correctedOn}
+                          </time>
+                          : <bdi dir="auto">{item.note}</bdi>
                         </p>
                         <ul>{sourceLinks(item.sourceIds)}</ul>
                       </div>

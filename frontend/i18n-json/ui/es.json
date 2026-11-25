@@ -3923,5 +3923,30 @@
       "offer_documents": "Documentos de la oferta",
       "milestones": "Hitos"
     }
+  },
+  "evidenceEditor": {
+    "title": "Correcciones de pruebas y nueva revisión",
+    "note": "El acceso mediante una cartera de operador no acredita una identidad profesional. Publique solo notas no confidenciales basadas en fuentes públicas. Las afirmaciones y revisiones originales siguen visibles. Las correcciones dejan la afirmación afectada sin verificar hasta una nueva revisión humana explícita.",
+    "campaign": "Campaña",
+    "claim": "Afirmación original",
+    "action": "Acción",
+    "correction": "Añadir una corrección",
+    "review": "Añadir una sustitución revisada",
+    "reviewText": "Hecho de sustitución",
+    "reviewNote": "Nota pública de corrección o revisión",
+    "sources": "Fuentes públicas existentes utilizadas",
+    "humanReviewed": "He comprobado personalmente estas fuentes públicas y el hecho de sustitución. Un enlace a una fuente no constituye por sí solo una revisión humana.",
+    "preview": "Vista previa de la publicación",
+    "publish": "Publicar esta actualización de pruebas",
+    "back": "Volver a editar",
+    "saved": "Actualización de pruebas publicada. Se han conservado los registros originales.",
+    "failed": "No se ha podido completar la actualización de pruebas. Recargue el registro actual antes de reintentarlo; otro operador puede haberlo cambiado.",
+    "reload": "Recargar pruebas actuales",
+    "addSource": "Añadir una fuente pública",
+    "sourceTitle": "Título de la fuente pública",
+    "sourceUrl": "URL HTTPS pública",
+    "sourcePublisher": "Clasificación del editor de la fuente",
+    "sourceRetrieved": "Consultada el (hoy)",
+    "sourcePublicOnly": "Solo fuentes públicas no confidenciales. Sin credenciales, URL firmadas, parámetros de consulta ni fragmentos. La fecha de consulta registra su comprobación de la fuente hoy."
   }
 }

@@ -4455,4 +4455,32 @@ export const fr: Messages = {
       milestones: 'Étapes clés',
     },
   },
+  evidenceEditor: {
+    title: 'Corrections des preuves et nouvel examen',
+    note: "L'accès par portefeuille d'opérateur ne prouve pas une identité professionnelle. Publiez uniquement des notes non confidentielles fondées sur des sources publiques. Les affirmations et examens d'origine restent visibles. Une correction laisse l'affirmation concernée non vérifiée jusqu'à un nouvel examen humain explicite.",
+    campaign: 'Campagne',
+    claim: "Affirmation d'origine",
+    action: 'Action',
+    correction: 'Ajouter une correction',
+    review: 'Ajouter un remplacement examiné',
+    reviewText: 'Fait de remplacement',
+    reviewNote: "Note publique de correction ou d'examen",
+    sources: 'Sources publiques existantes utilisées',
+    humanReviewed:
+      "J'ai personnellement vérifié ces sources publiques et le fait de remplacement. Un lien vers une source ne constitue pas à lui seul un examen humain.",
+    preview: 'Aperçu de la publication',
+    publish: 'Publier cette mise à jour des preuves',
+    back: 'Revenir à la modification',
+    saved: "Mise à jour des preuves publiée. Les enregistrements d'origine ont été conservés.",
+    failed:
+      "La mise à jour des preuves n'a pas pu être terminée. Rechargez l'enregistrement actuel avant de réessayer ; un autre opérateur peut l'avoir modifié.",
+    reload: 'Recharger les preuves actuelles',
+    addSource: 'Ajouter une source publique',
+    sourceTitle: 'Titre de la source publique',
+    sourceUrl: 'URL HTTPS publique',
+    sourcePublisher: "Classification de l'éditeur de la source",
+    sourceRetrieved: "Consultée le (aujourd'hui)",
+    sourcePublicOnly:
+      "Sources publiques non confidentielles uniquement. Sans identifiants, URL signées, paramètres de requête ni fragments. La date de consultation consigne votre vérification de la source aujourd'hui.",
+  },
 };

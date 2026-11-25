@@ -3914,5 +3914,30 @@
       "offer_documents": "Angebotsunterlagen",
       "milestones": "Meilensteine"
     }
+  },
+  "evidenceEditor": {
+    "title": "Belegkorrekturen und erneute Prüfung",
+    "note": "Der Zugang über eine Betreiber-Wallet bestätigt keine berufliche Identität. Veröffentlichen Sie nur nicht vertrauliche Notizen auf Grundlage öffentlicher Quellen. Ursprüngliche Aussagen und Prüfungen bleiben sichtbar. Nach einer Korrektur gilt die betroffene Aussage bis zu einer ausdrücklichen erneuten menschlichen Prüfung als ungeprüft.",
+    "campaign": "Kampagne",
+    "claim": "Ursprüngliche Aussage",
+    "action": "Aktion",
+    "correction": "Korrektur hinzufügen",
+    "review": "Geprüften Ersatz hinzufügen",
+    "reviewText": "Ersatzfakt",
+    "reviewNote": "Öffentliche Korrektur- oder Prüfnotiz",
+    "sources": "Verwendete vorhandene öffentliche Quellen",
+    "humanReviewed": "Ich habe diese öffentlichen Quellen und den Ersatzfakt persönlich geprüft. Ein Quellenlink allein ist keine menschliche Prüfung.",
+    "preview": "Veröffentlichung prüfen",
+    "publish": "Diese Belegaktualisierung veröffentlichen",
+    "back": "Zurück zur Bearbeitung",
+    "saved": "Belegaktualisierung veröffentlicht. Die ursprünglichen Einträge wurden beibehalten.",
+    "failed": "Die Belegaktualisierung konnte nicht abgeschlossen werden. Laden Sie den aktuellen Eintrag vor einem erneuten Versuch neu; ein anderer Betreiber könnte ihn geändert haben.",
+    "reload": "Aktuelle Belege neu laden",
+    "addSource": "Öffentliche Quelle hinzufügen",
+    "sourceTitle": "Titel der öffentlichen Quelle",
+    "sourceUrl": "Öffentliche HTTPS-URL",
+    "sourcePublisher": "Einordnung des Quellenherausgebers",
+    "sourceRetrieved": "Abgerufen am (heute)",
+    "sourcePublicOnly": "Nur nicht vertrauliche öffentliche Quellen. Keine Zugangsdaten, signierten URLs, Abfrageparameter oder Fragmente. Das Abrufdatum hält Ihre heutige Quellenprüfung fest."
   }
 }

@@ -470,7 +470,9 @@ html.rtl-text .testnet-setup-steps > li {
   padding-block: 1rem;
 }
 .issuer-evidence ul {
-  padding-inline-start: 1.5rem;
+  direction: ltr;
+  padding-left: 1.5rem;
+  padding-right: 0;
 }
 .issuer-evidence li + li {
   margin-block-start: 0.5rem;
@@ -481,4 +483,124 @@ html.rtl-text .testnet-setup-steps > li {
 html[lang='ar'] .issuer-evidence :is(h2, h3, h4, p, li) {
   direction: rtl;
   text-align: start;
+}
+
+/* Evidence editor: readable single-column controls, including narrow screens. */
+.evidence-editor > label,
+.evidence-editor form > fieldset > label {
+  display: grid;
+  gap: 0.4rem;
+  margin-block: 0.9rem;
+}
+.evidence-editor select,
+.evidence-editor textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.evidence-editor textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+.evidence-editor fieldset {
+  min-width: 0;
+  margin-block: 1rem;
+  padding: 1rem;
+}
+.evidence-editor fieldset fieldset > label {
+  display: block;
+  margin-block: 0.6rem;
+}
+.evidence-editor form > section > .btn {
+  margin-inline-end: 0.5rem;
+  margin-block: 0.4rem;
+}
+.evidence-editor form > fieldset > label.evidence-editor-check {
+  display: block;
+}
+.evidence-editor input:not([type='checkbox']) {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.evidence-editor fieldset fieldset > label:has(input:not([type='checkbox'])),
+.evidence-editor fieldset fieldset > label:has(select) {
+  display: grid;
+  gap: 0.4rem;
+}
+.evidence-editor input[type='url'] {
+  border: 1px solid var(--indigo-500);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-family: inherit;
+}
+.evidence-editor .evidence-editor-source-note {
+  margin-block: 0 1rem;
+}
+
+.evidence-editor input[type='url']:disabled {
+  background: var(--bg);
+  color: var(--ink-faint);
+}
+/* Arabic text direction only. Controls retain the same physical placement. */
+html[lang='ar'] .evidence-editor :is(label, legend, button) {
+  direction: ltr;
+  text-align: right;
+}
+html[lang='ar'] .evidence-editor :is(input:not([type='checkbox']), textarea) {
+  direction: ltr;
+  text-align: left;
+}
+.evidence-editor bdi {
+  unicode-bidi: isolate;
+}
+
+html[lang='ar'] .evidence-editor label > span,
+html[lang='ar'] .evidence-editor button > span {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+html[lang='ar'] .evidence-editor select {
+  direction: ltr;
+  text-align: right;
+}
+.evidence-editor label.evidence-editor-check,
+.evidence-editor fieldset fieldset > label:has(input[type='checkbox']) {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.5rem;
+  direction: ltr;
+  text-align: start;
+}
+.evidence-editor label:has(input[type='checkbox']) > input {
+  flex: 0 0 auto;
+}
+.evidence-editor label:has(input[type='checkbox']) > span {
+  flex: 1;
+}
+html[lang='ar'] .evidence-editor label:has(input[type='checkbox']) > span {
+  direction: rtl;
+  text-align: right;
+}
+html[lang='ar'] .evidence-editor form > fieldset > label.evidence-editor-check {
+  display: flex;
+  flex-direction: row;
+  direction: ltr;
+  text-align: start;
+}
+
+/* Keep list markers inside the same physical gutter in every language. */
+html[lang='ar'] .issuer-evidence ul {
+  direction: ltr;
+}
+html[lang='ar'] .issuer-evidence li {
+  direction: ltr;
+  text-align: right;
+}
+.issuer-evidence time {
+  unicode-bidi: isolate;
 }

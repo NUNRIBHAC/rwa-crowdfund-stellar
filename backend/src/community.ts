@@ -1,3 +1,4 @@
+import { issuerEvidenceFor, evidenceRevision, evidenceActionInput, appendEvidenceAction, type EvidenceDossierResult } from './issuer-evidence.js';
 import { audioUrlAllowed } from './audio-origins.js';
 import { PrivateApplicationUploadWorkflow, type PrivateTextObjects } from './private-application-upload-workflow.js';
 import { assertExplicitFileStorePath } from './test-storage-guard.js';
@@ -1296,6 +1297,46 @@ export class CommunityService {
       }
     });
     return { marked };
+  }
+
+  async readIssuerEvidence(campaignId: string): Promise<EvidenceDossierResult & { revision: string }> {
+    const state = await this.store.read();
+    const stored = state.evidenceRevisions?.[campaignId]?.at(-1);
+    const evidence = stored ? issuerEvidenceFor(campaignId, JSON.stringify([stored.dossier])) : issuerEvidenceFor(campaignId);
+    return { ...evidence, revision: evidenceRevision(evidence) };
+  }
+
+  async appendIssuerEvidence(campaignId: string, actor: string, raw: unknown): Promise<{ revision: string }> {
+    const input = evidenceActionInput.parse(raw);
+    const fingerprint = createHash('sha256').update(JSON.stringify({ campaignId, actor, input })).digest('hex');
+    let revision = '';
+    await this.store.change((state) => {
+      const key = campaignId + ':' + input.requestId;
+      const prior = state.evidenceRequests?.[key];
+      if (prior) {
+        if (prior.fingerprint !== fingerprint) throw new CommunityError(409, 'evidence request conflict', 'conflict');
+        revision = prior.revision;
+        return;
+      }
+      const stored = state.evidenceRevisions?.[campaignId]?.at(-1);
+      const current = stored ? issuerEvidenceFor(campaignId, JSON.stringify([stored.dossier])) : issuerEvidenceFor(campaignId);
+      if (current.state !== 'available') throw new CommunityError(503, 'evidence unavailable', 'feature_unavailable');
+      if (evidenceRevision(current) !== input.revision) throw new CommunityError(409, 'evidence revision changed', 'conflict');
+      const history = state.evidenceRevisions?.[campaignId] ?? [];
+      if (history.length >= 100) throw new CommunityError(409, 'evidence revision limit', 'conflict');
+      let dossier;
+      try {
+        dossier = appendEvidenceAction(current, input, new Date(this.now()).toISOString().slice(0, 10));
+      } catch {
+        throw new CommunityError(400, 'invalid evidence action', 'invalid_request');
+      }
+      revision = evidenceRevision(issuerEvidenceFor(campaignId, JSON.stringify([dossier])));
+      (state.evidenceRevisions ??= {})[campaignId] = [...history, { dossier, actor, at: this.now(), revision }];
+      (state.evidenceRequests ??= {})[key] = { fingerprint, revision };
+      // Same transaction as the dossier: failed audit persistence fails the edit.
+      state.audit.push({ id: newId('audit'), at: this.now(), actor, action: 'evidence.' + input.action, target: campaignId, detail: revision });
+    });
+    return { revision };
   }
 
   // Admin operations (router gates them behind x-admin-key).

@@ -3852,5 +3852,30 @@
       "offer_documents": "发行文件",
       "milestones": "里程碑"
     }
+  },
+  "evidenceEditor": {
+    "title": "证据更正与重新审核",
+    "note": "通过运营者钱包访问不代表专业身份已获验证。请仅发布基于公开来源的非机密说明。原始陈述和审核记录将保持可见。更正后的相关陈述在经过明确的人工重新审核之前仍属未验证。",
+    "campaign": "项目",
+    "claim": "原始陈述",
+    "action": "操作",
+    "correction": "添加更正",
+    "review": "添加已审核的替代内容",
+    "reviewText": "替代事实",
+    "reviewNote": "公开的更正或审核说明",
+    "sources": "使用的现有公开来源",
+    "humanReviewed": "我已亲自核查这些公开来源和替代事实。仅提供来源链接不等于人工审核。",
+    "preview": "预览发布内容",
+    "publish": "发布此证据更新",
+    "back": "返回编辑",
+    "saved": "证据更新已发布。原始记录已保留。",
+    "failed": "无法完成证据更新。请重新加载当前记录后再试；其他运营者可能已更改记录。",
+    "reload": "重新加载当前证据",
+    "addSource": "添加新的公开来源",
+    "sourceTitle": "公开来源标题",
+    "sourceUrl": "公开HTTPS网址",
+    "sourcePublisher": "来源发布者分类",
+    "sourceRetrieved": "查阅日期（今天）",
+    "sourcePublicOnly": "仅限非机密的公开来源。不得包含凭据、签名网址、查询参数或片段。查阅日期记录您今天对来源的核查。"
   }
 }

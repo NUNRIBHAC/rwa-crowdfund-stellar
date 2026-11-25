@@ -4353,6 +4353,32 @@ export const en = {
       milestones: 'Milestones',
     },
   },
+  evidenceEditor: {
+    title: 'Evidence corrections and re-review',
+    note: 'Operator wallet access is not verified professional identity. Publish only non-confidential public-source notes. Original claims and reviews remain visible. Corrections make the affected claim unverified until explicit human re-review.',
+    campaign: 'Campaign',
+    claim: 'Original claim',
+    action: 'Action',
+    correction: 'Append a correction',
+    review: 'Append a reviewed replacement',
+    reviewText: 'Replacement fact',
+    reviewNote: 'Public correction or review note',
+    sources: 'Existing public sources used',
+    humanReviewed: 'I personally checked these public sources and the replacement fact. A source link alone is not a human review.',
+    preview: 'Preview publication',
+    publish: 'Publish this evidence update',
+    back: 'Back to editing',
+    saved: 'Evidence update published. Original records were retained.',
+    failed: 'The evidence update could not be completed. Reload the current record before retrying; another operator may have changed it.',
+    reload: 'Reload current evidence',
+    addSource: 'Add a new public source',
+    sourceTitle: 'Public source title',
+    sourceUrl: 'Public HTTPS URL',
+    sourcePublisher: 'Source publisher classification',
+    sourceRetrieved: 'Retrieved on (today)',
+    sourcePublicOnly:
+      'Only non-confidential public sources. No credentials, signed URLs, query parameters or fragments. Retrieval date records your source check today.',
+  },
 };
 
 export type Messages = typeof en;

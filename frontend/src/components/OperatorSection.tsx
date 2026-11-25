@@ -1,3 +1,4 @@
+import OperatorEvidenceEditor from './OperatorEvidenceEditor';
 import { tpl } from '../format';
 import ApplicationDocuments from './ApplicationDocuments';
 // Operator dashboard (demo admin surface): issuer application triage, comment
@@ -44,7 +45,7 @@ type Props = {
   campaignsUnavailable?: boolean;
 };
 
-type Tab = 'applications' | 'comments' | 'tickets' | 'messages' | 'news' | 'reports' | 'podcast' | 'reconciliation' | 'corporate' | 'audit';
+type Tab = 'applications' | 'comments' | 'tickets' | 'messages' | 'news' | 'reports' | 'podcast' | 'reconciliation' | 'corporate' | 'audit' | 'evidence';
 
 export default function OperatorSection({ campaigns, campaignsLoading = false, campaignsUnavailable = false }: Props) {
   const { m, locale } = useI18n();
@@ -188,7 +189,7 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
       }}
       aria-pressed={tab === id}
     >
-      {labels.tabs[id]}
+      {id === 'evidence' ? m.issuerEvidence.title : labels.tabs[id]}
     </button>
   );
 
@@ -199,7 +200,9 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
       </h2>
       <p className="community-note">{labels.demoNote}</p>
       <div className="filter-chips" role="group" aria-label={labels.title}>
-        {(['applications', 'comments', 'tickets', 'messages', 'news', 'reports', 'podcast', 'reconciliation', 'corporate', 'audit'] as Tab[]).map(tabBtn)}
+        {(['applications', 'comments', 'tickets', 'messages', 'news', 'reports', 'podcast', 'reconciliation', 'corporate', 'audit', 'evidence'] as Tab[]).map(
+          tabBtn,
+        )}
       </div>
       {error && (
         <p role="alert" className="community-error">
@@ -212,6 +215,8 @@ export default function OperatorSection({ campaigns, campaignsLoading = false, c
       {notice && <p className="community-note">{notice}</p>}
 
       {tab === 'messages' && <OperatorIssuerMessages campaigns={campaigns} />}
+      {tab === 'evidence' &&
+        (campaignReadsBlocked ? campaignReadStatus : <OperatorEvidenceEditor campaigns={campaigns} copy={m.evidenceEditor} evidenceCopy={m.issuerEvidence} />)}
       {tab === 'applications' && (
         <>
           {!applications ? (
