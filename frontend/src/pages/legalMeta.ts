@@ -11,8 +11,8 @@ export const HOSTING_CONFIGURATION_VERIFIED_ON = '2026-11-19';
 export const DATABASE_RESTORE_PROOF_ON = '2026-11-20';
 
 // No current hosting, data-region, backup schedule or recovery guarantee is
-// inferred from these historical dates. Unreviewed documents have no fallback
-// revision: their own catalog date is preserved.
+// inferred from these historical dates. Other documents retain the date that
+// current main already renders, without implying a new substantive review.
 export function legalRevisionFor(doc: LegalDocId): string {
-  return LEGAL_FACTUAL_REVISIONS[doc] ?? '';
+  return LEGAL_FACTUAL_REVISIONS[doc] ?? '2026-10-31';
 }

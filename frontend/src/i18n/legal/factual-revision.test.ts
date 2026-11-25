@@ -26,7 +26,7 @@ it('separates the copy revision from historical configuration and restore eviden
   const data = JSON.parse(readFileSync(`${dir}/en.json`, 'utf8'));
   expect(legalRevisionFor('privacyPolicy')).toBe('2026-11-24');
   expect(legalRevisionFor('businessContinuity')).toBe('2026-11-24');
-  expect(legalRevisionFor('termsOfService')).toBe('');
+  expect(legalRevisionFor('termsOfService')).toBe('2026-10-31');
   expect(data.businessContinuity.b01.p).toContain(legalRevisionFor('businessContinuity'));
   expect(data.privacyPolicy.b00.notice).toContain('24 November 2026');
   expect(HOSTING_CONFIGURATION_VERIFIED_ON).toBe('2026-11-19');
@@ -34,5 +34,16 @@ it('separates the copy revision from historical configuration and restore eviden
   expect(data.privacyPolicy.b13.p).toContain('On 19 November 2026');
   expect(data.businessContinuity.b04.ul.i02).toContain('not proof of a later successful backup');
   const meta = readFileSync(new URL('../../pages/legalMeta.ts', import.meta.url), 'utf8');
-  expect(meta).not.toMatch(/NEON_REGION|LEGAL_LAST_UPDATED|2026-10-31/);
+  expect(meta).not.toMatch(/NEON_REGION|LEGAL_LAST_UPDATED/);
+});
+
+it('preserves the prior rendered date of legal documents outside the factual-copy revision', () => {
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
+    const data = JSON.parse(readFileSync(`${dir}/${file}`, 'utf8'));
+    for (const doc of ['termsOfService', 'riskDisclosure', 'legalNotice', 'conflictsOfInterest', 'complaintsManagement']) {
+      expect(data[doc].b01.p, `${file}:${doc}`).toContain('{v:lastUpdated}');
+      expect(legalRevisionFor(doc as Parameters<typeof legalRevisionFor>[0])).toBe('2026-10-31');
+      expect(data[doc].b01.p, `${file}:${doc}`).not.toContain('2026-11-20');
+    }
+  }
 });

@@ -4,7 +4,7 @@
       "notice": "Demo template: this page is an illustrative document for the Blockallisto prototype, not legal advice. It has not been reviewed by a lawyer and it is not evidence of any company registration or regulatory authorisation. Company particulars marked [DEMO] are fictional demonstration data."
     },
     "b01": {
-      "p": "<b>Last updated:</b> 2026-11-20"
+      "p": "<b>Last updated:</b> {v:lastUpdated}"
     },
     "b02": {
       "p": "These Terms of Service (\"Terms\") govern your use of the Blockallisto website and demo application (the \"Service\"), a prototype project operated by Blockallisto (\"we\", \"us\"). The corporate particulars shown for Blockallisto in these Terms are fictional demonstration data - legal form \"Lda.\" [DEMO], registered address \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], registration number \"000 000 000\" [DEMO]. Blockallisto's registered legal name, form, address and registration status have not been verified, and no registration is asserted. Contact: {v:contactEmail}."
@@ -171,7 +171,7 @@
       "notice": "Demo template: this page is an illustrative document for the Blockallisto prototype, not legal advice. It has not been reviewed by a lawyer and it is not evidence of any company registration or regulatory authorisation. Company particulars marked [DEMO] are fictional demonstration data."
     },
     "b01": {
-      "p": "<b>Last updated:</b> 2026-11-20"
+      "p": "<b>Last updated:</b> {v:lastUpdated}"
     },
     "b02": {
       "h2": "Read this first: today's demo involves no real money"
@@ -233,7 +233,7 @@
       "notice": "Demo template: this page is an illustrative document for the Blockallisto prototype, not legal advice. It has not been reviewed by a lawyer and it is not evidence of any company registration or regulatory authorisation. Company particulars marked [DEMO] are fictional demonstration data."
     },
     "b01": {
-      "p": "<b>Last updated:</b> 2026-11-20"
+      "p": "<b>Last updated:</b> {v:lastUpdated}"
     },
     "b02": {
       "p": "This Legal Notice identifies the operator of the Blockallisto website and demo application (the \"Service\"). The corporate particulars shown below are fictional demonstration data: legal form \"Lda.\" [DEMO], registered address \"Rua da Demonstracao 0, 0000-000 Lisboa, Portugal\" [DEMO], registration number \"000 000 000\" [DEMO], share capital \"EUR 0\" [DEMO], managing director \"Nome Demonstracao\" [DEMO]. Blockallisto's registered legal name, form, address and registration status have not been verified, and no registration is asserted. Contact: {v:contactEmail}."
@@ -317,7 +317,7 @@
       "notice": "Demo template: this page is an illustrative document for the Blockallisto prototype, not legal advice. It has not been reviewed by a lawyer and it is not evidence of any company registration or regulatory authorisation. Company particulars marked [DEMO] are fictional demonstration data."
     },
     "b01": {
-      "p": "<b>Last updated:</b> 2026-11-20"
+      "p": "<b>Last updated:</b> {v:lastUpdated}"
     },
     "b02": {
       "p": "This policy template describes how Blockallisto intends to identify, prevent, manage and disclose conflicts of interest. Blockallisto today is a prototype demonstration on the Stellar testnet: there are no real investors, issuers, funds or offers, so no actual conflict can arise today. This document is a design artifact prepared against the compliance surfaces of established EU crowdfunding platforms and is <b>not</b> a description of a live compliance program."
@@ -358,7 +358,7 @@
       "notice": "Demo template: this page is an illustrative document for the Blockallisto prototype, not legal advice. It has not been reviewed by a lawyer and it is not evidence of any company registration or regulatory authorisation. Company particulars marked [DEMO] are fictional demonstration data."
     },
     "b01": {
-      "p": "<b>Last updated:</b> 2026-11-20"
+      "p": "<b>Last updated:</b> {v:lastUpdated}"
     },
     "b02": {
       "p": "This page explains how to complain about the Blockallisto prototype and how complaints are handled. Blockallisto today is a demo on the Stellar testnet with no real funds involved; the handling process below is real for the demo, while the formal regulatory framework it mirrors applies only to an authorised platform."

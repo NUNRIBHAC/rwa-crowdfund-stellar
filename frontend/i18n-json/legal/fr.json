@@ -4,7 +4,7 @@
       "notice": "Modèle de démonstration : cette page est un document illustratif pour le prototype Blockallisto, et non un conseil juridique. Elle n'a pas été relue par un avocat et ne constitue la preuve d'aucun enregistrement de société ni d'aucune autorisation réglementaire. Les mentions sociales marquées [DEMO] sont des données fictives de démonstration."
     },
     "b01": {
-      "p": "<b>Dernière mise à jour :</b> 2026-11-20"
+      "p": "<b>Dernière mise à jour :</b> {v:lastUpdated}"
     },
     "b02": {
       "p": "Les présentes Conditions d'utilisation (les « Conditions ») régissent votre utilisation du site web et de l'application de démonstration Blockallisto (le « Service »), un projet prototype exploité par Blockallisto (« nous »). Les mentions sociales affichées pour Blockallisto dans ces Conditions sont des données fictives de démonstration : forme juridique « Lda. » [DEMO], siège social « Rua da Demonstracao 0, 0000-000 Lisboa, Portugal » [DEMO], numéro d'enregistrement « 000 000 000 » [DEMO]. La dénomination sociale, la forme, l'adresse et le statut d'enregistrement de Blockallisto n'ont pas été vérifiés, et aucun enregistrement n'est affirmé. Contact : {v:contactEmail}."
@@ -171,7 +171,7 @@
       "notice": "Modèle de démonstration : cette page est un document illustratif pour le prototype Blockallisto, et non un conseil juridique. Elle n'a pas été relue par un avocat et ne constitue la preuve d'aucun enregistrement de société ni d'aucune autorisation réglementaire. Les mentions sociales marquées [DEMO] sont des données fictives de démonstration."
     },
     "b01": {
-      "p": "<b>Dernière mise à jour :</b> 2026-11-20"
+      "p": "<b>Dernière mise à jour :</b> {v:lastUpdated}"
     },
     "b02": {
       "h2": "À lire d'abord : la démonstration d'aujourd'hui n'implique aucun argent réel"
@@ -233,7 +233,7 @@
       "notice": "Modèle de démonstration : cette page est un document illustratif pour le prototype Blockallisto, et non un conseil juridique. Elle n'a pas été relue par un avocat et ne constitue la preuve d'aucun enregistrement de société ni d'aucune autorisation réglementaire. Les mentions sociales marquées [DEMO] sont des données fictives de démonstration."
     },
     "b01": {
-      "p": "<b>Dernière mise à jour :</b> 2026-11-20"
+      "p": "<b>Dernière mise à jour :</b> {v:lastUpdated}"
     },
     "b02": {
       "p": "La présente Mention légale identifie l'opérateur du site web et de l'application de démonstration Blockallisto (le « Service »). Les mentions sociales affichées ci-dessous sont des données fictives de démonstration : forme juridique « Lda. » [DEMO], siège social « Rua da Demonstracao 0, 0000-000 Lisboa, Portugal » [DEMO], numéro d'enregistrement « 000 000 000 » [DEMO], capital social « EUR 0 » [DEMO], gérant « Nome Demonstracao » [DEMO]. La dénomination sociale, la forme juridique, l'adresse et le statut d'enregistrement de Blockallisto n'ont pas été vérifiés, et aucun enregistrement n'est affirmé. Contact : {v:contactEmail}."
@@ -317,7 +317,7 @@
       "notice": "Modèle de démonstration : cette page est un document illustratif pour le prototype Blockallisto, et non un conseil juridique. Elle n'a pas été relue par un avocat et ne constitue la preuve d'aucun enregistrement de société ni d'aucune autorisation réglementaire. Les mentions sociales marquées [DEMO] sont des données fictives de démonstration."
     },
     "b01": {
-      "p": "<b>Dernière mise à jour :</b> 2026-11-20"
+      "p": "<b>Dernière mise à jour :</b> {v:lastUpdated}"
     },
     "b02": {
       "p": "Ce modèle de politique décrit comment Blockallisto entend identifier, prévenir, gérer et divulguer les conflits d'intérêts. Blockallisto est aujourd'hui une démonstration de prototype sur le testnet Stellar : il n'existe ni investisseurs, ni émetteurs, ni fonds, ni offres réels, de sorte qu'aucun conflit effectif ne peut survenir aujourd'hui. Ce document est un artefact de conception préparé en regard des surfaces de conformité de plateformes européennes de financement participatif établies et n'est <b>pas</b> une description d'un programme de conformité en fonctionnement."
@@ -358,7 +358,7 @@
       "notice": "Modèle de démonstration : cette page est un document illustratif pour le prototype Blockallisto, et non un conseil juridique. Elle n'a pas été relue par un avocat et ne constitue la preuve d'aucun enregistrement de société ni d'aucune autorisation réglementaire. Les mentions sociales marquées [DEMO] sont des données fictives de démonstration."
     },
     "b01": {
-      "p": "<b>Dernière mise à jour :</b> 2026-11-20"
+      "p": "<b>Dernière mise à jour :</b> {v:lastUpdated}"
     },
     "b02": {
       "p": "Cette page explique comment déposer une réclamation concernant le prototype Blockallisto et comment les réclamations sont traitées. Blockallisto est aujourd'hui une démonstration sur le testnet Stellar sans fonds réels en jeu ; le processus de traitement ci-dessous est réel pour la démonstration, tandis que le cadre réglementaire formel qu'il reflète ne s'applique qu'à une plateforme agréée."
