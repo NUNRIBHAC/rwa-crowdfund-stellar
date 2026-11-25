@@ -468,6 +468,18 @@ export const en = {
     fundedTail: 'funded - {filled} of {count} blocks',
     captionUnavailable: 'Progress unavailable - on-chain data not loaded',
   },
+  paymentPath: {
+    title: 'Testnet payment path',
+    note: 'Testnet prototype only. No real money or payment service.',
+    escrowAmount: 'Prepared contribution to escrow',
+    refundAmount: 'Prepared refund to wallet',
+    finalAmount: 'Confirmed transfer amount',
+    actualFee: 'Network fee actually charged',
+    unknown: 'Not verified',
+    estimateNote:
+      'Prepared amounts and maximum fees are snapshots, not proof of a completed payment. The saved transaction status does not verify the final amount or fee.',
+    separateAssets: 'USDC and XLM are different assets. They are shown separately, not added into one total.',
+  },
   intent: {
     title: 'Saved transaction',
     steps: ['Prepared', 'Signed', 'Submitted', 'Confirmed'],

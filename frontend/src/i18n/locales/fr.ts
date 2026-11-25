@@ -473,6 +473,18 @@ export const fr: Messages = {
     fundedTail: 'financé - {filled} sur {count} blocs',
     captionUnavailable: 'Progression indisponible - données on-chain non chargées',
   },
+  paymentPath: {
+    title: 'Parcours de paiement sur le réseau de test',
+    note: 'Prototype sur le réseau de test uniquement. Aucun argent réel ni service de paiement.',
+    escrowAmount: 'Contribution préparée vers le séquestre',
+    refundAmount: 'Remboursement préparé vers le portefeuille',
+    finalAmount: 'Montant du transfert confirmé',
+    actualFee: 'Frais de réseau réellement facturés',
+    unknown: 'Non vérifié',
+    estimateNote:
+      'Les montants préparés et les frais maximaux sont des données ponctuelles, pas des preuves de paiement effectué. Le statut de la transaction enregistrée ne vérifie ni le montant final ni les frais.',
+    separateAssets: 'USDC et XLM sont des actifs différents. Ils sont affichés séparément, sans les additionner dans un total.',
+  },
   intent: {
     title: 'Transaction enregistrée',
     steps: ['Préparée', 'Signée', 'Envoyée', 'Confirmée'],

@@ -474,6 +474,18 @@ export const de: Messages = {
     fundedTail: 'finanziert - {filled} von {count} Blöcken',
     captionUnavailable: 'Fortschritt nicht verfügbar - On-Chain-Daten nicht geladen',
   },
+  paymentPath: {
+    title: 'Zahlungsablauf im Testnetz',
+    note: 'Nur ein Testnetz-Prototyp. Kein echtes Geld und kein Zahlungsdienst.',
+    escrowAmount: 'Vorbereiteter Beitrag zum Treuhandvertrag',
+    refundAmount: 'Vorbereitete Erstattung an die Wallet',
+    finalAmount: 'Bestätigter Überweisungsbetrag',
+    actualFee: 'Tatsächlich berechnete Netzwerkgebühr',
+    unknown: 'Nicht verifiziert',
+    estimateNote:
+      'Vorbereitete Beträge und Höchstgebühren sind Momentaufnahmen, keine Nachweise einer abgeschlossenen Zahlung. Der gespeicherte Transaktionsstatus bestätigt weder den endgültigen Betrag noch die Gebühr.',
+    separateAssets: 'USDC und XLM sind unterschiedliche Vermögenswerte. Sie werden getrennt angezeigt und nicht zu einer Summe addiert.',
+  },
   intent: {
     title: 'Gespeicherte Transaktion',
     steps: ['Vorbereitet', 'Signiert', 'Gesendet', 'Bestätigt'],

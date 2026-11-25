@@ -463,6 +463,17 @@ export const ko: Messages = {
     fundedTail: '달성 - {count}개 블록 중 {filled}개',
     captionUnavailable: '진행률을 사용할 수 없음 - 온체인 데이터가 로드되지 않음',
   },
+  paymentPath: {
+    title: '테스트넷 결제 흐름',
+    note: '테스트넷 프로토타입 전용입니다. 실제 자금이나 결제 서비스가 아닙니다.',
+    escrowAmount: '에스크로로 보낼 준비된 기여 금액',
+    refundAmount: '지갑으로 보낼 준비된 환불 금액',
+    finalAmount: '확인된 이체 금액',
+    actualFee: '실제로 부과된 네트워크 수수료',
+    unknown: '검증되지 않음',
+    estimateNote: '준비된 금액과 최대 수수료는 특정 시점의 기록이며 결제 완료 증거가 아닙니다. 저장된 거래 상태는 최종 금액이나 수수료를 검증하지 않습니다.',
+    separateAssets: 'USDC와 XLM은 서로 다른 자산입니다. 별도로 표시하며 하나의 합계로 더하지 않습니다.',
+  },
   intent: {
     title: '저장된 트랜잭션',
     steps: ['준비됨', '서명됨', '제출됨', '확정됨'],

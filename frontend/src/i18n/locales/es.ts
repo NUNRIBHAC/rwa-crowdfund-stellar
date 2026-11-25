@@ -473,6 +473,18 @@ export const es: Messages = {
     fundedTail: 'financiado - {filled} de {count} bloques',
     captionUnavailable: 'Progreso no disponible - datos on-chain no cargados',
   },
+  paymentPath: {
+    title: 'Proceso de pago en la red de pruebas',
+    note: 'Solo un prototipo en la red de pruebas. Sin dinero real ni servicio de pago.',
+    escrowAmount: 'Contribución preparada al depósito en garantía',
+    refundAmount: 'Reembolso preparado a la cartera',
+    finalAmount: 'Importe de la transferencia confirmada',
+    actualFee: 'Comisión de red cobrada realmente',
+    unknown: 'No verificado',
+    estimateNote:
+      'Los importes preparados y las comisiones máximas son datos de un momento, no pruebas de un pago completado. El estado de la transacción guardada no verifica el importe final ni la comisión.',
+    separateAssets: 'USDC y XLM son activos distintos. Se muestran por separado, sin sumarlos en un total.',
+  },
   intent: {
     title: 'Transacción guardada',
     steps: ['Preparada', 'Firmada', 'Enviada', 'Confirmada'],

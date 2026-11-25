@@ -26,6 +26,7 @@ export type Intent = {
   amount?: string;
   feeStroops?: string;
   contractId?: string;
+  paymentEvidence?: { hash: string; ledger: number; confirmedAmount: string | null } | null;
 };
 
 export const TERMINAL_STATUSES = ['SUCCESS', 'FAILED', 'CANCELLED_UNSIGNED'] as const;

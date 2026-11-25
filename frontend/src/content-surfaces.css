@@ -647,3 +647,20 @@ html[lang='ar'] .investor-information-guide :is(h2, p, label, summary, button) {
   direction: rtl;
   text-align: right;
 }
+
+.testnet-payment-path {
+  border-block: 1px solid var(--line);
+  margin-block: 1rem;
+  padding-block: 1rem;
+  overflow-wrap: anywhere;
+}
+html.rtl-text .testnet-payment-path dl.intent-facts {
+  direction: ltr;
+}
+.testnet-payment-path .intent-facts > div {
+  min-width: 0;
+}
+html[lang='ar'] .testnet-payment-path :is(h3, p, dt, dd:not([dir='ltr'])) {
+  direction: rtl;
+  text-align: left;
+}

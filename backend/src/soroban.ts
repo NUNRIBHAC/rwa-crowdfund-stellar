@@ -648,7 +648,7 @@ export async function buildSoroban(id: string, input: { actor: string; action: s
     xdr: prepared.toXDR(),
     networkPassphrase: passphrase,
     action: input.action,
-    amount: input.action === 'withdraw' ? undefined : input.amount,
+    amount: input.action === 'withdraw' ? undefined : input.action === 'refund' ? refundAmount : input.amount,
     feeStroops: prepared.fee,
     contractId: e.contractId,
     testOnly: true,
@@ -820,7 +820,22 @@ export async function statusSoroban(hash: string): Promise<any> {
     const confirmed = v1 ? confirmedAmountFromResult(result, intent.action, intent.actor, v1.contractId, expectedToken()) : undefined;
     await recordStatus(hash, result.status, confirmed);
   }
-  return { hash, status: result.status, confirmed: result.status === 'SUCCESS', held: result.status === 'NOT_FOUND' };
+  // Forward-only evidence for this exact checked hash and ledger. Cached
+  // terminal statuses above do not recreate missing network evidence.
+  const evidenceEntry = result.status === 'SUCCESS' ? v1Entries().find((e) => e.id === intent.campaign) : undefined;
+  const token = evidenceEntry ? expectedToken() : undefined;
+  const matching = evidenceEntry
+    ? transferEventsFromResult(result).filter(
+        (t) =>
+          t.emitter === token &&
+          (intent.action === 'contribute'
+            ? t.from === intent.actor && t.to === evidenceEntry.contractId
+            : (intent.action === 'refund' || intent.action === 'withdraw') && t.from === evidenceEntry.contractId && t.to === intent.actor),
+      )
+    : [];
+  const paymentEvidence =
+    result.status === 'SUCCESS' ? { hash, ledger: result.ledger, confirmedAmount: matching.length === 1 ? unitsToAmount(matching[0].units) : null } : null;
+  return { hash, status: result.status, confirmed: result.status === 'SUCCESS', held: result.status === 'NOT_FOUND', paymentEvidence };
 }
 
 // --- Campaign deployment (operator-prepared, wallet-signed) ---
