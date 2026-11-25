@@ -1,3 +1,5 @@
+import { testnetSetupRouter, testnetSetupPorts } from './testnet-setup-routes.js';
+import { HORIZON_URL, USDC } from './config.js';
 import { startBackgroundTask } from './background-task.js';
 import { databaseReadiness, databaseMetrics, refreshDatabaseReadiness, databasePoolMetrics } from './database-runtime.js';
 import { audioOrigins } from './audio-origins.js';
@@ -351,6 +353,7 @@ function readyCommunityRouter() {
         service,
         requireAdmin,
         mailer: mailerFromEnv(),
+        accountActivity,
         reconciliation: reconciliationPayload,
         shareRegister: shareRegisterPayload,
         fundingState: sorobanCampaignFundingState,
@@ -399,7 +402,7 @@ app.get('/api/operator/metrics', requireAdmin, (_req, res) => {
 const COMMUNITY_PATH =
   /^\/api\/(auth|support|issuer-applications|companies|comments|news|notifications|podcast)(\/|$)|^\/api\/campaigns\/[^/]+\/(comments|news|metadata|podcast|reports|investment-documents|share-register\.(json|csv|pdf)|corporate-actions|messages)(\/|$|\?)|^\/api\/admin\/(comments|tickets|issuer-applications|audit-log|abuse-diagnostics)(\/|$)|^\/api\/operator(\/|$)|^\/api\/investment-documents(\/|$)/;
 app.use((req, res, next) => {
-  if (!COMMUNITY_PATH.test(req.path)) return next();
+  if (!COMMUNITY_PATH.test(req.path) && req.path !== '/api/account/activity') return next();
   readyCommunityRouter().then((router) => {
     if (!router) {
       res.status(503).json({ error: 'community API unavailable', code: 'API_UNAVAILABLE' });
@@ -408,6 +411,10 @@ app.use((req, res, next) => {
     router(req, res, next);
   }, next);
 });
+app.use(
+  '/api/testnet-setup',
+  testnetSetupRouter({ enabled: process.env.TESTNET_SETUP_ENABLED === '1', network: NETWORK, horizon: HORIZON_URL, issuer: USDC.issuer }, testnetSetupPorts()),
+);
 app.get('/health', (_req, res) => {
   const database = databaseReadiness();
   const communityRequired =
@@ -489,17 +496,7 @@ app.get('/api/account/holdings', async (req, res) => {
     res.status(400).json(publicFailure(err));
   }
 });
-app.get('/api/account/activity', async (req, res) => {
-  try {
-    const actor = typeof req.query.actor === 'string' ? req.query.actor : '';
-    if (!actor) return res.status(400).json({ error: 'actor query param required', code: 'invalid_input' });
-    // Public read of on-chain-equivalent fields only; no signed material.
-    res.json({ activity: await accountActivity(actor), network: NETWORK, productionEligible: false });
-  } catch (err) {
-    console.error('API request failed:', err);
-    res.status(400).json(publicFailure(err));
-  }
-});
+
 // Read-only operator aid: journal-recorded SUCCESS contributions vs the
 // on-chain cumulative counter per campaign. See RECONCILIATION_SEMANTICS;
 // no accounting, custody or compliance claim is made or implied.

@@ -4308,4 +4308,105 @@ export const pt: Messages = {
       'Amostra de um formato suportado: o financiamento colaborativo por donativo, recompensa e pré-venda está abrangido pelo regime jurídico nacional português (Lei 102/2015), fora da ECSPR. Uma oferta real exige que o operador seja pessoa coletiva ou EIRL e comunique previamente à DGE pelo menos 30 dias antes de iniciar a atividade. Esta página mostra dados ilustrativos de exemplo: não se recolhe dinheiro nem se promete dedução fiscal. Não é oferecido qualquer retorno financeiro.',
     ecsprNote: 'Ofertas reais de empréstimos e ações de S.A. através de financiamento colaborativo exigem autorização ECSPR (CMVM em Portugal).',
   },
+  foundingCampaign: {
+    title: 'Ajuda a construir a Blockallisto',
+    previewNotice: 'Pré-visualização local, só com dinheiro de teste. Não aceita apoios nem efetua pagamentos.',
+    fundsDecision:
+      'Decisão de desenho: o dinheiro fica guardado até haver licença. A guarda e o reembolso ainda precisam de implementação e validação jurídica e operacional.',
+    origem: {
+      heading: 'O primeiro apoio',
+      paragraph1:
+        'Há projetos com potencial que nunca chegam a existir. Não por falta de ideia, mas por falta do primeiro capital que o financiamento tradicional não dá.',
+      paragraph2:
+        'Uma ideia só se prova quando alguém acredita nela. Mas quem tem a ideia nem sempre tem o capital, e quem tem o capital nem sempre sabe se a ideia vale o risco. Abrimos o caminho a muitos pequenos apoios: cada um é uma pequena prova de que a ideia importa.',
+    },
+    via: {
+      heading: 'Uma nova via',
+      paragraph1:
+        'É através desta campanha de crowdfunding que a Blockallisto vai nascer, para abrir outra via: crowdfunding e crowdlending, com a tecnologia à vista de todos.',
+      paragraph2:
+        'A Blockallisto é um negócio, não uma associação. Queremos construir uma plataforma que se sustente e gere valor, e acreditamos que isso também ajuda projetos a chegar ao capital que hoje não encontram.',
+    },
+    construir: {
+      heading: 'Começamos pela nossa plataforma',
+      paragraph1:
+        'Antes de convidarmos outros promotores, temos de construir a plataforma. E enfrentamos o mesmo problema que eles: transformar uma ideia em algo real custa dinheiro. Por isso começamos pela nossa própria campanha. Apresentamos a ideia, mostramos o plano e pedimos à multidão que a ajude a nascer.',
+    },
+    meta: {
+      heading: '25.000 € para chegar ao lançamento',
+      paragraph1:
+        'Precisamos de 25.000 € para três coisas: construir e proteger a plataforma, tratar do licenciamento e da conformidade como plataforma de crowdfunding, e operar até ao lançamento. Cada euro tem destino, e vamos mostrar como é usado.',
+    },
+    azulejo: {
+      heading: 'O teu lugar na parede de azulejos',
+      paragraph1:
+        'Cada apoio fica numa parede de azulejos. Cada azulejo é o teu lugar na história. É uma pré-reserva e um apoio, não um investimento, e não promete juro nem retorno. Podes escolher se queres que o teu nome apareça; guardamos o nome fora da blockchain. O azulejo e os eventos associados ficam registados de forma verificável através de um identificador.',
+    },
+    reembolso: {
+      heading: 'Quando devolvemos os apoios',
+      paragraph1:
+        'Devolvemos todos os apoios se a meta não for atingida ou se a Blockallisto não obtiver a autorização ECSP necessária para operar como plataforma de crowdfunding. Os apoios e os reembolsos serão feitos em euros, através de prestadores autorizados. Esta é a nossa intenção de desenho, sujeita a validação jurídica e operacional.',
+    },
+    tecnologia: {
+      heading: 'Tecnologia com transparência',
+      paragraph1:
+        'Somos Web3 e dizemos isso sem rodeios. Não prometemos que a blockchain elimina o risco. A confiança vem de direitos claros, regras sólidas e transparência sobre o dinheiro. A blockchain entra onde acrescenta valor: um só contrato guarda a parede e os eventos importantes ficam registados de forma verificável.',
+    },
+    futuro: {
+      heading: 'O primeiro passo',
+      paragraph1:
+        'Esta campanha é o primeiro passo de um objetivo maior: construir uma plataforma onde bens reais possam ser financiados por muitos. O que apoias hoje é a construção desta plataforma, e o teu azulejo é o reconhecimento disso.',
+      paragraph2:
+        'Se acreditamos que a multidão pode financiar bons projetos, temos de começar pelo nosso. Ajuda-nos a abrir esta via. Porque também pode ser a tua via.',
+    },
+  },
+  tileWall: {
+    refundComplete: 'Todos os apoios devolvidos (simulação)',
+    futureDoor:
+      'No futuro, a empresa poderá estudar, com aconselhamento jurídico, outras formas de participação. Nada disto é prometido nem faz parte deste apoio.',
+    footerLabel: 'Parede de azulejos',
+    wallTitle: 'Cada apoio, um azulejo',
+    wallNote: 'Cada azulejo representa um apoio já dado. Não promete qualquer pagamento adicional.',
+    demoNote: 'Simulação visual: não regista apoios, não movimenta dinheiro e não inicia reembolsos.',
+    progressLabel: 'Progresso da campanha (simulação)',
+    refundButton: 'Simular fase de reembolso',
+    resetButton: 'Repor simulação',
+    refundState: 'Fase de reembolso simulada',
+    campaignState: 'Campanha simulada em curso',
+  },
+  testnetSetup: {
+    title: 'Preparar uma conta testnet',
+    intro: 'Apenas testnet. XLM e USDC aqui são ativos de teste, sem valor real. Nunca introduza neste site uma chave privada ou frase de recuperação.',
+    historyNote: 'Uma conta nova na carteira não apaga contribuições anteriores nem reinicia uma campanha. Este guia não faz nenhuma contribuição.',
+    walletTitle: '1. Escolher uma conta na carteira',
+    walletHelp:
+      'Para repetir com uma conta nova, crie-a ou selecione-a na Freighter e mude para Testnet. Este site não pode criar uma conta dentro da carteira. Depois ligue-a aqui.',
+    connect: 'Ligar a conta selecionada',
+    address: 'Endereço público',
+    xlmTitle: '2. Obter XLM de teste',
+    xlmHelp: 'Numa conta nova ainda sem saldo, peça XLM de teste gratuitos. O site volta a verificar a conta antes de indicar sucesso.',
+    fund: 'Pedir XLM de teste',
+    trustlineTitle: '3. Autorizar USDC de teste',
+    trustlineHelp:
+      'Adicione uma trustline de USDC na Testnet. A carteira assina uma operação de trustline com limite de 1 000 USDC de teste. A taxa da transação é paga em XLM de teste.',
+    sign: 'Rever e assinar a trustline',
+    usdcTitle: '4. Obter USDC de teste',
+    usdcHelp:
+      'Abra o faucet oficial, escolha USDC e Stellar Testnet e use o mesmo endereço público. A disponibilidade e os limites são definidos pelo faucet. Volte aqui e verifique o saldo.',
+    faucet: 'Abrir o faucet USDC',
+    done: 'Presente',
+    notDone: 'Não presente',
+    check: 'Verificar rede e saldos',
+    busy: 'A verificar…',
+    campaigns: 'Ver campanhas',
+    assetsDetected:
+      'Ativos de teste detetados. A disponibilidade da campanha, os limites e qualquer contribuição exigem verificação separada e a assinatura da carteira.',
+    networkError: 'Mude a carteira para Testnet e volte a ligá-la.',
+    changedError: 'A conta selecionada na carteira mudou. Volte a ligar e a verificar.',
+    intentError: 'Resolva primeiro a contribuição guardada. A preparação está bloqueada para a trustline não invalidar a sequência da conta. Nada foi apagado.',
+    disabledError: 'A preparação testnet não está ativada neste servidor.',
+    rejectedError: 'A aprovação na carteira não foi concluída. Esta ação não submeteu nada.',
+    failureError: 'Não foi possível verificar este passo. Verifique a rede e os saldos antes de tentar novamente.',
+    uncertain: 'O último pedido tem resultado incerto. Verifique o saldo antes de outro financiamento ou assinatura. Não há repetição automática.',
+  },
 };

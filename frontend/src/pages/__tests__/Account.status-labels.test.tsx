@@ -4,7 +4,25 @@ import { I18nProvider, LOCALES, useI18n } from '../../i18n';
 import Account from '../Account';
 import type { Market } from '../../market';
 
-vi.mock('../../community/CommunityAuth', () => ({ useCommunityAuth: () => ({ account: null, restored: true }) }));
+const auth = vi.hoisted(() => ({
+  account: { publicKey: 'GDJF4GJDFTO3XA562HC4NRMLRAGJ6HQOJFG7US3LBIN5K44GEF2FNKCT', authMethod: 'wallet' },
+  token: 'synthetic-status-label-session',
+  restored: true,
+}));
+vi.mock('../../community/CommunityAuth', () => ({ useCommunityAuth: () => auth }));
+// Status labels are tested in a proven wallet session. Unrelated private
+// account panels have their own tests and must not invent fixture responses.
+vi.mock('../../components/DemoJourney', () => ({ default: () => null }));
+vi.mock('../../components/InvestorOnboarding', () => ({ default: () => null }));
+vi.mock('../../components/NotificationsSection', () => ({ default: () => null }));
+vi.mock('../../components/SecuritySection', () => ({ default: () => null }));
+vi.mock('../../components/CompanyAccountsSection', () => ({ default: () => null }));
+vi.mock('../../components/AppropriatenessSection', () => ({ default: () => null }));
+vi.mock('../../components/OperatorSection', () => ({ default: () => null }));
+vi.mock('../../components/MyCommunityActivity', () => ({ default: () => null }));
+vi.mock('../../components/SignInPanel', () => ({ default: () => null }));
+vi.mock('../../components/SupportCenter', () => ({ default: () => null }));
+vi.mock('../../components/IssuerApplicationForm', () => ({ default: () => null }));
 
 const actor = 'GDJF4GJDFTO3XA562HC4NRMLRAGJ6HQOJFG7US3LBIN5K44GEF2FNKCT';
 const knownStatuses = ['BUILT', 'SIGNED', 'PENDING', 'SUCCESS', 'FAILED', 'NOT_FOUND', 'CANCELLED_UNSIGNED'];

@@ -13,6 +13,7 @@ import Header from './components/Header';
 import IntentPanel from './components/IntentPanel';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import FoundingCampaign from './pages/FoundingCampaign';
 import Investments from './pages/Investments';
 import CampaignDetail from './pages/CampaignDetail';
 import HowItWorks from './pages/HowItWorks';
@@ -25,6 +26,7 @@ import About from './pages/About';
 import Financing from './pages/Financing';
 import CampaignBuilderDraft from './components/CampaignBuilderDraft';
 import Account from './pages/Account';
+import TestnetSetup from './pages/TestnetSetup';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import RiskDisclosure from './pages/RiskDisclosure';
@@ -352,6 +354,7 @@ export default function App() {
         )}
 
         {route.name === 'home' && <Home market={market} loadStatus={campaignLoadStatus} />}
+        {route.name === 'tile-wall' && <FoundingCampaign />}
         {route.name === 'investments' && <Investments market={market} loadStatus={campaignLoadStatus} />}
         {route.name === 'campaign' && <CampaignDetail market={market} campaignId={route.campaignId ?? ''} />}
         {route.name === 'how-it-works' && <HowItWorks />}
@@ -364,6 +367,7 @@ export default function App() {
         {route.name === 'financing' && <Financing />}
         {route.name === 'campaign-builder' && <CampaignBuilderDraft />}
         {route.name === 'account' && <Account market={market} />}
+        {route.name === 'testnet-setup' && <TestnetSetup actor={actor} onWallet={setActor} />}
         {route.name === 'terms-of-service' && <TermsOfService />}
         {route.name === 'privacy-policy' && <PrivacyPolicy />}
         {route.name === 'risk-disclosure' && <RiskDisclosure />}

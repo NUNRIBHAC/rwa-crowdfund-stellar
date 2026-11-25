@@ -1,3 +1,4 @@
+import { fetchAccountActivity } from '../community/api';
 import ContributionRecordButton from '../components/ContributionRecordButton';
 import DemoJourney from '../components/DemoJourney';
 import { useCommunityAuth } from '../community/CommunityAuth';
@@ -37,8 +38,7 @@ type Row = {
   status: PortfolioStatus;
 };
 
-// One recorded transaction intent from the platform journal (on-chain-public
-// fields only; the API never returns envelope material).
+// One private recorded transaction intent for the authenticated wallet.
 type ActivityRow = {
   hash: string;
   campaign: string;
@@ -81,15 +81,17 @@ export default function Account({ market }: { market: Market }) {
   const { campaigns, actor, fixtureMode } = market;
   const { account, token } = useCommunityAuth();
   const readActor = accountReadActor(actor, account);
+  const activityActor = token && account?.authMethod === 'wallet' ? account.publicKey : '';
   const [tab, setTab] = useState<PortfolioStatus | 'all'>('all');
-  const intent = useMemo(() => readIntent(readActor), [readActor]);
+  const intent = useMemo(() => readIntent(activityActor), [activityActor]);
   const [activityRead, setActivityRead] = useState<{
     actor: string;
+    session: string;
     data: ActivityRow[] | 'loading' | 'error';
     network?: unknown;
     productionEligible?: unknown;
   } | null>(null);
-  const activity = !readActor ? null : activityRead?.actor === readActor ? activityRead.data : 'loading';
+  const activity = !activityActor ? null : activityRead?.actor === activityActor && activityRead.session === token ? activityRead.data : 'loading';
   // Contribution records for the selected proven read actor: the same public /api/campaigns?actor= read the connected-wallet
   // path uses, never fabricated rows. Transaction paths still require the
   // connected wallet - this feeds only the read-only portfolio/invested-news
@@ -101,29 +103,29 @@ export default function Account({ market }: { market: Market }) {
   // unavailable or empty, so the section never shows fabricated history.
   useEffect(() => {
     setActivityRead(null);
-    if (!readActor) {
+    if (!activityActor) {
       return;
     }
     let live = true;
-    setActivityRead({ actor: readActor, data: 'loading' });
-    fetch(`/api/account/activity?actor=${encodeURIComponent(readActor)}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    setActivityRead({ actor: activityActor, session: token!, data: 'loading' });
+    fetchAccountActivity(token!)
       .then((j) => {
         if (live)
           setActivityRead({
-            actor: readActor,
+            actor: activityActor,
+            session: token!,
             data: Array.isArray(j.activity) ? j.activity : [],
             network: j.network,
             productionEligible: j.productionEligible,
           });
       })
       .catch(() => {
-        if (live) setActivityRead({ actor: readActor, data: 'error' });
+        if (live) setActivityRead({ actor: activityActor, session: token!, data: 'error' });
       });
     return () => {
       live = false;
     };
-  }, [readActor]);
+  }, [activityActor, token]);
 
   useEffect(() => {
     setPositionsRead(null);
@@ -172,6 +174,11 @@ export default function Account({ market }: { market: Market }) {
   return (
     <>
       <h1 className="page-title">{m.account.title}</h1>
+      <p>
+        <a className="btn" href={routeHash({ name: 'testnet-setup' })}>
+          {m.testnetSetup.title}
+        </a>
+      </p>
       <p className="account-note" role="note">
         {m.account.note}
       </p>
@@ -282,7 +289,8 @@ export default function Account({ market }: { market: Market }) {
                 <a href={`https://stellar.expert/explorer/testnet/tx/${a.hash}`} target="_blank" rel="noreferrer">
                   tx
                 </a>
-                ) <ContributionRecordButton row={a} actor={readActor} network={activityRead?.network} productionEligible={activityRead?.productionEligible} />
+                ){' '}
+                <ContributionRecordButton row={a} actor={activityActor} network={activityRead?.network} productionEligible={activityRead?.productionEligible} />
               </li>
             ))}
           </ul>

@@ -3,6 +3,7 @@
 export const PUBLIC_PAGES = [
   '/',
   '/about',
+  '/tile-wall',
   '/account',
   '/blog',
   '/business-continuity',
@@ -26,6 +27,7 @@ export const PUBLIC_PAGES = [
   '/risk-disclosure',
   '/risk-warnings',
   '/terms-of-service',
+  '/testnet-setup',
   // Unknown-path capture: routes to the not-found view, keeping the bad URL.
   '/404',
 ].map((path) => ({ path, name: path === '/' ? 'home' : path.slice(1).replaceAll('/', '-') }));

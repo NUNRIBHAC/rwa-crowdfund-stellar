@@ -19,7 +19,12 @@ const EXT = 'GAGOC4XXT2I7BYMJPEU3VDCIAE2K6A7T6CV4U4XSX6D3SRD6MMXLXEJK';
 const EMAIL_KEY = 'GINTERNALEMAILIDENTITYKEYNOTAWALLET0000000000000000000000';
 
 let mockAccount: CommunityAccount | null = null;
-vi.mock('../../community/CommunityAuth', () => ({ useCommunityAuth: () => ({ account: mockAccount, restored: true }) }));
+let mockToken = '';
+vi.mock('../../components/DemoJourney', () => ({ default: () => null }));
+vi.mock('../../community/CommunityAuth', () => ({
+  describeError: () => 'Synthetic unavailable',
+  useCommunityAuth: () => ({ account: mockAccount, token: mockToken, restored: true }),
+}));
 
 function campaign(id: string, name: string, balance: string | null): Campaign {
   return {
@@ -49,6 +54,7 @@ beforeEach(() => {
   localStorage.clear();
   localStorage.setItem('blockallisto-language', 'en');
   mockAccount = null;
+  mockToken = '';
   fetchCalls = [];
   campaignsByActor = {};
   campaignsShouldFail = false;
@@ -60,6 +66,7 @@ beforeEach(() => {
       const actor = new URL(url, 'https://test').searchParams.get('actor') ?? '';
       return json({ campaigns: campaignsByActor[actor] ?? [] });
     }
+    if (mockToken && url.startsWith('/api/auth/')) return Promise.reject(new Error('unrelated synthetic panel unavailable'));
     if (url.startsWith('/api/news')) return json({ news: [] });
     return json({
       campaigns: [],
@@ -225,6 +232,7 @@ test('R8 saved intent from another wallet is never shown as current activity', a
 });
 
 test('R8 matching saved intent disappears on wallet switch and signout', async () => {
+  mockToken = 'synthetic-session';
   mockAccount = walletAccount(W1);
   localStorage.setItem('rwa-soroban-intent', JSON.stringify({ actor: W1, campaign: 'saved-wallet-campaign', action: 'contribute', status: 'SUCCESS' }));
   const mkt = market('');
