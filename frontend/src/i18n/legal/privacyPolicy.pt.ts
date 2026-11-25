@@ -7,7 +7,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'notice',
     text: [
-      'Aviso de privacidade do protótipo de testnet, atualizado em 3 de novembro de 2026. Descreve o tratamento real dos dados de conta; não é aconselhamento jurídico nem prova de autorização regulatória. Não estão ativas operações com dinheiro real.',
+      'Aviso de privacidade do protótipo de testnet, atualizado em 24 de novembro de 2026. Descreve o tratamento real dos dados de conta; não é aconselhamento jurídico nem prova de autorização regulatória. Não estão ativas operações com dinheiro real.',
     ],
   },
   {
@@ -39,13 +39,13 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Os tokens de sessão são guardados como hashes no servidor; o navegador guarda o token no armazenamento local. As sessões duram até 30 dias e podem ser revogadas. Se ativar um segundo fator por autenticador, a semente é cifrada no servidor e os códigos de recuperação são guardados como hashes. A recuperação da palavra-passe revoga sessões e pedidos pendentes de segundo fator, mas não remove um segundo fator já ativado.',
+      'Os tokens de sessão são guardados como hashes no servidor. O navegador envia a sessão num cookie HttpOnly, limitado ao host e Secure em HTTPS; o JavaScript guarda apenas um marcador. As credenciais antigas em armazenamento local são migradas e removidas. As sessões duram até 30 dias e podem ser revogadas. As sementes do autenticador são cifradas no servidor e os códigos de recuperação são hashes. A reposição da palavra-passe revoga sessões e pedidos pendentes de segundo fator, sem remover o fator já inscrito.',
     ],
   },
   {
     t: 'p',
     text: [
-      'Os registos de conta, credenciais de email e dados opcionais de segundo fator não têm atualmente um prazo automático de eliminação da conta. Os tokens deixam de funcionar ao expirar, mas isso não garante a remoção imediata dos registos guardados. Ainda não existe eliminação autónoma de conta. Peça acesso, correção ou eliminação a blockallisto@gmail.com; os pedidos são avaliados tendo em conta obrigações de segurança e legais. Os registos e cópias de segurança dos fornecedores podem ter conservação própria.',
+      'As contas de email verificado podem pedir a eliminação no formulário da conta, com a palavra-passe atual, confirmação DELETE e código atual do segundo fator, quando ativo. Registos operacionais associados ou uma conta de operador podem impedir a eliminação. Isto não garante apagar todos os dados: cópias de segurança, registos de transações separados, registos dos fornecedores e dados públicos da blockchain não são apagados. Outros pedidos podem ser enviados para blockallisto@gmail.com. A expiração não garante remoção imediata dos registos guardados.',
     ],
   },
   {
@@ -67,7 +67,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'As escolhas de tema, idioma e sessão usam armazenamento local do navegador. Os fornecedores de alojamento tratam IPs e metadados de pedidos. A limitação de pedidos e cache de reputação IP usam IPs em memória transitória; os diagnósticos da aplicação usam contadores agregados em vez de registos de IPs. Os registos de infraestrutura e cópias de segurança dos fornecedores têm conservação separada. Não usamos rastreadores de publicidade nem listas de newsletters.',
+      'As preferências de tema e idioma usam armazenamento local; o segredo da sessão usa um cookie. Os fornecedores de alojamento tratam endereços IP e metadados dos pedidos. Os limites e a cache de reputação IP usam memória temporária. Os registos dos fornecedores e as cópias de segurança têm retenção separada. Não usamos rastreadores publicitários nem listas de newsletters.',
     ],
   },
   {
@@ -77,7 +77,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'A Render aloja a aplicação em Frankfurt e a Neon aloja os dados Postgres. A Brevo recebe emails de destinatários e o conteúdo das mensagens de verificação/recuperação e trata metadados de entrega. O Cloudflare Turnstile trata sinais do navegador/dispositivo e tokens para controlo de bots; a validação no servidor pode incluir o IP do cliente. Após um controlo de bots bem-sucedido, a ipapi.is recebe o IP para avaliação de abuso. A reputação é inicialmente apenas observação; usar VPN, proxy ou Tor, por si só, não provoca bloqueio. Falhas ou esgotamento do orçamento de consultas podem reduzir esta camada; CAPTCHA, limites de pedidos e orçamentos de email são proteções separadas.',
+      'Em 19 de novembro de 2026, o site e a API foram verificados numa VM Oracle Cloud com PostgreSQL 17 local para os dados operacionais. Esta verificação datada não prova o estado atual do alojamento nem a disponibilidade. Brevo recebe emails de destinatários e o conteúdo das mensagens de verificação/recuperação e trata metadados de entrega. O Cloudflare Turnstile trata sinais do navegador/dispositivo e tokens para controlo de bots; a validação no servidor pode incluir o IP do cliente. Após um controlo de bots bem-sucedido, a ipapi.is recebe o IP para avaliação de abuso. A reputação é inicialmente apenas observação; usar VPN, proxy ou Tor, por si só, não provoca bloqueio. Falhas ou esgotamento do orçamento de consultas podem reduzir esta camada; CAPTCHA, limites de pedidos e orçamentos de email são proteções separadas.',
     ],
   },
   {

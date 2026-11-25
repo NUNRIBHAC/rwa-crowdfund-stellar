@@ -1,24 +1,18 @@
-<!--
-DRAFT v0.1 (2026-10-31) - FOR REVIEW ONLY. Delete this comment block before publishing.
-Prepared as an honest prototype-stage template. It is not legal advice and has not
-been reviewed by a lawyer. Placeholders in [square brackets] must be filled before
-publication. Business continuity planning is an ECSPR-style compliance surface and
-only becomes obligatory for an authorised platform; this document describes the
-prototype's real continuity posture plus the intended future plan. A qualified
-lawyer should review before any real (mainnet) launch.
--->
+# Business continuity
 
-# Business Continuity
+Factual prototype revision: 20 November 2026. Not legal advice or a regulatory approval.
 
-**Last updated:** [date to be set on publication]
+Demo template: this page is an illustrative document for the Blockallisto prototype, not legal advice. It has not been reviewed by a lawyer and it is not evidence of any company registration or regulatory authorisation. Company particulars marked [DEMO] are fictional demonstration data.
+
+**Last updated:** 2026-11-24
 
 This page describes what keeps the Blockallisto prototype available and recoverable, and what continuity planning is intended for a future authorised platform. The first section is factual about the running demo; the second is design intent, not current practice.
 
 ## 1. Prototype continuity posture (current)
 
 - **No client assets at risk:** the demo holds no money, no client funds and no custody. Contributions are testnet tokens with no monetary value, settled by a Soroban smart contract on the public Stellar testnet. Contract state lives on the testnet ledger, independent of this website.
-- **Hosting:** the site and API run on Render's free tier; operational data (transaction journal, community data) lives in a Neon Postgres database on its free tier. Both are third-party services with their own availability properties; no uptime is guaranteed for the demo.
-- **Backups:** [backup schedule and retention to be defined - the free tiers provide no managed backups; testnet contract state is recoverable from the public ledger].
+- On 19 November 2026, the site and API were verified on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This dated configuration check does not prove the current hosting state or availability.
+- An encrypted external backup and isolated restore proof for the demo and staging databases succeeded on 20 November 2026. This dated check is not proof of a later successful backup, a recovery-time guarantee, an automatic retention promise or proof that every external service can be restored.
 - **Staging separation:** user-facing demo, a separate staging environment, and disposable database copies are kept apart so testing cannot corrupt the demo.
 - **If the demo is unavailable:** no user loses anything of value. Campaign state remains readable on public Stellar testnet explorers, and contributions remain governed by the contract, not by this site.
 

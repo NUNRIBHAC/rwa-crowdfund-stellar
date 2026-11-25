@@ -1,81 +1,39 @@
-<!--
-DRAFT v0.2 (2026-10-31) - FOR REVIEW ONLY. Delete this comment block before publishing.
-Prepared as an honest prototype-stage draft. It is not legal advice and has not been
-reviewed by a lawyer. Placeholders in [square brackets] must be filled before
-publication. Data-flow statements reflect the repository as audited on 2026-10-31;
-the planned-features section reflects the competitor platform blueprints in docs/.
-Operator particulars are DEMO/illustrative values per the founder's instruction (2026-10-31);
-replace them with real registered data before any real launch. Re-verify before
-publication if the code changes.
--->
+# Privacy policy
 
-# Privacy Policy
+Factual prototype revision: 20 November 2026. Not legal advice or a regulatory approval.
 
-**Last updated:** [date to be set on publication]
+Testnet prototype privacy notice, updated 24 November 2026. This describes actual account processing; it is not legal advice or evidence of regulatory authorisation. No real-money operations are enabled.
 
-This Privacy Policy explains what personal data the Blockallisto prototype (the "Service") processes, why, and what rights you have. The Service is a prototype project operated under the name Blockallisto. The corporate particulars shown for Blockallisto in these documents are fictional demonstration data ([DEMO] legal form "Lda.", [DEMO] registered address "Rua da Demonstracao 0, 0000-000 Lisboa, Portugal", [DEMO] registration number "000 000 000"); the registered legal identity behind the Blockallisto name has not been verified, and naming the project does not by itself identify the accountable data controller. [The controller - the person or entity actually responsible for this processing - is to be confirmed before publication.] Privacy requests are answered at blockallisto@gmail.com.
+## 1. Responsible person and contact
 
-## 1. Scope: what the demo does not collect
+Nuno Ribeiro is the data controller responsible for personal data processed by the Blockallisto testnet prototype. Contact for privacy requests: blockallisto@gmail.com. Blockallisto is a project name, not a claim of a registered company. Fictional company particulars on other DEMO legal templates do not identify the controller for account data.
 
-The current prototype has **no user accounts, no registration, no KYC, no newsletters and no payments**. We do not ask for your name, email address, phone number, identity documents or payment card. We do not use analytics or advertising trackers, and the site's fonts and assets are self-hosted.
+## 2. Account and community data
 
-## 2. Data we process
+Email/password registration stores your normalized email address, a salted scrypt password hash, account identifier, preferred email language, verification status, timestamps and failed-login/lockout records in the community database. We do not store your password in plain text. Verification and reset tokens are hashed and single-use: verification links expire after 24 hours and reset links after one hour. An email account receives an internal public-key identifier; its generated private key is discarded. This does not give it a wallet capable of signing blockchain transactions.
 
-**a) Wallet and contribution data.** If you connect a Freighter wallet and make a test contribution, the backend records, in a Postgres database (hosted by Neon), a safety journal containing: your Stellar **public key** (never your secret key), the campaign id, the action, the contribution amount, transaction envelopes, the transaction hash and status, and timestamps. A Stellar public key is pseudonymous data; we do not link it to your identity.
+Wallet sign-in remains optional and uses a single-use signed challenge valid for five minutes. When a configured social sign-in provider is available, we store its provider name, stable subject identifier, verified email if returned, and login timestamps; we do not automatically merge accounts by email. New social registration may remain restricted separately from email/password registration. Your email is not used as a public comment author label.
 
-_Retention:_ unsigned prepared transactions expire after 24 hours; completed or failed transactions are pruned after 30 days; a signed transaction whose outcome is unresolved is kept until it resolves, because deleting it could lose track of a broadcast transaction. Signed envelopes are scrubbed once the transaction reaches a final state. These are the cleanup rules configured in the application's own code: they describe what the application deletes. Our hosting providers' own server logs and backups may keep data for different periods under their own privacy policies, and are not covered by these rules.
+Session tokens are hashed on the server. The browser sends the session in an HttpOnly, host-only cookie, Secure over HTTPS; JavaScript keeps only a marker, not the session secret. Legacy local-storage credentials are migrated and removed. Sessions last up to 30 days and can be revoked. Authenticator seeds are encrypted server-side and recovery codes are hashed. Password reset revokes sessions and pending second-factor tickets without removing an enrolled second factor.
 
-**b) Public blockchain data.** Test contributions are recorded publicly on the Stellar **testnet** and are visible on public explorers. Blockchain records cannot be altered or deleted by us.
+Verified email accounts can request deletion in the account confirmation form with the current password, DELETE confirmation and a current second-factor code when enabled. Eligibility checks can block deletion for linked operational records or operator accounts. This is not an all-data erasure guarantee: backups, separate transaction journals, provider records and public blockchain data are not erased. Other requests can be sent to blockallisto@gmail.com. Expiry does not guarantee immediate removal of stored records.
 
-**c) Device preferences.** Your theme (light/dark) and language choices are stored in your browser's local storage. This data stays on your device and is not sent to us.
+Comments (public-key identifier, optional display name, text, campaign and timestamp) are public. The latest 100 per campaign are displayed; hidden comments are deleted after 30 days. Support/feedback tickets, issuer applications and notifications are private to the account and authorised operator roles and are deleted after 90 days by the application cleanup rules. Avoid sensitive personal information in free-text fields.
 
-**d) Technical logs.** Our hosting provider (Render, Frankfurt region) processes standard server logs (such as IP address and request metadata) to deliver and protect the Service.
+## 3. Test transactions and device data
 
-## 3. Data we plan to process in future versions (not collected today)
+Connecting a wallet or preparing test contributions records public wallet keys, campaign identifiers, amounts, transaction envelopes, hashes, status and timestamps in the safety journal. Unsigned preparations expire after 24 hours; final transactions are pruned after 30 days. Unresolved signed transactions remain until resolved and signed envelopes are scrubbed after finality. Public Stellar testnet records cannot be erased by us. Wallet secret keys stay in your wallet.
 
-The indicative design for future versions of Blockallisto - following the compliance surfaces of established EU crowdfunding platforms - is to process additional categories of personal data **when and if** those features launch. Exact categories, providers and thresholds may change with design work and legal advice:
+Theme and language preferences use browser local storage; the session secret uses a cookie, not local storage. Hosting providers process IP addresses and request metadata. Rate limits and IP-reputation caches use transient memory. Provider logs and backups have separate retention. We do not use advertising trackers or newsletter mailing lists.
 
-- **Registration data:** full name (exactly as on your identity document), email address, country of residence and tax residency.
-- **Identity verification (KYC/AML):** identity-document images, a selfie, mobile number, and verification results, processed with specialised third-party verification providers; for company investors, beneficial owners (typically anyone owning more than 25%) and source of funds; politically-exposed-person (PEP) declarations.
-- **Payment and payout data:** bank account details (such as IBAN) handled by licensed payment service providers, not by us holding client funds.
+## 4. Security services and recipients
 
-None of this data is collected by the current demo. If these features launch, this Policy will be updated first, with the providers, purposes, legal bases and retention periods for each category.
+On 19 November 2026, the site and API were verified on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This dated configuration check does not prove the current hosting state or availability. Brevo receives recipient email addresses and verification/reset email content and processes delivery metadata. Cloudflare Turnstile processes browser/device signals and challenge tokens for bot checks; server validation may include the client IP. After a successful bot check, ipapi.is receives the client IP for abuse-reputation assessment. Reputation is initially observation-only; VPN, proxy or Tor status alone is not a blocking reason. Provider errors or lookup-budget exhaustion may reduce this layer; CAPTCHA, rate limits and mail budgets are separate safeguards.
 
-## 4. Purposes and legal bases (GDPR)
+Where social sign-in is enabled, the chosen identity provider processes that authentication under its own terms. Stellar testnet is public and global. GitHub hosts source code, not the account database. Security and email providers may process data outside the EEA; do not assume every processor is EU-only. Their current policies and applicable safeguards govern their own processing: https://www.brevo.com/legal/privacypolicy/ ; https://www.cloudflare.com/privacypolicy/ ; https://ipapi.is/privacy.html ; https://ipapi.is/terms.html .
 
-We process the data in section 2 to operate, secure and demonstrate the prototype: preparing and tracking test transactions, preventing double-spends and resolving ambiguous transactions, and keeping the Service reliable. The legal basis is our legitimate interest (Art. 6(1)(f) GDPR) in running a safe technical demonstration. We do not use your data for marketing, profiling or sale.
+## 5. Purpose and rights
 
-## 5. Who processes data
+Data is used to provide the requested prototype account and community features, verify account access, answer support requests and protect the service against abuse. These operational and security purposes rely on legitimate interests under Article 6(1)(f) GDPR, subject to your rights and the assessment required by law. This notice does not certify compliance or replace legal review. We do not sell account data or use it for advertising.
 
-- **Render** (hosting, Frankfurt, EU) - runs the application.
-- **Neon** (managed Postgres; AWS Europe (Frankfurt) region, EU - verified in the Neon console on 2026-10-31) - stores the contribution journal.
-- **Stellar testnet** (public network operated by the Stellar Development Foundation, global) - records public test transactions.
-- **GitHub** - hosts the source code (no user data).
-
-Where processing occurs outside the EU/EEA (for example the global Stellar network), it involves pseudonymous testnet data only.
-
-## 6. Your rights under the GDPR
-
-You have the right to access, rectify, erase, restrict or object to the processing of your personal data, and to data portability, under Regulation (EU) 2016/679 (GDPR / RGPD). You also have the right to lodge a complaint with the Portuguese supervisory authority, the **CNPD** (Comissao Nacional de Protecao de Dados).
-
-Because the demo does not collect identifying information, we can usually only find your data if you tell us your Stellar public key. Data already written to a public blockchain cannot be erased; we can erase or de-link off-chain journal records on request.
-
-## 7. Brazil (LGPD)
-
-The demo is operated from Portugal. Brazil's Lei Geral de Protecao de Dados (Lei no 13.709/2018 - LGPD) can apply to processing that targets or involves people in Brazil; whether it applies to this prototype is a legal question [to confirm with counsel before publication]. If and to the extent the LGPD applies, it grants you rights over your personal data similar to those above, and you may contact the ANPD (Autoridade Nacional de Protecao de Dados). Use the same contact above for any request.
-
-## 8. Security
-
-Your wallet keys never leave your Freighter extension; the Service is designed so it cannot access them. The application is served over TLS, and administrative endpoints are disabled by default (fail-closed). No method is absolute, but the prototype's design minimises the data that exists to be attacked.
-
-## 9. Children
-
-The Service is a technical demonstration and is not directed at children.
-
-## 10. Changes
-
-We may update this Policy as the prototype evolves. The "Last updated" date shows the current version. Material changes will be reflected here before they take effect.
-
-## 11. Contact
-
-Privacy questions and requests: blockallisto@gmail.com.
+You can request access, correction, deletion, restriction, portability or object to processing by writing to blockallisto@gmail.com. You may complain to the Portuguese CNPD or your competent supervisory authority. Public blockchain records cannot be deleted by the operator. The prototype is not directed at children. Identity-document/KYC collection, live investment offerings, fiat payments and real-money operations are not enabled. Any later change requires a new notice before that processing starts.
