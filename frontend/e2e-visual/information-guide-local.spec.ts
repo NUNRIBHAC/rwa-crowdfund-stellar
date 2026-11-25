@@ -24,6 +24,7 @@ for (const locale of VISUAL_LOCALES)
         await page.goto('/for-investors');
         const guide = page.locator('.investor-information-guide');
         await expect(guide).toBeVisible();
+        expect(await page.evaluate(() => document.documentElement.dataset.theme || 'navy')).toBe(theme === 'light' ? 'light' : 'navy');
         await guide.scrollIntoViewIfNeeded();
         await page.addStyleTag({ content: '.site-header { position: static !important; }' });
         await page.evaluate(() => document.fonts.ready);
@@ -44,6 +45,8 @@ for (const locale of VISUAL_LOCALES)
         await guide.getByRole('button').nth(4).click();
         await expect(guide.locator('details')).toHaveCount(2);
         await guide.locator('summary').first().click();
+        await guide.locator('summary').last().click();
+        await expect(guide.locator('details[open]')).toHaveCount(2);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
         await guide.screenshot({ path: `test-results/information-guide/${locale}-${width}-${theme}-assumptions.png` });
         expect(writes).toEqual([]);

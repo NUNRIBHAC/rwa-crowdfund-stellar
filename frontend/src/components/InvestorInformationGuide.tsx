@@ -24,8 +24,8 @@ export default function InvestorInformationGuide() {
       ...m.glossary.map((item, i) => ({ id: `term-${i}`, topic: 'terms', title: item.term, text: item.definition })),
       ...m.riskWarnings.items.map((item, i) => ({ id: `risk-${i}`, topic: 'risks', title: item.h, text: item.p })),
       { id: 'fees', topic: 'fees', title: m.yieldCalculator.feeAmount, text: m.contributionTerms.fees },
-      { id: 'assumptions', topic: 'assumptions', title: m.yieldCalculator.assumptions, text: m.yieldCalculator.assumptionsNote },
-      { id: 'model', topic: 'assumptions', title: m.informationGuide.model, text: `${m.yieldCalculator.formula} ${m.yieldCalculator.advancedNote}` },
+      { id: 'assumptions', topic: 'assumptions', title: m.yieldCalculator.assumptions, text: m.yieldCalculator.advancedNote },
+      { id: 'model', topic: 'assumptions', title: m.informationGuide.model, text: `${m.yieldCalculator.waterfallNote} ${m.yieldCalculator.chartNote}` },
     ],
     [m],
   );

@@ -609,7 +609,7 @@ html[lang='ar'] .issuer-evidence li {
 
 /* Public information guide: no advice, profile inputs or transaction controls. */
 .investor-information-guide {
-  border-block-start: 1px solid var(--border);
+  border-block-start: 1px solid var(--line);
   margin-block: 2rem;
   padding-block: 1.5rem;
   overflow-wrap: anywhere;
@@ -623,10 +623,10 @@ html[lang='ar'] .issuer-evidence li {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
   border-radius: 0.6rem;
   background: var(--card);
-  color: var(--text);
+  color: var(--ink);
   font: inherit;
   padding: 0.65rem 0.8rem;
 }

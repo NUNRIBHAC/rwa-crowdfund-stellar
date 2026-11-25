@@ -47,3 +47,15 @@ test('objective filters and free-text search do not rank or recommend', () => {
   expect(container.textContent).toContain(en.yieldCalculator.notice);
   expect(container.textContent).not.toContain(en.learn.suitableLabel);
 });
+
+test('guide explains the main monthly model without lifting reference-only assumptions out of context', () => {
+  localStorage.setItem('blockallisto-language', 'en');
+  const { container, getByRole } = mount();
+  fireEvent.click(getByRole('button', { name: en.yieldCalculator.assumptions }));
+  expect(container.textContent).toContain(en.yieldCalculator.advancedNote);
+  expect(container.textContent).toContain(en.yieldCalculator.waterfallNote);
+  expect(container.textContent).toContain(en.yieldCalculator.chartNote);
+  expect(container.textContent).not.toContain(en.yieldCalculator.assumptionsNote);
+  expect(container.textContent).not.toContain(en.yieldCalculator.formula);
+  expect(new Set([...container.querySelectorAll('summary')].map((node) => node.textContent)).size).toBe(2);
+});
