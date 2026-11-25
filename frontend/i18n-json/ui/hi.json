@@ -449,13 +449,13 @@
     "viewProof": "नेटवर्क पर प्रमाण देखें",
     "clearConfirmed": "पुष्टि किया रिकॉर्ड साफ़ करें",
     "statusLabels": {
-      "BUILT": "BUILT",
-      "SIGNED": "SIGNED",
-      "PENDING": "PENDING",
-      "SUCCESS": "SUCCESS",
-      "FAILED": "FAILED",
-      "NOT_FOUND": "NOT_FOUND",
-      "CANCELLED_UNSIGNED": "CANCELLED_UNSIGNED"
+      "BUILT": "तैयार",
+      "SIGNED": "हस्ताक्षरित",
+      "PENDING": "लंबित",
+      "SUCCESS": "सफल",
+      "FAILED": "विफल",
+      "NOT_FOUND": "नहीं मिला",
+      "CANCELLED_UNSIGNED": "हस्ताक्षर से पहले रद्द"
     },
     "actionLabels": {
       "contribute": "योगदान",

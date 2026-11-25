@@ -449,13 +449,13 @@
     "viewProof": "ネットワーク上の証拠を確認",
     "clearConfirmed": "確定済みの記録をクリア",
     "statusLabels": {
-      "BUILT": "BUILT",
-      "SIGNED": "SIGNED",
-      "PENDING": "PENDING",
-      "SUCCESS": "SUCCESS",
-      "FAILED": "FAILED",
-      "NOT_FOUND": "NOT_FOUND",
-      "CANCELLED_UNSIGNED": "CANCELLED_UNSIGNED"
+      "BUILT": "作成済み",
+      "SIGNED": "署名済み",
+      "PENDING": "処理待ち",
+      "SUCCESS": "成功",
+      "FAILED": "失敗",
+      "NOT_FOUND": "見つかりません",
+      "CANCELLED_UNSIGNED": "未署名でキャンセル"
     },
     "actionLabels": {
       "contribute": "出資",
