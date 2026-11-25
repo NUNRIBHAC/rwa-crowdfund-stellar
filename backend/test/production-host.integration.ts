@@ -50,12 +50,14 @@ test('production host serves SPA, built assets and discovery without weakening A
   child.stdout.on('data', (data) => {
     output += String(data);
   });
-  child.stderr.on('data', () => {});
+  child.stderr.on('data', (data) => {
+    output += String(data);
+  });
   const base = `http://127.0.0.1:${port}`;
   try {
     const deadline = Date.now() + 15000;
     while (!output.includes(`host on ${port}`)) {
-      assert.equal(child.exitCode, null, 'production host exited before ready');
+      assert.equal(child.exitCode, null, 'production host exited before ready: ' + output);
       assert.ok(Date.now() < deadline, 'production host readiness timeout');
       await new Promise((done) => setTimeout(done, 20));
     }
@@ -105,6 +107,27 @@ test('production host serves SPA, built assets and discovery without weakening A
       assert.equal(response.status, 404);
       assert.equal(response.headers.get('cache-control'), 'no-store');
       assert.equal((await response.json()).code, 'not_found');
+    }
+    // Traverse the real server dispatcher and lazy community router, not only
+    // a standalone router fixture. Missing dispatch previously returned 404.
+    for (const campaignId of ['fixture-alentejo-solar', 'unconfigured-evidence-test']) {
+      const evidence = await fetch(base + `/api/campaigns/${campaignId}/evidence`);
+      assert.equal(evidence.status, 200, 'public evidence route must reach the community router');
+      assert.equal(evidence.headers.get('cache-control'), 'no-store');
+      const body = await evidence.json();
+      assert.equal(body.evidence.campaignId, campaignId);
+      assert.equal(body.evidence.state, 'not_provided');
+      assert.deepEqual(body.evidence.sources, []);
+      assert.deepEqual(body.evidence.claims, []);
+      assert.deepEqual(body.evidence.corrections, []);
+      assert.deepEqual(body.evidence.unknownAreas, ['issuer', 'team', 'track_record', 'financials', 'offer_documents', 'milestones']);
+      assert.match(body.evidence.revision, /^[a-f0-9]{64}$/);
+      const protectedWrite = await fetch(base + `/api/operator/campaigns/${campaignId}/evidence`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: '{}',
+      });
+      assert.equal(protectedWrite.status, 401, 'operator evidence writes remain authenticated');
     }
     const malformed = await fetch(base + '/api/auth/challenge', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{' });
     assert.equal(malformed.status, 400);
