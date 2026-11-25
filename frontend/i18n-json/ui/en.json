@@ -1525,8 +1525,7 @@
             "label": "Emission conditions (sample entry)",
             "note": "No file hosted in this prototype"
           }
-        ],
-        "news": []
+        ]
       },
       {
         "issuer": "Cais Norte (Sample data - not a live offer)",
@@ -1618,9 +1617,7 @@
           "Profit share depends entirely on issuer performance",
           "Can rank behind ordinary creditors",
           "Usually illiquid until maturity"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pátio do Cedro (Sample data - not a live offer)",
@@ -1646,9 +1643,7 @@
           "Legal form and investor protection differ strongly by jurisdiction",
           "May involve a trustee or vehicle between investor and issuer",
           "Usually illiquid"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Ciclo Mineral (Sample data - not a live offer)",
@@ -1679,9 +1674,7 @@
           "Total loss possible",
           "Crowdfunding shares are usually not tradable on an exchange",
           "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Prado Vivo (Sample data - not a live offer)",
@@ -1707,9 +1700,7 @@
           "Loss participation can reduce or wipe out the interest",
           "Exit often restricted by the partnership agreement",
           "Tax and reporting duties can be more involved"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Frio do Porto (Sample data - not a live offer)",
@@ -1739,9 +1730,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Bosque Solar (Sample data - not a live offer)",
@@ -1771,9 +1760,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mosaico Oficina (Sample data - not a live offer)",
@@ -1803,9 +1790,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rota Clara (Sample data - not a live offer)",
@@ -1835,9 +1820,7 @@
           "Subordination raises loss severity in insolvency",
           "Still unsecured unless collateral is stated",
           "No participation in company growth"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Linha Solar (Sample data - not a live offer)",
@@ -1872,9 +1855,7 @@
           "Still unsecured unless collateral is stated",
           "No participation in company growth",
           "A coupon structure on a loan or bond, not a seniority: no periodic interest; the return comes from issuance below nominal value and repayment at par. Combines with a debt parent, never stands alone."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Livros à Esquina (Sample data - not a live offer)",
@@ -1907,9 +1888,7 @@
           "A contribution without ownership, interest, repayment or financial return.",
           "No tax deduction is promised.",
           "All-or-nothing sample scenario: the goal was missed and contributions were returned."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Barro Vivo (Sample data - not a live offer)",
@@ -1942,9 +1921,7 @@
           "Funding in exchange for a non-financial reward or the financed product or service. No financial return is offered.",
           "Delivery, cancellation and consumer terms would be defined per offer.",
           "Successful sample scenario: the goal was reached and the creator withdrew the funds."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Luz de Oficina (Sample data - not a live offer)",
@@ -1977,9 +1954,7 @@
           "An advance order for the financed product or service, structured as reward crowdfunding, not an investment or future-token right. No financial return is offered.",
           "Delivery, cancellation and consumer terms would be defined per offer.",
           "All-or-nothing sample scenario: the goal was missed and contributions were returned."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pedal Leve (Sample data - not a live offer)",
@@ -2013,9 +1988,7 @@
           "If the share price never exceeds the exercise price, the warrant can expire worthless; total loss of the amount paid is possible.",
           "Exercise issues new shares and dilutes existing shareholders.",
           "Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Fio do Douro (Sample data - not a live offer)",
@@ -2049,9 +2022,7 @@
           "Custody requires an authorized bank or investment firm (CRD / MiFID II) or an equivalent issuer-registry arrangement.",
           "Portugal has no dedicated domestic depositary-receipt regime; this sample does not establish one.",
           "Total loss possible; underlying shares may be illiquid."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Folha Nova (Sample data - not a live offer)",
@@ -2085,9 +2056,7 @@
           "Unsecured: if the issuer cannot repay or refinance at maturity, investors can lose the full amount.",
           "No CMVM practice for retail crowdfunding of commercial paper was found; the retail conditions listed are required before any real offer.",
           "Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mesa da Costa (Sample data - not a live offer)",
@@ -2121,9 +2090,7 @@
           "Interest varies with the revenues of the issuer; if due amounts were payable only when revenue exists, the instrument would be conditional and no longer an ECSPR loan.",
           "A revenue-linked rate in a concrete contract is not confirmed by CMVM practice.",
           "Total loss possible; loans are usually illiquid until maturity."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Vento do Mondego (Sample data - not a live offer)",
@@ -2157,9 +2124,7 @@
           "ECSPR placement is not proven: a depositary receipt is issued by the depositary, not by the project owner or an SPV, and neither ESMA nor the CMVM has confirmed it.",
           "Custody requires an authorized bank or investment firm (CRD / MiFID II) or an equivalent issuer-registry arrangement.",
           "Total loss possible if the issuer defaults; underlying bonds may be illiquid."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Raiz Vertical (Sample data - not a live offer)",
@@ -2189,9 +2154,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Tronco Vivo (Sample data - not a live offer)",
@@ -2221,9 +2184,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Massa Lenta (Sample data - not a live offer)",
@@ -2253,9 +2214,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Terra de Forno (Sample data - not a live offer)",
@@ -2285,9 +2244,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mar em Terra (Sample data - not a live offer)",
@@ -2318,9 +2275,7 @@
           "Total loss possible",
           "Crowdfunding shares are usually not tradable on an exchange",
           "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Água de Volta (Sample data - not a live offer)",
@@ -2350,9 +2305,7 @@
           "Subordination raises loss severity in insolvency",
           "Still unsecured unless collateral is stated",
           "No participation in company growth"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Passo Certo (Sample data - not a live offer)",
@@ -2382,9 +2335,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lente Circular (Sample data - not a live offer)",
@@ -2414,9 +2365,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Polpa Fresca (Sample data - not a live offer)",
@@ -2446,9 +2395,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Som de Madeira (Sample data - not a live offer)",
@@ -2478,9 +2425,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Olho do Mar (Sample data - not a live offer)",
@@ -2511,9 +2456,7 @@
           "Total loss possible",
           "Crowdfunding shares are usually not tradable on an exchange",
           "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Traço Recuperado (Sample data - not a live offer)",
@@ -2543,9 +2486,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Solo de Novo (Sample data - not a live offer)",
@@ -2575,9 +2516,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Torra de Bairro (Sample data - not a live offer)",
@@ -2607,9 +2546,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Oficina Curiosa (Sample data - not a live offer)",
@@ -2640,9 +2577,7 @@
           "Total loss possible",
           "Crowdfunding shares are usually not tradable on an exchange",
           "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Letra Viva (Sample data - not a live offer)",
@@ -2672,9 +2607,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lã da Serra (Sample data - not a live offer)",
@@ -2704,9 +2637,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rota Digital (Sample data - not a live offer)",
@@ -2737,9 +2668,7 @@
           "Total loss possible",
           "Crowdfunding shares are usually not tradable on an exchange",
           "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Segundo Ciclo (Sample data - not a live offer)",
@@ -2769,9 +2698,7 @@
           "Subordination raises loss severity in insolvency",
           "Still unsecured unless collateral is stated",
           "No participation in company growth"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lagar Novo (Sample data - not a live offer)",
@@ -2801,9 +2728,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Colmeia Viva (Sample data - not a live offer)",
@@ -2833,9 +2758,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pata Serena (Sample data - not a live offer)",
@@ -2865,9 +2788,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rotas Abertas (Sample data - not a live offer)",
@@ -2897,9 +2818,7 @@
           "Issuer default can mean total loss",
           "Subordinated claims are paid only after senior creditors in insolvency",
           "No deposit protection"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Casa em Peças (Sample data - not a live offer)",
@@ -2929,9 +2848,7 @@
           "Subordination raises loss severity in insolvency",
           "Still unsecured unless collateral is stated",
           "No participation in company growth"
-        ],
-        "documents": [],
-        "news": []
+        ]
       }
     ]
   },
@@ -3968,5 +3885,30 @@
       "offer_documents": "Offer documents",
       "milestones": "Milestones"
     }
+  },
+  "evidenceEditor": {
+    "title": "Evidence corrections and re-review",
+    "note": "Operator wallet access is not verified professional identity. Publish only non-confidential public-source notes. Original claims and reviews remain visible. Corrections make the affected claim unverified until explicit human re-review.",
+    "campaign": "Campaign",
+    "claim": "Original claim",
+    "action": "Action",
+    "correction": "Append a correction",
+    "review": "Append a reviewed replacement",
+    "reviewText": "Replacement fact",
+    "reviewNote": "Public correction or review note",
+    "sources": "Existing public sources used",
+    "humanReviewed": "I personally checked these public sources and the replacement fact. A source link alone is not a human review.",
+    "preview": "Preview publication",
+    "publish": "Publish this evidence update",
+    "back": "Back to editing",
+    "saved": "Evidence update published. Original records were retained.",
+    "failed": "The evidence update could not be completed. Reload the current record before retrying; another operator may have changed it.",
+    "reload": "Reload current evidence",
+    "addSource": "Add a new public source",
+    "sourceTitle": "Public source title",
+    "sourceUrl": "Public HTTPS URL",
+    "sourcePublisher": "Source publisher classification",
+    "sourceRetrieved": "Retrieved on (today)",
+    "sourcePublicOnly": "Only non-confidential public sources. No credentials, signed URLs, query parameters or fragments. Retrieval date records your source check today."
   }
 }
