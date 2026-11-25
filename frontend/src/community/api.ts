@@ -825,3 +825,21 @@ export const fetchAccountActivity = (token: string) =>
     network: string;
     productionEligible: boolean;
   }>('/api/account/activity', { token });
+
+export type OperatorEvidence = import('../components/IssuerEvidence').EvidenceDossier & { revision: string };
+export const fetchOperatorEvidence = (campaignId: string) => call<{ evidence: OperatorEvidence }>(`/api/campaigns/${encodeURIComponent(campaignId)}/evidence`);
+export const appendOperatorEvidence = (
+  token: string,
+  campaignId: string,
+  body: {
+    revision: string;
+    requestId: string;
+    action: 'correction' | 'review';
+    claimId: string;
+    note: string;
+    sourceIds: string[];
+    text?: string;
+    humanReviewed?: true;
+    newSource?: OperatorEvidence['sources'][number];
+  },
+) => call<{ revision: string }>(`/api/operator/campaigns/${encodeURIComponent(campaignId)}/evidence`, { token, body });

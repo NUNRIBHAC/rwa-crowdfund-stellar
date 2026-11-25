@@ -1053,6 +1053,18 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
     }
   });
 
+  // Public, operator-curated evidence only. No private application store or
+  // outbound fetch is reachable from this read-only endpoint.
+  router.get('/api/campaigns/:id/evidence', async (req, res) => {
+    try {
+      const id = requireCampaignId(req.params.id);
+      res.setHeader('Cache-Control', 'no-store');
+      res.json({ evidence: await service.readIssuerEvidence(id) });
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   // --- Comments ---
   router.get('/api/campaigns/:id/comments', async (req, res) => {
     try {
@@ -1548,6 +1560,17 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       }
       await handler(req, res, account);
     });
+
+  router.post(
+    '/api/operator/campaigns/:id/evidence',
+    operator(async (req, res, account) => {
+      const id = requireCampaignId(req.params.id);
+      if (!deps.applicationCampaign) throw new CommunityError(503, 'campaign registry unavailable', 'feature_unavailable');
+      if (!(await deps.applicationCampaign(id))) throw new CommunityError(404, 'registered campaign not found', 'not_found');
+      res.setHeader('Cache-Control', 'no-store');
+      res.json(await service.appendIssuerEvidence(id, `operator:${account.publicKey}`, req.body));
+    }),
+  );
 
   router.get(
     '/api/operator/issuer-applications/:id/documents/:documentId',

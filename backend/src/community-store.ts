@@ -462,6 +462,8 @@ export type CommunityState = {
   privateApplicationUploads?: { version: 1; intents: Record<string, import('./private-application-upload-workflow.js').UploadIntent> };
   // Isolated non-binding fixture meetings; never a legal rights register.
   simulatedMeetings?: Record<string, import('./meeting-simulation.js').SimulatedMeeting>;
+  evidenceRevisions?: Record<string, import('./issuer-evidence.js').StoredEvidenceRevision[]>;
+  evidenceRequests?: Record<string, { fingerprint: string; revision: string }>;
   version: 1;
   socialLinkProofs?: Record<string, import('./social-link-proof.js').SocialLinkProof>;
   socialDeletionProofs?: Record<string, import('./deletion-proof.js').SocialDeletionProof>;
