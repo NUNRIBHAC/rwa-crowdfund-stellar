@@ -42,7 +42,7 @@ describe('Footer navigation groups', () => {
     expect(groups).toHaveLength(4);
     expect(groups.every((g) => g.querySelector('button')?.getAttribute('aria-expanded') === 'false')).toBe(true);
     expect(groups.every((g) => g.querySelector('div')?.hidden)).toBe(true);
-    expect(groups.map((g) => g.querySelectorAll('a').length)).toEqual([3, 7, 5, 5]);
+    expect(groups.map((g) => g.querySelectorAll('a').length)).toEqual([4, 7, 5, 5]);
     const legal = groups[1];
     const toggle = legal.querySelector('button')!;
     fireEvent.click(toggle);

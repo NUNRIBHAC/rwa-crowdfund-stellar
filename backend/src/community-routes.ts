@@ -1,3 +1,4 @@
+import { NETWORK } from './config.js';
 import { retryingSingleFlight, backgroundTask } from './background-task.js';
 import { browserSessionTransport, setBrowserSession, clearBrowserSession, COOKIE_SESSION } from './browser-session.js';
 import { privateApplicationOptionsFromEnv, startPrivateApplicationCleanup } from './private-application-runtime.js';
@@ -125,6 +126,8 @@ export type CommunityRouterDeps = {
   // route tests without chain access stay hermetic; absent means 503, never
   // a guess. null means the campaign id is unknown (404).
   shareRegister?: (campaignId: string) => Promise<ShareRegisterPayload | null>;
+  // Private journal read, scoped only by the authenticated wallet session.
+  accountActivity?: (wallet: string) => Promise<unknown[]>;
   // Outbound email for account verification (mailer.ts). Absent means the
   // email registration routes answer 503 - fail closed, never pretend-sent.
   mailer?: Mailer | null;
@@ -189,6 +192,26 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
         sendError(res, err);
       }
     };
+
+  router.get('/api/account/activity', async (req, res) => {
+    res.set('Cache-Control', 'no-store').set('X-Content-Type-Options', 'nosniff');
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      if (Object.keys(req.query).length) return res.status(400).json({ code: 'invalid_input' });
+      // Email/social identities have no proved payment-wallet ownership link.
+      // Never substitute a connected/query wallet or their internal identity.
+      if (account.authMethod) return res.status(403).json({ code: 'forbidden' });
+      if (!deps.accountActivity) return res.status(503).json({ code: 'API_UNAVAILABLE' });
+      try {
+        const activity = await deps.accountActivity(account.publicKey);
+        res.json({ activity, network: NETWORK, productionEligible: false });
+      } catch {
+        res.status(503).json({ code: 'API_UNAVAILABLE' });
+      }
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
 
   // --- Auth ---
   // Email + password registration (email-auth.ts), alongside the wallet

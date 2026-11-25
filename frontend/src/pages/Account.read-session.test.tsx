@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { I18nProvider } from '../i18n';
 import Account from './Account';
 import type { Market } from '../market';
-const auth = vi.hoisted(() => ({ token: '', account: { publicKey: 'wallet-session', authMethod: 'wallet' } as any }));
+const auth = vi.hoisted(() => ({ token: 'synthetic-session', account: { publicKey: 'wallet-session', authMethod: 'wallet' } as any }));
 vi.mock('../community/CommunityAuth', () => ({ useCommunityAuth: () => auth }));
 vi.mock('../components/DemoJourney', () => ({ default: () => null }));
 vi.mock('../components/InvestorOnboarding', () => ({ default: () => null }));
@@ -20,6 +20,7 @@ const market = { campaigns: [], actor: '', fixtureMode: false, loaded: true } as
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  auth.token = 'synthetic-session';
 });
 describe('account restored wallet records', () => {
   it('reads wallet-session records without connecting or preparing a transaction', async () => {
@@ -32,7 +33,10 @@ describe('account restored wallet records', () => {
       </I18nProvider>,
     );
     await waitFor(() => expect(fetcher).toHaveBeenCalledWith('/api/account/holdings?actor=wallet-session'));
-    expect(fetcher).toHaveBeenCalledWith('/api/account/activity?actor=wallet-session');
+    expect(fetcher).toHaveBeenCalledWith(
+      '/api/account/activity',
+      expect.objectContaining({ headers: expect.objectContaining({ Authorization: 'Bearer synthetic-session' }) }),
+    );
     // Read-only scope for a proven wallet session: account-record endpoints,
     // the session-token news feed, plus the same public campaign-catalog
     // balance read the connected-wallet path uses - always for the session's
@@ -94,7 +98,7 @@ it('does not retain an old actor activity row while the next actor read is pendi
     vi.fn((url: string) =>
       url.includes('/activity')
         ? new Promise<Response>((resolve) => {
-            if (url.includes('wallet-one')) finishOld = resolve;
+            if (auth.account.publicKey === 'wallet-one') finishOld = resolve;
           })
         : Promise.resolve(new Response(JSON.stringify({ holdings: [], payouts: [] }))),
     ),
@@ -126,7 +130,7 @@ it('only exports a current-actor SUCCESS contribution with explicit testnet evid
   vi.stubGlobal(
     'fetch',
     vi.fn((url: string) => {
-      if (url.includes('/activity') && url.includes(two)) return new Promise<Response>(() => {});
+      if (url.includes('/activity') && auth.account.publicKey === two) return new Promise<Response>(() => {});
       return Promise.resolve(
         new Response(
           JSON.stringify({
@@ -208,4 +212,68 @@ it('passes the reactive session token to documents and removes old labels before
   auth.token = '';
   rerender(view());
   expect(screen.queryByText('No investment documents are available for this campaign yet.')).toBeNull();
+});
+
+it('never reads private activity for a connected wallet without login or for email/social identities', () => {
+  const fetcher = vi.fn().mockResolvedValue(new Response(JSON.stringify({ campaigns: [], holdings: [], payouts: [] })));
+  vi.stubGlobal('fetch', fetcher);
+  auth.account = null;
+  auth.token = '';
+  const connected = { ...market, actor: 'connected-wallet' } as Market;
+  const view = render(
+    <I18nProvider>
+      <Account market={connected} />
+    </I18nProvider>,
+  );
+  expect(fetcher.mock.calls.some(([url]) => String(url).includes('/activity'))).toBe(false);
+  for (const authMethod of ['email', 'social']) {
+    auth.account = { publicKey: 'internal-identity', authMethod };
+    auth.token = 'synthetic-session';
+    view.rerender(
+      <I18nProvider>
+        <Account market={connected} />
+      </I18nProvider>,
+    );
+    expect(fetcher.mock.calls.some(([url]) => String(url).includes('/activity'))).toBe(false);
+  }
+});
+
+it('clears activity immediately on logout and same-wallet session replacement, and ignores late reads', async () => {
+  auth.account = { publicKey: 'same-wallet', authMethod: 'wallet' };
+  auth.token = 'session-one';
+  let late!: (r: Response) => void;
+  const fetcher = vi.fn((url: string) =>
+    url === '/api/account/activity'
+      ? auth.token === 'session-one'
+        ? Promise.resolve(
+            new Response(JSON.stringify({ activity: [{ hash: 'private', campaign: 'PRIVATE-ONE', action: 'contribute', status: 'SUCCESS', amount: '1' }] })),
+          )
+        : new Promise<Response>((r) => {
+            late = r;
+          })
+      : Promise.resolve(new Response(JSON.stringify({ campaigns: [], holdings: [], payouts: [] }))),
+  );
+  vi.stubGlobal('fetch', fetcher);
+  const view = render(
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>,
+  );
+  await screen.findByText('PRIVATE-ONE');
+  auth.token = 'session-two';
+  view.rerender(
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>,
+  );
+  expect(screen.queryByText('PRIVATE-ONE')).toBeNull();
+  auth.token = '';
+  auth.account = null;
+  view.rerender(
+    <I18nProvider>
+      <Account market={market} />
+    </I18nProvider>,
+  );
+  late(new Response(JSON.stringify({ activity: [{ hash: 'late', campaign: 'PRIVATE-LATE', status: 'SUCCESS' }] })));
+  await waitFor(() => expect(screen.queryByText('PRIVATE-LATE')).toBeNull());
 });

@@ -3813,6 +3813,90 @@
     "sampleNote": "Muestra de un formato admitido: el crowdfunding de donación, recompensa y preventa está cubierto por el régimen nacional portugués de financiación colectiva (Lei 102/2015), fuera del ECSPR. Una oferta real exige que el operador sea una persona jurídica o EIRL y lo comunique previamente a la DGE al menos 30 días antes de iniciar la actividad. Esta página muestra datos ilustrativos de ejemplo: no se recauda dinero ni se promete deducción fiscal. No se ofrece ningún rendimiento financiero.",
     "ecsprNote": "Las ofertas reales de préstamos y acciones de S.A. mediante financiación colaborativa requieren autorización ECSPR (CMVM en Portugal)."
   },
+  "foundingCampaign": {
+    "title": "Ayuda a construir Blockallisto",
+    "previewNotice": "Vista previa local, solo con dinero de prueba. No acepta aportaciones ni realiza pagos.",
+    "fundsDecision": "Decisión de diseño: el dinero permanece guardado hasta obtener la licencia. La custodia y los reembolsos aún requieren implementación y validación jurídica y operativa.",
+    "origem": {
+      "heading": "El primer apoyo",
+      "paragraph1": "Hay proyectos con potencial que nunca llegan a existir. No por falta de una idea, sino por falta del primer capital que la financiación tradicional no proporciona.",
+      "paragraph2": "Una idea solo se demuestra cuando alguien cree en ella. Pero quien tiene la idea no siempre tiene el capital, y quien tiene el capital no siempre sabe si la idea merece el riesgo. Abrimos el camino a muchas pequeñas aportaciones: cada una es una pequeña prueba de que la idea importa."
+    },
+    "via": {
+      "heading": "Otra vía",
+      "paragraph1": "Es a través de esta campaña de crowdfunding como nacerá Blockallisto, para abrir otra vía: crowdfunding y crowdlending, con la tecnología a la vista de todos.",
+      "paragraph2": "Blockallisto es un negocio, no una asociación. Queremos construir una plataforma que se sostenga y genere valor, y creemos que eso también ayuda a los proyectos a acceder al capital que hoy no encuentran."
+    },
+    "construir": {
+      "heading": "Empezamos por nuestra plataforma",
+      "paragraph1": "Antes de invitar a otros promotores, tenemos que construir la plataforma. Y nos enfrentamos al mismo problema que ellos: convertir una idea en algo real cuesta dinero. Por eso empezamos por nuestra propia campaña. Presentamos la idea, mostramos el plan y pedimos a la multitud que la ayude a nacer."
+    },
+    "meta": {
+      "heading": "25.000 € para llegar al lanzamiento",
+      "paragraph1": "Necesitamos 25.000 € para tres cosas: construir y proteger la plataforma, tramitar las licencias y el cumplimiento como plataforma de crowdfunding, y operar hasta el lanzamiento. Cada euro tiene un destino, y mostraremos cómo se utiliza."
+    },
+    "azulejo": {
+      "heading": "Tu lugar en el muro de azulejos",
+      "paragraph1": "Cada aportación tiene su lugar en un muro de azulejos. Cada azulejo es tu lugar en la historia. Es una prerreserva y un apoyo, no una inversión, y no promete intereses ni rentabilidad. Puedes elegir si quieres que aparezca tu nombre; lo guardamos fuera de la blockchain. El azulejo y los eventos asociados quedan registrados de forma verificable mediante un identificador."
+    },
+    "reembolso": {
+      "heading": "Cuándo devolvemos las aportaciones",
+      "paragraph1": "Devolvemos todas las aportaciones si no se alcanza el objetivo o si Blockallisto no obtiene la autorización ECSP necesaria para operar como plataforma de crowdfunding. Las aportaciones y los reembolsos se realizarán en euros, a través de proveedores autorizados. Esta es nuestra intención de diseño, sujeta a validación jurídica y operativa."
+    },
+    "tecnologia": {
+      "heading": "Tecnología con transparencia",
+      "paragraph1": "Somos Web3 y lo decimos sin rodeos. No prometemos que la blockchain elimine el riesgo. La confianza viene de derechos claros, reglas sólidas y transparencia sobre el dinero. La blockchain se utiliza donde aporta valor: un solo contrato guarda el muro y los eventos importantes quedan registrados de forma verificable."
+    },
+    "futuro": {
+      "heading": "El primer paso",
+      "paragraph1": "Esta campaña es el primer paso de un objetivo mayor: construir una plataforma donde los bienes reales puedan ser financiados por muchas personas. Lo que apoyas hoy es la construcción de esta plataforma, y tu azulejo es el reconocimiento de ello.",
+      "paragraph2": "Si creemos que la multitud puede financiar buenos proyectos, tenemos que empezar por el nuestro. Ayúdanos a abrir esta vía. Porque también puede ser tu vía."
+    }
+  },
+  "tileWall": {
+    "refundComplete": "Todas las aportaciones devueltas (simulación)",
+    "futureDoor": "En el futuro, la empresa podrá estudiar otras formas de participación con asesoramiento jurídico. Nada de esto se promete ni forma parte de este apoyo.",
+    "footerLabel": "Muro de azulejos",
+    "wallTitle": "Un azulejo por cada apoyo",
+    "wallNote": "Cada azulejo representa un apoyo ya dado. No promete ningún pago adicional.",
+    "demoNote": "Simulación visual: no registra aportaciones, no mueve dinero ni inicia reembolsos.",
+    "progressLabel": "Progreso de la campaña (simulación)",
+    "refundButton": "Simular fase de reembolso",
+    "resetButton": "Reiniciar simulación",
+    "refundState": "Fase de reembolso simulada",
+    "campaignState": "Campaña simulada en curso"
+  },
+  "testnetSetup": {
+    "title": "Preparar una cuenta testnet",
+    "intro": "Solo testnet. Los XLM y USDC son activos de prueba sin valor real. Nunca introduzcas una clave privada ni una frase de recuperación en este sitio.",
+    "historyNote": "Una cuenta nueva no borra aportaciones anteriores ni reinicia una campaña. Esta guía no realiza ninguna aportación.",
+    "walletTitle": "1. Elegir una cuenta en la cartera",
+    "walletHelp": "Para repetir con una cuenta nueva, créala o selecciónala dentro de Freighter y cambia a Testnet. Este sitio no puede crear una cuenta dentro de tu cartera. Después conéctala aquí.",
+    "connect": "Conectar cuenta seleccionada",
+    "address": "Dirección pública",
+    "xlmTitle": "2. Obtener XLM de prueba",
+    "xlmHelp": "Para una cuenta nueva sin fondos, solicita XLM de prueba gratuitos. El sitio vuelve a comprobar la cuenta antes de indicar éxito.",
+    "fund": "Solicitar XLM de prueba",
+    "trustlineTitle": "3. Autorizar USDC de prueba",
+    "trustlineHelp": "Añade una trustline de USDC en Testnet. Tu cartera firma una operación con un límite de 1.000 USDC de prueba. La comisión se paga con XLM de prueba.",
+    "sign": "Revisar y firmar trustline",
+    "usdcTitle": "4. Obtener USDC de prueba",
+    "usdcHelp": "Abre el faucet oficial, elige USDC y Stellar Testnet y usa la misma dirección pública. El faucet establece la disponibilidad y los límites. Vuelve aquí y comprueba el saldo.",
+    "faucet": "Abrir faucet USDC",
+    "done": "Presente",
+    "notDone": "No presente",
+    "check": "Comprobar red y saldos",
+    "busy": "Comprobando…",
+    "campaigns": "Ver campañas",
+    "assetsDetected": "Activos de prueba detectados. La disponibilidad, los límites y cualquier aportación requieren otra comprobación y la firma de tu cartera.",
+    "networkError": "Cambia tu cartera a Testnet y vuelve a conectarla.",
+    "changedError": "La cuenta seleccionada ha cambiado. Vuelve a conectar y comprobar.",
+    "intentError": "Resuelve primero la aportación guardada. La preparación está bloqueada para que la trustline no invalide su secuencia. No se borró nada.",
+    "disabledError": "La preparación testnet no está habilitada en este servidor.",
+    "rejectedError": "La aprobación en la cartera no se completó. Esta acción no envió nada.",
+    "failureError": "No se pudo verificar el paso. Comprueba la red y los saldos antes de reintentar.",
+    "uncertain": "El último pedido tiene un resultado incierto. Comprueba el saldo antes de otra financiación o firma. No hay reintento automático."
+  },
   "issuerEvidence": {
     "title": "Expediente de pruebas del promotor",
     "note": "Este expediente distingue las afirmaciones del promotor, las declaraciones de revisión humana y la información desconocida. Una revisión no es una garantía, aprobación jurídica ni recomendación de inversión.",
