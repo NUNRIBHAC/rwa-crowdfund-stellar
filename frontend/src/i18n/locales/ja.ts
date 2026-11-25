@@ -4,6 +4,16 @@
 import type { Messages } from './en';
 
 export const ja: Messages = {
+  informationGuide: {
+    title: '情報ガイド',
+    intro: '用語、リスク、手数料、計算ツールの仮定を確認できます。このガイドは情報を説明するもので、投資があなたに適しているかを評価するものではありません。',
+    searchLabel: 'ガイドを検索',
+    searchPlaceholder: '用語、リスク、手数料、仮定を検索',
+    topics: '情報のトピック',
+    all: 'すべてのトピック',
+    noMatches: '一致する情報がありません。別の検索語やトピックをお試しください。',
+    model: '計算方法とモデルの限界',
+  },
   yieldCalculator: {
     title: '収益シナリオ',
     notice: '予測や投資助言ではなく、説明用の試算です。投資元本を全額失う可能性があります。ここで支払いや投資は行われません。',

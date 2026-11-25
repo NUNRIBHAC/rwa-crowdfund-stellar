@@ -4,6 +4,16 @@
 import type { Messages } from './en';
 
 export const zhTW: Messages = {
+  informationGuide: {
+    title: '資訊指南',
+    intro: '了解術語、風險、費用和計算器假設。本指南用於解釋資訊，不評估某項投資是否適合您。',
+    searchLabel: '搜尋指南',
+    searchPlaceholder: '搜尋術語、風險、費用和假設',
+    topics: '資訊主題',
+    all: '所有主題',
+    noMatches: '沒有相符的資訊。請嘗試其他搜尋詞或主題。',
+    model: '計算方法和模型限制',
+  },
   yieldCalculator: {
     title: '回報情境',
     notice: '僅作示例，並非預測或投資建議。可能損失全部投入本金。這裡不會進行付款或投資。',

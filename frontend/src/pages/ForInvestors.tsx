@@ -1,3 +1,4 @@
+import InvestorInformationGuide from '../components/InvestorInformationGuide';
 import LossSimulator from '../components/LossSimulator';
 import YieldCalculator from '../components/YieldCalculator';
 import { useI18n } from '../i18n';
@@ -28,6 +29,7 @@ export default function ForInvestors() {
           </section>
         ))}
       </div>
+      <InvestorInformationGuide />
       <YieldCalculator copy={m.yieldCalculator} />
       <LossSimulator />
       <nav className="investors-context" aria-label={m.nav.forInvestors}>

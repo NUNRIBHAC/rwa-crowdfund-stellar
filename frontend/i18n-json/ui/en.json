@@ -3926,5 +3926,15 @@
     "sourcePublisher": "Source publisher classification",
     "sourceRetrieved": "Retrieved on (today)",
     "sourcePublicOnly": "Only non-confidential public sources. No credentials, signed URLs, query parameters or fragments. Retrieval date records your source check today."
+  },
+  "informationGuide": {
+    "title": "Information guide",
+    "intro": "Explore terms, risks, fees and calculator assumptions. This guide explains information; it does not assess whether an investment suits you.",
+    "searchLabel": "Search the guide",
+    "searchPlaceholder": "Search terms, risks, fees and assumptions",
+    "topics": "Information topics",
+    "all": "All topics",
+    "noMatches": "No matching information. Try another search or topic.",
+    "model": "Calculation method and model limits"
   }
 }

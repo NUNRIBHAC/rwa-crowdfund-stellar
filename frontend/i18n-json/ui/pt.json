@@ -3955,5 +3955,15 @@
     "sourcePublisher": "Classificação do editor da fonte",
     "sourceRetrieved": "Consultada em (hoje)",
     "sourcePublicOnly": "Apenas fontes públicas não confidenciais. Sem credenciais, URLs assinados, parâmetros de consulta ou fragmentos. A data de consulta regista a sua verificação da fonte hoje."
+  },
+  "informationGuide": {
+    "title": "Guia de informação",
+    "intro": "Explore termos, riscos, comissões e hipóteses da calculadora. Este guia explica informação; não avalia se um investimento é adequado para si.",
+    "searchLabel": "Pesquisar no guia",
+    "searchPlaceholder": "Pesquisar termos, riscos, comissões e hipóteses",
+    "topics": "Temas de informação",
+    "all": "Todos os temas",
+    "noMatches": "Não há informação correspondente. Experimente outra pesquisa ou tema.",
+    "model": "Método de cálculo e limites do modelo"
   }
 }

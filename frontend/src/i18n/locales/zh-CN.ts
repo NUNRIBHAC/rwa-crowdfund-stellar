@@ -4,6 +4,16 @@
 import type { Messages } from './en';
 
 export const zhCN: Messages = {
+  informationGuide: {
+    title: '信息指南',
+    intro: '了解术语、风险、费用和计算器假设。本指南用于解释信息，不评估某项投资是否适合您。',
+    searchLabel: '搜索指南',
+    searchPlaceholder: '搜索术语、风险、费用和假设',
+    topics: '信息主题',
+    all: '所有主题',
+    noMatches: '没有匹配的信息。请尝试其他搜索词或主题。',
+    model: '计算方法和模型局限',
+  },
   yieldCalculator: {
     title: '回报情景',
     notice: '仅作示例，并非预测或投资建议。可能损失全部投入本金。这里不会进行付款或投资。',

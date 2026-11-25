@@ -4,6 +4,17 @@
 import type { Messages } from './en';
 
 export const es: Messages = {
+  informationGuide: {
+    title: 'Guía de información',
+    intro:
+      'Explore términos, riesgos, comisiones y supuestos de la calculadora. Esta guía explica información; no evalúa si una inversión es adecuada para usted.',
+    searchLabel: 'Buscar en la guía',
+    searchPlaceholder: 'Buscar términos, riesgos, comisiones y supuestos',
+    topics: 'Temas de información',
+    all: 'Todos los temas',
+    noMatches: 'No hay información coincidente. Pruebe otra búsqueda o tema.',
+    model: 'Método de cálculo y límites del modelo',
+  },
   yieldCalculator: {
     title: 'Escenarios de rentabilidad',
     notice:

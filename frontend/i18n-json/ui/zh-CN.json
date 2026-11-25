@@ -3887,5 +3887,15 @@
     "sourcePublisher": "来源发布者分类",
     "sourceRetrieved": "查阅日期（今天）",
     "sourcePublicOnly": "仅限非机密的公开来源。不得包含凭据、签名网址、查询参数或片段。查阅日期记录您今天对来源的核查。"
+  },
+  "informationGuide": {
+    "title": "信息指南",
+    "intro": "了解术语、风险、费用和计算器假设。本指南用于解释信息，不评估某项投资是否适合您。",
+    "searchLabel": "搜索指南",
+    "searchPlaceholder": "搜索术语、风险、费用和假设",
+    "topics": "信息主题",
+    "all": "所有主题",
+    "noMatches": "没有匹配的信息。请尝试其他搜索词或主题。",
+    "model": "计算方法和模型局限"
   }
 }

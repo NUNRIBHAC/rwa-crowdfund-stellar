@@ -4,6 +4,16 @@
 import type { Messages } from './en';
 
 export const ko: Messages = {
+  informationGuide: {
+    title: '정보 안내',
+    intro: '용어, 위험, 수수료 및 계산기의 가정을 살펴보세요. 이 안내는 정보를 설명하며, 특정 투자가 귀하에게 적합한지 평가하지 않습니다.',
+    searchLabel: '안내 검색',
+    searchPlaceholder: '용어, 위험, 수수료 및 가정 검색',
+    topics: '정보 주제',
+    all: '모든 주제',
+    noMatches: '일치하는 정보가 없습니다. 다른 검색어나 주제를 사용해 보세요.',
+    model: '계산 방법과 모델의 한계',
+  },
   yieldCalculator: {
     title: '수익 시나리오',
     notice: '예시이며 예측이나 투자 조언이 아닙니다. 투자 원금 전부를 잃을 수 있습니다. 여기서는 결제나 투자가 이루어지지 않습니다.',

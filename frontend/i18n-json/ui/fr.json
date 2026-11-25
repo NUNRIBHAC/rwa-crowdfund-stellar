@@ -3958,5 +3958,15 @@
     "sourcePublisher": "Classification de l'éditeur de la source",
     "sourceRetrieved": "Consultée le (aujourd'hui)",
     "sourcePublicOnly": "Sources publiques non confidentielles uniquement. Sans identifiants, URL signées, paramètres de requête ni fragments. La date de consultation consigne votre vérification de la source aujourd'hui."
+  },
+  "informationGuide": {
+    "title": "Guide d’information",
+    "intro": "Explorez les termes, les risques, les frais et les hypothèses du calculateur. Ce guide explique les informations ; il n’évalue pas si un investissement vous convient.",
+    "searchLabel": "Rechercher dans le guide",
+    "searchPlaceholder": "Rechercher des termes, risques, frais et hypothèses",
+    "topics": "Thèmes du guide",
+    "all": "Tous les thèmes",
+    "noMatches": "Aucune information correspondante. Essayez une autre recherche ou un autre thème.",
+    "model": "Méthode de calcul et limites du modèle"
   }
 }

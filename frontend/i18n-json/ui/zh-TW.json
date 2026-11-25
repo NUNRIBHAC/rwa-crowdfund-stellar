@@ -3887,5 +3887,15 @@
     "sourcePublisher": "來源發布者分類",
     "sourceRetrieved": "查閱日期（今天）",
     "sourcePublicOnly": "僅限非機密的公開來源。不得包含憑證、簽署網址、查詢參數或片段。查閱日期記錄您今天對來源的查核。"
+  },
+  "informationGuide": {
+    "title": "資訊指南",
+    "intro": "了解術語、風險、費用和計算器假設。本指南用於解釋資訊，不評估某項投資是否適合您。",
+    "searchLabel": "搜尋指南",
+    "searchPlaceholder": "搜尋術語、風險、費用和假設",
+    "topics": "資訊主題",
+    "all": "所有主題",
+    "noMatches": "沒有相符的資訊。請嘗試其他搜尋詞或主題。",
+    "model": "計算方法和模型限制"
   }
 }
