@@ -3959,5 +3959,16 @@
     "all": "Alle Themen",
     "noMatches": "Keine passenden Informationen. Versuchen Sie eine andere Suche oder ein anderes Thema.",
     "model": "Berechnungsmethode und Modellgrenzen"
+  },
+  "paymentPath": {
+    "title": "Zahlungsablauf im Testnetz",
+    "note": "Nur ein Testnetz-Prototyp. Kein echtes Geld und kein Zahlungsdienst.",
+    "escrowAmount": "Vorbereiteter Beitrag zum Treuhandvertrag",
+    "refundAmount": "Vorbereitete Erstattung an die Wallet",
+    "finalAmount": "Bestätigter Überweisungsbetrag",
+    "actualFee": "Tatsächlich berechnete Netzwerkgebühr",
+    "unknown": "Nicht verifiziert",
+    "estimateNote": "Vorbereitete Beträge und Höchstgebühren sind Momentaufnahmen, keine Nachweise einer abgeschlossenen Zahlung. Der gespeicherte Transaktionsstatus bestätigt weder den endgültigen Betrag noch die Gebühr.",
+    "separateAssets": "USDC und XLM sind unterschiedliche Vermögenswerte. Sie werden getrennt angezeigt und nicht zu einer Summe addiert."
   }
 }
