@@ -24,7 +24,7 @@
 // (<b>, </b>, <i>, </i>, {v:..., backslash): the exporter throws if one
 // appears, so an unsafe source can never be projected silently.
 
-export const LEGAL_VARS = ['contactEmail', 'lastUpdated', 'neonRegion'];
+export const LEGAL_VARS = ['contactEmail', 'lastUpdated'];
 
 const RESERVED = /<\/?[bi]>|\{v:[^}]*\}|\\/;
 

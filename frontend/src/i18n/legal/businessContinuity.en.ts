@@ -16,10 +16,7 @@ export const blocks: LegalBlock[] = [
       {
         b: ['Last updated:'],
       },
-      ' ',
-      {
-        v: 'lastUpdated',
-      },
+      ' 2026-11-24',
     ],
   },
   {
@@ -42,16 +39,10 @@ export const blocks: LegalBlock[] = [
         ' the demo holds no money, no client funds and no custody. Contributions are testnet tokens with no monetary value, settled by a Soroban smart contract on the public Stellar testnet. Contract state lives on the testnet ledger, independent of this website.',
       ],
       [
-        {
-          b: ['Hosting:'],
-        },
-        " the site and API run on Render's free tier; operational data (transaction journal, community data) lives in a Neon Postgres database on its free tier. Both are third-party services with their own availability properties; no uptime is guaranteed for the demo.",
+        'On 19 November 2026, the site and API were verified on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This dated configuration check does not prove the current hosting state or availability.',
       ],
       [
-        {
-          b: ['Backups:'],
-        },
-        ' [backup schedule and retention to be defined - the free tiers provide no managed backups; testnet contract state is recoverable from the public ledger].',
+        'An encrypted external backup and isolated restore proof for the demo and staging databases succeeded on 20 November 2026. This dated check is not proof of a later successful backup, a recovery-time guarantee, an automatic retention promise or proof that every external service can be restored.',
       ],
       [
         {

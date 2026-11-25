@@ -3,7 +3,7 @@
 // {v} inline variant and are never translated or forked.
 // The parity test asserts every locale's block sequence and inline skeleton
 // match the English source, and that [DEMO] / bracketed placeholders survive.
-export type LegalVar = 'contactEmail' | 'lastUpdated' | 'neonRegion';
+export type LegalVar = 'contactEmail' | 'lastUpdated';
 export type LegalInline = string | { b: LegalInline[] } | { i: LegalInline[] } | { v: LegalVar };
 export type LegalBlock =
   | { t: 'notice'; text: LegalInline[] }

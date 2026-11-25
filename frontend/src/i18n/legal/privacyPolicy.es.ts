@@ -7,7 +7,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'notice',
     text: [
-      'Aviso de privacidad del prototipo en testnet, actualizado el 3 de noviembre de 2026. Describe el tratamiento real de los datos de cuenta; no es asesoramiento jurídico ni prueba de autorización regulatoria. No hay operaciones con dinero real activadas.',
+      'Aviso de privacidad del prototipo en testnet, actualizado el 24 de noviembre de 2026. Describe el tratamiento real de los datos de cuenta; no es asesoramiento jurídico ni prueba de autorización regulatoria. No hay operaciones con dinero real activadas.',
     ],
   },
   {
@@ -39,13 +39,13 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Los tokens de sesión se guardan con hash en el servidor; el navegador conserva el token de sesión en el almacenamiento local. Las sesiones duran hasta 30 días y pueden revocarse. Si activa un segundo factor con aplicación de autenticación, su semilla se cifra en el servidor y los códigos de recuperación se guardan como hashes. Restablecer la contraseña revoca las sesiones y los tickets de inicio de sesión de segundo factor pendientes, pero no elimina un segundo factor ya registrado.',
+      'Los tokens de sesión se guardan como hashes en el servidor. El navegador envía la sesión en una cookie HttpOnly, limitada al host y Secure en HTTPS; JavaScript solo guarda un marcador. Las credenciales antiguas en almacenamiento local se migran y eliminan. Las sesiones duran hasta 30 días y pueden revocarse. Las semillas del autenticador se cifran y los códigos de recuperación se guardan como hashes. Restablecer la contraseña revoca sesiones y solicitudes pendientes del segundo factor, sin eliminar el factor inscrito.',
     ],
   },
   {
     t: 'p',
     text: [
-      'Los registros de cuenta, las credenciales de correo y los datos opcionales del segundo factor no tienen actualmente un plazo automático de eliminación de la cuenta. Los tokens caducados dejan de funcionar al caducar, pero la caducidad no garantiza la eliminación inmediata de sus registros. Todavía no hay una herramienta de eliminación de cuenta de autoservicio. Escriba a blockallisto@gmail.com para solicitar acceso, rectificación o supresión; las solicitudes se revisan frente a obligaciones de seguridad y legales. Los registros y copias de seguridad de los proveedores pueden tener una conservación distinta.',
+      'Las cuentas de correo verificado pueden solicitar la eliminación en el formulario de la cuenta con la contraseña actual, confirmación DELETE y código actual del segundo factor si está activo. Los registros operativos vinculados y las cuentas de operador pueden bloquearla. No se garantiza borrar todos los datos: no se eliminan copias de seguridad, diarios de transacciones separados, registros de proveedores ni datos públicos de blockchain. Otras solicitudes: blockallisto@gmail.com. La caducidad no garantiza la eliminación inmediata de registros.',
     ],
   },
   {
@@ -67,7 +67,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'El tema, el idioma y las opciones de sesión usan el almacenamiento local del navegador. Los proveedores de alojamiento tratan direcciones IP y metadatos de las solicitudes. La limitación de frecuencia de la aplicación y la caché de reputación de IP usan direcciones IP en memoria transitoria; los diagnósticos de la aplicación usan contadores agregados y no registros con IP sin procesar. Los registros de infraestructura de los proveedores y la conservación de copias de seguridad son independientes. No usamos rastreadores publicitarios ni listas de correo de boletines.',
+      'Las preferencias de tema e idioma usan almacenamiento local; el secreto de sesión usa una cookie. Los proveedores de alojamiento procesan IP y metadatos de solicitudes. Los límites y la caché de reputación IP usan memoria temporal. Los registros de proveedores y las copias tienen retención separada. No usamos rastreadores publicitarios ni listas de boletines.',
     ],
   },
   {
@@ -77,7 +77,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Render aloja la aplicación en Fráncfort y Neon aloja sus datos Postgres. Brevo recibe las direcciones de correo de los destinatarios y el contenido de los correos de verificación y restablecimiento, y trata metadatos de entrega. Cloudflare Turnstile trata señales del navegador y del dispositivo y tokens de desafío para las comprobaciones antibot; la validación en el servidor puede incluir la IP del cliente. Tras una comprobación antibot correcta, ipapi.is recibe la IP del cliente para evaluar su reputación de abuso. La reputación es inicialmente solo de observación; el uso de VPN, proxy o Tor no es por sí solo un motivo de bloqueo. Los errores de los proveedores o el agotamiento del presupuesto de consultas pueden reducir esta capa; el CAPTCHA, los límites de frecuencia y los presupuestos de correo son salvaguardas independientes.',
+      'El 19 de noviembre de 2026 se verificaron el sitio y la API en una VM de Oracle Cloud con PostgreSQL 17 local para los datos operativos. Esta comprobación fechada no demuestra el estado actual del alojamiento ni su disponibilidad. Brevo recibe las direcciones de correo de los destinatarios y el contenido de los correos de verificación y restablecimiento, y trata metadatos de entrega. Cloudflare Turnstile trata señales del navegador y del dispositivo y tokens de desafío para las comprobaciones antibot; la validación en el servidor puede incluir la IP del cliente. Tras una comprobación antibot correcta, ipapi.is recibe la IP del cliente para evaluar su reputación de abuso. La reputación es inicialmente solo de observación; el uso de VPN, proxy o Tor no es por sí solo un motivo de bloqueo. Los errores de los proveedores o el agotamiento del presupuesto de consultas pueden reducir esta capa; el CAPTCHA, los límites de frecuencia y los presupuestos de correo son salvaguardas independientes.',
     ],
   },
   {

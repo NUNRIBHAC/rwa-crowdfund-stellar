@@ -7,7 +7,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'notice',
     text: [
-      'Testnet prototype privacy notice, updated 3 November 2026. This describes actual account processing; it is not legal advice or evidence of regulatory authorisation. No real-money operations are enabled.',
+      'Testnet prototype privacy notice, updated 24 November 2026. This describes actual account processing; it is not legal advice or evidence of regulatory authorisation. No real-money operations are enabled.',
     ],
   },
   {
@@ -39,13 +39,13 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Session tokens are hashed on the server; the browser keeps the session token in local storage. Sessions last up to 30 days and can be revoked. If you enable an authenticator second factor, its seed is encrypted server-side and recovery codes are stored as hashes. Password reset revokes sessions and pending second-factor login tickets but does not remove an enrolled second factor.',
+      'Session tokens are hashed on the server. The browser sends the session in an HttpOnly, host-only cookie, Secure over HTTPS; JavaScript keeps only a marker, not the session secret. Legacy local-storage credentials are migrated and removed. Sessions last up to 30 days and can be revoked. Authenticator seeds are encrypted server-side and recovery codes are hashed. Password reset revokes sessions and pending second-factor tickets without removing an enrolled second factor.',
     ],
   },
   {
     t: 'p',
     text: [
-      'Account records, email credentials and optional second-factor data currently have no automatic account-deletion timer. Expired tokens stop working at expiry, but expiry does not guarantee immediate removal of their stored records. There is no self-service account-deletion tool yet. Ask blockallisto@gmail.com for access, correction or deletion; requests are reviewed against security and legal obligations. Provider logs and backups may have separate retention.',
+      'Verified email accounts can request deletion in the account confirmation form with the current password, DELETE confirmation and a current second-factor code when enabled. Eligibility checks can block deletion for linked operational records or operator accounts. This is not an all-data erasure guarantee: backups, separate transaction journals, provider records and public blockchain data are not erased. Other requests can be sent to blockallisto@gmail.com. Expiry does not guarantee immediate removal of stored records.',
     ],
   },
   {
@@ -67,7 +67,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Theme, language and session choices use browser local storage. Hosting providers process IP addresses and request metadata. Application rate limiting and IP-reputation caching use IP addresses in transient memory; application diagnostics use aggregate counters rather than raw-IP logs. Provider infrastructure logs and backup retention are separate. We do not use advertising trackers or newsletter mailing lists.',
+      'Theme and language preferences use browser local storage; the session secret uses a cookie, not local storage. Hosting providers process IP addresses and request metadata. Rate limits and IP-reputation caches use transient memory. Provider logs and backups have separate retention. We do not use advertising trackers or newsletter mailing lists.',
     ],
   },
   {
@@ -77,7 +77,7 @@ export const blocks: LegalBlock[] = [
   {
     t: 'p',
     text: [
-      'Render hosts the app in Frankfurt and Neon hosts its Postgres data. Brevo receives recipient email addresses and verification/reset email content and processes delivery metadata. Cloudflare Turnstile processes browser/device signals and challenge tokens for bot checks; server validation may include the client IP. After a successful bot check, ipapi.is receives the client IP for abuse-reputation assessment. Reputation is initially observation-only; VPN, proxy or Tor status alone is not a blocking reason. Provider errors or lookup-budget exhaustion may reduce this layer; CAPTCHA, rate limits and mail budgets are separate safeguards.',
+      'On 19 November 2026, the site and API were verified on an Oracle Cloud VM with local PostgreSQL 17 for operational data. This dated configuration check does not prove the current hosting state or availability. Brevo receives recipient email addresses and verification/reset email content and processes delivery metadata. Cloudflare Turnstile processes browser/device signals and challenge tokens for bot checks; server validation may include the client IP. After a successful bot check, ipapi.is receives the client IP for abuse-reputation assessment. Reputation is initially observation-only; VPN, proxy or Tor status alone is not a blocking reason. Provider errors or lookup-budget exhaustion may reduce this layer; CAPTCHA, rate limits and mail budgets are separate safeguards.',
     ],
   },
   {

@@ -20,6 +20,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
 import { isMachineField } from './i18n-machine-fields.mjs';
+import { splitCatalog } from './i18n-dormant-catalogs.mjs';
 import { blocksToJson, jsonToBlocks, validateLegalAgainstBase } from './i18n-legal-codec.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -213,9 +214,19 @@ const drift = [];
 const written = [];
 
 const enTree = await loadTsModule(join(ROOT, 'src/i18n/locales/en.ts'));
+const englishCatalog = JSON.parse(readFileSync(join(ROOT, 'i18n-json/ui/en.json'), 'utf8'));
+// Preflight every locale before writing any generated source.
+for (const locale of LOCALES) {
+  const catalog = JSON.parse(readFileSync(join(ROOT, 'i18n-json/ui', `${locale}.json`), 'utf8'));
+  const { active } = splitCatalog(catalog, englishCatalog, enTree, `ui.${locale}`);
+  const diffs = [];
+  validateAgainstBase(enTree, active, `ui.${locale}`, diffs);
+  if (diffs.length) throw new Error(`ui.${locale}: projection rejected:\n  ${diffs.join('\n  ')}`);
+}
 
 for (const locale of LOCALES) {
-  const uiJson = JSON.parse(readFileSync(join(ROOT, 'i18n-json/ui', `${locale}.json`), 'utf8'));
+  const catalog = JSON.parse(readFileSync(join(ROOT, 'i18n-json/ui', `${locale}.json`), 'utf8'));
+  const { active: uiJson } = splitCatalog(catalog, englishCatalog, enTree, `ui.${locale}`);
   const legalJson = JSON.parse(readFileSync(join(ROOT, 'i18n-json/legal', `${locale}.json`), 'utf8'));
 
   if (check) {

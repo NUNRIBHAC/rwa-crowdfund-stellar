@@ -22,6 +22,7 @@ import { format, resolveConfig } from 'prettier';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { isMachineField } from './i18n-machine-fields.mjs';
+import { preserveDormant } from './i18n-dormant-catalogs.mjs';
 import { blocksToJson } from './i18n-legal-codec.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -91,6 +92,9 @@ const drift = [];
 // format:check AND stay byte-identical to a fresh export (no CI fight).
 async function emit(relPath, raw) {
   const abs = join(OUT, relPath);
+  // Retain existing catalog bytes when the data is unchanged. Weblate may
+  // format arrays differently; a source sync must not churn pending text.
+  if (relPath.startsWith('ui/') && existsSync(abs) && JSON.stringify(JSON.parse(readFileSync(abs, 'utf8'))) === JSON.stringify(JSON.parse(raw))) return;
   const content = await format(raw, { ...(await resolveConfig(abs)), filepath: abs });
   if (check) {
     const existing = existsSync(abs) ? readFileSync(abs, 'utf8') : null;
@@ -101,10 +105,15 @@ async function emit(relPath, raw) {
   }
 }
 
+const englishPath = join(OUT, 'ui/en.json');
+const englishCatalog = existsSync(englishPath) ? JSON.parse(readFileSync(englishPath, 'utf8')) : {};
+
 for (const locale of LOCALES) {
   const ui = await loadTsModule(join(ROOT, 'src/i18n/locales', `${locale}.ts`));
   assertJsonSafe(ui, `ui.${locale}`);
-  await emit(join('ui', `${locale}.json`), render(stripNonTranslatable(ui)));
+  const catalogPath = join(OUT, 'ui', `${locale}.json`);
+  const catalog = existsSync(catalogPath) ? JSON.parse(readFileSync(catalogPath, 'utf8')) : {};
+  await emit(join('ui', `${locale}.json`), render(preserveDormant(stripNonTranslatable(ui), catalog, englishCatalog, `ui.${locale}`)));
 
   const legal = {};
   for (const doc of LEGAL_DOCS) {
