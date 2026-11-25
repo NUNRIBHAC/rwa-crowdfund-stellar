@@ -3893,5 +3893,15 @@
     "rejectedError": "A aprovação na carteira não foi concluída. Esta ação não submeteu nada.",
     "failureError": "Não foi possível verificar este passo. Verifique a rede e os saldos antes de tentar novamente.",
     "uncertain": "O último pedido tem resultado incerto. Verifique o saldo antes de outro financiamento ou assinatura. Não há repetição automática."
+  },
+  "automaticRefund": {
+    "title": "Reembolso automático",
+    "testnetOnly": "Apenas na rede de teste. Não é movimentado dinheiro real.",
+    "pending": "Reembolso pendente. Ainda não foi confirmado qualquer pagamento.",
+    "submitted": "Reembolso enviado. Ainda aguarda confirmação.",
+    "paid": "Reembolso confirmado para a carteira original.",
+    "blocked": "O reembolso precisa de revisão. Aqui não está confirmado qualquer pagamento.",
+    "manualFallback": "Abrir a opção de reembolso manual",
+    "unavailable": "O estado do reembolso está temporariamente indisponível."
   }
 }

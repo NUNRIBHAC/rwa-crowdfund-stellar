@@ -449,13 +449,13 @@
     "viewProof": "ネットワーク上の証拠を確認",
     "clearConfirmed": "確定済みの記録をクリア",
     "statusLabels": {
-      "BUILT": "BUILT",
-      "SIGNED": "SIGNED",
-      "PENDING": "PENDING",
-      "SUCCESS": "SUCCESS",
-      "FAILED": "FAILED",
-      "NOT_FOUND": "NOT_FOUND",
-      "CANCELLED_UNSIGNED": "CANCELLED_UNSIGNED"
+      "BUILT": "作成済み",
+      "SIGNED": "署名済み",
+      "PENDING": "処理待ち",
+      "SUCCESS": "成功",
+      "FAILED": "失敗",
+      "NOT_FOUND": "見つかりません",
+      "CANCELLED_UNSIGNED": "未署名でキャンセル"
     },
     "actionLabels": {
       "contribute": "出資",
@@ -3835,5 +3835,15 @@
     "rejectedError": "ウォレットの承認が完了しませんでした。この操作からは何も送信していません。",
     "failureError": "この手順を検証できませんでした。再試行前にネットワークと残高を確認してください。",
     "uncertain": "前回の要求の結果が不明です。再度の資金取得や署名前に残高を確認してください。自動再試行は行いません。"
+  },
+  "automaticRefund": {
+    "title": "自動返金",
+    "testnetOnly": "テストネット専用です。実際のお金は移動しません。",
+    "pending": "返金は保留中です。支払いはまだ確認されていません。",
+    "submitted": "返金を送信しました。確認待ちです。",
+    "paid": "元のウォレットへの返金が確認されました。",
+    "blocked": "返金の確認が必要です。ここでは支払いは確認されていません。",
+    "manualFallback": "手動返金の選択肢を開く",
+    "unavailable": "返金状況を一時的に取得できません。"
   }
 }

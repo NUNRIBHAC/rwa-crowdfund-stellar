@@ -449,13 +449,13 @@
     "viewProof": "View network proof",
     "clearConfirmed": "Clear confirmed record",
     "statusLabels": {
-      "BUILT": "BUILT",
-      "SIGNED": "SIGNED",
-      "PENDING": "PENDING",
-      "SUCCESS": "SUCCESS",
-      "FAILED": "FAILED",
-      "NOT_FOUND": "NOT_FOUND",
-      "CANCELLED_UNSIGNED": "CANCELLED_UNSIGNED"
+      "BUILT": "Prepared",
+      "SIGNED": "Signed",
+      "PENDING": "Pending",
+      "SUCCESS": "Confirmed",
+      "FAILED": "Failed",
+      "NOT_FOUND": "Not found",
+      "CANCELLED_UNSIGNED": "Cancelled before signing"
     },
     "actionLabels": {
       "contribute": "contribute",
@@ -3864,5 +3864,15 @@
     "rejectedError": "Wallet approval was not completed. Nothing was submitted by this action.",
     "failureError": "The step could not be verified. Check the network and balances before trying again.",
     "uncertain": "The last request has an uncertain outcome. Use the balance check before any new funding or signature. There is no automatic retry."
+  },
+  "automaticRefund": {
+    "title": "Automatic refund",
+    "testnetOnly": "Testnet only. No real money is moved.",
+    "pending": "Refund pending. No payment has been confirmed.",
+    "submitted": "Refund submitted. Confirmation is still pending.",
+    "paid": "Refund confirmed to the original wallet.",
+    "blocked": "The refund needs review. No payment is confirmed here.",
+    "manualFallback": "Open the manual refund option",
+    "unavailable": "Refund status is temporarily unavailable."
   }
 }

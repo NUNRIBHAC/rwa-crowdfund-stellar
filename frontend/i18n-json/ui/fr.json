@@ -3896,5 +3896,15 @@
     "rejectedError": "L'approbation du portefeuille n'a pas été terminée. Cette action n'a rien soumis.",
     "failureError": "Cette étape n'a pas pu être vérifiée. Vérifiez le réseau et les soldes avant de réessayer.",
     "uncertain": "Le résultat de la dernière demande est incertain. Vérifiez le solde avant un nouvel approvisionnement ou une signature. Aucun nouvel essai automatique."
+  },
+  "automaticRefund": {
+    "title": "Remboursement automatique",
+    "testnetOnly": "Réseau de test uniquement. Aucun argent réel n'est transféré.",
+    "pending": "Remboursement en attente. Aucun paiement n'a été confirmé.",
+    "submitted": "Remboursement envoyé. La confirmation est toujours en attente.",
+    "paid": "Remboursement confirmé vers le portefeuille d'origine.",
+    "blocked": "Le remboursement doit être vérifié. Aucun paiement n'est confirmé ici.",
+    "manualFallback": "Ouvrir l'option de remboursement manuel",
+    "unavailable": "Le statut du remboursement est temporairement indisponible."
   }
 }
