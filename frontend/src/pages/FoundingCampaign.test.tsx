@@ -45,7 +45,7 @@ test.each(LOCALES.map((l) => l.id))('all campaign copy, tile controls and footer
   fireEvent.click(buttons[1]);
   expect(container.querySelector('.is-growing')).not.toBeNull();
   expect(container.querySelector('.tile-wall-refund-complete')).toBeNull();
-  expect(container.querySelector<HTMLInputElement>('input[type=range]')?.value).toBe('40');
+  expect(container.querySelector<HTMLInputElement>('input[type=range]')?.value).toBe('100');
   expect(container.querySelectorAll('.founding-campaign form,.founding-campaign iframe,.founding-campaign a')).toHaveLength(0);
 });
 test('dedicated route and link agree', () => {

@@ -23,6 +23,8 @@ for (const locale of VISUAL_LOCALES)
         await page.goto('/tile-wall');
         await expect(page.locator('[data-approved-paragraph]')).toHaveCount(11);
         await expect(page.locator('.wall-tile')).toHaveCount(240);
+        await expect(page.locator('.tile-wall-controls input')).toHaveValue('100');
+        await expect(page.locator('.wall-tile:not(.is-unfunded)')).toHaveCount(240);
         const geometry = await page.locator('.tile-wall-grid').evaluate((e) => ({
           columns: getComputedStyle(e).gridTemplateColumns.split(' ').length,
           rows: new Set(Array.from(e.querySelectorAll<HTMLElement>('.wall-tile'), (tile) => tile.offsetTop)).size,
@@ -40,12 +42,25 @@ for (const locale of VISUAL_LOCALES)
           ).toBe('rtl');
         }
         await page.screenshot({ path: `test-results/tile-wall/wall-${locale}-${width}-${theme}-campaign.png`, fullPage: true });
+        await page.reload();
+        await expect(page.locator('.tile-wall-controls input')).toHaveValue('100');
+        for (const [value, count] of [
+          ['0', 0],
+          ['50', 120],
+          ['100', 240],
+        ] as const) {
+          await page.locator('.tile-wall-controls input').fill(value);
+          await expect(page.locator('.wall-tile:not(.is-unfunded)')).toHaveCount(count);
+          await expect(page.locator('.tile-wall-controls output')).toHaveText(`${value}%`);
+        }
         await page.locator('.tile-wall-controls input').fill('90');
         await expect(page.locator('.tile-wall-controls output')).toHaveText('90%');
         await page.locator('.tile-wall-controls button').first().click();
         await expect(page.locator('.is-refunding')).toHaveCount(1);
         await expect(page.locator('.wall-tile').last()).toHaveCSS('opacity', '0');
         await expect(page.locator('.tile-wall-refund-complete')).toHaveCSS('opacity', '1');
+        await page.evaluate(() => scrollTo(0, 0));
+        await expect(page.locator('.site-header')).toHaveJSProperty('offsetTop', 0);
         await page.screenshot({ path: `test-results/tile-wall/wall-${locale}-${width}-${theme}-refund.png`, fullPage: true });
         await page.emulateMedia({ reducedMotion: 'reduce' });
         expect(
@@ -56,6 +71,8 @@ for (const locale of VISUAL_LOCALES)
         ).toBe('none');
         await page.locator('.tile-wall-controls button').last().click();
         await expect(page.locator('.is-growing')).toHaveCount(1);
+        await expect(page.locator('.tile-wall-controls input')).toHaveValue('100');
+        await expect(page.locator('.wall-tile:not(.is-unfunded)')).toHaveCount(240);
         for (const { path } of PUBLIC_PAGES) {
           await page.evaluate((path) => {
             history.pushState(null, '', path);

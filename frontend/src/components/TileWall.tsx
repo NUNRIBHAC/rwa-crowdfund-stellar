@@ -7,8 +7,9 @@ import './TileWall.css';
 export default function TileWall() {
   const { m } = useI18n();
   const copy = m.tileWall;
-  const [progress, setProgress] = useState(40);
+  const [progress, setProgress] = useState(100);
   const [refund, setRefund] = useState(false);
+  const visibleTiles = Math.floor((progress * 240) / 100);
   return (
     <section className="tile-wall-demo" aria-labelledby="tile-wall-title">
       <h2 id="tile-wall-title">{copy.wallTitle}</h2>
@@ -19,7 +20,12 @@ export default function TileWall() {
         style={{ '--tile-scale': String(0.65 + progress * 0.0035) } as React.CSSProperties}
       >
         {Array.from({ length: 240 }, (_, i) => (
-          <span aria-hidden="true" key={i} className={`wall-tile tile-pattern-${i % 4}`} style={{ '--tile-index': i } as React.CSSProperties} />
+          <span
+            aria-hidden="true"
+            key={i}
+            className={`wall-tile tile-pattern-${i % 4}${i >= visibleTiles ? ' is-unfunded' : ''}`}
+            style={{ '--tile-index': i } as React.CSSProperties}
+          />
         ))}
         {refund && <p className="tile-wall-refund-complete">{copy.refundComplete}</p>}
       </div>
@@ -43,7 +49,7 @@ export default function TileWall() {
           className="btn btn-outline"
           onClick={() => {
             setRefund(false);
-            setProgress(40);
+            setProgress(100);
           }}
         >
           {copy.resetButton}
