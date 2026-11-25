@@ -1,0 +1,29 @@
+{
+  "source": "Weblate UI component",
+  "scope": "testnetSetup only",
+  "base": "28e16dbb3f565c88d988ea11685282e803777d87",
+  "head": "9ff4cea4dc9328213a41ccc99d0c648787ecab64",
+  "commits": [
+    "712dfba11341c7c8af8cce1e6dd0c2530d83f555",
+    "48a7bfd269b46fd6dc922e201ffa4fd531636182",
+    "3a0feda4566dfb1d5d82b8b6258b899884d4fb9b",
+    "2afdf774c99ccf3c7b19dcd9e12ae77d54b44244",
+    "adf32a2d2b462912a5553b13ad3d1fd5586f8dfd",
+    "db9dec49c3db7d7353ec34fe53be5d7b9dabbca6",
+    "625144abdf3802fbd6e8299869352e674ad5183b",
+    "c661342052f15a824a01c6e56928e5b276731214",
+    "e3027f1132479ac44f617c06544dbe3859daaa72",
+    "2433bb17284113bafa99886f13018db5a4224121",
+    "d0593c968954042d038a3d2f5111db9078f369f3",
+    "9ff4cea4dc9328213a41ccc99d0c648787ecab64"
+  ],
+  "authorAndCommitter": "NUNRIBHAC <nunrib@sapo.pt>",
+  "keysPerLanguage": 29,
+  "languages": 11,
+  "addedUnits": 319,
+  "previousUnitsUnchanged": 28809,
+  "backupUnitsSha256": "8e69775c2c9d5cf0d06b512ed5bf9d658988ea5591d4c688898b23357e462a15",
+  "allTargetsMatchLocalExactly": true,
+  "normalizations": [],
+  "historyIntegration": "Full branch merge intentionally excluded because older ancestors contain separate legal, badge and refund work. This receipt records the scoped roundtrip without falsely marking unrelated ancestors merged."
+}
