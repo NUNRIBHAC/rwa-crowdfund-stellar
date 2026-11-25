@@ -4,6 +4,17 @@
 import type { Messages } from './en';
 
 export const de: Messages = {
+  informationGuide: {
+    title: 'Informationsleitfaden',
+    intro:
+      'Erkunden Sie Begriffe, Risiken, Gebühren und Annahmen des Rechners. Dieser Leitfaden erklärt Informationen; er beurteilt nicht, ob eine Anlage für Sie geeignet ist.',
+    searchLabel: 'Im Leitfaden suchen',
+    searchPlaceholder: 'Begriffe, Risiken, Gebühren und Annahmen suchen',
+    topics: 'Informationsthemen',
+    all: 'Alle Themen',
+    noMatches: 'Keine passenden Informationen. Versuchen Sie eine andere Suche oder ein anderes Thema.',
+    model: 'Berechnungsmethode und Modellgrenzen',
+  },
   yieldCalculator: {
     title: 'Renditeszenarien',
     notice:

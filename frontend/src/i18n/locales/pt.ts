@@ -4,6 +4,16 @@
 import type { Messages } from './en';
 
 export const pt: Messages = {
+  informationGuide: {
+    title: 'Guia de informação',
+    intro: 'Explore termos, riscos, comissões e hipóteses da calculadora. Este guia explica informação; não avalia se um investimento é adequado para si.',
+    searchLabel: 'Pesquisar no guia',
+    searchPlaceholder: 'Pesquisar termos, riscos, comissões e hipóteses',
+    topics: 'Temas de informação',
+    all: 'Todos os temas',
+    noMatches: 'Não há informação correspondente. Experimente outra pesquisa ou tema.',
+    model: 'Método de cálculo e limites do modelo',
+  },
   yieldCalculator: {
     title: 'Cenários de rentabilidade',
     notice:

@@ -2,6 +2,16 @@
 // Edit the JSON (Weblate) or this file, then run npm run i18n:export / i18n:import to sync.
 
 export const en = {
+  informationGuide: {
+    title: 'Information guide',
+    intro: 'Explore terms, risks, fees and calculator assumptions. This guide explains information; it does not assess whether an investment suits you.',
+    searchLabel: 'Search the guide',
+    searchPlaceholder: 'Search terms, risks, fees and assumptions',
+    topics: 'Information topics',
+    all: 'All topics',
+    noMatches: 'No matching information. Try another search or topic.',
+    model: 'Calculation method and model limits',
+  },
   yieldCalculator: {
     title: 'Return scenarios',
     notice: 'Illustration, not a forecast or investment advice. You can lose all invested capital. No payment or investment is made here.',

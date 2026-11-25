@@ -40,7 +40,13 @@ export default function InvestorInformationGuide() {
       <p className="community-note">{m.yieldCalculator.notice}</p>
       <div className="information-guide-controls">
         <label htmlFor={`${id}-search`}>{m.informationGuide.searchLabel}</label>
-        <input id={`${id}-search`} type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={m.informationGuide.searchPlaceholder} />
+        <input
+          id={`${id}-search`}
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={m.informationGuide.searchPlaceholder}
+        />
         <div className="tab-bar" role="group" aria-label={m.informationGuide.topics}>
           {[{ id: 'all', title: m.informationGuide.all }, ...topics].map((item) => (
             <button
