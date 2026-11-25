@@ -430,7 +430,12 @@
   },
   "intent": {
     "title": "Saved transaction",
-    "steps": ["Prepared", "Signed", "Submitted", "Confirmed"],
+    "steps": [
+      "Prepared",
+      "Signed",
+      "Submitted",
+      "Confirmed"
+    ],
     "action": "Action",
     "campaign": "Campaign",
     "contract": "Contract",
@@ -449,13 +454,13 @@
     "viewProof": "View network proof",
     "clearConfirmed": "Clear confirmed record",
     "statusLabels": {
-      "BUILT": "BUILT",
-      "SIGNED": "SIGNED",
-      "PENDING": "PENDING",
-      "SUCCESS": "SUCCESS",
-      "FAILED": "FAILED",
-      "NOT_FOUND": "NOT_FOUND",
-      "CANCELLED_UNSIGNED": "CANCELLED_UNSIGNED"
+      "BUILT": "Prepared",
+      "SIGNED": "Signed",
+      "PENDING": "Pending",
+      "SUCCESS": "Confirmed",
+      "FAILED": "Failed",
+      "NOT_FOUND": "Not found",
+      "CANCELLED_UNSIGNED": "Cancelled before signing"
     },
     "actionLabels": {
       "contribute": "contribute",
@@ -491,7 +496,13 @@
     "interestIsinDocsNote": "Not available - this prototype records contributions only and issues no securities",
     "marketingDivider": "Issuer-provided content below - not verified by the platform",
     "marketingDividerAria": "Marketing content below",
-    "tabs": ["Overview", "Details", "Documents", "News", "Podcast"],
+    "tabs": [
+      "Overview",
+      "Details",
+      "Documents",
+      "News",
+      "Podcast"
+    ],
     "tabsAria": "Campaign sections",
     "overviewMissing": "Issuer marketing content is not available in this prototype. On a production platform this area would carry the issuer's own description, team and business model, clearly separated from platform facts by the divider above.",
     "detailsPre": "Business model, market, financials and milestones would appear here as issuer-provided sections.",
@@ -893,15 +904,25 @@
       {
         "label": "Participation right / certificate",
         "summary": "A right (often securitised as a participation certificate) to a profit share and to repayment of the nominal value, without the full governance rights of a shareholder.",
-        "opportunities": ["Share in profits without buying full equity", "Often combines a base repayment claim with profit participation"],
-        "risks": ["Profit share depends entirely on issuer performance", "Can rank behind ordinary creditors", "Usually illiquid until maturity"],
+        "opportunities": [
+          "Share in profits without buying full equity",
+          "Often combines a base repayment claim with profit participation"
+        ],
+        "risks": [
+          "Profit share depends entirely on issuer performance",
+          "Can rank behind ordinary creditors",
+          "Usually illiquid until maturity"
+        ],
         "suitableFor": "Investors who want upside tied to business results and accept equity-like risk."
       },
       {
         "label": "Substanzgenussrecht",
         "subtypeOf": "Subtype of participation right / certificate",
         "summary": "A participation right linked to the issuer's asset base (\"substance\") rather than only its annual profit. Structuring and eligible issuers vary by jurisdiction and statute.",
-        "opportunities": ["Participation in the issuer's asset value", "Can be structured for smaller issuers where statutes allow"],
+        "opportunities": [
+          "Participation in the issuer's asset value",
+          "Can be structured for smaller issuers where statutes allow"
+        ],
         "risks": [
           "Legal form and investor protection differ strongly by jurisdiction",
           "May involve a trustee or vehicle between investor and issuer",
@@ -913,7 +934,10 @@
         "label": "Share",
         "note": "A capital increase is the corporate action that creates new shares; it is not a separate instrument.",
         "summary": "Direct equity in the issuing company: dividend entitlement and participation in company value, with rights set by the articles. New shares reach investors through a capital increase.",
-        "opportunities": ["Full participation in company growth", "Voting or information rights depending on share class"],
+        "opportunities": [
+          "Full participation in company growth",
+          "Voting or information rights depending on share class"
+        ],
         "risks": [
           "No fixed repayment claim; dividends are not guaranteed",
           "Total loss possible",
@@ -925,14 +949,24 @@
         "label": "Indirect participation",
         "note": "An ownership structure, not a distinct instrument: the investor holds the underlying participation through a vehicle or trustee, and the underlying interest decides the economics.",
         "summary": "Investors participate in an SME investment indirectly - for example through a vehicle or trustee - with simplified processing.",
-        "opportunities": ["Access to deals that would be hard to hold directly", "Simplified administration through the intermediary structure"],
-        "risks": ["An extra layer sits between investor and issuer", "Return depends on issuer performance", "Terms of the vehicle govern payouts and exit"],
+        "opportunities": [
+          "Access to deals that would be hard to hold directly",
+          "Simplified administration through the intermediary structure"
+        ],
+        "risks": [
+          "An extra layer sits between investor and issuer",
+          "Return depends on issuer performance",
+          "Terms of the vehicle govern payouts and exit"
+        ],
         "suitableFor": "Investors who want participation economics without holding the underlying interest directly."
       },
       {
         "label": "Limited partnership interest",
         "summary": "An interest as limited partner in a partnership: profit and loss participation per the partnership agreement, liability limited to the contribution.",
-        "opportunities": ["Direct pass-through of partnership results", "Liability capped at the contribution"],
+        "opportunities": [
+          "Direct pass-through of partnership results",
+          "Liability capped at the contribution"
+        ],
         "risks": [
           "Loss participation can reduce or wipe out the interest",
           "Exit often restricted by the partnership agreement",
@@ -943,22 +977,39 @@
       {
         "label": "Loan",
         "summary": "A direct loan to the issuer with a defined interest rate and repayment schedule. The same loan parent can be senior, subordinated (including profit-participating variants), or leave seniority unspecified.",
-        "opportunities": ["Fixed schedule is easier to model than equity", "Subordinated variants pay higher interest in exchange for the lower rank"],
-        "risks": ["Issuer default can mean total loss", "Subordinated claims are paid only after senior creditors in insolvency", "No deposit protection"],
+        "opportunities": [
+          "Fixed schedule is easier to model than equity",
+          "Subordinated variants pay higher interest in exchange for the lower rank"
+        ],
+        "risks": [
+          "Issuer default can mean total loss",
+          "Subordinated claims are paid only after senior creditors in insolvency",
+          "No deposit protection"
+        ],
         "suitableFor": "Investors who accept credit risk without bank-like protection."
       },
       {
         "label": "Bond",
         "summary": "A securitised debt instrument with a defined coupon and term. Issued senior (non-subordinated), subordinated (including explicitly subordinated qualified bonds and subordinated Mini Bonds), or with seniority unspecified.",
-        "opportunities": ["Defined coupon and repayment calendar", "Senior issues rank ahead of subordinated capital and equity in insolvency"],
-        "risks": ["Subordination raises loss severity in insolvency", "Still unsecured unless collateral is stated", "No participation in company growth"],
+        "opportunities": [
+          "Defined coupon and repayment calendar",
+          "Senior issues rank ahead of subordinated capital and equity in insolvency"
+        ],
+        "risks": [
+          "Subordination raises loss severity in insolvency",
+          "Still unsecured unless collateral is stated",
+          "No participation in company growth"
+        ],
         "suitableFor": "Yield-oriented investors who can bear a total loss and do not need the money back early."
       },
       {
         "label": "Warrant",
         "note": "Exercise creates new shares and dilutes existing holders. Offers of securities under ECSPR are capped at 5,000,000 EUR per issuer over 12 months.",
         "summary": "A transferable security giving the right, but not the obligation, to subscribe new shares of the issuer at a set price during a window or on a set date (transferable security under MiFID II Art. 4(1)(44)(c)).",
-        "opportunities": ["Upside if the share price rises above the exercise price", "Exercise price and window are fixed in advance"],
+        "opportunities": [
+          "Upside if the share price rises above the exercise price",
+          "Exercise price and window are fixed in advance"
+        ],
         "risks": [
           "Can expire worthless if the share price stays below the exercise price",
           "Exercise dilutes existing shareholders",
@@ -970,7 +1021,10 @@
         "label": "Share depositary receipt",
         "note": "Fits the MiFID II transferable-securities definition (Art. 4(1)(44)(a)) and ECSPR Art. 10 custody is feasible, but ECSPR placement covers securities issued by the project owner or an SPV, and a depositary receipt is issued by the depositary: no ESMA or CMVM confirmation. Not proven. Portugal has no dedicated domestic depositary-receipt regime.",
         "summary": "A certificate issued by a custodian representing shares of the company (shares of an S.A. and depositary receipts over shares): the holder carries the economic claim on the underlying shares while the custodian holds the shares themselves.",
-        "opportunities": ["Share exposure in a transferable certificate", "Distributions mirror the underlying shares"],
+        "opportunities": [
+          "Share exposure in a transferable certificate",
+          "Distributions mirror the underlying shares"
+        ],
         "risks": [
           "Adds custodian risk on top of share risk",
           "Voting and transfer rights depend on the certificate terms",
@@ -982,15 +1036,25 @@
         "label": "Commercial paper",
         "note": "Also a money-market instrument. No CMVM practice for retail crowdfunding of commercial paper was found: a retail offer needs a rating, a guarantee or a sufficient financial-autonomy ratio, a CMVM information note with a 10-business-day non-objection period, and a sponsor when the issuer has no statutory audit. ECSPR caps offers at 5,000,000 EUR per issuer over 12 months.",
         "summary": "Short-term debt under one year: a transferable security under DL 69/2004 (as amended by DL 102/2026) and MiFID II Art. 4(1)(44)(b), and at the same time a money-market instrument.",
-        "opportunities": ["Short maturity with a defined repayment date", "Yield for financing issuer working capital"],
-        "risks": ["Unsecured: loss if the issuer cannot repay or refinance", "Short maturity does not mean low risk", "Usually illiquid until maturity"],
+        "opportunities": [
+          "Short maturity with a defined repayment date",
+          "Yield for financing issuer working capital"
+        ],
+        "risks": [
+          "Unsecured: loss if the issuer cannot repay or refinance",
+          "Short maturity does not mean low risk",
+          "Usually illiquid until maturity"
+        ],
         "suitableFor": "Investors who want short-dated debt exposure and accept issuer default risk."
       },
       {
         "label": "Loan with revenue-linked remuneration",
         "note": "Variable interest linked to revenue fits ECSPR in the abstract (Delegated Regulation (EU) 2022/2118 Art. 8(3)(b) and 10(1)(g); Delegated Regulation (EU) 2022/2119 Annex). If capital or instalments already due were paid only when there is revenue, repayment would be conditional and it would no longer be an ECSPR loan. A revenue-linked rate in a concrete contract is not confirmed by CMVM practice.",
         "summary": "A loan with unconditional repayment of capital at an agreed term and a payment plan, whose interest varies with the revenues of the issuer.",
-        "opportunities": ["Interest rises when issuer revenues rise", "Repayment of capital does not depend on revenues"],
+        "opportunities": [
+          "Interest rises when issuer revenues rise",
+          "Repayment of capital does not depend on revenues"
+        ],
         "risks": [
           "Interest can fall to low levels in weak revenue periods",
           "Repayment is unconditional but the issuer can still default",
@@ -1002,7 +1066,10 @@
         "label": "Debt depositary receipt",
         "note": "Fits the MiFID II transferable-securities definition (Art. 4(1)(44)(b)) and ECSPR Art. 10 custody is feasible, but ECSPR placement covers securities issued by the project owner or an SPV, and a depositary receipt is issued by the depositary: no ESMA or CMVM confirmation. Not proven. Portugal has no dedicated domestic depositary-receipt regime; the \"certificado de depósito\" of Decreto-Lei 372/91 is a bank deposit certificate, a different instrument.",
         "summary": "A certificate issued by a custodian representing bonds or other securitised debt of the issuer: the holder carries the economic claim on the underlying debt securities while the custodian holds the securities themselves.",
-        "opportunities": ["Debt exposure in a transferable certificate", "Distributions mirror the underlying debt securities"],
+        "opportunities": [
+          "Debt exposure in a transferable certificate",
+          "Distributions mirror the underlying debt securities"
+        ],
         "risks": [
           "Adds custodian risk on top of issuer default risk",
           "Transfer and information rights depend on the certificate terms",
@@ -3864,5 +3931,67 @@
     "rejectedError": "Wallet approval was not completed. Nothing was submitted by this action.",
     "failureError": "The step could not be verified. Check the network and balances before trying again.",
     "uncertain": "The last request has an uncertain outcome. Use the balance check before any new funding or signature. There is no automatic retry."
+  },
+  "automaticRefund": {
+    "title": "Automatic refund",
+    "testnetOnly": "Testnet only. No real money is moved.",
+    "pending": "Refund pending. No payment has been confirmed.",
+    "submitted": "Refund submitted. Confirmation is still pending.",
+    "paid": "Refund confirmed to the original wallet.",
+    "blocked": "The refund needs review. No payment is confirmed here.",
+    "manualFallback": "Open the manual refund option",
+    "unavailable": "Refund status is temporarily unavailable."
+  },
+  "issuerEvidence": {
+    "title": "Issuer evidence dossier",
+    "note": "This dossier separates issuer claims, human review assertions and unknown information. A review is not a guarantee, legal approval or investment recommendation.",
+    "loading": "Loading the evidence dossier...",
+    "notProvided": "No evidence dossier has been provided for this campaign.",
+    "unavailable": "The evidence dossier is unavailable. No facts can be confirmed from this view.",
+    "revisedOn": "Dossier revised on",
+    "issuerClaim": "Issuer claim",
+    "checkedFact": "Human-reviewed fact",
+    "corrected": "Correction recorded, new review needed",
+    "unknown": "Unknown areas",
+    "sources": "Sources",
+    "issuerSource": "Issuer source",
+    "independentSource": "Source classified as independent",
+    "retrievedOn": "Retrieved on",
+    "publishedOn": "Published on",
+    "reviewedOn": "Reviewed on",
+    "corrections": "Reviewer corrections",
+    "areas": {
+      "issuer": "Issuer identity",
+      "team": "Team",
+      "track_record": "Track record",
+      "financials": "Financial information",
+      "offer_documents": "Offer documents",
+      "milestones": "Milestones"
+    }
+  },
+  "evidenceEditor": {
+    "title": "Evidence corrections and re-review",
+    "note": "Operator wallet access is not verified professional identity. Publish only non-confidential public-source notes. Original claims and reviews remain visible. Corrections make the affected claim unverified until explicit human re-review.",
+    "campaign": "Campaign",
+    "claim": "Original claim",
+    "action": "Action",
+    "correction": "Append a correction",
+    "review": "Append a reviewed replacement",
+    "reviewText": "Replacement fact",
+    "reviewNote": "Public correction or review note",
+    "sources": "Existing public sources used",
+    "humanReviewed": "I personally checked these public sources and the replacement fact. A source link alone is not a human review.",
+    "preview": "Preview publication",
+    "publish": "Publish this evidence update",
+    "back": "Back to editing",
+    "saved": "Evidence update published. Original records were retained.",
+    "failed": "The evidence update could not be completed. Reload the current record before retrying; another operator may have changed it.",
+    "reload": "Reload current evidence",
+    "addSource": "Add a new public source",
+    "sourceTitle": "Public source title",
+    "sourceUrl": "Public HTTPS URL",
+    "sourcePublisher": "Source publisher classification",
+    "sourceRetrieved": "Retrieved on (today)",
+    "sourcePublicOnly": "Only non-confidential public sources. No credentials, signed URLs, query parameters or fragments. Retrieval date records your source check today."
   }
 }
