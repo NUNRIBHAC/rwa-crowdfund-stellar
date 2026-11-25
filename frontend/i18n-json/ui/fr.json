@@ -430,7 +430,12 @@
   },
   "intent": {
     "title": "Transaction enregistrée",
-    "steps": ["Préparée", "Signée", "Envoyée", "Confirmée"],
+    "steps": [
+      "Préparée",
+      "Signée",
+      "Envoyée",
+      "Confirmée"
+    ],
     "action": "Action",
     "campaign": "Campagne",
     "contract": "Contrat",
@@ -491,7 +496,13 @@
     "interestIsinDocsNote": "Non disponible - ce prototype n'enregistre que des contributions et n'émet aucun titre",
     "marketingDivider": "Contenu fourni par l'émetteur ci-dessous - non vérifié par la plateforme",
     "marketingDividerAria": "Contenu marketing ci-dessous",
-    "tabs": ["Vue d'ensemble", "Détails", "Documents", "Actualités", "Podcast"],
+    "tabs": [
+      "Vue d'ensemble",
+      "Détails",
+      "Documents",
+      "Actualités",
+      "Podcast"
+    ],
     "tabsAria": "Sections de la campagne",
     "overviewMissing": "Le contenu marketing de l'émetteur n'est pas disponible dans ce prototype. Sur une plateforme en production, cette zone afficherait la description, l'équipe et le modèle économique de l'émetteur lui-même, clairement séparés des faits de la plateforme par le séparateur ci-dessus.",
     "detailsPre": "Le modèle économique, le marché, les finances et les jalons apparaîtraient ici comme sections fournies par l'émetteur.",
@@ -923,7 +934,10 @@
         "label": "Action",
         "note": "Une augmentation de capital est l'opération sociétaire qui crée de nouvelles actions ; ce n'est pas un instrument séparé.",
         "summary": "Capitaux propres directs de la société émettrice : droit aux dividendes et participation à la valeur de l'entreprise, avec des droits fixés par les statuts. Les nouvelles actions parviennent aux investisseurs via une augmentation de capital.",
-        "opportunities": ["Participation pleine à la croissance de l'entreprise", "Droits de vote ou d'information selon la classe d'actions"],
+        "opportunities": [
+          "Participation pleine à la croissance de l'entreprise",
+          "Droits de vote ou d'information selon la classe d'actions"
+        ],
         "risks": [
           "Aucun droit de remboursement fixe ; les dividendes ne sont pas garantis",
           "Perte totale possible",
@@ -935,7 +949,10 @@
         "label": "Participation indirecte",
         "note": "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie.",
         "summary": "Les investisseurs participent indirectement à un investissement dans une PME - par exemple via un véhicule ou un fiduciaire - avec un traitement simplifié.",
-        "opportunities": ["Accès à des opérations difficiles à détenir directement", "Administration simplifiée via la structure intermédiaire"],
+        "opportunities": [
+          "Accès à des opérations difficiles à détenir directement",
+          "Administration simplifiée via la structure intermédiaire"
+        ],
         "risks": [
           "Une couche supplémentaire entre l'investisseur et l'émetteur",
           "Le rendement dépend de la performance de l'émetteur",
@@ -946,7 +963,10 @@
       {
         "label": "Part de société en commandite",
         "summary": "Une part de commanditaire dans une société de personnes : participation aux bénéfices et aux pertes selon le contrat de société, responsabilité limitée à l'apport.",
-        "opportunities": ["Transmission directe des résultats de la société", "Responsabilité plafonnée à l'apport"],
+        "opportunities": [
+          "Transmission directe des résultats de la société",
+          "Responsabilité plafonnée à l'apport"
+        ],
         "risks": [
           "La participation aux pertes peut réduire ou annuler la part",
           "La sortie est souvent restreinte par le contrat de société",
@@ -986,7 +1006,10 @@
         "label": "Warrant",
         "note": "L'exercice crée de nouvelles actions et dilue les détenteurs existants. Les offres de titres relevant de l'ECSPR sont plafonnées à 5.000.000 EUR par émetteur sur 12 mois.",
         "summary": "Un titre négociable donnant le droit, mais non l'obligation, de souscrire de nouvelles actions de l'émetteur à un prix fixé pendant une fenêtre ou à une date définie (titre au sens de l'art. 4(1)(44)(c) de MiFID II).",
-        "opportunities": ["Plus-value si le cours de l'action dépasse le prix d'exercice", "Prix et fenêtre d'exercice fixés à l'avance"],
+        "opportunities": [
+          "Plus-value si le cours de l'action dépasse le prix d'exercice",
+          "Prix et fenêtre d'exercice fixés à l'avance"
+        ],
         "risks": [
           "Peut expirer sans valeur si le cours reste sous le prix d'exercice",
           "L'exercice dilue les actionnaires existants",
@@ -998,7 +1021,10 @@
         "label": "Certificat de dépôt sur actions",
         "note": "Correspond à la définition de titre négociable de MiFID II (art. 4(1)(44)(a)) et la conservation de l'art. 10 de l'ECSPR est faisable, mais le placement sous l'ECSPR couvre les titres émis par le porteur de projet ou un SPV, et un certificat de dépôt est émis par le dépositaire: sans confirmation de l'ESMA ou de la CMVM. Non prouvé. Le Portugal n'a pas de régime national propre aux certificats de dépôt.",
         "summary": "Un certificat émis par un dépositaire représentant des actions de la société (actions de S.A. et certificats de dépôt sur actions): le titulaire détient le droit économique sur les actions sous-jacentes pendant que le dépositaire détient les actions.",
-        "opportunities": ["Exposition aux actions sous forme de certificat négociable", "Les distributions suivent les actions sous-jacentes"],
+        "opportunities": [
+          "Exposition aux actions sous forme de certificat négociable",
+          "Les distributions suivent les actions sous-jacentes"
+        ],
         "risks": [
           "Ajoute un risque de dépositaire au risque de l'action",
           "Les droits de vote et de transfert dépendent des conditions du certificat",
@@ -1010,7 +1036,10 @@
         "label": "Papier commercial",
         "note": "C'est aussi un instrument du marché monétaire. Aucune pratique de la CMVM n'a été trouvée pour le papier commercial de détail en crowdfunding: une offre de détail exige une notation, une garantie ou un ratio d'autonomie financière suffisant, une note d'information à la CMVM avec un délai de non-opposition de 10 jours ouvrables et un sponsor lorsque l'émetteur n'a pas d'audit légal. L'ECSPR plafonne les offres à 5.000.000 EUR par émetteur sur 12 mois.",
         "summary": "Dette à court terme inférieure à un an: titre négociable au sens du DL 69/2004 (modifié par le DL 102/2026) et de l'art. 4(1)(44)(b) de MiFID II, et en même temps un instrument du marché monétaire.",
-        "opportunities": ["Échéance courte avec date de remboursement définie", "Rendement pour financer le fonds de roulement de l'émetteur"],
+        "opportunities": [
+          "Échéance courte avec date de remboursement définie",
+          "Rendement pour financer le fonds de roulement de l'émetteur"
+        ],
         "risks": [
           "Sans sûreté réelle: perte si l'émetteur ne paie ni ne refinance",
           "Une échéance courte ne signifie pas un risque faible",
@@ -1022,7 +1051,10 @@
         "label": "Prêt à rémunération indexée sur les revenus",
         "note": "L'intérêt variable indexé sur les revenus relève de l'ECSPR en abstrait (règl. délégué (UE) 2022/2118, art. 8(3)(b) et 10(1)(g); règl. délégué (UE) 2022/2119, annexe). Si le capital ou les échéances déjà dues ne sont payés qu'en présence de revenus, le remboursement est conditionnel et ce n'est plus un prêt ECSPR. Un taux indexé sur les revenus dans un contrat concret n'est pas confirmé par la pratique de la CMVM.",
         "summary": "Un prêt avec remboursement inconditionnel du capital à un terme convenu et selon un plan de paiements, dont l'intérêt varie avec les revenus de l'émetteur.",
-        "opportunities": ["L'intérêt augmente quand les revenus de l'émetteur augmentent", "Le remboursement du capital ne dépend pas des revenus"],
+        "opportunities": [
+          "L'intérêt augmente quand les revenus de l'émetteur augmentent",
+          "Le remboursement du capital ne dépend pas des revenus"
+        ],
         "risks": [
           "L'intérêt peut tomber à des niveaux faibles en période de revenus médiocres",
           "Le remboursement est inconditionnel, mais l'émetteur peut néanmoins faire défaut",
@@ -1034,7 +1066,10 @@
         "label": "Certificat de dépôt sur dette",
         "note": "Correspond à la définition de titre négociable de MiFID II (art. 4(1)(44)(b)) et la conservation de l'art. 10 de l'ECSPR est faisable, mais le placement sous l'ECSPR couvre les titres émis par le porteur de projet ou un SPV, et un certificat de dépôt est émis par le dépositaire: sans confirmation de l'ESMA ou de la CMVM. Non prouvé. Le Portugal n'a pas de régime national propre aux certificats de dépôt; le \"certificado de depósito\" du Decreto-Lei 372/91 est un dépôt bancaire, un instrument différent.",
         "summary": "Un certificat émis par un dépositaire représentant des obligations ou d'autres dettes titrisées de l'émetteur: le titulaire détient le droit économique sur les titres de dette sous-jacents pendant que le dépositaire détient les titres.",
-        "opportunities": ["Exposition à la dette sous forme de certificat négociable", "Les distributions suivent les titres de dette sous-jacents"],
+        "opportunities": [
+          "Exposition à la dette sous forme de certificat négociable",
+          "Les distributions suivent les titres de dette sous-jacents"
+        ],
         "risks": [
           "Ajoute un risque de dépositaire au risque de défaut de l'émetteur",
           "Les droits de transfert et d'information dépendent des conditions du certificat",
@@ -3958,5 +3993,15 @@
     "sourcePublisher": "Classification de l'éditeur de la source",
     "sourceRetrieved": "Consultée le (aujourd'hui)",
     "sourcePublicOnly": "Sources publiques non confidentielles uniquement. Sans identifiants, URL signées, paramètres de requête ni fragments. La date de consultation consigne votre vérification de la source aujourd'hui."
+  },
+  "informationGuide": {
+    "title": "Guide d’information",
+    "intro": "Explorez les termes, les risques, les frais et les hypothèses du calculateur. Ce guide explique les informations ; il n’évalue pas si un investissement vous convient.",
+    "searchLabel": "Rechercher dans le guide",
+    "searchPlaceholder": "Rechercher des termes, risques, frais et hypothèses",
+    "topics": "Thèmes du guide",
+    "all": "Tous les thèmes",
+    "noMatches": "Aucune information correspondante. Essayez une autre recherche ou un autre thème.",
+    "model": "Méthode de calcul et limites du modèle"
   }
 }
