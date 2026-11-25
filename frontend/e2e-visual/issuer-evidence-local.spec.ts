@@ -97,9 +97,12 @@ for (const locale of VISUAL_LOCALES)
                 const css = getComputedStyle(element);
                 return { direction: css.direction, left: parseFloat(css.paddingLeft), right: parseFloat(css.paddingRight) };
               });
-              expect(geometry.direction).toBe('ltr');
-              expect(geometry.left).toBeGreaterThanOrEqual(24);
-              expect(geometry.right).toBe(0);
+              expect(geometry.direction).toBe('rtl');
+              expect(geometry.left).toBe(0);
+              expect(geometry.right).toBeGreaterThanOrEqual(24);
+              for (const item of await list.locator('li').all()) {
+                expect(await item.evaluate((element) => getComputedStyle(element).direction)).toBe('rtl');
+              }
             }
           }
           await section.screenshot({ path: `test-results/evidence-section/${locale}-${width}-${theme}-${state}.png` });

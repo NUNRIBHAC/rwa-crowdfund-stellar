@@ -593,12 +593,14 @@ html[lang='ar'] .evidence-editor form > fieldset > label.evidence-editor-check {
   text-align: start;
 }
 
-/* Keep list markers inside the same physical gutter in every language. */
+/* Keep the page geometry fixed; Arabic list markers follow their own text. */
 html[lang='ar'] .issuer-evidence ul {
-  direction: ltr;
+  direction: rtl;
+  padding-left: 0;
+  padding-right: 1.5rem;
 }
 html[lang='ar'] .issuer-evidence li {
-  direction: ltr;
+  direction: rtl;
   text-align: right;
 }
 .issuer-evidence time {
