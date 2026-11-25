@@ -25,6 +25,9 @@
   background: #9497ff;
   transform: scale(var(--tile-scale));
 }
+.wall-tile.is-unfunded {
+  visibility: hidden;
+}
 .tile-pattern-1 {
   background: linear-gradient(45deg, #f3f2ff 25%, #4b4fe2 25%, #4b4fe2 50%, #f3f2ff 50%, #f3f2ff 75%, #4b4fe2 75%);
 }
