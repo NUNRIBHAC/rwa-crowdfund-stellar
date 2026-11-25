@@ -606,3 +606,44 @@ html[lang='ar'] .issuer-evidence li {
 .issuer-evidence time {
   unicode-bidi: isolate;
 }
+
+/* Public information guide: no advice, profile inputs or transaction controls. */
+.investor-information-guide {
+  border-block-start: 1px solid var(--border);
+  margin-block: 2rem;
+  padding-block: 1.5rem;
+  overflow-wrap: anywhere;
+}
+.information-guide-controls {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1rem;
+}
+.information-guide-controls input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  padding: 0.65rem 0.8rem;
+}
+.information-guide-controls input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.information-guide-controls label {
+  font-weight: 600;
+}
+.information-guide-controls .tab-bar {
+  flex-wrap: wrap;
+}
+.information-guide-results summary {
+  white-space: normal;
+}
+html[lang='ar'] .investor-information-guide :is(h2, p, label, summary, button) {
+  direction: rtl;
+  text-align: right;
+}
