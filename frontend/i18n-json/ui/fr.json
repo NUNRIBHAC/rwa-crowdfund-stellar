@@ -1525,7 +1525,8 @@
             "label": "Conditions d'émission (entrée d'exemple)",
             "note": "Aucun fichier hébergé dans ce prototype"
           }
-        ]
+        ],
+        "news": []
       },
       {
         "issuer": "Cais Norte (Données d'exemple - pas une offre réelle)",
@@ -1617,7 +1618,9 @@
           "La part des bénéfices dépend entièrement de la performance de l'émetteur",
           "Peut passer après les créanciers ordinaires",
           "Généralement illiquide jusqu'à l'échéance"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Pátio do Cedro (Données d'exemple - pas une offre réelle)",
@@ -1643,7 +1646,9 @@
           "La forme juridique et la protection de l'investisseur varient fortement selon la juridiction",
           "Peut impliquer un fiduciaire ou un véhicule entre l'investisseur et l'émetteur",
           "Généralement illiquide"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Ciclo Mineral (Données d'exemple - pas une offre réelle)",
@@ -1674,7 +1679,9 @@
           "Perte totale possible",
           "Les actions de crowdfunding ne sont généralement pas négociables en bourse",
           "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Prado Vivo (Données d'exemple - pas une offre réelle)",
@@ -1700,7 +1707,9 @@
           "La participation aux pertes peut réduire ou annuler la part",
           "La sortie est souvent restreinte par le contrat de société",
           "Les obligations fiscales et de reporting peuvent être plus lourdes"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Frio do Porto (Données d'exemple - pas une offre réelle)",
@@ -1730,7 +1739,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Bosque Solar (Données d'exemple - pas une offre réelle)",
@@ -1760,7 +1771,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Mosaico Oficina (Données d'exemple - pas une offre réelle)",
@@ -1790,7 +1803,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Rota Clara (Données d'exemple - pas une offre réelle)",
@@ -1820,7 +1835,9 @@
           "La subordination augmente la gravité de la perte en cas d'insolvabilité",
           "Reste non garantie sauf si une sûreté est indiquée",
           "Pas de participation à la croissance de l'entreprise"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Linha Solar (Données d'exemple - pas une offre réelle)",
@@ -1855,7 +1872,9 @@
           "Reste non garantie sauf si une sûreté est indiquée",
           "Pas de participation à la croissance de l'entreprise",
           "Une structure de coupon sur un prêt ou une obligation, pas une seniorité : pas d'intérêts périodiques ; le rendement vient de l'émission sous la valeur nominale et du remboursement au pair. Se combine avec une catégorie mère de dette, n'existe jamais seule."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Livros à Esquina (Données d'exemple - pas une offre réelle)",
@@ -1888,7 +1907,9 @@
           "Contribution sans propriété, intérêts, remboursement ni rendement financier.",
           "Aucune déduction fiscale n'est promise.",
           "Scénario d'exemple du tout ou rien : l'objectif n'a pas été atteint et les contributions ont été remboursées."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Barro Vivo (Données d'exemple - pas une offre réelle)",
@@ -1921,7 +1942,9 @@
           "Financement en échange d'une récompense non financière ou du produit ou service financé. Aucun rendement financier n'est offert.",
           "La livraison, l'annulation et les droits du consommateur seraient définis par offre.",
           "Scénario d'exemple réussi : l'objectif a été atteint et le porteur a retiré les fonds."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Luz de Oficina (Données d'exemple - pas une offre réelle)",
@@ -1954,7 +1977,9 @@
           "Commande anticipée du produit ou service financé, structurée comme un financement participatif par récompense, et non comme un investissement ou un droit à un jeton futur. Aucun rendement financier n'est offert.",
           "La livraison, l'annulation et les droits du consommateur seraient définis par offre.",
           "Scénario d'exemple du tout ou rien : l'objectif n'a pas été atteint et les contributions ont été remboursées."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Pedal Leve (Données d'exemple - pas une offre réelle)",
@@ -1988,7 +2013,9 @@
           "Si le cours de l'action ne dépasse jamais le prix d'exercice, le warrant peut expirer sans valeur; la perte totale du montant payé est possible.",
           "L'exercice émet de nouvelles actions et dilue les actionnaires existants.",
           "Les offres de titres relevant de l'ECSPR sont plafonnées à 5.000.000 EUR par émetteur sur 12 mois."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Fio do Douro (Données d'exemple - pas une offre réelle)",
@@ -2022,7 +2049,9 @@
           "La conservation exige une banque ou une entreprise d'investissement agréée (CRD / MiFID II) ou un régime équivalent de registre de l'émetteur.",
           "Le Portugal n'a pas de régime national propre aux certificats de dépôt; cet exemple ne l'établit pas.",
           "Perte totale possible; les actions sous-jacentes peuvent être illiquides."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Folha Nova (Données d'exemple - pas une offre réelle)",
@@ -2056,7 +2085,9 @@
           "Sans sûreté réelle: si l'émetteur ne paie ni ne refinance à l'échéance, les investisseurs peuvent tout perdre.",
           "Aucune pratique de la CMVM n'a été trouvée pour le papier commercial de détail en crowdfunding; les conditions de détail listées sont requises avant toute offre réelle.",
           "Les offres de titres relevant de l'ECSPR sont plafonnées à 5.000.000 EUR par émetteur sur 12 mois."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Mesa da Costa (Données d'exemple - pas une offre réelle)",
@@ -2090,7 +2121,9 @@
           "L'intérêt varie avec les revenus de l'émetteur; si les montants dus n'étaient payables qu'en présence de revenus, l'instrument serait conditionnel et ne serait plus un prêt ECSPR.",
           "Un taux indexé sur les revenus dans un contrat concret n'est pas confirmé par la pratique de la CMVM.",
           "Perte totale possible; les prêts sont généralement illiquides jusqu'à l'échéance."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Vento do Mondego (Données d'exemple - pas une offre réelle)",
@@ -2124,7 +2157,9 @@
           "Le placement sous l'ECSPR n'est pas prouvé: un certificat de dépôt est émis par le dépositaire, non par le porteur de projet ou un SPV, et ni l'ESMA ni la CMVM ne l'ont confirmé.",
           "La conservation exige une banque ou une entreprise d'investissement agréée (CRD / MiFID II) ou un régime équivalent de registre de l'émetteur.",
           "Perte totale possible en cas de défaut de l'émetteur; les obligations sous-jacentes peuvent être illiquides."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Raiz Vertical (Données d'exemple - pas une offre réelle)",
@@ -2154,7 +2189,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Tronco Vivo (Données d'exemple - pas une offre réelle)",
@@ -2184,7 +2221,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Massa Lenta (Données d'exemple - pas une offre réelle)",
@@ -2214,7 +2253,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Terra de Forno (Données d'exemple - pas une offre réelle)",
@@ -2244,7 +2285,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Mar em Terra (Données d'exemple - pas une offre réelle)",
@@ -2275,7 +2318,9 @@
           "Perte totale possible",
           "Les actions de crowdfunding ne sont généralement pas négociables en bourse",
           "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Água de Volta (Données d'exemple - pas une offre réelle)",
@@ -2305,7 +2350,9 @@
           "La subordination augmente la gravité de la perte en cas d'insolvabilité",
           "Reste non garantie sauf si une sûreté est indiquée",
           "Pas de participation à la croissance de l'entreprise"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Passo Certo (Données d'exemple - pas une offre réelle)",
@@ -2335,7 +2382,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Lente Circular (Données d'exemple - pas une offre réelle)",
@@ -2365,7 +2414,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Polpa Fresca (Données d'exemple - pas une offre réelle)",
@@ -2395,7 +2446,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Som de Madeira (Données d'exemple - pas une offre réelle)",
@@ -2425,7 +2478,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Olho do Mar (Données d'exemple - pas une offre réelle)",
@@ -2456,7 +2511,9 @@
           "Perte totale possible",
           "Les actions de crowdfunding ne sont généralement pas négociables en bourse",
           "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Traço Recuperado (Données d'exemple - pas une offre réelle)",
@@ -2486,7 +2543,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Solo de Novo (Données d'exemple - pas une offre réelle)",
@@ -2516,7 +2575,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Torra de Bairro (Données d'exemple - pas une offre réelle)",
@@ -2546,7 +2607,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Oficina Curiosa (Données d'exemple - pas une offre réelle)",
@@ -2577,7 +2640,9 @@
           "Perte totale possible",
           "Les actions de crowdfunding ne sont généralement pas négociables en bourse",
           "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Letra Viva (Données d'exemple - pas une offre réelle)",
@@ -2607,7 +2672,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Lã da Serra (Données d'exemple - pas une offre réelle)",
@@ -2637,7 +2704,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Rota Digital (Données d'exemple - pas une offre réelle)",
@@ -2668,7 +2737,9 @@
           "Perte totale possible",
           "Les actions de crowdfunding ne sont généralement pas négociables en bourse",
           "Une structure de détention, pas un instrument distinct : l'investisseur détient la participation sous-jacente via un véhicule ou un fiduciaire, et l'intérêt sous-jacent décide de l'économie."
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Segundo Ciclo (Données d'exemple - pas une offre réelle)",
@@ -2698,7 +2769,9 @@
           "La subordination augmente la gravité de la perte en cas d'insolvabilité",
           "Reste non garantie sauf si une sûreté est indiquée",
           "Pas de participation à la croissance de l'entreprise"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Lagar Novo (Données d'exemple - pas une offre réelle)",
@@ -2728,7 +2801,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Colmeia Viva (Données d'exemple - pas une offre réelle)",
@@ -2758,7 +2833,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Pata Serena (Données d'exemple - pas une offre réelle)",
@@ -2788,7 +2865,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Rotas Abertas (Données d'exemple - pas une offre réelle)",
@@ -2818,7 +2897,9 @@
           "Le défaut de l'émetteur peut signifier une perte totale",
           "Les créances subordonnées ne sont payées qu'après les créanciers seniors en cas d'insolvabilité",
           "Aucune garantie de dépôts"
-        ]
+        ],
+        "documents": [],
+        "news": []
       },
       {
         "issuer": "Casa em Peças (Données d'exemple - pas une offre réelle)",
@@ -2848,7 +2929,9 @@
           "La subordination augmente la gravité de la perte en cas d'insolvabilité",
           "Reste non garantie sauf si une sûreté est indiquée",
           "Pas de participation à la croissance de l'entreprise"
-        ]
+        ],
+        "documents": [],
+        "news": []
       }
     ]
   },
