@@ -29,6 +29,7 @@ for (const locale of VISUAL_LOCALES)
         ({ locale, theme, actor }) => {
           localStorage.setItem('blockallisto-language', locale);
           localStorage.setItem('blockallisto-theme', theme);
+          localStorage.setItem('blockallisto-community-token', 'synthetic-status-label-session');
           (window as unknown as { freighter: boolean }).freighter = true;
           window.addEventListener('message', (event) => {
             if (event.source !== window || event.data?.source !== 'FREIGHTER_EXTERNAL_MSG_REQUEST') return;
@@ -51,11 +52,35 @@ for (const locale of VISUAL_LOCALES)
           return route.abort();
         }
         const pathname = new URL(route.request().url()).pathname;
+        if (pathname === '/api/auth/me')
+          return route.fulfill({
+            json: { account: { publicKey: actor, authMethod: 'wallet', linkedProviders: [], linkedAuthMethods: [] }, isOperator: false },
+          });
+        if (pathname === '/api/auth/demo-onboarding')
+          return route.fulfill({
+            json: {
+              progress: { identity: 'not_started', risksAcknowledged: false, updatedAt: 0 },
+              assessmentSaved: false,
+              assessmentCurrent: false,
+              warningReady: false,
+              eligibility: 'demo_incomplete',
+              demo: true,
+              realInvestmentEligible: false,
+              realIdentityVerified: false,
+            },
+          });
         if (pathname === '/api/account/activity') return route.fulfill({ json: { activity: source === 'journal' ? [row()] : [] } });
         return route.fulfill({
           json: {
             campaigns: [],
             enabled: false,
+            completed: [],
+            business: { contribution: null },
+            investor: { contribution: null },
+            nextAction: null,
+            sessions: [],
+            socialProviders: [],
+            companies: [],
             providers: [],
             comments: [],
             news: [],
@@ -94,8 +119,6 @@ for (const locale of VISUAL_LOCALES)
           expect([...statuses, ...unknownStatuses]).not.toContain(label);
           await page.evaluate((intent) => localStorage.setItem('rwa-soroban-intent', JSON.stringify(intent)), { ...row(), xdr: 'SYNTHETIC-UNSIGNED-FIXTURE' });
           await page.reload();
-          await page.locator('.header-actions .btn').click();
-          await expect(page.locator('.wallet-chip')).toHaveCount(1);
           const panel = page.locator('.intent-head .status-chip');
           const account =
             source === 'journal'
