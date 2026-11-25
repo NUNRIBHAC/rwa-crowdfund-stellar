@@ -403,3 +403,27 @@
     border-color: var(--line);
   }
 }
+
+.issuer-evidence {
+  border-block-start: 1px solid var(--border);
+  margin-block: 2rem;
+  padding-block: 1.5rem;
+  overflow-wrap: anywhere;
+}
+.issuer-evidence article {
+  border-block-start: 1px solid var(--border);
+  padding-block: 1rem;
+}
+.issuer-evidence ul {
+  padding-inline-start: 1.5rem;
+}
+.issuer-evidence li + li {
+  margin-block-start: 0.5rem;
+}
+.issuer-evidence p {
+  max-width: 72ch;
+}
+html[lang='ar'] .issuer-evidence :is(h2, h3, h4, p, li) {
+  direction: rtl;
+  text-align: start;
+}

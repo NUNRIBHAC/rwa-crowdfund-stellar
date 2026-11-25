@@ -3741,5 +3741,32 @@
     "caveat": "真实项目可能适用葡萄牙国内捐赠/回报型众筹制度，不属于 ECSPR。平台运营者须为法人或 EIRL，并至少在开始营业前 30 天预先通知 DGE。此处仅为教育示例：不收取资金，不承诺税收抵扣。交付、取消及消费者权利须另行明确。",
     "sampleNote": "受支持格式的示例:捐赠、奖励和预售众筹受葡萄牙国家众筹制度(Lei 102/2015)管辖,不属于 ECSPR 范围。真实发行要求运营方为法人或 EIRL,并在开始活动前至少 30 天向 DGE 事先申报。本页面展示的是示范性示例数据:不收取任何资金,也不承诺任何税收减免。不提供任何财务回报。",
     "ecsprNote": "通过众筹进行真实贷款及 S.A. 股份要约须获得 ECSPR 授权（在葡萄牙由 CMVM 授权）。"
+  },
+  "issuerEvidence": {
+    "title": "发行方证据档案",
+    "note": "本档案区分发行方声明、人工审核陈述和未知信息。审核不构成保证、法律批准或投资建议。",
+    "loading": "正在加载证据档案...",
+    "notProvided": "此活动尚未提供证据档案。",
+    "unavailable": "证据档案不可用。无法通过此页面确认任何事实。",
+    "revisedOn": "档案修订日期",
+    "issuerClaim": "发行方声明",
+    "checkedFact": "经人工审核的事实",
+    "corrected": "已记录更正，需要重新审核",
+    "unknown": "未知领域",
+    "sources": "来源",
+    "issuerSource": "发行方来源",
+    "independentSource": "被归类为独立的来源",
+    "retrievedOn": "查阅日期",
+    "publishedOn": "发布日期",
+    "reviewedOn": "审核日期",
+    "corrections": "审核人员更正",
+    "areas": {
+      "issuer": "发行方身份",
+      "team": "团队",
+      "track_record": "过往记录",
+      "financials": "财务信息",
+      "offer_documents": "发行文件",
+      "milestones": "里程碑"
+    }
   }
 }

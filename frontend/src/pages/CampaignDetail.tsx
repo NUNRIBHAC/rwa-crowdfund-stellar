@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import FundingGrid from '../components/FundingGrid';
+import CampaignIssuerEvidence from '../components/CampaignIssuerEvidence';
 import type { Market } from '../market';
 import { campaignStatus } from '../components/CampaignCard';
 import { deadlineInfo, formatAmount, regionName, shorten } from '../format';
@@ -163,6 +164,8 @@ export default function CampaignDetail({ market, campaignId }: { market: Market;
               </dl>
             )}
           </section>
+
+          <CampaignIssuerEvidence key={campaign.id} campaignId={campaign.id} copy={m.issuerEvidence} />
 
           <ContributionTerms fixtureMode={market.fixtureMode} />
 

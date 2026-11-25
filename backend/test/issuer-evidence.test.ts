@@ -105,3 +105,33 @@ test('review cannot predate the source retrieval it claims to have checked', () 
   data[0].claims[1].review!.checkedOn = '2026-11-21';
   assert.throws(() => parseIssuerEvidence(data, today));
 });
+test('reviewer correction retains provenance and makes the affected area unknown pending review', () => {
+  const data = fixture();
+  const corrected = [
+    {
+      ...data[0],
+      corrections: [
+        { id: 'fix-1', claimId: 'issuer-record', correctedOn: '2026-11-23', note: 'Review withdrawn pending a corrected source.', sourceIds: ['registry'] },
+      ],
+    },
+  ];
+  const result = issuerEvidenceFor('synthetic-review-only', JSON.stringify(corrected));
+  assert.equal(result.state, 'available');
+  assert.equal(result.corrections.length, 1);
+  assert.ok(result.unknownAreas.includes('issuer'));
+  assert.equal(result.claims[1].review?.checkedOn, '2026-11-23');
+});
+test('reviewer corrections reject missing claims, sources, duplicates and impossible dates', () => {
+  const valid = { id: 'fix-1', claimId: 'issuer-record', correctedOn: '2026-11-23', note: 'Correction review.', sourceIds: ['registry'] };
+  for (const correction of [
+    { ...valid, claimId: 'missing' },
+    { ...valid, sourceIds: [] },
+    { ...valid, sourceIds: ['missing'] },
+    { ...valid, correctedOn: '2026-11-24' },
+    { ...valid, correctedOn: '2026-11-21' },
+  ]) {
+    assert.throws(() => parseIssuerEvidence([{ ...fixture()[0], corrections: [correction] }], today));
+  }
+  assert.throws(() => parseIssuerEvidence([{ ...fixture()[0], corrections: [valid, valid] }], today));
+  assert.deepEqual(issuerEvidenceFor('synthetic-review-only', '').corrections, []);
+});

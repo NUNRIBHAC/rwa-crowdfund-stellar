@@ -3812,5 +3812,32 @@
     "caveat": "Les campagnes réelles peuvent être possibles sous le régime national portugais de financement participatif par don/récompense, hors ECSPR. L'opérateur doit être une personne morale ou EIRL et notifier la DGE au moins 30 jours avant le début de l'activité. Exemple éducatif ici : aucun argent collecté et aucune déduction fiscale promise. Livraison, annulation et droits du consommateur nécessiteraient des conditions propres.",
     "sampleNote": "Exemple d'un format pris en charge : le financement participatif par don, par récompense et par prévente est couvert par le régime juridique national portugais (Lei 102/2015), hors ECSPR. Une offre réelle exige que l'exploitant soit une personne morale ou une EIRL et qu'il en informe préalablement la DGE au moins 30 jours avant le début de l'activité. Cette page présente des données illustratives d'exemple : aucun argent n'est collecté et aucune déduction fiscale n'est promise. Aucun rendement financier n'est offert.",
     "ecsprNote": "Les offres réelles de prêts et d'actions de S.A. via le financement participatif exigent une autorisation ECSPR (CMVM au Portugal)."
+  },
+  "issuerEvidence": {
+    "title": "Dossier de preuves du porteur de projet",
+    "note": "Ce dossier distingue les déclarations du porteur de projet, les attestations de vérification humaine et les informations inconnues. Une vérification ne constitue ni une garantie, ni une approbation juridique, ni une recommandation d'investissement.",
+    "loading": "Chargement du dossier de preuves...",
+    "notProvided": "Aucun dossier de preuves n'a été fourni pour cette campagne.",
+    "unavailable": "Le dossier de preuves est indisponible. Aucun fait ne peut être confirmé depuis cette vue.",
+    "revisedOn": "Dossier révisé le",
+    "issuerClaim": "Déclaration du porteur de projet",
+    "checkedFact": "Fait vérifié par une personne",
+    "corrected": "Correction enregistrée, nouvelle vérification nécessaire",
+    "unknown": "Domaines inconnus",
+    "sources": "Sources",
+    "issuerSource": "Source du porteur de projet",
+    "independentSource": "Source classée comme indépendante",
+    "retrievedOn": "Consultée le",
+    "publishedOn": "Publiée le",
+    "reviewedOn": "Vérifié le",
+    "corrections": "Corrections du réviseur",
+    "areas": {
+      "issuer": "Identité du porteur de projet",
+      "team": "Équipe",
+      "track_record": "Parcours",
+      "financials": "Informations financières",
+      "offer_documents": "Documents de l'offre",
+      "milestones": "Étapes clés"
+    }
   }
 }

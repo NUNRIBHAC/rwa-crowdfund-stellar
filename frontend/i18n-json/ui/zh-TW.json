@@ -3741,5 +3741,32 @@
     "caveat": "真實專案可能適用葡萄牙國內捐贈/回饋型群募制度，不屬於 ECSPR。平台營運者須為法人或 EIRL，並至少在開始營業前 30 天預先通知 DGE。此處僅為教育範例：不收取資金，不承諾稅收抵扣。交付、取消及消費者權利須另行明確。",
     "sampleNote": "受支援格式的範例:捐贈、獎勵和預售群眾募資受葡萄牙國家群眾募資制度(Lei 102/2015)管轄,不屬於 ECSPR 範圍。真實發行要求營運方為法人或 EIRL,並在開始活動前至少 30 天向 DGE 事先申報。本頁面展示的是示範性範例資料:不收取任何資金,也不承諾任何稅務減免。不提供任何財務回報。",
     "ecsprNote": "透過群募進行真實貸款及 S.A. 股份要約須獲得 ECSPR 授權（在葡萄牙由 CMVM 授權）。"
+  },
+  "issuerEvidence": {
+    "title": "發行方證據檔案",
+    "note": "本檔案區分發行方聲明、人工審查陳述和未知資訊。審查不構成保證、法律核准或投資建議。",
+    "loading": "正在載入證據檔案...",
+    "notProvided": "此活動尚未提供證據檔案。",
+    "unavailable": "證據檔案無法使用。無法透過此頁面確認任何事實。",
+    "revisedOn": "檔案修訂日期",
+    "issuerClaim": "發行方聲明",
+    "checkedFact": "經人工審查的事實",
+    "corrected": "已記錄更正，需要重新審查",
+    "unknown": "未知領域",
+    "sources": "來源",
+    "issuerSource": "發行方來源",
+    "independentSource": "被歸類為獨立的來源",
+    "retrievedOn": "查閱日期",
+    "publishedOn": "發布日期",
+    "reviewedOn": "審查日期",
+    "corrections": "審查人員更正",
+    "areas": {
+      "issuer": "發行方身分",
+      "team": "團隊",
+      "track_record": "過往紀錄",
+      "financials": "財務資訊",
+      "offer_documents": "發行文件",
+      "milestones": "里程碑"
+    }
   }
 }

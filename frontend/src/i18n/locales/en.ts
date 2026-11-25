@@ -4228,6 +4228,33 @@ export const en = {
       'Sample of a supported format: donation, reward and pre-sale crowdfunding are covered by the Portuguese national crowdfunding regime (Lei 102/2015), outside ECSPR. A live offer requires the operator to be a legal entity or EIRL and to give prior notice to the DGE at least 30 days before starting activity. This page shows illustrative sample data: no money is collected and no tax deduction is promised. No financial return is offered.',
     ecsprNote: 'Real loan and S.A. share offers through crowdfunding require ECSPR authorization (CMVM in Portugal).',
   },
+  issuerEvidence: {
+    title: 'Issuer evidence dossier',
+    note: 'This dossier separates issuer claims, human review assertions and unknown information. A review is not a guarantee, legal approval or investment recommendation.',
+    loading: 'Loading the evidence dossier...',
+    notProvided: 'No evidence dossier has been provided for this campaign.',
+    unavailable: 'The evidence dossier is unavailable. No facts can be confirmed from this view.',
+    revisedOn: 'Dossier revised on',
+    issuerClaim: 'Issuer claim',
+    checkedFact: 'Human-reviewed fact',
+    corrected: 'Correction recorded, new review needed',
+    unknown: 'Unknown areas',
+    sources: 'Sources',
+    issuerSource: 'Issuer source',
+    independentSource: 'Source classified as independent',
+    retrievedOn: 'Retrieved on',
+    publishedOn: 'Published on',
+    reviewedOn: 'Reviewed on',
+    corrections: 'Reviewer corrections',
+    areas: {
+      issuer: 'Issuer identity',
+      team: 'Team',
+      track_record: 'Track record',
+      financials: 'Financial information',
+      offer_documents: 'Offer documents',
+      milestones: 'Milestones',
+    },
+  },
 };
 
 export type Messages = typeof en;

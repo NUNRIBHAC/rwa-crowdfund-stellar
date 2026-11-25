@@ -62,6 +62,20 @@ const dossier = z
     revisedOn: date,
     sources: z.array(source).max(100),
     claims: z.array(claim).max(100),
+    corrections: z
+      .array(
+        z
+          .object({
+            id: z.string().regex(/^[a-z0-9-]{1,80}$/),
+            claimId: z.string().regex(/^[a-z0-9-]{1,80}$/),
+            correctedOn: date,
+            note: z.string().trim().min(1).max(1000),
+            sourceIds: z.array(z.string()).min(1).max(10),
+          })
+          .strict(),
+      )
+      .max(100)
+      .optional(),
   })
   .strict();
 
@@ -72,6 +86,7 @@ export type EvidenceDossierResult = {
   revisedOn: string | null;
   sources: IssuerEvidenceDossier['sources'];
   claims: IssuerEvidenceDossier['claims'];
+  corrections: NonNullable<IssuerEvidenceDossier['corrections']>;
   unknownAreas: (typeof EVIDENCE_AREAS)[number][];
 };
 
@@ -87,6 +102,20 @@ export function parseIssuerEvidence(input: unknown, today = new Date().toISOStri
     }
     for (const item of record.sources) {
       if (item.retrievedOn > record.revisedOn || (item.publishedOn && item.publishedOn > item.retrievedOn)) throw new Error('invalid source chronology');
+    }
+    const corrections = record.corrections ?? [];
+    if (new Set(corrections.map((entry) => entry.id)).size !== corrections.length) throw new Error('duplicate correction identifier');
+    for (const correction of corrections) {
+      const target = record.claims.find((entry) => entry.id === correction.claimId);
+      if (
+        !target ||
+        correction.correctedOn > record.revisedOn ||
+        (target.review && correction.correctedOn < target.review.checkedOn) ||
+        new Set(correction.sourceIds).size !== correction.sourceIds.length ||
+        correction.sourceIds.some((id) => !sources.has(id) || sources.get(id)!.retrievedOn > correction.correctedOn)
+      ) {
+        throw new Error('invalid reviewer correction');
+      }
     }
     for (const item of record.claims) {
       if (new Set(item.sourceIds).size !== item.sourceIds.length || item.sourceIds.some((id) => !sources.has(id))) throw new Error('missing evidence source');
@@ -108,15 +137,22 @@ export function parseIssuerEvidence(input: unknown, today = new Date().toISOStri
 }
 
 export function issuerEvidenceFor(campaignId: string, raw = process.env.ISSUER_EVIDENCE_JSON): EvidenceDossierResult {
-  const empty = { campaignId, revisedOn: null, sources: [], claims: [], unknownAreas: [...EVIDENCE_AREAS] };
+  const empty = { campaignId, revisedOn: null, sources: [], claims: [], corrections: [], unknownAreas: [...EVIDENCE_AREAS] };
   if (!raw) return { ...empty, state: 'not_provided' };
   try {
     const record = parseIssuerEvidence(JSON.parse(raw)).find((entry) => entry.campaignId === campaignId);
     if (!record) return { ...empty, state: 'not_provided' };
     return {
       ...record,
+      corrections: record.corrections ?? [],
       state: 'available',
-      unknownAreas: EVIDENCE_AREAS.filter((area) => !record.claims.some((entry) => entry.area === area && entry.status === 'checked_fact')),
+      unknownAreas: EVIDENCE_AREAS.filter(
+        (area) =>
+          !record.claims.some(
+            (entry) =>
+              entry.area === area && entry.status === 'checked_fact' && !(record.corrections ?? []).some((correction) => correction.claimId === entry.id),
+          ),
+      ),
     };
   } catch {
     // Never show partly validated facts or parser contents in public errors.

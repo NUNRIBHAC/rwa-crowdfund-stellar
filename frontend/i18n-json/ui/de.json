@@ -3803,5 +3803,32 @@
     "caveat": "Reale Kampagnen können unter dem portugiesischen nationalen Spenden-/Gegenleistungs-Crowdfunding-Regime außerhalb ECSPR möglich sein. Der Betreiber muss eine juristische Person oder EIRL sein und die DGE mindestens 30 Tage vor Tätigkeitsbeginn informieren. Hier nur Lehrbeispiel: kein Geld wird gesammelt, kein Steuerabzug versprochen. Lieferung, Stornierung und Verbraucherrechte müssten gesondert geregelt werden.",
     "sampleNote": "Beispiel eines unterstützten Formats: Spenden-, Prämien- und Vorverkaufs-Crowdfunding fallen unter das portugiesische nationale Crowdfunding-Regime (Lei 102/2015), außerhalb der ECSPR. Ein echtes Angebot setzt voraus, dass der Betreiber eine juristische Person oder EIRL ist und dies der DGE mindestens 30 Tage vor Aufnahme der Tätigkeit vorab meldet. Diese Seite zeigt illustrative Beispieldaten: Es wird kein Geld eingesammelt und keine Steuerbegünstigung versprochen. Es wird keine finanzielle Rendite angeboten.",
     "ecsprNote": "Reale Kredit- und S.A.-Aktienangebote über Crowdfunding erfordern eine ECSPR-Zulassung (CMVM in Portugal)."
+  },
+  "issuerEvidence": {
+    "title": "Nachweisdossier des Emittenten",
+    "note": "Dieses Dossier trennt Angaben des Emittenten, Aussagen zur menschlichen Prüfung und unbekannte Informationen. Eine Prüfung ist weder eine Garantie noch eine rechtliche Genehmigung oder Anlageempfehlung.",
+    "loading": "Nachweisdossier wird geladen...",
+    "notProvided": "Für diese Kampagne wurde kein Nachweisdossier bereitgestellt.",
+    "unavailable": "Das Nachweisdossier ist nicht verfügbar. In dieser Ansicht lassen sich keine Fakten bestätigen.",
+    "revisedOn": "Dossier überarbeitet am",
+    "issuerClaim": "Angabe des Emittenten",
+    "checkedFact": "Von einem Menschen geprüfter Sachverhalt",
+    "corrected": "Korrektur erfasst, erneute Prüfung erforderlich",
+    "unknown": "Unbekannte Bereiche",
+    "sources": "Quellen",
+    "issuerSource": "Quelle des Emittenten",
+    "independentSource": "Als unabhängig eingestufte Quelle",
+    "retrievedOn": "Abgerufen am",
+    "publishedOn": "Veröffentlicht am",
+    "reviewedOn": "Geprüft am",
+    "corrections": "Korrekturen des Prüfers",
+    "areas": {
+      "issuer": "Identität des Emittenten",
+      "team": "Team",
+      "track_record": "Bisherige Tätigkeit",
+      "financials": "Finanzinformationen",
+      "offer_documents": "Angebotsunterlagen",
+      "milestones": "Meilensteine"
+    }
   }
 }
