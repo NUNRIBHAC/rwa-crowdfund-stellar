@@ -1,8 +1,9 @@
 import { defineConfig } from '@playwright/test';
 
 // Synthetic visual captures for Argos. Deterministic by design: the backend
-// API uses explicit synthetic data. All 24 public routes x 11 locales x
-// three widths are captured. Protected account states remain separate.
+// API uses explicit synthetic data. PUBLIC_PAGES in e2e-visual/inventory.ts
+// defines the public route matrix. Protected and geometry states remain
+// separate; docs/visual-state-inventory.md records their exact scope.
 export default defineConfig({
   testDir: './e2e-visual',
   timeout: 30000,
