@@ -3710,15 +3710,7 @@
     "feedbackPanelIntro": "Diga-nos o que funciona e o que não funciona. O feedback é guardado como um pedido de suporte visível apenas para si e para a operadora.",
     "feedbackSignInPrompt": "Inicie sessão com a sua carteira para enviar feedback.",
     "feedbackSubmitted": "Obrigado - o seu feedback foi enviado.",
-    "feedbackClose": "Fechar",
-    "passwordShow": "Mostrar",
-    "passwordHide": "Ocultar",
-    "passwordStrength": {
-      "tooShort": "Demasiado curta: use pelo menos 10 caracteres.",
-      "weak": "Força: fraca",
-      "fair": "Força: razoável",
-      "strong": "Força: forte"
-    }
+    "feedbackClose": "Fechar"
   },
   "messaging": {
     "title": "Mensagens",

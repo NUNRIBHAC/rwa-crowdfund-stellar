@@ -3652,15 +3652,7 @@
     "feedbackPanelIntro": "良い点も悪い点もお聞かせください。フィードバックはサポートチケットとして保存され、あなたとオペレーターだけが見られます。",
     "feedbackSignInPrompt": "フィードバックを送るにはウォレットでサインインしてください。",
     "feedbackSubmitted": "ありがとうございます - フィードバックを送信しました。",
-    "feedbackClose": "閉じる",
-    "passwordShow": "表示",
-    "passwordHide": "非表示",
-    "passwordStrength": {
-      "tooShort": "短すぎます：10文字以上にしてください。",
-      "weak": "強度：弱い",
-      "fair": "強度：普通",
-      "strong": "強度：強い"
-    }
+    "feedbackClose": "閉じる"
   },
   "messaging": {
     "title": "メッセージ",

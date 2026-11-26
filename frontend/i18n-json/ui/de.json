@@ -3704,15 +3704,7 @@
     "feedbackPanelIntro": "Sag uns, was funktioniert und was nicht. Feedback wird als Support-Ticket gespeichert, das nur für dich und den Betreiber sichtbar ist.",
     "feedbackSignInPrompt": "Melde dich mit deiner Wallet an, um Feedback zu senden.",
     "feedbackSubmitted": "Danke - dein Feedback wurde gesendet.",
-    "feedbackClose": "Schließen",
-    "passwordShow": "Anzeigen",
-    "passwordHide": "Verbergen",
-    "passwordStrength": {
-      "tooShort": "Zu kurz: mindestens 10 Zeichen verwenden.",
-      "weak": "Stärke: schwach",
-      "fair": "Stärke: mittel",
-      "strong": "Stärke: stark"
-    }
+    "feedbackClose": "Schließen"
   },
   "messaging": {
     "title": "Nachrichten",
