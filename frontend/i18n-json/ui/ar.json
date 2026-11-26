@@ -3274,6 +3274,14 @@
     "emailExplainer": "أنشئ حساباً بالبريد الإلكتروني وكلمة مرور، أو سجّل الدخول بحساب موجود. الإجراءات على السلسلة مثل المساهمة ما تزال تتطلب محفظة Freighter.",
     "emailLabel": "البريد الإلكتروني",
     "passwordLabel": "كلمة المرور",
+    "passwordShow": "إظهار",
+    "passwordHide": "إخفاء",
+    "passwordStrength": {
+      "tooShort": "قصيرة جدًا: استخدم 10 أحرف على الأقل.",
+      "weak": "القوة: ضعيفة",
+      "fair": "القوة: متوسطة",
+      "strong": "القوة: قوية"
+    },
     "emailPasswordHint": "10 أحرف على الأقل.",
     "emailRegisterButton": "إنشاء حساب",
     "emailLoginButton": "تسجيل الدخول بالبريد الإلكتروني",
@@ -3657,7 +3665,15 @@
     "feedbackPanelIntro": "أخبرنا بما ينجح وما لا ينجح. تُحفظ الملاحظات كتذكرة دعم لا يراها سواك أنت والمشغل.",
     "feedbackSignInPrompt": "سجّل الدخول بمحفظتك لإرسال الملاحظات.",
     "feedbackSubmitted": "شكرًا - تم إرسال ملاحظاتك.",
-    "feedbackClose": "إغلاق"
+    "feedbackClose": "إغلاق",
+    "passwordShow": "إظهار",
+    "passwordHide": "إخفاء",
+    "passwordStrength": {
+      "tooShort": "قصيرة جدًا: استخدم 10 أحرف على الأقل.",
+      "weak": "القوة: ضعيفة",
+      "fair": "القوة: متوسطة",
+      "strong": "القوة: قوية"
+    }
   },
   "messaging": {
     "title": "الرسائل",

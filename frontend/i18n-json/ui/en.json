@@ -3290,6 +3290,14 @@
     "emailExplainer": "Create an account with email and a password, or sign in with an existing one. On-chain actions like contributing still require a Freighter wallet.",
     "emailLabel": "Email",
     "passwordLabel": "Password",
+    "passwordShow": "Show",
+    "passwordHide": "Hide",
+    "passwordStrength": {
+      "tooShort": "Too short: use at least 10 characters.",
+      "weak": "Strength: weak",
+      "fair": "Strength: fair",
+      "strong": "Strength: strong"
+    },
     "emailPasswordHint": "At least 10 characters.",
     "emailRegisterButton": "Create account",
     "emailLoginButton": "Sign in with email",
@@ -3673,7 +3681,15 @@
     "feedbackPanelIntro": "Tell us what works and what does not. Feedback is stored as a support ticket visible only to you and the operator.",
     "feedbackSignInPrompt": "Sign in with your wallet to send feedback.",
     "feedbackSubmitted": "Thank you - your feedback was sent.",
-    "feedbackClose": "Close"
+    "feedbackClose": "Close",
+    "passwordShow": "Show",
+    "passwordHide": "Hide",
+    "passwordStrength": {
+      "tooShort": "Too short: use at least 10 characters.",
+      "weak": "Strength: weak",
+      "fair": "Strength: fair",
+      "strong": "Strength: strong"
+    }
   },
   "messaging": {
     "title": "Messages",

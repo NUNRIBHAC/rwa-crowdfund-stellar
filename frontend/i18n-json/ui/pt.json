@@ -3319,6 +3319,14 @@
     "emailExplainer": "Crie uma conta com email e uma palavra-passe, ou entre com uma existente. Ações on-chain como contribuir continuam a exigir a carteira Freighter.",
     "emailLabel": "Email",
     "passwordLabel": "Palavra-passe",
+    "passwordShow": "Mostrar",
+    "passwordHide": "Ocultar",
+    "passwordStrength": {
+      "tooShort": "Demasiado curta: use pelo menos 10 caracteres.",
+      "weak": "Força: fraca",
+      "fair": "Força: razoável",
+      "strong": "Força: forte"
+    },
     "emailPasswordHint": "Pelo menos 10 caracteres.",
     "emailRegisterButton": "Criar conta",
     "emailLoginButton": "Entrar com email",
@@ -3702,7 +3710,15 @@
     "feedbackPanelIntro": "Diga-nos o que funciona e o que não funciona. O feedback é guardado como um pedido de suporte visível apenas para si e para a operadora.",
     "feedbackSignInPrompt": "Inicie sessão com a sua carteira para enviar feedback.",
     "feedbackSubmitted": "Obrigado - o seu feedback foi enviado.",
-    "feedbackClose": "Fechar"
+    "feedbackClose": "Fechar",
+    "passwordShow": "Mostrar",
+    "passwordHide": "Ocultar",
+    "passwordStrength": {
+      "tooShort": "Demasiado curta: use pelo menos 10 caracteres.",
+      "weak": "Força: fraca",
+      "fair": "Força: razoável",
+      "strong": "Força: forte"
+    }
   },
   "messaging": {
     "title": "Mensagens",

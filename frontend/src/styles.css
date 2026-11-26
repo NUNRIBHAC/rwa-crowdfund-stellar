@@ -2803,6 +2803,62 @@ input[type='checkbox'] {
   background: var(--card);
   color: var(--ink);
 }
+/* Password field: show/hide toggle and strength hint. Physical (left/right)
+   geometry on purpose: Arabic text reads RTL but the layout is not mirrored. */
+.community-section form .password-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.community-section form .password-field > label {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.password-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.community-section form .password-input-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.password-toggle {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+}
+.password-strength .community-note {
+  margin: 4px 0 0;
+  min-height: 1.2em;
+}
+.password-strength-bar {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 0;
+}
+.password-strength-bar span {
+  flex: 1 1 0;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+}
+.password-strength[data-level='1'] .password-strength-bar span:nth-child(-n + 1) {
+  background: var(--red);
+}
+.password-strength[data-level='2'] .password-strength-bar span:nth-child(-n + 2) {
+  background: #c56a00;
+}
+.password-strength[data-level='3'] .password-strength-bar span:nth-child(-n + 3) {
+  background: #8a7a00;
+}
+.password-strength[data-level='4'] .password-strength-bar span:nth-child(-n + 4) {
+  background: #1e7d46;
+}
+.password-strength[data-level='0'] .password-strength-bar {
+  display: none;
+}
 .community-section form input,
 .community-section form select,
 .community-section form textarea {

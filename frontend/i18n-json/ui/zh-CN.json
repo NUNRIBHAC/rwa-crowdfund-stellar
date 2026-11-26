@@ -3251,6 +3251,14 @@
     "emailExplainer": "使用邮箱和密码创建账户，或使用已有账户登录。链上操作（如出资）仍需 Freighter 钱包。",
     "emailLabel": "邮箱",
     "passwordLabel": "密码",
+    "passwordShow": "显示",
+    "passwordHide": "隐藏",
+    "passwordStrength": {
+      "tooShort": "太短：至少使用 10 个字符。",
+      "weak": "强度：弱",
+      "fair": "强度：中",
+      "strong": "强度：强"
+    },
     "emailPasswordHint": "至少 10 个字符。",
     "emailRegisterButton": "创建账户",
     "emailLoginButton": "使用邮箱登录",
@@ -3634,7 +3642,15 @@
     "feedbackPanelIntro": "告诉我们哪些好用、哪些不好用。反馈会保存为支持工单,仅您和运营者可见。",
     "feedbackSignInPrompt": "请使用钱包登录后发送反馈。",
     "feedbackSubmitted": "谢谢 - 您的反馈已发送。",
-    "feedbackClose": "关闭"
+    "feedbackClose": "关闭",
+    "passwordShow": "显示",
+    "passwordHide": "隐藏",
+    "passwordStrength": {
+      "tooShort": "太短：至少使用 10 个字符。",
+      "weak": "强度：弱",
+      "fair": "强度：中",
+      "strong": "强度：强"
+    }
   },
   "messaging": {
     "title": "消息",

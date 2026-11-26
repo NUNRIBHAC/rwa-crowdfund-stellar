@@ -3313,6 +3313,14 @@
     "emailExplainer": "Erstellen Sie ein Konto mit E-Mail und Passwort oder melden Sie sich mit einem bestehenden an. On-Chain-Aktionen wie Beitragen erfordern weiterhin die Freighter-Wallet.",
     "emailLabel": "E-Mail",
     "passwordLabel": "Passwort",
+    "passwordShow": "Anzeigen",
+    "passwordHide": "Verbergen",
+    "passwordStrength": {
+      "tooShort": "Zu kurz: mindestens 10 Zeichen verwenden.",
+      "weak": "Stärke: schwach",
+      "fair": "Stärke: mittel",
+      "strong": "Stärke: stark"
+    },
     "emailPasswordHint": "Mindestens 10 Zeichen.",
     "emailRegisterButton": "Konto erstellen",
     "emailLoginButton": "Mit E-Mail anmelden",
@@ -3696,7 +3704,15 @@
     "feedbackPanelIntro": "Sag uns, was funktioniert und was nicht. Feedback wird als Support-Ticket gespeichert, das nur für dich und den Betreiber sichtbar ist.",
     "feedbackSignInPrompt": "Melde dich mit deiner Wallet an, um Feedback zu senden.",
     "feedbackSubmitted": "Danke - dein Feedback wurde gesendet.",
-    "feedbackClose": "Schließen"
+    "feedbackClose": "Schließen",
+    "passwordShow": "Anzeigen",
+    "passwordHide": "Verbergen",
+    "passwordStrength": {
+      "tooShort": "Zu kurz: mindestens 10 Zeichen verwenden.",
+      "weak": "Stärke: schwach",
+      "fair": "Stärke: mittel",
+      "strong": "Stärke: stark"
+    }
   },
   "messaging": {
     "title": "Nachrichten",

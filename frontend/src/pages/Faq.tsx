@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { FaqState } from '../data/faq';
 import { useI18n } from '../i18n';
+import { faqMatches, faqSearchWords } from '../faq-search';
 
 const STATE_CLASS: Record<FaqState, string> = {
   live: 'status-funded',
@@ -14,12 +15,12 @@ export default function Faq() {
   const [query, setQuery] = useState('');
 
   const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const words = faqSearchWords(query);
     return m.faq.categories
       .filter((c) => cat === 'all' || c.id === cat)
       .map((c) => ({
         ...c,
-        entries: q ? c.entries.filter((e) => `${e.q} ${e.a}`.toLowerCase().includes(q)) : c.entries,
+        entries: words.length ? c.entries.filter((e) => faqMatches(`${e.q} ${e.a}`, words)) : c.entries,
       }))
       .filter((c) => c.entries.length > 0);
   }, [cat, query, m]);

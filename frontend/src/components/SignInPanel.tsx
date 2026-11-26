@@ -7,6 +7,7 @@ import { COMMUNITY_LIMITS } from '../community/api';
 import { useI18n } from '../i18n';
 import { shorten, tpl } from '../format';
 import { useEffect, useId, useState } from 'react';
+import PasswordField from './PasswordField';
 
 const SOCIAL_SIGNIN_LABELS: Record<
   string,
@@ -269,18 +270,14 @@ export default function SignInPanel({ actor }: { actor: string }) {
                 placeholder="blv_..."
               />
             </label>
-            <label>
-              {m.community.passwordLabel}
-              <input
-                type="password"
-                id={`${methodName}-password`}
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="new-password"
-                required
-              />
-            </label>
+            <PasswordField
+              id={`${methodName}-password`}
+              label={m.community.passwordLabel}
+              value={password}
+              onChange={setPassword}
+              autoComplete="new-password"
+              showStrength
+            />
             <p className="community-note">{m.community.emailPasswordHint}</p>
             <button className="btn btn-primary" disabled={busy}>
               {m.community.emailVerifySubmit}
@@ -428,18 +425,14 @@ export default function SignInPanel({ actor }: { actor: string }) {
                   placeholder="blr_..."
                 />
               </label>
-              <label>
-                {m.community.emailResetNewPasswordLabel}
-                <input
-                  type="password"
-                  id={`${methodName}-password`}
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="new-password"
-                  required
-                />
-              </label>
+              <PasswordField
+                id={`${methodName}-password`}
+                label={m.community.emailResetNewPasswordLabel}
+                value={password}
+                onChange={setPassword}
+                autoComplete="new-password"
+                showStrength
+              />
               <p className="community-note">{m.community.emailPasswordHint}</p>
               <button className="btn btn-primary" disabled={busy}>
                 {m.community.emailResetConfirmSubmit}
@@ -493,18 +486,14 @@ export default function SignInPanel({ actor }: { actor: string }) {
                   required
                 />
               </label>
-              <label>
-                {m.community.passwordLabel}
-                <input
-                  type="password"
-                  id={`${methodName}-password`}
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete={emailMode === 'register' ? 'new-password' : 'current-password'}
-                  required
-                />
-              </label>
+              <PasswordField
+                id={`${methodName}-password`}
+                label={m.community.passwordLabel}
+                value={password}
+                onChange={setPassword}
+                autoComplete={emailMode === 'register' ? 'new-password' : 'current-password'}
+                showStrength={emailMode === 'register'}
+              />
               {emailMode === 'register' && <p className="community-note">{m.community.emailPasswordHint}</p>}
               <button className="btn btn-primary" disabled={busy}>
                 {emailMode === 'register' ? m.community.emailRegisterButton : m.community.emailLoginButton}

@@ -3322,6 +3322,14 @@
     "emailExplainer": "Crea una cuenta con email y una contraseña, o inicia sesión con una existente. Las acciones on-chain como contribuir siguen requiriendo la billetera Freighter.",
     "emailLabel": "Email",
     "passwordLabel": "Contraseña",
+    "passwordShow": "Mostrar",
+    "passwordHide": "Ocultar",
+    "passwordStrength": {
+      "tooShort": "Demasiado corta: use al menos 10 caracteres.",
+      "weak": "Seguridad: débil",
+      "fair": "Seguridad: media",
+      "strong": "Seguridad: fuerte"
+    },
     "emailPasswordHint": "Al menos 10 caracteres.",
     "emailRegisterButton": "Crear cuenta",
     "emailLoginButton": "Entrar con email",
@@ -3705,7 +3713,15 @@
     "feedbackPanelIntro": "Cuéntanos qué funciona y qué no. Los comentarios se guardan como un ticket de soporte visible solo para ti y el operador.",
     "feedbackSignInPrompt": "Inicia sesión con tu monedero para enviar comentarios.",
     "feedbackSubmitted": "Gracias - tus comentarios se han enviado.",
-    "feedbackClose": "Cerrar"
+    "feedbackClose": "Cerrar",
+    "passwordShow": "Mostrar",
+    "passwordHide": "Ocultar",
+    "passwordStrength": {
+      "tooShort": "Demasiado corta: use al menos 10 caracteres.",
+      "weak": "Seguridad: débil",
+      "fair": "Seguridad: media",
+      "strong": "Seguridad: fuerte"
+    }
   },
   "messaging": {
     "title": "Mensajes",

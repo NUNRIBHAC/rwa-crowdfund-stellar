@@ -28,7 +28,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 ENV MEDIA_ORIGIN=https://blockallisto-public-media.pages.dev \
     COUNTRY_ORIGIN=https://blockallisto-country.nunrib-df6.workers.dev
 COPY --from=build /app/backend/dist backend/dist
-COPY --from=build /app/backend/scripts/host.mjs /app/backend/scripts/media-gateway.mjs backend/scripts/
+COPY --from=build /app/backend/scripts/host.mjs /app/backend/scripts/media-gateway.mjs /app/backend/scripts/spa-routes.mjs backend/scripts/
 COPY --from=build /app/frontend/dist frontend/dist
 COPY --from=build /app/backend/wasm backend/wasm
 USER node

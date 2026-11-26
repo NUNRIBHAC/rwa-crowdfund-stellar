@@ -8,6 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
 import { createMediaGateway } from './media-gateway.mjs';
+import { spaStatus } from './spa-routes.mjs';
 const { app } = await import('../dist/server.js');
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../frontend/dist');
 // SEP-1: stellar.toml must be fetchable cross-origin as text/plain.
@@ -40,9 +41,11 @@ app.use(
 // SPA fallback for path routing: only extension-less GET page paths get
 // index.html (deep links like /campaigns/demo-solar). Asset-like paths
 // (/assets/x.js, /og-image.png) 404 honestly instead of serving HTML with the
-// wrong MIME; /api and the discovery endpoints are handled above.
+// wrong MIME. Page paths the app does not know get the same shell with a real
+// 404 status (see spa-routes.mjs); /api and the discovery endpoints are handled above.
 app.use((req, res, next) => {
-  if (req.method === 'GET' && !req.path.startsWith('/api') && !path.extname(req.path)) return res.sendFile(path.join(dist, 'index.html'));
+  if (req.method === 'GET' && !req.path.startsWith('/api') && !path.extname(req.path))
+    return res.status(spaStatus(req.path)).sendFile(path.join(dist, 'index.html'));
   next();
 });
 const port = Number(process.env.PORT ?? 4000);
