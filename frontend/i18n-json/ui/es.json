@@ -430,7 +430,12 @@
   },
   "intent": {
     "title": "Transacción guardada",
-    "steps": ["Preparada", "Firmada", "Enviada", "Confirmada"],
+    "steps": [
+      "Preparada",
+      "Firmada",
+      "Enviada",
+      "Confirmada"
+    ],
     "action": "Acción",
     "campaign": "Campaña",
     "contract": "Contrato",
@@ -491,7 +496,13 @@
     "interestIsinDocsNote": "No disponible - este prototipo solo registra contribuciones y no emite valores",
     "marketingDivider": "Contenido proporcionado por el emisor a continuación - no verificado por la plataforma",
     "marketingDividerAria": "Contenido de marketing a continuación",
-    "tabs": ["Resumen", "Detalles", "Documentos", "Noticias", "Podcast"],
+    "tabs": [
+      "Resumen",
+      "Detalles",
+      "Documentos",
+      "Noticias",
+      "Podcast"
+    ],
     "tabsAria": "Secciones de la campaña",
     "overviewMissing": "El contenido de marketing del emisor no está disponible en este prototipo. En una plataforma en producción, esta zona mostraría la descripción, el equipo y el modelo de negocio del propio emisor, claramente separados de los hechos de la plataforma por el separador anterior.",
     "detailsPre": "El modelo de negocio, el mercado, las finanzas y los hitos aparecerían aquí como secciones proporcionadas por el emisor.",
@@ -923,7 +934,10 @@
         "label": "Acción",
         "note": "Una ampliación de capital es la operación societaria que crea nuevas acciones; no es un instrumento separado.",
         "summary": "Capital propio directo de la empresa emisora: derecho a dividendos y participación en el valor de la empresa, con derechos fijados por los estatutos. Las nuevas acciones llegan a los inversores mediante una ampliación de capital.",
-        "opportunities": ["Participación plena en el crecimiento de la empresa", "Derechos de voto o de información según la clase de acciones"],
+        "opportunities": [
+          "Participación plena en el crecimiento de la empresa",
+          "Derechos de voto o de información según la clase de acciones"
+        ],
         "risks": [
           "Sin derecho fijo de reembolso; los dividendos no están garantizados",
           "Pérdida total posible",
@@ -935,7 +949,10 @@
         "label": "Participación indirecta",
         "note": "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía.",
         "summary": "Los inversores participan indirectamente en una inversión en una PYME - por ejemplo a través de un vehículo o fiduciario - con tramitación simplificada.",
-        "opportunities": ["Acceso a operaciones difíciles de mantener directamente", "Administración simplificada a través de la estructura intermediaria"],
+        "opportunities": [
+          "Acceso a operaciones difíciles de mantener directamente",
+          "Administración simplificada a través de la estructura intermediaria"
+        ],
         "risks": [
           "Hay una capa adicional entre el inversor y el emisor",
           "El rendimiento depende del desempeño del emisor",
@@ -946,7 +963,10 @@
       {
         "label": "Participación en sociedad comanditaria",
         "summary": "Una participación como socio comanditario en una sociedad: participación en beneficios y pérdidas según el contrato social, con responsabilidad limitada a la aportación.",
-        "opportunities": ["Traslado directo de los resultados de la sociedad", "Responsabilidad limitada a la aportación"],
+        "opportunities": [
+          "Traslado directo de los resultados de la sociedad",
+          "Responsabilidad limitada a la aportación"
+        ],
         "risks": [
           "La participación en pérdidas puede reducir o anular la participación",
           "La salida suele estar restringida por el contrato social",
@@ -986,7 +1006,10 @@
         "label": "Warrant",
         "note": "El ejercicio crea nuevas acciones y diluye a los titulares existentes. Las ofertas de valores bajo el ECSPR están limitadas a 5.000.000 EUR por emisor en 12 meses.",
         "summary": "Un valor transmisible que da el derecho, pero no la obligación, de suscribir nuevas acciones del emisor a un precio fijado durante una ventana o en una fecha definida (valor transmisible según el art. 4(1)(44)(c) de MiFID II).",
-        "opportunities": ["Revalorización si el precio de la acción supera el precio de ejercicio", "Precio y ventana de ejercicio fijados de antemano"],
+        "opportunities": [
+          "Revalorización si el precio de la acción supera el precio de ejercicio",
+          "Precio y ventana de ejercicio fijados de antemano"
+        ],
         "risks": [
           "Puede expirar sin valor si el precio de la acción queda por debajo del precio de ejercicio",
           "El ejercicio diluye a los accionistas existentes",
@@ -998,7 +1021,10 @@
         "label": "Certificado de depósito sobre acciones",
         "note": "Encaja en la definición de valor transmisible de MiFID II (art. 4(1)(44)(a)) y la custodia del art. 10 del ECSPR es viable, pero la colocación bajo el ECSPR cubre valores emitidos por el propietario del proyecto o un SPV, y un certificado de depósito lo emite el custodio: sin confirmación de ESMA ni de la CMVM. No probado. Portugal no tiene un régimen nacional propio para certificados de depósito.",
         "summary": "Un certificado emitido por un custodio que representa acciones de la sociedad (acciones de S.A. y certificados de depósito sobre acciones): el titular tiene el derecho económico sobre las acciones subyacentes mientras el custodio mantiene las acciones.",
-        "opportunities": ["Exposición a acciones en un certificado transmisible", "Las distribuciones reflejan las acciones subyacentes"],
+        "opportunities": [
+          "Exposición a acciones en un certificado transmisible",
+          "Las distribuciones reflejan las acciones subyacentes"
+        ],
         "risks": [
           "Añade riesgo de custodia al riesgo de la acción",
           "Los derechos de voto y de transmisión dependen de las condiciones del certificado",
@@ -1010,7 +1036,10 @@
         "label": "Pagaré comercial",
         "note": "Es también un instrumento del mercado monetario. No se ha encontrado práctica de la CMVM para pagarés comerciales minoristas en crowdfunding: una oferta minorista exige rating, garantía o un ratio de autonomía financiera suficiente, nota informativa a la CMVM con un período de no oposición de 10 días hábiles y patrocinador cuando el emisor no tiene auditoría legal. El ECSPR limita las ofertas a 5.000.000 EUR por emisor en 12 meses.",
         "summary": "Deuda a corto plazo inferior a un año: valor transmisible según el DL 69/2004 (modificado por el DL 102/2026) y el art. 4(1)(44)(b) de MiFID II, y a la vez un instrumento del mercado monetario.",
-        "opportunities": ["Vencimiento corto con fecha de reembolso definida", "Rentabilidad por financiar el capital circulante del emisor"],
+        "opportunities": [
+          "Vencimiento corto con fecha de reembolso definida",
+          "Rentabilidad por financiar el capital circulante del emisor"
+        ],
         "risks": [
           "Sin garantía real: pérdida si el emisor no paga ni refinancia",
           "Vencimiento corto no significa riesgo bajo",
@@ -1022,7 +1051,10 @@
         "label": "Préstamo con remuneración vinculada a los ingresos",
         "note": "El interés variable vinculado a los ingresos encaja en el ECSPR en abstracto (Reg. Delegado (UE) 2022/2118, art. 8(3)(b) y 10(1)(g); Reg. Delegado (UE) 2022/2119, anexo). Si el capital o las cuotas ya vencidas solo se pagan cuando hay ingresos, el reembolso es condicional y deja de ser un préstamo ECSPR. Un tipo vinculado a los ingresos en un contrato concreto no está confirmado por la práctica de la CMVM.",
         "summary": "Un préstamo con reembolso incondicional del capital en un plazo acordado y con plan de pagos, cuyo interés varía con los ingresos del emisor.",
-        "opportunities": ["El interés sube cuando suben los ingresos del emisor", "El reembolso del capital no depende de los ingresos"],
+        "opportunities": [
+          "El interés sube cuando suben los ingresos del emisor",
+          "El reembolso del capital no depende de los ingresos"
+        ],
         "risks": [
           "El interés puede caer a niveles bajos en períodos de ingresos débiles",
           "El reembolso es incondicional, pero el emisor puede igualmente incumplir",
@@ -1034,7 +1066,10 @@
         "label": "Certificado de depósito sobre deuda",
         "note": "Encaja en la definición de valor transmisible de MiFID II (art. 4(1)(44)(b)) y la custodia del art. 10 del ECSPR es viable, pero la colocación bajo el ECSPR cubre valores emitidos por el propietario del proyecto o un SPV, y un certificado de depósito lo emite el custodio: sin confirmación de ESMA ni de la CMVM. No probado. Portugal no tiene un régimen nacional propio para certificados de depósito; el \"certificado de depósito\" del Decreto-Lei 372/91 es un depósito bancario, un instrumento distinto.",
         "summary": "Un certificado emitido por un custodio que representa bonos u otra deuda titulizada del emisor: el titular tiene el derecho económico sobre los valores de deuda subyacentes mientras el custodio mantiene los valores.",
-        "opportunities": ["Exposición a deuda en un certificado transmisible", "Las distribuciones reflejan los valores de deuda subyacentes"],
+        "opportunities": [
+          "Exposición a deuda en un certificado transmisible",
+          "Las distribuciones reflejan los valores de deuda subyacentes"
+        ],
         "risks": [
           "Añade riesgo de custodia al riesgo de impago del emisor",
           "Los derechos de transmisión y de información dependen de las condiciones del certificado",
@@ -1490,8 +1525,7 @@
             "label": "Condiciones de emisión (entrada de ejemplo)",
             "note": "Ningún archivo alojado en este prototipo"
           }
-        ],
-        "news": []
+        ]
       },
       {
         "issuer": "Cais Norte (Datos de ejemplo - no es una oferta real)",
@@ -1583,9 +1617,7 @@
           "La parte de los beneficios depende por completo del rendimiento del emisor",
           "Puede quedar por detrás de los acreedores ordinarios",
           "Normalmente ilíquido hasta el vencimiento"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pátio do Cedro (Datos de ejemplo - no es una oferta real)",
@@ -1611,9 +1643,7 @@
           "La forma jurídica y la protección del inversor varían mucho según la jurisdicción",
           "Puede implicar un fiduciario o vehículo entre el inversor y el emisor",
           "Normalmente ilíquido"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Ciclo Mineral (Datos de ejemplo - no es una oferta real)",
@@ -1644,9 +1674,7 @@
           "Pérdida total posible",
           "Las acciones de crowdfunding normalmente no son negociables en bolsa",
           "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Prado Vivo (Datos de ejemplo - no es una oferta real)",
@@ -1672,9 +1700,7 @@
           "La participación en pérdidas puede reducir o anular la participación",
           "La salida suele estar restringida por el contrato social",
           "Las obligaciones fiscales y de información pueden ser más exigentes"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Frio do Porto (Datos de ejemplo - no es una oferta real)",
@@ -1704,9 +1730,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Bosque Solar (Datos de ejemplo - no es una oferta real)",
@@ -1736,9 +1760,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mosaico Oficina (Datos de ejemplo - no es una oferta real)",
@@ -1768,9 +1790,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rota Clara (Datos de ejemplo - no es una oferta real)",
@@ -1800,9 +1820,7 @@
           "La subordinación aumenta la gravedad de la pérdida en caso de insolvencia",
           "Sigue sin garantías salvo indicación de colateral",
           "Sin participación en el crecimiento de la empresa"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Linha Solar (Datos de ejemplo - no es una oferta real)",
@@ -1837,9 +1855,7 @@
           "Sigue sin garantías salvo indicación de colateral",
           "Sin participación en el crecimiento de la empresa",
           "Una estructura de cupón en un préstamo o bono, no una senioridad: sin intereses periódicos; el rendimiento proviene de la emisión por debajo del valor nominal y del reembolso a la par. Se combina con una categoría madre de deuda, nunca existe sola."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Livros à Esquina (Datos de ejemplo - no es una oferta real)",
@@ -1872,9 +1888,7 @@
           "Contribución sin propiedad, intereses, reembolso ni rendimiento financiero.",
           "No se promete deducción fiscal.",
           "Escenario de ejemplo de todo o nada: no se alcanzó la meta y las contribuciones fueron devueltas."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Barro Vivo (Datos de ejemplo - no es una oferta real)",
@@ -1907,9 +1921,7 @@
           "Financiación a cambio de una recompensa no financiera o del producto o servicio financiado. No se ofrece rendimiento financiero.",
           "La entrega, la cancelación y los derechos del consumidor se definirían por oferta.",
           "Escenario de ejemplo con éxito: se alcanzó la meta y el promotor retiró los fondos."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Luz de Oficina (Datos de ejemplo - no es una oferta real)",
@@ -1942,9 +1954,7 @@
           "Pedido anticipado del producto o servicio financiado, estructurado como crowdfunding de recompensa, no como inversión ni derecho a un token futuro. No se ofrece rendimiento financiero.",
           "La entrega, la cancelación y los derechos del consumidor se definirían por oferta.",
           "Escenario de ejemplo de todo o nada: no se alcanzó la meta y las contribuciones fueron devueltas."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pedal Leve (Datos de ejemplo - no es una oferta real)",
@@ -1978,9 +1988,7 @@
           "Si el precio de la acción nunca supera el precio de ejercicio, el warrant puede expirar sin valor; es posible la pérdida total del importe pagado.",
           "El ejercicio emite nuevas acciones y diluye a los accionistas existentes.",
           "Las ofertas de valores bajo el ECSPR están limitadas a 5.000.000 EUR por emisor en 12 meses."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Fio do Douro (Datos de ejemplo - no es una oferta real)",
@@ -2014,9 +2022,7 @@
           "La custodia exige un banco o una empresa de inversión autorizada (CRD / MiFID II) o un régimen equivalente de registro del emisor.",
           "Portugal no tiene un régimen nacional propio para certificados de depósito; este ejemplo no lo establece.",
           "Pérdida total posible; las acciones subyacentes pueden ser ilíquidas."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Folha Nova (Datos de ejemplo - no es una oferta real)",
@@ -2050,9 +2056,7 @@
           "Sin garantía real: si el emisor no paga ni refinancia al vencimiento, los inversores pueden perder la totalidad.",
           "No se ha encontrado práctica de la CMVM para pagarés comerciales minoristas en crowdfunding; las condiciones minoristas enumeradas son exigidas antes de cualquier oferta real.",
           "Las ofertas de valores bajo el ECSPR están limitadas a 5.000.000 EUR por emisor en 12 meses."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mesa da Costa (Datos de ejemplo - no es una oferta real)",
@@ -2086,9 +2090,7 @@
           "El interés varía con los ingresos del emisor; si los importes vencidos solo se pagaran cuando existieran ingresos, el instrumento sería condicional y dejaría de ser un préstamo ECSPR.",
           "Un tipo vinculado a los ingresos en un contrato concreto no está confirmado por la práctica de la CMVM.",
           "Pérdida total posible; los préstamos suelen ser ilíquidos hasta el vencimiento."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Vento do Mondego (Datos de ejemplo - no es una oferta real)",
@@ -2122,9 +2124,7 @@
           "La colocación bajo el ECSPR no está probada: un certificado de depósito lo emite el custodio, no el propietario del proyecto ni un SPV, y ni ESMA ni la CMVM lo han confirmado.",
           "La custodia exige un banco o una empresa de inversión autorizada (CRD / MiFID II) o un régimen equivalente de registro del emisor.",
           "Pérdida total posible si el emisor incumple; los bonos subyacentes pueden ser ilíquidos."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Raiz Vertical (Datos de ejemplo - no es una oferta real)",
@@ -2154,9 +2154,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Tronco Vivo (Datos de ejemplo - no es una oferta real)",
@@ -2186,9 +2184,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Massa Lenta (Datos de ejemplo - no es una oferta real)",
@@ -2218,9 +2214,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Terra de Forno (Datos de ejemplo - no es una oferta real)",
@@ -2250,9 +2244,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Mar em Terra (Datos de ejemplo - no es una oferta real)",
@@ -2283,9 +2275,7 @@
           "Pérdida total posible",
           "Las acciones de crowdfunding normalmente no son negociables en bolsa",
           "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Água de Volta (Datos de ejemplo - no es una oferta real)",
@@ -2315,9 +2305,7 @@
           "La subordinación aumenta la gravedad de la pérdida en caso de insolvencia",
           "Sigue sin garantías salvo indicación de colateral",
           "Sin participación en el crecimiento de la empresa"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Passo Certo (Datos de ejemplo - no es una oferta real)",
@@ -2347,9 +2335,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lente Circular (Datos de ejemplo - no es una oferta real)",
@@ -2379,9 +2365,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Polpa Fresca (Datos de ejemplo - no es una oferta real)",
@@ -2411,9 +2395,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Som de Madeira (Datos de ejemplo - no es una oferta real)",
@@ -2443,9 +2425,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Olho do Mar (Datos de ejemplo - no es una oferta real)",
@@ -2476,9 +2456,7 @@
           "Pérdida total posible",
           "Las acciones de crowdfunding normalmente no son negociables en bolsa",
           "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Traço Recuperado (Datos de ejemplo - no es una oferta real)",
@@ -2508,9 +2486,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Solo de Novo (Datos de ejemplo - no es una oferta real)",
@@ -2540,9 +2516,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Torra de Bairro (Datos de ejemplo - no es una oferta real)",
@@ -2572,9 +2546,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Oficina Curiosa (Datos de ejemplo - no es una oferta real)",
@@ -2605,9 +2577,7 @@
           "Pérdida total posible",
           "Las acciones de crowdfunding normalmente no son negociables en bolsa",
           "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Letra Viva (Datos de ejemplo - no es una oferta real)",
@@ -2637,9 +2607,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lã da Serra (Datos de ejemplo - no es una oferta real)",
@@ -2669,9 +2637,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rota Digital (Datos de ejemplo - no es una oferta real)",
@@ -2702,9 +2668,7 @@
           "Pérdida total posible",
           "Las acciones de crowdfunding normalmente no son negociables en bolsa",
           "Una estructura de titularidad, no un instrumento distinto: el inversor mantiene la participación subyacente a través de un vehículo o fiduciario, y el interés subyacente decide la economía."
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Segundo Ciclo (Datos de ejemplo - no es una oferta real)",
@@ -2734,9 +2698,7 @@
           "La subordinación aumenta la gravedad de la pérdida en caso de insolvencia",
           "Sigue sin garantías salvo indicación de colateral",
           "Sin participación en el crecimiento de la empresa"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Lagar Novo (Datos de ejemplo - no es una oferta real)",
@@ -2766,9 +2728,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Colmeia Viva (Datos de ejemplo - no es una oferta real)",
@@ -2798,9 +2758,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Pata Serena (Datos de ejemplo - no es una oferta real)",
@@ -2830,9 +2788,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Rotas Abertas (Datos de ejemplo - no es una oferta real)",
@@ -2862,9 +2818,7 @@
           "El impago del emisor puede significar pérdida total",
           "Los créditos subordinados solo se pagan después de los acreedores sénior en caso de insolvencia",
           "Sin garantía de depósitos"
-        ],
-        "documents": [],
-        "news": []
+        ]
       },
       {
         "issuer": "Casa em Peças (Datos de ejemplo - no es una oferta real)",
@@ -2894,9 +2848,7 @@
           "La subordinación aumenta la gravedad de la pérdida en caso de insolvencia",
           "Sigue sin garantías salvo indicación de colateral",
           "Sin participación en el crecimiento de la empresa"
-        ],
-        "documents": [],
-        "news": []
+        ]
       }
     ]
   },
@@ -3705,7 +3657,15 @@
     "feedbackPanelIntro": "Cuéntanos qué funciona y qué no. Los comentarios se guardan como un ticket de soporte visible solo para ti y el operador.",
     "feedbackSignInPrompt": "Inicia sesión con tu monedero para enviar comentarios.",
     "feedbackSubmitted": "Gracias - tus comentarios se han enviado.",
-    "feedbackClose": "Cerrar"
+    "feedbackClose": "Cerrar",
+    "passwordShow": "Mostrar",
+    "passwordHide": "Ocultar",
+    "passwordStrength": {
+      "tooShort": "Demasiado corta: use al menos 10 caracteres.",
+      "weak": "Seguridad: débil",
+      "fair": "Seguridad: media",
+      "strong": "Seguridad: fuerte"
+    }
   },
   "messaging": {
     "title": "Mensajes",
