@@ -3251,6 +3251,14 @@
     "emailExplainer": "使用邮箱和密码创建账户，或使用已有账户登录。链上操作（如出资）仍需 Freighter 钱包。",
     "emailLabel": "邮箱",
     "passwordLabel": "密码",
+    "passwordShow": "显示",
+    "passwordHide": "隐藏",
+    "passwordStrength": {
+      "tooShort": "太短：至少使用 10 个字符。",
+      "weak": "强度：弱",
+      "fair": "强度：中",
+      "strong": "强度：强"
+    },
     "emailPasswordHint": "至少 10 个字符。",
     "emailRegisterButton": "创建账户",
     "emailLoginButton": "使用邮箱登录",

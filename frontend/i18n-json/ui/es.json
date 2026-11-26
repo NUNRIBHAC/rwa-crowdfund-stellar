@@ -3322,6 +3322,14 @@
     "emailExplainer": "Crea una cuenta con email y una contraseña, o inicia sesión con una existente. Las acciones on-chain como contribuir siguen requiriendo la billetera Freighter.",
     "emailLabel": "Email",
     "passwordLabel": "Contraseña",
+    "passwordShow": "Mostrar",
+    "passwordHide": "Ocultar",
+    "passwordStrength": {
+      "tooShort": "Demasiado corta: use al menos 10 caracteres.",
+      "weak": "Seguridad: débil",
+      "fair": "Seguridad: media",
+      "strong": "Seguridad: fuerte"
+    },
     "emailPasswordHint": "Al menos 10 caracteres.",
     "emailRegisterButton": "Crear cuenta",
     "emailLoginButton": "Entrar con email",

@@ -3313,6 +3313,14 @@
     "emailExplainer": "Erstellen Sie ein Konto mit E-Mail und Passwort oder melden Sie sich mit einem bestehenden an. On-Chain-Aktionen wie Beitragen erfordern weiterhin die Freighter-Wallet.",
     "emailLabel": "E-Mail",
     "passwordLabel": "Passwort",
+    "passwordShow": "Anzeigen",
+    "passwordHide": "Verbergen",
+    "passwordStrength": {
+      "tooShort": "Zu kurz: mindestens 10 Zeichen verwenden.",
+      "weak": "Stärke: schwach",
+      "fair": "Stärke: mittel",
+      "strong": "Stärke: stark"
+    },
     "emailPasswordHint": "Mindestens 10 Zeichen.",
     "emailRegisterButton": "Konto erstellen",
     "emailLoginButton": "Mit E-Mail anmelden",

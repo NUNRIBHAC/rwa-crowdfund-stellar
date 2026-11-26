@@ -3319,6 +3319,14 @@
     "emailExplainer": "Crie uma conta com email e uma palavra-passe, ou entre com uma existente. Ações on-chain como contribuir continuam a exigir a carteira Freighter.",
     "emailLabel": "Email",
     "passwordLabel": "Palavra-passe",
+    "passwordShow": "Mostrar",
+    "passwordHide": "Ocultar",
+    "passwordStrength": {
+      "tooShort": "Demasiado curta: use pelo menos 10 caracteres.",
+      "weak": "Força: fraca",
+      "fair": "Força: razoável",
+      "strong": "Força: forte"
+    },
     "emailPasswordHint": "Pelo menos 10 caracteres.",
     "emailRegisterButton": "Criar conta",
     "emailLoginButton": "Entrar com email",

@@ -87,6 +87,16 @@ test('production host serves SPA, built assets and discovery without weakening A
       assert.match(body, /<div id="root">/, path);
       if (path === '/') html = body;
     }
+    // Unknown page paths: real 404 status, still the app shell so people see the
+    // localized not-found view. Known paths and the root stay 200.
+    for (const path of ['/definitely-not-a-page', '/wp-admin', '/campaigns/%E0%A4%A']) {
+      const response = await fetch(base + path);
+      assert.equal(response.status, 404, path);
+      assert.equal(response.headers.get('cache-control'), 'no-store', path);
+      assert.match(response.headers.get('content-type') ?? '', /text\/html/, path);
+      assert.match(await response.text(), /<div id="root">/, path);
+    }
+    for (const path of ['/faq/', '/learn/anything', '/campaigns/some-campaign']) assert.equal((await fetch(base + path)).status, 200, path);
     for (const asset of [...html.matchAll(/(?:src|href)="(\/assets\/[^"?#]+\.(?:js|css))"/g)].map((match) => match[1])) {
       const response = await fetch(base + asset);
       assert.equal(response.status, 200, asset);

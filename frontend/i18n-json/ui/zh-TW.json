@@ -3251,6 +3251,14 @@
     "emailExplainer": "使用電子郵件和密碼建立帳戶，或使用現有帳戶登入。鏈上操作（如出資）仍需 Freighter 錢包。",
     "emailLabel": "電子郵件",
     "passwordLabel": "密碼",
+    "passwordShow": "顯示",
+    "passwordHide": "隱藏",
+    "passwordStrength": {
+      "tooShort": "太短：至少使用 10 個字元。",
+      "weak": "強度：弱",
+      "fair": "強度：中",
+      "strong": "強度：強"
+    },
     "emailPasswordHint": "至少 10 個字元。",
     "emailRegisterButton": "建立帳戶",
     "emailLoginButton": "使用電子郵件登入",

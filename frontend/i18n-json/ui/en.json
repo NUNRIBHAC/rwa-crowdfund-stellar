@@ -3290,6 +3290,14 @@
     "emailExplainer": "Create an account with email and a password, or sign in with an existing one. On-chain actions like contributing still require a Freighter wallet.",
     "emailLabel": "Email",
     "passwordLabel": "Password",
+    "passwordShow": "Show",
+    "passwordHide": "Hide",
+    "passwordStrength": {
+      "tooShort": "Too short: use at least 10 characters.",
+      "weak": "Strength: weak",
+      "fair": "Strength: fair",
+      "strong": "Strength: strong"
+    },
     "emailPasswordHint": "At least 10 characters.",
     "emailRegisterButton": "Create account",
     "emailLoginButton": "Sign in with email",

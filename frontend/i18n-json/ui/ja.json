@@ -3261,6 +3261,14 @@
     "emailExplainer": "メールアドレスとパスワードでアカウントを作成するか、既存のアカウントでログインします。出資などのオンチェーン操作には引き続きFreighterウォレットが必要です。",
     "emailLabel": "メールアドレス",
     "passwordLabel": "パスワード",
+    "passwordShow": "表示",
+    "passwordHide": "非表示",
+    "passwordStrength": {
+      "tooShort": "短すぎます：10文字以上にしてください。",
+      "weak": "強度：弱い",
+      "fair": "強度：普通",
+      "strong": "強度：強い"
+    },
     "emailPasswordHint": "10文字以上。",
     "emailRegisterButton": "アカウント作成",
     "emailLoginButton": "メールでログイン",
