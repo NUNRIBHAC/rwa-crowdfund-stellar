@@ -506,7 +506,8 @@ test('quarantined journal rows fail API safety holds closed with a reconciliatio
 test('refund intents journal the on-chain escrowed amount, never a client-supplied one', { skip: !fixtureAvailable }, async () => {
   reset();
   balanceUnits = 10000000n;
-  await buildSoroban('s1', { actor: actor.publicKey(), action: 'refund', amount: '999' });
+  const built = await buildSoroban('s1', { actor: actor.publicKey(), action: 'refund', amount: '999' });
+  assert.equal(built.amount, '1', 'response uses the same contract snapshot as the journal, never the client amount');
   const stored = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents[0];
   assert.equal(stored.action, 'refund');
   assert.equal(stored.amount, '1');
@@ -514,7 +515,8 @@ test('refund intents journal the on-chain escrowed amount, never a client-suppli
 
 test('refund with a zero balance leaves the amount unrecorded', { skip: !fixtureAvailable }, async () => {
   reset();
-  await buildSoroban('s1', { actor: actor.publicKey(), action: 'refund' });
+  const built = await buildSoroban('s1', { actor: actor.publicKey(), action: 'refund', amount: '999' });
+  assert.equal(built.amount, undefined, 'an unknown amount cannot be replaced with the client input');
   const stored = JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents[0];
   assert.equal(stored.amount, undefined);
 });
@@ -639,3 +641,80 @@ test('withdraw ignores a matching transfer emitted by another token contract', a
   const built = await completedWithdrawal([withdrawalTransfer(25000000n, actor.publicKey(), contractId)]);
   assert.equal((await accountPayouts(actor.publicKey())).find((i) => i.hash === built.hash)?.amount, null);
 });
+
+test('status evidence exposes one configured-token transfer for the exact confirmed hash and ledger only', async () => {
+  reset();
+  const built = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '10' });
+  await submitSoroban('s1', { actor: actor.publicKey(), xdr: signed(built) });
+  txStatus = 'SUCCESS';
+  txEvents = [
+    {
+      contractId: new xdr.ContractId(StrKey.decodeContract(tokenId)),
+      body: {
+        v0: {
+          topics: [nativeToScVal('transfer', { type: 'symbol' }), new Address(actor.publicKey()).toScVal(), new Address(contractId).toScVal()],
+          data: nativeToScVal(95000000n, { type: 'i128' }),
+        },
+      },
+    },
+  ];
+  const result = await statusSoroban(built.hash);
+  assert.deepEqual(result.paymentEvidence, { hash: built.hash, ledger: 100, confirmedAmount: '9.5' });
+  const cached = await statusSoroban(built.hash);
+  assert.equal(cached.paymentEvidence, undefined, 'cached status cannot manufacture a fresh network read');
+});
+for (const kind of [
+  'foreign token',
+  'ambiguous',
+  'missing',
+  'missing emitter',
+  'wrong sender',
+  'wrong recipient',
+  'negative amount',
+  'malformed event',
+] as const) {
+  test(`status ${kind} transfer evidence remains unknown instead of trusting the prepared amount`, async () => {
+    reset();
+    const built = await buildSoroban('s1', { actor: actor.publicKey(), action: 'contribute', amount: '10' });
+    await submitSoroban('s1', { actor: actor.publicKey(), xdr: signed(built) });
+    txStatus = 'SUCCESS';
+    const transfer = {
+      contractId: new xdr.ContractId(StrKey.decodeContract(kind === 'foreign token' ? contractId : tokenId)),
+      body: {
+        v0: {
+          topics: [nativeToScVal('transfer', { type: 'symbol' }), new Address(actor.publicKey()).toScVal(), new Address(contractId).toScVal()],
+          data: nativeToScVal(100000000n, { type: 'i128' }),
+        },
+      },
+    };
+    if (kind === 'missing emitter') delete (transfer as { contractId?: unknown }).contractId;
+    if (kind === 'wrong sender') transfer.body.v0.topics[1] = new Address(contractId).toScVal();
+    if (kind === 'wrong recipient') transfer.body.v0.topics[2] = new Address(actor.publicKey()).toScVal();
+    if (kind === 'negative amount') transfer.body.v0.data = nativeToScVal(-1n, { type: 'i128' });
+    txEvents = kind === 'missing' ? [] : kind === 'malformed event' ? [{ body: {} }] : kind === 'ambiguous' ? [transfer, transfer] : [transfer];
+    const result = await statusSoroban(built.hash);
+    assert.equal(result.paymentEvidence.confirmedAmount, null);
+  });
+}
+
+for (const action of ['refund', 'withdraw'] as const) {
+  test(`status evidence binds ${action} to configured token and campaign-to-wallet direction`, async () => {
+    reset();
+    balanceUnits = 100000000n;
+    const built = await buildSoroban('s1', { actor: actor.publicKey(), action, amount: '10' });
+    await submitSoroban('s1', { actor: actor.publicKey(), xdr: signed(built) });
+    txStatus = 'SUCCESS';
+    txEvents = [
+      {
+        contractId: new xdr.ContractId(StrKey.decodeContract(tokenId)),
+        body: {
+          v0: {
+            topics: [nativeToScVal('transfer', { type: 'symbol' }), new Address(contractId).toScVal(), new Address(actor.publicKey()).toScVal()],
+            data: nativeToScVal(97500000n, { type: 'i128' }),
+          },
+        },
+      },
+    ];
+    assert.deepEqual((await statusSoroban(built.hash)).paymentEvidence, { hash: built.hash, ledger: 100, confirmedAmount: '9.75' });
+  });
+}

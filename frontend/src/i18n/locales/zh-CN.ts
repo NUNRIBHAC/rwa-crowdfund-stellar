@@ -453,6 +453,17 @@ export const zhCN: Messages = {
     fundedTail: '已融资 - {count} 个方块中的 {filled} 个',
     captionUnavailable: '进度不可用 - 链上数据未加载',
   },
+  paymentPath: {
+    title: '测试网支付流程',
+    note: '仅为测试网原型。不涉及真实资金或支付服务。',
+    escrowAmount: '准备转入托管的出资额',
+    refundAmount: '准备退回钱包的金额',
+    finalAmount: '已确认转账金额',
+    actualFee: '实际收取的网络费用',
+    unknown: '未验证',
+    estimateNote: '准备的金额和最高费用是某一时刻的记录，不是付款完成的证明。已保存的交易状态并不验证最终金额或费用。',
+    separateAssets: 'USDC与XLM是不同资产。两者分别显示，不相加为一个总额。',
+  },
   intent: {
     title: '已保存的交易',
     steps: ['已准备', '已签署', '已提交', '已确认'],

@@ -464,6 +464,18 @@ export const ja: Messages = {
     fundedTail: '達成 - {count} ブロック中 {filled} ブロック',
     captionUnavailable: '進捗を取得できません - オンチェーンデータが未読み込み',
   },
+  paymentPath: {
+    title: 'テストネットの支払いフロー',
+    note: 'テストネットの試作のみです。実際のお金や決済サービスではありません。',
+    escrowAmount: 'エスクローへの準備済み拠出額',
+    refundAmount: 'ウォレットへの準備済み返金額',
+    finalAmount: '確認済み送金額',
+    actualFee: '実際に請求されたネットワーク手数料',
+    unknown: '未検証',
+    estimateNote:
+      '準備済み金額と最大手数料はある時点の情報であり、支払い完了の証明ではありません。保存された取引の状態は最終金額や手数料を検証するものではありません。',
+    separateAssets: 'USDCとXLMは異なる資産です。別々に表示し、合計額として足し合わせません。',
+  },
   intent: {
     title: '保存されたトランザクション',
     steps: ['準備済み', '署名済み', '送信済み', '確定済み'],

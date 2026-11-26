@@ -242,7 +242,7 @@ export default function App() {
   async function check() {
     if (!intent) return;
     const r = await api(`/api/soroban/transactions/${intent.hash}`);
-    retain({ ...intent, status: r.status });
+    retain({ ...intent, status: r.status, paymentEvidence: r.paymentEvidence ?? intent.paymentEvidence ?? null });
     await refresh();
   }
 

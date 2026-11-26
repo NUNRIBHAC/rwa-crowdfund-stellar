@@ -1,6 +1,7 @@
+import TestnetPaymentPath from './TestnetPaymentPath';
 import type { Intent } from '../types';
 import { isTerminal } from '../types';
-import { formatAmount, shorten } from '../format';
+import { shorten } from '../format';
 import { useI18n } from '../i18n';
 import { intentStatusLabel } from '../intent-status-label';
 
@@ -27,7 +28,7 @@ function stepClass(intent: Intent, step: number): string {
 }
 
 export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel, onClear }: Props) {
-  const { locale, m } = useI18n();
+  const { m } = useI18n();
   const terminal = isTerminal(intent.status);
   const statusLabel = intentStatusLabel(intent.status, m);
   const actionLabel = m.intent.actionLabels[intent.action] ?? intent.action;
@@ -68,10 +69,6 @@ export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel,
             </dd>
           </div>
         )}
-        <div>
-          <dt>{m.intent.maxFee}</dt>
-          <dd>{intent.feeStroops ? `${formatAmount(intent.feeStroops, locale)} ${m.intent.xlmTestnet}` : m.intent.checkWallet}</dd>
-        </div>
         <div className="intent-hash">
           <dt>{m.intent.hash}</dt>
           <dd>
@@ -79,6 +76,8 @@ export default function IntentPanel({ intent, busy, onSubmit, onCheck, onCancel,
           </dd>
         </div>
       </dl>
+
+      <TestnetPaymentPath intent={intent} />
 
       {!terminal && <p className="intent-warning">{m.intent.warningPending}</p>}
       {intent.status === 'SUCCESS' && <p className="intent-warning intent-confirmed">{m.intent.confirmed}</p>}

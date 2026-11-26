@@ -3968,5 +3968,16 @@
     "all": "Tous les thèmes",
     "noMatches": "Aucune information correspondante. Essayez une autre recherche ou un autre thème.",
     "model": "Méthode de calcul et limites du modèle"
+  },
+  "paymentPath": {
+    "title": "Parcours de paiement sur le réseau de test",
+    "note": "Prototype sur le réseau de test uniquement. Aucun argent réel ni service de paiement.",
+    "escrowAmount": "Contribution préparée vers le séquestre",
+    "refundAmount": "Remboursement préparé vers le portefeuille",
+    "finalAmount": "Montant du transfert confirmé",
+    "actualFee": "Frais de réseau réellement facturés",
+    "unknown": "Non vérifié",
+    "estimateNote": "Les montants préparés et les frais maximaux sont des données ponctuelles, pas des preuves de paiement effectué. Le statut de la transaction enregistrée ne vérifie ni le montant final ni les frais.",
+    "separateAssets": "USDC et XLM sont des actifs différents. Ils sont affichés séparément, sans les additionner dans un total."
   }
 }

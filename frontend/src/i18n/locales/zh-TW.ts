@@ -453,6 +453,17 @@ export const zhTW: Messages = {
     fundedTail: '已融資 - {count} 個方塊中的 {filled} 個',
     captionUnavailable: '進度不可用 - 鏈上數據未加載',
   },
+  paymentPath: {
+    title: '測試網付款流程',
+    note: '僅為測試網原型。不涉及真實資金或支付服務。',
+    escrowAmount: '準備轉入託管的出資額',
+    refundAmount: '準備退回錢包的金額',
+    finalAmount: '已確認轉帳金額',
+    actualFee: '實際收取的網路費用',
+    unknown: '未驗證',
+    estimateNote: '準備的金額和最高費用是某一時刻的紀錄，不是付款完成的證明。已儲存的交易狀態並不驗證最終金額或費用。',
+    separateAssets: 'USDC與XLM是不同資產。兩者分別顯示，不相加為一個總額。',
+  },
   intent: {
     title: '已保存的交易',
     steps: ['已準備', '已簽署', '已提交', '已確認'],
