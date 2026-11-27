@@ -35,3 +35,18 @@ Environment:
   at 127.0.0.1:4101; 600 iterations each, passed. This proves script
   executability only - it is not evidence of actual backend capacity. The
   scenarios have not yet been run against a real backend.
+
+## Target guard (all scenarios)
+
+The default target is loopback (`http://localhost:4000`). Credentials in a
+target URL are refused outright (userinfo must never be mistaken for the
+destination host), and every allowlist entry is validated before the
+decision, so a malformed entry fails closed. The k6 scenarios and
+the e2e submit scripts refuse any other target unless BOTH are set:
+
+- `K6_ALLOW_REMOTE=1` (k6) or `E2E_ALLOW_REMOTE=1` (node e2e) - the explicit opt-in;
+- `K6_TARGET_ALLOWLIST=host[:port],...` / `E2E_TARGET_ALLOWLIST=...` - the exact allowed hosts.
+
+The scripts that submit testnet transactions (`backend/e2e/trustline.mjs`,
+`backend/e2e/api-live.mjs`) additionally require `E2E_SUBMIT_OPT_IN=1`,
+confirming the testnet target out loud before any submission.
