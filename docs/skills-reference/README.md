@@ -9,6 +9,14 @@ They are not installed or executed by this repository, and copying them into a
 folder does not give any tool new capabilities. Nothing here is wired into CI,
 the backend or the contracts.
 
+Vendored third-party skills are kept verbatim. Their documents can contain
+relative links that only resolve in the upstream repository layout (for
+example `../prisma-orm-setup/` or `../shared/` siblings that were never
+vendored) and absolute website paths (for example `/connect/...`). Those
+links are known and intentionally left as upstream wrote them; editing them
+would silently fork the vendored material. Consult the upstream repository
+named in `INDEX.md` when such a link does not resolve here.
+
 ## What is included
 
 Skills are copied into `skills/` when the right to publish them is

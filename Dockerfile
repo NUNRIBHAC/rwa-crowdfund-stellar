@@ -2,7 +2,9 @@
 # Multi-stage: full workspace install for the build, production-only install for
 # the runtime. Pure-JS dependencies only (express, pg, stellar-sdk, pdfkit, viem,
 # zod, openid-client) - no native modules, so this builds on arm64 and amd64 alike.
-FROM node:24-alpine AS build
+# Pinned by digest (multiarch index, resolved 2026-11-19; covers the arm64/amd64
+# builds this file supports). Dependabot proposes digest bumps.
+FROM node:24-alpine@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5 AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY backend/package.json backend/
@@ -16,7 +18,7 @@ ENV VITE_PUBLIC_MEDIA_ORIGIN=$VITE_PUBLIC_MEDIA_ORIGIN \
 RUN npm run build && node backend/scripts/media-index.mjs
 RUN node backend/scripts/check-reviewed-wasm.mjs
 
-FROM node:24-alpine AS runtime
+FROM node:24-alpine@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5 AS runtime
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=4000
