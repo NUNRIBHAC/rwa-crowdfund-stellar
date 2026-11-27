@@ -39,3 +39,21 @@ horizontal overflow and Arabic text direction with fixed list geometry.
 Discovery is now 2,007 tests across 13 files. No route was added and the
 28-route light-only public capture matrix is unchanged. These are local
 synthetic-API presentation checks, not a human review or hosted release proof.
+
+## Prepared session-state regression extension
+
+Based on merged main 3ba0239553d1cafbf03f3b8380bea02d5b42dced (PR294),
+`sessions-local` adds 264 local synthetic cases: 11 locales x widths
+390/820/1440 x light/navy x loading/populated/empty/error. Each captures the
+Security region rather than relabelling the whole account page as covered.
+The loading fixture holds the sessions response, populated uses one synthetic
+current session, empty returns an explicit empty list, and error returns a
+controlled HTTP 500. The tests assert the corresponding translated state,
+absence of a premature empty state, no raw server text, exact language/theme,
+no page errors, no horizontal overflow and zero non-read requests.
+
+The local cases passed in eight disjoint 33-case shards. Total suite discovery
+is now 2,271 cases in 14 files (previous 2,007 plus 264). This is not a live
+session/authentication test, a real server fault or a hosted Argos comparison.
+No API behavior, product text, account data, baselines or provider configuration
+changes. Existing account sections outside Security remain out of scope.
