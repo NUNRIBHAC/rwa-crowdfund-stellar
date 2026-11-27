@@ -190,9 +190,35 @@ class FileJournal implements Journal {
     const before = store.intents.length;
     store = { intents: pruneIntents(purgeTerminalEnvelopes(store.intents)) };
     if (store.intents.length !== before) logEvent('journal.pruned', { backend: 'file', removed: before - store.intents.length });
+    // Monotonic merge against the on-disk rows: a stale writer (a delayed
+    // response persisting an old state) must never regress a terminal row,
+    // never erase a stored signed envelope with an unsigned one, and is
+    // refused outright when it carries a DIFFERENT envelope for the same
+    // hash - the same guarantees the Postgres upsert gives.
+    const onDisk = new Map<string, Intent>();
+    if (fs.existsSync(this.file)) {
+      try {
+        const raw = JSON.parse(fs.readFileSync(this.file, 'utf8'));
+        for (const r of Array.isArray(raw?.intents) ? raw.intents : []) if (isIntentRow(r)) onDisk.set((r as Intent).hash, r as Intent);
+      } catch {
+        // An unreadable/corrupt file is handled by read() callers failing
+        // closed; do not double-guess it here.
+      }
+    }
+    const merged = store.intents.map((i) => {
+      const d = onDisk.get(i.hash);
+      if (!d) return i;
+      if (d.signedXdr && i.signedXdr && d.signedXdr !== i.signedXdr) throw new Error(`conflicting signed envelope for intent ${i.hash}; refusing to overwrite`);
+      const status = TERMINAL_STATUSES.includes(d.status) ? d.status : i.status;
+      const signedXdr = i.signedXdr ?? (TERMINAL_STATUSES.includes(status) ? undefined : d.signedXdr);
+      const out: Intent = { ...d, ...i, status };
+      if (signedXdr) out.signedXdr = signedXdr;
+      else delete out.signedXdr;
+      return out;
+    });
     // Malformed rows are re-persisted untouched: pruning/scrubbing never
     // applies to them and they are never dropped by a read-modify-write.
-    const out = { intents: [...store.intents, ...this.skipped] };
+    const out = { intents: [...merged, ...this.skipped] };
     fs.mkdirSync(path.dirname(this.file), { recursive: true });
     const tmp = `${this.file}.tmp`;
     const fd = fs.openSync(tmp, 'w', 0o600);

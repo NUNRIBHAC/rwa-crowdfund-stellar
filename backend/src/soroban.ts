@@ -26,7 +26,7 @@ export const sorobanDeps = {
 const passphrase = Networks.TESTNET;
 const expectedToken = () => new Asset('USDC', process.env.USDC_ISSUER ?? '').contractId(passphrase);
 const WASM_HASH = '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564';
-import { journalBackend, readJournalSummary } from './journal.js';
+import { journalBackend, logEvent, readJournalSummary } from './journal.js';
 import type { Intent, IntentStore, IntentSummaryStore } from './journal.js';
 // Registry entries come in two shapes. v1 entries point at one reviewed
 // crowdfund contract; v2 entries point at the share-token + offering pair
@@ -397,6 +397,13 @@ async function recordStatus(hash: string, status: string, confirmedAmount?: stri
     const store = await readStore();
     const intent = store.intents.find((i) => i.hash === hash);
     if (!intent) throw new Error('signed intent not found');
+    // Monotonic terminal state: a delayed response must never regress a
+    // terminal row. Terminal is final; a late transition to anything else is
+    // ignored and logged, never applied.
+    if (TERMINAL.includes(intent.status) && intent.status !== status) {
+      logEvent('journal.late_transition_ignored', { hash, stored: intent.status, ignored: status });
+      return;
+    }
     intent.status = status;
     // Forward capture only: set once from the confirmed transfer event, never
     // overwritten, never derived from the build-time amount.

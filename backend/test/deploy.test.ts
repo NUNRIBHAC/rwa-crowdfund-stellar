@@ -341,6 +341,19 @@ test('v2 build validates the contract-set parameters', async () => {
   await assert.rejects(buildCampaignDeployV2({ ...v2Input(), id: 'taken' }), /already registered/);
 });
 
+test('a delayed response never regresses a terminal deploy journal state', async () => {
+  reset();
+  const built = await buildCampaignDeployV2(v2Input());
+  await submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' });
+  const onDisk = () => JSON.parse(fs.readFileSync(process.env.SOROBAN_INTENTS_PATH!, 'utf8')).intents.find((i: any) => i.hash === built.hash);
+  assert.equal(onDisk().status, 'SUCCESS');
+  // The RPC later answers FAILED for the same hash (stale index, delayed
+  // error): the resubmit surfaces it, but the recorded terminal state wins.
+  txStatus = 'FAILED';
+  await assert.rejects(submitCampaignDeployV2({ actor: operator.publicKey(), xdr: signed(built.xdr), name: 'Solar V2' }), /failed on-chain/);
+  assert.equal(onDisk().status, 'SUCCESS');
+});
+
 test('v2 deploy walks the full five-step chain and returns a wired registry entry', async () => {
   reset();
   const run = async () => {
