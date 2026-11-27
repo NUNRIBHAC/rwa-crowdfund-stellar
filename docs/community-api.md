@@ -103,7 +103,7 @@ Admin (`x-admin-key`, the existing demo-grade gate):
   the admin desk. Comments expose no full public keys.
 - Rate limits are per-account and per-IP, in-process sliding windows; move
   to shared storage or a proxy limit before multi-instance deployment.
-  Set `TRUST_PROXY=1` behind the hosting proxy for client-IP limiting.
+  Set `TRUST_PROXY_DEPTH` to the measured proxy-chain depth for client-IP limiting (see `backend/.env.example`; the legacy `TRUST_PROXY=1` is ignored).
 - Clients must render comment/ticket bodies as plain text (no HTML).
 - Retention: tickets and applications hard-delete after
   `COMMUNITY_RETENTION_DAYS` (default 90); hidden comments after 30 days;
@@ -115,7 +115,7 @@ Admin (`x-admin-key`, the existing demo-grade gate):
 See `backend/.env.example`: `COMMUNITY_DATABASE_URL` (falls back to
 `SOROBAN_JOURNAL_DATABASE_URL`, then a local JSON file),
 `COMMUNITY_STORE_PATH`, `COMMUNITY_RETENTION_DAYS`,
-`CAMPAIGN_METADATA_JSON`, `TRUST_PROXY`.
+`CAMPAIGN_METADATA_JSON`, `TRUST_PROXY_DEPTH`.
 
 ## Known limits
 
