@@ -22,21 +22,30 @@ The reviewed configuration path remains available for seeds. The protected brows
 2. Confirm sources are public, safe to disclose and relevant. Check the correction date is no earlier than the original review and no later than the dossier revision. The validator rejects duplicate IDs, missing references and invalid chronology.
 3. Run the evidence model tests and review the exact configuration diff. A recorded correction hides the original reviewed-fact badge and makes its area unknown. Original claim, review and correction provenance remain visible.
 4. Ask for the normal reviewed release approval before changing live configuration. This PR does not change an environment setting. There is no automatic publication or remote write from this workflow.
-5. A later human review requires a newly reviewed dossier revision. Do not silently erase a correction or overwrite its source history. The protected editor preparation described below adds explicit human re-review as a new linked claim; this config-only path by itself is not the promised browser workflow.
+5. A later human review requires a newly reviewed dossier revision. Do not silently erase a correction or overwrite its source history. The protected editor described below adds explicit human re-review as a new linked claim; this config-only path by itself is not the promised browser workflow.
 
-## Public-source example and remaining limits
+## Current shipped state and separate assistant example
 
-`issuer-evidence-public-source-example.md` compares the EIB's shareholder page with the EU institutional directory for one narrow identity statement. It is explicitly documentation only, with no association to any of the fictional campaigns. It is an automated source comparison, not a human reviewer attestation. No human-reviewed fact is fabricated to make the example appear complete. An actual reviewer attestation remains a product sign-off requirement before this example could carry that badge.
+The public presentation and protected correction editor shipped through PR 276,
+with the public route correction in PR 285 and Arabic correction in PR 286.
+They are not awaiting their original merge. The 23 public and 23 editor labels
+are present in all 11 languages. Existing fictional campaigns remain
+`not_provided` with six unknown areas; no real issuer evidence was seeded.
 
-Merge remains held pending the existing legal/status translation PRs and a clean verified translation-history integration. The full Weblate head must not be discarded or falsely recorded as merged. No PR 250, 275 or 276 release is authorized here.
+`issuer-evidence-public-source-example.md` now documents the real Kipster KIIS
+example. The prepared `AssistantDocumentaryReview` section on For Investors is
+separate from campaign facts and human-review badges. It names the assistant,
+source provenance, review date, five findings, coverage and unresolved issues.
+It is not a professional attestation and does not need one to be presented as an
+assistant review. A `checked_fact` still requires the existing human review.
 
-Idea 8's factual guide can use this provenance model later. Idea 9 remains Stellar testnet only. Neither is implemented by this foundation.
+The separate factual information guide is already implemented. The Stellar
+features remain testnet-only. This documentation change does not authorize a
+merge, deployment, demo, live operator grant or configuration change.
 
-No merge or deployment is authorized by publication of this PR.
+## Protected correction editor, shipped
 
-## Protected correction editor candidate (25 November, unpublished)
-
-A local unmerged implementation now persists append-only evidence revisions in
+The implementation persists append-only evidence revisions in
 CommunityStore. The write route uses the existing wallet-session/operator
 allowlist, checks campaign registration and never changes live grants or env.
 Revision digests reject stale edits. Request IDs fence retries. Each saved
@@ -55,19 +64,9 @@ campaign/session scope and reuses a request ID for a retry. Its 23 labels in all
 11 languages came through the separately approved Weblate batch. The public
 campaign presentation has no editing controls.
 
-Local regression: narrow current-main candidate, 823 backend tests across 98 files,
-1,194 frontend tests across 121 files. The preserving dependency analysis graph
-with PRs 250/275 and the full translation history passed 823 backend tests and
-1,776 frontend tests across 126 files. These are different graphs, not interchangeable
-counts. Both public presentation and mounted editor have 264-cell synthetic visual
-matrices (11 languages, three widths, light/dark, four states). Synthetic review
-fixtures are not real human attestations. The real-source example remains explicitly
-unreviewed. No live operator permissions, source records or campaign configuration
-were changed by these tests.
-
-The narrow candidate deliberately does not include unrelated pending legal/status
-catalogs. The preserving analysis retains the full Weblate branch and dormant
-refund text without activating the feature. Before merging main, the exact chosen
-release graph still needs current-head translation mergeability and CI checks.
-After any approved main merge, Weblate health, ancestry and pending content must
-be verified again. This preparation does not authorize a PR merge, deploy or demo.
+The original preparation used synthetic visual matrices for the public view and
+mounted editor. Synthetic reviews are test fixtures, not real attestations. The
+real Kipster source example never creates a human-reviewed claim. Current PR
+validation must be recorded against its exact head rather than reusing old test
+counts. No live operator permissions, source records or campaign configuration
+are changed by the documentary example.

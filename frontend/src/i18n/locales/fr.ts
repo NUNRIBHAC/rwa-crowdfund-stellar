@@ -4514,4 +4514,30 @@ export const fr: Messages = {
     sourcePublicOnly:
       "Sources publiques non confidentielles uniquement. Sans identifiants, URL signées, paramètres de requête ni fragments. La date de consultation consigne votre vérification de la source aujourd'hui.",
   },
+  assistantDocumentaryReview: {
+    title: 'Kipster : examen documentaire de sources publiques',
+    notice:
+      "Examen par Instinct, l'assistant IA, le 26 novembre 2026. Ni examen humain indépendant, ni avis professionnel, ni approbation ou conseil en investissement. Cet exemple historique est distinct des campagnes Blockallisto et ne porte aucun badge de fait vérifié.",
+    identity:
+      "Identité : la KIIS nomme Kipster Production B.V., Venlo, registre 69940320. GLEIF indique le nom ultérieur Kipster Holding B.V. Aucun extrait du registre néerlandais des sociétés n'a été lu.",
+    offer:
+      "Offre : la KIIS du promoteur décrit des certificats d'actions via une STAK à EUR 25 chacun, minimum EUR 250, objectif minimal EUR 700 000 et maximal EUR 3,5 millions, extensible à EUR 5 millions. L'échéance indiquée était le 12 décembre 2024. Ce sont des conditions historiques, pas une offre ouverte ici.",
+    platform:
+      "Plateforme : la KIIS nomme Oneplanetcrowd International B.V. (Invesdor). La copie du registre AFM indique un agrément de financement participatif depuis le 15 septembre 2022, sans date de fin affichée. Sa validité actuelle n'a pas été établie et l'entrée officielle ESMA n'a pas été lue.",
+    outcome:
+      "Résultat : le promoteur annonce EUR 3 700 275 et 1 373 investisseurs. La KIIS prévoit un seuil de souscriptions de EUR 3,7 millions et des dépassements conditionnels après 14 jours d'annulation. Le montant conservé après annulations et l'utilisation de l'option d'augmentation sont inconnus. Les EUR 3,3 millions du rapport d'impact ne sont pas rapprochés. La KIIS associe aussi 200 000 certificats à EUR 25 à EUR 5,2 millions, incohérence interne.",
+    financials:
+      "Finances : les comptes compilés de 2023 indiquent un résultat de EUR 83 012, contre EUR -423 315 après transfert de résultat dans la KIIS. Le périmètre des entités et les définitions ne sont pas rapprochés. Il s'agit d'une compilation, pas d'un audit. Ne pas assimiler ces mesures ni en déduire un résultat de groupe.",
+    coverage:
+      "Couverture : les six pages anglaises de la KIIS et la déclaration de responsabilité signée en page 13 ont été lues. Pour les pages néerlandaises 7 à 12, montants, noms et conditions ont été comparés, pas chaque phrase. Les chiffres clés et l'organigramme ont été vérifiés en image. La date de consultation n'est pas la date de publication.",
+    limits:
+      "Inconnus : validité actuelle de l'agrément, extrait du registre, comptes audités ou de groupe, périmètre du tableau financier et écarts de financement. Aucune analyse de crédit, juridique ou d'adéquation.",
+    sources: 'Sources publiques et provenance',
+    kiis: 'KIIS du promoteur publiée par la plateforme (PDF anglais et néerlandais)',
+    result: 'Annonce de clôture du promoteur, 16 janvier 2025',
+    lei: 'Registre LEI officiel GLEIF, pas un extrait du registre des sociétés',
+    afm: "Registre AFM en PDF, pas une preuve de validité actuelle de l'agrément",
+    accounts: 'Comptes 2023, compilation et non audit (PDF)',
+    impact: "Rapport d'impact 2024 du promoteur (PDF néerlandais), chiffres non rapprochés",
+  },
 };

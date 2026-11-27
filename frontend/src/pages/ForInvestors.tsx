@@ -1,3 +1,4 @@
+import AssistantDocumentaryReview from '../components/AssistantDocumentaryReview';
 import InvestorInformationGuide from '../components/InvestorInformationGuide';
 import LossSimulator from '../components/LossSimulator';
 import YieldCalculator from '../components/YieldCalculator';
@@ -30,6 +31,7 @@ export default function ForInvestors() {
         ))}
       </div>
       <InvestorInformationGuide />
+      <AssistantDocumentaryReview />
       <YieldCalculator copy={m.yieldCalculator} />
       <LossSimulator />
       <nav className="investors-context" aria-label={m.nav.forInvestors}>

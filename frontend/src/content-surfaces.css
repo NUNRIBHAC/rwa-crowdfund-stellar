@@ -664,3 +664,30 @@ html[lang='ar'] .testnet-payment-path :is(h3, p, dt, dd:not([dir='ltr'])) {
   direction: rtl;
   text-align: left;
 }
+
+/* Public historical assistant review: physical LTR geometry in every locale;
+   Arabic text keeps the shared logical text direction without mirroring. */
+.assistant-documentary-review {
+  margin-block: 2rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  overflow-wrap: anywhere;
+}
+html .assistant-documentary-review .documentary-findings,
+html .assistant-documentary-review .documentary-sources {
+  direction: ltr !important;
+  padding-left: 1.5rem;
+  padding-right: 0;
+}
+.documentary-findings li,
+.documentary-sources li {
+  direction: ltr !important;
+  margin-block: 1rem;
+}
+html.rtl-text .documentary-findings li p,
+html.rtl-text .documentary-sources li a {
+  direction: rtl;
+  text-align: left;
+}

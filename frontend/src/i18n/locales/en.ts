@@ -4409,6 +4409,32 @@ export const en = {
     sourcePublicOnly:
       'Only non-confidential public sources. No credentials, signed URLs, query parameters or fragments. Retrieval date records your source check today.',
   },
+  assistantDocumentaryReview: {
+    title: 'Kipster: a public-source documentary review',
+    notice:
+      'Review by Instinct, the AI assistant, on 26 November 2026. Not an independent human review, professional opinion, endorsement or investment advice. This historical example is separate from Blockallisto campaigns and has no reviewed-fact badge.',
+    identity:
+      'Identity: the KIIS names Kipster Production B.V., Venlo, register number 69940320. GLEIF records the later name Kipster Holding B.V. No Dutch company-register extract was read.',
+    offer:
+      "Offer: the promoter's KIIS describes share depositary receipts through a STAK at EUR 25 each, minimum EUR 250, a EUR 700,000 minimum target and EUR 3.5 million maximum, with an option to raise to EUR 5 million. The stated deadline was 12 December 2024. These are historical terms, not an open offer here.",
+    platform:
+      "Platform: the KIIS names Oneplanetcrowd International B.V. (Invesdor). The AFM register copy lists a crowdfunding licence from 15 September 2022 without an end date shown. The review did not establish the licence's current standing or read the official ESMA entry.",
+    outcome:
+      'Outcome: the promoter reports EUR 3,700,275 and 1,373 investors. The KIIS allows a EUR 3.7 million subscription cut-off and conditional excess subscriptions after a 14-day cancellation period. The amount retained after cancellations and use of the raise option are unknown. EUR 3.3 million in the impact report is unreconciled. The KIIS also pairs 200,000 receipts at EUR 25 with EUR 5.2 million, an internal inconsistency.',
+    financials:
+      'Financials: the 2023 compiled statements report a EUR 83,012 result, while the KIIS table reports EUR -423,315 after profit transfer. Their entity scope and definitions are unreconciled. The statements are a compilation, not an audit. Do not treat these as the same measure or infer a group result.',
+    coverage:
+      'Review coverage: all six English KIIS pages and the signed responsibility statement on page 13 were read. Dutch pages 7 to 12 were checked for amounts, names and terms, not every sentence. Financial key figures and the ownership chart were checked as images. Source retrieval date is not publication date.',
+    limits:
+      'Still unknown: current licence standing, a company-register extract, audited or group accounts, the financial-table scope and the different funding totals. No credit, legal or suitability assessment was made.',
+    sources: 'Public sources and provenance',
+    kiis: 'KIIS, promoter-prepared offer document published by the platform (English and Dutch PDF)',
+    result: "Promoter's own closing announcement, 16 January 2025",
+    lei: 'GLEIF official LEI record, not a company-register extract',
+    afm: 'AFM regulator register PDF, not proof of current licence standing',
+    accounts: '2023 company statements, compilation not audit (PDF)',
+    impact: "Promoter's 2024 impact report (Dutch PDF), figures not reconciled",
+  },
 };
 
 export type Messages = typeof en;
