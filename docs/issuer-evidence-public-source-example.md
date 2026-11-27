@@ -1,22 +1,30 @@
-# Public-source dossier example: EIB identity only
+# Public-source dossier example: Kipster
 
-Source comparison prepared with automated assistance on 25 November 2026. No human reviewer has attested this example. Documentation only, not an offer, campaign, endorsement or evidence about any Blockallisto sample campaign. Do not load this example into live campaign configuration.
+## Prepared site integration
 
-## Narrow source-supported statement
+`AssistantDocumentaryReview` is a read-only section on the existing For Investors page. It presents a historical public-source example reviewed by Instinct on 26 November 2026. It is not associated with a Blockallisto campaign, does not seed `ISSUER_EVIDENCE_JSON`, and creates no campaign or review record. It has no transaction, editor, new route or API behavior.
 
-The European Investment Bank is owned by EU Member States.
+The assistant's documentary review is deliberately separate from `issuer_claim` and `checked_fact`. It cannot satisfy the latter's human-review requirement and receives no human-reviewed badge. A professional or human attestation is neither claimed nor a prerequisite for this assistant presentation.
 
-Sources read on 25 November 2026:
+The section's 16 text entries are prepared in each of the 11 UI languages. Publication requires the usual Weblate round trip, tests and per-PR release approval. Local preparation is not a deployment.
 
-- EIB, "Shareholders": https://www.eib.org/en/about/governance-and-structure/shareholders/index . The institution's own statement says its shareholders are the 27 EU Member States. Classify this as an issuer/institution source, not independent evidence about itself.
-- European Union, "European Investment Bank (EIB)": https://european-union.europa.eu/institutions-law-budget/institutions-and-bodies/search-all-eu-institutions-and-bodies/european-investment-bank-eib_en . This separately published institutional directory says the EIB is jointly owned by EU countries and all EU countries are shareholders. It is independent of the EIB's own web publisher for this narrow identity statement, but both are within the EU institutional system. This is not proof of independence for every purpose.
+## Five findings and their limits
 
-Neither page displayed a publication date in the retrieved content. Retrieval date is not publication date.
+1. **Identity.** The KIIS names Kipster Production B.V., Venlo, KvK 69940320. GLEIF's official LEI record names Kipster Holding B.V. and records the previous name. No KvK extract was read.
+2. **Historical offer.** The promoter's KIIS describes STAK depositary receipts at EUR 25, minimum investment EUR 250, target EUR 700,000 to EUR 3.5 million with a EUR 5 million raise option, deadline 12 December 2024. Single promoter source. This is not a currently open offer here.
+3. **Platform.** The KIIS names Oneplanetcrowd International B.V. (Invesdor). The AFM PDF lists a crowdfunding licence from 15 September 2022 and no end date. The undated copy does not establish current licence standing. The official ESMA entry was not read.
+4. **Closing amount.** The promoter reports EUR 3,700,275 and 1,373 investors. The KIIS provides a EUR 3.7 million subscription cut-off and conditional excess subscriptions after a 14-day cancellation period. A reported total above EUR 3.5 million is not by itself evidence of an unlawful excess. Use of the raise option and the final retained amount are unknown. The impact report's EUR 3.3 million is unreconciled. The KIIS's pairing of 200,000 receipts at EUR 25 with EUR 5.2 million is internally inconsistent.
+5. **Financial figures.** The compiled 2023 statements report EUR 83,012 result, versus EUR -423,315 after profit transfer in the KIIS table. Their entity scope and definitions remain unreconciled. The compilation is not an audit. No unsupported group-account explanation is inferred.
 
-## Review limits
+## Sources read, 26 November 2026
 
-Only the ownership/identity statement above was compared across sources here. It must not receive a human-reviewed badge without a real reviewer attestation. No campaign, funding target, returns, credit quality, management suitability, financial statements, offer documents, investor eligibility or project milestones are reviewed. These remain unknown. This comparison is not a human review assertion, legal approval or a guarantee.
+- KIIS, promoter document published by the platform: https://kapilendo-public.imgix.net/files/projects/kipster-01/f81411f6-d320-414a-8339-c15a98f467fe_KIIS_EN_NL.pdf
+- Promoter's closing announcement, dated 16 January 2025: https://kipster.nl/deelnemers-bedankt/
+- Official GLEIF LEI record, not a company-register extract: https://api.gleif.org/api/v1/lei-records/7245007JQYIGW328K081
+- AFM register copy, no document date established: https://www.afm.nl/~/profmedia/files/registers/register-crowdfunding-platformen.pdf
+- Company statements, compilation not audit: https://dl.invesdor.de/projects/public/33b141d4-3ce6-483d-9860-de77b1cbd7c4/plink/20240521_Kipster_Production_BV_Jaarrekening_2023_getekend.pdf
+- Promoter's 2024 impact report: https://kipster.nl/app/uploads/2025/05/Impactreport-2024-NL.pdf
 
-## Correction procedure
+Retrieval is not publication. English KIIS pages 1 to 6 and signed responsibility statement on page 13 were read in full. Dutch pages 7 to 12 were checked for amounts, names and terms, not sentence-by-sentence equivalence. Financial key pages and the ownership chart were inspected as images. The chart is the promoter's 24 July 2024 snapshot, not registry verification. No audited or group accounts, legal, credit or suitability opinion, or current-performance conclusion is supplied.
 
-A reviewer prepares a dated correction with the affected claim ID, a reason and public source IDs in a reviewed configuration change. The original claim and review remain in the record. A claim with a recorded correction must lose its reviewed-fact badge and its area must return to unknown until a new reviewed revision is supplied. The local candidate includes a protected operator browser editor. It re-checks the authenticated operator wallet and campaign registry on each write, previews the exact update before explicit publication, checks the revision digest, and appends corrections without replacing the original record. A reviewed replacement needs a recorded correction, an independent source classification and a human-review attestation. Source classification and a checkbox alone cannot prove source independence or truth. This example has no such human attestation and must remain unreviewed. Publication still needs the normal repository review and release approval.
+This replaces the earlier documentation-only EIB identity comparison as the worked example. It does not alter the production dossier correction rules documented in `issuer-evidence-dossier.md`. No live permissions, environment settings, evidence records or source configuration are changed.

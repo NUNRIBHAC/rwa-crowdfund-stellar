@@ -28,3 +28,14 @@ Source baseline: main a8dd9864aab154695acf0d170a8a63b0b13164c6 (merged PR289), 2
 - Local synthetic session flags are not live authentication, wallet extension signing, native device gestures or a financial/legal attestation.
 - Test discovery and a passing run do not prove actual pixel quality or a reviewed hosted Argos baseline. The already completed PR289 run separately passed 1,941 cases; this pass only lists and reconciles them. PR-triggered uploads remain skipped by design.
 - This document changes no visual behavior, screenshot baseline, fixture or capture count. A future state expansion must name exact routes, roles, states, themes, locales and widths instead of relabelling existing tests as complete coverage.
+
+## Prepared assistant documentary example extension
+
+Based on main 806ae365626b83e732cc1c7de5b5a03f977376fe (PR290), this
+candidate adds `assistant-documentary-review-local`: 66 tests, 11 locales ×
+390/820/1440 × light/dark, on the existing For Investors route. Each checks
+five findings, six source links, no write requests, no runtime errors, no
+horizontal overflow and Arabic text direction with fixed list geometry.
+Discovery is now 2,007 tests across 13 files. No route was added and the
+28-route light-only public capture matrix is unchanged. These are local
+synthetic-API presentation checks, not a human review or hosted release proof.

@@ -4486,4 +4486,30 @@ export const de: Messages = {
     sourcePublicOnly:
       'Nur nicht vertrauliche öffentliche Quellen. Keine Zugangsdaten, signierten URLs, Abfrageparameter oder Fragmente. Das Abrufdatum hält Ihre heutige Quellenprüfung fest.',
   },
+  assistantDocumentaryReview: {
+    title: 'Kipster: Dokumentenprüfung öffentlicher Quellen',
+    notice:
+      'Prüfung durch Instinct, den KI-Assistenten, am 26. November 2026. Keine unabhängige menschliche Prüfung, kein Fachgutachten, keine Empfehlung oder Anlageberatung. Dieses historische Beispiel ist von Blockallisto-Kampagnen getrennt und erhält kein Prüfsiegel.',
+    identity:
+      'Identität: Das KIIS nennt Kipster Production B.V., Venlo, Registernummer 69940320. GLEIF verzeichnet den späteren Namen Kipster Holding B.V. Ein niederländischer Handelsregisterauszug wurde nicht gelesen.',
+    offer:
+      'Angebot: Das KIIS des Projektträgers beschreibt Aktienzertifikate über eine STAK zu je EUR 25, Mindestanlage EUR 250, Mindestziel EUR 700.000 und Höchstziel EUR 3,5 Mio., mit Erhöhungsoption auf EUR 5 Mio. Die Frist war der 12. Dezember 2024. Historische Bedingungen, kein hier offenes Angebot.',
+    platform:
+      'Plattform: Das KIIS nennt Oneplanetcrowd International B.V. (Invesdor). Die AFM-Registerkopie führt eine Crowdfunding-Zulassung seit 15. September 2022 ohne angezeigtes Enddatum. Ihr heutiger Status wurde nicht bestätigt; der offizielle ESMA-Eintrag wurde nicht gelesen.',
+    outcome:
+      'Ergebnis: Der Projektträger meldet EUR 3.700.275 und 1.373 Anleger. Das KIIS erlaubt einen Zeichnungsschluss bei EUR 3,7 Mio. und bedingte Mehrzeichnungen nach 14 Tagen Widerrufsfrist. Verbleibender Betrag nach Widerrufen und Nutzung der Erhöhungsoption sind unbekannt. Die EUR 3,3 Mio. im Wirkungsbericht sind nicht abgeglichen. Das KIIS setzt zudem 200.000 Zertifikate zu EUR 25 mit EUR 5,2 Mio. gleich, ein interner Widerspruch.',
+    financials:
+      'Finanzen: Der erstellte Abschluss 2023 nennt EUR 83.012 Ergebnis, die KIIS-Tabelle EUR -423.315 nach Ergebnisübertragung. Unternehmensumfang und Definitionen sind nicht abgeglichen. Der Abschluss ist eine Erstellung, keine Prüfung. Werte nicht gleichsetzen oder als Konzernergebnis auslegen.',
+    coverage:
+      'Prüfumfang: Alle sechs englischen KIIS-Seiten und die unterschriebene Verantwortungserklärung auf Seite 13 wurden gelesen. Bei den niederländischen Seiten 7 bis 12 wurden Beträge, Namen und Bedingungen verglichen, nicht jeder Satz. Finanzkennzahlen und Organigramm wurden als Bilder geprüft. Abrufdatum ist nicht Veröffentlichungsdatum.',
+    limits:
+      'Offen bleiben heutiger Zulassungsstatus, Registerauszug, geprüfte oder Konzernabschlüsse, Umfang der Finanztabelle und abweichende Finanzierungssummen. Keine Kredit-, Rechts- oder Eignungsprüfung.',
+    sources: 'Öffentliche Quellen und Herkunft',
+    kiis: 'KIIS des Projektträgers, von der Plattform veröffentlicht (englisches und niederländisches PDF)',
+    result: 'Eigene Abschlussmeldung des Projektträgers, 16. Januar 2025',
+    lei: 'Offizieller GLEIF-LEI-Eintrag, kein Handelsregisterauszug',
+    afm: 'AFM-Aufsichtsregister als PDF, kein Nachweis des heutigen Zulassungsstatus',
+    accounts: 'Unternehmensabschluss 2023, Erstellung statt Prüfung (PDF)',
+    impact: 'Wirkungsbericht 2024 des Projektträgers (niederländisches PDF), Zahlen nicht abgeglichen',
+  },
 };
