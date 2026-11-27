@@ -7,7 +7,8 @@
 //   "log"           -> explicit demo opt-in: writes the full message to the
 //                      server log. Anyone with hosting log access can read
 //                      verification tokens, so this is for demo/staging only,
-//                      never a substitute for a real provider.
+//                      never a substitute for a real provider. Requires an
+//                      explicit non-production DEPLOYMENT_ENV marker.
 //   "brevo"         -> Brevo transactional API (free tier: 300 emails/day,
 //                      no card, sender can be an individually verified
 //                      address - no domain purchase required). Needs
@@ -112,7 +113,15 @@ export function mailerFromEnv(env: NodeJS.ProcessEnv = process.env): Mailer | nu
   if (!provider) return null;
   const allowed = allowedRecipientsFromEnv(env);
   const wrap = (m: Mailer): Mailer => (allowed ? new AllowlistMailer(m, allowed) : m);
-  if (provider === 'log') return wrap(new LogMailer());
+  if (provider === 'log') {
+    // Deployment environment, not NODE_ENV: staging builds use production too.
+    const deployment = (env.DEPLOYMENT_ENV ?? '').trim().toLowerCase();
+    if (!['staging', 'demo', 'development', 'test'].includes(deployment)) {
+      console.warn('[mailer] log provider refused outside an explicit non-production deployment');
+      return null;
+    }
+    return wrap(new LogMailer());
+  }
   if (provider === 'brevo') {
     const apiKey = (env.BREVO_API_KEY ?? '').trim();
     const from = (env.COMMUNITY_EMAIL_FROM ?? '').trim();
