@@ -34,6 +34,8 @@ export default function SecuritySection() {
     proofSession.current = `${account?.publicKey ?? ''}:${token ?? ''}`;
   }, [account?.publicKey, token]);
   const [sessions, setSessions] = useState<SessionInfo[] | null>(null);
+  const [sessionsError, setSessionsError] = useState('');
+  const sessionsRequest = useRef(0);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
@@ -77,15 +79,25 @@ export default function SecuritySection() {
   const [totpEnabled, setTotpEnabled] = useState(account?.totpEnabled === true);
 
   const load = useCallback(() => {
+    const request = ++sessionsRequest.current;
+    setSessions(null);
+    setSessionsError('');
     if (!account) return;
     fetchSessions(token)
-      .then((v) => setSessions(v.sessions))
-      .catch((e) => setError(describeError(e, m.community)));
+      .then((v) => {
+        if (!Array.isArray(v?.sessions)) throw new Error(m.community.errorInternal);
+        if (sessionsRequest.current === request) setSessions(v.sessions);
+      })
+      .catch((e) => {
+        if (sessionsRequest.current === request) setSessionsError(describeError(e, m.community));
+      });
   }, [account, token, m.community]);
 
   useEffect(() => {
     if (!account) {
+      sessionsRequest.current += 1;
       setSessions(null);
+      setSessionsError('');
       setTotpEnabled(false);
       return;
     }
@@ -94,6 +106,9 @@ export default function SecuritySection() {
     // so the 2FA block must reflect THIS account's actual TOTP state.
     setTotpEnabled(account.totpEnabled === true);
     load();
+    return () => {
+      sessionsRequest.current += 1;
+    };
   }, [account, load]);
 
   if (!account) return null;
@@ -405,7 +420,13 @@ export default function SecuritySection() {
       )}
 
       <h3>{labels.sessionsTitle}</h3>
-      {!sessions || sessions.length === 0 ? (
+      {sessionsError ? (
+        <p role="alert" className="community-error">
+          {sessionsError}
+        </p>
+      ) : sessions === null ? (
+        <p role="status">{m.community.loading}</p>
+      ) : sessions.length === 0 ? (
         <p>{labels.empty}</p>
       ) : (
         <ul className="account-checklist">
