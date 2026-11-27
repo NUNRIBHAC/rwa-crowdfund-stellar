@@ -128,6 +128,7 @@ export type EmailCredential = {
   createdAt: number;
   failedAttempts: number;
   lockUntil: number | null; // ms epoch; set after repeated login failures
+  lockStrikes?: number; // consecutive lockouts since the last successful login; drives the progressive delay
   resetTokenHash?: string | null; // sha256 hex of the single-use blr_ reset token
   resetExpiresAt?: number | null;
   resetSentAt?: number | null; // per-email reset-mail cooldown marker

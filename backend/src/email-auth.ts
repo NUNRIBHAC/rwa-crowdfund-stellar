@@ -128,7 +128,19 @@ export async function sendBudgetedMail(
 export const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 export const EMAIL_RESEND_COOLDOWN_MS = 10 * 60 * 1000;
 export const EMAIL_MAX_FAILURES = 5;
+// Flat 5-minute lock kept for the account-deletion confirmation path.
 export const EMAIL_LOCK_MS = 5 * 60 * 1000;
+// Login penalty is progressive: after EMAIL_MAX_FAILURES wrong passwords the
+// first penalty window is short, each consecutive strike doubles it up to a
+// cap, and a wrong guess inside the window extends it. The penalty throttles
+// WRONG guesses only - the correct password always clears it and logs in, so
+// targeted lockout abuse can never bench the account owner. Per-IP limiting
+// on the route bounds request volume independently.
+export const EMAIL_LOCK_BASE_MS = 60 * 1000;
+export const EMAIL_LOCK_MAX_MS = 30 * 60 * 1000;
+export function emailLockMs(lockStrikes: number): number {
+  return Math.min(EMAIL_LOCK_BASE_MS * 2 ** Math.max(0, lockStrikes - 1), EMAIL_LOCK_MAX_MS);
+}
 export const PASSWORD_MIN_LENGTH = 10;
 export const PASSWORD_MAX_LENGTH = 200;
 
@@ -395,6 +407,7 @@ export async function confirmPasswordReset(
     credential.resetTokenHash = null; // single-use
     credential.resetExpiresAt = null;
     credential.failedAttempts = 0;
+    credential.lockStrikes = 0;
     credential.lockUntil = null;
     for (const [id, session] of Object.entries(state.sessions)) {
       if (session.publicKey === credential.publicKey) delete state.sessions[id];
@@ -457,18 +470,30 @@ export async function loginEmail(
     const credential = state.emailCredentials[email];
     if (!credential) return null;
     if (!credential.verified) return null;
-    if (credential.lockUntil && credential.lockUntil > now) {
-      throw new AuthError(429, 'too many failed attempts; retry in a few minutes', 'login_throttled');
-    }
+    const locked = !!(credential.lockUntil && credential.lockUntil > now);
     if (!verifyPassword(input.password as string, credential.passwordRecord)) {
+      if (locked) {
+        // Wrong guess inside the penalty window: refused, and the penalty
+        // escalates (window extends progressively, capped). Return a marker
+        // instead of throwing - a throw would roll back the escalation.
+        credential.lockStrikes = (credential.lockStrikes ?? 0) + 1;
+        credential.lockUntil = now + emailLockMs(credential.lockStrikes);
+        credential.failedAttempts = 0;
+        return { throttled: true as const };
+      }
       credential.failedAttempts += 1;
       if (credential.failedAttempts >= EMAIL_MAX_FAILURES) {
-        credential.lockUntil = now + EMAIL_LOCK_MS;
+        credential.lockStrikes = (credential.lockStrikes ?? 0) + 1;
+        credential.lockUntil = now + emailLockMs(credential.lockStrikes);
         credential.failedAttempts = 0;
       }
       return null;
     }
+    // The correct password is never locked out: it clears the penalty even
+    // inside the window. A targeted attacker can slow wrong guesses but can
+    // never bench the account owner.
     credential.failedAttempts = 0;
+    credential.lockStrikes = 0;
     credential.lockUntil = null;
     const account = state.accounts[credential.publicKey];
     if (!account) throw new AuthError(500, 'account record missing');
@@ -484,5 +509,6 @@ export async function loginEmail(
     return createSession(state, account, now);
   });
   if (!result) throw new AuthError(401, 'invalid email or password', 'credentials_invalid');
+  if ('throttled' in result) throw new AuthError(429, 'too many failed attempts; retry in a few minutes', 'login_throttled');
   return result;
 }
