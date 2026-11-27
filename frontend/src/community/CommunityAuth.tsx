@@ -188,7 +188,14 @@ export function CommunityAuthProvider({ children, messages }: { children: ReactN
           setIsOperator(isOperator === true);
           saveCommunityToken(stored);
         })
-        .catch(() => saveCommunityToken(''))
+        .catch((err: unknown) => {
+          // Only a definitive 401 drops the stored session. A network error
+          // or timeout is transient: keep the stored credential so the next
+          // load can still restore it (this also protects the one-time
+          // legacy bearer migration), and say the service is unreachable.
+          if (err instanceof ApiError && err.status === 401) saveCommunityToken('');
+          else setError(describeError(err, messages.community));
+        })
         .finally(() => setRestored(true));
     if (social?.kind === 'token') {
       restore(social.value);
