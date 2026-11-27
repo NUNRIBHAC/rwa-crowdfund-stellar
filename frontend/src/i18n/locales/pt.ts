@@ -4518,4 +4518,14 @@ export const pt: Messages = {
     accounts: 'Contas da empresa de 2023, compilação sem auditoria (PDF)',
     impact: 'Relatório de impacto de 2024 do promotor (PDF neerlandês), valores não reconciliados',
   },
+  automaticRefund: {
+    title: 'Reembolso automático',
+    testnetOnly: 'Apenas na rede de teste. Não é movimentado dinheiro real.',
+    pending: 'Reembolso pendente. Ainda não foi confirmado qualquer pagamento.',
+    submitted: 'Reembolso enviado. Ainda aguarda confirmação.',
+    paid: 'Reembolso confirmado para a carteira original.',
+    blocked: 'O reembolso precisa de revisão. Aqui não está confirmado qualquer pagamento.',
+    manualFallback: 'Abrir a opção de reembolso manual',
+    unavailable: 'O estado do reembolso está temporariamente indisponível.',
+  },
 };

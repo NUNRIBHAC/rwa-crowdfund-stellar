@@ -1,5 +1,5 @@
-// Explicit catalog-only namespaces. These remain translatable but are never
-// projected into runtime dictionaries. Activation requires a separate change.
+// Catalog-only namespaces stay dormant until an explicit runtime integration.
+// The automatic-refund integration activates its exact reviewed namespace.
 const DORMANT = Object.freeze({
   automaticRefund: Object.freeze(['title', 'testnetOnly', 'pending', 'submitted', 'paid', 'blocked', 'manualFallback', 'unavailable']),
 });
@@ -25,14 +25,17 @@ export function splitCatalog(catalog, englishCatalog, runtimeBase, label) {
   const active = { ...catalog };
   const dormant = {};
   for (const name of Object.keys(DORMANT)) {
-    if (own(runtimeBase, name)) throw new Error(`${name}: dormant namespace must not be active in runtime`);
+    const enabled = own(runtimeBase, name);
+    if (enabled) validateNamespace(name, runtimeBase[name], null, 'runtime');
     const expected = own(englishCatalog, name);
     if (expected) validateNamespace(name, englishCatalog[name], null, 'ui.en');
     if (own(catalog, name) !== expected) throw new Error(`${label}.${name}: dormant namespace presence differs from English`);
     if (!expected) continue;
     validateNamespace(name, catalog[name], englishCatalog[name], label);
-    dormant[name] = catalog[name];
-    delete active[name];
+    if (!enabled) {
+      dormant[name] = catalog[name];
+      delete active[name];
+    }
   }
   return { active, dormant };
 }

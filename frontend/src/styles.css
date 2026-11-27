@@ -5236,3 +5236,10 @@ html.rtl-text .accordion summary > span:first-child {
     flex-direction: column;
   }
 }
+
+/* Keep testnet contract IDs within narrow account cards without changing the
+   shared LTR layout or the Arabic text-only direction rules. */
+.automatic-refund-account-row > code {
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}

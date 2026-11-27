@@ -4362,4 +4362,14 @@ export const ko: Messages = {
     accounts: '2023년 회사 재무제표, 작성이며 감사 아님(PDF)',
     impact: '발행자의 2024년 영향 보고서(네덜란드어 PDF), 수치 미조정',
   },
+  automaticRefund: {
+    title: '자동 환불',
+    testnetOnly: '테스트넷 전용입니다. 실제 돈은 이동하지 않습니다.',
+    pending: '환불 대기 중입니다. 아직 결제가 확인되지 않았습니다.',
+    submitted: '환불이 제출되었습니다. 확인을 기다리는 중입니다.',
+    paid: '원래 지갑으로의 환불이 확인되었습니다.',
+    blocked: '환불 검토가 필요합니다. 여기서는 결제가 확인되지 않았습니다.',
+    manualFallback: '수동 환불 옵션 열기',
+    unavailable: '환불 상태를 일시적으로 확인할 수 없습니다.',
+  },
 };

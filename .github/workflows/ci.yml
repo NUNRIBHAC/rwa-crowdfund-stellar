@@ -150,6 +150,11 @@ jobs:
 
       - run: stellar contract build
 
+      - name: Reproduce reviewed automatic-refund testnet artifact
+        run: |
+          stellar contract build --package crowdfund-auto --locked --optimize=false
+          echo '1603bf0edb92ab1b6594e37dcb825fc64c065b38ec62dbe913fda6f2df92e855  target/wasm32v1-none/release/crowdfund_auto.wasm' | sha256sum -c -
+
       - name: Verify SEP-41 share-token artifact
         run: |
           echo '6010fc62cf08ee606a2687bd4877790c6d131cbd57936beb21e592d179b818e7  target/wasm32v1-none/release/share_token.wasm' | sha256sum -c -

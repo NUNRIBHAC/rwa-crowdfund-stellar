@@ -1,3 +1,4 @@
+import AccountAutomaticRefunds from '../components/AccountAutomaticRefunds';
 import { fetchAccountActivity } from '../community/api';
 import ContributionRecordButton from '../components/ContributionRecordButton';
 import DemoJourney from '../components/DemoJourney';
@@ -247,6 +248,7 @@ export default function Account({ market }: { market: Market }) {
         />
       )}
 
+      {account?.authMethod === 'wallet' && token && <AccountAutomaticRefunds key={`auto:${account.publicKey}`} wallet={account.publicKey} token={token} />}
       {readActor && <AccountPayoutsSection key={`payouts:${readActor}`} actor={readActor} />}
 
       <div id="investor-holdings">{readActor && <AccountHoldingsSection key={`holdings:${readActor}`} actor={readActor} />}</div>

@@ -4291,4 +4291,14 @@ export const zhCN: Messages = {
     accounts: '2023 年公司报表，编制而非审计（PDF）',
     impact: '发起人 2024 年影响报告（荷兰文 PDF），数据尚未核对一致',
   },
+  automaticRefund: {
+    title: '自动退款',
+    testnetOnly: '仅限测试网络。不会转移真实资金。',
+    pending: '退款待处理。尚未确认任何付款。',
+    submitted: '退款已提交，仍待确认。',
+    paid: '已确认退款至原始钱包。',
+    blocked: '退款需要审核。此处尚未确认付款。',
+    manualFallback: '打开手动退款选项',
+    unavailable: '退款状态暂时无法获取。',
+  },
 };

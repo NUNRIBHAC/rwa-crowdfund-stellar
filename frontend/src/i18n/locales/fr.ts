@@ -4540,4 +4540,14 @@ export const fr: Messages = {
     accounts: 'Comptes 2023, compilation et non audit (PDF)',
     impact: "Rapport d'impact 2024 du promoteur (PDF néerlandais), chiffres non rapprochés",
   },
+  automaticRefund: {
+    title: 'Remboursement automatique',
+    testnetOnly: "Réseau de test uniquement. Aucun argent réel n'est transféré.",
+    pending: "Remboursement en attente. Aucun paiement n'a été confirmé.",
+    submitted: 'Remboursement envoyé. La confirmation est toujours en attente.',
+    paid: "Remboursement confirmé vers le portefeuille d'origine.",
+    blocked: "Le remboursement doit être vérifié. Aucun paiement n'est confirmé ici.",
+    manualFallback: "Ouvrir l'option de remboursement manuel",
+    unavailable: 'Le statut du remboursement est temporairement indisponible.',
+  },
 };
