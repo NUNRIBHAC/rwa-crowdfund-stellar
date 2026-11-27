@@ -44,6 +44,7 @@ const sequences = new Map<string, number>();
 let returnedPaymentPages: any[][] = []; // fake paged Horizon payment history
 let injectedFailure: { type: 'network' | 'bad_seq'; applyFirst: boolean; times?: number } | null = null;
 let forceLookupUnknown = false;
+let lastSubmissionError: Error | undefined;
 
 function applyTx(tx: Transaction, hash: string): void {
   appliedTxHashes.add(hash);
@@ -111,6 +112,7 @@ __setDepsForTests({
       if (replayBadSeq) {
         const e: any = new Error('expired replay');
         e.response = { data: { extras: { result_codes: { transaction: replayCode } } } };
+        lastSubmissionError = e;
         throw e;
       }
       return { hash } as any;
@@ -128,9 +130,11 @@ __setDepsForTests({
         sequences.set(tx.source, (sequences.get(tx.source) ?? 1) + 1); // seq consumed elsewhere
         const e: any = new Error('tx failed');
         e.response = { data: { extras: { result_codes: { transaction: 'tx_bad_seq' } } } };
+        lastSubmissionError = e;
         throw e;
       }
-      throw new Error('network error: response lost');
+      lastSubmissionError = new Error('network error: response lost');
+      throw lastSubmissionError;
     }
     applyTx(tx, hash);
     return { hash } as any;
@@ -149,6 +153,7 @@ function resetState(): void {
   returnedPaymentPages = [];
   injectedFailure = null;
   forceLookupUnknown = false;
+  lastSubmissionError = undefined;
 }
 
 function addDemoInvestor(): Keypair {
@@ -1268,7 +1273,12 @@ for (const damage of ['corrupt XDR', 'wrong network', 'hash mismatch'] as const)
   test(`F5 ${damage} legacy intent holds without broadcast or replacement`, async () => {
     resetState();
     injectedFailure = { type: 'network', applyFirst: false };
-    await assert.rejects(createCampaign({ name: 'damaged intent', goalUsdc: GOAL }), /submission uncertain/);
+    await assert.rejects(createCampaign({ name: 'damaged intent', goalUsdc: GOAL }), (error: Error) => {
+      assert.match(error.message, /submission uncertain/);
+      assert.equal(error.cause, lastSubmissionError);
+      assert.ok(error.cause instanceof Error);
+      return true;
+    });
     const store = readStore();
     const row = store.campaigns[0];
     delete row.mintIntentHash;
@@ -1288,7 +1298,12 @@ for (const damage of ['corrupt XDR', 'wrong network', 'hash mismatch'] as const)
     const before = row.mintXdr;
     fs.writeFileSync(storePath, JSON.stringify(store));
     const sends = submitLog.length;
-    await assert.rejects(retryPending(row.id), /holding without broadcast or rebuild/);
+    await assert.rejects(retryPending(row.id), (error: Error) => {
+      assert.match(error.message, /holding without broadcast or rebuild/);
+      assert.ok(error.cause instanceof Error);
+      assert.notEqual(error.cause, lastSubmissionError, 'validation failure keeps its own cause');
+      return true;
+    });
     assert.equal(submitLog.length, sends);
     const after = readStore().campaigns[0];
     assert.equal(after.mintXdr, before);
@@ -1387,3 +1402,39 @@ test('F5 XDR-only mint also reconciles an applied expired replay', async () => {
     replayCode = 'tx_bad_seq';
   }
 });
+
+for (const code of ['tx_bad_seq', 'tx_too_late']) {
+  test(`rejected mint ${code} preserves original error and exact intent`, async () => {
+    resetState();
+    injectedFailure = { type: 'network', applyFirst: false };
+    await assert.rejects(createCampaign({ name: 'replay cause', goalUsdc: GOAL }), /submission uncertain/);
+    const row = readStore().campaigns[0];
+    const envelope = row.mintXdr;
+    const hash = row.mintIntentHash;
+    const original = new Error('injected replay rejection');
+    Object.assign(original, { response: { data: { extras: { result_codes: { transaction: code } } } } });
+    const submit = campaigns.deps.submitTransaction;
+    let sends = 0;
+    __setDepsForTests({
+      submitTransaction: async () => {
+        sends++;
+        throw original;
+      },
+    });
+    try {
+      await assert.rejects(retryPending(row.id), (error: Error) => {
+        assert.equal(error.cause, original);
+        assert.match(error.message, /holding the intent for manual reconciliation/);
+        return true;
+      });
+      assert.equal(sends, 1);
+      const held = readStore().campaigns[0];
+      assert.equal(held.mintXdr, envelope);
+      assert.equal(held.mintIntentHash, hash);
+      assert.equal(held.mintTx, '');
+      assert.equal(paymentLog.length, 0);
+    } finally {
+      __setDepsForTests({ submitTransaction: submit });
+    }
+  });
+}

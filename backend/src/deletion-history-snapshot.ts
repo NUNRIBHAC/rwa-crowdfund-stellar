@@ -276,7 +276,7 @@ export async function buildWalletHistorySnapshot(sources: WalletHistorySources):
 
     const state = states.get(row.key)!;
     let participantKeys: string[] = [];
-    let unreadableEvents = false;
+    let unreadableEvents: boolean;
     try {
       // Over-inclusion is the safe direction: events archived BEYOND the
       // shared target ledger are still checked for participation (a late

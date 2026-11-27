@@ -520,8 +520,8 @@ export async function deriveContributionFromNetwork(hash: string): Promise<{ cam
   if (Buffer.from(tx.hash()).toString('hex') !== hash) throw new Error('network envelope hash mismatch');
   if (tx.operations.length !== 1) return null;
   let contractId = '';
-  let fnName = '';
-  let contributor = '';
+  let fnName: string;
+  let contributor: string;
   try {
     const ic = (tx.operations[0] as any).func.invokeContract;
     if (ic?.contractAddress?.type === 'scAddressTypeContract' && ic.contractAddress.contractId?.value) {

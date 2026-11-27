@@ -146,7 +146,7 @@ export async function verifyFarcasterSignIn(
   } catch {
     throw bad;
   }
-  let verified: { fid: number } | null = null;
+  let verified: { fid: number } | null;
   try {
     verified = await verifier({ nonce, domain, message, signature: signature as `0x${string}` });
   } catch {
