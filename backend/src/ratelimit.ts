@@ -3,9 +3,16 @@
 // shared storage (the journal's soroban_rate_hits pattern) or a proxy limit.
 export class RateLimiter {
   private hits = new Map<string, number[]>();
-  constructor(private nowFn: () => number = () => Date.now()) {}
+  // maxKeys bounds the key table (memory). When it is reached, NEW keys are
+  // rejected without being recorded; existing keys are never evicted, so a
+  // flood of fresh keys cannot reset an existing key's budget.
+  constructor(
+    private nowFn: () => number = () => Date.now(),
+    private maxKeys: number = Number.POSITIVE_INFINITY,
+  ) {}
   // Returns true and records a hit when under `limit` hits in `windowMs`.
   allow(key: string, limit: number, windowMs: number): boolean {
+    if (!this.hits.has(key) && this.hits.size >= this.maxKeys) return false;
     const now = this.nowFn();
     const cutoff = now - windowMs;
     const list = (this.hits.get(key) ?? []).filter((t) => t > cutoff);
