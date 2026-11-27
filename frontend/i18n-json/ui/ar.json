@@ -3665,15 +3665,7 @@
     "feedbackPanelIntro": "أخبرنا بما ينجح وما لا ينجح. تُحفظ الملاحظات كتذكرة دعم لا يراها سواك أنت والمشغل.",
     "feedbackSignInPrompt": "سجّل الدخول بمحفظتك لإرسال الملاحظات.",
     "feedbackSubmitted": "شكرًا - تم إرسال ملاحظاتك.",
-    "feedbackClose": "إغلاق",
-    "passwordShow": "إظهار",
-    "passwordHide": "إخفاء",
-    "passwordStrength": {
-      "tooShort": "قصيرة جدًا: استخدم 10 أحرف على الأقل.",
-      "weak": "القوة: ضعيفة",
-      "fair": "القوة: متوسطة",
-      "strong": "القوة: قوية"
-    }
+    "feedbackClose": "إغلاق"
   },
   "messaging": {
     "title": "الرسائل",

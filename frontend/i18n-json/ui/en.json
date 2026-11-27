@@ -3681,15 +3681,7 @@
     "feedbackPanelIntro": "Tell us what works and what does not. Feedback is stored as a support ticket visible only to you and the operator.",
     "feedbackSignInPrompt": "Sign in with your wallet to send feedback.",
     "feedbackSubmitted": "Thank you - your feedback was sent.",
-    "feedbackClose": "Close",
-    "passwordShow": "Show",
-    "passwordHide": "Hide",
-    "passwordStrength": {
-      "tooShort": "Too short: use at least 10 characters.",
-      "weak": "Strength: weak",
-      "fair": "Strength: fair",
-      "strong": "Strength: strong"
-    }
+    "feedbackClose": "Close"
   },
   "messaging": {
     "title": "Messages",

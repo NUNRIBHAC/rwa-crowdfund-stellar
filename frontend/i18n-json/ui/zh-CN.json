@@ -3642,15 +3642,7 @@
     "feedbackPanelIntro": "告诉我们哪些好用、哪些不好用。反馈会保存为支持工单,仅您和运营者可见。",
     "feedbackSignInPrompt": "请使用钱包登录后发送反馈。",
     "feedbackSubmitted": "谢谢 - 您的反馈已发送。",
-    "feedbackClose": "关闭",
-    "passwordShow": "显示",
-    "passwordHide": "隐藏",
-    "passwordStrength": {
-      "tooShort": "太短：至少使用 10 个字符。",
-      "weak": "强度：弱",
-      "fair": "强度：中",
-      "strong": "强度：强"
-    }
+    "feedbackClose": "关闭"
   },
   "messaging": {
     "title": "消息",
