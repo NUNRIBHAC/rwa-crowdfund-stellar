@@ -7,7 +7,8 @@ import { AllowlistMailer, BrevoMailer, MailerError, allowedRecipientsFromEnv, ma
 test('mailerFromEnv: unset/unknown/log and half-configured brevo fail closed', () => {
   assert.equal(mailerFromEnv({} as NodeJS.ProcessEnv), null);
   assert.equal(mailerFromEnv({ COMMUNITY_EMAIL_PROVIDER: 'carrier-pigeon' } as NodeJS.ProcessEnv), null);
-  assert.ok(mailerFromEnv({ COMMUNITY_EMAIL_PROVIDER: 'log' } as NodeJS.ProcessEnv));
+  assert.equal(mailerFromEnv({ COMMUNITY_EMAIL_PROVIDER: 'log' } as NodeJS.ProcessEnv), null);
+  assert.ok(mailerFromEnv({ COMMUNITY_EMAIL_PROVIDER: 'log', DEPLOYMENT_ENV: 'test' } as NodeJS.ProcessEnv));
   // brevo without key or sender must not produce a mailer (503 at routes).
   assert.equal(mailerFromEnv({ COMMUNITY_EMAIL_PROVIDER: 'brevo' } as NodeJS.ProcessEnv), null);
   assert.equal(mailerFromEnv({ COMMUNITY_EMAIL_PROVIDER: 'brevo', BREVO_API_KEY: 'k' } as NodeJS.ProcessEnv), null);
@@ -77,7 +78,7 @@ test('allowlist guard: non-listed recipients never reach the provider, listed on
 });
 
 test('mailerFromEnv wraps any configured provider with the allowlist when set', () => {
-  const base = { COMMUNITY_EMAIL_PROVIDER: 'log' };
+  const base = { COMMUNITY_EMAIL_PROVIDER: 'log', DEPLOYMENT_ENV: 'test' };
   const unrestricted = mailerFromEnv({ ...base });
   assert.ok(unrestricted);
   assert.ok(!(unrestricted instanceof AllowlistMailer));
