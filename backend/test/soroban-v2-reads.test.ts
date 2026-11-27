@@ -17,13 +17,18 @@ const holderB = Keypair.random().publicKey();
 const issuer = Keypair.random().publicKey();
 let badTokenWasm = false;
 let sep41TokenWasm = false;
+let sdk30TokenWasm = false,
+  sdk30OfferingWasm = false,
+  crossFamilyOffering = false;
+const token30 = fs.readFileSync(new URL('../wasm/sdk30-share-token.wasm', import.meta.url));
+const offering30 = fs.readFileSync(new URL('../wasm/sdk30-offering.wasm', import.meta.url));
 const newTokenWasm = fs.readFileSync(new URL('../wasm/v2-share-token-sep41.wasm', import.meta.url));
 const balances: Record<string, bigint> = { [holderA]: 42000000n, [holderB]: 0n };
 
 const client: any = {
   getContractWasmByContractId: async (id: string) => {
-    if (id === tokenId) return badTokenWasm ? Buffer.from('wrong') : sep41TokenWasm ? newTokenWasm : tokenWasm;
-    if (id === offeringId) return offeringWasm;
+    if (id === tokenId) return badTokenWasm ? Buffer.from('wrong') : sdk30TokenWasm ? token30 : sep41TokenWasm ? newTokenWasm : tokenWasm;
+    if (id === offeringId) return crossFamilyOffering ? token30 : sdk30OfferingWasm ? offering30 : offeringWasm;
     throw new Error('unknown contract ' + id);
   },
   simulateTransaction: async (tx: any) => {
@@ -135,4 +140,23 @@ test('new SEP-41 token and exact legacy token both retain read compatibility', a
   } finally {
     sep41TokenWasm = false;
   }
+});
+
+test('all historical and SDK30 token/offering read pairs pass, cross-family code fails', async () => {
+  registry([v2Entry]);
+  badTokenWasm = false;
+  for (const t of [0, 1, 2])
+    for (const o of [false, true]) {
+      sep41TokenWasm = t === 1;
+      sdk30TokenWasm = t === 2;
+      sdk30OfferingWasm = o;
+      const result = await readV2SharePositions('v2camp', [holderA]);
+      assert.equal(result.holders[0].balance, '42000000');
+    }
+  crossFamilyOffering = true;
+  await assert.rejects(readV2SharePositions('v2camp', [holderA]), /offering contract code/);
+  crossFamilyOffering = false;
+  sdk30TokenWasm = false;
+  sdk30OfferingWasm = false;
+  sep41TokenWasm = false;
 });

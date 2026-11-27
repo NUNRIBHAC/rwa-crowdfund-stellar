@@ -131,15 +131,15 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/stellar-cli
-          key: ${{ runner.os }}-stellar-cli-28.1.0
+          key: ${{ runner.os }}-stellar-cli-30.0.1
 
       - name: Download pinned Stellar CLI release binary
         if: steps.stellar-cache.outputs.cache-hit != 'true'
         run: |
           curl --fail --location --retry 3 --proto '=https' --tlsv1.2 \
-            https://github.com/stellar/stellar-cli/releases/download/v28.1.0/stellar-cli-28.1.0-x86_64-unknown-linux-gnu.tar.gz \
+            https://github.com/stellar/stellar-cli/releases/download/v30.0.1/stellar-cli-30.0.1-x86_64-unknown-linux-gnu.tar.gz \
             --output /tmp/stellar-cli.tar.gz
-          echo 'c1680deee94301d33ada7a17f98411e642a4248c727afbd2e43050d345746462  /tmp/stellar-cli.tar.gz' | sha256sum -c -
+          echo '48c70074020e09af0a3ebbd2bf62d53c9aec47935e49a112d3cd90fb4e37658f  /tmp/stellar-cli.tar.gz' | sha256sum -c -
           mkdir -p "$RUNNER_TEMP/stellar-cli"
           tar -xzf /tmp/stellar-cli.tar.gz -C "$RUNNER_TEMP/stellar-cli"
 
@@ -148,17 +148,22 @@ jobs:
           "$RUNNER_TEMP/stellar-cli/stellar" --version
           echo "$RUNNER_TEMP/stellar-cli" >> "$GITHUB_PATH"
 
-      - run: stellar contract build
+      - run: stellar contract build --locked
 
       - name: Verify SEP-41 share-token artifact
         run: |
-          echo '6010fc62cf08ee606a2687bd4877790c6d131cbd57936beb21e592d179b818e7  target/wasm32v1-none/release/share_token.wasm' | sha256sum -c -
-          cmp target/wasm32v1-none/release/share_token.wasm ../../backend/wasm/v2-share-token-sep41.wasm
+          echo 'c256d9bbca81821d461ff8384d588c233593b44811494b7480612150aa300f87  target/wasm32v1-none/release/share_token.wasm' | sha256sum -c -
+          cmp target/wasm32v1-none/release/share_token.wasm ../../backend/wasm/sdk30-share-token.wasm
 
-      - name: Verify API-pinned Wasm fixture
+      - name: Verify SDK30 offering artifact
         run: |
-          echo '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564  target/wasm32v1-none/release/crowdfund.wasm' | sha256sum -c -
-          cmp target/wasm32v1-none/release/crowdfund.wasm ../../backend/test/fixtures/reviewed-crowdfund.wasm
+          echo '2f3239d8514035ddd7d3c6d77f1e4a588e831b333cf9a309d18961974ec30910  target/wasm32v1-none/release/offering.wasm' | sha256sum -c -
+          cmp target/wasm32v1-none/release/offering.wasm ../../backend/wasm/sdk30-offering.wasm
+
+      - name: Verify SDK30 crowdfund artifact
+        run: |
+          echo '79e4d2122a8ebee77eaea1dc7bf9aa082f1b594062844422879320858cf043b8  target/wasm32v1-none/release/crowdfund.wasm' | sha256sum -c -
+          cmp target/wasm32v1-none/release/crowdfund.wasm ../../backend/wasm/sdk30-crowdfund.wasm
 
   gitleaks:
     runs-on: ubuntu-latest

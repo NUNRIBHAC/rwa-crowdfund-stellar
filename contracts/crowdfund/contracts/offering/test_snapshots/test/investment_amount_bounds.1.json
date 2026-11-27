@@ -48,7 +48,7 @@
     []
   ],
   "ledger": {
-    "protocol_version": 29,
+    "protocol_version": 30,
     "sequence_number": 0,
     "timestamp": 1000,
     "network_id": "0000000000000000000000000000000000000000000000000000000000000000",

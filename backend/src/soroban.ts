@@ -1,5 +1,5 @@
+import { CONTRACT_ARTIFACTS, DEPLOY_ARTIFACTS, isReviewedContractHash, loadDeployArtifact } from './contract-artifacts.js';
 import { createHash, randomBytes } from 'node:crypto';
-import { readFileSync } from 'node:fs';
 import {
   Account,
   Address,
@@ -25,7 +25,7 @@ export const sorobanDeps = {
 };
 const passphrase = Networks.TESTNET;
 const expectedToken = () => new Asset('USDC', process.env.USDC_ISSUER ?? '').contractId(passphrase);
-const WASM_HASH = '202c9d7e59623c06d1eb2f1ade4cbd187a73ccd3f8154673593820c71db1b564';
+const WASM_HASH = DEPLOY_ARTIFACTS.crowdfund.hash;
 import { journalBackend, readJournalSummary } from './journal.js';
 import type { Intent, IntentStore, IntentSummaryStore } from './journal.js';
 // Registry entries come in two shapes. v1 entries point at one reviewed
@@ -257,7 +257,8 @@ function assertReviewedInstance(found: LedgerEntryLike | undefined): xdr.ScContr
   if (instance.type !== 'scvContractInstance') throw new Error('contract instance entry malformed; refusing');
   const executable = instance.instance.executable;
   if (executable.type !== 'contractExecutableWasm') throw new Error('contract is not Wasm-executable; refusing');
-  if (Buffer.from(executable.wasmHash.value).toString('hex') !== WASM_HASH) throw new Error('contract code does not match reviewed crowdfund Wasm; refusing');
+  if (!isReviewedContractHash('crowdfund', Buffer.from(executable.wasmHash.value).toString('hex')))
+    throw new Error('contract code does not match reviewed crowdfund Wasm; refusing');
   return instance.instance;
 }
 
@@ -854,20 +855,8 @@ export async function statusSoroban(hash: string): Promise<any> {
 // Wasm pin, and returns a registry entry for the operator to add to
 // SOROBAN_CAMPAIGNS_JSON. The server never edits the registry itself:
 // listing a new campaign stays an explicit operator configuration step.
-const REVIEWED_WASM_URL = new URL('../wasm/reviewed-crowdfund.wasm', import.meta.url);
-let reviewedWasmCache: Buffer | null = null;
 function loadReviewedWasm(): Buffer {
-  if (reviewedWasmCache) return reviewedWasmCache;
-  let wasm: Buffer;
-  try {
-    wasm = readFileSync(REVIEWED_WASM_URL);
-  } catch {
-    throw new Error('reviewed crowdfund Wasm is not packaged on this deployment');
-  }
-  if (createHash('sha256').update(wasm).digest('hex') !== WASM_HASH)
-    throw new Error('packaged crowdfund Wasm does not match the reviewed hash; refusing to prepare deployment');
-  reviewedWasmCache = wasm;
-  return wasm;
+  return loadDeployArtifact('crowdfund');
 }
 // True when the exact reviewed Wasm hash already exists on the ledger, so
 // the upload step can be skipped. RPC failure fails closed to 'not
@@ -1051,6 +1040,24 @@ async function recordContractCreation(hash: string, campaignId: string): Promise
     console.error('deployment manifest record failed:', campaignId, err instanceof Error ? err.message : err);
   }
 }
+// A journaled deployment can span a release. Recover its exact artifact from
+// its signed operation, never replace an old intent with the new deploy pin.
+function journaledDeploymentHash(tx: Transaction, action: string, family: 'crowdfund' | 'token' | 'offering'): string {
+  if (tx.operations.length !== 1) throw new Error('invalid journaled deployment operation');
+  const op = tx.operations[0] as any;
+  if (op.type !== 'invokeHostFunction') throw new Error('invalid journaled deployment operation');
+  const fn = op.func;
+  let hash: string;
+  if (action.includes('upload') && fn.type === 'hostFunctionTypeUploadContractWasm') {
+    hash = createHash('sha256').update(Buffer.from(fn.value)).digest('hex');
+  } else if (action.includes('create') && fn.type === 'hostFunctionTypeCreateContractV2') {
+    const executable = fn.value.executable;
+    if (executable.type !== 'contractExecutableWasm') throw new Error('invalid journaled deployment code');
+    hash = Buffer.from(executable.wasmHash.value).toString('hex');
+  } else throw new Error('invalid journaled deployment action');
+  if (!isReviewedContractHash(family, hash)) throw new Error('unreviewed journaled deployment code');
+  return hash;
+}
 export async function submitCampaignDeploy(input: { actor: string; xdr: string; name?: string }): Promise<any> {
   guard();
   actorAddress(input.actor);
@@ -1062,6 +1069,7 @@ export async function submitCampaignDeploy(input: { actor: string; xdr: string; 
     const store = await readStore();
     const intent = store.intents.find((i) => i.hash === hash && i.actor === input.actor && (i.action === 'deploy-upload' || i.action === 'deploy-create'));
     if (!intent) throw new Error(quarantinedHash(store, hash) ?? 'transaction was not prepared by this API');
+    journaledDeploymentHash(tx, intent.action, 'crowdfund');
     if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
     const other = store.intents.find((i) => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
     if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
@@ -1106,7 +1114,7 @@ export async function submitCampaignDeploy(input: { actor: string; xdr: string; 
   // Fail closed on the created instance itself: the registry entry is only
   // returned when the deployed code IS the reviewed crowdfund contract.
   const deployedWasm = await sorobanDeps.client().getContractWasmByContractId(outcome.contractId);
-  if (createHash('sha256').update(deployedWasm).digest('hex') !== WASM_HASH)
+  if (createHash('sha256').update(deployedWasm).digest('hex') !== journaledDeploymentHash(tx, intent.action, 'crowdfund'))
     throw new Error('deployed contract code does not match the reviewed crowdfund Wasm; refusing to produce a registry entry');
   await recordContractCreation(hash, intent.campaign);
   return {
@@ -1142,43 +1150,31 @@ export async function submitCampaignDeploy(input: { actor: string; xdr: string; 
 // testnet scaffolds and the registry entry below says so.
 // New deployments use the SEP-41 token. Existing scaffold positions remain
 // readable only for the exact legacy hash; this is not a migration or upgrade.
-const LEGACY_V2_SHARE_TOKEN_WASM_HASH = '3fc3d4b74f69fcfb2e0b86878b5b0f3d89a73050e6a049da4dd789dd7a27eaa1';
-const V2_SHARE_TOKEN_WASM_HASH = '6010fc62cf08ee606a2687bd4877790c6d131cbd57936beb21e592d179b818e7';
-const V2_OFFERING_WASM_HASH = '84d254abbc46f5aaf8305734510d66123b4cc9d800992cd11c23da88eb1be622';
-// The v2 scaffolds that are deployed as a wired set; V2_WASMS is keyed by
-// exactly this union, so a new member without a packaged Wasm is a type error.
 type V2Kind = 'token' | 'offering';
-const V2_WASMS: Record<V2Kind, { url: URL; hash: string; cache: Buffer | null }> = {
-  token: {
-    url: new URL('../wasm/v2-share-token-sep41.wasm', import.meta.url),
-    hash: V2_SHARE_TOKEN_WASM_HASH,
-    cache: null,
-  },
-  offering: {
-    url: new URL('../wasm/v2-offering.wasm', import.meta.url),
-    hash: V2_OFFERING_WASM_HASH,
-    cache: null,
-  },
-};
-function loadV2Wasm(kind: V2Kind): Buffer {
-  const entry = V2_WASMS[kind];
-  if (entry.cache) return entry.cache;
-  let wasm: Buffer;
-  try {
-    wasm = readFileSync(entry.url);
-  } catch {
-    throw new Error(`v2 ${kind} Wasm is not packaged on this deployment`);
+type V2Pins = { token: string; offering: string };
+const CURRENT_V2_PINS: V2Pins = { token: DEPLOY_ARTIFACTS.token.hash, offering: DEPLOY_ARTIFACTS.offering.hash };
+const HISTORICAL_V2_PINS: V2Pins = { token: CONTRACT_ARTIFACTS.token29.hash, offering: CONTRACT_ARTIFACTS.offering29.hash };
+function v2DeploymentPins(rows: { action: string; status: string; xdr: string }[]): V2Pins {
+  let selected: V2Pins | undefined;
+  for (const row of rows) {
+    if (row.status !== 'SUCCESS' || row.action === 'deploy-v2-set-minter') continue;
+    const family = row.action.endsWith('token') ? 'token' : 'offering';
+    const tx = TransactionBuilder.fromXDR(row.xdr, passphrase);
+    if (!(tx instanceof Transaction)) throw new Error('invalid historical deployment envelope');
+    const hash = journaledDeploymentHash(tx, row.action, family);
+    const set = hash === CURRENT_V2_PINS[family] ? CURRENT_V2_PINS : hash === HISTORICAL_V2_PINS[family] ? HISTORICAL_V2_PINS : null;
+    if (!set || (selected && selected !== set)) throw new Error('mixed deployment artifact generations; reconcile exact original hashes');
+    selected = set;
   }
-  if (createHash('sha256').update(wasm).digest('hex') !== entry.hash)
-    throw new Error(`packaged v2 ${kind} Wasm does not match its pin; refusing to prepare deployment`);
-  entry.cache = wasm;
-  return wasm;
+  return selected ?? CURRENT_V2_PINS;
 }
-async function v2WasmOnLedger(client: rpc.Server, kind: V2Kind): Promise<boolean> {
-  const entry = V2_WASMS[kind];
+async function v2WasmOnLedger(client: rpc.Server, kind: V2Kind, pins: V2Pins): Promise<boolean> {
   try {
-    const wasm = await client.getContractWasmByHash(Buffer.from(entry.hash, 'hex'));
-    return createHash('sha256').update(wasm).digest('hex') === entry.hash;
+    return (
+      createHash('sha256')
+        .update(await client.getContractWasmByHash(Buffer.from(pins[kind], 'hex')))
+        .digest('hex') === pins[kind]
+    );
   } catch {
     return false;
   }
@@ -1204,9 +1200,9 @@ async function verifyV2Code(client: rpc.Server, e: V2Entry): Promise<void> {
     client.getContractWasmByContractId(e.tokenContractId),
     client.getContractWasmByContractId(e.offeringContractId),
   ]);
-  if (![V2_SHARE_TOKEN_WASM_HASH, LEGACY_V2_SHARE_TOKEN_WASM_HASH].includes(createHash('sha256').update(tokenWasm).digest('hex')))
+  if (!isReviewedContractHash('token', createHash('sha256').update(tokenWasm).digest('hex')))
     throw new Error('share-token contract code does not match the pinned v2 Wasm; refusing to read positions');
-  if (createHash('sha256').update(offeringWasm).digest('hex') !== V2_OFFERING_WASM_HASH)
+  if (!isReviewedContractHash('offering', createHash('sha256').update(offeringWasm).digest('hex')))
     throw new Error('offering contract code does not match the pinned v2 Wasm; refusing to read positions');
 }
 export async function readV2SharePositions(campaignId: string, holders: string[]): Promise<V2SharePositions> {
@@ -1289,6 +1285,31 @@ function v2NextStep(
   if (!ok('deploy-v2-set-minter')) return { action: 'deploy-v2-set-minter', tokenContractId, offeringContractId };
   return { action: 'complete', tokenContractId, offeringContractId };
 }
+function deploymentRows(store: Awaited<ReturnType<typeof readStore>>, campaign: string, actor: string) {
+  return store.intents.filter((i) => i.campaign === campaign && i.actor === actor && i.action.startsWith('deploy-v2-'));
+}
+function assertNoOpenDeployment(rows: ReturnType<typeof deploymentRows>, reusableHash?: string) {
+  for (const row of rows) {
+    if (TERMINAL.includes(row.status)) continue;
+    if (row.hash === reusableHash && row.status === 'BUILT' && !row.signedXdr) continue;
+    if (row.signedXdr || row.status !== 'BUILT') throw new Error('prior deployment intent unresolved; reconcile exact hash');
+    let tx: Transaction;
+    try {
+      const parsed = TransactionBuilder.fromXDR(row.xdr, passphrase);
+      if (!(parsed instanceof Transaction)) throw new Error();
+      tx = parsed;
+    } catch {
+      throw new Error('invalid prior deployment envelope');
+    }
+    if (
+      !tx.timeBounds ||
+      !Number.isSafeInteger(Number(tx.timeBounds.maxTime)) ||
+      Number(tx.timeBounds.maxTime) <= 0 ||
+      Number(tx.timeBounds.maxTime) >= Math.floor(Date.now() / 1000)
+    )
+      throw new Error('prior unsigned deployment intent is still live; wait for expiry or submit exact hash');
+  }
+}
 export async function buildCampaignDeployV2(input: {
   actor: string;
   id: string;
@@ -1312,9 +1333,49 @@ export async function buildCampaignDeployV2(input: {
   validateV2Params(input.v2);
   await rateLimit('build', input.actor);
   const client = sorobanDeps.client();
-  const [tokenOnLedger, offeringOnLedger] = await Promise.all([v2WasmOnLedger(client, 'token'), v2WasmOnLedger(client, 'offering')]);
-  const store0 = await readStore();
-  const mine = store0.intents.filter((i) => i.campaign === input.id && i.actor === input.actor && i.action.startsWith('deploy-v2-'));
+  const snapshot = await guarded(async () => {
+    const store = await readStore();
+    quarantineHold(store);
+    const rows = deploymentRows(store, input.id, input.actor);
+    const pins = v2DeploymentPins(rows);
+    const context = JSON.stringify([
+      input.actor,
+      input.id,
+      input.name,
+      input.goal,
+      deadline,
+      input.v2.symbol,
+      input.v2.decimals,
+      input.v2.minPerInvestor,
+      input.v2.maxPerInvestor,
+      pins,
+      passphrase,
+      process.env.RPC_URL ?? 'https://soroban-testnet.stellar.org',
+      expectedToken(),
+    ]);
+    const live = rows.filter((i) => !TERMINAL.includes(i.status));
+    const candidates = live.filter((i) => i.status === 'BUILT' && !i.signedXdr && i.deploymentContext === context);
+    if (candidates.length > 1) throw new Error('multiple unsigned deployment candidates; reconcile exact hashes');
+    const candidate = candidates[0];
+    let reuse: Transaction | undefined;
+    if (candidate) {
+      const parsed = TransactionBuilder.fromXDR(candidate.xdr, passphrase);
+      if (
+        parsed instanceof Transaction &&
+        Number(parsed.timeBounds?.maxTime) > Math.floor(Date.now() / 1000) + 120 &&
+        parsed.source === input.actor &&
+        Buffer.from(parsed.hash()).toString('hex') === candidate.hash
+      )
+        reuse = parsed;
+    }
+    assertNoOpenDeployment(rows, reuse ? candidate?.hash : undefined);
+    const globalUnresolved = store.intents.find((i) => i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
+    if (globalUnresolved) throw new Error('prior signed intent unresolved');
+    return { reuse, candidate, context, rows, pins: v2DeploymentPins(rows), fingerprint: JSON.stringify(rows) };
+  });
+  const mine = snapshot.rows;
+  const pins = snapshot.pins;
+  const [tokenOnLedger, offeringOnLedger] = await Promise.all([v2WasmOnLedger(client, 'token', pins), v2WasmOnLedger(client, 'offering', pins)]);
   const next = v2NextStep(mine, tokenOnLedger, offeringOnLedger);
   if (next.action === 'complete')
     return {
@@ -1326,6 +1387,44 @@ export async function buildCampaignDeployV2(input: {
       offeringContractId: next.offeringContractId,
       testOnly: true,
     };
+  if (snapshot.reuse && snapshot.candidate) {
+    if (snapshot.candidate.action !== next.action) throw new Error('deployment step changed; reconcile exact history');
+    const original = snapshot.reuse;
+    if (next.action !== 'deploy-v2-set-minter') {
+      const family = next.action.endsWith('token') ? 'token' : 'offering';
+      if (journaledDeploymentHash(original, next.action, family) !== pins[family]) throw new Error('reusable envelope generation mismatch');
+    }
+
+    const liveAccount = await client.getAccount(input.actor);
+    if (BigInt(liveAccount.sequenceNumber()) + 1n !== BigInt(original.sequence))
+      throw new Error('original envelope account sequence changed; wait for expiry, do not replace');
+    const freshSimulation = await client.simulateTransaction(original);
+    if (rpc.Api.isSimulationError(freshSimulation) || rpc.Api.isSimulationRestore(freshSimulation))
+      throw new Error('original envelope simulation is stale; wait for expiry, do not replace');
+    if (rpc.assembleTransaction(original, freshSimulation).build().toXDR() !== original.toXDR())
+      throw new Error('original envelope resources changed; wait for expiry, do not replace');
+    await guarded(async () => {
+      const store = await readStore();
+      quarantineHold(store);
+      const rows = deploymentRows(store, input.id, input.actor);
+      if (Number(original.timeBounds?.maxTime) <= Math.floor(Date.now() / 1000) + 120) throw new Error('reusable envelope too near expiry');
+      assertNoOpenDeployment(rows, snapshot.candidate!.hash);
+      if (JSON.stringify(rows) !== snapshot.fingerprint || store.intents.some((i) => i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status)))
+        throw new Error('deployment state changed during reuse');
+    });
+    return {
+      hash: snapshot.candidate.hash,
+      xdr: original.toXDR(),
+      networkPassphrase: passphrase,
+      action: 'deploy',
+      contractSet: 'v2',
+      step: next.action.replace(/^deploy-v2-/, ''),
+      id: input.id,
+      name: input.name,
+      feeStroops: original.fee,
+      testOnly: true,
+    };
+  }
   const account = await client.getAccount(input.actor).catch((e: unknown) => {
     if (/account not found/i.test(e instanceof Error ? e.message : String(e))) {
       const err = new Error('Transaction preparation failed: wallet account does not exist on testnet.');
@@ -1338,15 +1437,15 @@ export async function buildCampaignDeployV2(input: {
     ReturnType<typeof Operation.uploadContractWasm> | ReturnType<typeof Operation.createCustomContract> | ReturnType<typeof Operation.invokeContractFunction>;
   switch (next.action) {
     case 'deploy-v2-upload-token':
-      operation = Operation.uploadContractWasm({ wasm: loadV2Wasm('token') });
+      operation = Operation.uploadContractWasm({ wasm: loadDeployArtifact('token', pins.token) });
       break;
     case 'deploy-v2-upload-offering':
-      operation = Operation.uploadContractWasm({ wasm: loadV2Wasm('offering') });
+      operation = Operation.uploadContractWasm({ wasm: loadDeployArtifact('offering', pins.offering) });
       break;
     case 'deploy-v2-create-token':
       operation = Operation.createCustomContract({
         address: actor,
-        wasmHash: Buffer.from(V2_SHARE_TOKEN_WASM_HASH, 'hex'),
+        wasmHash: Buffer.from(pins.token, 'hex'),
         salt: randomBytes(32),
         constructorArgs: [
           actor.toScVal(),
@@ -1361,7 +1460,7 @@ export async function buildCampaignDeployV2(input: {
       // operator wallet is the issuer in this demo-grade configuration.
       operation = Operation.createCustomContract({
         address: actor,
-        wasmHash: Buffer.from(V2_OFFERING_WASM_HASH, 'hex'),
+        wasmHash: Buffer.from(pins.offering, 'hex'),
         salt: randomBytes(32),
         constructorArgs: [
           actor.toScVal(),
@@ -1406,7 +1505,21 @@ export async function buildCampaignDeployV2(input: {
     if (unresolved) throw new Error(`prior signed intent ${unresolved.hash} is unresolved; check/retry exact hash, do not build a replacement`);
     const open = openIntents(store, input.actor);
     if (open.length >= openIntentCap()) throw new Error(`too many open intents (${open.length}); resolve signed intents or let unsigned ones expire`);
-    store.intents.push({ hash, campaign: input.id, actor: input.actor, action: next.action, xdr: prepared.toXDR(), status: 'BUILT' });
+    const current = deploymentRows(store, input.id, input.actor);
+    assertNoOpenDeployment(current);
+    const currentPins = v2DeploymentPins(current);
+    if (JSON.stringify(current) !== snapshot.fingerprint || currentPins.token !== pins.token || currentPins.offering !== pins.offering)
+      throw new Error('deployment state changed during preparation; reread exact state');
+    if (store.intents.some((i) => i.hash === hash)) throw new Error('transaction hash already belongs to another build');
+    store.intents.push({
+      hash,
+      campaign: input.id,
+      actor: input.actor,
+      action: next.action,
+      xdr: prepared.toXDR(),
+      status: 'BUILT',
+      deploymentContext: snapshot.context,
+    });
     await save(store);
   });
   return {
@@ -1434,6 +1547,7 @@ export async function submitCampaignDeployV2(input: { actor: string; xdr: string
     const store = await readStore();
     const intent = store.intents.find((i) => i.hash === hash && i.actor === input.actor && V2_ACTIONS.includes(i.action));
     if (!intent) throw new Error(quarantinedHash(store, hash) ?? 'transaction was not prepared by this API');
+    if (intent.action !== 'deploy-v2-set-minter') journaledDeploymentHash(tx, intent.action, intent.action.endsWith('token') ? 'token' : 'offering');
     if (TERMINAL.includes(intent.status)) return { terminal: true, status: intent.status };
     const other = store.intents.find((i) => i.hash !== hash && i.actor === input.actor && i.signedXdr && !TERMINAL.includes(i.status));
     if (other) throw new Error(`prior signed intent ${other.hash} unresolved`);
@@ -1485,7 +1599,7 @@ export async function submitCampaignDeployV2(input: { actor: string; xdr: string
         step,
         message: 'Submission is not confirmation. Check the hash before another action.',
       };
-    const pin = step === 'create-token' ? V2_SHARE_TOKEN_WASM_HASH : V2_OFFERING_WASM_HASH;
+    const pin = journaledDeploymentHash(tx, intent.action, step === 'create-token' ? 'token' : 'offering');
     const deployedWasm = await sorobanDeps.client().getContractWasmByContractId(outcome.contractId);
     if (createHash('sha256').update(deployedWasm).digest('hex') !== pin)
       throw new Error(`deployed v2 ${step} code does not match its pin; refusing to journal the contract id`);
