@@ -1,0 +1,49 @@
+# Build-context hygiene for `docker build` (COPY . . in the Dockerfile).
+# gitignore does NOT limit what is sent to the builder: a dirty working tree
+# would otherwise ship local secrets, data and caches into build layers and
+# the cache. Keep this list aligned with .gitignore and with what the build
+# truly needs (see infra/tests/test_dockerignore.py).
+
+# VCS metadata
+.git
+
+# Dependencies (installed fresh via npm ci in the image)
+**/node_modules
+
+# Build outputs (rebuilt inside the image)
+**/dist
+**/build
+
+# Local env files and secrets. The committed examples stay: they are part of
+# the source tree and carry no secrets.
+**/.env
+**/.env.*
+!**/.env.example
+
+# Local runtime state and creator/investor secrets (never part of a build)
+backend/.creator.json
+backend/.demo-investors.json
+backend/data
+backend/debug-ops.ts
+data/community-store.json
+deploy
+
+# Logs, OS noise, caches, test/coverage artifacts
+**/*.log
+**/.DS_Store
+**/coverage
+frontend/test-results
+frontend/playwright-report
+frontend/screenshots
+**/__pycache__
+**/*.pyc
+
+# Rust build/test output (the image never builds contracts)
+contracts/crowdfund/target
+contracts/crowdfund/contracts/crowdfund/test_snapshots
+
+# Local-only unverified skill copies and portal build trees
+docs/skills-reference/private
+portal/build-public
+portal/build-internal
+portal/.docusaurus
