@@ -4435,6 +4435,16 @@ export const en = {
     accounts: '2023 company statements, compilation not audit (PDF)',
     impact: "Promoter's 2024 impact report (Dutch PDF), figures not reconciled",
   },
+  automaticRefund: {
+    title: 'Automatic refund',
+    testnetOnly: 'Testnet only. No real money is moved.',
+    pending: 'Refund pending. No payment has been confirmed.',
+    submitted: 'Refund submitted. Confirmation is still pending.',
+    paid: 'Refund confirmed to the original wallet.',
+    blocked: 'The refund needs review. No payment is confirmed here.',
+    manualFallback: 'Open the manual refund option',
+    unavailable: 'Refund status is temporarily unavailable.',
+  },
 };
 
 export type Messages = typeof en;

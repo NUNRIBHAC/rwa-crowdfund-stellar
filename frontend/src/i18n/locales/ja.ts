@@ -4384,4 +4384,14 @@ export const ja: Messages = {
     accounts: '2023 年財務諸表、調製であって監査ではありません（PDF）',
     impact: '発行者の 2024 年影響報告書（オランダ語 PDF）、数値未照合',
   },
+  automaticRefund: {
+    title: '自動返金',
+    testnetOnly: 'テストネット専用です。実際のお金は移動しません。',
+    pending: '返金は保留中です。支払いはまだ確認されていません。',
+    submitted: '返金を送信しました。確認待ちです。',
+    paid: '元のウォレットへの返金が確認されました。',
+    blocked: '返金の確認が必要です。ここでは支払いは確認されていません。',
+    manualFallback: '手動返金の選択肢を開く',
+    unavailable: '返金状況を一時的に取得できません。',
+  },
 };

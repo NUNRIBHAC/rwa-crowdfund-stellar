@@ -4512,4 +4512,14 @@ export const de: Messages = {
     accounts: 'Unternehmensabschluss 2023, Erstellung statt Prüfung (PDF)',
     impact: 'Wirkungsbericht 2024 des Projektträgers (niederländisches PDF), Zahlen nicht abgeglichen',
   },
+  automaticRefund: {
+    title: 'Automatische Rückerstattung',
+    testnetOnly: 'Nur im Testnetz. Es wird kein echtes Geld bewegt.',
+    pending: 'Rückerstattung ausstehend. Es wurde noch keine Zahlung bestätigt.',
+    submitted: 'Rückerstattung gesendet. Die Bestätigung steht noch aus.',
+    paid: 'Rückerstattung an die ursprüngliche Wallet bestätigt.',
+    blocked: 'Die Rückerstattung muss geprüft werden. Hier ist keine Zahlung bestätigt.',
+    manualFallback: 'Manuelle Rückerstattung öffnen',
+    unavailable: 'Der Status der Rückerstattung ist vorübergehend nicht verfügbar.',
+  },
 };

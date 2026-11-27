@@ -5,6 +5,7 @@ import Account from './Account';
 import type { Market } from '../market';
 const auth = vi.hoisted(() => ({ token: 'synthetic-session', account: { publicKey: 'wallet-session', authMethod: 'wallet' } as any }));
 vi.mock('../community/CommunityAuth', () => ({ useCommunityAuth: () => auth }));
+vi.mock('../components/AccountAutomaticRefunds', () => ({ default: () => null }));
 vi.mock('../components/DemoJourney', () => ({ default: () => null }));
 vi.mock('../components/InvestorOnboarding', () => ({ default: () => null }));
 vi.mock('../components/NotificationsSection', () => ({ default: () => null }));

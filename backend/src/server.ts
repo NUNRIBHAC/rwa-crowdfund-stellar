@@ -1,3 +1,4 @@
+import { readAutomaticRefunds } from './automatic-refund-read.js';
 import { testnetSetupRouter, testnetSetupPorts } from './testnet-setup-routes.js';
 import { HORIZON_URL, USDC } from './config.js';
 import { startBackgroundTask } from './background-task.js';
@@ -352,6 +353,11 @@ function readyCommunityRouter() {
       const router = createCommunityRouter({
         service,
         requireAdmin,
+        automaticRefundsUnavailable: NETWORK !== 'testnet' ? 'unsupported_network' : 'not_configured',
+        automaticRefunds:
+          NETWORK === 'testnet' && process.env.AUTO_REFUND_READ_CONFIG
+            ? (wallet) => readAutomaticRefunds(process.env.AUTO_REFUND_READ_CONFIG!, wallet)
+            : undefined,
         mailer: mailerFromEnv(),
         accountActivity,
         reconciliation: reconciliationPayload,

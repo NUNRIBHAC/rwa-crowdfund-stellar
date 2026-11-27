@@ -1,0 +1,91 @@
+{
+  "verifiedAt": "2026-11-27T16:36:51.214Z",
+  "source": "https://soroban-testnet.stellar.org/",
+  "network": "Test SDF Network ; September 2015",
+  "contract": "CBQFMNZMVM25VFOXG5AYQDRM5OBGNEZKH6PW25JWF6NQVSFLAN4ORDKD",
+  "payer": "GAD5HXTRHXMFE76TLGYTCFGVPXTPXCWTZA7BXG3RS5WJR6YOBMULZPL4",
+  "contributor": "GBZ5GH6R7ANIY25X74STNJKFKOTJCYFDTVEJT2PYVACX7WQZZG6EJI3G",
+  "wasmHash": "1603bf0edb92ab1b6594e37dcb825fc64c065b38ec62dbe913fda6f2df92e855",
+  "contributionStroops": "10000000",
+  "expired": {
+    "hash": "fae5a22e8cd8e7720a90e0911ec54955b081fd5c469d3ebe9cd995d02df28b07",
+    "bytesSha256": "c5e9dcba686d78a819335978f5c0ef1abd2d9b5da95798255270f8e6a3be52e1",
+    "bytesPreserved": true,
+    "proof": {
+      "source": "https://soroban-testnet.stellar.org/",
+      "hash": "fae5a22e8cd8e7720a90e0911ec54955b081fd5c469d3ebe9cd995d02df28b07",
+      "outcome": "absent",
+      "minTime": 1795797221,
+      "maxTime": 1795797341,
+      "oldestLedger": 5833786,
+      "oldestCloseTime": 1795192570,
+      "latestLedger": 5954745,
+      "latestCloseTime": 1795797369
+    },
+    "currentStatus": "NOT_FOUND"
+  },
+  "replacement": {
+    "hash": "a69f4782149a33a94cfc2cd5c77e5b7d115c3526a1f9faba356430b032fb4902",
+    "ledger": 5954748,
+    "feeCapStroops": "1000000",
+    "envelopeFeeStroops": "13035",
+    "actualFeeStroops": "8097",
+    "signatureVerified": true,
+    "confirmedAmountStroops": "10000000",
+    "returnValueStroops": "10000000",
+    "events": [
+      {
+        "contract": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+        "type": "contract",
+        "topics": [
+          "transfer",
+          "CBQFMNZMVM25VFOXG5AYQDRM5OBGNEZKH6PW25JWF6NQVSFLAN4ORDKD",
+          "GBZ5GH6R7ANIY25X74STNJKFKOTJCYFDTVEJT2PYVACX7WQZZG6EJI3G",
+          "native"
+        ],
+        "data": "10000000"
+      },
+      {
+        "contract": "CBQFMNZMVM25VFOXG5AYQDRM5OBGNEZKH6PW25JWF6NQVSFLAN4ORDKD",
+        "type": "contract",
+        "topics": ["refunded", "GBZ5GH6R7ANIY25X74STNJKFKOTJCYFDTVEJT2PYVACX7WQZZG6EJI3G"],
+        "data": {
+          "amount": "10000000"
+        }
+      }
+    ]
+  },
+  "setupActualFeesStroops": "923838",
+  "phases": {
+    "prepare-never-submit": {
+      "at": "2026-11-27T16:33:42.202Z",
+      "signCalls": 1,
+      "submitCalls": 0,
+      "state": "signed"
+    },
+    "recover": {
+      "at": "2026-11-27T16:36:11.297Z",
+      "signCalls": 0,
+      "submitCalls": 0,
+      "state": "expired"
+    },
+    "replace": {
+      "at": "2026-11-27T16:36:20.289Z",
+      "signCalls": 1,
+      "submitCalls": 1,
+      "state": "submitted"
+    },
+    "confirm": {
+      "at": "2026-11-27T16:36:25.566Z",
+      "signCalls": 0,
+      "submitCalls": 0,
+      "state": "confirmed"
+    },
+    "repeat": {
+      "at": "2026-11-27T16:36:27.640Z",
+      "signCalls": 0,
+      "submitCalls": 0,
+      "state": "confirmed"
+    }
+  }
+}

@@ -20,8 +20,10 @@ describe('explicit dormant catalog boundary', () => {
       expect(JSON.stringify(preserveDormant(active, catalog, base, `ui.${locale}`))).toBe(JSON.stringify(catalog));
     });
   }
-  it('rejects accidental runtime activation', () => {
-    expect(() => splitCatalog(base, base, base, 'ui.en')).toThrow('must not be active');
+  it('preserves explicitly integrated runtime namespace and validates its shape', () => {
+    expect(splitCatalog(base, base, base, 'ui.en')).toEqual({ active: base, dormant: {} });
+    expect(preserveDormant(base, base, base, 'ui.en')).toEqual(base);
+    expect(() => splitCatalog(base, base, { ...base, automaticRefund: {} }, 'ui.en')).toThrow('shape rejected');
   });
   it('does not classify unknown namespaces as dormant', () => {
     const catalog = { ...base, unapprovedFeature: { title: 'No' } };

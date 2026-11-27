@@ -82,6 +82,8 @@ export type CommunityRouterDeps = {
   // OAuth provider HTTP override for tests; production uses global fetch.
   socialFetch?: typeof fetch;
   requireAdmin: express.RequestHandler;
+  automaticRefundsUnavailable?: 'not_configured' | 'unsupported_network';
+  automaticRefunds?: (wallet: string) => Promise<import('./automatic-refund-read.js').AutomaticRefundReadRow[]>;
   // Read-only operator reconciliation payload provider (wired in server.ts
   // from the campaign registry + intent journal). Optional so route tests
   // without chain access stay hermetic; absent means 503, never a guess.
@@ -904,6 +906,22 @@ export function createCommunityRouter(deps: CommunityRouterDeps): express.Router
       res.json({ record: await service.requestSophistication(account, req.body) });
     } catch (err) {
       sendError(res, err);
+    }
+  });
+
+  router.get('/api/auth/automatic-refunds', async (req, res) => {
+    res.set('Cache-Control', 'no-store').set('X-Content-Type-Options', 'nosniff');
+    try {
+      const account = await authenticate(store, req.header('authorization'));
+      if (account.authMethod) return res.status(403).json({ code: 'forbidden' });
+      if (Object.keys(req.query).length) return res.status(400).json({ code: 'invalid_input' });
+      if (!deps.automaticRefunds) return res.json({ enabled: false, reason: deps.automaticRefundsUnavailable ?? 'not_configured' });
+      const refunds = await deps.automaticRefunds(account.publicKey);
+      res.json({ refunds, network: 'testnet', productionEligible: false });
+    } catch (err) {
+      if (err instanceof AuthError) return sendError(res, err);
+      // Never disclose journal paths, XDR, account identifiers or raw errors.
+      res.status(503).json({ code: 'API_UNAVAILABLE' });
     }
   });
 

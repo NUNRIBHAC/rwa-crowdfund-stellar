@@ -4291,4 +4291,14 @@ export const zhTW: Messages = {
     accounts: '2023 年公司報表，編製而非查核（PDF）',
     impact: '發起人 2024 年影響報告（荷蘭文 PDF），資料尚未核對一致',
   },
+  automaticRefund: {
+    title: '自動退款',
+    testnetOnly: '僅限測試網路。不會轉移真實資金。',
+    pending: '退款待處理。尚未確認任何付款。',
+    submitted: '退款已提交，仍待確認。',
+    paid: '已確認退款至原始錢包。',
+    blocked: '退款需要審查。此處尚未確認付款。',
+    manualFallback: '開啟手動退款選項',
+    unavailable: '退款狀態暫時無法取得。',
+  },
 };
