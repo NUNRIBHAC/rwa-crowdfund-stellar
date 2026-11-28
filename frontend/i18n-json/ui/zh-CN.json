@@ -3934,5 +3934,30 @@
     "afm": "AFM 监管登记 PDF，非许可当前状态证明",
     "accounts": "2023 年公司报表，编制而非审计（PDF）",
     "impact": "发起人 2024 年影响报告（荷兰文 PDF），数据尚未核对一致"
+  },
+  "trustEvidence": {
+    "title": "透明度证据",
+    "notice": "尚未提供这些项目的证据。本清单不证明已获授权、已通过审计或存在担保。",
+    "loading": "正在加载证据状态。",
+    "unavailable": "证据状态暂时不可用。",
+    "missing": "未提供证据",
+    "criteria": {
+      "operator_provider_binding": "运营方与服务提供方",
+      "official_register_warnings": "官方登记与监管警告",
+      "reflection_withdrawal": "冷静期与撤回",
+      "fees_taxes": "费用与税费",
+      "buyback": "回购政策",
+      "provision_fund": "准备基金",
+      "preemption_dilution": "优先权与股权稀释",
+      "portfolio_concentration": "投资组合集中度",
+      "audited_accounts": "经审计财务报表",
+      "portfolio_recoveries": "投资组合与回收",
+      "business_history": "运营历史",
+      "arrears_defaults_losses": "逾期、违约与损失",
+      "realised_net_return": "已实现净回报",
+      "withdrawal_delays": "提现延迟",
+      "community_size": "社区规模",
+      "environmental_social_impact": "环境与社会影响"
+    }
   }
 }

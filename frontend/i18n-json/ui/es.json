@@ -4005,5 +4005,30 @@
     "afm": "PDF del registro del regulador AFM, no prueba de vigencia actual",
     "accounts": "Cuentas de 2023, compilación no auditada (PDF)",
     "impact": "Informe de impacto 2024 del promotor (PDF neerlandés), cifras no conciliadas"
+  },
+  "trustEvidence": {
+    "title": "Evidencias de transparencia",
+    "notice": "No se han aportado evidencias para estos puntos. Esta lista no demuestra autorización, auditoría ni garantía.",
+    "loading": "Cargando el estado de las evidencias.",
+    "unavailable": "El estado de las evidencias no está disponible temporalmente.",
+    "missing": "Evidencias no aportadas",
+    "criteria": {
+      "operator_provider_binding": "Operador y proveedor del servicio",
+      "official_register_warnings": "Registros oficiales y advertencias del regulador",
+      "reflection_withdrawal": "Período de reflexión y retirada",
+      "fees_taxes": "Comisiones e impuestos",
+      "buyback": "Política de recompra",
+      "provision_fund": "Fondo de provisión",
+      "preemption_dilution": "Preferencia y dilución",
+      "portfolio_concentration": "Concentración de la cartera",
+      "audited_accounts": "Cuentas auditadas",
+      "portfolio_recoveries": "Cartera y recuperaciones",
+      "business_history": "Historial de actividad",
+      "arrears_defaults_losses": "Retrasos, impagos y pérdidas",
+      "realised_net_return": "Rentabilidad neta realizada",
+      "withdrawal_delays": "Retrasos en las retiradas",
+      "community_size": "Tamaño de la comunidad",
+      "environmental_social_impact": "Impacto ambiental y social"
+    }
   }
 }

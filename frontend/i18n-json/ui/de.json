@@ -3996,5 +3996,30 @@
     "afm": "AFM-Aufsichtsregister als PDF, kein Nachweis des heutigen Zulassungsstatus",
     "accounts": "Unternehmensabschluss 2023, Erstellung statt Prüfung (PDF)",
     "impact": "Wirkungsbericht 2024 des Projektträgers (niederländisches PDF), Zahlen nicht abgeglichen"
+  },
+  "trustEvidence": {
+    "title": "Transparenznachweise",
+    "notice": "Für diese Punkte wurden keine Nachweise vorgelegt. Diese Liste belegt weder eine Zulassung noch eine Prüfung oder Garantie.",
+    "loading": "Nachweisstatus wird geladen.",
+    "unavailable": "Der Nachweisstatus ist vorübergehend nicht verfügbar.",
+    "missing": "Keine Nachweise vorgelegt",
+    "criteria": {
+      "operator_provider_binding": "Betreiber und Dienstleister",
+      "official_register_warnings": "Amtliche Register und Warnungen der Aufsicht",
+      "reflection_withdrawal": "Bedenkzeit und Widerruf",
+      "fees_taxes": "Gebühren und Steuern",
+      "buyback": "Rückkaufregelung",
+      "provision_fund": "Vorsorgefonds",
+      "preemption_dilution": "Bezugsrechte und Verwässerung",
+      "portfolio_concentration": "Portfoliokonzentration",
+      "audited_accounts": "Geprüfte Abschlüsse",
+      "portfolio_recoveries": "Portfolio und Rückgewinnung",
+      "business_history": "Geschäftshistorie",
+      "arrears_defaults_losses": "Verzug, Ausfälle und Verluste",
+      "realised_net_return": "Realisierte Nettorendite",
+      "withdrawal_delays": "Verzögerungen bei Auszahlungen",
+      "community_size": "Größe der Gemeinschaft",
+      "environmental_social_impact": "Umwelt- und Sozialwirkung"
+    }
   }
 }

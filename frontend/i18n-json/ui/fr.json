@@ -4005,5 +4005,30 @@
     "afm": "Registre AFM en PDF, pas une preuve de validité actuelle de l'agrément",
     "accounts": "Comptes 2023, compilation et non audit (PDF)",
     "impact": "Rapport d'impact 2024 du promoteur (PDF néerlandais), chiffres non rapprochés"
+  },
+  "trustEvidence": {
+    "title": "Éléments de transparence",
+    "notice": "Aucun justificatif n’a été fourni pour ces points. Cette liste ne prouve ni autorisation, ni audit, ni garantie.",
+    "loading": "Chargement de l’état des justificatifs.",
+    "unavailable": "L’état des justificatifs est temporairement indisponible.",
+    "missing": "Justificatifs non fournis",
+    "criteria": {
+      "operator_provider_binding": "Opérateur et prestataire de services",
+      "official_register_warnings": "Registres officiels et avertissements du régulateur",
+      "reflection_withdrawal": "Délai de réflexion et retrait",
+      "fees_taxes": "Frais et impôts",
+      "buyback": "Politique de rachat",
+      "provision_fund": "Fonds de provision",
+      "preemption_dilution": "Préemption et dilution",
+      "portfolio_concentration": "Concentration du portefeuille",
+      "audited_accounts": "Comptes audités",
+      "portfolio_recoveries": "Portefeuille et recouvrements",
+      "business_history": "Historique d’activité",
+      "arrears_defaults_losses": "Retards, défauts et pertes",
+      "realised_net_return": "Rendement net réalisé",
+      "withdrawal_delays": "Retards de retrait",
+      "community_size": "Taille de la communauté",
+      "environmental_social_impact": "Impact environnemental et social"
+    }
   }
 }

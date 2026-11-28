@@ -1,4 +1,5 @@
 import { useI18n } from '../i18n';
+import TrustEvidencePanel from '../components/TrustEvidencePanel';
 
 export default function About() {
   const { m } = useI18n();
@@ -26,6 +27,8 @@ export default function About() {
         </ul>
         <p>{m.about.ethicsNote}</p>
       </section>
+
+      <TrustEvidencePanel copy={m.trustEvidence} />
 
       <section aria-label={m.about.techAria}>
         <h2 className="section-title">{m.about.techTitle}</h2>

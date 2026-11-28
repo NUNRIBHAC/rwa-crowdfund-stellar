@@ -4002,5 +4002,30 @@
     "afm": "PDF do registo do regulador AFM, não prova da situação atual da licença",
     "accounts": "Contas da empresa de 2023, compilação sem auditoria (PDF)",
     "impact": "Relatório de impacto de 2024 do promotor (PDF neerlandês), valores não reconciliados"
+  },
+  "trustEvidence": {
+    "title": "Elementos de transparência",
+    "notice": "Não foram fornecidos elementos comprovativos para estes pontos. Esta lista não comprova autorização, auditoria ou garantia.",
+    "loading": "A carregar o estado dos elementos.",
+    "unavailable": "O estado dos elementos está temporariamente indisponível.",
+    "missing": "Elementos comprovativos não fornecidos",
+    "criteria": {
+      "operator_provider_binding": "Operador e prestador do serviço",
+      "official_register_warnings": "Registos oficiais e avisos do regulador",
+      "reflection_withdrawal": "Período de reflexão e retirada",
+      "fees_taxes": "Taxas e impostos",
+      "buyback": "Política de recompra",
+      "provision_fund": "Fundo de provisão",
+      "preemption_dilution": "Preferência e diluição",
+      "portfolio_concentration": "Concentração da carteira",
+      "audited_accounts": "Contas auditadas",
+      "portfolio_recoveries": "Carteira e recuperações",
+      "business_history": "Histórico de atividade",
+      "arrears_defaults_losses": "Atrasos, incumprimentos e perdas",
+      "realised_net_return": "Retorno líquido realizado",
+      "withdrawal_delays": "Atrasos nos levantamentos",
+      "community_size": "Dimensão da comunidade",
+      "environmental_social_impact": "Impacto ambiental e social"
+    }
   }
 }

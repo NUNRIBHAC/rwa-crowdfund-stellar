@@ -1,4 +1,5 @@
 import { readAutomaticRefunds } from './automatic-refund-read.js';
+import { trustEvidenceRouter } from './trust-evidence-routes.js';
 import { testnetSetupRouter, testnetSetupPorts } from './testnet-setup-routes.js';
 import { HORIZON_URL, USDC } from './config.js';
 import { startBackgroundTask } from './background-task.js';
@@ -421,6 +422,7 @@ app.use(
   '/api/testnet-setup',
   testnetSetupRouter({ enabled: process.env.TESTNET_SETUP_ENABLED === '1', network: NETWORK, horizon: HORIZON_URL, issuer: USDC.issuer }, testnetSetupPorts()),
 );
+app.use(trustEvidenceRouter());
 app.get('/health', (_req, res) => {
   const database = databaseReadiness();
   const communityRequired =

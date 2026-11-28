@@ -3961,5 +3961,30 @@
     "afm": "AFM नियामक रजिस्टर PDF, वर्तमान लाइसेंस स्थिति का प्रमाण नहीं",
     "accounts": "2023 के कंपनी खाते, संकलन न कि ऑडिट (PDF)",
     "impact": "प्रवर्तक की 2024 प्रभाव रिपोर्ट (डच PDF), आंकड़ों का मिलान नहीं हुआ"
+  },
+  "trustEvidence": {
+    "title": "पारदर्शिता के प्रमाण",
+    "notice": "इन मदों के लिए प्रमाण उपलब्ध नहीं कराए गए हैं। यह सूची प्राधिकरण, लेखापरीक्षा या गारंटी का प्रमाण नहीं है।",
+    "loading": "प्रमाण की स्थिति लोड हो रही है।",
+    "unavailable": "प्रमाण की स्थिति अभी उपलब्ध नहीं है।",
+    "missing": "प्रमाण उपलब्ध नहीं कराए गए",
+    "criteria": {
+      "operator_provider_binding": "संचालक और सेवा प्रदाता",
+      "official_register_warnings": "आधिकारिक रजिस्टर और नियामक की चेतावनियाँ",
+      "reflection_withdrawal": "विचार अवधि और वापसी",
+      "fees_taxes": "शुल्क और कर",
+      "buyback": "पुनर्खरीद नीति",
+      "provision_fund": "प्रावधान निधि",
+      "preemption_dilution": "प्राथमिकता अधिकार और हिस्सेदारी में कमी",
+      "portfolio_concentration": "पोर्टफोलियो संकेंद्रण",
+      "audited_accounts": "लेखापरीक्षित खाते",
+      "portfolio_recoveries": "पोर्टफोलियो और वसूली",
+      "business_history": "परिचालन इतिहास",
+      "arrears_defaults_losses": "बकाया, चूक और नुकसान",
+      "realised_net_return": "वास्तविक प्राप्त शुद्ध प्रतिफल",
+      "withdrawal_delays": "निकासी में देरी",
+      "community_size": "समुदाय का आकार",
+      "environmental_social_impact": "पर्यावरणीय और सामाजिक प्रभाव"
+    }
   }
 }

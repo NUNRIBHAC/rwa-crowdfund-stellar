@@ -89,7 +89,9 @@ test('mount campaign-load failure stays off static content routes', async () => 
   );
   expect(await screen.findByRole('heading', { level: 1, name: 'About this project' })).toBeTruthy();
   await waitFor(() => expect(container.querySelector('.error-banner')).toBeNull());
-  expect(screen.queryByRole('alert')).toBeNull();
+  // About now has an independent evidence request. A malformed response may
+  // show its own evidence error, but never the campaign load banner.
+  expect(screen.queryByText('The service is temporarily unavailable. Please try again in a moment.')).toBeNull();
   expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
 });
 

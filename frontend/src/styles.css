@@ -5243,3 +5243,21 @@ html.rtl-text .accordion summary > span:first-child {
   overflow-wrap: anywhere;
   word-break: break-all;
 }
+
+/* Keep evidence rows in the same geometry for every language. Only Arabic
+   text direction changes; the list markers remain on the English side. */
+html.rtl-text .trust-evidence-panel ol,
+.trust-evidence-panel ol {
+  direction: ltr;
+  padding-left: 1.75rem;
+  padding-right: 0;
+}
+html.rtl-text .trust-evidence-panel li,
+.trust-evidence-panel li {
+  direction: ltr;
+  text-align: left;
+}
+html.rtl-text .trust-evidence-panel li > * {
+  direction: rtl;
+  text-align: left;
+}

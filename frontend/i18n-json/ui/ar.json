@@ -3957,5 +3957,30 @@
     "afm": "سجل الجهة الرقابية AFM بصيغة PDF، وليس إثباتا لحالة الترخيص الحالية",
     "accounts": "قوائم الشركة لعام 2023، إعداد وليس تدقيقا (PDF)",
     "impact": "تقرير أثر المروج لعام 2024 (PDF هولندي)، الأرقام غير مسوّاة"
+  },
+  "trustEvidence": {
+    "title": "أدلة الشفافية",
+    "notice": "لم تُقدم أدلة لهذه البنود. هذه القائمة ليست إثباتًا لترخيص أو تدقيق أو ضمان.",
+    "loading": "جارٍ تحميل حالة الأدلة.",
+    "unavailable": "حالة الأدلة غير متاحة مؤقتًا.",
+    "missing": "لم تُقدم أدلة",
+    "criteria": {
+      "operator_provider_binding": "المشغل ومقدم الخدمة",
+      "official_register_warnings": "السجلات الرسمية وتحذيرات الجهة الرقابية",
+      "reflection_withdrawal": "فترة التروي والتراجع",
+      "fees_taxes": "الرسوم والضرائب",
+      "buyback": "سياسة إعادة الشراء",
+      "provision_fund": "صندوق المخصصات",
+      "preemption_dilution": "حقوق الأولوية وتخفيف الملكية",
+      "portfolio_concentration": "تركز المحفظة",
+      "audited_accounts": "الحسابات المدققة",
+      "portfolio_recoveries": "المحفظة والمبالغ المستردة",
+      "business_history": "سجل النشاط",
+      "arrears_defaults_losses": "التأخر والتعثر والخسائر",
+      "realised_net_return": "العائد الصافي المحقق",
+      "withdrawal_delays": "تأخر السحب",
+      "community_size": "حجم المجتمع",
+      "environmental_social_impact": "الأثر البيئي والاجتماعي"
+    }
   }
 }

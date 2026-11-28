@@ -3944,5 +3944,30 @@
     "afm": "AFM 監督当局登録簿 PDF、現在の許可状況の証明ではありません",
     "accounts": "2023 年財務諸表、調製であって監査ではありません（PDF）",
     "impact": "発行者の 2024 年影響報告書（オランダ語 PDF）、数値未照合"
+  },
+  "trustEvidence": {
+    "title": "透明性に関する証拠",
+    "notice": "これらの項目の証拠は提供されていません。この一覧は認可、監査、保証の証明ではありません。",
+    "loading": "証拠の状況を読み込み中です。",
+    "unavailable": "証拠の状況は一時的に利用できません。",
+    "missing": "証拠は提供されていません",
+    "criteria": {
+      "operator_provider_binding": "運営者とサービス提供者",
+      "official_register_warnings": "公的登録簿と規制当局の警告",
+      "reflection_withdrawal": "熟慮期間と申込みの撤回",
+      "fees_taxes": "手数料と税金",
+      "buyback": "買戻し方針",
+      "provision_fund": "引当基金",
+      "preemption_dilution": "優先権と希薄化",
+      "portfolio_concentration": "ポートフォリオの集中度",
+      "audited_accounts": "監査済み財務諸表",
+      "portfolio_recoveries": "ポートフォリオと回収",
+      "business_history": "事業実績",
+      "arrears_defaults_losses": "延滞、債務不履行、損失",
+      "realised_net_return": "実現純収益率",
+      "withdrawal_delays": "出金の遅延",
+      "community_size": "コミュニティの規模",
+      "environmental_social_impact": "環境・社会への影響"
+    }
   }
 }

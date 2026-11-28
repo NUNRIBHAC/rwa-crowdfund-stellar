@@ -4445,6 +4445,31 @@ export const en = {
     manualFallback: 'Open the manual refund option',
     unavailable: 'Refund status is temporarily unavailable.',
   },
+  trustEvidence: {
+    title: 'Transparency evidence',
+    notice: 'Evidence has not been provided for these items. This list is not proof of authorisation, an audit or a guarantee.',
+    loading: 'Loading evidence status.',
+    unavailable: 'Evidence status is temporarily unavailable.',
+    missing: 'Evidence not provided',
+    criteria: {
+      operator_provider_binding: 'Operator and service provider',
+      official_register_warnings: 'Official registers and regulator warnings',
+      reflection_withdrawal: 'Reflection period and withdrawal',
+      fees_taxes: 'Fees and taxes',
+      buyback: 'Buyback policy',
+      provision_fund: 'Provision fund',
+      preemption_dilution: 'Pre-emption and dilution',
+      portfolio_concentration: 'Portfolio concentration',
+      audited_accounts: 'Audited accounts',
+      portfolio_recoveries: 'Portfolio and recoveries',
+      business_history: 'Operating history',
+      arrears_defaults_losses: 'Arrears, defaults and losses',
+      realised_net_return: 'Realised net return',
+      withdrawal_delays: 'Withdrawal delays',
+      community_size: 'Community size',
+      environmental_social_impact: 'Environmental and social impact',
+    },
+  },
 };
 
 export type Messages = typeof en;
